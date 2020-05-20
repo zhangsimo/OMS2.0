@@ -43,6 +43,7 @@ const test = {
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
+  // wmsApi: "https://api2.g-parts.cn/oms-system-provider",
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
@@ -89,12 +90,28 @@ const audit = {
 };
 
 const pro = {
-  tokenApi: "https://api2.g-part.cn",
-  wmsApi: "https://api2.g-part.cn/wms-order-provider",
-  omsApi: "https://api2.g-part.cn/oms-product-provider",
-  omsOrderApi: "https://api2.g-part.cn/oms-order-provider",
-  passportApi: "https://api2.g-part.cn/gpart-passport-provider",
-  essentialApi: "https://api2.g-part.cn/gpart-essential-provider"
+  omsTask: "https://api2.g-parts.cn/oms-task-provider",
+  omsEdit: "https://api2.g-parts.cn/oms-edi-provider",
+  omsApi: "https://api2.g-parts.cn/oms-lease-provider",
+  tokenApi: "https://api2.g-parts.cn",
+  wmsApi: "https://api2.g-parts.cn/oms-system-provider",
+  omsProduct: "https://api2.g-parts.cn/oms-product-provider",
+  omsOrder: "https://api2.g-parts.cn/oms-order-provider",
+  passportApi: "https://api2.g-parts.cn/gpart-passport-provider",
+  essentialApi: "https://api2.g-parts.cn/oms-essential-provider",
+  authApi: "https://api2.g-parts.cn/gpart-passport-provider",
+  omsBatch: "https://api2.g-parts.cn/oms-batch-provider",
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
+  omsSotck: "https://api2.g-parts.cn/oms-stock-provider",
+  uploadApi:
+    "https://api2.g-parts.cn/gpart-essential-provider/file/uploadFile",
+  upbase64Api:
+    "https://api2.g-parts.cn/gpart-essential-provider/file/uploadFileNew",
+  getFileApi: "https://uatoms2.g-part.cn.cn",
+  downApi: "https://api2.g-parts.cn/gpart-oss-provider",
+  omsTpApi: "https://api2.g-parts.cn/oms-thirdparty-provider"
+
+
 };
 
 let urlObj = { dev, test, audit, pro };

@@ -193,8 +193,10 @@
     <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
     <!--其他查看-->
     <view-other-model ref="viewOtherModel" :main-store="mainStore" :bill-type-arr="settleTypeList"></view-other-model>
-    <!--供应商申请-->
+    <!--客户信用调查-->
     <apply-model-view ref="clientApply" :bill-type-arr="settleTypeList"></apply-model-view>
+    <!--客户信用额度-->
+    <quota-apply-model ref="quotaApply" :bill-type-arr="settleTypeList"></quota-apply-model>
   </div>
 </template>
 
@@ -222,10 +224,12 @@
   import ViewOtherModel from "../component/viewOtherModel";
   import {getDigitalDictionary} from "../../../api/system/essentialData/clientManagement";
   import ApplyModelView from "../component/viewApplyModel";
+  import QuotaApplyModel from "../component/quotaApplyModel";
 
   export default {
         name: "myApplication",
         components: {
+          QuotaApplyModel,
           ApplyModelView,
           ViewOtherModel,
           quickDate,
@@ -318,6 +322,34 @@
             {
               value: "10",
               label: "发票对冲"
+            },
+            {
+              value: "11",
+              label: "采购计划单"
+            },
+            {
+              value: "12",
+              label: "临时采购订单"
+            },
+            {
+              value: "13",
+              label: "门店外采订单"
+            },
+            {
+              value: "14",
+              label: "盘亏出库"
+            },
+            {
+              value: "15",
+              label: "盘盈入库"
+            },
+            {
+              value: "16",
+              label: "客户信用调查"
+            },
+            {
+              value: "17",
+              label: "客户信用额度"
             },
           ], //申请类型数组
           tableData:[], //表格内容
@@ -416,7 +448,7 @@
           let data = {}
           //107票据类型`
           //106结算方式
-          data = ['CS00106', 'CS00107', 'CS00118','CS00117']
+          data = ['CS00106', 'CS00107', 'CS00118','CS00117','CS00112']
           let res = await getDigitalDictionary(data)
           if (res.code == 0) {
             this.settleTypeList = res.data
@@ -531,6 +563,9 @@
               break;
             case "客户信用调查":
               this.$refs.clientApply.init(row);
+              break;
+            case "客户信用额度":
+              this.$refs.quotaApply.init(row);
               break;
             case "盘亏出库": case "盘盈入库": case "采购计划单": case "临时采购订单": case "门店外采订单":
               this.$refs.viewOtherModel.init(row);

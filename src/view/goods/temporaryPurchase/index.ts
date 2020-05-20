@@ -391,6 +391,7 @@ export default class InterPurchase extends Vue {
 
   // 提交
   private submit(refname: string) {
+    if(!this.selectTableRow.id) return this.$message.error("请先保存再提交");
     this.$Modal.confirm({
       title: '是否提交',
       onOk: async () => {

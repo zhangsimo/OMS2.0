@@ -84,3 +84,12 @@ export function findCreditDetail (params) {
     params
   })
 }
+
+//获取客户信用额度详情
+export function findQuotaDetail (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guestAdjust/findByCode`,
+    method: 'get',
+    params
+  })
+}

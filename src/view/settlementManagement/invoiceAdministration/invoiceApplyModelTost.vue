@@ -63,17 +63,17 @@ export default {
                 },
                 {
                 title: "店号",
-                key: "orgId",
+                key: "orgCode",
                 className: "tc"
                 },
                 {
                 title: "往来单位",
-                key: "sourceType",
+                key: "guestName",
                 className: "tc"
                 },
                 {
                 title: "申请日期",
-                key: " applyDate",
+                key: "applyDate",
                 className: "tc"
                 },
                 {
@@ -93,7 +93,7 @@ export default {
                 },
                 {
                 title: "开票公司",
-                key: "tenantName",
+                key: "invoiceUnit",
                 className: "tc"
                 },
                 {
@@ -193,7 +193,7 @@ export default {
                 },
                 {
                 title: "店号",
-                key: " orgCode",
+                key: "orgCode",
                 className: "tc"
                 },
                 {
@@ -297,7 +297,8 @@ export default {
             }else if(this.allSelectList.length>=2){
                 this.$Message.warning("请选择一条数据");
             }else{
-                this.hxOjb.salesInvoiceId=this.allSelectList[0]['id']
+                this.hxOjb.salesInvoiceId = this.allSelectList[0].id
+                this.hxOjb.invoiceApplyId = this.data[0].id
                 subManualList(this.hxOjb).then(res=>{
                     if(res.code===0){
                         this.$Message.warning("核销成功");
@@ -325,5 +326,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    
+
 </style>

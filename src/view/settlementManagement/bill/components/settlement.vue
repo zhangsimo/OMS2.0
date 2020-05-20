@@ -180,6 +180,8 @@ export default {
       this.BusinessType.push({
         businessTypeName: val.titleName,
         reconciliationAmt: 0,
+        mateAccountCode: val.titleCode,
+        mateAccountName: val.titleName,
         hasAmt: 0,
         unAmt: 0,
         rpAmt: 0,
@@ -193,6 +195,8 @@ export default {
       if (value.fullName) {
         this.BusinessType.push({
           businessTypeName: this.obj.fullName + "-" + value.fullName,
+          mateAccountCode: this.obj.titleCode,
+          mateAccountName: this.obj.titleName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -202,6 +206,8 @@ export default {
       } else if (value.userName) {
         this.BusinessType.push({
           businessTypeName: this.obj.fullName + "-" + value.userName,
+          mateAccountCode: this.obj.titleCode,
+          mateAccountName: this.obj.titleName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,

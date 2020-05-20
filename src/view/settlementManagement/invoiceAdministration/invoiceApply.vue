@@ -196,7 +196,7 @@ export default {
         },
         {
           title: "申请开票金额",
-          key: "apply_amt",
+          key: "applyAmt",
           className: "tc"
         },
         {
@@ -211,12 +211,12 @@ export default {
         },
         {
           title: "寄件方式",
-          key: "sending_way",
+          key: "sendingWay",
           className: "tc"
         },
         {
           title: "快递单号",
-          key: "sending_number",
+          key: "sendingNumber",
           className: "tc",
           render: (h, params) => {
             return h("Input", {
@@ -258,12 +258,12 @@ export default {
         },
         {
           title: "导入开票单位",
-          key: "import_invoice_unit",
+          key: "importInvoiceUnit",
           className: "tc"
         },
         {
           title: "验证开票单位",
-          key: "verify_invoice_unit",
+          key: "verifyInvoiceUnit",
           className: "tc"
         },
         {

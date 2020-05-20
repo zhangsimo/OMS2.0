@@ -73,7 +73,7 @@
                 :key="index"
                 class="flex"
               >
-                <span class="listChild">{{ item.businessType? item.businessType.name ? item.businessType.name: '' : '' }}</span>
+                <span class="listChild">{{ item.businessTypeName? item.businessTypeName  : '' }}</span>
               </li>
             </ul>
           </template>
