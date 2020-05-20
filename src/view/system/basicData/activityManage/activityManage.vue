@@ -306,6 +306,7 @@ export default {
   name: "activityManage",
   data() {
     return {
+      shopName: this.$store.state.user.userData.shopName,
       applyStatusOption: [
         {
           value: "草稿",
@@ -948,14 +949,12 @@ export default {
       getActApplyTable({ applyId: this.tableFormDate.applyId }).then(res => {
         // console.log(res)
         this.data4 = [];
-        Object.keys(res.data).forEach(key => {
-          let item = res.data[key];
-          if(Array.isArray(item)) {
-            this.data4.push(...item)
-          } else {
-            this.data4.push(item)
-          }
-        })
+        let item = res.data[this.shopName] ? res.data[this.shopName] : [];
+        if(Array.isArray(item)) {
+          this.data4.push(...item)
+        } else {
+          this.data4.push(item)
+        }
       });
     },
     // 取消申请
