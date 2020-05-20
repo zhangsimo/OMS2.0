@@ -947,7 +947,15 @@ export default {
       this.tableFormDate.applyId = item.applyId;
       getActApplyTable({ applyId: this.tableFormDate.applyId }).then(res => {
         // console.log(res)
-        this.data4 = res.data;
+        this.data4 = [];
+        Object.keys(res.data).forEach(key => {
+          let item = res.data[key];
+          if(Array.isArray(item)) {
+            this.data4.push(...item)
+          } else {
+            this.data4.push(item)
+          }
+        })
       });
     },
     // 取消申请
