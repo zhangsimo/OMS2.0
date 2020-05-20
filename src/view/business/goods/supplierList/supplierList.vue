@@ -650,6 +650,9 @@
                 this.$message.error('明细中存在缺货数量，请调整')
                 return
               }
+              data.details.map(item => {
+                item.stockOutQty = 0
+              })
               saveDraft(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -955,6 +958,9 @@
                     this.$message.error('明细中存在缺货数量，请调整')
                     return
                   }
+                  data.details.map(item => {
+                    item.stockOutQty = 0
+                  })
 
                   // data.details = this.Right.tbdata.map(item => {
                   //   return {
@@ -1102,7 +1108,9 @@
                 this.$message.error('明细中存在缺货数量，请调整')
                 return
               }
-
+              data.details.map(item => {
+                item.stockOutQty = 0
+              })
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success('提交成功');
