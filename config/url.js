@@ -43,6 +43,7 @@ const test = {
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
+  // wmsApi: "https://api2.g-parts.cn/oms-system-provider",
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",

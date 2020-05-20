@@ -498,7 +498,7 @@
           //认领弹框查询
           queryClaimed(){
             if (this.claimTit === "其他付款认领") {
-              this.claimedList(1);
+              this.claimedList(2);
             } else {
               this.claimedList(2);
             }
