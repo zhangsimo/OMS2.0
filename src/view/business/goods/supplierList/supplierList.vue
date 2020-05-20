@@ -609,8 +609,9 @@
           this.Right.tbdata = arr;
         }
 
-        this.Right.tbdata.forEach(el => {
+        this.Right.tbdata = this.Right.tbdata.map(el => {
           el.orginOrderQty = el.orderQty;
+          return el;
         })
 
         //this.Right.tbdata = arr
@@ -649,7 +650,10 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
-              let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+              let noBack = data.details.filter(item => {
+                // console.log(item.stockOutQty, item.orginOrderQty, item.orderQty, item.stockOutQty-(item.orginOrderQty-item.orderQty) > 0);
+                return item.stockOutQty-(item.orginOrderQty-item.orderQty) > 0;
+              })
               if(noBack.length>0){
                 this.$message.error('明细中存在缺货数量，请调整')
                 return
@@ -857,10 +861,10 @@
             this.Left.page.total = res.data.totalElements
 
             for(let item of this.Left.tbdata){
+              item._highlight = false
               item.details.forEach(el => {
                 el.orginOrderQty = el.orderQty;
               })
-              item._highlight = false
               if(item.id==this.selectLeftItemId){
                 item._highlight = true;
                 this.setRightData(item);
@@ -1077,7 +1081,10 @@
         row.details.map(item => {
           item.orderPrice = Number(item.orderPrice).toFixed(2)
         })
-        this.Right.tbdata = this.datadata.details
+        this.Right.tbdata = this.datadata.details.map(el => {
+          el.orginOrderQty = el.orderQty;
+          return el;
+        })
         this.presentrowMsg = row.billStatusId.value
         // console.log(this.presentrowMsg)
         this.rowId = row.id
