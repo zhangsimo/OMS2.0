@@ -230,7 +230,7 @@ export default {
     //确认添加一条信息
     addNewSupplier() {
       this.$refs.child.handleSubmit(async () => {
-        let data = this.clientList;
+        let data = JSON.parse(JSON.stringify(this.clientList))
         data.softOpenDate = this.changeTime(data.softOpenDate);
         let res = await getNewSupplier(data);
         if (res.code == 0) {

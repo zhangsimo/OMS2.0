@@ -141,7 +141,7 @@
                   <vxe-table-column field="partName" fixed="left" show-overflow title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" fixed="left" show-overflow title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="canReQty" title="入库数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
@@ -154,7 +154,7 @@
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100">
                     <template v-slot="{row}">
-                      <div v-if="presentrowMsg !== 1">{{(row.stockOutQty-(row.canReQty-row.orderQty))>=0?(row.stockOutQty-(row.canReQty-row.orderQty)):0}}</div>
+                      <div v-if="presentrowMsg !== 1">{{(row.stockOutQty-(row.orginOrderQty-row.orderQty))>=0?(row.stockOutQty-(row.orginOrderQty-row.orderQty)):0}}</div>
                       <div v-else>{{row.stockOutQty||0}}</div>
                     </template>
                   </vxe-table-column>
@@ -609,6 +609,11 @@
           this.Right.tbdata = arr;
         }
 
+        this.Right.tbdata = this.Right.tbdata.map(el => {
+          el.orginOrderQty = el.orderQty;
+          return el;
+        })
+
         //this.Right.tbdata = arr
         // if(this.Right.tbdata){
         //   this.Right.tbdata = [...this.Right.tbdata,...arr];
@@ -645,11 +650,17 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
-              let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+              let noBack = data.details.filter(item => {
+                // console.log(item.stockOutQty, item.orginOrderQty, item.orderQty, item.stockOutQty-(item.orginOrderQty-item.orderQty) > 0);
+                return item.stockOutQty-(item.orginOrderQty-item.orderQty) > 0;
+              })
               if(noBack.length>0){
                 this.$message.error('明细中存在缺货数量，请调整')
                 return
               }
+              data.details.map(item => {
+                item.stockOutQty = 0
+              })
               saveDraft(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -851,6 +862,9 @@
 
             for(let item of this.Left.tbdata){
               item._highlight = false
+              item.details.forEach(el => {
+                el.orginOrderQty = el.orderQty;
+              })
               if(item.id==this.selectLeftItemId){
                 item._highlight = true;
                 this.setRightData(item);
@@ -955,6 +969,9 @@
                     this.$message.error('明细中存在缺货数量，请调整')
                     return
                   }
+                  data.details.map(item => {
+                    item.stockOutQty = 0
+                  })
 
                   // data.details = this.Right.tbdata.map(item => {
                   //   return {
@@ -1064,7 +1081,10 @@
         row.details.map(item => {
           item.orderPrice = Number(item.orderPrice).toFixed(2)
         })
-        this.Right.tbdata = this.datadata.details
+        this.Right.tbdata = this.datadata.details.map(el => {
+          el.orginOrderQty = el.orderQty;
+          return el;
+        })
         this.presentrowMsg = row.billStatusId.value
         // console.log(this.presentrowMsg)
         this.rowId = row.id
@@ -1102,7 +1122,9 @@
                 this.$message.error('明细中存在缺货数量，请调整')
                 return
               }
-
+              data.details.map(item => {
+                item.stockOutQty = 0
+              })
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success('提交成功');
