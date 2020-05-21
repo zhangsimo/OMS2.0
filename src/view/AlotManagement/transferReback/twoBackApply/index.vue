@@ -178,7 +178,7 @@
                       <Row class="w160">
                         <Col span="24">
                           <Select
-                            :disabled="this.remarkStatus"
+                            :disabled="remarkStatus || isWms"
                             v-model="Leftcurrentrow.storeId"
                           >
                             <!--<Option-->
@@ -413,6 +413,7 @@ export default {
   },
   data() {
     return {
+      isWms: false,
       serviceId: "",
       newFlag: true,
       remarkStatus: true,
@@ -1036,6 +1037,12 @@ export default {
       this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
+      // this.isWms
+      this.cangkuListall.forEach(el => {
+        if(this.Leftcurrentrow.storeId == el.id) {
+          this.isWms = el.isWms
+        }
+      })
       const that = this;
       setTimeout(() => {
         that.showit = true;
