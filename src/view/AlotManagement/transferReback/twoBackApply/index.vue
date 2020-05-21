@@ -60,7 +60,7 @@
             <div class="db">
               <Button
                 v-has="'delivery'"
-                :disabled="Leftcurrentrow.statuName != '已受理'"
+                :disabled="Leftcurrentrow.statuName != '已受理' || isWms"
                 class="mr10"
                 @click="chuku"
               >
@@ -178,7 +178,7 @@
                       <Row class="w160">
                         <Col span="24">
                           <Select
-                            :disabled="remarkStatus || isWms"
+                            :disabled="remarkStatus"
                             v-model="Leftcurrentrow.storeId"
                           >
                             <!--<Option-->
@@ -850,13 +850,10 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
             this.$Message.success("提交成功");
           }
         })
-        .catch(e => {
-          this.$Message.error("提交失败");
-        });
+      this.getList(this.form);
     },
     zuofei1() {
       this.$Modal.confirm({
