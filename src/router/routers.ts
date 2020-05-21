@@ -258,7 +258,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "华胜订单处理",
-          hideInMenu:true
+          // hideInMenu:true
         },
         component: () =>
           import("@/view/salesManagement/hsOrder/hsIndex.vue")
