@@ -7,6 +7,7 @@ import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveO
 // import {allStaff} from '_api/admin/userApi.js'
 import AddRolse from "./AddRolse.vue"
 import ChangeRolse from "@/view/admin/roles/ChangeRolse.vue";
+import {v} from "xe-utils/dist/xe-utils";
 
 @Component({
   components:{
@@ -194,13 +195,39 @@ export default class index extends Vue{
   private checkChange(){
     let checkedIds = []
     let tree:any = this.$refs.resTree,
-        nodes:any = tree.flatState
+        nodes:any = tree.flatState,
+    // @ts-ignore
+        arrList:Array = [],
+        showArr:any =[]
+         nodes.map( item => {
+          if (item.node.checked || item.node.indeterminate)
+          // @ts-ignore
+            arrList.push(item.node)
+        })
+    arrList = arrList.filter(item =>
+       item.name.length == 4 //用来判定是否是页面
+    )
+
+    arrList.map( item => {
+      if (item.childs) {
+        showArr.push(item.childs.filter(item => item.displayName == '查看')[0])
+      }
+    })
     nodes.map(item => {
       if (item.node.checked || item.node.indeterminate)
       // @ts-ignore
         checkedIds.push(item.node.id)
     })
+
+    showArr.forEach(item => {
+      if (!item) return
+      if ( !item.hasOwnProperty('checked') || !item.checked){
+        checkedIds = checkedIds.filter( v => v != item.parentId)
+      }
+    })
+
     this.role.resIds = checkedIds
+
   }
 
   //保存修改好的数据

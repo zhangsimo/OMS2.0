@@ -361,7 +361,7 @@ export default {
         },
         {
           title: "发票代码",
-          key: "invoiceNo",
+          key: "invoiceCode",
           className: "tc"
         },
         {
@@ -675,7 +675,6 @@ export default {
           );
         } else {
           this.getDetailInfor();
-          console.log(this.formValidate)
           this.proModal = true;
         }
       }
@@ -784,13 +783,12 @@ export default {
     //查看详情
     getDetailInfor() {
       // await this.getSelectOptions()
-      for (let key in this.formValidate) {
-        this.formValidate[key] = this.allTablist[0][key];
-      }
+      // for (let key in this.formValidate) {
+        this.formValidate = JSON.parse(JSON.stringify(this.allTablist[0] ))
+      // }
     },
     //表格全选的时候
     requires(val) {
-      console.log(val , 78978)
       this.allTablist = val;
     },
     //获取列表数据
