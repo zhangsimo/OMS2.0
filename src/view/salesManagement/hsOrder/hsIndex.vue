@@ -8,7 +8,7 @@
             <getDate class="mr10" @quickDate="getvalue"></getDate>
           </div>
           <div class="db mr10">
-            <span class="mr10">订单日期：</span>
+            <span class="">订单日期：</span>
             <Date-picker
               type="daterange"
               clearable
