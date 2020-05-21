@@ -239,11 +239,11 @@ export default {
                 key: "receiptUnit",
                 className: "tc"
                 },
-                {
-                title: "开票清单类型",
-                key: "speciesName",
-                className: "tc"
-                },
+                // {
+                // title: "开票清单类型",
+                // key: "speciesName",
+                // className: "tc"
+                // },
                 {
                 title: "开票业务",
                 key: "invoiceServiceName",

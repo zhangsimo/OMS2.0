@@ -20,8 +20,9 @@ export const hasChild = (item) => {
 }
 
 const showThisMenuEle = (item, access) => {
+  // console.log(item.mark);
   if (item.mark && access) {// && access.length
-    return access.indexOf(item.mark) > -1
+    return access.includes(item.mark)
   } else return true
 
   // if (item.meta && item.meta.access && item.meta.access.length) {
