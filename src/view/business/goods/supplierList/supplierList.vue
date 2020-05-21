@@ -141,7 +141,7 @@
                   <vxe-table-column field="partName" fixed="left" show-overflow title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" fixed="left" show-overflow title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="canReQty" title="入库数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
