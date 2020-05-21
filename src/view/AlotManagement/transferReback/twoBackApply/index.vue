@@ -60,7 +60,7 @@
             <div class="db">
               <Button
                 v-has="'delivery'"
-                :disabled="Leftcurrentrow.statuName != '已受理'"
+                :disabled="Leftcurrentrow.statuName != '已受理' || isWms"
                 class="mr10"
                 @click="chuku"
               >
@@ -178,7 +178,7 @@
                       <Row class="w160">
                         <Col span="24">
                           <Select
-                            :disabled="this.remarkStatus"
+                            :disabled="remarkStatus"
                             v-model="Leftcurrentrow.storeId"
                           >
                             <!--<Option-->
@@ -413,6 +413,7 @@ export default {
   },
   data() {
     return {
+      isWms: false,
       serviceId: "",
       newFlag: true,
       remarkStatus: true,
@@ -849,13 +850,10 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
             this.$Message.success("提交成功");
           }
         })
-        .catch(e => {
-          this.$Message.error("提交失败");
-        });
+      this.getList(this.form);
     },
     zuofei1() {
       this.$Modal.confirm({
@@ -1036,6 +1034,12 @@ export default {
       this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
+      // this.isWms
+      this.cangkuListall.forEach(el => {
+        if(this.Leftcurrentrow.storeId == el.id) {
+          this.isWms = el.isWms
+        }
+      })
       const that = this;
       setTimeout(() => {
         that.showit = true;
