@@ -204,11 +204,11 @@ export default {
           key: "invoiceUnit",
           className: "tc"
         },
-        {
-          title: "开票清单类型",
-          key: "species",
-          className: "tc"
-        },
+        // {
+        //   title: "开票清单类型",
+        //   key: "species",
+        //   className: "tc"
+        // },
         {
           title: "寄件方式",
           key: "sendingWay",
