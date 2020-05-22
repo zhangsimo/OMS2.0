@@ -145,8 +145,8 @@
           <FormItem label="对账单欠票金额" prop="statementAmountOwed">
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
-          <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
-            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" />
+          <FormItem label="本次申请开票含税金额" >
+            <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -290,7 +290,7 @@
       </TabPane>
     </Tabs>
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
-    <noTax ref="noTax" :information="information" :parameter="parameter" />
+    <noTax ref="noTax" :information="information" :parameter="parameter"  @taxList="getnoTaxSaleList" />
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -683,6 +683,12 @@ export default {
         this.$refs.noTax.modal1 = true;
       }, 100);
     },
+
+    //增加不函数开票申请返回值
+    getnoTaxSaleList(row){
+      this.information.invoiceNotTaxApply = row.id
+    },
+
     // 保存草稿
    async preservation() {
      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
@@ -707,7 +713,8 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
-            isOilPart: this.$parent.data1[0].isOilPart
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -746,8 +753,8 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
-            isOilPart: this.$parent.data1[0].isOilPart
-
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -774,9 +781,13 @@ export default {
           if (columnIndex === 0) {
             return '和值'
           }
+          if (['applyAmt'].includes(column.property)) {
+            this.$set(this.invoice , 'applyTaxAmt' , this.$utils.sum(data, column.property))
+          }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
+
           return null
         })
       ]
@@ -828,6 +839,7 @@ export default {
           this.accessoriesBillingData1 = val
           this.OilPartShow = false
         }
+        val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
       },
       deep:true
     }

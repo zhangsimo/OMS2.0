@@ -22,7 +22,7 @@ export function getSupplierList(data) {
 // /guest/findForAllot
 export function findForAllot(data) {
   return axios.request({
-    url: `${api.wmsApi}/guest/findForAllot`,
+    url: `${api.wmsApi}/guest/findForAllot?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   })
