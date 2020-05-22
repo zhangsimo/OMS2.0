@@ -289,8 +289,8 @@ export default {
     // 对账单
     bus.$on("accountNo", val => {
       this.invoice.taxPoint = 0.07;
-      val.notAmt = val.serviceAmt - val.invoiceAmt;
-      val.invoiceTaxAmt = val.notAmt;
+      val.notAmt = val.noInvoiceAmt
+      val.invoiceTaxAmt = 0;
       this.invoice = { ...this.invoice, ...val };
     });
     // 销售单

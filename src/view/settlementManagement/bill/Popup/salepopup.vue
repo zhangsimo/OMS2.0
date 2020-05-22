@@ -145,8 +145,8 @@
           <FormItem label="对账单欠票金额" prop="statementAmountOwed">
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
-          <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
-            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" />
+          <FormItem label="本次申请开票含税金额" >
+            <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -781,9 +781,13 @@ export default {
           if (columnIndex === 0) {
             return '和值'
           }
+          if (['applyAmt'].includes(column.property)) {
+            this.$set(this.invoice , 'applyTaxAmt' , this.$utils.sum(data, column.property))
+          }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
+
           return null
         })
       ]
@@ -835,6 +839,7 @@ export default {
           this.accessoriesBillingData1 = val
           this.OilPartShow = false
         }
+        val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
       },
       deep:true
     }
