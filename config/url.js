@@ -15,7 +15,7 @@ const dev = {
   // omsTask: '', // 9230
   // omsApi: '', // 9240
   // wmsApi: '', // 9250
-  omsBatch: 'http://192.168.30.179:9260', // 9260
+  omsBatch: 'http://192.168.30.221:9260', // 9260
   // omsSettle: '', // 9270
   omsSotck: "http://192.168.30.221:9280", //9280
 

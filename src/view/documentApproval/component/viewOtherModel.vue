@@ -27,7 +27,7 @@
           <td class="table-th">来源</td>
           <td>{{mainData.source===0?"OMS盘点":"WMS盘点"}}</td>
           <td class="table-th">合计总金额</td>
-          <td>{{mainData.exhibitAmt}}</td>
+          <td>{{mainData.exhibitAmt|priceFilters}}</td>
           <td class="table-th">出库单号</td>
           <td>{{mainData.serviceId}}</td>
         </tr>
@@ -82,7 +82,7 @@
           <td class="table-th">来源</td>
           <td>{{mainData.source===0?"OMS盘点":"WMS盘点"}}</td>
           <td class="table-th">合计总金额</td>
-          <td>{{mainData.exhibitAmt}}</td>
+          <td>{{mainData.exhibitAmt|priceFilters}}</td>
           <td class="table-th">入库单号</td>
           <td>{{mainData.serviceId}}</td>
         </tr>
@@ -137,7 +137,7 @@
           <td class="table-th">其他费用</td>
           <td>{{mainData.otherAmt}}</td>
           <td class="table-th">合计总金额</td>
-          <td>{{mainData.otherAmt}}</td>
+          <td>{{mainData.totalAmt|priceFilters}}</td>
           <td class="table-th">单号</td>
           <td>{{mainData.serviceId}}</td>
         </tr>
@@ -212,7 +212,7 @@
           <td class="table-th">预计到货日期</td>
           <td>{{mainData.planArriveDate}}</td>
           <td class="table-th">合计总金额</td>
-          <td>{{mainData.totalAmt}}</td>
+          <td>{{mainData.orderAmt|priceFilters}}</td>
           <td class="table-th">单号</td>
           <td>{{mainData.serviceId}}</td>
         </tr>
@@ -278,7 +278,7 @@
           <td class="table-th">备注</td>
           <td>{{mainData.remark}}</td>
           <td class="table-th">合计总金额</td>
-          <td>{{mainData.totalAmt}}</td>
+          <td>{{mainData.orderAmt|priceFilters}}</td>
           <td class="table-th">单号</td>
           <td>{{mainData.serviceId}}</td>
         </tr>
