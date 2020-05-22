@@ -93,3 +93,14 @@ export function getSales () {
 
   })
 }
+
+
+//获取退货员
+export function getHuaShengOrders (params,data) {
+  return axios.request({
+    url: `${api.omsOrder}/huaShengOrders/findByParams`,
+    method: 'post',
+    params,
+    data
+  })
+}
