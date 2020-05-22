@@ -652,6 +652,7 @@ export default {
         item.spec = item.specifications;
         item.partId = item.orgid;
         item.partInnerId = item.code;
+        item.unit = item.minUnit;
         let el = Object.assign({}, item);
         delete el.id;
         delete el.orderPrice;
