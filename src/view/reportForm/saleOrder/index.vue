@@ -44,13 +44,7 @@ export default {
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrandCode = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
@@ -71,13 +65,7 @@ export default {
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
@@ -96,13 +84,7 @@ export default {
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
