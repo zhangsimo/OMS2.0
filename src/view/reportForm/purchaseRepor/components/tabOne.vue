@@ -53,7 +53,11 @@
           field="orderType"
           title="订单类型"
           width="120"
-        ></vxe-table-column>
+        >
+          <template v-slot="{ row }">
+            <span>{{ row.orderType.name }}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group2" title="配件信息">
         <vxe-table-column
@@ -127,7 +131,7 @@
       <vxe-table-column field="group4" title="税率信息">
         <vxe-table-column field="taxSign" title="是否含税" width="140">
           <template v-slot="{ row }">
-            <Checkbox v-model="row.taxSign"></Checkbox>
+            <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
         </vxe-table-column>
         <vxe-table-column
