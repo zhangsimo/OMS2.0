@@ -36,13 +36,7 @@ export default {
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
@@ -61,13 +55,7 @@ export default {
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";

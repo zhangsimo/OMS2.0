@@ -128,11 +128,7 @@ export default {
               data.endAuditDate = moment(this.search["submitDate"][1]).format("YYYY-MM-DD") + " 23:59:59";
             }
           } else if (key == "content" && this.search.content) {
-            if(/[\u4e00-\u9fa5]/.test(this.search.content)) {
-              data.partName = this.search.content;
-            } else {
-              data.partCode = this.search.content;
-            }
+            data.partCode = this.search.content;
           } else {
             data[key] = this.search[key];
           }

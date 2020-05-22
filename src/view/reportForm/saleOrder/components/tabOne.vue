@@ -110,14 +110,14 @@
         ></vxe-table-column>
         <vxe-table-column field="isMakActivity" title="活动" width="120">
           <template v-slot="{ row }">
-            <Checkbox v-model="row.isMakActivity"></Checkbox>
+            <Checkbox disabled v-model="row.isMakActivity"></Checkbox>
           </template>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group4" title="税率信息">
         <vxe-table-column field="taxSign" title="是否含税" width="140">
           <template v-slot="{ row }">
-            <Checkbox v-model="row.taxSign"></Checkbox>
+            <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
         </vxe-table-column>
         <vxe-table-column

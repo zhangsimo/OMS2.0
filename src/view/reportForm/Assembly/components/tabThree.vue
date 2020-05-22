@@ -93,7 +93,7 @@
         ></vxe-table-column>
         <vxe-table-column field="taxSign" title="是否含税" width="140">
           <template v-slot="{ row }">
-            <Checkbox v-model="row.taxSign"></Checkbox>
+            <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
         </vxe-table-column>
         <vxe-table-column

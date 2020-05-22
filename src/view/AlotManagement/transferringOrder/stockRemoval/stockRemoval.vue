@@ -343,7 +343,6 @@ import {
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 export default {
-  name: "stockRemoval",
   components: {
     More,
     QuickDate,
@@ -653,6 +652,7 @@ export default {
         item.spec = item.specifications;
         item.partId = item.orgid;
         item.partInnerId = item.code;
+        item.unit = item.minUnit;
         let el = Object.assign({}, item);
         delete el.id;
         delete el.orderPrice;
@@ -1301,11 +1301,11 @@ export default {
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
-
     window.onresize = () => {
       this.getDomHeight();
     };
     this.warehouse();
+    this.getList();
   }
 };
 </script>

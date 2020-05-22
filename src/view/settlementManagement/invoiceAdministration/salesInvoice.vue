@@ -70,7 +70,7 @@
         <Row>
           <Col span="11">
             <FormItem label="购方名称：" prop="receiptUnit">
-              <Input v-model="formValidate.receiptUnit"/>
+              <Input v-model="formValidate.receiptUnitName"/>
             </FormItem>
           </Col>
           <Col span="11">
@@ -371,7 +371,7 @@ export default {
         },
         {
           title: "购方名称",
-          key: "receiptUnit",
+          key: "receiptUnitName",
           className: "tc"
         },
         {
@@ -424,7 +424,7 @@ export default {
         },
         {
           title: "部门门店",
-          key: "createTime",
+          key: "orgName",
           className: "tc"
         },
         {
@@ -455,7 +455,7 @@ export default {
         },
         {
           title: "开票公司",
-          key: "invoiceUnit",
+          key: "invoiceUnitName",
           className: "tc"
         },
         {

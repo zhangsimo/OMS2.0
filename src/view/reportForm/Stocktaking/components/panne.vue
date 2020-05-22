@@ -133,6 +133,8 @@ export default {
                 data.outDateEnd = moment(this.search["submitDate"][1]).format("YYYY-MM-DD") + " 23:59:59";
               }
             }
+          } else if (key == "content" && this.search.content) {
+            data.partCode = this.search.content;
           } else {
             data[key] = this.search[key];
           }
