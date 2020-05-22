@@ -548,7 +548,7 @@ export default {
     getDataDictionaryTable({ dictCode: "KPDW" }).then(res => {
       res.data.map(item => {
         this.invoice.issuingOfficeList.push({
-          value: item.itemName,
+          value: item.itemCode,
           label: item.itemName
         });
       });
@@ -642,7 +642,7 @@ export default {
           if (res.code === 0) {
             res.data.map(item => {
               item.label = item.taxpayerName;
-              item.value = item.taxpayerName;
+              item.value = item.id;
             });
             this.invoice.receiptUnitList = res.data;
           }
