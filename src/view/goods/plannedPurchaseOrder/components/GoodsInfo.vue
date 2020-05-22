@@ -289,8 +289,8 @@ export default class GoodsInfo extends Vue {
     this.isRequired = false;
     this.logisRequired = false;
     this.reset();
-    this.getLists();
-    this.inlogistics();
+    await this.getLists();
+    await this.inlogistics();
   }
 
   private async getLists() {
@@ -525,6 +525,7 @@ export default class GoodsInfo extends Vue {
     //   this.formDateRight.receiveAddress = row.address;
     // }
     // this.changeDeliveryType();
+    this.inlogistics();
   }
   //传入保存id
   private saveId(row) {
