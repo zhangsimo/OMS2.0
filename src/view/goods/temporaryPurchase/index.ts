@@ -415,7 +415,7 @@ export default class InterPurchase extends Vue {
               onOk: async () => {
                 let res = await api.temporarySaveCommit(data);
                 if (res.code == 0) {
-                  this.$Message.success('保存成功');
+                  this.$Message.success('提交成功');
                   this.getListData();
                   this.isAdd = true;
                 }
@@ -428,7 +428,7 @@ export default class InterPurchase extends Vue {
         }else{
           let res = await api.temporarySaveCommit(data);
           if (res.code == 0) {
-            this.$Message.success('保存成功');
+            this.$Message.success('提交成功');
             this.getListData();
             this.isAdd = true;
           }
