@@ -309,7 +309,9 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAmt ? row.rpAmt * 1 : 0).toFixed(2) : 0;
+      console.log(row , 888)
+      row.unAmtLeft = this.$utils.subtract(row.unAmt , row.rpAmt).toFixed(2)
+      // row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAmt ? row.rpAmt * 1 : 0).toFixed(2) : 0;
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -362,7 +364,6 @@ export default {
         sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });
       this.check = (sum1 - sum2 - sum3).toFixed(2);
-      console.log(this.check)
     }
   }
 };

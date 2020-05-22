@@ -70,7 +70,7 @@
               <a @click="dele(item)">删除行</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="serviceId" title="预收款收款单号"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="预付款采购单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
           <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
           <vxe-table-column field="claimAmt" title="预收款认领金额"></vxe-table-column>

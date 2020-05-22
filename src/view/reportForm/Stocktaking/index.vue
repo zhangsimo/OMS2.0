@@ -32,13 +32,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.enterDateStart = data.startTime : "";
         data.endTime ? data2.enterDateEnd = data.endTime : "";
         data.atimeStart ? data2.createTimeStart = data.atimeStart : "";
@@ -59,13 +53,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.outDateStart = data.startTime : "";
         data.endTime ? data2.outDateEnd = data.endTime : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";

@@ -896,6 +896,9 @@ export default {
     },
     //保存
     save() {
+      if(!this.formPlan.planSendDate) {
+        return this.$Message.error("*为必填项");
+      }
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {

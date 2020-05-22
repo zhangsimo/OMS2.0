@@ -10,31 +10,28 @@
           <div class="db mr10">
             <span class="">订单日期：</span>
             <Date-picker
-              type="daterange"
+              type="datetimerange"
               clearable
-              class="w200 mr10"
+              class="w320 mr10"
               @on-change="getvalue"
               placeholder="年/月/日-年/月/日"
             >
             </Date-picker>
           </div>
           <div class="db mr10">
-            <span>查询机构：</span>
+            <span>华胜门店：</span>
             <Select v-model="company" class="w200 mr10" placeholder="选择公司" filterable clearable @on-change="getCompany">
               <Option v-for="item in companyListOptions" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db mr10">
-            <span>查询值：</span>
-            <Select v-model="orderType" style="width:100px" class="mr10" @on-change="getOrderType">
-              <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
-            </Select>
+            <span>配件编码/名称：</span>
+            <Input v-model="searchData.partName" class="w150 mr10" />
           </div>
-          <div class="db mr10">
-            <Select v-model="guestId" class="w150 mr10" placeholder="选择客户" filterable clearable
-                    @on-change="getCustomer">
-              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>
+          <div class="db">
+            <Button class="mr15 w90" type="primary" @click="resetData">
+              查询
+            </Button>
           </div>
         </div>
       </div>
@@ -59,21 +56,18 @@
 
     <section class="con-box">
       <div class="inner-box">
-        <Tabs value="name1" :animated="false">
+        <Tabs v-model="tabsName" :animated="false" @on-click="changeTab">
           <TabPane label="可处理信息" name="name1">
-            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="待处理" name="name2">
-            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="已处理配件查询" name="name3">
-            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="历史订单" name="name4">
-            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
-          </TabPane>
-          <TabPane label="取消订单查询" name="name5">
-            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
         </Tabs>
       </div>
@@ -83,6 +77,7 @@
 
 <script>
   import {getTopList, getClient, selectCompany} from "_api/salesManagment/acceptance.js";
+  import {getHuaShengOrders} from "../../../api/salesManagment/sellReturn";
   import getDate from '@/components/getDate/dateget'
 
   export default {
@@ -134,43 +129,38 @@
             minWidth: 80
           },
           {
-            title: "订单类型",
-            key: "partInnerId",
-            minWidth: 120
-          },
-          {
             title: "订单单号",
-            key: "partCode",
+            key: "ordersNo",
             minWidth: 120
           },
           {
             title: "下单门店",
-            key: "partName",
+            key: "companyName",
             minWidth: 120
           },
           {
             title: "备注",
-            key: "carModelName",
+            key: "remark",
             minWidth: 120
           },
           {
             title: "配件内码",
-            key: "spec",
+            key: "partInnerId",
             minWidth: 120
           },
           {
             title: "配件编码",
-            key: "brandName",
+            key: "partCode",
             minWidth: 120
           },
           {
             title: "配件名称",
-            key: "quality",
+            key: "partName",
             minWidth: 120
           },
           {
             title: "规格",
-            key: "partBrand",
+            key: "unit",
             minWidth: 60
           },
           {
@@ -180,90 +170,141 @@
           },
           {
             title: "实物码",
-            key: "unit",
+            key: "inkindNo",
             minWidth: 80
           },
           {
             title: "订单数量",
-            key: "carTypef",
+            key: "orderQty",
             minWidth: 80
           },
           {
             title: "本店库存",
-            key: "carTypes",
+            key: "shopStock",
             minWidth: 80
           },
           {
             title: "总部库存",
-            key: "carTypet",
-            minWidth: 80
-          },
-          {
-            title: "生产厂家",
-            key: "carBrandName",
+            key: "headquartersStock",
             minWidth: 80
           },
           {
             title: "配件品质",
-            key: "fullName",
+            key: "partQuality",
             minWidth: 80
           },
           {
             title: "品牌",
-            key: "fullName",
+            key: "partBrand",
             minWidth: 80
           },
           {
             title: "厂牌",
-            key: "fullName",
+            key: "carBrandName",
             minWidth: 80
           },
           {
             title: "品牌车型",
-            key: "fullName",
+            key: "carModelName",
             minWidth: 120
           },
           {
             title: "单位",
-            key: "fullName",
+            key: "spec",
             minWidth: 60
           },
           {
             title: "一级分类",
-            key: "fullName",
+            key: "carTypef",
             minWidth: 180
           },
           {
             title: "二级分类",
-            key: "fullName",
+            key: "carTypes",
             minWidth: 180
           },
           {
             title: "订单来源",
-            key: "fullName",
+            key: "orderSource",
             minWidth: 180
           },
           {
             title: "订单人",
-            key: "fullName",
+            key: "createUname",
             minWidth: 180
           },
           {
             title: "订单日期",
-            key: "fullName",
+            key: "createTime",
             minWidth: 180
           },
-
         ],
+
+        tabsName:'name1',
+        hsOrderList1:[],
+        searchData:{
+          status:0,
+          partName:''
+        }
       }
 
     },
     mounted() {
-      this.getTopList()
+      // this.getTopList()
       this.getAllClient()
       this.getAllCompany()
+      this.getListData()
     },
     methods: {
+
+      async getListData(){
+        let params = {};
+        let data = {};
+        data.status = this.searchData.status;
+        if(this.searchData.partName.trim()){
+          data.partName = this.searchData.partName.trim();
+        }
+        // if (this.purchaseType !== 9999 && this.purchaseType) {
+        //   data.billStatusId = this.purchaseType;
+        // }
+        // if (this.dateTime.length > 0) {
+        //   data.startTime = this.dateTime[0];
+        //   data.endTime = this.dateTime[1];
+        // }
+        data.startDate = this.queryTime[0] || ''
+        data.endDate = this.queryTime[1] || ''
+        params.page = this.page.num - 1;
+        params.size = this.page.size;
+
+        let repData = await getHuaShengOrders(params,data);
+        if(repData.code===0){
+          this.hsOrderList1 = repData.data.content||[];
+        }
+      },
+
+      changeTab(name){
+        switch (name) {
+          case 'name1':
+            this.searchData.status = 0;
+            break;
+          case 'name2':
+            this.searchData.status = 1;
+            break;
+          case 'name3':
+            this.searchData.status = 2;
+            break;
+          case 'name4':
+            delete this.searchData.status;
+            break;
+        };
+        this.resetData();
+      },
+      resetData(){
+        this.page.num = 1;
+        this.page.size = 10;
+        this.getListData();
+      },
+
       //获取选择状态类型
       getOrderType(v) {
         this.orderType = v
@@ -280,6 +321,7 @@
       //获取时间
       getvalue(date) {
         this.queryTime = date
+        this.resetData();
       },
       //客户列表
       getAllClient() {

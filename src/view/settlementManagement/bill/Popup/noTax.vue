@@ -82,8 +82,8 @@
       :summary-method="billSum"
     ></Table>
     <div class="mt10">
-      <h4>不含税销售开票申请</h4>
-      <approval :approvalTit="approvalTit" />
+<!--      <h4>不含税销售开票申请</h4>-->
+<!--      <approval :approvalTit="approvalTit" />-->
     </div>
     <!-- 选择销售单据 -->
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="invoice" />
@@ -289,8 +289,8 @@ export default {
     // 对账单
     bus.$on("accountNo", val => {
       this.invoice.taxPoint = 0.07;
-      val.notAmt = val.serviceAmt - val.invoiceAmt;
-      val.invoiceTaxAmt = val.notAmt;
+      val.notAmt = val.noInvoiceAmt
+      val.invoiceTaxAmt = 0;
       this.invoice = { ...this.invoice, ...val };
     });
     // 销售单
@@ -364,8 +364,8 @@ export default {
     submission() {
       this.$refs.formCustom.validate(val => {
         if (val) {
-          console.log(this.information)
           let obj = {
+            ...this.invoice,
             ...{
               orgCode: this.information.code,
               orgid: this.information.orgId,
@@ -374,22 +374,22 @@ export default {
               applyNo: this.information.noTaxApply,
               guestName: this.information.guestName,
               partList: this.accessoriesBillingData,
-              applyDate: this.information.applicationDate
-            },
-            ...this.invoice
+              applyDate: this.information.applicationDate,
+            }
+
           };
           if (this.invoice.taxPoint > 0.06) {
             bus.$emit("noTaxSaleList", this.accessoriesBillingData);
             bus.$emit("noTaxInfo", this.invoice);
             this.modal1 = false;
-          } else {
+          }
             submitNoTax(obj).then(res => {
               if(res.code===0){
+                this.$emit('taxList' , res.data)
                 this.$message.success('提交成功')
                 this.modal1 = false
               }
             });
-          }
         }
       });
     },

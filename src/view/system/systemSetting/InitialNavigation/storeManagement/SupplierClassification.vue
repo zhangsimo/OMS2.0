@@ -16,7 +16,7 @@
       <Tree v-if="treeDiagramList" :data="treeDiagramList" @on-select-change="changeOneList"></Tree>
     </div>
     <!--      新增-->
-    <Modal v-model="modalShow" title="添加客户分类">
+    <Modal v-model="modalShow" title="添加门店分类">
       <Form ref="form" :label-width="100">
         <FormItem label="分类名称：">
           <Input placeholder="请输入分类名称" v-model="addTitle" style="width: 250px" />
@@ -38,7 +38,7 @@
       </div>
     </Modal>
     <!--      修改-->
-    <Modal v-model="changeShow" title="修改客户分类">
+    <Modal v-model="changeShow" title="修改门店分类">
       <Form ref="form" :label-width="100">
         <FormItem label="分类名称：">
           <Input placeholder="请输入分类名称" v-model="changeName" style="width: 250px" />
