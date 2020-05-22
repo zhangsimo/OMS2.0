@@ -290,7 +290,7 @@
       </TabPane>
     </Tabs>
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
-    <noTax ref="noTax" :information="information" :parameter="parameter" />
+    <noTax ref="noTax" :information="information" :parameter="parameter"  @taxList="getnoTaxSaleList" />
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -683,6 +683,12 @@ export default {
         this.$refs.noTax.modal1 = true;
       }, 100);
     },
+
+    //增加不函数开票申请返回值
+    getnoTaxSaleList(row){
+      this.information.invoiceNotTaxApply = row.id
+    },
+
     // 保存草稿
    async preservation() {
      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
@@ -707,7 +713,8 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
-            isOilPart: this.$parent.data1[0].isOilPart
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -746,8 +753,8 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
-            isOilPart: this.$parent.data1[0].isOilPart
-
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },

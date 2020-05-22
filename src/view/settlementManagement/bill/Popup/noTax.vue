@@ -385,6 +385,7 @@ export default {
           }
             submitNoTax(obj).then(res => {
               if(res.code===0){
+                this.$emit('taxList' , res.data)
                 this.$message.success('提交成功')
                 this.modal1 = false
               }
