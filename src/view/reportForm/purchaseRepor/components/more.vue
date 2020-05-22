@@ -45,7 +45,7 @@
       <FormItem :label="type == 1 ? '采购单单号: ' : (type == 2 ? '采购入库单号:' : (type == 3 ? '采退出库单号:' : '采购计划单号'))">
         <Input type="text" class="w300 ml5" v-model="serviceId" />
       </FormItem>
-      <FormItem v-if="type != 4" :label="type == 1 ? '往来单号: ' : (type == 2 ? '采购订单单号:' : (type == 3 ? '采退订单单号:' : ''))">
+      <FormItem v-if="type != 4 && type != 1" :label="type == 1 ? '往来单号: ' : (type == 2 ? '采购订单单号:' : (type == 3 ? '采退订单单号:' : ''))">
         <Input type="text" class="w300 ml5" v-model="code" />
       </FormItem>
       <FormItem v-if="type == 4" label="直发门店: ">
@@ -148,9 +148,12 @@ export default class MoreSearch extends Vue {
   }
 
   private orderTypeList: Array<any> = [
-    {id: "1", name: "常规订单"},
-    {id: "2", name: "备货订单"},
-    {id: "3", name: "急件订单"},
+    {id: "0", name: "所有"},
+    {id: "1", name: "采购计划"},
+    {id: "2", name: "国际采购"},
+    {id: "3", name: "临时采购"},
+    {id: "4", name: "门店外采"},
+    {id: "5", name: "销售退货"},
   ];
   private warehouse: Array<any> = new Array();
   private async getWares() {

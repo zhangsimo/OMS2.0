@@ -411,6 +411,7 @@ export default {
     SelectSupplier,
     PrintShow
   },
+  inject: ["reload"],
   data() {
     return {
       isWms: false,
@@ -830,6 +831,10 @@ export default {
       });
     },
     tijiao1() {
+      let len = this.Leftcurrentrow.detailVOS.filter(el => el.stockOutQty > 0).length;
+      if(length > 0) {
+        return this.$Message.error("存在缺货的配件");
+      }
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.error("请先保存该单据");
         return;
@@ -854,6 +859,7 @@ export default {
           }
         })
       this.getList(this.form);
+      // this.reload();
     },
     zuofei1() {
       this.$Modal.confirm({

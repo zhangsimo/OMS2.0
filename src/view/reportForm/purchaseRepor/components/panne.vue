@@ -185,11 +185,7 @@ export default {
               }
             }
           } else if (key == "content" && this.search.content) {
-            if (/[\u4e00-\u9fa5]/.test(this.search.content)) {
-              data.partName = this.search.content;
-            } else {
-              data.partCode = this.search.content;
-            }
+            data.partCode = this.search.content;
           } else {
             data[key] = this.search[key];
           }
