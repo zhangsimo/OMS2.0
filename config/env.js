@@ -1,5 +1,5 @@
 // 开发
-export default "dev"
+// export default "dev"
 
 // 测试
 // export default "test";
@@ -23,5 +23,5 @@ if (origin.includes('uatoms2')){
 if (origin.includes('erp')){
   output = 'pro'
 }
-console.log(output , '测试当前环境')
-// export default output
+// console.log(output , '测试当前环境')
+export default output
