@@ -187,7 +187,7 @@
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
@@ -198,8 +198,8 @@
               {{row.taxAmt | priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="invoiceTax" title="开票税率" ></vxe-table-column>
-          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
+          <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
           <vxe-table-column field="salePrice" title="销售单价" >
             <template v-slot="{row}">
               {{row.salePrice | priceFilters}}
@@ -242,7 +242,7 @@
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
           <vxe-table-column field="oilsSpec" title="油品包装规格" ></vxe-table-column>
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
@@ -253,8 +253,8 @@
               {{row.taxAmt | priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="invoiceTax" title="开票税率" ></vxe-table-column>
-          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
+          <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
           <vxe-table-column field="salePrice" title="销售单价" >
             <template v-slot="{row}">
               {{row.salePrice | priceFilters}}
