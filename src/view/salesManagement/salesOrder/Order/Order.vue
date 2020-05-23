@@ -32,7 +32,7 @@
       <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0"  v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button class="mr10" @click="setBackOrder" :disabled="orderlistType.value != 1" v-has="'BackOrder'">
+      <Button class="mr10" @click="setBackOrder" :loading="backloading" :disabled="orderlistType.value != 1" v-has="'BackOrder'">
         <i class="iconfont mr5 iconziyuan14"></i> 返单
       </Button>
       <Button class="mr10" @click="setCancellation" :disabled="orderlistType.value != 0" v-has="'Cancellation'">
@@ -90,6 +90,7 @@ export default {
   },
   data() {
     return {
+      backloading: false,
       isNew:true,//页面开始禁用
       isAdd:false,//判断是否新增
       orderType: 6,
@@ -182,9 +183,11 @@ export default {
     },
     //返单
     async setBackOrder() {
+      this.backloading = true;
       let list = this.$store.state.dataList.oneOrder;
       if (!list.id) {
         this.$message.error("请选择一条有效数据");
+        this.backloading = false;
         return false;
       }
       let data = {};
@@ -194,6 +197,7 @@ export default {
         this.changeLeft = res;
         let data = {};
         this.$store.commit("setOneOrder", data);
+        this.backloading = false;
       }
     },
     //作废
