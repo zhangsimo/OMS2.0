@@ -49,6 +49,7 @@ export default {
       moment: moment,
       advanced: false, //更多模块的弹框
       orderType: 99,
+      billStatusValue: 0,
       typeList: [
         { value: 99, name: '全部' },
         { value: 0, name: '草稿' },
@@ -235,10 +236,10 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      console.log(data)
       if(data.row.id){
         this.selectLeftItemId = data.row.id;
       }
+      this.billStatusValue = data.row.billStatusValue;
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
