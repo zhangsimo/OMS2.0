@@ -472,6 +472,7 @@ import SelectSupplier from "./components/supplier/selectSupplier";
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 import { TOKEN_KEY } from "@/libs/util";
+import Cookies from "js-cookie";
 import baseUrl from "_conf/url";
 export default {
   name: "goodsList",
