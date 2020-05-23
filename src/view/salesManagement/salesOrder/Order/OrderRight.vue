@@ -912,6 +912,7 @@ export default {
       let res = await getAccessories(data);
       if (res.code === 0) {
         this.getList();
+        this.$parent.$parent.$refs.OrderLeft.gitlistValue()
       }
     },
     //打开查看模态框
@@ -923,7 +924,6 @@ export default {
     },
     //保存
     save() {
-      console.log(this.formPlan.planSendDate)
       if(!this.formPlan.planSendDate) {
         return this.$Message.error("*为必填项");
       }
@@ -931,7 +931,6 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
@@ -1063,6 +1062,9 @@ export default {
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();
+                    } else {
+                      this.formPlan.planSendDate ? this.formPlan.planSendDate = new Date(this.formPlan.planSendDate) : "";
+                      this.formPlan.planArriveDate ? this.formPlan.planArriveDate = new Date(this.formPlan.planArriveDate) : "";
                     }
                   },
                   onCancel: () => {}
@@ -1103,7 +1105,7 @@ export default {
       data.sign = 1;
       let res = await getAccessories(data);
       if (res.code === 0) {
-        //this.getList();
+        this.getList();
         this.$parent.$parent.parentGetleft();
       }
     },
