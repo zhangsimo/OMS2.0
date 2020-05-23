@@ -698,9 +698,9 @@ export default {
             if (res.code === 0) {
               this.$message.success("保存成功");
               // 不含税申请单号
+              this.information.id = res.data.id
               noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
                 if (res.code === 0) {
-                  this.information.id = res.data.id
                   this.$refs.noTax.information.noTaxApply = res.data.applyNo;
                   this.$refs.noTax.information.code = res.data.orgCode;
                 }
