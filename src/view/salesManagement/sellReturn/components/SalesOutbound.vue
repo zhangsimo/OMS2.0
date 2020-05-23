@@ -257,6 +257,10 @@
         if(this.selectTableList.length === 0){
           this.$Message.error('请选择一条有效数据')
         }else {
+          this.selectTableList.forEach(el => {
+            el.oid = el.id;
+            el.unit = el.systemUnitId;
+          })
           this.$emit('salesOutList',this.selectTableList)
           this.showInfo = false
         }
