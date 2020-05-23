@@ -916,24 +916,46 @@ export default {
     deletePart() {
       if (this.selectTableList.length > 0) {
         let data = [];
+        let arr = [];
         this.selectTableList.forEach(item => {
-          data.push({ id: item.id });
-        });
-        const arr = this.formPlan.details.filter(
-          v => !this.selectTableList.includes(v)
-        );
-        this.$set(this.formPlan, "details", arr);
-        console.log('11',this.sellOrderTable.tbdata)
-        this.sellOrderTable.tbdata.map((item, index) => {
-          if (item.id === this.formPlan.id) {
-            this.$set(this.sellOrderTable.tbdata[index], "details", arr);
+          if(item.oid) {
+            arr.push({ oid: item.oid })
+          } else {
+            data.push({ id: item.id });
           }
         });
-        getDeleteList(data).then(res => {
+        if(arr.length > 0) {
+          arr.forEach(el => {
+            this.formPlan.details.forEach((el2, index) => {
+              if(el2.id == el.oid) {
+                this.formPlan.details.splice(index, 1)
+              }
+            })
+          })
+        }
+        // const arr = this.formPlan.details.filter(
+        //   v => !this.selectTableList.includes(v)
+        // );
+        // this.$set(this.formPlan, "details", arr);
+        // this.sellOrderTable.tbdata.map((item, index) => {
+        //   if (item.id === this.formPlan.id) {
+        //     this.$set(this.sellOrderTable.tbdata[index], "details", arr);
+        //   }
+        // });
+        if(data.length > 0) {
+          getDeleteList(data).then(res => {
           if (res.code === 0) {
+            data.forEach(el => {
+            this.formPlan.details.forEach((el2, index) => {
+              if(el2.id == el.id) {
+                this.formPlan.details.splice(index, 1)
+              }
+            })
+          })
             this.$Message.success("删除配件成功");
           }
         });
+        }
       } else {
         this.$Message.error("请选择一条有效数据");
       }
