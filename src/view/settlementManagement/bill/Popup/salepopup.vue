@@ -142,8 +142,8 @@
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="对账单欠票金额" prop="statementAmountOwed">
-            <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
+          <FormItem label="对账单欠票金额" prop="statementAmtOwed">
+            <Input v-model="invoice.statementAmtOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" >
             <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
@@ -311,7 +311,7 @@ export default {
   data() {
     const validateTax = (rule, value, callback) => {
       if (value) {
-        if (parseFloat(value) > parseFloat(this.invoice.statementAmountOwed)) {
+        if (parseFloat(value) > parseFloat(this.invoice.statementAmtOwed)) {
           callback(new Error("不得大于欠票金额"));
         } else {
           callback();
@@ -323,7 +323,8 @@ export default {
     const validateTicket = (rule, value, callback) => {
       if (
         parseFloat(this.invoice.applyTaxAmt) !=
-        parseFloat(this.invoice.statementAmountOwed) && this.invoice.underTicketExplain.trim() == '' ) {
+        parseFloat(this.invoice.statementAmtOwed) && this.invoice.underTicketExplain.trim() == ''
+      ) {
           callback(new Error("欠票金额不等于本次申请开票含税金额"));
       } else {
         callback();
@@ -370,7 +371,7 @@ export default {
             label: "自取"
           }
         ], //费用承担列表
-        statementAmountOwed: "", //对账单欠票金额
+        statementAmtOwed: "", //对账单欠票金额
         applyMoney: "", //申请开票金额
         address: "", //收件地址
         remark: "", //备注
@@ -447,7 +448,7 @@ export default {
             message: "费用承担不能为空"
           }
         ],
-        statementAmountOwed: [
+        statementAmtOwed: [
           {
             required: true,
             message: "对账单欠票金额不能为空"
@@ -623,9 +624,9 @@ export default {
     visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields();
-        this.invoice.statementAmountOwed =
+        this.invoice.statementAmtOwed =
           this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
-        this.invoice.applyTaxAmt = this.invoice.statementAmountOwed;
+        this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.applyAmt =
           this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
         // 发票单位
@@ -699,6 +700,7 @@ export default {
               // 不含税申请单号
               noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
                 if (res.code === 0) {
+                  this.information.id = res.data.id
                   this.$refs.noTax.information.noTaxApply = res.data.applyNo;
                   this.$refs.noTax.information.code = res.data.orgCode;
                 }
@@ -786,7 +788,8 @@ export default {
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
             isOilPart: this.$parent.data1[0].isOilPart,
-            invoiceNotTaxApply:this.information.invoiceNotTaxApply
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply,
+            id:this.information.id ? this.information.id : ""
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
