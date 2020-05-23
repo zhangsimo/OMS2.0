@@ -594,6 +594,13 @@ export default {
     requires(val) {
       this.allTablist = val;
     },
+    //只能核销
+    async Intelligence(){
+      let data ={}
+      let res = await IntelligenceList(data)
+      if (res.code === 0) return this.$Message.success('智能核销成功')
+    },
+
     cancellation() {
       if (!this.allTablist.length) {
         return this.$Message.warning("请选择要核销的数据！");
