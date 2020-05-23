@@ -748,7 +748,8 @@ export default {
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
             isOilPart: this.$parent.data1[0].isOilPart,
-            invoiceNotTaxApply:this.information.invoiceNotTaxApply
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply,
+            id:this.information.id ? this.information.id : ""
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
