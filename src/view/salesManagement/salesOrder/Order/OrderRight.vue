@@ -804,50 +804,77 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          let vals = conversionList(val);
-          this.formPlan.detailList = [
-            ...this.formPlan.detailList,
-            ...conversionList(val)
-          ];
-          this.formPlan.detailList.forEach(el => {
-            if(!el.orderQty) {
-              el.orderQty = 1
-            }
-          });
-          this.$Message.success("已添加");
-        } else {
-          this.$Message.error("*为必填项");
+      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      if (this.formPlan.planSendDate) {
+        this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      }
+      let vals = conversionList(val);
+      this.formPlan.detailList = [
+        ...this.formPlan.detailList,
+        ...conversionList(val)
+      ];
+      this.formPlan.detailList.forEach(el => {
+        if(!el.orderQty) {
+          el.orderQty = 1
         }
       });
+      this.$Message.success("已添加");
+      // this.$refs.formPlan.validate(async valid => {
+      //   if (valid) {
+      //     let vals = conversionList(val);
+      //     this.formPlan.detailList = [
+      //       ...this.formPlan.detailList,
+      //       ...conversionList(val)
+      //     ];
+      //     this.formPlan.detailList.forEach(el => {
+      //       if(!el.orderQty) {
+      //         el.orderQty = 1
+      //       }
+      //     });
+      //     this.$Message.success("已添加");
+      //   } else {
+      //     this.$Message.error("*为必填项");
+      //   }
+      // });
     },
     // 批次配件
     async getBarchList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          // let data = {};
-          val.map(item => {
-            item.orderQty = 1;
-            item.isMarkBatch = 1;
-            item.batchSourceId = item.id||item.batchSourceId
-            Reflect.deleteProperty(item, 'id');
-          });
-          // data = this.formPlan;
-          // val.map(item=>{
-          //     data.detailList.unshift(val);
-          // })
-            this.formPlan.detailList = [
-                ...this.formPlan.detailList,
-                ...val
-            ]
-            // this.formPlan.detailList.forEach(el => el.orderQty = 1);
-        } else {
-          this.$Message.error("*为必填项");
-        }
+      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      if (this.formPlan.planSendDate) {
+        this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      }
+      val.map(item => {
+        item.orderQty = 1;
+        item.isMarkBatch = 1;
+        item.batchSourceId = item.id||item.batchSourceId
+        Reflect.deleteProperty(item, 'id');
       });
+      this.formPlan.detailList = [
+          ...this.formPlan.detailList,
+          ...val
+      ]
+      // this.$refs.formPlan.validate(async valid => {
+      //   if (valid) {
+      //     // let data = {};
+      //     val.map(item => {
+      //       item.orderQty = 1;
+      //       item.isMarkBatch = 1;
+      //       item.batchSourceId = item.id||item.batchSourceId
+      //       Reflect.deleteProperty(item, 'id');
+      //     });
+      //     // data = this.formPlan;
+      //     // val.map(item=>{
+      //     //     data.detailList.unshift(val);
+      //     // })
+      //       this.formPlan.detailList = [
+      //           ...this.formPlan.detailList,
+      //           ...val
+      //       ]
+      //       // this.formPlan.detailList.forEach(el => el.orderQty = 1);
+      //   } else {
+      //     this.$Message.error("*为必填项");
+      //   }
+      // });
     },
     //打开客户选择
     openAddCustomer() {
@@ -896,6 +923,7 @@ export default {
     },
     //保存
     save() {
+      console.log(this.formPlan.planSendDate)
       if(!this.formPlan.planSendDate) {
         return this.$Message.error("*为必填项");
       }

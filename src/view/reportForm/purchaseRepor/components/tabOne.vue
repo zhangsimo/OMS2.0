@@ -40,7 +40,7 @@
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="enterDate"
+          field="orderDate"
           title="订货日期"
           width="120"
         ></vxe-table-column>

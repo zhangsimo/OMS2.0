@@ -615,8 +615,6 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList();
-    this.getArrayParams();
   },
   methods: {
     // 高级查询弹框
@@ -625,8 +623,8 @@ export default {
     },
     getArrayParams() {
       var req = {};
-      req.page = 1;
-      req.size = 20;
+      req.page = 0;
+      req.size = 1000;
       findForAllot(req).then(res => {
         const { content } = res.data;
         this.getArray = content;
@@ -1304,6 +1302,8 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
+    this.getList();
+    this.getArrayParams();
     this.warehouse();
     this.getList();
   }
