@@ -171,14 +171,6 @@
     >选择必开销售单</button>
     <Tabs type="card" value="invoice1" class="mt10">
       <TabPane label="配件清单" name="invoice1">
-<!--        <Table-->
-<!--          border-->
-<!--          :columns="accessoriesBilling"-->
-<!--          :data="accessoriesBillingData1"-->
-<!--          show-summary-->
-<!--          :summary-method="billSum"-->
-<!--        ></Table>-->
-
 
         <vxe-table
           border
@@ -330,10 +322,9 @@ export default {
     };
     const validateTicket = (rule, value, callback) => {
       if (
-        parseFloat(this.invoice.applyTaxAmt) !==
-        parseFloat(this.invoice.statementAmountOwed)
-      ) {
-        callback(new Error("欠票金额不等于本次申请开票含税金额"));
+        parseFloat(this.invoice.applyTaxAmt) !=
+        parseFloat(this.invoice.statementAmountOwed) && this.invoice.underTicketExplain.trim() == '' ) {
+          callback(new Error("欠票金额不等于本次申请开票含税金额"));
       } else {
         callback();
       }
@@ -671,17 +662,58 @@ export default {
       }
     },
     // 增加不含税销售开票申请
-    add() {
-      // 不含税申请单号
-      noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
-        if (res.code === 0) {
-          this.$refs.noTax.information.noTaxApply = res.data.applyNo;
-          this.$refs.noTax.information.code = res.data.orgCode;
+    async add() {
+      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      const errMap2 = await this.$refs.xTable2.validate().catch(errMap => errMap)
+      if (errMap1){
+        return this.$Message.error('增加不含税销售开票申请前请先保存草稿')
+      }
+      if (errMap2){
+        return this.$Message.error('增加不含税销售开票申请前请先保存草稿')
+      }
+
+      this.$refs.formCustom.validate(vald => {
+        if (vald) {
+          let info = {
+            orgCode: this.information.code,
+            orgid: this.information.orgId,
+            orgName: this.information.orgName,
+            guestId: this.information.guestId,
+            accountNo: this.information.accountNo,
+            applyNo: this.information.applyNo,
+            applyDate: this.information.applicationDate,
+            guestName: this.information.guestName,
+            oilsListOrder:this.information.oilsListOrder,
+            partsListOrder:this.information.partsListOrder,
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply
+          };
+          let obj = Object.assign(
+            { partList: this.accessoriesBillingData },
+            info,
+            this.invoice
+          );
+          saveDraft(obj).then(res => {
+            if (res.code === 0) {
+              this.$message.success("保存成功");
+              // 不含税申请单号
+              noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
+                if (res.code === 0) {
+                  this.$refs.noTax.information.noTaxApply = res.data.applyNo;
+                  this.$refs.noTax.information.code = res.data.orgCode;
+                }
+              });
+              setTimeout(() => {
+                this.$refs.noTax.modal1 = true;
+              }, 100);
+
+            }
+          });
         }
       });
-      setTimeout(() => {
-        this.$refs.noTax.modal1 = true;
-      }, 100);
+
+
+
     },
 
     //增加不函数开票申请返回值
