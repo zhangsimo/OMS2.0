@@ -831,8 +831,8 @@ export default {
       });
     },
     tijiao1() {
-      let len = this.Leftcurrentrow.detailVOS.filter(el => el.stockOutQty > 0).length;
-      if(length > 0) {
+      let len = this.Leftcurrentrow.detailVOS.filter(el => Number(el.stockOutQty) > 0).length;
+      if(len > 0) {
         return this.$Message.error("存在缺货的配件");
       }
       if (this.Leftcurrentrow.xinzeng === "1") {
