@@ -33,7 +33,7 @@ export default {
     let changeNumber = ({cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
       if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+        return Promise.reject(new Error('数量输入不正确'))
       }
     };
 
@@ -428,9 +428,16 @@ export default {
     selectPlan() {
       this.$refs.procurementModal.init()
     },
+
+    setSelected(row) {
+      this.$refs.formPlan.resetFields();
+      this.$refs.xTab.setCurrentRow(row);
+      this.formPlan = row;
+    },
+
     //获取采购订单数据
     async getPlanOrder(val) {
-      console.log(val)
+      // console.log(val)
       if (val) {
         this.formPlan.pchsOrderId = val.id
         await this.$refs.xTable.validate()
@@ -453,8 +460,9 @@ export default {
           }
           await this.clickOnesList(this.dataChange)
           this.allMoney = 0
+          this.$refs.formPlan.resetFields();
           this.$Message.success('保存成功');
-          // this.$refs.formPlan.resetFields();
+          // this.setSelected(this.dataChange.row);
         }
         try {
         } catch (errMap) {
@@ -480,8 +488,8 @@ export default {
                 }
                 this.allMoney = 0
                 this.$Message.success('保存成功');
-                this.$refs.formPlan.resetFields();
                 this.flag = 0
+                this.setSelected(this.dataChange.row);
               }
             } catch (errMap) {
               this.$XModal.message({ status: 'error', message: '表格校验不通过！' })

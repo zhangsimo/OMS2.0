@@ -260,7 +260,6 @@ import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 export default {
-  name: "twoBackInStorage",
   components: {
     More,
     QuickDate,
