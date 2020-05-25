@@ -19,7 +19,7 @@
       }}</Option>
     </Select>
     <span class="ml10">收付款类型：</span>
-    <Select v-model="receivePaymentType" class="w150" filterable>
+    <Select v-model="receivePaymentType" class="w150" filterable disabled>
       <Option
         v-for="item in receivePayments"
         :value="item.value"

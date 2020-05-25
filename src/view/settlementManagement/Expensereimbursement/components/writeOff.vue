@@ -257,6 +257,7 @@ export default {
       let data = {
         claimed: 1,
         writeOffStatus: 0,
+        searchType:0,
         startTime: this.dates[0]
           ? moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00"
           : "",
@@ -266,11 +267,11 @@ export default {
         // serviceId: this.requestCode
         // guestId: this.companyId,
       };
-      for (let d in data) {
-        if (!data[d]) {
-          delete data[d];
-        }
-      }
+      // for (let d in data) {
+      //   if (!data[d]) {
+      //     delete data[d];
+      //   }
+      // }
       api.findListPageAll(params, data).then(res => {
         if (res.code == 0) {
           this.tbdataChild = res.data.content;

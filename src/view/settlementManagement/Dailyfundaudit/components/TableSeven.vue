@@ -19,26 +19,9 @@
       <vxe-table-column title="基本信息">
         <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="businessNumbers" title="预收款支出/核销单号"></vxe-table-column>
-        <vxe-table-column field="businessNumbersList" title="预收款单号"></vxe-table-column>
-        <vxe-table-column field="tmp" title="来源往来单位">
-          <template v-slot="{ row }">
-            <ul class="list">
-              <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
-                <span class="listChild">{{ item.guestSourceName }}</span>
-              </li>
-            </ul>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="tmp" title="目标往来单位">
-          <template v-slot="{ row }">
-            <ul class="list">
-              <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
-                <span class="listChild">{{ item.guestTargetName }}</span>
-              </li>
-            </ul>
-          </template>
-        </vxe-table-column>
+        <vxe-table-column field="businessNumbers" title="收付款单号"></vxe-table-column>
+        <vxe-table-column field="businessNumbersList" title="费用报销/因公借支申请单号"></vxe-table-column>
+        <vxe-table-column field="proposerName" title="申请人"></vxe-table-column>
         <vxe-table-column field="tmp" title="收付类型">
           <template v-slot="{ row }">
             <span>{{ row.receiptPaymentType.name }}</span>
