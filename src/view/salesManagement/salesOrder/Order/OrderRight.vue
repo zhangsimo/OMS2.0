@@ -804,50 +804,77 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          let vals = conversionList(val);
-          this.formPlan.detailList = [
-            ...this.formPlan.detailList,
-            ...conversionList(val)
-          ];
-          this.formPlan.detailList.forEach(el => {
-            if(!el.orderQty) {
-              el.orderQty = 1
-            }
-          });
-          this.$Message.success("已添加");
-        } else {
-          this.$Message.error("*为必填项");
+      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      if (this.formPlan.planSendDate) {
+        this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      }
+      let vals = conversionList(val);
+      this.formPlan.detailList = [
+        ...this.formPlan.detailList,
+        ...conversionList(val)
+      ];
+      this.formPlan.detailList.forEach(el => {
+        if(!el.orderQty) {
+          el.orderQty = 1
         }
       });
+      this.$Message.success("已添加");
+      // this.$refs.formPlan.validate(async valid => {
+      //   if (valid) {
+      //     let vals = conversionList(val);
+      //     this.formPlan.detailList = [
+      //       ...this.formPlan.detailList,
+      //       ...conversionList(val)
+      //     ];
+      //     this.formPlan.detailList.forEach(el => {
+      //       if(!el.orderQty) {
+      //         el.orderQty = 1
+      //       }
+      //     });
+      //     this.$Message.success("已添加");
+      //   } else {
+      //     this.$Message.error("*为必填项");
+      //   }
+      // });
     },
     // 批次配件
     async getBarchList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          // let data = {};
-          val.map(item => {
-            item.orderQty = 1;
-            item.isMarkBatch = 1;
-            item.batchSourceId = item.id||item.batchSourceId
-            Reflect.deleteProperty(item, 'id');
-          });
-          // data = this.formPlan;
-          // val.map(item=>{
-          //     data.detailList.unshift(val);
-          // })
-            this.formPlan.detailList = [
-                ...this.formPlan.detailList,
-                ...val
-            ]
-            // this.formPlan.detailList.forEach(el => el.orderQty = 1);
-        } else {
-          this.$Message.error("*为必填项");
-        }
+      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      if (this.formPlan.planSendDate) {
+        this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      }
+      val.map(item => {
+        item.orderQty = 1;
+        item.isMarkBatch = 1;
+        item.batchSourceId = item.id||item.batchSourceId
+        Reflect.deleteProperty(item, 'id');
       });
+      this.formPlan.detailList = [
+          ...this.formPlan.detailList,
+          ...val
+      ]
+      // this.$refs.formPlan.validate(async valid => {
+      //   if (valid) {
+      //     // let data = {};
+      //     val.map(item => {
+      //       item.orderQty = 1;
+      //       item.isMarkBatch = 1;
+      //       item.batchSourceId = item.id||item.batchSourceId
+      //       Reflect.deleteProperty(item, 'id');
+      //     });
+      //     // data = this.formPlan;
+      //     // val.map(item=>{
+      //     //     data.detailList.unshift(val);
+      //     // })
+      //       this.formPlan.detailList = [
+      //           ...this.formPlan.detailList,
+      //           ...val
+      //       ]
+      //       // this.formPlan.detailList.forEach(el => el.orderQty = 1);
+      //   } else {
+      //     this.$Message.error("*为必填项");
+      //   }
+      // });
     },
     //打开客户选择
     openAddCustomer() {
@@ -885,6 +912,7 @@ export default {
       let res = await getAccessories(data);
       if (res.code === 0) {
         this.getList();
+        this.$parent.$parent.$refs.OrderLeft.gitlistValue()
       }
     },
     //打开查看模态框
@@ -903,7 +931,6 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
@@ -1035,6 +1062,9 @@ export default {
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();
+                    } else {
+                      this.formPlan.planSendDate ? this.formPlan.planSendDate = new Date(this.formPlan.planSendDate) : "";
+                      this.formPlan.planArriveDate ? this.formPlan.planArriveDate = new Date(this.formPlan.planArriveDate) : "";
                     }
                   },
                   onCancel: () => {}
@@ -1075,7 +1105,7 @@ export default {
       data.sign = 1;
       let res = await getAccessories(data);
       if (res.code === 0) {
-        //this.getList();
+        this.getList();
         this.$parent.$parent.parentGetleft();
       }
     },

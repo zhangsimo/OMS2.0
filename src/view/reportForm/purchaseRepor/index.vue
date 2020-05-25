@@ -70,7 +70,7 @@ export default {
         data.ctimeEnd ? data2.endEnterDate = data.ctimeEnd : "";
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.code ? data2.pchsServiceId = data.code : "";
+        data.code ? data2.code = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
