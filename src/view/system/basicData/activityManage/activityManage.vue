@@ -537,7 +537,7 @@ export default {
         {
           title: "配件内码",
           align: "center",
-          key: "partId"
+          key: "partInnerId"
         },
         {
           title: "配件编码",

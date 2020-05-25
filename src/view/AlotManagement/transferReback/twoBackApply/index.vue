@@ -854,12 +854,12 @@ export default {
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
-          if (res.code == 0) {
+          if (res.code == 0 || res.message.indexOf("成功") > -1) {
+            this.reload();
             this.$Message.success("提交成功");
           }
         })
-      this.getList(this.form);
-      // this.reload();
+      // this.getList(this.form);
     },
     zuofei1() {
       this.$Modal.confirm({
