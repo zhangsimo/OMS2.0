@@ -141,7 +141,6 @@ import {
 } from "../../../../api/AlotManagement/transferringOrder";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
-  name: "Acceptances",
   components: {
     QuickDate
   },
@@ -334,6 +333,7 @@ export default {
     }
   },
   mounted() {
+    console.log("getlist")
     this.getList();
     this.supplier();
   }

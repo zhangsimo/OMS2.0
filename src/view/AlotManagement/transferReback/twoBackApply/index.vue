@@ -411,6 +411,7 @@ export default {
     SelectSupplier,
     PrintShow
   },
+  inject: ["reload"],
   data() {
     return {
       isWms: false,
@@ -830,6 +831,10 @@ export default {
       });
     },
     tijiao1() {
+      let len = this.Leftcurrentrow.detailVOS.filter(el => Number(el.stockOutQty) > 0).length;
+      if(len > 0) {
+        return this.$Message.error("存在缺货的配件");
+      }
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.error("请先保存该单据");
         return;
@@ -849,11 +854,12 @@ export default {
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
-          if (res.code == 0) {
+          if (res.code == 0 || res.message.indexOf("成功") > -1) {
+            this.reload();
             this.$Message.success("提交成功");
           }
         })
-      this.getList(this.form);
+      // this.getList(this.form);
     },
     zuofei1() {
       this.$Modal.confirm({

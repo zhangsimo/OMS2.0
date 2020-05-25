@@ -49,13 +49,7 @@ export default {
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.orderType ? data2.orderType = data.orderType : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
@@ -76,14 +70,8 @@ export default {
         data.ctimeEnd ? data2.endEnterDate = data.ctimeEnd : "";
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.code ? data2.pchsServiceId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.code ? data2.code = data.code : "";
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
@@ -103,13 +91,7 @@ export default {
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
@@ -131,13 +113,7 @@ export default {
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.directCompanyId = data.code : "";
-        if(data.partCode) {
-          if(/[\u4e00-\u9fa5]/.test(data.partCode)) {
-            data2.partName = data.partCode;
-          } else {
-            data2.partCode = data.partCode;
-          }
-        }
+        data.partCode ? data2.partCode = data.partCode : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";

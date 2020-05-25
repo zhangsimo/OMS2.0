@@ -55,6 +55,7 @@
     <div class="tabeBox">
       <div style="width: 3000px">
         <Table
+          ref="table"
           class="table-highlight-row"
           :loading="loading"
           size="small"
@@ -405,6 +406,7 @@ export default {
       });
     },
     openOrClose() {
+      this.$refs.table.clearCurrentRow();
       this.pitchSupplierOne = {};
     },
     //修改客户资料

@@ -175,7 +175,7 @@ export default {
         },
         {
           title: "利息收入",
-          key: "interestIncome_money",
+          key: "interestIncomeMoney",
           width: 100
         },
         {
@@ -332,7 +332,7 @@ export default {
         }
       }
     },
-    
+
     // 查询
     async query() {
       let params = {

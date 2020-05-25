@@ -339,7 +339,6 @@ export default class InterPurchase extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: this.formPlanmain.planArriveDate ? tools.transTime(this.formPlanmain.planArriveDate) : "",
           remark: this.formPlanmain.remark,
-          directCompanyId: this.formPlanmain.directCompanyId,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt: this.formPlanmain.advanceAmt,
           processInstanceId: this.formPlanmain.processInstanceId,
@@ -349,6 +348,7 @@ export default class InterPurchase extends Vue {
             data[k] = this.amt[k];
           }
         }
+        data.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : 0;
       } else {
         this.$Message.error('请添加配件或完善订单信息后再提交!');
         data = null;
@@ -361,6 +361,7 @@ export default class InterPurchase extends Vue {
         obj[k] = v;
       }
     }
+    obj.directCompanyId = obj.directCompanyId ? obj.directCompanyId : 0;
     if (!data) {
       return null;
     }
@@ -373,9 +374,9 @@ export default class InterPurchase extends Vue {
     let data: any = this.formdata(refname)
     if (!data) return;
 
-    if(!data.directCompanyId){
-      this.selectTableRow.directCompanyId = 0;
-    }
+    // if(!data.directCompanyId){
+    //   this.selectTableRow.directCompanyId = 0;
+    // }
 
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
@@ -397,9 +398,9 @@ export default class InterPurchase extends Vue {
       onOk: async () => {
         let data: any = this.formdata(refname);
 
-        if(!data.directCompanyId){
-          this.selectTableRow.directCompanyId = 0;
-        }
+        // if(!data.directCompanyId){
+        //   this.selectTableRow.directCompanyId = 0;
+        // }
 
         if (!data) return;
         if (this.selectTableRow.id) {
@@ -415,7 +416,7 @@ export default class InterPurchase extends Vue {
               onOk: async () => {
                 let res = await api.temporarySaveCommit(data);
                 if (res.code == 0) {
-                  this.$Message.success('保存成功');
+                  this.$Message.success('提交成功');
                   this.getListData();
                   this.isAdd = true;
                 }
@@ -428,7 +429,7 @@ export default class InterPurchase extends Vue {
         }else{
           let res = await api.temporarySaveCommit(data);
           if (res.code == 0) {
-            this.$Message.success('保存成功');
+            this.$Message.success('提交成功');
             this.getListData();
             this.isAdd = true;
           }

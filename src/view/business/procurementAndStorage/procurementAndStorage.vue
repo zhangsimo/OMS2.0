@@ -273,7 +273,7 @@
                     <vxe-table-column
                       field="orderQty"
                       title="数量"
-                      :edit-render="{name: 'input',immediate: true,attrs: {disabled: true}, events: {input: updateFooterEvent}}"
+                      :edit-render="{name: 'input',immediate: true,attrs: {disabled: billStatusValue != 0}, events: {input: updateFooterEvent}}"
                     ></vxe-table-column>
                     <vxe-table-column
                       field="orderPrice"

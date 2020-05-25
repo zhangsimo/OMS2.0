@@ -218,7 +218,6 @@
   import {findForAllot} from "_api/purchasing/purchasePlan";
 
     export default {
-      name: "applyFor",
       components: {
         QuickDate,
         More,
@@ -232,7 +231,7 @@
         let changeNumber = ({cellValue }) => {
           const reg = /^[1-9]\d{0,}$/;
           if(!reg.test(cellValue)) {
-            return Promise.reject(new Error('角色输入不正确'))
+            return Promise.reject(new Error('数量输入不正确'))
           }
         };
         return {
@@ -389,17 +388,14 @@
           ArrayValue: []
         }
       },
-      created() {
-        this.getArrayParams()
-      },
       methods: {
         selectOption(date) {
           this.selectvalue = date.value
         },
         getArrayParams() {
           var req = {};
-          req.page = 1;
-          req.size = 20;
+          req.page = 0;
+          req.size = 1000;
           findForAllot(req).then(res => {
             const { content } = res.data;
             this.getArray = content;
@@ -955,6 +951,7 @@
         };
           this.leftgetList();
           this.warehouse();
+          this.getArrayParams();
           // this.selecQuery();
       }
     }

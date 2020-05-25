@@ -790,7 +790,6 @@ export default {
     },
     //计划发货日期
     getplanSendDate(data) {
-      // this.formPlan.planSendDate = new Date(data);
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {
@@ -805,50 +804,30 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          let vals = conversionList(val);
-          this.formPlan.detailList = [
-            ...this.formPlan.detailList,
-            ...conversionList(val)
-          ];
-          this.formPlan.detailList.forEach(el => {
-            if(!el.orderQty) {
-              el.orderQty = 1
-            }
-          });
-          this.$Message.success("已添加");
-        } else {
-          this.$Message.error("*为必填项");
+      let vals = conversionList(val);
+      this.formPlan.detailList = [
+        ...this.formPlan.detailList,
+        ...conversionList(val)
+      ];
+      this.formPlan.detailList.forEach(el => {
+        if(!el.orderQty) {
+          el.orderQty = 1
         }
       });
+      this.$Message.success("已添加");
     },
     // 批次配件
     async getBarchList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          // let data = {};
-          val.map(item => {
-            item.orderQty = 1;
-            item.isMarkBatch = 1;
-            item.batchSourceId = item.id||item.batchSourceId
-            Reflect.deleteProperty(item, 'id');
-          });
-          // data = this.formPlan;
-          // val.map(item=>{
-          //     data.detailList.unshift(val);
-          // })
-            this.formPlan.detailList = [
-                ...this.formPlan.detailList,
-                ...val
-            ]
-            // this.formPlan.detailList.forEach(el => el.orderQty = 1);
-        } else {
-          this.$Message.error("*为必填项");
-        }
+      val.map(item => {
+        item.orderQty = 1;
+        item.isMarkBatch = 1;
+        item.batchSourceId = item.id||item.batchSourceId
+        Reflect.deleteProperty(item, 'id');
       });
+      this.formPlan.detailList = [
+          ...this.formPlan.detailList,
+          ...val
+      ]
     },
     //打开客户选择
     openAddCustomer() {
@@ -875,17 +854,18 @@ export default {
         el.orderPrice = el.price;
         return el;
       });
-      this.formPlan.planSendDate = this.formPlan.planSendDate ? tools.transTime(this.formPlan.planSendDate) : "";
-      this.formPlan.planArriveDate = this.formPlan.planArriveDate ? tools.transTime(this.formPlan.planArriveDate) : "";
       for(let key in this.formPlan) {
         if(this.formPlan[key]) {
           data[key] = this.formPlan[key]
         }
       }
+      data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
+      data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
       data.detailList = arr;
       let res = await getAccessories(data);
       if (res.code === 0) {
         this.getList();
+        this.$parent.$parent.$refs.OrderLeft.gitlistValue()
       }
     },
     //打开查看模态框
@@ -904,13 +884,13 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
-            this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
-            this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
-            let res = await getSave(this.formPlan);
+            let data = JSON.parse(JSON.stringify(this.formPlan));
+            data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
+            data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+            let res = await getSave(data);
             if (res.code === 0) {
               this.$Message.success("保存成功");
               this.$parent.$parent.isAdd = false;
@@ -964,7 +944,7 @@ export default {
             onOk: async () => {
                 if (this.door.outStockDoor) {
                     this.door.outStockDoor = false;
-                    this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+                    this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
                     this.$refs.formPlan.validate(async valid => {
                         if (valid) {
                             try {
@@ -1003,6 +983,9 @@ export default {
     },
     //提交
     submitList() {
+      if(!this.formPlan.planSendDate) {
+        return this.$Message.error("*为必填项");
+      }
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -1010,10 +993,11 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
-            this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
+            let data = JSON.parse(JSON.stringify(this.formPlan));
+            data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
+            data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
             let orderList = [];
-            orderList = this.formPlan.detailList.filter(
+            orderList = data.detailList.filter(
               item => item.orderPrice*1 < item.averagePrice*1
             );
             if (orderList.length > 0) {
@@ -1028,7 +1012,7 @@ export default {
                   title: "提示",
                   content: text,
                   onOk: async () => {
-                    let res = await getSubmitList(this.formPlan);
+                    let res = await getSubmitList(data);
                     if (res.code === 0) {
                       this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
@@ -1042,7 +1026,7 @@ export default {
                 });
               }, 500);
             } else {
-              let res = await getSubmitList(this.formPlan);
+              let res = await getSubmitList(data);
               if (res.code === 0) {
                 this.$Message.success("提交成功");
                   this.$parent.$parent.isAdd = false;
@@ -1061,14 +1045,13 @@ export default {
     },
     //获取选择入库单的信息
     async getGodown(val) {
-      let data = {};
-      if (this.formPlan.planSendDate) {
-        this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      let data = JSON.parse(JSON.stringify(this.formPlan));
+      if (data.planSendDate) {
+        data.planSendDate = tools.transTime(data.planSendDate)
       }
-      if (this.formPlan.planArriveDate) {
-        this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
+      if (data.planArriveDate) {
+        data.planArriveDate = tools.transTime(data.planArriveDate)
       }
-      data = this.formPlan;
       val.details.map(item => {
         item.isMarkBatch = 1;
       });
@@ -1076,7 +1059,7 @@ export default {
       data.sign = 1;
       let res = await getAccessories(data);
       if (res.code === 0) {
-        //this.getList();
+        this.getList();
         this.$parent.$parent.parentGetleft();
       }
     },

@@ -142,11 +142,11 @@
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="对账单欠票金额" prop="statementAmountOwed">
-            <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
+          <FormItem label="对账单欠票金额" prop="statementAmtOwed">
+            <Input v-model="invoice.statementAmtOwed" class="ml5 w200" disabled />
           </FormItem>
-          <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
-            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" />
+          <FormItem label="本次申请开票含税金额" >
+            <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -171,14 +171,6 @@
     >选择必开销售单</button>
     <Tabs type="card" value="invoice1" class="mt10">
       <TabPane label="配件清单" name="invoice1">
-<!--        <Table-->
-<!--          border-->
-<!--          :columns="accessoriesBilling"-->
-<!--          :data="accessoriesBillingData1"-->
-<!--          show-summary-->
-<!--          :summary-method="billSum"-->
-<!--        ></Table>-->
-
 
         <vxe-table
           border
@@ -195,7 +187,7 @@
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
@@ -206,8 +198,8 @@
               {{row.taxAmt | priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="invoiceTax" title="开票税率" ></vxe-table-column>
-          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
+          <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
           <vxe-table-column field="salePrice" title="销售单价" >
             <template v-slot="{row}">
               {{row.salePrice | priceFilters}}
@@ -250,7 +242,7 @@
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
           <vxe-table-column field="oilsSpec" title="油品包装规格" ></vxe-table-column>
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
@@ -261,8 +253,8 @@
               {{row.taxAmt | priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="invoiceTax" title="开票税率" ></vxe-table-column>
-          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
+          <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
           <vxe-table-column field="salePrice" title="销售单价" >
             <template v-slot="{row}">
               {{row.salePrice | priceFilters}}
@@ -290,7 +282,7 @@
       </TabPane>
     </Tabs>
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
-    <noTax ref="noTax" :information="information" :parameter="parameter" />
+    <noTax ref="noTax" :information="information" :parameter="parameter"  @taxList="getnoTaxSaleList" />
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -319,7 +311,7 @@ export default {
   data() {
     const validateTax = (rule, value, callback) => {
       if (value) {
-        if (parseFloat(value) > parseFloat(this.invoice.statementAmountOwed)) {
+        if (parseFloat(value) > parseFloat(this.invoice.statementAmtOwed)) {
           callback(new Error("不得大于欠票金额"));
         } else {
           callback();
@@ -330,10 +322,10 @@ export default {
     };
     const validateTicket = (rule, value, callback) => {
       if (
-        parseFloat(this.invoice.applyTaxAmt) !==
-        parseFloat(this.invoice.statementAmountOwed)
+        parseFloat(this.invoice.applyTaxAmt) !=
+        parseFloat(this.invoice.statementAmtOwed) && this.invoice.underTicketExplain.trim() == ''
       ) {
-        callback(new Error("欠票金额不等于本次申请开票含税金额"));
+          callback(new Error("欠票金额不等于本次申请开票含税金额"));
       } else {
         callback();
       }
@@ -379,7 +371,7 @@ export default {
             label: "自取"
           }
         ], //费用承担列表
-        statementAmountOwed: "", //对账单欠票金额
+        statementAmtOwed: "", //对账单欠票金额
         applyMoney: "", //申请开票金额
         address: "", //收件地址
         remark: "", //备注
@@ -456,7 +448,7 @@ export default {
             message: "费用承担不能为空"
           }
         ],
-        statementAmountOwed: [
+        statementAmtOwed: [
           {
             required: true,
             message: "对账单欠票金额不能为空"
@@ -632,9 +624,9 @@ export default {
     visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields();
-        this.invoice.statementAmountOwed =
+        this.invoice.statementAmtOwed =
           this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
-        this.invoice.applyTaxAmt = this.invoice.statementAmountOwed;
+        this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.applyAmt =
           this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
         // 发票单位
@@ -671,18 +663,66 @@ export default {
       }
     },
     // 增加不含税销售开票申请
-    add() {
-      // 不含税申请单号
-      noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
-        if (res.code === 0) {
-          this.$refs.noTax.information.noTaxApply = res.data.applyNo;
-          this.$refs.noTax.information.code = res.data.orgCode;
+    async add() {
+      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      const errMap2 = await this.$refs.xTable2.validate().catch(errMap => errMap)
+      if (errMap1){
+        return this.$Message.error('增加不含税销售开票申请前请先保存草稿')
+      }
+      if (errMap2){
+        return this.$Message.error('增加不含税销售开票申请前请先保存草稿')
+      }
+
+      this.$refs.formCustom.validate(vald => {
+        if (vald) {
+          let info = {
+            orgCode: this.information.code,
+            orgid: this.information.orgId,
+            orgName: this.information.orgName,
+            guestId: this.information.guestId,
+            accountNo: this.information.accountNo,
+            applyNo: this.information.applyNo,
+            applyDate: this.information.applicationDate,
+            guestName: this.information.guestName,
+            oilsListOrder:this.information.oilsListOrder,
+            partsListOrder:this.information.partsListOrder,
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply
+          };
+          let obj = Object.assign(
+            { partList: this.accessoriesBillingData },
+            info,
+            this.invoice
+          );
+          saveDraft(obj).then(res => {
+            if (res.code === 0) {
+              this.$message.success("保存成功");
+              // 不含税申请单号
+              this.information.id = res.data.id
+              noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
+                if (res.code === 0) {
+                  this.$refs.noTax.information.noTaxApply = res.data.applyNo;
+                  this.$refs.noTax.information.code = res.data.orgCode;
+                }
+              });
+              setTimeout(() => {
+                this.$refs.noTax.modal1 = true;
+              }, 100);
+
+            }
+          });
         }
       });
-      setTimeout(() => {
-        this.$refs.noTax.modal1 = true;
-      }, 100);
+
+
+
     },
+
+    //增加不函数开票申请返回值
+    getnoTaxSaleList(row){
+      this.information.invoiceNotTaxApply = row.id
+    },
+
     // 保存草稿
    async preservation() {
      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
@@ -707,7 +747,9 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
-            isOilPart: this.$parent.data1[0].isOilPart
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply,
+            id:this.information.id ? this.information.id : ""
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -746,8 +788,9 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
-            isOilPart: this.$parent.data1[0].isOilPart
-
+            isOilPart: this.$parent.data1[0].isOilPart,
+            invoiceNotTaxApply:this.information.invoiceNotTaxApply,
+            id:this.information.id ? this.information.id : ""
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -774,9 +817,13 @@ export default {
           if (columnIndex === 0) {
             return '和值'
           }
+          if (['applyAmt'].includes(column.property)) {
+            this.$set(this.invoice , 'applyTaxAmt' , this.$utils.sum(data, column.property))
+          }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
+
           return null
         })
       ]
@@ -828,6 +875,7 @@ export default {
           this.accessoriesBillingData1 = val
           this.OilPartShow = false
         }
+        val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
       },
       deep:true
     }

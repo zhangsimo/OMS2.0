@@ -135,13 +135,13 @@ export const mixSelectSupplier = {
       }
       req.isDisabled = this.isDisable ? 1 : 0;
 
-      req.page = this.page.num;
+      req.page = this.page.num -1;
       req.size = this.page.size;
       findForAllot(req).then(res => {
         // console.log(res.data.content, "res =>138");
         this.loading = false;
         this.partData = res.data.content || [];
-        this.page.total = res.data.total;
+        this.page.total = res.data.totalElements;
         const { content } = res.data;
         // console.log(content, "content ==>146");
         content.forEach(item => {
