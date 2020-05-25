@@ -437,7 +437,7 @@ export default {
         {
           title: "配件内码",
           align: "center",
-          key: "partId"
+          key: "partInnerId"
         },
         {
           title: "配件编码",
@@ -537,7 +537,7 @@ export default {
         {
           title: "配件内码",
           align: "center",
-          key: "partId"
+          key: "partInnerId"
         },
         {
           title: "配件编码",
@@ -878,7 +878,7 @@ export default {
           //   console.log(i)
           // }
           // this.toList([data])
-          // 
+          //
           // console.log(this.companyListOptions)
         }
       });

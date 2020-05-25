@@ -339,7 +339,6 @@ export default class InterPurchase extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: this.formPlanmain.planArriveDate ? tools.transTime(this.formPlanmain.planArriveDate) : "",
           remark: this.formPlanmain.remark,
-          directCompanyId: this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : 0,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt: this.formPlanmain.advanceAmt,
           processInstanceId: this.formPlanmain.processInstanceId,
@@ -349,6 +348,7 @@ export default class InterPurchase extends Vue {
             data[k] = this.amt[k];
           }
         }
+        data.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : 0;
       } else {
         this.$Message.error('请添加配件或完善订单信息后再提交!');
         data = null;
@@ -361,6 +361,7 @@ export default class InterPurchase extends Vue {
         obj[k] = v;
       }
     }
+    obj.directCompanyId = obj.directCompanyId ? obj.directCompanyId : 0;
     if (!data) {
       return null;
     }
