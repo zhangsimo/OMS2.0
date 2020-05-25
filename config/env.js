@@ -24,4 +24,4 @@ if (origin.includes('erp')){
   output = 'pro'
 }
 // console.log(output , '测试当前环境')
-// export default output
+export default output
