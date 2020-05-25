@@ -239,6 +239,7 @@ export default {
     // 对账单号选择
     accountNoClick() {
       this.$refs.accountSelette.modal1 = true;
+      this.$refs.accountSelette.paymentId = 'YJDZ'
     },
     //弹框打开
     hander(type) {

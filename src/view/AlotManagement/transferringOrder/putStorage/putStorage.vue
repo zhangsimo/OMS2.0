@@ -87,7 +87,7 @@
                 ></Page>
               </div>
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-                <div class="pane-made-hd">调入退回信息</div>
+                <div class="pane-made-hd">调拨入库信息</div>
                 <div v-if="showit" class="clearfix purchase" ref="planForm">
                   <Form inline :show-message="false" ref="formPlan" :label-width="120">
                     <FormItem label="调出方：" prop="supplyName" class="redIT">
@@ -283,6 +283,7 @@ import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "backApply",
+  inject: ["reload"],
   components: {
     More,
     QuickDate,
@@ -711,10 +712,8 @@ export default {
             this.getList(this.form);
             this.$Message.success("作废成功");
           }
+          this.reload();
         })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
     },
     //选择单据
     selectAddlierName(row) {
@@ -762,6 +761,7 @@ export default {
           if(res.message.indexOf("成功") > -1) {
             this.Status = 1;
           }
+          this.reload();
         })
     },
     searchPro(params, size, page) {

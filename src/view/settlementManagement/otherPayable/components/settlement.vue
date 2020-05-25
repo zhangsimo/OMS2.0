@@ -181,7 +181,6 @@ export default {
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      // console.log(val)
       this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
       // val.two.map(item => {
       //   item.businessTypeName = item.businessType.name;

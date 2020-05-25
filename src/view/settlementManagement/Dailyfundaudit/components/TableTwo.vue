@@ -27,7 +27,7 @@
           field="businessNumbersList"
           title="对账单单号"
         ></vxe-table-column>
-        <vxe-table-column field="tmp" title="来源往来单位">
+        <vxe-table-column field="tmp" title="往来单位">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -40,19 +40,19 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="目标往来单位">
-          <template v-slot="{ row }">
-            <ul class="list">
-              <li
-                v-for="(item, index) of row.suppliers"
-                :key="index"
-                class="flex"
-              >
-                <span class="listChild">{{ item.guestTargetName }}</span>
-              </li>
-            </ul>
-          </template>
-        </vxe-table-column>
+<!--        <vxe-table-column field="tmp" title="目标往来单位">-->
+<!--          <template v-slot="{ row }">-->
+<!--            <ul class="list">-->
+<!--              <li-->
+<!--                v-for="(item, index) of row.suppliers"-->
+<!--                :key="index"-->
+<!--                class="flex"-->
+<!--              >-->
+<!--                <span class="listChild">{{ item.guestTargetName }}</span>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </template>-->
+<!--        </vxe-table-column>-->
         <vxe-table-column field="tmp" title="收付类型">
           <template v-slot="{ row }">
             <span>{{ row.receiptPaymentType.name }}</span>
