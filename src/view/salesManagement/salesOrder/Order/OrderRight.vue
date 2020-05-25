@@ -556,6 +556,7 @@ export default {
       if (!value) {
         return false;
       }
+      console.log(this.client)
       let oneClient = [];
       oneClient = this.client.filter(item => {
         return item.id === value;
