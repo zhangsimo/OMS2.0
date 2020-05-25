@@ -283,6 +283,7 @@ import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "backApply",
+  inject: ["reload"],
   components: {
     More,
     QuickDate,
@@ -711,10 +712,8 @@ export default {
             this.getList(this.form);
             this.$Message.success("作废成功");
           }
+          this.reload();
         })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
     },
     //选择单据
     selectAddlierName(row) {
@@ -762,6 +761,7 @@ export default {
           if(res.message.indexOf("成功") > -1) {
             this.Status = 1;
           }
+          this.reload();
         })
     },
     searchPro(params, size, page) {

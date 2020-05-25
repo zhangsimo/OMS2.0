@@ -235,14 +235,14 @@ export default class GoodsInfo extends Vue {
     this.showInfo = false;
   }
 
-  private async init() {
+  private init() {
     this.showInfo = true;
     this.loading = true;
     this.isRequired = false;
     this.logisRequired = false;
     this.reset();
-    await this.getLists();
-    await this.inlogistics();
+    // await this.getLists();
+    this.searchInfo();
     const ref: any = this.$refs["formTwo"];
     ref.resetFields();
   }
@@ -272,24 +272,17 @@ export default class GoodsInfo extends Vue {
       this.loading = false;
       const xtable: any = this.$refs["xTable1"];
       let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+      let arrDefault = this.tableData.filter(item => item.isDefault);
       if (arrData.length > 0) {
         this.echoDate({ row: arrData[0] });
         xtable.setRadioRow(arrData[0]);
+      } else if (arrDefault.length > 0) {
+        this.echoDate({ row: arrDefault[0] });
+        xtable.setRadioRow(arrDefault[0]);
       } else {
-        let arrDefault = this.tableData.filter(item => item.isDefault);
-        if (arrDefault.length > 0) {
-          this.echoDate({ row: arrDefault[0] });
-          xtable.setRadioRow(arrDefault[0]);
-        }
+        this.echoDate({ row: this.tableData[0] });
+        xtable.setRadioRow(this.tableData[0]);
       }
-      // for (let b of this.tableData) {
-      //   if (b.isDefault === 1) {
-      //     this.echoDate({ row: b });
-      //     let thisTable: any = this.$refs.xTable1;
-      //     thisTable.setRadioRow(b);
-      //     break;
-      //   }
-      // }
     }
   }
 
@@ -447,6 +440,7 @@ export default class GoodsInfo extends Vue {
           xtable.setRadioRow(arrDefault[0]);
         }
       }
+      this.inlogistics();
     }
   }
   //快递下拉框
@@ -545,10 +539,6 @@ export default class GoodsInfo extends Vue {
       this.SaveId = row.logisticsRecordVO.id;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
-      // this.formDateRight = { ...row.logisticsRecordVO };
-      // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-      // this.formDateRight.settleType = this.formDateRight.settleType + "";
-      // this.formDateRight = row.logisticsRecordVO
       this.formDateRight.receiveCompName = row.logisticsRecordVO.receiveComp;
       this.formDateRight.streetAddress = row.logisticsRecordVO.receiveAddress;
       this.formDateRight.receiveMan = row.logisticsRecordVO.receiver;

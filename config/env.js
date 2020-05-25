@@ -2,7 +2,7 @@
 // export default "dev"
 
 // 测试
-export default "test";
+// export default "test";
 
 // audit
 // export default 'audit'
@@ -24,4 +24,4 @@ if (origin.includes('erp')){
   output = 'pro'
 }
 // console.log(output , '测试当前环境')
-// export default output
+export default output
