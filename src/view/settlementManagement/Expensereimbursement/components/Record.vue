@@ -112,8 +112,8 @@ export default {
           align: "center",
           render: (h, p) => {
             let val = "";
-            if (p.row.documentStatus) {
-              val = p.row.documentStatus.name;
+            if (p.row.startStatus) {
+              val = p.row.startStatus.name;
             }
             return h("span", val);
           }
