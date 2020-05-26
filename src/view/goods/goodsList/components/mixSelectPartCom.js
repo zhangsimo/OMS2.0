@@ -258,13 +258,14 @@ export const mixSelectPartCom = {
     },
 
     search() {
-      this.page.num = 0;
+      this.page.num = 1;
       this.getList();
     },
     //系统分类树形节点点击数据
     selectTree(v) {
       if (v.length > 0) {
         this.selectTreeItem = v[0];
+        this.page.num = 1;
         this.getList();
       }
     },

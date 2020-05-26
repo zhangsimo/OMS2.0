@@ -540,7 +540,7 @@
                         this.formPlan.remark =  '',
                         this.formPlan.createUname =  '',
                         this.formPlan.serviceId =  '',
-                        this.formPlan.orderDate = ''
+                        // this.formPlan.orderDate = ''
                         this.Right.tbdata = []
                         this.isAdd = true
                         this.$refs.formPlan.resetFields();

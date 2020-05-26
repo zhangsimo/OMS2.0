@@ -282,7 +282,6 @@ import {
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
-  name: "backApply",
   inject: ["reload"],
   components: {
     More,
@@ -744,25 +743,29 @@ export default {
       }
       this.$refs.printBox.openModal();
     },
-    chuku() {
+    async chuku() {
       const params = {
         id: this.Leftcurrentrow.id,
         voList: this.ArrayValue,
         storeId:this.Leftcurrentrow.storeId
       };
       // 配件组装作废
-      outDataList(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("入库成功");
-          }
-          if(res.message.indexOf("成功") > -1) {
-            this.Status = 1;
-          }
-          this.reload();
-        })
+      let res = await outDataList(params);
+      // console.log("res", res);
+      if (res.code == 0) {
+        this.getList(this.form);
+        this.$Message.success("入库成功");
+        this.reload();
+        return;
+      }
+      if(res.message && res.message.indexOf("成功") > -1) {
+        this.reload();
+        return;
+      }
+      // if(res.message.indexOf("成功") > -1) {
+      //   this.Status = 1;
+      // }
+      // this.reload();
     },
     searchPro(params, size, page) {
       chengping({ ...params }, size, page)

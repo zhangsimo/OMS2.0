@@ -115,6 +115,7 @@ export default {
       },//请求头
       upurl: getup,//批量导入地址
       flag: 0,
+      new: false,
       selectLeftItemId:'',
     }
   },
@@ -440,6 +441,7 @@ export default {
       // console.log(val)
       if (val) {
         this.formPlan.pchsOrderId = val.id
+        this.formPlan.guestId = val.guestId
         await this.$refs.xTable.validate()
         this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
         this.formPlan.remark = val.remark||""
@@ -448,15 +450,16 @@ export default {
           this.flag = 0
           await this.getLeftLists("addDetails")
           //判断左侧列表有没有点击已生成单子的数据
-          let isActiveNum = 0;
+          // let isActiveNum = 0;
           this.legtTableData.map(item => {
             if (item.id === this.dataChange.row.id) {
-              isActiveNum++
+              // isActiveNum++
               this.$set(this.dataChange, 'row', item)
             }
           })
-          if(!isActiveNum){
+          if(this.new){
             this.dataChange = {"row":this.legtTableData[0]}
+            this.new = false;
           }
           await this.clickOnesList(this.dataChange)
           this.allMoney = 0
@@ -582,12 +585,14 @@ export default {
           guestId: '',
           code: '',
           storeId: this.StoreId, //调入仓库
-          orderMan: this.$store.state.user.userData.staffName
+          orderMan: this.$store.state.user.userData.staffName,
+          orderManId: this.$store.state.user.userId,
         }
         this.legtTableData.unshift(this.formPlan)
         this.$refs.xTab.setCurrentRow(this.legtTableData[0])
         this.dataChange.row = this.formPlan
         this.flag = 1
+        this.new = true;
       } else {
         this.$message.error('请先保存数据')
       }
