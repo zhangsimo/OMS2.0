@@ -754,7 +754,6 @@
           }
           return item;
         })
-        console.log(newArr)
         let rep = await setHuaShengOrder(newArr);
         if(rep.code==0){
           if(status!=2){
