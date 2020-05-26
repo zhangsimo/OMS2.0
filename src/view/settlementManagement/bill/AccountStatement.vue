@@ -807,18 +807,18 @@ export default {
         },
         {
           title: "前期已对账金额",
-          key: "charOffAmt",
+          key: "accountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.charOffAmt.toFixed(2));
+            return h("span", params.row.accountAmt.toFixed(2));
           }
         },
         {
           title: "前期未对账金额",
-          key: "noCharOffAmt",
+          key: "noAccountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.noCharOffAmt.toFixed(2));
+            return h("span", params.row.noAccountAmt.toFixed(2));
           }
         },
         {
@@ -875,18 +875,18 @@ export default {
         },
         {
           title: "前期已对账金额",
-          key: "charOffAmt",
+          key: "accountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.charOffAmt.toFixed(2));
+            return h("span", params.row.accountAmt.toFixed(2));
           }
         },
         {
           title: "前期未对账金额",
-          key: "noCharOffAmt",
+          key: "noAccountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.noCharOffAmt.toFixed(2));
+            return h("span", params.row.noAccountAmt.toFixed(2));
           }
         },
         {
