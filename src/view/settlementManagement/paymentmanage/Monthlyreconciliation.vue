@@ -202,7 +202,7 @@
         <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称" align="center"></vxe-table-column>
         <vxe-table-column field="partSpecification" title="规格型号" align="center"></vxe-table-column>
-        <vxe-table-column field="Detailedstatistics" title="适用车型" align="center"></vxe-table-column>
+        <vxe-table-column field="partModel" title="适用车型" align="center"></vxe-table-column>
         <vxe-table-column field="price" title="单价" align="center"></vxe-table-column>
         <vxe-table-column field="quantity" title="数量" align="center"></vxe-table-column>
         <vxe-table-column field="amount" title="金额" align="center"></vxe-table-column>

@@ -594,6 +594,7 @@ export default {
     },
     // 选中行
     currentChangeEvent({ row }) {
+      // console.log(row , 777888)
       this.currRow = row;
       this.$store.commit("setLoanId", row.id)
       // this.reconciliationStatement.accountNo = row.serviceId;

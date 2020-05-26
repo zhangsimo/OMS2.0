@@ -278,10 +278,10 @@ export default {
         },
         {
           title: "金额",
-          key: "enterAmt",
+          key: "outAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.enterAmt.toFixed(2));
+            return h("span", params.row.outAmt.toFixed(2));
           }
         }
       ],

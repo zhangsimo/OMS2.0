@@ -429,9 +429,9 @@
           </div>
           <Page
             size="small"
-            :total="page.total"
-            :page-size="page.size"
-            :current="page.num"
+            :total="page1.total"
+            :page-size="page1.size"
+            :current="page1.num"
             show-sizer
             show-total
             show-elevator
@@ -543,6 +543,8 @@ export default {
       }
       if (res2.code == 0) {
         this.tableData1 = res2.data.content;
+        this.page1.total = res2.data.totalElements
+
       }
     },
     // 查询
@@ -567,14 +569,14 @@ export default {
     //已审核分页
     //已审核分页切换页数
     selectNumpersonage1(page) {
-      this.page.num = page;
+      this.page1.num = page;
       this.getTable();
     },
 
     //已审核分页分页条数
     selectPagepersonage1(size) {
-      this.page.num = 1;
-      this.page.size = size;
+      this.page1.num = 1;
+      this.page1.size = size;
       this.getTable();
     },
 
