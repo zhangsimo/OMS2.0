@@ -402,6 +402,7 @@ export default {
     },
     //打开新增客户
     addClient() {
+      this.$refs.child.placeList = [];
       this.$refs.child.$refs.form.resetFields()
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};

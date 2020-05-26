@@ -16,7 +16,7 @@
         <vxe-table-column field="serviceId" title="费用报销申请单号"></vxe-table-column>
         <vxe-table-column field="applicationTime" title="申请时间"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
-        <vxe-table-column field="reimbursementAmount" title="费用报销总金额"></vxe-table-column>
+        <vxe-table-column field="paymentBalance" title="费用报销总金额"></vxe-table-column>
         <vxe-table-column field="totalPrice" title="因公借支总金额"></vxe-table-column>
         <vxe-table-column field="compay" title="公司应付"></vxe-table-column>
         <vxe-table-column field="ownpay" title="个人应还"></vxe-table-column>
@@ -184,14 +184,14 @@ export default {
     tableData() {
       let pay = 0;
       if (this.table != null) {
-        pay = this.table.reimbursementAmount - this.totalPrice;
+        pay = this.table.paymentBalance - this.totalPrice;
       }
-      if (pay >= 0) {
+      if (pay  < 0) {
         this.compay = pay;
         this.ownpay = 0;
       } else {
         this.ownpay = pay;
-        this.compay = 0;
+        this.compay = this.$utils.multiply(this.totalPrice , this.table.paymentBalance)
       }
       return [
         {
@@ -257,6 +257,7 @@ export default {
       let data = {
         claimed: 1,
         writeOffStatus: 0,
+        searchType:0,
         startTime: this.dates[0]
           ? moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00"
           : "",
@@ -266,11 +267,11 @@ export default {
         // serviceId: this.requestCode
         // guestId: this.companyId,
       };
-      for (let d in data) {
-        if (!data[d]) {
-          delete data[d];
-        }
-      }
+      // for (let d in data) {
+      //   if (!data[d]) {
+      //     delete data[d];
+      //   }
+      // }
       api.findListPageAll(params, data).then(res => {
         if (res.code == 0) {
           this.tbdataChild = res.data.content;

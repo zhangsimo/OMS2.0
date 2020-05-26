@@ -95,7 +95,7 @@ export function getSales () {
 }
 
 
-//获取退货员
+//获取华胜订单
 export function getHuaShengOrders (params,data) {
   return axios.request({
     url: `${api.omsOrder}/huaShengOrders/findByParams`,
@@ -104,3 +104,31 @@ export function getHuaShengOrders (params,data) {
     data
   })
 }
+
+export function setHuaShengOrder (data) {
+  return axios.request({
+    url: `${api.omsOrder}/huaShengOrders/acceptInfo`,
+    method: 'post',
+    data:data
+  })
+}
+
+//获取客户信息
+export function getClientInfo (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByIsInternalId`,
+    method: 'get',
+    params
+  })
+}
+
+//获取华胜门店
+export function getHsStore (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByType`,
+    method: 'get',
+    params
+  })
+}
+
+

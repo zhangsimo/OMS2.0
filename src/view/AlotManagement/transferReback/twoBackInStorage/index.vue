@@ -75,7 +75,7 @@
               ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-              <div class="pane-made-hd">调拨入库信息</div>
+              <div class="pane-made-hd">调出退回信息</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
@@ -260,7 +260,6 @@ import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 export default {
-  name: "twoBackInStorage",
   components: {
     More,
     QuickDate,

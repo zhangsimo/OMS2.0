@@ -239,6 +239,11 @@ export default {
     // 对账单号选择
     accountNoClick() {
       this.$refs.accountSelette.modal1 = true;
+      if (this.$parent.paymentId == "YSK") {
+        this.$refs.accountSelette.paymentId = 'YJDZ'
+        this.$refs.accountSelette.sort = 'SK'
+
+      }
     },
     //弹框打开
     hander(type) {

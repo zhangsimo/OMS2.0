@@ -4,36 +4,36 @@
       <Row>
         <Col span="12">
           <FormItem label="配件编码：">
-            <Input v-model="formItem.partCode" class="w200" placeholder="配件编码"></Input>
+            <Input disabled v-model="formItem.partCode" class="w200" placeholder="配件编码"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="配件名称：">
-            <Input v-model="formItem.partStandardName" class="w200" placeholder="配件名称"></Input>
+            <Input disabled v-model="formItem.partStandardName" class="w200" placeholder="配件名称"></Input>
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="12">
           <FormItem label="品质：">
-            <Input v-model="formItem.quality" class="w200" placeholder="品质"></Input>
+            <Input disabled v-model="formItem.quality" class="w200" placeholder="品质"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="品牌：">
-            <Input v-model="formItem.partBrand" class="w200" placeholder="品牌"></Input>
+            <Input disabled v-model="formItem.partBrand" class="w200" placeholder="品牌"></Input>
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="12">
           <FormItem label="厂牌：">
-            <Input v-model="formItem.brandName" class="w200" placeholder="厂牌"></Input>
+            <Input disabled v-model="formItem.adapterCarBrand" class="w200" placeholder="厂牌"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="品牌车型：">
-            <Input v-model="formItem.adapterCarModel" class="w200" placeholder="品牌车型"></Input>
+            <Input disabled v-model="formItem.adapterCarModel" class="w200" placeholder="品牌车型"></Input>
           </FormItem>
         </Col>
       </Row>
@@ -45,7 +45,7 @@
         </Col>
         <Col span="12">
           <FormItem label="单位：">
-            <Input v-model="formItem.minUnit" class="w200" placeholder="单位"></Input>
+            <Input disabled v-model="formItem.minUnit" class="w200" placeholder="单位"></Input>
           </FormItem>
         </Col>
       </Row>
@@ -57,7 +57,7 @@
         </Col>
         <Col span="12">
           <FormItem label="金额：">
-            <Input v-model="(formItem.orderPrice*formItem.orderQty).toFixed(2)" class="w200" placeholder="金额"></Input>
+            <Input disabled v-model="(formItem.orderPrice*formItem.orderQty).toFixed(2)" class="w200" placeholder="金额"></Input>
           </FormItem>
         </Col>
       </Row>

@@ -102,7 +102,8 @@ export default {
         {
           title: "收付款金额",
           key: "checkAmt",
-          align: "center"
+          align: "center",
+
         },
         {
           title: "审核状态",
@@ -140,6 +141,11 @@ export default {
         let res = await api.findByAccountNo({ accountNo: this.$parent.serviceId });
         if(res.code == 0) {
           this.recordLists = res.data;
+          this.recordLists.map( item => {
+            if (item.sort.enum == 'FK'){
+              item.checkAmt = -item.checkAmt
+            }
+          })
         }
       }
     },

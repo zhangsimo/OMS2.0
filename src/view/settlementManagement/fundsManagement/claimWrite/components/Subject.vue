@@ -73,7 +73,7 @@
                 data.parentCode = 6003
                 break;
               case "FY003":
-                data.parentCode = 6001
+                data.parentCode = 601
                 break;
               case "FY004":
                 data.parentCode = 6403

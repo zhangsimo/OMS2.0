@@ -172,12 +172,12 @@
           width="140"
         ></vxe-table-column>
         <vxe-table-column
-          field="date3"
+          field="auditor"
           title="提交人"
           width="140"
         ></vxe-table-column>
         <vxe-table-column
-          field="auditor"
+          field="auditDate"
           title="提交日期"
           width="200"
           show-overflow
