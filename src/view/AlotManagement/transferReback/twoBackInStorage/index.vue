@@ -50,7 +50,7 @@
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500">
             <div slot="left" class="con-split-pane-left">
-              <div class="pane-made-hd">调拨申请列表</div>
+              <div class="pane-made-hd">调出退回入库列表</div>
               <Table
                 :height="leftTableHeight"
                 @on-current-change="selectTabelData"
@@ -260,6 +260,7 @@ import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 export default {
+  inject: ["reload"],
   components: {
     More,
     QuickDate,
@@ -505,6 +506,7 @@ export default {
           if (res.code === 0) {
             this.showIn = false;
             this.$Message.info("确定入库成功");
+            this.reload();
           } else if (res.code === 1) {
             this.$Message.info("提示入库失败");
           }

@@ -164,8 +164,8 @@
           <div>
             <p style="margin-bottom: 10px">财务信息</p>
             <div>
-              <FormItem label="收款户名:" prop="receiveName">
-                <Input v-model="data.receiveName" style="width: 450px" />
+              <FormItem label="收款户名:" prop="accountName">
+                <Input v-model="data.accountName" style="width: 450px" />
               </FormItem>
               <FormItem label="银行账号:" prop="accountBankNo">
                 <Input v-model="data.accountBankNo" style="width: 450px" />
@@ -649,7 +649,7 @@
           //     trigger: "change"
           //   }
           // ],
-          receiveName: [
+          accountName: [
             { required: true, message: " 不能为空", trigger: "change" }
           ],
           accountBankNo: [
