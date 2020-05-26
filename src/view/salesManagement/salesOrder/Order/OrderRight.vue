@@ -942,8 +942,8 @@ export default {
             title: str,
             onOk: async () => {
                 if (this.door.outStockDoor) {
+                    let data = JSON.parse(JSON.stringify(this.formPlan));
                     this.door.outStockDoor = false;
-                    this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
                     this.$refs.formPlan.validate(async valid => {
                         if (valid) {
                             try {
@@ -951,9 +951,9 @@ export default {
                                 if (+this.totalMoney > +this.limitList.outOfAmt) {
                                     return this.$message.error("可用余额不足");
                                 }
-                              this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
-                              this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
-                                let res = await getStockOut(this.formPlan);
+                              data.planSendDate = tools.transTime(data.planSendDate)
+                              data.planArriveDate = tools.transTime(data.planArriveDate)
+                                let res = await getStockOut(data);
                                 if (res.code === 0) {
                                     this.$Message.success("出库成功");
                                     this.$store.commit("setleftList", res);

@@ -265,19 +265,27 @@ export default {
           className: "tc"
         },
         {
-          title: "销售单价",
+          title: "单价",
           key: "sellPrice",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.sellPrice.toFixed(2));
+            if(this.typeName === "050202") {
+              return h("span", params.row.sellPrice.toFixed(2));
+            } else {
+              return h("span", params.row.rtnPrice.toFixed(2));
+            }
           }
         },
         {
-          title: "销售金额",
+          title: "金额",
           key: "sellAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.sellAmt.toFixed(2));
+            if(this.typeName === "050202") {
+              return h("span", params.row.sellAmt.toFixed(2));
+            } else {
+              return h("span", params.row. rtnAmt.toFixed(2));
+            }
           }
         }
       ],
