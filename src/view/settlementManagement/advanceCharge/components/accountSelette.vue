@@ -35,6 +35,7 @@
       highlight-row
       @on-current-change="seleteDate"
     ></Table>
+    <div class="clearfix">
     <Page
       class-name="fr mb10"
       size="small"
@@ -46,6 +47,7 @@
       show-sizer
       show-total
     ></Page>
+    </div>
     <div slot="footer">
       <Button type="primary" @click="determine">确定</Button>
       <Button @click="modal1 = false">取消</Button>
@@ -198,7 +200,8 @@ export default {
         guestId: this.companyId,
         tenantId: userData.tenantId,
         orgid: "", // userData.shopId
-        receivePaymentType: this.receivePaymentType
+        receivePaymentType: this.receivePaymentType,
+        sort:'FK'
       };
       for (let key in obj) {
         if (!obj[key]) {

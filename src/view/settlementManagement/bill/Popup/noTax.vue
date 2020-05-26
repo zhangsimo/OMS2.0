@@ -48,10 +48,10 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt" :label-width="150">
-            <Input v-model="invoice.invoiceTaxAmt" class="ml5 w100" />
+            <Input v-model="invoice.invoiceTaxAmt" class="ml5 w100" disabled/>
           </FormItem>
           <FormItem label="申请说明" :label-width="150">
-            <Input v-model="invoice.remark" class="ml5 w400" />
+            <Input v-model="invoice.remark" class="ml5 w100" />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -64,6 +64,9 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
+          <FormItem label="外加税点总计" :label-width="150">
+            <Input v-model="invoice.additionalTaxPoint" class="ml5 w100"  readonly/>
+          </FormItem>
         </div>
       </div>
     </Form>
@@ -74,13 +77,67 @@
       v-has="'examine'"
     >选择必开不含税销售单</button>
     <h4 class="mt10">不含税开票清单</h4>
-    <Table
+
+    <vxe-table
       border
-      :columns="accessoriesBilling"
+      resizable
+      ref="xTable2"
+      auto-resize
+      show-footer
+      :footer-method="footerMethod"
       :data="accessoriesBillingData"
-      show-summary
-      :summary-method="billSum"
-    ></Table>
+      :edit-rules="validRules"
+      :edit-config="{trigger: 'click', mode: 'cell'}"
+    >
+      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+      <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
+      <vxe-table-column field="unit" title="单位" ></vxe-table-column>
+      <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+      <vxe-table-column field="taxPrice" title="商品含税单价" >
+        <template v-slot="{row}">
+          {{row.taxPrice | priceFilters}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="taxAmt" title="商品含税金额" >
+        <template v-slot="{row}">
+          {{row.taxAmt | priceFilters}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
+      <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
+      <vxe-table-column field="salePrice" title="销售单价" >
+        <template v-slot="{row}">
+          {{row.salePrice | priceFilters}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="saleAmt" title="销售金额" >
+        <template v-slot="{row}">
+          {{row.saleAmt | priceFilters}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="invoiceAmt" title="已开票金额" >
+        <template v-slot="{row}">
+          {{row.invoiceAmt | priceFilters}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="invoiceNotAmt" title="未开票金额" >
+        <template v-slot="{row}">
+          {{row.invoiceNotAmt | priceFilters}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+<!--      <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>-->
+    </vxe-table>
+
+
+<!--    <Table-->
+<!--      border-->
+<!--      :columns="accessoriesBilling"-->
+<!--      :data="accessoriesBillingData"-->
+<!--      show-summary-->
+<!--      :summary-method="billSum"-->
+<!--    ></Table>-->
     <div class="mt10">
 <!--      <h4>不含税销售开票申请</h4>-->
 <!--      <approval :approvalTit="approvalTit" />-->
@@ -118,111 +175,22 @@ export default {
         callback(new Error("只能输入数字"));
       }
     };
+    const applyAmtValid = ({ cellValue, rule, rules, row, }) => {
+      if(row.salePrice < cellValue) {
+        return Promise.reject(new Error('申请开票金额不能大于销售金额'))
+      }
+    }
     return {
       tax: "", //税率
       modal1: false, //弹窗显示
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开不含税单据", //选择销售单据标题
-      accessoriesBilling: [
-        {
-          title: "序号",
-          type: "index",
-          width: 40,
-          className: "tc"
-        },
-        {
-          title: "配件名称",
-          key: "partName",
-          className: "tc"
-        },
-        {
-          title: "配件编码",
-          key: "partCode",
-          className: "tc"
-        },
-        {
-          title: "单位",
-          key: "unit",
-          className: "tc"
-        },
-        {
-          title: "数量",
-          key: "orderQty",
-          className: "tc"
-        },
-        {
-          title: "商品含税单价",
-          key: "taxPrice",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxPrice.toFixed(2));
-          }
-        },
-        {
-          title: "商品含税金额",
-          key: "taxAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxAmt.toFixed(2));
-          }
-        },
-        {
-          title: "开票税率",
-          key: "invoiceTax",
-          className: "tc"
-        },
-        {
-          title: "出库单号",
-          key: "orderNo",
-          className: "tc"
-        },
-        {
-          title: "销售单价",
-          key: "salePrice",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.salePrice.toFixed(2));
-          }
-        },
-        {
-          title: "销售金额",
-          key: "saleAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.saleAmt.toFixed(2));
-          }
-        },
-        {
-          title: "已开票金额",
-          key: "invoiceAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceAmt.toFixed(2));
-          }
-        },
-        {
-          title: "未开票金额",
-          key: "invoiceNotAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceNotAmt.toFixed(2));
-          }
-        },
-        {
-          title: "申请开票金额",
-          key: "applyAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.applyAmt.toFixed(2));
-          }
-        },
-        {
-          title: "外加税点",
-          key: "additionalTaxPoint",
-          className: "tc"
-        }
-      ], //开票配件
       accessoriesBillingData: [], //开票配件数据
+      validRules: {
+        applyAmt: [
+          { validator:applyAmtValid }
+        ],
+      },//表格校验
       invoice: {
         taxPoint: "", //申请税点
         taxApplicationList: [
@@ -239,7 +207,7 @@ export default {
         taxation: "", //产生税费
         notAmt: "", //不含税对账单未开金额
         invoiceAmt: "", //实际增加开票金额
-        invoiceTaxAmt: "", //本次不含税开票金额
+        invoiceTaxAmt: 0, //本次不含税开票金额
         remark: "" //申请说明
       }, //发票数据表单
       invoiceRule: {
@@ -273,13 +241,13 @@ export default {
             message: "实际增加开票金额不能为空"
           }
         ],
-        invoiceTaxAmt: [
-          {
-            required: true,
-            // message: "本次含税开票金额不能为空",
-            validator: thisTaxChange
-          }
-        ]
+        // invoiceTaxAmt: [
+        //   {
+        //     required: true,
+        //     // message: "本次含税开票金额不能为空",
+        //     validator: thisTaxChange
+        //   }
+        // ]
       }, //发票数据表单验证规则
       copyData: [] //深拷贝处理
       // num: 0 //表格数量合计
@@ -330,6 +298,25 @@ export default {
     });
   },
   methods: {
+
+    // 开票配件合计
+    footerMethod({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['applyAmt'].includes(column.property)) {
+            this.$set(this.invoice , 'invoiceTaxAmt' , this.$utils.sum(data, column.property))
+          }
+          if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
+            return this.$utils.sum(data, column.property)
+          }
+
+          return null
+        })
+      ]
+    },
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
@@ -476,12 +463,14 @@ export default {
             return this.accessoriesBillingData.push(i);
           }
         }
+        this.invoice.additionalTaxPoint = this.invoice.taxation
+
       }
     },
     // 申请税点
     taxPoint(val, ov) {
       if (val !== ov) {
-        // console.log(val);
+        console.log(val);
         this.invoice.taxation = parseFloat(
           (
             this.invoice.invoiceTaxAmt / (1 - val) -
@@ -503,6 +492,8 @@ export default {
           item.taxAmt = item.applyAmt + item.additionalTaxPoint;
           item.taxPrice = item.taxAmt / item.orderQty;
         });
+
+          this.invoice.additionalTaxPoint = this.invoice.taxation
       }
     },
     tax: {

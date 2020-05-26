@@ -110,7 +110,9 @@ export default {
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
       paymentId: "YSK", //收付类型
-      paymentList: [] //收付类型下拉框
+      paymentList: [], //收付类型下拉框,
+      sort:'', // 判断是预收款还是预付款其他为空
+
     };
   },
   methods: {
@@ -156,7 +158,8 @@ export default {
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
         receivePaymentType: this.paymentId,
-        guestId: this.companyId
+        guestId: this.companyId,
+        sort:this.sort,
       };
       obj.size = 9999
       obj.page = 0
