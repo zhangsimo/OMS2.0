@@ -758,10 +758,11 @@ export default {
         this.reload();
         return;
       }
-      if(res.message && res.message.indexOf("成功") > -1) {
+      if(res && res.message && res.message.indexOf("成功") > -1) {
         this.reload();
         return;
       }
+      this.reload();
       // if(res.message.indexOf("成功") > -1) {
       //   this.Status = 1;
       // }
