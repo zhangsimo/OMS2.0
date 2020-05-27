@@ -115,18 +115,6 @@
         <Button @click="re">返回</Button>
       </div>
     </Modal>
-    <!-- <Page
-        class-name="mb10 mt10 fr"
-        :current="page.num"
-        :total="page.total"
-        :page-size="page.size"
-        :page-size-opts="page.opts"
-        @on-change="changePage"
-        @on-page-size-change="changeSize"
-        show-elevator
-        show-sizer
-        show-total
-    ></Page>-->
     <br />
   </Modal>
 </template>
@@ -186,7 +174,7 @@ export default {
       if (this.table != null) {
         pay = this.table.paymentBalance - this.totalPrice;
       }
-      if (pay  < 0) {
+      if (pay  > 0) {
         this.compay = pay;
         this.ownpay = 0;
       } else {
@@ -359,6 +347,7 @@ export default {
               this.$message.success(res.data);
               this.$parent.getQuery();
               this.cancel();
+              this.show = false
             }
           });
         } else {

@@ -206,55 +206,55 @@
             </TabPane>
           </Tabs>
         </div>
-        <div class="db mt10" v-if="falg">
-          <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>
-          <section class="data-container">
-            <div class="modal-data">
-              <span class="data-name">审批人:</span>
-              <div class="data-value flex-center">
-                <template v-for="(item,i) in statusData">
-                  <div class="status-box flex-center" :key="i">
-                    <span class="status">{{item.userName}}</span>
-                    <span class="arrow-box" v-if="i<statusData.length-1"></span>
-                  </div>
-                </template>
-              </div>
-            </div>
-            <div class="modal-data">
-              <span class="data-name">审批状态:</span>
-              <div class="data-value flex-center">
-                <template v-for="(item,i) in statusData">
-                  <div class="status-box flex-center" :key="i">
-                    <span
-                      class="words"
-                      :class="{res:item.operationResult=='REFUSE'}"
-                    >{{item.operationResult|status}}</span>
-                  </div>
-                </template>
-              </div>
-            </div>
-            <div class="modal-data">
-              <span class="data-name">审批日期:</span>
-              <div class="data-value flex-center">
-                <template v-for="(item,i) in statusData">
-                  <div class="status-box flex-center" :key="i">
-                    <span class="date">{{item.date | date}}</span>
-                  </div>
-                </template>
-              </div>
-            </div>
-            <div class="modal-data">
-              <span class="data-name">审批意见:</span>
-              <div class="data-value flex-center">
-                <template v-for="(item,i) in statusData">
-                  <div class="status-box flex-center" :key="i">
-                    <span class="remark">{{item.remark}}</span>
-                  </div>
-                </template>
-              </div>
-            </div>
-          </section>
-        </div>
+<!--        <div class="db mt10" v-if="falg">-->
+<!--          <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>-->
+<!--          <section class="data-container">-->
+<!--            <div class="modal-data">-->
+<!--              <span class="data-name">审批人:</span>-->
+<!--              <div class="data-value flex-center">-->
+<!--                <template v-for="(item,i) in statusData">-->
+<!--                  <div class="status-box flex-center" :key="i">-->
+<!--                    <span class="status">{{item.userName}}</span>-->
+<!--                    <span class="arrow-box" v-if="i<statusData.length-1"></span>-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="modal-data">-->
+<!--              <span class="data-name">审批状态:</span>-->
+<!--              <div class="data-value flex-center">-->
+<!--                <template v-for="(item,i) in statusData">-->
+<!--                  <div class="status-box flex-center" :key="i">-->
+<!--                    <span-->
+<!--                      class="words"-->
+<!--                      :class="{res:item.operationResult=='REFUSE'}"-->
+<!--                    >{{item.operationResult|status}}</span>-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="modal-data">-->
+<!--              <span class="data-name">审批日期:</span>-->
+<!--              <div class="data-value flex-center">-->
+<!--                <template v-for="(item,i) in statusData">-->
+<!--                  <div class="status-box flex-center" :key="i">-->
+<!--                    <span class="date">{{item.date | date}}</span>-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="modal-data">-->
+<!--              <span class="data-name">审批意见:</span>-->
+<!--              <div class="data-value flex-center">-->
+<!--                <template v-for="(item,i) in statusData">-->
+<!--                  <div class="status-box flex-center" :key="i">-->
+<!--                    <span class="remark">{{item.remark}}</span>-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </section>-->
+<!--        </div>-->
       </div>
     </section>
     <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
@@ -1254,6 +1254,9 @@ export default {
       // account({id:row.id}).then(res => {
       //   console.log(res);
       // });
+      this.data2 = []
+      this.data3 = []
+      this.data4 = []
       if (row.processInstance) {
         approvalStatus({ instanceId: row.processInstance }).then(res => {
           if (res.code == 0) {
