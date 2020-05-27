@@ -762,7 +762,6 @@ export default {
         this.reload();
         return;
       }
-      this.reload();
       // if(res.message.indexOf("成功") > -1) {
       //   this.Status = 1;
       // }

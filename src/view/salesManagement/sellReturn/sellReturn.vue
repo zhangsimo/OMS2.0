@@ -374,6 +374,7 @@ import { save } from "../../../api/AlotManagement/transferringOrder";
 
 export default {
   name: "sellReturn",
+  inject: ["reload"],
   components: {
     selectTheCustomer,
     SalesOutbound,
@@ -881,7 +882,8 @@ export default {
                   this.formPlan = {};
                   this.id = null;
                   this.$refs.formPlan.resetFields();
-                  this.getLeftList();
+                  // this.getLeftList();
+                  this.reload();
                 } else {
                   this.formPlan.orderDate = preTime;
                 }
