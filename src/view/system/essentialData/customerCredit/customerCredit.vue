@@ -598,7 +598,7 @@ export default {
     confirm() {
       this.$refs["SurveyList"].$refs["formInline"].validate(valid => {
         if (valid) {
-          let data = this.creaditList;
+          let data = JSON.parse(JSON.stringify(this.creaditList));
           if(this.creaditList.registerDate) {
               data.registerDate = tools.transTime(this.creaditList.registerDate);
           }
