@@ -571,6 +571,7 @@ export default {
         });
         return "";
       }
+     this.infoBase.buttonStatus = 1
      this.list.four = [this.infoBase]
      if(num ==0) {
        let res = await CheckForSave(this.list, this.modelType)

@@ -1258,12 +1258,12 @@ export default {
       this.data3 = []
       this.data4 = []
       if (row.processInstance) {
-        approvalStatus({ instanceId: row.processInstance }).then(res => {
-          if (res.code == 0) {
-            this.falg = true;
-            this.statusData = res.data.operationRecords;
-          }
-        });
+        // approvalStatus({ instanceId: row.processInstance }).then(res => {
+        //   if (res.code == 0) {
+        //     this.falg = true;
+        //     this.statusData = res.data.operationRecords;
+        //   }
+        // });
       }
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
