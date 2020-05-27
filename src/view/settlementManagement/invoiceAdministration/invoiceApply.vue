@@ -506,7 +506,7 @@ export default {
         size: 10,
         startDate: "",
         endDate: "",
-        cancalStatus: 1
+        cancalStatus: '',
       },
       details: {
         page: 0,
