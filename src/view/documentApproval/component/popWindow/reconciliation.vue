@@ -571,7 +571,7 @@ export default {
         });
         return "";
       }
-     this.list.four = this.infoBase
+     this.list.four = [this.infoBase]
      if(num ==0) {
        let res = await CheckForSave(this.list, this.modelType)
        if (res.code === 0) {
