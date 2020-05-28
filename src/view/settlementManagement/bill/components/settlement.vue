@@ -242,7 +242,12 @@ export default {
       if (this.$parent.paymentId == "YSK") {
         this.$refs.accountSelette.paymentId = 'YJDZ'
         this.$refs.accountSelette.sort = 'SK'
-
+      }
+      if (this.$parent.paymentId == "YS") {
+        this.$refs.accountSelette.paymentId = 'YSK'
+      }
+      if (this.$parent.paymentId == "YF") {
+        this.$refs.accountSelette.paymentId = 'YFK'
       }
     },
     //弹框打开
