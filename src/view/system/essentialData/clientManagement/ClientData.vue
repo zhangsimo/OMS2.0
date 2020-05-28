@@ -42,7 +42,7 @@
                 <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
-                    v-if="item.parentId==0"
+                    v-show="item.parentId==0"
                     :key="item.id"
                     :value="item.id"
                   >{{ item.name}}</Option>
