@@ -125,14 +125,15 @@
                   >{{ item.title }}</Option>
                 </Select>
               </FormItem>
+              <FormItem v-if="sessionKey == 0" label="信誉额度:" prop="creditLimit">
+                <Input v-model="data.creditLimit" style="width: 180px" />
+              </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员手机:" prop="salesmanTel">
                 <Input v-model="data.salesmanTel" style="width: 180px" />
               </FormItem>
-              <FormItem v-show="sessionKey == 0" label="信誉额度:" prop="creditLimit">
-                <Input v-model="data.creditLimit" style="width: 180px" />
-              </FormItem>
+
               <FormItem label="QQ/微信:">
                 <Input v-model="data.instantMsg" style="width: 180px" />
               </FormItem>

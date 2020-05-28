@@ -684,7 +684,6 @@
 
       async getHsStoreFun(){
         let rep = await getHsStore({});
-        console.log(rep)
         if(rep.code==0){
           this.hsStore = rep.data||[];
 
@@ -782,7 +781,6 @@
           groupId: this.$store.state.user.userData.groupId
         });
         if (res.code === 0) {
-          console.log(res.data)
           this.WarehouseList = res.data;
           this.WarehouseList.map(item => {
             if(item.isDefault){

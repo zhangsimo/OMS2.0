@@ -313,16 +313,16 @@ export default {
           type: "selection"
         },
         {
-          key: "index",
+          type: "index",
           title: "序号",
           width: 40,
           className: "tc",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.index + this.form.page * this.form.size + 1
-            );
-          }
+          // render: (h, params) => {
+          //   return h(
+          //     "span",
+          //     params.index + this.form.page * this.form.size + 1
+          //   );
+          // }
         },
         {
           title: "开票申请单号",
@@ -791,6 +791,7 @@ export default {
     },
     //获取列表数据
     getTabList() {
+      this.form.page = this.form.page - 1
       getSalesList(this.form).then(res => {
         if (res.code === 0) {
           this.data = res.data.content;
@@ -843,8 +844,7 @@ export default {
     },
     //分页
     pageNumChange(pageNum) {
-      this.form.page = page
-      +Num;
+      this.form.page = pageNum
       this.getTabList();
     },
     pageSizeChange(pageSize) {

@@ -20,6 +20,7 @@ import { Object } from 'core-js'
 
 export default {
   name: "market",
+  inject: ["reload"],
   components: {
     QuickDate,
     MoreQuery,
@@ -198,7 +199,6 @@ export default {
       if (res.code === 0) {
         this.legtTableData = res.data.content
         this.leftPage.total = res.data.totalElements
-
         if(this.selectLeftItemId){
           for(let b of this.legtTableData){
             if(b.id==this.selectLeftItemId){
@@ -448,7 +448,7 @@ export default {
         let res = await saveList(this.formPlan)
         if (res.code === 0) {
           this.flag = 0
-          await this.getLeftLists("addDetails")
+          await this.getLeftLists()
           //判断左侧列表有没有点击已生成单子的数据
           // let isActiveNum = 0;
           this.legtTableData.map(item => {
@@ -458,14 +458,14 @@ export default {
             }
           })
           if(this.new){
-            this.dataChange = {"row":this.legtTableData[0]}
+            this.$set(this.dataChange, 'row', this.legtTableData[0])
             this.new = false;
           }
-          await this.clickOnesList(this.dataChange)
+          // await this.clickOnesList(this.dataChange)
           this.allMoney = 0
           this.$refs.formPlan.resetFields();
           this.$Message.success('保存成功');
-          // this.setSelected(this.dataChange.row);
+          this.setSelected(this.dataChange.row);
         }
         try {
         } catch (errMap) {
