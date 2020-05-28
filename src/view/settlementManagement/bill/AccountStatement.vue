@@ -915,6 +915,8 @@ export default {
       taxArrearsfalg: false,//含税配件欠票、含税油品欠票都是0 ，不能点击销售开票申请；
       hedgingfalg:false,//对冲配件发票/对冲油品发票=含税配件/油品金额，不能点击发票对冲;
       receivefalg:false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
+      paymentId:'',//判定付款默认类型
+
     };
   },
   async mounted() {
@@ -1321,6 +1323,11 @@ export default {
           (this.reconciliationStatement.statementStatusName === "审批通过" ||
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
+          if(type == 1){
+            this.paymentId = 'YS'
+          }else if(type == 2){
+            this.paymentId = 'YF'
+          }
           this.$refs.settlementMoadl.Settlement = true;
           this.type = !type ? 0: type === 1 ? 1:2
         } else {
