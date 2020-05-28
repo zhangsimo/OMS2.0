@@ -30,6 +30,13 @@
     }
 </script>
 
+<style>
+.left-pane.ivu-split-pane {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+</style>
+
 <style scoped lang="less">
   .warehouseBigBox {
     width: 100%;
@@ -40,6 +47,5 @@
     height: 100%;
     border: 1px solid #dcdee2;
   }
-  .demo-split-pane{
-  }
+  
 </style>

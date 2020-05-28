@@ -474,6 +474,7 @@ import { getSales } from "@/api/salesManagment/salesOrder";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
 import baseUrl from "_conf/url";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 export default {
   name: "goodsList",
   components: {
@@ -760,10 +761,7 @@ export default {
 
     //下载模板
     down(){
-      location.href =
-        baseUrl.omsOrder +
-        "/preOrderMain/template?access_token=" +
-        Cookies.get(TOKEN_KEY);
+      down('1800000000')
     }
   }
 };

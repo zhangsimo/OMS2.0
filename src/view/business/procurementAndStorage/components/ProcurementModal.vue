@@ -178,7 +178,7 @@ export default class ProcurementModal extends Vue {
   @Emit("getPlanOrder")
   private ok() {
     if (!this.selectRow) {
-      this.$Message.error("请选择采购计划");
+      this.$Message.error("请选择采购订单");
       return null;
     }
     this.shows = false;

@@ -109,7 +109,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="电话:" >
+              <FormItem label="电话:">
                 <Input v-model="data.tel" style="width: 180px" />
               </FormItem>
               <FormItem label="备注:">
@@ -130,7 +130,7 @@
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员手机:" >
+              <FormItem label="业务员手机:">
                 <Input v-model="data.salesmanTel" style="width: 180px" />
               </FormItem>
 

@@ -3,6 +3,7 @@ import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 
 import baseUrl from "../../../../config/url";
 
@@ -178,10 +179,7 @@ export default class InterPurchase extends Vue {
   };
   //下载模板
   down(){
-    location.href =
-      baseUrl.omsOrder +
-      "/preOrderMain/template?access_token=" +
-      Cookies.get(TOKEN_KEY);
+    down('2000000000')
   };
 
   // 合计采购金额
