@@ -565,7 +565,7 @@ export default {
         );
       } else {
         return (
-          this.$utils.toNumber(row.amount) +
+          this.$utils.toNumber(row.amount) -
           this.$utils.toNumber(row.accountAmt) +
           this.$utils.toNumber(row.thisNoAccountAmt)
         );
