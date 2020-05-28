@@ -163,6 +163,7 @@ export default {
       if (flag) {
         this.accessoriesBillingData = [];
         this.accessoriesBillingData.push(this.information);
+        console.log()
         approvalStatus({ instanceId: this.information.processInstance }).then(res => {
           if (res.code == 0) {
             bus.$emit('approval',res.data.operationRecords)
@@ -228,6 +229,19 @@ export default {
     // 选择对账单
     seleteAccount() {
       this.$refs.saleSelete.modal1 = true;
+    }
+  },
+  watch:{
+    accessoriesBillingData:{
+      handler(newVal ,oldVal){
+        if (newVal.length == 0) return
+        newVal.map( item => {
+          if(item.billingTypeName == '付款') {
+            item.taxArrearsOfPart = - Math.abs(item.taxArrearsOfPart)
+          }
+      })
+      },
+      deep:true
     }
   }
 };

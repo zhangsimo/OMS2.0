@@ -474,121 +474,6 @@ export default {
           label: "对冲"
         }
       ],
-      Reconciliationlist: [
-        {
-          title: "序号",
-          type: "index",
-          width: "40",
-          className: "tc"
-        },
-        {
-          title: "配件编码",
-          key: "partCode",
-          className: "tc"
-        },
-        {
-          title: "配件名称",
-          key: "partName",
-          className: "tc"
-        },
-        {
-          title: "规格型号",
-          key: "partSpecification",
-          className: "tc"
-        },
-        {
-          title: "适用车型",
-          key: "Detailedstatistics",
-          className: "tc"
-        },
-        {
-          title: "单价",
-          key: "price",
-          className: "tc"
-        },
-        {
-          title: "数量",
-          key: "quantity",
-          className: "tc"
-        },
-        {
-          title: "金额",
-          key: "amount",
-          className: "tc"
-        },
-        {
-          title: "前期已对账金额",
-          key: "accountAmt",
-          className: "tc"
-        },
-        {
-          title: "前期未对账金额",
-          key: "noAccountAmt",
-          className: "tc"
-        },
-        {
-          title: "本次不对账金额",
-          key: "thisNoAccountAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("InputNumber", {
-              style: {
-                width: "60px"
-              },
-              props: {
-                value: params.row.thisNoAccountAmt,
-                type: "number",
-                min: "0"
-              },
-              on: {
-                "on-change": event => {
-                  console.log(1);
-                  if (event > params.row.amount - params.row.accountAmt)
-                    return this.$message.error(
-                      "配件的本次不对账金额不能大于金额减前期已对账金额"
-                    );
-                  this.flag = true;
-                  this.modifyAccountAmt = event;
-                  this.$set(
-                    params.row,
-                    "thisNoAccountAmt",
-                    this.modifyAccountAmt
-                  );
-                  this.$set(
-                    this.Reconciliationcontent,
-                    params.index,
-                    params.row
-                  );
-                  params.row.thisAccountAmt =
-                    params.row.amount -
-                    params.row.accountAmt -
-                    this.modifyAccountAmt;
-                }
-              }
-            });
-          }
-        },
-        {
-          title: "本次对账金额",
-          key: "thisAccountAmt",
-          className: "tc"
-        },
-        {
-          title: "差异原因",
-          key: "diffeReason",
-          className: "tc",
-          render: (h, params) => {
-            return h("Input", {
-              style: {
-                width: "60px"
-              },
-              props: {
-                value: ""
-              }
-            });
-          }
-        }
-      ],
       data: [],
       data1: [],
       data2: [],
@@ -1006,6 +891,7 @@ export default {
             }
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
+            this.$set(this.data1[index] , 'detailDtoList' , this.Reconciliationcontent)
           } else {
             const sum1 =
               this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1026,6 +912,7 @@ export default {
             }
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
+            this.$set(this.data2[index] , 'detailDtoList' , this.Reconciliationcontent)
           }
           this.Reconciliation = false;
         } else {
