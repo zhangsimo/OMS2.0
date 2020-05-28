@@ -30,7 +30,7 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="10" />
+                <Input v-model="data.shortName" style="width: 180px" maxlength="30" />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
                 <Input v-model="data.fullName" style="width: 180px" />

@@ -339,19 +339,22 @@ export default class InterPurchase extends Vue {
           billTypeId: this.formPlanmain.billTypeId,
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
-          orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate ? tools.transTime(this.formPlanmain.planArriveDate) : "",
+          orderDate: this.formPlanmain.orderDate,
+          planArriveDate: this.formPlanmain.planArriveDate,
           remark: this.formPlanmain.remark,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt: this.formPlanmain.advanceAmt,
           processInstanceId: this.formPlanmain.processInstanceId,
+          directCompanyId: this.formPlanmain.directCompanyId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
             data[k] = this.amt[k];
           }
         }
-        data.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : 0;
+        data.orderDate = tools.transTime(data.orderDate);
+        data.planArriveDate = data.planArriveDate ? tools.transTime(data.planArriveDate) : ""
+        data.directCompanyId = data.directCompanyId ? data.directCompanyId : "0";
       } else {
         this.$Message.error('请添加配件或完善订单信息后再提交!');
         data = null;
@@ -360,15 +363,17 @@ export default class InterPurchase extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (!!v) {
+      if (v) {
         obj[k] = v;
       }
     }
-    obj.directCompanyId = obj.directCompanyId ? obj.directCompanyId : 0;
     if (!data) {
       return null;
     }
     // obj.details = [];
+    if(!obj.directCompanyId) {
+      obj.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : "0";
+    }
     return obj;
   }
 
@@ -377,13 +382,8 @@ export default class InterPurchase extends Vue {
     let data: any = this.formdata(refname)
     if (!data) return;
 
-    // if(!data.directCompanyId){
-    //   this.selectTableRow.directCompanyId = 0;
-    // }
-
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
-
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
@@ -623,8 +623,8 @@ export default class InterPurchase extends Vue {
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-      this.formPlanmain.planArriveDate = this.formPlanmain.planArriveDate ? new Date(this.formPlanmain.planArriveDate) : "";
+      this.formPlanmain.orderDate = (v.orderDate instanceof Date) ? v.orderDate : new Date(v.orderDate);
+      this.formPlanmain.planArriveDate = v.planArriveDate ? new Date(v.planArriveDate) : "";
       if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
