@@ -29,7 +29,7 @@
             <Input v-model="searchData.partName" class="w150 mr10" />
           </div>
           <div class="db">
-            <Button class="mr15 w90" type="primary" @click="resetData">
+            <Button class="mr15 w90" type="primary" @click="resetData" v-has="'examine'">
               查询
             </Button>
           </div>
@@ -37,18 +37,18 @@
       </div>
     </section>
     <section class="con-btn">
-      <Button :disabled="tabsName!='name1'" class="mr15 w90" @click="changeStatus1(1)">
+      <Button :disabled="tabsName!='name1'" class="mr15 w90" @click="changeStatus1(1)" v-has="'pending'">
         转待处理
       </Button>
-      <Button :disabled="tabsName!='name2'" class="mr15" @click="changeStatus1(0)">
+      <Button :disabled="tabsName!='name2'" class="mr15" @click="changeStatus1(0)" v-has="'cancel'">
         取消待处理
       </Button>
-      <Button class="mr15" @click="generateSalesOrder" :disabled="tabsName!='name2'">
+      <Button class="mr15" @click="generateSalesOrder" :disabled="tabsName!='name2'" v-has="'sales'">
         生成销售订单
       </Button>
 
       <Poptip placement="bottom" width="200">
-        <Button class="mr15" :disabled="tabsName!='name2'">
+        <Button class="mr15" :disabled="tabsName!='name2'" v-has="'allot'">
           生成调拨申请单
         </Button>
         <div slot="content" class="tc lh30 layer-db">
@@ -56,7 +56,7 @@
           <p class="fs16" @click="generateApplicationOrder(2)">按订单数量生成</p>
         </div>
       </Poptip>
-      <Button class="mr15 w90" @click="exportHandle">
+      <Button class="mr15 w90" @click="exportHandle" v-has="'output'">
         导出
       </Button>
     </section>
