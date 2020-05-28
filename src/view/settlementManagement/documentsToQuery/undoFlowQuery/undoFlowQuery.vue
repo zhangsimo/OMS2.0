@@ -31,7 +31,8 @@
           highlight-current-row
           show-overflow
           height="600"
-          :data="tableData">
+          :data="tableData"
+        >
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="revokeNum" title="撤销单号"></vxe-table-column>
           <vxe-table-column field="revokeType" title="撤单类型">
@@ -72,7 +73,7 @@
           {id:0 , name:'全部'}
         ],
         shopCode: 0,
-        tableData: [{revokeReason:'123'}],//表格数据
+        tableData: [],//表格数据
 
       };
     },
@@ -100,7 +101,7 @@
         data.startDate = moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.endDate = moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
         let res = await runningWater(data)
-        // if (res.code === 0) return  this.tableData = res.data.content
+        if (res.code === 0) return  this.tableData = res.data.content
       },
       // 快速查询
       quickDate(data){

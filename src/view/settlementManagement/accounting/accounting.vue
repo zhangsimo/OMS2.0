@@ -6,6 +6,7 @@
           <div class="db ml15">
             <span>发生日期：</span>
             <Date-picker
+              :clearable="noclear"
               v-model="date"
               type="date"
               placeholder="选择日期"
@@ -495,7 +496,8 @@ export default {
         {name:'全部' , id: 0},
         {name:'成功' , id: 1},
         {name:'失败' , id: 2},
-      ]
+      ],
+      noclear:false
     };
   },
   async mounted() {
@@ -524,9 +526,7 @@ export default {
         shopNumber: this.store,
         mateAccountCode: this.subjectId,
       };
-      if (this.date) {
-        params.occurTime = moment(this.date).format("YYYY-MM-DD");
-      }
+        params.occurTime = this.date ? moment(this.date).format("YYYY-MM-DD") : ''
       // for (let key in params) {
       //   if (!params[key]) {
       //     Reflect.deleteProperty(params, key);
