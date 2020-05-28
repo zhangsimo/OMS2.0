@@ -261,7 +261,7 @@ export default {
         },
         {
           title: "数量",
-          key: "enterQty", 
+          key: "enterQty",
           className: "tc",
           render: (h, params) => {
             let qty = params.row.enterQty ? params.row.enterQty : params.row.rtnableQty
@@ -278,10 +278,10 @@ export default {
         },
         {
           title: "金额",
-          key: "outAmt",
+          key: "enterAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.outAmt.toFixed(2));
+            return h("span", params.row.enterAmt.toFixed(2));
           }
         }
       ],
