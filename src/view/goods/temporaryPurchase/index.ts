@@ -5,6 +5,9 @@ import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
 import { orderState } from '../plannedPurchaseOrder/global';
 import { getSales } from "@/api/salesManagment/salesOrder";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+
+import baseUrl from "../../../../config/url";
 
 import QuickDate from '_c/getDate/dateget.vue';
 import SelectSupplier from "../plannedPurchaseOrder/components/selectSupplier.vue";
@@ -896,6 +899,11 @@ export default class InterPurchase extends Vue {
       this.showModel('tabsModel');
     })
   }
+
+  //下载模板
+  down(){
+    down('1900000000')
+  };
 
   private mounted() {
     setTimeout(() => {
