@@ -254,7 +254,7 @@ export default [
       {
         path: "/hsOrder/hsIndex",
         name: "hsOrder",
-        mark: "2003",
+        mark: "2004",
         meta: {
           icon: "arrow-graph-up-right",
           title: "华胜订单处理",
@@ -502,7 +502,7 @@ export default [
       {
         path: "/policy/ventoryProfit",
         name: "ventoryProfit",
-        mark: "4004",
+        mark: "4006",
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘盈入库"
@@ -513,7 +513,7 @@ export default [
       {
         path: "/policy/inventoryLosses",
         name: "inventoryLosses",
-        mark: "4004",
+        mark: "4007",
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘亏出库"
@@ -530,7 +530,18 @@ export default [
           title: "加工单"
         },
         component: () => import("@/view/business/policy/process/process.vue")
+      },
+      {
+        path: "/hsStock/hsStockIndex",
+        name: "hsStock",
+        mark: "4005",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "华盛库存查询"
+        },
+        component: () => import("@/view/business/policy/process/process.vue")
       }
+
     ]
   },
   {
@@ -742,7 +753,7 @@ export default [
             path: "/invoiceAdministration/invoiceApply",
             name: "invoiceAdministration-invoiceApply",
             redirect: "",
-            mark: "5201",
+            // mark: "5201",
             meta: {
               title: "开票申请查询与核销"
             },
@@ -1842,6 +1853,19 @@ export default [
               )
           }
         ]
+      },
+      {
+        path: "/system/systemSetting/template/templateIndex",
+        name: "templateIndex",
+        mark: "9301",
+        meta: {
+          notCache: true,
+          title: "模板管理"
+        },
+        component: () =>
+          import(
+            "@/view/system/systemSetting/template/templateIndex.vue"
+            )
       }
     ]
   },

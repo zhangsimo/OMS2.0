@@ -276,7 +276,7 @@ export default {
                 invoiceNo:'',
                 receiptUnit:'',
                 page:0,
-                size:10
+                size:9999
             },
             allSelectList:[]
         }

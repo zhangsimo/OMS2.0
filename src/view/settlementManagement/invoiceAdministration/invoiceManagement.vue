@@ -761,8 +761,8 @@ export default {
     handleSuccess(response) {
       if (response.code == 0) {
         let txt = "上传成功";
-        if (response.data.length > 0) {
-          txt = response.data.join(",");
+        if (response.data) {
+          txt = response.message;
         }
         this.$Notice.success({
           title: "导入成功",
@@ -772,7 +772,15 @@ export default {
         this.exportData = false;
         this.getTabList(this.form);
       } else {
-        this.$Message.error(response.message);
+        let txt = "上传失败";
+        txt = response.message;
+        this.$Notice.success({
+          title: "导入失败",
+          desc: txt,
+          duration: 0
+        });
+        this.exportData = false;
+        this.getTabList(this.form);
       }
     },
     //获取下拉菜单

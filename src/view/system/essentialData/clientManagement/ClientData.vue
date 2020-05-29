@@ -30,7 +30,7 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="10" />
+                <Input v-model="data.shortName" style="width: 180px" maxlength="30" />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
                 <Input v-model="data.fullName" style="width: 180px" />
@@ -42,7 +42,7 @@
                 <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
-                    v-if="item.parentId==0"
+                    v-show="item.parentId==0"
                     :key="item.id"
                     :value="item.id"
                   >{{ item.name}}</Option>
@@ -109,7 +109,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="电话:" prop="tel">
+              <FormItem label="电话:">
                 <Input v-model="data.tel" style="width: 180px" />
               </FormItem>
               <FormItem label="备注:">
@@ -130,7 +130,7 @@
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员手机:" prop="salesmanTel">
+              <FormItem label="业务员手机:">
                 <Input v-model="data.salesmanTel" style="width: 180px" />
               </FormItem>
 

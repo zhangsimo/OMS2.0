@@ -350,11 +350,11 @@ export default {
           key: "taxSignName",
           className: "tc"
         },
-        {
-          title: "油品/配件",
-          key: "speciesName",
-          className: "tc"
-        },
+        // {
+        //   title: "油品/配件",
+        //   key: "speciesName",
+        //   className: "tc"
+        // },
         {
           title: "单据金额",
           key: "rpAmt",
