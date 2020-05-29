@@ -50,31 +50,31 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="operation(1)"
-          v-has="'export'"
+          v-has="'exportAll'"
         >导出汇总</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="operation(2)"
-          v-has="'export'"
+          v-has="'exportList'"
         >导出明细</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="operation(3)"
-          v-has="'export'"
+          v-has="'ai'"
         >智能核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="operation(4)"
-          v-has="'export'"
+          v-has="'labour'"
         >人工核销</button>
         <button
           class="ivu-btn ivu-btn-default"
           type="button"
           @click="operation(5)"
-          v-has="'export'"
+          v-has="'backout'"
         >撤销核销</button>
       </div>
       <div class="mt20">
