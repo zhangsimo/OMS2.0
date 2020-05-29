@@ -502,7 +502,7 @@ export default [
       {
         path: "/policy/ventoryProfit",
         name: "ventoryProfit",
-        mark: "4004",
+        mark: "4006",
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘盈入库"
@@ -513,7 +513,7 @@ export default [
       {
         path: "/policy/inventoryLosses",
         name: "inventoryLosses",
-        mark: "4004",
+        mark: "4007",
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘亏出库"
@@ -742,7 +742,7 @@ export default [
             path: "/invoiceAdministration/invoiceApply",
             name: "invoiceAdministration-invoiceApply",
             redirect: "",
-            mark: "5201",
+            // mark: "5201",
             meta: {
               title: "开票申请查询与核销"
             },
