@@ -36,22 +36,24 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button class="ml10" @click="claimCollect(1)">预收款认领</Button>
+        <Button class="ml10" @click="claimCollect(1)" v-has="'claim'">预收款认领</Button>
         <Button
           class="ml10"
           @click="collectWirte"
           :disabled="Boolean(currRow.writeOffReceiptNo)"
+          v-has="'cancel'"
         >预收款核销</Button>
-        <Button class="ml10" @click="collectWPay" :disabled="Boolean(currRow.expenditureNo)">预收款支出</Button>
-        <Button class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
-        <Button class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
+        <Button v-has="'expend'" class="ml10" @click="collectWPay" :disabled="Boolean(currRow.expenditureNo)">预收款支出</Button>
+        <Button v-has="'expendCancel'" class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
+        <Button v-has="'revoke'" class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
         <Button
           class="ml10"
           @click="revokeCollection(1)"
           :disabled="!currRow.writeOffReceiptNo"
+          v-has="'backout'"
         >预收款核销撤回</Button>
-        <Button class="ml10" @click="revokeCollection(2)" :disabled="!currRow.expenditureNo">预收款支出撤回</Button>
-        <Button class="ml10">导出</Button>
+        <Button v-has="'claimBackout'" class="ml10" @click="revokeCollection(2)" :disabled="!currRow.expenditureNo">预收款支出撤回</Button>
+        <Button v-has="'export'" class="ml10">导出</Button>
       </div>
     </section>
     <section class="con-box">
