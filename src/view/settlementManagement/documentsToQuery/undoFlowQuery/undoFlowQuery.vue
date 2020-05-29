@@ -17,7 +17,7 @@
             <i class="iconfont iconchaxunicon"></i>
             <span>查询</span>
           </button>
-          <button class=" ivu-btn ivu-btn-default" type="button" @click="exportSelectEvent">
+          <button class=" ivu-btn ivu-btn-default" type="button" @click="exportSelectEvent" v-has="'export'">
             <span>导出</span>
           </button>
         </div>
