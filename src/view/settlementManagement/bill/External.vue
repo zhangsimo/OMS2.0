@@ -261,7 +261,7 @@ export default {
         },
         {
           title: "数量",
-          key: "enterQty", 
+          key: "enterQty",
           className: "tc",
           render: (h, params) => {
             let qty = params.row.enterQty ? params.row.enterQty : params.row.rtnableQty
