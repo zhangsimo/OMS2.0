@@ -1,8 +1,8 @@
 <template>
   <div class="content-oper content-oper-flex">
     <section class="oper-box paddinSize">
-      <Button class="mr10" @click="operation(1)">保存草稿</Button>
-      <Button class="mr10" @click="operation(2)">提交申请</Button>
+      <Button class="mr10" @click="operation(1)" v-has="'save'">保存草稿</Button>
+      <Button class="mr10" @click="operation(2)" v-has="'submit'">提交申请</Button>
     </section>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
       <div class="con-box">

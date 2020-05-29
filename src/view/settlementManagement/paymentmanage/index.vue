@@ -148,13 +148,11 @@
           class="mr10 ivu-btn ivu-btn-default"
           type="button"
           @click="print(0)"
-          v-has="'print'"
         >打印</button>
         <button
           class="mr10 ivu-btn ivu-btn-default"
           type="button"
           @click="exportDetail(0)"
-          v-has="'export'"
         >导出</button>
       </div>
       <Table
@@ -175,13 +173,11 @@
           class="mr10 ivu-btn ivu-btn-default"
           type="button"
           @click="print(1)"
-          v-has="'print'"
         >打印</button>
         <button
           class="mr10 ivu-btn ivu-btn-default"
           type="button"
           @click="exportDetail(1)"
-          v-has="'export'"
         >导出</button>
       </div>
       <Table

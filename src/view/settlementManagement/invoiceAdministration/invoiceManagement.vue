@@ -2,12 +2,12 @@
   <div class="content-oper content-oper-flex">
     <section class="oper-box paddinSize flexd">
       <Button class="mr10" v-has="'export'" @click="operation(1)">导入</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(2)">修改</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(3)">删除</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(4)">智能核销</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(5)">发票退回</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(6)">红字进项转出</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(7)">导入勾选认证时间</Button>
+      <Button class="mr10" v-has="'change'" @click="operation(2)">修改</Button>
+      <Button class="mr10" v-has="'delete'" @click="operation(3)">删除</Button>
+      <Button class="mr10" v-has="'ai'" @click="operation(4)">智能核销</Button>
+      <Button class="mr10" v-has="'backout'" @click="operation(5)">发票退回</Button>
+      <Button class="mr10" v-has="'red'" @click="operation(6)">红字进项转出</Button>
+      <Button class="mr10" v-has="'time'" @click="operation(7)">导入勾选认证时间</Button>
     </section>
     <div class="mt20">
       <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
@@ -760,25 +760,27 @@ export default {
     },
     handleSuccess(response) {
       if (response.code == 0) {
-        let txt = "上传成功";
-        if (response.data) {
-          txt = response.message;
-        }
-        this.$Notice.success({
-          title: "导入成功",
-          desc: txt,
-          duration: 0
-        });
+        // let txt = "上传成功";
+        // if (response.data) {
+        //   txt = response.message;
+        // }
+        // this.$Message.success({
+        //   title: "导入成功",
+        //   desc: txt,
+        //   duration: 0
+        // });
+        this.$Message.success("导入成功");
         this.exportData = false;
         this.getTabList(this.form);
       } else {
-        let txt = "上传失败";
-        txt = response.message;
-        this.$Notice.success({
-          title: "导入失败",
-          desc: txt,
-          duration: 0
-        });
+        // let txt = "上传失败";
+        // txt = response.message;
+        // this.$Message.success({
+        //   title: "导入失败",
+        //   desc: txt,
+        //   duration: 0
+        // });
+        this.$Message.error(response.message)
         this.exportData = false;
         this.getTabList(this.form);
       }
