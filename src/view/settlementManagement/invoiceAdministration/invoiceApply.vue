@@ -598,7 +598,7 @@ export default {
     async Intelligence(){
       let data ={}
       let res = await IntelligenceList(data)
-      if (res.code === 0) return this.$Message.success('智能核销成功')
+      if (res.code === 0) return this.$Message.success(res.data)
     },
 
     cancellation() {
