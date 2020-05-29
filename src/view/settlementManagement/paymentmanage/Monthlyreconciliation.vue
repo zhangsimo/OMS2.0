@@ -398,11 +398,11 @@ export default {
           key: "taxSignName",
           className: "tc"
         },
-        {
-          title: "油品/配件",
-          key: "speciesName",
-          className: "tc"
-        },
+        // {
+        //   title: "油品/配件",
+        //   key: "speciesName",
+        //   className: "tc"
+        // },
         {
           title: "单据金额",
           key: "rpAmt",
@@ -867,7 +867,9 @@ export default {
           });
           const index = this.Reconciliationcontent[0].index;
           if (this.business === "销售退货" || this.business === "销售出库") {
+
             //金额为负数是退货
+              // console.log("sum", sum)
             let sum1 = 0;
             if (this.data1[index].rpAmt >= 0) {
               sum1 =
@@ -879,10 +881,10 @@ export default {
                 );
             } else {
               sum1 =
-                this.data1[index].rpAmt + this.data1[index].accountAmt + sum;
+                this.data1[index].rpAmt - this.data1[index].accountAmt + sum;
 
               if (
-                sum + (this.data1[index].rpAmt + this.data1[index].accountAmt) >
+                sum + (this.data1[index].rpAmt - this.data1[index].accountAmt) >
                 0
               )
                 return this.$message.error(
