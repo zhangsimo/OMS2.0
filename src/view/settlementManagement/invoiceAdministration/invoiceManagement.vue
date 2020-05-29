@@ -760,25 +760,27 @@ export default {
     },
     handleSuccess(response) {
       if (response.code == 0) {
-        let txt = "上传成功";
-        if (response.data) {
-          txt = response.message;
-        }
-        this.$Notice.success({
-          title: "导入成功",
-          desc: txt,
-          duration: 0
-        });
+        // let txt = "上传成功";
+        // if (response.data) {
+        //   txt = response.message;
+        // }
+        // this.$Message.success({
+        //   title: "导入成功",
+        //   desc: txt,
+        //   duration: 0
+        // });
+        this.$Message.success("导入成功");
         this.exportData = false;
         this.getTabList(this.form);
       } else {
-        let txt = "上传失败";
-        txt = response.message;
-        this.$Notice.success({
-          title: "导入失败",
-          desc: txt,
-          duration: 0
-        });
+        // let txt = "上传失败";
+        // txt = response.message;
+        // this.$Message.success({
+        //   title: "导入失败",
+        //   desc: txt,
+        //   duration: 0
+        // });
+        this.$Message.error(response.message)
         this.exportData = false;
         this.getTabList(this.form);
       }
