@@ -537,7 +537,7 @@ export default [
         mark: "4005",
         meta: {
           icon: "arrow-graph-up-right",
-          title: "华盛库存查询"
+          title: "华胜库存查询"
         },
         component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
       }
