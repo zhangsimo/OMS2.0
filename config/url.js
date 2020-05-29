@@ -65,7 +65,7 @@ const test = {
   getFileApi: "https://tsoms2.g-parts.cn",
   downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider",
-  templateApi:"https://tsapi2.g-parts.cn/gpart-essential-provider/"
+  templateApi:"https://tsapi2.g-parts.cn/gpart-essential-provider"
 };
 
 const audit = {
@@ -89,7 +89,7 @@ const audit = {
   getFileApi: "https://uatoms2.g-part.cn.cn",
   downApi: "https://uatapi2.g-part.cn/gpart-oss-provider",
   omsTpApi: "https://uatapi2.g-part.cn/oms-thirdparty-provider",
-  templateApi:"https://uatapi2.g-part.cn/gpart-essential-provider/"
+  templateApi:"https://uatapi2.g-part.cn/gpart-essential-provider"
 };
 
 const pro = {
@@ -113,7 +113,7 @@ const pro = {
   getFileApi: "https://api2.g-part.cn.cn",
   downApi: "https://api2.g-part.cn/gpart-oss-provider",
   omsTpApi: "https://api2.g-part.cn/oms-thirdparty-provider",
-  templateApi:"https://api2.g-part.cn/gpart-essential-provider/"
+  templateApi:"https://api2.g-part.cn/gpart-essential-provider"
 
 
 };

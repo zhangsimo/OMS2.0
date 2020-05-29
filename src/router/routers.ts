@@ -539,7 +539,7 @@ export default [
           icon: "arrow-graph-up-right",
           title: "华盛库存查询"
         },
-        component: () => import("@/view/business/policy/process/process.vue")
+        component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
       }
 
     ]
