@@ -329,6 +329,8 @@ import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import * as tools from "../../../../utils/tools";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+
 export default {
   name: "smsInventory",
   components: {
@@ -934,10 +936,7 @@ export default {
 
     //下载模板
     down(){
-      location.href =
-        baseUrl.omsOrder +
-        "/preOrderMain/template?access_token=" +
-        Cookies.get(TOKEN_KEY);
+      down('2100000000')
     },
     //配件返回的参数
     getPartNameList(val) {
@@ -945,22 +944,10 @@ export default {
        datas.map(item=>{
            item.id=''
        })
-      this.formPlan.detailVOList = datas;
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
-      // this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
-      //   "YYYY-MM-DD HH:mm:ss"
-      // );
+      this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
       this.$refs.SelectPartRef.searchPartLayer = false;
       this.$Message.success("已添加");
-      // getSubmitList(this.formPlan)
-      //   .then(res => {
-      //
-      //     this.getList();
-      //   })
-      //   .catch(err => {
-      //     this.showRemove = false;
-      //     this.$Message.info("添加失败");
-      //   });
     },
     //分页
     changePage(p) {

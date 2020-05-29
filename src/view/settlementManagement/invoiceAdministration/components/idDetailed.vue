@@ -86,11 +86,11 @@ export default {
           key: "taxSignName",
           className: "tc"
         },
-        {
-          title: "油品/配件",
-          key: "speciesName",
-          className: "tc"
-        },
+        // {
+        //   title: "油品/配件",
+        //   key: "speciesName",
+        //   className: "tc"
+        // },
         {
           title: "转单日期",
           key: "transferDate",
@@ -204,11 +204,11 @@ export default {
           key: "taxSignName",
           className: "tc"
         },
-        {
-          title: "油品/配件",
-          key: "speciesName",
-          className: "tc"
-        },
+        // {
+        //   title: "油品/配件",
+        //   key: "speciesName",
+        //   className: "tc"
+        // },
         {
           title: "转单日期",
           key: "transferDate",

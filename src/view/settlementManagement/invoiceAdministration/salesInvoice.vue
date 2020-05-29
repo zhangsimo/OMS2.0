@@ -604,7 +604,7 @@ export default {
         let txt = "上传成功";
           txt = response.message;
         this.$Notice.success({
-          title: "导入成功",
+          title: "导入失败",
           desc: txt,
           duration: 0
         });

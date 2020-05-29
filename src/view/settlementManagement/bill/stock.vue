@@ -359,10 +359,18 @@ export default {
     },
     // 配件表格合计方式
     summary({ columns, data }) {
-      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
-        const key = column.key;
+        let key = column.key;
+        if(this.typeName == "050102") {
+          if (key == "sellAmt") {
+            key = "rtnAmt";
+          }
+          if (key == "sellPrice") {
+            key = "rtnPrice";
+          }
+          column.key = key;
+        }
         if (index === 0) {
           sums[key] = {
             key,
