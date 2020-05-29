@@ -97,8 +97,8 @@
                   <span>查询</span>
                 </button>
                 <br />
-                <Button class="mt10 ml10" @click="distributionDelete">撤销分配</Button>
-                <Button class="mt10 ml10" @click="openSubjecMoadl">转当期损益</Button>
+                <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete">撤销分配</Button>
+                <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
                 <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
                 <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
                 <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>

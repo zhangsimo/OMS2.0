@@ -559,7 +559,7 @@ export default [
         path:'/documentsToQuery',
         name:'DocumentsToQuery',
         redirect: "/multilevel/level_2_1",
-        mark:'',
+        mark:'5400',
         meta: {
           title:'单据查询'
         },
@@ -568,23 +568,23 @@ export default [
           {
             path: 'undoFlowQuery',
             name: 'UndoFlowQuery',
-            mark:'',
+            mark:'5401',
             meta:{
               title:'撤销流水帐查询',
             },
             component:() =>
               import("@/view/settlementManagement/documentsToQuery/undoFlowQuery/undoFlowQuery.vue")
           },
-          {
-            path: 'checkTheOrder',
-            name: 'checkTheOrder',
-            mark:'',
-            meta:{
-              title:'对账订单',
-            },
-            component:() =>
-              import("@/view/settlementManagement/documentsToQuery/undoFlowQuery/undoFlowQuery.vue")
-          }
+          // {
+          //   path: 'checkTheOrder',
+          //   name: 'checkTheOrder',
+          //   mark:'',
+          //   meta:{
+          //     title:'对账订单',
+          //   },
+          //   component:() =>
+          //     import("@/view/settlementManagement/documentsToQuery/undoFlowQuery/undoFlowQuery.vue")
+          // }
         ]
       },
       {
@@ -647,7 +647,7 @@ export default [
           {
             path: "/settlementManagement/bill/Onway",
             name: "bill_Onway",
-            mark: "7103",
+            mark: "5105",
             meta: {
               // hideInMenu: true,
               title: " 调出在途信息"
@@ -728,7 +728,7 @@ export default [
       {
         path: "/invoiceAdministration",
         name: "invoiceAdministration",
-        // mark: "5",
+        mark: "5500",
         // redirect: "/reportForm",
         meta: {
           // icon: "ios-paper",
@@ -740,7 +740,7 @@ export default [
             path: "/invoiceAdministration/costOpening",
             name: "invoiceAdministration-costOpening",
             redirect: "",
-            mark: "5200",
+            mark: "5501",
             meta: {
               title: "费用开票申请"
             },
@@ -753,7 +753,7 @@ export default [
             path: "/invoiceAdministration/invoiceApply",
             name: "invoiceAdministration-invoiceApply",
             redirect: "",
-            // mark: "5201",
+            mark: "5502",
             meta: {
               title: "开票申请查询与核销"
             },
@@ -766,7 +766,7 @@ export default [
             path: "/invoiceAdministration/salesInvoice",
             name: "invoiceAdministration-salesInvoice",
             redirect: "",
-            // mark: "5200",
+            mark: "5503",
             meta: {
               title: "销售发票导入"
             },
@@ -856,7 +856,7 @@ export default [
         path: "/settlementManagement/advanceCollection",
         name: "settlementManagement-advanceCollection",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "5300",
         meta: {
           // hideInMenu: true,
           title: "预收款管理"
@@ -868,7 +868,7 @@ export default [
         path: "/settlementManagement/advanceCharge",
         name: "settlementManagement-advanceCharge",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "5600",
         meta: {
           // hideInMenu: true,
           title: "预付款管理"
@@ -880,7 +880,7 @@ export default [
         path: "/settlementManagement/otherReceivables",
         name: "settlementManagement-otherReceivables",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "5700",
         meta: {
           // hideInMenu: true,
           title: "其他应收款管理"
@@ -892,7 +892,7 @@ export default [
         path: "/settlementManagement/otherPayable",
         name: "settlementManagement-otherPayable",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "5800",
         meta: {
           // hideInMenu: true,
           title: "其他应付款管理"
@@ -904,7 +904,7 @@ export default [
         path: "/settlementManagement/businessBorrowing",
         name: "settlementManagement-businessBorrowing",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "5900",
         meta: {
           // hideInMenu: true,
           title: "因公借支管理"
@@ -916,7 +916,7 @@ export default [
         path: "/settlementManagement/Dailyfundaudit",
         name: "settlementManagement-Dailyfundaudit",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "5301",
         meta: {
           // hideInMenu: true,
           title: "每日资金审核",
@@ -928,7 +928,7 @@ export default [
         path: "/settlementManagement/Expensereimbursement",
         name: "settlementManagement-Expensereimbursement",
         // mark: 'oms_orders_approve',
-        // mark: "5200",
+        mark: "51000",
         meta: {
           // hideInMenu: true,
           title: "费用报销管理"
@@ -939,7 +939,7 @@ export default [
       {
         path: "/fundsManagement",
         name: "fundsManagement",
-        // mark: "5100",
+        mark: "51100",
         meta: {
           title: "资金管理"
         },
@@ -949,7 +949,7 @@ export default [
             path: "capitalChain",
             name: "capitalChain",
             redirect: "",
-            // mark: "5101",
+            mark: "51101",
             meta: {
               title: "连锁资金日记账"
             },
@@ -960,7 +960,7 @@ export default [
             path: "shopJournal",
             name: "shopJournal",
             redirect: "",
-            // mark: "5101",
+            mark: "51102",
             meta: {
               title: "门店资金日记账"
             },
@@ -971,7 +971,7 @@ export default [
             path: "accountRegistration",
             name: "accountRegistration",
             redirect: "",
-            // mark: "5101",
+            mark: "51103",
             meta: {
               title: "账户登记表"
             },
@@ -981,7 +981,7 @@ export default [
           {
             path: "/fundsManagement/statistical",
             name: "statistical",
-            mark: "5300",
+            mark: "51104",
             meta: {
               // hideInMenu: true,
               title: "资金统计表"
@@ -992,7 +992,7 @@ export default [
           {
             path: "/fundsManagement/cashflow",
             name: "cashflow",
-            mark: "5300",
+            mark: "51105",
             meta: {
               // hideInMenu: true,
               title: "现金流量表"
@@ -1003,7 +1003,7 @@ export default [
           {
             path: "/fundsManagement/accountings",
             name: "accountings",
-            mark: "5300",
+            mark: "51106",
             meta: {
               // hideInMenu: true,
               title: "资金日记账审核"
@@ -1015,7 +1015,7 @@ export default [
             path: "/fundsManagement/cashJournal",
             name: "cashJournal",
             redirect: "",
-            // mark: "5101",
+            mark: "51107",
             meta: {
               title: "现金日记账"
             },
@@ -1026,7 +1026,7 @@ export default [
             path: "/fundsManagement/claimWrite",
             name: "claimWrite",
             redirect: "",
-            // mark: "5101",
+            mark: "51108",
             meta: {
               title: "资金认领款核销"
             },

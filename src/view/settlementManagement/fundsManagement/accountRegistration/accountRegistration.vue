@@ -48,7 +48,7 @@
             </button>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="newlyIncreased(1)">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="newlyIncreased(1)" v-has="'add'">
               <span>新 增</span>
             </button>
           </div>
