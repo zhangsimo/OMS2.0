@@ -77,7 +77,7 @@ import OrderLeft from "./OrderLeft";
 import OrderRight from "./OrderRight";
 import MoreQuery from "../../commonality/MoreQuery";
 import PrintShow from "../../commonality/PrintShow";
-import { getCancellation, getReorder } from "@/api/salesManagment/salesOrder";
+import { getCancellation, getReorder, getLeftList } from "@/api/salesManagment/salesOrder";
 
 export default {
   name: "Order",
@@ -259,12 +259,25 @@ export default {
       })
     },
     //重置额度
-      reset(){
+      reset(v){
+        const left = this.$refs.OrderLeft;
         this.$refs.right.limitList={
-            fixationQuota:'',
-            tempQuota:'',
-            sumAmt:'',
+          fixationQuota:'',
+          tempQuota:'',
+          sumAmt:'',
         }
+        v.showPerson = v.showPerson ? 1 : 0;
+        left.page.num = 1;
+        // this.page.size = 10;
+        let page = left.page.num - 1;
+        let size = left.page.size;
+        getLeftList(page, size, v).then(res => {
+          if (res.code === 0) {
+            // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
+            left.tableData = res.data.content;
+            left.page.total = res.data.totalElements;
+          }
+        });
       }
   }
 };
