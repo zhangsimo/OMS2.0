@@ -117,9 +117,9 @@
             },
             //确定
             emit(){
-                this.$emit('resetData');
+              this.$emit('resetData', this.formData);
               this.$store.commit('setOrederQuery' , this.formData)
-                this.moreQueryShow = false
+              this.moreQueryShow = false
             }
         }
     }

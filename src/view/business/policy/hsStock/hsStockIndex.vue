@@ -4,24 +4,13 @@
       <div class="oper-top flex">
         <div class="wlf wlf-center">
           <div class="db mr10">
-            <span class="">订单日期：</span>
-            <Date-picker
-              type="datetimerange"
-              clearable
-              class="w320 mr10"
-              @on-change="getvalue"
-              placeholder="年/月/日-年/月/日"
-            >
-            </Date-picker>
-          </div>
-          <div class="db mr10">
-            <span>华胜门店：</span>
+            <span>公司编号：</span>
             <Select v-model="company" class="w200 mr10" placeholder="选择公司" filterable clearable @on-change="getCompany">
               <Option v-for="item in hsStore" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
           </div>
           <div class="db mr10">
-            <span>配件编码/名称：</span>
+            <span>配件编码/名称/ID：</span>
             <Input v-model="searchData.partName" class="w150 mr10" />
           </div>
           <div class="db">
@@ -46,7 +35,7 @@
 </template>
 
 <script>
-  import {getAllTemplate,getAllFile} from "../../../../api/system/systemSetting/systemset";
+  import {getAllTemplate,getAllFile,getStock} from "../../../../api/system/systemSetting/systemset";
   import api from '_conf/url'
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
@@ -68,48 +57,49 @@
             type: "index"
           },
           {
-            title: "ID",
-            key: "id",
+            title: "配件ID",
+            key: "partID",
             minWidth: 150
           },
           {
-            title: "文件名称",
-            key: "fileOriginName",
+            title: "配件编码",
+            key: "partCode",
+            minWidth: 150
+          },
+          {
+            title: "配件名称",
+            key: "partName",
             minWidth: 120
           },
           {
-            title: "文件类型",
-            key: "remark",
-            minWidth: 120,
-            render:(h,p)=>{
-              let objData = p.row.fileType?JSON.parse(p.row.fileType):{};
-              return h('span',objData.name)
-            }
-          },
-          {
-            title: "MD5",
-            key: "fileMD5",
+            title: "品牌名称",
+            key: "brandName",
             minWidth: 120
           },
           {
-            title: "使用次数",
-            key: "reqCount",
+            title: "入库数量",
+            key: "amount",
             minWidth: 120
           },
           {
-            title: "文件路径",
-            key: "filePath",
+            title: "可出库数",
+            key: "outAmount",
             minWidth: 120
           },
           {
-            title: "创建时间",
-            key: "createTime",
+            title: "门店名称",
+            key: "shortname",
+            minWidth: 120
+          },
+          {
+            title: "单位",
+            key: "unit",
+            minWidth: 120
+          },
+          {
+            title: "入库日期",
+            key: "deliveryDue",
             minWidth: 60
-          },
-          {
-            title: "更新时间",
-            key: "updateTime",
-            minWidth: 120
           },
         ],
 
@@ -150,13 +140,13 @@
           req.fileOriginName = this.searchData.partName;
         }
         params.page = this.page.num - 1;
-        params.size = this.page.size;
+        params.pageSize = this.page.size;
         this.loading = true;
-        let rep = await getAllTemplate(req,params);
+        let rep = await getStock(req,params);
         this.loading = false;
         if(rep.code===0){
-          this.templateData = rep.data.content||[];
-          this.page.total = rep.data.totalElements;
+          this.templateData = rep.data.data.items||[];
+          this.page.total = rep.data.data.total;
         }
       },
       async getFileList(){

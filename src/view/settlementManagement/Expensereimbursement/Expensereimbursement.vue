@@ -48,21 +48,21 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button class="ml10" @click="claimCollect">报销认领</Button>
-        <Button class="ml10" @click="openWriteOffModel">因公借支核销</Button>
-        <Button class="ml10" @click="revokeCollection(1)"
+        <Button v-has="'claim'" class="ml10" @click="claimCollect">报销认领</Button>
+        <Button v-has="'cancel'" class="ml10" @click="openWriteOffModel">因公借支核销</Button>
+        <Button v-has="'apply'" class="ml10" @click="revokeCollection(1)"
           :disabled="currRow == null"
           >报销申请撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(2)"
-          :disabled="currRow == null"
+          :disabled="currRow == null" v-has="'revoke'"
           >报销认领撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(3)"
-          :disabled="currRow == null"
+          :disabled="currRow == null" v-has="'claimRevoke'"
           >因公借支核销撤回</Button
         >
-        <Button class="ml10"
+        <Button class="ml10" v-has="'export'"
           >导出</Button
         >
       </div>
