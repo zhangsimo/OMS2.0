@@ -712,7 +712,7 @@ export default {
                 label: item.fullName
               });
               if (item.id === this.companyInfo) {
-                this.collectionAccountName = item.receiveName;
+                this.collectionAccountName = item.accountName // item.receiveName;
                 this.openingBank = item.accountBank;
                 this.collectionAccount = item.accountBankNo;
               }
@@ -730,7 +730,7 @@ export default {
           //   value: 0,
           //   label: item.receiveName
           // });
-          this.collectionAccountName = item.receiveName;
+          this.collectionAccountName = item.accountName; // item.receiveName;
           this.openingBank = item.accountBank;
           this.collectionAccount = item.accountBankNo;
         }

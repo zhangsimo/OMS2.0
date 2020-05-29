@@ -2,10 +2,10 @@
   <div class="content-oper content-oper-flex">
     <section class="oper-box paddinSize">
       <Button class="mr10" v-has="'export'" @click="operation(1)">导入发票</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(2)">修改</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(3)">删除导入</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(4)">发票作废</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(5)">红字核销</Button>
+      <Button class="mr10" v-has="'change'" @click="operation(2)">修改</Button>
+      <Button class="mr10" v-has="'delete'" @click="operation(3)">删除导入</Button>
+      <Button class="mr10" v-has="'cancellation'" @click="operation(4)">发票作废</Button>
+      <Button class="mr10" v-has="'cancel'" @click="operation(5)">红字核销</Button>
       <div class="mt20">
         <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
         <Button class="mr10" :type="isActive===1?'info':'default'" @click="chooseTable(1)">已核销</Button>
