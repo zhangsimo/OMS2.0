@@ -1051,7 +1051,7 @@ export default [
   {
     path: "/documentApproval",
     name: "documentApproval",
-    // mark: "6",
+    mark: "11",
     redirect: "/reportForm",
     meta: {
       icon: "ios-paper",
@@ -1063,7 +1063,7 @@ export default [
         path:'/documentApproval/draftingOfApplication',
         name:'documentApproval-draftingOfApplication',
         // redirect: "/multilevel/level_2_1",
-        // mark:'5100',
+        mark:'11001',
         meta: {
           title:'申请流程'
         },
@@ -1073,7 +1073,7 @@ export default [
       {
         path: "/documentApproval/myApplication",
         name: "documentApproval-myApplication",
-        // mark: "5100",
+        mark: "11002",
         meta: {
           title: "申请单"
         },
@@ -1130,7 +1130,7 @@ export default [
         path: "/reportForm/purchaseRepor/saleOrder",
         name: "procurementSaleOrder",
         redirect: "",
-        mark: "7100",
+        mark: "7101",
         meta: {
           title: "销售报表"
         },
@@ -1140,7 +1140,7 @@ export default [
         path: "/reportForm/purchaseRepor/transfer",
         name: "procurementTransfer",
         redirect: "",
-        mark: "7100",
+        mark: "7102",
         meta: {
           title: "调拨报表"
         },
@@ -1150,7 +1150,7 @@ export default [
         path: "/reportForm/purchaseRepor/way",
         name: "procurementWay",
         redirect: "",
-        mark: "7100",
+        mark: "7103",
         meta: {
           title: "调出在途信息"
         },
@@ -1160,7 +1160,7 @@ export default [
         path: "/reportForm/purchaseRepor/moveWarehouse",
         name: "procurementMoveWarehouse",
         redirect: "",
-        mark: "7100",
+        mark: "7104",
         meta: {
           title: "移仓报表"
         },
@@ -1170,7 +1170,7 @@ export default [
         path: "/reportForm/purchaseRepor/Stocktaking",
         name: "procurementStocktaking",
         redirect: "",
-        mark: "7100",
+        mark: "7105",
         meta: {
           title: "盘点报表"
         },
@@ -1180,7 +1180,7 @@ export default [
         path: "/reportForm/purchaseRepor/Assembly",
         name: "procurementAssembly",
         redirect: "",
-        mark: "7100",
+        mark: "7106",
         meta: {
           title: "加工报表"
         },
@@ -1857,7 +1857,7 @@ export default [
       {
         path: "/system/systemSetting/template/templateIndex",
         name: "templateIndex",
-        mark: "9301",
+        mark: "9999",
         meta: {
           notCache: true,
           title: "模板管理"
