@@ -66,21 +66,21 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement(0)"
-          v-has="'examine'"
+          v-has="'reconciliation'"
           :disabled="statementStatusflag"
         >对账单对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement(1)"
-          v-has="'examine'"
+          v-has="'writeDown'"
           :disabled="statementStatusflag"
         >冲减预收</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement(2)"
-          v-has="'examine'"
+          v-has="'prepayment'"
           :disabled="statementStatusflag"
         >冲减预付</button>
         <!-- <button
@@ -93,59 +93,59 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="viewStatement"
-          v-has="'examine'"
+          v-has="'look'"
         >查看对账单</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="capitalWrite"
-          v-has="'examine'"
+          v-has="'claim'"
           :disabled="statementStatusflag"
         >认领款核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement"
-          v-has="'examine'"
+          v-has="'print'"
         >打印流程</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="saleApplication"
-          v-has="'examine'"
+          v-has="'market'"
           :disabled="taxArrearsfalg"
         >销售开票申请</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="queryApplication"
-          v-has="'examine'"
+          v-has="'query'"
         >查询开票申请</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="hedgingInvoice"
-          v-has="'examine'"
+          v-has="'incoice'"
           :disabled="hedgingfalg"
         >发票对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="registrationEntry"
-          v-has="'examine'"
+          v-has="'register'"
           :disabled="receivefalg"
         >进项登记及修改</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="queryEntry"
-          v-has="'examine'"
+          v-has="'input'"
         >查询进项核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="Revoke"
-          v-has="'revoke'"
+          v-has="'revocation'"
         >撤销</button>
         <div class="hide1">
           <Table
