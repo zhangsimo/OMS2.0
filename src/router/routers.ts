@@ -254,7 +254,7 @@ export default [
       {
         path: "/hsOrder/hsIndex",
         name: "hsOrder",
-        mark: "2003",
+        mark: "2004",
         meta: {
           icon: "arrow-graph-up-right",
           title: "华胜订单处理",

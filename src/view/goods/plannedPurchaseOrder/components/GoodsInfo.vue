@@ -44,7 +44,7 @@
       </div>
       <div class="main">
         <!-- 收货信息 左 -->
-        <div class="fl  w300">
+        <div class="fl1 fl  w300">
           <div class="bgc p5">收货信息</div>
           <vxe-table
             border
@@ -93,8 +93,8 @@
           </vxe-table>
         </div>
         <!-- 收货信息 右 -->
-        <div class="bgc p5  mb15">收货信息</div>
         <div class="sForm">
+          <div class="bgc p5  mb15">收货信息</div>
           <Form
             inline
             :model="formDateRight"
@@ -583,5 +583,11 @@ export default class GoodsInfo extends Vue {
   color: #000;
   background-color: #e8e8e8;
 }
-.c {}
+.fl1, .sForm{
+  position: relative;
+  z-index: 1;
+}
+.fl1 {
+  z-index: 10;
+}
 </style>
