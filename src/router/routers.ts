@@ -530,7 +530,18 @@ export default [
           title: "加工单"
         },
         component: () => import("@/view/business/policy/process/process.vue")
+      },
+      {
+        path: "/hsStock/hsStockIndex",
+        name: "hsStock",
+        mark: "4005",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "华盛库存查询"
+        },
+        component: () => import("@/view/business/policy/process/process.vue")
       }
+
     ]
   },
   {
@@ -1842,6 +1853,19 @@ export default [
               )
           }
         ]
+      },
+      {
+        path: "/system/systemSetting/template/templateIndex",
+        name: "templateIndex",
+        mark: "9301",
+        meta: {
+          notCache: true,
+          title: "模板管理"
+        },
+        component: () =>
+          import(
+            "@/view/system/systemSetting/template/templateIndex.vue"
+            )
       }
     ]
   },

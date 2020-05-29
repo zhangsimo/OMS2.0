@@ -34,7 +34,8 @@ const dev = {
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
   // omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
-  omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
+  omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider",
+  templateApi:"http://192.168.21.109:5100"
 };
 
 const test = {
@@ -63,7 +64,8 @@ const test = {
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFileNew",
   getFileApi: "https://tsoms2.g-parts.cn",
   downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
-  omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
+  omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider",
+  templateApi:"http://192.168.21.109:5100"
 };
 
 const audit = {
