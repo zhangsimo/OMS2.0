@@ -718,6 +718,7 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      params.detailVOS.forEach(el => el.systemUnitId = el.unit);
       if (params.xinzeng) {
         delete params.status;
       }
