@@ -36,12 +36,12 @@
           </div>
         </div>
         <div class="mt10 mb10">
-          <Button class="ml10" @click="claimCollect(1)" :disabled="Boolean(currRow.paymentClaimNo)">其他付款认领</Button>
-          <Button class="ml10" @click="collectWirte" :disabled="Boolean(currRow.writeOffReceiptNo)">其他收款核销</Button>
-          <Button class="ml10" @click="claimCollect(2)" :disabled="Boolean(currRow.paymentRegainNo)">其他收款收回</Button>
-          <Button class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
-          <Button class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
-          <Button class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
+          <Button v-has="'claim'" class="ml10" @click="claimCollect(1)" :disabled="Boolean(currRow.paymentClaimNo)">其他付款认领</Button>
+          <Button v-has="'cancel'" class="ml10" @click="collectWirte" :disabled="Boolean(currRow.writeOffReceiptNo)">其他收款核销</Button>
+          <Button v-has="'back'" class="ml10" @click="claimCollect(2)" :disabled="Boolean(currRow.paymentRegainNo)">其他收款收回</Button>
+          <Button v-has="'payBack'" class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
+          <Button v-has="'gatheringClaimBack'" class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
+          <Button v-has="'gatheringBack'" class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
           <!--<Button class="ml10">导出</Button>-->
         </div>
       </section>

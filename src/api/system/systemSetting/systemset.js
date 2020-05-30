@@ -38,3 +38,13 @@ export function getAllFile(data,params) {
     params
   })
 }
+
+//获取华胜库存
+export function getStock(data,params) {
+  return axios.request({
+    url: `${api.omsEdit}/hs/stock/getHsPartsStock`,
+    method: 'post',
+    data,
+    params
+  })
+}

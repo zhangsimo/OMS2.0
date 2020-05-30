@@ -11,7 +11,7 @@ const dev = {
   // omsSettle: "http://192.168.30.221:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
-  // omsEdit: '', // 9220salesOrder
+  omsEdit: 'http://192.168.21.59:9220', // 9220salesOrder
   // omsTask: '', // 9230
   // omsApi: '', // 9240
   // wmsApi: '', // 9250
@@ -41,6 +41,7 @@ const dev = {
 const test = {
   omsTask: "https://tsapi2.g-parts.cn/oms-task-provider",
   omsEdit: "https://tsapi2.g-parts.cn/oms-edi-provider",
+  // omsEdit: "http://192.168.21.59:9220",
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
