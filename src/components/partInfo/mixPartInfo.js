@@ -161,6 +161,7 @@ export const mixPartInfo = {
       this.btnIsLoadding = false;
       this.proModal = true;
       this.formValidate.specVOS=[];
+      this.saveFlag = false;
       this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌
       this.getCarBrand();
