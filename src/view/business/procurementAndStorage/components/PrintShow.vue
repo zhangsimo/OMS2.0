@@ -128,6 +128,14 @@
 
                     },
                     {
+                        title: '品牌车型',
+                        key: 'carBrandName',
+                        align: 'center',
+                        render(h, params) {
+                          return h("span", {}, params.row.carBrandName + params.row.carModelName);
+                        }
+                    },
+                    {
                         title: '规格',
                         key: 'spec',
                         align: 'center'
@@ -136,6 +144,12 @@
                     {
                         title: '单位',
                         key: 'unit',
+                        align: 'center'
+
+                    },
+                    {
+                        title: '数量',
+                        key: 'orderQty',
                         align: 'center'
 
                     },

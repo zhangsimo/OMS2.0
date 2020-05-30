@@ -41,7 +41,11 @@ export const minxParts = {
         {
           label: "不通过",
           value: 2
-        }
+        },
+        {
+          label: "待同步",
+          value: 3
+        },
       ],
 
       //新增配件名称层
@@ -164,6 +168,8 @@ export const minxParts = {
                 } else if (approval == 2) {
                   apptxt = "未通过";
                   className = "red";
+                } else if (approval == 3) {
+                  apptxt = "待同步";
                 }
                 return h(
                   "span",

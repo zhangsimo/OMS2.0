@@ -1303,7 +1303,6 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
-    this.getList();
     this.getArrayParams();
     this.warehouse();
     this.getList();
