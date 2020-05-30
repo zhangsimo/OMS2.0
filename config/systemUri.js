@@ -11,11 +11,15 @@ const test = {
 const audit = {
   wms: "https://uatwms.g-parts.cn/",
   wmsTokenApi: "https://uatapi2.g-part.cn",
-};
+}; 
 const pro = {
-  wms: "https://wms.g-part.cn/",
-  wmsTokenApi: "https://api.g-parts.cn",
+  wms: "https://wo_wms.g-part.cn/",
+  wmsTokenApi: "https://woapi.g-part.cn",
 };
+// const pro = {
+//   wms: "https://wms.g-part.cn/",
+//   wmsTokenApi: "https://api.g-parts.cn",
+// };
 
 let systemUri = { dev, test, audit, pro };
 
