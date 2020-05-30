@@ -168,6 +168,8 @@ export const minxParts = {
                 } else if (approval == 2) {
                   apptxt = "未通过";
                   className = "red";
+                } else if (approval == 3) {
+                  apptxt = "待同步";
                 }
                 return h(
                   "span",
