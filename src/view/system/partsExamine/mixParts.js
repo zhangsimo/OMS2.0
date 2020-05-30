@@ -41,7 +41,11 @@ export const minxParts = {
         {
           label: "不通过",
           value: 2
-        }
+        },
+        {
+          label: "待同步",
+          value: 3
+        },
       ],
 
       //新增配件名称层
