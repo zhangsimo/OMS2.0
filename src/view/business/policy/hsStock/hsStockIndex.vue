@@ -5,13 +5,16 @@
         <div class="wlf wlf-center">
           <div class="db mr10">
             <span>公司编号：</span>
-            <Select v-model="company" class="w200 mr10" placeholder="选择公司" filterable clearable @on-change="getCompany">
+            <Select v-model="company" class="w200 mr10" placeholder="选择公司" filterable clearable>
               <Option v-for="item in hsStore" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
           </div>
           <div class="db mr10">
-            <span>配件编码/名称/ID：</span>
-            <Input v-model="searchData.partName" class="w150 mr10" />
+            <span>查询项：</span>
+            <Select v-model="searchData.partType" class="w120 mr10">
+              <Option v-for="item in partType" :value="item.value" :key="item.value">{{ item.name }}</Option>
+            </Select>
+            <Input v-model="searchData.partName" class="w250 mr10" />
           </div>
           <div class="db">
             <Button class="mr15 w90" type="primary" @click="resetData" v-has="'examine'">
@@ -43,6 +46,24 @@
     name: "hsStockIndex",
     data(){
       return {
+        company:'',
+        hsStore:[],
+
+        //查询项
+        partType:[
+          {
+            "name":"配件编码",
+            "value":"partCode"
+          },
+          {
+            "name":"品牌名称",
+            "value":"brandName"
+          },
+          {
+            "name":"配件ID",
+            "value":"partId"
+          },
+        ],
         //分页
         page: {
           total: 0,
@@ -105,15 +126,12 @@
 
         loading:false,
         //tabs切换标签
-        tabsName:'name1',
         //模板数据
         templateData:[],
-        //文件数据
-        fileData:[],
         //搜索条件
         searchData:{
           partName:'',
-          fileName:''
+          partType:'partCode',
         },
         //表格勾选数据
         selectTableDataArr:[],
@@ -123,21 +141,16 @@
       }
     },
     computed:{
-      uploadFile(){
-        return `${api.templateApi}/file/uploadFileTemplate`
-      },
-
     },
     mounted(){
       this.getTemplateList();
-      // this.getFileList();
     },
     methods:{
       async getTemplateList(){
         let req = {};
         let params = {};
         if(this.searchData.partName.trim()){
-          req.fileOriginName = this.searchData.partName;
+          req[this.searchData.partType] = this.searchData.partName;
         }
         params.page = this.page.num - 1;
         params.pageSize = this.page.size;
@@ -149,87 +162,22 @@
           this.page.total = rep.data.data.total;
         }
       },
-      async getFileList(){
-        let req = {};
-        let params = {};
-        if(this.searchData.fileName.trim()){
-          req.fileOriginName = this.searchData.fileName;
-        }
-        params.page = this.page.num - 1;
-        params.size = this.page.size;
-        this.loading = true;
-        let rep = await getAllFile(req,params);
-        this.loading = false;
-        if(rep.code===0){
-          this.fileData = rep.data.content||[];
-          this.page.total = rep.data.totalElements;
-        }
-      },
-// 导入
-      handleBeforeUpload() {
-        let refs = this.$refs;
-        refs.upload.clearFiles();
-      },
-      handleSuccess(res, file) {
-        let self = this;
-        if (res.code == 0) {
-          if (res.data.errosMsg.length > 0) {
-            this.warning(res.data.errosMsg);
-          } else  {
-            self.$Message.success("导入成功");
-          }
-        } else {
-          self.$Message.error(res.message);
-        }
-      },
-      warning(nodesc) {
-        this.$Notice.warning({
-          title: '上传错误信息',
-          desc: nodesc
-        });
-      },
-      onFormatError(file) {
-        this.$Message.error('只支持xls xlsx后缀的文件')
-      },
-      changeTab(name){
-        this.resetData();
-        switch (name) {
-          case 'name1':
-            this.getTemplateList();
-            break;
-          case 'name2':
-            this.getFileList();
-            break;
-        };
-      },
+
       resetData(){
         this.page.num = 1;
         this.page.size = 10;
+        this.getTemplateList();
       },
       //切换页面
       selectNum(val) {
         this.page.num = val;
-        switch (this.tabsName) {
-          case 'name1':
-            this.getTemplateList();
-            break;
-          case 'name2':
-            this.getFileList();
-            break;
-        };
+        this.getTemplateList();
       },
       //切换页数
       selectPage(val) {
         this.page.num = 1;
         this.page.size = val;
-        switch (this.tabsName) {
-          case 'name1':
-            this.getTemplateList();
-            break;
-          case 'name2':
-            this.getFileList();
-            break;
-        };
+        this.getTemplateList();
       },
     }
   }
