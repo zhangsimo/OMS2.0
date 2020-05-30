@@ -55,12 +55,12 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button :disabled="currRow == null" class="ml10" ref="payBtn" @click="openModal('预付款认领')">预付款认领</Button>
-        <Button :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
-        <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
-        <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
-        <Button :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
-        <Button :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
+        <Button v-has="'claim'" :disabled="currRow == null" class="ml10" ref="payBtn" @click="openModal('预付款认领')">预付款认领</Button>
+        <Button v-has="'cancel'" :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
+        <Button v-has="'back'" :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
+        <Button v-has="'revoke'" :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
+        <Button v-has="'cancelRevoke'" :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
+        <Button v-has="'baclRrvoke'" :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
 <!--        <Button class="ml10">导出</Button>-->
       </div>
     </section>

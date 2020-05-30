@@ -60,37 +60,37 @@
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="importXSL">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="importXSL" v-has="'import'">
             <span>导入日记账</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="dele">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="dele" v-has="'delete'">
             <span>删除导入</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="intellect">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="intellect" v-has="'ai'">
             <span>智能匹配</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="artificialChange">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="artificialChange" v-has="'people'">
             <span>人工分配</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation" v-has="'revoke'">
             <span>撤销分配</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="goMoney">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="goMoney" v-has="'clima'">
             <span>资金认领核销</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="openChangeModal">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="openChangeModal" v-has="'change'">
             <span>修改</span>
           </button>
         </div>

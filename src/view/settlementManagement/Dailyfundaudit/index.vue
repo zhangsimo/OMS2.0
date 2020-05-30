@@ -63,6 +63,7 @@
               type="button"
               @click="SubmitAudit"
               :disabled="oneList.length <= 0"
+              v-has="'audit'"
             >
               <span>审核</span>
             </button>
@@ -73,6 +74,7 @@
               type="button"
               @click="reAudit"
               :disabled="oneList.length <= 0"
+              v-has="'revoke'"
             >
               <span>撤销</span>
             </button>

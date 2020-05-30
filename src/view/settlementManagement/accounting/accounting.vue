@@ -66,6 +66,7 @@
               type="button"
               :disabled="status != 0 || oneList.length <= 0"
               @click="SubmitAudit"
+              v-has="'aduit'"
             >
               <span>审核</span>
             </button>
@@ -77,6 +78,7 @@
               type="button"
               :disabled="status != 1 || oneList.length <= 0"
               @click="reAudit"
+              v-has="'backAudit'"
             >
               <span>撤销审核</span>
             </button>
@@ -87,6 +89,7 @@
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="putVoucher"
+              v-has="'change'"
             >
               <span>修改凭证</span>
             </button>

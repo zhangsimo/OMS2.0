@@ -48,23 +48,23 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button class="ml10" @click="claimCollect(1)">因公借支认领</Button>
-        <Button class="ml10" @click="openWriteOffModel">因公借支核销</Button>
-        <Button class="ml10" @click="claimCollect(2)">因公借支收回</Button>
-        <Button class="ml10" @click="revokeCollection(3)"
+        <Button v-has="'clima'" class="ml10" @click="claimCollect(1)">因公借支认领</Button>
+        <Button v-has="'cancel'" class="ml10" @click="openWriteOffModel">因公借支核销</Button>
+        <Button v-has="'back'" class="ml10" @click="claimCollect(2)">因公借支收回</Button>
+        <Button v-has="'revoke'" class="ml10" @click="revokeCollection(3)"
           :disabled="currRow == null"
           >因公借支申请撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(0)"
-          :disabled="currRow == null"
+          :disabled="currRow == null" v-has="'claimRevoke'"
           >因公借支认领撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(1)"
-          :disabled="currRow == null"
+          :disabled="currRow == null" v-has="'borrowRevoke'"
           >因公借支核销撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(2)"
-          :disabled="currRow == null"
+          :disabled="currRow == null" v-has="'payRevoke'"
           >因公借支收回撤回</Button
         >
         <!--<Button class="ml10">导出</Button>-->
