@@ -578,6 +578,12 @@ export default class GoodsInfo extends Vue {
 }
 </script>
 
+<style>
+.vxe-table--body-wrapper.body--wrapper {
+  background-color: #fff;
+}
+</style>
+
 <style lang="less" scoped>
 .bgc {
   color: #000;
