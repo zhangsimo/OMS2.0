@@ -583,9 +583,11 @@ export default {
     },
     //获取公司
     async getAllClient() {
-      let res = await getClient();
-      if (res.code === 0) {
-        this.client = res.data;
+      if(this.client.length <= 0) {
+        let res = await getClient();
+        if (res.code === 0) {
+          this.client = res.data;
+        }
       }
     },
     //获取销售员
