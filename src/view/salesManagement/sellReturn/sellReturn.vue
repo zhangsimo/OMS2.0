@@ -678,11 +678,13 @@ export default {
     },
     //客户列表
     getAllClient() {
-      getClient().then(res => {
-        if (res.code === 0) {
-          this.client = res.data;
-        }
-      });
+      if(this.client.length <= 0) {
+        getClient().then(res => {
+          if (res.code === 0) {
+            this.client = res.data;
+          }
+        });
+      }
     },
     //改变客户
     changeClient(value) {
