@@ -14,7 +14,7 @@ const audit = {
 }; 
 const pro = {
   wms: "https://wo_wms.g-part.cn/",
-  wmsTokenApi: "https://api2.g-parts.cn",
+  wmsTokenApi: "https://api2.g-part.cn",
 };
 // const pro = {
 //   wms: "https://wms.g-part.cn/",
