@@ -74,6 +74,7 @@
             title="实际入库数量"
           ></vxe-table-column>
           <vxe-table-column
+            v-if="$route.name!='plannedPurchaseOrder'&& $route.name!='interPurchase'"
             field="notEnterQty"
             title="已调整数量"
           ></vxe-table-column>
