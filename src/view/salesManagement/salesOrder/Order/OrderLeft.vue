@@ -139,6 +139,7 @@ export default {
           this.$refs.currentRowTable.setCurrentRow(this.tableData[0]);
           this.$emit("getOneOrder", this.tableData[0]);
           this.$store.commit("setOneOrder", this.tableData[0]);
+          this.selectItemId=this.tableData[0];
         }
       }
     },
@@ -156,7 +157,7 @@ export default {
     //点击获取当前信息
     clickOnesList(data) {
       if(data){
-          this.selectItemId=data.row.id;
+        this.selectItemId=data.row.id;
       }
       this.$parent.$parent.ispart=false;
       if(data.row == null) return;

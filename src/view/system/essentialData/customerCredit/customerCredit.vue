@@ -29,7 +29,7 @@
       <Button
         class="mr10"
         @click="openAdjustment"
-        v-has="'credit'"
+        v-has="'change'"
         v-show="this.state === 1 && this.researchStatus === 2"
       >
         <span class="center">额度调整</span>
