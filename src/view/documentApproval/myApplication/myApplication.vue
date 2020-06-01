@@ -460,9 +460,9 @@
           let params = {};
           params.page = this.page.num - 1;
           params.size = this.page.size;
-          if(this.value){
-            params.startTime = this.value[0];
-            params.endTime = this.value[1];
+          if(this.value.length != 0){
+            params.startTime = moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
+            params.endTime = moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           }
           params.billStatus = this.Reconciliationtype;
           params.applyType = this.ApplicationType;
