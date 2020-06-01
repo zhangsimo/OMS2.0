@@ -396,6 +396,7 @@ import { conversionList } from "@/components/changeWbList/changewblist";
 
 export default {
   name: "OrderRight",
+  inject: ["reload"],
   components: {
     ClientData,
     goodsInfo,
@@ -844,6 +845,9 @@ export default {
     },
     //打开活动
     openActivityModal() {
+      if(!this.$parent.$parent.$refs.OrderLeft.selectItemId) {
+        return this.$message.error("请先保存单据!");
+      }
       this.$refs.activity.openModal();
     },
     //获取活动内的数据
@@ -864,8 +868,9 @@ export default {
       data.detailList = arr;
       let res = await getAccessories(data);
       if (res.code === 0) {
-        this.getList();
-        this.$parent.$parent.$refs.OrderLeft.gitlistValue()
+        // this.getList();
+        this.reload();
+        // this.$parent.$parent.$refs.OrderLeft.gitlistValue()
       }
     },
     //打开查看模态框
@@ -897,6 +902,7 @@ export default {
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields();
               this.limitList = {};
+              this.reload();
             }
           } catch (errMap) {
             this.$XModal.message({
@@ -1033,6 +1039,7 @@ export default {
                 this.limitList = {};
                 this.$store.commit("setleftList", res);
                   this.$refs.formPlan.resetFields();
+                  this.reload();
               }
             }
           } catch (errMap) {
@@ -1059,8 +1066,9 @@ export default {
       data.sign = 1;
       let res = await getAccessories(data);
       if (res.code === 0) {
-        this.getList();
-        this.$parent.$parent.parentGetleft();
+        // this.getList();
+        this.reload();
+        // this.$parent.$parent.parentGetleft();
       }
     },
     getRUl(val) {
