@@ -487,7 +487,7 @@ const methods = {
     let newA = [];
     a.map(item => {
       newA.push({
-        partCode: item.code,
+        partCode: item.partCode,
         partName: item.partStandardName,
         partId: item.id,
         partInnerId: item.code,
