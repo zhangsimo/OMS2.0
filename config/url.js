@@ -7,7 +7,7 @@ const dev = {
   omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.221:9200",
   // omsOrder:'http://192.168.30.11:9210', //陈舒
-  omsSettle: "http://192.168.30.226:9271",
+  omsSettle: "http://192.168.30.43:9270",
   // omsSettle: "http://192.168.30.221:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
@@ -111,10 +111,10 @@ const pro = {
     "https://api2.g-part.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
     "https://api2.g-part.cn/gpart-essential-provider/file/uploadFileNew",
-  getFileApi: "https://erp.g-part.cn",
+  getFileApi: "https://tsoms2.g-parts.cn",
   downApi: "https://api2.g-part.cn/gpart-oss-provider",
   omsTpApi: "https://api2.g-part.cn/oms-thirdparty-provider",
-  templateApi:"https://api2.g-part.cn/gpart-essential-provider"
+  templateApi:"https://api2.g-part.cn/gpart-essential-provider",
 
 
 };

@@ -38,7 +38,8 @@
           </Button>
         </div>
         <div class="db ml15" v-if="$route.name!='outsidePurchase'&&$route.name!='temporaryPurchase'">
-          <Checkbox v-model="showModify" @on-change="query">显示已调整</Checkbox>
+          <Checkbox v-model="showModify" @on-change="query"  v-if="$route.name!='plannedPurchaseOrder'&& $route.name!='interPurchase'"
+          >显示已调整</Checkbox>
         </div>
       </div>
       <div>
@@ -74,7 +75,6 @@
             title="实际入库数量"
           ></vxe-table-column>
           <vxe-table-column
-            v-if="$route.name!='plannedPurchaseOrder'&& $route.name!='interPurchase'"
             field="notEnterQty"
             title="已调整数量"
           ></vxe-table-column>
