@@ -99,6 +99,7 @@
           :data="tbdataChild"
           align="center"
           ref="xTableChild"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
         >
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -135,9 +136,10 @@ export default {
     const amtValid = ({ row, cellValue }) => {
       return new Promise((resolve, reject) => {
         let max =
-          row.paymentReturnBalance <= 0 ? row.payAmt : row.paymentReturnBalance;
+          this.tableData[0].paymentBalance < this.tableData[0].totalPrice ?  this.tableData[0].paymentBalance : this.tableData[0].totalPrice ;
+        console.log(max , 8888)
         if (cellValue > max) {
-          reject(new Error("因公借支核销金额不能大于借支金额!"));
+          reject(new Error(`因公借支核销金额不能大于借支金额${max}`));
         } else {
           resolve(true);
         }
@@ -170,6 +172,7 @@ export default {
   },
   computed: {
     tableData() {
+      if (!this.table) return
       let pay = 0;
       if (this.table != null) {
         pay = this.table.paymentBalance - this.totalPrice;
@@ -347,7 +350,6 @@ export default {
               this.$message.success(res.data);
               this.$parent.getQuery();
               this.cancel();
-              this.show = false
             }
           });
         } else {

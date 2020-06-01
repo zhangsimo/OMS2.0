@@ -104,7 +104,14 @@ export default {
         {
           title: "付款金额",
           key: "checkAmt",
-          align: "center"
+          align: "center",
+          render: (h , p) => {
+            let val = p.row.checkAmt
+            if (p.row.sort.name == '付款'){
+                val = - val
+            }
+            return h('span' , val)
+          }
         },
         {
           title: "审核状态",

@@ -575,6 +575,7 @@ export default {
         if (res.code == 0) {
           this.$message.success("撤销成功")
           this.revoke = false;
+          this.query()
           // this.reload();
         }
       })
