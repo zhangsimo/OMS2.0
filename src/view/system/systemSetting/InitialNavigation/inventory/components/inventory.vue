@@ -472,6 +472,9 @@ export default {
     },
     // 上传前
     handleBeforeUpload() {
+      if(!this.mid) {
+        return this.$message.error("请先保存单据再导入!")
+      }
       let refs = this.$refs;
       refs.upload.clearFiles();
     },
