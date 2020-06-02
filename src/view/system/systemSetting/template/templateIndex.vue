@@ -85,9 +85,9 @@
           </Select>
         </FormItem>
 
-        <FormItem label="模板名称：" prop="fileOriginName">
-          <Input class="w250" v-model="templateForm2.fileOriginName" placeholder="请输入模板名称"></Input>
-        </FormItem>
+        <!--<FormItem label="模板名称：" prop="fileOriginName">-->
+          <!--<Input class="w250" v-model="templateForm2.fileOriginName" placeholder="请输入模板名称"></Input>-->
+        <!--</FormItem>-->
         <FormItem label="上传模板文件：" prop="fileRule">
           <Upload
             style="display: inline-block;"
@@ -249,14 +249,10 @@
         },
 
         templateForm2:{
-          fileOriginName:'',
           fileRule:null,
           id:''
         },
         ruleValidate2:{
-          fileOriginName: [
-            { required: true, message: '模板名称不能为空', trigger: 'blur' }
-          ],
           id: [
             { required: true, message: '请选择模板类型', trigger: 'change' }
           ],

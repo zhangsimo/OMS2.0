@@ -386,7 +386,8 @@
           mainId: null, //选中行的id
           clickdelivery: false,
           Flaga: false,
-          ArrayValue: []
+          ArrayValue: [],
+          getArray: [],
         }
       },
       methods: {
@@ -494,8 +495,7 @@
         SaveMsg(){
               this.$refs.formPlan.validate(async valid => {
                 if (valid) {
-                  try {
-                    await this.$refs.xTable.validate();
+                  await this.$refs.xTable.validate();
                     let data = {}
                     for (var i = 0; i < this.getArray.length; i++) {
                       if (this.getArray[i].id == this.formPlan.guestName) {
@@ -547,12 +547,15 @@
                         this.$refs.formPlan.resetFields();
                       }
                     })
-                  } catch (errMap) {
-                    this.$XModal.message({
-                      status: "error",
-                      message: "申请数量必须输入大于0的正整数"
-                    });
-                  }
+                  // try {
+                    
+                  // } 
+                  // catch (errMap) {
+                  //   this.$XModal.message({
+                  //     status: "error",
+                  //     message: "申请数量必须输入大于0的正整数"
+                  //   });
+                  // }
                 } else {
                   if(!this.formPlan.guestName){
                     this.$Message.warning('请选择调出方！')
