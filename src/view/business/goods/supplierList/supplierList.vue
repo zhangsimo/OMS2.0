@@ -61,10 +61,10 @@
                     <FormItem label="供应商：" prop="guestName" class="fs12">
                       <Row class="w350">
                         <Col span="22">
-                          <!--<Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input>-->
-                          <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" @on-change="SelectGuest">
+                          <Input placeholder="请选择供应商" v-model="formPlan.guestName" readonly disabled></Input>
+                          <!-- <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" @on-change="SelectGuest">
                             <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-                          </Select>
+                          </Select> -->
                         </Col>
                         <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                       </Row>
@@ -795,7 +795,7 @@
       // 供应商子组件内容
       getSupplierName(a){
         // console.log(a)
-        this.formPlan.guestName = a.id
+        this.formPlan.guestName = a.fullName
         this.guestidId = a.id
       },
       leftgetList(){
@@ -1248,7 +1248,7 @@
       }, 0);
       this.allSelect();
       this.leftgetList();
-      this.selecQuery();
+      // this.selecQuery();
       this.getAllSales();
     }
   }
