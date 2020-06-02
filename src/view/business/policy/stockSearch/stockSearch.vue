@@ -38,7 +38,7 @@
             >
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" @on-change="changecompanyFun" v-model="searchForm.old" placeholder="公司">
+            <Select class="w200 mr10" filterable @on-change="changecompanyFun" v-model="searchForm.old" placeholder="公司">
               <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
             <Select class="w120 mr10" @on-change="changeStore" v-model="searchForm.storeId" placeholder="仓库">
@@ -90,7 +90,7 @@
               <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" @on-change="changecompanyFun2" v-model="searchForm1.old" placeholder="公司">
+            <Select class="w200 mr10" filterable @on-change="changecompanyFun2" v-model="searchForm1.old" placeholder="公司">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"

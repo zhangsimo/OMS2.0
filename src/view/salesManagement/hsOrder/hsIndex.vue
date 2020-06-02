@@ -231,9 +231,12 @@
     getSales,
     getSave
   } from "@/api/salesManagment/salesOrder";
-  import SelectSupplier from "../../goods/goodsList/components/supplier/selectSupplier";
+
+
   import {findForAllot} from "_api/purchasing/purchasePlan";
   import {save} from "../../../api/AlotManagement/transferringOrder";
+  import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier";
+
 
   export default {
     name: "hsOrder",
@@ -747,7 +750,13 @@
             item.serviceId = this.danhao;
           }
           if(status==2&&type==2){
-            item.allotOrderQty = Math.abs(item.outAbleQty-item.orderQty)
+            if(this.applyForType==1){
+              item.allotOrderQty = Math.abs(item.outAbleQty-item.orderQty);
+            }
+            if(this.applyForType==2){
+              item.allotOrderQty = item.orderQty;
+            }
+
             item.state = 2;
             item.serviceId = this.danhao;
           }
@@ -909,6 +918,7 @@
             reqData.detailVOS = detailList;
             if(this.applyForType===1){
               this.modal3Text = "按本店缺货数量生成调拨申请单成功";
+              //判断配件列表，是否有存才不缺货状态
               let isQh = 0;
               reqData.detailVOS.map(item => {
                 if(item.outAbleQty-item.orderQty>0){
@@ -972,8 +982,9 @@
 
       getArrayParams() {
         var req = {};
-        req.page = 1;
-        req.size = 20;
+        req.page = 0;
+        req.size = 1000;
+        req.isDisabled= 0;
         findForAllot(req).then(res => {
           const {content} = res.data;
           this.getArray = content;
@@ -1107,7 +1118,6 @@
       },
       //获取下侧表格一行选中的数据
       selectTabelData(v) {
-        console.log(v)
         this.selectTableDataArr = v;
       },
       //计算表格数据
