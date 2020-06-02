@@ -6,7 +6,7 @@
           <div class="db mr10">
             <span>公司编号：</span>
             <Select v-model="company" class="w200 mr10" placeholder="选择公司" filterable clearable>
-              <Option v-for="item in hsStore" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+              <Option v-for="item in hsStore" :value="item.erpCompCode" :key="item.erpCompCode">{{ item.fullName }}</Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import {getAllTemplate,getAllFile,getStock} from "../../../../api/system/systemSetting/systemset";
+  import {getAllTemplate,getAllFile,getStock,getHsStore} from "../../../../api/system/systemSetting/systemset";
   import api from '_conf/url'
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
@@ -144,6 +144,7 @@
     },
     mounted(){
       this.getTemplateList();
+      this.getHsStoreFun();
     },
     methods:{
       async getTemplateList(){
@@ -152,8 +153,11 @@
         if(this.searchData.partName.trim()){
           req[this.searchData.partType] = this.searchData.partName;
         }
-        params.page = this.page.num - 1;
-        params.pageSize = this.page.size;
+        if(this.company){
+          req['compcodes'] = this.company;
+        }
+        req.page = this.page.num - 1;
+        req.pageSize = this.page.size;
         this.loading = true;
         let rep = await getStock(req,params);
         this.loading = false;
@@ -162,7 +166,12 @@
           this.page.total = rep.data.data.total;
         }
       },
-
+      async getHsStoreFun(){
+        let rep = await getHsStore();
+        if(rep.code==0){
+          this.hsStore = rep.data;
+        }
+      },
       resetData(){
         this.page.num = 1;
         this.page.size = 10;
