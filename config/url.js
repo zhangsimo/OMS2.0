@@ -111,7 +111,7 @@ const pro = {
     "https://api2.g-part.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
     "https://api2.g-part.cn/gpart-essential-provider/file/uploadFileNew",
-  getFileApi: "https://tsoms2.g-parts.cn",
+  getFileApi: "https://erp.g-part.cn",
   downApi: "https://api2.g-part.cn/gpart-oss-provider",
   omsTpApi: "https://api2.g-part.cn/oms-thirdparty-provider",
   templateApi:"https://api2.g-part.cn/gpart-essential-provider",
