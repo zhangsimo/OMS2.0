@@ -1171,7 +1171,7 @@ export default {
         this.diaochuID = row.id;
       }
     },
-    getOkList(list, rowValue) {
+    getOkList(list, rowValue, codeId, code) {
       this.showit = false;
       this.Leftcurrentrow.detailVOS = [];
       for (var i = 0; i < list.length; i++) {
@@ -1189,7 +1189,8 @@ export default {
       // }
       // this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
-
+      this.Leftcurrentrow.codeId = codeId;
+      this.Leftcurrentrow.code = code;
       this.Leftcurrentrow.guestName = rowValue.guestName;
       this.Leftcurrentrow.createUname = rowValue.commitUname;
       this.Leftcurrentrow.remark = rowValue.remark;
