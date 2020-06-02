@@ -240,14 +240,21 @@
                   field="trueQty"
                   title="实盘数量"
                   width="100"
-                  :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
-                ></vxe-table-column>
+                  :edit-render="{autofocus: '.vxe-input--inner'}"
+                >
+                  <template v-slot:edit="{ row }">
+                    <vxe-input type="integer" :disabled="formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false" :min="0" v-model="row.trueQty"></vxe-input>
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="truePrice"
                   title="成本单价"
                   width="100"
-                  :edit-render="{name: 'input',attrs:{disabled:dis}}"
+                  :edit-render="{autofocus: '.vxe-input--inner'}"
                 >
+                  <template v-slot:edit="{ row }">
+                    <vxe-input type="float" :min="0" :disabled="dis" v-model="row.truePrice"></vxe-input>
+                  </template>
                   <template v-slot="{ row }">{{ row.truePrice|priceFilters}}</template>
                 </vxe-table-column>
                 <vxe-table-column field="dc" title="盈亏状态" width="100">
