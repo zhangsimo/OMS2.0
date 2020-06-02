@@ -146,7 +146,9 @@ export default {
       },
       xuanzhognList: [],
       checkRow: {},
-      currentData: []
+      currentData: [],
+      code: "",
+      codeId: "",
     };
   },
   watch: {
@@ -273,6 +275,8 @@ export default {
     async selectTabelData({ row }) {
       console.log(row, "row  ==>272");
       this.checkRow = row;
+      this.codeId = row.codeId;
+      this.code = row.code;
       const params = {
         mainId: row.id
       };
@@ -289,7 +293,7 @@ export default {
         this.$Message.info("请勾选需要选入的行");
         return;
       } else {
-        this.$emit("ok", this.currentData, this.checkRow);
+        this.$emit("ok", this.currentData, this.checkRow, this.codeId, this.code);
         this.searchPartLayer = false;
       }
     }

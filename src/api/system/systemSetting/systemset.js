@@ -38,6 +38,16 @@ export function getAllFile(data,params) {
     params
   })
 }
+//获取模板类型
+export function getTemplateType(params) {
+  return axios.request({
+    url: `${api.omsProduct}/dictionaries/findByCode`,
+    method: 'get',
+    params
+  })
+}
+
+
 
 //获取华胜库存
 export function getStock(data,params) {
