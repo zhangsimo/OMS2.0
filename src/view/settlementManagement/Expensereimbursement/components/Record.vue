@@ -105,13 +105,13 @@ export default {
           title: "付款金额",
           key: "checkAmt",
           align: "center",
-          render: (h , p) => {
-            let val = p.row.checkAmt
-            if (p.row.sort.name == '付款'){
-                val = - val
-            }
-            return h('span' , val)
-          }
+          // render: (h , p) => {
+          //   let val = p.row.checkAmt
+          //   if (p.row.sort.name == '付款'){
+          //       val = - val
+          //   }
+          //   return h('span' , val)
+          // }
         },
         {
           title: "审核状态",
@@ -151,6 +151,11 @@ export default {
       } else {
         let res = await api.findByAccountNo({ accountNo: this.$parent.serviceId });
         if(res.code == 0) {
+          res.data.map( item => {
+            if (item.sort.name == '付款'){
+              item.checkAmt = -item.checkAmt
+            }
+          })
           this.recordLists = res.data;
         }
       }
