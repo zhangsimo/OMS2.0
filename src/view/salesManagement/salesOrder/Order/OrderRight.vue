@@ -278,7 +278,19 @@
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-          ></vxe-table-column>
+            width="160"
+          >
+            <template v-slot:edit="{ row }">
+              <el-input-number
+                :min="0"
+                :max="row.isMarkBatch == 1 ? row.adjustQty : 999999"
+                v-model="row.orderQty"
+                :controls="false"
+                size="mini"
+                :precision="0"
+              />
+            </template>
+          </vxe-table-column>
           <vxe-table-column
             field="orderPrice"
             title="单价"
@@ -825,7 +837,8 @@ export default {
       val.map(item => {
         item.orderQty = 1;
         item.isMarkBatch = 1;
-        item.batchSourceId = item.id||item.batchSourceId
+        item.batchSourceId = item.id||item.batchSourceId;
+        item.adjustQty = item.outableQty;
         Reflect.deleteProperty(item, 'id');
       });
       this.formPlan.detailList = [
@@ -1064,6 +1077,7 @@ export default {
       }
       val.details.map(item => {
         item.isMarkBatch = 1;
+        item.adjustQty = item.outableQty;
       });
       data.detailList = val.details;
       data.sign = 1;
