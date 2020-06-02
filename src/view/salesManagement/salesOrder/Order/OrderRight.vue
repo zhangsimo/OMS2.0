@@ -20,7 +20,8 @@
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="guestId">
           <Row style="width: 310px">
-            <Select
+            <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
+            <!-- <Select
               v-model="formPlan.guestId"
               filterable
               style="width: 240px"
@@ -28,7 +29,7 @@
               @on-change="changeClient"
             >
               <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>
+            </Select> -->
             <!--            <Input-->
             <!--              class="w240"-->
             <!--              v-model="formPlan.fullName"-->
@@ -507,7 +508,7 @@ export default {
   },
   mounted() {
     this.getAdress();
-    this.getAllClient();
+    // this.getAllClient();
     this.getType();
     this.getWarehouse();
     this.getClassifyList();

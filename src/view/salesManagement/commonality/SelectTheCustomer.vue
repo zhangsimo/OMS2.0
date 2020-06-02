@@ -119,7 +119,7 @@ export default {
         size: 20,
         sizeOpts: [20, 40, 60, 80, 100]
       },
-      tableData: [{ name: 23 }],
+      tableData: [],
       treeData: [], //全国地址
       // 省
       Provinces: {},
@@ -133,16 +133,36 @@ export default {
     };
   },
   mounted() {
-    this.getList()
-    this.getAdress();
-    this.getClientTypeList();
+    // this.getList()
+    // this.getAdress();
+    // this.getClientTypeList();
   },
   methods: {
     openModel() {
+      this.reset();
+      this.getList()
+      this.getAdress();
+      this.getClientTypeList();
       this.addressShow = true;
+    },
+    reset() {
+      this.clientName = "";
+      this.clientPhone = "";
+      this.clientCode = "";
+      if(!(this.tableData.length > 0 && this.page1.num == 1)) {
+        this.page1 = {
+          num: 1,
+          total: 0,
+          size: 20,
+          sizeOpts: [20, 40, 60, 80, 100]
+        }
+      }
     },
     //获取地级市
     getAdress() {
+      if(this.treeData.length > 0) {
+        return;
+      }
       area().then(res => {
         if (res.code == 0) {
           res.data.forEach(el => {
@@ -193,6 +213,9 @@ export default {
     },
     // 获取客户
     async getList() {
+      if(this.tableData.length > 0 && this.page1.num == 1) {
+        return;
+      }
       let data = {};
       if(this.clickCity.grade){
         data.grade = this.clickCity.grade;
@@ -225,6 +248,9 @@ export default {
     },
     //客户类型获取
     async getClientTypeList() {
+      if(this.clientType.length > 0) {
+        return;
+      }
       let res = await getClientType();
       if (res.code === 0) {
         let data = res.data;
