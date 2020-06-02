@@ -146,7 +146,7 @@
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
-                :edit-config="{trigger: 'click', mode: 'cell'}"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -161,8 +161,19 @@
                   field="trueQty"
                   title="实盘数量"
                   width="100"
-                  :edit-render="{name: 'input'}"
-                ></vxe-table-column>
+                  :edit-render="{ name: 'input' }"
+                >
+                  <template v-slot:edit="{ row }">
+                    <el-input-number
+                      :max="999999999999"
+                      :min="0"
+                      v-model="row.trueQty"
+                      :controls="false"
+                      :precision="0"
+                      size="mini"
+                    />
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="truePrice"
                   title="成本单价"

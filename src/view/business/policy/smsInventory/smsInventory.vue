@@ -239,11 +239,18 @@
                 <vxe-table-column
                   field="trueQty"
                   title="实盘数量"
-                  width="100"
-                  :edit-render="{autofocus: '.vxe-input--inner'}"
+                  width="160"
+                  :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
                 >
                   <template v-slot:edit="{ row }">
-                    <vxe-input type="integer" :disabled="formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false" :min="0" v-model="row.trueQty"></vxe-input>
+                    <el-input-number
+                      :max="999999999999"
+                      :min="0"
+                      v-model="row.trueQty"
+                      :controls="false"
+                      :precision="0"
+                      size="mini"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
