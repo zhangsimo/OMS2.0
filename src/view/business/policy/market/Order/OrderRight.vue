@@ -19,7 +19,8 @@
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="guestId">
           <Row style="width: 310px">
-            <Select
+            <Input placeholder="请选择客户" v-model="formPlan.guestName" readonly disabled style="width:200px;" />
+            <!-- <Select
               v-model="formPlan.guestId"
               filterable
               style="width: 240px"
@@ -27,7 +28,7 @@
               @on-change="changeClient"
             >
               <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
             <Button
               class="ml5"
               size="small"
@@ -855,7 +856,7 @@ export default {
     setOneClient(val) {
       //console.log(val);
       this.$set(this.formPlan, "guestId", val.id);
-      this.$set(this.formPlan, "fullName", val.fullName);
+      this.$set(this.formPlan, "guestName", val.fullName);
       this.$set(this.formPlan, "billTypeId", val.billTypeId);
       this.$set(this.formPlan, "settleTypeId", val.settTypeId);
     },
