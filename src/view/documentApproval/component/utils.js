@@ -64,7 +64,7 @@ export async function getComenAndGo() {
             arr.push({
               value: item.id,
               label: item.fullName,
-              receiver: item.receiveName || '',
+              receiver: item.accountReceiveName || '',
               receiveBank: item.accountBank || '',
               receiveBankNo: item.accountBankNo || ''
             });
