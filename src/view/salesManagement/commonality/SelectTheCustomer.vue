@@ -209,11 +209,11 @@ export default {
     //点击树形图获取信息
     clickTree(val) {
       this.clickCity = val[0];
-      this.getList();
+      this.getList(true);
     },
     // 获取客户
-    async getList() {
-      if(this.tableData.length > 0 && this.page1.num == 1) {
+    async getList(isget = false) {
+      if(this.tableData.length > 0 && this.page1.num == 1 && !isget) {
         return;
       }
       let data = {};
@@ -272,13 +272,13 @@ export default {
     //切换页面
     selectNum(val) {
       this.page1.num = val;
-      this.getList();
+      this.getList(true);
     },
     //切换页数
     selectPage(val) {
       this.page1.num = 1;
       this.page1.size = val;
-      this.getList();
+      this.getList(true);
     },
     //级联选择器
     getType(value, selectedData) {
@@ -288,7 +288,7 @@ export default {
     query() {
       this.page1.num = 1;
       this.clickCity = {};
-      this.getList();
+      this.getList(true);
     },
     //选择
     select() {
