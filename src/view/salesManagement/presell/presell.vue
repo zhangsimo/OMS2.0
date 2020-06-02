@@ -121,6 +121,7 @@
               </div>
               <Form
                 inline
+                :show-message="false"
                 ref="formPlan"
                 :model="formPlan"
                 :label-width="120"
@@ -128,7 +129,7 @@
               >
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
-                    <Row style="width: 310px">
+                    <Row>
                       <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
                       <!-- <Select
                         v-model="formPlan.guestId"
@@ -165,7 +166,7 @@
                       v-model="formPlan.orderManId"
                       @on-change="selectOrderMan"
                       filterable
-                      style="width: 240px"
+                      style="width: 180px"
                       :disabled="draftShow != 0||isNew"
                       label-in-value
                     >
@@ -179,7 +180,7 @@
                   <FormItem label="交货仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
-                      style="width:200px"
+                      style="width:180px"
                       :disabled="draftShow != 0||isNew"
                       @on-change="getStore"
                     >
@@ -190,9 +191,6 @@
                         :key="item.id"
                       >{{ item.name }}</Option>
                     </Select>
-                  </FormItem>
-                  <FormItem label="预售单号：">
-                    <Input class="w160" v-model="formPlan.serviceId" disabled />
                   </FormItem>
                   <FormItem label="票据类型:" prop="billTypeId">
                     <Select
@@ -210,6 +208,33 @@
                       </Option>
                     </Select>
                   </FormItem>
+                  <FormItem label="预售单号：">
+                    <Input class="w230" style="margin-right: 3px" v-model="formPlan.serviceId" disabled />
+                  </FormItem>
+                  <FormItem label="预计发货日期:">
+                    <DatePicker
+                      :value="formPlan.planSendDate"
+                      @on-change="getplanSendDate"
+                      @on-clear="clearplanSendDate"
+                      v-bind:options="planSendDatePicker"
+                      type="date"
+                      placeholder="选择日期"
+                      style="width: 180px"
+                      :disabled="draftShow != 0||isNew"
+                    ></DatePicker>
+                  </FormItem>
+                  <FormItem label="预计到货日期:">
+                    <DatePicker
+                      :value="formPlan.planArriveDate"
+                      @on-change="getplanArriveDate"
+                      v-bind:options="planArriveDatePicker"
+                      type="date"
+                      placeholder="选择日期"
+                      @on-clear="clearplanArriveDate"
+                      style="width: 180px"
+                      :disabled="draftShow != 0||isNew"
+                    ></DatePicker>
+                  </FormItem>
                   <FormItem label="结算方式：" prop="settleTypeId">
                     <Select
                       v-model="formPlan.settleTypeId"
@@ -225,30 +250,6 @@
                         item.itemName }}
                       </Option>
                     </Select>
-                  </FormItem>
-                  <FormItem label="预计发货日期:">
-                    <DatePicker
-                      :value="formPlan.planSendDate"
-                      @on-change="getplanSendDate"
-                      @on-clear="clearplanSendDate"
-                      v-bind:options="planSendDatePicker"
-                      type="date"
-                      placeholder="选择日期"
-                      style="width: 120px"
-                      :disabled="draftShow != 0||isNew"
-                    ></DatePicker>
-                  </FormItem>
-                  <FormItem label="预计到货日期:">
-                    <DatePicker
-                      :value="formPlan.planArriveDate"
-                      @on-change="getplanArriveDate"
-                      v-bind:options="planArriveDatePicker"
-                      type="date"
-                      placeholder="选择日期"
-                      @on-clear="clearplanArriveDate"
-                      style="width: 120px"
-                      :disabled="draftShow != 0||isNew"
-                    ></DatePicker>
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
@@ -1226,7 +1227,10 @@ export default {
   }
 
   .ivu-form-item {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    .ivu-form-item-label{
+      font-size: 12px!important;
+    }
   }
 
   .plan-cz-btn {
@@ -1242,4 +1246,9 @@ export default {
   display: flex;
   align-items: center;
 }
+</style>
+<style scoped>
+  .purchase >>> .ivu-form-item .ivu-form-item-label{
+    font-size: 12px!important;
+  }
 </style>
