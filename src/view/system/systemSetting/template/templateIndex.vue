@@ -10,19 +10,7 @@
               <Button class="mr15 w90" type="primary" @click="getTemplateList">
                 查询
               </Button>
-              <Upload
-                style="display: inline-block;"
-                ref="upload"
-                :show-upload-list="false"
-                :action="uploadFile"
-                :format="['xlsx', 'xls', 'csv']"
-                :headers="headers"
-                :before-upload="handleBeforeUpload"
-                :on-success="handleSuccess"
-                :on-format-error="onFormatError"
-              >
-                <Button>上传模板文件</Button>
-              </Upload>
+              <Button @click="uploadTemplate">上传模板文件</Button>
             </div>
             <Table size="small" height="389" ref="hsOrder" :loading="loading" border :stripe="true" :columns="columnsPart" :data="templateData"></Table>
           </TabPane>
@@ -61,10 +49,10 @@
       footer-hide
       title="修改模板">
       <Form ref="templateForm" :model="templateForm" :rules="ruleValidate" :label-width="120" style="padding-bottom: 20px">
-        <FormItem label="模板名称：" prop="templateName">
+        <FormItem label="模板名称：" prop="fileOriginName">
           <Input class="w250" v-model="templateForm.fileOriginName" placeholder="请输入模板名称"></Input>
         </FormItem>
-        <FormItem label="上传模板文件：" prop="file">
+        <FormItem label="上传模板文件：" prop="fileRule">
           <Upload
             style="display: inline-block;"
             ref="upDateFile"
@@ -86,11 +74,47 @@
         </FormItem>
       </Form>
     </Modal>
+    <Modal
+      v-model="templateModel2"
+      footer-hide
+      title="上传模板">
+      <Form ref="templateForm2" :model="templateForm2" :rules="ruleValidate2" :label-width="120" style="padding-bottom: 20px">
+        <FormItem label="模板类型：" prop="id">
+          <Select v-model="templateForm2.id" class="w250 mr10" placeholder="选择模板类型" filterable>
+            <Option v-for="item in templateTypeArr" :value="item.itemValueOne" :key="item.itemValueOne">{{ item.itemName }}</Option>
+          </Select>
+        </FormItem>
+
+        <FormItem label="模板名称：" prop="fileOriginName">
+          <Input class="w250" v-model="templateForm2.fileOriginName" placeholder="请输入模板名称"></Input>
+        </FormItem>
+        <FormItem label="上传模板文件：" prop="fileRule">
+          <Upload
+            style="display: inline-block;"
+            ref="upDateFile2"
+            :action="uploadFile"
+            :format="['xlsx', 'xls', 'csv']"
+            :headers="headers"
+            :data="templateForm2"
+            :before-upload="handleBeforeUpload"
+            :on-success="handleSuccess"
+            :on-format-error="onFormatError"
+            :show-upload-list ="false"
+          >
+            <Button>上传模板文件</Button>
+          </Upload>
+          <span class="ml20" v-if="file2 !== null">{{file2.name }}</span>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSubmit2('templateForm2')">提交</Button>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
 <script>
-  import {getAllTemplate,getAllFile} from "../../../../api/system/systemSetting/systemset";
+  import {getAllTemplate,getAllFile,getTemplateType} from "../../../../api/system/systemSetting/systemset";
   import api from '_conf/url'
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
@@ -98,6 +122,7 @@
 		name: "templateIndex",
     data(){
       const validateUpload = (rule, value, callback) => {
+        console.log(value)
         if(value && value.name) {
           callback();
         } else {
@@ -205,29 +230,52 @@
         headers: {
           Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
         },
+        //模板上传
+        templateModel2:false,
         //模板修改层
         templateModel:false,
         templateForm:{
           fileOriginName:'',
           id:'',
-          file:null
+          fileRule:null
         },
         ruleValidate:{
           fileOriginName: [
             { required: true, message: '模板名称不能为空', trigger: 'blur' }
           ],
-          file: [
+          fileRule: [
             { required: true, validator: validateUpload, trigger: 'change' }
           ],
         },
+
+        templateForm2:{
+          fileOriginName:'',
+          fileRule:null,
+          id:''
+        },
+        ruleValidate2:{
+          fileOriginName: [
+            { required: true, message: '模板名称不能为空', trigger: 'blur' }
+          ],
+          id: [
+            { required: true, message: '请选择模板类型', trigger: 'change' }
+          ],
+          fileRule: [
+            { required: true, validator: validateUpload, trigger: 'change' }
+          ],
+        },
+
         file:null,
+        file2:null,
+        templateTypeArr:[],
       }
     },
     computed:{
+      //上传模板
       uploadFile(){
-        return `${api.templateApi}/file/uploadFileTemplate`
+        return `${api.templateApi}/file/uploadFileTemplateNew`
       },
-
+      //修改模板
       upDateFile(){
         return `${api.templateApi}/file/updateFileTemplate`
       },
@@ -270,21 +318,32 @@
           this.page.total = rep.data.totalElements;
         }
       },
+      async getTemplateTypeFun(){
+        let rep = await getTemplateType({"dictCode":"FILE_TEMPLATE"});
+        if(rep.code == 0){
+          this.templateTypeArr = rep.data.itemVOS
+        }
+
+      },
 // 导入
-      handleBeforeUpload() {
+      handleBeforeUpload(file) {
         let refs = this.$refs;
-        refs.upload.clearFiles();
+        refs.upDateFile2.clearFiles();
+        this.templateForm2.fileRule = file;
+        this.file2 = file
+        return false;
+
+
       },
       handleSuccess(res, file) {
-        let self = this;
-        if (res.code == 0) {
-          if (res.data.errosMsg.length > 0) {
-            this.warning(res.data.errosMsg);
-          } else  {
-            self.$Message.success("导入成功");
-          }
-        } else {
-          self.$Message.error(res.message);
+        if(res.code==0){
+          this.$refs.templateForm2.resetFields();
+          this.file2 = null;
+          this.templateModel2 = false;
+          this.$Message.success("上传成功");
+          this.getTemplateList();
+        }else{
+          this.$Message.error(res.message);
         }
       },
       warning(nodesc) {
@@ -342,11 +401,20 @@
           this.templateForm.id = row.id;
         }
       },
+      //上传模板提交
+      handleSubmit2(name){
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            delete this.templateForm2.file;
+            this.$refs.upDateFile2.post(this.file2)
+          }
+        })
+      },
       //修改模板提交
       handleSubmit(name){
         this.$refs[name].validate((valid) => {
           if (valid) {
-            delete this.templateForm.file;
+            // delete this.templateForm.file;
             this.$refs.upDateFile.post(this.file)
           }
         })
@@ -354,7 +422,7 @@
       beforeUpdateTemplate(file){
         let refs = this.$refs;
         refs.upDateFile.clearFiles();
-        this.templateForm.file = file;
+        this.templateForm.fileRule = file;
         this.file = file
         return false;
       },
@@ -370,6 +438,11 @@
       },
       UpdateTemplateError(){
         this.$Message.error("上传失败");
+      },
+      //上传新模板
+      uploadTemplate(){
+		    this.getTemplateTypeFun();
+		    this.templateModel2 = true;
       }
     }
 	}
