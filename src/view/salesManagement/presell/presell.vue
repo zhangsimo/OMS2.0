@@ -129,7 +129,8 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row style="width: 310px">
-                      <Select
+                      <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
+                      <!-- <Select
                         v-model="formPlan.guestId"
                         filterable
                         style="width: 240px"
@@ -141,7 +142,7 @@
                           :value="item.id"
                           :key="item.id"
                         >{{ item.fullName }}</Option>
-                      </Select>
+                      </Select> -->
                       <Button
                         class="ml5"
                         size="small"
@@ -612,7 +613,7 @@ export default {
   },
   mounted() {
     this.getLeftList();
-    this.getAllClient();
+    // this.getAllClient();
     this.getWarehouse();
     this.getType();
     this.getAllSales();
@@ -885,6 +886,7 @@ export default {
         }
       } else {
         if (v.id) {
+          v.fullName = v.guestName;
           this.isNew = false;
           this.currentRow = v;
           this.id = v.id;

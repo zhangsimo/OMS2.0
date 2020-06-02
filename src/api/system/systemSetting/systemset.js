@@ -48,3 +48,12 @@ export function getStock(data,params) {
     params
   })
 }
+
+//获取华胜门店
+export function getHsStore(params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findHSStoreList`,
+    method: 'get',
+    params
+  })
+}

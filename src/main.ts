@@ -9,7 +9,7 @@ import config from '@/config'
 import Axios from 'axios'
 import _ from 'lodash';
 import importDirective from '@/directive'
-import 'view-design/dist/styles/iview.css'
+import '@/assets/iview/iview.css';
 import './index.less'
 import '@/assets/icons/iconfont.css'
 import '@/mock'
