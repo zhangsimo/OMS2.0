@@ -89,9 +89,10 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
+                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />
+                            <!-- <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
                               <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                          </Select>
+                            </Select> -->
                           </Col>
                           <Col span="2">
                             <Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
@@ -505,7 +506,7 @@
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-                    data.guestId = this.selectvalue
+                    data.guestId =  this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName
@@ -704,7 +705,7 @@
         getSupplierName(a){
           // this.isInternalId = a.isInternalId
           // this.formPlan.guestName = a.id
-          this.formPlan.guestName = a.id
+          this.formPlan.guestName = a.fullName
           this.guestidId = a.id
           this.isInternalId = a.isInternalId
         },
@@ -778,7 +779,7 @@
                     data.id = this.rowId;
                     data.orgid = this.rowOrgId;
                     data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
-                    data.guestId = this.selectvalue
+                    data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName
@@ -839,6 +840,8 @@
             if(row.id){
               this.setRow(row)
             }
+            // console.log(row);
+            // this.formPlan.guestName = row.guestName
           }
 
         },
@@ -848,7 +851,8 @@
           this.mainId = row.id
           this.guestidId = row.guestId
           this.datadata = row
-          this.formPlan.guestName = this.datadata.guestId
+          this.formPlan.guestName = this.datadata.guestName
+          // this.formPlan.guestName = this.datadata.guestId
           this.formPlan.storeId = this.datadata.storeId
           this.formPlan.orderDate = this.datadata.orderDate
           this.formPlan.remark = this.datadata.remark
@@ -951,7 +955,7 @@
         };
           this.leftgetList();
           this.warehouse();
-          this.getArrayParams();
+          // this.getArrayParams();
           // this.selecQuery();
       }
     }

@@ -114,21 +114,19 @@
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
-                          <!-- <Input
+                          <Input
                             readonly
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调入方"
-                          ></Input>
-                            placeholder="请选择调出方"
-                          ></Input>-->
-                          <Select
+                          />
+                          <!-- <Select
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
                             filterable
                             :disabled="this.flagValue != 0"
                           >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
-                          </Select>
+                          </Select> -->
                         </Col>
                         <Col span="2">
                           <Button
