@@ -115,7 +115,8 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="供应商：" prop="guestId">
                     <Row style="width: 310px">
-                      <Select
+                      <Input placeholder="请选择供应商" v-model="formPlan.guestName" readonly disabled style="width:200px;" />
+                      <!-- <Select
                         v-model="formPlan.guestId"
                         filterable
                         style="width: 240px"
@@ -127,7 +128,7 @@
                           :value="item.id"
                           :key="item.id"
                         >{{ item.fullName }}</Option>
-                      </Select>
+                      </Select> -->
                       <Button
                         class="ml5"
                         size="small"

@@ -1252,7 +1252,7 @@ export default {
       if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
-      // console.log(row.id)
+      // console.log(row)
       // account({id:row.id}).then(res => {
       //   console.log(res);
       // });

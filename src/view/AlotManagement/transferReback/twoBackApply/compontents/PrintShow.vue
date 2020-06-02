@@ -16,7 +16,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
            <p>
-              <span>地址:{{onelist.applyGuest.addr}}</span>
+              <span>地址:{{onelist.applyGuest.address}}</span>
             </p>
             <p>
               <span>电话:{{onelist.applyGuest.tel}}</span>
@@ -37,11 +37,11 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调出方:</span>
-              <span>{{onelist.guest.fullName}}</span>
+              <span>{{onelist.guest.name}}</span>
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.guest.addr || onelist.guest.streetAddress}}</span>
+              <span>{{onelist.guest.address || onelist.guest.province+onelist.guest.city+onelist.guest.district+onelist.guest.streetAddress}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
@@ -57,7 +57,7 @@
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.guest.contactorTel}}</span>
+              <span>{{onelist.guest.tel}}</span>
             </p>
             <p>
               <span>出库仓库:</span>
