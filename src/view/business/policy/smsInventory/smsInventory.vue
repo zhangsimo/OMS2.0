@@ -239,9 +239,20 @@
                 <vxe-table-column
                   field="trueQty"
                   title="实盘数量"
-                  width="100"
+                  width="160"
                   :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
-                ></vxe-table-column>
+                >
+                  <template v-slot:edit="{ row }">
+                    <el-input-number
+                      :max="999999999999"
+                      :min="0"
+                      v-model="row.trueQty"
+                      :controls="false"
+                      :precision="0"
+                      size="mini"
+                    />
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="truePrice"
                   title="成本单价"

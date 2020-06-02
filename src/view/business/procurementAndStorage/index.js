@@ -258,6 +258,7 @@ export default {
       this.$refs.xTab.setCurrentRow(this.dataChange.row)
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
+      // console.log(data.row)
       if (this.taxRate) {
         this.formPlan.taxRate = this.taxRate.itemValueOne || ''
         this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
@@ -465,7 +466,8 @@ export default {
           this.allMoney = 0
           this.$refs.formPlan.resetFields();
           this.$Message.success('保存成功');
-          this.setSelected(this.dataChange.row);
+          this.reload();
+          // this.setSelected(this.dataChange.row);
         }
         try {
         } catch (errMap) {
