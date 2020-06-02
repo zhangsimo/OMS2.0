@@ -89,7 +89,7 @@
                 ref="currentRowTable"
                 :queryTime="queryTime"
                 :billStatusId="billStatusId"
-                height="660"
+                :height="leftTableHeight"
                 size="small"
                 highlight-row
                 border
@@ -127,6 +127,7 @@
                 :model="formPlan"
                 :label-width="120"
                 :rules="ruleValidate"
+                :show-message="false"
               >
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
@@ -167,7 +168,7 @@
                       :value="formPlan.orderManId"
                       @on-change="selectOrderMan"
                       filterable
-                      style="width: 240px"
+                      style="width: 200px"
                       :disabled="draftShow != 0||isNew"
                       label-in-value
                     >
@@ -190,9 +191,24 @@
                   <FormItem label="往来单号：">
                     <Input class="w160" v-model="formPlan.code" disabled />
                   </FormItem>
+                  <FormItem label="入库仓库：" prop="storeId">
+                    <Select
+                      v-model="formPlan.storeId"
+                      style="width:233px"
+                      :disabled="draftShow != 0||isNew"
+                      @on-change="getStore"
+                    >
+                      <Option
+                        v-for="item in WareHouseList"
+                        :disabled="item.isDisabled"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{ item.name }}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="退货原因：" prop="rtnReasonId">
                     <Select
-                      class="w160"
+                      class="w200"
                       v-model="formPlan.rtnReasonId"
                       :disabled="draftShow != 0||isNew"
                     >
@@ -206,7 +222,7 @@
                   <FormItem label="结算方式：" prop="settleTypeId">
                     <Select
                       v-model="formPlan.settleTypeId"
-                      style="width:100px"
+                      style="width:160px"
                       :disabled="draftShow != 0||isNew"
                     >
                       <Option
@@ -228,21 +244,7 @@
                       :edit-render="{name: 'input',attrs: {disabled: false}}"
                     />
                   </FormItem>
-                  <FormItem label="入库仓库：" prop="storeId">
-                    <Select
-                      v-model="formPlan.storeId"
-                      style="width:200px"
-                      :disabled="draftShow != 0||isNew"
-                      @on-change="getStore"
-                    >
-                      <Option
-                        v-for="item in WareHouseList"
-                        :disabled="item.isDisabled"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.name }}</Option>
-                    </Select>
-                  </FormItem>
+
                   <FormItem label="退货单号：">
                     <Input class="w160" v-model="formPlan.serviceId" disabled />
                   </FormItem>
@@ -285,7 +287,7 @@
                   @select-all="selectAllTable"
                   @edit-actived="editActivedEvent"
                   ref="xTable"
-                  height="500"
+                  :height="rightTableHeight"
                   :data="formPlan.details"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
@@ -398,6 +400,9 @@ export default {
       }
     };
     return {
+      //左侧表格高度
+      leftTableHeight: 0,
+      rightTableHeight:0,
       isNew: true, //页面开始禁用
       draftShow: "", //判定是不是草稿
       isAdd: true, //判断是否新增
@@ -542,8 +547,21 @@ export default {
     this.getType();
     this.getWarehouse();
     this.getAllSales();
+    this.getDomHeight();
   },
   methods: {
+    getDomHeight() {
+      this.$nextTick(() => {
+        let wrapH = this.$refs.paneLeft.offsetHeight;
+        let planFormH = this.$refs.planForm.offsetHeight;
+        //获取左侧侧表格高度
+        this.leftTableHeight = wrapH - 90;
+        this.rightTableHeight = wrapH - planFormH  - 120;
+      });
+    },
+
+
+
     //判断表格能不能编辑
     editActivedEvent({ row }) {
       let xTable = this.$refs.xTable;
@@ -1013,4 +1031,13 @@ export default {
 <style lang="less" scoped>
 @import url("../../lease/product/lease.less");
 @import url("./index");
+.goods-list-form .ivu-form-item{
+  margin-bottom: 0px;
+}
+
+</style>
+<style scoped>
+  .purchase >>> .ivu-form-item .ivu-form-item-label{
+    font-size: 12px!important;
+  }
 </style>

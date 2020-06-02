@@ -6,9 +6,9 @@
       ref="formPlan"
       :model="formPlan"
       :rules="ruleValidate"
-      :label-width="110"
+      :label-width="120"
     >
-      <div class="pane-made-hd">
+      <div class="pane-made-hd fs12">
         <span class="titler mr5">固定额度:</span>
         <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
         <span class="titler mr5">临时额度:</span>
@@ -17,10 +17,10 @@
 <!--        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>-->
         <span class="titler mr5">{{ limitList.sumAmt  |priceFilters}}</span>
       </div>
-      <div class="clearfix purchase" ref="planForm">
-        <FormItem label="客户：" prop="guestId">
-          <Row style="width: 310px">
-            <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
+      <div class="clearfix purchase pb10" ref="planForm">
+        <FormItem label="客户：" prop="guestId" :show-message="false" inline>
+          <Row>
+            <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:260px;" />
             <!-- <Select
               v-model="formPlan.guestId"
               filterable
@@ -62,7 +62,7 @@
             :value="formPlan.orderManId"
             @on-change="selectOrderMan"
             filterable
-            style="width: 240px"
+            style="width: 140px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             label-in-value
           >
@@ -77,7 +77,7 @@
         <FormItem label="往来单号：">
           <Input class="w210" v-model="formPlan.code" disabled />
         </FormItem>
-        <FormItem label="票据类型:" prop="billTypeId">
+        <FormItem label="票据类型：" prop="billTypeId">
           <Select
             v-model="formPlan.billTypeId"
             style="width:100px"
@@ -103,23 +103,13 @@
             >{{ item.itemName }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="备注：">
-          <Input
-            style="width: 370px"
-            v-model="formPlan.remark"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-          />
-        </FormItem>
-        <FormItem label="订单号:">
-          <Input class="w210" v-model="formPlan.serviceId" disabled />
-        </FormItem>
-        <FormItem label="计划发货日期:" prop="planSendDate">
+        <FormItem label="计划发货日期：" prop="planSendDate">
           <!-- @on-change="getplanSendDate" -->
           <DatePicker
             v-model="formPlan.planSendDate"
             :options="options1"
             type="date"
-            class="w130"
+            class="w140"
             @on-change="getplanSendDate"
             placeholder="选择日期"
             style="width: 120px"
@@ -127,7 +117,7 @@
             clearable
           ></DatePicker>
         </FormItem>
-        <FormItem label="计划到货日期:" prop="planArriveDate">
+        <FormItem label="计划到货日期：" prop="planArriveDate">
           <DatePicker
             :value="formPlan.planArriveDate"
             @on-change="getplanArriveDate"
@@ -144,11 +134,22 @@
         <FormItem label="交货仓库：" prop="storeId">
           <Select
             v-model="formPlan.storeId"
-            style="width:200px"
+            style="width:180px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
           >
             <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
+        </FormItem>
+        <FormItem label="备注：">
+          <Input
+            style="width: 330px"
+            v-model="formPlan.remark"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+          />
+        </FormItem>
+
+        <FormItem label="订单号：">
+          <Input class="w200" v-model="formPlan.serviceId" disabled />
         </FormItem>
       </div>
       <div class="flex plan-cz-btn" ref="planBtn">
@@ -278,7 +279,19 @@
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-          ></vxe-table-column>
+            width="160"
+          >
+            <template v-slot:edit="{ row }">
+              <el-input-number
+                :min="0"
+                :max="row.isMarkBatch == 1 ? row.adjustQty : 999999"
+                v-model="row.orderQty"
+                :controls="false"
+                size="mini"
+                :precision="0"
+              />
+            </template>
+          </vxe-table-column>
           <vxe-table-column
             field="orderPrice"
             title="单价"
@@ -825,7 +838,8 @@ export default {
       val.map(item => {
         item.orderQty = 1;
         item.isMarkBatch = 1;
-        item.batchSourceId = item.id||item.batchSourceId
+        item.batchSourceId = item.id||item.batchSourceId;
+        item.adjustQty = item.outableQty;
         Reflect.deleteProperty(item, 'id');
       });
       this.formPlan.detailList = [
@@ -1064,6 +1078,7 @@ export default {
       }
       val.details.map(item => {
         item.isMarkBatch = 1;
+        item.adjustQty = item.outableQty;
       });
       data.detailList = val.details;
       data.sign = 1;
@@ -1137,9 +1152,15 @@ export default {
 </style>
 <style scoped>
 .purchase >>> .ivu-form-item {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
+}
+.purchase >>> .ivu-form-item .ivu-form-item-label{
+  font-size: 12px!important;
 }
 .demo-spin-icon-load {
   animation: ani-demo-spin 1s linear infinite;
 }
+  .plan-cz-btn .ivu-btn-small{
+    font-size: 12px;
+  }
 </style>
