@@ -235,7 +235,7 @@
           :footer-method="footerMethod"
           :data="accessoriesBillingData2"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
         >
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
@@ -867,14 +867,14 @@ export default {
     },
     accessoriesBillingData:{
       handler(val){
-        this.accessoriesBillingData1 = []
-        this.accessoriesBillingData2 = []
         if (val.length < 1) return
         if (this.$parent.reconciliationStatement.isOilPart == 1){
           this.accessoriesBillingData1 = val
+          this.accessoriesBillingData2 = []
           this.OilPartShow = false
         } else {
           this.accessoriesBillingData2 = val
+          this.accessoriesBillingData1 = []
           this.OilPartShow = true
         }
         val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
