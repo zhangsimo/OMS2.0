@@ -160,7 +160,7 @@ export const mixSelectPartCom = {
       this.loading = true;
       let data = {};
       let params = {}
-      params.page = this.page.num;
+      params.page = this.page.num - 1;
       params.size = this.page.size;
       if (this.selectTreeItem.id) {
         data.typeId = this.selectTreeItem.id;
