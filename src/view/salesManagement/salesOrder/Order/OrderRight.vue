@@ -149,7 +149,7 @@
         </FormItem>
 
         <FormItem label="订单号：">
-          <Input class="w200" v-model="formPlan.serviceId" disabled />
+          <Input class="w210" v-model="formPlan.serviceId" disabled />
         </FormItem>
       </div>
       <div class="flex plan-cz-btn" ref="planBtn">
@@ -272,7 +272,7 @@
               <a @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
           <vxe-table-column min-width="150" field="partName" title="配件名称"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column
@@ -332,7 +332,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
           <vxe-table-column field="showDirection" title="方向"></vxe-table-column>
         </vxe-table>
