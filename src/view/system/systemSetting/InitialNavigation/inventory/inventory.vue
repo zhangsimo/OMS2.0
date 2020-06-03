@@ -264,6 +264,8 @@ export default {
       }
       let res = await saveList(this.oneWarehouse);
       if (res.code == 0) {
+        this.oneWarehouse = {};
+        consoel.log("save");
         this.getList();
         this.$message.success("保存成功");
       } else {

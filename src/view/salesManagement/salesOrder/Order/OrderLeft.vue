@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <div class="orderList">
       <h5>销售订单列表</h5>
     </div>
-    <div class="orderCenter">
+    <div class="orderCenter" style="overflow: hidden">
       <vxe-table
         ref="currentRowTable"
         border
@@ -12,24 +12,23 @@
         @current-change="clickOnesList"
         highlight-hover-row
         highlight-current-row
-        style="width: 1000px"
-        height="593"
+        :height="leftTableHeight"
         :data="tableData"
       >
         <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="billStatusId" title="状态">
+        <vxe-table-column field="billStatusId" title="状态" min-width="80">
           <template v-slot="{ row }">
-            <span>{{row.billStatusId.name}}</span>
+            <span>{{row.billStatusId?row.billStatusId.name:""}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="guestName" title="客户"></vxe-table-column>
-        <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
-        <vxe-table-column field="orderMan" title="销售员"></vxe-table-column>
-        <vxe-table-column field="serviceId" title="销售订单单号"></vxe-table-column>
-        <vxe-table-column field="printTimes" title="打印次数"></vxe-table-column>
-        <vxe-table-column field="auditor" title="提交人"></vxe-table-column>
-        <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
-        <vxe-table-column field="createUname" title="创建人"></vxe-table-column>
+        <vxe-table-column field="guestName" title="客户" min-width="180"></vxe-table-column>
+        <vxe-table-column field="createTime" title="创建日期" min-width="180"></vxe-table-column>
+        <vxe-table-column field="orderMan" title="销售员" min-width="80"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="销售订单单号" width="200"></vxe-table-column>
+        <vxe-table-column field="printTimes" title="打印次数" min-width="80"></vxe-table-column>
+        <vxe-table-column field="auditor" title="提交人" min-width="120"></vxe-table-column>
+        <vxe-table-column field="auditDate" title="提交日期" min-width="180"></vxe-table-column>
+        <vxe-table-column field="createUname" title="创建人" min-width="120"></vxe-table-column>
       </vxe-table>
     </div>
     <Page
@@ -80,6 +79,7 @@ export default {
       }, //更多搜索信息
       Flaga: true,
       selectItemId:'',
+      leftTableHeight:0,
     };
   },
   mounted() {

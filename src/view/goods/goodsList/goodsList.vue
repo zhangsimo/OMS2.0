@@ -684,7 +684,7 @@ export default {
         //获取左侧侧表格高度
         this.leftTableHeight = wrapH - 100;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 20;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 40;
       });
     },
     initStart() {

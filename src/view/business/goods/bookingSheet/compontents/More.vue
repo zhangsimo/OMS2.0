@@ -89,7 +89,20 @@
         submit(date){
           this.submitData = date
         },
+        getCity() {
+          if(this.cityList.length > 0) {
+            return;
+          }
+          let params = {}
+          queryAll(params).then(res => {
+            if(res.code === 0){
+              this.cityList = res.data.content
+            }
+          });
+        },
         init(){
+          this.getAllBrand()
+          this.getCity();
           this.moreAndMore = true
         },
         sendMsg(){
@@ -134,7 +147,9 @@
         },
         //获取品牌
         async getAllBrand() {
-
+          if(this.brandList.length > 0) {
+            return;
+          }
           let res = await getPartBrandNoWB({ pageSize: 10000 });
           if (res.code === 0) {
             let arr = [];
@@ -150,13 +165,6 @@
         },
       },
     mounted(){
-          let params = {}
-      queryAll(params).then(res => {
-        if(res.code === 0){
-          this.cityList = res.data.content
-        }
-      });
-      this.getAllBrand()
     }
     }
 </script>

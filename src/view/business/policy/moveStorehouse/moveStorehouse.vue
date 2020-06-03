@@ -936,13 +936,29 @@ export default {
     getPartNameList(val) {
       // console.log(conversionList(val),8888)
       var datas = [...val] // conversionList(val);
-      // console.log(datas, "datas=>738");
+      // console.log(datas, "datas=>738"); partCode
+
+      var arr = [];
+
       datas.forEach(item => {
+        let filterArr = this.Right.tbdata.map(({ partCode }) => partCode)
+        if(!filterArr.includes(item.partCode)) {
+          arr.push(item)
+        }
+      })
+
+      // console.log(arr, datas)
+
+      arr.forEach(item => {
         delete item.id;
         item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
       });
-      this.$Message.success("已添加");
+      if(arr.length != datas.length) {
+        this.$Message.success("配件已存在请勿重复添加");
+      } else {
+        this.$Message.success("已添加");
+      }
     },
     //删除
     deletePar() {

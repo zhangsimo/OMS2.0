@@ -137,6 +137,7 @@ export default {
       (this.moreAndMore = false), (this.submita = "");
       this.create = "";
       this.guestId = "";
+      this.getArrayParams();
       this.moreAndMore = true;
     },
     sendMsg() {
@@ -173,6 +174,9 @@ export default {
       this.moreAndMore = false;
     },
     getArrayParams() {
+      if(this.ArrayValue.length > 0) {
+        return;
+      }
       var req = {};
       req.page = 1;
       req.size = 20;
@@ -190,7 +194,6 @@ export default {
     }
   },
   mounted() {
-    this.getArrayParams();
   }
 };
 </script>

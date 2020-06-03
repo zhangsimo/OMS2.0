@@ -196,8 +196,8 @@
                       ></vxe-table-column>
                       <!--                      <vxe-table-column field="orderPrice" title="单价" width="100"></vxe-table-column>-->
                       <!--                      <vxe-table-column field="orderAmt" title="金额" width="100"></vxe-table-column>-->
-                      <vxe-table-column field="TaxPrice" title="含税单价" width="100"></vxe-table-column>
-                      <vxe-table-column field="TaxAmt" title="含税金额" width="100"></vxe-table-column>
+                      <vxe-table-column field="taxPrice" title="含税单价" width="100"></vxe-table-column>
+                      <vxe-table-column field="taxAmt" title="含税金额" width="100"></vxe-table-column>
                       <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
                       <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
                       <vxe-table-column title="品牌车型">

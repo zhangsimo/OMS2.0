@@ -95,9 +95,11 @@ export default {
     getShowMore: Boolean
   },
   mounted() {
-    this.getArrayParams();
   },
   methods: {
+    init() {
+      this.getArrayParams();
+    },
     getArray(data) {
       // console.log(data, "data");
     },
@@ -111,6 +113,7 @@ export default {
       // console.log(this.moreData.orderMan, "this.moreData.orderMan");
     },
     getArrayParams() {
+      if(this.ArrayValue.length > 0) return;
       var req = {};
       req.page = 1;
       req.size = 20;
