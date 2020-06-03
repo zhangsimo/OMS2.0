@@ -314,8 +314,12 @@ const methods = {
       item.oemCode = el.oemCode;
       item.fullName = el.fullName;
       item.carBrandModel = el.carModelName;
+      item.partBrand = el.partBrand;
+      item.unit = el.unit;
+      item.spec = el.spec;
       data.push(item);
     });
+    // console.log(data)
     await partMatchingSave(data);
     this.leftgetList();
     this.$Message.success("保存成功");
@@ -477,7 +481,10 @@ const methods = {
         partInnerId: item.code,
         oemCode: item.oeCode,
         fullName: item.fullName,
-        carModelName: item.adapterCarModel
+        carModelName: item.adapterCarModel,
+        partBrand: item.partBrand,
+        unit: item.minUnit,
+        spec: item.specifications,
       };
     });
     this.level.tbdata = [ ...newA,...this.level.tbdata];
@@ -494,7 +501,10 @@ const methods = {
         fullName: item.fullName,
         remark: item.remarks,
         qty: 0,
-        ratio: 0
+        ratio: 0,
+        carBrandModel: item.adapterCarModel,
+        partBrand: item.partBrand,
+        spec: item.specifications,
       });
     });
     this.getArrRight = newA;

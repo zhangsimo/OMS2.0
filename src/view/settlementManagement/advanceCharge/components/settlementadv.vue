@@ -176,7 +176,9 @@ export default {
         hasAmt: 0,
         unAmt: 0,
         rpAmt: 0,
-        unAmtLeft: 0
+        unAmtLeft: 0,
+        mateAccountName:val.titleName,
+        mateAccountCode:val.titleCode,
       });
     });
     bus.$on("content", val => {
@@ -190,7 +192,9 @@ export default {
           hasAmt: 0,
           unAmt: 0,
           rpAmt: 0,
-          unAmtLeft: 0
+          unAmtLeft: 0,
+          mateAccountName:val.titleName,
+          mateAccountCode:val.titleCode,
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -199,7 +203,9 @@ export default {
           hasAmt: 0,
           unAmt: 0,
           rpAmt: 0,
-          unAmtLeft: 0
+          unAmtLeft: 0,
+          mateAccountName:val.titleName,
+          mateAccountCode:val.titleCode,
         });
       }
     });
@@ -314,12 +320,14 @@ export default {
             accountNo: el.accountNo,
             guestId: el.guestId,
             guestName: el.guestName,
-            businessType: !el.businessType ? "" : el.businessType,
+            businessType: !el.businessType ? null : el.businessType,
             reconciliationAmt: el.reconciliationAmt,
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
             rpAmt: el.rpAmt,
-            unAmtLeft: el.unAmtLeft
+            unAmtLeft: el.unAmtLeft,
+            mateAccountName:el.mateAccountName,
+            mateAccountCode:el.mateAccountCode,
           };
           data.two.push(item);
         });
@@ -340,7 +348,7 @@ export default {
               accountName: el.accountName,
               id: el.id,
               mateAccountCode: el.mateAccountCode,
-              mateAccountName: el.subjectName,
+              mateAccountName: el.mateAccountName,
               incomeMoney: el.incomeMoney,
               paidMoney: el.paidMoney,
               orgId: el.ownStoreId,
@@ -364,7 +372,7 @@ export default {
               accountName: el.accountName,
               id: el.id,
               mateAccountCode: el.mateAccountCode,
-              mateAccountName: el.subjectName,
+              mateAccountName: el.mateAccountName,
               incomeMoney: el.incomeMoney,
               paidMoney: el.paidMoney,
               orgId: el.ownStoreId,
