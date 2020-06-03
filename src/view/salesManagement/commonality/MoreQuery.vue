@@ -67,14 +67,14 @@
             }
         },
         mounted(){
-            this.getAllClient()
-            this.getAllBrand();
-            this.getAllSales();
         },
         methods:{
             //打开模态框框
             openModal(){
-                this.moreQueryShow = true
+              this.getAllClient()
+              this.getAllBrand();
+              this.getAllSales();
+              this.moreQueryShow = true
             },
             //获取创建时间
             getCreatDate(date){
@@ -88,6 +88,9 @@
             },
             //获取公司
            async getAllClient(){
+             if(this.clientList.length > 0) {
+               return;
+             }
                 let res = await getClient()
                if(res.code === 0 ){
                    this.clientList = res.data
@@ -95,6 +98,9 @@
             },
             //获取品牌
             async getAllBrand(){
+              if(this.brandList.length > 0) {
+                return;
+              }
                 let res = await getBrandList({pageSize:10000})
                 if(res.code === 0 ){
                     let arr = []
@@ -106,6 +112,9 @@
             },
             //获取销售员
             async getAllSales() {
+              if(this.salesList.length > 0) {
+                return;
+              }
                 let res = await getSales();
                 if (res.code === 0) {
                     this.salesList = res.data.content;
