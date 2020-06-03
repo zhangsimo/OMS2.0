@@ -859,7 +859,7 @@ export default {
           if (sum <= val) {
             this.accessoriesBillingData.push(i);
           } else {
-            // i.applyAmt -= sum - val;
+            i.applyAmt -= sum - val;
             return this.accessoriesBillingData.push(i);
           }
         }
