@@ -474,7 +474,7 @@ export default {
     },
     //显示更多弹窗
     more() {
-      // this.$refs.more.init();
+      this.$refs.more.init();
       this.showMore = true;
     },
     //更多弹窗恢复false
