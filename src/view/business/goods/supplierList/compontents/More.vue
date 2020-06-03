@@ -112,7 +112,8 @@
           this.guestId = a.id
         },
         init(){
-          this.moreAndMore = true
+          this.moreAndMore = true;
+          this.selecQuery();
         },
         sendMsg(){
             let a = {
@@ -133,6 +134,9 @@
         },
         //供应商下拉查询
         selecQuery(){
+          if(this.ArraySelect.length > 0) {
+            return;
+          }
           let req = {}
           getSupplierList(req).then(res => {
             this.ArraySelect = res.data || [];
@@ -173,7 +177,7 @@
         }
       },
     mounted(){
-      this.selecQuery()
+      // this.selecQuery()
     }
 
     }

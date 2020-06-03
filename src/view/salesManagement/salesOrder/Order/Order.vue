@@ -44,8 +44,8 @@
     </div>
     <div class="conter">
       <div class="demo-split">
-        <Split v-model="split1">
-          <div slot="left" class="demo-split-pane">
+        <Split v-model="split1" >
+          <div slot="left" ref="paneLeft" style="height: 100%" class="demo-split-pane">
             <OrderLeft
               ref="OrderLeft"
               :queryTime="queryTime"
@@ -116,7 +116,22 @@ export default {
       isWms:false
     };
   },
+  mounted(){
+    this.getDomHeight();
+  },
   methods: {
+    getDomHeight() {
+      this.$nextTick(() => {
+        let wrapH = this.$refs.paneLeft.offsetHeight;
+        let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
+        console.log(planFormH)
+        //获取左侧侧表格高度
+        this.$refs.OrderLeft.leftTableHeight = wrapH - 130;
+        this.$refs.right.rightTableHeight = wrapH - planFormH  - 120;
+      });
+    },
+
+
     //用于父子组件之间的方法通信
     getDutyInfo(){
       this.setSave();

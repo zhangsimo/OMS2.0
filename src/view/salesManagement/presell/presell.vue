@@ -80,7 +80,7 @@
                 ref="currentRowTable"
                 :queryTime="queryTime"
                 :orderType="orderType"
-                height="660"
+                :height="leftTableHeight"
                 size="small"
                 highlight-row
                 border
@@ -308,7 +308,7 @@
                         </Button>
                       </Upload>
                     </div>
-                    <div class="fl mb5">
+                    <div class="fl mb5 mr10">
                       <Button size="small" @click="down" v-has="'down'">
                         <Icon custom="iconfont iconxiazaiicon icons" />下载模板
                       </Button>
@@ -333,7 +333,7 @@
                   auto-resize
                   size="mini"
                   ref="xTable"
-                  height="500"
+                  :height="rightTableHeight"
                   @select-change="selectTable"
                   @select-all="selectAllTable"
                   @edit-actived="editActivedEvent"
@@ -465,6 +465,8 @@ export default {
       }
     };
     return {
+      leftTableHeight:0,
+      rightTableHeight:0,
       isNew: true, //判断页面开始是否禁用
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -618,8 +620,20 @@ export default {
     this.getWarehouse();
     this.getType();
     this.getAllSales();
+    this.getDomHeight();
   },
   methods: {
+    getDomHeight() {
+      this.$nextTick(() => {
+        let wrapH = this.$refs.paneLeft.offsetHeight;
+        let planFormH = this.$refs.planForm.offsetHeight;
+        //获取左侧侧表格高度
+        this.leftTableHeight = wrapH - 90;
+        this.rightTableHeight = wrapH - planFormH  - 120;
+      });
+    },
+
+
     //判断表格能不能编辑
     editActivedEvent({ row }) {
       let xTable = this.$refs.xTable;

@@ -638,8 +638,8 @@
               data.code = this.Acode || this.formPlan.serviceId
               data.codeId = this.AcodeId
               data.id = this.rowId
-              // data.guestId = this.guestidId   //调出方
-              data.guestId = this.formPlan.guestName   //调出方
+              data.guestId = this.guestidId   //调出方
+              data.guestName = this.formPlan.guestName   //调出方
               data.orderManId = this.formPlan.storeId     //退货员id
               data.orderMan = this.formPlan.orderMan //退货员
               data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
@@ -1069,7 +1069,8 @@
         this.mainId = row.id
         this.guestidId = row.guestId
         this.datadata = row
-        this.formPlan.guestName = this.datadata.guestId
+        this.formPlan.guestId = this.datadata.guestId
+        this.formPlan.guestName = this.datadata.guestName
         this.formPlan.storeId = this.datadata.orderManId
         this.formPlan.orderDate = this.datadata.orderDate
         this.formPlan.numbers = this.datadata.serviceId
