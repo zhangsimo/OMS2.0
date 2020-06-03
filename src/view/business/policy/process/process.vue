@@ -504,8 +504,6 @@
       </TabPane>
     </Tabs>
     <add-in-com
-      :tbdata="tableData1"
-      @search21="searchPro"
       @ok="getOkList"
       @selectAddName="selectAddlierName"
       ref="addInCom"
@@ -538,7 +536,6 @@ import {
   chaifenlingjian,
   daoru1,
   shanqu,
-  chengping,
   cangkulist2
 } from "../../../../api/business/process.js";
 export default {
@@ -748,7 +745,6 @@ export default {
       },
       currentDataP: [],
       cangkuListall: [],
-      tableData1: [],
       currentNum: 1,
       saveBtnClik:false,
 
@@ -1018,34 +1014,7 @@ export default {
         );
         return;
       }
-      chengping("", "")
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.tableData1 = res.data;
-            this.$refs.addInCom.init();
-            setTimeout(()=>{
-              this.$Message.success("获取成品列表成功");
-            },0)
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
-      // 获取成品列表把data赋值给子组件中
-      // this.getListPro()
-    },
-    searchPro(params) {
-      chengping(params.productCode, params.productName)
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.tableData1 = res.data;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+      this.$refs.addInCom.init();
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -1416,18 +1385,6 @@ export default {
         })
         .catch(e => {
           this.$Message.info("获取拆分列表失败");
-        });
-    },
-    getListPro() {
-      chengping()
-        .then(res => {
-          if (res.code == 0) {
-            this.tbdata = res.data || [];
-            this.page.total = res.totalElements;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取成品列表失败");
         });
     },
     array_diff(a, b) {
