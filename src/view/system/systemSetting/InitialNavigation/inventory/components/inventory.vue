@@ -340,6 +340,9 @@ export default {
 
     //校验+保存
     async save() {
+      if(this.oneWarehouse == null) {
+        return this.$message.error("请先新增数据");
+      }
       let storeIdFind = this.oneWarehouse.hasOwnProperty("storeId");
       // console.log(storeIdFind)
       // console.log('保存')
@@ -349,6 +352,7 @@ export default {
       }
       let res = await saveList(this.oneWarehouse);
       if (res.code == 0) {
+        this.oneWarehouse = null;
         this.$message.success("保存成功");
         this.getList();
       } else {
@@ -473,7 +477,7 @@ export default {
     // 上传前
     handleBeforeUpload() {
       if(!this.mid) {
-        return this.$message.error("请先保存单据再导入!")
+        return this.$message.error("请选择保存后的单据再导入!")
       }
       let refs = this.$refs;
       refs.upload.clearFiles();

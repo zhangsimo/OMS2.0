@@ -217,7 +217,6 @@
       <Modal v-model="advanced" title="高级查询" width="600px">
         <More
           ref="naform"
-          :ArrayValue1="ArrayValue1"
           @getName="showModel2"
           :dcName="diaochuName"
           :dcId="diaochuID"
@@ -280,7 +279,6 @@ import {
 } from "@/api/AlotManagement/putStorage.js";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
-import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
   inject: ["reload"],
   components: {
@@ -297,7 +295,6 @@ export default {
       // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
-      ArrayValue1: [],
       getArray: [],
       staaa: false,
       dcData: [],
@@ -536,18 +533,6 @@ export default {
     getArrayFun(data) {
       this.ArrayValue = data;
       // this.Leftcurrentrow.detailVOS = data;
-    },
-    getArrayParams() {
-      var req = {};
-      req.page = 1;
-      req.size = 20;
-      findForAllot(req).then(res => {
-        const { content } = res.data;
-        this.getArray = content;
-        content.forEach(item => {
-          this.ArrayValue1.push(item.fullName);
-        });
-      });
     },
     warehouse() {
       queryByOrgid().then(res => {
@@ -807,6 +792,7 @@ export default {
     },
     //更多按钮
     more() {
+      this.$refs.naform.reset();
       this.advanced = true;
     },
     //左边列表选中当前行
@@ -886,7 +872,6 @@ export default {
         }
       }
       this.getList(params);
-      this.$refs.naform.reset();
       this.advanced = false;
     },
     ok() {},

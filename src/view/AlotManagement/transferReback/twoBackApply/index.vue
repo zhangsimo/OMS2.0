@@ -994,6 +994,7 @@ export default {
     },
     //更多按钮
     more() {
+      this.$refs.naform.reset();
       this.advanced = true;
     },
     //左边列表选中当前行
@@ -1083,7 +1084,6 @@ export default {
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
       this.getList(params);
-      this.$refs.naform.reset();
       this.advanced = false;
     },
     ok() {},

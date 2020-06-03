@@ -107,7 +107,6 @@ export default {
     }
   },
   mounted() {
-    this.getArrayParams();
   },
   methods: {
     commitstart(date) {
@@ -125,6 +124,9 @@ export default {
       // console.log(this.moreData.orderMan, "this.moreData.orderMan");
     },
     getArrayParams() {
+      if (this.ArrayValue.length > 0) {
+        return;
+      }
       var req = {};
       req.page = 1;
       req.size = 20;
@@ -176,6 +178,7 @@ export default {
       return this.form;
     },
     reset() {
+      this.getArrayParams();
       this.createDate = [];
       this.commitDate = [];
       this.form = {

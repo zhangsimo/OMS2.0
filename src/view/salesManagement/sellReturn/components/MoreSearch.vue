@@ -68,8 +68,6 @@
       }
     },
     mounted(){
-      this.getAllClient()
-      this.getAllSales()
     },
     methods: {
       setDate(date) {
@@ -78,9 +76,14 @@
         return [s, e]
       },
       openModal() {
+        this.getAllClient()
+        this.getAllSales()
         this.moreQueryShow = true
       },
       async getAllSales() {
+        if(this.salesList.length > 0) {
+          return;
+        }
       let res = await getCRman();
       if (res.code === 0) {
         this.salesList = res.data.content;
@@ -92,6 +95,9 @@
     },
       //获取公司
       async getAllClient() {
+        if(this.clientList.length > 0) {
+          return;
+        }
         let res = await getClient()
         if (res.code === 0) {
           this.clientList = res.data

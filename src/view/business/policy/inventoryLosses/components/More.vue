@@ -136,12 +136,10 @@
       billStatusId: '',
     },
     mounted(){
-      this.getBrand();
-      this.getAllSales();
-      this.getWouse();
     },
     methods: {
       getWouse(){
+        if(this.warehouseList.length > 0) return;
         getstate()
           .then(res => {
             console.log(res)
@@ -155,6 +153,7 @@
       },
       //提交人
       async getAllSales() {
+        if(this.salesList.length > 0) return;
         let res = await getSales();
         if (res.code === 0) {
           this.salesList = res.data.content;
@@ -166,6 +165,7 @@
       },
       //品牌
       async getBrand() {
+        if(this.brandLists.length > 0) return;
         let res = await getParamsBrand();
         if (res.code == 0) {
           this.brandLists = res.data;
@@ -228,13 +228,16 @@
             this.$Message.info("更多查询列表失败");
             this.$emit("getMoreStatus", false);
           });
-        this.reset();
+        // this.reset();
       },
       //更多弹窗-取消
       moreCancel() {
         this.$emit("getMoreStatus", false);
       },
       reset() {
+        this.getBrand();
+        this.getAllSales();
+        this.getWouse();
         this.moreData = {
           createTime:'',//创建时间
           enterTime:'',//提交日期

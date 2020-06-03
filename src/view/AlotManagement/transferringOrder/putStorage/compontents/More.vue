@@ -79,11 +79,13 @@
 
 <script>
 import moment from "moment";
+import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "More",
   data() {
     return {
       moment: moment,
+      ArrayValue1: [],
       form: {
         partCode: "", //申请单号
         partName: "", //申请单号
@@ -121,13 +123,24 @@ export default {
       type: String,
       default: ""
     },
-    ArrayValue1: {
-      type: Array,
-      default: ""
-    }
   },
 
   methods: {
+    getArrayParams() {
+      if(this.ArrayValue1.length > 0) {
+        return;
+      }
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        const { content } = res.data;
+        this.getArray = content;
+        content.forEach(item => {
+          this.ArrayValue1.push(item.fullName);
+        });
+      });
+    },
     //展示方
     showModel() {
       this.$emit("getName", "1");
@@ -177,6 +190,7 @@ export default {
       return this.form;
     },
     reset() {
+      this.getArrayParams();
       this.form = {
         partCode: "", //申请单号
         partName: "", //申请单号
