@@ -314,6 +314,9 @@ const methods = {
       item.oemCode = el.oemCode;
       item.fullName = el.fullName;
       item.carBrandModel = el.carModelName;
+      item.partBrand = el.partBrand;
+      item.unit = el.minUnit;
+      item.spec = el.specifications;
       data.push(item);
     });
     await partMatchingSave(data);
@@ -494,7 +497,11 @@ const methods = {
         fullName: item.fullName,
         remark: item.remarks,
         qty: 0,
-        ratio: 0
+        ratio: 0,
+        carBrandModel: item.adapterCarModel,
+        partBrand: item.partBrand,
+        spec: item.specifications,
+
       });
     });
     this.getArrRight = newA;
