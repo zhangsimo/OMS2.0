@@ -254,13 +254,13 @@
           show-footer
           :footer-method="footerMethod"
           showOverflow="true"
-          height="400"
           :edit-rules="validRules"
           :data="formPlan.detailList"
           @select-change="selectTable"
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
+          :height="rightTableHeight"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
           >
@@ -273,13 +273,13 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+          <vxe-table-column min-width="150" field="partName" title="配件名称"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-            width="160"
+            width="100"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
@@ -295,6 +295,7 @@
           <vxe-table-column
             field="orderPrice"
             title="单价"
+            width="100"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
             <!--            <template v-slot="{ row }">-->
@@ -310,6 +311,7 @@
           <vxe-table-column
             field="remark"
             title="备注"
+            min-width="200"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
           ></vxe-table-column>
           <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
@@ -516,7 +518,8 @@ export default {
       door: {
         outStockDoor: true
       },
-      ispart: true //添加配件状态
+      ispart: true, //添加配件状态
+      rightTableHeight:0
     };
   },
   mounted() {
