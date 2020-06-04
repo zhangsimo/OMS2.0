@@ -1049,6 +1049,8 @@ export default {
             this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
           }
         });
+        this.$refs.salepopup.accessoriesBillingData1 = []
+        this.$refs.salepopup.accessoriesBillingData2 = []
         setTimeout(() => {
           this.$refs.salepopup.modal1 = true;
         }, 500);

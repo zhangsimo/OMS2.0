@@ -87,8 +87,8 @@
       <vxe-table-column field="taxParts" title="剩余含税配件欠票"></vxe-table-column>
       <vxe-table-column field="taxOil" title="剩余含税油品欠票"></vxe-table-column>
     </vxe-table>
-    <h4 class="mt10">发票对冲申请</h4>
-    <approval :approvalTit="approvalTit" />
+<!--    <h4 class="mt10">发票对冲申请</h4>-->
+<!--    <approval :approvalTit="approvalTit" />-->
     <saleSelete ref="saleSelete" :information="information" />
     <div slot="footer"></div>
   </Modal>
@@ -118,12 +118,10 @@ export default {
   mounted() {
     bus.$on("accountHedNo", val => {
       val.statementMasterId = val.id;
+      delete val.id
       this.accessoriesBillingData.push(val);
-      val.taxArrearsOfPart = val.taxArrearsOfPart;
-      val.taxArrearsOfOil = val.taxArrearsOfOil;
-      this.accessoriesBillingData.map(item => {
-        delete item.id;
-      });
+      // val.taxArrearsOfPart = val.taxArrearsOfPart;
+      // val.taxArrearsOfOil = val.taxArrearsOfOil;
     });
   },
   methods: {
