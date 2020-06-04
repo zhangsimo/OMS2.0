@@ -1167,7 +1167,8 @@ export default {
           tata.showit = true;
         }, 200);
       } else {
-        this.diaochuName = row.id;
+        // console.log(row)
+        this.diaochuName = row.fullName;
         this.diaochuID = row.id;
       }
     },

@@ -905,7 +905,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.outOfAmt) {
+            if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
             let data = JSON.parse(JSON.stringify(this.formPlan));
@@ -971,7 +971,7 @@ export default {
                         if (valid) {
                             try {
                                 await this.$refs.xTable.validate();
-                                if (+this.totalMoney > +this.limitList.outOfAmt) {
+                                if (+this.totalMoney > +this.limitList.sumAmt) {
                                     return this.$message.error("可用余额不足");
                                 }
                               data.planSendDate = tools.transTime(data.planSendDate)

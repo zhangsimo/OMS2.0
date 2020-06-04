@@ -24,8 +24,8 @@
     </row>
     <row class="mt15">
       <span>调 出 方 ：</span>
-      <!-- <Input readonly v-model="form.guestName" style="width: 398px" /> -->
-      <Select
+      <Input readonly v-model="form.guestName" style="width: 398px" />
+      <!-- <Select
         placeholder="请选择调出方！"
         v-model="form.guestName"
         filterable
@@ -33,7 +33,7 @@
         @on-change="getSupplierNamea1"
       >
         <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-      </Select>
+      </Select> -->
       <Button @click="showModel" class="ml5" size="small" type="default">
         <i class="iconfont iconxuanzetichengchengyuanicon"></i>
       </Button>

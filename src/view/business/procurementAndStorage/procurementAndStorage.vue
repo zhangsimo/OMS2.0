@@ -114,7 +114,7 @@
                 </div>
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="供应商：" prop="guestId">
-                    <Row style="width: 310px">
+                    <Row>
                       <Input placeholder="请选择供应商" v-model="formPlan.guestName" readonly disabled style="width:200px;" />
                       <!-- <Select
                         v-model="formPlan.guestId"
@@ -157,8 +157,22 @@
                       disabled
                     ></DatePicker>
                   </FormItem>
+                  <FormItem label="入库仓库：" prop="storeId">
+                    <Select
+                      v-model="formPlan.storeId"
+                      style="width:180px"
+                      disabled
+                    >
+                      <Option
+                        v-for="item in WarehouseList"
+                        :disabled="item.isDisabled"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{ item.name }}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="入库单号：">
-                    <Input class="w160" v-model="formPlan.serviceId" disabled />
+                    <Input class="w230 mr5" v-model="formPlan.serviceId" disabled />
                   </FormItem>
                   <FormItem label="票据类型:" prop="billTypeId">
                     <Select
@@ -188,27 +202,13 @@
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
-                      style="width: 370px"
+                      style="width: 340px"
                       v-model="formPlan.remark"
                       disabled
                     />
                   </FormItem>
                   <FormItem label="往来单号：">
-                    <Input class="w210" v-model="formPlan.code" disabled />
-                  </FormItem>
-                  <FormItem label="入库仓库：" prop="storeId">
-                    <Select
-                      v-model="formPlan.storeId"
-                      style="width:200px"
-                      disabled
-                    >
-                      <Option
-                        v-for="item in WarehouseList"
-                        :disabled="item.isDisabled"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.name }}</Option>
-                    </Select>
+                    <Input class="w230" v-model="formPlan.code" disabled />
                   </FormItem>
                 </div>
                 <div class="flex plan-cz-btn" ref="planBtn">
@@ -413,6 +413,6 @@
 </style>
 <style scoped>
 .purchase >>> .ivu-form-item {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 </style>
