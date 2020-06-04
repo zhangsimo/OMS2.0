@@ -12,8 +12,8 @@
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <!-- <Input v-model="penSalesData.guestName" style="width: 398px" /> -->
-            <Select
+            <Input v-model="penSalesData.guestName" style="width: 398px" />
+            <!-- <Select
               placeholder="请选择调出方！"
               v-model="penSalesData.guestName"
               filterable
@@ -21,7 +21,7 @@
               @on-change="getSupplierNamea1"
             >
               <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>
+            </Select> -->
             <Button @click="getName" class="ml5" size="small" type="default">
               <i class="iconfont iconxuanzetichengchengyuanicon"></i>
             </Button>
@@ -145,7 +145,7 @@ export default {
         pageSizeOpts: [50, 100, 150, 200]
       },
       xuanzhognList: [],
-      checkRow: {},
+      checkRow: null,
       currentData: [],
       code: "",
       codeId: "",
@@ -205,6 +205,7 @@ export default {
       // console.log(this.moreData.orderMan, "this.moreData.orderMan");
     },
     getArrayParams() {
+      this.checkRow == null;
       var req = {};
       req.page = 1;
       req.size = 20;
@@ -234,10 +235,19 @@ export default {
       this.penSalesData.guestName = "";
       this.penSalesData.guestId = "";
       this.penSalesData.serviceId = "";
+      this.checkRow = null;
       this.getArrayParams();
     },
     init1() {
       this.searchPartLayer = false;
+      this.penSalesData.allotEnterTime = [];
+      this.penSalesData.allotEnterTimeStart = "";
+      this.penSalesData.allotEnterTimeEnd = "";
+      this.penSalesData.guestName = "";
+      this.penSalesData.guestId = "";
+      this.penSalesData.serviceId = "";
+      this.checkRow = null;
+      this.getArrayParams();
     },
     //选中的日期
     selectDate(date) {
@@ -245,6 +255,7 @@ export default {
     },
     //搜索
     search(size, num) {
+      this.checkRow == null;
       if (this.penSalesData.allotEnterTime[0]) {
         this.penSalesData.allotEnterTimeStart = moment(
           this.penSalesData.allotEnterTime[0]
@@ -289,7 +300,7 @@ export default {
     ok() {
       // 将选好的成品传父组件
       const sendList = this.$refs.xtale.getSelectRecords();
-      if (this.checkRow == {}) {
+      if (this.checkRow == null) {
         this.$Message.info("请勾选需要选入的行");
         return;
       } else {

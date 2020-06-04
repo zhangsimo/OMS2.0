@@ -16,9 +16,9 @@
         <span class="titler mr5">可用余额:</span>
         <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
       </div>
-      <div class="clearfix purchase" ref="planForm">
+      <div class="clearfix purchase pb10" ref="planForm">
         <FormItem label="客户：" prop="guestId">
-          <Row style="width: 310px">
+          <Row>
             <Input placeholder="请选择客户" v-model="formPlan.guestName" readonly disabled style="width:200px;" />
             <!-- <Select
               v-model="formPlan.guestId"
@@ -87,6 +87,9 @@
             >{{ item.itemName }}</Option>
           </Select>
         </FormItem>
+        <FormItem label="出库单号:">
+          <Input class="w270" v-model="formPlan.serviceId" disabled />
+        </FormItem>
         <FormItem label="结算方式：" prop="settleTypeId">
           <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0">
             <Option
@@ -98,9 +101,6 @@
         </FormItem>
         <FormItem label="备注：">
           <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0" />
-        </FormItem>
-        <FormItem label="出库单号:">
-          <Input class="w210" v-model="formPlan.serviceId" disabled />
         </FormItem>
         <!-- <FormItem label="计划发货日期:">
           <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
@@ -1039,6 +1039,6 @@ export default {
 </style>
 <style scoped>
 .purchase >>> .ivu-form-item {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 </style>
