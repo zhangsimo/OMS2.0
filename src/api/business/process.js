@@ -85,10 +85,11 @@ export function peijianchaifen(data, size, num) {
 
 // 通用
 // 成品接口(带查询)
-export function chengping(code, name) {
+export function chengping(code, name, params) {
   return axios.request({
     url: `${api.wmsApi}/partMatching/queryByCondition?partCode=${code}&partName=${name}`,
-    method: 'get'
+    method: 'get',
+    params,
   })
 }
 

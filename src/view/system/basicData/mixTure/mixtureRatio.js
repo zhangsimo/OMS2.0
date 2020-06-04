@@ -505,6 +505,7 @@ const methods = {
         carBrandModel: item.adapterCarModel,
         partBrand: item.partBrand,
         spec: item.specifications,
+        unit: item.minUnit,
       });
     });
     this.getArrRight = newA;
