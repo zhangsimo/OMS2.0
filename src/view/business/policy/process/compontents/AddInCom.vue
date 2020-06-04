@@ -1,15 +1,21 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择配件" width="1000" @on-ok="ok" footer-hide>
+  <Modal
+    v-model="searchPartLayer"
+    title="选择配件"
+    width="1000"
+    @on-ok="ok"
+    footer-hide
+  >
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
           <!--<div class="db mr10">-->
-            <!--<Input-->
-              <!--v-model="penSalesData.productCode"-->
-              <!--placeholder="配件编码"-->
-              <!--style="width: 160px"-->
-              <!--class="mr10"-->
-            <!--&gt;</Input>-->
+          <!--<Input-->
+          <!--v-model="penSalesData.productCode"-->
+          <!--placeholder="配件编码"-->
+          <!--style="width: 160px"-->
+          <!--class="mr10"-->
+          <!--&gt;</Input>-->
           <!--</div>-->
           <div class="db mr10">
             <Input
@@ -19,10 +25,10 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Button @click="search" type >查询</Button>
+            <Button @click="search" type>查询</Button>
           </div>
           <div class="db mr10 btn">
-            <Button @click="ok" type="warning" >选入</Button>
+            <Button @click="ok" type="warning">选入</Button>
           </div>
         </div>
       </div>
@@ -39,16 +45,36 @@
           :data="tabList"
           highlight-current-row
           highlight-hover-row
-          :radio-config="{labelField: 'name', trigger: 'row'}"
+          :radio-config="{ labelField: 'name', trigger: 'row' }"
           @radio-change="radioChangeEvent"
         >
-          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-          <vxe-table-column type="radio" width="60" title=" "></vxe-table-column>
+          <vxe-table-column
+            type="index"
+            width="60"
+            title="序号"
+          ></vxe-table-column>
+          <vxe-table-column
+            type="radio"
+            width="60"
+            title=" "
+          ></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
-          <vxe-table-column field="carBrandModel" title="品牌车型"></vxe-table-column>
+          <vxe-table-column
+            field="partCode"
+            title="配件编码"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="partName"
+            title="配件名称"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="fullName"
+            title="配件全称"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="carBrandModel"
+            title="品牌车型"
+          ></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
         </vxe-table>
       </div>
@@ -59,21 +85,39 @@
           <div>
             <Page
               :current="pageList.page"
-              :total="this.pageList.total"
-              :page-size="pageList.pageSize"
+              :total="pageList.total"
+              :page-size="pageList.size"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
+              @on-change="changePage"
+              @on-page-size-change="changeSize"
             />
           </div>
         </Col>
       </Row>
       <!--        下表格-->
       <div class="bottomTableDate">
-        <vxe-table border resizable auto-resize height="150" :data="currentData">
+        <vxe-table
+          border
+          resizable
+          auto-resize
+          height="150"
+          :data="currentData"
+        >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-          <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
+          <vxe-table-column
+            field="partCode"
+            title="配件编码"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="partName"
+            title="配件名称"
+            width="100"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="fullName"
+            title="配件全称"
+          ></vxe-table-column>
           <vxe-table-column field="qty" title="数量"></vxe-table-column>
           <vxe-table-column field="ratio" title="成本比例"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -83,9 +127,10 @@
   </Modal>
 </template>
 
-<script >
+<script>
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
+import { chengping } from "../../../../../api/business/process.js";
 export default {
   data() {
     return {
@@ -96,61 +141,83 @@ export default {
       // 调出方查询
       penSalesData: {
         options1: [], //日期
-        customer: '', //调出方
-        productName: '', //申请单号
-        productCode: ''
+        customer: "", //调出方
+        productName: "", //申请单号
+        productCode: ""
       },
       customerListOptions: [], //调出方下拉列表
-      tableData: [{name1: '123'}, {}, {}, {}],
+      tableData: [],
       TopTableData: [], //上侧表格list
       BottomTableData: [], //下侧表格list
       // 分页数据
       pageList: {
         page: 1,
         total: 0,
-        size: 50,
-        pageSize: 50,
-        pageSizeOpts: [50, 100, 150, 200]
+        size: 20,
+        pageSizeOpts: [20, 100, 150, 200]
       },
       xuanzhognList: [],
       checkRow: {},
-      currentData:[]
-    }
+      currentData: []
+    };
   },
   watch: {
     tbdata: {
       handler(newVal) {
-        this.tabList = newVal
+        this.tabList = newVal;
       },
       deep: true
     }
   },
-  props: {
-    tbdata: {
-      type: Array,
-      default: function() {
-        return []
-      }
-    }
-  },
+  props: {},
   methods: {
     init() {
-      this.searchPartLayer = true
+      this.getList();
+      this.searchPartLayer = true;
     },
     init1() {
-      this.searchPartLayer = false
+      this.searchPartLayer = false;
+    },
+    getList(productCode = "", productName = "") {
+      let params = {
+        page: this.pageList.page - 1,
+        size: this.pageList.size,
+      }
+      chengping(productCode, productName, params)
+        .then(res => {
+          // 导入成品, 并把成品覆盖掉当前配件组装信息list
+          if (res.code == 0) {
+            this.tabList = res.data;
+            this.pageList.total = res.totalElements;
+            this.$Message.success("获取成品列表成功");
+          }
+        })
+        .catch(e => {
+          this.$Message.info("获取成品失败");
+        });
     },
     //选中的日期
     selectDate(date) {
-      this.penSalesData.option1 = date
-      console.log(this.penSalesData.option1)
+      this.penSalesData.option1 = date;
+      console.log(this.penSalesData.option1);
+    },
+    changePage(p) {
+      this.pageList.page = p
+      this.getList();
+    },
+    changeSize(size) {
+      this.pageList.page = 1
+      this.pageList.size = size
+      this.getList();
     },
     //搜索
     search() {
-      this.$emit('search21', this.penSalesData)
+      this.pageList.page = 1;
+      this.getList(this.penSalesData.productCode, this.penSalesData.productName);
+      // this.$emit('search21', this.penSalesData)
     },
     getParams() {
-      this.$emit('getLisw', this.penSalesData)
+      // this.$emit('getLisw', this.penSalesData)
     },
     //确定
     chose() {
@@ -160,21 +227,21 @@ export default {
     //取消
     cancel() {},
     echoDate() {},
-    radioChangeEvent({row}) {
-      console.log(row)
-      this.checkRow = row
-      this.currentData = row.detailList
+    radioChangeEvent({ row }) {
+      console.log(row);
+      this.checkRow = row;
+      this.currentData = row.detailList;
     },
     ok() {
       // 将选好的成品传父组件
-      if(this.checkRow.id){
-        this.$emit('ok', this.checkRow)
-      }else{
+      if (this.checkRow.id) {
+        this.$emit("ok", this.checkRow);
+      } else {
         this.$Message.error("请先选择配件");
       }
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -297,7 +364,7 @@ export default {
 
           &:after {
             background: #f8f8f8;
-            content: '';
+            content: "";
             position: absolute;
             left: 0px;
             top: 0px;

@@ -117,16 +117,17 @@
             }
         },
         mounted(){
-            this.getAdress()
-            this.getClientTypeList()
-            this.getList()
         },
         methods:{
             openModel(){
+                this.getAdress()
+                this.getClientTypeList()
+                this.getList()
                 this.addressShow =true
             },
             //获取地级市
             getAdress(){
+                if(this.treeData.length > 0) return;
                 area().then(res => {
                     if(res.code == 0){
                             res.data.forEach(el => {
@@ -178,6 +179,7 @@
             },
             // 获取客户
             async getList(){
+                if(this.tableData.length > 0) return;
                 let data ={}
                     data.grade = this.clickCity.grade
                     data.id = this.clickCity.id
@@ -202,6 +204,7 @@
             },
             //客户类型获取
             async getClientTypeList(){
+                if(this.clientType.length > 0) return;
                 let res = await getClientType()
                 if(res.code === 0){
                     let data = res.data
