@@ -413,11 +413,12 @@ export default {
     };
   },
   mounted() {
-    this.getAdress();
+    // this.getAdress();
+    // this.getClassifyList();
+
     this.getAllClient();
     this.getType();
     this.getWarehouse();
-    this.getClassifyList();
     this.getAllSales();
   },
   computed: {
@@ -539,6 +540,8 @@ export default {
     //打开新增客户
     openAddNewClient() {
       this.clientList = {};
+      this.getAdress();
+      this.getClassifyList();
       this.clientDataShow = true;
     },
     //获取新增客户二级分类

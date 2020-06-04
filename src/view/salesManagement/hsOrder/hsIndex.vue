@@ -645,11 +645,7 @@
     mounted() {
       this.getListData()
       this.getType();
-      this.getWarehouse();
       this.getAllCompany();
-      this.getAllSales();
-      this.getAllClient();
-      this.getArrayParams();
       this.getHsStoreFun();
     },
     methods: {
@@ -817,6 +813,16 @@
           if(filterArr.length!==this.selectTableDataArr.length){
             this.$Message.error("选择的数据只能是相同门店");
           }else{
+            if(this.salesList.length==0){
+              this.getAllSales();
+            }
+            if(this.client.length==0){
+              this.getAllClient();
+            }
+            if(this.WarehouseList.length==0){
+              this.getWarehouse();
+            }
+
             this.showModel1 = true;
             let firstObj = this.selectTableDataArr[0];
             this.formPlan.guestName = firstObj.companyName;
@@ -872,6 +878,13 @@
           if(filterArr.length!==this.selectTableDataArr.length){
             this.$Message.error("选择的数据只能是相同门店");
           }else{
+            if(this.ArrayValue.length==0){
+              this.getArrayParams();
+            }
+            if(this.WarehouseList.length==0){
+              this.getWarehouse();
+            }
+
             this.showModel2 = true;
             let firstObj = this.selectTableDataArr[0];
             this.formPlan.guestName = firstObj.companyName;

@@ -354,14 +354,7 @@
     </Modal>
 
     <!--  编辑发货地址 -->
-    <!--      <Modal v-model="addressShow" title="收货信息"  width="1000">-->
     <goods-info ref="goodsInfo" :guestId="formPlan.guestId" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
-    <!--        <div slot='footer'>-->
-    <!--          <Button type='primary' @click = changeShippingAddress>确定</Button>-->
-    <!--          <Button type='default' @click='addressShow = false'>取消</Button>-->
-    <!--        </div>-->
-    <!--      </Modal>-->
-
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"  @selectPartName="getPartNameList"></select-part-com>
     <!--      批次配件-->
@@ -523,8 +516,9 @@ export default {
     };
   },
   mounted() {
-    this.getAdress();
+    // this.getAdress();
     // this.getAllClient();
+
     this.getType();
     this.getWarehouse();
     this.getClassifyList();
@@ -633,6 +627,8 @@ export default {
     //打开新增客户
     openAddNewClient() {
       this.clientList = {};
+      this.getAdress();
+      this.getClassifyList();
       this.clientDataShow = true;
     },
     //获取新增客户二级分类
