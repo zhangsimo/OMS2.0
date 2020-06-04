@@ -298,7 +298,7 @@ export default {
       this.Loading = true;
       let res = await getList({});
       if (res.code == 0) {
-        console.log(res, "res =>286");
+        // console.log(res, "res =>286");
         this.isShow = false;
         this.Loading = false;
         res.data.map(item => {
@@ -340,7 +340,7 @@ export default {
 
     //校验+保存
     async save() {
-      if(this.oneWarehouse == null) {
+      if(this.oneWarehouse.lf) {
         return this.$message.error("请先新增数据");
       }
       let storeIdFind = this.oneWarehouse.hasOwnProperty("storeId");
@@ -352,7 +352,7 @@ export default {
       }
       let res = await saveList(this.oneWarehouse);
       if (res.code == 0) {
-        this.oneWarehouse = null;
+        this.oneWarehouse = { lf: true };
         this.$message.success("保存成功");
         this.getList();
       } else {
