@@ -29,7 +29,7 @@ import {rightButtonShow , authButton} from './utils/button'
 import loadmore from "./directive/loadmore";
 import VueQriously from 'vue-qriously'
 import locale from 'view-design/dist/locale/zh-CN';
-
+import VueI18n from 'vue-i18n'
 Vue.use(VueQriously)
 // @ts-ignore
 Vue.use(loadmore);
@@ -41,6 +41,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)
 Vue.use(VXETable)
 VXETable.use(VXETablePluginIView)
+Vue.use(VueI18n)
 Vue.use(iView, { locale })
 Vue.config.productionTip = false
 Vue.use(VXEUtils, XEUtils)
