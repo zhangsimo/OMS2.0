@@ -242,6 +242,20 @@ export default {
         this.page.total = res.data.totalElements;
       }
     },
+    async getList2(v) {
+      let data = {};
+      data = this.Outform;
+      data.page = this.page.num - 1;
+      data.size = this.page.size;
+      data.storeId = v || this.storeId;
+      this.Loading = true;
+      let res = await getGodown(data);
+      if (res.code === 0) {
+        this.Loading = false;
+        this.tableDataTop = res.data.content;
+        this.page.total = res.data.totalElements;
+      }
+    },
     //获取供应商列表
     async getClientList() {
       if (this.clientList.length > 0) return;
@@ -259,18 +273,18 @@ export default {
     },
     //查询
     query() {
-      this.getList(this.storeId);
+      this.getList2(this.storeId);
     },
     //切换页面
     selectNum(val) {
       this.page.num = val;
-      this.getList();
+      this.getList2();
     },
     //切换页数
     selectPage(val) {
       this.page.num = 1;
       this.page.size = val;
-      this.getList();
+      this.getList2();
     },
     //上部表格选中
     selectOne(data) {
