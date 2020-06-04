@@ -870,11 +870,9 @@ export default {
         if (val.length < 1) return
         if (this.$parent.reconciliationStatement.isOilPart == 1){
           this.accessoriesBillingData1 = val
-          this.accessoriesBillingData2 = []
           this.OilPartShow = false
         } else {
           this.accessoriesBillingData2 = val
-          this.accessoriesBillingData1 = []
           this.OilPartShow = true
         }
         val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
