@@ -88,12 +88,11 @@ export function getoutList (num,page,data) {
 //获取退货员
 export function getSales () {
   return axios.request({
-    url: `${api.authApi}/tenantUsers/queryAll?&size=10000&page=0&userName=&phone=&office=0`,
+    url: `${api.authApi}/tenantUsers/findAllPlanner?&size=10000&page=0&userName=&phone=&office=0`,
     method: 'get',
 
   })
 }
-
 
 //获取华胜订单
 export function getHuaShengOrders (params,data) {
