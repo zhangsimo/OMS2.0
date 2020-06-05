@@ -2,8 +2,6 @@
   <Table
     class="mt10"
     border
-    show-summary
-    :summary-method="handleSummary"
     :columns="columns1"
     :data="recordLists"
   ></Table>
