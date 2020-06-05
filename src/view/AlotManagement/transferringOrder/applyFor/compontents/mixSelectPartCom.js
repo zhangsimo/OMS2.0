@@ -240,7 +240,7 @@ export const mixSelectPartCom = {
         // }
         req.adapterCarModel = this.partName;
       }
-      req.page = this.page.num;
+      req.page = this.page.num - 1;
       req.size = this.page.size;
       getCarPartsTwo(req).then(res => {
         this.loading = false;
