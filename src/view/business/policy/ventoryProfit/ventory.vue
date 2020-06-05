@@ -182,54 +182,6 @@
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
-                <!--<div class="clearfix">-->
-                  <!--<div class="fl mb5">-->
-                    <!--<Button-->
-                      <!--size="small"-->
-                      <!--class="mr10"-->
-                      <!--@click="addPro"-->
-                      <!--v-has="'addPro'"-->
-                      <!--:disabled="draftShow != 0||!formPlan.storeId"-->
-                    <!--&gt;-->
-                      <!--<Icon type="md-add" />添加配件-->
-                    <!--</Button>-->
-                  <!--</div>-->
-                  <!--<div class="fl mb5">-->
-                    <!--<Button-->
-                      <!--size="small"-->
-                      <!--class="mr10"-->
-                      <!--@click="shanchu"-->
-                      <!--v-has="'delete'"-->
-                      <!--:disabled="draftShow != 0"-->
-                    <!--&gt;-->
-                      <!--<i class="iconfont mr5 iconlajitongicon"></i> 删除-->
-                    <!--</Button>-->
-                  <!--</div>-->
-                  <!--<div class="fl mb5">-->
-                    <!--<Upload-->
-                      <!--ref="upload"-->
-                      <!--:show-upload-list="false"-->
-                      <!--:headers="headers"-->
-                      <!--:action="upurl"-->
-                      <!--:format="['xlsx', 'xls', 'csv']"-->
-                      <!--:before-upload="handleBeforeUpload"-->
-                      <!--:on-format-error="onFormatError"-->
-                      <!--:on-success="handleSuccess"-->
-                      <!--:disabled="draftShow != 0||!formPlan.serviceId"-->
-                    <!--&gt;-->
-                      <!--<Button-->
-                        <!--@click="importAss"-->
-                        <!--size="small"-->
-                        <!--class="mr10"-->
-                        <!--v-has="'import'"-->
-                        <!--:disabled="draftShow != 0||!formPlan.storeId"-->
-                      <!--&gt;导入</Button>-->
-                    <!--</Upload>-->
-                    <!--&lt;!&ndash; <Button size="small" @click="importAss" class="mr10" :disabled="draftShow != 0">-->
-                      <!--<i class="iconfont mr5 iconlajitongicon"></i> 导入-->
-                    <!--</Button>&ndash;&gt;-->
-                  <!--</div>-->
-                <!--</div>-->
               </div>
               <vxe-table
                 ref="xTable1"
@@ -249,8 +201,9 @@
                 <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                 <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
+                <vxe-table-column field="sysQty" title="系统数量" width="100" v-if="formPlan.source != 1"></vxe-table-column>
                 <vxe-table-column
+                  v-if="formPlan.source != 1"
                   field="trueQty"
                   title="实盘数量"
                   width="100"
