@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modelShow" title="对账单申请" width="1200px" @on-visible-change="hander">
+  <Modal v-model="modelShow" title="对账单申请" width="1200px">
     <div>
       <div class="mb10">
         <span class="mr5">申请单号：</span>
@@ -86,7 +86,11 @@ export default {
     //保存提交关闭模态框
     colse(){
       this.modelShow = false
-    }
+    },
+    init() {
+      this.hander();
+      this.modelShow = true
+    },
   }
 };
 </script>
