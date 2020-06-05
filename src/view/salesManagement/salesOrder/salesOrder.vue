@@ -1,5 +1,5 @@
 <template>
-    <main class="bigBox main-wrap">
+    <main class="bigBox main-wrap lightbox-wrap">
       <Tabs type="card" name="orderbox">
         <TabPane  label="销售订单" tab="orderbox">
         <div class="marketBox">
@@ -42,6 +42,9 @@
     .ivu-tabs-content{
       height: 94%;
     }
+    
+  }
+  .lightbox-wrap{
     .ivu-tabs-bar{
       border:none;
     }
