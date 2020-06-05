@@ -276,7 +276,7 @@ export const mixSelectPartCom = {
         }
         getWbList(params,req).then(res=>{
           this.loading = false;
-          this.partData = res.data|| [];
+          this.partData = res.data.content|| [];
           this.page.total = this.partData.length;
         })
       }

@@ -550,7 +550,7 @@
               this.$refs.OtherPayment.open();
               break;
             case "对账单":
-              this.$refs.statementApplication.modelShow = true;
+              this.$refs.statementApplication.init();
               break;
             case "销售开票":
               this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
