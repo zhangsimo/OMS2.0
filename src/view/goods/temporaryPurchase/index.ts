@@ -5,7 +5,7 @@ import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
 import { orderState } from '../plannedPurchaseOrder/global';
 import { getSales } from "@/api/salesManagment/salesOrder";
-import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+import { down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 
 import baseUrl from "../../../../config/url";
 
