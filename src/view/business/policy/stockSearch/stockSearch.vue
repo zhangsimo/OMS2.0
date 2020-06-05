@@ -283,7 +283,7 @@ export default {
         {
           title: "品牌车型",
           align: "center",
-          key: "carBrandName",
+          key: "carModelName",
           minWidth: 120
         },
         {
@@ -424,7 +424,7 @@ export default {
         {
           title: "品牌车型",
           align: "center",
-          key: "carBrandName",
+          key: "carModelName",
           /*render:(h , params)=>{
 
                           return h('span' ,{} ,tex)
