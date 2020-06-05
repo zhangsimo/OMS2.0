@@ -140,3 +140,12 @@ export function addSave(data){
     data
   });
 }
+
+//获取当前科目
+export function getSubjectType (params){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/financeAccountTitle`,
+    method: 'get',
+    params
+  });
+}

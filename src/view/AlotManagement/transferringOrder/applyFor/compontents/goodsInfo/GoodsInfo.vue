@@ -96,7 +96,7 @@
                 filterable
                 @on-change="selectLogis"
               >
-                <Option v-for="item in logisArr" :disabled="item.isDisabled===1" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+                <Option v-for="item in logisArr" :disabled="item.isDisabled==1" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
               </Select>
               <div class="ivu-form-item-error-tip" v-show="logisRequired">发货物流未选择</div>
             </FormItem>

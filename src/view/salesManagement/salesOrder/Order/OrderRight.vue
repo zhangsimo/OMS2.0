@@ -279,7 +279,7 @@
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-            width="100"
+            width="160"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
@@ -560,6 +560,7 @@ export default {
       data.id = this.leftOneOrder?this.leftOneOrder.id:''
       let res = await getLimit(data);
       if (res.code === 0) {
+        // console.log(res.data)
         this.limitList = res.data;
       }
     },
@@ -568,7 +569,7 @@ export default {
       if (!value) {
         return false;
       }
-      console.log(this.client)
+      // console.log(this.client)
       let oneClient = [];
       oneClient = this.client.filter(item => {
         return item.id === value;
