@@ -23,7 +23,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150">
+            <Select  v-model="shopCode" filterable class="w150 mr15">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -256,7 +256,7 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
-  import { are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { are , goshop , impUrl , goList , deleList , revocation , ait , getSubjectType} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import changeJournal from '../components/changeJournal'
   import add from '../components/addJournal'
   import amtData from '../../components/amtData'
@@ -307,7 +307,7 @@
       this.value = arr[0];
       this.getShop()  //获取门店
       this.getAllAre() //获取区域
-
+      this.getSubject() //获取会计科目
 
 
     },
@@ -317,7 +317,6 @@
         let res = await are()
         if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
       },
-
 
       // //切换地址重新调取门店接口
       changeArea(){
@@ -336,6 +335,15 @@
         let res = await are(data)
         if (res.code === 0){
           this.model1 = 0
+        }
+      },
+
+      //获取当前科目
+      async getSubject(){
+        let res = await getSubjectType()
+        if(res.code === 0){
+          this.subJectList = res.data
+          this.subjectCode = res.data[0].id
         }
       },
 

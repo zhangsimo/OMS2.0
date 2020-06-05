@@ -61,22 +61,22 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="对方户名" prop="reciprocalAccountName">
+          <FormItem label="对方户名">
             <Input  v-model="formCustom.reciprocalAccountName" class="w150"></Input>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="对账账号" prop="checkAccount">
+          <FormItem label="对账账号">
             <Input  v-model="formCustom.checkAccount" class="w150"></Input>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="对方开户行" prop="reciprocalBankName">
+          <FormItem label="对方开户行">
             <Input v-model="formCustom.reciprocalBankName" class="w150"></Input>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="交易备注" prop="tradingNote">
+          <FormItem label="交易备注">
             <Input  v-model="formCustom.tradingNote" class="w150"></Input>
           </FormItem>
         </Col>
@@ -106,8 +106,7 @@
 </template>
 
 <script>
-  import {are , goshop , goAccountList , gosubjectType , addSave} from '@/api/settlementManagement/fundsManagement/capitalChain'
-  import {getTableList}from '@/api/accountant/accountant'
+  import {are , goshop , goAccountList , gosubjectType , addSave , getSubjectType} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import moment from 'moment'
 
   export default {
@@ -232,10 +231,11 @@
 
       //获取科目
       async getSubject(){
-        let data = {}
-        data.parentCode = 101
-        let res = await getTableList(data)
-        if(res.code === 0) return this.subJectList =  res.data
+        let res = await getSubjectType()
+        if(res.code === 0){
+          this.subJectList = res.data
+          this.formCustom.mateAccountCode = res.data[0].id
+        }
       },
 
       //切换区域清除数据
