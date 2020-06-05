@@ -40,7 +40,7 @@
   }
 }
   .btn {
-    width: 360px;
+    width: 90%;
     height: 35px;
     text-align: center;
     line-height: 35px;

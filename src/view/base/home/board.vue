@@ -31,60 +31,113 @@
         <h5 style="margin-bottom: 20px">待办事项</h5>
         <ul>
           <li>
+            <Row>
+              <Col span="20">
             <a @click="go(1000)">
             <img src="../../../assets/images/home/rukuguanli.png" alt="">
               待提交采购计划
-            <span class="munber">{{dataObj.pchsplanQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+            <span class="munber">{{dataObj.pchsplanQty}}</span>
+              </Col>
+            </Row>
           </li>
+
           <li>
+            <Row>
+              <Col span="20">
             <a>
             <img src="../../../assets/images/home/chukuguanli.png" alt="">
               待提交销售订单
-            <span class="munber2">{{dataObj.sellOrderQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+              <span class="munber2">{{dataObj.sellOrderQty}}</span>
+              </Col>
+            </Row>
           </li>
+
+
           <li>
-            <a>
+            <Row>
+              <Col span="20">
+              <a>
             <img src="../../../assets/images/home/fukuan.png" alt="">
               待收货计划采购订单
-            <span class="munber">{{dataObj.submitMap.planQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+              <span class="munber">{{dataObj.submitMap.planQty}}</span>
+              </Col>
+            </Row>
           </li>
+
           <li>
-            <a>
+            <Row>
+              <Col span="20">
+              <a>
             <img src="../../../assets/images/home/yingshoukuan.png" alt="">
               已提交销售订单
-            <span class="munber2">{{dataObj.sellOrderSubmitQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+              <span class="munber2">{{dataObj.sellOrderSubmitQty}}</span>
+              </Col>
+            </Row>
           </li>
+
           <li>
-            <a>
+            <Row>
+              <Col span="20">
+              <a>
             <img src="../../../assets/images/home/duizhangdan .png" alt="">
             待收货临时采购订单
-            <span class="munber">{{dataObj.submitMap.tempQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+              <span class="munber">{{dataObj.submitMap.tempQty}}</span>
+              </Col>
+            </Row>
           </li>
           <li>
-            <a>
+            <Row>
+              <Col span="20">
+              <a>
             <img src="../../../assets/images/home/caigouguanli .png" alt="">
             待受理调拨申请单
-            <span class="munber2">{{dataObj.waitAcceptAllocateOrderQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+              <span class="munber2">{{dataObj.waitAcceptAllocateOrderQty}}</span>
+              </Col>
+            </Row>
           </li>
           <li>
-            <a>
+            <Row>
+              <Col span="20">
+              <a>
             <img src="../../../assets/images/home/tuidanguanli.png" alt="">
             待收货外采订单
-            <span class="munber">{{dataObj.submitMap.outQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+            <span class="munber">{{dataObj.submitMap.outQty}}</span>
+              </Col>
+            </Row>
           </li>
           <li>
-            <a>
+            <Row>
+              <Col span="20">
+              <a>
               <img src="../../../assets/images/home/tuidanguanli.png" alt="">
               草稿对账单
-              <span class="munber2">{{dataObj.draftOrderQty}}</span>
             </a>
+              </Col>
+              <Col span="4">
+            <span class="munber2">{{dataObj.draftOrderQty}}</span>
+              </Col>
+            </Row>
           </li>
 
         </ul>
@@ -188,7 +241,7 @@
     list-style: none;
     li {
       display: inline-block;
-      width: 57%;
+      width: 50%;
       height: 45px;
       box-sizing: border-box;
       img {
@@ -202,15 +255,15 @@
   }
 }
 .munber {
-  float: right;
+  /*float: right;*/
   font-weight: 700;
-  margin-right: 27%;
+  /*margin-right: 27%;*/
 }
 
 .munber2{
-  float: right;
+  /*float: right;*/
   font-weight: 700;
-  margin-right: 0px;
+  /*margin-right: 0px;*/
 }
 .board-one{
   background-color: #f7f0fc;
