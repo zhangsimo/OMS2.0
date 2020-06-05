@@ -154,9 +154,9 @@
           req[this.searchData.partType] = this.searchData.partName;
         }
         if(this.company){
-          req['compcodes'] = this.company;
+          req['compcodes'] = [this.company];
         }
-        req.page = this.page.num - 1;
+        req.page = this.page.num;
         req.pageSize = this.page.size;
         this.loading = true;
         let rep = await getStock(req,params);
