@@ -206,6 +206,7 @@ export const mixSelectPartCom = {
     //初始化数据
     getList() {
       this.loading = true;
+      let params = {};
       let req = {};
       if (this.selectTreeItem.id) {
         req.typeId = this.selectTreeItem.id;
@@ -223,9 +224,9 @@ export const mixSelectPartCom = {
         // }
         req.adapterCarModels = [this.partName];
       }
-      req.page = this.page.num;
-      req.size = this.page.size;
-      getwbParts({}, req).then(res => {
+      params.page = this.page.num - 1;
+      params.size = this.page.size;
+      getwbParts(params, req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;

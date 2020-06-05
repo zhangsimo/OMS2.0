@@ -285,7 +285,6 @@
         ], //门店列表
         subjectCode:'1243469693836918001',//科目id
         subJectList:[
-          {id:'1243469693836918001' ,titleName:'库存现金'}
         ],//科目列表
         company: "", //往来单位
         companyId: "", //往来单位id

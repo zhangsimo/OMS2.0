@@ -40,7 +40,7 @@
         </Col>
         <Col span="12">
           <FormItem label="对应科目" prop="mateAccountCode">
-            <Select v-model="formCustom.mateAccountCode" style="width:150px">
+            <Select v-model="formCustom.mateAccountCode" style="width:150px" disabled>
               <Option v-for="item in subJectList" :value="item.id" :key="item.id">{{ item.titleName }}</Option>
             </Select>
           </FormItem>
@@ -182,14 +182,14 @@
     mounted(){
       this.getAllArea()
       this.getsubjectType()
-      this.getSubject()
       this.getAccount()
       this.getclaimShop()
     },
     methods: {
     open(){
       this.handleReset()
-        this.formCustom = JSON.parse(JSON.stringify(this.list))
+      this.getSubject()
+      this.formCustom = JSON.parse(JSON.stringify(this.list))
       this.modalShow = true
       this.getShopList()
     },
