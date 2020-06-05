@@ -169,7 +169,7 @@ export default {
 <style lang="less" scoped>
 .box-left {
   float: left;
-  width: calc(~"100% - 420px");
+  width: 70%;
   .quick-navigation {
     overflow: hidden;
   }
@@ -223,7 +223,7 @@ export default {
 }
 .box-right {
   float: right;
-  width: 400px;
+  width: 29%;
   height: 85vh;
   background: #ffffff;
   box-shadow: 0px 2px 6px 0px rgba(229, 229, 229, 0.8);

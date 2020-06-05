@@ -236,7 +236,7 @@ export const mixPartInfo = {
         req.nameEn = selectBrandData[0].nameEn
       }
       req.page = 1;
-      req.pageSize = 200;
+      req.pageSize = 1000;
       getCarModel(req).then(res => {
         let arrData = res.data.content || {}
         let arr2 = []
@@ -248,7 +248,7 @@ export const mixPartInfo = {
     },
     //获取品牌品质
     getQuiltyAndBrand() {
-      getAllBrand({ page: 1, pageSize: 200 }).then(res => {
+      getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
         if (res.code == 0) {
           this.qualityArr = res.data.content || {};
           //根据品质获取品牌
