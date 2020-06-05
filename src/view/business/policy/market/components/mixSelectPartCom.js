@@ -238,8 +238,8 @@ export const mixSelectPartCom  = {
         // }
         req.adapterCarModels = [this.partName];
       }
-      req.page = this.page.num;
-      req.size = this.page.size;
+      params.page = this.page.num - 1;
+      params.size = this.page.size;
       if(this.keyType!=1){
         req.guestId=this.guestId;
         req.storeId=this.storeId;

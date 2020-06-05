@@ -9,7 +9,7 @@
 
 // 生产
 // export default 'pro'
-let output = 'test' //本地修改环境
+let output = 'dev' //本地修改环境
 const origin = location.hostname
 if (origin.includes('devoms2')){
   output = 'dev'
