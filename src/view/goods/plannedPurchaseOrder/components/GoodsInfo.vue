@@ -157,6 +157,7 @@
                 <Option
                   v-for="item in logisArr"
                   :value="item.id"
+                  :disabled="item.isDisabled===1"
                   :key="item.id"
                   >{{ item.fullName }}</Option
                 >

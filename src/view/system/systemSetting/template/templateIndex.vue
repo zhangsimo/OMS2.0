@@ -35,7 +35,7 @@
                 <!--<Button icon="ios-cloud-upload-outline">上传模板文件</Button>-->
               <!--</Upload>-->
             </div>
-            <Table size="small" ref="hsOrder" height="389" :loading="loading" border :stripe="true" :columns="columnsPart" :data="fileData"></Table>
+            <Table size="small" ref="hsOrder" height="389" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="fileData"></Table>
           </TabPane>
         </Tabs>
         <div ref="planPage">
@@ -162,6 +162,81 @@
               },'修改')
             }
           },
+          {
+            title: "ID",
+            key: "id",
+            minWidth: 150
+          },
+          {
+            title: "文件名称",
+            key: "fileOriginName",
+            minWidth: 120
+          },
+          {
+            title: "文件类型",
+            key: "remark",
+            minWidth: 120,
+            render:(h,p)=>{
+              let objData = p.row.fileType?JSON.parse(p.row.fileType):{};
+              return h('span',objData.name)
+            }
+          },
+          {
+            title: "相同文件ID",
+            key: "eqMD5Id",
+            minWidth: 120
+          },
+          {
+            title: "MD5",
+            key: "fileMD5",
+            minWidth: 120
+          },
+          {
+            title: "使用次数",
+            key: "reqCount",
+            minWidth: 120
+          },
+          {
+            title: "文件路径",
+            key: "filePath",
+            minWidth: 120
+          },
+          {
+            title: "创建时间",
+            key: "createTime",
+            minWidth: 60
+          },
+          {
+            title: "更新时间",
+            key: "updateTime",
+            minWidth: 120
+          },
+        ],
+        columnsPart2: [
+          {
+            title: "序号",
+            width: 50,
+            type: "index"
+          },
+          // {
+          //   title: "操作",
+          //   key: "id",
+          //   minWidth: 60,
+          //   render:(h,p)=>{
+          //     let _this = this;
+          //     return h('span',{
+          //       class:'blue',
+          //       style:{
+          //         "cursor":"pointer"
+          //       },
+          //       on:{
+          //         click:()=>{
+          //           _this.updateTemplate(p.row)
+          //         }
+          //       }
+          //     },'修改')
+          //   }
+          // },
           {
             title: "ID",
             key: "id",
