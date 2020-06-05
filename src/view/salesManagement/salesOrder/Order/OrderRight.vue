@@ -560,6 +560,7 @@ export default {
       data.id = this.leftOneOrder?this.leftOneOrder.id:''
       let res = await getLimit(data);
       if (res.code === 0) {
+        console.log(res.data)
         this.limitList = res.data;
       }
     },
