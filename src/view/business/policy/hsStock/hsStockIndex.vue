@@ -55,10 +55,10 @@
             "name":"配件编码",
             "value":"partCode"
           },
-          // {
-          //   "name":"品牌名称",
-          //   "value":"brandName"
-          // },
+          {
+            "name":"品牌名称",
+            "value":"brandName"
+          },
           {
             "name":"配件ID",
             "value":"partID"
@@ -92,11 +92,11 @@
             key: "partName",
             minWidth: 120
           },
-          // {
-          //   title: "品牌名称",
-          //   key: "brandName",
-          //   minWidth: 120
-          // },
+          {
+            title: "品牌名称",
+            key: "brandName",
+            minWidth: 120
+          },
           {
             title: "入库数量",
             key: "amount",
