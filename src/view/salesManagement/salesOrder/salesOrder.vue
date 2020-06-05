@@ -40,7 +40,13 @@
 <style lang="less">
   .main-wrap{
     .ivu-tabs-content{
-      height: 90%;
+      height: 94%;
+    }
+    .ivu-tabs-bar{
+      border:none;
+    }
+    .ivu-tabs-nav-container{
+      display: none;
     }
   }
 </style>
