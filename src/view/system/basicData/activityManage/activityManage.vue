@@ -1046,7 +1046,10 @@ export default {
     // 删除活动配件的一项
     deleteDate5() {
       if(!this.actIfoTableData.activityId || this.actIfoTableData.activityId == "") {
-        return this.$message.error("请选择一条记录");
+        setTimeout(()=>{
+          this.$Message.error("请选择一条记录");
+        },0)
+        return 
       }
       let idx = this.data5.findIndex(
         item => item.activityId === this.actIfoTableData.activityId
