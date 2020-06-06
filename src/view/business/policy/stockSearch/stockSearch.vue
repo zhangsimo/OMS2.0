@@ -753,43 +753,79 @@ export default {
       this.contentTwo.page.num = 1;
       this.getLotStocks();
     },
+
+    //汇总库存请求当前全数据
+    async getStockAll(){
+      let data = {};
+      data = this.searchForm;
+      data.page = 0;
+      data.size = this.contentOne.page.total;
+      data.noStock = data.noStock ? 1 : 0;
+      let res = await getAllStock(data);
+      if (res.code == 0) {
+        let arrData = res.data.content||[];
+
+        arrData.map((item,index) => {
+          item.index = index+1
+          item.outableQty = item.sellSign ? 0 : item.outableQty
+          item.costPrice = item.costPrice.toFixed(2);
+          item.stockAmt = item.stockAmt.toFixed(2);
+        })
+        if (arrData.length > 0) {
+          this.$refs.table1.exportCsv({
+            filename: "汇总库存",
+            original:false,
+            columns:this.columns1,
+            data:arrData
+          });
+        }
+      }
+    },
+      
+
     //汇总导出
     exportTheSummary() {
-      this.contentOne.dataOne.map((item,index) => {
-        item.index = index+1
-        item.outableQty = item.sellSign ? 0 : item.outableQty
-        item.costPrice = item.costPrice.toFixed(2);
-        item.stockAmt = item.stockAmt.toFixed(2);
-      })
-      if (this.contentOne.dataOne.length > 0) {
-        this.$refs.table1.exportCsv({
-          filename: "汇总库存",
-          original:false,
-          columns:this.columns1,
-          data:this.contentOne.dataOne
+      this.getStockAll();      
+    },
+
+
+    //批次库存请求当前全数据
+    async getBatchStockAll(){
+      let data = {};
+      data = this.searchForm1;
+      data.page = 0;
+      data.size = this.contentTwo.page.total;
+      data.noStock = data.noStock ? 1 : 0;
+      // console.log('数据',data)
+      let res = await getLotStock(data);
+      if (res.code == 0) {
+        let arrData2 = res.data.content||[];
+        arrData2.map((item,index) => {
+          item.index = index + 1
+          item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
+        if (arrData2.length > 0) {
+          let arrData = arrData2.map(item => {
+            let objData = {...item}
+            objData.enterPrice = objData.enterPrice.toFixed(2);
+            objData.enterAmt = objData.enterAmt.toFixed(2);
+            objData.noTaxPrice = objData.noTaxPrice.toFixed(2);
+            objData.noTaxAmt = objData.noTaxAmt.toFixed(2);
+            objData.isUnsalable = objData.isUnsalable === 0 ? "否" : "是";
+            return objData
+          })
+          this.$refs.table2.exportCsv({
+            filename: "批次库存",
+            original:false,
+            columns:this.columns2,
+            data:arrData
+          });
+        }
       }
     },
     //导出批次
     exportBatch() {
-      if (this.contentTwo.dataTwo.length > 0) {
-        let arrData = this.contentTwo.dataTwo.map(item => {
-          let objData = {...item}
-          objData.enterPrice = objData.enterPrice.toFixed(2);
-          objData.enterAmt = objData.enterAmt.toFixed(2);
-          objData.noTaxPrice = objData.noTaxPrice.toFixed(2);
-          objData.noTaxAmt = objData.noTaxAmt.toFixed(2);
-          objData.isUnsalable = objData.isUnsalable === 0 ? "否" : "是";
-          return objData
-        })
-        console.log(arrData)
-        this.$refs.table2.exportCsv({
-          filename: "批次库存",
-          original:false,
-          columns:this.columns2,
-          data:arrData
-        });
-      }
+      this.getBatchStockAll();
     }
   }
 };

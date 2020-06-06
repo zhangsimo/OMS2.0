@@ -816,18 +816,26 @@ export default class PlannedPurchaseOrder extends Vue {
       this.formPlanmain.settleTypeId =  row.settTypeId || ''
       //票据类型
       this.formPlanmain.billTypeId = row.billTypeId || ''
+
+      //清空数据
+      this.tableData = [];
+      this.formPlanmain.code = row.serviceId;
+      this.isDirectCompanyId = false;
+      this.formPlanmain.directCompanyId = null;
+      
     }
   }
 
   // 采购计划单据
   private getPlanOrder(row: any) {
-    console.log(row)
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
     if(row.directCompanyId){
-      this.isDirectCompanyId = true
-      this.formPlanmain.directCompanyId = row.directCompanyId
+      this.isDirectCompanyId = true      
+    }else{
+      this.isDirectCompanyId = false;
     }
+    this.formPlanmain.directCompanyId = row.directCompanyId;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
