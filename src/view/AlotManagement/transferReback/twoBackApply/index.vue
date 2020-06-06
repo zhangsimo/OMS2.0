@@ -1178,6 +1178,7 @@ export default {
       for (var i = 0; i < list.length; i++) {
         list[i].oid = list[i].id;
         list[i].id = "";
+        list[i].applyQty = list[i].hasInQty;
         this.Leftcurrentrow.detailVOS.push(list[i]);
       }
       // var result = [];
