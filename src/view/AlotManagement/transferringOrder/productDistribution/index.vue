@@ -231,7 +231,7 @@ export default {
   },
   created() {
     this.searchPartBrand();
-    this.getList();
+    // this.getList();
     setTimeout(() => {
       this.search(this.form);
     }, 1000);

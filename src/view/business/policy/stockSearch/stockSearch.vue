@@ -18,17 +18,7 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex">
           <div class="wlf" style="line-height: 54px">
-            <!--<Input v-model="searchForm.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input v-model="searchForm.partName" placeholder="配件编码/名称" class="w200 mr10"></Input>
-            <!--              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌" filterable>-->
-            <!--                &lt;!&ndash; <Option value="9999" v-for="item in partBrandList">品牌</Option> &ndash;&gt;-->
-            <!--                <Option-->
-            <!--                  v-for="item in partBrandList"-->
-            <!--                  :value="item.partBrandValue"-->
-            <!--                  :key="item.partBrandValue"-->
-            <!--                >{{ item.partBrandName}}-->
-            <!--                </Option>-->
-            <!--              </Select>-->
             <Select
               filterable
               clearable
@@ -90,7 +80,7 @@
               <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w200 mr10" filterable @on-change="changecompanyFun2" v-model="searchForm1.old" placeholder="公司">
+            <Select v-if="showSearch == true" class="w200 mr10" filterable @on-change="changecompanyFun2" v-model="searchForm1.old" placeholder="公司">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -183,7 +173,8 @@ export default {
   components: { EnterStock },
   data() {
     return {
-      shopkeeper: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopkeeper,
+      shopkeeper: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopkeeper, // 0 总部
+      shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopId,
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
@@ -212,183 +203,12 @@ export default {
       storeName: "999",
       // tab索引
       tabIndex: 0,
+      showSearch: true,
       selectTableData: "",
       //查看框
       look: false,
       // 汇总库存列表
-      columns1: [
-        {
-          title: "序号",
-          type: "index",
-          key:"index",
-          align: "center",
-          minWidth: 40,
-          render: (h, params) => {
-            return h(
-              "span",
-              params._index +
-                (this.contentOne.page.num - 1) * this.contentOne.page.size +
-                1
-            );
-          }
-        },
-        {
-          title: "操作",
-          align: "center",
-          minWidth: 80,
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.showList(params.row);
-                    }
-                  }
-                },
-                "查看"
-              )
-            ]);
-          }
-        },
-        {
-          title: "配件编码",
-          align: "center",
-          key: "partCode",
-          minWidth: 170
-        },
-        {
-          title: "配件名称",
-          align: "center",
-          key: "partName",
-          minWidth: 120
-        },
-        {
-          title: "OE码",
-          align: "center",
-          key: "oemCode",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          align: "center",
-          key: "partBrand",
-          minWidth: 120
-        },
-        {
-          title: "品牌车型",
-          align: "center",
-          key: "carModelName",
-          minWidth: 120
-        },
-        {
-          title: "单位",
-          align: "center",
-          key: "unit",
-          minWidth: 120
-        },
-        {
-          title: "库存数量",
-          align: "center",
-          key: "stockQty",
-          minWidth: 120
-        },
-        {
-          title: "可售数量",
-          align: "center",
-          key: 'outableQty',
-          minWidth: 80,
-          render: (h, params) => {
-            let tex = params.row.sellSign ? 0 : params.row.outableQty;
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "仓库",
-          align: "center",
-          key: "storeName",
-          minWidth: 120
-        },
-        {
-          title: "仓位",
-          align: "center",
-          key: "shelf",
-          minWidth: 120
-        },
-        {
-          title: "库存单价",
-          align: "center",
-          key: 'costPrice',
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.costPrice.toFixed(2);
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "库存金额",
-          align: "center",
-          key: 'stockAmt',
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.stockAmt.toFixed(2);
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "规格",
-          align: "center",
-          key: "spec",
-          minWidth: 120
-        },
-        {
-          title: "最近入库日期",
-          align: "center",
-          key: "lastEnterDate",
-          minWidth: 120
-        },
-        {
-          title: "最近出库日期",
-          align: "center",
-          key: "lastOutDate",
-          minWidth: 120
-        },
-        {
-          title: "库存上限",
-          align: "center",
-          key: "upLimit",
-          minWidth: 120
-        },
-        {
-          title: "库存下限",
-          align: "center",
-          key: "downLimitWinter",
-          minWidth: 120
-        },
-        {
-          title: "采购在途库存",
-          align: "center",
-          key: "pchRoadQty",
-          minWidth: 120
-        },
-        {
-          title: "调拨在途库存",
-          align: "center",
-          key: "attotRoadQty",
-          minWidth: 120
-        },
-        {
-          title: "合计在途库存",
-          align: "center",
-          key: "onRoadQty",
-          minWidth: 120
-        }
-      ],
+      columns1: [],
       //批次库存列表
       columns2: [
         {
@@ -580,20 +400,194 @@ export default {
       Branchstore: []
     };
   },
-  created() {
+  mounted() {
     this.getCommpany();
     this.getMasterId();
-    // if (this.shopkeeper != 0) {
-    //   this.columns2.forEach((el, index, arr) => {
-    //     if(el.key === "originGuestName") {
-    //       arr.splice(index, 1)
-    //     }
-    //   })
-    // }
   },
   methods: {
+    getColumns() {
+      let arr = [
+        {
+          title: "序号",
+          type: "index",
+          key:"index",
+          align: "center",
+          minWidth: 40,
+          render: (h, params) => {
+            return h(
+              "span",
+              params._index +
+                (this.contentOne.page.num - 1) * this.contentOne.page.size +
+                1
+            );
+          }
+        },
+        {
+          title: "操作",
+          align: "center",
+          minWidth: 80,
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.showList(params.row);
+                    }
+                  }
+                },
+                "查看"
+              )
+            ]);
+          }
+        },
+        {
+          title: "配件编码",
+          align: "center",
+          key: "partCode",
+          minWidth: 170
+        },
+        {
+          title: "配件名称",
+          align: "center",
+          key: "partName",
+          minWidth: 120
+        },
+        {
+          title: "OE码",
+          align: "center",
+          key: "oemCode",
+          minWidth: 120
+        },
+        {
+          title: "品牌",
+          align: "center",
+          key: "partBrand",
+          minWidth: 120
+        },
+        {
+          title: "品牌车型",
+          align: "center",
+          key: "carModelName",
+          minWidth: 120
+        },
+        {
+          title: "单位",
+          align: "center",
+          key: "unit",
+          minWidth: 120
+        },
+        {
+          title: "库存数量",
+          align: "center",
+          key: "stockQty",
+          minWidth: 120
+        },
+        {
+          title: "可售数量",
+          align: "center",
+          key: 'outableQty',
+          minWidth: 80,
+          render: (h, params) => {
+            let tex = params.row.sellSign ? 0 : params.row.outableQty;
+            return h("span", {}, tex);
+          }
+        },
+        {
+          title: "仓库",
+          align: "center",
+          key: "storeName",
+          minWidth: 120
+        },
+        {
+          title: "仓位",
+          align: "center",
+          key: "shelf",
+          minWidth: 120
+        },
+        {
+          title: "库存单价",
+          align: "center",
+          key: 'costPrice',
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.costPrice.toFixed(2);
+            return h("span", {}, tex);
+          }
+        },
+        {
+          title: "库存金额",
+          align: "center",
+          key: 'stockAmt',
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.stockAmt.toFixed(2);
+            return h("span", {}, tex);
+          }
+        },
+        {
+          title: "规格",
+          align: "center",
+          key: "spec",
+          minWidth: 120
+        },
+        {
+          title: "最近入库日期",
+          align: "center",
+          key: "lastEnterDate",
+          minWidth: 120
+        },
+        {
+          title: "最近出库日期",
+          align: "center",
+          key: "lastOutDate",
+          minWidth: 120
+        },
+        {
+          title: "库存上限",
+          align: "center",
+          key: "upLimit",
+          minWidth: 120
+        },
+        {
+          title: "库存下限",
+          align: "center",
+          key: "downLimitWinter",
+          minWidth: 120
+        },
+        {
+          title: "采购在途库存",
+          align: "center",
+          key: "pchRoadQty",
+          minWidth: 120
+        },
+        {
+          title: "调拨在途库存",
+          align: "center",
+          key: "attotRoadQty",
+          minWidth: 120
+        },
+        {
+          title: "合计在途库存",
+          align: "center",
+          key: "onRoadQty",
+          minWidth: 120
+        }
+      ];
+      if(this.shopkeeper != 0 && this.shopId != this.searchForm.old) {
+        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+      } else {
+        this.columns1 = arr;
+      }
+    },
     changecompanyFun(){
       this.searchForm.storeId = "";
+      this.getColumns();
     },
     changecompanyFun2(){
       this.searchForm1.storeId = "";
@@ -625,6 +619,7 @@ export default {
       this.getStoreHoure();
       this.getBand(); //获取品牌
       this.getLotStocks(); //获取批次
+      this.getColumns();
     },
     //搜索
     serch() {
@@ -683,6 +678,7 @@ export default {
     // tab切换
     setTab(index) {
       this.tabIndex = index;
+      this.showSearch = this.shopkeeper == 0 || index == 0;
     },
     // 修改每页显示条数-客户信息
     changeSizeCus(val) {
