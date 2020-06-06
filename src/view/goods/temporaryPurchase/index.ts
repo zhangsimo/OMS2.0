@@ -726,7 +726,7 @@ export default class InterPurchase extends Vue {
       item.orderPrice = item.recentPrice
     })
     this.tableData = this.tableData.concat(arrData);
-    this.tableData = tools.arrRemoval(this.tableData, 'partCode');
+    // this.tableData = tools.arrRemoval(this.tableData, 'partCode');
   }
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
   private showModel(name) {
