@@ -125,7 +125,6 @@ export default {
       this.$nextTick(() => {
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
-        console.log(planFormH)
         //获取左侧侧表格高度
         this.$refs.OrderLeft.leftTableHeight = wrapH - 130;
         this.$refs.right.rightTableHeight = wrapH - planFormH  - 120;
@@ -156,10 +155,11 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
+      console.log(data)
       this.isWms = false;
       this.backShow = false
       this.orderlistType = data.billStatusId;
-      if (data.billStatusId.value == 5 && data.isWms == 1){ this.backShow = true}
+      if (data.billStatusId.value == 1 && data.isWms == 1){ this.backShow = true}
       if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
         this.isWms = true;
       }
