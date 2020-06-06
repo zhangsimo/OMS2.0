@@ -305,7 +305,7 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['trueOutQty', 'orderPrice', 'trueOutAmt'].includes(column.property)) {
+            if (['sellQty', 'sellPrice', 'sellAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
             if (columnIndex === 7) {

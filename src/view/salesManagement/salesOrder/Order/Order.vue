@@ -32,7 +32,7 @@
       <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0"  v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button class="mr10" @click="setBackOrder" :loading="backloading" :disabled="orderlistType.value != 1" v-has="'BackOrder'">
+      <Button class="mr10" @click="setBackOrder" :loading="backloading" :disabled="orderlistType.value != 1 || backShow" v-has="'BackOrder'">
         <i class="iconfont mr5 iconziyuan14"></i> 返单
       </Button>
       <Button class="mr10" @click="setCancellation" :disabled="orderlistType.value != 0" v-has="'Cancellation'">
@@ -113,7 +113,8 @@ export default {
       }, //默认状态
       changeLeft: "" ,//发生改变数据调动左侧list
       ispart:true,
-      isWms:false
+      isWms:false,
+      backShow:false,//作废判断是否wms仓库
     };
   },
   mounted(){
@@ -156,7 +157,9 @@ export default {
     //左侧点击数据
     getOrder(data) {
       this.isWms = false;
+      this.backShow = false
       this.orderlistType = data.billStatusId;
+      if (data.billStatusId.value == 5 && data.isWms == 1){ this.backShow = true}
       if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
         this.isWms = true;
       }
