@@ -140,7 +140,7 @@ export default {
   methods: {
     openModel() {
       this.reset();
-      this.getList()
+      this.getList(true)
       this.getAdress();
       this.getClientTypeList();
       this.addressShow = true;
@@ -149,13 +149,11 @@ export default {
       this.clientName = "";
       this.clientPhone = "";
       this.clientCode = "";
-      if(!(this.tableData.length > 0 && this.page1.num == 1)) {
-        this.page1 = {
-          num: 1,
-          total: 0,
-          size: 20,
-          sizeOpts: [20, 40, 60, 80, 100]
-        }
+      this.page1 = {
+        num: 1,
+        total: 0,
+        size: 20,
+        sizeOpts: [20, 40, 60, 80, 100]
       }
     },
     //获取地级市
@@ -213,9 +211,9 @@ export default {
     },
     // 获取客户
     async getList(isget = false) {
-      if(this.tableData.length > 0 && this.page1.num == 1 && !isget) {
-        return;
-      }
+      // if(this.tableData.length > 0 && this.page1.num == 1 && !isget) {
+      //   return;
+      // }
       let data = {};
       if(this.clickCity.grade){
         data.grade = this.clickCity.grade;
