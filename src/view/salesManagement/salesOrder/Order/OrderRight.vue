@@ -958,10 +958,11 @@ export default {
     },
     //出库
     stockOut() {
-        let str = '是否确定出库';
+      let str = '是否确定出库';
         if(this.formPlan.orderAmt*1==0){
             str='存在配件单价为0，是否确定出库';
         }
+      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
       this.$Modal.confirm({
             title: str,
             onOk: async () => {

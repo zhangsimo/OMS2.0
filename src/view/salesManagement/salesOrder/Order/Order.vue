@@ -170,10 +170,10 @@ export default {
     },
     //出库
     setStockOut() {
-      let res = this.$refs.right.stockOut();
-      if(res.code===0){
-        this.$message.success('出库成功')
-      }
+       this.$refs.right.stockOut();
+      // if(res.code===0){
+      //   this.$message.success('出库成功')
+      // }
     },
     //提交
     sumbit() {
