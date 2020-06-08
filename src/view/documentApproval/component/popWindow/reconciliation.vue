@@ -529,8 +529,8 @@ export default {
 
     // 保存接口
    async getPreservation(num) {
-      console.log(this.infoBase , 7789)
-     console.log(this.list ,123)
+      // console.log(this.infoBase , 7789)
+     // console.log(this.list ,123)
       // if (this.totalvalue === "0") {
       //   if (!this.collectionAccountName)
       //     return this.$message.error("收款户名不能为空");
@@ -572,6 +572,7 @@ export default {
         return "";
       }
      this.infoBase.buttonStatus = 1
+     this.infoBase.commitType = 1
      this.list.four = [this.infoBase]
      if(num ==0) {
        let res = await CheckForSave(this.list, this.modelType)
