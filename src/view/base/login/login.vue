@@ -32,7 +32,9 @@ export default {
                 location.href = uri;
               }
             }
-          );
+          ).catch(err => {
+            errCallback && errCallback();
+          });
           break;
           // case 'tax':
         case "oms":
