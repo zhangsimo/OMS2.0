@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modelShow" title="对账单申请" width="1200px">
+  <Modal v-model="modelShow" title="对账单申请" width="1200px" @on-visible-change="hander">
     <div>
       <div class="mb10">
         <span class="mr5">申请单号：</span>
@@ -47,7 +47,8 @@ export default {
         orgName: "",
         applyTypeName: "",
         applyTime: "",
-        paymentOrgName: ""
+        paymentOrgName: "",
+        applyNo:''
       }, //所有数据对象
       modelShow: false,
       allList:{},//获取返回所有数据
@@ -56,14 +57,14 @@ export default {
   methods: {
     // 对账单弹框出现加载数据
     async hander(type) {
-      if (type ) {
+      if (type) {
           let data ={};
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data);
           if(res.code == 0){
-            // console.log(res , 99999)
             this.allList = res.data
-            this.formInline.applyNo = res.data.one[0].accountNo;
+            this.$set( this.formInline , 'applyNo' , res.data.one[0].accountNo )
+            // this.formInline.applyNo = res.data.one[0].accountNo;
           }
 
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
