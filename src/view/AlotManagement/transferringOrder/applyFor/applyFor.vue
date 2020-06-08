@@ -507,6 +507,7 @@
                     data.orgid = this.rowOrgId
                     // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                     data.guestId =  this.guestidId
+                    data.guestOrgid = this.formPlan.guestOrgid
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName
@@ -708,6 +709,8 @@
         getSupplierName(a){
           // this.isInternalId = a.isInternalId
           // this.formPlan.guestName = a.id
+          console.log(a);
+          this.formPlan.guestOrgid = a.orgid;
           this.formPlan.guestName = a.fullName
           this.guestidId = a.id
           this.isInternalId = a.isInternalId
@@ -908,6 +911,7 @@
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     data.guestId = this.guestidId
+                    data.guestOrgid = this.formPlan.guestOrgid
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     data.orderDate = tools.transTime(this.formPlan.orderDate)
