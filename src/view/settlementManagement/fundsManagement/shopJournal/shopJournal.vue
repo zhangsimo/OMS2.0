@@ -80,7 +80,7 @@
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation" v-has="'revoke'">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation" v-has="'revoke'" :disabled="oneList.collateState == 1">
             <span>撤销分配</span>
           </button>
         </div>
@@ -449,7 +449,6 @@
       //点击获取表格数据
       getOneList(val){
         this.oneList = val.row
-        console.log(this.oneList)
       },
 
 

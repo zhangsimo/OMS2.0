@@ -121,7 +121,7 @@
             label:"OMS盘点",
           },
           {
-            value:2,
+            value:1,
             label:"WMS盘点",
           },
           {

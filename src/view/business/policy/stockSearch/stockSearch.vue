@@ -173,7 +173,7 @@ export default {
   components: { EnterStock },
   data() {
     return {
-      shopkeeper: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopkeeper, // 0 总部
+      shopkeeper: 0, // 1 总部
       shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopId,
       // 品牌选项
       partBrandList: [],
@@ -579,7 +579,7 @@ export default {
           minWidth: 120
         }
       ];
-      if(this.shopkeeper != 0 && this.shopId != this.searchForm.old) {
+      if(this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
         this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
       } else {
         this.columns1 = arr;
@@ -637,6 +637,7 @@ export default {
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
         this.contentOne.page.total = res.data.totalElements;
+        this.shopkeeper = res.data.content[0].isMaster;
       }
     },
     //汇总分页
@@ -678,7 +679,7 @@ export default {
     // tab切换
     setTab(index) {
       this.tabIndex = index;
-      this.showSearch = this.shopkeeper == 0 || index == 0;
+      this.showSearch = this.shopkeeper == 1 || index == 0;
     },
     // 修改每页显示条数-客户信息
     changeSizeCus(val) {

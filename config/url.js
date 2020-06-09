@@ -3,7 +3,7 @@ import env from "./env";
 const dev = {
   omsApi: "http://192.168.30.221:9240", //徐林烽
   wmsApi: "http://192.168.30.221:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
+  omsOrder: "http://192.168.30.221:9210", // 徐林烽
   omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.221:9200",
   // omsOrder:'http://192.168.30.11:9210', //陈舒
@@ -49,6 +49,7 @@ const test = {
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  // omsOrder: "http://192.168.30.21:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",

@@ -481,7 +481,7 @@ export const mixGoodsData = {
         details: []
       };
       this.selectPlanOrderItem = row;
-      this.tbdata.push(row);
+      this.tbdata.unshift(row);
       this.delArr = [];
     },
 

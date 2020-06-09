@@ -23,7 +23,7 @@
                       v-for="item in qualityArr"
                       :value="item.qualityCode"
                       :key="item.qualityCode"
-                    >{{item.quality}}</Option>
+                    >{{item.name}}</Option>
                   </Select>
                 </FormItem>
               </Col>
