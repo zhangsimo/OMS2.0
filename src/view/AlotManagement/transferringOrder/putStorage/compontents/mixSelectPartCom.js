@@ -233,7 +233,7 @@ export const mixSelectPartCom  = {
     //获取配件品牌
     getPartBrandAll(){
       getAllBrand({page: 1,pageSize: 1000}).then(res => {
-        let filterData = res.data.content.filter(item => item.quality=='品牌件')
+        let filterData = res.data.content.filter(item => item.qualityCode=='品牌件')
         if(filterData.length>0){
           if(filterData[0].children&&filterData[0].children.length>0){
             filterData[0].children.map(item => {
