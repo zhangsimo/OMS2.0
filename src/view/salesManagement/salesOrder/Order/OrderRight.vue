@@ -964,8 +964,7 @@ export default {
         if(this.formPlan.orderAmt*1==0){
             str='存在配件单价为0，是否确定出库';
         }
-        let date = this.formPlan.planSendDate.split(' ')[0]
-      this.formPlan.planSendDate = new Date(date)
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$Modal.confirm({
             title: str,
             onOk:  () => {
@@ -1044,14 +1043,14 @@ export default {
                       this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
                         this.$parent.$parent.orderlistType.value = 1;
-                      this.limitList = {};
-                      this.$store.commit("setleftList", res);
+                        this.limitList = {};
+                        this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();
                     }
                   },
                   onCancel: () => {}
                 });
-              }, 500);
+              }, 100);
             } else {
               let res = await getSubmitList(data);
               if (res.code === 0) {
