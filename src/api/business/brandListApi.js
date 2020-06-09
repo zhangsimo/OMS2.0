@@ -103,7 +103,7 @@ export function selectCompany(params) {
   // 获取品牌信息
   export function getBrandIfo(data = { pageSize: 1000, page: 0 }) {
     return axios.request({
-      url: `${api.wmsApi}/wbPub/getPartBrand`,
+      url: `${api.omsOrder}/stPartBrand/getPartBrand`,
       method: "post",
       data
     });
@@ -122,7 +122,7 @@ export function selectCompany(params) {
   //获取品牌
 export function allBrand(data) {
   return axios.request({
-    url: `${api.wmsApi}/wbPub/getPartBrand`,
+    url: `${api.omsOrder}/stPartBrand/getPartBrand`,
     method: "post",
     data
   });

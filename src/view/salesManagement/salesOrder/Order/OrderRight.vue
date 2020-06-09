@@ -1050,7 +1050,7 @@ export default {
                   },
                   onCancel: () => {}
                 });
-              }, 100);
+              }, 500);
             } else {
               let res = await getSubmitList(data);
               if (res.code === 0) {

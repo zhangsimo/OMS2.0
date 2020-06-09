@@ -45,7 +45,7 @@ export function getstate () {
 //获取品牌
 export function getBrandList (data) {
   return axios.request({
-    url: `${api.omsOrder}/wbPub/getPartBrand`,
+    url: `${api.omsOrder}/stPartBrand/getPartBrand`,
     method: 'post',
     data
   })
