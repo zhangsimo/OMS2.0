@@ -419,7 +419,7 @@ export default class ProductLA extends Vue {
                 partCode: el.partCode,
                 empId: this.employeeId,
                 partBrandCode: el.partBrandCode,
-                partId: el.partId,
+                partId: el.code,
                 partInnerId: el.code,
                 partBrand: el.partBrand,
                 empName: this.loginName,
