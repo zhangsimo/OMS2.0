@@ -729,14 +729,17 @@ export default class Accessories extends Vue {
     let res = await api.getWbPartBrand();
     if (res.code == 0) {
       for (let quality of res.data.content) {
-        let qua = {
-          label: quality.quality,
-          value: quality.qualityCode,
-          children: quality.children
-        };
-        this.qualitites.push(qua);
-        if (quality.children.length <= 0) {
-          break;
+        if(["000070", "000071"].includes(quality.qualityCode)) {
+          let name = quality.qualityCode === "000070" ? "原厂件" : "品牌件";
+          let qua = {
+            label: name,
+            value: quality.qualityCode,
+            children: quality.children
+          };
+          this.qualitites.push(qua);
+          if (quality.children.length <= 0) {
+            break;
+          }
         }
       }
     }

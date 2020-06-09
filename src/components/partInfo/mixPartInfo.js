@@ -250,7 +250,17 @@ export const mixPartInfo = {
     getQuiltyAndBrand() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
         if (res.code == 0) {
-          this.qualityArr = res.data.content || {};
+          this.qualityArr = res.data.content
+          .filter( el => (el.qualityCode === "000070" || el.qualityCode === "000071"))
+          .map(el => {
+            if(el.qualityCode === "000070") {
+              el.name = "原厂件"
+            }
+            if(el.qualityCode === "000071") {
+              el.name = "品牌件"
+            }
+            return el;
+          })
           //根据品质获取品牌
           if (this.formValidate.qualityTypeId) {
             this.qualityGetBrand()

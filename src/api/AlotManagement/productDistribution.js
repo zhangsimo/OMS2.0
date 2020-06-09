@@ -10,7 +10,7 @@ export function getcangku() {
 //获取品牌
 export function getPartBrand(data) {
   return axios.request({
-    url: `${api.wmsApi}/wbPub/getPartBrand`,
+    url: `${api.omsOrder}/stPartBrand/getPartBrand`,
     method: 'post',
     data
   });
