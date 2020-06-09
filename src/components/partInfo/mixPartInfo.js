@@ -260,7 +260,7 @@ export const mixPartInfo = {
     },
     //根据品质获取品牌
     qualityGetBrand() {
-      let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
+      let arrData = this.qualityArr.filter(item => item.qualityCodeCode == this.formValidate.qualityTypeId)
       if (arrData.length > 0) {
         this.brandArr = arrData[0].children
         this.getFullName();
@@ -416,7 +416,7 @@ export const mixPartInfo = {
               //品质
               objReq.qualityTypeId = this.formValidate.qualityTypeId
               //品质名称
-              let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
+              let arrData = this.qualityArr.filter(item => item.qualityCodeCode == this.formValidate.qualityTypeId)
               if (arrData.length > 0) {
                 objReq.qualityName = arrData[0].quality
               }
