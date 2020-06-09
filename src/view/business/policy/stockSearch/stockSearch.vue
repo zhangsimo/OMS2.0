@@ -761,12 +761,12 @@ export default {
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content||[];
-
         arrData.map((item,index) => {
           item.index = index+1
           item.outableQty = item.sellSign ? 0 : item.outableQty
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
+          item.partCode =  `\t${item.partCode}`
         })
         if (arrData.length > 0) {
           this.$refs.table1.exportCsv({
@@ -778,11 +778,11 @@ export default {
         }
       }
     },
-      
+
 
     //汇总导出
     exportTheSummary() {
-      this.getStockAll();      
+      this.getStockAll();
     },
 
 
