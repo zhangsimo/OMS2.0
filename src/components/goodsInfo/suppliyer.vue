@@ -36,7 +36,7 @@
 //获取全部配件品牌
 // export function getAllBrand(data) {
 //   return axios.request({
-//     url: `${api.wmsApi}/wbPub/getPartBrand`,
+//     url: `${api.wmsApi}/stPartBrand/getPartBrand`,
 //     method: 'post',
 //     data
 //   })
