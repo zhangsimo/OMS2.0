@@ -100,6 +100,9 @@ class httpRequest {
               if(typeof data.message=='object'){
                 data.message=data.message[0]
               }
+              if (data.message.includes('Error')){
+                data.message = data.message.substring(6)
+              }
               globalVue.$Message.error(data.message)
             }
           }

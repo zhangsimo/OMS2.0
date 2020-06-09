@@ -271,7 +271,6 @@ export default {
                 // this.idValue = res.data[i].id;
               }
             }
-            console.log(res.data)
           }
         })
         .catch(e => {
@@ -362,7 +361,6 @@ export default {
     update() {
       // 更新列表信息
         this.formItem.storeId=this.form.storeId;
-        console.log(this.formItem);
         this.formItem.lockQty=(this.formItem.lockQty*1).toFixed(2)
       genxin(this.formItem)
         .then(res => {

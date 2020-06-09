@@ -49,6 +49,7 @@ const test = {
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  // omsOrder: "http://192.168.30.21:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",

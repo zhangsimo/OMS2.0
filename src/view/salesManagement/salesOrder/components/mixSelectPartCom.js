@@ -221,8 +221,8 @@ export const mixSelectPartCom = {
       selectBrand: "9999",
       partBrandData: [
         {
-          label: "全部",
-          value: "9999"
+          name: "全部",
+          code: "9999"
         }
       ],
       //获取点击的数据
@@ -288,19 +288,22 @@ export const mixSelectPartCom = {
     getPartBrandAll() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
         let arrData = res.data.content || []
-        let filterData = arrData.filter(
-          item => item.quality == "品牌件"
-        );
-        if (filterData.length > 0) {
-          if (filterData[0].children && filterData[0].children.length > 0) {
-            filterData[0].children.map(item => {
-              let objData = {};
-              objData.label = item.name;
-              objData.value = item.code;
-              this.partBrandData.push(objData);
-            });
-          }
-        }
+        // let filterData = arrData.filter(
+        //   item => item.qualityCode == "000070" || item.qualityCode == "000071"
+        // );
+        // if (filterData.length > 0) {
+        //   if (filterData[0].children && filterData[0].children.length > 0) {
+        //     filterData[0].children.map(item => {
+        //       let objData = {};
+        //       objData.label = item.name;
+        //       objData.value = item.code;
+        //       this.partBrandData.push(objData);
+        //     });
+        //   }
+        // }
+        arrData.map(item => {
+          this.partBrandData.push(...item.children);
+        })
       });
     },
     //获取系统分类

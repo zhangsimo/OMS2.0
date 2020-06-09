@@ -83,8 +83,7 @@ export default class index extends Vue{
       this.role.name = val.row.name
       this.role.displayName = val.row.displayName
       this.role.resIds = val.row.resourceVOSet.map(item => item.id)
-       this.findRootRes()
-
+      this.findRootRes()
       this.getAllStaff()
     // console.log(val.row)
     }
@@ -152,7 +151,7 @@ export default class index extends Vue{
   //确定修改员工
   private changeList(){
     this.page.num = 1
-    this.getLeftList()
+    // this.getLeftList()
   }
 
   //删除员工
