@@ -316,19 +316,8 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
-      let oldArr = [...v,...this.tableData]
+      let oldArr = [...this.tableData, ...v]
       var allArr = [...oldArr];
-      // for (var i = 0; i < oldArr.length; i++) {
-      //   var flag = true;
-      //   for (var j = 0; j < allArr.length; j++) {
-      //     if (oldArr[i].oemCode == allArr[j].oemCode) {
-      //       flag = false;
-      //     }
-      //   }
-      //   if (flag) {
-      //     allArr.push(oldArr[i]);
-      //   }
-      // }
 
       allArr.map(item => {
         item.orderPrice = item.recentPrice||0
@@ -492,7 +481,7 @@ export const mixGoodsData = {
         details: []
       };
       this.selectPlanOrderItem = row;
-      this.tbdata.unshift(row);
+      this.tbdata.push(row);
       this.delArr = [];
     },
 

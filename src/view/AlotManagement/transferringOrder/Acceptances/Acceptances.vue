@@ -324,7 +324,7 @@ export default {
     },
     // 供应商
     supplier() {
-      let params = {};
+      let params = {page: 0, size: 10000};
       findForAllot(params).then(res => {
         if (res.code === 0) {
           this.purchaseNameArr.push(...res.data.content);
