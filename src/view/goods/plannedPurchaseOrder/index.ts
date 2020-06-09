@@ -822,7 +822,6 @@ export default class PlannedPurchaseOrder extends Vue {
       this.formPlanmain.code = row.serviceId;
       this.isDirectCompanyId = false;
       this.formPlanmain.directCompanyId = null;
-      
     }
   }
 
