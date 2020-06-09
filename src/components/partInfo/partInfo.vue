@@ -21,9 +21,9 @@
                   <Select @on-change="qualityGetBrand" v-model="formValidate.qualityTypeId" filterable>
                     <Option
                       v-for="item in qualityArr"
-                      :value="item.qualityCodeCode"
-                      :key="item.qualityCodeCode"
-                    >{{item.qualityCode}}</Option>
+                      :value="item.qualityCode"
+                      :key="item.qualityCode"
+                    >{{item.name}}</Option>
                   </Select>
                 </FormItem>
               </Col>
