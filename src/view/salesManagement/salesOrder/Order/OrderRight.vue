@@ -808,6 +808,8 @@ export default {
     //计划发货日期
     getplanSendDate(data) {
       const orderDate = this.formPlan.planSendDate;
+      console.log(this.formPlan , 111)
+      console.log(data , 222)
       this.options2 = {
         disabledDate(date) {
           return date && orderDate && date.valueOf() < new Date(orderDate);
@@ -962,10 +964,11 @@ export default {
         if(this.formPlan.orderAmt*1==0){
             str='存在配件单价为0，是否确定出库';
         }
-      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+        let date = this.formPlan.planSendDate.split(' ')[0]
+      this.formPlan.planSendDate = new Date(date)
       this.$Modal.confirm({
             title: str,
-            onOk: async () => {
+            onOk:  () => {
                 if (this.door.outStockDoor) {
                     let data = JSON.parse(JSON.stringify(this.formPlan));
                     this.door.outStockDoor = false;

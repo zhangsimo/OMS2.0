@@ -285,7 +285,7 @@ export const mixSelectPartCom = {
       // console.log(this.selectTableItem);
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
-        this.searchPartLayer = false;
+        // this.searchPartLayer = false;
         this.$Message.success("已添加");
       } else {
         this.$Message.error("请选择数据");
