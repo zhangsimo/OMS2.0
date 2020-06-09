@@ -60,7 +60,7 @@ export default class index extends Vue{
     this.getLeftList()
     this.right = this.$store.state.user.userData.shopkeeper
   }
-  //-------------------------------methods-----------------------------------------
+  //-------------------------------methods-----------------------------------
     //获取左侧全部员工
    private async getLeftList(){
       let data:any ={}
@@ -83,8 +83,7 @@ export default class index extends Vue{
       this.role.name = val.row.name
       this.role.displayName = val.row.displayName
       this.role.resIds = val.row.resourceVOSet.map(item => item.id)
-       this.findRootRes()
-
+      this.findRootRes()
       this.getAllStaff()
     // console.log(val.row)
     }
@@ -153,6 +152,7 @@ export default class index extends Vue{
   private changeList(){
     this.page.num = 1
     this.getLeftList()
+    this.findRootRes()
   }
 
   //删除员工
@@ -187,7 +187,11 @@ export default class index extends Vue{
          let tmp = res.data
          this.ch(tmp)
          this.treeList = tmp
-       }else{stop()}
+         console.log("success")
+       }else{
+        console.log("fail")
+         stop()
+       }
 
   }
 
@@ -238,6 +242,7 @@ export default class index extends Vue{
     saveOrder(this.role, this.role.resIds).then(res => {
       if (res.code == 0) {
           this.getLeftList()
+          this.findRootRes()
           this.$Message.success('修改成功')
         stop()
       }
@@ -246,6 +251,7 @@ export default class index extends Vue{
       stop()
     })
   }
+
 
   //点击属性数据获取值
   private selectTree(val){
