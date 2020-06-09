@@ -61,7 +61,7 @@ export function findWbAllByTree(data = { pageSize: 1000, page: 0 }) {
 // wb品质/品牌查询
 export function getWbPartBrand(data = { pageSize: 1000, page: 0 }) {
   return axios.request({
-    url: `${api.wmsApi}/wbPub/getPartBrand`,
+    url: `${api.omsOrder}/stPartBrand/getPartBrand`,
     method: "post",
     data
   });
