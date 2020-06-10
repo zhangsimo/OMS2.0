@@ -114,7 +114,7 @@ export const minxParts = {
             {
               title: "配件品质",
               key: "qualityName",
-              minWidth: 70
+              minWidth: 70,
             },
             {
               title: "品牌车型",

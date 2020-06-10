@@ -425,11 +425,17 @@ export const mixPartInfo = {
               let objReq = {}
               //品质
               objReq.qualityTypeId = this.formValidate.qualityTypeId
-              //品质名称
-              let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
-              if (arrData.length > 0) {
-                objReq.qualityName = arrData[0].quality
+              if(objReq.qualityTypeId === "000070") {
+                objReq.qualityName = "原厂件"
               }
+              if(objReq.qualityTypeId === "000071") {
+                objReq.qualityName = "品牌件"
+              }
+              //品质名称
+              // let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
+              // if (arrData.length > 0) {
+              //   objReq.qualityName = arrData[0].quality
+              // }
               //品牌
               objReq.partBrandId = this.formValidate.partBrandId
               //获取品牌code
