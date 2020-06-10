@@ -637,7 +637,10 @@ export default {
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
         this.contentOne.page.total = res.data.totalElements;
-        this.shopkeeper = res.data.content[0].isMaster;
+        let row = res.data.content[0];
+        if(row != undefined) {
+          this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+        }
       }
     },
     //汇总分页
@@ -761,12 +764,15 @@ export default {
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content||[];
+
         arrData.map((item,index) => {
           item.index = index+1
           item.outableQty = item.sellSign ? 0 : item.outableQty
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
-          item.partCode =  `\t${item.partCode}`
+          item.partCode = item.partCode.toString();
+          item.oemCode = item.oemCode.toString();
+          return item;
         })
         if (arrData.length > 0) {
           this.$refs.table1.exportCsv({
@@ -778,11 +784,11 @@ export default {
         }
       }
     },
-
+      
 
     //汇总导出
     exportTheSummary() {
-      this.getStockAll();
+      this.getStockAll();      
     },
 
 
@@ -809,6 +815,8 @@ export default {
             objData.noTaxPrice = objData.noTaxPrice.toFixed(2);
             objData.noTaxAmt = objData.noTaxAmt.toFixed(2);
             objData.isUnsalable = objData.isUnsalable === 0 ? "否" : "是";
+            objData.partCode = objData.partCode.toString();
+            objData.oemCode = objData.oemCode.toString();
             return objData
           })
           this.$refs.table2.exportCsv({
