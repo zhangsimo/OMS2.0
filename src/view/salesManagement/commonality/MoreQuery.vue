@@ -91,10 +91,10 @@
              if(this.clientList.length > 0) {
                return;
              }
-                let res = await getTreeClient({page:0, size: 10000})
-               if(res.code === 0 ){
-                   this.clientList = res.data.content;
-               }
+              let res = await getTreeClient({page:0, size: 10000})
+              if(res.code === 0 ){
+                this.clientList = res.data.content;
+              }
             },
             //获取品牌
             async getAllBrand(){

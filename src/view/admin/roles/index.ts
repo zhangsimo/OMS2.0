@@ -78,11 +78,10 @@ export default class index extends Vue{
     //点击左侧表格获取当前数据
   private async setOneTable(val){
       this.oneStaff = JSON.parse(JSON.stringify(val.row))
-    // console.log(this.oneStaff , 9999)
       this.role.id = val.row.id
       this.role.name = val.row.name
       this.role.displayName = val.row.displayName
-      this.role.resIds = val.row.resourceVOSet.map(item => item.id)
+      this.role.resIds = val.row.resourceVOSet.map(item => item.id) /*将左侧员工与右侧权限对应 */
       this.findRootRes()
       this.getAllStaff()
     // console.log(val.row)
@@ -151,7 +150,7 @@ export default class index extends Vue{
   //确定修改员工
   private changeList(){
     this.page.num = 1
-    // this.getLeftList()
+    this.getLeftList()
   }
 
   //删除员工
@@ -237,6 +236,7 @@ export default class index extends Vue{
     saveOrder(this.role, this.role.resIds).then(res => {
       if (res.code == 0) {
           this.getLeftList()
+          console.log(this.role)
           this.$Message.success('修改成功')
         stop()
       }
@@ -244,6 +244,7 @@ export default class index extends Vue{
       this.$Message.error('修改失败')
       stop()
     })
+    this.checkChange()
   }
 
   //点击属性数据获取值
