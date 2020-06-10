@@ -402,7 +402,7 @@ import { TOKEN_KEY } from "@/libs/util";
 import barch from "../batch/selectPartCom";
 import baseUrl from "_conf/url";
 import { conversionList } from "@/components/changeWbList/changewblist";
-
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 export default {
   name: "OrderRight",
   inject: ["reload"],
@@ -498,9 +498,9 @@ export default {
         storeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        planSendDate: [
-          { required: true, type: "date", message: " ", trigger: "change" }
-        ],
+        // planSendDate: [
+        //   { required: true, type: "date", message: " ", trigger: "change" }
+        // ],
       },
       //form表单校验
       validRules: {
@@ -712,10 +712,11 @@ export default {
     },
     //下载模板
     down() {
-      location.href =
-        baseUrl.omsOrder +
-        "/sellOrderMain/template?access_token=" +
-        Cookies.get(TOKEN_KEY);
+      // location.href =
+      //   baseUrl.omsOrder +
+      //   "/sellOrderMain/template?access_token=" +
+      //   Cookies.get(TOKEN_KEY);
+      down('2200000000');
     },
     //批量上传失败
     onFormatError(file) {
@@ -901,9 +902,9 @@ export default {
     },
     //保存
     save() {
-      if(!this.formPlan.planSendDate) {
-        return this.$Message.error("*为必填项");
-      }
+      // if(!this.formPlan.planSendDate) {
+      //   return this.$Message.error("*为必填项");
+      // }
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -964,7 +965,7 @@ export default {
         if(this.formPlan.orderAmt*1==0){
             str='存在配件单价为0，是否确定出库';
         }
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      //this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$Modal.confirm({
             title: str,
             onOk:  () => {
@@ -1009,9 +1010,9 @@ export default {
     },
     //提交
     submitList() {
-      if(!this.formPlan.planSendDate) {
-        return this.$Message.error("*为必填项");
-      }
+      // if(!this.formPlan.planSendDate) {
+      //   return this.$Message.error("*为必填项");
+      // }
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
