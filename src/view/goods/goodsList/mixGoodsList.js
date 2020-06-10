@@ -28,6 +28,7 @@ export const mixGoodsData = {
       ArrayList: [],
       upurl: "",
       hideSp: true,
+      loading: false,
       //计划采购信息
       formPlan: {
         createUid: "",
@@ -483,6 +484,7 @@ export const mixGoodsData = {
       this.selectPlanOrderItem = row;
       this.tbdata.unshift(row);
       this.delArr = [];
+      this.isMore = false;
     },
 
     //作废--反作废
@@ -525,6 +527,7 @@ export const mixGoodsData = {
         return
       }
       this.submitloading = true;
+      this.loading = true;
       this.$refs["formPlan"].validate(valid => {
         if (valid) {
           let objReq = {};
@@ -570,7 +573,8 @@ export const mixGoodsData = {
               onOk: () => {
                 if (subType === 1) {
                   saveDraft(objReq).then(res => {
-                    this.submitloading = false
+                    this.submitloading = false;
+                    this.loading = false;
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
@@ -581,10 +585,12 @@ export const mixGoodsData = {
                 } else if (subType === 2) {
                   if (this.tableData.length <= 0) {
                     this.submitloading = false
+                    this.loading = false;
                     return this.$Message.error("请添加配件后再提交");
                   }
                   saveCommit(objReq).then(res => {
-                    this.submitloading = false
+                    this.submitloading = false;
+                    this.loading = false;
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
@@ -627,6 +633,7 @@ export const mixGoodsData = {
           }
         } else {
           this.submitloading = false;
+          this.loading = false;
           this.$Message.error("必填数据未填写");
         }
       });

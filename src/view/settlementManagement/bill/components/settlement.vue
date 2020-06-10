@@ -56,9 +56,11 @@
           border
           resizable
           auto-resize
+          ref="xTable"
           show-footer
           max-height="400"
           align="center"
+          :edit-rules="validRules"
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -153,6 +155,19 @@ export default {
     subjexts
   },
   data() {
+    const rpAmtValid = ({cellValue ,row}) =>{
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          if (Math.abs(cellValue) > Math.abs(row.unAmt)) {
+            reject(new Error('本次核销金额不能大于未收/付金额'))
+          } else {
+            resolve()
+          }
+        } else {
+          resolve()
+        }
+      })
+    }
     return {
       Settlement: false, //弹框显示
       check: 0,
@@ -161,7 +176,13 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
-      obj: {}
+      obj: {},
+      //表格校验
+      validRules:{
+        rpAmt:[
+          { validator: rpAmtValid }
+        ]
+      },
     };
   },
   mounted() {
@@ -300,8 +321,10 @@ export default {
       }
     },
     //保存
-    conserve() {
+   async conserve() {
       if (!Number(this.check)) {
+        const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
+        if (errMap) return this.$Message.error('表格校验错误')
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
@@ -319,7 +342,6 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      console.log(row , 888)
       row.unAmtLeft = this.$utils.subtract(row.unAmt , row.rpAmt).toFixed(2)
       // row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAmt ? row.rpAmt * 1 : 0).toFixed(2) : 0;
       this.$set(this.BusinessType, rowIndex, row);
