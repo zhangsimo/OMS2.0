@@ -51,7 +51,7 @@
 </template>
 
 <script>
-  import {getClient , getBrandList,getSales} from '@/api/salesManagment/salesOrder'
+  import {getClient , getBrandList,getSales, getTreeClient} from '@/api/salesManagment/salesOrder'
     export default {
         name: "MoreQuery",
         props:{
@@ -91,9 +91,9 @@
              if(this.clientList.length > 0) {
                return;
              }
-                let res = await getClient()
+                let res = await getTreeClient({page:0, size: 10000})
                if(res.code === 0 ){
-                   this.clientList = res.data
+                   this.clientList = res.data.content;
                }
             },
             //获取品牌
