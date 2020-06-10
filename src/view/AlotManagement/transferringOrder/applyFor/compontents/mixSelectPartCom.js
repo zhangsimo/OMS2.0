@@ -229,7 +229,7 @@ export const mixSelectPartCom = {
       }
       if (this.selectBrand && this.selectBrand != "9999") {
         req.partCodes = [];
-        req.partBrandCodes = [this.selectBrand];
+        req.partBrandCode = this.selectBrand;
       }
 
       if (this.partName.trim()) {
