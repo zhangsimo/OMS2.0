@@ -764,14 +764,18 @@ export default {
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content||[];
-
         arrData.map((item,index) => {
+          for(let b in item){
+            if(item[b]&&typeof item[b]=='string'){
+              item[b] = item[b].replace(/,/g,'，')
+            }
+          }
           item.index = index+1
           item.outableQty = item.sellSign ? 0 : item.outableQty
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
-          item.partCode = item.partCode.toString();
-          item.oemCode = item.oemCode.toString();
+          item.partCode = "\t"+item.partCode;
+          item.oemCode = "\t"+item.oemCode
           return item;
         })
         if (arrData.length > 0) {
@@ -784,11 +788,11 @@ export default {
         }
       }
     },
-      
+
 
     //汇总导出
     exportTheSummary() {
-      this.getStockAll();      
+      this.getStockAll();
     },
 
 
@@ -810,13 +814,18 @@ export default {
         if (arrData2.length > 0) {
           let arrData = arrData2.map(item => {
             let objData = {...item}
+            for(let b in objData){
+              if(objData[b]&&typeof objData[b]=='string'){
+                objData[b] = objData[b].replace(/,/g,'，')
+              }
+            }
             objData.enterPrice = objData.enterPrice.toFixed(2);
             objData.enterAmt = objData.enterAmt.toFixed(2);
             objData.noTaxPrice = objData.noTaxPrice.toFixed(2);
             objData.noTaxAmt = objData.noTaxAmt.toFixed(2);
             objData.isUnsalable = objData.isUnsalable === 0 ? "否" : "是";
-            objData.partCode = objData.partCode.toString();
-            objData.oemCode = objData.oemCode.toString();
+            objData.partCode = "\t"+objData.partCode;
+            objData.oemCode = "\t"+objData.oemCode;
             return objData
           })
           this.$refs.table2.exportCsv({
