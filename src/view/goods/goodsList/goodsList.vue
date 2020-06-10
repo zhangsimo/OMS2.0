@@ -40,6 +40,7 @@
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(2)"
               v-has="'submit'"
+              :loading="loading"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
@@ -711,6 +712,7 @@ export default {
     },
 
     getmoreData(data) {
+      console.log(data)
       this.moreData = data;
       if (data != null) {
         this.isMore = true;
