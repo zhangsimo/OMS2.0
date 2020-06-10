@@ -712,6 +712,7 @@ export default {
     },
 
     getmoreData(data) {
+      console.log(data)
       this.moreData = data;
       if (data != null) {
         this.isMore = true;

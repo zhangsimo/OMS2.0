@@ -484,6 +484,7 @@ export const mixGoodsData = {
       this.selectPlanOrderItem = row;
       this.tbdata.unshift(row);
       this.delArr = [];
+      this.isMore = false;
     },
 
     //作废--反作废
