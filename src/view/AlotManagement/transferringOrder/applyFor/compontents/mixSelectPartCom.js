@@ -228,8 +228,7 @@ export const mixSelectPartCom = {
         req.typeId = this.selectTreeItem.id;
       }
       if (this.selectBrand && this.selectBrand != "9999") {
-        req.partCodes = [];
-        req.partBrandCodes = [this.selectBrand];
+        req.partCode = this.selectBrand;
       }
 
       if (this.partName.trim()) {
