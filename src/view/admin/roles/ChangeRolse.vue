@@ -31,6 +31,8 @@ export default class ChangeRolse extends Vue {
   //父组件传过来的值
   @Prop({ type: Object })
   list: Object;
+  @Prop({ type: Object })
+  role: Object;
   //判断模态框状态
   private staffShow: boolean = false;
   //校验
@@ -56,11 +58,12 @@ export default class ChangeRolse extends Vue {
       if (valid) {
         let data: any = {};
         data = this.list;
-        data.systemType = this.systemType;
+        data.resIds = this.role.resIds;
         let res = await addNewStaffe(data);
         if (res.code === 0) {
           // @ts-ignore
           this.$message.success("修改成功");
+          data.resIds = data.resourceVOSet
           this.staffShow = false;
           this.$emit("getNewList", res);
         }
