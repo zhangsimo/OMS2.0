@@ -49,7 +49,7 @@
           <!--          新增模态框-->
           <Add-rolse ref="add" @getNewList="addList"></Add-rolse>
           <!--          修改模态框-->
-          <Change-rolse ref="change" :list="oneStaff" @getNewList="changeList"></Change-rolse>
+          <Change-rolse ref="change" :list="oneStaff"  :role='role' @getNewList="changeList"></Change-rolse>
         </div>
         <div slot="right" class="demo-split-pane-right" style="padding-top: 18px">
           <Tabs type="card" value="name1">

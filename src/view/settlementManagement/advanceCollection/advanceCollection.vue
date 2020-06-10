@@ -45,10 +45,10 @@
         >预收款核销</Button>
         <Button v-has="'expend'" class="ml10" @click="collectWPay" :disabled="Boolean(currRow.expenditureNo)">预收款支出</Button>
         <Button v-has="'expendCancel'" class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
-        <Button v-has="'revoke'" class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
+        <Button v-has="'revoke'" class="ml10" @click="revokeCollection(0)" :disabled=" currRow.writeOffReceiptNo || currRow.expenditureNo">预收款撤回</Button>
         <Button
           class="ml10"
-          @click="revokeCollection(1)"
+          @click="revokeCollection(1)"  
           :disabled="!currRow.writeOffReceiptNo"
           v-has="'backout'"
         >预收款核销撤回</Button>
