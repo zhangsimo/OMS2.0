@@ -58,6 +58,7 @@ export default class ChangeRolse extends Vue {
       if (valid) {
         let data: any = {};
         data = this.list;
+          // @ts-ignore
         data.resIds = this.role.resIds;
         let res = await addNewStaffe(data);
         if (res.code === 0) {
