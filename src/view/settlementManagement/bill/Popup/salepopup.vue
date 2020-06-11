@@ -247,7 +247,7 @@
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
             </template>
-          </vxe-table-column> 
+          </vxe-table-column>
           <vxe-table-column field="taxAmt" title="商品含税金额" >
             <template v-slot="{row}">
               {{row.taxAmt | priceFilters}}
@@ -840,7 +840,7 @@ export default {
           }
           if (['applyAmt'].includes(column.property)) {
             this.$set(this.invoice , 'applyTaxAmt' , this.$utils.sum(data, column.property))
-            this.$set(this.invoice , 'applyAmt' , this.$utils.sum(data, column.property)+ this.invoice.applyTaxAmt)
+            this.$set(this.invoice , 'applyAmt' , this.$utils.sum(data, column.property)+ this.invoice.notTaxAmt)
           }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
