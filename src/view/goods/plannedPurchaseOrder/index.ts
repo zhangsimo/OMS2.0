@@ -365,7 +365,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (Object.keys(data).length <= 0) return;
-    //versionNo 如果选择的采购计划存在支付门店该值传1反之0，用于判断该单子的直发门店是采购计划带入，还是自己手选
+    //versionNo 如果选择的采购计划存在直发门店该值传1反之0，用于判断该单子的直发门店是采购计划带入，还是自己手选
     if(this.isDirectCompanyId){
       data.versionNo = '1';
     }else{
@@ -856,6 +856,7 @@ export default class PlannedPurchaseOrder extends Vue {
       this.isDirectCompanyId = false;
     }
     this.formPlanmain.directCompanyId = row.directCompanyId;
+    this.formPlanmain.remark = row.remark;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {

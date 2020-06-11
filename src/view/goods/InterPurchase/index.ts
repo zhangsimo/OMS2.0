@@ -848,6 +848,7 @@ export default class InterPurchase extends Vue {
       this.isDirectCompanyId = false;
     }
     this.formPlanmain.directCompanyId = row.directCompanyId;
+    this.formPlanmain.remark = row.remark;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
