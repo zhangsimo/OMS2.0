@@ -657,7 +657,6 @@ export default {
                     this.invoice[key] = res.data[key]
                   }
                 })
-                console.log( this.invoice , 111)
                 this.accessoriesBillingData = res.data.partList
                 this.information.id = res.data.id
               }
