@@ -649,7 +649,6 @@ export default {
           if(this.information.owned ==1) {
             getDraftList({accountNo: this.information.accountNo}).then(res => {
               if (res.code === 0) {
-                console.log(res)
                 Object.keys(this.invoice).forEach( key => {
                   if (res.data.hasOwnProperty(key)){
                     this.invoice[key] = res.data[key]
