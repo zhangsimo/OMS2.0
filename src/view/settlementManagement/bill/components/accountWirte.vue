@@ -109,7 +109,7 @@ export default {
       ], //选择不含税对账单单
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
-      paymentId: "YSK", //收付类型
+      paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框,
       sort:'', // 判断是预收款还是预付款其他为空
 

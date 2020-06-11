@@ -54,7 +54,7 @@
         >预收款核销撤回</Button>
         <Button v-has="'claimBackout'" class="ml10" @click="revokeCollection(2)" :disabled="!currRow.expenditureNo">预收款支出撤回</Button>
         <Button v-has="'export'" class="ml10">导出</Button>
-      </div>
+      </div> 
     </section>
     <section class="con-box">
       <div class="inner-box">

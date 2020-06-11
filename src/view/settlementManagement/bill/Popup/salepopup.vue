@@ -247,7 +247,7 @@
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
             </template>
-          </vxe-table-column>
+          </vxe-table-column> 
           <vxe-table-column field="taxAmt" title="商品含税金额" >
             <template v-slot="{row}">
               {{row.taxAmt | priceFilters}}

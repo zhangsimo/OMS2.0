@@ -363,7 +363,7 @@ import settlementMoadl from "./components/settlement";
 import hedgingInvoice from "./Popup/hedgingInvoice";
 import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import salepopup from "./Popup/salepopup";
+import salepopup from "./Popup/salepopup"; 
 import { creat } from "./../components";
 import moment from "moment";
 import {
