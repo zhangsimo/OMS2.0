@@ -32,7 +32,7 @@
 import idDetailed from "./idDetailed";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
-import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi"; /*拉取收付款类型字典详情*/
 import bus from "../Popup/Bus";
 import moment from "moment";
 export default {
@@ -109,7 +109,7 @@ export default {
       ], //选择不含税对账单单
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
-      paymentId: "YSK", //收付类型
+      paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框,
       sort:'', // 判断是预收款还是预付款其他为空
 
@@ -137,6 +137,7 @@ export default {
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
             this.paymentList = [];
+            console.log(res)
             res.data.map(item => {
               this.paymentList.push({
                 value: item.itemCode,

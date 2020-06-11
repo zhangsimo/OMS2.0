@@ -100,8 +100,8 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="开票税率" prop="invoiceTax">
-            <Select v-model="invoice.invoiceTax" class="ml5 w200" :disabled="modelType.type==3">
+          <FormItem label="开票税率" prop="taxRate">
+            <Select v-model="invoice.taxRate" class="ml5 w200" :disabled="modelType.type==3">
               <Option
                 v-for="item in invoice.rateBillingList"
                 :value="item.value"
@@ -299,7 +299,7 @@ export default {
         issuingOfficeList: [], //开票单位列表
         invoiceType: "", //开票类型
         typeBillingList: [], //开票类型列表
-        invoiceTax: "", //开票税率
+        taxRate: "", //开票税率
         rateBillingList: [], //开票税率列表
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
@@ -375,7 +375,7 @@ export default {
             trigger: "change"
           }
         ],
-        invoiceTax: [
+        taxRate: [
           {
             required: true,
             message: "开票税率不能为空",
@@ -484,7 +484,7 @@ export default {
         },
         {
           title: "开票税率",
-          key: "invoiceTax",
+          key: "taxRate",
           className: "tc"
         },
         {
@@ -588,7 +588,7 @@ export default {
         },
         {
           title: "开票税率",
-          key: "invoiceTax",
+          key: "taxRate",
           className: "tc"
         },
         {
@@ -653,7 +653,7 @@ export default {
       let data = [];
       val.map(item => {
         item.details.map(itm => {
-          // itm.invoiceTax = this.$refs.noTax.tax;
+          // itm.taxRate = this.$refs.noTax.tax;
           data.push(itm);
         });
       });
@@ -701,7 +701,7 @@ export default {
     // 不含税信息
     bus.$on("noTaxInfo", val => {
       this.invoice.amountExcludingTax = val.taxation;
-      this.invoice.additionalTaxPoint = val.invoiceTaxAmt;
+      this.invoice.additionalTaxPoint = val.taxRateAmt;
     });
   },
   methods: {
@@ -788,7 +788,7 @@ export default {
                 item.taxPrice = item.taxAmt / item.orderQty;
               });
               this.invoice.invoiceType = "010103";
-              this.invoice.invoiceTax = "010103";
+              this.invoice.taxRate = "010103";
               this.accessoriesBillingData = res.data;
               this.copyData = res.data;
             }
@@ -964,8 +964,8 @@ export default {
     }
   },
   computed: {
-    invoiceTax() {
-      return this.invoice.invoiceTax;
+    taxRate() {
+      return this.invoice.taxRate;
     },
     applyTaxAmt() {
       return this.invoice.applyTaxAmt;
@@ -973,11 +973,11 @@ export default {
   },
   watch: {
     // 开票税率
-    invoiceTax(val) {
+    taxRate(val) {
       this.invoice.rateBillingList.map(item => {
         if (val === item.value) {
           this.accessoriesBillingData.map(itm => {
-            this.$set(itm, "invoiceTax", item.label);
+            this.$set(itm, "taxRate", item.label);
           });
           this.$refs.noTax.tax = item.label;
         }

@@ -10,7 +10,7 @@ export function getDataDictionaryType (params) {
   })
 }
 
-// 拉取字典详情
+// 拉取收付款类型字典详情
 export function getDataDictionaryTable (params) {
   return axios.request({
     url: `${api.omsProduct}/dictionariesItem/findBydictCode`,
