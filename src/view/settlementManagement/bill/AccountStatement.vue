@@ -1032,11 +1032,13 @@ export default {
         Object.keys(this.reconciliationStatement).length !== 0 &&
         this.reconciliationStatement.billingTypeName === "收款"
       ) {
+
+        if(0 >= this.reconciliationStatement.statementAmtOwed) return this.$Message.error('剩余欠票金额为0不能继续开票')
         this.$refs.salepopup.parameter = this.reconciliationStatement;
         this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
         this.reconciliationStatement.code = this.$refs.salepopup.information.code;
         this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
-        this.$refs.salepopup.information = this.reconciliationStatement;
+        this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
         this.$refs.salepopup.information.applicationDate = moment(
           new Date()
         ).format("YYYY-MM-DD HH:mm:ss");

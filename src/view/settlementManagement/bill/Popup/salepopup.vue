@@ -298,7 +298,8 @@ import {
   informationCitation,
   partsInvoice,
   saveDraft,
-  submitDraft
+  submitDraft,
+  getDraftList
 } from "@/api/bill/popup";
 import bus from "./Bus";
 import index from "../../../admin/roles";
@@ -624,8 +625,7 @@ export default {
     visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields();
-        this.invoice.statementAmtOwed =
-          this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
+        this.invoice.statementAmtOwed = this.information.statementAmtOwed
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.applyAmt =
           this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
@@ -655,11 +655,37 @@ export default {
             this.copyData = res.data;
           }
         });
+
+
         approvalStatus({ instanceId: this.information.processInstance }).then(res => {
           if (res.code == 0) {
             bus.$emit('approval',res.data.operationRecords)
           }
         });
+
+        this.$nextTick(()=>{
+          if(this.information.owned ==1) {
+            getDraftList({accountNo: this.information.accountNo}).then(res => {
+              if (res.code === 0) {
+                console.log(res, 888)
+                console.log( this.information , 111)
+                //  this.information.code
+                // this.information.orgId
+                //  this.information.orgName
+                // this.information.guestId
+                // this.information.accountNo
+                // this.information.applyNo
+                // this.information.applicationDate
+                // this.information.guestName
+                // this.information.oilsListOrder
+                // this.information.partsListOrder
+                // this.$parent.data1[0].isOilPart
+                // this.information.invoiceNotTaxApply
+                // this.information.id = res.data.id
+              }
+            })
+          }
+        })
       }
     },
     // 增加不含税销售开票申请
