@@ -110,6 +110,7 @@
                           format="yyyy-MM-dd HH:mm:ss"
                           style="width: 160px"
                           placeholder="请选择调拨申请日期"
+                          :options="options1"
                           v-model="formPlan.orderDate"
                           :disabled="presentrowMsg !== 0 || buttonDisable"
                         ></DatePicker>
@@ -244,6 +245,11 @@
             // remark: [
             //   { required: true, validator:changeNumber }
             // ]
+          },
+          options1: {
+            disabledDate (date) {
+                return date && date.valueOf() < Date.now() - 86400000;
+            }
           },
           StoreId :'', //默认仓
           ArraySelect: [], //供应商下拉框
@@ -804,7 +810,7 @@
                         this.formPlan.remark =  '',
                         this.formPlan.createUname =  '',
                         this.formPlan.serviceId =  '',
-                        this.formPlan.orderDate = ''
+                        this.formPlan.orderDate = null;
                         this.Right.tbdata = []
                         this.$refs.formPlan.resetFields();
                         this.leftgetList()
@@ -860,7 +866,7 @@
           this.formPlan.guestName = this.datadata.guestName
           // this.formPlan.guestName = this.datadata.guestId
           this.formPlan.storeId = this.datadata.storeId
-          this.formPlan.orderDate = this.datadata.orderDate
+          this.formPlan.orderDate = new Date(this.datadata.orderDate);
           this.formPlan.remark = this.datadata.remark
           this.formPlan.createUname = this.datadata.createUname
           this.formPlan.serviceId = this.datadata.serviceId
