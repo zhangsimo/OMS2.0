@@ -345,12 +345,19 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (!data) return;
+    //如果选择的采购计划存在支付门店该值传1反之0，用于判断该单子的直发门店是采购计划带入，还是自己手选
+    if(this.isDirectCompanyId){
+      data.versionNo = '1';
+    }else{
+      data.versionNo = '0';
+    }
 
     if(!data.directCompanyId){
       this.selectTableRow.directCompanyId = 0;
     }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
+
     let res = await api.saveInterDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
@@ -366,6 +373,11 @@ export default class InterPurchase extends Vue {
       onOk: async () => {
         let data: any = this.formdata(refname);
         if (!data) return;
+        if(this.isDirectCompanyId){
+          data.versionNo = '1';
+        }else{
+          data.versionNo = '0';
+        }
 
         if(!data.directCompanyId){
           this.selectTableRow.directCompanyId = 0;
@@ -543,7 +555,11 @@ export default class InterPurchase extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
-
+          if(this.isDirectCompanyId){
+            this.formPlanmain.versionNo = '1';
+          }else{
+            this.formPlanmain.versionNo = '0';
+          }
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);
@@ -596,6 +612,11 @@ export default class InterPurchase extends Vue {
       }
       for (let k in this.formPlanmain) {
         this.formPlanmain[k] = v[k];
+      }
+      if(v.versionNo==='1'){
+        this.isDirectCompanyId = true;
+      }else{
+        this.isDirectCompanyId = false;
       }
     }
   }
