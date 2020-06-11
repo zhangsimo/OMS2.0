@@ -627,8 +627,6 @@ export default {
         this.$refs.formCustom.resetFields();
         this.invoice.statementAmtOwed = this.information.statementAmtOwed
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
-        // this.invoice.applyAmt =
-        //   this.invoice.applyTaxAmt + this.invoice.notTaxAmt;
         this.invoice.notTaxAmt = 0
         this.invoice.applyAmt = this.invoice.applyTaxAmt + this.invoice.notTaxAmt
         // 发票单位
@@ -651,6 +649,7 @@ export default {
           if(this.information.owned ==1) {
             getDraftList({accountNo: this.information.accountNo}).then(res => {
               if (res.code === 0) {
+                console.log(res)
                 Object.keys(this.invoice).forEach( key => {
                   if (res.data.hasOwnProperty(key)){
                     this.invoice[key] = res.data[key]
@@ -839,8 +838,11 @@ export default {
             return '和值'
           }
           if (['applyAmt'].includes(column.property)) {
-            this.$set(this.invoice , 'applyTaxAmt' , this.$utils.sum(data, column.property))
-            this.$set(this.invoice , 'applyAmt' , this.$utils.sum(data, column.property)+ this.invoice.notTaxAmt)
+            let num = this.$utils.sum(data, column.property)
+            this.$set(this.invoice , 'applyTaxAmt' , num)
+            this.$set(this.invoice , 'applyAmt' , this.$utils.add(num, this.invoice.notTaxAmt))
+
+
           }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
