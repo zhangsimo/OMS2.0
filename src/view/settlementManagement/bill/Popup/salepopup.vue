@@ -629,6 +629,8 @@ export default {
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.applyAmt =
           this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
+        this.invoice.amountExcludingTax = 0
+        this.invoice.applyMoney = this.invoice.applyTaxAmt + this.invoice.amountExcludingTax
         // 发票单位
         ditInvoice({ guestId: this.information.guestId }).then(res => {
           if (res.code === 0) {
@@ -639,9 +641,6 @@ export default {
             this.invoice.receiptUnitList = res.data;
           }
         });
-
-
-
         approvalStatus({ instanceId: this.information.processInstance }).then(res => {
           if (res.code == 0) {
             bus.$emit('approval',res.data.operationRecords)
@@ -680,6 +679,8 @@ export default {
             });
           }
         })
+
+
       }
     },
     // 增加不含税销售开票申请
