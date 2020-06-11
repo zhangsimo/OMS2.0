@@ -56,13 +56,13 @@
               type = v.expenseType
             switch (type) {
               case "FY001":
-                data.parentCode = 6002
+                data.parentCode = 6602
                 break;
               case "FY002":
-                data.parentCode = 6003
+                data.parentCode = 6603
                 break;
               case "FY003":
-                data.parentCode = 6001
+                data.parentCode = 6601
                 break;
               case "FY004":
                 data.parentCode = 6403

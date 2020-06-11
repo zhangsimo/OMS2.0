@@ -74,7 +74,7 @@
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
   </div>
-</template>
+</template> 
 
 <script>
 import ExpenseReimbursement from "../component/ExpenseReimbursement";

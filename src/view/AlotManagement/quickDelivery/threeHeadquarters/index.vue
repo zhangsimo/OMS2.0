@@ -159,6 +159,7 @@ export default {
   components: {
     QuickDate
   },
+  inject: ["reload"],
   data() {
     return {
       modal2: false,
@@ -304,11 +305,12 @@ export default {
         .then(res => {
           if (res.code == 0) {
             ////console.log(res);
-            this.$Message.info("入库成功");
+            this.$Message.success("入库成功");
+            this.reload();
           }
         })
         .catch(e => {
-          this.$Message.info("入库失败");
+          this.$Message.error("入库失败");
         });
     },
     cancel() {

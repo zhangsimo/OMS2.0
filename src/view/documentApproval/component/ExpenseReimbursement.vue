@@ -23,7 +23,7 @@
         <Col class="inner" span="4">{{formInline.applicant || ''}}</Col>
         <Col class="inner" span="4">部门名称</Col>
         <Col class="inner" span="4">{{formInline.deptName || ' '}}</Col>
-        <Col class="inner" span="4">门店店号</Col>
+        <Col class="inner" span="4">门店店号</Col> 
         <Col class="inner" span="4">{{formInline.shopCode || ' '}}</Col>
       </Row>
       <Row class="tableBox twoTable">
