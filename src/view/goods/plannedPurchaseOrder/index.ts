@@ -365,6 +365,12 @@ export default class PlannedPurchaseOrder extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (Object.keys(data).length <= 0) return;
+    //versionNo 如果选择的采购计划存在直发门店该值传1反之0，用于判断该单子的直发门店是采购计划带入，还是自己手选
+    if(this.isDirectCompanyId){
+      data.versionNo = '1';
+    }else{
+      data.versionNo = '0';
+    }
     if(!data.directCompanyId){
       this.selectTableRow.directCompanyId = 0;
     }
@@ -385,6 +391,11 @@ export default class PlannedPurchaseOrder extends Vue {
       onOk: async () => {
         let data: any = this.formdata(refname);
         if (Object.keys(data).length <= 0) return;
+        if(this.isDirectCompanyId){
+          data.versionNo = '1';
+        }else{
+          data.versionNo = '0';
+        }
         if(!data.directCompanyId){
           this.selectTableRow.directCompanyId = 0;
         }
@@ -559,6 +570,11 @@ export default class PlannedPurchaseOrder extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
+          if(this.isDirectCompanyId){
+            this.formPlanmain.versionNo = '1';
+          }else{
+            this.formPlanmain.versionNo = '0';
+          }
 
         },
         onCancel: () => {
@@ -615,6 +631,11 @@ export default class PlannedPurchaseOrder extends Vue {
       }
       for (let k in this.formPlanmain) {
         this.formPlanmain[k] = v[k];
+      }
+      if(v.versionNo==='1'){
+        this.isDirectCompanyId = true;
+      }else{
+        this.isDirectCompanyId = false;
       }
     }
   }
@@ -829,12 +850,13 @@ export default class PlannedPurchaseOrder extends Vue {
   private getPlanOrder(row: any) {
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
-    if(row.directCompanyId){
-      this.isDirectCompanyId = true      
+    if(row.directCompanyId&&row.directCompanyId!=='0'){
+      this.isDirectCompanyId = true
     }else{
       this.isDirectCompanyId = false;
     }
     this.formPlanmain.directCompanyId = row.directCompanyId;
+    this.formPlanmain.remark = row.remark;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
