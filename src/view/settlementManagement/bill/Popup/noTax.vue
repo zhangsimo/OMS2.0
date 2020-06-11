@@ -304,7 +304,7 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return '和值'
+            return '合计'
           }
           if (['applyAmt'].includes(column.property)) {
             this.$set(this.invoice , 'invoiceTaxAmt' , this.$utils.sum(data, column.property))
@@ -312,11 +312,11 @@ export default {
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
-
           return null
         })
       ]
     },
+
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
@@ -470,7 +470,6 @@ export default {
     // 申请税点
     taxPoint(val, ov) {
       if (val !== ov) {
-        console.log(val);
         this.invoice.taxation = parseFloat(
           (
             this.invoice.invoiceTaxAmt / (1 - val) -

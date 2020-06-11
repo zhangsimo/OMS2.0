@@ -360,15 +360,15 @@ export default {
         costBear: "", //费用承担
         bearingCostList: [
           {
-            value: 0,
+            value: '0',
             label: "现付"
           },
           {
-            value: 1,
+            value: '1',
             label: "到付"
           },
           {
-            value: 2,
+            value: '2',
             label: "自取"
           }
         ], //费用承担列表
@@ -639,22 +639,7 @@ export default {
             this.invoice.receiptUnitList = res.data;
           }
         });
-        // 开票配件
-        partsInvoice({
-          accountNo: this.information.accountNo,
-          taxSign: 1
-        }).then(res => {
-          if (res.code === 0) {
-            res.data.map(item => {
-              item.taxAmt = item.applyAmt + item.additionalTaxPoint;
-              item.taxPrice = item.taxAmt / item.orderQty;
-            });
-            this.invoice.invoiceType = "010103";
-            this.invoice.invoiceTax = "010103";
-            this.accessoriesBillingData = res.data;
-            this.copyData = res.data;
-          }
-        });
+
 
 
         approvalStatus({ instanceId: this.information.processInstance }).then(res => {
@@ -667,23 +652,33 @@ export default {
           if(this.information.owned ==1) {
             getDraftList({accountNo: this.information.accountNo}).then(res => {
               if (res.code === 0) {
-                console.log(res, 888)
-                console.log( this.information , 111)
-                //  this.information.code
-                // this.information.orgId
-                //  this.information.orgName
-                // this.information.guestId
-                // this.information.accountNo
-                // this.information.applyNo
-                // this.information.applicationDate
-                // this.information.guestName
-                // this.information.oilsListOrder
-                // this.information.partsListOrder
-                // this.$parent.data1[0].isOilPart
-                // this.information.invoiceNotTaxApply
-                // this.information.id = res.data.id
+                Object.keys(this.invoice).forEach( key => {
+                  if (res.data.hasOwnProperty(key)){
+                    this.invoice[key] = res.data[key]
+                  }
+                })
+                console.log( this.invoice , 111)
+                this.accessoriesBillingData = res.data.partList
+                this.information.id = res.data.id
               }
             })
+          }else{
+            // 开票配件
+            partsInvoice({
+              accountNo: this.information.accountNo,
+              taxSign: 1
+            }).then(res => {
+              if (res.code === 0) {
+                res.data.map(item => {
+                  item.taxAmt = item.applyAmt + item.additionalTaxPoint;
+                  item.taxPrice = item.taxAmt / item.orderQty;
+                });
+                this.invoice.invoiceType = "010103";
+                this.invoice.invoiceTax = "010103";
+                this.accessoriesBillingData = res.data;
+                this.copyData = res.data;
+              }
+            });
           }
         })
       }
