@@ -111,7 +111,7 @@
 
 <script>
 import { getClient } from "_api/salesManagment/presell.js";
-import { getSales } from "@/api/salesManagment/salesOrder";
+import { getSales, getTreeClient } from "@/api/salesManagment/salesOrder";
 import * as tools from "../../../../utils/tools";
 export default {
   name: "MoreSearh",
@@ -158,9 +158,9 @@ export default {
       if(this.clientList.length > 0) {
         return;
       }
-      let res = await getClient();
+      let res = await getTreeClient({page:0, size: 10000});
       if (res.code === 0) {
-        this.clientList = res.data;
+        this.clientList = res.data.content;
       }
     },
     //获取创建时间
