@@ -584,13 +584,6 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   if (this.Leftcurrentrow.xinzeng === "1") {
-      //   } else {
-      //     this.$Message.info("请先选择加工单");
-      //     return;
-      //   }
-      // }
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -623,6 +616,7 @@ export default {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList(this.form);
+            this.Leftcurrentrow = {};
             this.$Message.success("保存成功");
           }
         })
