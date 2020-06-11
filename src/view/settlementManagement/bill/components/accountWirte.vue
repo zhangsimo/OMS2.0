@@ -32,7 +32,7 @@
 import idDetailed from "./idDetailed";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
-import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi"; /*拉取收付款类型字典详情*/
 import bus from "../Popup/Bus";
 import moment from "moment";
 export default {
@@ -137,6 +137,7 @@ export default {
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
             this.paymentList = [];
+            console.log(res)
             res.data.map(item => {
               this.paymentList.push({
                 value: item.itemCode,

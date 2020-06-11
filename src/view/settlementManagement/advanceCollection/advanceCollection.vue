@@ -40,7 +40,7 @@
         <Button
           class="ml10"
           @click="collectWirte"
-          :disabled="Boolean(currRow.writeOffReceiptNo)"
+          :disabled="!currRow.writeOffReceiptNo || currRow.remainingAmt<=0"
           v-has="'cancel'"
         >预收款核销</Button>
         <Button v-has="'expend'" class="ml10" @click="collectWPay" :disabled="Boolean(currRow.expenditureNo)">预收款支出</Button>
