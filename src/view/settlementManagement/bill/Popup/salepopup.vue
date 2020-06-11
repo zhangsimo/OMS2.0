@@ -148,14 +148,14 @@
           <FormItem label="本次申请开票含税金额" >
             <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
           </FormItem>
-          <FormItem label="不含税金额" prop="amountExcludingTax">
-            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
+          <FormItem label="不含税金额" prop="notTaxAmt">
+            <Input v-model="invoice.notTaxAmt" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="外加税点" prop="additionalTaxPoint">
             <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />
           </FormItem>
-          <FormItem label="申请开票金额" prop="applyMoney">
-            <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
+          <FormItem label="申请开票金额" >
+            <Input v-model="invoice.applyAmt" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
             <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
@@ -373,13 +373,13 @@ export default {
           }
         ], //费用承担列表
         statementAmtOwed: "", //对账单欠票金额
-        applyMoney: "", //申请开票金额
+        applyAmt: "", //申请开票金额
         address: "", //收件地址
         remark: "", //备注
         applyTaxAmt: "", //本次申请开票含税金额
         underTicketExplain: "", //欠票未全金额开具说明
         phone: "", //电话
-        amountExcludingTax: "", //不含税金额
+        notTaxAmt: "", //不含税金额
         sendingWay: "", //寄件方式
         waySendingList: [], //寄件方式列表
         additionalTaxPoint: "" //外加税点
@@ -455,7 +455,7 @@ export default {
             message: "对账单欠票金额不能为空"
           }
         ],
-        // applyMoney: [
+        // applyAmt: [
         //   {
         //     required: true,
         //     message: "申请开票金额不能为空"
@@ -596,7 +596,7 @@ export default {
     });
     // 不含税信息
     bus.$on("noTaxInfo", val => {
-      this.invoice.amountExcludingTax = val.taxation;
+      this.invoice.notTaxAmt = val.taxation;
       this.invoice.additionalTaxPoint = val.invoiceTaxAmt;
     });
   },
@@ -627,10 +627,10 @@ export default {
         this.$refs.formCustom.resetFields();
         this.invoice.statementAmtOwed = this.information.statementAmtOwed
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
-        this.invoice.applyAmt =
-          this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
-        this.invoice.amountExcludingTax = 0
-        this.invoice.applyMoney = this.invoice.applyTaxAmt + this.invoice.amountExcludingTax
+        // this.invoice.applyAmt =
+        //   this.invoice.applyTaxAmt + this.invoice.notTaxAmt;
+        this.invoice.notTaxAmt = 0
+        this.invoice.applyAmt = this.invoice.applyTaxAmt + this.invoice.notTaxAmt
         // 发票单位
         ditInvoice({ guestId: this.information.guestId }).then(res => {
           if (res.code === 0) {
@@ -840,6 +840,7 @@ export default {
           }
           if (['applyAmt'].includes(column.property)) {
             this.$set(this.invoice , 'applyTaxAmt' , this.$utils.sum(data, column.property))
+            this.$set(this.invoice , 'applyAmt' , this.$utils.sum(data, column.property)+ this.invoice.applyTaxAmt)
           }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
