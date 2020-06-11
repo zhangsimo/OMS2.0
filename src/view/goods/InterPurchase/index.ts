@@ -821,8 +821,8 @@ export default class InterPurchase extends Vue {
   private getPlanOrder(row: any) {
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
-    if(row.directCompanyId){
-      this.isDirectCompanyId = true;      
+    if(row.directCompanyId&&row.directCompanyId!=='0'){
+      this.isDirectCompanyId = true;
     }else{
       this.isDirectCompanyId = false;
     }
