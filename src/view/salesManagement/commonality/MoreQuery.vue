@@ -118,7 +118,6 @@
                 let res = await getSales();
                 if (res.code === 0) {
                     this.salesList = res.data.content;
-                    console.log(res.data)
                     this.salesList.map(item => {
                         item.label = item.userName;
                     });

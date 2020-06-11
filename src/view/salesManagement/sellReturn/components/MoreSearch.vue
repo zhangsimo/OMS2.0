@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import {getClient, getCRman} from '@/api/salesManagment/salesOrder'
+  import {getClient, getCRman, getSales, getTreeClient} from '@/api/salesManagment/salesOrder'
   import {getMoreList} from "_api/salesManagment/presell.js";
   import * as tools from "../../../../utils/tools";
   export default {
@@ -84,7 +84,7 @@
         if(this.salesList.length > 0) {
           return;
         }
-      let res = await getCRman();
+      let res = await getSales();
       if (res.code === 0) {
         this.salesList = res.data.content;
         this.salesList.forEach(item => {
@@ -98,9 +98,9 @@
         if(this.clientList.length > 0) {
           return;
         }
-        let res = await getClient()
+        let res = await getTreeClient({page:0, size: 10000})
         if (res.code === 0) {
-          this.clientList = res.data
+          this.clientList = res.data.content
         }
         // console.log(res,999)
       },

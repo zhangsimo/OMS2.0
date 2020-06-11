@@ -143,3 +143,12 @@ export function submitNoTax(data){
     data
 })
 }
+
+//有草稿的返回值
+export function getDraftList (params){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/findDraft`,
+    method: 'get',
+    params
+  })
+}
