@@ -101,8 +101,6 @@
           <vxe-table-column field="outableQty" title="可售数量"></vxe-table-column>
           <vxe-table-column field="lockQty" title="锁定数量"></vxe-table-column>
           <vxe-table-column field="pchRoadQty" title="采购在途数量"></vxe-table-column>
-          <vxe-table-column title="最后订货日期"></vxe-table-column>
-          <vxe-table-column title="最新预计到货日期" width="140"></vxe-table-column>
           <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
           <vxe-table-column field="pastTime" title="结束日期"></vxe-table-column>
         </vxe-table>

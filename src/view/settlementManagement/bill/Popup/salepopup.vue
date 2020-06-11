@@ -298,7 +298,8 @@ import {
   informationCitation,
   partsInvoice,
   saveDraft,
-  submitDraft
+  submitDraft,
+  getDraftList
 } from "@/api/bill/popup";
 import bus from "./Bus";
 import index from "../../../admin/roles";
@@ -359,15 +360,15 @@ export default {
         costBear: "", //费用承担
         bearingCostList: [
           {
-            value: 0,
+            value: '0',
             label: "现付"
           },
           {
-            value: 1,
+            value: '1',
             label: "到付"
           },
           {
-            value: 2,
+            value: '2',
             label: "自取"
           }
         ], //费用承担列表
@@ -624,11 +625,12 @@ export default {
     visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields();
-        this.invoice.statementAmtOwed =
-          this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
+        this.invoice.statementAmtOwed = this.information.statementAmtOwed
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.applyAmt =
           this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
+        this.invoice.amountExcludingTax = 0
+        this.invoice.applyMoney = this.invoice.applyTaxAmt + this.invoice.amountExcludingTax
         // 发票单位
         ditInvoice({ guestId: this.information.guestId }).then(res => {
           if (res.code === 0) {
@@ -639,27 +641,46 @@ export default {
             this.invoice.receiptUnitList = res.data;
           }
         });
-        // 开票配件
-        partsInvoice({
-          accountNo: this.information.accountNo,
-          taxSign: 1
-        }).then(res => {
-          if (res.code === 0) {
-            res.data.map(item => {
-              item.taxAmt = item.applyAmt + item.additionalTaxPoint;
-              item.taxPrice = item.taxAmt / item.orderQty;
-            });
-            this.invoice.invoiceType = "010103";
-            this.invoice.invoiceTax = "010103";
-            this.accessoriesBillingData = res.data;
-            this.copyData = res.data;
-          }
-        });
         approvalStatus({ instanceId: this.information.processInstance }).then(res => {
           if (res.code == 0) {
             bus.$emit('approval',res.data.operationRecords)
           }
         });
+
+        this.$nextTick(()=>{
+          if(this.information.owned ==1) {
+            getDraftList({accountNo: this.information.accountNo}).then(res => {
+              if (res.code === 0) {
+                Object.keys(this.invoice).forEach( key => {
+                  if (res.data.hasOwnProperty(key)){
+                    this.invoice[key] = res.data[key]
+                  }
+                })
+                this.accessoriesBillingData = res.data.partList
+                this.information.id = res.data.id
+              }
+            })
+          }else{
+            // 开票配件
+            partsInvoice({
+              accountNo: this.information.accountNo,
+              taxSign: 1
+            }).then(res => {
+              if (res.code === 0) {
+                res.data.map(item => {
+                  item.taxAmt = item.applyAmt + item.additionalTaxPoint;
+                  item.taxPrice = item.taxAmt / item.orderQty;
+                });
+                this.invoice.invoiceType = "010103";
+                this.invoice.invoiceTax = "010103";
+                this.accessoriesBillingData = res.data;
+                this.copyData = res.data;
+              }
+            });
+          }
+        })
+
+
       }
     },
     // 增加不含税销售开票申请
