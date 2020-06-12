@@ -126,7 +126,7 @@ import { Printing } from "@/api/bill/saleOrder";
 
 export default {
   name: "PrintShow",
-  props: { title: "" },
+  props: { title: "" }, 
   data() {
     return {
       printShow: false, //模态框隐藏
@@ -226,8 +226,6 @@ export default {
       if (this.title === "销售出库") {
         arr = this.$parent.data3[0];
       } else if (this.title === "采购入库") {
-        arr = this.$parent.data4[0];
-      }else{
         arr = this.$parent.data4[0];
       }
       let data = {
