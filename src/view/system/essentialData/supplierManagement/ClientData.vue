@@ -161,7 +161,7 @@
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="二级分类:" prop="supplierTypeSecond">
+              <FormItem label="二级分类:">
                 <Select v-model="data.supplierTypeSecond" style="width:180px" placement="top">
                   <Option
                     v-for="item in treelist "

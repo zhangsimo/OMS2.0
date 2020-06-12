@@ -140,7 +140,7 @@
               <FormItem label="默认物流:">
                 <Input v-model="data.defaultLogistics" style="width: 180px" />
               </FormItem>
-              <FormItem label="二级分类:" prop="guestTypeFloor">
+              <FormItem label="二级分类:">
                 <Select
                   v-model="data.guestTypeFloor"
                   style="width:180px"
