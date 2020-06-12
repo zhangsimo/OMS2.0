@@ -87,6 +87,7 @@
                 <Input v-model="thisApplyAccount" class="w140 mr10" />
               </div>
             </div>
+            <!-- 应收业务销售出库/退货对账 -->
             <div class="db mt20">
               <h5>应收业务销售出库/退货对账</h5>
               <Table
@@ -102,6 +103,7 @@
                 ref="receivable"
               ></Table>
             </div>
+            <!-- 应付业务采购入库/退货对账 -->
             <div class="db mt20">
               <h5>应付业务采购入库/退货对账</h5>
               <Table
@@ -173,6 +175,7 @@
       </div>
       <div slot="footer"></div>
     </Modal>
+    <!-- 本次不对帐 -->
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
@@ -609,6 +612,14 @@ export default {
     query() {
       this.Initialization();
     },
+    // 计算应收业务销售出库/退货对账的总计
+    collectSum(sumData){
+      let collectSum=0;
+      sumData.map(item=>{
+        collectSum += item.thisAccountAmt
+      })
+      return collectSum
+    },
     // 对账单弹框出现加载数据
     hander(type) {
       if (type) {
@@ -683,6 +694,7 @@ export default {
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
+          // console.log(res.data.two.thisAccountAmt)
           this.data1 = res.data.two;
         } else {
           this.data1 = [];
@@ -800,22 +812,25 @@ export default {
       this.collectlist = selection;
       this.totalcollect = 0;
       this.Actualtotalcollect = 0;
-      selection.map(item => {
-        this.totalcollect += item.thisAccountAmt;
-      });
+      this.totalcollect=this.collectSum(selection)
+      // selection.map(item => {
+      //   this.totalcollect += item.thisAccountAmt;
+      // });
       this.getSettlementComputed();
     },
     // 应收全选
     collectCheckoutAll(selection) {
       this.collectlist = selection;
-      selection.map(item => {
-        this.totalcollect += item.thisAccountAmt;
-      });
+      this.totalcollect=this.collectSum(selection)
+      // selection.map(item => {
+      //   this.totalcollect += item.thisAccountAmt;
+      // });
       this.getSettlementComputed();
     },
     // 应付全选
     paymentCheckoutAll(selection) {
       this.paymentlist = selection;
+      this.totalpayment=0
       selection.map(item => {
         this.totalpayment += item.thisAccountAmt;
       });
