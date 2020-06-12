@@ -1222,7 +1222,10 @@ export default {
     // 打印
     print(type) {
       type ? (this.tit = "采购入库") : (this.tit = "销售出库");
-      this.$refs.PrintShow.openModal();
+      setTimeout(() => {
+        this.$refs.PrintShow.openModal();
+      },0)
+
     },
     //获取公司
     async getAllClient(){
