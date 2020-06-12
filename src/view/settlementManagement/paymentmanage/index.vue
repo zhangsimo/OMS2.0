@@ -1136,6 +1136,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : ""
       };
+      
       this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
       this.getDetailed(data, this.value);
     },
