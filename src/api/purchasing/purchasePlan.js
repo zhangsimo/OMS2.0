@@ -27,6 +27,14 @@ export function findForAllot(data) {
     data
   })
 }
+//调拨管理获取供应商
+export function transferringFindForAllot(data) {
+  return axios.request({
+    url: `${api.wmsApi}/company/findPageByDynamicQuery?page=${data.page}&size=${data.size}`,
+    method: 'post',
+    data
+  })
+}
 
 //获取票据类型，直发门店下拉框数据
 export function getPurchaseInit(data) {

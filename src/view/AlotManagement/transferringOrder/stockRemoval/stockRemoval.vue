@@ -325,7 +325,7 @@ import GoodsInfo from "./compontents/goodsInfo";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
-import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 import {
   getList1,
@@ -1193,17 +1193,17 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
-      this.guestOrgid = row.isInternalId;
+      this.guestOrgid = row.id;
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.fullName;
-        this.Leftcurrentrow.guestId = row.id;
+        this.Leftcurrentrow.guestName = row.name;
+        this.Leftcurrentrow.guestId = row.guestId;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;
         }, 200);
       } else {
-        this.diaochuName = row.fullName;
+        this.diaochuName = row.name;
         this.diaochuID = row.id;
       }
     },
