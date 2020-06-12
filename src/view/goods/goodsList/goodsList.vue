@@ -455,7 +455,7 @@
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectPlanOrderItem"></status-model>
-  </div>
+  </div> 
 </template>
 <script>
 import adjustModel from "./components/AdjustModel.vue";
