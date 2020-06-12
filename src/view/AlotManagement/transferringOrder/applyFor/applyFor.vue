@@ -195,7 +195,7 @@
         <!--选择配件-->
         <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
         <!--编辑收货信息-->
-          <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata"></goods-info>
+          <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata" :guestId="guestidId"></goods-info>
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -211,7 +211,7 @@
   import More from './compontents/More'
   // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
   import GoodsInfo from './compontents/goodsInfo/GoodsInfo'
-  import SelectSupplier from "./compontents/supplier/selectSupplier";
+  import SelectSupplier from "./compontents/supplier/selectSupplier2";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
   import supplier from './compontents/supplier'
@@ -555,8 +555,8 @@
                       }
                     })
                   // try {
-                    
-                  // } 
+
+                  // }
                   // catch (errMap) {
                   //   this.$XModal.message({
                   //     status: "error",
@@ -716,10 +716,10 @@
           // this.isInternalId = a.isInternalId
           // this.formPlan.guestName = a.id
           console.log(a);
-          this.formPlan.guestOrgid = a.orgid;
-          this.formPlan.guestName = a.fullName
-          this.guestidId = a.id
-          this.isInternalId = a.isInternalId
+          this.formPlan.guestOrgid = a.id;
+          this.formPlan.guestName = a.name
+          this.guestidId = a.guestId
+          this.isInternalId = a.id
         },
         leftgetList(){
           let params = {}

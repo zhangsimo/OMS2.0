@@ -14,6 +14,7 @@ import {
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
+import { v4 } from "uuid"
 
 export const mixGoodsData = {
   data() {
@@ -201,7 +202,7 @@ export const mixGoodsData = {
             if(!this.selectPlanOrderItem.id) {
               this.delArr.forEach(els => {
                 this.tableData.forEach((el, index, arr) => {
-                  if(el.partCode == els.partCode) {
+                  if(el.id == els.id) {
                     arr.splice(index, 1);
                   }
                 })
@@ -211,7 +212,7 @@ export const mixGoodsData = {
             } else {
               this.delArr.forEach((els,i,arrP) => {
                 this.tableData.forEach((el, index, arr) => {
-                  if(el.partCode == els.partCode&&!els.id) {
+                  if(el.uuid == els.uuid&&!els.id) {
                     arr.splice(index, 1);
                   }
                 })
@@ -317,10 +318,12 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
+      v = JSON.parse(JSON.stringify(v));
       let oldArr = [...this.tableData, ...v]
       var allArr = [...oldArr];
 
       allArr.map(item => {
+        item.uuid = v4();
         item.orderPrice = item.recentPrice||0
       })
       this.tableData = allArr;

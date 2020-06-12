@@ -1,6 +1,8 @@
 <template>
+<!-- 采购计划页面 -->
   <div class="content-oper content-oper-flex">
     <section class="oper-box">
+      <!-- 对采购计划订单以及采购计划信息的操作 -->
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
@@ -87,11 +89,13 @@
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
+            <!-- 左侧采购计划列表 -->
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">采购计划单列表</div>
+              <!-- 表格 @on-current-change开启 highlight-row（是否支持高亮选中的行，即单选） 后有效，当表格的当前行发生变化的时候会触发-->
               <Table
                 :height="leftTableHeight"
-                @on-current-change="selectTabelData"
+                @on-current-change="selectTabelData" 
                 ref="planOrderTable"
                 size="small"
                 highlight-row
@@ -100,6 +104,7 @@
                 :columns="columns"
                 :data="tbdata"
               ></Table>
+              <!-- 分页操作 -->
               <Page
                 class-name="fl pt10"
                 size="small"
@@ -113,9 +118,11 @@
                 show-total
               ></Page>
             </div>
+            <!-- 右侧采购计划信息 -->
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
               <div class="pane-made-hd">采购计划信息</div>
               <div class="clearfix purchase" ref="planForm">
+                <!-- 采购计划信息的上半部分表单部分 -->
                 <Form
                   inline
                   :show-message="false"
@@ -451,7 +458,7 @@
     ></select-supplier>
     <!-- 更多 -->
     <more-search type="采购计划" :getBrand="getBrand" @getmoreData="getmoreData" ref="moreSearch"></more-search>
-    <!-- 订单调整 -->
+    <!-- 采购计划信息的订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectPlanOrderItem"></status-model>
