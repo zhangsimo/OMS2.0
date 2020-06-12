@@ -190,7 +190,7 @@
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'carBrandName',
+                        key: 'carModelName',
                         minWidth: 120
                     },
                     {
@@ -326,7 +326,7 @@
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'carBrandName',
+                        key: 'carModelName',
                         minWidth: 120
                     },
                     {

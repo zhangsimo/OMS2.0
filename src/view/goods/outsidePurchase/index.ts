@@ -24,7 +24,7 @@ import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.v
 import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
-
+import { v4 } from "uuid"
 
 @Component({
   components: {
@@ -160,7 +160,10 @@ export default class InterPurchase extends Vue {
       } else {
         this.$Message.success("导入成功");
       }
-      this.tableData = [...this.tableData, ...response.data.details]
+      this.tableData = [...this.tableData, ...response.data.details].map( el => {
+        el.uuid = v4;
+        return el;
+      })
       this.tableData.push();
     } else {
       this.$Message.error(response.message)
@@ -465,42 +468,52 @@ export default class InterPurchase extends Vue {
     this.$Modal.confirm({
       title: '是否要删除配件',
       onOk: async () => {
-        if(this.deletePartArr.length > 0) {
-          let res:any = await api.delPchsOrderDetail(this.deletePartArr);
-          if(res.code == 0) {
-            delOk = true;
-            isNetWork = true;
-            this.deletePartArr.forEach((els: any) => {
-              this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-                if (el.partCode == els.partCode) {
-                  arr.splice(index, 1);
-                }
-              })
-            })
-          }
-        } else {
-          delOk = true;
-        }
-        if(this.tmpDeletePartArr.length > 0) {
-          this.tmpDeletePartArr.forEach((els:any) => {
-            this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-              if(el.partCode == els.partCode) {
-                arr.splice(index, 1);
-              }
-            })
+        let arr = [...this.deletePartArr, ...this.tmpDeletePartArr].map(el => el.uuid);
+        let res:any = await api.delPchsOrderDetail(this.deletePartArr);
+        if (res.code == 0) {
+          this.tableData = this.tableData.filter(item => {
+            return !arr.includes(item.uuid);
           })
           this.tmpDeletePartArr = [];
-          delOk2 = true;
-        } else {
-          delOk2 = true;
-        }
-        if (delOk && delOk2) {
-          this.$Message.success('删除成功');
           this.deletePartArr = [];
-          // if(isNetWork) {
-          //   this.getListData();
-          // }
+          this.$Message.success('删除成功');
         }
+        // if(this.deletePartArr.length > 0) {
+        //   let res:any = await api.delPchsOrderDetail(this.deletePartArr);
+        //   if(res.code == 0) {
+        //     delOk = true;
+        //     isNetWork = true;
+        //     this.deletePartArr.forEach((els: any) => {
+        //       this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
+        //         if (el.partCode == els.partCode) {
+        //           arr.splice(index, 1);
+        //         }
+        //       })
+        //     })
+        //   }
+        // } else {
+        //   delOk = true;
+        // }
+        // if(this.tmpDeletePartArr.length > 0) {
+        //   this.tmpDeletePartArr.forEach((els:any) => {
+        //     this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
+        //       if(el.partCode == els.partCode) {
+        //         arr.splice(index, 1);
+        //       }
+        //     })
+        //   })
+        //   this.tmpDeletePartArr = [];
+        //   delOk2 = true;
+        // } else {
+        //   delOk2 = true;
+        // }
+        // if (delOk && delOk2) {
+        //   this.$Message.success('删除成功');
+        //   this.deletePartArr = [];
+        //   // if(isNetWork) {
+        //   //   this.getListData();
+        //   // }
+        // }
       },
       onCancel: () => {
         // this.$Message.info('取消删除');
@@ -550,7 +563,10 @@ export default class InterPurchase extends Vue {
           this.purchaseOrderTable.tbdata.push();
           this.saveHandle('formplanref');
           this.mainId = row.id || "";
-          this.tableData = row.details || [];
+          this.tableData = (row.details || []).map( el => {
+            el.uuid = v4;
+            return el;
+          });
           this.selectRowState = null;
           this.serviceId = row.serviceId || "";
           this.isInput = false;
@@ -589,7 +605,10 @@ export default class InterPurchase extends Vue {
     if(v) {
       this.selectTableRow = v;
       this.mainId = v.id;
-      this.tableData = v.details || [];
+      this.tableData = (v.details || []).map( el => {
+        el.uuid = v4;
+        return el;
+      });
       this.selectRowState = v.billStatusId.name;
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
@@ -691,10 +710,14 @@ export default class InterPurchase extends Vue {
   //添加配件数据
   private getPartNameList(v){
     let arrData = v||[]
+    arrData = JSON.parse(JSON.stringify(arrData));
     arrData.map(item => {
       item.orderPrice = item.recentPrice
     })
-    this.tableData = this.tableData.concat(arrData);
+    this.tableData = this.tableData.concat(arrData).map(el => {
+      el.uuid = v4();
+      return el;
+    });
     // this.tableData = tools.arrRemoval(this.tableData, 'partCode');
   }
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
@@ -843,7 +866,10 @@ export default class InterPurchase extends Vue {
         }
       })
     })
-    this.tableData = row.details;
+    this.tableData = row.details.map( el => {
+      el.uuid = v4;
+      return el;
+    });
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {

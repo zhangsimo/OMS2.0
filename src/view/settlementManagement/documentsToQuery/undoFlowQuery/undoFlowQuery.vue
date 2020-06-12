@@ -57,7 +57,7 @@
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import {creat} from '../../components'
   import {runningWater} from '@/api/settlementManagement/documentsToQuery/undoFlowQuery'
-  import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { goshop } from '@/api/settlementManagement/shopList'
 
 
   import moment from 'moment'
