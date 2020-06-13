@@ -463,6 +463,7 @@
 
 <script>
 import { getTableList } from "@/api/accountant/accountant";
+import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "@/api/settlementManagement/financialStatement";
 import moment from "moment";
 import { creat } from "./../components";
@@ -478,7 +479,9 @@ export default {
       date: new Date(), // 发生日期
       store: "", // 门店id
       single:0,//复选框状态
-      Branchstore: [], // 门店
+      Branchstore: [
+        {id:0 ,name:'全部'}
+      ], //分店名称
       subjectId: 0 , // 对应科目id
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
@@ -506,7 +509,12 @@ export default {
   async mounted() {
     this.getSubjecties();
     let arr = await creat("", this.$store);
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
     this.query();
   },
   methods: {

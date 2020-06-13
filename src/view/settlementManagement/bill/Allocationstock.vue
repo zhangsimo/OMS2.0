@@ -90,6 +90,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/SelectTheCustomer";
 import { creat } from "./../components";
 import { transferStock, stockParts } from "@/api/bill/saleOrder";
+import { goshop } from '@/api/settlementManagement/shopList'
 import moment from 'moment';
 export default {
   components: {
@@ -99,7 +100,9 @@ export default {
   data() {
     return {
       value: [],
-      Branchstore: [],
+      Branchstore: [
+        {id:0 ,name:'全部'}
+      ], //分店名称
       model1: "",
       modal1: false,
       columns: [
@@ -300,7 +303,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res2 = await goshop(data)
+    if (res2.code === 0) return this.Branchstore = [...this.Branchstore , ...res2.data]
+    console.log(res2.data,arr)
     const res = await this.getTransferStock();
   },
   methods: {

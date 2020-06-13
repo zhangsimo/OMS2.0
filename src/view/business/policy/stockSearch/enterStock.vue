@@ -460,7 +460,7 @@
                     {
                         title: '出库单号',
                         align: 'center',
-                        key: 'code',
+                        key: 'serviceId',
                         minWidth: 120
                     },
                     {
