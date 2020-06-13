@@ -346,6 +346,7 @@ import {
   findByDynamicQuery,
   withdraw
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
+import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
@@ -371,7 +372,9 @@ export default {
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
-      Branchstore: [], //分店名称
+      Branchstore: [
+        {id:0 ,name:'全部'}
+      ], //分店名称
       requestCode: "", //费用报销申请单号
       currRow: null, //选中行
       claimModal: false, //认领弹框
@@ -638,7 +641,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.BranchstoreId = arr[1];
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
     this.getOne();
     this.getQuery();
   }

@@ -126,13 +126,13 @@ export const mixSelectSupplier2 = {
       this.loading = true;
       let req = {};
       if (this.fullName.trim()) {
-        req.fullName = this.fullName.trim();
+        req.name = this.fullName.trim();
       }
       if (this.code.trim()) {
         req.code = this.code.trim();
       }
       if (this.contactorTel.trim()) {
-        req.contactorTel = this.contactorTel.trim();
+        req.tel = this.contactorTel.trim();
       }
       if (this.selectTreeItem) {
         req.supplierTypeFirst = this.selectTreeItem.id;
@@ -145,6 +145,9 @@ export const mixSelectSupplier2 = {
         // console.log(res.data.content, "res =>138");
         this.loading = false;
         this.partData = res.data.content || [];
+        this.partData = this.partData.filter((item) => {
+          return item.id!=this.$store.state.user.userData.shopId
+        })
         this.page.total = res.data.totalElements;
         const { content } = res.data;
         // console.log(content, "content ==>146");

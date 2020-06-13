@@ -191,6 +191,7 @@ import {
   distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
+import { goshop } from '@/api/settlementManagement/shopList';
 import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
@@ -208,7 +209,9 @@ export default {
       companyIdClaim: "", //待认领往来单位
       company: [], //往来单位下拉框
       orgId: "", //门店
-      orgList: [], //门店
+      orgList: [
+        {id:0 ,name:'全部'}
+      ], //分店名称
       claimedSubjectList:{},//获取到点击到的本店认领数据
       areaId:0,//区域
       areaList:[{value:0 ,label:'全部'}],//区域
@@ -368,7 +371,12 @@ export default {
     let arr = await creat([], this.$store);
     this.orgName = arr[3];
     this.orgId = arr[1];
-    this.orgList = arr[2];
+    // this.orgList = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
     this.claimedList();
     this.distributionList();
     this.getAllAre()

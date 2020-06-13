@@ -357,7 +357,7 @@ const methods = {
       this.num += this.num;
       this.$store.commit("setDialog", this.num);
     } else {
-      this.$Message.warning("请选择备配比清单");
+      this.$Message.warning("请选择配比清单");
     }
   },
   // 删除配件

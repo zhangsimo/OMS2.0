@@ -100,6 +100,7 @@ import {
   getOutStockList,
   getOutStockPart
 } from "@/api/bill/saleOrder";
+import { goshop } from '@/api/settlementManagement/shopList';
 import moment from "moment";
 export default {
   components: {
@@ -109,7 +110,9 @@ export default {
   data() {
     return {
       value: [],
-      Branchstore: [],
+      Branchstore: [
+        {id:0 ,name:'全部'}
+      ], //分店名称
       model1: "",
       modal1: false,
       columns: [
@@ -310,7 +313,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
     this.getGeneral();
   },
   methods: {
