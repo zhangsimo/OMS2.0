@@ -126,13 +126,13 @@ export const mixSelectSupplier2 = {
       this.loading = true;
       let req = {};
       if (this.fullName.trim()) {
-        req.fullName = this.fullName.trim();
+        req.name = this.fullName.trim();
       }
       if (this.code.trim()) {
         req.code = this.code.trim();
       }
       if (this.contactorTel.trim()) {
-        req.contactorTel = this.contactorTel.trim();
+        req.tel = this.contactorTel.trim();
       }
       if (this.selectTreeItem) {
         req.supplierTypeFirst = this.selectTreeItem.id;
