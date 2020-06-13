@@ -120,6 +120,7 @@ import {
   getOptionFdList,
   getOptionGuesList
 } from "_api/salesManagment/invoiceApply";
+import { goshop } from '@/api/settlementManagement/shopList';
 import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
@@ -632,13 +633,18 @@ export default {
       });
     }
   },
-  mounted() {
+  async mounted() { 
     this.getDataList();
-    getOptionFdList().then(res=>{
-      if(res.code===0){
-        this.proTypeList=res.data
-      }
-    })
+    // getOptionFdList().then(res=>{
+    //   if(res.code===0){
+    //     this.proTypeList=res.data
+    //   }
+    // })
+    let data ={};
+    data.supplierTypeSecond = 0;
+    let res = await goshop(data);
+    if (res.code === 0) return this.proTypeList = [...this.proTypeList , ...res.data]
+    console.log(res.data)
     getOptionGuesList().then(res=>{
       if(res.code===0){
         this.guestNameList = res.data

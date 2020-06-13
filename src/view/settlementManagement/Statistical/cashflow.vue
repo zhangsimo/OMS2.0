@@ -121,8 +121,9 @@
 <script>
 import {
   are,
-  goshop
+  // goshop
 } from "@/api/settlementManagement/fundsManagement/capitalChain";
+import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "_api/settlementManagement/financialStatement.js";
 import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";

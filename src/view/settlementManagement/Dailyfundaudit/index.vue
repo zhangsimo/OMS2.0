@@ -137,6 +137,7 @@ import TableEight from "./components/TableEight";
 
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import * as api from "_api/settlementManagement/Dailyfundaudit/index.js";
+import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
@@ -166,7 +167,9 @@ export default {
       tableData8: [], // 转损益审核
       dates: [], // 查询日期
       BranchstoreId: "", // 分店id
-      Branchstore: [], // 分店
+      Branchstore: [
+        {id:0 ,name:'全部'}
+      ], //分店名称
       companyId: "", // 往来单位id
       company: [], // 往来单位
       payOrderNo: "", // 收付款单号
@@ -180,7 +183,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.dates = arr[0];
     this.BranchstoreId = arr[1];
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
     this.getCompany();
     this.query();
   },
