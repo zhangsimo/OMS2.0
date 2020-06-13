@@ -322,6 +322,7 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
+import { goshop } from '@/api/settlementManagement/shopList';
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import * as api from "_api/settlementManagement/advanceCharge";
 import { creat } from "../components";
@@ -415,10 +416,15 @@ export default {
 
     //获取门店
     async getShop(){
+      // let data ={}
+      // data.supplierTypeSecond = 0
+      // let res = await goshop(data)
+      // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+      // console.log(res.data,arr)
       let data ={}
       data.supplierTypeSecond = this.model1
       this.Branchstore = [{id:0 , name:'全部'}]
-      let res = await api.goshop(data)
+      let res = await goshop(data)
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore , ...res.data]
         this.$nextTick( () => {

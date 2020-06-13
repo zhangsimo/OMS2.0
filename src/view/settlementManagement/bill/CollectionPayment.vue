@@ -139,6 +139,7 @@ import {
   getReceiptsPaymentsSummary,
   getReceiptsPaymentsList
 } from "@/api/bill/saleOrder";
+import { goshop } from '@/api/settlementManagement/shopList';
 import moment from "moment";
 import { set } from "xe-utils/methods";
 import index from "../../admin/roles";
@@ -151,7 +152,9 @@ export default {
       BranchstoreId: "",
       tab: "key1",
       value: [],
-      Branchstore: [],
+      Branchstore:[
+        {id:0 ,name:'全部'}
+      ], //分店名称
       model1: "",
       modal1: false,
       statelist: [
@@ -399,7 +402,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
     this.getGeneral();
     this.getOne();
   },

@@ -209,6 +209,7 @@ import {
   getSalelist,
   getNumberList
 } from "@/api/bill/saleOrder";
+import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
@@ -835,7 +836,9 @@ export default {
           label: "外部"
         }
       ],
-      Branchstore: [],
+      Branchstore: [
+        {id:0 ,name:'全部'}
+      ],
       business: [
         {
           value: "CGRK",
@@ -871,7 +874,12 @@ export default {
     this.getGeneral(obj);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    // this.Branchstore = arr[2];
+    let data ={}
+    data.supplierTypeSecond = 0
+    let res = await goshop(data)
+    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    console.log(res.data,arr)
   },
   methods: {
     // 表格合计方式
