@@ -255,8 +255,13 @@ export default {
           width: 100
         },
         {
-          title: "本日经营活动支出小计",
-          key: "activitiesExpendMoney",
+          title: "本日资金支出小计",
+          key: "deathMoney",
+          width: 100
+        },
+        {
+          title: "费用报销业务类型",
+          key: "expenseReimbursement",
           width: 100
         },
         {
@@ -267,6 +272,11 @@ export default {
         {
           title: "投、融资活动产生的现金支",
           key: "outActivitiesMoney",
+          width: 100
+        },
+        {
+          title: "本日资金支出小计",
+          key: "capitalSpendingMoney",
           width: 100
         }
       ],

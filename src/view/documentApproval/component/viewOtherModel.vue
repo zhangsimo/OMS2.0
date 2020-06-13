@@ -49,7 +49,7 @@
         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
         <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
         <vxe-table-column field="trueQty" title="实盘数量" width="100"></vxe-table-column>
-        <vxe-table-column field="stockOutQty" title="出库数量" width="100"></vxe-table-column>
+        <vxe-table-column field="exhibitQty" title="出库数量" width="100"></vxe-table-column>
         <vxe-table-column field="exhibitPrice" title="出库单价" width="100"></vxe-table-column>
         <vxe-table-column field="exhibitAmt" title="出库金额" width="100">
         </vxe-table-column>
@@ -388,6 +388,9 @@
         let rep = await findByCodeDetail({'code':row.applyNo});
         if(rep.code==0){
           this.mainData = rep.data||{};
+          this.mainData.exhibitAmt = this.mainData.detailVOList.reduce((total,cur) => {
+            return total+(cur.exhibitAmt||0)
+          },0)
         }
       },
       //采购计划详情
