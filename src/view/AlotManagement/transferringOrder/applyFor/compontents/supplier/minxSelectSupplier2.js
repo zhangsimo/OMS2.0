@@ -145,6 +145,9 @@ export const mixSelectSupplier2 = {
         // console.log(res.data.content, "res =>138");
         this.loading = false;
         this.partData = res.data.content || [];
+        this.partData = this.partData.filter((item) => {
+          return item.id!=this.$store.state.user.userData.shopId
+        })
         this.page.total = res.data.totalElements;
         const { content } = res.data;
         // console.log(content, "content ==>146");
