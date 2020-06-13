@@ -161,7 +161,7 @@ export default class InterPurchase extends Vue {
         this.$Message.success("导入成功");
       }
       this.tableData = [...this.tableData, ...response.data.details].map( el => {
-        el.uuid = v4;
+        el.uuid = v4();
         return el;
       })
       this.tableData.push();
@@ -469,7 +469,15 @@ export default class InterPurchase extends Vue {
       title: '是否要删除配件',
       onOk: async () => {
         let arr = [...this.deletePartArr, ...this.tmpDeletePartArr].map(el => el.uuid);
-        let res:any = await api.delPchsOrderDetail(this.deletePartArr);
+        
+        let res: any;
+        if(this.deletePartArr.length > 0) {
+          res = await api.delPchsOrderDetail(this.deletePartArr);
+        }
+        if(this.tmpDeletePartArr.length > 0) {
+          res = { code: 0 }
+        }
+        
         if (res.code == 0) {
           this.tableData = this.tableData.filter(item => {
             return !arr.includes(item.uuid);
@@ -564,7 +572,7 @@ export default class InterPurchase extends Vue {
           this.saveHandle('formplanref');
           this.mainId = row.id || "";
           this.tableData = (row.details || []).map( el => {
-            el.uuid = v4;
+            el.uuid = v4();
             return el;
           });
           this.selectRowState = null;
@@ -606,7 +614,7 @@ export default class InterPurchase extends Vue {
       this.selectTableRow = v;
       this.mainId = v.id;
       this.tableData = (v.details || []).map( el => {
-        el.uuid = v4;
+        el.uuid = v4();
         return el;
       });
       this.selectRowState = v.billStatusId.name;
@@ -867,7 +875,7 @@ export default class InterPurchase extends Vue {
       })
     })
     this.tableData = row.details.map( el => {
-      el.uuid = v4;
+      el.uuid = v4();
       return el;
     });
     // this.selectTableRow.details = this.tableData;

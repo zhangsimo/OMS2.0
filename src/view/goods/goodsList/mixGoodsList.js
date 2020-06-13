@@ -324,7 +324,8 @@ export const mixGoodsData = {
 
       allArr.map(item => {
         item.uuid = v4();
-        item.orderPrice = item.recentPrice||0
+        item.orderPrice = item.recentPrice||0;
+        return item;
       })
       this.tableData = allArr;
     },
@@ -438,7 +439,10 @@ export const mixGoodsData = {
         this.formPlan.processInstanceId = v.processInstanceId || "";
         this.formPlan.orderMan = v.orderMan || "";
         this.formPlan.orderManId = v.orderManId || "";
-        this.tableData = v.details || [];
+        this.tableData = (v.details || []).map(item => {
+          item.uuid = v4();
+          return item;
+        });
         this.mainId = v.id;
         this.upurl = upxlxs + v.id;
       }
@@ -670,7 +674,10 @@ export const mixGoodsData = {
         } else  {
           self.$Message.success("导入成功");
         }
-        this.tableData = [...this.tableData, ...res.data.details]
+        this.tableData = [...this.tableData, ...res.data.details].map(item => {
+          item.uuid = v4();
+          return item;
+        });
         this.tableData.push();
       } else {
         self.$Message.error(res.message);
