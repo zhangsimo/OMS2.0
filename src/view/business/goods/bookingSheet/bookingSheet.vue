@@ -350,7 +350,7 @@ export default {
     let changeNumber = ({ cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
       if (!reg.test(cellValue)) {
-        return Promise.reject(new Error("角色输入不正确"));
+        return Promise.reject(new Error("数量输入不正确"));
       }
     };
     return {
@@ -641,6 +641,9 @@ export default {
     selectTabelData() {},
     //保存按钮
     SaveMsg() {
+      let zero = tools.isZero(this.tableData, {qty: "preQty"});
+      if(zero) return;
+
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // console.log(this.rowId)
@@ -827,7 +830,7 @@ export default {
           unit: item.unit, //单位
           partBrand: item.partBrand, //品牌
           spec: item.spec, //规格
-          preQty: "", //预定数量
+          preQty: undefined, //预定数量
           remark: "", //备注
           acceptQty: 0, //受理数量
           oemCode: item.oemCode, //oe码
@@ -842,9 +845,9 @@ export default {
         this.Right.tbdata = parts;
       }
 
-      this.Right.tbdata.map(
-        item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
-      );
+      // this.Right.tbdata.map(
+      //   item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
+      // );
     },
     //编辑收货信息弹框显示
     GoodsInfoModal() {
@@ -1012,6 +1015,8 @@ export default {
     // 提交按钮
     instance() {
       if (this.Right.tbdata !== null) {
+        let zero = tools.isZero(this.tableData, {qty: "preQty"});
+        if(zero) return;
         this.$refs.formPlan.validate(valid => {
           if (valid) {
             this.$Modal.confirm({

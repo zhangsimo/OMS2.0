@@ -16,9 +16,9 @@
             <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+                :value="item.id"
+                :key="item.id"
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -303,15 +303,32 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res2 = await goshop(data)
-    if (res2.code === 0) return this.Branchstore = [...this.Branchstore , ...res2.data]
-    console.log(res2.data,arr)
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     const res = await this.getTransferStock();
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
+    },
     // 日期选择
     dateChange(data){
       this.value = data

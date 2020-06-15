@@ -329,8 +329,6 @@
       this.getAllAre() //获取区域
       this.getShop()  //获取门店
       this.getSubject()//获取科目
-
-
     },
     methods: {
 
