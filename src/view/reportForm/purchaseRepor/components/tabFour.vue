@@ -207,7 +207,7 @@ export default {
             el.taxSign = false;
           }
           el.statusName = el.status == 0 ? "未下订单" : (el.status == 1 ? "已下部分订单" : (el.status == 2 ? "完成订单" : ""));
-          el.adjustQty = el.details[0].adjustQty || 0;
+          el.adjustQty = el.details[0] ? el.details[0].adjustQty ? el.details[0].adjustQty:0 : 0;
           el.trueEnterQty = el.details[0].adjustQty || 0;
           return el;
         });

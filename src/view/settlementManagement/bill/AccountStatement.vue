@@ -23,9 +23,9 @@
             <Select v-model="model1" class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+                :value="item.id"
+                :key="item.id"
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -419,7 +419,7 @@ export default {
       model3: "",
       Reconciliationtype: "",
       Branchstore: [
-        {id:0 ,name:'全部'}
+        {id:0 , name:'全部'}
       ],
       modal1: false,
       text: "",
@@ -927,14 +927,9 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1]; 
     // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.getShop()
     this.Branchstore.map(itm => {
-      if (itm.value === this.model1)
-        this.$refs.registrationEntry.orgName = itm.label;
+        this.$refs.registrationEntry.orgName = itm.name;
     });
     let obj = {
       startDate: this.value[0]
@@ -975,6 +970,25 @@ export default {
     }
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
+    },
     //资金认领核销
     capitalWrite() {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
@@ -1163,7 +1177,7 @@ export default {
     },
     // 选择日期
     changedate(daterange) {
-      this.value = daterange;
+      this.value = daterange;  
     },
     // 应收/付单据接口
     getdetailsDocuments(obj) {

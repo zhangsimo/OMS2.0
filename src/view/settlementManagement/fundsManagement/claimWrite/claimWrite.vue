@@ -119,9 +119,9 @@
                 <Select v-model="orgId" class="w150" filterable>
                   <Option
                     v-for="item in orgList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                    :value="item.id"
+                    :key="item.id"
+                  >{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtDis" class="w50" />
@@ -372,11 +372,7 @@ export default {
     this.orgName = arr[3];
     this.orgId = arr[1];
     // this.orgList = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.getShop()
     this.claimedList();
     this.distributionList();
     this.getAllAre()
@@ -394,6 +390,22 @@ export default {
     }
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      this.orgList = [{id:0 , name:'全部'}]
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.orgList = [...this.orgList , ...res.data]
+        this.$nextTick( () => {
+          this.shopCode = 0
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
+    },
     // 往来单位选择
     async getOne() {
       findGuest({size:2000}).then(res => {

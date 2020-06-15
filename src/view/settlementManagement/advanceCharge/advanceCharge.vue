@@ -378,10 +378,11 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    // this.BranchstoreId = this.$store.state.user.userData.shopId
-    // this.Branchstore = [...this.Branchstore,...arr[2]];
-    this.getOne();
     this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
+    this.getOne();
   },
   methods: {
     ...mapMutations(["setClaimedSearch", "setSign", "setClaimedSelectionList"]),
@@ -416,11 +417,6 @@ export default {
 
     //获取门店
     async getShop(){
-      // let data ={}
-      // data.supplierTypeSecond = 0
-      // let res = await goshop(data)
-      // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-      // console.log(res.data,arr)
       let data ={}
       data.supplierTypeSecond = this.model1
       this.Branchstore = [{id:0 , name:'全部'}]
