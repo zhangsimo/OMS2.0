@@ -192,7 +192,7 @@ export const mixGoodsData = {
     },
     //删除选中数据
     delTableData() {
-      console.log(this.delArr)
+      // console.log(this.delArr)
       if (this.delArr.length == 0) {
         this.$message.error("选择要删除的数据");
       } else {
@@ -202,7 +202,7 @@ export const mixGoodsData = {
             if(!this.selectPlanOrderItem.id) {
               this.delArr.forEach(els => {
                 this.tableData.forEach((el, index, arr) => {
-                  if(el.id == els.id) {
+                  if(el.uuid == els.uuid) {
                     arr.splice(index, 1);
                   }
                 })
