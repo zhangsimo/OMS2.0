@@ -18,7 +18,7 @@
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</Option>
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -229,7 +229,7 @@ import claimGuest from "./components/claimGuest";
 import payApply from "./components/payApply";
 import CreditSpending from '@/view/documentApproval/component/CreditSpending'
 import { getComenAndGo, getAllSalesList, getPayList } from "@/view/documentApproval/component/utils";
-
+import { goshop } from '@/api/settlementManagement/shopList'
 
 import moment from "moment";
 export default {
@@ -279,7 +279,10 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.BranchstoreId = arr[1];
-    this.Branchstore = arr[2];
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     this.getOne();
     this.getQuery();
     this.modelType.allSalesList = await getAllSalesList();
@@ -287,6 +290,13 @@ export default {
     this.modelType.payList = await getPayList();
   },
   methods: {
+    //获取门店
+    async getShop(){ 
+      let data ={}
+      data.supplierTypeSecond = 0
+      let res = await goshop(data)
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    },
     //撤回弹框是否打开
     visChange(type) {
       if (!type) {

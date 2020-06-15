@@ -85,7 +85,7 @@
     },
     methods: {
       //获取门店
-      async getShop(){
+      async getShop(){ 
         let data ={}
         data.supplierTypeSecond = 0
         let res = await goshop(data)

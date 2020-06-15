@@ -25,7 +25,7 @@
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</Option>
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml5">
@@ -209,7 +209,7 @@ import {
   getSalelist,
   getNumberList
 } from "@/api/bill/saleOrder";
-// import { goshop } from '@/api/settlementManagement/shopList';
+import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
@@ -874,9 +874,19 @@ export default {
     this.getGeneral(obj);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
   },
   methods: {
+    //获取门店
+    async getShop(){ 
+      let data ={}
+      data.supplierTypeSecond = 0
+      let res = await goshop(data)
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    },
     // 表格合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)

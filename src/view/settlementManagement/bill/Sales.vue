@@ -18,7 +18,7 @@
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</Option>
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -70,7 +70,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/SelectTheCustomer";
 import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
-// import { goshop } from '@/api/settlementManagement/shopList';
+import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from 'moment'
 export default {
@@ -236,15 +236,20 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
-    // let data ={}
-    // data.supplierTypeSecond = 0
-    // let res = await goshop(data)
-    // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    // console.log(res.data,arr)
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     this.getGeneral()
   },
   methods: {
+    //获取门店
+    async getShop(){ 
+      let data ={}
+      data.supplierTypeSecond = 0
+      let res = await goshop(data)
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    },
     // 日期选择
     dateChange(data){
       this.value = data
