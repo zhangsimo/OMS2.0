@@ -1059,7 +1059,7 @@ export default {
     },
     // 保存草稿
     preservationDraft() {
-      this.getPreservation(0);
+      // this.getPreservation(0);
     },
     // 保存并提交
     preservationSubmission() {
