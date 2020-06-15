@@ -479,9 +479,7 @@ export default {
       date: new Date(), // 发生日期
       store: "", // 门店id
       single:0,//复选框状态
-      Branchstore: [
-        {id:0 ,name:'全部'}
-      ], //分店名称
+      Branchstore: [], //分店名称
       subjectId: 0 , // 对应科目id
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
@@ -520,7 +518,6 @@ export default {
     async getShop(){
       let data ={}
       data.supplierTypeSecond = this.model1
-      this.Branchstore = [{id:0 , name:'全部'}]
       let res = await goshop(data)
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore , ...res.data]

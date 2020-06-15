@@ -16,8 +16,8 @@
             <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
+                :value="item.id"
+                :key="item.id"
               >{{ item.name }}</Option>
             </Select>
           </div>
@@ -284,11 +284,23 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop(){ 
+    async getShop(){
       let data ={}
-      data.supplierTypeSecond = 0
+      data.supplierTypeSecond = this.model1
       let res = await goshop(data)
-      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
     },
     // 日期选择
     dateChange(data){

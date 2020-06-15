@@ -22,8 +22,8 @@
             <Select v-model="BranchstoreId" class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
+                :value="item.id"
+                :key="item.id"
                 >{{ item.name }}</Option
               >
             </Select>
