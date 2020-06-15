@@ -43,7 +43,8 @@
           field="outDate"
           title="退货日期"
           width="120"
-        ></vxe-table-column>
+        >
+        </vxe-table-column>
         <vxe-table-column
           field="storeName"
           title="退货仓库"
@@ -109,7 +110,7 @@
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="detailRemark"
+          field="mainRemark"
           title="备注"
           width="120"
         ></vxe-table-column>
@@ -166,7 +167,7 @@
       </vxe-table-column>
       <vxe-table-column field="group4" title="其他">
         <vxe-table-column
-          field="code"
+          field="manualCode"
           title="采退订单单号"
           width="140"
         ></vxe-table-column>
@@ -182,13 +183,13 @@
           show-overflow
         ></vxe-table-column>
         <vxe-table-column
-          field="mainRemark"
+          field="detailRemark"
           title="订单备注"
           width="200"
           show-overflow
         ></vxe-table-column>
         <vxe-table-column
-          field="manualCode"
+          field="pcshOrderCode"
           title="采购订单"
           width="200"
           show-overflow
@@ -211,6 +212,7 @@
 
 <script>
 import * as api from "_api/reportForm/index.js";
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -232,6 +234,8 @@ export default {
       let res = await api.getPjPchsRtnMainDetails(data);
       if (res.code == 0) {
         this.tableDataAll = (res.data || []).map(el => {
+          // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
+          // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
           if ([1, "1", "是"].includes(el.taxSign)) {
             el.taxSign = true;
           }

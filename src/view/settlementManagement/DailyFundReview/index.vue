@@ -22,8 +22,8 @@
             <Select v-model="model1" class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
+                :value="item.id"
+                :key="item.id"
               >{{ item.label }}</Option>
             </Select>
           </div>
@@ -132,7 +132,10 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     let obj = {
       startDate: this.value[0]
         ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -568,6 +571,26 @@ export default {
     };
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      this.Branchstore = [{id:0 , name:'全部'}]
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
+    },
     // 日期选择
     dateChange(data) {
       this.value = data;

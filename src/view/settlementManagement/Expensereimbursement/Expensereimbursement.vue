@@ -25,9 +25,9 @@
             <Select v-model="BranchstoreId" class="w150" filterable clearable>
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
               >
             </Select>
           </div>
@@ -400,6 +400,26 @@ export default {
     };
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      this.Branchstore = [{id:0 , name:'全部'}]
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
+    },
     // 快速查询
     quickDate(data) {
       this.value = data;
@@ -641,12 +661,10 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.BranchstoreId = arr[1];
-    // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     this.getOne();
     this.getQuery();
   }

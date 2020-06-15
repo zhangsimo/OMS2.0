@@ -11,10 +11,10 @@ import {
   deleteparts,
   getParamsBrand
 } from "_api/purchasing/purchasePlan";
-import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import { v4 } from "uuid"
+import * as tools from "_utils/tools";
 
 export const mixGoodsData = {
   data() {
@@ -192,7 +192,7 @@ export const mixGoodsData = {
     },
     //删除选中数据
     delTableData() {
-      console.log(this.delArr)
+      // console.log(this.delArr)
       if (this.delArr.length == 0) {
         this.$message.error("选择要删除的数据");
       } else {
@@ -202,7 +202,7 @@ export const mixGoodsData = {
             if(!this.selectPlanOrderItem.id) {
               this.delArr.forEach(els => {
                 this.tableData.forEach((el, index, arr) => {
-                  if(el.id == els.id) {
+                  if(el.uuid == els.uuid) {
                     arr.splice(index, 1);
                   }
                 })
@@ -319,12 +319,17 @@ export const mixGoodsData = {
     //添加配件数据
     getPartNameList(v) {
       v = JSON.parse(JSON.stringify(v));
+
+      v.forEach(item => {
+        item.orderPrice = item.recentPrice || undefined;
+        item.orderQty = undefined;
+      })
+
       let oldArr = [...this.tableData, ...v]
       var allArr = [...oldArr];
 
       allArr.map(item => {
         item.uuid = v4();
-        item.orderPrice = item.recentPrice||0;
         return item;
       })
       this.tableData = allArr;
@@ -533,6 +538,8 @@ export const mixGoodsData = {
       if(this.submitloading){
         return
       }
+      let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
+      if(zero) return;
       this.submitloading = true;
       this.loading = true;
       this.$refs["formPlan"].validate(valid => {

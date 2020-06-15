@@ -479,9 +479,7 @@ export default {
       date: new Date(), // 发生日期
       store: "", // 门店id
       single:0,//复选框状态
-      Branchstore: [
-        {id:0 ,name:'全部'}
-      ], //分店名称
+      Branchstore: [], //分店名称
       subjectId: 0 , // 对应科目id
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
@@ -509,15 +507,32 @@ export default {
   async mounted() {
     this.getSubjecties();
     let arr = await creat("", this.$store);
-    // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.getShop()
+    this.Branchstore.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     this.query();
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
+    },
     // 获取科目列表
     async getSubjecties() {
       let data = {};

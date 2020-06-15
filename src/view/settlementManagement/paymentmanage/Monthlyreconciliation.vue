@@ -16,8 +16,8 @@
                 >
                   <Option
                     v-for="item in Branchstore"
-                    :value="item.value"
-                    :key="item.value"
+                    :value="item.id"
+                    :key="item.id"
                   >{{ item.label }}</Option>
                 </Select>
               </div>
@@ -1059,7 +1059,7 @@ export default {
     },
     // 保存草稿
     preservationDraft() {
-      this.getPreservation(0);
+      // this.getPreservation(0);
     },
     // 保存并提交
     preservationSubmission() {
