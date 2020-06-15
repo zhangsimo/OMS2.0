@@ -197,7 +197,7 @@ export default {
   methods: {
     // 查询表
     async getList(data = {}) {
-      let res = await api.getPartSplitOut(data);
+      let res = await api.getPartSplitEnter(data);
       if (res.code == 0) {
         this.tableDataAll = (res.data || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
