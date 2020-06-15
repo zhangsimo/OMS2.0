@@ -166,7 +166,7 @@
       </vxe-table-column>
       <vxe-table-column field="group4" title="其他">
         <vxe-table-column
-          field="code"
+          field="manualCode"
           title="采退订单单号"
           width="140"
         ></vxe-table-column>
@@ -188,7 +188,7 @@
           show-overflow
         ></vxe-table-column>
         <vxe-table-column
-          field="manualCode"
+          field="pcshOrderCode"
           title="采购订单"
           width="200"
           show-overflow
