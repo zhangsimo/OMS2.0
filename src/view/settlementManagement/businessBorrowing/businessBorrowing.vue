@@ -344,7 +344,7 @@ import {
   findByDynamicQuery,
   withdraw
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
-import { goshop } from '@/api/settlementManagement/shopList';
+// import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
@@ -657,12 +657,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.BranchstoreId = arr[1];
-    // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.Branchstore = arr[2];
+    // let data ={}
+    // data.supplierTypeSecond = 0
+    // let res = await goshop(data)
+    // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    // console.log(res.data,arr)
     this.getOne();
     this.getQuery();
   }

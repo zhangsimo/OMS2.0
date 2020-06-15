@@ -378,7 +378,7 @@ import {
   account
 } from "@/api/bill/saleOrder";
 import { hedgingApplyNo, applyNo } from "@/api/bill/popup";
-import { goshop } from '@/api/settlementManagement/shopList'
+// import { goshop } from '@/api/settlementManagement/shopList'
 import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
@@ -418,9 +418,7 @@ export default {
       model2: "",
       model3: "",
       Reconciliationtype: "",
-      Branchstore: [
-        {id:0 ,name:'全部'}
-      ],
+      Branchstore: [],
       modal1: false,
       text: "",
       nametext: "",
@@ -926,12 +924,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1]; 
-    // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.Branchstore = arr[2];
+    // let data ={}
+    // data.supplierTypeSecond = 0
+    // let res = await goshop(data)
+    // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    // console.log(res.data,arr)
     this.Branchstore.map(itm => {
       if (itm.value === this.model1)
         this.$refs.registrationEntry.orgName = itm.label;

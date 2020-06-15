@@ -191,7 +191,7 @@ import {
   distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
-import { goshop } from '@/api/settlementManagement/shopList';
+// import { goshop } from '@/api/settlementManagement/shopList';
 import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
@@ -371,12 +371,12 @@ export default {
     let arr = await creat([], this.$store);
     this.orgName = arr[3];
     this.orgId = arr[1];
-    // this.orgList = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.orgList = arr[2];
+    // let data ={}
+    // data.supplierTypeSecond = 0
+    // let res = await goshop(data)
+    // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    // console.log(res.data,arr)
     this.claimedList();
     this.distributionList();
     this.getAllAre()

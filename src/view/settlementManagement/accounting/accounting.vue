@@ -509,12 +509,12 @@ export default {
   async mounted() {
     this.getSubjecties();
     let arr = await creat("", this.$store);
-    // this.Branchstore = arr[2];
-    let data ={}
-    data.supplierTypeSecond = 0
-    let res = await goshop(data)
-    if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    console.log(res.data,arr)
+    this.Branchstore = arr[2];
+    // let data ={}
+    // data.supplierTypeSecond = 0
+    // let res = await goshop(data)
+    // if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    // console.log(res.data,arr)
     this.query();
   },
   methods: {

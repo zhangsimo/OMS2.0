@@ -81,7 +81,7 @@
       let arr = await creat (this.$refs.quickDate.val,this.$store)
       this.value = arr[0]
       // this.shopCode = arr[1]
-      this.getShop() //获取门店
+      this.getShop() //获取门店 
     },
     methods: {
       //获取门店
