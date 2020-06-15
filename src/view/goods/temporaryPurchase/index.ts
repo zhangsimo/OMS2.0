@@ -387,6 +387,9 @@ export default class InterPurchase extends Vue {
     let data: any = this.formdata(refname)
     if (!data) return;
 
+    let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
+    if(zero) return;
+
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
@@ -401,6 +404,10 @@ export default class InterPurchase extends Vue {
   // 提交
   private submit(refname: string) {
     if(!this.selectTableRow.id) return this.$message.error("请先保存再提交");
+    
+    let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
+    if(zero) return;
+
     this.$Modal.confirm({
       title: '是否提交',
       onOk: async () => {
@@ -749,7 +756,8 @@ export default class InterPurchase extends Vue {
     let arrData = v||[]
     arrData = JSON.parse(JSON.stringify(arrData));
     arrData.forEach(item => {
-      item.orderPrice = item.recentPrice
+      item.orderPrice = item.recentPrice || undefined;
+      item.orderQty = undefined;
     })
     this.tableData = this.tableData.concat(arrData).map(el => {
       el.uuid = v4();

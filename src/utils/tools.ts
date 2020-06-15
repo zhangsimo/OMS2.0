@@ -1,3 +1,5 @@
+import { Message } from 'view-design'
+
 function lt9(v: number) {
   return v > 9 ? v : "0" + v;
 }
@@ -181,4 +183,29 @@ export function checkPhone(rule:any, value:string, callback:Function) {
   }
 };
 
+// 判断数量和单价是否为空
+export function isZero(data: Array<any>, { qty, price }) : boolean {
+  let message :any = Message;
+  let zero1:any, zero2:any;
 
+  if(qty) {
+    zero1 = data.find(el => el[qty] === undefined || el[qty] === 0);
+  }
+
+  if(price) {
+    zero2 = data.find(el => el[price] === undefined || el[price] === 0);
+  }
+
+  if(zero1) {
+    message.error("数量不能为空");
+    return true;
+  }
+
+  if(zero2) {
+    message.error("单价不可为空");
+    return true;
+  }
+
+  return false;
+
+}
