@@ -14,7 +14,7 @@ export default {
     flowbox
   },
   props:{
-    list:''
+    list:'',
   },
   data(){
     return {
@@ -186,6 +186,7 @@ export default {
           let res = await getCreditSave(this.formInline)
           if (res.code == 0) {
             this.$Message.success('操作成功')
+            this.$emit("updateD")
             this.model = false
           }
         } else {

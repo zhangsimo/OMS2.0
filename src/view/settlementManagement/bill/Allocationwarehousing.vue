@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150">
+            <Select v-model="model1" filterable class="w150" @on-change="getTransferWarehousing">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -28,7 +28,7 @@
           </div>
           <div class="db">
             <span>类型：</span>
-            <Select v-model="type" style="width:200px">
+            <Select v-model="type" style="width:200px" @on-change="getTransferWarehousing">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -311,6 +311,7 @@ export default {
             data[1]=data[1]+' 23:59:59';
         }
       this.value = data;
+      this.getTransferWarehousing();
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -413,6 +414,7 @@ export default {
     getOne(data) {
       this.company = data.fullName;
       this.companyId = data.id;
+      this.getTransferWarehousing()
     },
     // 快速查询
     quickDate(data) {

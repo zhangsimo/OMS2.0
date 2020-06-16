@@ -246,6 +246,8 @@ import "../../../lease/product/lease.less";
 import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
 import PrintShow from "./components/PrintShow";
 import More from "./components/More";
+import * as tools from "_utils/tools";
+
 export default {
   name: "takeStock",
   components: {
@@ -506,6 +508,8 @@ export default {
         this.$Message.error("只有草稿状态才能提交");
         return;
       }
+      let zero = tools.isZero(this.Right.tbdata, {qty: "trueQty"});
+      if(zero) return;
       if (
         !this.formPlan.auditDate ||
         !this.formPlan.storeId ||
@@ -529,6 +533,8 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
+      let zero = tools.isZero(this.Right.tbdata, {qty: "trueQty"});
+      if(zero) return;
       //判断是否为草稿状态
       if (this.formPlan.billStatusId !== 0) {
         this.$Message.error("只有草稿状态才能保存");
@@ -595,23 +601,6 @@ export default {
     removeCancel() {
       this.showRemove = false;
     },
-    //审核
-    // audit(){
-    //   this.showAudit = true
-    // },
-    // //确认审核
-    // auditOK() {
-    //   removeDataList()
-    //     .then(res => {
-    //       if (res.code === 0) {
-    //         this.showAudit = false
-    //       }
-    //     })
-    //     .catch(err => {
-    //       this.showAudit = false
-    //       this.$Message.info('确认审核失败')
-    //     })
-    // },
     auditCancel() {
       this.showRemove = false;
     },
@@ -658,23 +647,12 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      console.log(val, 999);
-      console.log(conversionList(val), 8888);
       var datas = conversionList(val);
-      console.log(datas);
       datas.forEach(item => {
-        this.Right.tbdata.push(item);
-        this.formPlan.detailVOList.push(item);
+        item.trueQty = undefined;
       });
-      // getSubmitList(this.formPlan)
-      //   .then(res => {
-      //     console.log(res);
-      //   })
-      //   .catch(err => {
-      //     this.showRemove = false;
-      //     this.$Message.info("添加失败");
-      //   });
-      console.log(this.Right.tbdata);
+      this.Right.tbdata = this.Right.tbdata.concat(datas);
+      this.formPlan.detailVOList = this.formPlan.detailVOList.concat(datas);
     },
     //分页
     changePage(p) {

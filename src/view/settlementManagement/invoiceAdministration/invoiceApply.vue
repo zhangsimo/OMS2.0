@@ -615,6 +615,7 @@ export default {
     // 选择日期
     changedate(daterange) {
       this.value = daterange;
+      this.getDataList()
     },
     pageCode() {},
     getDetails() {
@@ -631,6 +632,24 @@ export default {
           this.pagetotal = res.data.totalElements;
         }
       });
+    },
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.proTypeList = [...this.proTypeList , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
     }
   },
   async mounted() { 
@@ -640,11 +659,10 @@ export default {
     //     this.proTypeList=res.data
     //   }
     // })
-    let data ={};
-    data.supplierTypeSecond = 0;
-    let res = await goshop(data);
-    if (res.code === 0) return this.proTypeList = [...this.proTypeList , ...res.data]
-    console.log(res.data)
+    this.getShop()
+    this.proTypeList.map(itm => {
+        this.$refs.registrationEntry.orgName = itm.name;
+    });
     getOptionGuesList().then(res=>{
       if(res.code===0){
         this.guestNameList = res.data

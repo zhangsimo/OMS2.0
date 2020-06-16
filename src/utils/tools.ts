@@ -189,11 +189,11 @@ export function isZero(data: Array<any>, { qty, price }) : boolean {
   let zero1:any, zero2:any;
 
   if(qty) {
-    zero1 = data.find(el => el[qty] === undefined || el[qty] === 0);
+    zero1 = data.find(el => el[qty] === undefined || el[qty] * 1 <= 0);
   }
 
   if(price) {
-    zero2 = data.find(el => el[price] === undefined || el[price] === 0);
+    zero2 = data.find(el => el[price] === undefined || el[price] * 1 <= 0);
   }
 
   if(zero1) {

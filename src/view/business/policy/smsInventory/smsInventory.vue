@@ -342,8 +342,8 @@ import moment, { months } from "moment";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
-import * as tools from "../../../../utils/tools";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+import * as tools from "_utils/tools";
 
 export default {
   name: "smsInventory",
@@ -712,22 +712,8 @@ export default {
         this.$Message.error("只有草稿状态才能提交");
         return;
       }
-      // this.$refs.form.validate(valid => {
-      //   if (valid) {
-      //     this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
-      //       "YYYY-MM-DD HH:mm:ss"
-      //     );
-      //     this.formPlan.billStatusId = 1;
-      //     getSubmitList(this.formPlan).then(res => {
-      //       if (res.code == 0) {
-      //         this.$Message.success("提交成功");
-      //         this.getList();
-      //       }
-      //     });
-      //   } else {
-      //     callback(new Error("带*必填"));
-      //   }
-      // });
+      let zero = tools.isZero(this.Right.tbdata, {qty: "trueQty"});
+      if(zero) return;
       this.$Modal.confirm({
         title: "是否确定提交订单",
         onOk: async () => {
@@ -757,6 +743,8 @@ export default {
     baocun() {
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
+        let zero = tools.isZero(this.Right.tbdata, {qty: "trueQty"});
+        if(zero) return;
         this.formPlan.checkDate = new Date(this.formPlan.checkDate);
         this.$refs.form.validate(valid => {
           // let preTime = "";
@@ -956,7 +944,8 @@ export default {
     getPartNameList(val) {
         var datas=val;
        datas.map(item=>{
-           item.id=''
+           delete item.id;
+           item.trueQty = undefined;
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
