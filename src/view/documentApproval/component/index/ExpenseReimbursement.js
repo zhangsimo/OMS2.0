@@ -151,9 +151,6 @@ export default {
         this.details = []
         let arr = [
           {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
-          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
-          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
-          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
         ]
         this.$set(this.formInline ,'expenseDetails' ,  arr )
 
@@ -352,7 +349,7 @@ export default {
       data.totalAmt = 0
       data.taxRateCode = 'TR001'
       data.taxAmt = 0
-      this.formInline.expenseDetails.push(data)
+      this.formInline.expenseDetails.splice(1 , 0 ,data)
     },
 
     // 表格尾部合计
