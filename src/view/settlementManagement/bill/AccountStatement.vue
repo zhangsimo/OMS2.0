@@ -102,12 +102,12 @@
           v-has="'claim'"
           :disabled="statementStatusflag"
         >认领款核销</button>
-        <button
-          class="ivu-btn ivu-btn-default mr10"
-          type="button"
-          @click="statementSettlement"
-          v-has="'print'"
-        >打印流程</button>
+<!--        <button-->
+<!--          class="ivu-btn ivu-btn-default mr10"-->
+<!--          type="button"-->
+<!--          @click="statementSettlement"-->
+<!--          v-has="'print'"-->
+<!--        >打印流程</button>-->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -363,7 +363,7 @@ import settlementMoadl from "./components/settlement";
 import hedgingInvoice from "./Popup/hedgingInvoice";
 import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import salepopup from "./Popup/salepopup"; 
+import salepopup from "./Popup/salepopup";
 import { creat } from "./../components";
 import moment from "moment";
 import {
@@ -925,7 +925,7 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.model1 = arr[1]; 
+    this.model1 = arr[1];
     // this.Branchstore = arr[2];
     this.getShop()
     this.Branchstore.map(itm => {
@@ -1177,7 +1177,7 @@ export default {
     },
     // 选择日期
     changedate(daterange) {
-      this.value = daterange;  
+      this.value = daterange;
     },
     // 应收/付单据接口
     getdetailsDocuments(obj) {
