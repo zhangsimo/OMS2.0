@@ -204,7 +204,7 @@ export default class SelectSupplier extends Vue {
     params.page = this.page.num - 1;
     params.size = this.page.size;
     let arr = [
-      'fullName',
+      'shortName',
       'code',
       'contactorTel',
     ];
@@ -218,6 +218,7 @@ export default class SelectSupplier extends Vue {
     }
     let res = await api.getSupplier(params);
     if (res.code == 0) {
+      console.log(res.data)
       this.loading = false;
       this.partData = res.data.content;
       this.page.total = res.data.totalElements;

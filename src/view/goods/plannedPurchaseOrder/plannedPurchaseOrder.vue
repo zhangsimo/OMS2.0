@@ -266,7 +266,7 @@
                         :key="index"
                         :value="item.value"
                         v-show="item.value!=$store.state.user.userData.shopId"
-                        >{{ item.label }}</Option
+                        >{{ item.label.length>=9?item.label.slice(0,7):item.label }}</Option
                       >
                     </Select>
                   </FormItem>

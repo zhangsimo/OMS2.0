@@ -810,8 +810,8 @@ export default class InterPurchase extends Vue {
         this.inStores.push({ value: storeMap[el], label: el })
       }
       // 直发门店
-      for (let el in companyMap) {
-        this.putStores.push({ value: companyMap[el], label: el })
+      for (let el in guestMap) {
+        this.putStores.push({ value: guestMap[el], label: el })
       }
       for (let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })

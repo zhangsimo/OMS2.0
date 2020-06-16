@@ -127,7 +127,7 @@
       </Content>
     </Layout>
   </Layout>
-</template>
+</template> 
 <script>
 import SideMenu from "./components/side-menu";
 import HeaderBar from "./components/header-bar";

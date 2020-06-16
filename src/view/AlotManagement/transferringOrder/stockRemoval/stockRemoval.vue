@@ -338,6 +338,7 @@ import {
   outDataList,
   getListDetail
 } from "@/api/AlotManagement/stockRemoval.js";
+import * as tools from "_utils/tools";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 export default {
@@ -641,7 +642,7 @@ export default {
       var arr = []
       val.forEach(item => {
         item.partName = item.partStandardName;
-        item.hasAcceptQty = "1";
+        item.hasAcceptQty = undefined;
         item.carBrandName = item.adapterCarModel;
         item.orderPrice = item.minUnit;
         item.oemCode = item.oeCode;
@@ -703,6 +704,8 @@ export default {
       this.getList();
     },
     async baocun1() {
+      let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {qty: "hasAcceptQty"});
+      if(zero) return;
       if (this.Leftcurrentrow.remark.length > 100) {
         this.$Message.info("备注小于100个字符");
         return;
@@ -839,6 +842,8 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
+      let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {qty: "hasAcceptQty"});
+      if(zero) return;
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
         if(params.status.value!=undefined){
             params.status = params.status.value

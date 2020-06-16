@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" class="w150" @on-change="getGeneral">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -342,6 +342,7 @@ export default {
     // 日期选择
     dateChange(data) {
       this.value = data;
+      this.getGeneral()
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -453,6 +454,7 @@ export default {
     getOne(data) {
       this.company = data.fullName;
       this.companyId = data.id;
+      this.getGeneral()
     },
     // 快速查询
     quickDate(data) {
@@ -486,6 +488,7 @@ export default {
     // 类型
     type(value) {
       this.typeName = value;
+      this.getGeneral()
     },
     // 总表查询
     getGeneral() {

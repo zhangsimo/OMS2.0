@@ -9,11 +9,11 @@
           </div>
           <div class="db ml20">
             <span>查询日期：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker format="yyyy-MM-dd" :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="changedate"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable >
+            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable clearable >
+            <Select v-model="companyId" class="w150" filterable clearable @on-change="query">
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -176,8 +176,8 @@
     <!-- 认领弹框 -->
     <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
-        <Option v-for="item in company" :value="item.value" :key="item.value">
+      <Select v-model="companyId" class="w150" filterable @on-change="queryClaimed">
+        <Option v-for="item in company" :value="item.id" :key="item.id">
           {{
           item.label
           }}
@@ -206,8 +206,8 @@
         <Button @click="revoke=false">取消</Button>
       </div>
     </Modal>
-    <CreditSpending ref="credit"  :list="modelType" />
-    <settlement ref="settlement" />
+    <CreditSpending ref="credit"  :list="modelType" @updateD="query" />
+    <settlement ref="settlement" @updateD="query" />
     <payApply ref="payApply" />
   </div>
 </template>
@@ -337,6 +337,10 @@ export default {
           });
         }
       });
+    },
+    changedate(daterange) {
+      this.value = daterange;
+      this.query()
     },
     // 快速查询
     quickDate(data) {
@@ -485,13 +489,14 @@ export default {
       } else {
         this.$message.error("请先选择数据");
       }
+      this.query()
     },
     //传参数据
     selection(arr) {
       this.claimSelection=[]
       this.claimSelection.push({ id: arr.id });
     },
-    //预收款认领弹窗查询
+    //预收款认领弹窗查询suppliers
     claimedList(type) {
       let obj = {
         amount: this.amt,
@@ -503,6 +508,7 @@ export default {
       };
       claimedFund(obj).then(res => {
         if (res.code === 0) {
+          console.log(res.data)
           this.$refs.claim.claimedData = res.data.content;
           this.$refs.claim.claimedPage.total = res.data.totalElements;
         }
