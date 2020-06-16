@@ -291,6 +291,8 @@ import More from "./components/More";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
 import {getSales} from "@/api/salesManagment/salesOrder";
+import * as tools from "_utils/tools";
+
 export default {
   name: "moveStorehouse",
   components: {
@@ -718,6 +720,9 @@ export default {
       }
       this.saveButClick = true;
 
+      let zero = tools.isZero(this.Right.tbdata, {qty: "orderQty",});
+      if(zero) return this.saveButClick = false;
+
       if (!this.Leftcurrentrow.serviceId) {
         if (this.Leftcurrentrow.xinzeng !== "1") {
           this.saveButClick = false;
@@ -790,27 +795,6 @@ export default {
       },
     // 提交
     editPro() {
-      //判断是否为草稿状态
-      // this.$refs.Leftcurrentrow.validate(valid => {
-      //   if (valid) {
-      //     //成功
-      //   } else {
-      //     return;
-      //   }
-      // });
-      // if (!this.Leftcurrentrow.id) {
-      //   this.$Message.error("请选择数据");
-      //   return;
-      // }
-      // if (
-      //   !this.Leftcurrentrow.receiveStoreId ||
-      //   !this.Leftcurrentrow.storeId ||
-      //   !this.Leftcurrentrow.createUname ||
-      //   !this.Leftcurrentrow.serviceId
-      // ) {
-      //   this.$Message.error("请填写移仓信息");
-      //   return;
-      // }
       if (
         this.Leftcurrentrow.status.value &&
         this.this.Leftcurrentrow.status.value !== 0
@@ -818,6 +802,9 @@ export default {
         this.$Message.error("只有草稿状态才能保存");
         return;
       }
+      let zero = tools.isZero(this.Right.tbdata, {qty: "orderQty",});
+      if(zero) return;
+
       this.Leftcurrentrow.billStatusId = 1;
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -934,9 +921,10 @@ export default {
 
     //添加配件
     getPartNameList(val) {
-      // console.log(conversionList(val),8888)
-      var datas = [...val] // conversionList(val);
-      // console.log(datas, "datas=>738"); partCode
+      var datas = [...val].map(el => {
+        el.orderQty = undefined;
+        return el;
+      });
 
       var arr = [];
 
@@ -951,7 +939,6 @@ export default {
 
       arr.forEach(item => {
         delete item.id;
-        item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
       });
       if(arr.length != datas.length) {
