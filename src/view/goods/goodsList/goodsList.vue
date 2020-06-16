@@ -212,9 +212,9 @@
                       <Option
                         v-for="item in companyMap"
                         :value="item.value"
-                        :key="item.value"
+                        :key="item.value" 
                         v-show="item.value!=$store.state.user.userData.shopId"
-                      >{{ item.label }}</Option>
+                      >{{ item.label}}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="计划单号：">
@@ -657,9 +657,6 @@ export default {
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
-
-
-
     getPurchaseInit({}).then(res => {
       //票据类型
       if (res.code == 0) {
@@ -672,7 +669,6 @@ export default {
         }
       }
     });
-
     this.getAllSales()
   },
   created() {
@@ -698,7 +694,6 @@ export default {
     initStart() {
       this.getList();
     },
-
     async getAllSales() {
       let res = await getSales();
       if (res.code === 0) {
@@ -709,15 +704,12 @@ export default {
         })
       }
     },
-
     showStatus() {
       this.$refs["StatusModel"].init();
     },
-
     showModel(name) {
       this.$refs[name].init();
     },
-
     getmoreData(data) {
       console.log(data)
       this.moreData = data;
@@ -728,7 +720,6 @@ export default {
         this.isMore = false;
       }
     },
-
     //选择供应商
     addSuppler() {
       this.$refs.selectSupplier.init();
@@ -737,12 +728,10 @@ export default {
     addPro() {
       this.$refs.selectPartCom.init();
     },
-
     print() {
       const ref = this.$refs.PrintModel;
       ref.openModal();
     },
-
     //分页
     changePage(p) {
       this.page.num = p;

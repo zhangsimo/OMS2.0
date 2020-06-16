@@ -69,7 +69,7 @@ export default [
         mark: "1000",
         meta: {
           icon: "arrow-graph-up-right",
-          title: "采购计划"
+          title: "滚动计划单"
         },
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },

@@ -519,10 +519,10 @@ export default {
     // this.getAdress();
     // this.getAllClient();
 
-    this.getType();
-    this.getWarehouse();
-    this.getClassifyList();
-    this.getAllSales();
+    this.getType();/*获取客户属性*/
+    this.getWarehouse();/*获取仓库*/
+    this.getClassifyList();/*获取新增客户二级分类*/
+    this.getAllSales();/*获取销售员*/
   },
   computed: {
     getOneOrder() {
@@ -1006,7 +1006,6 @@ export default {
                 this.$Message.info('已取消出库');
             },
         })
-
     },
     //提交
     submitList() {
@@ -1102,15 +1101,15 @@ export default {
       handler(old, ov) {
         this.$parent.$parent.ispart=false;
         if (!old.id) {
-             this.formPlan =Object.assign({},{
-                 billStatusId: { name: "草稿", value: 0 },
-                 detailList: [],
-                 storeId:this.formPlan.storeId,
-                 orderTypeValue:0,
-                 orderManId:this.$store.state.user.userData.id,
-                 orderMan: this.$store.state.user.userData.staffName,
-                 guestId:this.formPlan.guestId}
-                 ) ;
+          this.formPlan =Object.assign({},{
+              billStatusId: { name: "草稿", value: 0 },
+              detailList: [],
+              storeId:this.formPlan.storeId,
+              orderTypeValue:0,
+              orderManId:this.$store.state.user.userData.id,
+              orderMan: this.$store.state.user.userData.staffName,
+              guestId:this.formPlan.guestId}
+              ) ;
           this.draftShow = 0;
           this.leftOneOrder = this.formPlan
           return false;

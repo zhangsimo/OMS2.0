@@ -9,15 +9,15 @@
       <Button type="default" class="mr10" @click="openQueryModal">
         <Icon type="ios-more" />更多
       </Button>
-      <Button type="default" @click="addNew" class="mr10 w90"  v-has="'add'">
+      <Button type="default" @click="addNew" class="mr10 w90" v-has="'add'">
         <Icon type="md-add" size="14" />新增
       </Button>
-      <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0"  v-has="'save'">
+      <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0" v-has="'save'">
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons" />保存
         </span>
       </Button>
-      <Button class="mr10" @click="sumbit" :disabled="orderlistType.value != 0"  v-has="'submit'">
+      <Button class="mr10" @click="sumbit" :disabled="orderlistType.value != 0" v-has="'submit'">
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
       </Button>
       <Button
@@ -26,25 +26,36 @@
         :disabled="orderlistType.value != 1||isWms"
         v-has="'StockOut'"
       >
-      <!--orderlistType.isWms == 1 || ^-->
+        <!--orderlistType.isWms == 1 || ^-->
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
       </Button>
-      <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0"  v-has="'print'">
+      <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0" v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button class="mr10" @click="setBackOrder" :loading="backloading" :disabled="orderlistType.value != 1 || backShow" v-has="'BackOrder'">
+      <Button
+        class="mr10"
+        @click="setBackOrder"
+        :loading="backloading"
+        :disabled="orderlistType.value != 1 || backShow"
+        v-has="'BackOrder'"
+      >
         <i class="iconfont mr5 iconziyuan14"></i> 返单
       </Button>
-      <Button class="mr10" @click="setCancellation" :disabled="orderlistType.value != 0" v-has="'Cancellation'">
+      <Button
+        class="mr10"
+        @click="setCancellation"
+        :disabled="orderlistType.value != 0"
+        v-has="'Cancellation'"
+      >
         <Icon type="md-close" size="14" />作废
       </Button>
-      <Button class @click="setDerive"  v-has="'Derive'">
+      <Button class @click="setDerive" v-has="'Derive'">
         <i class="iconfont mr5 icondaochuicon"></i> 导出
       </Button>
     </div>
     <div class="conter">
       <div class="demo-split">
-        <Split v-model="split1" >
+        <Split v-model="split1">
           <div slot="left" ref="paneLeft" style="height: 100%" class="demo-split-pane">
             <OrderLeft
               ref="OrderLeft"
@@ -52,7 +63,7 @@
               :orderType="orderType"
               @getOneOrder="getOrder"
               :changeLeftList="changeLeft"
-              @refresh= "getDutyInfo"
+              @refresh="getDutyInfo"
             ></OrderLeft>
           </div>
           <div slot="right" class="demo-split-pane">
@@ -77,7 +88,11 @@ import OrderLeft from "./OrderLeft";
 import OrderRight from "./OrderRight";
 import MoreQuery from "../../commonality/MoreQuery";
 import PrintShow from "../../commonality/PrintShow";
-import { getCancellation, getReorder, getLeftList } from "@/api/salesManagment/salesOrder";
+import {
+  getCancellation,
+  getReorder,
+  getLeftList
+} from "@/api/salesManagment/salesOrder";
 
 export default {
   name: "Order",
@@ -91,8 +106,8 @@ export default {
   data() {
     return {
       backloading: false,
-      isNew:true,//页面开始禁用
-      isAdd:false,//判断是否新增
+      isNew: true, //页面开始禁用
+      isAdd: false, //判断是否新增
       orderType: 6,
       typeList: [
         { value: 6, name: "全部" },
@@ -111,13 +126,13 @@ export default {
       orderlistType: {
         value: 0
       }, //默认状态
-      changeLeft: "" ,//发生改变数据调动左侧list
-      ispart:true,
-      isWms:false,
-      backShow:false,//作废判断是否wms仓库
+      changeLeft: "", //发生改变数据调动左侧list
+      ispart: true,
+      isWms: false,
+      backShow: false //作废判断是否wms仓库
     };
   },
-  mounted(){
+  mounted() {
     this.getDomHeight();
   },
   methods: {
@@ -127,13 +142,12 @@ export default {
         let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
         this.$refs.OrderLeft.leftTableHeight = wrapH - 130;
-        this.$refs.right.rightTableHeight = wrapH - planFormH  - 120;
+        this.$refs.right.rightTableHeight = wrapH - planFormH - 120;
       });
     },
 
-
     //用于父子组件之间的方法通信
-    getDutyInfo(){
+    getDutyInfo() {
       this.setSave();
     },
     //  调用left方法
@@ -155,12 +169,18 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
-      console.log(data)
+      console.log(data);
       this.isWms = false;
-      this.backShow = false
+      this.backShow = false;
       this.orderlistType = data.billStatusId;
-      if (data.billStatusId.value == 1 && data.isWms == 1){ this.backShow = true}
-      if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
+      if (data.billStatusId.value == 1 && data.isWms == 1) {
+        this.backShow = true;
+      }
+      if (
+        this.orderlistType &&
+        this.orderlistType.value === 1 &&
+        data.isWms === 1
+      ) {
         this.isWms = true;
       }
     },
@@ -170,7 +190,7 @@ export default {
     },
     //出库
     setStockOut() {
-       this.$refs.right.stockOut();
+      this.$refs.right.stockOut();
       // if(res.code===0){
       //   this.$message.success('出库成功')
       // }
@@ -178,25 +198,25 @@ export default {
     //提交
     sumbit() {
       let list = this.$store.state.dataList.oneOrder;
-        this.$refs.right.$refs.formPlan.validate(async valid => {
-            if(valid){
-                if (list.id||this.isAdd) {
-                    this.$Modal.confirm({
-                        title: '是否确定提交',
-                        onOk: async () => {
-                          await this.$refs.right.submitList();
-                        },
-                        onCancel: () => {
-                          this.$Message.info('取消提交');
-                        },
-                    })
-                }else{
-                    this.$Message.warning('请选择一条有效数据')
-                }
-            }else{
-                this.$Message.error("*为必填项");
-            }
-        })
+      this.$refs.right.$refs.formPlan.validate(async valid => {
+        if (valid) {
+          if (list.id || this.isAdd) {
+            this.$Modal.confirm({
+              title: "是否确定提交",
+              onOk: async () => {
+                await this.$refs.right.submitList();
+              },
+              onCancel: () => {
+                this.$Message.info("取消提交");
+              }
+            });
+          } else {
+            this.$Message.warning("请选择一条有效数据");
+          }
+        } else {
+          this.$Message.error("*为必填项");
+        }
+      });
     },
     //返单
     async setBackOrder() {
@@ -222,7 +242,7 @@ export default {
       let list = this.$store.state.dataList.oneOrder;
       if (list.id) {
         this.$Modal.confirm({
-          title: '是否确定作废',
+          title: "是否确定作废",
           onOk: async () => {
             let data = {};
             data.id = list.id;
@@ -234,11 +254,11 @@ export default {
             }
           },
           onCancel: () => {
-            this.$Message.info('取消作废');
-          },
-        })
+            this.$Message.info("取消作废");
+          }
+        });
       } else {
-        this.$Message.warning('请选择一条有效数据')
+        this.$Message.warning("请选择一条有效数据");
       }
     },
     //导出
@@ -258,45 +278,45 @@ export default {
     },
     //新增
     addNew() {
-        if(this.isAdd){
-            return this.$Message.error("请先保存数据");
-        }
+      if (this.isAdd) {
+        return this.$Message.error("请先保存数据");
+      }
       this.$refs.OrderLeft.change();
-      this.ispart=false
-      this.orderlistType.value = 0
+      this.ispart = false;
+      this.orderlistType.value = 0;
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
-      this.$refs.right.limitList.fixationQuota = '00.00'
-      this.$refs.right.limitList.tempQuota  = '00.00'
-      this.$refs.right.limitList.sumAmt = '00.00';
-      this.isAdd=true;
-      this.$refs.right.WarehouseList.map(item=>{
-          if(item.isDefault){
-              this.$refs.right.formPlan=Object.assign({},{storeId:item.id});
-          }
-      })
+      this.$refs.right.limitList.fixationQuota = "00.00";
+      this.$refs.right.limitList.tempQuota = "00.00";
+      this.$refs.right.limitList.sumAmt = "00.00";
+      this.isAdd = true;
+      this.$refs.right.WarehouseList.map(item => {
+        if (item.isDefault) {
+          this.$refs.right.formPlan = Object.assign({}, { storeId: item.id });
+        }
+      });
     },
     //重置额度
-      reset(v){
-        const left = this.$refs.OrderLeft;
-        this.$refs.right.limitList={
-          fixationQuota:'',
-          tempQuota:'',
-          sumAmt:'',
+    reset(v) {
+      const left = this.$refs.OrderLeft;
+      this.$refs.right.limitList = {
+        fixationQuota: "",
+        tempQuota: "",
+        sumAmt: ""
+      };
+      v.showPerson = v.showPerson ? 1 : 0;
+      left.page.num = 1;
+      // this.page.size = 10;
+      let page = left.page.num - 1;
+      let size = left.page.size;
+      getLeftList(page, size, v).then(res => {
+        if (res.code === 0) {
+          // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
+          left.tableData = res.data.content;
+          left.page.total = res.data.totalElements;
         }
-        v.showPerson = v.showPerson ? 1 : 0;
-        left.page.num = 1;
-        // this.page.size = 10;
-        let page = left.page.num - 1;
-        let size = left.page.size;
-        getLeftList(page, size, v).then(res => {
-          if (res.code === 0) {
-            // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
-            left.tableData = res.data.content;
-            left.page.total = res.data.totalElements;
-          }
-        });
-      }
+      });
+    }
   }
 };
 </script>
