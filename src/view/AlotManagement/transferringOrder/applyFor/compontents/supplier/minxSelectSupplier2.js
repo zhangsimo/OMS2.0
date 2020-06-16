@@ -32,19 +32,14 @@ export const mixSelectSupplier2 = {
           type: "index"
         },
         {
-          title: "供应商名称",
-          key: "name",
-          minWidth: 200
+          title: "机构简称",
+          key: "shortName",
+          minWidth: 100
         },
         {
           title: "编码",
           key: "code",
           minWidth: 200
-        },
-        {
-          title: "简称",
-          key: "shortName",
-          minWidth: 100
         },
         {
           title: "状态",
@@ -73,6 +68,11 @@ export const mixSelectSupplier2 = {
           title: "业务员电话",
           key: "salesmanTel",
           minWidth: 150
+        },
+        {
+          title: "机构全称",
+          key: "name",
+          minWidth: 200
         },
         {
           title: "票据类型",
