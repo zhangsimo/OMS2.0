@@ -15,7 +15,9 @@
             <div style="display:flex" class="mt20 mb20">
                 <div class="db ml20">
                     <span>分店名称：</span>
-                    <input type="text" class="h30" v-model="form.orgid" readonly />
+                    <Select v-model="form.orgName" style="width:180px">
+                        <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+                    </Select>
                 </div>
                 <div class="db ml20">
                     <span>发票号码：</span>
@@ -39,6 +41,7 @@
 </template>
 <script>
 import { getManualList,subManualList } from '_api/salesManagment/invoiceApply'
+import { goshop } from '@/api/settlementManagement/shopList';
 export default {
     data(){
         return{
@@ -278,7 +281,8 @@ export default {
                 page:0,
                 size:9999
             },
-            allSelectList:[]
+            allSelectList:[],
+            proTypeList:[]
         }
     },
     methods:{
@@ -321,7 +325,31 @@ export default {
         },
         requireMore(val){
             this.allSelectList=val
+        },
+        async getShop(){
+            let data ={}
+            data.supplierTypeSecond = this.model1
+            let res = await goshop(data)
+            if (res.code === 0) {
+                this.proTypeList = [...this.proTypeList , ...res.data]
+                this.$nextTick( () => {
+                    if (localStorage.getItem('oms2-userList')){
+                        this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+                    } else {
+                        this.BranchstoreId = this.$store.state.user.userData.shopId
+                    }
+                })
+                if (this.$store.state.user.userData.shopkeeper != 0){
+                    this.getThisArea()//获取当前门店地址
+                }
+            }
         }
+    },
+    mounted(){
+        this.getShop();
+        this.proTypeList.map(itm => {
+            this.$refs.registrationEntry.orgName = itm.name;
+        });
     }
 }
 </script>

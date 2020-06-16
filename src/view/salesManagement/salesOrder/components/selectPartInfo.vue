@@ -40,7 +40,7 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber :min="1" class="w200" precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <InputNumber :min="0" class="w200" precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
           </FormItem>
         </Col>
         <Col span="12">
@@ -57,7 +57,7 @@
         </Col>
         <Col span="12">
           <FormItem label="金额：">
-            <Input disabled v-model="(formItemData.orderPrice*formItemData.orderQty).toFixed(2)" class="w200" placeholder="金额"></Input>
+            <Input disabled v-model="total" class="w200" placeholder="金额"></Input>
           </FormItem>
         </Col>
       </Row>
@@ -79,13 +79,21 @@
         prevPrice: 0,
       }
     },
+    computed: {
+      total() {
+        let orderPrice = this.formItemData.orderPrice || 0;
+        let qty = this.formItemData.orderQty || 0;
+        return (orderPrice * qty).toFixed(2);
+      }
+    },
     methods:{
 		  init(v){
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};
-          this.formItemData.orderPrice = v.orderPrice*1
-          this.prevPrice = v.orderPrice*1;
+          this.formItemData.orderQty = v.orderQty || undefined;
+          this.formItemData.orderPrice = v.orderPrice * 1 || undefined;
+          this.prevPrice = v.orderPrice;
         }
 
       },
@@ -101,9 +109,14 @@
         return this.prevPrice;
       },
       submit(){
+        if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
+          return this.$message.error("数量不能为空");
+        }
+        if(!this.formItemData.orderPrice || this.formItemData.orderPrice <= 0) {
+          return this.$message.error("单价不可为空");
+        }
 		    this.searchPartLayer = false;
 		    this.$parent.$parent.getPartNameList([this.formItemData]);
-
       }
     }
 	}

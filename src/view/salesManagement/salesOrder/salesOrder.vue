@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import Order from "./Order/Order";
+  import Order from "./Order/Order"; 
     export default {
         name: "salesOrder",
         components:{

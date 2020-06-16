@@ -328,7 +328,7 @@ import barch from "../batch/selectPartCom";
 import baseUrl from "_conf/url";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { baocun, shanqu, outDataList, zuofei } from "@/api/business/market.js";
-import * as tools from "../../../../../utils/tools";
+import * as tools from "_utils/tools";
 import { set } from "xe-utils/methods";
 
 export default {
@@ -721,26 +721,31 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          let data = this.formPlan.details;
-          const form = val;//conversionList(val);
-          // form.map(item => {
-          //   item.partId = item.id
-          //   Reflect.deleteProperty(item, "id");
-          //   data.push(item);
-          // });
-          data = [
-            ...data,
-            ...conversionList(val)
-          ];
-          data.forEach(el => el.orderQty = 1);
-          this.$set(this.formPlan, "details", data);
-          // this.$Message.success("已添加");
-        } else {
-          this.$Message.error("*为必填项");
+      let data = this.formPlan.details;
+      let arr  = conversionList(val);
+      // console.log("arr", arr)m
+      arr.forEach(el => {
+        el.orderQty = undefined;
+        if(!el.orderPrice || !(el.orderPrice * 1)) {
+          el.orderPrice = undefined;
         }
       });
+      data = [
+        ...data,
+        ...arr
+      ];
+      // console.log("data", data)
+      this.$set(this.formPlan, "details", data);
+      this.$Message.success("已添加");
+
+      // this.$refs.formPlan.validate(async valid => {
+      //   if (valid) {
+          
+      //     // this.$Message.success("已添加");
+      //   } else {
+      //     this.$Message.error("*为必填项");
+      //   }
+      // });
     },
     // 批次配件
     async getBarchList(val) {
@@ -800,6 +805,8 @@ export default {
     },
     //保存
     save() {
+      let zero = tools.isZero(this.formPlan.details, {qty: "orderQty", price: "orderPrice"});
+      if(zero) return this.$parent.$parent.isSaveClick = false;
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -943,6 +950,8 @@ export default {
 
     //提交
     submitList() {
+      let zero = tools.isZero(this.formPlan.details, {qty: "orderQty", price: "orderPrice"});
+      if(zero) return;
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {

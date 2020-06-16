@@ -747,9 +747,9 @@ export default class PlannedPurchaseOrder extends Vue {
       for (let el in storeMap) {
         this.inStores.push({ value: storeMap[el], label: el })
       }
-      // 直发门店
-      for (let el in companyMap) {
-        this.putStores.push({ value: companyMap[el], label: el })
+      // 直发门店guestMap
+      for (let el in guestMap) {
+        this.putStores.push({ value: guestMap[el], label: el })
       }
       for (let el in billStatusMap) {
         if(!["审批中","不通过"].includes(el)){
