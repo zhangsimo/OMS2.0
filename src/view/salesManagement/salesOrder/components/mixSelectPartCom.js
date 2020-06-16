@@ -353,7 +353,6 @@ export const mixSelectPartCom = {
     throwData() {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
-        item.forEach(el => el.orderQty = 1);
         this.$emit("selectPartName", item);
         // this.searchPartLayer = false;
         // setTimeout(()=>{

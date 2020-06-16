@@ -23,7 +23,7 @@
         :data="tableData">
         <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="applicant" title="申请单号"></vxe-table-column>
+        <vxe-table-column field="applyNo" title="申请单号"></vxe-table-column>
         <vxe-table-column field="applyAmt" title="申请费用"></vxe-table-column>
         <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>

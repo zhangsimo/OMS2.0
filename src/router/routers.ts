@@ -736,19 +736,19 @@ export default [
         },
         component: parentView,
         children: [
-          {
-            path: "/invoiceAdministration/costOpening",
-            name: "invoiceAdministration-costOpening",
-            redirect: "",
-            mark: "5501",
-            meta: {
-              title: "费用开票申请"
-            },
-            component: () =>
-              import(
-                "@/view/settlementManagement/invoiceAdministration/costOpening.vue"
-              )
-          },
+          // {
+          //   path: "/invoiceAdministration/costOpening",
+          //   name: "invoiceAdministration-costOpening",
+          //   redirect: "",
+          //   mark: "5501",
+          //   meta: {
+          //     title: "费用开票申请"
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/settlementManagement/invoiceAdministration/costOpening.vue"
+          //     )
+          // },
           {
             path: "/invoiceAdministration/invoiceApply",
             name: "invoiceAdministration-invoiceApply",

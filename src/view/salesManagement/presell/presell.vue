@@ -824,6 +824,12 @@ export default {
         if (valid) {
           var datas = conversionList(val);
           datas.forEach(item => {
+            if(!item.orderQty) {
+              item.orderQty = undefined;
+            }
+            if(!(item.orderPrice * 1)) {
+              item.orderPrice = undefined;
+            }
             this.formPlan.detailVOList.push(item);
           });
           this.$Message.success("已添加");
@@ -1030,6 +1036,8 @@ export default {
     },
     //保存
     isSave() {
+      let zero = tools.isZero(this.formPlan.detailVOList, {qty: "orderQty", price: "orderPrice"});
+      if(zero) return;
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -1061,6 +1069,8 @@ export default {
     },
     //提交
     isSubmit() {
+      let zero = tools.isZero(this.formPlan.detailVOList, {qty: "orderQty", price: "orderPrice"});
+      if(zero) return;
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {

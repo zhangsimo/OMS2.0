@@ -298,9 +298,6 @@
             width="100"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
-            <!--            <template v-slot="{ row }">-->
-            <!--              <span>{{ countPrice(row) |priceFilters}}</span>-->
-            <!--            </template>-->
           </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
@@ -831,7 +828,10 @@ export default {
       ];
       this.formPlan.detailList.forEach(el => {
         if(!el.orderQty) {
-          el.orderQty = 1
+          el.orderQty = undefined;
+        }
+        if(!(el.orderPrice * 1)) {
+          el.orderPrice = undefined;
         }
       });
       this.$Message.success("已添加");
@@ -839,7 +839,12 @@ export default {
     // 批次配件
     async getBarchList(val) {
       val.map(item => {
-        item.orderQty = 1;
+        if(!item.orderQty) {
+          item.orderQty = undefined;
+        }
+        if(!(item.orderPrice * 1)) {
+          item.orderPrice = undefined;
+        }
         item.isMarkBatch = 1;
         item.batchSourceId = item.id||item.batchSourceId;
         item.adjustQty = item.outableQty;
@@ -906,6 +911,8 @@ export default {
       //   return this.$Message.error("*为必填项");
       // }
       this.$refs.formPlan.validate(async valid => {
+        let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+        if(zero) return;
         if (valid) {
           try {
             await this.$refs.xTable.validate();
@@ -1013,6 +1020,8 @@ export default {
       //   return this.$Message.error("*为必填项");
       // }
       this.$refs.formPlan.validate(async valid => {
+        let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+        if(zero) return;
         if (valid) {
           try {
             await this.$refs.xTable.validate();

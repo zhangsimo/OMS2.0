@@ -23,7 +23,7 @@
         <Col class="inner" span="4">{{formInline.applicant || ''}}</Col>
         <Col class="inner" span="4">部门名称</Col>
         <Col class="inner" span="4">{{formInline.deptName || ' '}}</Col>
-        <Col class="inner" span="4">门店店号</Col> 
+        <Col class="inner" span="4">门店店号</Col>
         <Col class="inner" span="4">{{formInline.shopCode || ' '}}</Col>
       </Row>
       <Row class="tableBox twoTable">
@@ -68,7 +68,7 @@
         >
         <vxe-table-column title="操作" width="80" v-if="!modelType">
           <template v-slot="item">
-            <a v-if="item.seq != item.data.length" @click="dele(item)">删除行</a>
+            <a v-if="item.seq != 1 " @click="dele(item)">删除行</a>
             <a v-else @click="addRow">添加行</a>
           </template>
         </vxe-table-column>

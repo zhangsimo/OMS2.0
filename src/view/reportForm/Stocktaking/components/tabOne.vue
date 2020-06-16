@@ -20,7 +20,7 @@
           width="180"
         ></vxe-table-column>
         <vxe-table-column
-          field="orderMan"
+          field="createUname"
           title="创建人"
           width="120"
         ></vxe-table-column>
