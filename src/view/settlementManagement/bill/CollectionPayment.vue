@@ -432,6 +432,7 @@ export default {
     // 日期选择
     dateChange(data) {
       this.value = data;
+      this.getGeneral()
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -530,6 +531,7 @@ export default {
     // 分店切换
     fendian(val) {
       this.BranchstoreId = val;
+      this.getGeneral()
     },
     // 快速查询
     quickDate(data) {

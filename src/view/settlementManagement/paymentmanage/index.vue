@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150">
+            <Select v-model="model1" filterable class="w150" @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -115,25 +115,25 @@
       </div>
       <div class="db pro mt20">
         <span>客户类型：</span>
-        <Select v-model="model2" style="width:200px">
+        <Select v-model="model2" style="width:200px" @on-change="senior">
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>客户名称：</span>
-        <Select v-model="guestId" filterable class="w200">
+        <Select v-model="guestId" filterable class="w200" @on-change="senior">
           <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>分店名称：</span>
-        <Select v-model="model1" style="width:200px">
-          <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Select v-model="model1" style="width:200px" @on-change="senior">
+          <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>业务类型：</span>
-        <Select v-model="model3" style="width:200px">
+        <Select v-model="model3" style="width:200px" @on-change="senior">
           <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
@@ -861,17 +861,17 @@ export default {
   },
   async mounted() {
     this.parameter = [];
-    let arr = await creat(this.$refs.quickDate.val, this.$store);
-    let obj = {
-      orgId: arr[1],
-      startDate: this.value[0]
-        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-        : "",
-      endDate: this.value[1]
-        ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-        : ""
-    };
-    this.getGeneral(obj);
+      let arr = await creat(this.$refs.quickDate.val, this.$store);
+      let obj = {
+        orgId: arr[1],
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
+      };
+      this.getGeneral(obj);
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
@@ -1039,6 +1039,7 @@ export default {
     // 选择日期
     changedate(daterange) {
       this.value = daterange;
+      this.query()
     },
     open() {
       this.value = []
@@ -1049,6 +1050,10 @@ export default {
       this.text = ''
       this.getAllClient();
       this.modal1 = true
+      this.getShop()
+      this.Branchstore.map(itm => {
+          this.$refs.registrationEntry.orgName = itm.name;
+      });
     },
     // 更多条件查询
     senior() {
