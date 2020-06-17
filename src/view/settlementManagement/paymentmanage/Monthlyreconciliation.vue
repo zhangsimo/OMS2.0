@@ -1045,6 +1045,9 @@ export default {
         };
         this.disabledBtn = true;
         Preservation(obj).then(res => {
+          setTimeout(() => {
+            this.disabledBtn = false;
+          },500)
           if (res.code === 0) {
             // this.$message.success("保存成功");
             this.$message({
@@ -1053,11 +1056,11 @@ export default {
               customClass: "zZindex"
             });
             this.modal = false;
-            setTimeout(() => {
-              this.disabledBtn = false;
-            },500)
-
           }
+        }).catch(err => {
+          setTimeout(() => {
+            this.disabledBtn = false;
+          },500)
         });
       } else {
         // this.$message.error("请选择要对账的数据");
