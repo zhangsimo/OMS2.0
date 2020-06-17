@@ -5,9 +5,10 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import { getwbParts } from "_api/system/partManager";
 import {
-  getCarPartClass,
   getCarParts
 } from "../../../../api/purchasing/purchasePlan";
+
+import { getCarPartClass } from "_api/parts";
 
 export const mixSelectPartCom = {
   inject: ["reload"],
@@ -94,11 +95,6 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "三级分类",
-          key: "carTypet",
-          minWidth: 120
-        },
-        {
           title: "生产厂家",
           key: "carBrandName",
           minWidth: 120
@@ -162,34 +158,15 @@ export const mixSelectPartCom = {
       let params = {}
       params.page = this.page.num - 1;
       params.size = this.page.size;
-      if (this.selectTreeItem.id) {
-        data.typeId = this.selectTreeItem.id;
-      }
+      data.typeId = this.selectTreeItem.typeId;
       if (this.selectBrand && this.selectBrand !== "9999") {
-        data.partCodes = [];
-        data.partBrandCodes = [this.selectBrand];
+        data.partBrandId = this.selectBrand;
       }
       const qurry = this.partName.trim();
       if(qurry.length > 0) {
-        // switch (this.searchType) {
-        //   case "0":
-        //     data.partCode = qurry;
-        //     break;
-        //   case "1":
-        //     data.fullName = qurry;
-        //     break;
-        //   case "2":
-        //     data.adapterCarModels = [qurry];
-        //     break;
-        //   case "3":
-        //     data.pinyin = qurry;
-        //     break;
-        //   default:
-        //     break;
-        // }
-        data.adapterCarModels = [qurry];
+        data.partCode = qurry;
       }
-      if(this.formPlanmain&&this.formPlanmain.guestId) {
+      if(this.formPlanmain && this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
       }
       getCarParts({data:data,params:params}).then(res => {
@@ -210,19 +187,6 @@ export const mixSelectPartCom = {
         arrData.map(item => {
           this.partBrandData.push(...item.children);
         })
-        // let filterData = res.data.content.filter(
-        //   item => item.qualityCode == "000070" || item.qualityCode == "000071"
-        // );
-        // if (filterData.length > 0) {
-        //   if (filterData[0].children && filterData[0].children.length > 0) {
-        //     filterData[0].children.map(item => {
-        //       let objData = {};
-        //       objData.label = item.name;
-        //       objData.value = item.code;
-        //       this.partBrandData.push(objData);
-        //     });
-        //   }
-        // }
       });
     },
     //获取系统分类
@@ -232,26 +196,19 @@ export const mixSelectPartCom = {
         page:1,
         pageSize:500
       }
-      getCarPartClass(req).then(res => {
+      getCarPartClass().then(res => {
         this.treeLoading = false;
-        if(res.code==0){
-          this.treeData = this.resetData(res.data.content || []);
-          // //默认选中第一个
-          // if(this.treeData.length>0){
-          //   this.treeData[0].selected = true
-          //   this.selectTreeItem = this.treeData[0];
-          // }
-          this.getList();
-        }
+        this.treeData = res;
+        this.getList();
       });
     },
     //树形数组递归加入新属性
     resetData(treeData) {
       treeData.map((item,index) => {
-        item.title = item.typeName;
+        item.title = item.name;
         item.selected = false
-        if (item.children && item.children.length > 0) {
-          item.children = this.resetData(item.children);
+        if (item.secendType && item.secendType.length > 0) {
+          item.secendType = this.resetData(item.secendType);
         }
       });
       return treeData;
