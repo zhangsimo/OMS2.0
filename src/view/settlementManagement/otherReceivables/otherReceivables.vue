@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable>
+            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable clearable>
+            <Select v-model="companyId" class="w150" filterable clearable @on-change="query">
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -390,7 +390,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
-      this.getQuery();
+      this.query();
     },
     //查询
     query() {
@@ -523,6 +523,7 @@ export default {
     changeDate(val) {
       // console.log(val)
       this.value = val;
+      this.getQuery()
     },
     //收回认领
     claimCollection() {
@@ -708,9 +709,6 @@ export default {
     this.value = arr[0];
     this.BranchstoreId = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     this.getOne();
     this.getQuery();
   }

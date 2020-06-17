@@ -15,11 +15,11 @@
           </div>
           <div class="db ml15">
             <span>查询日期：</span>
-            <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200" @on-change="changedate"></Date-picker>
           </div>
           <div class="db ml15">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150">
+            <Select v-model="BranchstoreId" class="w150" @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -184,9 +184,6 @@ export default {
     this.dates = arr[0];
     this.BranchstoreId = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     this.getCompany();
     this.query();
   },
@@ -216,6 +213,10 @@ export default {
       this.dates = v;
       this.query();
     },
+    changedate(daterange) {
+      this.value = daterange;
+      this.query()
+    },
     // 往来单位
     async getCompany() {
       findGuest({ size: 2000 }).then(res => {
@@ -227,7 +228,7 @@ export default {
             });
           });
         }
-      });
+      })
     },
     // 查询
     async query() {
