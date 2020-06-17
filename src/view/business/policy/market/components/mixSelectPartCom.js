@@ -195,7 +195,7 @@ export const mixSelectPartCom  = {
       searchValue:'',
       //所有配件品牌
       selectBrand:'9999',
-      partBrandData:[
+      partBrandData: [
         {
           name: "全部",
           code: "9999"
@@ -252,12 +252,15 @@ export const mixSelectPartCom  = {
 
     //获取配件品牌
     getPartBrandAll(){
-      getAllBrand({page: 1,pageSize: 1000}).then(res => {
+      getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
+        if(!res.data){
+          return
+        }
         let arrData = res.data.content||[]
         arrData.map(item => {
           this.partBrandData.push(...item.children);
         })
-      })
+      });
     },
     //获取系统分类
     getCarClassifysFun(){
