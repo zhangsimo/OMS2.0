@@ -17,7 +17,7 @@
         </tr>
         <tr>
           <td class="table-th">出库仓库</td>
-          <td>{{getStoreName}}</td>
+          <td>{{storeName}}</td>
           <td class="table-th">票据类型</td>
           <td>{{getBillTypeName}}</td>
           <td class="table-th">备注</td>
@@ -72,7 +72,7 @@
         </tr>
         <tr>
           <td class="table-th">入库仓库</td>
-          <td>{{getStoreName}}</td>
+          <td>{{storeName}}</td>
           <td class="table-th">票据类型</td>
           <td>{{getBillTypeName}}</td>
           <td class="table-th">备注</td>
@@ -104,7 +104,7 @@
         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
         <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
         <vxe-table-column field="trueQty" title="实盘数量" width="100"></vxe-table-column>
-        <vxe-table-column field="stockOutQty" title="入库数量" width="100"></vxe-table-column>
+        <vxe-table-column field="exhibitQty" title="入库数量" width="100"></vxe-table-column>
         <vxe-table-column field="exhibitPrice" title="入库单价" width="100"></vxe-table-column>
         <vxe-table-column field="exhibitAmt" title="入库金额" width="100">
         </vxe-table-column>
