@@ -168,7 +168,7 @@
 </template>
 
 <script>
-  import index from './index/OtherPayment.js'
+  import index from './index/OtherPayment.js' 
   export default index
 </script>
 

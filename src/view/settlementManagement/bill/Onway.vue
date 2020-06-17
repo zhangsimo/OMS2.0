@@ -225,14 +225,10 @@ export default {
     };
   },
   async mounted () {
-    // console.log(this.$refs.quickDate.val)
     let arr = await creat (this.$refs.quickDate.val,this.$store)
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     this.getGeneral()
   },
   methods: {

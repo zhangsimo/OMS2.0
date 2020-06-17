@@ -177,10 +177,8 @@
     <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select v-model="companyId" class="w150" filterable @on-change="queryClaimed">
-        <Option v-for="item in company" :value="item.id" :key="item.id">
-          {{
-          item.label
-          }}
+        <Option v-for="item in company" :value="item.value" :key="item.value">
+          {{item.label}}
         </Option>
       </Select>
       <span class="ml10">金额：</span>
@@ -398,6 +396,7 @@ export default {
           this.getQuery();
         }
       });
+      this.query()
     },
     //预收款核销
     collectWirte() {
@@ -508,7 +507,6 @@ export default {
       };
       claimedFund(obj).then(res => {
         if (res.code === 0) {
-          console.log(res.data)
           this.$refs.claim.claimedData = res.data.content;
           this.$refs.claim.claimedPage.total = res.data.totalElements;
         }

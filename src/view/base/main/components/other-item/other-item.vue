@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="other-item">
-      <a class="mr20 shopName" @click="openShow">{{getName || '请选择分店'}}</a>
+      <a class="mr20" @click="openShow">{{getName || '请选择分店'}}</a>
       <a class="mr20 service" href="#" @click="serviceShow = !serviceShow" v-if="service && shopkeeper == 0">客服
        <div class="title" v-if="serviceShow">
          <div><img src="@/assets/images/home/service.svg"  class="mr10"><span>{{serviceList.name}}</span></div>
@@ -63,27 +63,15 @@
             company:'',//公司
             tableData:[],//公司列表
             companyOneList:'',//点击获取到的公司信息
-            serviceShow:false,//客服显示 
+            serviceShow:false,//客服显示
             serviceList:{},//客服信息
             service:false, //客服是否展示
             shopkeeper:0,//判断是否为租户
-            shopName:""
         }
       },
       computed:{
         getName(){
-            let shopName=this.$store.state.user.userShopName
-            let slicShopName=shopName.slice("0",6)
-            this.getList()
-            if(this.show){
-              this.tableData.map(item=>{
-                if(item.tenantCompanyName=shopName){
-                  let id=item.orgid
-                  shopName=`${id}${slicShopName}`
-                }else{}
-              })
-            }
-            return shopName
+            return this.$store.state.user.userShopName
         }
       },
       mounted(){

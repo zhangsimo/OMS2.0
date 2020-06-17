@@ -53,13 +53,13 @@
               v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
               v-has="'audit'"
             >编辑/重新提交</Button>
-            <Button
-              type="warning"
-              class="mr10 w90"
-              @click="showReview"
-              v-has="'audit'"
-              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'"
-            >审核</Button>
+            <!--<Button-->
+              <!--type="warning"-->
+              <!--class="mr10 w90"-->
+              <!--@click="showReview"-->
+              <!--v-has="'audit'"-->
+              <!--v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'"-->
+            <!--&gt;审核</Button>-->
           </div>
         </div>
       </div>
@@ -1049,7 +1049,7 @@ export default {
         setTimeout(()=>{
           this.$Message.error("请选择一条记录");
         },0)
-        return 
+        return
       }
       let idx = this.data5.findIndex(
         item => item.activityId === this.actIfoTableData.activityId

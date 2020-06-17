@@ -39,6 +39,7 @@
             :stripe="true"
             :columns="columnsPart"
             :data="partData"
+            @on-row-dblclick="dblclick"
           ></Table>
           <Page
             size="small"
@@ -58,7 +59,8 @@
         <!--<Button type='default' @click='proModal = false'>取消</Button>-->
       </div>
     </Modal>
-    <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>
+    <!--<part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>-->
+    <select-part-info ref="selectPartInfo"></select-part-info>
   </div>
 </template>
 
@@ -70,10 +72,11 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import PartInfo from "_c/partInfo/partInfo";
 import { mixSelectPartCom } from "./mixSelectPartCom";
+import SelectPartInfo from "./selectPartInfo";
 export default {
   name: "supplier",
   mixins: [mixSelectPartCom],
-  components: { PartInfo },
+  components: {SelectPartInfo, PartInfo },
   props: {
     isShowAddPartBtn: false
   },
