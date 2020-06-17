@@ -16,8 +16,8 @@
                 >
                   <Option
                     v-for="item in Branchstore"
-                    :value="item.id"
-                    :key="item.id"
+                    :value="item.value"
+                    :key="item.value"
                   >{{ item.label }}</Option>
                 </Select>
               </div>
@@ -50,11 +50,13 @@
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationDraft"
+                  :disabled="disabledBtn"
                 >保存草稿</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationSubmission"
+                  :disabled="disabledBtn"
                 >保存并提交</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
@@ -296,6 +298,7 @@ export default {
       }
     };
     return {
+      disabledBtn:false,
       summer: null, //计算费用合计
       validRules: {
         thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
@@ -971,6 +974,9 @@ export default {
           return "";
         }
       }
+
+
+
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
         if (!this.remark) {
           // this.$message.error("请填写备注");
@@ -1037,7 +1043,11 @@ export default {
           three: this.paymentlist,
           four
         };
+        this.disabledBtn = true;
         Preservation(obj).then(res => {
+          setTimeout(() => {
+            this.disabledBtn = false;
+          },500)
           if (res.code === 0) {
             // this.$message.success("保存成功");
             this.$message({
@@ -1047,6 +1057,10 @@ export default {
             });
             this.modal = false;
           }
+        }).catch(err => {
+          setTimeout(() => {
+            this.disabledBtn = false;
+          },500)
         });
       } else {
         // this.$message.error("请选择要对账的数据");
@@ -1055,11 +1069,14 @@ export default {
           type: "error",
           customClass: "zZindex"
         });
+        setTimeout(() => {
+          this.disabledBtn = false;
+        },500)
       }
     },
     // 保存草稿
     preservationDraft() {
-      // this.getPreservation(0);
+      this.getPreservation(0);
     },
     // 保存并提交
     preservationSubmission() {

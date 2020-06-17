@@ -304,9 +304,6 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     const res = await this.getTransferStock();
   },
   methods: {

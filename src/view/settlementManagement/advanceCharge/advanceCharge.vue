@@ -18,11 +18,12 @@
               type="daterange"
               placeholder="选择日期"
               class="w200"
+              @on-change="changedate"
             ></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable>
+            <Select v-model="BranchstoreId" class="w150" filterable @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -33,7 +34,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable>
+            <Select v-model="companyId" class="w150" filterable @on-change="query">
               <Option
                 v-for="item in company"
                 :value="item.value"
@@ -379,13 +380,14 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     this.getOne();
   },
   methods: {
     ...mapMutations(["setClaimedSearch", "setSign", "setClaimedSelectionList"]),
+    changedate(daterange) {
+      this.value = daterange;
+      this.query()
+    },
     // 往来单位选择
     async getOne() {
       const res = await getSupplierList({});

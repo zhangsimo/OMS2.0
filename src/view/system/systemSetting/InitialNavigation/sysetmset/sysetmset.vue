@@ -71,6 +71,50 @@
         </Row>
         <Row class="row" type="flex" align="middle">
           <Col :span="12">
+            <p class="end">是否开启供应商资料审批:</p>
+          </Col>
+          <Col :span="12">
+            <RadioGroup v-model="isSupplierInformation">
+              <Radio label="1">开启</Radio>
+              <Radio label="0">关闭</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+        <Row class="row" type="flex" align="middle">
+          <Col :span="12">
+            <p class="end">是否开启活动审批:</p>
+          </Col>
+          <Col :span="12">
+            <RadioGroup v-model="isActivity">
+              <Radio label="1">开启</Radio>
+              <Radio label="0">关闭</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+        <Row class="row" type="flex" align="middle">
+          <Col :span="12">
+            <p class="end">是否开启配件资料审批:</p>
+          </Col>
+          <Col :span="12">
+            <RadioGroup v-model="isPartInfo">
+              <Radio label="1">开启</Radio>
+              <Radio label="0">关闭</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+        <Row class="row" type="flex" align="middle">
+          <Col :span="12">
+            <p class="end">是否开启客户信用调查审批:</p>
+          </Col>
+          <Col :span="12">
+            <RadioGroup v-model="isCreditSurvey">
+              <Radio label="1">开启</Radio>
+              <Radio label="0">关闭</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
+        <Row class="row" type="flex" align="middle">
+          <Col :span="12">
             <p class="end">启用额度审批流程:</p>
           </Col>
           <Col :span="12">
@@ -180,6 +224,12 @@ const data = () => {
     isTPA: "", // 是否开启临时采购审批
     isEAOM: "", // 是否开启门店外采审批
     isAuto: "", // 是否开启调拨自动受理流程
+
+    isSupplierInformation:"",//是否开启供应商资料审批
+    isActivity:"",//是否开启活动审批
+    isPartInfo:"",//是否开启配件资料审批
+    isCreditSurvey:"",//是否开启客户信用调查审批
+
     flag: true
   };
 };
