@@ -24,6 +24,7 @@ export async function getAllSalesList() {
           let arr = [] //获取收款人列表
          let Salse = await getSales()
             if (Salse.code == 0) {
+              console.log(Salse.data)
               Salse.data.content.map(item => {
                 item.value = item.id
                 item.label = item.userName

@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150">
+            <Select v-model="model1" filterable class="w150"  @on-change="getTransferStock">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -28,7 +28,7 @@
           </div>
           <div class="db">
             <span>类型：</span>
-            <Select v-model="type" style="width:200px">
+            <Select v-model="type" style="width:200px" @on-change="getTransferStock">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -304,9 +304,6 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     const res = await this.getTransferStock();
   },
   methods: {
@@ -332,6 +329,7 @@ export default {
     // 日期选择
     dateChange(data){
       this.value = data
+      this.getTransferStock()
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -434,6 +432,7 @@ export default {
     getOne(data) {
       this.company = data.fullName;
       this.companyId = data.id;
+      this.getTransferStock()
     },
     // 快速查询
     quickDate(data) {

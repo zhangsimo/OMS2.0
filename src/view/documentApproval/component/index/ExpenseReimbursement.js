@@ -21,9 +21,10 @@ export default {
     list:''
   },
   data(){
-    const roleValid = (rows) => {
-      if(rows.cellValue && rows.row.applyAmt < rows.cellValue)
+    const roleValid = ({cellValue , row}) => {
+      if(cellValue && (+row.applyAmt < +cellValue) ) {
         return Promise.reject(new Error('核销金额不能大于借支金额'))
+      }
     }
     const notaxValid = (rows) => {
       if (rows.cellValue && rows.row.totalAmt && rows.row.taxAmt && rows.cellValue != this.$utils.subtract(rows.row.totalAmt ,rows.row.taxAmt )){
@@ -150,9 +151,6 @@ export default {
      if (this.list.type == 1) {
         this.details = []
         let arr = [
-          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
-          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
-          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
           {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
         ]
         this.$set(this.formInline ,'expenseDetails' ,  arr )
@@ -352,7 +350,7 @@ export default {
       data.totalAmt = 0
       data.taxRateCode = 'TR001'
       data.taxAmt = 0
-      this.formInline.expenseDetails.push(data)
+      this.formInline.expenseDetails.splice(1 , 0 ,data)
     },
 
     // 表格尾部合计
@@ -429,6 +427,7 @@ export default {
           const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
           const errTwo = await this.$refs.documentTable.fullValidate().catch(errTwo => errTwo)
           if (errMap || errTwo){
+            if (errTwo)  return  this.$Message.error('核销金额不能大于借支金额')
             this.$Message.error('表格校验失败')
           } else {
             this.formInline.step = type

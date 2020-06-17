@@ -9,11 +9,11 @@
           </div>
           <div class="db ml20">
             <span>查询日期：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker format="yyyy-MM-dd" :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="changedate"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable >
+            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable clearable >
+            <Select v-model="companyId" class="w150" filterable clearable @on-change="query">
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -176,11 +176,9 @@
     <!-- 认领弹框 -->
     <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
+      <Select v-model="companyId" class="w150" filterable @on-change="queryClaimed">
         <Option v-for="item in company" :value="item.value" :key="item.value">
-          {{
-          item.label
-          }}
+          {{item.label}}
         </Option>
       </Select>
       <span class="ml10">金额：</span>
@@ -206,8 +204,8 @@
         <Button @click="revoke=false">取消</Button>
       </div>
     </Modal>
-    <CreditSpending ref="credit"  :list="modelType" />
-    <settlement ref="settlement" />
+    <CreditSpending ref="credit"  :list="modelType" @updateD="query" />
+    <settlement ref="settlement" @updateD="query" />
     <payApply ref="payApply" />
   </div>
 </template>
@@ -338,6 +336,10 @@ export default {
         }
       });
     },
+    changedate(daterange) {
+      this.value = daterange;
+      this.query()
+    },
     // 快速查询
     quickDate(data) {
       this.value = data;
@@ -394,6 +396,7 @@ export default {
           this.getQuery();
         }
       });
+      this.query()
     },
     //预收款核销
     collectWirte() {
@@ -485,13 +488,14 @@ export default {
       } else {
         this.$message.error("请先选择数据");
       }
+      this.query()
     },
     //传参数据
     selection(arr) {
       this.claimSelection=[]
       this.claimSelection.push({ id: arr.id });
     },
-    //预收款认领弹窗查询
+    //预收款认领弹窗查询suppliers
     claimedList(type) {
       let obj = {
         amount: this.amt,

@@ -207,7 +207,7 @@
   import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
   import { approvalStatus } from "_api/base/user";
 
-  import ExpenseReimbursement from "../component/ExpenseReimbursement"; 
+  import ExpenseReimbursement from "../component/ExpenseReimbursement";
   import OtherPayment from "../component/OtherPayment";
   import PublicRequest from "../component/PublicRequest";
   import AskForInstrucions from "../component/AskForInstructions";
@@ -237,7 +237,7 @@
           //11种类型
           ExpenseReimbursement,
           OtherPayment,
-          PublicRequest, 
+          PublicRequest,
           AskForInstrucions,
           CreditSpending,
           AdvanceApply,
@@ -498,6 +498,7 @@
 
         //下拉框改变
         SelectChange(){
+          this.page.num = 1
         this.getList();
         },
 

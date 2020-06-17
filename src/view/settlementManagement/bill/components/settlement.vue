@@ -155,19 +155,19 @@ export default {
     subjexts
   },
   data() {
-    const rpAmtValid = ({cellValue ,row}) =>{
+    const rpAmtValid = ({ cellValue, row }) => {
       return new Promise((resolve, reject) => {
         if (cellValue) {
           if (Math.abs(cellValue) > Math.abs(row.unAmt)) {
-            reject(new Error('本次核销金额不能大于未收/付金额'))
+            reject(new Error("本次核销金额不能大于未收/付金额"));
           } else {
-            resolve()
+            resolve();
           }
         } else {
-          resolve()
+          resolve();
         }
-      })
-    }
+      });
+    };
     return {
       Settlement: false, //弹框显示
       check: 0,
@@ -178,11 +178,9 @@ export default {
       collectPayId: "",
       obj: {},
       //表格校验
-      validRules:{
-        rpAmt:[
-          { validator: rpAmtValid }
-        ]
-      },
+      validRules: {
+        rpAmt: [{ validator: rpAmtValid }]
+      }
     };
   },
   mounted() {
@@ -194,7 +192,7 @@ export default {
         item.businessTypeName = item.businessType.name;
       });
       this.BusinessType = [...this.BusinessType, ...val.two];
-      this.checkComputed()
+      this.checkComputed();
     });
     //选择科目
     bus.$on("hedInfo", val => {
@@ -261,14 +259,14 @@ export default {
     accountNoClick() {
       this.$refs.accountSelette.modal1 = true;
       if (this.$parent.paymentId == "YSK") {
-        this.$refs.accountSelette.paymentId = 'YJDZ'
-        this.$refs.accountSelette.sort = 'SK'
+        this.$refs.accountSelette.paymentId = "YJDZ";
+        this.$refs.accountSelette.sort = "SK";
       }
       if (this.$parent.paymentId == "YS") {
-        this.$refs.accountSelette.paymentId = 'YSK'
+        this.$refs.accountSelette.paymentId = "YSK";
       }
       if (this.$parent.paymentId == "YF") {
-        this.$refs.accountSelette.paymentId = 'YFK'
+        this.$refs.accountSelette.paymentId = "YFK";
       }
     },
     //弹框打开
@@ -280,8 +278,8 @@ export default {
         this.BusinessType = [];
         this.tableData = [];
         this.collectPayId = "";
-        if(this.$parent.paymentId === "YSKZC"){
-          this.$parent.claimModal=false
+        if (this.$parent.paymentId === "YSKZC") {
+          this.$parent.claimModal = false;
         }
       } else {
         let sign = 0;
@@ -291,7 +289,7 @@ export default {
           sign = 4;
         } else if (this.$parent.paymentId === "YJDZ") {
           sign = 1;
-        }else if (this.$parent.paymentId === "YSKZC") {
+        } else if (this.$parent.paymentId === "YSKZC") {
           sign = 3;
         } else if (this.$parent.type === 0) {
           sign = 6;
@@ -321,10 +319,12 @@ export default {
       }
     },
     //保存
-   async conserve() {
+    async conserve() {
       if (!Number(this.check)) {
-        const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
-        if (errMap) return this.$Message.error('表格校验错误')
+        const errMap = await this.$refs.xTable
+          .fullValidate()
+          .catch(errMap => errMap);
+        if (errMap) return this.$Message.error("表格校验错误");
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
@@ -333,6 +333,7 @@ export default {
         saveAccount(obj).then(res => {
           if (res.code === 0) {
             this.Settlement = false;
+            this.$emit("updateD")
             this.$message.success("保存成功");
           }
         });
@@ -342,7 +343,7 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = this.$utils.subtract(row.unAmt , row.rpAmt).toFixed(2)
+      row.unAmtLeft = this.$utils.subtract(row.unAmt, row.rpAmt).toFixed(2);
       // row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAmt ? row.rpAmt * 1 : 0).toFixed(2) : 0;
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
@@ -389,7 +390,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        sum1 += item.rpAmt ? item.rpAmt* 1 : 0;
+        sum1 += item.rpAmt ? item.rpAmt * 1 : 0;
       });
       this.tableData.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;

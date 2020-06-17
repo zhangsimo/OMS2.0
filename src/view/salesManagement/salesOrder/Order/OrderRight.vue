@@ -298,9 +298,6 @@
             width="100"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
-            <!--            <template v-slot="{ row }">-->
-            <!--              <span>{{ countPrice(row) |priceFilters}}</span>-->
-            <!--            </template>-->
           </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
@@ -519,10 +516,10 @@ export default {
     // this.getAdress();
     // this.getAllClient();
 
-    this.getType();
-    this.getWarehouse();
-    this.getClassifyList();
-    this.getAllSales();
+    this.getType();/*获取客户属性*/
+    this.getWarehouse();/*获取仓库*/
+    this.getClassifyList();/*获取新增客户二级分类*/
+    this.getAllSales();/*获取销售员*/
   },
   computed: {
     getOneOrder() {
@@ -831,7 +828,10 @@ export default {
       ];
       this.formPlan.detailList.forEach(el => {
         if(!el.orderQty) {
-          el.orderQty = 1
+          el.orderQty = undefined;
+        }
+        if(!(el.orderPrice * 1)) {
+          el.orderPrice = undefined;
         }
       });
       this.$Message.success("已添加");
@@ -839,7 +839,12 @@ export default {
     // 批次配件
     async getBarchList(val) {
       val.map(item => {
-        item.orderQty = 1;
+        if(!item.orderQty) {
+          item.orderQty = undefined;
+        }
+        if(!(item.orderPrice * 1)) {
+          item.orderPrice = undefined;
+        }
         item.isMarkBatch = 1;
         item.batchSourceId = item.id||item.batchSourceId;
         item.adjustQty = item.outableQty;
@@ -906,6 +911,8 @@ export default {
       //   return this.$Message.error("*为必填项");
       // }
       this.$refs.formPlan.validate(async valid => {
+        let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+        if(zero) return;
         if (valid) {
           try {
             await this.$refs.xTable.validate();
@@ -1006,7 +1013,6 @@ export default {
                 this.$Message.info('已取消出库');
             },
         })
-
     },
     //提交
     submitList() {
@@ -1014,6 +1020,8 @@ export default {
       //   return this.$Message.error("*为必填项");
       // }
       this.$refs.formPlan.validate(async valid => {
+        let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+        if(zero) return;
         if (valid) {
           try {
             await this.$refs.xTable.validate();
@@ -1102,15 +1110,15 @@ export default {
       handler(old, ov) {
         this.$parent.$parent.ispart=false;
         if (!old.id) {
-             this.formPlan =Object.assign({},{
-                 billStatusId: { name: "草稿", value: 0 },
-                 detailList: [],
-                 storeId:this.formPlan.storeId,
-                 orderTypeValue:0,
-                 orderManId:this.$store.state.user.userData.id,
-                 orderMan: this.$store.state.user.userData.staffName,
-                 guestId:this.formPlan.guestId}
-                 ) ;
+          this.formPlan =Object.assign({},{
+              billStatusId: { name: "草稿", value: 0 },
+              detailList: [],
+              storeId:this.formPlan.storeId,
+              orderTypeValue:0,
+              orderManId:this.$store.state.user.userData.id,
+              orderMan: this.$store.state.user.userData.staffName,
+              guestId:this.formPlan.guestId}
+              ) ;
           this.draftShow = 0;
           this.leftOneOrder = this.formPlan
           return false;

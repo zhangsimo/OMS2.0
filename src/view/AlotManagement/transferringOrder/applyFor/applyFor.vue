@@ -504,6 +504,7 @@
           this.isAdd = false;
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
+          this.formPlan.shortName = '',
             this.formPlan.storeId =  this.StoreId, //调入仓库
             this.formPlan.orderDate =  dataTime, //申请调拨日期
             this.formPlan.remark =  '', //备注
@@ -536,6 +537,8 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
+          let zero = tools.isZero(this.Right.tbdata, {qty: "applyQty"});
+          if(zero) return;
               this.$refs.formPlan.validate(async valid => {
                 if (valid) {
                   await this.$refs.xTable.validate();
@@ -581,6 +584,7 @@
                         this.$message.success('保存成功！');
                         this.leftgetList()
                         this.formPlan.guestName = '',
+                        this.formPlan.shortName = '',
                         this.formPlan.storeId =  '',
                         this.formPlan.remark =  '',
                         this.formPlan.createUname =  '',
@@ -716,7 +720,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : item.orderQty,
+              applyQty : item.orderQty||undefined,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
@@ -750,11 +754,9 @@
         },
         // 供应商子组件内容
         getSupplierName(a){
-          // this.isInternalId = a.isInternalId
-          // this.formPlan.guestName = a.id
-          console.log(a);
           this.formPlan.guestOrgid = a.id;
-          this.formPlan.guestName = a.name
+          // this.formPlan.guestName = a.name;
+          this.formPlan.guestName = a.shortName || "";
           this.guestidId = a.guestId
           this.isInternalId = a.id
         },
@@ -945,6 +947,8 @@
           if (this.rowId.length <= 3) {
             return this.$message.error("请先保存数据，再提交！")
           }
+          let zero = tools.isZero(this.Right.tbdata, {qty: "applyQty"});
+          if(zero) return;
           this.$refs[name].validate((valid) => {
             if (valid) {
               this.$Modal.confirm({

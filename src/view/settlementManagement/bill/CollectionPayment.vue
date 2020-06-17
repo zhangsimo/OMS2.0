@@ -107,7 +107,7 @@
         </Tabs>
       </div>
     </section>
-    <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
+    <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="modal1=false">
       <Form :label-width="120">
         <FormItem label="对账单号：">
           <Input type="text" class="w200" v-model="accountNo" />
@@ -403,9 +403,6 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     this.getGeneral();
     this.getOne();
   },
@@ -432,6 +429,7 @@ export default {
     // 日期选择
     dateChange(data) {
       this.value = data;
+      this.getGeneral()
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -530,6 +528,7 @@ export default {
     // 分店切换
     fendian(val) {
       this.BranchstoreId = val;
+      this.getGeneral()
     },
     // 快速查询
     quickDate(data) {
@@ -574,6 +573,9 @@ export default {
     // 高级查询确认
     ok() {
       this.getGeneral();
+    },
+    cancel(){
+
     },
     // 总表查询
     getGeneral() {
