@@ -286,6 +286,18 @@ const methods = {
           case 11:
             this.isAuto = el.keyidValue;
             break;
+          case 12:
+            this.isSupplierInformation = el.keyidValue;
+            break;
+          case 13:
+            this.isActivity = el.keyidValue;
+            break;
+          case 14:
+            this.isPartInfo = el.keyidValue;
+            break;
+          case 15:
+            this.isCreditSurvey = el.keyidValue;
+            break;
           default:
             return;
         }
@@ -337,6 +349,18 @@ const methods = {
           break;
         case 11:
           el.keyidValue = this.isAuto;
+          break;
+        case 12:
+          el.keyidValue = this.isSupplierInformation;
+          break;
+        case 13:
+          el.keyidValue = this.isActivity;
+          break;
+        case 14:
+          el.keyidValue = this.isPartInfo;
+          break;
+        case 15:
+          el.keyidValue = this.isCreditSurvey;
           break;
         default:
           break;
