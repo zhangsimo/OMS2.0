@@ -16,8 +16,8 @@
                 >
                   <Option
                     v-for="item in Branchstore"
-                    :value="item.id"
-                    :key="item.id"
+                    :value="item.value"
+                    :key="item.value"
                   >{{ item.label }}</Option>
                 </Select>
               </div>

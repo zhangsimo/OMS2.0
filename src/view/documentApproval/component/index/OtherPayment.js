@@ -133,6 +133,7 @@ export default {
 
     //获取往来单位
     getCompany(row) {
+      
       let arr = this.company.filter( item => item.value == row.value)
       this.formInline.receiver = arr[0].receiver || ''
       this.formInline.receiveBank = arr[0].receiveBank || ''
@@ -192,6 +193,7 @@ export default {
          if (res.code == 0) {
            this.$Message.success('操作成功')
            this.model = false
+           this.$parent.getQuery()
          }
        } else {
          this.$Message.error('带*必填');
