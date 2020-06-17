@@ -52,17 +52,26 @@ export const mixSelectPartCom = {
         {
           title: "品牌车型",
           key: "adapterCarModel",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.adapterCarModel||p.row.carBrandName)
+          }
         },
         {
           title: "规格",
           key: "specifications",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.specifications||p.row.spec)
+          }
         },
         {
           title: "型号",
           key: "brandName",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.brandName||p.row.carModelName)
+          }
         },
         {
           title: "品质",
@@ -88,33 +97,22 @@ export const mixSelectPartCom = {
           title: "一级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text = "";
+            let text = '';
             try {
-              text = params.row.baseType.firstType.typeName;
-            } catch (e) {}
-            return h("span", text);
+              text = params.row.baseType.firstType.typeName
+            } catch(e) {}
+            return h('span', text||params.row.carTypef);
           }
         },
         {
           title: "二级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text = "";
+            let text = ''
             try {
-              text = params.row.baseType.secondType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
-        },
-        {
-          title: "三级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text = "";
-            try {
-              text = params.row.baseType.thirdType.typeName;
-            } catch (e) {}
-            return h("span", text);
+              text = params.row.baseType.secondType.typeName
+            } catch(e) {}
+            return h('span', text||params.row.carTypes);
           }
         },
         {
