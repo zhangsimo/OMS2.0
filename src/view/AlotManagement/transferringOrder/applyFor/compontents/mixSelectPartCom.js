@@ -343,6 +343,13 @@ export const mixSelectPartCom = {
         this.$Message.success("保存成功！");
         this.reload();
       });
+    },
+    //双击显示
+    dblclick(v){
+      console.log(v)
+      if(this.$route.name=="applyFor"){
+        this.$refs.selectPartInfo.init(v);
+      }
     }
   }
 };

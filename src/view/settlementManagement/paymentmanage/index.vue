@@ -128,7 +128,7 @@
       <div class="db pro mt20">
         <span>分店名称：</span>
         <Select v-model="model1" style="width:200px" @on-change="senior">
-          <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.label }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
@@ -875,9 +875,6 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
   },
   methods: {
     //获取门店
