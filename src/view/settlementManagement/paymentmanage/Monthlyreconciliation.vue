@@ -50,11 +50,13 @@
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationDraft"
+                  :disabled="disabledBtn"
                 >保存草稿</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationSubmission"
+                  :disabled="disabledBtn"
                 >保存并提交</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
@@ -296,6 +298,7 @@ export default {
       }
     };
     return {
+      disabledBtn:false,
       summer: null, //计算费用合计
       validRules: {
         thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
@@ -971,6 +974,9 @@ export default {
           return "";
         }
       }
+
+
+
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
         if (!this.remark) {
           // this.$message.error("请填写备注");
@@ -1037,6 +1043,7 @@ export default {
           three: this.paymentlist,
           four
         };
+        this.disabledBtn = true;
         Preservation(obj).then(res => {
           if (res.code === 0) {
             // this.$message.success("保存成功");
@@ -1046,6 +1053,10 @@ export default {
               customClass: "zZindex"
             });
             this.modal = false;
+            setTimeout(() => {
+              this.disabledBtn = false;
+            },500)
+
           }
         });
       } else {
@@ -1055,11 +1066,14 @@ export default {
           type: "error",
           customClass: "zZindex"
         });
+        setTimeout(() => {
+          this.disabledBtn = false;
+        },500)
       }
     },
     // 保存草稿
     preservationDraft() {
-      // this.getPreservation(0);
+      this.getPreservation(0);
     },
     // 保存并提交
     preservationSubmission() {
