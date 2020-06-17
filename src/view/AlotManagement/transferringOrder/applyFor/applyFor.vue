@@ -132,6 +132,33 @@
                         <Button size="small" class="mr10" @click="addPro" v-has="'addAccessories'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
+                        <Upload
+                          ref="upload"
+                          :show-upload-list="false"
+                          :action="upurl"
+                          :format="['xlsx', 'xls', 'csv']"
+                          :headers="headers"
+                          :before-upload="handleBeforeUpload"
+                          :on-success="handleSuccess"
+                          :on-format-error="onFormatError"
+                          :disabled="![0, 4].includes(datadata&&datadata.status.value)"
+                        >
+                          <Button
+                            size="small"
+                            class="mr10"
+                            :disabled="![0, 4].includes(datadata&&datadata.status.value)"
+                          >导入配件</Button>
+                        </Upload>
+                      </div>
+                      <div class="fl mb5 mr10">
+                        <Button
+                          size="small"
+                          @click="down"
+                        >
+                          <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                        </Button>
+                      </div>
+                      <div class="fl mb5">
                         <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'deleteAccessories'" @click="Delete"><i class="iconfont mr5 iconlaji调拨申请信息tongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
@@ -218,6 +245,12 @@
   import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   import {findForAllot} from "_api/purchasing/purchasePlan";
+  import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+  import {
+    upxlxs
+  } from "_api/purchasing/purchasePlan";
+  import { TOKEN_KEY } from "@/libs/util";
+  import Cookies from "js-cookie";
 
     export default {
       components: {
@@ -237,6 +270,10 @@
           }
         };
         return {
+          headers: {
+            Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+          },
+          upurl:"",
           selectRowId: '',
           selectvalue: '',
           //校验输入框的值
@@ -679,7 +716,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : 1,
+              applyQty : item.orderQty,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
@@ -874,7 +911,9 @@
           this.presentrowMsg = row.status.value
           this.rowId = row.id
           this.buttonDisable = false
-          this.getRightlist()
+          this.getRightlist();
+
+          this.upurl = upxlxs + row.id;
         },
         //右部分接口
         getRightlist(){
@@ -956,6 +995,45 @@
             //获取右侧表格高度
             this.rightTableHeight = wrapH - planFormH - planBtnH - 38 - 64;
           });
+        },
+
+        //下载模板
+        down(){
+          down('1800000000')
+        },
+        // 导入
+        handleBeforeUpload() {
+          if (this.selectPlanOrderItem.new) {
+            return this.$Message.error("请先保存数据!");
+          }
+          let refs = this.$refs;
+          refs.upload.clearFiles();
+        },
+        handleSuccess(res, file) {
+          let self = this;
+          if (res.code == 0) {
+            if (res.data.errosMsg.length > 0) {
+              this.warning(res.data.errosMsg);
+            } else  {
+              self.$Message.success("导入成功");
+            }
+            this.tableData = [...this.tableData, ...res.data.details].map(item => {
+              item.uuid = v4();
+              return item;
+            });
+            this.tableData.push();
+          } else {
+            self.$Message.error(res.message);
+          }
+        },
+        warning(nodesc) {
+          this.$Notice.warning({
+            title: '上传错误信息',
+            desc: nodesc
+          });
+        },
+        onFormatError(file) {
+          this.$Message.error('只支持xls xlsx后缀的文件')
         },
       },
       mounted(){
