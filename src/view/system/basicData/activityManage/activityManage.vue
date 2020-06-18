@@ -58,7 +58,7 @@
               class="mr10 w90"
               @click="showReview"
               v-has="'audit'"
-              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'&&isActivity!=='1'"
+              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'&&!this.checkedData[0].processInstanceId"
             >审核</Button>
           </div>
         </div>
@@ -792,8 +792,6 @@ export default {
       ],
       data5: [],
       data6: [],
-      //活动是否开始审批
-      isActivity:sessionStorage.getItem('isActivity')
     };
   },
   mounted() {

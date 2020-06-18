@@ -308,8 +308,6 @@ const methods = {
         }
         sessionStorage.setItem("key", this.isQuota);
       });
-      //用户判断活动申请页是否显示审批按钮
-      sessionStorage.setItem("isActivity",this.isActivity)
     }
   },
   // 保存
