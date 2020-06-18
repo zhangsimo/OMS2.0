@@ -34,7 +34,12 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable @on-change="query">
+            <Select v-model="companyId" class="w150" 
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne" @on-change="query">
               <Option
                 v-for="item in company"
                 :value="item.value"
@@ -293,7 +298,10 @@
     </Modal>
     <Modal v-model="modal" :title="claimedButtonType" width="800">
       <span>往来单位：</span>
-      <Select v-model="suppliers" class="w150" filterable>
+      <Select v-model="suppliers" class="w150" filterable
+        remote
+        :loading="remoteloading"
+        :remote-method="getOne">
         <Option
           v-for="item in company"
           :value="item.value"
@@ -332,6 +340,7 @@ import Record from "./components/Record";
 import settlementadv from "./components/settlementadv"
 import moment from "moment";
 import { mapMutations } from "vuex";
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 export default {
   components: {
     quickDate,
@@ -351,9 +360,7 @@ export default {
       claimedButtonType: "预付款认领", // claimed 用以判断弹窗按钮坐用
       claimedSelectData: [], // 认领弹窗选择的数据
       value: [], //日期
-      company: [
-        {value:0 ,label:'全部'}
-      ], //往来单位
+      company: [], //往来单位
       companyId: 0, //往来单位
       Branchstore: [
         {id:'0' ,name:'全部'}
@@ -383,7 +390,7 @@ export default {
       this.BranchstoreId = arr[1]
     })
     this.getShop()
-    this.getOne();
+    // this.getOne();
   },
   methods: {
     ...mapMutations(["setClaimedSearch", "setSign", "setClaimedSelectionList"]),
@@ -392,32 +399,23 @@ export default {
       this.query()
     },
     // 往来单位选择
-    async getOne() {
-      const res = await getSupplierList({});
-      const res1 = await getbayer({});
-      let data = [];
-      let result = [];
-      let obj = {};
-      if (res.data.length !== 0 && res1.data.content.length !== 0) {
-        data = [...res.data, ...res1.data.content];
-      } else if (res.data.length !== 0) {
-        data = res.data;
-      } else if (res1.data.content.length !== 0) {
-        data = res.data.content;
-      }
-      for (let i in data) {
-        if (!obj[data[i].id]) {
-          result.push(data[i]);
-          obj[data[i].id] = 1;
-        }
-      }
-      data = result;
-      data.map(item => {
-        this.company.push({
-          label: item.fullName,
-          value: item.id
+    async getOne(query) {
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading = false;
+          }
         });
-      });
+      } else {
+        this.company = [];
+      }
     },
 
     //获取门店
