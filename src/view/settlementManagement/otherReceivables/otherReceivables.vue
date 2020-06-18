@@ -408,7 +408,7 @@ export default {
             this.currRow.paymentBalance == 0 ||
             !this.currRow.paymentBalance
           ) {
-            this.$Message.error("他收款余额为0无法收回!");
+            this.$Message.error("其他收款余额为0无法收回!");
           } else {
             this.claimTit = "其他收款收回";
             this.claimModal = true;
