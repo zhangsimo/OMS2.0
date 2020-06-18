@@ -263,7 +263,6 @@
                         title: '不含税金额',
                         align: 'center',
                         // key: 'noTaxAmt',
-
                         minWidth: 120,
                       render: (h, params) => {
                         let tex = parseFloat(params.row.noTaxAmt).toFixed(2)
