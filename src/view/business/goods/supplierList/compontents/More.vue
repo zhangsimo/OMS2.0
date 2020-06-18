@@ -14,10 +14,10 @@
           </Row>
           <Row class="mt15">
             <span class="ml5">供 应 商：</span>
-            <!--<Input v-model="callout" placeholder="请选择供应商" style="width: 410px" disabled/>-->
-            <Select v-model="callout" filterable style="width: 410px" @on-change="SelectChange">
+            <Input v-model="fullName" placeholder="请选择供应商" style="width: 410px" disabled/>
+            <!-- <Select v-model="callout" filterable style="width: 410px" @on-change="SelectChange">
               <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>
+            </Select> -->
             <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
           </Row>
           <Row class="mt15">
@@ -88,7 +88,8 @@
             submita: '',
             create: '',
             guestId: '',
-            Ischeck: false
+            Ischeck: false,
+            fullName: '',
           }
       },
       methods: {
@@ -107,9 +108,10 @@
           this.submitData = null
         },
         getSupplierNamea(a) {
-          console.log(a)
+          // console.log(a)
           this.callout = a.id
           this.guestId = a.id
+          this.fullName = a.fullName;
         },
         init(){
           this.moreAndMore = true;
