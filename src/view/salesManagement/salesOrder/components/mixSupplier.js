@@ -216,7 +216,7 @@ export const mixSelectPartCom = {
       if (this.partName.trim()) {
         req.partCode = this.partName.trim()
       }
-      params.page = this.page.num
+      params.page = this.page.num - 1
       params.size = this.page.size
       getwbParts(params,req).then(res => {
         this.loading = false;

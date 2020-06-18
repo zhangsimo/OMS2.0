@@ -125,8 +125,8 @@ export default {
     return {
       model1: 0, //区域
       Branchstore: [{ id: 0, companyName: "全部" }], //区域数组
-      shopCode: 0, //门店
-      shopListArr: [{ id: "99", name: "全部" }], //门店数组
+      shopCode: "", //门店1265535798180593664
+      shopListArr: [{ id: "0", name: "全部" }], //门店数组
       accountName: "", //账户
       bankName: "", //开户行
       subjectCode: 0, //对应科目
@@ -147,17 +147,12 @@ export default {
     //获取门店
     async getShop() {
       let data = {};
-      data.supplierTypeSecond = this.model1;
-      this.shopListArr = [{ id: 0, name: "全部" }];
+      this.$nextTick(()=>{
+        data.supplierTypeSecond = this.shopCode;
+      })
       let res = await goshop(data);
       if (res.code === 0) {
         this.shopListArr = [...this.shopListArr, ...res.data];
-        // this.$nextTick( () => {
-        //   this.shopCode = this.$store.state.user.userData.shopId
-        // })
-        if (this.$store.state.user.userData.shopkeeper != 0) {
-          this.getThisArea(); //获取当前门店地址
-        }
       }
     },
 
@@ -181,19 +176,6 @@ export default {
     //查询
     query() {
       this.getList();
-    },
-
-    //当前非管理员状态情况下获取门店地址
-    async getThisArea() {
-      let data = {};
-      data.shopkeeper = 1;
-      data.shopNumber = this.$store.state.user.userData.shopId;
-      data.tenantId = this.$store.state.user.userData.tenantId;
-      let res = await are(data);
-
-      if (res.code === 0) {
-        this.model1 = res.data[0].id;
-      }
     },
 
     //初始化数据
@@ -298,7 +280,7 @@ export default {
   },
   mounted() {
     this.getAllAre(); //获取区域
-    this.getShop(); //获取门店
+    this.getShop()
     this.getSubject(); //获取科目
     this.getList(); //查询
   }

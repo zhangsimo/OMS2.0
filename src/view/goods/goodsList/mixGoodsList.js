@@ -88,6 +88,7 @@ export const mixGoodsData = {
   },
   mounted() {
     getPurchaseInit({}).then(res => {
+      console.log(res)
       //票据类型
       let { invoiceMap, settlementMap } = res.data || {};
       if (invoiceMap) {

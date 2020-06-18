@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150" @on-change="query">
+            <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -115,25 +115,25 @@
       </div>
       <div class="db pro mt20">
         <span>客户类型：</span>
-        <Select v-model="model2" style="width:200px" @on-change="senior">
+        <Select v-model="model2" style="width:200px">
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>客户名称：</span>
-        <Select v-model="guestId" filterable class="w200" @on-change="senior">
+        <Select v-model="guestId" filterable class="w200">
           <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>分店名称：</span>
-        <Select v-model="model1" style="width:200px" @on-change="senior">
-          <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.label }}</Option>
+        <Select v-model="model1" style="width:200px">
+          <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>业务类型：</span>
-        <Select v-model="model3" style="width:200px" @on-change="senior">
+        <Select v-model="model3" style="width:200px">
           <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
@@ -837,7 +837,7 @@ export default {
         }
       ],
       Branchstore: [
-        {id:0 ,name:'全部'}
+        {id:'0' ,name:'全部'}
       ],
       business: [
         {
@@ -873,28 +873,17 @@ export default {
       };
       this.getGeneral(obj);
     this.value = arr[0];
-    this.model1 = arr[1];
+    this.$nextTick( () => {
+      this.model1 = arr[1]
+    })
     this.getShop()
   },
   methods: {
     //获取门店
     async getShop(){
       let data ={}
-      data.supplierTypeSecond = this.model1
       let res = await goshop(data)
-      if (res.code === 0) {
-        this.Branchstore = [...this.Branchstore , ...res.data]
-        this.$nextTick( () => {
-          if (localStorage.getItem('oms2-userList')){
-            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
-          } else {
-            this.BranchstoreId = this.$store.state.user.userData.shopId
-          }
-        })
-        if (this.$store.state.user.userData.shopkeeper != 0){
-          this.getThisArea()//获取当前门店地址
-        }
-      }
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -1048,9 +1037,7 @@ export default {
       this.getAllClient();
       this.modal1 = true
       this.getShop()
-      this.Branchstore.map(itm => {
-          this.$refs.registrationEntry.orgName = itm.name;
-      });
+
     },
     // 更多条件查询
     senior() {
@@ -1163,7 +1150,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : ""
       };
-      
+
       this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
       this.getDetailed(data, this.value);
     },
