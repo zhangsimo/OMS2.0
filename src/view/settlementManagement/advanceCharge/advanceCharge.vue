@@ -350,6 +350,7 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       modalShow: false,
       reTitle: "",
       revokeReason: "",
