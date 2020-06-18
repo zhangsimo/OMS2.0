@@ -16,7 +16,7 @@ const resetData = treeData => {
 // 查询客服信息
 export async function getCarPartClass() {
     let res = await axios.request({
-      url: `http://192.168.30.221:9200/partType/getCarClassifys`,
+      url: `${api.omsProduct}/partType/getCarClassifys`,
       method: "post",
     });
 
