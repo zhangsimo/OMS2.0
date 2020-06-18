@@ -53,13 +53,13 @@
               v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
               v-has="'audit'"
             >编辑/重新提交</Button>
-            <!--<Button-->
-              <!--type="warning"-->
-              <!--class="mr10 w90"-->
-              <!--@click="showReview"-->
-              <!--v-has="'audit'"-->
-              <!--v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'"-->
-            <!--&gt;审核</Button>-->
+            <Button
+              type="warning"
+              class="mr10 w90"
+              @click="showReview"
+              v-has="'audit'"
+              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'&&isActivity!=='1'"
+            >审核</Button>
           </div>
         </div>
       </div>
@@ -791,7 +791,9 @@ export default {
         }
       ],
       data5: [],
-      data6: []
+      data6: [],
+      //活动是否开始审批
+      isActivity:sessionStorage.getItem('isActivity')
     };
   },
   mounted() {
