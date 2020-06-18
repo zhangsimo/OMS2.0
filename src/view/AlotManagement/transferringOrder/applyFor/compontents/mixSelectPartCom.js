@@ -5,9 +5,10 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import { getwbParts } from "_api/system/partManager";
 import {
-  getCarPartClass,
   getCarPartsTwo
 } from "../../../../../api/purchasing/purchasePlan";
+import { getCarPartClass } from "_api/parts";
+
 
 export const mixSelectPartCom = {
   inject: ["reload"],
@@ -51,17 +52,26 @@ export const mixSelectPartCom = {
         {
           title: "品牌车型",
           key: "adapterCarModel",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.adapterCarModel||p.row.carBrandName)
+          }
         },
         {
           title: "规格",
           key: "specifications",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.specifications||p.row.spec)
+          }
         },
         {
           title: "型号",
           key: "brandName",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.brandName||p.row.carModelName)
+          }
         },
         {
           title: "品质",
@@ -87,33 +97,22 @@ export const mixSelectPartCom = {
           title: "一级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text = "";
+            let text = '';
             try {
-              text = params.row.baseType.firstType.typeName;
-            } catch (e) {}
-            return h("span", text);
+              text = params.row.baseType.firstType.typeName
+            } catch(e) {}
+            return h('span', text||params.row.carTypef);
           }
         },
         {
           title: "二级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text = "";
+            let text = ''
             try {
-              text = params.row.baseType.secondType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
-        },
-        {
-          title: "三级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text = "";
-            try {
-              text = params.row.baseType.thirdType.typeName;
-            } catch (e) {}
-            return h("span", text);
+              text = params.row.baseType.secondType.typeName
+            } catch(e) {}
+            return h('span', text||params.row.carTypes);
           }
         },
         {
@@ -203,46 +202,22 @@ export const mixSelectPartCom = {
   methods: {
     //初始化数据
     getList() {
-      // this.loading = true
-      // let req = {}
-      // if(this.selectTreeItem.id){
-      //   req.typeId = this.selectTreeItem.id
-      // }
-      // if(this.selectBrand&&this.selectBrand!='9999'){
-      //   req.partBrandCode = this.selectBrand
-      // }
-
-      // if(this.searchValue.trim()){
-      //   req[this.searchType] = this.searchValue.trim()
-      // }
-      // req.page = this.page.num
-      // req.size = this.page.size
-      // getCarPartsTwo(req).then(res => {
-      //   this.loading = false;
-      //   this.partData = res.data.content||[];
-      //   this.page.total = res.data.totalElements
-      // })
       this.loading = true;
       let req = {};
+      let data = {};
       if (this.selectTreeItem.id) {
-        req.typeId = this.selectTreeItem.id;
+        data.typeId = this.selectTreeItem.typeId;
       }
       if (this.selectBrand && this.selectBrand != "9999") {
-        req.partCodes = [];
-        req.partBrandCode = this.selectBrand;
+        data.partBrandId = this.selectBrand;
       }
 
       if (this.partName.trim()) {
-        // if (this.searchType == "adapterCarModels") {
-        //   req.adapterCarModels = [this.partName];
-        // } else {
-        //   req[this.searchType] = this.partName.trim();
-        // }
-        req.adapterCarModel = this.partName;
+        data.partCode = this.partName.trim();
       }
       req.page = this.page.num - 1;
       req.size = this.page.size;
-      getCarPartsTwo(req).then(res => {
+      getCarPartsTwo(req, data).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
@@ -271,12 +246,9 @@ export const mixSelectPartCom = {
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
-      let data = {};
-      data.page = 1;
-      data.pageSize = 500;
-      getCarPartClass(data).then(res => {
+      getCarPartClass().then(res => {
         this.treeLoading = false;
-        this.treeData = this.resetData(res.data.content || []);
+        this.treeData = res;
       });
     },
     //树形数组递归加入新属性
