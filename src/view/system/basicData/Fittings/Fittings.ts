@@ -444,22 +444,7 @@ export default class Fittings extends Vue {
     params.size = this.cloud.page.size;
     const qurry = this.query.trim();
     if (qurry.length > 0) {
-      switch (this.queryValue) {
-        case "0":
-          data.partCode = qurry;
-          break;
-        case "1":
-          data.fullName = qurry;
-          break;
-        case "2":
-          data.adapterCarModels = [qurry];
-          break;
-        case "3":
-          data.pinyin = qurry;
-          break;
-        default:
-          break;
-      }
+      data.partCode = qurry;
     }
     if (this.band.length > 1) {
       // data.partBrandId = this.band;

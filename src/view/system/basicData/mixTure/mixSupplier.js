@@ -217,7 +217,7 @@ export const mixSelectPartCom = {
       if (this.partName.trim()) {
         req.partCode = this.partName.trim()
       }
-      req.page = this.page.num
+      req.page = this.page.num - 1;
       req.size = this.page.size
       req.matchingId = this.$parent.levelId
       req.partInnerId = this.$parent.code
