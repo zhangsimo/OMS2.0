@@ -5,14 +5,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询:</span>
-            <Select v-model="queryValue" style="width:140px">
-              <Option
-                v-for="item in queryList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <Input v-model="queryValue" placeholder="请输入配件内码/编码/名称/OE码" style="width: 200px;" class="mr10" />
           </div>
           <div class="db">
             <Input v-model="query" placeholder="输入查询条件" style="width: 140px;" class="mr10" />

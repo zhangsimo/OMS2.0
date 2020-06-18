@@ -5,6 +5,7 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import { getwbParts } from "_api/system/partManager";
 import { getDetails } from "@/api/salesManagment/salesOrder";
+import { getCarPartClass } from "_api/parts";
 
 export const mixSelectPartCom = {
   inject: ["reload"],
@@ -83,49 +84,47 @@ export const mixSelectPartCom = {
         {
           title: "规格",
           key: "specifications",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.specifications||p.row.spec)
+          }
         },
         {
           title: "型号",
           key: "brandName",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.brandName||p.row.carModelName)
+          }
         },
         {
           title: "品牌车型",
           key: "adapterCarModel",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.adapterCarModel||p.row.carBrandName)
+          }
         },
         {
           title: "一级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text = "";
+            let text = '';
             try {
-              text = params.row.baseType.firstType.typeName;
-            } catch (e) {}
-            return h("span", text);
+              text = params.row.baseType.firstType.typeName
+            } catch(e) {}
+            return h('span', text||params.row.carTypef);
           }
         },
         {
           title: "二级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text = "";
+            let text = ''
             try {
-              text = params.row.baseType.secondType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
-        },
-        {
-          title: "三级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text = "";
-            try {
-              text = params.row.baseType.thirdType.typeName;
-            } catch (e) {}
-            return h("span", text);
+              text = params.row.baseType.secondType.typeName
+            } catch(e) {}
+            return h('span', text||params.row.carTypes);
           }
         },
         {
@@ -209,20 +208,14 @@ export const mixSelectPartCom = {
       let params = {};
       let req = {};
       if (this.selectTreeItem.id) {
-        req.typeId = this.selectTreeItem.id;
+        req.typeId = this.selectTreeItem.typeId;
       }
       if (this.selectBrand && this.selectBrand != "9999") {
-        req.partCodes = [];
-        req.partBrandCodes = [this.selectBrand];
+        req.partBrandId = this.selectBrand;
       }
 
       if (this.partName.trim()) {
-        // if (this.searchType == "adapterCarModels") {
-        //   req[this.searchType] = [this.partName];
-        // } else {
-        //   req[this.searchType] = this.partName.trim();
-        // }
-        req.adapterCarModels = [this.partName.trim()];
+        req.partCode = this.partName.trim();
       }
       params.page = this.page.num - 1;
       params.size = this.page.size;
@@ -254,9 +247,9 @@ export const mixSelectPartCom = {
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
-      getCarClassifys({ page: 1, pageSize: 500 }).then(res => {
+      getCarPartClass().then(res => {
         this.treeLoading = false;
-        this.treeData = this.resetData(res.data.content || []);
+        this.treeData = res;
       });
     },
     //树形数组递归加入新属性

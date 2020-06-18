@@ -142,11 +142,12 @@ export function getParamsBrand(data) {
 }
 
 // ====> 调拨所需接口
-export function getCarPartsTwo(params) {
+export function getCarPartsTwo(params, data) {
   return axios.request({
     url: `${api.wmsApi}/wbParts/findByAllot`,
-    method: 'get',
-    params
+    method: 'post',
+    params,
+    data
   })
 }
 

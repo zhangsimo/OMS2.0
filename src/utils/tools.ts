@@ -193,7 +193,7 @@ export function isZero(data: Array<any>, { qty, price }) : boolean {
   }
 
   if(price) {
-    zero2 = data.find(el => el[price] === undefined || el[price] * 1 <= 0);
+    zero2 = data.find(el => el[price] === undefined);
   }
 
   if(zero1) {
