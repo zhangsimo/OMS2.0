@@ -913,15 +913,18 @@ export default {
             this.$set(this.data1[index], "thisAccountAmt", sum1);
             this.$set(this.data1[index] , 'detailDtoList' , this.Reconciliationcontent)
           } else {
-            const sum1 =
-              this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
-
+            let sum1 = 0
+             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
             if (this.data2[index].rpAmt >= 0) {
+                sum1 =
+                    this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
               if (sum > this.data2[index].rpAmt - this.data2[index].accountAmt)
                 return this.$message.error(
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
             } else {
+                sum1 =
+                    this.data2[index].rpAmt - this.data2[index].accountAmt + sum;
               if (
                 sum + (this.data2[index].rpAmt + this.data2[index].accountAmt) >
                 0
