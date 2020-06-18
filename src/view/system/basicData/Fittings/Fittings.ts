@@ -6,8 +6,10 @@ import * as api from "_api/system/partManager";
 // @ts-ignore
 import * as tools from "_utils/tools";
 // @ts-ignore
-// import accessories from './modal/Accessories';
 import PartInfo from "_c/partInfo/partInfo";
+// @ts-ignore
+import { getCarPartClass } from "_api/parts";
+
 import _ from 'lodash';
 @Component({
   components: {
@@ -133,17 +135,6 @@ export default class Fittings extends Vue {
             let text: string = "";
             try {
               text = params.row.baseType.secondType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
-        },
-        {
-          title: "三级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text: string = "";
-            try {
-              text = params.row.baseType.thirdType.typeName;
             } catch (e) {}
             return h("span", text);
           }
@@ -391,12 +382,9 @@ export default class Fittings extends Vue {
   // 初始化配件分类
   private orginTreeData: Array<Tree> = new Array();
   private async treeInit() {
-    let res: any = await api.findWbAllByTree();
-    if (res.code == 0) {
-      this.treeData = res.data.content;
-      tools.transTree(this.treeData, "typeName");
-      this.orginTreeData = this._.cloneDeep(this.treeData);
-    }
+    let res: any = await getCarPartClass();
+    this.treeData = res;
+    this.orginTreeData = this._.cloneDeep(this.treeData);
   }
   // 获取品牌
   private async getBand() {
@@ -413,11 +401,6 @@ export default class Fittings extends Vue {
           this.bands.push(el);
         });
       }
-      // res.data.content.forEach((el: any) => {
-      //   el.label = el.name;
-      //   el.value = el.id;
-      //   this.bands.push(el);
-      // })
     }
   }
 
@@ -430,25 +413,9 @@ export default class Fittings extends Vue {
     params.size = this.local.page.size;
     const qurry = this.query.trim();
     if (qurry.length > 0) {
-      switch (this.queryValue) {
-        case "0":
-          data.queryCode = qurry;
-          break;
-        case "1":
-          data.fullName = qurry;
-          break;
-        case "2":
-          data.carModelName = qurry;
-          break;
-        case "3":
-          data.pyCode = qurry;
-          break;
-        default:
-          break;
-      }
+      data.partCode = qurry;
     }
     if (this.band.length > 1) {
-      // data.partBrandId = this.band;
       for (let band of this.bands) {
         if (band.value == this.band) {
           data.partBandCode = band.value;
@@ -457,7 +424,6 @@ export default class Fittings extends Vue {
       }
     }
     if (this.selectTreeId) {
-      // data.carTypeIdThr = this.selectTreeId;
       data.carTypeT = this.selectTreeId;
     }
     params = { ...params, ...data };
@@ -522,7 +488,7 @@ export default class Fittings extends Vue {
   // 选中树形菜单
   private selectedTree(tree: Array<Tree>, data: Tree) {
     this.restParams();
-    this.selectTreeId = data.id;
+    this.selectTreeId = data.typeId;
     this.queryHandle();
   }
   // tab切换
