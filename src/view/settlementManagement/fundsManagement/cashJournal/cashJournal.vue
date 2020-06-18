@@ -311,7 +311,7 @@ export default {
       Branchstore: [{ id: 0, companyName: "全部" }],
       model1: 0, //获取到地址id
       shopCode: 0, //获取到门店id
-      shopList: [{ id: 0, name: "全部" }], //门店列表
+      shopList: [{ id: '0', name: "全部" }], //门店列表
       subjectCode: "1243469693836918001", //科目id
       subJectList: [], //科目列表
       company: "", //往来单位
@@ -332,6 +332,9 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
+    this.$nextTick( () => {
+      this.shopCode = arr[1]
+    })
     this.getShop(); //获取门店
     this.getAllAre(); //获取区域
     this.getSubject(); //获取会计科目
@@ -352,42 +355,21 @@ export default {
       }
     },
 
-    //当前非管理员状态情况下获取门店地址
-    async getThisArea() {
-      let data = {};
-      data.shopkeeper = 1;
-      data.shopNumber = this.$store.state.user.userData.shopId;
-      data.tenantId = this.$store.state.user.userData.tenantId;
-      let res = await are(data);
-      if (res.code === 0) {
-        this.model1 = 0;
-      }
-    },
-
     //获取当前科目
-    async getSubject() {
-      let res = await getSubjectType();
-      if (res.code === 0) {
-        this.subJectList = res.data;
-        this.subjectCode = res.data[0].id;
-      }
+    async getSubject(){
+        let res = await getSubjectType()
+        if(res.code === 0){
+          this.subJectList = res.data
+          if(res.data.length == 0) return
+          this.subjectCode = res.data[0].id
+        }
     },
 
     //获取门店
     async getShop() {
-      let data = {};
-      data.supplierTypeSecond = this.model1;
-      this.shopList = [{ id: 0, name: "全部" }];
-      let res = await goshop(data);
-      if (res.code === 0) {
-        this.shopList = [...this.shopList, ...res.data];
-        this.$nextTick(() => {
-          this.shopCode = 0;
-        });
-        if (this.$store.state.user.userData.shopkeeper != 0) {
-          this.getThisArea(); //获取当前门店地址
-        }
-      }
+      let data ={}
+      let res = await goshop(data)
+      if (res.code === 0) return this.shopList = [...this.shopList , ...res.data]
     },
 
     // 日期选择

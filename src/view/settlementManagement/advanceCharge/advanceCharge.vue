@@ -356,9 +356,9 @@ export default {
       ], //往来单位
       companyId: 0, //往来单位
       Branchstore: [
-        {id:0 ,name:'全部'}
+        {id:'0' ,name:'全部'}
       ], //分店名称
-      BranchstoreId: 0, //分店名称
+      BranchstoreId: "", //分店名称
       tableData: [], //总表数据
       page: {
         num: 1,
@@ -379,6 +379,9 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
+    this.$nextTick( () => {
+      this.BranchstoreId = arr[1]
+    })
     this.getShop()
     this.getOne();
   },
@@ -420,23 +423,28 @@ export default {
     //获取门店
     async getShop(){
       let data ={}
-      data.supplierTypeSecond = this.model1
-      this.Branchstore = [{id:0 , name:'全部'}]
       let res = await goshop(data)
-      if (res.code === 0) {
-        this.Branchstore = [...this.Branchstore , ...res.data]
-        this.$nextTick( () => {
-          if (localStorage.getItem('oms2-userList')){
-            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
-          } else {
-            this.BranchstoreId = this.$store.state.user.userData.shopId
-          }
-        })
-        if (this.$store.state.user.userData.shopkeeper != 0){
-          this.getThisArea()//获取当前门店地址
-        }
-      }
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
+    // async getShop(){
+    //   let data ={}
+    //   data.supplierTypeSecond = this.model1
+    //   this.Branchstore = [{id:0 , name:'全部'}]
+    //   let res = await goshop(data)
+    //   if (res.code === 0) {
+    //     this.Branchstore = [...this.Branchstore , ...res.data]
+    //     this.$nextTick( () => {
+    //       if (localStorage.getItem('oms2-userList')){
+    //         this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+    //       } else {
+    //         this.BranchstoreId = this.$store.state.user.userData.shopId
+    //       }
+    //     })
+    //     if (this.$store.state.user.userData.shopkeeper != 0){
+    //       this.getThisArea()//获取当前门店地址
+    //     }
+    //   }
+    // },
     // 快速查询
     quickDate(data) {
       this.value = data;

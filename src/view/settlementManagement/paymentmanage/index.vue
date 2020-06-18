@@ -876,7 +876,6 @@ export default {
     this.$nextTick( () => {
       this.model1 = arr[1]
     })
-
     this.getShop()
   },
   methods: {
