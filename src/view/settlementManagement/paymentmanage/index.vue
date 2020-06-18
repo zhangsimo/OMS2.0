@@ -883,7 +883,6 @@ export default {
     //获取门店
     async getShop(){
       let data ={}
-      data.supplierTypeSecond = 0
       let res = await goshop(data)
       if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
