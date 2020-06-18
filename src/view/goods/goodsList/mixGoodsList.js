@@ -103,14 +103,14 @@ export const mixGoodsData = {
         }
       }
       //直发门店
-      let companyMap = res.data.guestMap || {};
+      let companyMap = res.data.companyMap || {};
       if (companyMap) {
         for (let v in companyMap) {
           if(companyMap[v]!=this.$store.state.user.userData.shopId){
             let objData = {
               label: v,
               value: companyMap[v]
-            };
+            }; 
             this.companyMap.push(objData);
           }
         }
