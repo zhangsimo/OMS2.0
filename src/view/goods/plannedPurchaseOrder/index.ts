@@ -748,7 +748,7 @@ export default class PlannedPurchaseOrder extends Vue {
         this.inStores.push({ value: storeMap[el], label: el })
       }
       // 直发门店guestMap
-      for (let el in companyMap) {
+      for (let el in companyMap) { 
         this.putStores.push({ value: companyMap[el], label: el })
       }
       for (let el in billStatusMap) {

@@ -110,7 +110,7 @@ export const mixGoodsData = {
             let objData = {
               label: v,
               value: companyMap[v]
-            };
+            }; 
             this.companyMap.push(objData);
           }
         }
