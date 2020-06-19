@@ -119,7 +119,7 @@
              //切换公司跟换token(权限设置)
              let res = await setCompany(data)
                   if(res.code === 0){
-                      this.$store.commit('setUserShopName' , res.data.shopName)
+                      this.$store.commit('setUserShopName' , res.data.shortName)
                       let data = {}
                       data.tenantId = res.data.tenantId
                       data.shopId = res.data.shopId
