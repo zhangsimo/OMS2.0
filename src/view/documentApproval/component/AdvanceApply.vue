@@ -84,7 +84,9 @@
           <Row>
             <Col span="6">
               <FormItem label="往来单位" style="margin-bottom: 0px">
-                <Select @on-change="getCompany" v-model="formInline.receiveGuestId"  label-in-value  filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+                <Select @on-change="getCompany" v-model="formInline.receiveGuestId"  label-in-value  filterable remote
+                  :loading="remoteloading"
+                  :remote-method="getOne" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>

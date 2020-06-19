@@ -416,9 +416,7 @@ export default {
       value: [], //日期
       company: [], //往来单位
       companyId: "", //往来单位
-      Branchstore: [
-        {id:"0",name:"全部"}
-      ], //分店名称
+      Branchstore: [{ id: "0", name: "全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
       page: {
@@ -442,9 +440,9 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.$nextTick( () => {
-      this.BranchstoreId = arr[1]
-    })
+    this.$nextTick(() => {
+      this.BranchstoreId = arr[1];
+    });
     this.getShop();
     // this.getOne();
     this.getQuery();
@@ -454,27 +452,11 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-     if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0)
+        return (this.Branchstore = [...this.Branchstore, ...res.data]);
     },
     //撤回弹框是否打开
     visChange(type) {
