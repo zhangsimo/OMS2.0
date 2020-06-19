@@ -46,10 +46,11 @@ const test = {
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
   // wmsApi: "https://api2.g-parts.cn/oms-system-provider",
-  wmsApi: "http://localhost:9250",
+  wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
+  // wmsApi: "http://192.168.30.221:9250",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
-  omsOrder: "http://localhost:9210",
-  // omsOrder: "http://192.168.30.21:9210",
+  omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  // omsOrder: "http://192.168.30.221:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
@@ -59,7 +60,7 @@ const test = {
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.30.43:9270",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
-  omsSotck: "http://localhost:9280",
+  omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
