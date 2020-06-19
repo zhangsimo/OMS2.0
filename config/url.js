@@ -1,28 +1,28 @@
 import env from "./env";
 
 const dev = {
-  omsApi: "http://192.168.30.21:9240", //徐林烽
-  wmsApi: "http://192.168.30.21:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
-  omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.21:9200",
+  omsApi: "http://192.168.30.221:9240", //徐林烽
+  wmsApi: "http://192.168.30.221:9250", // 徐林烽
+  omsOrder: "http://192.168.30.221:9210", // 徐林烽
+  omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.221:9200",
   // omsOrder:'http://192.168.30.11:9210', //陈舒
-  omsSettle: "http://192.168.30.21:9270",
+  omsSettle: "http://192.168.30.43:9270",
   // omsSettle: "http://192.168.30.221:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
-  omsEdit: 'http://192.168.21.21:9220', // 9220salesOrder
+  omsEdit: 'http://192.168.21.59:9220', // 9220salesOrder
   // omsTask: '', // 9230
   // omsApi: '', // 9240
   // wmsApi: '', // 9250
   omsBatch: 'http://192.168.30.221:9260', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.21:9280", //9280
+  omsSotck: "http://192.168.30.221:9280", //9280
 
   /**oms系统接口设定 */
-  tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  authApi: "http://192.168.2.47:5200", // 系统资源 5200
-  passportApi: "http://192.168.2.47:5200", // passport微服务API
+  tokenApi: "http://192.168.2.48:5600", // 登录接口API
+  authApi: "http://192.168.2.48:5200", // 系统资源 5200
+  passportApi: "http://192.168.2.48:5200", // passport微服务API
   // tokenApi: "http://192.168.30.226:5600",
   // authApi: "http://192.168.30.226:5200",
   // passportApi: "http://192.168.30.226:5200",
@@ -46,11 +46,10 @@ const test = {
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
   // wmsApi: "https://api2.g-parts.cn/oms-system-provider",
-  wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
-  // wmsApi: "http://192.168.30.221:9250",
+  wmsApi: "http://localhost:9250",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
-  omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  // omsOrder: "http://192.168.30.221:9210",
+  omsOrder: "http://localhost:9210",
+  // omsOrder: "http://192.168.30.21:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
@@ -60,7 +59,7 @@ const test = {
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.30.43:9270",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
-  omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
+  omsSotck: "http://localhost:9280",
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
