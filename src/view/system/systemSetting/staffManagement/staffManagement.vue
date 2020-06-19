@@ -1,13 +1,13 @@
 <template>
   <div class="staff-box">
     <div class="staff-header">
-      <span>机构:</span>
+      <span class="mr5">机构:</span>
       <Cascader :data="list" v-model="groundIds" placeholder='选择机构' style="width: 250px" class="mr10"></Cascader>
-      <span>姓名:</span>
+      <span class="mr5">姓名:</span>
       <input type="text" class="staff-name mr10" v-model="staffName" />
-      <span>手机号码:</span>
+      <span class="mr5">手机号码:</span>
       <input type="text" class="staff-phone-number mr10" v-model="staffphoneNumber" />
-      <span>是否离职:</span>
+      <span class="mr5">是否离职:</span>
       <Select v-model="dimission" style="width:80px">
         <Option v-for="item in isDimission" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
@@ -326,6 +326,7 @@ export default {
         emergencyContact: "", //紧急联系人
         emergencyContactPhone: "", //紧急联系人电话
         costPrice: "",
+        groundIds:[],
         salesman: "", //
         id: "", //id
         sureCost: 0, //成本价
@@ -377,6 +378,8 @@ export default {
               this.list = list
           }
       },
+
+    //查询页面数据
     getAllStaffList() {
       this.oneStaffChange = {};
       let stop = this.$loading();
@@ -386,7 +389,7 @@ export default {
       data.userName = this.staffName;
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
-      data.groundIds=this.groundIds[this.groundIds.length-1] || '';
+      data.groundIds= this.groundIds.length > 0 ?  this.groundIds[this.groundIds.length-1] : '';
       getStaffList(data).then(res => {
           stop();
           this.loading = false;
@@ -482,7 +485,6 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
-          data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
             .then(res => {
@@ -506,7 +508,6 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
-          data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           changeeditUser(data)
             .then(res => {
@@ -525,6 +526,7 @@ export default {
     },
     //获取当前数据
     selection(currentRow) {
+      currentRow.groundIds = JSON.parse(currentRow.groundIds)
       this.oneStaffChange = currentRow;
     },
     //修改信息
@@ -646,6 +648,7 @@ export default {
       }
       this.$refs.addNew.getlist();
       this.$refs.addNew.clearList();
+      this.$refs.addNew.resetFields();
       this.PtCompany = true;
     },
     //关闭公司选项
