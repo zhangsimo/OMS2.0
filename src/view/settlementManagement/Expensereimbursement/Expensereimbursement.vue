@@ -290,7 +290,10 @@
       @on-visible-change="visChangeClaim"
     >
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
+      <Select v-model="companyId" class="w150" filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne">
         <Option v-for="item in company" :value="item.value" :key="item.value">{{
           item.label
         }}</Option>
@@ -369,6 +372,7 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
@@ -590,17 +594,23 @@ export default {
       })
     },
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
     },
     // 选中行
     currentChangeEvent({ row }) {

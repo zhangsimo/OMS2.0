@@ -35,7 +35,7 @@ export const minxParts = {
           value: 1
         },
         {
-          label: "待审",
+          label: "待审核",
           value: 0
         },
         {
@@ -43,7 +43,7 @@ export const minxParts = {
           value: 2
         },
         {
-          label: "待同步",
+          label: "待审批",
           value: 3
         },
       ],
@@ -169,7 +169,7 @@ export const minxParts = {
                   apptxt = "未通过";
                   className = "red";
                 } else if (approval == 3) {
-                  apptxt = "待同步";
+                  apptxt = "待审批";
                 }
                 return h(
                   "span",
