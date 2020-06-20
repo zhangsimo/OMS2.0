@@ -15,7 +15,7 @@ import PrintShow from './components/PrintShow'
 import SelectSupplier from "./../../goods/goodsList/components/supplier/selectSupplier";
 import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
 import { Object } from 'core-js'
-
+import { checkStore } from '@/api/system/systemApi'
 
 
 export default {
@@ -44,6 +44,13 @@ export default {
           return Promise.reject(new Error('最多保留2位小数'))
       }
     };
+
+    let checkStoreSelf = ({ cellValue }) => {
+      checkStore({ storeId: this.formPlan.storeId , name: cellValue }).then(res => {
+        console.log(res);
+      })
+    }
+
     return {
       dataChange: {},//左侧当前数据
       StoreId: '', //默认仓
@@ -104,6 +111,11 @@ export default {
         ],
         orderPrice: [
           { required: true, validator: money }
+        ],
+        storeShelf: [
+          {
+            validator: checkStoreSelf
+          }
         ]
       }, //表格校验
       allMoney: 0,//总价

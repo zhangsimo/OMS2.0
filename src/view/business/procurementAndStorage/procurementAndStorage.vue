@@ -291,6 +291,11 @@
                       title="备注"
                       :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"
                     ></vxe-table-column>
+                    <vxe-table-column
+                      field="storeShelf"
+                      title="仓位"
+                      :edit-render="{name: 'input',immediate: true}"
+                    ></vxe-table-column>
                     <vxe-table-column title="不含税单价">
                       <template v-slot="{row}">
                         <span>{{countTaxRate(row) |priceFilters}}</span>

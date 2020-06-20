@@ -97,7 +97,7 @@ const dev = {
   // passportApi: "http://192.168.30.226:5200",
 
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
-  uploadApi: "http://192.168.2.48:5100/file/uploadFile",
+  uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
