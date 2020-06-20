@@ -422,7 +422,6 @@ export default {
     },
     //新增客户确认
     addNewClient() {
-      console.log(this.clientList ,111)
       this.$refs.child.handleSubmit(async () => {
         let data = {};
         // console.log(data)

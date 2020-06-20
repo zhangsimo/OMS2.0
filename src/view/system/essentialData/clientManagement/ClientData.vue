@@ -3,11 +3,11 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled" :false-value="0" :true-value="1" />
+        <Checkbox v-model="data.isDisabled" false-value="0" true-value="1" />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier" :false-value="0" :true-value="1" />
+        <Checkbox v-model="data.isSupplier" false-value="0" true-value="1" />
       </span>
       <span class="isDisabeld">
         客户
