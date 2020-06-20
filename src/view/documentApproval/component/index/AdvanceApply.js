@@ -4,9 +4,7 @@ import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getAdvanceSave} from '_api/documentApproval/AdvanceApply.js'
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
-import {
-  findGuest
-} from "_api/settlementManagement/advanceCollection.js";
+
 export default {
   name: "AdvanceApply",
   components:{
@@ -19,7 +17,6 @@ export default {
   },
   data(){
     return {
-      remoteloading: false,
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
       formInline:{
@@ -70,7 +67,7 @@ export default {
   methods:{
     //模态框打开111
     open(){
-      // this.company = this.list.salesList
+      this.company = this.list.salesList
       this.payUserList = this.list.payList
       this.formInline = {}
       this.$refs.upImg.uploadListModal = []
@@ -97,25 +94,6 @@ export default {
       if (this.list.type == 3 || this.list.type == 4){
         this.getList()
         this.modelType = true
-      }
-    },
-
-    async getOne(query) {
-      if (query != "") {
-        this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(item => {
-              this.company.push({
-                value: item.id,
-                label: item.fullName
-              });
-            });
-            this.remoteloading = false;
-          }
-        });
-      } else {
-        this.company = [];
       }
     },
 

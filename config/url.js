@@ -20,9 +20,9 @@ const dev = {
   omsSotck: "http://192.168.30.21:9280", //9280
 
   /**oms系统接口设定 */
-  tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  authApi: "http://192.168.2.47:5200", // 系统资源 5200
-  passportApi: "http://192.168.2.47:5200", // passport微服务API
+  tokenApi: "http://192.168.2.48:5600", // 登录接口API
+  authApi: "http://192.168.2.48:5200", // 系统资源 5200
+  passportApi: "http://192.168.2.48:5200", // passport微服务API
   // tokenApi: "http://192.168.30.226:5600",
   // authApi: "http://192.168.30.226:5200",
   // passportApi: "http://192.168.30.226:5200",
@@ -47,10 +47,9 @@ const test = {
   // tokenApi: "http://192.168.30.226:5600",
   // wmsApi: "https://api2.g-parts.cn/oms-system-provider",
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
-  // wmsApi: "http://192.168.30.221:9250",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  // omsOrder: "http://192.168.30.221:9210",
+  // omsOrder: "http://192.168.30.21:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",

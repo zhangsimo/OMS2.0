@@ -72,3 +72,11 @@ export function storeAreaLineDeleted(params) {
     params,
   })
 }
+
+export function checkStore(params) {
+  return axios.request({
+    url: `${api.wmsApi}/storeLocation/location/checkLocation`,
+    method: 'get',
+    params,
+  })
+}
