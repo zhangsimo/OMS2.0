@@ -158,6 +158,7 @@
                       <div v-else>{{row.stockOutQty||0}}</div>
                     </template>
                   </vxe-table-column>
+                  <vxe-table-column field="storeShelf" title="仓位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 </vxe-table>

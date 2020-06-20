@@ -80,45 +80,6 @@
         <Button type="primary" @click="staffSubmit">确定</Button>
       </div>
     </Modal>
-
-
-<!--    //编辑权限模态框-->
-    <Modal
-      v-model="rightControlShow"
-      title="编辑权限"
-    >
-      <Tree
-        style="max-height: 600px;overflow-y: auto"
-        :data="treeList"
-        show-checkbox
-        children-key="childs"
-        ref="resTree"
-        @on-check-change="checkChange"
-      ></Tree>
-      <div slot="footer">
-        <Button type="primary" @click="submit">保存</Button>
-        <Button type="text" @click="rightControlShow = false">取消</Button>
-      </div>
-    </Modal>
-
-    <Modal v-model="staff.modal" :title="staff.title">
-      <Form :label-width="60">
-        <FormItem label="人员:">
-          <Select v-model="staff.checkedIds" filterable multiple>
-            <Option
-              v-for="item in staff.data"
-              :value="item.id"
-              :key="item.staffName"
-            >{{ item.staffName }}</Option
-            >
-          </Select>
-        </FormItem>
-      </Form>
-      <div slot="footer">
-        <Button type="text" @click="staff.modal = false">取消</Button>
-        <Button type="primary" @click="staffSubmit">确定</Button>
-      </div>
-    </Modal>
   </div>
 </template>
 <script>
@@ -186,34 +147,48 @@ export default {
           key: "username",
           minWidth: 160
         },
-        {
-          title: "操作",
-          align: "center",
-          key: "",
-          render: (h, params) => {
-            return h( 'div', [
-              h('a', {
-                props: {
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.openModel(params)
-                  }
-                }
-              }, '编辑权限')
-            ])
-
-          },
-          width: 80
-        }
+        // {
+        //   title: "操作",
+        //   align: "center",
+        //   key: "",
+        //   render: (h, params) => {
+        //     return h("Icon", {
+        //       props: {
+        //         size: 16,
+        //         type: "android-delete"
+        //       },
+        //       attrs: {
+        //         title: `从【${this.curName}】移出`
+        //       },
+        //       class: "delete",
+        //       on: {
+        //         click: () => {
+        //           this.$Modal.confirm({
+        //             title: "提示",
+        //             content: `确定要将【${params.row.staffName}】从【${this.curName}】移出吗？`,
+        //             onOk: () => {
+        //               let stop = this.$loading();
+        //               removeStaff(this.curId, params.row.id)
+        //                 .then(res => {
+        //                   stop();
+        //                   if (res.code == 0) {
+        //                     this.$Message.success(res.message);
+        //                     this.findStaffByGroupId();
+        //                   }
+        //                 })
+        //                 .catch(err => {
+        //                   stop();
+        //                 });
+        //             }
+        //           });
+        //         }
+        //       }
+        //     });
+        //   },
+        //   width: 80
+        // }
       ],
-      tbdata: [],//右侧人员列表数据
-      rightControlShow:false,//编辑权限模态框展示
-      treeList:[],//树形图数据展示
+      tbdata: []
     };
   },
   activated() {
@@ -224,6 +199,9 @@ export default {
     this.getCompanyList();
   },
   methods: {
+    addStaff() {
+      this.findAllStaff();
+    },
     getCompanyList(data = {}) {
       allStaffCompany(this.page.num, 10000, data).then(res => {
         if (res.code == 0) {
@@ -231,8 +209,6 @@ export default {
         }
       });
     },
-
-
     staffSubmit() {
       let stop = this.$loading();
       changeStaff(this.curId, this.staff.checkedIds)
@@ -487,18 +463,6 @@ export default {
         .catch(err => {
           stop();
         });
-    },
-
-    //打开编辑权限模态框
-    openModel(params){
-      this.rightControlShow = true
-      console.log(params)
-    },
-
-    //树形图复选框事件
-    checkChange(){
-      let tree = this.$refs.resTree,
-          nodes = tree.flatState
     }
   }
 };

@@ -16,7 +16,7 @@
         :on-success="onSuccess"
         :before-upload="beforeUpload"
       >
-        <Button type="default" class="mr10" v-has="'import'">
+        <Button type="default" class="mr10">
           导入
         </Button>
       </Upload>

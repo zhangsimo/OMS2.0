@@ -34,6 +34,13 @@
       >
         <span class="center">额度调整</span>
       </Button>
+      <Button
+        class="mr10"
+        @click="openImportXLS"
+        v-has="'change'"
+      >
+        <span class="center">额度批量调整</span>
+      </Button>
     </div>
     <div class="customerCredit-title">
       <div style="width: 3000px;padding-right: 10px">
@@ -121,7 +128,6 @@
         </div>
       </Modal>
     </div>
-
     <!--      修改信用调查-->
     <Modal v-model="surveyShow" title="信用调查表" width="1000">
       <SurveyList :data="creaditList" :dataMsg="costList" :dataJudge="creditArr" ref="SurveyList"></SurveyList>
@@ -143,6 +149,8 @@
         <Button type="default" @click="cancelChange">取消</Button>
       </div>
     </Modal>
+    <!-- 申请额度批量调整 -->
+    <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
   </div>
 </template>
 
@@ -150,6 +158,7 @@
 import CreditLineApplication from "./CreditLineApplication";
 import QuotaAdjustment from "./QuotaAdjustment";
 import SurveyList from "./SurveyList";
+import importXLS from "@/view/settlementManagement/components/importXLS"
 import {
   queryCreditList,
   guestCreditHistory,
@@ -158,7 +167,7 @@ import {
   save,
   guestAdjust
 } from "../../../../api/system/CustomerManagement/CustomerManagement";
-import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
+import { getDigitalDictionary, impUrl} from "@/api/system/essentialData/clientManagement";
 import * as tools from "../../../../utils/tools";
 import moment from "moment";
 
@@ -167,7 +176,8 @@ export default {
   components: {
     CreditLineApplication,
     SurveyList,
-    QuotaAdjustment
+    QuotaAdjustment,
+    importXLS
   },
   data() {
     return {
@@ -427,6 +437,10 @@ export default {
       creaditList: {},
       surveyAllList: [],
       adjustmentOne: {}, //额度调整信息
+      impirtUrl:{
+        downId: '1600000000',
+        upUrl:impUrl
+      },//下载上传路径
       ID: "", //保存当前行id
       state: -1, //保存当前行的客户调查状态
       Limitstate: "", //保存当前的额度状态
@@ -441,7 +455,6 @@ export default {
       total: "", //调整后剩余额度
       totalSuma: "",
       flag: "",
-
       editTopItemId:""//记录操作的是第几条数据
     };
   },
@@ -466,7 +479,6 @@ export default {
     },
     //当前行
     selection(row) {
-      console.log(row)
       if(!row){
         return
       }
@@ -481,7 +493,6 @@ export default {
       this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.creaditList.applyTrustMoney = this.creaditList.applyTrustMoney||1;
       this.flag = row.isGuestResearch;
-      console.log(this.creaditList)
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
         ? JSON.parse(row.researchStatus).value
@@ -644,6 +655,12 @@ export default {
         }
       });
     },
+    //打开导入模板下载
+    openImportXLS(){
+      this.$refs.imp.openModal()
+    },
+    // 额度批量调整
+    getNew(data){},
     //调整信用额度的确定
     adjustmentconfirm() {
       this.$refs["formRule"].$refs["formRule"].validate(valid => {

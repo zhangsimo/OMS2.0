@@ -312,6 +312,7 @@
                     title="备注"
                     width="100"
                   ></vxe-table-column>
+                  <vxe-table-column field="storeShelf" title="仓位" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="carBrandName"
                     title="品牌车型"

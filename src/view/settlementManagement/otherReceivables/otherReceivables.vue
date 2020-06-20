@@ -5,11 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate
-              class="mr10"
-              ref="quickDate"
-              @quickDate="quickDate"
-            ></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>查询日期：</span>
@@ -23,46 +19,22 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select
-              v-model="BranchstoreId"
-              class="w150"
-              filterable
-              clearable
-              @on-change="query"
-            >
+            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
-              >
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
-              v-model="companyId"
-              class="w150"
-              filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne"
-              @on-change="query"
-            >
-              <Option
-                v-for="item in company"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+            <Select v-model="companyId" class="w150" filterable clearable @on-change="query">
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db ml20">
-            <button
-              class="mr10 ivu-btn ivu-btn-default"
-              type="button"
-              @click="query"
-            >
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon mr5"></i>
               <span>查询</span>
             </button>
@@ -75,37 +47,22 @@
           class="ml10"
           @click="claimCollect(1)"
           :disabled="Boolean(currRow.paymentClaimNo)"
-          >其他付款认领</Button
-        >
+        >其他付款认领</Button>
         <Button
           v-has="'cancel'"
           class="ml10"
           @click="collectWirte"
           :disabled="Boolean(currRow.writeOffReceiptNo)"
-          >其他收款核销</Button
-        >
+        >其他收款核销</Button>
         <Button
           v-has="'back'"
           class="ml10"
           @click="claimCollect(2)"
           :disabled="Boolean(currRow.paymentRegainNo)"
-          >其他收款收回</Button
-        >
-        <Button v-has="'payBack'" class="ml10" @click="revokeCollection(0)"
-          >其他付款认领撤回</Button
-        >
-        <Button
-          v-has="'gatheringClaimBack'"
-          class="ml10"
-          @click="revokeCollection(1)"
-          >其他收款核销撤回</Button
-        >
-        <Button
-          v-has="'gatheringBack'"
-          class="ml10"
-          @click="revokeCollection(2)"
-          >其他收款收回撤回</Button
-        >
+        >其他收款收回</Button>
+        <Button v-has="'payBack'" class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
+        <Button v-has="'gatheringClaimBack'" class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
+        <Button v-has="'gatheringBack'" class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
         <!--<Button class="ml10">导出</Button>-->
       </div>
     </section>
@@ -127,99 +84,48 @@
             :footer-method="footerMethod"
           >
             <vxe-table-column title="基本信息">
-              <vxe-table-column
-                type="seq"
-                width="60"
-                title="序号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="serviceId"
-                title="其他付款申请单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="guestName"
-                title="往来单位"
-              ></vxe-table-column>
+              <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column field="serviceId" title="其他付款申请单号"></vxe-table-column>
+              <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
               <vxe-table-column field="businessType" title="业务类型">
-                <template v-slot="{ row }">{{
-                  row.businessType.name
-                }}</template>
+                <template v-slot="{row}">{{row.businessType.name}}</template>
               </vxe-table-column>
-              <vxe-table-column
-                field="payTime"
-                title="付款时间"
-              ></vxe-table-column>
+              <vxe-table-column field="payTime" title="付款时间"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
-              <vxe-table-column
-                field="applyAmt"
-                title="其他付款申请金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentClaimNo"
-                title="其他付款认领单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentClaimAmt"
-                title="其他付款认领金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="writeOffReceiptNo"
-                title="其他收付款核销单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="writeOffAmount"
-                title="其他收款核销金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentRegainNo"
-                title="其他收款收回单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentRegainAmt"
-                title="其他收款收回金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentBalance"
-                title="其他收款余额"
-              ></vxe-table-column>
+              <vxe-table-column field="applyAmt" title="其他付款申请金额"></vxe-table-column>
+              <vxe-table-column field="paymentClaimNo" title="其他付款认领单号"></vxe-table-column>
+              <vxe-table-column field="paymentClaimAmt" title="其他付款认领金额"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="其他收付款核销单号"></vxe-table-column>
+              <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
+              <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
+              <vxe-table-column field="paymentRegainAmt" title="其他收款收回金额"></vxe-table-column>
+              <vxe-table-column field="paymentBalance" title="其他收款余额"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="收款方式">
               <vxe-table-column field="account" title="账户">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.receiveType"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span class="listChild">{{ item.account }}</span>
+                    <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                      <span class="listChild">{{item.account}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="amt" title="金额">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.receiveType"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span class="listChild">{{ item.amt }}</span>
+                    <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                      <span class="listChild">{{item.amt}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="age" title="收款所属门店">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.receiveType"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span class="listChild">{{ item.ownStoreName }}</span>
+                    <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                      <span class="listChild">{{item.ownStoreName}}</span>
                     </li>
                   </ul>
                 </template>
@@ -227,40 +133,28 @@
             </vxe-table-column>
             <vxe-table-column title="付款方式">
               <vxe-table-column field="role" title="账户">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.paymentType"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span class="listChild">{{ item.accountName }}</span>
+                    <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
+                      <span class="listChild">{{item.accountName}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="sex" title="金额">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.paymentType"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span class="listChild">{{ item.amt }}</span>
+                    <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
+                      <span class="listChild">{{item.amt}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="age" title="付款所属门店">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.paymentType"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span class="listChild">{{ item.ownStoreName }}</span>
+                    <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
+                      <span class="listChild">{{item.ownStoreName}}</span>
                     </li>
                   </ul>
                 </template>
@@ -268,131 +162,91 @@
             </vxe-table-column>
             <vxe-table-column title="其他信息">
               <vxe-table-column field="receiver" title="收款人">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.receiver }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiver}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="receiveDate" title="收款日期">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.receiveDate }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveDate}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="receiveRemark" title="收款备注">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.receiveRemark }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveRemark}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="receiveAuditor" title="收款审核人">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.receiveAuditor }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveAuditor}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="receiveAuditDate" title="收款审核日期">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.receiveAuditDate }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveAuditDate}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="payer" title="付款人">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.payer }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.payer}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="paymentDate" title="付款日期">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.paymentDate }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentDate}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="paymentRemark" title="付款备注">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.paymentRemark }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentRemark}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="paymentAuditor" title="付款审核人">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.paymentAuditor }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentAuditor}}</span>
                     </li>
                   </ul>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="paymentAuditDate" title="付款审核日期">
-                <template v-slot="{ row }">
+                <template v-slot="{row}">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.otherInfo"
-                      :key="index"
-                      class="flex"
-                    >
-                      <span>{{ item.paymentAuditDate }}</span>
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentAuditDate}}</span>
                     </li>
                   </ul>
                 </template>
@@ -418,40 +272,20 @@
       </div>
     </section>
     <!-- 认领弹框 -->
-    <Modal
-      v-model="claimModal"
-      :title="claimTit"
-      width="1000"
-      @on-visible-change="visChangeClaim"
-    >
+    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
-      <Select
-        v-model="companyId"
-        class="w150"
-        filterable
-        remote
-        :loading="remoteloading"
-        :remote-method="getOne"
-      >
-        <Option v-for="item in company" :value="item.value" :key="item.value">{{
-          item.label
-        }}</Option>
+      <Select v-model="companyId" class="w150" filterable>
+        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <span class="ml10">金额：</span>
       <InputNumber v-model="amt" class="w50" />
       <span class="ml10">对方户名：</span>
       <Input v-model="bankNameO" class="w100" />
-      <button
-        class="ivu-btn ivu-btn-default ml10"
-        type="button"
-        @click="queryClaimed"
-      >
+      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay"
-        >认领</Button
-      >
+      <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>
       <Button class="ml10" v-else @click="claimCollection">认领</Button>
       <claim ref="claim" @selection="selection" />
       <!--<claimGuest ref="claimGuest" />-->
@@ -463,7 +297,7 @@
       <Input class="w200 ml10" v-model="reason" />
       <div slot="footer">
         <Button type="primary" @click="revokeDetaim">确认</Button>
-        <Button @click="revoke = false">取消</Button>
+        <Button @click="revoke=false">取消</Button>
       </div>
     </Modal>
     <!--其他收款核销-->
@@ -502,12 +336,13 @@ export default {
   },
   data() {
     return {
-      remoteloading: false,
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
       companyId: "", //往来单位
-      Branchstore: [{ id: "0", name: "全部" }], //分店名称
+      Branchstore: [
+        {id:'0' ,name:'全部'}
+      ], //分店名称
       currRow: {}, //选中行
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
@@ -533,11 +368,10 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop() {
-      let data = {};
-      let res = await goshop(data);
-      if (res.code === 0)
-        return (this.Branchstore = [...this.Branchstore, ...res.data]);
+    async getShop(){
+      let data ={}
+      let res = await goshop(data)
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
     // 快速查询
     quickDate(data) {
@@ -675,7 +509,7 @@ export default {
     changeDate(val) {
       // console.log(val)
       this.value = val;
-      this.getQuery();
+      this.getQuery()
     },
     //收回认领
     claimCollection() {
@@ -805,23 +639,17 @@ export default {
       });
     },
     // 往来单位选择
-    async getOne(query) {
-      if (query != "") {
-        this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(item => {
-              this.company.push({
-                value: item.id,
-                label: item.fullName
-              });
+    async getOne() {
+      findGuest({ size: 2000 }).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item => {
+            this.company.push({
+              value: item.id,
+              label: item.fullName
             });
-            this.remoteloading = false;
-          }
-        });
-      } else {
-        this.company = [];
-      }
+          });
+        }
+      });
     },
     // 选中行
     currentChangeEvent({ row }) {
@@ -865,10 +693,10 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.$nextTick(() => {
-      this.BranchstoreId = arr[1];
-    });
-    this.getShop();
+    this.$nextTick( () => {
+      this.BranchstoreId = arr[1]
+    })
+    this.getShop()
     this.getOne();
     this.getQuery();
   }

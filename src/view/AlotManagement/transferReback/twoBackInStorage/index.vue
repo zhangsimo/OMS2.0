@@ -167,6 +167,7 @@
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
+                :edit-config="{trigger: 'click', mode: 'cell'}"
               >
                 <vxe-table-column
                   type="index"
@@ -197,6 +198,12 @@
                   field="remark"
                   title="备注"
                   width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  width="120"
+                  field="storeShelf"
+                  title="仓位"
+                  :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="unit"
@@ -258,6 +265,7 @@ import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
+import { checkStore } from '@/api/system/systemApi'
 
 export default {
   inject: ["reload"],
@@ -268,6 +276,7 @@ export default {
   },
   data() {
     return {
+      isSelfOk: true,
       flag: false,
       Leftcurrentrow: {},
       dayinCureen: {},
@@ -445,6 +454,19 @@ export default {
     this.getinfo(this.params);
   },
   methods: {
+    checkSelf({ row : { storeShelf } }) {
+      if(storeShelf == "") {
+        this.isSelfOk = true;
+      } else {
+        checkStore({ storeId: this.formPlan.storeId , name: storeShelf }).then(res => {
+          if(res.code == 0 && res.data != null) {
+            this.isSelfOk = true;
+          } else {
+            this.isSelfOk = false;
+          }
+        })
+      }
+    },
     //获取调拨申请列表
     getinfo(params) {
       getList(params)
@@ -501,6 +523,9 @@ export default {
     },
     //确定入库
     inOk() {
+      if(!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!")
+      }
       inDataList(this.inID)
         .then(res => {
           if (res.code === 0) {
