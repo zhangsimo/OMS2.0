@@ -29,10 +29,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne" @on-change="query">
+            <Select v-model="companyId" class="w150" filterable clearable @on-change="query">
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -274,10 +271,7 @@
     <!-- 认领弹框 -->
     <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne">
+      <Select v-model="companyId" class="w150" filterable>
         <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <span class="ml10">金额：</span>
@@ -350,7 +344,6 @@ export default {
   },
   data() {
     return {
-      remoteloading: false,
       modelType: {
         type: 5, //新增
         id: "",
@@ -652,23 +645,17 @@ export default {
       });
     },
     // 往来单位选择
-    async getOne(query) {
-      if (query != "") {
-        this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(item => {
-              this.company.push({
-                value: item.id,
-                label: item.fullName
-              });
+    async getOne() {
+      findGuest({ size: 2000 }).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item => {
+            this.company.push({
+              value: item.id,
+              label: item.fullName
             });
-            this.remoteloading = false;
-          }
-        });
-      } else {
-        this.company = [];
-      }
+          });
+        }
+      });
     },
     // 选中行
     currentChangeEvent({ row }) {

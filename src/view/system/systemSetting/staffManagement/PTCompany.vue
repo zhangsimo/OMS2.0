@@ -8,13 +8,6 @@
         <a class="mr20 iconfont iconxuanzetichengchengyuanicon" @click="addCompany"> 确定</a>
         <a class="mr20 iconfont iconshanchuicon" @click="cancel"> 取消</a>
       </div>
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-        <FormItem label="角色名称:" prop="userRoleId">
-          <Select v-model="formValidate.userRoleId" style="width:150px" >
-            <Option v-for="item in jobList" :value="item.id" :key="item.id">{{ item.displayName }}</Option>
-          </Select>
-        </FormItem>
-      </Form>
       <div class="companyList">
         <Table :columns="columns" border :loading="loading" stripe :data="companyList" height="440" size="small"
                @on-selection-change="selectRow"
@@ -28,9 +21,7 @@
 
 <script>
   import {getCompanyList , addEditUser} from '@/api/system/systemSetting/staffManagenebt'
-  import {queryRolesByPage } from '_api/admin/roleApi.js';
-
-  export default {
+    export default {
         name: "PTCompany",
         props:{
             data:''
@@ -75,19 +66,9 @@
                         key: 'address',
                     },
                 ],
-              formValidate:{
-                userRoleId:''
-              },//表单总数据
-              ruleValidate:{
-                userRoleId:[
-                  {required: true,type:'string', message: '请选择岗位', trigger: 'change'}
-                ],
-              },//表单校验
-              jobList:[],//角色列表
             }
         },
         mounted(){
-          this.getLeftList()
         },
         methods:{
           getlist(){
@@ -105,7 +86,6 @@
                 }
               })
           },
-
             //清空数据
             clearList(){
                 this.selectedArr = []
@@ -140,56 +120,30 @@
             cancelAll(selection) {
                 this.selectedArr = []
             },
-
-          //确定添加兼职公司职能
             addCompany(){
               if(this.selectedArr.length < 1){
-                return  this.$Message.error('至少选择一个公司')
+                  this.$Message.error('至少选择一个公司')
+                  return false
               }
-              this.$refs.formValidate.validate(valid => {
-                if (valid) {
-                  let companyList = ''
-                  this.selectedArr.forEach( item => {
+              let companyList = ''
+                this.selectedArr.forEach( item => {
                     companyList += item.id + ','
-                  })
-                  companyList = companyList.substring(0 ,companyList.length -1 )
-                  this.data.companyList = '('+ companyList + ')'
-                  let stop = this.$loading()
-                  addEditUser(this.data).then( res => {
+                })
+                companyList = companyList.substring(0 ,companyList.length -1 )
+                this.data.companyList = '('+ companyList + ')'
+                let stop = this.$loading()
+                addEditUser(this.data).then( res => {
                     stop()
                     this.getlist()
                     this.$emit('colseMdole' , res)
-                  })
-                } else {
-                  this.$Message.error('兼职岗位必选');
-                }
-              })
-
-
+                })
             },
-          //清空
-            cancel(){
+          cancel(){
             this.shopCode=''
             this.compentName=''
             this.$emit('colseMdole' , this.data)
             this.getlist()
-          },
-          //获取全部岗位
-          async getLeftList(){
-            let data ={}
-            data.size = 9999
-            data.page = 0
-            data.systemType = 0
-            let res = await queryRolesByPage(data)
-            if(res.code == 0){
-              this.jobList = res.data.content
-            }
-          },
-          //清空校验
-          resetFields() {
-            this.$refs.formValidate.resetFields()
-          },
-
+          }
         }
     }
 </script>

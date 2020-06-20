@@ -14,19 +14,19 @@
             <span>对账单勾选金额</span>
           </Col>
           <Col span="3">
-            <span>{{ currentAccount.actualCollectionOrPayment }}</span>
+            <span>{{currentAccount.actualCollectionOrPayment}}</span>
           </Col>
           <Col span="6">
             <span>认领款勾选金额</span>
           </Col>
           <Col span="3">
-            <span>{{ claimedAmt }}</span>
+            <span>{{claimedAmt}}</span>
           </Col>
           <Col span="2">
             <span>差异</span>
           </Col>
           <Col span="2">
-            <span>{{ difference }}</span>
+            <span>{{difference}}</span>
           </Col>
         </Row>
       </div>
@@ -35,24 +35,10 @@
       <div class="inner-box">
         <Split v-model="split1">
           <div slot="left">
-            <h4 class="mb10 p5 pl10" style="background:#F2F2F2">
-              未核销对账单
-            </h4>
+            <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
             <span>往来单位：</span>
-            <Select
-              v-model="companyIdNo"
-              class="w100"
-              filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne"
-            >
-              <Option
-                v-for="item in company"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+            <Select v-model="companyIdNo" class="w100" filterable>
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <span class="ml10">收付类型：</span>
             <Select v-model="paymentId" class="w100" filterable>
@@ -60,16 +46,11 @@
                 v-for="item in paymentList"
                 :value="item.value"
                 :key="item.value"
-                >{{ item.label }}</Option
-              >
+              >{{ item.label }}</Option>
             </Select>
             <span class="ml10">金额：</span>
             <InputNumber v-model="amtNo" class="w50" />
-            <button
-              class="ivu-btn ivu-btn-default ml10 mt10"
-              type="button"
-              @click="queryNoWrite"
-            >
+            <button class="ivu-btn ivu-btn-default ml10 mt10" type="button" @click="queryNoWrite">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -98,47 +79,26 @@
           <div slot="right" class="h500">
             <Split v-model="split2" mode="vertical">
               <div slot="top">
-                <h4 class="mb10 p5 pl10" style="background:#F2F2F2">
-                  本店待认领款
-                </h4>
+                <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
                 <span class="ml10">往来单位：</span>
-                <Select
-                  v-model="companyIdClaim"
-                  class="w150"
-                  filterable
-                  remote
-                  :loading="remoteloading"
-                  :remote-method="getOne"
-                >
+                <Select v-model="companyIdClaim" class="w150" filterable>
                   <Option
                     v-for="item in company"
                     :value="item.value"
                     :key="item.value"
-                    >{{ item.label }}</Option
-                  >
+                  >{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtClaim" class="w50" />
                 <span class="ml10">对方户名：</span>
                 <Input v-model="bankNameOClaim" class="w100" />
-                <button
-                  class="ivu-btn ivu-btn-default ml10"
-                  type="button"
-                  @click="queryClaimed"
-                >
+                <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
                 </button>
                 <br />
-                <Button
-                  class="mt10 ml10"
-                  v-has="'revoke'"
-                  @click="distributionDelete"
-                  >撤销分配</Button
-                >
-                <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl"
-                  >转当期损益</Button
-                >
+                <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete">撤销分配</Button>
+                <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
                 <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
                 <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
                 <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
@@ -146,17 +106,14 @@
                 <claim ref="claim" />
               </div>
               <div slot="bottom">
-                <h4 class="mb10 p5 pl10" style="background:#F2F2F2">
-                  连锁待分配款项
-                </h4>
+                <h4 class="mb10 p5 pl10" style="background:#F2F2F2">连锁待分配款项</h4>
                 <span class="ml10">区域：</span>
                 <Select v-model="areaId" class="w100" filterable>
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
                     :key="item.value"
-                    >{{ item.label }}</Option
-                  >
+                  >{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">门店：</span>
                 <Select v-model="orgId" class="w150" filterable>
@@ -164,8 +121,7 @@
                     v-for="item in orgList"
                     :value="item.id"
                     :key="item.id"
-                    >{{ item.name }}</Option
-                  >
+                  >{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtDis" class="w50" />
@@ -183,9 +139,7 @@
                   class="ivu-btn ivu-btn-default ml10 mt10"
                   type="button"
                   @click="distributionShop"
-                >
-                  分配至本店
-                </button>
+                >分配至本店</button>
                 <Table
                   border
                   class="mt10"
@@ -236,25 +190,17 @@ import {
   distributionShop,
   distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
-import { are } from "@/api/settlementManagement/fundsManagement/capitalChain";
-import { goshop } from "@/api/settlementManagement/shopList";
-import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
+import { goshop } from '@/api/settlementManagement/shopList';
+import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
-import subject from "./components/Subject";
+import subject from './components/Subject'
 
 export default {
-  components: {
-    advance,
-    expenditure,
-    settlement,
-    claim,
-    chargeAdvance,
-    subject
-  },
+  components: { advance, expenditure, settlement, claim, chargeAdvance ,subject},
   data() {
     return {
-      remoteloading: false,
       title: "预付款认领", //弹框标题
       split1: 0.4, //左右面板分割
       split2: 0.52, //上下面板分割
@@ -263,10 +209,12 @@ export default {
       companyIdClaim: "", //待认领往来单位
       company: [], //往来单位下拉框
       orgId: "", //门店
-      orgList: [{ id: "0", name: "全部" }], //分店名称
-      claimedSubjectList: {}, //获取到点击到的本店认领数据
-      areaId: 0, //区域
-      areaList: [{ value: 0, label: "全部" }], //区域
+      orgList: [
+        {id:'0' ,name:'全部'}
+      ], //分店名称
+      claimedSubjectList:{},//获取到点击到的本店认领数据
+      areaId:0,//区域
+      areaList:[{value:0 ,label:'全部'}],//区域
       bankNameOClaim: "", //对方户名
       bankNameODis: "", //对方户名
       paymentId: "YJDZ", //收付类型
@@ -406,11 +354,11 @@ export default {
       }, //连锁待分配款项分页
       currentDistribution: [], //本店待认领款选中的数据
       claimedAmt: null, //认领款勾选金额
-      difference: null //差异
+      difference: null, //差异
     };
   },
   async mounted() {
-    // this.getOne();
+    this.getOne();
     //收付类型数据字典
     getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(res => {
       res.data.map(item => {
@@ -422,13 +370,13 @@ export default {
     });
     let arr = await creat([], this.$store);
     this.orgName = arr[3];
-    this.$nextTick(() => {
-      this.orgId = arr[1];
-    });
-    this.getShop();
+    this.$nextTick( () => {
+      this.orgId = arr[1]
+    })
+    this.getShop()
     this.claimedList();
     this.distributionList();
-    this.getAllAre();
+    this.getAllAre()
     if (Object.keys(this.$route.params).length !== 0) {
       this.$route.params.data.receivePaymentTypeName = this.$route.params.data.paymentTypeName;
       this.$route.params.data.actualCollectionOrPayment = this.$route.params.data.receiptPayment;
@@ -444,30 +392,23 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop() {
-      let data = {};
-      let res = await goshop(data);
-      if (res.code === 0)
-        return (this.orgList = [...this.orgList, ...res.data]);
+    async getShop(){
+      let data ={}
+      let res = await goshop(data)
+      if (res.code === 0) return this.orgList = [...this.orgList , ...res.data]
     },
     // 往来单位选择
-    async getOne(query) {
-      if (query != "") {
-        this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(item => {
-              this.company.push({
-                value: item.id,
-                label: item.fullName
-              });
-            });
-            this.remoteloading = false;
-          }
-        });
-      } else {
-        this.company = [];
-      }
+    async getOne() {
+      findGuest({size:2000}).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item=>{
+            this.company.push({
+              value:item.id,
+              label:item.fullName
+            })
+          })
+        }
+      });
     },
     //核销对账单
     write() {
@@ -479,15 +420,15 @@ export default {
     },
 
     //打开选择会计科目
-    openSubjecMoadl() {
+    openSubjecMoadl(){
       if (this.$refs.claim.currentClaimed.length == 0) {
-        this.$message.error("请先选择数据");
+        this.$message.error("请先选择数据")
       } else if (this.$refs.claim.currentClaimed.length > 1) {
-        this.$message.error("只能为一条数据进行当前转益");
-      } else {
-        console.log(this.$refs.claim.currentClaimed);
-        this.claimedSubjectList = this.$refs.claim.currentClaimed[0];
-        this.$refs.subjecModal.open();
+        this.$message.error("只能为一条数据进行当前转益")
+      }else {
+        console.log(this.$refs.claim.currentClaimed)
+        this.claimedSubjectList = this.$refs.claim.currentClaimed[0]
+        this.$refs.subjecModal.open()
       }
     },
 
@@ -509,17 +450,17 @@ export default {
         this.$Modal.confirm({
           title: "是否撤回分配",
           onOk: () => {
-            let arr = [];
-            this.$refs.claim.currentClaimed.map(item => {
-              arr.push(item.id);
-            });
-            distributionRevoke(arr).then(res => {
-              if (res.code === 0) {
-                this.$message.success("撤销成功");
-                this.claimedList();
-                this.distributionList();
+            let arr = []
+            this.$refs.claim.currentClaimed.map(item=>{
+              arr.push(item.id)
+            })
+            distributionRevoke(arr).then(res=>{
+              if(res.code===0){
+                this.$message.success('撤销成功')
+                this.claimedList()
+                this.distributionList()
               }
-            });
+            })
           },
           onCancel: () => {}
         });
@@ -561,15 +502,15 @@ export default {
     //分配至本店
     distributionShop() {
       if (this.currentDistribution.length !== 0) {
-        let obj = [];
-        this.currentDistribution.map(item => {
-          obj.push({ id: item.id });
-        });
+        let obj =[]
+        this.currentDistribution.map(item=>{
+          obj.push({id:item.id})
+        })
         distributionShop(obj).then(res => {
-          if (res.code === 0) {
-            this.$message.success("分配成功");
-            this.distributionList();
-            this.claimedList();
+          if(res.code===0){
+            this.$message.success('分配成功')
+            this.distributionList()
+            this.claimedList()
           }
         });
       } else {
@@ -613,7 +554,7 @@ export default {
       claimedFund(obj).then(res => {
         if (res.code === 0) {
           this.$refs.claim.claimedData = res.data.content;
-          this.$refs.claim.claimedPage.total = res.data.totalElements;
+          this.$refs.claim.claimedPage.total = res.data.totalElements
         }
       });
     },
@@ -628,9 +569,9 @@ export default {
         size: this.distributionPage.size
       };
       distributionSelete(obj).then(res => {
-        if (res.code === 0) {
-          this.distributionData = res.data.content;
-          this.distributionPage.total = res.data.totalElements;
+        if(res.code===0){
+          this.distributionData = res.data.content
+          this.distributionPage.total = res.data.totalElements
         }
       });
     },
@@ -638,35 +579,35 @@ export default {
     async getAllAre() {
       let res = await are();
       if (res.code === 0) {
-        res.data.map(item => {
+        res.data.map(item=>{
           this.areaList.push({
-            value: item.id,
-            label: item.companyName
-          });
-        });
+            value:item.id,
+            label:item.companyName
+          })
+        })
       }
     },
     //未核销对账单页码改变
     pageChangeNo(val) {
       this.accountPage.page = val;
-      this.noWrite();
+      this.noWrite()
     },
     //未核销对账单每页条数改变
     sizeChangeNo(val) {
-      this.accountPage.page = 1;
+      this.accountPage.page =1
       this.accountPage.size = val;
-      this.noWrite();
+      this.noWrite()
     },
     // 连锁待分配款项页码
     pageChange(val) {
       this.distributionPage.page = val;
-      this.distributionList();
+      this.distributionList()
     },
     // 连锁待分配款项每页条数
     sizeChange(val) {
-      this.distributionPage.page = 1;
+      this.distributionPage.page =1
       this.distributionPage.size = val;
-      this.distributionList();
+      this.distributionList()
     }
   }
 };
