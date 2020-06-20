@@ -294,7 +294,7 @@
                     <vxe-table-column
                       field="storeShelf"
                       title="仓位"
-                      :edit-render="{name: 'input',immediate: true}"
+                      :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
                     ></vxe-table-column>
                     <vxe-table-column title="不含税单价">
                       <template v-slot="{row}">

@@ -20,7 +20,7 @@
           <div class="db mr10">
             <Select
               @on-change="selectStatus"
-              v-model="form.billStatusId "
+              v-model="form.billStatusId"
               class="w100 mr10"
               clearable
             >
@@ -30,7 +30,12 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="form.serviceId" placeholder="业务单号" style="width: 160px" class="mr10"></Input>
+            <Input
+              v-model="form.serviceId"
+              placeholder="业务单号"
+              style="width: 160px"
+              class="mr10"
+            ></Input>
           </div>
           <div class="db mr10">
             <Select
@@ -45,14 +50,25 @@
                 v-for="item in customerListOptions"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</Option>
+                >{{ item.label }}</Option
+              >
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="form.partCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
+            <Input
+              v-model="form.partCode"
+              placeholder="配件编码"
+              style="width: 160px"
+              class="mr10"
+            ></Input>
           </div>
           <div class="db mr10">
-            <Input v-model="form.partName" placeholder="配件名称" style="width: 160px" class="mr10"></Input>
+            <Input
+              v-model="form.partName"
+              placeholder="配件名称"
+              style="width: 160px"
+              class="mr10"
+            ></Input>
           </div>
           <div class="db mr10">
             <Button type="warning" class="mr20" @click="search(form)">
@@ -79,41 +95,74 @@
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column title="操作">
-            <template v-slot="{ row,rowIndex }">
+            <template v-slot="{ row, rowIndex }">
               <Button type="text" @click="ruku">到货入库</Button>
             </template>
           </vxe-table-column>
 
-          <vxe-table-column field="serviceId" title="业务单号"></vxe-table-column>
-          <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
-          <vxe-table-column field="billStatusName" title="状态"></vxe-table-column>
+          <vxe-table-column
+            field="serviceId"
+            title="业务单号"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="guestName"
+            title="供应商名称"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="billStatusName"
+            title="状态"
+          ></vxe-table-column>
 
           <vxe-table-column field="orderMan" title="采购员"></vxe-table-column>
-          <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
-          <vxe-table-column field="settleTypeName" title="结算方式" width="100"></vxe-table-column>
-          <vxe-table-column field="auditor" title="提交人" width="100"></vxe-table-column>
-          <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
+          <vxe-table-column
+            field="billTypeName"
+            title="票据类型"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="settleTypeName"
+            title="结算方式"
+            width="100"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="auditor"
+            title="提交人"
+            width="100"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="auditDate"
+            title="提交日期"
+          ></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
             field="enterStoreId"
             title="入库仓库"
-            :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
+            :edit-render="{
+              name: 'select',
+              options: storeArray,
+              events: { change: roleChangeEvent }
+            }"
           ></vxe-table-column>
-          <vxe-table-column field="enterTime" title="入库日期" width="100"></vxe-table-column>
-          <vxe-table-column field="enterUname" title="操作人" width="100"></vxe-table-column>
+          <vxe-table-column
+            field="enterTime"
+            title="入库日期"
+            width="100"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="enterUname"
+            title="操作人"
+            width="100"
+          ></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal2" title="提示" @on-ok="ok1" @on-cancel="cancel">
-        <span>
-          <Icon type="information"></Icon>是否确认已到货入库!
-        </span>
+        <span> <Icon type="information"></Icon>是否确认已到货入库! </span>
       </Modal>
       <!--     分页-->
       <Row class="mt10 mb10">
         <Col span="12" offset="12" style="text-align:right">
           <div>
             <Page
-              :current="pageList.page+1"
+              :current="pageList.page + 1"
               :total="pageList.total"
               :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
@@ -144,21 +193,49 @@
                 </template>
           </vxe-table-column>-->
 
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+          <vxe-table-column
+            field="partCode"
+            title="配件编码"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="partName"
+            title="配件名称"
+            width="100"
+          ></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
+          <vxe-table-column
+            field="orderQty"
+            title="订单数量"
+          ></vxe-table-column>
 
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column field="trueEnterQty" title="已入库数量"></vxe-table-column>
-          <vxe-table-column field="adjustQty" title="已取消数量"></vxe-table-column>
+          <vxe-table-column
+            field="trueEnterQty"
+            title="已入库数量"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="adjustQty"
+            title="已取消数量"
+          ></vxe-table-column>
           <vxe-table-column
             field="thisQty"
             title="本次入库数量"
-            :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
+            :edit-render="{
+              name: 'input',
+              attrs: { type: 'number' },
+              events: { change: numChangeEvent }
+            }"
           ></vxe-table-column>
-
+          <vxe-table-column
+            field="storeShelf"
+            title="仓位"
+            :edit-render="{
+              name: 'input',
+              immediate: true,
+              events: { blur: checkSelf }
+            }"
+          ></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
         </vxe-table>
@@ -178,6 +255,8 @@ import {
   daohuoruku,
   getcangku
 } from "../../../../api/AlotManagement/threeSupplier.js";
+import { checkStore } from "@/api/system/systemApi";
+
 export default {
   name: "threeSupplier",
   components: {
@@ -185,6 +264,7 @@ export default {
   },
   data() {
     return {
+      isSelfOk: true,
       modal2: false,
       form: {
         auditStartDate: "",
@@ -218,6 +298,22 @@ export default {
     this.search();
   },
   methods: {
+    checkSelf({ row: { storeShelf } }) {
+      if (storeShelf == "") {
+        this.isSelfOk = true;
+      } else {
+        checkStore({
+          storeId: this.currentrow.enterStoreId,
+          name: storeShelf
+        }).then(res => {
+          if (res.code == 0 && res.data != null) {
+            this.isSelfOk = true;
+          } else {
+            this.isSelfOk = false;
+          }
+        });
+      }
+    },
     log() {
       getcangku().then(res => {
         if (res.code === 0) {
@@ -298,6 +394,9 @@ export default {
     },
 
     ok1() {
+      if(!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!")
+       }
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code === 0) {
@@ -328,7 +427,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
-
-
+<style scoped></style>

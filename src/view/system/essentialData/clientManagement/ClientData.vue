@@ -3,11 +3,11 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled" :false-value="0" :true-value="1" />
+        <Checkbox v-model="data.isDisabled" false-value="0" true-value="1" />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier" :false-value="0" :true-value="1" />
+        <Checkbox v-model="data.isSupplier" false-value="0" true-value="1" />
       </span>
       <span class="isDisabeld">
         客户
@@ -159,6 +159,9 @@
           </div>
           <span style="margin-left: 100px">
             <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
+          </span>
+          <span style="margin-left: 100px">
+            <Checkbox v-model="data.isFatCompany" false-value="0" true-value="1" ></Checkbox>是否成品油企业
           </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
