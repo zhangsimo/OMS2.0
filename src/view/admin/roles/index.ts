@@ -100,9 +100,9 @@ export default class index extends Vue {
     data.shopName = this.organization
     /*右侧分页参数 */
     data.page = this.pageRight.num - 1
+    data.size = this.pageRight.size
     data.roleId = this.oneStaff.id
     let res = await getStaff(data)
-    console.log(res.data, "右")
     if (res.code === 0) {
       this.rightTableData = res.data.content
       /* 右侧分页数据*/ 

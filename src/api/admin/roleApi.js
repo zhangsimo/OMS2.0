@@ -63,7 +63,7 @@ export function addOrUpdate (data,) {
 //获取员工权限
 export function getStaff (data) {
   return axios.request({
-    url: `${api.authApi}/staff/findAllTenantUsersRole`,
+    url: `${api.authApi}/staff/findAllTenantUsersRole?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   })
