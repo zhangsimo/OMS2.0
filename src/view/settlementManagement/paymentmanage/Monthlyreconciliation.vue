@@ -25,9 +25,6 @@
                 <span>往来单位：</span>
                 <Select
                   filterable
-        remote
-        :loading="remoteloading"
-        :remote-method="getOne"
                   v-model="companyInfo"
                   style="width:200px"
                   @on-change="companySelect"
@@ -256,9 +253,6 @@ import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import index from "../../admin/roles";
 import render from "../../../components/message/base/render";
-import {
-  findGuest
-} from "_api/settlementManagement/advanceCollection.js";
 export default {
   components: {
     selectDealings
@@ -318,7 +312,6 @@ export default {
       collectionAccount: "",
       thisApplyAccount: "",
       collectionAccountList: [],
-      remoteloading: false,
       companyList: [],
       info: false,
       store: "",
@@ -621,25 +614,6 @@ export default {
     },
     query() {
       this.Initialization();
-    },
-    // 往来单位选择
-    async getOne(query) {
-      if (query != "") {
-        this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(item => {
-              this.companyList.push({
-                value: item.id,
-                label: item.fullName
-              });
-            });
-            this.remoteloading = false;
-          }
-        });
-      } else {
-        this.company = [];
-      }
     },
     // 计算应收业务销售出库/退货对账的总计
     collectSum(sumData){

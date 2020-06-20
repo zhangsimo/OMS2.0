@@ -25,7 +25,7 @@
         </Col>
         <Col span="8">
           <FormItem label="申请增加固定额度:" prop="applyQuota">
-            <Input v-model="data.applyQuota" style="width: 150px" @on-blur="increaseBlur"></Input>
+            <Input v-model="data.applyQuota" style="width: 150px" @on-blur="increaseBlur" disabled></Input>
           </FormItem>
           <FormItem label="申请增加临时额度:" prop="tempQuota">
             <!--tempQuota-->
