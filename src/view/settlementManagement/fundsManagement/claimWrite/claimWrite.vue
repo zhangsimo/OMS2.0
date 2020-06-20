@@ -99,10 +99,11 @@
                 <br />
                 <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete">撤销分配</Button>
                 <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
-                <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
-                <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
-                <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
-                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button> -->
+                <Button class="mt10 ml10">预收款认领</Button>
+                <Button class="mt10 ml10">预付款认领</Button>
+                <Button class="mt10 ml10">其他收款认领</Button>
+                <Button class="mt10 ml10">其他付款认领</Button>
+                <Button class="mt10 ml10">转应收应付</Button>
                 <claim ref="claim" />
               </div>
               <div slot="bottom">
@@ -162,8 +163,13 @@
                 />
               </div>
             </Split>
-
+            <!-- 转当期损益 -->
             <subject ref="subjecModal" :clime="claimedSubjectList"></subject>
+            <!-- 预收款认领 collectionClaims-->
+            <!-- 预付款认领 paymentClaim-->
+            <!-- 其他收款认领 otherCollectionClaims-->
+            <!-- 其他付款认领 otherPaymentClaim-->
+            <!-- 转应收应付 accrued-->
           </div>
         </Split>
       </div>
