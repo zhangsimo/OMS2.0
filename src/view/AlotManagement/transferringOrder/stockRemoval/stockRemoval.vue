@@ -250,8 +250,8 @@
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
-                  <!-- <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column> -->
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="storeShelf" title="仓位" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
