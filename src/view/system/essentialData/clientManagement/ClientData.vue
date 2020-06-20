@@ -160,6 +160,9 @@
           <span style="margin-left: 100px">
             <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
           </span>
+          <span style="margin-left: 100px">
+            <Checkbox v-model="data.isFatCompany" false-value="0" true-value="1" ></Checkbox>是否成品油企业
+          </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
           <div>

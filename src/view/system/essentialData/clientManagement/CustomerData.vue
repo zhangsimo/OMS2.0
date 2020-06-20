@@ -407,6 +407,7 @@ export default {
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
       this.clientList.isNeedPack = false
+      this.clientList.isFatCompany = 0
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
     },
@@ -421,6 +422,7 @@ export default {
     },
     //新增客户确认
     addNewClient() {
+      console.log(this.clientList ,111)
       this.$refs.child.handleSubmit(async () => {
         let data = {};
         // console.log(data)
