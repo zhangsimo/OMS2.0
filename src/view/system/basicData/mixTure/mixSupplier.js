@@ -217,11 +217,7 @@ export const mixSelectPartCom = {
       if (this.partName.trim()) {
         req.partCode = this.partName.trim()
       }
-<<<<<<< Updated upstream
       req.page = this.page.num - 1
-=======
-      req.page = this.page.num - 1;
->>>>>>> Stashed changes
       req.size = this.page.size
       req.matchingId = this.$parent.levelId
       req.partInnerId = this.$parent.code
