@@ -101,17 +101,32 @@
                     <Button @click="search" class="mr10" type="warning">
                       <Icon type="ios-search" size="14" />查询
                     </Button>
+                  </div>                  
+                  <div style="max-height: 600px;height:600px;overflow-y: auto">
+                    <vxe-table border align="center" resizable :data="rightTableData">
+                      <vxe-table-column field="loginName" title="登录账号"></vxe-table-column>
+                      <vxe-table-column field="userName" title="员工姓名"></vxe-table-column>
+                      <vxe-table-column field="shopName" title="所属机构"></vxe-table-column>
+                      <vxe-table-column field="role" title="授权">
+                        <template v-slot="{ row,rowIndex }">
+                          <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>
+                        </template>
+                      </vxe-table-column>
+                    </vxe-table>
                   </div>
-                  <vxe-table border align="center" resizable :data="rightTableData">
-                    <vxe-table-column field="loginName" title="登录账号"></vxe-table-column>
-                    <vxe-table-column field="userName" title="员工姓名"></vxe-table-column>
-                    <vxe-table-column field="shopName" title="所属机构"></vxe-table-column>
-                    <vxe-table-column field="role" title="授权">
-                      <template v-slot="{ row,rowIndex }">
-                        <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>
-                      </template>
-                    </vxe-table-column>
-                  </vxe-table>
+                    <Page
+                      :total="pageRight.total"
+                      :page-size="pageRight.size"
+                      :current="pageRight.num"
+                      show-sizer
+                      show-total
+                      class-name="page-con"
+                      size="small"
+                      :page-size-opts="[20,40,60,80,100]"
+                      @on-change="selectNumRight"
+                      @on-page-size-change="selectPageRight"
+                      style="float: right;margin-right: 10px"
+                    ></Page>                  
                 </div>
               </div>
             </TabPane>
@@ -122,7 +137,7 @@
   </div>
 </template>
 <script src="./index.ts">
-</script>
+</script> 
 <style scoped lang="less">
 .bigbox {
   height: 100%;
