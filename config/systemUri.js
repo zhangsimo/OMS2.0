@@ -12,7 +12,7 @@ const audit = {
   wms: "https://uatwms.g-parts.cn/",
   wmsTokenApi: "https://uatapi2.g-part.cn",
 };
-let pro = {
+const pro = {
   wms: "https://wo_wms.g-part.cn/",
   wmsTokenApi: "https://api2.g-part.cn",
 };
