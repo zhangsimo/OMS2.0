@@ -192,14 +192,9 @@ export const mixSelectPartCom = {
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
-      let req = {
-        page:1,
-        pageSize:500
-      }
       getCarPartClass().then(res => {
         this.treeLoading = false;
         this.treeData = res;
-        this.getList();
       });
     },
     //树形数组递归加入新属性
@@ -230,9 +225,9 @@ export const mixSelectPartCom = {
     init() {
       this.searchPartLayer = true;
       this.partName = "";
-      // this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();
+      this.getList();
     },
     //配件表格点击的行
     selectTabelData(v) {

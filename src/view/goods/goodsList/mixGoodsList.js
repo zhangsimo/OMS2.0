@@ -200,36 +200,54 @@ export const mixGoodsData = {
         this.$Modal.confirm({
           title: "是否要删除配件",
           onOk: async () => {
-            if(!this.selectPlanOrderItem.id) {
-              this.delArr.forEach(els => {
-                this.tableData.forEach((el, index, arr) => {
-                  if(el.uuid == els.uuid) {
-                    arr.splice(index, 1);
-                  }
-                })
+
+            let res;
+            let arr = this.delArr.map(el => el.uuid);
+            let hasIds = this.delArr.filter(el => el.id);
+            let notIds = this.delArr.filter(el => !el.id);
+
+            if(hasIds.length > 0) {
+              res = await deleteparts(hasIds);
+            }
+            if(notIds.length > 0) {
+              res = { code: 0 };
+            }
+            if (res.code == 0) {
+              this.tableData = this.tableData.filter(item => {
+                return !arr.includes(item.uuid);
               })
               this.delArr = [];
               this.$Message.success("删除成功");
-            } else {
-              this.delArr.forEach((els,i,arrP) => {
-                this.tableData.forEach((el, index, arr) => {
-                  if(el.uuid == els.uuid&&!els.id) {
-                    arr.splice(index, 1);
-                  }
-                })
-                if(!els.id){
-                  arrP.splice(i,1);
-                }
-              })
-              if(this.delArr.length==0){
-                return this.$Message.success("删除成功");
-              }
-              let res = await deleteparts(this.delArr);
-              if (res.code == 0) {
-                this.$Message.success("删除成功");
-                this.getList();
-              }
+              // this.getList();
             }
+
+            // if(!this.selectPlanOrderItem.id) {
+            //   let arrs = JSON.parse(JSON.stringify(this.tableData));
+            //   this.delArr.forEach(els => {
+            //     arrs.forEach((el, index, arr) => {
+            //       if(el.uuid == els.uuid) {
+            //         this.tableData.splice(index, 1);
+            //       }
+            //     })
+            //   })
+            //   this.delArr = [];
+            //   this.$Message.success("删除成功");
+            // } else {
+            //   let arrs = JSON.parse(JSON.stringify(this.tableData));
+            //   this.delArr.forEach((els,i,arrP) => {
+            //     arrs.forEach((el, index, arr) => {
+            //       if(el.uuid == els.uuid&&!els.id) {
+            //         this.tableData.splice(index, 1);
+            //       }
+            //     })
+            //     if(!els.id){
+            //       arrP.splice(i,1);
+            //     }
+            //   })
+            //   if(this.delArr.length==0){
+            //     return this.$Message.success("删除成功");
+            //   }
+            // }
           },
           onCancel: () => {
             // this.$Message.info("取消删除");
@@ -322,6 +340,7 @@ export const mixGoodsData = {
       v = JSON.parse(JSON.stringify(v));
 
       v.forEach(item => {
+        item.id = undefined;
         item.orderPrice = item.recentPrice || undefined;
         item.orderQty = undefined;
       })
@@ -540,7 +559,7 @@ export const mixGoodsData = {
         return
       }
       let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
-      if(zero) return;
+      if(zero) return this.submitloading = this.loading = false;
       this.submitloading = true;
       this.loading = true;
       this.$refs["formPlan"].validate(valid => {
@@ -611,12 +630,14 @@ export const mixGoodsData = {
                       this.proModal = false;
                       this.$Message.success("提交成功");
                       this.getList();
+                    } else {
+                      this.submitloading = this.loading = false;
                     }
                   });
                 }
               },
               onCancel:() => {
-                this.submitloading = false
+                this.submitloading = this.loading = false;
               }
             })
           } else {
