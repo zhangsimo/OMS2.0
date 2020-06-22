@@ -310,6 +310,7 @@ export default class PlannedPurchaseOrder extends Vue {
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();
+    this.activeMethod = 0;
   }
 
   // 保存/修改/提交用数据
@@ -607,13 +608,13 @@ export default class PlannedPurchaseOrder extends Vue {
   private setFormPlanmain(v:any){
     if(v) {
       this.selectTableRow = v;
-      this.activeMethod = v.billStatusId.value;
+      this.activeMethod = typeof v.billStatusId == "object" ? v.billStatusId.value : 0;
       this.mainId = v.id;
       this.tableData = v.details || [];
       this.tableData.map(item => {
         item.orderPrice = parseFloat((item.orderPrice||0)).toFixed(2);
       })
-      this.selectRowState = v.billStatusId.name;
+      this.selectRowState = typeof v.billStatusId == "object" ? v.billStatusId.name : "";
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
@@ -748,8 +749,8 @@ export default class PlannedPurchaseOrder extends Vue {
         this.inStores.push({ value: storeMap[el], label: el })
       }
       // 直发门店guestMap
-      for (let el in guestMap) {
-        this.putStores.push({ value: guestMap[el], label: el })
+      for (let el in companyMap) { 
+        this.putStores.push({ value: companyMap[el], label: el })
       }
       for (let el in billStatusMap) {
         if(!["审批中","不通过"].includes(el)){

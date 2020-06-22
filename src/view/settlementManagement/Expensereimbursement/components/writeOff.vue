@@ -137,7 +137,6 @@ export default {
       return new Promise((resolve, reject) => {
         let max =
           this.tableData[0].paymentBalance < this.tableData[0].totalPrice ?  this.tableData[0].paymentBalance : this.tableData[0].totalPrice ;
-        console.log(max , 8888)
         if (cellValue > max) {
           reject(new Error(`因公借支核销金额不能大于借支金额${max}`));
         } else {

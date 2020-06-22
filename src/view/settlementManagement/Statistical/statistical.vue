@@ -330,13 +330,13 @@ export default {
     //获取门店
     async getShop() {
       let data = {};
-      data.supplierTypeSecond = this.areaId;
+      data.supplierTypeSecond = this.BranchstoreId;
       this.Branchstore = [{ id: 0, name: "全部" }];
       let res = await goshop(data);
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];
         this.$nextTick(() => {
-          this.shopCode = this.$store.state.user.userData.shopId;
+          this.BranchstoreId = this.$store.state.user.userData.shopId;
         });
         if (this.$store.state.user.userData.shopkeeper != 0) {
           this.getThisArea(); //获取当前门店地址

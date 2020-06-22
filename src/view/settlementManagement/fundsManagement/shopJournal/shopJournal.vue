@@ -290,7 +290,7 @@
   import {getTableList}from '@/api/accountant/accountant'
   import amtData from '../../components/amtData'
   import changeJournal from '../components/changeJournal'
-
+   
 
   import moment from 'moment'
   export default {
@@ -352,15 +352,8 @@
 
       //当前非管理员状态情况下获取门店地址
       async getThisArea(){
-        let data = {}
-        data.shopkeeper = 1
-        data.shopNumber = this.$store.state.user.userData.shopId
-        data.tenantId = this.$store.state.user.userData.tenantId
-        let res = await are(data)
-
-        if (res.code === 0){
-          this.model1 = res.data[0].id
-        }
+        let arr = this.shopList.filter( item=> item.id == this.shopCode)
+        this.model1 = arr[0].supplierTypeSecond
       },
 
       // //切换地址重新调取门店接口
@@ -379,12 +372,11 @@
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList , ...res.data]
-          this.$nextTick( () => {
             this.shopCode = this.$store.state.user.userData.shopId
-          })
-          if (this.$store.state.user.userData.shopkeeper != 0){
-            this.getThisArea()//获取当前门店地址
-          }
+            if (this.$store.state.user.userData.shopkeeper != 0){
+              this.getThisArea()//获取当前门店地址
+            }
+
         }
       },
 

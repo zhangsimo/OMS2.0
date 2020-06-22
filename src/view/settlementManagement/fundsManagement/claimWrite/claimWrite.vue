@@ -99,10 +99,11 @@
                 <br />
                 <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete">撤销分配</Button>
                 <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
-                <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
-                <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
-                <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
-                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button> -->
+                <Button class="mt10 ml10">预收款认领</Button>
+                <Button class="mt10 ml10">预付款认领</Button>
+                <Button class="mt10 ml10">其他收款认领</Button>
+                <Button class="mt10 ml10">其他付款认领</Button>
+                <Button class="mt10 ml10">转应收应付</Button>
                 <claim ref="claim" />
               </div>
               <div slot="bottom">
@@ -162,8 +163,13 @@
                 />
               </div>
             </Split>
-
+            <!-- 转当期损益 -->
             <subject ref="subjecModal" :clime="claimedSubjectList"></subject>
+            <!-- 预收款认领 collectionClaims-->
+            <!-- 预付款认领 paymentClaim-->
+            <!-- 其他收款认领 otherCollectionClaims-->
+            <!-- 其他付款认领 otherPaymentClaim-->
+            <!-- 转应收应付 accrued-->
           </div>
         </Split>
       </div>
@@ -210,7 +216,7 @@ export default {
       company: [], //往来单位下拉框
       orgId: "", //门店
       orgList: [
-        {id:0 ,name:'全部'}
+        {id:'0' ,name:'全部'}
       ], //分店名称
       claimedSubjectList:{},//获取到点击到的本店认领数据
       areaId:0,//区域
@@ -370,8 +376,9 @@ export default {
     });
     let arr = await creat([], this.$store);
     this.orgName = arr[3];
-    this.orgId = arr[1];
-    // this.orgList = arr[2];
+    this.$nextTick( () => {
+      this.orgId = arr[1]
+    })
     this.getShop()
     this.claimedList();
     this.distributionList();
@@ -393,18 +400,8 @@ export default {
     //获取门店
     async getShop(){
       let data ={}
-      data.supplierTypeSecond = this.model1
-      this.orgList = [{id:0 , name:'全部'}]
       let res = await goshop(data)
-      if (res.code === 0) {
-        this.orgList = [...this.orgList , ...res.data]
-        this.$nextTick( () => {
-          this.shopCode = 0
-        })
-        if (this.$store.state.user.userData.shopkeeper != 0){
-          this.getThisArea()//获取当前门店地址
-        }
-      }
+      if (res.code === 0) return this.orgList = [...this.orgList , ...res.data]
     },
     // 往来单位选择
     async getOne() {

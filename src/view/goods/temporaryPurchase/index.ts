@@ -810,8 +810,8 @@ export default class InterPurchase extends Vue {
         this.inStores.push({ value: storeMap[el], label: el })
       }
       // 直发门店
-      for (let el in guestMap) {
-        this.putStores.push({ value: guestMap[el], label: el })
+      for (let el in companyMap) {
+        this.putStores.push({ value: companyMap[el], label: el })
       }
       for (let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
@@ -894,7 +894,7 @@ export default class InterPurchase extends Vue {
       this.formPlanmain.guestName = row.fullName;
       this.formPlanmain.guestId = row.id;
       //结算方式
-      // this.formPlanmain.settleTypeId = row.settTypeId || ''
+      this.formPlanmain.settleTypeId = row.settTypeId || ''
       //票据类型
       this.formPlanmain.billTypeId = row.billTypeId || ''
     }

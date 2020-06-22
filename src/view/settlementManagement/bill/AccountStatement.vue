@@ -421,7 +421,7 @@ export default {
       model3: "",
       Reconciliationtype: "",
       Branchstore: [
-        {id:0 , name:'全部'}
+        {id:'0' , name:'全部'}
       ],
       modal1: false,
       text: "",
@@ -989,12 +989,6 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.model1 = arr[1];
-    // this.Branchstore = arr[2];
-    this.getShop()
-    this.Branchstore.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
-    });
     let obj = {
       startDate: this.value[0]
         ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -1006,6 +1000,10 @@ export default {
       statementStatus: this.Reconciliationtype
     };
     this.getAccountStatement(obj);
+    this.$nextTick( () => {
+      this.model1 = arr[1]
+    })
+    this.getShop()
   },
   filters: {
     date(value = 0) {
@@ -1037,21 +1035,8 @@ export default {
     //获取门店
     async getShop(){
       let data ={}
-      data.supplierTypeSecond = this.model1
       let res = await goshop(data)
-      if (res.code === 0) {
-        this.Branchstore = [...this.Branchstore , ...res.data]
-        this.$nextTick( () => {
-          if (localStorage.getItem('oms2-userList')){
-            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
-          } else {
-            this.BranchstoreId = this.$store.state.user.userData.shopId
-          }
-        })
-        if (this.$store.state.user.userData.shopkeeper != 0){
-          this.getThisArea()//获取当前门店地址
-        }
-      }
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
     //资金认领核销
     capitalWrite() {
