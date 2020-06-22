@@ -12,12 +12,12 @@
       @click="submission"
       v-has="'examine'"
     >提交申请</button>
-    <button
-      class="ivu-btn ivu-btn-default mr10"
-      type="button"
-      @click="add"
-      v-has="'examine'"
-    >增加不含税销售开票申请</button>
+    <!--<button-->
+      <!--class="ivu-btn ivu-btn-default mr10"-->
+      <!--type="button"-->
+      <!--@click="add"-->
+      <!--v-has="'examine'"-->
+    <!--&gt;增加不含税销售开票申请</button>-->
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="6">
@@ -148,15 +148,15 @@
           <FormItem label="本次申请开票含税金额" >
             <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
           </FormItem>
-          <FormItem label="不含税金额" prop="notTaxAmt">
-            <Input v-model="invoice.notTaxAmt" class="ml5 w200" disabled />
-          </FormItem>
-          <FormItem label="外加税点" prop="additionalTaxPoint">
-            <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />
-          </FormItem>
-          <FormItem label="申请开票金额" >
-            <Input v-model="invoice.applyAmt" class="ml5 w200" disabled />
-          </FormItem>
+          <!--<FormItem label="不含税金额" prop="notTaxAmt">-->
+            <!--<Input v-model="invoice.notTaxAmt" class="ml5 w200" disabled />-->
+          <!--</FormItem>-->
+          <!--<FormItem label="外加税点" prop="additionalTaxPoint">-->
+            <!--<Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />-->
+          <!--</FormItem>-->
+          <!--<FormItem label="申请开票金额" >-->
+            <!--<Input v-model="invoice.applyAmt" class="ml5 w200" disabled />-->
+          <!--</FormItem>-->
           <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
             <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
           </FormItem>
@@ -187,7 +187,7 @@
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
@@ -199,7 +199,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
-          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
           <vxe-table-column field="salePrice" title="销售单价" >
             <template v-slot="{row}">
               {{row.salePrice | priceFilters}}
@@ -220,7 +220,12 @@
               {{row.invoiceNotAmt | priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+          <!--<vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>-->
+          <vxe-table-column field="applyAmt" title="申请开票金额" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template v-slot:edit="{ row }">
+              <vxe-input type="float"  v-model="row.applyAmt" :max="row.invoiceNotAmt" digits="2"></vxe-input>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
         </vxe-table>
 
@@ -240,9 +245,9 @@
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
-          <vxe-table-column field="oilsSpec" title="油品包装规格" ></vxe-table-column>
+          <!--<vxe-table-column field="oilsSpec" title="油品包装规格" ></vxe-table-column>-->
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}
@@ -254,7 +259,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="taxRate" title="开票税率" ></vxe-table-column>
-          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="outNo" title="出库单号" ></vxe-table-column>
           <vxe-table-column field="salePrice" title="销售单价" >
             <template v-slot="{row}">
               {{row.salePrice | priceFilters}}
@@ -275,13 +280,18 @@
               {{row.invoiceNotAmt | priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+          <!--<vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>-->
+          <vxe-table-column field="applyAmt" title="申请开票金额" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <template v-slot:edit="{ row }">
+              <vxe-input type="float"  v-model="row.applyAmt" :max="row.invoiceNotAmt" digits="2"></vxe-input>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
         </vxe-table>
 
       </TabPane>
     </Tabs>
-    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
+    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" @partsData="partsData"/>
     <noTax ref="noTax" :information="information" :parameter="parameter"  @taxList="getnoTaxSaleList" />
     <div slot="footer"></div>
   </Modal>
@@ -547,49 +557,49 @@ export default {
       });
     });
 
-    // 选择销售单
-    bus.$on("partsData", val => {
-      let data = [];
-      val.map(item => {
-        item.details.map(itm => {
-          // itm.invoiceTax = this.$refs.noTax.tax;
-          data.push(itm);
-        });
-      });
-      let sum = 0;
-      data.map((itm, index) => {
-        itm.taxAmt = parseFloat(
-          (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
-        );
-        itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
-        sum += itm.applyAmt * 1;
-        if (sum > this.invoice.applyTaxAmt) {
-          itm.applyAmt -= sum - this.invoice.applyTaxAmt;
-          data = data.slice(0, index + 1);
-        }
-      });
-      if (sum < this.invoice.applyTaxAmt) {
-        this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
-        let s = 0
-        this.accessoriesBillingData.map((item,index)=>{
-          s+=item.applyAmt * 1
-          if (s > this.invoice.applyTaxAmt) {
-          item.applyAmt -= s - this.invoice.applyTaxAmt;
-          this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
-        }
-        })
-      } else {
-        if (this.invoice.additionalTaxPoint) {
-          this.accessoriesBillingData = [
-            ...data,
-            ...this.accessoriesBillingData
-          ];
-        } else {
-          this.accessoriesBillingData = data;
-        }
-      }
-      this.copyData = this.accessoriesBillingData;
-    });
+    // // 选择销售单
+    // bus.$on("partsData", val => {
+    //   let data = [];
+    //   val.map(item => {
+    //     item.details.map(itm => {
+    //       // itm.invoiceTax = this.$refs.noTax.tax;
+    //       data.push(itm);
+    //     });
+    //   });
+    //   let sum = 0;
+    //   data.map((itm, index) => {
+    //     itm.taxAmt = parseFloat(
+    //       (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
+    //     );
+    //     itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
+    //     sum += itm.applyAmt * 1;
+    //     if (sum > this.invoice.applyTaxAmt) {
+    //       itm.applyAmt -= sum - this.invoice.applyTaxAmt;
+    //       data = data.slice(0, index + 1);
+    //     }
+    //   });
+    //   if (sum < this.invoice.applyTaxAmt) {
+    //     this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
+    //     let s = 0
+    //     this.accessoriesBillingData.map((item,index)=>{
+    //       s+=item.applyAmt * 1
+    //       if (s > this.invoice.applyTaxAmt) {
+    //       item.applyAmt -= s - this.invoice.applyTaxAmt;
+    //       this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
+    //     }
+    //     })
+    //   } else {
+    //     if (this.invoice.additionalTaxPoint) {
+    //       this.accessoriesBillingData = [
+    //         ...data,
+    //         ...this.accessoriesBillingData
+    //       ];
+    //     } else {
+    //       this.accessoriesBillingData = data;
+    //     }
+    //   }
+    //   this.copyData = this.accessoriesBillingData;
+    // });
     // 不含税表格数据
     bus.$on("noTaxSaleList", val => {
       this.accessoriesBillingData = [...val, ...this.accessoriesBillingData];
@@ -601,13 +611,37 @@ export default {
     });
   },
   methods: {
+    //够选的数据放上面
+    partsData(v){
+      let oldPartData = [...this.accessoriesBillingData];
+      if(v&&v.length>0){
+        let orderNoArr = v.map(item => item.orderNo);
+        let arrData1 = [];
+        let bbArr = oldPartData.filter(item => {
+          if(orderNoArr.includes(item.outNo)){
+            return item;
+          }else{
+            arrData1.push(item);
+          }
+        });
+        if (this.$parent.reconciliationStatement.isOilPart == 1){
+          this.accessoriesBillingData1 = bbArr.concat(arrData1)
+        } else {
+          this.accessoriesBillingData2 = bbArr.concat(arrData1)
+        }
+
+      }
+    },
+
     // 引用上次申请信息
     quote() {
       informationCitation({ guestId: this.information.guestId }).then(res => {
         if (res.code === 0) {
-          this.invoice.consignee = res.data.consignee;
-          this.invoice.address = res.data.address;
-          this.invoice.phone = res.data.phone;
+          for(let key in this.invoice){
+            if (res.data.hasOwnProperty(key)){
+              this.invoice[key] = res.data[key]
+            }
+          }
         }
       });
     },
@@ -639,11 +673,11 @@ export default {
             this.invoice.receiptUnitList = res.data;
           }
         });
-        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
-          if (res.code == 0) {
-            bus.$emit('approval',res.data.operationRecords)
-          }
-        });
+        // approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+        //   if (res.code == 0) {
+        //     bus.$emit('approval',res.data.operationRecords)
+        //   }
+        // });
 
         this.$nextTick(()=>{
           if(this.information.owned ==1) {
@@ -654,8 +688,14 @@ export default {
                     this.invoice[key] = res.data[key]
                   }
                 })
+                this.information.applyNo = res.data.applyNo;
+                this.information.code = res.data.orgCode;
+                this.information.oilsListOrder = res.data.oilsListOrder;
+                this.information.partsListOrder = res.data.partsListOrder;
+
                 this.accessoriesBillingData = res.data.partList
-                this.information.id = res.data.id
+                this.information.id = res.data.id;
+                this.setTableData();
               }
             })
           }else{
@@ -673,12 +713,22 @@ export default {
                 this.invoice.invoiceTax = "010103";
                 this.accessoriesBillingData = res.data;
                 this.copyData = res.data;
+
+                this.setTableData();
               }
             });
           }
         })
 
 
+      }
+    },
+    //填充表格数据
+    setTableData(){
+      if (this.$parent.reconciliationStatement.isOilPart == 1){
+        this.accessoriesBillingData1 = this.accessoriesBillingData
+      } else {
+        this.accessoriesBillingData2 = this.accessoriesBillingData
       }
     },
     // 增加不含税销售开票申请
@@ -779,6 +829,7 @@ export default {
             if (res.code === 0) {
               this.$message.success("保存成功");
               this.modal1 = false;
+              this.$parent.query();
             }
           });
         }
@@ -860,48 +911,48 @@ export default {
       return this.invoice.applyTaxAmt;
     }
   },
-  watch: {
-    // 开票税率
-    invoiceTax(val) {
-      this.invoice.rateBillingList.map(item => {
-        if (val === item.value) {
-          this.accessoriesBillingData.map(itm => {
-            this.$set(itm, "invoiceTax", item.label);
-          });
-          this.$refs.noTax.tax = item.label;
-        }
-      });
-    },
-    applyTaxAmt(val, ov) {
-      if (this.copyData.length !== 0 && val !== ov) {
-        let sum = 0;
-        let accData = JSON.parse(JSON.stringify(this.copyData));
-        this.accessoriesBillingData = [];
-        for (let i of accData) {
-          sum += i.applyAmt * 1;
-          if (sum <= val) {
-            this.accessoriesBillingData.push(i);
-          } else {
-            i.applyAmt -= sum - val;
-            return this.accessoriesBillingData.push(i);
-          }
-        }
-      }
-    },
-    accessoriesBillingData:{
-      handler(val){
-        if (val.length < 1) return
-        if (this.$parent.reconciliationStatement.isOilPart == 1){
-          this.accessoriesBillingData1 = val
-          this.OilPartShow = false
-        } else {
-          this.accessoriesBillingData2 = val
-          this.OilPartShow = true
-        }
-        val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
-      },
-      deep:true
-    }
-  }
+  // watch: {
+  //   // 开票税率
+  //   invoiceTax(val) {
+  //     this.invoice.rateBillingList.map(item => {
+  //       if (val === item.value) {
+  //         this.accessoriesBillingData.map(itm => {
+  //           this.$set(itm, "invoiceTax", item.label);
+  //         });
+  //         this.$refs.noTax.tax = item.label;
+  //       }
+  //     });
+  //   },
+  //   applyTaxAmt(val, ov) {
+  //     if (this.copyData.length !== 0 && val !== ov) {
+  //       let sum = 0;
+  //       let accData = JSON.parse(JSON.stringify(this.copyData));
+  //       this.accessoriesBillingData = [];
+  //       for (let i of accData) {
+  //         sum += i.applyAmt * 1;
+  //         if (sum <= val) {
+  //           this.accessoriesBillingData.push(i);
+  //         } else {
+  //           i.applyAmt -= sum - val;
+  //           return this.accessoriesBillingData.push(i);
+  //         }
+  //       }
+  //     }
+  //   },
+  //   accessoriesBillingData:{
+  //     handler(val){
+  //       if (val.length < 1) return
+  //       if (this.$parent.reconciliationStatement.isOilPart == 1){
+  //         this.accessoriesBillingData1 = val
+  //         this.OilPartShow = false
+  //       } else {
+  //         this.accessoriesBillingData2 = val
+  //         this.OilPartShow = true
+  //       }
+  //       val.map(item => item.isOilPart =  this.$parent.data1[0].isOilPart)
+  //     },
+  //     deep:true
+  //   }
+  // }
 };
 </script>

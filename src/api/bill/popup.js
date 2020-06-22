@@ -48,6 +48,27 @@ export function noTaxApplyNo(params){
     params
 })
 }
+
+
+//保存不含税开票为草稿
+export function saveNoTaxDraft(data){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/notTaxDraft`,
+    method: 'post',
+    data
+  })
+}
+
+//获取不含税开票草稿
+export function getNoTaxDraft(params){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApplyNotTax/findNotTaxDraft`,
+    method: 'get',
+    params
+  })
+}
+
+
 //选择销售单
 export function saleSlip(data){
   return axios.request({

@@ -149,7 +149,6 @@
         >撤销</button>
         <div class="hide1">
           <Table
-            width="2000"
             border
             :columns="columns1"
             :data="data1"
@@ -356,6 +355,7 @@
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
     <settlementMoadl ref="settlementMoadl" />
+    <no-tax ref="noTax" :information="reconciliationStatement" :parameter="{}"></no-tax>
   </div>
 </template>
 <script>
@@ -383,8 +383,10 @@ import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 import bus from './Popup/Bus'
+import NoTax from "./Popup/noTax";
 export default {
   components: {
+    NoTax,
     registrationEntry,
     quickDate,
     reconciliation,
@@ -452,27 +454,32 @@ export default {
         {
           title: "公司名称",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "对账单号",
           key: "accountNo",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "往来单位",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "收付类型",
           key: "paymentTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "对账应收",
           key: "accountsReceivable",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.accountsReceivable.toFixed(2));
           }
@@ -481,6 +488,7 @@ export default {
           title: "应收返利",
           key: "receivableRebate",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.receivableRebate.toFixed(2));
           }
@@ -489,6 +497,7 @@ export default {
           title: "应收坏账",
           key: "badDebtReceivable",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.badDebtReceivable.toFixed(2));
           }
@@ -497,6 +506,7 @@ export default {
           title: "对账应付",
           key: "reconciliation",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.reconciliation.toFixed(2));
           }
@@ -505,6 +515,7 @@ export default {
           title: "应付返利",
           key: "dealingRebates",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.dealingRebates.toFixed(2));
           }
@@ -513,6 +524,7 @@ export default {
           title: "应付坏账",
           key: "payingBadDebts",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.payingBadDebts.toFixed(2));
           }
@@ -521,6 +533,7 @@ export default {
           title: "运费",
           key: "transportExpenses",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.transportExpenses.toFixed(2));
           }
@@ -529,6 +542,7 @@ export default {
           title: "保险费",
           key: "insuranceExpenses",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.insuranceExpenses.toFixed(2));
           }
@@ -537,6 +551,7 @@ export default {
           title: "手续费",
           key: "serviceCharge",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.serviceCharge.toFixed(2));
           }
@@ -545,6 +560,7 @@ export default {
           title: "配件管理费",
           key: "partsManagementFee",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.partsManagementFee.toFixed(2));
           }
@@ -553,6 +569,7 @@ export default {
           title: "其他费用",
           key: "otherFees",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.otherFees.toFixed(2));
           }
@@ -561,6 +578,7 @@ export default {
           title: "实际收款/付款",
           key: "receiptPayment",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.receiptPayment.toFixed(2));
           }
@@ -569,6 +587,7 @@ export default {
           title: "已收金额",
           key: "amountReceived",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.amountReceived.toFixed(2));
           }
@@ -577,6 +596,7 @@ export default {
           title: "未收金额",
           key: "noCharOffAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.noCharOffAmt.toFixed(2));
           }
@@ -585,6 +605,7 @@ export default {
           title: "已付金额",
           key: "amountPaid",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.amountPaid.toFixed(2));
           }
@@ -593,6 +614,7 @@ export default {
           title: "未付金额",
           key: "unpaidAmount",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.unpaidAmount.toFixed(2));
           }
@@ -600,97 +622,117 @@ export default {
         {
           title: "计算结算类型",
           key: "billingTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "对账单状态",
           key: "statementStatusName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "对账人",
           key: "auditor",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "最近一次回款时间",
           key: "lastPaymentDate",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "流程是否通过",
           key: "passName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "最近一次开票申请人",
           key: "recentApplier",
-          className: "tc"
+          className: "tc",
+          minWidth:140
         },
         {
           title: "最近一次开票申请时间",
           key: "recentTime",
-          className: "tc"
+          className: "tc",
+          minWidth:140
         },
         {
           title: "含税配件金额",
           key: "taxAmountOfPart",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "含税油品",
           key: "taxAmountOfOil",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
             title: "不含税金额",
             key: "noTaxAmount",
-            className: "tc"
+            className: "tc",
+          minWidth:120
+
         },
         {
           title: "含税配件已开",
           key: "taxAmountOfPartOpened",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "含税油品已开",
           key: "taxAmountOfOilOpened",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
             title: "不含税增加税点",
             key: "increasePointExcludingTax",
-            className: "tc"
+            className: "tc",
+          minWidth:120
         },
         {
           title: "收到配件进项发票",
           key: "receiveInputInvoiceAmount",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "收到含税油品金额",
           key: "receiveTaxOfOilAmount",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "对冲配件发票",
           key: "hedgingInvoiceOfPart",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "对冲油品发票",
           key: "hedgingInvoiceOfOil",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "含税配件欠票",
           key: "taxArrearsOfPart",
           className: "tc",
+          minWidth:120,
           // render:(h, params) => {
           //   let tax = this.$utils.subtract(params.row.taxAmountOfPart , params.row.taxAmountOfPartOpend)
           //   return h("span" , tax)
@@ -699,22 +741,26 @@ export default {
         {
           title: "含税油品欠票",
           key: "taxArrearsOfOil",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
             title: "不含税未开",
             key: "taxNotIncluded",
-            className: "tc"
+            className: "tc",
+          minWidth:120
         },
         {
           title: "最近一次开票公司",
           key: "recentInvoiceCompany",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         },
         {
           title: "最近一次开票名称",
           key: "recentInvoiceName",
-          className: "tc"
+          className: "tc",
+          minWidth:120
         }
       ],
       columns2: [
@@ -783,27 +829,32 @@ export default {
         {
           title: "门店",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          minWidth:80,
         },
         {
           title: "客户",
           key: "guestName",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "销售单号",
           key: "orderNo",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "出库单号",
           key: "serviceId",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "应收金额",
           key: "rpAmt",
           className: "tc",
+          minWidth:80,
           render: (h, params) => {
             return h("span", params.row.rpAmt.toFixed(2));
           }
@@ -812,6 +863,7 @@ export default {
           title: "前期已对账金额",
           key: "accountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.accountAmt.toFixed(2));
           }
@@ -820,6 +872,7 @@ export default {
           title: "前期未对账金额",
           key: "noAccountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.noAccountAmt.toFixed(2));
           }
@@ -828,6 +881,7 @@ export default {
           title: "本次不对账金额",
           key: "thisNoAccountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.thisNoAccountAmt.toFixed(2));
           }
@@ -836,6 +890,7 @@ export default {
           title: "本次对账金额",
           key: "thisAccountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.thisAccountAmt.toFixed(2));
           }
@@ -851,27 +906,32 @@ export default {
         {
           title: "门店",
           key: "orgName",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "客户",
           key: "guestName",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "采购单号",
           key: "orderNo",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "入库单号",
           key: "serviceId",
+          minWidth:80,
           className: "tc"
         },
         {
           title: "应付金额",
           key: "rpAmt",
           className: "tc",
+          minWidth:80,
           render: (h, params) => {
             return h("span", params.row.rpAmt.toFixed(2));
           }
@@ -880,6 +940,7 @@ export default {
           title: "前期已对账金额",
           key: "accountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.accountAmt.toFixed(2));
           }
@@ -888,6 +949,7 @@ export default {
           title: "前期未对账金额",
           key: "noAccountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.noAccountAmt.toFixed(2));
           }
@@ -896,6 +958,7 @@ export default {
           title: "本次不对账金额",
           key: "thisNoAccountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.thisNoAccountAmt.toFixed(2));
           }
@@ -904,6 +967,7 @@ export default {
           title: "本次对账金额",
           key: "thisAccountAmt",
           className: "tc",
+          minWidth:120,
           render: (h, params) => {
             return h("span", params.row.thisAccountAmt.toFixed(2));
           }
@@ -1054,30 +1118,39 @@ export default {
         Object.keys(this.reconciliationStatement).length !== 0 &&
         this.reconciliationStatement.billingTypeName === "收款"
       ) {
-
+        if(this.reconciliationStatement.ownSellOutList===0){
+          return this.$Message.error('该对账单不包含销售出库单据，不能开票！')
+        }
         if(0 >= this.reconciliationStatement.statementAmtOwed) return this.$Message.error('剩余欠票金额为0不能继续开票')
-        this.$refs.salepopup.parameter = this.reconciliationStatement;
-        this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
-        this.reconciliationStatement.code = this.$refs.salepopup.information.code;
-        this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
-        this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
-        this.$refs.salepopup.information.applicationDate = moment(
-          new Date()
-        ).format("YYYY-MM-DD HH:mm:ss");
-        // 申请单号
-        applyNo({ orgid: this.reconciliationStatement.orgId }).then(res => {
-          if (res.code === 0) {
-            this.$refs.salepopup.information.applyNo = res.data.applyNo;
-            this.$refs.salepopup.information.code = res.data.orgCode;
-            this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
-            this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
+        if(this.reconciliationStatement.taxSign===1){
+          this.$refs.salepopup.parameter = this.reconciliationStatement;
+          this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
+          this.reconciliationStatement.code = this.$refs.salepopup.information.code;
+          this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
+          this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
+          this.$refs.salepopup.information.applicationDate = moment(
+            new Date()
+          ).format("YYYY-MM-DD HH:mm:ss");
+          if(this.reconciliationStatement.owned===0){
+            // 申请单号
+            applyNo({ orgid: this.reconciliationStatement.orgId }).then(res => {
+              if (res.code === 0) {
+                this.$refs.salepopup.information.applyNo = res.data.applyNo;
+                this.$refs.salepopup.information.code = res.data.orgCode;
+                this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
+                this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
+              }
+            });
           }
-        });
-        this.$refs.salepopup.accessoriesBillingData1 = []
-        this.$refs.salepopup.accessoriesBillingData2 = []
-        setTimeout(() => {
-          this.$refs.salepopup.modal1 = true;
-        }, 500);
+
+          this.$refs.salepopup.accessoriesBillingData1 = []
+          this.$refs.salepopup.accessoriesBillingData2 = []
+          setTimeout(() => {
+            this.$refs.salepopup.modal1 = true;
+          }, 500);
+        }else{
+          this.$refs.noTax.init();
+        }
       } else {
         this.$message.error("只能勾选计划对账类型为收款的对账单");
       }
@@ -1273,7 +1346,14 @@ export default {
       this.hedgingfalg = false
       this.receivefalg = false
       if (row.statementStatus.value == 4){ this.statementStatusflag = true}
-      if (row.taxArrearsOfPart == 0 && row.taxArrearsOfOil == 0){this.taxArrearsfalg = true}
+      if(row.taxSign===1){
+        if (row.taxArrearsOfPart == 0 && row.taxArrearsOfOil == 0){this.taxArrearsfalg = true}
+      }else{
+        if(row.taxNotIncluded<=0){
+          this.taxArrearsfalg = true
+        }
+      }
+
       if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil){this.hedgingfalg = true}
       if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
       this.reconciliationStatement = row;
@@ -1830,6 +1910,5 @@ export default {
   color: #ff3600 !important;
 }
 .hide1 {
-  overflow-x: auto;
 }
 </style>
