@@ -22,8 +22,8 @@
             <Select v-model="BranchstoreId" class="w150" @on-change="fendian">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
+                :value="item.id"
+                :key="item.id"
               >{{ item.name }}</Option>
             </Select>
           </div>
@@ -401,11 +401,20 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.model1 = arr[1];
+    this.getShop()
+    this.$nextTick(()=>{
+      this.BranchstoreId = arr[1]
+    })
     this.getGeneral();
     this.getOne();
   },
   methods: {
+    //获取门店
+    async getShop(){
+      let data ={}
+      let res = await goshop(data)
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    },
     // 日期选择
     dateChange(data) {
       this.value = data;
