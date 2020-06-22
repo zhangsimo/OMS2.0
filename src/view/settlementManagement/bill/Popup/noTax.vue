@@ -1,9 +1,15 @@
 <template>
-  <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200" @on-visible-change="visChange">
+  <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200">
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
-      @click="submission"
+      @click="submission(1)"
+      v-has="'examine'"
+    >保存草稿</button>
+    <button
+      class="ivu-btn ivu-btn-default mr10"
+      type="button"
+      @click="submission(2)"
       v-has="'examine'"
     >提交申请</button>
     <h4 class="mt10 mb10">基本信息</h4>
@@ -27,20 +33,20 @@
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
-    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="80">
+    <Form ref="formCustom" :model="invoice" :label-width="80">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="对账单号" prop="accountNo">
-            <Input v-model="invoice.accountNo" class="ml5 w100" readonly />
-            <i class="iconfont iconcaidan input" @click="seleteAccount"></i>
+            <Input v-model="information.accountNo" style="width: 204px" class="ml5 " readonly />
+            <!--<i class="iconfont iconcaidan input" @click="seleteAccount"></i>-->
           </FormItem>
           <FormItem label="产生税费" prop="taxation">
-            <Input v-model="invoice.taxation" class="ml5 w100" readonly />
+            <Input v-model="invoice.taxation" class="ml5 w150" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="不含税对账单未开金额" prop="notAmt" :label-width="160">
-            <Input v-model="invoice.notAmt" class="ml5 w100" readonly />
+            <Input v-model="information.statementAmtOwed" class="ml5 w100" readonly />
           </FormItem>
           <FormItem label="实际增加开票金额" prop="invoiceAmt" :label-width="160">
             <Input v-model="invoice.invoiceAmt" class="ml5 w100" readonly />
@@ -56,7 +62,7 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="申请税点" prop="taxPoint">
-            <Select v-model="invoice.taxPoint" class="ml5 w100">
+            <Select v-model="invoice.taxPoint" class="ml5 w100" @on-change="taxPointChange">
               <Option
                 v-for="item in invoice.taxApplicationList"
                 :value="item.value"
@@ -64,9 +70,9 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="外加税点总计" :label-width="150">
-            <Input v-model="invoice.additionalTaxPoint" class="ml5 w100"  readonly/>
-          </FormItem>
+          <!--<FormItem label="外加税点总计" :label-width="150">-->
+            <!--<Input v-model="invoice.additionalTaxPoint" class="ml5 w100"  readonly/>-->
+          <!--</FormItem>-->
         </div>
       </div>
     </Form>
@@ -93,7 +99,7 @@
       <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
       <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
       <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-      <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+      <vxe-table-column field="qty" title="数量" ></vxe-table-column>
       <vxe-table-column field="taxPrice" title="商品含税单价" >
         <template v-slot="{row}">
           {{row.taxPrice | priceFilters}}
@@ -126,7 +132,11 @@
           {{row.invoiceNotAmt | priceFilters}}
         </template>
       </vxe-table-column>
-      <vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+      <vxe-table-column field="applyAmt" title="申请开票金额" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template v-slot:edit="{ row }">
+          <vxe-input type="float"  v-model="row.applyAmt" :max="row.salePrice" digits="2"></vxe-input>
+        </template>
+      </vxe-table-column>
 <!--      <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>-->
     </vxe-table>
 
@@ -143,7 +153,7 @@
 <!--      <approval :approvalTit="approvalTit" />-->
     </div>
     <!-- 选择销售单据 -->
-    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="invoice" />
+    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="information" @partsData="partsData"/>
     <!-- 选择对账单 -->
     <saleAccount ref="saleAccount" :parameter="parameter" />
     <div slot="footer"></div>
@@ -153,9 +163,11 @@
 import SeleteSale from "./seleteSale";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
-import { noTaxApplyNo, partsInvoice, submitNoTax } from "@/api/bill/popup";
+import { noTaxApplyNo, partsInvoice, submitNoTax ,saveNoTaxDraft,getNoTaxDraft} from "@/api/bill/popup";
 import bus from "./Bus";
 import { approvalStatus } from "_api/base/user";
+import moment from "moment";
+
 export default {
   components: {
     SeleteSale,
@@ -176,9 +188,14 @@ export default {
       }
     };
     const applyAmtValid = ({ cellValue, rule, rules, row, }) => {
-      if(row.salePrice < cellValue) {
-        return Promise.reject(new Error('申请开票金额不能大于销售金额'))
-      }
+      return new Promise((resolve,reject) => {
+        if(parseFloat(row.salePrice) < parseFloat(cellValue)) {
+           reject(new Error('申请开票金额不能大于销售金额'))
+        }else{
+          resolve();
+        }
+      })
+
     }
     return {
       tax: "", //税率
@@ -203,9 +220,9 @@ export default {
             label: "7%"
           }
         ], //申请税点列表
-        accountNo: "", //对账单号
+        //accountNo: "", //对账单号
         taxation: "", //产生税费
-        notAmt: "", //不含税对账单未开金额
+        //notAmt: "", //不含税对账单未开金额
         invoiceAmt: "", //实际增加开票金额
         invoiceTaxAmt: 0, //本次不含税开票金额
         remark: "" //申请说明
@@ -249,8 +266,9 @@ export default {
         //   }
         // ]
       }, //发票数据表单验证规则
-      copyData: [] //深拷贝处理
+      copyData: [], //深拷贝处理
       // num: 0 //表格数量合计
+      invoicedAmountTotal:0,//总开票金额
     };
   },
   mounted() {
@@ -262,42 +280,100 @@ export default {
       this.invoice = { ...this.invoice, ...val };
     });
     // 销售单
-    bus.$on("partsData", val => {
-      let data = [];
-      let num = 0;
-      val.map(item => {
-        item.details.map(itm => {
-          itm.invoiceTax = this.tax;
-          num += itm.orderQty;
-          data.push(itm);
-        });
-      });
-      let sum = 0;
-      data.map((itm, index) => {
-        if (this.invoice.taxation) {
-          itm.additionalTaxPoint = parseFloat(
-            ((itm.orderQty / num) * this.invoice.taxation).toFixed1(2)
-          );
-          itm.taxAmt = parseFloat(
-            (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
-          );
-          itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
-          sum += itm.applyAmt * 1;
-          if (sum > this.invoice.invoiceTaxAmt) {
-            itm.applyAmt -= sum - this.invoice.invoiceTaxAmt;
-            data = data.slice(0, index + 1);
-          }
-        }
-      });
-      if (sum < this.invoice.invoiceTaxAmt) {
-        this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
-      } else {
-        this.accessoriesBillingData = data;
-      }
-      this.copyData = this.accessoriesBillingData;
-    });
+    // bus.$on("partsData", val => {
+    //   let data = [];
+    //   let num = 0;
+    //   val.map(item => {
+    //     item.details.map(itm => {
+    //       itm.invoiceTax = this.tax;
+    //       num += itm.orderQty;
+    //       data.push(itm);
+    //     });
+    //   });
+    //   let sum = 0;
+    //   data.map((itm, index) => {
+    //     if (this.invoice.taxation) {
+    //       itm.additionalTaxPoint = parseFloat(
+    //         ((itm.orderQty / num) * this.invoice.taxation).toFixed1(2)
+    //       );
+    //       itm.taxAmt = parseFloat(
+    //         (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
+    //       );
+    //       itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
+    //       sum += itm.applyAmt * 1;
+    //       if (sum > this.invoice.invoiceTaxAmt) {
+    //         itm.applyAmt -= sum - this.invoice.invoiceTaxAmt;
+    //         data = data.slice(0, index + 1);
+    //       }
+    //     }
+    //   });
+    //   if (sum < this.invoice.invoiceTaxAmt) {
+    //     this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
+    //   } else {
+    //     this.accessoriesBillingData = data;
+    //   }
+    //   this.copyData = this.accessoriesBillingData;
+    // });
   },
   methods: {
+    //够选的数据放上面
+    partsData(v){
+      let oldPartData = [...this.accessoriesBillingData];
+      if(v&&v.length>0){
+        let orderNoArr = v.map(item => item.orderNo);
+        let arrData1 = [];
+        let bbArr = oldPartData.filter(item => {
+          if(orderNoArr.includes(item.outNo)){
+            return item;
+          }else{
+            arrData1.push(item);
+          }
+        });
+        this.accessoriesBillingData = bbArr.concat(arrData1)
+      }
+    },
+    async init(){
+      if(this.information.owned){
+        this.modal1 = true;
+        this.getDraftInfo(this.information.accountNo);
+      }else{
+        this.visChange(true);
+        let rep = await noTaxApplyNo({ orgid: this.information.orgId});
+        if(rep.code==0){
+          this.modal1 = true;
+          this.information.noTaxApply = rep.data.applyNo;
+          this.information.code = rep.data.orgCode;
+          this.information.applicationDate = moment(
+            new Date()
+          ).format("YYYY-MM-DD HH:mm:ss");
+        }
+      }
+    },
+
+    async getDraftInfo(code){
+      let rep = await getNoTaxDraft({accountNo:code})
+      if(rep.code==0){
+        // this.information = {};
+        this.information.code = rep.data.orgCode||"";
+        this.information.orgId = rep.data.orgid||"";
+        this.information.orgName= rep.data.orgName||"";
+        this.information.guestId= rep.data.guestId||"";
+        this.information.noTaxApply= rep.data.applyNo||"";
+        this.information.guestName= rep.data.guestName||"";
+        this.information.applicationDate= rep.data.applyDate||"";
+        this.information.statementAmtOwed= rep.data.notAmt||"";
+        this.information.accountNo = rep.data.accountNo||"";
+        this.information.id = rep.data.id;
+
+        this.invoice.taxPoint = parseFloat(rep.data.taxPoint)||0;
+        this.invoice.taxation = rep.data.taxation||0;
+        this.invoice.invoiceAmt = rep.data.invoiceAmt||0;
+        this.invoice.invoiceTaxAmt = rep.data.invoiceTaxAmt||0;
+        this.invoice.remark = rep.data.remark||"";
+        this.accessoriesBillingData = rep.data.partList||[];
+
+      }
+    },
 
     // 开票配件合计
     footerMethod({ columns, data }) {
@@ -308,6 +384,7 @@ export default {
           }
           if (['applyAmt'].includes(column.property)) {
             this.$set(this.invoice , 'invoiceTaxAmt' , this.$utils.sum(data, column.property))
+            this.pointComputed(this.$utils.sum(data, column.property))
           }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
@@ -315,6 +392,21 @@ export default {
           return null
         })
       ]
+    },
+
+    //税费计算
+    pointComputed(total){
+      this.invoicedAmountTotal = total;
+      //产生税费
+      let taxation = (total/(1-this.invoice.taxPoint)- this.invoice.invoiceTaxAmt);
+      this.invoice.taxation = taxation.toFixed(2);
+      //实际增加开票金额
+      this.invoice.invoiceAmt = (taxation + this.invoice.invoiceTaxAmt).toFixed(2);
+    },
+
+    taxPointChange(){
+      console.log(this.invoicedAmountTotal)
+      this.pointComputed(this.invoicedAmountTotal);
     },
 
     // 对话框是否显示
@@ -340,43 +432,59 @@ export default {
             this.copyData = res.data;
           }
         });
-        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
-          if (res.code == 0) {
-            bus.$emit('approval',res.data.operationRecords)
-          }
-        });
+        // approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+        //   if (res.code == 0) {
+        //     bus.$emit('approval',res.data.operationRecords)
+        //   }
+        // });
       }
     },
     // 提交申请
-    submission() {
-      this.$refs.formCustom.validate(val => {
+     submission(type) { //type 1保存为草稿 2提交申请
+      this.$refs.formCustom.validate(async val => {
         if (val) {
           let obj = {
             ...this.invoice,
             ...{
               orgCode: this.information.code,
               orgid: this.information.orgId,
-              orgName: this.information.orgName,
+              orgName: this.information.orgName||"",
               guestId: this.information.guestId,
               applyNo: this.information.noTaxApply,
               guestName: this.information.guestName,
               partList: this.accessoriesBillingData,
               applyDate: this.information.applicationDate,
+              notAmt: this.information.statementAmtOwed,
+              accountNo:this.information.accountNo
             }
-
           };
+          if(this.information.owned){
+            obj.id = this.information.id;
+          }
           if (this.invoice.taxPoint > 0.06) {
             bus.$emit("noTaxSaleList", this.accessoriesBillingData);
             bus.$emit("noTaxInfo", this.invoice);
             this.modal1 = false;
           }
+          if(type==2){
             submitNoTax(obj).then(res => {
               if(res.code===0){
                 this.$emit('taxList' , res.data)
                 this.$message.success('提交成功')
-                this.modal1 = false
+                this.modal1 = false;
+                this.$parent.query();
               }
             });
+          }else{
+            let rep = await saveNoTaxDraft(obj);
+            if(rep.code===0){
+              this.$emit('taxList' , rep.data)
+              this.$message.success('保存成功')
+              this.modal1 = false;
+              this.$parent.query();
+            }
+          }
+
         }
       });
     },
@@ -433,78 +541,78 @@ export default {
       return this.invoice.taxPoint;
     }
   },
-  watch: {
-    invoiceTaxAmt(val, ov) {
-      if (this.copyData.length !== 0 && val !== ov) {
-        this.invoice.taxation = parseFloat(
-          (val / (1 - this.invoice.taxPoint) - val).toFixed(2)
-        );
-        this.invoice.invoiceAmt = (val * 1 + this.invoice.taxation * 1).toFixed(
-          2
-        );
-        let sum = 0;
-        let accData = JSON.parse(JSON.stringify(this.copyData));
-        this.accessoriesBillingData = [];
-        let num = 0;
-        accData.map(item => {
-          num += item.orderQty;
-        });
-        for (let i of accData) {
-          sum += i.applyAmt * 1;
-          if (sum <= val) {
-            this.accessoriesBillingData.push(i);
-          } else {
-            i.applyAmt -= sum - val;
-            i.additionalTaxPoint = parseFloat(
-              ((i.orderQty / num) * this.invoice.taxation).toFixed(2)
-            );
-            i.taxAmt = i.applyAmt + i.additionalTaxPoint;
-            i.taxPrice = i.taxAmt / i.orderQty;
-            return this.accessoriesBillingData.push(i);
-          }
-        }
-        this.invoice.additionalTaxPoint = this.invoice.taxation
-
-      }
-    },
-    // 申请税点
-    taxPoint(val, ov) {
-      if (val !== ov) {
-        this.invoice.taxation = parseFloat(
-          (
-            this.invoice.invoiceTaxAmt / (1 - val) -
-            this.invoice.invoiceTaxAmt
-          ).toFixed(2)
-        );
-        this.invoice.invoiceAmt = (
-          this.invoice.invoiceTaxAmt * 1 +
-          this.invoice.taxation * 1
-        ).toFixed(2);
-        let num = 0;
-        this.accessoriesBillingData.map(item => {
-          num += item.orderQty;
-        });
-        this.accessoriesBillingData.map(item => {
-          item.additionalTaxPoint = parseFloat(
-            ((item.orderQty / num) * this.invoice.taxation).toFixed(2)
-          );
-          item.taxAmt = item.applyAmt + item.additionalTaxPoint;
-          item.taxPrice = item.taxAmt / item.orderQty;
-        });
-
-          this.invoice.additionalTaxPoint = this.invoice.taxation
-      }
-    },
-    tax: {
-      handler(val, ov) {
-        if (val !== ov) {
-          this.accessoriesBillingData.map(item => {
-            this.$set(item, "invoiceTax", val);
-          });
-        }
-      }
-    }
-  }
+  // watch: {
+  //   invoiceTaxAmt(val, ov) {
+  //     if (this.copyData.length !== 0 && val !== ov) {
+  //       this.invoice.taxation = parseFloat(
+  //         (val / (1 - this.invoice.taxPoint) - val).toFixed(2)
+  //       );
+  //       this.invoice.invoiceAmt = (val * 1 + this.invoice.taxation * 1).toFixed(
+  //         2
+  //       );
+  //       let sum = 0;
+  //       let accData = JSON.parse(JSON.stringify(this.copyData));
+  //       this.accessoriesBillingData = [];
+  //       let num = 0;
+  //       accData.map(item => {
+  //         num += item.orderQty;
+  //       });
+  //       for (let i of accData) {
+  //         sum += i.applyAmt * 1;
+  //         if (sum <= val) {
+  //           this.accessoriesBillingData.push(i);
+  //         } else {
+  //           i.applyAmt -= sum - val;
+  //           i.additionalTaxPoint = parseFloat(
+  //             ((i.orderQty / num) * this.invoice.taxation).toFixed(2)
+  //           );
+  //           i.taxAmt = i.applyAmt + i.additionalTaxPoint;
+  //           i.taxPrice = i.taxAmt / i.orderQty;
+  //           return this.accessoriesBillingData.push(i);
+  //         }
+  //       }
+  //       this.invoice.additionalTaxPoint = this.invoice.taxation
+  //
+  //     }
+  //   },
+  //   // 申请税点
+  //   taxPoint(val, ov) {
+  //     if (val !== ov) {
+  //       this.invoice.taxation = parseFloat(
+  //         (
+  //           this.invoice.invoiceTaxAmt / (1 - val) -
+  //           this.invoice.invoiceTaxAmt
+  //         ).toFixed(2)
+  //       );
+  //       this.invoice.invoiceAmt = (
+  //         this.invoice.invoiceTaxAmt * 1 +
+  //         this.invoice.taxation * 1
+  //       ).toFixed(2);
+  //       let num = 0;
+  //       this.accessoriesBillingData.map(item => {
+  //         num += item.orderQty;
+  //       });
+  //       // this.accessoriesBillingData.map(item => {
+  //       //   item.additionalTaxPoint = parseFloat(
+  //       //     ((item.orderQty / num) * this.invoice.taxation).toFixed(2)
+  //       //   );
+  //       //   // item.taxAmt = item.applyAmt
+  //       //   item.taxPrice = item.taxAmt / item.orderQty;
+  //       // });
+  //
+  //         this.invoice.additionalTaxPoint = this.invoice.taxation
+  //     }
+  //   },
+  //   tax: {
+  //     handler(val, ov) {
+  //       if (val !== ov) {
+  //         this.accessoriesBillingData.map(item => {
+  //           this.$set(item, "invoiceTax", val);
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 };
 </script>
 <style lang="less" scoped>
