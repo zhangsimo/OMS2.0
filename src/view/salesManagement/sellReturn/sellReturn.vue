@@ -327,7 +327,7 @@
                       </Select>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
+                  <vxe-table-column field="storeShelf" title="仓位" :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"></vxe-table-column>
                   <vxe-table-column title="品牌车型">
                     <template v-slot="{row,rowIndex}">
                       <span>{{row.carBrandName}} {{row.carModelName}}</span>
@@ -374,7 +374,7 @@ import PrintShow from "./components/PrintShow";
 import MoreSearch from "./components/MoreSearch";
 import * as tools from "../../../utils/tools";
 import { save } from "../../../api/AlotManagement/transferringOrder";
-
+import { checkStore } from "@/api/system/systemApi";
 export default {
   name: "sellReturn",
   inject: ["reload"],
@@ -400,6 +400,8 @@ export default {
       }
     };
     return {
+        isSelfOk: true,
+        StoreId: "", //默认仓
       //左侧表格高度
       leftTableHeight: 0,
       rightTableHeight:0,
@@ -503,7 +505,8 @@ export default {
       }, //表格属性
       salesList: [], //销售员列表
       formPlan: {
-        details: []
+        details: [],
+          storeId: ""
       }, //表单对象
       split1: 0.2, //左右框
       WareHouseList: [], // 入库仓
@@ -559,9 +562,22 @@ export default {
         this.rightTableHeight = wrapH - planFormH  - 120;
       });
     },
-
-
-
+      //检验仓位（参照采购入库）
+    checkSelf({ row: { storeShelf } }) {
+          if (storeShelf == "") {
+              this.isSelfOk = true;
+          } else {
+              checkStore({ storeId: this.formPlan.storeId, name: storeShelf }).then(
+                  res => {
+                      if (res.code == 0 && res.data != null) {
+                          this.isSelfOk = true;
+                      } else {
+                          this.isSelfOk = false;
+                      }
+                  }
+              );
+          }
+      },
     //判断表格能不能编辑
     editActivedEvent({ row }) {
       let xTable = this.$refs.xTable;
@@ -585,7 +601,6 @@ export default {
     },
     //获取销售员
     selectOrderMan(val) {
-      console.log(val)
       // this.formPlan.orderMan = val.label;
       // this.formPlan.orderManId = val.value;
       this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
@@ -608,7 +623,6 @@ export default {
     },
     //获取左侧表格一行选中的数据
     selectTabelData(v) {
-      console.log("左侧数据数据", v);
       if (v == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
       if (!this.Flag && !this.isAdd) {
@@ -665,7 +679,8 @@ export default {
       this.formPlan = {
         details: [],
         orderManId: this.PTrow.orderManId,
-        orderMan:this.PTrow.orderMan
+        orderMan:this.PTrow.orderMan,
+          storeId: this.StoreId, //调入仓库
       };
       this.draftShow = 0;
       if (!this.isAdd) {
@@ -733,7 +748,6 @@ export default {
     //获取时间
     getvalue(date) {
       this.queryTime = date;
-      console.log(this.queryTime);
     },
     // 获取仓库
     async getWarehouse() {
@@ -742,7 +756,14 @@ export default {
       });
       if (res.code === 0) {
         this.WareHouseList = res.data;
+          res.data.map(item => {
+              if (item.isDefault == true) {
+                  this.formPlan.storeId = item.id;
+                  this.StoreId = item.id;
+              }
+          });
       }
+
     },
     //仓库改变右侧表格改变
     getStore(data) {
@@ -848,6 +869,9 @@ export default {
     },
     //保存
     isSave() {
+        if (!this.isSelfOk) {
+            return this.$message.error("请填写正确的仓位!");
+        }
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
@@ -884,6 +908,9 @@ export default {
 
     //提交
     isSubmit() {
+        if (!this.isSelfOk) {
+            return this.$message.error("请填写正确的仓位!");
+        }
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
