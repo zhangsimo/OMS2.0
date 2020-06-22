@@ -638,8 +638,10 @@ export default {
       informationCitation({ guestId: this.information.guestId }).then(res => {
         if (res.code === 0) {
           for(let key in this.invoice){
-            if (res.data.hasOwnProperty(key)){
-              this.invoice[key] = res.data[key]
+            if(key!="statementAmtOwed"&&key!="applyTaxAmt"){
+              if (res.data.hasOwnProperty(key)){
+                this.invoice[key] = res.data[key]
+              }
             }
           }
         }

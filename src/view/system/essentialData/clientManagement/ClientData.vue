@@ -384,8 +384,8 @@
         default:{}
       },
       provincearr: {
-        type:Array,
-        default:[]
+        type:Object,
+        default:{}
       },
       treelist: {
         type:Array,
