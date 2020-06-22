@@ -721,7 +721,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : item.orderQty||undefined,
+              applyQty :undefined,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
