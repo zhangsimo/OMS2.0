@@ -1,382 +1,244 @@
 <template>
-  <Form :label-width="100" :model="data" :rules="rules" ref="form">
+  <Modal v-model="clientDataShow" title="供应商申请" width="700">
+    <Form :label-width="100" :model="data" :rules="rules" ref="form">
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled" false-value="0" true-value="1" />
+        <Checkbox v-model="data.isDisabled" :false-value="0" :true-value="1" />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier" false-value="0" true-value="1" />
+        <Checkbox v-model="data.isSupplier" :false-value="0" :true-value="1" />
       </span>
       <span class="isDisabeld">
         客户
         <Checkbox v-model="clinet" disabled />
       </span>
     </div>
+      <h4 class="pb10">基本信息</h4>
+      <div style="display: flex">
+        <div style="flex-flow: row nowrap;width: 100%">
+          <FormItem label="客户属性:" prop="guestProperty">
+            <Select v-model="data.guestProperty" style="width:180px" class="mr10">
+              <Option
+                v-for="item in dataList.CS00105"
+                :value="item.itemCode"
+                :key="item.itemCode"
+              >{{ item.itemName }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="客户简称:" prop="shortName">
+            <Input v-model="data.shortName" style="width: 180px" maxlength="30" />
+          </FormItem>
+          <FormItem label="客户全称:" prop="fullName">
+            <Input v-model="data.fullName" style="width: 180px" />
+          </FormItem>
+          <FormItem label="联系人:" prop="contactor">
+            <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
+          </FormItem>
+          <FormItem label="省份:" prop="provinceId">
+            <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
+              <Option
+                v-for="item in provincearr"
+                v-show="item.parentId==0"
+                :key="item.id"
+                :value="item.id"
+              >{{ item.name}}</Option>
+            </Select>
+          </FormItem>
+        </div>
+        <div style="flex-flow: row nowrap;width: 100%">
+          <FormItem label="所属体系:" prop="belongSystem" class="h40">
+            <Select v-model="data.belongSystem" style="width:180px" class="mr10">
+              <Option
+                v-for="item in Subordinate"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="票据类型:" prop="billTypeId">
+            <Select v-model="data.billTypeId" style="width:180px" class="mr10">
+              <Option
+                v-for="item in dataList.CS00107"
+                :value="item.itemCode"
+                :key="item.id"
+              >{{ item.itemName }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="结算方式:" prop="settTypeId">
+            <Select v-model="data.settTypeId" style="width:180px" class="mr10">
+              <Option
+                v-for="item in dataList.CS00106"
+                :value="item.itemCode"
+                :key="item.id"
+              >{{ item.itemName }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="联系人手机:" prop="contactorTel">
+            <Input v-model="data.contactorTel" style="width: 180px" />
+          </FormItem>
+          <FormItem label="城市:" prop="cityId">
+            <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
+              <Option
+                v-for="item in provincearr"
+                v-if="data.provinceId==item.parentId"
+                :key="item.id"
+                :value="item.id"
+              >{{ item.name}}</Option>
+            </Select>
+          </FormItem>
+        </div>
+      </div>
+      <FormItem label="地址:">
+        <Input v-model="data.streetAddress" style="width: 380px" />
+      </FormItem>
+      <div style="display: flex">
+        <div style="flex-flow: row nowrap;width: 100%">
+          <FormItem label="业务员:">
+            <Input v-model="data.salesman" style="width: 180px" />
+          </FormItem>
+          <FormItem v-if="sessionKey === 0" label="信用等级:">
+            <Select v-model="data.tgrade" style="width:180px" class="mr10">
+              <Option
+                v-for="item in dataList.CS00112"
+                :value="item.itemCode"
+                :key="item.itemCode"
+              >{{ item.itemName }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="电话:">
+            <Input v-model="data.tel" style="width: 180px" />
+          </FormItem>
+          <FormItem label="备注:">
+            <Input v-model="data.remark" style="width: 180px" />
+          </FormItem>
+          <FormItem label="一级分类:" prop="guestType">
+            <Select v-model="data.guestType" style="width:180px" class="mr10" placement="top">
+              <Option
+                v-for="item in treelist"
+                v-if="item.lever == 1"
+                :value="item.code"
+                :key="item.id"
+              >{{ item.title }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem v-if="sessionKey == 0" label="信誉额度:" prop="creditLimit">
+            <Input v-model="data.creditLimit" style="width: 180px" />
+          </FormItem>
+        </div>
+        <div style="flex-flow: row nowrap;width: 100%">
+          <FormItem label="业务员手机:">
+            <Input v-model="data.salesmanTel" style="width: 180px" />
+          </FormItem>
+
+          <FormItem label="QQ/微信:">
+            <Input v-model="data.instantMsg" style="width: 180px" />
+          </FormItem>
+          <FormItem label="默认物流:">
+            <Input v-model="data.defaultLogistics" style="width: 180px" />
+          </FormItem>
+          <FormItem label="二级分类:">
+            <Select
+              v-model="data.guestTypeFloor"
+              style="width:180px"
+              class="mr10"
+              placement="top"
+            >
+              <Option
+                v-for="item in treelist "
+                v-if="data.guestType == item.parentId"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.title }}</Option>
+            </Select>
+          </FormItem>
+        </div>
+      </div>
+      <span style="margin-left: 100px">
+            <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
+          </span>
+      <h4 class="pb10">其他信息</h4>
+      <div>
+        <p style="margin-bottom: 10px;padding-left: 20px">财务信息</p>
+        <div>
+          <FormItem label="收款户名:" prop="accountName">
+            <Input v-model="data.accountName" style="width: 450px" />
+          </FormItem>
+          <FormItem label="银行账号:" prop="accountBankNo">
+            <Input v-model="data.accountBankNo" style="width: 450px" />
+          </FormItem>
+          <FormItem label="开户银行:" prop="accountBank">
+            <Input v-model="data.accountBank" style="width: 450px" />
+          </FormItem>
+          <div style="display: flex">
+            <div style="flex-flow: row nowrap;width: 100%">
+              <FormItem label="纳税人编码:" prop="phone">
+                <Input v-model="data.taxpayerCode" style="width: 150px" />
+              </FormItem>
+            </div>
+            <div style="flex-flow: row nowrap;width: 100%">
+              <FormItem label="纳税人电话:" prop="phone">
+                <Input v-model="data.taxpayerTel" style="width: 150px" />
+              </FormItem>
+            </div>
+          </div>
+          <FormItem label="纳税人名称:">
+            <Input v-model="data.taxpayerName" style="width: 450px" />
+          </FormItem>
+        </div>
+        <p style="margin-bottom: 10px;padding-left: 20px">其他信息</p>
+        <FormItem label="网址:">
+          <Input v-model="data.website" style="width: 450px" />
+        </FormItem>
+        <FormItem label="传真:">
+          <Input v-model="data.fax" style="width: 450px" />
+        </FormItem>
+        <FormItem label="经营地址:">
+          <Input v-model="data.addr" style="width: 450px" />
+        </FormItem>
+        <FormItem label="会员卡号:">
+          <Input v-model="data.memCarNo" style="width: 450px" />
+        </FormItem>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="会员等级:" prop="phone">
+              <Input v-model="data.memLevelId" style="width: 150px" />
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="邮政编码:" prop="phone">
+              <Input v-model="data.postalCode" style="width: 150px" />
+            </FormItem>
+          </div>
+        </div>
+      </div>
     <!--   切换栏-->
     <div class="tabList">
       <Tabs type="card" name="clientBox">
         <TabPane label="基本信息" tab="clientBox">
-          <div style="display: flex">
-            <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="客户属性:" prop="guestProperty">
-                <Select v-model="data.guestProperty" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in dataList.CS00105"
-                    :value="item.itemCode"
-                    :key="item.itemCode"
-                  >{{ item.itemName }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="30" />
-              </FormItem>
-              <FormItem label="客户全称:" prop="fullName">
-                <Input v-model="data.fullName" style="width: 180px" />
-              </FormItem>
-              <FormItem label="联系人:" prop="contactor">
-                <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
-              </FormItem>
-              <FormItem label="省份:" prop="provinceId">
-                <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in provincearr"
-                    v-show="item.parentId==0"
-                    :key="item.id"
-                    :value="item.id"
-                  >{{ item.name}}</Option>
-                </Select>
-              </FormItem>
-            </div>
-            <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="所属体系:" prop="belongSystem" class="h40">
-                <Select v-model="data.belongSystem" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in Subordinate"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="票据类型:" prop="billTypeId">
-                <Select v-model="data.billTypeId" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in dataList.CS00107"
-                    :value="item.itemCode"
-                    :key="item.id"
-                  >{{ item.itemName }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="结算方式:" prop="settTypeId">
-                <Select v-model="data.settTypeId" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in dataList.CS00106"
-                    :value="item.itemCode"
-                    :key="item.id"
-                  >{{ item.itemName }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="联系人手机:" prop="contactorTel">
-                <Input v-model="data.contactorTel" style="width: 180px" />
-              </FormItem>
-              <FormItem label="城市:" prop="cityId">
-                <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in provincearr"
-                    v-if="data.provinceId==item.parentId"
-                    :key="item.id"
-                    :value="item.id"
-                  >{{ item.name}}</Option>
-                </Select>
-              </FormItem>
-            </div>
-          </div>
-          <FormItem label="地址:">
-            <Input v-model="data.streetAddress" style="width: 380px" />
-          </FormItem>
-          <div style="display: flex">
-            <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员:">
-                <Input v-model="data.salesman" style="width: 180px" />
-              </FormItem>
-              <FormItem v-if="sessionKey === 0" label="信用等级:">
-                <Select v-model="data.tgrade" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in dataList.CS00112"
-                    :value="item.itemCode"
-                    :key="item.itemCode"
-                  >{{ item.itemName }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="电话:">
-                <Input v-model="data.tel" style="width: 180px" />
-              </FormItem>
-              <FormItem label="备注:">
-                <Input v-model="data.remark" style="width: 180px" />
-              </FormItem>
-              <FormItem label="一级分类:" prop="guestType">
-                <Select v-model="data.guestType" style="width:180px" class="mr10" placement="top">
-                  <Option
-                    v-for="item in treelist"
-                    v-if="item.lever == 1"
-                    :value="item.code"
-                    :key="item.id"
-                  >{{ item.title }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem v-if="sessionKey == 0" label="信誉额度:" prop="creditLimit">
-                <Input v-model="data.creditLimit" style="width: 180px" />
-              </FormItem>
-            </div>
-            <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员手机:">
-                <Input v-model="data.salesmanTel" style="width: 180px" />
-              </FormItem>
 
-              <FormItem label="QQ/微信:">
-                <Input v-model="data.instantMsg" style="width: 180px" />
-              </FormItem>
-              <FormItem label="默认物流:">
-                <Input v-model="data.defaultLogistics" style="width: 180px" />
-              </FormItem>
-              <FormItem label="二级分类:">
-                <Select
-                  v-model="data.guestTypeFloor"
-                  style="width:180px"
-                  class="mr10"
-                  placement="top"
-                >
-                  <Option
-                    v-for="item in treelist "
-                    v-if="data.guestType == item.parentId"
-                    :value="item.id"
-                    :key="item.id"
-                  >{{ item.title }}</Option>
-                </Select>
-              </FormItem>
-            </div>
-          </div>
-          <span style="margin-left: 100px">
-            <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
-          </span>
-          <span style="margin-left: 100px">
-            <Checkbox v-model="data.isFatCompany" false-value="0" true-value="1" ></Checkbox>是否成品油企业
-          </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
-          <div>
-            <p style="margin-bottom: 10px">财务信息</p>
-            <div>
-              <FormItem label="收款户名:" prop="accountName">
-                <Input v-model="data.accountName" style="width: 450px" />
-              </FormItem>
-              <FormItem label="银行账号:" prop="accountBankNo">
-                <Input v-model="data.accountBankNo" style="width: 450px" />
-              </FormItem>
-              <FormItem label="开户银行:" prop="accountBank">
-                <Input v-model="data.accountBank" style="width: 450px" />
-              </FormItem>
-              <div style="display: flex">
-                <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人编码:" prop="phone">
-                    <Input v-model="data.taxpayerCode" style="width: 150px" />
-                  </FormItem>
-                </div>
-                <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人电话:" prop="phone">
-                    <Input v-model="data.taxpayerTel" style="width: 150px" />
-                  </FormItem>
-                </div>
-              </div>
-              <FormItem label="纳税人名称:">
-                <Input v-model="data.taxpayerName" style="width: 450px" />
-              </FormItem>
-            </div>
-            <p style="margin-bottom: 10px">其他信息</p>
-            <FormItem label="网址:">
-              <Input v-model="data.website" style="width: 450px" />
-            </FormItem>
-            <FormItem label="传真:">
-              <Input v-model="data.fax" style="width: 450px" />
-            </FormItem>
-            <FormItem label="经营地址:">
-              <Input v-model="data.addr" style="width: 450px" />
-            </FormItem>
-            <FormItem label="会员卡号:">
-              <Input v-model="data.memCarNo" style="width: 450px" />
-            </FormItem>
-            <div style="display: flex">
-              <div style="flex-flow: row nowrap;width: 100%">
-                <FormItem label="会员等级:" prop="phone">
-                  <Input v-model="data.memLevelId" style="width: 150px" />
-                </FormItem>
-              </div>
-              <div style="flex-flow: row nowrap;width: 100%">
-                <FormItem label="邮政编码:" prop="phone">
-                  <Input v-model="data.postalCode" style="width: 150px" />
-                </FormItem>
-              </div>
-            </div>
-          </div>
-        </TabPane>
-        <TabPane label="收货地址" tab="clientBox">
-          <div>
-            <div class="place">
-              <a class="mr10" @click="addPlace">
-                <Icon custom="iconfont iconxinzengicon icons" />新增
-              </a>
-              <a class="mr10" @click="changeplage">
-                <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
-              </a>
-              <a class="mr10" @click="deletPlace">
-                <Icon custom="iconfont iconlajitongicon icons" />删除
-              </a>
-            </div>
-            <Table
-              border
-              height="400"
-              size="small"
-              highlight-row
-              :stripe="true"
-              :columns="columns"
-              :data="placeList"
-              @on-current-change="selection"
-            ></Table>
-          </div>
-          <Modal v-model="newplace" :title="title" width="700">
-            <Newplace :data="oneNew" :place="provincearr" ref="child"></Newplace>
-            <div slot="footer">
-              <Button type="primary" @click="addplaceSure">确定</Button>
-              <Button type="default" @click="newplace = false">取消</Button>
-            </div>
-          </Modal>
-        </TabPane>
-        <TabPane label="关联客户" tab="clientBox">
-          <div>
-            <div class="place">
-              <span>客户名称:</span>
-              <Input type="text" v-model="customerName" class="staff-name mr10" />
-              <Button type="warning" class="w90 mr10" @click="queryClientList">
-                <span class="center">
-                  <Icon custom="iconfont iconchaxunicon icons" />查询
-                </span>
-              </Button>
-              <Button type="warning" class="w90 mr10" @click="joinClientList">
-                <span class="center">
-                  <Icon custom="iconfont iconxuanzetichengchengyuanicon" />选入
-                </span>
-              </Button>
-            </div>
-            <div>
-              <Table
-                size="small"
-                :loading="loading1"
-                border
-                :stripe="true"
-                :columns="columns1"
-                :data="relevanceClient"
-                height="200"
-                @on-selection-change="pitchOnClient"
-              ></Table>
-              <div class="clearfix" style="margin-bottom: 10px">
-                <Page
-                  class-name="page-con"
-                  :current="page.num"
-                  :total="page.total"
-                  :page-size="page.size"
-                  @on-change="changePage1"
-                  @on-page-size-change="changeSize1"
-                  show-sizer
-                  show-total
-                  show-elevator
-                  style="float: right;margin-top: 10px"
-                  class="mr10"
-                ></Page>
-              </div>
-              <div>
-                <div class="place">
-                  <span>已选择的客户</span>
-                  <Button class="mr10 w90" @click="deletAllClient">
-                    <span class="center">
-                      <Icon custom="iconfont iconlajitongicon icons" />删除
-                    </span>
-                  </Button>
-                </div>
-                <Table
-                  size="small"
-                  border
-                  :stripe="true"
-                  :columns="columns2"
-                  :data="relevanceClientShow"
-                  height="200"
-                  @on-selection-change="deleteClient"
-                ></Table>
-              </div>
-            </div>
-          </div>
-        </TabPane>
-        <TabPane label="开票信息" tab="clientBox">
-          <div>
-            <div class="place">
-              <a class="mr10" @click="addInoice">
-                <Icon custom="iconfont iconxinzengicon icons" />新增
-              </a>
-              <a class="mr10" @click="changeBank">
-                <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
-              </a>
-              <a class="mr10" @click="deletBank">
-                <Icon custom="iconfont iconlajitongicon icons" />删除
-              </a>
-            </div>
-            <vxe-table
-              highlight-current-row
-              @current-change="pitchOnBank"
-              border
-              auto-resize
-              show-overflow
-              ref="validData"
-              :mouse-config="{selected: true}"
-              :data="invoice"
-              height="300px"
-              :edit-rules="validRules"
-              :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-              :edit-config="{trigger: 'click', mode: 'cell'}"
-            >
-              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column field="taxpayerName" title="开票名称" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="taxpayerCode" title="税号" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="taxpayerTel" title="地址电话" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="accountBankNo" title="开户行及账号" :edit-render="{name: 'input'}"></vxe-table-column>
-            </vxe-table>
-          </div>
-          <Modal v-model="newInoiceShow" :title="tit">
-            <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
-            <div slot="footer">
-              <Button type="primary" @click="addNewBank">确定</Button>
-              <Button type="default" @click="newInoiceShow = false">取消</Button>
-            </div>
-          </Modal>
+
         </TabPane>
       </Tabs>
     </div>
   </Form>
+  </Modal>
 </template>
 
 <script>
-  import Newplace from "./Newplace";
-  import AddInoice from "./AddInoice";
   import {
     getDigitalDictionary,
     getCustomerInformation,
     getCustomer
   } from "@/api/system/essentialData/clientManagement";
+  import {typeSelect} from "../../../api/bill/saleOrder";
 
   export default {
-    name: "Data",
+    name: "viewSupplerModel",
     components: {
-      Newplace,
-      AddInoice
     },
     props: {
       data: {
@@ -384,8 +246,8 @@
         default:{}
       },
       provincearr: {
-        type:Object,
-        default:{}
+        type:Array,
+        default:[]
       },
       treelist: {
         type:Array,
@@ -462,6 +324,7 @@
         }
       };
       return {
+        clientDataShow:true,
         sessionKey: "0",
         Subordinate: [
           {
@@ -709,6 +572,10 @@
       this.sessionKey = sessionStorage.getItem("key");
     },
     methods: {
+      async getSuppler(code){
+        let rep = await typeSelect({"code":code});
+      },
+
       //获取关联客户
       async getClienlist() {
         this.loading1 = true;
@@ -978,3 +845,4 @@
     margin-bottom: 10px;
   }
 </style>
+

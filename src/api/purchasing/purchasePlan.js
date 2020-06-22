@@ -177,3 +177,8 @@ export function deleteparts(data) {
 
 //
 export const upxlxs = `${api.omsOrder}/pchsPlanMain/importExcel?id=`;
+
+
+//调拨申请导入
+export const upxlxsDBo = `${api.omsOrder}/allotApplyMain/importExcel
+?id=`;
