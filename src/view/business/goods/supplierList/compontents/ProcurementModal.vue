@@ -1,6 +1,6 @@
 <template>
   <Modal
-    title="选择采购入库单"
+    title="选择采购入库单11"
     v-model="shows"
     :styles="{ top: '50px', width: '1000px' }"
   >
@@ -33,12 +33,12 @@
         </div>
         <div class="db mr5">
           <Button type="default" @click="ok"
-            ><i class="iconfont iconxuanzetichengchengyuanicon"></i>选择</Button
+            >选择</Button
           >
         </div>
         <div class="db mr5">
           <Button type="default" @click="cancel"
-            ><Icon type="md-close" />取消</Button
+            >整单选择</Button
           >
         </div>
       </div>
@@ -84,37 +84,7 @@
         ></Page>
       </div>
     </div>
-    <div class="bottom-plan mt10">
-        <vxe-table
-        border
-        stripe
-        ref="xTable1"
-        height="300"
-        size="small"
-        :data="tableDataBm"
-        auto-resize
-      >
-        <vxe-table-column
-          type="index"
-          title="序号"
-          width="60"
-        ></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-        <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-        <vxe-table-column field="enterUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
-        <vxe-table-column field="trueEnterQty" title="入库数量"></vxe-table-column>
-         <vxe-table-column field="orderPrice" title="入库单价"></vxe-table-column>
-         <vxe-table-column field="trueEnterAmt" title="入库金额"></vxe-table-column>
-         <vxe-table-column field="partInnerId" title="配件内码"></vxe-table-column>
-        </vxe-table>
-    </div>
-    <div slot="footer">
-      <!-- <Button class="mr15" type="primary" @click="ok">确定</Button>
-      <Button @click="cancel">取消</Button> -->
-    </div>
+
      <!-- 供应商资料
     <select-supplier
       @selectSearchName="selectSupplierName"

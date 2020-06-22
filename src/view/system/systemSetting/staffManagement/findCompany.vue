@@ -50,6 +50,12 @@
                         key: 'tenantCompanyName',
                         minWidth: 80
                     },
+                  {
+                    title: "角色",
+                    align: "center",
+                    key: "userRoleName",
+                    minWidth: 80
+                  },
                     {
                         title: '公司地址',
                         align: 'center',
