@@ -299,7 +299,7 @@
 <script>
 import ClientData from "../../../../system/essentialData/clientManagement/ClientData";
 import goodsInfo from "../../../../goods/plannedPurchaseOrder/components/GoodsInfo";
-import selectPartCom from "../components/selectPartCom";
+import selectPartCom from "@/view/salesManagement/salesOrder/batch/selectPartCom";
 // import selectPartCom from "@/view/salesManagement/salesOrder/components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
@@ -740,7 +740,7 @@ export default {
 
       // this.$refs.formPlan.validate(async valid => {
       //   if (valid) {
-          
+
       //     // this.$Message.success("已添加");
       //   } else {
       //     this.$Message.error("*为必填项");

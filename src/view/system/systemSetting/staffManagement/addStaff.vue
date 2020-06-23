@@ -50,7 +50,16 @@
         </div>
       </div>
 
+      <div style="display: flex">
+        <div style="flex-flow: row nowrap;width: 100%" >
+          <FormItem label='角色名称:' prop="userRoleId" >
+            <Select v-model="data.userRoleId" style="width:150px" >
+              <Option v-for="item in jobList" :value="item.id" :key="item.id">{{ item.displayName }}</Option>
+            </Select>
+          </FormItem>
+        </div>
 
+      </div>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
           <FormItem label='入职时间：' style="" prop="entryTime">
@@ -125,6 +134,7 @@
 <script>
   import {getcompany} from '@/api/system/systemSetting/staffManagenebt'
   import {findGuest} from '@/api/settlementManagement/advanceCollection'
+  import {queryRolesByPage } from '_api/admin/roleApi.js';
   import {goshop} from "@/api/settlementManagement/fundsManagement/capitalChain";
     export default {
         name: "addStaff",
@@ -164,6 +174,9 @@
                     groundIds:[
                         {required: true,type:'array', message: '请选择部门', trigger: 'change'}
                     ],
+                  userRoleId:[
+                      {required: true,type:'string', message: '请选择岗位', trigger: 'change'}
+                    ],
                     entryTime:[
                         {required: true , type:'date' ,message:'入职时间不能为空' ,trigger:'change'}
                     ],
@@ -190,6 +203,7 @@
                     {name:'是',value:0},
                     {name:'否',value:1}
                 ],
+              jobList:[],//获取当前岗位
                 business:0,
                 list:[], //公司信息
               gusetList:[],//往来单位信息
@@ -198,6 +212,7 @@
     mounted(){
       this.getList()
       this.getfindGuestList()
+      this.getLeftList()
     },
     methods:{
             //获取公司
@@ -245,6 +260,19 @@
        }
 
       },
+
+      //获取全部岗位
+       async getLeftList(){
+        let data ={}
+        data.size = 9999
+        data.page = 0
+        data.systemType = 0
+        let res = await queryRolesByPage(data)
+        if(res.code == 0){
+          this.jobList = res.data.content
+        }
+      },
+        //删除校验
         resetFields() {
             this.$refs.form.resetFields()
         },
