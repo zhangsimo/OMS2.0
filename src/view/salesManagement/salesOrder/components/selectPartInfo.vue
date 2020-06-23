@@ -103,7 +103,7 @@
         }
       },
       changeblur(){
-        this.formItemData.orderPrice = parseFloat(this.formItemData.orderPrice.toFixed(2))
+        this.formItemData.orderPrice = this.formItemData.orderPrice.toFixed(2);
       },
 
       submit(){
