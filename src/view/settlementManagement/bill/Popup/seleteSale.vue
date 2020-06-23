@@ -93,7 +93,11 @@ export default {
     //选择一条数据
     determine() {
       if (this.seleteData.length!==0) {
-        bus.$emit('partsData',this.seleteData)
+        if(this.saleSingleData.length===this.seleteData.length){
+          this.$emit('partsData',[])
+        }else{
+          this.$emit('partsData',this.seleteData);
+        }
         this.modal1 = false
       } else {
         this.$message.error("请先选择一条销售单");

@@ -251,8 +251,9 @@
   } from "_api/purchasing/purchasePlan";
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
+  import {upxlxsDBo} from "../../../../api/purchasing/purchasePlan";
 
-    export default {
+  export default {
       components: {
         QuickDate,
         More,
@@ -720,7 +721,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : item.orderQty||undefined,
+              applyQty :undefined,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
@@ -915,7 +916,7 @@
           this.buttonDisable = false
           this.getRightlist();
 
-          this.upurl = upxlxs + row.id;
+          this.upurl = upxlxsDBo + row.id;
         },
         //右部分接口
         getRightlist(){
@@ -1003,11 +1004,12 @@
 
         //下载模板
         down(){
-          down('1800000000')
+          down('2300000000')
         },
         // 导入
         handleBeforeUpload() {
-          if (this.selectPlanOrderItem.new) {
+          console.log(this.upurl)
+          if (this.datadata.new) {
             return this.$Message.error("请先保存数据!");
           }
           let refs = this.$refs;
