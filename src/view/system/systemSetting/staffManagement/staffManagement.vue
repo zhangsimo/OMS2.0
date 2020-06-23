@@ -1,13 +1,13 @@
 <template>
   <div class="staff-box">
     <div class="staff-header">
-      <span>机构:</span>
+      <span class="mr5">机构:</span>
       <Cascader :data="list" v-model="groundIds" placeholder='选择机构' style="width: 250px" class="mr10"></Cascader>
-      <span>姓名:</span>
+      <span class="mr5">姓名:</span>
       <input type="text" class="staff-name mr10" v-model="staffName" />
-      <span>手机号码:</span>
+      <span class="mr5">手机号码:</span>
       <input type="text" class="staff-phone-number mr10" v-model="staffphoneNumber" />
-      <span>是否离职:</span>
+      <span class="mr5">是否离职:</span>
       <Select v-model="dimission" style="width:80px">
         <Option v-for="item in isDimission" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
@@ -234,6 +234,12 @@ export default {
           minWidth: 80
         },
         {
+          title: "角色",
+          align: "center",
+          key: "userRoleName",
+          minWidth: 80
+        },
+        {
           title: "性别",
           align: "center",
           key: "",
@@ -302,6 +308,12 @@ export default {
           title: "公司名称",
           align: "center",
           key: "tenantCompanyName",
+          minWidth: 80
+        },
+        {
+          title: "角色",
+          align: "center",
+          key: "userRoleName",
           minWidth: 80
         },
         {
@@ -482,7 +494,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
-          data.groundIds = JSON.stringify(data.groundIds);
+          // data.groundIds = JSON.parse(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
             .then(res => {
@@ -506,7 +518,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
-          data.groundIds = JSON.stringify(data.groundIds);
+          // data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           changeeditUser(data)
             .then(res => {
@@ -527,6 +539,8 @@ export default {
     selection(currentRow) {
       this.oneStaffChange = currentRow;
     },
+
+
     //修改信息
     changStaffList() {
       this.isNextAdd = false;
@@ -535,10 +549,11 @@ export default {
         return false;
       }
       this.title = "修改员工信息";
-      this.newStaff = this.oneStaffChange; //用户名
+      this.newStaff = JSON.parse(JSON.stringify(this.oneStaffChange)) //用户名
       this.newStaff.single = this.newStaff.single == 1 ? true : false; //允许查看
       this.newStaff.singtwo = this.newStaff.singtwo == 1 ? true : false; //允许提交
-      // this.newStaff.groundIds = JSON.parse(this.newStaff.groundIds)
+      this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
+      console.log(this.newStaff)
       this.modalShow = true;
     },
     //员工离职
@@ -702,7 +717,7 @@ export default {
       data.allCompanyList = this.oneStaffChange.allCompanyList || "";
       findCompanyList(data).then(res => {
         if (res.code == 0) {
-          this.companyList = res.data.content;
+          this.companyList =  res.data.content ? res.data.content : []
           this.page2.total = res.data.totalElements;
         }
       });

@@ -197,6 +197,10 @@
     <apply-model-view ref="clientApply" :bill-type-arr="settleTypeList"></apply-model-view>
     <!--客户信用额度-->
     <quota-apply-model ref="quotaApply" :bill-type-arr="settleTypeList"></quota-apply-model>
+    <!--配件审核-->
+    <part-info ref="partInfo"></part-info>
+    <!--供应商申请-->
+    <view-suppler-model></view-suppler-model>
   </div>
 </template>
 
@@ -225,10 +229,14 @@
   import {getDigitalDictionary} from "../../../api/system/essentialData/clientManagement";
   import ApplyModelView from "../component/viewApplyModel";
   import QuotaApplyModel from "../component/quotaApplyModel";
+  import PartInfo from "../component/partInfo/partInfo";
+  import ViewSupplerModel from "../component/viewSupplerModel";
 
   export default {
         name: "myApplication",
         components: {
+          ViewSupplerModel,
+          PartInfo,
           QuotaApplyModel,
           ApplyModelView,
           ViewOtherModel,
@@ -393,6 +401,7 @@
         }
       },
       async mounted(){
+        this.$refs.partInfo.init();
           this.getShop();
           // console.log(this.$store.state.user.userData)
         this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;
