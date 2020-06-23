@@ -13,7 +13,17 @@ export const mixPartInfo = {
       // 模拟异步验证效果
       let reg = /^[0-9a-zA-Z]*$/;
       if (!value) {
-        callback(new Error('不能为空！'));
+        callback(new Error('编码不能为空！'));
+      } else {
+        callback()
+      }
+    };
+    //数字加字母校验
+    const NumberA2 = (rule, value, callback) => {
+      // 模拟异步验证效果
+      let reg = /^[0-9a-zA-Z]*$/;
+      if (!value) {
+        callback(new Error('OE码不能为空！'));
       } else {
         callback()
       }
@@ -89,7 +99,7 @@ export const mixPartInfo = {
           { required: true, message: '单位不能为空', trigger: 'change' }
         ],
         oemCode: [
-          { required: true, validator: NumberA, trigger: 'blur' }
+          { required: true, validator: NumberA2, trigger: 'blur' }
         ]
       },
       qualityArr: [],//所有品质
@@ -403,6 +413,12 @@ export const mixPartInfo = {
     submit(name, auditSign) {
       this.btnIsLoadding = true
       this.$refs[name].validate((valid) => {
+        this.isCart = false;
+        if(!this.carList[0].carName&&!this.carList[0].id){
+          this.btnIsLoadding = false;
+          this.isCart = true;
+          return
+        }
         if (valid) {
           this.$refs.vxeTable.validate(val => {
             if (!val) {
@@ -458,7 +474,6 @@ export const mixPartInfo = {
               objReq.spec = this.formValidate.spec
               //型号
               objReq.model = this.formValidate.model
-              console.log(objReq)
               //使用车型品牌
               // let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
               // if (selectBrandData.length > 0) {
@@ -467,12 +482,7 @@ export const mixPartInfo = {
               // }
               // objReq.carModelName = this.formValidate.carModelName
               // console.log(this.carList)
-              this.isCart = false;
-              if(!this.carList[0].carName&&!this.carList[0].id){
-                this.btnIsLoadding = false;
-                this.isCart = true;
-                return
-              }
+
 
               let carBrand = [];
               let carBrandName = [];
