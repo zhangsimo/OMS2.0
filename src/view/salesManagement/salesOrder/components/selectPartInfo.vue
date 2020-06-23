@@ -104,6 +104,7 @@
       },
       changeblur(){
         this.formItemData.orderPrice = this.formItemData.orderPrice.toFixed(2);
+
       },
 
       submit(){
