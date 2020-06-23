@@ -824,9 +824,9 @@ export default {
         if (valid) {
           var datas = conversionList(val);
           datas.forEach(item => {
-            if(!item.orderQty) {
+            // if(!item.orderQty) {
               item.orderQty = undefined;
-            }
+            // }
             if(!(item.orderPrice * 1)) {
               item.orderPrice = undefined;
             }
