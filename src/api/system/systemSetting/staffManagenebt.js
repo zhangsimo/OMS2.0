@@ -53,7 +53,7 @@ export function findCompanyList (params) {
     method: 'get',
     params
   })
-}         
+}
 
 //开通账号
 export function putNewCompany (data ,id) {
@@ -85,10 +85,10 @@ export function getcompany (params) {
 
 
 //删除兼职公司
-export function setCliemt (data) {
+export function setCliemt (params) {
   return axios.request({
     url: `${api.authApi}/tenantUsers/cancelUserCompany`,
-    method: 'post',
-    data
+    method: 'get',
+    params
   })
 }

@@ -406,9 +406,8 @@ export default {
       this.$refs.child.$refs.form.resetFields()
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
-      this.clientList.isNeedPack = false
-      this.clientList.isFatCompany = 0
       this.clientDataShow = true;
+      this.$refs.child.handleReset()
       this.$refs.child.getClienlist();
     },
     //更多搜索确认
@@ -429,6 +428,7 @@ export default {
         data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
         data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
         data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
+        data.isFatCompany = data.isFatCompany ? 1 : 0
         // data.tgrade = data.tgradeName
         // console.log(data,this.clientList)
         let res = await getNewClient(this.clientList);
@@ -454,6 +454,10 @@ export default {
       getCustomerDetails(data).then(res => {
         if (res.code == 0) {
           this.clientList = res.data;
+          this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
+          this.clientList.isFatCompany = this.clientList.isFatCompany == 1 ? true : false
+          this.clientList.isDisabled = this.clientList.isDisabled == 1 ? true : false
+          this.clientList.isSupplier = this.clientList.isSupplier == 1 ? true : false
           this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
           this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
           this.$refs.child.relevanceClientShow = this.clientList.guestVOList;

@@ -40,7 +40,7 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber :min="0" class="w200" precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <InputNumber :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
           </FormItem>
         </Col>
         <Col span="12">
@@ -52,7 +52,8 @@
       <Row>
         <Col span="12">
           <FormItem label="单价：">
-            <InputNumber :min="0" class="w200" placeholder="单价" v-model="formItemData.orderPrice" precision="2" ></InputNumber>
+            <!--<InputNumber :min="0" class="w200" placeholder="单价" v-model="formItemData.orderPrice" @on-focus="changeFocuse" @on-blur="changeblur" ></InputNumber>-->
+            <vxe-input type="float" class="w200" size="mini"  v-model="formItemData.orderPrice" :min="0" digits="2"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -76,7 +77,6 @@
 		  return {
         searchPartLayer:false,
         formItemData: {},
-        prevPrice: 0,
       }
     },
     computed: {
@@ -91,32 +91,40 @@
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};
-          this.formItemData.orderQty = v.orderQty || undefined;
-          this.formItemData.orderPrice = v.orderPrice * 1 || undefined;
-          this.prevPrice = v.orderPrice;
+          this.formItemData.orderQty = null;
+          this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
         }
 
       },
-      changePrice(v){
-		    let vl = v.target.value;
-        let reg = /((^[1-9]\d*)|^0)(\.\d{1,2}){0,1}$/;
-		    if(reg.test(vl)){
-          this.formItemData.orderPrice = vl;
-          this.prevPrice = vl;
-        }else{
-          this.$set(this.formItemData,'orderPrice',this.prevPrice);
+      changeFocuse(v){
+        let vl = v.target.value;
+        if(vl==0){
+          this.formItemData.orderPrice = null;
         }
-        return this.prevPrice;
       },
+      changeblur(){
+		    if(this.formItemData.orderPrice&&this.formItemData.orderPrice>0){
+          this.formItemData.orderPrice = this.formItemData.orderPrice.toFixed(2);
+        }else{
+          this.formItemData.orderPrice = 0;
+        }
+      },
+
       submit(){
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
-          return this.$message.error("数量不能为空");
+          setTimeout(()=>{
+            this.$message.error("数量不能为空");
+          },50)
+          return
         }
         if(!this.formItemData.orderPrice || this.formItemData.orderPrice <= 0) {
-          return this.$message.error("单价不可为空");
+          setTimeout(()=>{
+            this.$message.error("单价不可为空");
+          },50)
+          return
         }
 		    this.searchPartLayer = false;
-		    this.$parent.$parent.getPartNameList([this.formItemData]);
+		    this.$parent.$parent.getPartNameList2([this.formItemData]);
       }
     }
 	}

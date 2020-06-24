@@ -249,6 +249,7 @@
       @selectAddName="selectAddlierName"
       ref="addInCom"
       headerTit="配件成品选择"
+      :pageDataObj="propPageObj"
     ></add-in-com>
     <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
   </main>
@@ -291,6 +292,7 @@ export default {
   },
   data() {
     return {
+      propPageObj:{},
       Status: 0,
       // serviceIdValue: "",
       codeValue: "",
@@ -706,6 +708,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            this.propPageObj = res.data||{};
           }
         })
         .catch(e => {

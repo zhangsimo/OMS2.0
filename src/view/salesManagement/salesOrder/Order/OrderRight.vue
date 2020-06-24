@@ -398,7 +398,7 @@ import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import barch from "../batch/selectPartCom";
 import baseUrl from "_conf/url";
-import { conversionList } from "@/components/changeWbList/changewblist";
+import { conversionList,conversionListNoNum } from "@/components/changeWbList/changewblist";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 export default {
   name: "OrderRight",
@@ -466,7 +466,7 @@ export default {
         }
       ], //订单类型
       clientList: {}, //新增客户资料
-      provinceArr: {}, //获取数据字典地址
+      provinceArr: [], //获取数据字典地址
       treeDiagramList: [], //新增客户树形图信息
       clientDataShow: false, //新增客户模态框关闭
       addressShow: false, //收货地址显示
@@ -822,6 +822,7 @@ export default {
     //配件返回的参数
     getPartNameList(val) {
       let vals = conversionList(val);
+      console.log(vals)
       this.formPlan.detailList = [
         ...this.formPlan.detailList,
         ...conversionList(val)
@@ -836,6 +837,24 @@ export default {
       });
       this.$Message.success("已添加");
     },
+
+    //配件返回的参数
+    getPartNameList2(val) {
+      this.formPlan.detailList = [
+        ...this.formPlan.detailList,
+        ...conversionListNoNum(val)
+      ];
+      this.formPlan.detailList.forEach(el => {
+        if(!el.orderQty) {
+          el.orderQty = undefined;
+        }
+        if(!(el.orderPrice * 1)) {
+          el.orderPrice = undefined;
+        }
+      });
+      this.$Message.success("已添加");
+    },
+
     // 批次配件
     async getBarchList(val) {
       val.map(item => {

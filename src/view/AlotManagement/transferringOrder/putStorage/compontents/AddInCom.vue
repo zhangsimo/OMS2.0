@@ -92,8 +92,8 @@
           <div>
             <Page
               :current="pageList.page"
-              :total="tabList.length"
-              :page-size="pageList.pageSize"
+              :total="pageDataObj.totalElements"
+              :page-size="pageList.size"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -151,8 +151,7 @@ export default {
         page: 1,
         total: 0,
         size: 10,
-        pageSize: 50,
-        pageSizeOpts: [50, 100, 150, 200]
+        pageSizeOpts: [10, 20, 30]
       },
       xuanzhognList: [],
       checkRow: {},
@@ -186,6 +185,10 @@ export default {
     }
   },
   props: {
+    pageDataObj:{
+      type:Object,
+      default:{}
+    },
     tbdata: {
       type: Array,
       default: function() {

@@ -1,12 +1,24 @@
 <template>
   <Modal
-    title="选择采购入库单"
+    title="选择采购入库单11"
     v-model="shows"
-    :styles="{ top: '50px', width: '1000px' }"
+    :styles="{ top: '50px', width: '1100px' }"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
-        <div class="db mr5">快速查询:</div>
+        <div class="db mr5">
+          <span class="mr5">快速查询:</span>
+          <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
+        </div>
+        <div class="db mr5">
+          <Input placeholder="配件内码/编码/名称/OE码" v-model="serviceId" />
+        </div>
+        <div class="db mr5">
+          <span class=" mr5">品牌:</span>
+          <Select  v-model="band" filterable style="width:140px" class="mr20">
+            <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </div>
         <div class="db mr5"><span>入库日期:</span></div>
         <div class="db mr5">
           <DatePicker
@@ -18,12 +30,6 @@
             @on-change="getDate"
           ></DatePicker>
         </div>
-        <!-- <div class="db mr5">
-          <Input placeholder="请选择供应商" v-model="guestname"  @on-focus="showModel('selectSupplier')" />
-        </div> -->
-        <div class="db mr5">
-          <Input placeholder="订单号" v-model="serviceId" />
-        </div>
         <div class="db mr5">
           <Button class="w90" type="warning" @click="query">
             <span class="center">
@@ -33,29 +39,33 @@
         </div>
         <div class="db mr5">
           <Button type="default" @click="ok"
-            ><i class="iconfont iconxuanzetichengchengyuanicon"></i>选择</Button
+            >选择</Button
           >
         </div>
         <div class="db mr5">
           <Button type="default" @click="cancel"
-            ><Icon type="md-close" />取消</Button
+            >整单选择</Button
           >
         </div>
       </div>
       <vxe-table
         border
         stripe
+        align="center"
         ref="xTable1"
         height="300"
+        column-min-width="100px"
         size="small"
         :data="tableData"
-        @cell-click="cellClickEvent"
-        @radio-change="radioChangeEvent"
+        show-overflow
+        :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"
+        @checkbox-all="cellClickEvent"
+        @checkbox-change="radioChangeEvent"
+        @getCheckboxReserveRecords='getReserve'
         auto-resize
       >
         <vxe-table-column
-          type="radio"
-          title="选择"
+          type="checkbox"
           width="60"
         ></vxe-table-column>
         <vxe-table-column
@@ -63,12 +73,21 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
-        <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
-        <vxe-table-column field="orderAmt" title="入库金额"></vxe-table-column>
-        <vxe-table-column field="finishDate" title="入库日期"></vxe-table-column>
-        <vxe-table-column field="code" title="采购单号"></vxe-table-column>
-        <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        <vxe-table-column  field="serviceId" title="配件编码"></vxe-table-column>
+        <vxe-table-column  field="guestName" title="配件名称"></vxe-table-column>
+        <vxe-table-column  field="orderAmt" title="OE码"></vxe-table-column>
+        <vxe-table-column  field="finishDate" title="品牌"></vxe-table-column>
+        <vxe-table-column  field="code" title="是否含税"></vxe-table-column>
+        <vxe-table-column  field="remark" title="税率"></vxe-table-column>
+        <vxe-table-column  field="remark" title="出库数量"></vxe-table-column>
+        <vxe-table-column  field="remark" title="出库单价"></vxe-table-column>
+        <vxe-table-column  field="remark" title="可退数量"></vxe-table-column>
+        <vxe-table-column  field="remark" title="单位"></vxe-table-column>
+        <vxe-table-column  field="remark" title="供应商"></vxe-table-column>
+        <vxe-table-column  field="remark" title="出库单号"></vxe-table-column>
+        <vxe-table-column  field="remark" title="出库日期"></vxe-table-column>
+        <vxe-table-column  field="remark" title="关联销售订单"></vxe-table-column>
+        <vxe-table-column  field="remark" title="第一供应商"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
         <Page
@@ -84,37 +103,7 @@
         ></Page>
       </div>
     </div>
-    <div class="bottom-plan mt10">
-        <vxe-table
-        border
-        stripe
-        ref="xTable1"
-        height="300"
-        size="small"
-        :data="tableDataBm"
-        auto-resize
-      >
-        <vxe-table-column
-          type="index"
-          title="序号"
-          width="60"
-        ></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-        <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-        <vxe-table-column field="enterUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
-        <vxe-table-column field="trueEnterQty" title="入库数量"></vxe-table-column>
-         <vxe-table-column field="orderPrice" title="入库单价"></vxe-table-column>
-         <vxe-table-column field="trueEnterAmt" title="入库金额"></vxe-table-column>
-         <vxe-table-column field="partInnerId" title="配件内码"></vxe-table-column>
-        </vxe-table>
-    </div>
-    <div slot="footer">
-      <!-- <Button class="mr15" type="primary" @click="ok">确定</Button>
-      <Button @click="cancel">取消</Button> -->
-    </div>
+
      <!-- 供应商资料
     <select-supplier
       @selectSearchName="selectSupplierName"
@@ -129,9 +118,14 @@ import  * as tools from "../../../../../utils/tools";
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "../../../../../api/procurement/planTwo";
-// import SelectSupplier from "./selectSupplier.vue";
+import { getPartBrand } from "@/api/business/stockSearch";
+import getDate from "@/components/getDate/dateget_bill.vue";
 
-@Component
+@Component({
+  components:{
+    getDate
+  }
+})
 export default class ProcurementModal extends Vue {
   private shows: boolean = false;
   private selectRow: any = null;
@@ -149,7 +143,15 @@ export default class ProcurementModal extends Vue {
     total: 0
   };
 
-  private tableData: Array<any> = new Array();
+  private tableData: Array<any> = [
+    {serviceId:'123'},
+    {serviceId:'456'},
+    {serviceId:'789'},
+    ];
+
+  private band:any = '0' //获取当前品牌code
+
+  private bands: Array<any> =[{ value: "0", label: "全部" }] //品牌列表
 
   private tableDataBm: Array<any> = new Array();
 
@@ -170,11 +172,11 @@ export default class ProcurementModal extends Vue {
     return this.selectRow;
   }
 
-  // 选择供应商
-  // private selectSupplierName(row: any) {
-  //   this.guestId = row.id;
-  //   this.guestname = row.fullName;
-  // }
+
+//生命周期
+  created () {
+    this.getBand() //调用品牌接口
+  }
 
   private showModel(name) {
     let ref: any = this.$refs[name];
@@ -194,24 +196,61 @@ export default class ProcurementModal extends Vue {
     this.serviceId = "";
   }
 
-  private cellClickEvent() {
-    // console.log("单元格点击事件");
+  //点击全选
+  private cellClickEvent( {selection} ) {
+    // console.log(selection);
   }
-  private radioChangeEvent({ row }) {
-    this.selectRow = row;
-    // console.log(this.selectRow)
-    this.tableDataBm = row.details || [];
+
+  //点击复选框获取当前已选择数据
+  private radioChangeEvent( {selection} ) {
+    this.selectRow = selection;
+    // console.log(this.selectRow , 7777)
+    // this.tableDataBm = row.details || [];
   }
+
+  //获取保留复选数据
+  getReserve(v){
+    console.log(v)
+  }
+
 
   private query() {
     this.page.num = 1;
     this.getPchsPlanList();
   }
 
-  //获取日期
-  private getDate(v){
+  //快速查询日期
+  private getDataQuick(v){
     this.auditDate = v
   }
+
+
+  //出库日期获取
+  private getDate(v){
+    if (v[0]){
+      v[0] = v[0] + " 00:00:00"
+      v[1] = v[1] + " 23:59:59"
+    }
+    this.auditDate = v
+  }
+
+  //获取品牌
+  private async getBand() {
+    let res:any = await getPartBrand({ pageSize: 10000 });
+    if (res.code === 0) {
+      let arr:any = [];
+      res.data.content.forEach(item => {
+        arr.push(...item.children);
+      });
+      arr.map(item => {
+        this.bands.push({
+          value: item.code,
+          label: item.name
+        });
+      });
+    }
+  }
+
 
   private async getPchsPlanList() {
     let params: any = {};
@@ -232,7 +271,7 @@ export default class ProcurementModal extends Vue {
     let res:any = await api.getPchsPlan(params, formData);
     if(res.code == 0) {
       this.page.total = res.data.totalElements;
-      this.tableData = res.data.content;
+      // this.tableData = res.data.content;
     }
   }
 

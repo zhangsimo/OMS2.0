@@ -3,11 +3,11 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled" false-value="0" true-value="1" />
+        <Checkbox v-model="data.isDisabled"  />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier" false-value="0" true-value="1" />
+        <Checkbox v-model="data.isSupplier"  />
       </span>
       <span class="isDisabeld">
         客户
@@ -158,10 +158,10 @@
             </div>
           </div>
           <span style="margin-left: 100px">
-            <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
+            <Checkbox v-model="data.isNeedPack" ></Checkbox>需求打包发货
           </span>
           <span style="margin-left: 100px">
-            <Checkbox v-model="data.isFatCompany" false-value="0" true-value="1" ></Checkbox>是否成品油企业
+            <Checkbox v-model="data.isFatCompany"  ></Checkbox>是否成品油企业
           </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
@@ -799,6 +799,15 @@
         }
         this.newplace = true;
         this.title = "修改收货地址";
+      },
+
+      //表单清除
+      handleReset () {
+        this.data.isNeedPack = false
+        this.data.isFatCompany = false
+        this.data.isDisabled = false
+        this.data.isSupplier = false
+        this.$refs.form.resetFields();
       },
       //新增地址
       addPlace() {

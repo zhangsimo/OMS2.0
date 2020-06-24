@@ -84,7 +84,7 @@
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};
-          this.formItemData.orderQty = 0
+          this.formItemData.orderQty = null
         }
 
       },
@@ -101,11 +101,13 @@
       },
       submit(){
 		    if(this.formItemData.orderQty>0){
-		      console.log(this.formItemData)
           this.searchPartLayer = false;
-          this.$parent.$parent.getPartNameList([this.formItemData]);
+          this.$parent.$parent.getPartNameList2([this.formItemData]);
         }else{
-		      this.$message.error("数量请输入大于0的正整数")
+		      setTimeout(() => {
+            this.$message.error("数量请输入大于0的正整数")
+          },50);
+
         }
 
 
