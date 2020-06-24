@@ -283,13 +283,11 @@ import {
   queryCreditLike,
   getStaffList,
   getDataDictionaryType,
+  getcompany,
   kmType,
   saveTreeDetailItem
 } from "@/api/settlementManagement/VoucherInput"
 export default {
-  props:{
-    oneAccountent: Object, //获取到的会计科目
-  },
   data(){
     return {
       currTab:'client',//当前tab页
@@ -330,10 +328,13 @@ export default {
         } //分页
       },
       categoryArr: [], //类别数组
+      oneAccountent: {}, //获取到的会计科目
       selectClass: 0,
       accountingName: "", //核算名称
       OtherModalAdd: false, //其他辅助弹框新增弹框状态
       AssistTableDataOther: [], //辅助弹框其他
+      dictCode:"CW0011X",
+      dictName:"",
       formAdd: {
         assistName: "" //新增辅助核算名称
       },
@@ -368,30 +369,34 @@ export default {
   mounted() {
     this.OtherClickTable();
     this.fundGetList();
+    this.OtherGetlist(); //其他初始化
     // this.SelectGetlistJi();
     // this.businessType();
+    this.ClientgetList(); //客户初始化
+    this.SupperliergetList(); //供应商初始化
+    this.getListCompany(); // 公司
   },
   methods:{
-    // //计、收、付、转下拉框
-    // SelectGetlistJi() {
-    //   let params = {};
-    //   params.dictCode = "CW00010";
-    //   kmType(params).then(res => {
-    //     if (res.code === 0) {
-    //       this.formPlan.cityList = res.data;
-    //     }
-    //   });
-    // },
-    // //业务类型
-    // businessType() {
-    //   let params = {};
-    //   params.dictCode = "CW00020";
-    //   kmType(params).then(res => {
-    //     if (res.code === 0) {
-    //       this.formPlan.businessTypes.push(...res.data);
-    //     }
-    //   });
-    // },
+    // 计、收、付、转下拉框
+    SelectGetlistJi() {
+      let params = {};
+      params.dictCode = "CW00010";
+      kmType(params).then(res => {
+        if (res.code === 0) {
+          this.formPlan.cityList = res.data;
+        }
+      });
+    },
+    //业务类型
+    businessType() {
+      let params = {};
+      params.dictCode = "CW00020";
+      kmType(params).then(res => {
+        if (res.code === 0) {
+          this.formPlan.businessTypes.push(...res.data);
+        }
+      });
+    },
     //辅助核算确定弹框
     confirmFuzhu() {
       if (this.Classification) {
@@ -403,11 +408,11 @@ export default {
             } else {
             this.subjectModelShowassist = false;
             this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
-            this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
-            this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
-            if (this.oneAccountent.auxiliaryTypeCode == "3") {
-            this.oneAccountent.auxiliaryCode = this.departmentVal;
-            }
+            // this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
+            // this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
+            // if (this.oneAccountent.auxiliaryTypeCode == "3") {
+            //   this.oneAccountent.auxiliaryCode = this.departmentVal;
+            // }
             }
         } else {
             this.$Message.error("请选择款项分类!");
@@ -417,11 +422,56 @@ export default {
     } else {
         this.subjectModelShowassist = false;
         this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
-        this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
-        this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
-        if (this.oneAccountent.auxiliaryTypeCode == "3") {
-        this.oneAccountent.auxiliaryCode = this.departmentVal;
-        }
+        // this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
+        // this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
+        // if (this.oneAccountent.auxiliaryTypeCode == "3") {
+        //   this.oneAccountent.auxiliaryCode = this.departmentVal;
+        // }
+      }
+    },
+    //获取公司
+    async getListCompany() {
+      let data = {};
+      data.groupId = this.$store.state.user.userData.tenantGroupId;
+      data.shopId = this.$store.state.user.userData.shopId;
+      let res = await getcompany(data);
+      if (res.code === 0) {
+        let list = [];
+        res.data.childs.forEach(item => {
+          if (item.childs.length > 0) {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: item.childs,
+              groupCode: item.groupCode
+            });
+          } else {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: [],
+              groupCode: item.groupCode
+            });
+          }
+        });
+        list.forEach(item => {
+          if (item.children.length > 0) {
+            item.children.map(val => {
+              val.value = val.id;
+              val.label = val.name;
+              if (val.childs.length > 0) {
+                val.children = val.childs;
+                val.children.map(v => {
+                  v.value = v.id;
+                  v.label = v.name;
+                });
+              } else {
+                val.children = [];
+              }
+            });
+          }
+        });
+        this.list = list;
       }
     },
     //客户搜索模糊查询

@@ -284,7 +284,7 @@
 <script>
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import {creat} from '../../components'
-  import importXLS from '../../components/importXLS'
+  import importXLS from '@/view/settlementManagement/components/importXLS'
   import artificial from '../../components/artificial'
   import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getTableList}from '@/api/accountant/accountant'

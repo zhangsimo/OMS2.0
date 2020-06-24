@@ -320,7 +320,7 @@ import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
 import PrintShow from "./compontents/PrintShow";
-import selectPartCom from "./compontents/selectPartCom";
+import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom";
 import GoodsInfo from "./compontents/goodsInfo";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
