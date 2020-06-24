@@ -13,7 +13,7 @@ export function conversionList(val){
         partCode : data.partCode || '',
         fullName : data.fullName || '',
         oemCode : data.oeCode || '',
-        orderQty:data.orderQty||1,
+        orderQty:undefined,
         partBrand : data.partBrand || '',
         carBrandName : data.adapterCarBrand || '',
         carModelName : data.adapterCarModel|| '',

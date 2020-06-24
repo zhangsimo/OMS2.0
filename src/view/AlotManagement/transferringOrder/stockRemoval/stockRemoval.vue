@@ -257,6 +257,7 @@
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
                 </vxe-table>
               </div>
             </Split>

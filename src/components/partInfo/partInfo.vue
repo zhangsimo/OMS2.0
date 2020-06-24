@@ -84,7 +84,7 @@
             </Row>
             <Row>
               <Col span="22">
-                <FormItem label="适用车型：" class="car-item-w" prop="">
+                <FormItem label="适用车型：" class="car-item-w" :class="{'ivu-form-item-error':isCart}" prop="">
                   <div class="car-con-item" v-for="(v,vi) in carList">
                     <Select
                       @on-change="getSelectCarBrand"
