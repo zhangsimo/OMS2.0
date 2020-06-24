@@ -743,6 +743,42 @@
           this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
           this.$Message.success("已添加");
         },
+
+        //添加配件双击配件填入的数据
+        getPartNameList2(ChildMessage){
+          let parts = ChildMessage.map( item => {
+
+            return {
+              partName : item.partStandardName,
+              unit : item.minUnit,
+              // oemCode : item.brandPartCode,
+              // spec : item.specifications,
+              enterUnitId : item.direction,
+              applyQty :item.orderQty||1,
+              remark : '',
+              partInnerId : item.code,
+              partCode : item.partCode,
+              oemCode : item.oeCode,
+              partBrand : item.partBrand,
+              carBrandName : item.adapterCarBrand,
+              carModelName : item.adapterCarModel,
+              carTypef : item.baseType ? item.baseType.firstType ? item.baseType.firstType.typeName ? item.baseType.firstType.typeName : '' : '' : '',
+              cartypes : item.baseType ? item.baseType.secondType ? item.baseType.secondType.typeName ? item.baseType.secondType.typeName : '' : '': '',
+              carTypet : item.baseType ? item.baseType.thirdType ? item.baseType.thirdType.typeName ? item.baseType.thirdType.typeName : '': '': '',
+              spec : item.specifications,
+              partId : item.id,
+              fullName : item.fullName,
+              systemUnitId : item.minUnit,
+              isTight: !!item.isTightPart == true? 1:0,
+            }
+          })
+          this.Right.tbdata = [...this.Right.tbdata,...parts]
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.$Message.success("已添加");
+        },
+
+
+
         //编辑收货信息弹框显示
         GoodsInfoModal(){
           if(!this.datadata || this.datadata.new) return this.$Message.error('请先保存数据');
@@ -1018,16 +1054,14 @@
         handleSuccess(res, file) {
           let self = this;
           if (res.code == 0) {
-            if (res.data.errosMsg.length > 0) {
-              this.warning(res.data.errosMsg);
-            } else  {
-              self.$Message.success("导入成功");
-            }
-            this.tableData = [...this.tableData, ...res.data.details].map(item => {
-              item.uuid = v4();
-              return item;
-            });
-            this.tableData.push();
+            this.Left.tbdata.forEach(el => {
+              if (el.id == this.selectRowId) {
+                el._highlight = true;
+                this.isAdd = true;
+                this.setRow(el);
+                self.$Message.success("导入成功");
+              }
+            })
           } else {
             self.$Message.error(res.message);
           }

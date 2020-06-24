@@ -150,8 +150,8 @@ export default {
       pageList: {
         page: 1,
         total: 0,
-        size: 20,
-        pageSizeOpts: [20, 30, 40]
+        size: 10,
+        pageSizeOpts: [10, 20, 30]
       },
       xuanzhognList: [],
       checkRow: {},
