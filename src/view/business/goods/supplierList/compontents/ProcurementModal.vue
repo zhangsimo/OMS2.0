@@ -127,7 +127,7 @@ import getDate from "@/components/getDate/dateget_bill.vue";
   }
 })
 export default class ProcurementModal extends Vue {
-  private shows: boolean = true;
+  private shows: boolean = false;
   private selectRow: any = null;
 
   @Prop(String)
