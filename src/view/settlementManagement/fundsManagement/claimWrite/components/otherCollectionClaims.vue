@@ -1,0 +1,345 @@
+<template>
+  <div>
+    <Modal v-model="modal" :title="claimTit" width="800" on-ok="ok">
+      <Row class="dbd" v-if="claimTit=='预收款认领'">
+        <i-col span="12">
+          <button class="ivu-btn ivu-btn-default mr10" type="button" @click="openClimed('预收款认领')">{{claimTit}}</button>
+        </i-col>
+        <i-col span="12">
+          <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
+           <!-- @change="changeModel" -->
+        </i-col>
+      </Row>
+      <Row  class="dbd" v-else>
+        <i-col span="8">
+          <button class="ivu-btn ivu-btn-default mr10" type="button" @click="openClimed('其他收款认领')">{{claimTit}}</button>
+        </i-col>
+        <i-col span="6">
+          <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成其他收款单号</Checkbox>
+           <!-- @change="changeModel" -->
+        </i-col>
+        <i-col span="10">
+          <Form :model="formValidate" :rules="ruleValidate">
+            <FormItem label="选择辅助核算">
+              <Row>
+                <i-col span="8">
+                    <i-input :value.sync="formValidate.voucherInput" ></i-input>
+                </i-col>
+                <i-col span="2">
+                    <Button type="default" @click="openVoucherInput">辅助核算</Button>                  
+                </i-col>
+              </Row>
+            </FormItem>
+          </Form>
+        </i-col>
+      </Row>
+      <vxe-table
+        border
+        align="center"
+        ref="xTable"
+        :edit-rules="validRules"
+        highlight-hover-row
+        auto-resize
+        height="300"
+        @current-change="currentChangeEvent"
+        :edit-config="{trigger: 'click', mode: 'cell'}"
+        size="mini"
+        :data="accrued"
+      >
+        <vxe-table-column type="seq" title="序号"></vxe-table-column>
+        <vxe-table-column field="area" title="所属区域"></vxe-table-column>
+        <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
+        <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
+        <vxe-table-column field="accountName" title="账户"></vxe-table-column>
+        <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
+        <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
+        <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
+        <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+        <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
+        <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+        <vxe-table-column
+          field="rpAmt || balanceMoney"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+          title="本次认领金额"
+          align="center"
+        ></vxe-table-column>
+        <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
+        <vxe-table-column
+          field="tradingNote"
+          :edit-render="{name: 'input',immediate:true, attrs: {type: 'text'}}"
+          title="交易备注"
+          align="center"
+        ></vxe-table-column>
+      </vxe-table>
+    </Modal>
+    <!-- 认领弹框 -->
+    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
+      <span>往来单位：</span>
+      <Select v-model="companyId" class="w150" filterable>
+        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+      <span class="ml10">金额：</span>
+      <InputNumber v-model="amt" class="w50" />
+      <span class="ml10">对方户名：</span>
+      <Input v-model="bankName" class="w100" />
+      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
+        <i class="iconfont iconchaxunicon"></i>
+        <span>查询</span>
+      </button>
+      <Button class="ml10" v-if="claimTit == '其他收款认领'" @click="claimPay">认领</Button>
+      <Button class="ml10" v-else @click="claimCollection">认领</Button>
+      <claim ref="claim" @selection="selection" />
+      <div slot="footer"></div>
+    </Modal>
+    <claimGuest ref="claimGuest"></claimGuest>
+    <!-- 辅助核销计算 -->
+    <voucherInput ref="voucherInput" :oneAccountent="accrued"></voucherInput>
+    <!--其他收款核销-->
+    <settlement ref="settlement"></settlement>
+  </div>
+</template>
+<script>
+import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
+import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
+import quickDate from "@/components/getDate/dateget_bill.vue";
+import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
+
+import {findGuest} from "@/api/settlementManagement/advanceCollection.js";
+import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
+import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
+import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
+
+export default {
+  props: {
+    accrued: "", //表格数据
+  },
+  components: {
+    voucherInput,claim,settlement,claimGuest
+  },
+  data() {
+    const amtValid = ({ row }) => {
+      return new Promise((resolve, reject) => {
+        let trueValue =
+          Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
+        if (trueValue) {
+          reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+        } else {
+          resolve(true);
+        }
+      });
+    };
+    return {
+      voucherinputModel: false,
+      formValidate:{voucherInput:""},
+      ruleValidate:{
+        voucherInput:[{ required: true, message: '不能为空', trigger: 'blur' }]
+      },
+      // 表格验证  本次认领金额  是否符合条件
+      validRules: {
+        rpAmt: [{ required: true, validator: amtValid }]
+      },
+      modal: false, //模态框展示
+      oneSubject: {}, //单选获取到的数据
+      company: [], //往来单位数组
+      companyId: "", //往来单位
+      claimModal: false, //认领弹框
+      claimTit: "预收款认领", //认领弹框标题
+      amt: null, //认领弹框金额
+      bankName: "", //认领弹框对方户名
+      tableData: [], //表格信息
+      page: {
+        num: 1,
+        size: 10,
+        total: 0,
+        opts: [20, 50, 100, 200]
+      }, //分页
+      serviceId: "", //给子组件传的值,
+      MessageValue:"",
+      claimSelection: []
+    };
+  },
+  mounted(){
+      this.getOne()
+  },
+  methods: {
+    // 打开模态框
+    open() {
+      this.oneSubject = {};
+      this.modal = true;
+    },
+    //判断是否可选择
+    checkMethod({ row }) {
+      return row.isDetailSubject == 0;
+    },
+    //获取单选框
+    getRaido({ row }) {
+      this.oneSubject = row;
+    },
+    openVoucherInput() {
+      this.$refs.voucherInput.subjectModelShowassist = true;
+    },
+    openClimed(claimTit){
+        if(this.voucherinputModel==false){
+          this.$refs.claimGuest.modal=true
+        }else{
+          this.$refs.voucherInput.subjectModelShowassist = true;
+          this.claimedList(2);
+        }
+    },
+    //预收款弹框是否打开
+    visChangeClaim(type) {
+      this.$refs.claim.currentClaimed = {};
+      if (!type) {
+        this.companyId = "";
+        this.amt = null;
+        this.claimSelection = [];
+      }
+    },
+    //认领弹框传参数据
+    selection(arr) {
+      this.claimSelection = [];
+      this.claimSelection.push({ id: arr.id });
+    },
+    //其他付款认领弹窗查询
+    claimedList(type) {
+      let obj = {
+        amount: this.amt,
+        reciprocalAccountName: this.bankNameO,
+        page: this.$refs.claim.claimedPage.page - 1,
+        size: this.$refs.claim.claimedPage.size,
+        amountType: type,
+        guestId: this.companyId
+      };
+      claimedFund(obj).then(res => {
+        if (res.code === 0) {
+          this.$refs.claim.claimedData = res.data.content;
+          this.$refs.claim.claimedPage.total = res.data.totalElements;
+        }
+      });
+    },
+    //认领弹框查询
+    queryClaimed() {
+      if (this.claimTit === "其他付款认领") {
+        this.claimedList(2);
+      } else {
+        this.claimedList(2);
+      }
+    },
+    //收回认领
+    claimCollection() {
+      if (Object.keys(this.$refs.claim.currentClaimed).length !== 0) {
+        if (
+          Math.abs(this.$refs.claim.currentClaimed.incomeMoney) <
+          this.oneSubject.paymentBalance
+        ) {
+          this.paymentId = "YSK";
+          this.typeA = "收回";
+        } else {
+          this.$message.error("收入金额大于其他其他收款余额，无法认领");
+        }
+      } else {
+        this.$message.error("请选择认领的数据");
+      }
+    },
+    //子组件的数据
+    getMessage(value) {
+      this.MessageValue = value[0].startStatus.name;
+    },
+    //认领弹框认领
+    claimPay() {
+      if (Object.keys(this.$refs.claim.currentClaimed).length !== 0) {
+        if (
+          Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
+          this.oneSubject.applyAmt
+        ) {
+          this.$refs.settlement.Settlement = true;
+          this.paymentId = "YJDZ";
+        } else {
+          this.$message.error("金额大于其他付款申请金额，无法认领");
+        }
+      } else {
+        this.$message.error("请选择认领的数据");
+      }
+    },
+    //认领弹框传参数据
+    selection(arr) {
+      this.claimSelection = [];
+      this.claimSelection.push({ id: arr.id });
+    },
+    // 往来单位选择
+    async getOne() {
+      findGuest({ size: 2000 }).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item => {
+            this.company.push({
+              value: item.id,
+              label: item.fullName
+            });
+          });
+        }
+      });
+    },
+    // 选中行
+    currentChangeEvent({ row }) {
+      this.oneSubject = row;
+    //   this.reconciliationStatement.accountNo = row.serviceId;
+    //   this.serviceId = row.serviceId;
+    //   this.$refs.Record.init();
+    },
+    //表尾合计
+    footerMethod({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "合计";
+          }
+          if (
+            [
+              "applyAmt",
+              "writeOffAmount",
+              "paymentRegainAmt",
+              "paymentBalance"
+            ].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property);
+          }
+          return null;
+        })
+      ];
+    },
+    changeModel(){
+      this.$refs.voucherInput.modal=!this.$refs.voucherInput.modal
+      if(this.voucherinputModel=true){
+          this.openVoucherInput()
+      }else{
+          this.$refs.voucherInput.modal=false
+      }
+    },
+    async ok(){
+      if(!this.voucherinputModel){
+        let data = {};
+        data.detailId = this.accrued[0].id;
+        if(this.claimTit=="预收款认领"){
+          data.subjectCode="1123"; 
+          data.climeType=3
+        }else{
+          data.subjectCode="2241";
+          data.climeType=5
+        }
+        let res = await TurnToTheProfitAndLoss(data);
+        if (res.code === 0) {
+          this.modal = false;
+          this.claimTit=="预收款认领"?this.$Message.success("预收款认领成功"):this.$Message.success("其他收款认领成功")
+        }
+      }else{
+        
+      }
+    }
+  }
+};
+</script>
+<style lang="less" scoped>
+.dbd {
+  padding-bottom: 25px;
+}
+</style>

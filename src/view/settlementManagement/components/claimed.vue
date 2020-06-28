@@ -23,9 +23,10 @@
   </div>
 </template>
 <script>
-import * as api from "_api/settlementManagement/advanceCharge";
+import * as api from "@/api/settlementManagement/advanceCharge";
 import { mapGetters,mapMutations } from "vuex";
-import bus from '../bill/Popup/Bus'
+import bus from '@/view/settlementManagement/bill/Popup/Bus'
+// import bus from '../bill/Popup/Bus'
 export default {
   data() {
     return {

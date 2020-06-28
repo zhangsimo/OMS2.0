@@ -401,7 +401,7 @@
         }
       },
       async mounted(){
-        this.$refs.partInfo.init();
+        // this.$refs.partInfo.init();
           this.getShop();
           // console.log(this.$store.state.user.userData)
         this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;

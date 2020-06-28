@@ -297,6 +297,8 @@ export default {
           sign = 7;
         } else if (this.$parent.type === 2) {
           sign = 8;
+        } else if (this.$parent.type === 3) {
+          sign = 9;
         }
         let accountNo = this.$parent.reconciliationStatement
           ? this.$parent.reconciliationStatement.accountNo

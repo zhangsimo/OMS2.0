@@ -552,8 +552,8 @@ export default {
       this.newStaff = JSON.parse(JSON.stringify(this.oneStaffChange)) //用户名
       this.newStaff.single = this.newStaff.single == 1 ? true : false; //允许查看
       this.newStaff.singtwo = this.newStaff.singtwo == 1 ? true : false; //允许提交
-      this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
-      console.log(this.newStaff)
+      // this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
+      this.newStaff.groundIds = this.newStaff.groundIds||[];
       this.modalShow = true;
     },
     //员工离职

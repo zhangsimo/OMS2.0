@@ -2,7 +2,7 @@
   <div>
     <Modal v-model="searchPartLayer" title="配件名称查询" width="1000">
       <div class="partCheck-hd">
-        <Input class="w200 mr10" v-model="partName"></Input>
+        <Input class="w200 mr10" v-model="partName" placeholder="请输入配件名称"/>
         <Button @click="search" class="mr10" type="primary">
           <Icon type="ios-search" size="14" />查询
         </Button>
@@ -12,13 +12,13 @@
         <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
       </div>
       <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
+        <!-- <div class="partCheck-left fl">
           <div class="partCheck-left-tit">系统分类</div>
           <div class="partCheck-left-tree">
             <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
           </div>
-        </div>
-        <div class="fr partCheck-right" style="width: 758px">
+        </div> -->
+        <div>
           <Table
             height="389"
             @on-current-change="selectTabelData"
@@ -135,20 +135,21 @@ export default {
     },
     getList() {
       this.loading = true;
+      let params = {};
       let req = {};
-      req.typeId = this.selectTreeItem.id;
+      // req.typeId = this.selectTreeItem.id;
       if (this.partName.trim()) {
         req.name = this.partName.trim();
       }
-      req.page = this.page.num;
-      req.pageSize = this.page.size;
-      getCarPartName(req).then(res => {
+      params.page = this.page.num - 1;
+      params.size = this.page.size;
+      getCarPartName(params, req).then(res => {
         if(res.data){
           this.objectValue = res.data.content[0];
           this.selectTableItem = this.objectValue;
           this.loading = false;
           this.partData = res.data.content || [];
-          this.page.total = res.data.total;
+          this.page.total = res.data.totalElements;
         }
       });
     },
@@ -166,7 +167,7 @@ export default {
     //显示层
     init() {
       this.searchPartLayer = true;
-      this.getCarClassifysFun();
+      // this.getCarClassifysFun();
     },
     //配件表格点击的行
     selectTabelData(v) {

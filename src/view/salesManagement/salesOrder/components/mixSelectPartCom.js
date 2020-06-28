@@ -392,7 +392,9 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      this.$refs.selectPartInfo.init(v);
+      if(this.$route.name=="salesOrder"){
+        this.$refs.selectPartInfo.init(v);
+      }
     }
   }
 };

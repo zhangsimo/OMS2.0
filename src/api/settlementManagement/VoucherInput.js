@@ -42,7 +42,7 @@ export function getcompany (params) {
     url: `${api.authApi}/group/findRootGroup`,
     method: 'get',
     params
-  })
+  }) 
 }
 // // 选择辅助核算个人查询
 // https://tsapi2.g-parts.cn/gpart-passport-provider/staff/findAll

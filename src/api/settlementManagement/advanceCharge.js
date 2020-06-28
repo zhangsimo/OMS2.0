@@ -9,7 +9,13 @@ export function findPageByDynamicQuery(params) {
     params,
   });
 }
-
+export function findPageByDynamicQueryFirst(params) {
+  return axios.request({
+    url: `${api.omsSettle}/advancePayment/findPageByDynamicQuery`,
+    method: "get",
+    params,
+  });
+}
 // 获取附表
 export function findByAccountNo(params) {
   return axios.request({
