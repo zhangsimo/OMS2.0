@@ -399,55 +399,55 @@ export default class PriceManage extends Vue {
     this.part.page.num = 1;
     this.getPart();
   }
-  // 添加配件
-  private addAccessories(){
-    this.$refs.selectPartCom.init()
-  }
-  //配件返回的参数
-  private getPartNameList(val:any) {
-    var arr = []
-    val.forEach(item => {
-      item.partName = item.partStandardName;
-      item.hasAcceptQty = undefined;
-      item.carBrandName = item.adapterCarModel;
-      item.orderPrice = item.minUnit;
-      item.oemCode = item.oeCode;
-      item.spec = item.specifications;
-      item.partId = item.orgid;
-      item.partInnerId = item.code;
-      item.unit = item.minUnit;
-      let el = Object.assign({}, item);
-      delete el.id;
-      delete el.orderPrice;
-      arr.push(el)
-    });
-    var allArr = []; //新数组
-    this.Leftcurrentrow.detailVOS = [
-      ...this.Leftcurrentrow.detailVOS,
-      ...arr
-    ];
-    var allArr = [];
-    var oldArr = this.Leftcurrentrow.detailVOS;
-    for (var i = 0; i < oldArr.length; i++) {
-      var flag = true;
-      for (var j = 0; j < allArr.length; j++) {
-        if (oldArr[i].oemCode == allArr[j].oemCode) {
-          flag = false;
-        }
-      }
-      if (flag) {
-        allArr.push(oldArr[i]);
-      }
-    }
-    this.Leftcurrentrow.detailVOS = allArr;
-    setTimeout(()=>{
-      this.$Message.success("已添加");
-    },0)
-  }
-  // 导入模板
-  private importModule(){
-    this.$refs.imp.openModal()
-  }
+  // // 添加配件
+  // private addAccessories(){
+  //   this.$refs.selectPartCom.init()
+  // }
+  // //配件返回的参数
+  // private getPartNameList(val:any) {
+  //   var arr = []
+  //   val.forEach(item => {
+  //     item.partName = item.partStandardName;
+  //     item.hasAcceptQty = undefined;
+  //     item.carBrandName = item.adapterCarModel;
+  //     item.orderPrice = item.minUnit;
+  //     item.oemCode = item.oeCode;
+  //     item.spec = item.specifications;
+  //     item.partId = item.orgid;
+  //     item.partInnerId = item.code;
+  //     item.unit = item.minUnit;
+  //     let el = Object.assign({}, item);
+  //     delete el.id;
+  //     delete el.orderPrice;
+  //     arr.push(el)
+  //   });
+  //   var allArr = []; //新数组
+  //   this.Leftcurrentrow.detailVOS = [
+  //     ...this.Leftcurrentrow.detailVOS,
+  //     ...arr
+  //   ];
+  //   var allArr = [];
+  //   var oldArr = this.Leftcurrentrow.detailVOS;
+  //   for (var i = 0; i < oldArr.length; i++) {
+  //     var flag = true;
+  //     for (var j = 0; j < allArr.length; j++) {
+  //       if (oldArr[i].oemCode == allArr[j].oemCode) {
+  //         flag = false;
+  //       }
+  //     }
+  //     if (flag) {
+  //       allArr.push(oldArr[i]);
+  //     }
+  //   }
+  //   this.Leftcurrentrow.detailVOS = allArr;
+  //   setTimeout(()=>{
+  //     this.$Message.success("已添加");
+  //   },0)
+  // }
+  // // 导入模板
+  // private importModule(){
+  //   this.$refs.imp.openModal()
+  // }
   //导入成功后刷新页
   private getNew(data){}
   // 保存配件
