@@ -73,10 +73,11 @@ export function getCarClassifys(data) {
 }
 
 //获取标准名称
-export function getCarPartName(data) {
+export function getCarPartName(params, data) {
   return axios.request({
-    url: `${api.wmsApi}/wbPub/getPartStandardName`,
+    url: `${api.omsProduct}/partName/queryByConditions`,
     method: 'post',
+    params,
     data
   })
 }
