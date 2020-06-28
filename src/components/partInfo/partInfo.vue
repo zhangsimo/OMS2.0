@@ -66,7 +66,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="二级分类：" prop="partTypeS">
-                  <Select v-model="formValidate.partTypeS" filterable>
+                  <Select v-model="formValidate.partTypeS" @on-change="changetypeS" filterable>
                     <Option
                       v-for="item in typeps"
                       :value="item.typeId"
