@@ -2,8 +2,8 @@ import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/system/priceManage";
 import DiaLog from "./dialog.vue";
-import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom";
-import importXLS from '@/view/settlementManagement/components/importXLS'
+import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
+import importXLS from '@/view/settlementManagement/components/importXLS.vue'
 
 
 @Component({
