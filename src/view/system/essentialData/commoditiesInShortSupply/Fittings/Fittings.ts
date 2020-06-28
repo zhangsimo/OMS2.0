@@ -329,9 +329,9 @@ export default class Fittings extends Vue {
       data.partCode = queryValue;
     }
     // console.log(this.query)
-    if (this.band != "0") {
-      // data.partBrandId = this.band;
-      data.partBrandCode = this.band;
+    if (this.band&&this.band != "0") {
+      data.partBrandId = this.band;
+      // data.partBrandCode = this.band;
     }
     if (this.selectTreeId) {
       // data.carTypeIdThr = this.selectTreeId;
