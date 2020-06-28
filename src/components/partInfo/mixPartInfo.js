@@ -158,9 +158,18 @@ export const mixPartInfo = {
     async treeInit() {
       let res = await getCarPartClass();
       this.typepf = res;
+      if(this.formValidate.partTypeF) {
+        this.changetype(this.formValidate.partTypeF);
+      }
     },
-    changetype(v) {
-      this.typeps = this.typepf.filter(el => el.typeId === v)[0].children;
+    changetype(v) { 
+      let item = this.typepf.filter(el => el.typeId === v)[0];
+      this.formValidate.carTypefName = item.title || item.name;
+      this.typeps = item.children
+    },
+    changetypeS(v) {
+      let item = this.typeps.filter(el => el.typeId === v)[0];
+      this.formValidate.carTypesName = item.title || item.name;
     },
     // 弹框打开关闭
     visible(type) {
@@ -202,7 +211,7 @@ export const mixPartInfo = {
         this.formValidate = setData;
 
         // console.log(setData)
-
+        
         //赋值适用车型
         let carModelName = setData.carModelName.split("|");//车系
         let carBrandName = setData.carBrandName.split("|");//车品牌

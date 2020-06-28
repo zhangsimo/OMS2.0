@@ -20,15 +20,15 @@ const dev = {
   omsSotck: "http://192.168.30.21:9280", //9280
 
   /**oms系统接口设定 */
-  tokenApi: "http://192.168.2.48:5600", // 登录接口API
-  authApi: "http://192.168.2.48:5200", // 系统资源 5200
-  passportApi: "http://192.168.2.48:5200", // passport微服务API
+  tokenApi: "http://192.168.2.47:5600", // 登录接口API
+  authApi: "http://192.168.2.47:5200", // 系统资源 5200
+  passportApi: "http://192.168.2.47:5200", // passport微服务API
   // tokenApi: "http://192.168.30.226:5600",
   // authApi: "http://192.168.30.226:5200",
   // passportApi: "http://192.168.30.226:5200",
 
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
-  uploadApi: "http://192.168.2.48:5100/file/uploadFile",
+  uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
