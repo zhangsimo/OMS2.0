@@ -53,6 +53,8 @@
 <script>
     import {getUserAllCompany , setCompany ,changeToken , getService} from '@/api/base/user'
     import {setToken} from '@/libs/util'
+    import { mapActions } from "vuex";
+
     export default {
     name: 'other-item',
       components: {
@@ -81,7 +83,8 @@
           this.shopkeeper = this.$store.state.user.userData.shopkeeper
       },
       methods: {
-          toImage() {
+        ...mapActions(["handleLogin", "getUserInfo"]),
+        toImage() {
            this.$emit('getImg',{})
           },
           //打开公司选择模态框
@@ -119,7 +122,7 @@
              //切换公司跟换token(权限设置)
              let res = await setCompany(data)
                   if(res.code === 0){
-                      this.$store.commit('setUserShopName' , res.data.shopName)
+                      // this.$store.commit('setUserShopName' , res.data.shopName)
                       let data = {}
                       data.tenantId = res.data.tenantId
                       data.shopId = res.data.shopId
@@ -129,10 +132,20 @@
                     let token = await changeToken( res.data)
                       if(token.code == 0){
                           setToken(token.data.access_token)
+                        let username = this.$store.state.user.username
+                        this.getUserInfo(username).then(res => {
+                          let data = {};
+                          data.tenantId = res.tenantId;
+                          data.shopId = res.shopId;
+                          data.shopkeeper = res.shopkeeper;
+                          localStorage.setItem("oms2-userList", JSON.stringify(data));
+                          this.$nextTick( () => {
+                            this.$router.go(0);
+                          })
+
+                        })
+
                       }
-                      this.$nextTick( () => {
-                          this.$router.go(0);
-                      })
                   }
 
 

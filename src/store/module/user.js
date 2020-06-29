@@ -117,11 +117,12 @@ export default {
 
         getUserInfo(username).then(res => {
           const data = res.data
+          console.log(data , 888888)
             let access = data.resourceVOS && data.resourceVOS.map(item => item.name)
             commit('setAccess', access)
             commit('setUserId', data.id)
             commit('setUserData', data)
-            commit('setUserShopName', data.shopName)
+            commit('setUserShopName', data.currentShopName)
           loginIsOpen = true
           // localStorage.tenantId = data.tenantId
           resolve(data)
