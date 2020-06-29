@@ -43,7 +43,7 @@
           >
         </div>
         <div class="db mr5">
-          <Button type="default" @click="cancel"
+          <Button type="default" @click="selectOrder"
             >整单选择</Button
           >
         </div>
@@ -61,7 +61,6 @@
         :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
-        @getCheckboxReserveRecords='getReserve'
         auto-resize
       >
         <vxe-table-column
@@ -159,13 +158,45 @@ export default class ProcurementModal extends Vue {
 
   @Emit('getPlanOrder')
   private ok() {
-    if(this.selectRow.length <= 0) { return this.$Message.error('请选择采购入库单'); };
-    this.shows = false;
+    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    // this.shows = false;
     this.selectRow.forEach((el:any) => {
       el.sourceDetailId = el.id;
       Reflect.deleteProperty(el, 'id');
     })
     return this.selectRow;
+  }
+
+  @Emit('getPlanOrder')
+  private async selectOrder() {
+    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    
+    let msg:any = this.$Message.loading({
+      content: '加载中...',
+      duration: 0
+    });
+
+    let row = this.selectRow[0];
+
+    let params: any = {
+      guestId: this.guestId,
+      storeId: this.storeId,
+      code: row.code,
+    }
+    params.size = 9999;
+    params.page = 0;
+
+    let res:any = await getParts(params); 
+    let data:Array<any> = new Array();
+    if(res.code == 0) {
+      data = (res.data.content || []).map(el => {
+        el.sourceDetailId = el.id;
+        Reflect.deleteProperty(el, 'id');
+        return el;
+      });  
+    }
+    msg();
+    return data;
   }
 
 

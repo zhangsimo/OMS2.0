@@ -450,9 +450,12 @@ export default {
     PrintShow
   },
   data() {
-    let changeNumber = ({ cellValue }) => {
+    let changeNumber = ({cellValue, row: { canReQty } }) => {
       const reg = /^[1-9]\d{0,}$/;
       if (!reg.test(cellValue)) {
+        return Promise.reject(new Error("数量输入不正确"));
+      }
+      if(canReQty < cellValue) {
         return Promise.reject(new Error("数量输入不正确"));
       }
     };
@@ -868,13 +871,22 @@ export default {
     //选择采购入库单
     getPlanOrder(Msg) {
       let arr = Msg || [];
+
+      if (arr.length <= 0) return;
+
       arr.map(item => {
         item.outUnitId = item.enterUnitId;
+        item.unit = item.enterUnitId;
+        item.systemUnitId = item.enterUnitId;
         item.canReQty = item.enterQty;
         item.orginOrderQty = item.orderQty;
+        item.orderQty = item.rtnableQty;
+        item.orderPrice = item.enterPrice;
+        item.partInnerId = item.partId;
       });
 
-      this.Right.tbdata = arr;
+      this.Right.tbdata = this.Right.tbdata.concat(arr);
+      this.$message.success("已添加");
     },
     selectTabelData() {},
     //保存按钮
