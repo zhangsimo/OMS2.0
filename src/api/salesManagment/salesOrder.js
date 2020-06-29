@@ -231,3 +231,11 @@ export function getSupplier (data) {
   })
 }
 
+// 获取配件
+export function getParts (params) {
+  return axios.request({
+    url: `${api.omsOrder}/enterDetail/addParts`,
+    method: 'get',
+    params
+  })
+}

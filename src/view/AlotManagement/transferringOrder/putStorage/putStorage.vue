@@ -755,6 +755,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            this.propPageObj = res.data||{};
           }
         })
         .catch(e => {
