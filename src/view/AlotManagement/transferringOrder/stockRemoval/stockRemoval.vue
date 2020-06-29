@@ -257,6 +257,7 @@
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
                 </vxe-table>
               </div>
             </Split>
@@ -320,7 +321,7 @@ import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
 import PrintShow from "./compontents/PrintShow";
-import selectPartCom from "./compontents/selectPartCom";
+import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom";
 import GoodsInfo from "./compontents/goodsInfo";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";

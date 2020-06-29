@@ -5,6 +5,8 @@ import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamine
 
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
 
+import { getCarPartClass } from "_api/parts";
+
 export const mixPartInfo = {
 
   data() {
@@ -19,6 +21,8 @@ export const mixPartInfo = {
       }
     };
     return {
+      typepf: [],
+      typeps: [],
       saveFlag:false,
       //car
       isCart:false,
@@ -45,6 +49,8 @@ export const mixPartInfo = {
       customModal: false,
       //配件资料层form数据
       formValidate: {
+        partTypeS: "",
+        partTypeF: "",
         qualityTypeId: '',//品质
         partBrandId: '',//品牌
         code: '',//配件编码
@@ -87,6 +93,12 @@ export const mixPartInfo = {
         ],
         unitId: [
           { required: true, message: '单位不能为空', trigger: 'change' }
+        ],
+        partTypeF: [
+          { required: true, message: '一级分类不能为空', trigger: 'change' }
+        ],
+        partTypeS: [
+          { required: true, message: '二级分类不能为空', trigger: 'change' }
         ],
         oemCode: [
           { required: true, validator: NumberA, trigger: 'blur' }
@@ -143,6 +155,22 @@ export const mixPartInfo = {
     }
   },
   methods: {
+    async treeInit() {
+      let res = await getCarPartClass();
+      this.typepf = res;
+      if(this.formValidate.partTypeF) {
+        this.changetype(this.formValidate.partTypeF);
+      }
+    },
+    changetype(v) { 
+      let item = this.typepf.filter(el => el.typeId === v)[0];
+      this.formValidate.carTypefName = item.title || item.name;
+      this.typeps = item.children
+    },
+    changetypeS(v) {
+      let item = this.typeps.filter(el => el.typeId === v)[0];
+      this.formValidate.carTypesName = item.title || item.name;
+    },
     // 弹框打开关闭
     visible(type) {
       if (type) {
@@ -151,6 +179,7 @@ export const mixPartInfo = {
     },
     //初始化
     init(setData) {
+      this.treeInit();
       //清空数据重新赋值
       this.$refs.proModalForm.resetFields();
       this.carList = [];
@@ -180,6 +209,9 @@ export const mixPartInfo = {
       this.formValidate.fullName = ''
       if (setData) {
         this.formValidate = setData;
+
+        // console.log(setData)
+        
         //赋值适用车型
         let carModelName = setData.carModelName.split("|");//车系
         let carBrandName = setData.carBrandName.split("|");//车品牌
@@ -280,12 +312,9 @@ export const mixPartInfo = {
     getSearchPartName(v) {
       this.formValidate.name = v.name
       this.formValidate.partNameId = v.id
-      this.formValidate.carTypeF = v.baseType.firstType.typeId
-      this.formValidate.carTypeS = v.baseType.secondType.typeId
-      this.formValidate.carTypeT = v.baseType.thirdType.typeId
-      this.formValidate.carTypefName = v.baseType.firstType.typeName
-      this.formValidate.carTypesName = v.baseType.secondType.typeName
-      this.formValidate.carTypetName = v.baseType.thirdType.typeName
+      this.formValidate.carTypeF = v.carTypef
+      this.formValidate.carTypeS = v.carTypes
+      this.formValidate.carTypeT = v.carTypet
       this.getFullName();
     },
     //显示配件名称选择
@@ -458,6 +487,8 @@ export const mixPartInfo = {
               objReq.spec = this.formValidate.spec
               //型号
               objReq.model = this.formValidate.model
+              objReq.partTypeF = this.formValidate.partTypeF
+              objReq.partTypeS = this.formValidate.partTypeS
               console.log(objReq)
               //使用车型品牌
               // let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)

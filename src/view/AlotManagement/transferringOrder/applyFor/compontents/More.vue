@@ -91,8 +91,9 @@
 </template>
 
 <script>
-import { findForAllot } from "_api/purchasing/purchasePlan";
-import SelectSupplier from "../compontents/supplier/selectSupplier";
+  transferringFindForAllot
+import { findForAllot,transferringFindForAllot } from "_api/purchasing/purchasePlan";
+  import SelectSupplier from "../compontents/supplier/selectSupplier";
 export default {
   name: "More",
   components: {
@@ -151,6 +152,7 @@ export default {
         submitData: this.submitData,
         guestId: this.guestId
       };
+      console.log(a)
       this.$emit("sendMsg", a);
     },
     //更多弹框的确定按钮
@@ -178,17 +180,12 @@ export default {
         return;
       }
       var req = {};
-      req.page = 1;
-      req.size = 20;
-      findForAllot(req).then(res => {
-        var req = {};
-        req.page = 1;
-        req.size = 20;
-        findForAllot(req).then(res => {
-          const { content } = res.data;
-          content.forEach(item => {
-            this.ArrayValue.push({ value: item.id, label: item.fullName });
-          });
+      req.page = 0;
+      req.size = 1000;
+      transferringFindForAllot(req).then(res => {
+        const { content } = res.data;
+        content.forEach(item => {
+          this.ArrayValue.push({ value: item.guestId, label: item.shortName });
         });
       });
     }

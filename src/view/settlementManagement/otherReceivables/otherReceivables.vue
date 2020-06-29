@@ -308,7 +308,8 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import claim from "./components/claimed";
-import settlement from "./components/settlement";
+import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
+// import settlement from "./components/settlement";
 import { creat } from "./../components";
 import Record from "./components/Record";
 import {

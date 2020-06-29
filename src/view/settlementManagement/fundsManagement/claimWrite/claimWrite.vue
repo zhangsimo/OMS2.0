@@ -99,11 +99,11 @@
                 <br />
                 <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete">撤销分配</Button>
                 <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
-                <Button class="mt10 ml10">预收款认领</Button>
-                <Button class="mt10 ml10">预付款认领</Button>
-                <Button class="mt10 ml10">其他收款认领</Button>
-                <Button class="mt10 ml10">其他付款认领</Button>
-                <Button class="mt10 ml10">转应收应付</Button>
+                <Button class="mt10 ml10" @click="openOtherCollectionClaims('预收款认领')">预收款认领</Button>
+                <Button class="mt10 ml10" @click="openOtherPaymentClaims('预付款认领')">预付款认领</Button>
+                <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
+                <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
+                <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
                 <claim ref="claim" />
               </div>
               <div slot="bottom">
@@ -118,11 +118,7 @@
                 </Select>
                 <span class="ml10">门店：</span>
                 <Select v-model="orgId" class="w150" filterable>
-                  <Option
-                    v-for="item in orgList"
-                    :value="item.id"
-                    :key="item.id"
-                  >{{ item.name }}</Option>
+                  <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtDis" class="w50" />
@@ -167,9 +163,12 @@
             <subject ref="subjecModal" :clime="claimedSubjectList"></subject>
             <!-- 预收款认领 collectionClaims-->
             <!-- 预付款认领 paymentClaim-->
-            <!-- 其他收款认领 otherCollectionClaims-->
+            <!-- 其他收款认领 otherCollectionClaims  预收款认领 collectionClaims-->
+            <otherCollectionClaims ref="otherCollectionClaims" :accrued="claimedSubjectList"></otherCollectionClaims>
             <!-- 其他付款认领 otherPaymentClaim-->
+            <otherPaymentClaim ref="otherPaymentClaim" :accrued="claimedSubjectList"></otherPaymentClaim>
             <!-- 转应收应付 accrued-->
+            <accrued ref="accrued" :accrued="claimedSubjectList"></accrued>
           </div>
         </Split>
       </div>
@@ -196,15 +195,27 @@ import {
   distributionShop,
   distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
-import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
-import { goshop } from '@/api/settlementManagement/shopList';
-import { findGuest} from "_api/settlementManagement/advanceCollection.js";
+import { are } from "@/api/settlementManagement/fundsManagement/capitalChain";
+import { goshop } from "@/api/settlementManagement/shopList";
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
-import subject from './components/Subject'
-
+import subject from "./components/Subject";
+import accrued from "./components/accrued";
+import otherCollectionClaims from "./components/otherCollectionClaims";
+import otherPaymentClaim from "@/view/settlementManagement/fundsManagement/claimWrite/components/otherPaymentClaim";
 export default {
-  components: { advance, expenditure, settlement, claim, chargeAdvance ,subject},
+  components: {
+    advance,
+    expenditure,
+    settlement,
+    claim,
+    chargeAdvance,
+    subject,
+    accrued,
+    otherCollectionClaims,
+    otherPaymentClaim
+  },
   data() {
     return {
       title: "预付款认领", //弹框标题
@@ -215,12 +226,10 @@ export default {
       companyIdClaim: "", //待认领往来单位
       company: [], //往来单位下拉框
       orgId: "", //门店
-      orgList: [
-        {id:'0' ,name:'全部'}
-      ], //分店名称
-      claimedSubjectList:{},//获取到点击到的本店认领数据
-      areaId:0,//区域
-      areaList:[{value:0 ,label:'全部'}],//区域
+      orgList: [{ id: "0", name: "全部" }], //分店名称
+      claimedSubjectList: [], //获取到点击到的本店认领数据
+      areaId: 0, //区域
+      areaList: [{ value: 0, label: "全部" }], //区域
       bankNameOClaim: "", //对方户名
       bankNameODis: "", //对方户名
       paymentId: "YJDZ", //收付类型
@@ -360,7 +369,7 @@ export default {
       }, //连锁待分配款项分页
       currentDistribution: [], //本店待认领款选中的数据
       claimedAmt: null, //认领款勾选金额
-      difference: null, //差异
+      difference: null //差异
     };
   },
   async mounted() {
@@ -376,13 +385,13 @@ export default {
     });
     let arr = await creat([], this.$store);
     this.orgName = arr[3];
-    this.$nextTick( () => {
-      this.orgId = arr[1]
-    })
-    this.getShop()
+    this.$nextTick(() => {
+      this.orgId = arr[1];
+    });
+    this.getShop();
     this.claimedList();
     this.distributionList();
-    this.getAllAre()
+    this.getAllAre();
     if (Object.keys(this.$route.params).length !== 0) {
       this.$route.params.data.receivePaymentTypeName = this.$route.params.data.paymentTypeName;
       this.$route.params.data.actualCollectionOrPayment = this.$route.params.data.receiptPayment;
@@ -398,21 +407,22 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-      if (res.code === 0) return this.orgList = [...this.orgList , ...res.data]
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0)
+        return (this.orgList = [...this.orgList, ...res.data]);
     },
     // 往来单位选择
     async getOne() {
-      findGuest({size:2000}).then(res => {
+      findGuest({ size: 2000 }).then(res => {
         if (res.code === 0) {
-          res.data.content.map(item=>{
+          res.data.content.map(item => {
             this.company.push({
-              value:item.id,
-              label:item.fullName
-            })
-          })
+              value: item.id,
+              label: item.fullName
+            });
+          });
         }
       });
     },
@@ -426,18 +436,68 @@ export default {
     },
 
     //打开选择会计科目
-    openSubjecMoadl(){
+    openSubjecMoadl() {
       if (this.$refs.claim.currentClaimed.length == 0) {
-        this.$message.error("请先选择数据")
+        this.$message.error("请先选择数据");
       } else if (this.$refs.claim.currentClaimed.length > 1) {
-        this.$message.error("只能为一条数据进行当前转益")
-      }else {
-        console.log(this.$refs.claim.currentClaimed)
-        this.claimedSubjectList = this.$refs.claim.currentClaimed[0]
-        this.$refs.subjecModal.open()
+        this.$message.error("只能为一条数据进行当前转益");
+      } else {
+        this.claimedSubjectList = this.$refs.claim.currentClaimed;
+        this.$refs.subjecModal.open();
       }
     },
-
+    // 打开应收应付弹框
+    openAccrued() {
+      if (this.$refs.claim.currentClaimed.length == 0) {
+        this.$message.error("请先选择数据");
+      } else if (this.$refs.claim.currentClaimed.length > 1) {
+        this.$message.error("只能为一条数据进行转应收应付操作");
+      } else {
+        this.claimedSubjectList = this.$refs.claim.currentClaimed;
+        if (this.claimedSubjectList[0].incomeMoney > 0) {
+          this.$refs.accrued.bool = false;
+        } else {
+          this.$refs.accrued.bool = true;
+        }
+        this.$refs.accrued.open();
+      }
+    },
+    // 打开   预收款认领/其他收款认领   弹框
+    openOtherCollectionClaims(claimTit) {
+      if (this.$refs.claim.currentClaimed.length == 0) {
+        this.$message.error("请先选择数据");
+      } else if (this.$refs.claim.currentClaimed.length > 1) {
+        this.$message.error("只能为一条数据进行转应收应付操作");
+      } else {
+        this.claimedSubjectList = this.$refs.claim.currentClaimed;
+        this.$refs.otherCollectionClaims.claimTit = claimTit;
+        if (this.claimedSubjectList[0].incomeMoney > 0) {
+          this.$refs.otherCollectionClaims.open();
+        } else {
+          claimTit = "预收款认领"
+            ? this.$message.error("预收款认领不能选择支出类资金")
+            : this.$message.error("其他收款认领不能选择支出类资金");
+        }
+      }
+    },
+    // 打开   预付款认领/其他付款认领   弹框
+    openOtherPaymentClaims(claimTit) {
+      if (this.$refs.claim.currentClaimed.length == 0) {
+        this.$message.error("请先选择数据");
+      } else if (this.$refs.claim.currentClaimed.length > 1) {
+        this.$message.error("只能为一条数据进行转应收应付操作");
+      } else {
+        this.claimedSubjectList = this.$refs.claim.currentClaimed;
+        this.$refs.otherPaymentClaim.claimTit = claimTit;
+        if (this.claimedSubjectList[0].paidMoney<0) {
+          this.$refs.otherPaymentClaim.open();
+        } else {
+          claimTit = "预付款认领"
+            ? this.$message.error("预付款认领不能选择收入类资金")
+            : this.$message.error("其他付款认领不能选择收入类资金");
+        }
+      }
+    },
     //未核销对账单查询
     queryNoWrite() {
       this.noWrite();
@@ -456,17 +516,17 @@ export default {
         this.$Modal.confirm({
           title: "是否撤回分配",
           onOk: () => {
-            let arr = []
-            this.$refs.claim.currentClaimed.map(item=>{
-              arr.push(item.id)
-            })
-            distributionRevoke(arr).then(res=>{
-              if(res.code===0){
-                this.$message.success('撤销成功')
-                this.claimedList()
-                this.distributionList()
+            let arr = [];
+            this.$refs.claim.currentClaimed.map(item => {
+              arr.push(item.id);
+            });
+            distributionRevoke(arr).then(res => {
+              if (res.code === 0) {
+                this.$message.success("撤销成功");
+                this.claimedList();
+                this.distributionList();
               }
-            })
+            });
           },
           onCancel: () => {}
         });
@@ -508,15 +568,15 @@ export default {
     //分配至本店
     distributionShop() {
       if (this.currentDistribution.length !== 0) {
-        let obj =[]
-        this.currentDistribution.map(item=>{
-          obj.push({id:item.id})
-        })
+        let obj = [];
+        this.currentDistribution.map(item => {
+          obj.push({ id: item.id });
+        });
         distributionShop(obj).then(res => {
-          if(res.code===0){
-            this.$message.success('分配成功')
-            this.distributionList()
-            this.claimedList()
+          if (res.code === 0) {
+            this.$message.success("分配成功");
+            this.distributionList();
+            this.claimedList();
           }
         });
       } else {
@@ -560,7 +620,7 @@ export default {
       claimedFund(obj).then(res => {
         if (res.code === 0) {
           this.$refs.claim.claimedData = res.data.content;
-          this.$refs.claim.claimedPage.total = res.data.totalElements
+          this.$refs.claim.claimedPage.total = res.data.totalElements;
         }
       });
     },
@@ -575,9 +635,9 @@ export default {
         size: this.distributionPage.size
       };
       distributionSelete(obj).then(res => {
-        if(res.code===0){
-          this.distributionData = res.data.content
-          this.distributionPage.total = res.data.totalElements
+        if (res.code === 0) {
+          this.distributionData = res.data.content;
+          this.distributionPage.total = res.data.totalElements;
         }
       });
     },
@@ -585,35 +645,35 @@ export default {
     async getAllAre() {
       let res = await are();
       if (res.code === 0) {
-        res.data.map(item=>{
+        res.data.map(item => {
           this.areaList.push({
-            value:item.id,
-            label:item.companyName
-          })
-        })
+            value: item.id,
+            label: item.companyName
+          });
+        });
       }
     },
     //未核销对账单页码改变
     pageChangeNo(val) {
       this.accountPage.page = val;
-      this.noWrite()
+      this.noWrite();
     },
     //未核销对账单每页条数改变
     sizeChangeNo(val) {
-      this.accountPage.page =1
+      this.accountPage.page = 1;
       this.accountPage.size = val;
-      this.noWrite()
+      this.noWrite();
     },
     // 连锁待分配款项页码
     pageChange(val) {
       this.distributionPage.page = val;
-      this.distributionList()
+      this.distributionList();
     },
     // 连锁待分配款项每页条数
     sizeChange(val) {
-      this.distributionPage.page =1
+      this.distributionPage.page = 1;
       this.distributionPage.size = val;
-      this.distributionList()
+      this.distributionList();
     }
   }
 };

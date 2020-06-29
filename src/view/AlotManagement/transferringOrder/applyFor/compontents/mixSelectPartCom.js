@@ -318,7 +318,6 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      console.log(v)
       if(this.$route.name=="applyFor"){
         this.$refs.selectPartInfo.init(v);
       }

@@ -310,14 +310,15 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import claim from "./components/claimed";
 import settlement from "./components/settlement";
-import { creat } from "./../components";
+import { creat } from "@/view/settlementManagement/components";
+// import { creat } from "./../components";
 import Record from "./components/Record";
 import claimGuest from "./components/claimGuest";
 import OtherPayment from "../../documentApproval/component/OtherPayment";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
 import { goshop } from "@/api/settlementManagement/shopList";
 import {
-  findAdvance,
+  findAdvance, 
   revoke,
   findGuest
 } from "_api/settlementManagement/advanceCollection";
@@ -416,6 +417,7 @@ export default {
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
+          console.log(res.data.content)
           this.page.total = res.data.totalElements;
         }
       });

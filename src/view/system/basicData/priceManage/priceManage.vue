@@ -21,6 +21,9 @@
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
             </Button>
+            <Button class="mr10 w90" :disabled="priceEnableBool" @click="priceEnableFun">
+              <span class="center">{{priceEnable}}</span>
+            </Button>
           </div>
           <vxe-table
             border
@@ -66,7 +69,7 @@
                 placeholder="请输入拼音"
                 style="width: 140px;"
                 class="mr10"
-              /> -->
+              />-->
               <Input
                 v-model="customer.fullname"
                 placeholder="请输入全称"
@@ -83,12 +86,22 @@
                   <Icon type="md-add" />添加客户
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="removeCustomer" v-has="'deleteRight'">
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="removeCustomer"
+                v-has="'deleteRight'"
+              >
                 <span class="center">
                   <Icon custom="iconfont iconlajitongicon icons" />删除客户
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="saveCustomer" v-has="'saveRight'">
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="saveCustomer"
+                v-has="'saveRight'"
+              >
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>
@@ -136,6 +149,16 @@
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
               </Button>
+              <Button :disabled="disabled" class="mr10 w90" @click="addAccessories">
+                <span class="center">
+                  <Icon type="md-add" />添加配件
+                </span>
+              </Button>
+              <Button :disabled="disabled" class="mr10 w90" @click="importModule">
+                <span class="center">
+                  <Icon type="md-add" />导入
+                </span>
+              </Button>
               <Button :disabled="disabled" class="mr10 w90" @click="savePart" v-has="'saveRight3'">
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
@@ -167,7 +190,13 @@
                 width="160"
               >
                 <template v-slot:edit="{ row }">
-                  <el-input-number :min="0" :precision="2"  v-model="row.sellPrice" :controls="false" size="mini" />
+                  <el-input-number
+                    :min="0"
+                    :precision="2"
+                    v-model="row.sellPrice"
+                    :controls="false"
+                    size="mini"
+                  />
                 </template>
               </vxe-table-column>
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>
@@ -206,6 +235,10 @@
     <Modal v-model="modal" title="客户资料" :footer-hide="true" width="1020">
       <Dia-log ref="curs" :show.sync="modal" @addcu="addcu"></Dia-log>
     </Modal>
+    <!--      添加配件-->
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <!-- 导入模板弹窗组件-->
+    <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
   </main>
 </template>
 
