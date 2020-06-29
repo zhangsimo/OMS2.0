@@ -123,7 +123,7 @@ export default class Fittings extends Vue {
           render: (h, params) => {
             let text: string = "";
             try {
-              text = params.row.baseType.firstType.typeName;
+              text = params.row.carTypef;
             } catch (e) {}
             return h("span", text);
           }
@@ -134,7 +134,7 @@ export default class Fittings extends Vue {
           render: (h, params) => {
             let text: string = "";
             try {
-              text = params.row.baseType.secondType.typeName;
+              text = params.row.carTypes;
             } catch (e) {}
             return h("span", text);
           }

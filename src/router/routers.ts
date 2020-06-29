@@ -432,7 +432,6 @@ export default [
       }
     ]
   },
-
   {
     path: "/business/policy",
     name: "policy",

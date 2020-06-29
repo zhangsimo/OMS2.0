@@ -102,7 +102,6 @@
                     sizeOpts:[20,40,60,80,100]
                 },
                 tableData:[
-                    {name:23}
                 ],
                 treeData:[],//全国地址
                 // 省
@@ -179,7 +178,7 @@
             },
             // 获取客户
             async getList(){
-                if(this.tableData.length > 0) return;
+                //if(this.tableData.length > 0) return;
                 let data ={}
                     data.grade = this.clickCity.grade
                     data.id = this.clickCity.id

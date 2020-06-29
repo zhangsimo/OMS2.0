@@ -552,8 +552,8 @@ export default {
       this.newStaff = JSON.parse(JSON.stringify(this.oneStaffChange)) //用户名
       this.newStaff.single = this.newStaff.single == 1 ? true : false; //允许查看
       this.newStaff.singtwo = this.newStaff.singtwo == 1 ? true : false; //允许提交
-      this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
-      console.log(this.newStaff)
+      // this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
+      this.newStaff.groundIds = this.newStaff.groundIds||[];
       this.modalShow = true;
     },
     //员工离职
@@ -698,8 +698,8 @@ export default {
         return;
       }
       let data = {};
-      data.id = this.oneStaffChange.id;
-      data.companyList = "(" + this.oneCliemt.id + ")";
+      data.staffId = this.oneStaffChange.id;
+      data.cmpyId = this.oneCliemt.id ;
       let res = await setCliemt(data);
       if (res.code === 0) {
         this.page2.num = 1;
@@ -717,7 +717,7 @@ export default {
       data.allCompanyList = this.oneStaffChange.allCompanyList || "";
       findCompanyList(data).then(res => {
         if (res.code == 0) {
-          this.companyList =  res.data.content ? res.data.content : []
+          this.companyList =  res.data ? res.data.content ? res.data.content : [] : []
           this.page2.total = res.data.totalElements;
         }
       });

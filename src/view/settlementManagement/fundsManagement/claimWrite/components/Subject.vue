@@ -101,10 +101,11 @@ export default {
         return this.$Message.error("请至少选择一条数据");
       let data = {};
       data.remark = this.maker;
-      data.detailId = this.clime.id;
-      data.mateAccountName = this.oneSubject.titleName;
-      data.mateAccountCode = this.oneSubject.titleCode;
-      data.mateAccountId = this.oneSubject.id;
+      data.detailId = this.clime[0].id;
+      data.subjectName = this.oneSubject.titleName;
+      data.subjectCode = this.oneSubject.titleCode;
+      data.subjectId = this.oneSubject.id;
+      data.climeType=8
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.subjectModelShow = false;

@@ -292,7 +292,7 @@
             //调用接口
             getList(){
                 let data = {}
-                data.num = this.page.num
+                data.page = this.page.num - 1
                 data.size = this.page .size
                 data[this.logisticsSelect] =this.logisticsInquirts
                 data.isDisabled = this.logisticsState

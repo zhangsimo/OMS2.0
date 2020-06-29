@@ -52,8 +52,8 @@
       <Row>
         <Col span="12">
           <FormItem label="单价：">
-            <InputNumber :min="0" class="w200" placeholder="单价" v-model="formItemData.orderPrice" @on-focus="changeFocuse" @on-blur="changeblur" ></InputNumber>
-            <!--<vxe-input type="float" class="w200" size="mini"  v-model="formItemData.orderPrice" :min="0" digits="2"></vxe-input>-->
+            <!--<InputNumber :min="0" class="w200" placeholder="单价" v-model="formItemData.orderPrice" @on-focus="changeFocuse" @on-blur="changeblur" ></InputNumber>-->
+            <vxe-input type="float" class="w200" size="mini"  v-model="formItemData.orderPrice" :min="0" digits="2"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -91,8 +91,8 @@
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};
-          this.formItemData.orderQty = v.orderQty*1 || 1;
-          this.formItemData.orderPrice = v.orderPrice * 1 || 0;
+          this.formItemData.orderQty = null;
+          this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
         }
 
       },
@@ -103,18 +103,28 @@
         }
       },
       changeblur(){
-        this.formItemData.orderPrice = parseFloat(this.formItemData.orderPrice.toFixed(2))
+		    if(this.formItemData.orderPrice&&this.formItemData.orderPrice>0){
+          this.formItemData.orderPrice = this.formItemData.orderPrice.toFixed(2);
+        }else{
+          this.formItemData.orderPrice = 0;
+        }
       },
 
       submit(){
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
-          return this.$message.error("数量不能为空");
+          setTimeout(()=>{
+            this.$message.error("数量不能为空");
+          },50)
+          return
         }
         if(!this.formItemData.orderPrice || this.formItemData.orderPrice <= 0) {
-          return this.$message.error("单价不可为空");
+          setTimeout(()=>{
+            this.$message.error("单价不可为空");
+          },50)
+          return
         }
 		    this.searchPartLayer = false;
-		    this.$parent.$parent.getPartNameList([this.formItemData]);
+		    this.$parent.$parent.getPartNameList2([this.formItemData]);
       }
     }
 	}

@@ -5,11 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate
-              class="mr10"
-              ref="quickDate"
-              @quickDate="quickDate"
-            ></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>查询日期：</span>
@@ -24,36 +20,26 @@
           <div class="db ml20">
             <span>分店名称：</span>
             <Select v-model="BranchstoreId" class="w150" filterable @on-change="query">
-              <Option
-                v-for="item in Branchstore"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
+              <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" 
+            <Select
+              v-model="companyId"
+              class="w150"
               clearable
               filterable
               remote
               :loading="remoteloading"
-              :remote-method="getOne" @on-change="query">
-              <Option
-                v-for="item in company"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+              :remote-method="getOne"
+              @on-change="query"
+            >
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db ml5">
-            <button
-              class="mr10 ivu-btn ivu-btn-default"
-              type="button"
-              @click="query"
-            >
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -61,13 +47,44 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button v-has="'claim'" :disabled="currRow == null" class="ml10" ref="payBtn" @click="openModal('预付款认领')">预付款认领</Button>
-        <Button v-has="'cancel'" :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
-        <Button v-has="'back'" :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
-        <Button v-has="'revoke'" :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
-        <Button v-has="'cancelRevoke'" :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
-        <Button v-has="'baclRrvoke'" :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
-<!--        <Button class="ml10">导出</Button>-->
+        <Button
+          v-has="'claim'"
+          :disabled="currRow == null"
+          class="ml10"
+          ref="payBtn"
+          @click="openModal('预付款认领')"
+        >预付款认领</Button>
+        <Button
+          v-has="'cancel'"
+          :disabled="currRow == null"
+          class="ml10"
+          @click="openSettlement"
+        >预付款核销</Button>
+        <Button
+          v-has="'back'"
+          :disabled="currRow == null"
+          class="ml10"
+          @click="openModal('预付款收回认领')"
+        >预付款收回认领</Button>
+        <Button
+          v-has="'revoke'"
+          :disabled="btnIsdisable.one"
+          class="ml10"
+          @click="openShow('预付款撤回')"
+        >预付款撤回</Button>
+        <Button
+          v-has="'cancelRevoke'"
+          :disabled="btnIsdisable.two"
+          class="ml10"
+          @click="openShow('预付款核销撤回')"
+        >预付款核销撤回</Button>
+        <Button
+          v-has="'baclRrvoke'"
+          :disabled="btnIsdisable.three"
+          class="ml10"
+          @click="openShow('预付款回收撤回')"
+        >预付款回收撤回</Button>
+        <!--        <Button class="ml10">导出</Button>-->
       </div>
     </section>
     <section class="con-box">
@@ -88,71 +105,27 @@
             :footer-method="footerMethod"
           >
             <vxe-table-column title="基本信息">
-              <vxe-table-column
-                title="序号"
-                type="seq"
-                width="60"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="serviceId"
-                title="预付款申请单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="orderNo"
-                title="预付款采购订单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="guestName"
-                title="往来单位"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="applicant"
-                title="申请人"
-              ></vxe-table-column>
+              <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
+              <vxe-table-column field="serviceId" title="预付款申请单号"></vxe-table-column>
+              <vxe-table-column field="orderNo" title="预付款采购订单号"></vxe-table-column>
+              <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
+              <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
-              <vxe-table-column
-                field="payAmt"
-                title="预付款金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentNo"
-                title="预付款认领单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="claimAmt"
-                title="预付款已认领金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="writeOffReceiptNo"
-                title="预付款核销单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="writeOffAmt"
-                title="预付款核销金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="returnNo"
-                title="预付款收回单号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="returnClaimAmt"
-                title="预付款收回认领金额"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="remainingAmt"
-                title="预付款余额"
-              ></vxe-table-column>
+              <vxe-table-column field="payAmt" title="预付款金额"></vxe-table-column>
+              <vxe-table-column field="paymentNo" title="预付款认领单号"></vxe-table-column>
+              <vxe-table-column field="claimAmt" title="预付款已认领金额"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="预付款核销单号"></vxe-table-column>
+              <vxe-table-column field="writeOffAmt" title="预付款核销金额"></vxe-table-column>
+              <vxe-table-column field="returnNo" title="预付款收回单号"></vxe-table-column>
+              <vxe-table-column field="returnClaimAmt" title="预付款收回认领金额"></vxe-table-column>
+              <vxe-table-column field="remainingAmt" title="预付款余额"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="付款方式">
               <vxe-table-column field="role" title="账户">
                 <template v-slot="{ row }">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.paymentType"
-                      :key="index"
-                      class="flex"
-                    >
+                    <li v-for="(item, index) of row.paymentType" :key="index" class="flex">
                       <span class="listChild">{{ item.accountName }}</span>
                     </li>
                   </ul>
@@ -161,11 +134,7 @@
               <vxe-table-column field="sex" title="金额">
                 <template v-slot="{ row }">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.paymentType"
-                      :key="index"
-                      class="flex"
-                    >
+                    <li v-for="(item, index) of row.paymentType" :key="index" class="flex">
                       <span class="listChild">{{ item.amt }}</span>
                     </li>
                   </ul>
@@ -174,11 +143,7 @@
               <vxe-table-column field="age" title="付款所属门店">
                 <template v-slot="{ row }">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.paymentType"
-                      :key="index"
-                      class="flex"
-                    >
+                    <li v-for="(item, index) of row.paymentType" :key="index" class="flex">
                       <span class="listChild">{{ item.ownStoreName }}</span>
                     </li>
                   </ul>
@@ -189,11 +154,7 @@
               <vxe-table-column field="role" title="账户">
                 <template v-slot="{ row }">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.receiveType"
-                      :key="index"
-                      class="flex"
-                    >
+                    <li v-for="(item, index) of row.receiveType" :key="index" class="flex">
                       <span class="listChild">{{ item.accountName }}</span>
                     </li>
                   </ul>
@@ -202,11 +163,7 @@
               <vxe-table-column field="sex" title="金额">
                 <template v-slot="{ row }">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.receiveType"
-                      :key="index"
-                      class="flex"
-                    >
+                    <li v-for="(item, index) of row.receiveType" :key="index" class="flex">
                       <span class="listChild">{{ item.amt }}</span>
                     </li>
                   </ul>
@@ -215,11 +172,7 @@
               <vxe-table-column field="age" title="收款所属门店">
                 <template v-slot="{ row }">
                   <ul class="list">
-                    <li
-                      v-for="(item, index) of row.receiveType"
-                      :key="index"
-                      class="flex"
-                    >
+                    <li v-for="(item, index) of row.receiveType" :key="index" class="flex">
                       <span class="listChild">{{ item.ownStoreName }}</span>
                     </li>
                   </ul>
@@ -228,42 +181,15 @@
             </vxe-table-column>
             <vxe-table-column title="其他信息">
               <vxe-table-column field="payer" title="付款人"></vxe-table-column>
-              <vxe-table-column
-                field="paymentDate"
-                title="付款日期"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentRemark"
-                title="付款备注"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentAuditor"
-                title="付款审核人"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="paymentAuditDate"
-                title="付款审核日期"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="receiver"
-                title="收款人"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="receiveDate"
-                title="收款日期"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="receiveRemark"
-                title="收款备注"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="receiveAuditor"
-                title="收款审核人"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="receiveAuditDate"
-                title="收款审核日期"
-              ></vxe-table-column>
+              <vxe-table-column field="paymentDate" title="付款日期"></vxe-table-column>
+              <vxe-table-column field="paymentRemark" title="付款备注"></vxe-table-column>
+              <vxe-table-column field="paymentAuditor" title="付款审核人"></vxe-table-column>
+              <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
+              <vxe-table-column field="receiver" title="收款人"></vxe-table-column>
+              <vxe-table-column field="receiveDate" title="收款日期"></vxe-table-column>
+              <vxe-table-column field="receiveRemark" title="收款备注"></vxe-table-column>
+              <vxe-table-column field="receiveAuditor" title="收款审核人"></vxe-table-column>
+              <vxe-table-column field="receiveAuditDate" title="收款审核日期"></vxe-table-column>
             </vxe-table-column>
           </vxe-table>
         </div>
@@ -284,13 +210,11 @@
         <Record ref="Record" :service="serviceId" />
       </div>
     </section>
-    <Modal
-      v-model="modalShow"
-      :title="reTitle" @on-ok="reClose"
-      @on-cancel="cancel"
-    >
+    <Modal v-model="modalShow" :title="reTitle" @on-ok="reClose" @on-cancel="cancel">
       <Row>
-        <Col span="4"><span>撤回原因：</span></Col>
+        <Col span="4">
+          <span>撤回原因：</span>
+        </Col>
         <Col span="20">
           <Input v-model="revokeReason" />
         </Col>
@@ -298,26 +222,21 @@
     </Modal>
     <Modal v-model="modal" :title="claimedButtonType" width="800">
       <span>往来单位：</span>
-      <Select v-model="suppliers" class="w150" filterable
+      <Select
+        v-model="suppliers"
+        class="w150"
+        filterable
         remote
         :loading="remoteloading"
-        :remote-method="getOne">
-        <Option
-          v-for="item in company"
-          :value="item.value"
-          :key="item.value"
-          >{{ item.label }}</Option
-        >
+        :remote-method="getOne"
+      >
+        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <span class="ml10">对方户名：</span>
       <Input v-model="reciprocalAccountName" class="w100" />
       <span class="ml10">金额：</span>
       <InputNumber v-model="amount" class="w50" />
-      <button
-        class="ivu-btn ivu-btn-default ml10"
-        type="button"
-        @click="queryClaimed"
-      >
+      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
@@ -325,19 +244,19 @@
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
     </Modal>
-    <settlementadv ref="settlementadv" @getNewList="getNewQuery"/>
+    <settlementadv ref="settlementadv" @getNewList="getNewQuery" />
   </div>
 </template>
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
-import { goshop } from '@/api/settlementManagement/shopList';
+import { goshop } from "@/api/settlementManagement/shopList";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import * as api from "_api/settlementManagement/advanceCharge";
 import { creat } from "../components";
 import claim from "./components/claimed";
 import Record from "./components/Record";
-import settlementadv from "./components/settlementadv"
+import settlementadv from "./components/settlementadv";
 import moment from "moment";
 import { mapMutations } from "vuex";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
@@ -346,7 +265,7 @@ export default {
     quickDate,
     claim,
     Record,
-    settlementadv,
+    settlementadv
   },
   data() {
     return {
@@ -363,9 +282,7 @@ export default {
       value: [], //日期
       company: [], //往来单位
       companyId: 0, //往来单位
-      Branchstore: [
-        {id:'0' ,name:'全部'}
-      ], //分店名称
+      Branchstore: [{ id: "0", name: "全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
       page: {
@@ -380,24 +297,24 @@ export default {
       btnIsdisable: {
         one: true,
         two: true,
-        three: true,
-      },
+        three: true
+      }
     };
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.$nextTick( () => {
-      this.BranchstoreId = arr[1]
-    })
-    this.getShop()
+    this.$nextTick(() => {
+      this.BranchstoreId = arr[1];
+    });
+    this.getShop();
     // this.getOne();
   },
   methods: {
     ...mapMutations(["setClaimedSearch", "setSign", "setClaimedSelectionList"]),
     changedate(daterange) {
       this.value = daterange;
-      this.query()
+      this.query();
     },
     // 往来单位选择
     async getOne(query) {
@@ -420,10 +337,11 @@ export default {
     },
 
     //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0)
+        return (this.Branchstore = [...this.Branchstore, ...res.data]);
     },
     // async getShop(){
     //   let data ={}
@@ -455,16 +373,17 @@ export default {
     },
     //查询接口
     async getQuery() {
-      let obj = {}
-
-        obj = {
-           startDate: this.value[0]
+      let obj = {};
+      obj = {
+        startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        }
+          ? moment(this.value[1])
+              .endOf("day")
+              .format("YYYY-MM-DD HH:mm:ss")
+          : ""
+      };
       obj = {
         ...obj,
         orgId: this.BranchstoreId,
@@ -495,25 +414,21 @@ export default {
       this.btnIsdisable = {
         one: true,
         two: true,
-        three: true,
-      }
-      const {
-        paymentNo,
-        writeOffReceiptNo,
-        returnNo,
-      } = row;
+        three: true
+      };
+      const { paymentNo, writeOffReceiptNo, returnNo } = row;
       let [one, two, three] = [true, true, true];
-      if(row.paymentNo) {
+      if (row.paymentNo) {
         one = true;
       } else {
         one = false;
       }
-      if(row.writeOffReceiptNo) {
+      if (row.writeOffReceiptNo) {
         two = true;
       } else {
         two = false;
       }
-      if(row.returnNo) {
+      if (row.returnNo) {
         three = true;
       } else {
         three = false;
@@ -528,18 +443,18 @@ export default {
         this.btnIsdisable.three = false;
       }
       this.serviceId = row.serviceId;
-      this.$refs.Record.init();
+      this.$refs.Record.init(); 
     },
     // 撤回
     async reClose() {
-      if(this.revokeReason.trim().length <= 0) {
+      if (this.revokeReason.trim().length <= 0) {
         return this.$message.error("请输入撤回原因");
       }
       let data = {
         revokeReason: this.revokeReason,
-        id: this.currRow.id,
-      }
-      switch(this.reTitle) {
+        id: this.currRow.id
+      };
+      switch (this.reTitle) {
         case "预付款撤回":
           data.sign = 1;
           break;
@@ -553,7 +468,7 @@ export default {
           break;
       }
       let res = await api.addWithdraw(data);
-      if(res.code == 0) {
+      if (res.code == 0) {
         this.$message.success("撤回成功");
         this.modalShow = false;
         this.getQuery();
@@ -600,11 +515,11 @@ export default {
       this.getQuery();
     },
     openModal(name) {
-      if (name == '预付款认领' && this.currRow.paymentNo != null){
-        return this.$Message.error('预付款付款已认领')
+      if (name == "预付款认领" && this.currRow.paymentNo != null) {
+        return this.$Message.error("预付款付款已认领");
       }
       this.claimedButtonType = name;
-      this.amount = null
+      this.amount = null;
       this.reciprocalAccountName = "";
       this.suppliers = "";
       this.queryClaimed();
@@ -612,7 +527,7 @@ export default {
     },
     // 预收款认领查询
     queryClaimed() {
-      if(this.claimedButtonType == "预付款认领") {
+      if (this.claimedButtonType == "预付款认领") {
         this.setClaimedSearch({
           amount: this.amount,
           reciprocalAccountName: this.reciprocalAccountName,
@@ -644,25 +559,25 @@ export default {
         orgid: userData.shopId,
         paymentTypeList: [],
         guestId: this.currRow.guestId,
-        id: this.currRow.id,
-      }
+        id: this.currRow.id
+      };
       for (let key in obj) {
-        if(!obj[key]) {
+        if (!obj[key]) {
           delete obj[key];
         }
       }
       obj.claimAmt = 0;
       obj.financeAccountCashList = [];
-      if(this.claimedButtonType == "预付款认领") {
+      if (this.claimedButtonType == "预付款认领") {
         let Numbers = 0;
-       this.claimedSelectData.map(item => {
+        this.claimedSelectData.map(item => {
           Numbers += item.paidMoney;
           return Numbers;
         });
-        if(Numbers > this.currRow.payAmt){
-          this.$message.error("支出金额之和不能大于预付款金额")
-        }else {
-          this.setSign({type: "9", accountNo: this.currRow.serviceId});
+        if (Numbers > this.currRow.payAmt) {
+          this.$message.error("支出金额之和不能大于预付款金额");
+        } else {
+          this.setSign({ type: "9", accountNo: this.currRow.serviceId });
           this.modal = false;
           this.$refs.settlementadv.init();
           // this.claimedSelectData.forEach(el => {
@@ -683,32 +598,31 @@ export default {
           //   return this.$message.success("认领成功");
           // }
         }
-      }else if(this.claimedButtonType == "预付款收回认领") {
+      } else if (this.claimedButtonType == "预付款收回认领") {
         let Numbers = 0;
         this.claimedSelectData.map(item => {
           Numbers += item.incomeMoney;
           return Numbers;
         });
-        if(Numbers > this.currRow.remainingAmt){
-          this.$message.error("收入金额之和不能大于预付款余额")
-        }else {
-          this.setSign({type: "5", accountNo: this.currRow.serviceId});
+        if (Numbers > this.currRow.remainingAmt) {
+          this.$message.error("收入金额之和不能大于预付款余额");
+        } else {
+          this.setSign({ type: "5", accountNo: this.currRow.serviceId });
           this.modal = false;
           this.$refs.settlementadv.init();
         }
       }
     },
 
-
     //预收款认领完成刷新页面
-    getNewQuery(){
+    getNewQuery() {
       this.getQuery();
     },
 
     // 核销
     openSettlement() {
       this.setClaimedSelectionList([]);
-      this.setSign({type: "4", accountNo: this.currRow.serviceId});
+      this.setSign({ type: "4", accountNo: this.currRow.serviceId });
       this.$refs.settlementadv.init();
     },
     // 撤回弹窗

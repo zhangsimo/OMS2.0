@@ -406,7 +406,6 @@ export default {
       this.$refs.child.$refs.form.resetFields()
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
-
       this.clientDataShow = true;
       this.$refs.child.handleReset()
       this.$refs.child.getClienlist();
@@ -455,6 +454,10 @@ export default {
       getCustomerDetails(data).then(res => {
         if (res.code == 0) {
           this.clientList = res.data;
+          this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
+          this.clientList.isFatCompany = this.clientList.isFatCompany == 1 ? true : false
+          this.clientList.isDisabled = this.clientList.isDisabled == 1 ? true : false
+          this.clientList.isSupplier = this.clientList.isSupplier == 1 ? true : false
           this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
           this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
           this.$refs.child.relevanceClientShow = this.clientList.guestVOList;

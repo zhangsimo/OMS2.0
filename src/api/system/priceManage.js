@@ -74,3 +74,12 @@ export function area(params) {
     params
   });
 }
+
+// 导入配件表格
+export function impUrl(data) {
+  return axios.request({
+    // url:`${api}`,
+    methods:"post",
+    data
+  })
+}

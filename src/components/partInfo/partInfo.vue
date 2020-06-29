@@ -42,13 +42,37 @@
                 </FormItem>
               </Col>
               <Col span="11">
-                <FormItem label="名称：" prop="name">
+                <FormItem label="标准名称：" prop="name">
                   <Input
                     @on-click="showName"
                     icon="ios-more"
                     v-model="formValidate.name"
                     readonly="readonly"
                   ></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="一级分类：" prop="partTypeF">
+                  <Select v-model="formValidate.partTypeF" @on-change="changetype" filterable>
+                    <Option
+                      v-for="item in typepf"
+                      :value="item.typeId"
+                      :key="item.typeId"
+                    >{{item.name}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="二级分类：" prop="partTypeS">
+                  <Select v-model="formValidate.partTypeS" @on-change="changetypeS" filterable>
+                    <Option
+                      v-for="item in typeps"
+                      :value="item.typeId"
+                      :key="item.typeId"
+                    >{{item.name}}</Option>
+                  </Select>
                 </FormItem>
               </Col>
             </Row>
@@ -84,7 +108,7 @@
             </Row>
             <Row>
               <Col span="22">
-                <FormItem label="适用车型：" class="car-item-w" prop="">
+                <FormItem label="适用车型：" class="car-item-w" :class="{'ivu-form-item-error':isCart}" prop="">
                   <div class="car-con-item" v-for="(v,vi) in carList">
                     <Select
                       @on-change="getSelectCarBrand"
@@ -168,49 +192,13 @@
                 </FormItem>
               </Col>
             </Row>
-            <!--<Row>-->
-            <!--<Col span="22">-->
-            <!--<FormItem label="单位换算：" class="x11">-->
-            <!--<div class="flex">-->
-            <!--<div>-->
-            <!--<div class="unit-item w300" v-for="v in valueVOS">-->
-            <!--<Select class="w80" v-model="v.unit1">-->
-            <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
-            <!--</Select>-->
-            <!--<Input class="w80" v-model="v.inputNum"></Input>-->
-            <!--<Select class="w80" v-model="v.unit2">-->
-            <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
-            <!--</Select>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div>-->
-            <!--<Button class="ml30" @click="addValueVOS" type="default"><Icon type="md-add" size="14"/> 新增</Button>-->
-            <!--<Button class="ml10" @click="delValueVOS" type="primary"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</FormItem>-->
-            <!--</Col>-->
-            <!--</Row>-->
           </Form>
-          <!--<div class="tc">-->
-          <!--<Button class="mr10" type='warning' @click='submit("proModalForm",1)'>审核通过</Button>-->
-          <!--<Button class="mr10" type='primary' @click='submit("proModalForm",2)'>审核不通过</Button>-->
-          <!--<Button type='default' @click='proModal = false'>取消</Button>-->
-          <!--</div>-->
         </TabPane>
         <TabPane label="包装规格" tab="partInfoTab" v-if="showSpe" name="active2">
           <div class="pb10">
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
           </div>
-          <!--<Table height="300" size="small" :loading="loading" border :stripe="true" :columns="columnsTab" :data="formValidate.specVOS">-->
-          <!--<template slot-scope="{ row, index }" slot="meterCompany">-->
-          <!--<span v-if="index===0">{{formValidate.unitId}}</span>-->
-          <!--<Select @on-change="changeSpec(index,row)" v-else class="w80" v-model="row.meterCompany">-->
-          <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
-          <!--</Select>-->
-          <!--</template>-->
-          <!--</Table>-->
           <vxe-table
             ref="vxeTable"
             border
@@ -274,10 +262,6 @@
               </template>
             </vxe-table-column>
           </vxe-table>
-          <!--<div class="tc pt20">-->
-          <!--<Button class="mr10" type='primary' @click='submit("proModal")'>保存</Button>-->
-          <!--<Button type='default' @click='proModal = false'>取消</Button>-->
-          <!--</div>-->
         </TabPane>
       </Tabs>
       <div slot="footer" v-if="isAddPart">
