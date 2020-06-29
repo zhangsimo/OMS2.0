@@ -46,7 +46,7 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Button @click="search(pageList.size, pageList.page)" type="primary" class="mr20">查询</Button>
+            <Button @click="search(pageList.size, 1)" type="primary" class="mr20">查询</Button>
           </div>
           <div class="db mr10 btn">
             <Button @click="ok" type="warning" class="mr20">选入</Button>

@@ -1,6 +1,6 @@
 <template>
   <Modal
-    title="选择采购入库单11"
+    title="添加配件"
     v-model="shows"
     :styles="{ top: '50px', width: '1100px' }"
   >
@@ -11,12 +11,12 @@
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="serviceId" />
+          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" />
         </div>
         <div class="db mr5">
           <span class=" mr5">品牌:</span>
-          <Select  v-model="band" filterable style="width:140px" class="mr20">
-            <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select  v-model="partBrand" filterable style="width:140px" class="mr20">
+            <Option v-for="(item, index) in bands" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
         </div>
         <div class="db mr5"><span>入库日期:</span></div>
@@ -43,7 +43,7 @@
           >
         </div>
         <div class="db mr5">
-          <Button type="default" @click="cancel"
+          <Button type="default" @click="selectOrder"
             >整单选择</Button
           >
         </div>
@@ -61,7 +61,6 @@
         :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
-        @getCheckboxReserveRecords='getReserve'
         auto-resize
       >
         <vxe-table-column
@@ -73,21 +72,17 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column  field="serviceId" title="配件编码"></vxe-table-column>
-        <vxe-table-column  field="guestName" title="配件名称"></vxe-table-column>
-        <vxe-table-column  field="orderAmt" title="OE码"></vxe-table-column>
-        <vxe-table-column  field="finishDate" title="品牌"></vxe-table-column>
-        <vxe-table-column  field="code" title="是否含税"></vxe-table-column>
-        <vxe-table-column  field="remark" title="税率"></vxe-table-column>
-        <vxe-table-column  field="remark" title="出库数量"></vxe-table-column>
-        <vxe-table-column  field="remark" title="出库单价"></vxe-table-column>
-        <vxe-table-column  field="remark" title="可退数量"></vxe-table-column>
-        <vxe-table-column  field="remark" title="单位"></vxe-table-column>
-        <vxe-table-column  field="remark" title="供应商"></vxe-table-column>
-        <vxe-table-column  field="remark" title="出库单号"></vxe-table-column>
-        <vxe-table-column  field="remark" title="出库日期"></vxe-table-column>
-        <vxe-table-column  field="remark" title="关联销售订单"></vxe-table-column>
-        <vxe-table-column  field="remark" title="第一供应商"></vxe-table-column>
+        <vxe-table-column  field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column  field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column  field="partBrand" title="品牌"></vxe-table-column>
+        <vxe-table-column  field="enterQty" title="库存数量"></vxe-table-column>
+        <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
+        <vxe-table-column  field="enterUnitId" title="单位"></vxe-table-column>
+        <vxe-table-column  field="branchStockAge" title="库龄"></vxe-table-column>
+        <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column  field="code" title="入库单号"></vxe-table-column>
+        <vxe-table-column  field="enterDate" title="入库日期"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
         <Page
@@ -110,6 +105,9 @@
       ref="selectSupplier"
       headerTit="供应商资料"
     ></select-supplier> -->
+
+    <div slot='footer'></div>
+
   </Modal>
 </template>
 
@@ -120,6 +118,7 @@ import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import * as api from "../../../../../api/procurement/planTwo";
 import { getPartBrand } from "@/api/business/stockSearch";
 import getDate from "@/components/getDate/dateget_bill.vue";
+import { getParts } from "@/api/salesManagment/salesOrder";
 
 @Component({
   components:{
@@ -128,14 +127,14 @@ import getDate from "@/components/getDate/dateget_bill.vue";
 })
 export default class ProcurementModal extends Vue {
   private shows: boolean = false;
-  private selectRow: any = null;
+  private selectRow: Array<any> = new Array();
 
-  @Prop(String)
-  private readonly guestId;
+  @Prop(String) private readonly guestId;
+  @Prop(String) private readonly storeId;
 
   private auditDate:Array<Date> = [];
   // private guestname:string = "";
-  private serviceId:string = "";
+  private partId:string = "";
 
   private page: Page = {
     num: 1,
@@ -143,33 +142,61 @@ export default class ProcurementModal extends Vue {
     total: 0
   };
 
-  private tableData: Array<any> = [
-    {serviceId:'123'},
-    {serviceId:'456'},
-    {serviceId:'789'},
-    ];
+  private tableData: Array<any> = [];
 
-  private band:any = '0' //获取当前品牌code
+  private partBrand:any = '' //获取当前品牌code
 
   private bands: Array<any> =[{ value: "0", label: "全部" }] //品牌列表
 
   private tableDataBm: Array<any> = new Array();
 
   private init() {
-    this.shows = true;
     this.reset();
     this.getPchsPlanList();
+    this.shows = true;
   }
 
   @Emit('getPlanOrder')
-  @Emit('selectRow')
   private ok() {
-    if(!this.selectRow) {this.$Message.error('请选择采购入库单'); return};
-    this.shows = false;
-    this.selectRow.details.forEach((el:any) => {
+    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    // this.shows = false;
+    this.selectRow.forEach((el:any) => {
+      el.sourceDetailId = el.id;
       Reflect.deleteProperty(el, 'id');
     })
     return this.selectRow;
+  }
+
+  @Emit('getPlanOrder')
+  private async selectOrder() {
+    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    
+    let msg:any = this.$Message.loading({
+      content: '加载中...',
+      duration: 0
+    });
+
+    let row = this.selectRow[0];
+
+    let params: any = {
+      guestId: this.guestId,
+      storeId: this.storeId,
+      code: row.code,
+    }
+    params.size = 9999;
+    params.page = 0;
+
+    let res:any = await getParts(params); 
+    let data:Array<any> = new Array();
+    if(res.code == 0) {
+      data = (res.data.content || []).map(el => {
+        el.sourceDetailId = el.id;
+        Reflect.deleteProperty(el, 'id');
+        return el;
+      });  
+    }
+    msg();
+    return data;
   }
 
 
@@ -188,12 +215,10 @@ export default class ProcurementModal extends Vue {
   }
 
   private reset() {
-    this.selectRow = null;
+    this.selectRow = new Array();
     this.auditDate = new Array();
     this.tableDataBm = new Array();
-    // this.guestId = "";
-    // this.guestname = "";
-    this.serviceId = "";
+    this.partId = "";
   }
 
   //点击全选
@@ -204,8 +229,6 @@ export default class ProcurementModal extends Vue {
   //点击复选框获取当前已选择数据
   private radioChangeEvent( {selection} ) {
     this.selectRow = selection;
-    // console.log(this.selectRow , 7777)
-    // this.tableDataBm = row.details || [];
   }
 
   //获取保留复选数据
@@ -244,7 +267,7 @@ export default class ProcurementModal extends Vue {
       });
       arr.map(item => {
         this.bands.push({
-          value: item.code,
+          value: item.name,
           label: item.name
         });
       });
@@ -253,25 +276,32 @@ export default class ProcurementModal extends Vue {
 
 
   private async getPchsPlanList() {
-    let params: any = {};
-    let data:any = {
+    let params: any = {
       guestId: this.guestId,
-      serviceId: this.serviceId,
-      startTime: this.auditDate[0]?this.auditDate[0]+" 00:00:00":"",
-      endTime: this.auditDate[1]?this.auditDate[1]+" 23:59:59":"",
+      storeId: this.storeId,
     };
-    params.pageSize = this.page.size;
+    params.size = this.page.size;
     params.page = this.page.num - 1;
+
+    let data:any = {
+      partId: this.partId,
+      partBrand: this.partBrand,
+      startEnterDate: this.auditDate[0]?this.auditDate[0]:"",
+      endEnterDate: this.auditDate[1]?this.auditDate[1]:"",
+    };
     let formData = {};
     for(let k in data) {
       if(data[k] && data[k].trim().length > 0) {
         formData[k] = data[k];
       }
     }
-    let res:any = await api.getPchsPlan(params, formData);
+
+    let obj = {...params, ...formData}
+
+    let res:any = await getParts(obj);
     if(res.code == 0) {
       this.page.total = res.data.totalElements;
-      // this.tableData = res.data.content;
+      this.tableData = res.data.content;
     }
   }
 
