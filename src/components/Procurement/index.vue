@@ -279,7 +279,7 @@ export default class ProcurementModal extends Vue {
 
   //点击全选
   private cellClickEvent( {selection} ) {
-    // console.log(selection);
+    this.selectRow = selection;
   }
 
   //点击复选框获取当前已选择数据
