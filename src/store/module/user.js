@@ -117,7 +117,6 @@ export default {
 
         getUserInfo(username).then(res => {
           const data = res.data
-          console.log(data , 888888)
             let access = data.resourceVOS && data.resourceVOS.map(item => item.name)
             commit('setAccess', access)
             commit('setUserId', data.id)
