@@ -296,7 +296,7 @@ export default class Fittings extends Vue {
     this.local.loading = true;
     let params: Kv = {};
     let data: Kv = {};
-    params.page = this.local.page.num;
+    params.page = this.local.page.num - 1;
     params.size = this.local.page.size;
     const queryValue = this.queryValue.trim();
     if (queryValue.length > 0) {
@@ -322,7 +322,7 @@ export default class Fittings extends Vue {
     let params: Kv = {};
     let data: Kv = {};
     params.tenantId = 0;
-    params.page = this.cloud.page.num;
+    params.page = this.cloud.page.num - 1;
     params.size = this.cloud.page.size;
     const queryValue = this.queryValue.trim();
     if (queryValue.length > 0) {

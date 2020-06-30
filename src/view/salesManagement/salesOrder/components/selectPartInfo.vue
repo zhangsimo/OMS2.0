@@ -112,16 +112,10 @@
 
       submit(){
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
-          setTimeout(()=>{
-            this.$message.error("数量不能为空");
-          },50)
-          return
+          return this.$Message.error("数量不能为空");
         }
         if(!this.formItemData.orderPrice || this.formItemData.orderPrice <= 0) {
-          setTimeout(()=>{
-            this.$message.error("单价不可为空");
-          },50)
-          return
+          return this.$Message.error("单价不可为空");
         }
 		    this.searchPartLayer = false;
 		    this.$parent.$parent.getPartNameList2([this.formItemData]);
