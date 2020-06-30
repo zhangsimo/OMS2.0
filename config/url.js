@@ -13,8 +13,8 @@ const dev = {
 
   /**oms系统接口设定 */
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  authApi: "http://192.168.2.47:5200", // 系统资源 5200
-  passportApi: "http://192.168.2.47:5200", // passport微服务API
+  authApi: "http://192.168.15.165:5200", // 系统资源 5200
+  passportApi: "http://192.168.15.165:5200", // passport微服务API
   
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
