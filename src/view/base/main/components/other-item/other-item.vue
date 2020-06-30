@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="other-item">
-      <a class="mr20" @click="openShow">{{getName || '请选择分店'}}</a>
+      <a class="mr20" @click="openShow">{{shortName || '请选择分店'}}</a>
       <a class="mr20 service" href="#" @click="serviceShow = !serviceShow" v-if="service && shopkeeper == 0">客服
        <div class="title" v-if="serviceShow">
          <div><img src="@/assets/images/home/service.svg"  class="mr10"><span>{{serviceList.name}}</span></div>
@@ -53,8 +53,6 @@
 <script>
     import {getUserAllCompany , setCompany ,changeToken , getService} from '@/api/base/user'
     import {setToken} from '@/libs/util'
-    import { mapActions } from "vuex";
-
     export default {
     name: 'other-item',
       components: {
@@ -69,12 +67,11 @@
             serviceList:{},//客服信息
             service:false, //客服是否展示
             shopkeeper:0,//判断是否为租户
+            shortName:this.$store.state.user.userShopName
         }
       },
       computed:{
-        getName(){
-            return this.$store.state.user.userShopName
-        }
+
       },
       mounted(){
           //获取客服信息
@@ -83,14 +80,26 @@
           this.shopkeeper = this.$store.state.user.userData.shopkeeper
       },
       methods: {
-        ...mapActions(["handleLogin", "getUserInfo"]),
-        toImage() {
+          toImage() {
            this.$emit('getImg',{})
           },
           //打开公司选择模态框
-          openShow(){
-              this.show = true
-            this.getList()
+          async openShow(){
+            let data ={}
+            data.size = 10000
+            data.page = 0
+            data.id = this.$store.state.user.userData.id
+            data.tenantCompanyName = this.company
+            let res = await getUserAllCompany(data)
+            if(res.code === 0){
+                this.tableData = res.data.content
+            }
+            this.tableData.map(item=>{
+              if(item.tenantCompanyName==this.$store.state.user.userShopName){
+                this.shortName=item.shortName
+              }
+            })
+            this.show = true
           },
           //获取所有公司信息
           async getList(){
@@ -107,6 +116,7 @@
           //查询
           query(){
               this.getList()
+              this.company=""
           },
           //点击查询获取当前数据
           selectOne(val){
@@ -122,7 +132,7 @@
              //切换公司跟换token(权限设置)
              let res = await setCompany(data)
                   if(res.code === 0){
-                      // this.$store.commit('setUserShopName' , res.data.shopName)
+                      this.$store.commit('setUserShopName' , res.data.shopName)
                       let data = {}
                       data.tenantId = res.data.tenantId
                       data.shopId = res.data.shopId
@@ -132,20 +142,10 @@
                     let token = await changeToken( res.data)
                       if(token.code == 0){
                           setToken(token.data.access_token)
-                        let username = this.$store.state.user.username
-                        this.getUserInfo(username).then(res => {
-                          let data = {};
-                          data.tenantId = res.tenantId;
-                          data.shopId = res.shopId;
-                          data.shopkeeper = res.shopkeeper;
-                          localStorage.setItem("oms2-userList", JSON.stringify(data));
-                          this.$nextTick( () => {
-                            this.$router.go(0);
-                          })
-
-                        })
-
                       }
+                      this.$nextTick( () => {
+                          this.$router.go(0);
+                      })
                   }
 
 

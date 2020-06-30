@@ -21,7 +21,7 @@ export function getAddClient (data) {
 }
 
 //导入文件地址
-export const impUrl = `${api.omsSettle}/guestAdjust/import`
+export const impUrl = `${api.wmsApi}/guestAdjust/import` 
 
 //右侧list
 export function getCustomerInformation (params) {
