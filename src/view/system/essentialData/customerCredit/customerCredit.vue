@@ -438,7 +438,7 @@ export default {
       surveyAllList: [],
       adjustmentOne: {}, //额度调整信息
       impirtUrl:{
-        downId: '1600000000',
+        downId: '2400000000',
         upUrl:impUrl
       },//下载上传路径
       ID: "", //保存当前行id

@@ -2,13 +2,14 @@ import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/system/priceManage";
 import DiaLog from "./dialog.vue";
-import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
+// import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
+import selectPartCom from "@/view/system/basicData/priceManage/components/selectPartCom.vue";
 import importXLS from '@/view/settlementManagement/components/importXLS.vue'
 
 
 @Component({
   components: {
-    DiaLog,selectPartCom,importXLS
+    DiaLog, selectPartCom, importXLS
   }
 })
 export default class PriceManage extends Vue {
@@ -16,11 +17,13 @@ export default class PriceManage extends Vue {
   // 按钮禁用
   private disabled: boolean = true;
   // 价格启用禁用按钮 是否可以点击
-  private priceEnableBool:boolean=true
+  private priceEnableBool: boolean = true
   // 价格启用禁用
-  private priceEnable:string = "启用";
+  private priceEnable: string = "启用";
   // 左侧所被选中的行
-  private rowPriceManege:any
+  private rowPriceManege: any
+  // 最低销价
+  private sellPriceTitle:any
   // modal显示
   private modal: boolean = false;
   // tab索引
@@ -77,16 +80,17 @@ export default class PriceManage extends Vue {
       size: 10
     }
   };
-  private impirtUrl:any={
-    downId: '1600000000',
-    upUrl:api.impUrl
+  private impirtUrl: any = {
+    downId: '',
+    upUrl: api.impUrl
   }
   /**methods */
   /**==============左侧============= */
   // 获取表格
   private async getLevelList() {
-    this.rowPriceManege={}?this.priceEnableBool=true:this.priceEnableBool=false
-    this.level.tbdata = [{ name: "统一售价", readonly: true }];
+    this.rowPriceManege = {} ? this.priceEnableBool = true : this.priceEnableBool = false
+    this.level.tbdata = [{ name: "统一售价", readonly: true ,id:0}];
+    console.log( this.level.tbdata,111)
     // isDisabled:0 启用
     // isDisabled:1 禁用
     let res = await api.sellPsList();
@@ -147,7 +151,7 @@ export default class PriceManage extends Vue {
     if (res.code == 0) {
       this.part.loading = false;
       this.part.tbdata = res.data.content.map((el: any) => {
-        el.sellPrice =parseFloat(el.sellPrice).toFixed(2);
+        el.sellPrice = parseFloat(el.sellPrice).toFixed(2);
         el.costPrice = parseFloat(el.costPrice).toFixed(2);
         return el;
       });
@@ -224,8 +228,10 @@ export default class PriceManage extends Vue {
   }
   // 单选行
   private selectRow({ row }) {
-    this.rowPriceManege=row
-    row.isDisabled==0?this.priceEnable="禁用":this.priceEnable="启用"
+    this.rowPriceManege = row
+    row.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
+    row.name=="统一售价"?this.priceEnableBool=true:this.priceEnableBool=false
+    row.name=="统一售价"?this.sellPriceTitle="最低销价":this.sellPriceTitle="销售价格"
     const curs: any = this.$refs.curs;
     curs.custarr = new Array();
     this.currRow = row;
@@ -263,7 +269,7 @@ export default class PriceManage extends Vue {
   }
   // 删除
   private remove() {
-    if(!this.currRow) {
+    if (!this.currRow) {
       return this.$Message.error("请先选中一个级别名称");
     }
     this.level.tbdata.forEach((el: any, index: number, arr: Array<any>) => {
@@ -275,10 +281,17 @@ export default class PriceManage extends Vue {
     this.currRow = null;
   }
   // 切换价格启用禁用
-  private priceEnableFun(){
-    let data:any={}
-    data.id=this.rowPriceManege.id
-    api.sellPsList(data)
+  private priceEnableFun() {
+    let data: any = {}
+    data.id = this.rowPriceManege.id
+    api.tabPriceEnable(data).then(()=>{
+      if(this.rowPriceManege.isDisabled == 0 ){
+        this.priceEnable = "禁用"
+      }else{
+        this.priceEnable = "启用"
+      }
+      this.$Message.success(`价格${this.priceEnable}成功`)
+    })
   }
   // tab切换
   private setTab(index: number) {
@@ -371,7 +384,7 @@ export default class PriceManage extends Vue {
     }
     data.addList.forEach(el => {
       el.strategyId = this.currRow.id;
-      el.guestId = el.id||el.guestId;
+      el.guestId = el.id || el.guestId;
       Reflect.deleteProperty(el, "id");
     });
     let res = await api.sellcussave(data);
@@ -399,57 +412,60 @@ export default class PriceManage extends Vue {
     this.part.page.num = 1;
     this.getPart();
   }
-  // // 添加配件
-  // private addAccessories(){
-  //   this.$refs.selectPartCom.init()
-  // }
-  // //配件返回的参数
-  // private getPartNameList(val:any) {
-  //   var arr = []
-  //   val.forEach(item => {
-  //     item.partName = item.partStandardName;
-  //     item.hasAcceptQty = undefined;
-  //     item.carBrandName = item.adapterCarModel;
-  //     item.orderPrice = item.minUnit;
-  //     item.oemCode = item.oeCode;
-  //     item.spec = item.specifications;
-  //     item.partId = item.orgid;
-  //     item.partInnerId = item.code;
-  //     item.unit = item.minUnit;
-  //     let el = Object.assign({}, item);
-  //     delete el.id;
-  //     delete el.orderPrice;
-  //     arr.push(el)
-  //   });
-  //   var allArr = []; //新数组
-  //   this.Leftcurrentrow.detailVOS = [
-  //     ...this.Leftcurrentrow.detailVOS,
-  //     ...arr
-  //   ];
-  //   var allArr = [];
-  //   var oldArr = this.Leftcurrentrow.detailVOS;
-  //   for (var i = 0; i < oldArr.length; i++) {
-  //     var flag = true;
-  //     for (var j = 0; j < allArr.length; j++) {
-  //       if (oldArr[i].oemCode == allArr[j].oemCode) {
-  //         flag = false;
-  //       }
-  //     }
-  //     if (flag) {
-  //       allArr.push(oldArr[i]);
-  //     }
-  //   }
-  //   this.Leftcurrentrow.detailVOS = allArr;
-  //   setTimeout(()=>{
-  //     this.$Message.success("已添加");
-  //   },0)
-  // }
-  // // 导入模板
-  // private importModule(){
-  //   this.$refs.imp.openModal()
-  // }
+  // 添加配件
+  private async addAccessories() {
+    this.$refs.selectPartCom.init()
+  }
+  //配件返回的参数
+  private getPartNameList(val:any) {
+    var arr = []
+    val.forEach(item => {
+      item.partName = item.partStandardName;
+      item.hasAcceptQty = undefined;
+      item.carBrandName = item.adapterCarModel;
+      item.orderPrice = item.minUnit;
+      item.oemCode = item.oeCode;
+      item.spec = item.specifications;
+      item.partId = item.orgid;
+      item.partInnerId = item.code;
+      item.unit = item.minUnit;
+      let el = Object.assign({}, item);
+      delete el.id;
+      delete el.orderPrice;
+      arr.push(el)
+    });
+    var allArr = []; //新数组
+    this.part.tbdata = [
+      ...this.part.tbdata,
+      ...arr
+    ];
+    var allArr = [];
+    var oldArr = this.part.tbdata;
+    for (var i = 0; i < oldArr.length; i++) {
+      var flag = true;
+      for (var j = 0; j < allArr.length; j++) {
+        if (oldArr[i].oemCode == allArr[j].oemCode) {
+          flag = false;
+        }
+      }
+      if (flag) {
+        allArr.push(oldArr[i]);
+      }
+    }
+    this.part.tbdata = allArr;
+    setTimeout(()=>{
+      this.$Message.success("已添加");
+    },0)
+  }
+  // 导入模板
+  private importModule() {
+    this.rowPriceManege.name == "统一售价"
+      ? (this.impirtUrl.downId = "2300000000")
+      : (this.impirtUrl.downId = "2400000000");
+    this.$refs.imp.openModal();
+  }
   //导入成功后刷新页
-  private getNew(data){}
+  private getNew(data) { }
   // 保存配件
   private async savePart() {
     let res: any;
@@ -458,7 +474,6 @@ export default class PriceManage extends Vue {
     data.forEach((el: any) => {
       el.pchsPrice = el.costPrice;
     });
-    console.log(data, "data ==>383");
     if (this.curronly) {
       res = await api.partPriceSave(data);
     } else {
