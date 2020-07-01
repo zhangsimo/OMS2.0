@@ -373,7 +373,6 @@
       headerTit="配件成品选择"
     ></add-in-com>
     <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
-    <add-part ref="addPart"></add-part>
     <procurement-modal
       ref="addPart"
       :guestId="Leftcurrentrow.guestId"
@@ -408,14 +407,12 @@ import {
 } from "../../../../api/AlotManagement/twoBackApply.js";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
-import AddPart from "./compontents/addPart";
 import ProcurementModal from "../../../business/goods/supplierList/compontents/ProcurementModal";
 
 export default {
   name: "twoBackApply",
   components: {
     ProcurementModal,
-    AddPart,
     More,
     QuickDate,
     AddInCom,
