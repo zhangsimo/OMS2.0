@@ -280,7 +280,520 @@
   </main>
 </template>
 
-<script src="./index.ts"></script>
+<script>
+import * as api from "_api/system/priceManage";
+import DiaLog from "./dialog.vue";
+// import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
+import selectPartCom from "@/view/system/basicData/priceManage/components/selectPartCom.vue";
+import importXLS from '@/view/settlementManagement/components/importXLS.vue'
+const impirtUrlData1="1190210181681389568"
+export default {
+  data(){
+    return {
+      impirtUrlData:impirtUrlData1,
+      split:  0.34,
+      // 按钮禁用
+       disabled: true,
+      // 价格启用禁用按钮 是否可以点击
+       priceEnableBool: true,
+      // 价格启用禁用
+       priceEnable: "启用",
+      // 左侧所被选中的行
+       rowPriceManege: {},
+      // 最低销价
+       sellPriceTitle:"最低销价",
+      // modal显示
+       modal:false,
+      // tab索引
+       tabIndex:0,
+      // 选中的行
+       currRow:null,
+      // 选中是否第一行
+       curronly:false,
+      // 级别修改和新增数据
+       levelupOrSaveArr:[],
+      // 级别删除的数据
+       leveldelarr: [],
+      // 级别名称
+       level: {
+        loading: false,
+        name: "", // 修改的级别名称
+        tbdata: [{ name: "统一售价", readonly: true }]
+      },
+       selectCrr: [],
+      // 右边选择的客户
+       selectRightCR: [],
+      // 右边删除的客户
+       removeRightCr: [],
+      // 客户信息
+       customer :{
+        pinyin: "", //客户拼音
+        fullname: "", //客户全程
+        // 表头
+        // 表身
+        tbdata: [],
+        // 表格加载
+        loading: false,
+        // 分页
+        page: {
+          num: 1,
+          total: 0,
+          size: 10
+        }
+      },
+       part :{
+        pinyin: "", // 拼音
+        code: "", // 编码
+        fullname: "", // 名称
+        // 表身
+        tbdata: new Array(),
+        // 表格加载
+        loading: false,
+        // 分页
+        page: {
+          num: 1,
+          total: 0,
+          size: 10
+        }
+      },
+       impirtUrl: {
+        downId: '',
+        upUrl: api.impUrl
+      }
+    }
+  },
+  components: {
+    DiaLog, selectPartCom, importXLS
+  },
+  methods:{
+    /**methods */
+    /**==============左侧============= */
+    // 获取表格
+    async getLevelList() {
+      this.rowPriceManege = {} ? this.priceEnableBool = true : this.priceEnableBool = false
+      this.level.tbdata = [{ name: "统一售价", readonly: true }];
+      // isDisabled:0 启用
+      // isDisabled:1 禁用
+      let res = await api.sellPsList();
+      if (res.code === 0) {
+        res.data.forEach(el => {
+          el.oid = el.id;
+          this.level.tbdata.push(el);
+        });
+      }
+      this.leveldelarr = [];
+    },
+    // 获取客户
+    async getCus() {
+      this.customer.loading = true;
+      this.selectCrr = [];
+      this.removeRightCr = [];
+      this.selectRightCR = [];
+      let params = {};
+      let data = {};
+      if (this.customer.fullname) {
+        data.fullName = this.customer.fullname.trim();
+      }
+      if (this.customer.pinyin) {
+        data.pyName = this.customer.pinyin.trim();
+      }
+      data.strategyId = this.currRow.id;
+      params.page = this.customer.page.num - 1;
+      params.size = this.customer.page.size;
+      let res = await api.findAllCus(params, data);
+      if (res.code == 0) {
+        this.customer.loading = false;
+        this.customer.tbdata = res.data.content;
+        this.customer.tbdata.forEach(el => {
+          el.oid = el.id;
+        });
+        this.customer.page.total = res.data.totalElements;
+      }
+    },
+    // 获取配件
+    async getPart() {
+      this.part.loading = true;
+      let data = {};
+      let params = {};
+      if (this.part.fullname) {
+        data.fullName = this.part.fullname;
+      }
+      if (this.part.pinyin) {
+        data.pinyin = this.part.pinyin;
+      }
+      if (this.part.code) {
+        data.partCode = this.part.code;
+      }
+      params.strategyId = this.currRow.id;
+      params.page = this.part.page.num - 1;
+      params.size = this.part.page.size;
+      let res = await api.queryPart(params, data);
+      if (res.code == 0) {
+        this.part.loading = false;
+        this.part.tbdata = res.data.content.map((el) => {
+          el.sellPrice = parseFloat(el.sellPrice).toFixed(2);
+          el.costPrice = parseFloat(el.costPrice).toFixed(2);
+          return el;
+        });
+        this.part.page.total = res.data.totalElements;
+      }
+    },
+    rowPriceLevelStyle(row){
+      if(row.isDisabled!=0){
+        return `backgroundColor:#f2f2f2 !important;`
+      }else{
+        return `backgroundColor:#f1f1f1 !important;`
+      }
+    },
+    selectPartName(selectPartName){
+      // this.getPart()
+      this.part.tbdata.push(selectPartName)
+    },
+    removeLimitChange(row){
+      row.removeLimit==0?row.removeLimit=1:row.removeLimit=0
+    },
+    // rest
+    restTbdata() {
+      this.customer = {
+        pinyin: "", //客户拼音
+        fullname: "", //客户全程
+        // 表头
+        // 表身
+        tbdata: new Array(),
+        // 表格加载
+        loading: false,
+        // 分页
+        page: {
+          num: 1,
+          total: 0,
+          size: 10
+        }
+      };
+      this.part = {
+        pinyin: "", // 拼音
+        code: "", // 编码
+        fullname: "", // 名称
+        // 表身
+        tbdata: new Array(),
+        // 表格加载
+        loading: false,
+        // 分页
+        page: {
+          num: 1,
+          total: 0,
+          size: 10
+        }
+      };
+    },
+    // 保存级别
+    async save() {
+      let data = {
+        addList: []
+      };
+      data.addList = JSON.parse(JSON.stringify(this.level.tbdata));
+      if (this.leveldelarr.length > 0) {
+        data.delList = this.leveldelarr;
+      }
+      data.addList.forEach((el, index, arr) => {
+        if (el.readonly) {
+          arr.splice(index, 1);
+        }
+      });
+      let isOk = data.addList.every((el) => {
+        let name = el.name.trim();
+        if (name && name.length >= 1) {
+          return true;
+        }
+        return false;
+      });
+      if (!isOk) {
+        return this.$Message.error("级别名称未输入");
+      }
+      let res = await api.sellPsSave(data);
+      if (res.code === 0) {
+        this.$Message.success("保存成功");
+        this.getLevelList();
+        this.restTbdata();
+      }
+    },
+    // 新增
+    add() {
+      this.level.tbdata.push({ name: "", isNew: true, oid: Date.now() });
+    },
+    // 单选行
+    selectRow({ row }) {
+      this.rowPriceManege = row
+      this.rowPriceLevelStyle(row)
+      row.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
+      row.readonly==true?this.priceEnableBool=true:this.priceEnableBool=false
+      row.readonly==true?this.sellPriceTitle="最低销价":this.sellPriceTitle="销售价格"
+      row.readonly==true?this.impirtUrlData="":this.impirtUrlData=this.rowPriceManege.id
+      const curs = this.$refs.curs;
+      curs.custarr = new Array();
+      this.currRow = row;
+      this.disabled = false;
+      this.selectCrr = new Array();
+      this.removeRightCr = new Array();
+      this.selectRightCR = new Array();
+      this.customer.pinyin = "";
+      this.customer.fullname = "";
+      this.part.pinyin = "";
+      this.part.code = "";
+      this.part.fullname = "";
+      if (row.readonly) {
+        this.curronly = true;
+        this.tabIndex = 1;
+      } else {
+        this.curronly = false;
+        this.tabIndex = 0;
+      }
+      this.customer.page = {
+        num: 1,
+        total: 0,
+        size: 10
+      };
+      this.part.page = {
+        num: 1,
+        total: 0,
+        size: 10
+      };
+      if (row.isNew) return false;
+      if (!this.curronly) {
+        this.getCus();
+      }
+      this.getPart();
+    },
+    // 删除
+    remove() {
+      if (!this.currRow) {
+        return this.$Message.error("请先选中一个级别名称");
+      }
+      this.level.tbdata.forEach((el, index, arr) => {
+        if (this.currRow.oid === el.oid && !el.readonly) {
+          arr.splice(index, 1);
+          el.id && this.leveldelarr.push(el);
+        }
+      });
+      this.currRow = null;
+    },
+    // 切换价格启用禁用
+    priceEnableFun() {
+      let data = {}
+      data.id = this.rowPriceManege.id
+      api.tabPriceEnable(data).then(()=>{
+        if(this.rowPriceManege.isDisabled == 0 ){
+          this.priceEnable = "禁用"
+        }else{
+          this.priceEnable = "启用"
+        }
+        this.$Message.success(`价格${this.priceEnable}成功`)
+        this.getLevelList()
+        this.rowPriceManege.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
+      })
+    },
+    // tab切换
+    setTab(index) {
+      this.tabIndex = index;
+    },
+    /**============客户信息============ */
+    // 翻页-客户信息
+    changePageCus(p) {
+      this.customer.page.num = p;
+      this.getCus();
+    },
+    // 修改每页显示条数-客户信息
+    changeSizeCus(size) {
+      this.customer.page.num = 1;
+      this.customer.page.size = size;
+      this.getCus();
+    },
+    // 查询客户
+    queryCustomer() {
+      this.customer.page.num = 1;
+      this.getCus();
+    },
+    // 添加客户
+    addCustomer() {
+      const curs = this.$refs.curs;
+      this.selectCrr = new Array();
+      this.selectRightCR = new Array();
+      this.removeRightCr = new Array();
+      curs.init();
+      this.modal = true;
+    },
+    // 添加客户
+    addcu(val) {
+      this.modal = false;
+      var obj = {};
+      this.selectCrr = val;
+      this.customer.tbdata = this.customer.tbdata.concat(val);
+      this.customer.tbdata = this.customer.tbdata.reduce((item, next) => {
+        obj[next.id] ? "" : (obj[next.id] = true && item.push(next));
+        return item;
+      }, []);
+    },
+    // 右侧-选择客户
+    selectRC({ selection }) {
+      this.selectRightCR = selection;
+    },
+    // 右侧-全选客户
+    selectAllrightcus({ selection }) {
+      this.selectRightCR = selection;
+    },
+    // 删除客户
+    removeCustomer() {
+      if (this.selectRightCR.length <= 0) {
+        return this.$Message.error("请选择客户");
+      }
+      const curs = this.$refs.curs;
+      this.removeRightCr = this.removeRightCr.concat(...this.selectRightCR);
+      this.removeRightCr.forEach(rs => {
+        this.customer.tbdata.forEach((el, index, arr) => {
+          if (rs.id === el.id) {
+            arr.splice(index, 1);
+          }
+        });
+        this.selectRightCR.forEach((el, index, arr) => {
+          if (rs.id === el.id) {
+            arr.splice(index, 1);
+          }
+        });
+        curs.custarr.forEach((el, index, arr) => {
+          if (rs.id === el.id) {
+            arr.splice(index, 1);
+          }
+        });
+      });
+    },
+    // 保存客户
+    async saveCustomer() {
+      let data = {
+        addList: new Array(),
+        delList: new Array()
+      };
+      data.addList = this.customer.tbdata.filter((el) => el.new);
+      this.removeRightCr.forEach(el => {
+        if (el.oid) {
+          data.delList.push(el);
+        }
+      });
+      if (data.addList.length <= 0 && data.delList.length <= 0) {
+        return this.$Message.error("没有修改过数据");
+      }
+      data.addList.forEach(el => {
+        el.strategyId = this.currRow.id;
+        el.guestId = el.id || el.guestId;
+        Reflect.deleteProperty(el, "id");
+      });
+      let res = await api.sellcussave(data);
+      if (res.code === 0) {
+        const curs = this.$refs.curs;
+        curs.custarr = new Array();
+        this.$Message.success("保存成功");
+        this.getCus();
+      }
+    },
+    /**============配件============ */
+// 添加配件
+   addAccessories() {
+    this.rowPriceManege.name=="统一售价"?this.$refs.selectPartCom.apiDataId="":this.$refs.selectPartCom.apiDataId=this.rowPriceManege.id
+    this.$refs.selectPartCom.init()
+    // @Component.components.selectPartCom.init()
+  },
+  //配件返回的参数
+   getPartNameList(val) {
+    var arr = []
+    val.forEach(item => {
+      item.partName = item.partStandardName;
+      item.hasAcceptQty = undefined;
+      item.carBrandName = item.adapterCarModel;
+      item.orderPrice = item.minUnit;
+      item.oemCode = item.oeCode;
+      item.spec = item.specifications;
+      item.partId = item.orgid;
+      item.partInnerId = item.code;
+      item.unit = item.minUnit;
+      let el= Object.assign({}, item);
+      delete el.id;
+      delete el.orderPrice;
+      arr.push(el)
+    });
+    var allArr = []; //新数组
+    this.getPart()
+    this.part.tbdata = [
+      ...this.part.tbdata,
+      ...arr
+    ];
+    var allArr = [];
+    var oldArr = this.part.tbdata;
+    for (var i = 0; i < oldArr.length; i++) {
+      var flag = true;
+      for (var j = 0; j < allArr.length; j++) {
+        if (oldArr[i].oemCode == allArr[j].oemCode) {
+          flag = false;
+        }
+      }
+      if (flag) {
+        allArr.push(oldArr[i]);
+      }
+    }
+    this.part.tbdata = allArr;
+    setTimeout(()=>{
+      this.$Message.success("已添加");
+    },0)
+  },
+  // 导入模板
+  importModule() {
+    this.rowPriceManege.name == "统一售价"
+      ? (this.impirtUrl.downId = "2600000000")
+      : (this.impirtUrl.downId = "2700000000");
+    this.$refs.imp.openModal();
+  },
+    // 翻页-配件价格
+    changePagePagePart(p) {
+      this.part.page.num = p;
+      this.getPart();
+    },
+    // 修改每页显示条数-配件价格
+    changeSizePagePart(size) {
+      this.part.page.num = 1;
+      this.part.page.size = size;
+      this.getPart();
+    },
+    // 查询配件
+    queryPart() {
+      this.part.page.num = 1;
+      this.getPart();
+    },
+    //导入成功后刷新页
+    getNew(data) { },
+    // 保存配件
+    async savePart() {
+      let res;
+      let data = [...this.part.tbdata];
+      data.forEach((el) => {
+        el.pchsPrice = el.costPrice;
+      });
+      if (this.curronly) {
+        res = await api.partPriceSave(data);
+      } else {
+        data.map((el) => {
+          el.strategyId = this.currRow.id;
+          return el;
+        });
+        res = await api.partLevelSave(data);
+      }
+      if (res.code == 0) {
+        this.$Message.success("保存成功");
+        this.queryPart();
+      }
+    },
+  },
+   mounted() {
+    this.getLevelList();
+  }
+}
+</script>
 <style lang="less" scoped>
 @import url("../../../lease/tenantres/icon");
 @import url("./index");

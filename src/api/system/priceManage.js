@@ -1,6 +1,6 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-import {impirtUrlData} from "@/view/system/basicData/priceManage/index.ts"
+import {impirtUrlData} from "@/view/system/basicData/priceManage/priceManage.vue"
 // 级别定义-保存
 export function sellPsSave(data) {
   return axios.request({
