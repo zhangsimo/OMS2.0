@@ -157,7 +157,6 @@
                         </Col>
                         <Col span="2">
                           <Button
-                            disabled
                             @click="showModel"
                             class="ml5"
                             size="small"
@@ -239,7 +238,7 @@
                         class="mr10"
                         @click="addProoo"
                       >
-                        <Icon type="md-add" />选择调拨入库单
+                        <Icon type="md-add" />添加配件
                       </Button>
                     </div>
                     <div class="fl mb5">
@@ -374,6 +373,13 @@
       headerTit="配件成品选择"
     ></add-in-com>
     <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
+    <add-part ref="addPart"></add-part>
+    <procurement-modal
+      ref="addPart"
+      :guestId="Leftcurrentrow.guestId"
+      :storeId="Leftcurrentrow.storeId"
+      @getPlanOrder="getPlanOrder">
+    </procurement-modal>
   </main>
   <!-- 配件组装 -->
 </template>
@@ -402,10 +408,14 @@ import {
 } from "../../../../api/AlotManagement/twoBackApply.js";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
+import AddPart from "./compontents/addPart";
+import ProcurementModal from "../../../business/goods/supplierList/compontents/ProcurementModal";
 
 export default {
   name: "twoBackApply",
   components: {
+    ProcurementModal,
+    AddPart,
     More,
     QuickDate,
     AddInCom,
@@ -917,23 +927,26 @@ export default {
       //   this.$Message.error("只有草稿状态申请单能进行添加操作");
       //   return;
       // }
-      const params = {
-        mainId: this.Leftcurrentrow.id,
-        status: "HAS_ENTER"
-      };
-      this.$refs.addInCom.init();
-      chengping(params, 10, 1)
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.tableData1 = res.data.content;
-          }
-        })
-        .catch(e => {
-          this.$Message.error("数据加载失败");
-        });
+      // const params = {
+      //   mainId: this.Leftcurrentrow.id,
+      //   status: "HAS_ENTER"
+      // };
+      // this.$refs.addInCom.init();
+      // chengping(params, 10, 1)
+      //   .then(res => {
+      //     // 导入成品, 并把成品覆盖掉当前配件组装信息list
+      //     if (res.code == 0) {
+      //       this.tableData1 = res.data.content;
+      //     }
+      //   })
+      //   .catch(e => {
+      //     this.$Message.error("数据加载失败");
+      //   });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
+      if (!this.Leftcurrentrow.guestId || !this.Leftcurrentrow.storeId)
+        return this.$Message.error("请先选择调出方和调出仓库");
+      this.$refs.addPart.init();
     },
     //打印表格
     printTable() {
@@ -1031,6 +1044,7 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      console.log(this.Leftcurrentrow)
       this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
@@ -1068,6 +1082,30 @@ export default {
           this.$Message.error("获取仓库列表失败");
         });
     },
+
+    //选择采购入库单
+    getPlanOrder(Msg) {
+      console.log(Msg)
+      let arr = Msg || [];
+
+      if (arr.length <= 0) return;
+
+      arr.map(item => {
+        item.outUnitId = item.enterUnitId;
+        item.unit = item.enterUnitId;
+        item.systemUnitId = item.enterUnitId;
+        item.canReQty = item.enterQty;
+        item.orginOrderQty = item.orderQty;
+        item.applyQty = item.rtnableQty;
+        item.orderPrice = item.enterPrice;
+        item.partInnerId = item.partId;
+      });
+
+      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arr);
+      this.$message.success("已添加");
+    },
+
+
     //分页
     changePage(p) {
       this.Left.page.num = p;
@@ -1161,7 +1199,7 @@ export default {
     selectSupplierName(row) {
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.id;
+        this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.id;
         const tata = this;
         setTimeout(() => {

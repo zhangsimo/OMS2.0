@@ -197,6 +197,33 @@
                     </Button>
                   </div>
                   <div class="fl mb5">
+                    <Upload
+                      ref="upload"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :format="['xlsx', 'xls', 'csv']"
+                      :headers="headers"
+                      :before-upload="handleBeforeUpload"
+                      :on-success="handleSuccess"
+                      :on-format-error="onFormatError"
+                      :disabled="Leftcurrentrow.status.value !== 0"
+                    >
+                      <Button
+                        size="small"
+                        class="mr10"
+                        :disabled="Leftcurrentrow.status.value !== 0"
+                      >导入</Button>
+                    </Upload>
+                  </div>
+                  <div class="fl mb5 mr10">
+                    <Button
+                      size="small"
+                      @click="down"
+                    >
+                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                    </Button>
+                  </div>
+                  <div class="fl mb5">
                     <Button
                       size="small"
                       class="mr10"
@@ -262,6 +289,9 @@
 </template>
 
 <script>
+  import {
+    upxlxs
+  } from "_api/purchasing/purchasePlan";
 import {
   getLeftList,
   getstate, //仓库数据
@@ -292,7 +322,9 @@ import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
 import {getSales} from "@/api/salesManagment/salesOrder";
 import * as tools from "_utils/tools";
-
+  import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+  import { TOKEN_KEY } from "@/libs/util";
+  import Cookies from "js-cookie";
 export default {
   name: "moveStorehouse",
   components: {
@@ -510,7 +542,10 @@ export default {
 
       saveButClick:false,//点击保存临时屏蔽保存按钮功能
       leftClickItemId:'',
-
+      upurl:'',
+      headers: {
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+      },
     };
   },
   watch: {
@@ -870,6 +905,7 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(row) {
+      console.log(row)
       if(row.id){
         this.leftClickItemId = row.id;
       }
@@ -917,6 +953,7 @@ export default {
       if (this.Leftcurrentrow.createUname == "") {
         this.Leftcurrentrow.createUname = this.salesman;
       }
+      this.upurl = upxlxs + row.id;
     },
 
     //添加配件
@@ -1016,6 +1053,44 @@ export default {
         }
       }
       return a;
+    },
+    // 导入
+    handleBeforeUpload() {
+      if (this.Leftcurrentrow.new) {
+        return this.$Message.error("请先保存数据!");
+      }
+      let refs = this.$refs;
+      refs.upload.clearFiles();
+    },
+    handleSuccess(res, file) {
+      let self = this;
+      if (res.code == 0) {
+        if (res.data.errosMsg.length > 0) {
+          this.warning(res.data.errosMsg);
+        } else  {
+          self.$Message.success("导入成功");
+        }
+        this.tableData = [...this.tableData, ...res.data.details].map(item => {
+          item.uuid = v4();
+          return item;
+        });
+        this.tableData.push();
+      } else {
+        self.$Message.error(res.message);
+      }
+    },
+    warning(nodesc) {
+      this.$Notice.warning({
+        title: '上传错误信息',
+        desc: nodesc
+      });
+    },
+    onFormatError(file) {
+      this.$Message.error('只支持xls xlsx后缀的文件')
+    },
+    //下载模板
+    down(){
+      down('2500000000')
     }
   },
   mounted() {

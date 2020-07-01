@@ -304,7 +304,7 @@
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="averagePrice" title="采购价"></vxe-table-column>
+          <vxe-table-column field="averagePrice" title="参考价"></vxe-table-column>
           <vxe-table-column
             field="remark"
             title="备注"

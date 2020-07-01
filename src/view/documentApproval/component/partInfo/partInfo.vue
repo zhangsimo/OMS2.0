@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="proModal" title="配件申请审批" width="700" :mask-closable="false" @on-visible-change="visible">
+    <Modal v-model="proModal" title="配件申请审批" width="700" :mask-closable="false" @on-visible-change="visible" footer-hide>
       <div class="pb10 tr" v-if="!isAddPart || isSellDis">
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
@@ -208,8 +208,6 @@
             </template>
           </vxe-table-column>
         </vxe-table>
-      </div>
-      <div slot="footer" v-if="isAddPart">
       </div>
     </Modal>
 
