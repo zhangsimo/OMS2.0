@@ -1,6 +1,5 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-import {impirtUrlData} from "@/view/system/basicData/priceManage/priceManage.vue"
 // 级别定义-保存
 export function sellPsSave(data) {
   return axios.request({
@@ -93,7 +92,7 @@ export function area(params) {
 //   })
 // } 
 // export const impUrl = `${api.wmsApi}/sellPricePart/import`
-export const impUrl = `${api.wmsApi}/sellPricePart/import?strategyId=${impirtUrlData}`
+export const impUrl = `${api.wmsApi}/sellPricePart/import`
 
 // 添加配件
 export function getwbParts(data) {

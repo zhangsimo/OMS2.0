@@ -286,11 +286,10 @@ import DiaLog from "./dialog.vue";
 // import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
 import selectPartCom from "@/view/system/basicData/priceManage/components/selectPartCom.vue";
 import importXLS from '@/view/settlementManagement/components/importXLS.vue'
-const impirtUrlData1="1190210181681389568"
+// strategyId
 export default {
   data(){
     return {
-      impirtUrlData:impirtUrlData1,
       split:  0.34,
       // 按钮禁用
        disabled: true,
@@ -528,6 +527,7 @@ export default {
       row.readonly==true?this.priceEnableBool=true:this.priceEnableBool=false
       row.readonly==true?this.sellPriceTitle="最低销价":this.sellPriceTitle="销售价格"
       row.readonly==true?this.impirtUrlData="":this.impirtUrlData=this.rowPriceManege.id
+      row.readonly==true?this.impirtUrl.upUrl:this.impirtUrl.upUrl=`${this.impirtUrl.upUrl}?strategyId=${row.id}`
       const curs = this.$refs.curs;
       curs.custarr = new Array();
       this.currRow = row;
