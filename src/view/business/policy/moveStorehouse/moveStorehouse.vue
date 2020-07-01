@@ -710,6 +710,9 @@ export default {
           return;
         }
       }
+      this.Left.tbdata.map((item, index) => {
+        item._highlight = false;
+      });
       this.$refs.Leftcurrentrow.resetFields();
       const item = {
         index: 1,
@@ -1065,16 +1068,18 @@ export default {
     handleSuccess(res, file) {
       let self = this;
       if (res.code == 0) {
-        if (res.data.errosMsg.length > 0) {
-          this.warning(res.data.errosMsg);
-        } else  {
-          self.$Message.success("导入成功");
-        }
-        this.tableData = [...this.tableData, ...res.data.details].map(item => {
-          item.uuid = v4();
-          return item;
-        });
-        this.tableData.push();
+        this.getList();
+        self.$Message.success("导入成功");
+        // if (res.data.errosMsg.length > 0) {
+        //   this.warning(res.data.errosMsg);
+        // } else  {
+        //   self.$Message.success("导入成功");
+        // }
+        // this.tableData = [...this.tableData, ...res.data.details].map(item => {
+        //   item.uuid = v4();
+        //   return item;
+        // });
+        // this.tableData.push();
       } else {
         self.$Message.error(res.message);
       }
