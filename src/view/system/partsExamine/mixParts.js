@@ -35,7 +35,7 @@ export const minxParts = {
           value: 1
         },
         {
-          label: "待审",
+          label: "待审核",
           value: 0
         },
         {
@@ -43,7 +43,7 @@ export const minxParts = {
           value: 2
         },
         {
-          label: "待同步",
+          label: "待审批",
           value: 3
         },
       ],
@@ -140,11 +140,6 @@ export const minxParts = {
               minWidth: 70
             },
             {
-              title: "配件类别三级",
-              key: "carTypetName",
-              minWidth: 70
-            },
-            {
               title: "单位",
               key: "unitId",
               minWidth: 70
@@ -161,7 +156,7 @@ export const minxParts = {
               render: (h, params) => {
                 let approval = params.row.auditSign || 0;
                 let className = "";
-                let apptxt = "待审批";
+                let apptxt = "待审核批";
                 if (approval == 1) {
                   className = "blue";
                   apptxt = "审批通过";
@@ -169,7 +164,7 @@ export const minxParts = {
                   apptxt = "未通过";
                   className = "red";
                 } else if (approval == 3) {
-                  apptxt = "待同步";
+                  apptxt = "待审批";
                 }
                 return h(
                   "span",
