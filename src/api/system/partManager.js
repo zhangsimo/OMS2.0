@@ -116,7 +116,7 @@ export function toggleSale(id) {
 // 通过主键查询-配件资料
 export function findbyidInfo(partId) {
   return axios.request({
-    url: `${api.omsProduct}/part/findById`,
+    url: `${api.wmsApi}/partApply/findByPartId`,
     method: "get",
     params: { partId }
   });
