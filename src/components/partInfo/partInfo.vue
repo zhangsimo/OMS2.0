@@ -309,10 +309,6 @@ import SearchPartName from "./searchPartName";
 
 export default {
   name: "partInfo",
-  data: {
-    // 按钮状态
-    btnIsLoadding: false,
-  },
   props: {
     isAddPart: false,
     isSellDis: false
