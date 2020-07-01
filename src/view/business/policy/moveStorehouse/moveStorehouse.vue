@@ -206,12 +206,12 @@
                       :before-upload="handleBeforeUpload"
                       :on-success="handleSuccess"
                       :on-format-error="onFormatError"
-                      :disabled="Leftcurrentrow.status.value !== 0"
+                      :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
                     >
                       <Button
                         size="small"
                         class="mr10"
-                        :disabled="Leftcurrentrow.status.value !== 0"
+                        :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
                       >导入</Button>
                     </Upload>
                   </div>
@@ -1056,7 +1056,7 @@ export default {
     },
     // 导入
     handleBeforeUpload() {
-      if (this.Leftcurrentrow.new) {
+      if (this.Leftcurrentrow.xinzeng=='1') {
         return this.$Message.error("请先保存数据!");
       }
       let refs = this.$refs;

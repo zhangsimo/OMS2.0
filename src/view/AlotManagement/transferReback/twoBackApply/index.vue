@@ -375,7 +375,6 @@
     <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
     <procurement-modal
       ref="addPart"
-      :guestId="Leftcurrentrow.guestId"
       :storeId="Leftcurrentrow.storeId"
       @getPlanOrder="getPlanOrder">
     </procurement-modal>
