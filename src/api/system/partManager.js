@@ -114,11 +114,11 @@ export function toggleSale(id) {
 }
 
 // 通过主键查询-配件资料
-export function findbyidInfo(id) {
+export function findbyidInfo(partId) {
   return axios.request({
-    url: `${api.wmsApi}/part/findById`,
+    url: `${api.wmsApi}/partApply/findByPartId`,
     method: "get",
-    params: { id }
+    params: { partId }
   });
 }
 

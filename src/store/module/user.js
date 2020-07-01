@@ -19,6 +19,7 @@ export default {
     storeId:'',
     supplierId:'',
     managementId:'',
+    changePassword: false,//判断是否需要开启强制修改密码弹窗
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -55,6 +56,9 @@ export default {
     setUserShopName(state ,data){
       state.userShopName = data
     },
+    setChangePassword(state , data){
+      state.changePassword = data
+    }
 
   },
   actions: {
@@ -117,7 +121,6 @@ export default {
 
         getUserInfo(username).then(res => {
           const data = res.data
-          console.log(data , 888888)
             let access = data.resourceVOS && data.resourceVOS.map(item => item.name)
             commit('setAccess', access)
             commit('setUserId', data.id)

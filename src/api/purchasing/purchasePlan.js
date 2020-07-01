@@ -182,3 +182,7 @@ export const upxlxs = `${api.omsOrder}/pchsPlanMain/importExcel?id=`;
 //调拨申请导入
 export const upxlxsDBo = `${api.omsOrder}/allotApplyMain/importExcel
 ?id=`;
+
+//移仓单导入
+export const upxlxsMoveStore = `${api.omsOrder}/stockShiftMain/importExcel
+?id=`;

@@ -21,6 +21,7 @@ export const mixPartInfo = {
       }
     };
     return {
+      btnIsLoadding: false,
       typepf: [],
       typeps: [],
       saveFlag:false,
@@ -192,7 +193,7 @@ export const mixPartInfo = {
       this.formValidate.specVOS=[];
       this.saveFlag = false;
       this.$refs.tabs.activeKey = 'active1'
-      //拉取适用车型品牌
+      //拉取适用车型品牌submit
       this.getCarBrand();
       //获取所有品质
       this.getQuiltyAndBrand();
@@ -311,7 +312,7 @@ export const mixPartInfo = {
     //获取选中配件名称
     getSearchPartName(v) {
       this.formValidate.name = v.name
-      this.formValidate.partNameId = v.id
+      this.formValidate.partNameId = v.nameId
       this.formValidate.carTypeF = v.carTypef
       this.formValidate.carTypeS = v.carTypes
       this.formValidate.carTypeT = v.carTypet
@@ -460,11 +461,6 @@ export const mixPartInfo = {
               if(objReq.qualityTypeId === "000071") {
                 objReq.qualityName = "品牌件"
               }
-              //品质名称
-              // let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
-              // if (arrData.length > 0) {
-              //   objReq.qualityName = arrData[0].quality
-              // }
               //品牌
               objReq.partBrandId = this.formValidate.partBrandId
               //获取品牌code
@@ -489,15 +485,6 @@ export const mixPartInfo = {
               objReq.model = this.formValidate.model
               objReq.partTypeF = this.formValidate.partTypeF
               objReq.partTypeS = this.formValidate.partTypeS
-              console.log(objReq)
-              //使用车型品牌
-              // let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
-              // if (selectBrandData.length > 0) {
-              //   objReq.carBrand = selectBrandData[0].nameCn
-              //   objReq.carBrandName = selectBrandData[0].id
-              // }
-              // objReq.carModelName = this.formValidate.carModelName
-              // console.log(this.carList)
               this.isCart = false;
               if(!this.carList[0].carName&&!this.carList[0].id){
                 this.btnIsLoadding = false;

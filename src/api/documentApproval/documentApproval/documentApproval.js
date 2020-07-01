@@ -58,6 +58,15 @@ export function findLsOrWcDetail (params) {
   })
 }
 
+//获取活动申请
+export function findActivty (params) {
+  return axios.request({
+    url: `${api.wmsApi}/activity/findByCode`,
+    method: 'get',
+    params
+  })
+}
+
 
 //获取仓库
 export function findByStore(){
@@ -89,6 +98,15 @@ export function findCreditDetail (params) {
 export function findQuotaDetail (params) {
   return axios.request({
     url: `${api.wmsApi}/guestAdjust/findByCode`,
+    method: 'get',
+    params
+  })
+}
+
+//获取供应商资料详情
+export function findSupplerDetail (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByProcessInstanceId`,
     method: 'get',
     params
   })

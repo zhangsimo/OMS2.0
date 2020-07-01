@@ -1,6 +1,5 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-
 // 级别定义-保存
 export function sellPsSave(data) {
   return axios.request({
@@ -16,6 +15,15 @@ export function sellPsList() {
     url: `${api.wmsApi}/sellPriceStrategy/findByTenantId`,
     method: "post",
     data: {}
+  });
+}
+
+// 切换价格启用禁用
+export function tabPriceEnable(params) {
+  return axios.request({
+    url: `${api.wmsApi}/sellPriceStrategy/changeState`,
+    method: "get",
+    params
   });
 }
 
@@ -41,7 +49,7 @@ export function findAllCus(params, data) {
 // 配件分页查询
 export function queryPart(params, data) {
   return axios.request({
-    url: `${api.omsSotck}/partStock/findPartPrice`,
+    url: `${api.wmsApi}/sellPricePart/findPartPrice`,
     method: "post",
     params,
     data
@@ -76,10 +84,21 @@ export function area(params) {
 }
 
 // 导入配件表格
-export function impUrl(data) {
+// export function impUrl(data) {
+//   return axios.request({
+//     url:`${api.wmsApi}/sellPricePart/import`,
+//     methods:"post",
+//     data
+//   })
+// } 
+// export const impUrl = `${api.wmsApi}/sellPricePart/import`
+export const impUrl = `${api.wmsApi}/sellPricePart/import`
+
+// 添加配件
+export function getwbParts(data) {
   return axios.request({
-    // url:`${api}`,
-    methods:"post",
+    url: `${api.wmsApi}/wbParts/findForPartPrice?page=${data.page}&size=${data.size}`,
+    method: "post",
     data
-  })
+  });
 }
