@@ -132,6 +132,11 @@ export default {
         if (valid) {
           let username = this.form.username;
           let password = this.form.password;
+          if (password == '000000'){
+            this.$store.commit('setChangePassword' , true)
+          } else {
+            this.$store.commit('setChangePassword' , false)
+          }
           let scope = this.form.scope;
           localStorage.setItem("userScope", scope);
           this.$emit("on-commit", {

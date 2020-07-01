@@ -321,12 +321,65 @@
         <vxe-table-column field="acceptQty" title="验收数量" width="100"></vxe-table-column>
       </vxe-table>
     </div>
+    <div v-show="modelTitle=='活动申请'">
+      <p>申请单号：<Input disabled :value="mainData.applyId" placeholder="申请单号" style="width: 300px" /></p>
+      <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="table-th">申请分店</td>
+          <td>{{mainData.orgname}}</td>
+          <td class="table-th">是否厂家提供</td>
+          <td>{{mainData.isBelowCost ? "是" : "否"}}</td>
+          <td class="table-th">创建时间</td>
+          <td>{{mainData.createTime}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">创建人</td>
+          <td>{{mainData.createUname}}</td>
+          <td class="table-th">备注</td>
+          <td colspan="3">{{mainData.remark}}</td>
+        </tr>
+      </table>
+      <p class="p10 fs14">活动信息</p>
+      <vxe-table
+        border
+        resizable
+        size="mini"
+        height="300"
+        :data="mainData.details"
+        :footer-method="addFooter3"
+      >
+        <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column field="activityName" title="活动名称" width="100"></vxe-table-column>
+        <vxe-table-column field="partName" title="指定公司" width="150"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+
+        <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column field="partBrandName" title="品牌" width="100">
+        </vxe-table-column>
+        <vxe-table-column field="num" title="活动数量" width="100">
+        </vxe-table-column>
+        <vxe-table-column field="price" title="活动单价" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxPrice" title="是否赠送" width="100">
+          <template v-slot="{row}">
+            <checkbox disabled :value="row.isGift == 0 ? false : true"></checkbox>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
+        <vxe-table-column field="carModelName" title="车型" width="100"></vxe-table-column>
+        <vxe-table-column field="activityId" title="活动ID" width="100"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+        <vxe-table-column field="beginDate" title="开始日期" width="100"></vxe-table-column>
+        <vxe-table-column field="endDate" title="结束日期" width="100"></vxe-table-column>
+        <vxe-table-column field="createUname" title="创建人" width="100"></vxe-table-column>
+        <vxe-table-column field="createTime" title="创建日期" width="100"></vxe-table-column>
+      </vxe-table>
+    </div>
     <div slot='footer'></div>
   </Modal>
 </template>
 
 <script>
-  import {findByCodeDetail,findGoodsByCodeDetail,findLsOrWcDetail} from "../../../api/documentApproval/documentApproval/documentApproval";
+  import {findByCodeDetail,findGoodsByCodeDetail,findLsOrWcDetail,findActivty} from "../../../api/documentApproval/documentApproval/documentApproval";
 
   export default {
 		name: "viewOtherModel",
@@ -382,6 +435,9 @@
         if(this.modelTitle=="临时采购订单"||this.modelTitle=="门店外采订单"){
           this.getLsOrWcDetail(row);
         }
+        if(this.modelTitle=="活动申请"){
+          this.getActivtyDetail(row);
+        }
       },
       //盘盈、盘亏详情
       async panYK(row){
@@ -406,6 +462,22 @@
         if(rep.code==0){
           this.mainData = rep.data||{};
         }
+      },
+      //活动申请详情
+      async getActivtyDetail(row){
+        let rep = await findActivty({'code':row.applyNo});
+        if(rep.code==0){
+          this.mainData = rep.data.activity||{};
+          this.mainData.details = [];
+          for(let b in rep.data.query){
+            if(Array.isArray(rep.data.query[b])){
+              this.mainData.details.push(...rep.data.query[b])
+            }else{
+              this.mainData.details.push(rep.data.query[b])
+            }
+          }
+        }
+        console.log(this.mainData)
       },
 
       //计算合计

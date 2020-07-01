@@ -4,6 +4,7 @@ import { getCarBrandAll, getCarModel } from "_api/system/systemSetting/Initializ
 import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamineApi'
 
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
+import {getExamineDetail} from "../../../../api/system/partsExamine/partsExamineApi";
 
 export const mixPartInfo = {
 
@@ -152,7 +153,6 @@ export const mixPartInfo = {
     //初始化
     init(setData) {
       this.proModal = true;
-      return
       //清空数据重新赋值
       this.$refs.proModalForm.resetFields();
       this.carList = [];
@@ -164,7 +164,7 @@ export const mixPartInfo = {
       this.proModal = true;
       this.formValidate.specVOS=[];
       this.saveFlag = false;
-      this.$refs.tabs.activeKey = 'active1'
+      // this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌
       this.getCarBrand();
       //获取所有品质
@@ -210,6 +210,13 @@ export const mixPartInfo = {
       this.prohibit = this.formValidate.disabled == 1 ? true : false
       this.forbidsale = this.formValidate.isStopSell == 1 ? true : false
       this.getFullName();
+    },
+
+    async getPartDetail(row){
+      let rep = await getExamineDetail({'id':row.applyNo})
+      if (rep.code==0){
+        this.init(rep.data);
+      }
     },
 
     //获取所有车型品牌

@@ -273,7 +273,7 @@
                     {
                         title: '入库单号',
                         align: 'center',
-                        key: 'code',
+                        key: 'serviceId',
                         minWidth: 120
                     },
                     {

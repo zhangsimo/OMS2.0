@@ -105,7 +105,7 @@ export default {
       data.subjectName = this.oneSubject.titleName;
       data.subjectCode = this.oneSubject.titleCode;
       data.subjectId = this.oneSubject.id;
-      data.climeType=8
+      data.claimeType=8
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.subjectModelShow = false;

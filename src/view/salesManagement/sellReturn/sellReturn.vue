@@ -16,7 +16,12 @@
               class="mr10"
               @on-change="getOrderType"
             >
-              <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
+              <Option
+                v-for="item in typeList"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.name }}</Option
+              >
             </Select>
           </div>
           <div class="db">
@@ -33,7 +38,7 @@
             <Button
               type="default"
               class="mr10"
-              :disabled="draftShow != 0||isNew"
+              :disabled="draftShow != 0 || isNew"
               @click="isSave"
               v-has="'save'"
             >
@@ -43,7 +48,7 @@
           <div class="db">
             <Button
               class="mr10"
-              :disabled="draftShow != 0||isNew"
+              :disabled="draftShow != 0 || isNew"
               @click="isSubmit"
               v-has="'submit'"
             >
@@ -64,7 +69,7 @@
             <Button
               class="mr10"
               @click="cancellation"
-              :disabled="draftShow != 0||!formPlan.id"
+              :disabled="draftShow != 0 || !formPlan.id"
               v-has="'cancellation'"
             >
               <Icon type="md-close" size="14" />作废
@@ -83,7 +88,11 @@
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="300" max="500">
             <!--            左侧表格-->
-            <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+            <div
+              slot="left"
+              class="con-split-pane-left"
+              style="overflow-y: auto; height: 100%;"
+            >
               <div class="pane-made-hd">销售退货列表</div>
               <Table
                 ref="currentRowTable"
@@ -132,7 +141,13 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
-                      <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
+                      <Input
+                        placeholder="请选择客户"
+                        v-model="formPlan.fullName"
+                        readonly
+                        disabled
+                        style="width:200px;"
+                      />
                       <!-- <Select
                         v-model="formPlan.guestId"
                         filterable
@@ -151,7 +166,7 @@
                         size="small"
                         type="default"
                         @click="CustomerShowModel"
-                        :disabled="draftShow != 0||isNew"
+                        :disabled="draftShow != 0 || isNew"
                       >
                         <Icon type="md-checkmark" />
                       </Button>
@@ -169,14 +184,15 @@
                       @on-change="selectOrderMan"
                       filterable
                       style="width: 200px"
-                      :disabled="draftShow != 0||isNew"
+                      :disabled="draftShow != 0 || isNew"
                       label-in-value
                     >
                       <Option
                         v-for="item in salesList"
                         :value="item.id"
                         :key="item.id"
-                      >{{ item.label }}</Option>
+                        >{{ item.label }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="退货日期：" prop="orderDate">
@@ -185,7 +201,7 @@
                       type="date"
                       placeholder="请选择退货日期"
                       v-model="formPlan.orderDate"
-                      :disabled="draftShow != 0||isNew"
+                      :disabled="draftShow != 0 || isNew"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="往来单号：">
@@ -195,7 +211,7 @@
                     <Select
                       v-model="formPlan.storeId"
                       style="width:233px"
-                      :disabled="draftShow != 0||isNew"
+                      :disabled="draftShow != 0 || isNew"
                       @on-change="getStore"
                     >
                       <Option
@@ -203,35 +219,36 @@
                         :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
-                      >{{ item.name }}</Option>
+                        >{{ item.name }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="退货原因：" prop="rtnReasonId">
                     <Select
                       class="w200"
                       v-model="formPlan.rtnReasonId"
-                      :disabled="draftShow != 0||isNew"
+                      :disabled="draftShow != 0 || isNew"
                     >
                       <Option
-                        v-for="item in  settleTypeList.CS00116"
+                        v-for="item in settleTypeList.CS00116"
                         :key="item.itemCode"
                         :value="item.itemCode"
-                      >{{ item.itemName }}</Option>
+                        >{{ item.itemName }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="结算方式：" prop="settleTypeId">
                     <Select
                       v-model="formPlan.settleTypeId"
                       style="width:160px"
-                      :disabled="draftShow != 0||isNew"
+                      :disabled="draftShow != 0 || isNew"
                     >
                       <Option
                         v-for="item in settleTypeList.CS00106"
                         :value="item.itemCode"
                         :key="item.itemCode"
                       >
-                        {{
-                        item.itemName }}
+                        {{ item.itemName }}
                       </Option>
                     </Select>
                   </FormItem>
@@ -240,8 +257,11 @@
                       placeholder="请输入备注"
                       class="w160"
                       v-model="formPlan.remark"
-                      :disabled="draftShow != 0||isNew"
-                      :edit-render="{name: 'input',attrs: {disabled: false}}"
+                      :disabled="draftShow != 0 || isNew"
+                      :edit-render="{
+                        name: 'input',
+                        attrs: { disabled: false }
+                      }"
                     />
                   </FormItem>
 
@@ -259,18 +279,20 @@
                         v-has="'SalesOutbound'"
                         :disabled="draftShow != 0 || isNew"
                       >
-                        <Icon type="md-add" />选择销售出库单
+                        添加配件
                       </Button>
                     </div>
                     <div class="fl mb5">
                       <Button
                         size="small"
                         class="mr10"
-                        :disabled="draftShow != 0||isNew"
+                        :disabled="draftShow != 0 || isNew"
                         @click="deletePart"
                         v-has="'deletePart'"
                       >
-                        <Icon custom="iconfont iconlajitongicon icons" />删除配件
+                        <Icon
+                          custom="iconfont iconlajitongicon icons"
+                        />删除配件
                       </Button>
                     </div>
                   </div>
@@ -291,30 +313,42 @@
                   :data="formPlan.details"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column type="index" title="序号"></vxe-table-column>
+                  <vxe-table-column
+                    type="index"
+                    title="序号"
+                  ></vxe-table-column>
                   <vxe-table-column type="checkbox"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                  <vxe-table-column
+                    field="partCode"
+                    title="配件编码"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partName"
+                    title="配件名称"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partBrand"
+                    title="品牌"
+                  ></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
                     title="数量"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="orderPrice"
                     title="销价"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column title="金额">
                     <template v-slot="{ row }">
-                      <span>{{ countAmount(row) |priceFilters}}</span>
+                      <span>{{ countAmount(row) | priceFilters }}</span>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column
                     field="remark"
                     title="备注"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column field="storeName" title="仓库" disabled>
                     <template v-slot:edit="{ row }">
@@ -323,19 +357,37 @@
                           v-for="item in WareHouseList"
                           :value="item.id"
                           :key="item.id"
-                        >{{ item.name }}</Option>
+                          >{{ item.name }}</Option
+                        >
                       </Select>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="storeShelf" title="仓位" :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"></vxe-table-column>
+                  <vxe-table-column
+                    field="storeShelf"
+                    title="仓位"
+                    :edit-render="{
+                      name: 'input',
+                      immediate: true,
+                      events: { blur: checkSelf }
+                    }"
+                  ></vxe-table-column>
                   <vxe-table-column title="品牌车型">
-                    <template v-slot="{row,rowIndex}">
-                      <span>{{row.carBrandName}} {{row.carModelName}}</span>
+                    <template v-slot="{ row, rowIndex }">
+                      <span>{{ row.carBrandName }} {{ row.carModelName }}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="unit" title="单位"></vxe-table-column>
-                  <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格"></vxe-table-column>
+                  <vxe-table-column
+                    field="unit"
+                    title="单位"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="oemCode"
+                    title="OE码"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="spec"
+                    title="规格"
+                  ></vxe-table-column>
                 </vxe-table>
               </Form>
             </div>
@@ -346,11 +398,29 @@
     <!--        打印-->
     <Print-show ref="printBox" :id="id"></Print-show>
     <!--    选择客户-->
-    <select-the-customer ref="selectTheCustomer" @getOne="setOneClient"></select-the-customer>
+    <select-the-customer
+      ref="selectTheCustomer"
+      @getOne="setOneClient"
+    ></select-the-customer>
     <!--更多 搜索-->
-    <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
+    <More-search
+      :data="moreQueryList"
+      ref="morequeryModal"
+      @moreQuery="queryList"
+    ></More-search>
     <!-- 选择销售出库单 -->
-    <Sales-outbound ref="salesOutbound" :guestId = 'formPlan.guestId' @salesOutList="getOutList"></Sales-outbound>
+    <Sales-outbound
+      ref="salesOutbound"
+      :guestId="formPlan.guestId"
+      @salesOutList="getOutList"
+    ></Sales-outbound>
+    <procurement
+      ref="procurementModal"
+      :type="'sale'"
+      :guestId="formPlan.guestId"
+      :storeId="formPlan.storeId"
+      @getPlanOrder="getPlanOrder"
+    ></procurement>
   </div>
 </template>
 
@@ -375,6 +445,8 @@ import MoreSearch from "./components/MoreSearch";
 import * as tools from "../../../utils/tools";
 import { save } from "../../../api/AlotManagement/transferringOrder";
 import { checkStore } from "@/api/system/systemApi";
+import Procurement from "@/components/Procurement";
+
 export default {
   name: "sellReturn",
   inject: ["reload"],
@@ -383,28 +455,32 @@ export default {
     SalesOutbound,
     getDate,
     MoreSearch,
-    PrintShow
+    PrintShow,
+    Procurement
   },
   data() {
-    let changeNumber = ({cellValue }) => {
+    let changeNumber = ({ cellValue, row: { rtnableQty } }) => {
       const reg = /^[1-9]\d{0,}$/;
-      if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+      if (!reg.test(cellValue)) {
+        return Promise.reject(new Error("数量输入不正确"));
+      }
+      if (rtnableQty < cellValue) {
+        return Promise.reject(new Error("数量输入不正确"));
       }
     };
 
-    let money = ({cellValue}) => {
+    let money = ({ cellValue }) => {
       const reg = /^\d+(\.\d{0,2})?$/i;
       if (!reg.test(cellValue)) {
-          return Promise.reject(new Error('最多保留2位小数'))
+        return Promise.reject(new Error("最多保留2位小数"));
       }
     };
     return {
-        isSelfOk: true,
-        StoreId: "", //默认仓
+      isSelfOk: true,
+      StoreId: "", //默认仓
       //左侧表格高度
       leftTableHeight: 0,
-      rightTableHeight:0,
+      rightTableHeight: 0,
       isNew: true, //页面开始禁用
       draftShow: "", //判定是不是草稿
       isAdd: true, //判断是否新增
@@ -414,7 +490,7 @@ export default {
         billStatusId: { name: "草稿", value: 0 },
         billStatusName: "草稿",
         orderManId: this.$store.state.user.userData.id,
-        orderMan: this.$store.state.user.userData.staffName,
+        orderMan: this.$store.state.user.userData.staffName
       },
       page: {
         total: 0,
@@ -506,7 +582,7 @@ export default {
       salesList: [], //销售员列表
       formPlan: {
         details: [],
-          storeId: ""
+        storeId: ""
       }, //表单对象
       split1: 0.2, //左右框
       WareHouseList: [], // 入库仓
@@ -559,25 +635,25 @@ export default {
         let planFormH = this.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
         this.leftTableHeight = wrapH - 90;
-        this.rightTableHeight = wrapH - planFormH  - 120;
+        this.rightTableHeight = wrapH - planFormH - 120;
       });
     },
-      //检验仓位（参照采购入库）
+    //检验仓位（参照采购入库）
     checkSelf({ row: { storeShelf } }) {
-          if (storeShelf == "") {
+      if (storeShelf == "") {
+        this.isSelfOk = true;
+      } else {
+        checkStore({ storeId: this.formPlan.storeId, name: storeShelf }).then(
+          res => {
+            if (res.code == 0 && res.data != null) {
               this.isSelfOk = true;
-          } else {
-              checkStore({ storeId: this.formPlan.storeId, name: storeShelf }).then(
-                  res => {
-                      if (res.code == 0 && res.data != null) {
-                          this.isSelfOk = true;
-                      } else {
-                          this.isSelfOk = false;
-                      }
-                  }
-              );
+            } else {
+              this.isSelfOk = false;
+            }
           }
-      },
+        );
+      }
+    },
     //判断表格能不能编辑
     editActivedEvent({ row }) {
       let xTable = this.$refs.xTable;
@@ -644,13 +720,13 @@ export default {
             this.draftShow = v.billStatusId.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
-              for(let b of this.sellOrderTable.tbdata){
-                  b._highlight = false
-                  if(b.id==this.id){
-                      b._highlight = true;
-                      break;
-                  }
+            for (let b of this.sellOrderTable.tbdata) {
+              b._highlight = false;
+              if (b.id == this.id) {
+                b._highlight = true;
+                break;
               }
+            }
           }
         });
 
@@ -669,7 +745,6 @@ export default {
           this.selectTableList = [];
         }
       }
-
     },
     //新增按钮
     addOneList() {
@@ -679,16 +754,16 @@ export default {
       this.formPlan = {
         details: [],
         orderManId: this.PTrow.orderManId,
-        orderMan:this.PTrow.orderMan,
-          storeId: this.StoreId, //调入仓库
+        orderMan: this.PTrow.orderMan,
+        storeId: this.StoreId //调入仓库
       };
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
-        for(let b of this.sellOrderTable.tbdata){
-            b._highlight = false
-        }
+      for (let b of this.sellOrderTable.tbdata) {
+        b._highlight = false;
+      }
       this.sellOrderTable.tbdata.unshift(this.PTrow);
       this.isAdd = false;
     },
@@ -713,7 +788,7 @@ export default {
     },
     //客户列表
     getAllClient() {
-      if(this.client.length <= 0) {
+      if (!this.client || this.client.length <= 0) {
         getClient().then(res => {
           if (res.code === 0) {
             this.client = res.data;
@@ -736,8 +811,9 @@ export default {
     },
     //选择销售出库单
     SalesOutboundShowModel() {
-      if(!this.formPlan.guestId) return this.$message.error('请选择客户')
-      this.$refs.salesOutbound.openModal();
+      if (!this.formPlan.guestId || !this.formPlan.storeId)
+        return this.$Message.error("请先选择客户和入库仓库");
+      this.$refs.procurementModal.init();
     },
     //选择更多
     moreQueryShowModal(row) {
@@ -756,14 +832,13 @@ export default {
       });
       if (res.code === 0) {
         this.WareHouseList = res.data;
-          res.data.map(item => {
-              if (item.isDefault == true) {
-                  this.formPlan.storeId = item.id;
-                  this.StoreId = item.id;
-              }
-          });
+        res.data.map(item => {
+          if (item.isDefault == true) {
+            this.formPlan.storeId = item.id;
+            this.StoreId = item.id;
+          }
+        });
       }
-
     },
     //仓库改变右侧表格改变
     getStore(data) {
@@ -817,14 +892,14 @@ export default {
         if (res.code === 0) {
           this.sellOrderTable.tbdata = res.data.content || [];
           this.page.total = res.data.totalElements;
-            for(let b of this.sellOrderTable.tbdata){
-                b._highlight = false
-                if(b.id==this.id){
-                    b._highlight = true;
-                    this.selectTabelData(b)
-                    break;
-                }
+          for (let b of this.sellOrderTable.tbdata) {
+            b._highlight = false;
+            if (b.id == this.id) {
+              b._highlight = true;
+              this.selectTabelData(b);
+              break;
             }
+          }
         }
       });
     },
@@ -869,9 +944,9 @@ export default {
     },
     //保存
     isSave() {
-        if (!this.isSelfOk) {
-            return this.$message.error("请填写正确的仓位!");
-        }
+      if (!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!");
+      }
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
@@ -900,17 +975,38 @@ export default {
             });
           }
         } else {
-           this.$set(this.sellOrderTable.tbdata,0,this.PTrow);
+          this.$set(this.sellOrderTable.tbdata, 0, this.PTrow);
           this.$Message.error("*为必填项");
         }
       });
     },
 
+    getPlanOrder(Msg) {
+      let arr = Msg || [];
+
+      if (arr.length <= 0) return;
+
+      arr.forEach(item => {
+        item.prevDetailId = item.sourceDetailId;
+        item.outUnitId = item.systemUnitId;
+        item.unit = item.systemUnitId;
+        item.enterUnitId = item.systemUnitId;
+        item.orderQty = item.rtnableQty;
+        item.orderPrice = item.sellPrice;
+        Reflect.deleteProperty(item, "sourceDetailId");
+      });
+      if (!this.formPlan.details) {
+        this.formPlan.details = [];
+      }
+      this.formPlan.details = this.formPlan.details.concat(arr);
+      this.$message.success("已添加");
+    },
+
     //提交
     isSubmit() {
-        if (!this.isSelfOk) {
-            return this.$message.error("请填写正确的仓位!");
-        }
+      if (!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!");
+      }
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
@@ -952,8 +1048,8 @@ export default {
 
     //选择销售出库单
     getOutList(val) {
-      if(this.formPlan.details==null){
-        this.formPlan.details=[]
+      if (this.formPlan.details == null) {
+        this.formPlan.details = [];
       }
       val.forEach(item => {
         item.orderQty = item.rtnableQty;
@@ -969,20 +1065,20 @@ export default {
         let data = [];
         let arr = [];
         this.selectTableList.forEach(item => {
-          if(item.oid) {
-            arr.push({ oid: item.oid })
+          if (item.oid) {
+            arr.push({ oid: item.oid });
           } else {
             data.push({ id: item.id });
           }
         });
-        if(arr.length > 0) {
+        if (arr.length > 0) {
           arr.forEach(el => {
             this.formPlan.details.forEach((el2, index) => {
-              if(el2.id == el.oid) {
-                this.formPlan.details.splice(index, 1)
+              if (el2.id == el.oid) {
+                this.formPlan.details.splice(index, 1);
               }
-            })
-          })
+            });
+          });
         }
         // const arr = this.formPlan.details.filter(
         //   v => !this.selectTableList.includes(v)
@@ -993,19 +1089,19 @@ export default {
         //     this.$set(this.sellOrderTable.tbdata[index], "details", arr);
         //   }
         // });
-        if(data.length > 0) {
+        if (data.length > 0) {
           getDeleteList(data).then(res => {
-          if (res.code === 0) {
-            data.forEach(el => {
-            this.formPlan.details.forEach((el2, index) => {
-              if(el2.id == el.id) {
-                this.formPlan.details.splice(index, 1)
-              }
-            })
-          })
-            this.$Message.success("删除配件成功");
-          }
-        });
+            if (res.code === 0) {
+              data.forEach(el => {
+                this.formPlan.details.forEach((el2, index) => {
+                  if (el2.id == el.id) {
+                    this.formPlan.details.splice(index, 1);
+                  }
+                });
+              });
+              this.$Message.success("删除配件成功");
+            }
+          });
         }
       } else {
         this.$Message.error("请选择一条有效数据");
@@ -1018,9 +1114,7 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
-          if (
-            ["orderPrice", "orderAmt"].includes(column.property)
-          ) {
+          if (["orderPrice", "orderAmt"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           // if (["orderQty"].includes(column.property)) {
@@ -1058,13 +1152,12 @@ export default {
 <style lang="less" scoped>
 @import url("../../lease/product/lease.less");
 @import url("./index");
-.goods-list-form .ivu-form-item{
+.goods-list-form .ivu-form-item {
   margin-bottom: 0px;
 }
-
 </style>
 <style scoped>
-  .purchase >>> .ivu-form-item .ivu-form-item-label{
-    font-size: 12px!important;
-  }
+.purchase >>> .ivu-form-item .ivu-form-item-label {
+  font-size: 12px !important;
+}
 </style>

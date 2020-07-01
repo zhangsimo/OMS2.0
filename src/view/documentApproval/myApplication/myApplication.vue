@@ -200,7 +200,7 @@
     <!--配件审核-->
     <part-info ref="partInfo"></part-info>
     <!--供应商申请-->
-    <view-suppler-model></view-suppler-model>
+    <view-suppler-model ref="suppler"></view-suppler-model>
   </div>
 </template>
 
@@ -577,8 +577,15 @@
             case "客户信用额度":
               this.$refs.quotaApply.init(row);
               break;
-            case "盘亏出库": case "盘盈入库": case "采购计划单": case "临时采购订单": case "门店外采订单":
+            case "盘亏出库": case "盘盈入库": case "采购计划单": case "临时采购订单": case "门店外采订单": case "活动申请":
               this.$refs.viewOtherModel.init(row);
+              break;
+            case "配件资料审批申请":
+              this.$refs.partInfo.getPartDetail(row);
+              break;
+            case "供应商资料审批申请":
+              this.$refs.suppler.init(row);
+              break;
           }
         },
 

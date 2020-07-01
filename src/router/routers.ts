@@ -1380,8 +1380,29 @@ export default [
               icon: "arrow-graph-up-right",
               title: "价格管理"
             },
-            component: () =>
-              import("@/view/system/basicData/priceManage/priceManage.vue")
+            component: parentView,
+            children:[
+              {
+                path: "priceManage",
+                name: "priceManage",
+                // mark: "9210",
+                meta: {
+                  title: "价格管理"
+                },
+                component: () =>
+                  import("@/view/system/basicData/priceManage/priceManage.vue")
+              },
+              {
+                path: "priceSystemSearch",
+                name: "priceSystemSearch",
+                // mark: "9211",
+                meta: {
+                  title: "价格体系查询"
+                },
+                component: () =>
+                  import("@/view/system/basicData/priceManage/priceSystemSearch/priceSystemSearch.vue")
+              }
+            ]
           },
           // {
           //   path: "/",

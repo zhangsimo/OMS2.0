@@ -401,12 +401,12 @@
     <!--更多弹框-->
     <More @sendMsg="getMsg" ref="moremore"></More>
     <!--选择采购计划弹窗-->
-    <procurement-modal
+    <procurement
       ref="procurementModal"
       :guestId="guestidId"
       :storeId="formPlan.warehouse"
       @getPlanOrder="getPlanOrder"
-    ></procurement-modal>
+    ></procurement>
     <!--供应商资料-->
     <select-supplier
       ref="selectSupplier"
@@ -427,7 +427,7 @@ import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 import PrintShow from "./compontents/PrintShow";
 // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
-import ProcurementModal from "./compontents/ProcurementModal";
+import Procurement from "@/components/Procurement";
 import {
   optGroup,
   findPageByDynamicQuery,
@@ -445,7 +445,7 @@ export default {
   components: {
     QuickDate,
     More,
-    ProcurementModal,
+    Procurement,
     SelectSupplier,
     PrintShow
   },
