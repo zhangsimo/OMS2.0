@@ -167,27 +167,25 @@
             </div>
             <vxe-table
               border
-              stripe
               resizable
               auto-resize
+              stripe
+              sheetName="n1"
+              id="n1"
               height="440"
-              sheetName="n2"
-              id="n2"
               :loading="part.loading"
               :data="part.tbdata"
               highlight-current-row
               :edit-config="{ trigger: 'click', mode: 'cell' }"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
               <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
-              <vxe-table-column field="costPrice" title="成本单价"></vxe-table-column>
+              <!-- <vxe-table-column field="costPrice" title="成本单价" v-if="rowPriceManege.name=='统一售价'"></vxe-table-column> -->
               <vxe-table-column
                 field="sellPrice"
-                title="销售单价"
+                :title="sellPriceTitle"
                 :edit-render="{ name: 'input' }"
-                width="160"
               >
                 <template v-slot:edit="{ row }">
                   <el-input-number
@@ -199,6 +197,10 @@
                   />
                 </template>
               </vxe-table-column>
+              <vxe-table-column field="minRequiredQty" title="最低要求数量"  v-if="rowPriceManege.name=='统一售价'"></vxe-table-column>
+              <vxe-table-column field="maxRequiredQty" title="最高要求数量"  v-if="rowPriceManege.name=='统一售价'"></vxe-table-column>
+              <vxe-table-column field="removeLimit" title="解除限制" type="checkbox"  v-if="rowPriceManege.name=='统一售价'"></vxe-table-column>
+              <!-- 最低要求数量，最高要求数量，解除限制 -->
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>
               <vxe-table-column field="operationTime" title="操作日期"></vxe-table-column>
             </vxe-table>
@@ -243,7 +245,6 @@
 </template>
 
 <script src="./index.ts"></script>
-
 <style lang="less" scoped>
 @import url("../../../lease/tenantres/icon");
 @import url("./index");

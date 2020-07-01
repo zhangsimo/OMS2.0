@@ -186,30 +186,30 @@ export default {
           key: "username",
           minWidth: 160
         },
-        {
-          title: "操作",
-          align: "center",
-          key: "",
-          render: (h, params) => {
-            return h( 'div', [
-              h('a', {
-                props: {
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.openModel(params)
-                  }
-                }
-              }, '编辑权限')
-            ])
-
-          },
-          width: 80
-        }
+        // {
+        //   title: "操作",
+        //   align: "center",
+        //   key: "",
+        //   render: (h, params) => {
+        //     return h( 'div', [
+        //       h('a', {
+        //         props: {
+        //           size: 'small'
+        //         },
+        //         style: {
+        //           marginRight: '5px'
+        //         },
+        //         on: {
+        //           click: () => {
+        //             this.openModel(params)
+        //           }
+        //         }
+        //       }, '编辑权限')
+        //     ])
+        //
+        //   },
+        //   width: 80
+        // }
       ],
       tbdata: [],//右侧人员列表数据
       rightControlShow:false,//编辑权限模态框展示

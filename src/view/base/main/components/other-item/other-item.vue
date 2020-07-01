@@ -2,6 +2,7 @@
   <div>
     <div class="other-item">
       <a class="mr20" @click="openShow">{{getName || '请选择分店'}}</a>
+      <span class="mr20" >{{getPost}}</span>
       <a class="mr20 service" href="#" @click="serviceShow = !serviceShow" v-if="service && shopkeeper == 0">客服
        <div class="title" v-if="serviceShow">
          <div><img src="@/assets/images/home/service.svg"  class="mr10"><span>{{serviceList.name}}</span></div>
@@ -73,7 +74,10 @@
       },
       computed:{
         getName(){
-            return this.$store.state.user.userShopName
+            return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
+        },
+        getPost(){
+           return Array.isArray(this.$store.state.user.userData.currentRoles) ? this.$store.state.user.userData.currentRoles[0] ? this.$store.state.user.userData.currentRoles[0].displayName: '' : ''
         }
       },
       mounted(){

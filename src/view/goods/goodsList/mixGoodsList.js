@@ -643,7 +643,7 @@ export const mixGoodsData = {
           } else {
             if (subType === 1) {
               saveDraft(objReq).then(res => {
-                this.submitloading = false
+                this.submitloading = this.loading = false;
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
@@ -653,11 +653,11 @@ export const mixGoodsData = {
               });
             } else if (subType === 2) {
               if (this.tableData.length <= 0) {
-                this.submitloading = false
+                this.submitloading = this.loading = false;
                 return this.$Message.error("请添加配件后再提交");
               }
               saveCommit(objReq).then(res => {
-                this.submitloading = false
+                this.submitloading = this.loading = false;
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
