@@ -29,7 +29,6 @@
             border
             resizable
             auto-resize
-            stripe
             height="549"
             :loading="level.loading"
             :data="level.tbdata"
@@ -37,6 +36,7 @@
             @current-change="selectRow"
             :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
+            <!-- :row-style="rowPriceLevelStyle" -->
             <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
             <vxe-table-column
               field="name"
@@ -174,6 +174,7 @@
               id="n1"
               height="440"
               :loading="part.loading"
+              :checkbox-change="removeLimitChange"
               :data="part.tbdata"
               highlight-current-row
               :edit-config="{ trigger: 'click', mode: 'cell' }"
@@ -197,9 +198,44 @@
                   />
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="minRequiredQty" title="最低要求数量"  v-if="rowPriceManege.name=='统一售价'"></vxe-table-column>
-              <vxe-table-column field="maxRequiredQty" title="最高要求数量"  v-if="rowPriceManege.name=='统一售价'"></vxe-table-column>
-              <vxe-table-column field="removeLimit" title="解除限制" type="checkbox"  v-if="rowPriceManege.name=='统一售价'"></vxe-table-column>
+              <vxe-table-column
+                field="minRequiredQty"
+                title="最低要求数量"
+                v-if="rowPriceManege.name=='统一售价'"
+                :edit-render="{ name: 'input' }"
+              >
+                <template v-slot:edit="{ row }">
+                  <el-input-number
+                    :min="0"
+                    :precision="2"
+                    v-model="row.minRequiredQty"
+                    :controls="false"
+                    size="mini"
+                  />
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="maxRequiredQty"
+                title="最高要求数量"
+                v-if="rowPriceManege.name=='统一售价'"
+                :edit-render="{ name: 'input' }"
+              >
+                <template v-slot:edit="{ row }">
+                  <el-input-number
+                    :min="0"
+                    :precision="2"
+                    v-model="row.maxRequiredQty"
+                    :controls="false"
+                    size="mini"
+                  />
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="removeLimit"
+                title="解除限制"
+                type="checkbox"
+                v-if="rowPriceManege.name=='统一售价'"
+              ></vxe-table-column>
               <!-- 最低要求数量，最高要求数量，解除限制 -->
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>
               <vxe-table-column field="operationTime" title="操作日期"></vxe-table-column>

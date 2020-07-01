@@ -21,9 +21,9 @@ export default class PriceManage extends Vue {
   // 价格启用禁用
   private priceEnable: string = "启用";
   // 左侧所被选中的行
-  private rowPriceManege: any
+  private rowPriceManege: any={}
   // 最低销价
-  private sellPriceTitle:any
+  private sellPriceTitle:any ="最低销价"
   // modal显示
   private modal: boolean = false;
   // tab索引
@@ -80,6 +80,8 @@ export default class PriceManage extends Vue {
       size: 10
     }
   };
+  // 导入参数
+  private impirtUrlData:string="1190210181681389568"
   private impirtUrl: any = {
     downId: '',
     upUrl: api.impUrl
@@ -89,8 +91,7 @@ export default class PriceManage extends Vue {
   // 获取表格
   private async getLevelList() {
     this.rowPriceManege = {} ? this.priceEnableBool = true : this.priceEnableBool = false
-    this.level.tbdata = [{ name: "统一售价", readonly: true ,id:0}];
-    console.log( this.level.tbdata,111)
+    this.level.tbdata = [{ name: "统一售价", readonly: true }];
     // isDisabled:0 启用
     // isDisabled:1 禁用
     let res = await api.sellPsList();
@@ -157,6 +158,20 @@ export default class PriceManage extends Vue {
       });
       this.part.page.total = res.data.totalElements;
     }
+  }
+  private rowPriceLevelStyle(row){
+    if(row.isDisabled!=0){
+      return `backgroundColor:#f2f2f2 !important;`
+    }else{
+      return `backgroundColor:#f1f1f1 !important;`
+    }
+  }
+  private selectPartName(selectPartName){
+    // this.getPart()
+    this.part.tbdata.push(selectPartName)
+  }
+  private removeLimitChange(row){
+    row.removeLimit==0?row.removeLimit=1:row.removeLimit=0
   }
   // rest
   private restTbdata() {
@@ -229,9 +244,11 @@ export default class PriceManage extends Vue {
   // 单选行
   private selectRow({ row }) {
     this.rowPriceManege = row
+    this.rowPriceLevelStyle(row)
     row.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
     row.name=="统一售价"?this.priceEnableBool=true:this.priceEnableBool=false
     row.name=="统一售价"?this.sellPriceTitle="最低销价":this.sellPriceTitle="销售价格"
+    row.name=="统一售价"?this.impirtUrlData="":this.impirtUrlData=this.rowPriceManege.id
     const curs: any = this.$refs.curs;
     curs.custarr = new Array();
     this.currRow = row;
@@ -291,6 +308,8 @@ export default class PriceManage extends Vue {
         this.priceEnable = "启用"
       }
       this.$Message.success(`价格${this.priceEnable}成功`)
+      this.getLevelList()
+      this.rowPriceManege.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
     })
   }
   // tab切换
@@ -413,7 +432,8 @@ export default class PriceManage extends Vue {
     this.getPart();
   }
   // 添加配件
-  private async addAccessories() {
+  private addAccessories() {
+    this.rowPriceManege.name=="统一售价"?this.$refs.selectPartCom.apiDataId="":this.$refs.selectPartCom.apiDataId=this.rowPriceManege.id
     this.$refs.selectPartCom.init()
   }
   //配件返回的参数
@@ -435,6 +455,7 @@ export default class PriceManage extends Vue {
       arr.push(el)
     });
     var allArr = []; //新数组
+    this.getPart()
     this.part.tbdata = [
       ...this.part.tbdata,
       ...arr
@@ -469,7 +490,6 @@ export default class PriceManage extends Vue {
   // 保存配件
   private async savePart() {
     let res: any;
-
     let data = [...this.part.tbdata];
     data.forEach((el: any) => {
       el.pchsPrice = el.costPrice;

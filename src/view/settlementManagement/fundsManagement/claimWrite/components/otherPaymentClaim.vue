@@ -82,7 +82,7 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
-      <div v-if="voucherinputModel">
+      <div v-if="!voucherinputModel">
         <Row class="mb20 mt20">
           <Col span="8">
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
@@ -350,7 +350,7 @@ export default {
       this.$refs.voucherInput.subjectModelShowassist = true;
     },
     openClimed() {
-      if (this.voucherinputModel) {
+      if (!this.voucherinputModel) {
         this.$refs.settlement.Settlement = true;
       } else {
         this.$refs.voucherInput.subjectModelShowassist = true;
@@ -485,7 +485,7 @@ export default {
       }
     },
     async ok() {
-      if (!this.voucherinputModel) {
+      if (this.voucherinputModel) {
         let data = {};
         data.detailId = this.accrued[0].id;
         if (this.claimTit == "预付款认领") {
