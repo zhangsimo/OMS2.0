@@ -231,10 +231,19 @@ export function getSupplier (data) {
   })
 }
 
-// 获取配件
+// 获取配件-采退
 export function getParts (params) {
   return axios.request({
     url: `${api.omsOrder}/enterDetail/addParts`,
+    method: 'get',
+    params
+  })
+}
+
+// 获取配件-销退
+export function getSaleParts (params) {
+  return axios.request({
+    url: `${api.omsOrder}/outDetail/addParts`,
     method: 'get',
     params
   })

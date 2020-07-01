@@ -311,7 +311,7 @@ export const mixPartInfo = {
     //获取选中配件名称
     getSearchPartName(v) {
       this.formValidate.name = v.name
-      this.formValidate.partNameId = v.id
+      this.formValidate.partNameId = v.nameId
       this.formValidate.carTypeF = v.carTypef
       this.formValidate.carTypeS = v.carTypes
       this.formValidate.carTypeT = v.carTypet
