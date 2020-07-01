@@ -198,7 +198,8 @@ import {
           }
         ],
         //获取点击的数据
-        allList: {}
+        allList: {},
+        apiDataId:""
       };
     },
     mounted() {},
@@ -209,17 +210,15 @@ import {
         let params = {};
         let req = {};
         if (this.selectTreeItem.id) {
-          req.typeId = this.selectTreeItem.typeId;
+          params.typeId = this.selectTreeItem.typeId;
         }
         if (this.selectBrand && this.selectBrand != "9999") {
-          req.partBrandId = this.selectBrand;
+          params.partBrandId = this.selectBrand;
         }
-  
-        if (this.partName.trim()) {
-          req.partCode = this.partName.trim();
-        }
+          params.partCode = this.partName;
         params.page = this.page.num - 1;
         params.size = this.page.size;
+        params.strategyId=this.apiDataId;
         getwbParts(params, req).then(res => {
           this.loading = false;
           this.partData = res.data.content || [];
@@ -267,6 +266,7 @@ import {
       search() {
         this.page.num = 1;
         this.getList();
+        this.partName=""
       },
       //系统分类树形节点点击数据
       selectTree(v) {

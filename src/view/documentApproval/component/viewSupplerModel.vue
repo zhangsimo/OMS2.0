@@ -1,30 +1,30 @@
 <template>
-  <Modal v-model="clientDataShow" title="供应商申请" width="700">
-    <Form :label-width="100" :model="data" :rules="rules" ref="form">
-    <div class="header-box clearfix">
-      <span class="isDisabeld">
-        是否禁用
-        <Checkbox v-model="data.isDisabled" :false-value="0" :true-value="1" />
-      </span>
-      <span class="isDisabeld">
-        供应商
-        <Checkbox v-model="data.isSupplier" :false-value="0" :true-value="1" />
-      </span>
-      <span class="isDisabeld">
-        客户
-        <Checkbox v-model="clinet" disabled />
-      </span>
-    </div>
+  <Modal v-model="clientDataShow" title="供应商申请" width="700" footer-hide>
+    <Form :label-width="100" :model="data" ref="form" class="tabList">
+      <div class="header-box clearfix">
+        <span class="isDisabeld">
+          是否禁用
+          <Checkbox v-model="data.isDisabled" :false-value="0" :true-value="1" />
+        </span>
+        <span class="isDisabeld">
+          供应商
+          <Checkbox v-model="data.isSupplier" :false-value="0" :true-value="1" />
+        </span>
+        <span class="isDisabeld">
+          客户
+          <Checkbox v-model="clinet" disabled />
+        </span>
+      </div>
       <h4 class="pb10">基本信息</h4>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="客户属性:" prop="guestProperty">
-            <Select v-model="data.guestProperty" style="width:180px" class="mr10">
+          <FormItem label="所属体系:" prop="belongSystem" class="h40">
+            <Select v-model="data.belongSystem" style="width:180px" class="mr10">
               <Option
-                v-for="item in dataList.CS00105"
-                :value="item.itemCode"
-                :key="item.itemCode"
-              >{{ item.itemName }}</Option>
+                v-for="item in Subordinate"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
             </Select>
           </FormItem>
           <FormItem label="客户简称:" prop="shortName">
@@ -32,9 +32,6 @@
           </FormItem>
           <FormItem label="客户全称:" prop="fullName">
             <Input v-model="data.fullName" style="width: 180px" />
-          </FormItem>
-          <FormItem label="联系人:" prop="contactor">
-            <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
           </FormItem>
           <FormItem label="省份:" prop="provinceId">
             <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
@@ -46,17 +43,18 @@
               >{{ item.name}}</Option>
             </Select>
           </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="所属体系:" prop="belongSystem" class="h40">
-            <Select v-model="data.belongSystem" style="width:180px" class="mr10">
+          <FormItem label="城市:" prop="cityId">
+            <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
               <Option
-                v-for="item in Subordinate"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+                v-for="item in provincearr"
+                v-if="data.provinceId==item.parentId"
+                :key="item.id"
+                :value="item.id"
+              >{{ item.name}}</Option>
             </Select>
           </FormItem>
+        </div>
+        <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="票据类型:" prop="billTypeId">
             <Select v-model="data.billTypeId" style="width:180px" class="mr10">
               <Option
@@ -78,15 +76,8 @@
           <FormItem label="联系人手机:" prop="contactorTel">
             <Input v-model="data.contactorTel" style="width: 180px" />
           </FormItem>
-          <FormItem label="城市:" prop="cityId">
-            <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
-              <Option
-                v-for="item in provincearr"
-                v-if="data.provinceId==item.parentId"
-                :key="item.id"
-                :value="item.id"
-              >{{ item.name}}</Option>
-            </Select>
+          <FormItem label="联系人:" prop="contactor">
+            <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
           </FormItem>
         </div>
       </div>
@@ -98,61 +89,68 @@
           <FormItem label="业务员:">
             <Input v-model="data.salesman" style="width: 180px" />
           </FormItem>
-          <FormItem v-if="sessionKey === 0" label="信用等级:">
-            <Select v-model="data.tgrade" style="width:180px" class="mr10">
+          <FormItem label="职务:" class="h50">
+            <Select v-model="data.salesmanDuty" style="width:180px" class="mr10">
               <Option
-                v-for="item in dataList.CS00112"
+                v-for="item in dataList.CS00110"
                 :value="item.itemCode"
-                :key="item.itemCode"
+                :key="item.id"
               >{{ item.itemName }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="电话:">
-            <Input v-model="data.tel" style="width: 180px" />
-          </FormItem>
-          <FormItem label="备注:">
-            <Input v-model="data.remark" style="width: 180px" />
-          </FormItem>
-          <FormItem label="一级分类:" prop="guestType">
-            <Select v-model="data.guestType" style="width:180px" class="mr10" placement="top">
+          <FormItem label="供应类型:" class="h50">
+            <Select v-model="data.supplierType" style="width:180px" class="mr10">
               <Option
-                v-for="item in treelist"
-                v-if="item.lever == 1"
-                :value="item.code"
+                v-for="item in dataList.CS00111"
+                :value="item.itemCode"
                 :key="item.id"
-              >{{ item.title }}</Option>
+              >{{ item.itemName }}</Option>
             </Select>
           </FormItem>
-          <FormItem v-if="sessionKey == 0" label="信誉额度:" prop="creditLimit">
-            <Input v-model="data.creditLimit" style="width: 180px" />
+          <FormItem label="邮箱:" class="h50">
+            <Input v-model="data.email" style="width: 180px" />
+          </FormItem>
+          <FormItem label="QQ/微信:">
+            <Input v-model="data.instantMsg" style="width: 180px" />
+          </FormItem>
+          <FormItem label="一级分类:" prop="supplierTypeFirst">
+            <Select v-model="data.supplierTypeFirst" style="width:180px" placement="top">
+              <Option
+                v-for="item in treelistArr"
+                v-if="item.lever == 1"
+                :value="item.id"
+                :key="item.code"
+              >{{ item.title }}</Option>
+            </Select>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="业务员手机:">
             <Input v-model="data.salesmanTel" style="width: 180px" />
           </FormItem>
-
-          <FormItem label="QQ/微信:">
-            <Input v-model="data.instantMsg" style="width: 180px" />
+          <FormItem label="邮政编码:" class="h50">
+            <Input v-model="data.postalCode" style="width: 180px" />
           </FormItem>
-          <FormItem label="默认物流:">
-            <Input v-model="data.defaultLogistics" style="width: 180px" />
+          <FormItem label="优势品牌/产品:" class="h50">
+            <Input v-model="data.advantageCarbrandId" style="width: 180px" />
+          </FormItem>
+          <FormItem label="电话:" class="h50">
+            <Input v-model="data.tel" style="width: 180px" />
+          </FormItem>
+          <FormItem label="备注:">
+            <Input v-model="data.remark" style="width: 180px" />
           </FormItem>
           <FormItem label="二级分类:">
-            <Select
-              v-model="data.guestTypeFloor"
-              style="width:180px"
-              class="mr10"
-              placement="top"
-            >
+            <Select v-model="data.supplierTypeSecond" style="width:180px" placement="top">
               <Option
-                v-for="item in treelist "
-                v-if="data.guestType == item.parentId"
+                v-for="item in treelistArr"
+                v-if="data.supplierTypeFirst == item.parentId"
                 :value="item.id"
                 :key="item.id"
               >{{ item.title }}</Option>
             </Select>
           </FormItem>
+
         </div>
       </div>
       <span style="margin-left: 100px">
@@ -163,7 +161,7 @@
         <p style="margin-bottom: 10px;padding-left: 20px">财务信息</p>
         <div>
           <FormItem label="收款户名:" prop="accountName">
-            <Input v-model="data.accountName" style="width: 450px" />
+            <Input v-model="data.receiveName" style="width: 450px" />
           </FormItem>
           <FormItem label="银行账号:" prop="accountBankNo">
             <Input v-model="data.accountBankNo" style="width: 450px" />
@@ -213,17 +211,6 @@
           </div>
         </div>
       </div>
-    <!--   切换栏-->
-    <div class="tabList">
-      <Tabs type="card" name="clientBox">
-        <TabPane label="基本信息" tab="clientBox">
-
-        </TabPane>
-        <TabPane label="其他信息" tab="clientBox">
-
-        </TabPane>
-      </Tabs>
-    </div>
   </Form>
   </Modal>
 </template>
@@ -235,24 +222,16 @@
     getCustomer
   } from "@/api/system/essentialData/clientManagement";
   import {typeSelect} from "../../../api/bill/saleOrder";
+  import {findSupplerDetail} from "../../../api/documentApproval/documentApproval/documentApproval";
+  import {area} from "../../../api/lease/registerApi";
+  import {getSupplierTreeList} from "../../../api/system/essentialData/supplierManagement";
 
   export default {
     name: "viewSupplerModel",
     components: {
     },
     props: {
-      data: {
-        type:Object,
-        default:{}
-      },
-      provincearr: {
-        type:Array,
-        default:[]
-      },
-      treelist: {
-        type:Array,
-        default:[]
-      }
+
     },
     data() {
       const contactorTel = (rule, value, callback) => {
@@ -340,7 +319,7 @@
             value: 2
           }
         ],
-        tree: this.treelist,
+        //tree: this.treelist,
         clinet: true, //是否客户 //是
         list: [
           {
@@ -555,7 +534,10 @@
         pitchOnClientList: [], //选中关联客户
         deleteOneClient: [], //获取删除项
         pitchOneBank: [],
-        tit: "" //开票弹窗
+        tit: "", //开票弹窗
+        data: {},
+        provincearr:[],
+        treelistArr: []
       };
     },
     // computed:{
@@ -567,15 +549,51 @@
       this.placeList = this.data.guestLogisticsVOList || [];
       this.relevanceClientShow = this.data.guestVOList || [];
       this.invoice = this.data.guestTaxpayerVOList || [];
-      this.getList();
-      this.getClienlist();
-      this.sessionKey = sessionStorage.getItem("key");
     },
     methods: {
-      async getSuppler(code){
-        let rep = await typeSelect({"code":code});
+      init(row){
+        this.clientDataShow = true;
+        this.getList2();
+        this.getSuppler(row);
       },
+      async getSuppler(row){
+        let rep = await findSupplerDetail({"processInstanceId":row.processInstance});
+        if(rep.code==0){
+          this.getList();
+          this.getClienlist();
+          this.getAdress();
+          this.sessionKey = sessionStorage.getItem("key");
+          this.data = rep.data||{};
+          this.data.belongSystem = this.data.belongSystem?JSON.parse(this.data.belongSystem).value:"";
 
+        }
+      },
+//获取地址
+      getAdress() {
+        area().then(res => {
+          if (res.code == 0) {
+            this.provincearr = res.data;
+          }
+        });
+      },
+      getList2() {
+        getSupplierTreeList().then(res => {
+          if (res.code == 0){
+            let list = res.data
+            // let leverOne = res.data.filter( item => item.lever ==1)
+            // leverOne.map( item => {
+            //   item.children =[]
+            //   item.code = item.id
+            //   list.forEach( el => {
+            //     if (item.id == el.parentId){
+            //       item.children.push(el)
+            //     }
+            //   })
+            // })
+            this.treelistArr = list;
+          }
+        });
+      },
       //获取关联客户
       async getClienlist() {
         this.loading1 = true;
@@ -593,7 +611,7 @@
       //获取客户属性
       async getList() {
         let data = {};
-        data = ["CS00105", "CS00106", "CS00107", "CS00112"];
+        data = ["CS00105", "CS00106", "CS00107", "CS00112","CS00110","CS00111","CS00112"];
         let res = await getDigitalDictionary(data);
         if (res.code == 0) {
           this.dataList = res.data;

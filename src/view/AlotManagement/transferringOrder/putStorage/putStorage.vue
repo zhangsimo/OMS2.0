@@ -199,10 +199,15 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     field="storeShelf"
-                    :edit-render="{name: 'input'}"
+                    :edit-render="{autofocus: '.vxe-input--inner'}"
                     title="入库仓位"
                     width="100"
-                  ></vxe-table-column>
+                  >
+                    <template v-slot:edit="{ row }">
+                      <vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf)"></vxe-input>
+                    </template>
+                    <template v-slot="{ row }">{{ row.storeShelf }}</template>
+                  </vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -532,6 +537,9 @@ export default {
     this.getArrayParams();
   },
   methods: {
+    blurFun(row){
+      console.log(row)
+    },
     getArrayFun(data) {
       this.ArrayValue = data;
       // this.Leftcurrentrow.detailVOS = data;
