@@ -30,14 +30,13 @@
         class="mr10"
         @click="openAdjustment"
         v-has="'change'"
-        v-show="this.state == 1 && this.researchStatus == 2"
       >
         <span class="center">额度调整</span>
       </Button>
       <Button
         class="mr10"
         @click="openImportXLS"
-        v-has="'change'"
+        v-has="'allChange'"
       >
         <span class="center">额度批量调整</span>
       </Button>
