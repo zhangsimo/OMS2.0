@@ -290,7 +290,7 @@
 
 <script>
   import {
-    upxlxs
+    upxlxsMoveStore
   } from "_api/purchasing/purchasePlan";
 import {
   getLeftList,
@@ -953,7 +953,7 @@ export default {
       if (this.Leftcurrentrow.createUname == "") {
         this.Leftcurrentrow.createUname = this.salesman;
       }
-      this.upurl = upxlxs + row.id;
+      this.upurl = upxlxsMoveStore + row.id;
     },
 
     //添加配件
