@@ -190,7 +190,10 @@
       if(res.code == 0) {
         data = (res.data.content || []).map(el => {
           el.sourceDetailId = el.id;
-          Reflect.deleteProperty(el, 'id');
+          el.batchSourceId = el.id;
+          if(el.batchSourceId){
+            Reflect.deleteProperty(el, 'id');
+          }
           return el;
         });
       }

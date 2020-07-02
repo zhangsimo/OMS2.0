@@ -40,6 +40,15 @@ export function findByAllot(params){
   })
 }
 
+// 验证调拨入库仓位检查
+export function validityPosition(params){
+  return axios.request({
+    url: `${api.wmsApi}/storeLocation/location/checkLocation`,
+    method: 'get',
+    params
+  })
+}
+
 
 // 保存按钮
 export function save(data) {

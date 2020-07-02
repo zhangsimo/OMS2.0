@@ -161,13 +161,17 @@
               auto-resize
               stripe
               sheetName="n1"
+              row-id="id"
               id="n1"
               height="440"
+              ref="part"
               :loading="part.loading"
-              :checkbox-change="removeLimitChange"
+              @checkbox-all="removeLimitChangeAll"
+              @checkbox-change="removeLimitChange"
               :data="part.tbdata"
               highlight-current-row
               :edit-config="{ trigger: 'click', mode: 'cell' }"
+              :checkbox-config="{checkRowKeys: defaultSelecteRows}"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
@@ -219,12 +223,11 @@
                 </template>
               </vxe-table-column>
               <vxe-table-column
-                field="removeLimit"
                 title="解除限制"
                 type="checkbox"
                 v-if="rowPriceManege.name=='统一售价'"
+                field="removeLimitIn"
               ></vxe-table-column>
-              <!-- 最低要求数量，最高要求数量，解除限制 -->
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>
               <vxe-table-column field="operationTime" title="操作日期"></vxe-table-column>
             </vxe-table>
@@ -346,7 +349,9 @@ export default {
       impirtUrl: {
         downId: "",
         upUrl: api.impUrl
-      }
+      },
+      // 配件表格中默认选中
+      defaultSelecteRows: []
     };
   },
   components: {
@@ -420,18 +425,22 @@ export default {
       if (res.code == 0) {
         this.part.loading = false;
         this.part.tbdata = res.data.content.map(el => {
+          let data = {};
+          data = el;
           el.sellPrice = parseFloat(el.sellPrice).toFixed(2);
           el.costPrice = parseFloat(el.costPrice).toFixed(2);
           el.minRequiredQty = parseInt(el.minRequiredQty);
           el.maxRequiredQty = parseInt(el.maxRequiredQty);
-          return el;
+          if (el.removeLimit == 1) {
+            this.defaultSelecteRows.push(data.id);
+          }
+          return data;
         });
         this.part.page.total = res.data.totalElements;
       }
     },
     rowPriceLevelStyle(row) {
       if (row.row.isDisabled == 1) {
-        // console.log("isDisabled==1")
         return `backgroundColor:#f2f2f2 !important;`;
       }
     },
@@ -439,8 +448,32 @@ export default {
       // this.getPart()
       this.part.tbdata.push(selectPartName);
     },
-    removeLimitChange(row) {
-      row.removeLimit == 0 ? (row.removeLimit = 1) : (row.removeLimit = 0);
+    removeLimitChange(checkbox) {
+      console.log(checkbox.selection)
+      // if (checkbox == true) {
+      //   this.$refs.part.setCheckboxRow(this.part.tbdata[checkbox.$rowIndex],true);
+      // } else {
+      //   // this.$refs.part.setCheckboxRow(this.part.tbdata[checkbox.$rowIndex],false);
+      //   // this.$refs.part.clearCheckboxRow(this.part.tbdata[checkbox.$rowIndex]);
+      // }
+      this.part.tbdata.map(item => {
+        if (item.id == checkbox.row.id) {
+          checkbox.checked == true
+            ? (item.removeLimit = 1)
+            : (item.removeLimit = 0);
+        }
+      });
+    },
+    removeLimitChangeAll({ checked, records }) {
+      if (checked == true) {
+        this.part.tbdata.map(item=>{
+          item.removeLimit=1
+        })
+      } else {
+        this.part.tbdata.map(item=>{
+          item.removeLimit=0
+        })
+      }
     },
     // rest
     restTbdata() {
@@ -511,24 +544,21 @@ export default {
       this.level.tbdata.push({ name: "", isNew: true, oid: Date.now() });
     },
     // 单选行
-    selectRow({ row }) {
+    async selectRow({ row }) {
       this.rowPriceManege = row;
       // this.rowPriceLevelStyle(row);
-      row.isDisabled == 0
+      this.rowPriceManege.isDisabled == 0
         ? (this.priceEnable = "禁用")
         : (this.priceEnable = "启用");
-      row.readonly == true
+      this.rowPriceManege.readonly == true
         ? (this.priceEnableBool = true)
         : (this.priceEnableBool = false);
-      row.readonly == true
+      this.rowPriceManege.readonly == true
         ? (this.sellPriceTitle = "最低销价")
         : (this.sellPriceTitle = "销售价格");
-      row.readonly == true
-        ? (this.impirtUrlData = "")
-        : (this.impirtUrlData = this.rowPriceManege.id);
-      row.readonly == true
-        ? this.impirtUrl.upUrl
-        : (this.impirtUrl.upUrl = `${this.impirtUrl.upUrl}?strategyId=${row.id}`);
+      this.rowPriceManege.readonly == true
+        ? await (this.impirtUrl.upUrl = `${api.impUrl}`)
+        : await (this.impirtUrl.upUrl = `${api.impUrl}?strategyId=${this.rowPriceManege.id}`);
       const curs = this.$refs.curs;
       curs.custarr = new Array();
       this.currRow = row;
@@ -709,7 +739,7 @@ export default {
       }
     },
     //配件返回的参数
-    getPartNameList(val) {
+    async getPartNameList(val) {
       var arr = [];
       val.forEach(item => {
         item.partName = item.partStandardName;
@@ -729,18 +759,15 @@ export default {
         delete el.orderPrice;
         arr.push(el);
       });
-      let params = { strategyId: this.rowPriceManege.id };
-      this.rowPriceManege.id == undefined
-        ? (params.strategyId = "")
+      let params = {};
+      this.rowPriceManege.id == undefined || ""
+        ? (params.strategyId = null)
         : (params.strategyId = this.rowPriceManege.id);
-      api
-        .addWbParts(params, arr)
-        .then(res => {
-          if (!res == false) {
-            this.$Message.success("添加成功");
-            this.getPart();
-          }
-        })
+      let res = await api.addWbParts(params, arr);
+      if (!res == false) {
+        this.$Message.success("添加成功");
+        this.getPart();
+      }
     },
     // 导入模板
     importModule() {
@@ -771,17 +798,9 @@ export default {
     async savePart() {
       let res;
       let data = [...this.part.tbdata];
-      data.forEach(el => {
-        el.pchsPrice = el.costPrice;
-      });
       if (this.curronly) {
         res = await api.partPriceSave(data);
       } else {
-        data.map(el => {
-          el.strategyId = this.currRow.id;
-          el.removeLimit = 1;
-          return el;
-        });
         res = await api.partLevelSave(data);
       }
       if (res.code == 0) {
