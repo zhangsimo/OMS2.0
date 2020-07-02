@@ -10,6 +10,17 @@
       <Select @on-change="brandSelect" v-model="band" filterable style="width:140px" class="mr20">
         <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
+      <Select
+          style="width:140px" class="mr20"
+          v-model="storeId"
+        >
+          <Option
+            v-for="(item, index) in inStores"
+            :key="index"
+            :value="item.value"
+          >{{ item.label }}</Option
+          >
+        </Select>
       <Button type="warning" class="mr20" @click="queryTight">
         <Icon custom="iconfont iconchaxunicon icons" />查询
       </Button>
@@ -82,6 +93,7 @@ import { getPartBrand } from "@/api/business/stockSearch";
 import Fittings from "./Fittings/Fittings.vue";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
+import * as api2 from "_api/procurement/plan";
 
 export default {
   name: "commoditiesInShortSupply",
@@ -90,6 +102,8 @@ export default {
   },
   data() {
     return {
+      storeId: "",
+      inStores: [],
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
@@ -227,8 +241,19 @@ export default {
   mounted() {
     this.getList();
     this.getBand();
+    this.init();
   },
   methods: {
+    async init() {
+      let res = await api2.optGroupInit();
+      const { storeMap, defaultStore } = res.data;
+      for (let el in storeMap) {
+        this.inStores.push({ value: storeMap[el], label: el })
+      }
+      if(defaultStore) {
+        this.storeId = defaultStore;
+      }
+    },
     brandSelect() {
       // console.log(this.band);
       this.getList();
@@ -239,6 +264,7 @@ export default {
       this.Loading = true;
       data.size = this.page.page;
       data.page = this.page.num - 1;
+      data.storeId = this.storeId;
       if (this.band != "0" && this.band) {
         data.partBrandCode = this.band;
       }
