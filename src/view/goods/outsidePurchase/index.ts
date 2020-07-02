@@ -4,12 +4,8 @@ import { State } from 'vuex-class';
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
-
-import baseUrl from "../../../../config/url";
-
 import { orderState } from '../plannedPurchaseOrder/global';
 import { getSales } from "@/api/salesManagment/salesOrder";
-
 import QuickDate from '_c/getDate/dateget.vue';
 import SelectSupplier from "../plannedPurchaseOrder/components/selectSupplier.vue";
 import PurchaseAmount from "../plannedPurchaseOrder/components/PurchaseAmount.vue";
@@ -477,7 +473,7 @@ export default class InterPurchase extends Vue {
       title: '是否要删除配件',
       onOk: async () => {
         let arr = [...this.deletePartArr, ...this.tmpDeletePartArr].map(el => el.uuid);
-        
+
         let res: any;
         if(this.deletePartArr.length > 0) {
           res = await api.delPchsOrderDetail(this.deletePartArr);
@@ -485,7 +481,7 @@ export default class InterPurchase extends Vue {
         if(this.tmpDeletePartArr.length > 0) {
           res = { code: 0 }
         }
-        
+
         if (res.code == 0) {
           this.tableData = this.tableData.filter(item => {
             return !arr.includes(item.uuid);
