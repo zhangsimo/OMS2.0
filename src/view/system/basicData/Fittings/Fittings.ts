@@ -86,7 +86,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "规格",
-          key: "specifications",
+          key: "spec",
           minWidth: 120
         },
         {
@@ -534,8 +534,8 @@ export default class Fittings extends Vue {
     }
     if (res.code == 0) {
       self.$Message.success(success);
-      const localTable: any = this.$refs.localTable;
-      localTable.clearCurrentRow();
+      // const localTable: any = this.$refs.localTable;
+      // localTable.clearCurrentRow();
       if (this.tabIndex === 0) {
         this.initLocalPartInfo();
       } else {
@@ -564,8 +564,8 @@ export default class Fittings extends Vue {
     }
     if (res.code == 0) {
       self.$Message.success(success);
-      const localTable: any = this.$refs.localTable;
-      localTable.clearCurrentRow();
+      // const localTable: any = this.$refs.localTable;
+      // localTable.clearCurrentRow();
       if (this.tabIndex === 0) {
         this.initLocalPartInfo();
       } else {
