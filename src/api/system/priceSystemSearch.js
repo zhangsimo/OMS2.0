@@ -2,11 +2,12 @@ import axios from "@/libs/api.request";
 import api from "_conf/url";
 
 // 获取表格数据
-export function getPriceSystemSearchTable(data) {
+export function getPriceSystemSearchTable(params,data) {
   return axios.request({
-    url: `${api.wmsApi}/sellPricePart/findForPartPrice?page=${data.page}&size=${data.size}`,
+    url: `${api.wmsApi}/sellPricePart/findPartSystem?page=${params.page}&size=${params.size}`,
     method: "post",
-    data: {}
+    data,
+    params
   });
 }
 // 获取非禁用价格列表
