@@ -1385,7 +1385,7 @@ export default [
               {
                 path: "priceManage",
                 name: "priceManage",
-                // mark: "9210",
+                mark: "9210",
                 meta: {
                   title: "价格管理"
                 },
@@ -1395,7 +1395,7 @@ export default [
               {
                 path: "priceSystemSearch",
                 name: "priceSystemSearch",
-                // mark: "9211",
+                mark: "9211",
                 meta: {
                   title: "价格体系查询"
                 },
