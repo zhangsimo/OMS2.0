@@ -239,9 +239,8 @@ export default {
     };
   },
   mounted() {
-    this.getList();
-    this.getBand();
     this.init();
+    this.getBand();
   },
   methods: {
     async init() {
@@ -253,6 +252,7 @@ export default {
       if(defaultStore) {
         this.storeId = defaultStore;
       }
+      this.getList();
     },
     brandSelect() {
       // console.log(this.band);
