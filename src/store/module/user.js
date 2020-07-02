@@ -19,6 +19,7 @@ export default {
     storeId:'',
     supplierId:'',
     managementId:'',
+    changePassword: false,//判断是否需要开启强制修改密码弹窗
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -55,6 +56,9 @@ export default {
     setUserShopName(state ,data){
       state.userShopName = data
     },
+    setChangePassword(state , data){
+      state.changePassword = data
+    }
 
   },
   actions: {

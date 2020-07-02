@@ -26,6 +26,23 @@
         <Button type='primary' @click='changePwdClick'>确定</Button>
       </div>
     </Modal>
+    <Modal v-model="passwodrShow" width="400" :mask-closable="false" :closable="false" title="修改密码">
+      <p style="line-height: 36px">
+        <span class="mr5"><i style="margin-right: 2px;color: red;">*</i>重要提示:</span>
+        <span >首次登录请修改密码</span>
+      </p>
+      <Form :rules='rules' :label-width="80" ref='form' :model='data'>
+        <FormItem label='新密码:' prop='newPwd'>
+          <Input type="password" placeholder="新密码" v-model='data.newPwd'></Input>
+        </FormItem>
+        <FormItem label='确认密码:' prop='newPwd2'>
+          <Input type="password" placeholder="确认密码" v-model='data.newPwd2'></Input>
+        </FormItem>
+      </Form>
+      <div slot='footer'>
+        <Button type='primary' @click='changePwdClick2'>确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -44,7 +61,6 @@ export default {
         callback([])
       }
     }
-
     return {
       show: false,
       data: {
@@ -67,7 +83,8 @@ export default {
           {max: 16, message:'最大长度16', trigger:'blur'},
           {validator: checkPwd, trigger: 'blur'}
         ]
-      }
+      },
+      passwodrShow:false
     }
   },
   props: {
@@ -76,6 +93,11 @@ export default {
       default: ''
     },
     userData: Object
+  },
+  mounted(){
+    if (this.$store.state.user.changePassword) {
+      this.passwodrShow = true
+    }
   },
   methods: {
     ...mapActions([
@@ -94,6 +116,23 @@ export default {
             if (res.code == 0) {
               this.$Message.success(res.message)
               this.cancel()
+            }
+          })
+        }
+      })
+    },
+    changePwdClick2() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          let oldPwd = '000000'
+          let newPwd = this.data.newPwd.trim()
+          if (newPwd == '000000') return this.$Message.error('新密码不能为原始密码')
+          this.changePwd({oldPwd, newPwd}).then((res) => {
+            if (res.code == 0) {
+              this.$Message.success(res.message)
+              this.$store.commit('setChangePassword' , false)
+              this.passwodrShow = false
+              this.$refs.form.resetFields()
             }
           })
         }

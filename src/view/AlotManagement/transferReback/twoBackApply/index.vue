@@ -199,7 +199,6 @@
                     <FormItem
                       label="退回申请日期："
                       prop="billType"
-                      class="redIT"
                     >
                       <DatePicker
                         :value="Leftcurrentrow.createTime"
@@ -373,11 +372,12 @@
       headerTit="配件成品选择"
     ></add-in-com>
     <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
-    <procurement-modal
+    <add-part
       ref="addPart"
       :storeId="Leftcurrentrow.storeId"
+      :guestId="Leftcurrentrow.guestId"
       @getPlanOrder="getPlanOrder">
-    </procurement-modal>
+    </add-part>
   </main>
   <!-- 配件组装 -->
 </template>
@@ -406,12 +406,13 @@ import {
 } from "../../../../api/AlotManagement/twoBackApply.js";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
-import ProcurementModal from "../../../business/goods/supplierList/compontents/ProcurementModal";
+
+import AddPart from "./compontents/addPart";
 
 export default {
   name: "twoBackApply",
   components: {
-    ProcurementModal,
+    AddPart,
     More,
     QuickDate,
     AddInCom,
@@ -706,7 +707,6 @@ export default {
     baocun1() {
       if (
         !this.Leftcurrentrow.storeId ||
-        !this.Leftcurrentrow.createTime ||
         !this.Leftcurrentrow.guestName
       ) {
         this.$Message.error("调出仓库为必填项");
@@ -780,13 +780,14 @@ export default {
           name: ""
         },
         storeName: "",
-        createTime: "",
+        createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: "",
         createUname: "",
         remark: "",
         serviceId: "",
         detailVOS: [],
-        xinzeng: "1"
+        xinzeng: "1",
+        storeId:""
       };
       // console.log(this.$store);
       if (this.Left.tbdata.length === 0) {

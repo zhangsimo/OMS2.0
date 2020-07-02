@@ -240,6 +240,15 @@ export function getParts (params) {
   })
 }
 
+// 获取配件-调入退回申请
+export function getPartsBackApply (params) {
+  return axios.request({
+    url: `${api.omsOrder}/enterDetail/chooseParts`,
+    method: 'get',
+    params
+  })
+}
+
 // 获取配件-销退
 export function getSaleParts (params) {
   return axios.request({
