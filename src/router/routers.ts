@@ -530,16 +530,16 @@ export default [
         },
         component: () => import("@/view/business/policy/process/process.vue")
       },
-      {
-        path: "/hsStock/hsStockIndex",
-        name: "hsStock",
-        mark: "4005",
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "华胜库存查询"
-        },
-        component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
-      }
+      // {
+      //   path: "/hsStock/hsStockIndex",
+      //   name: "hsStock",
+      //   mark: "4005",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "华胜库存查询"
+      //   },
+      //   component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
+      // }
 
     ]
   },

@@ -26,9 +26,9 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table size="small" height="389" ref="hsOrder" :loading="loading" border :stripe="true" :columns="columnsPart" :data="templateData"></Table>
+        <Table size="small" height="389" ref="hsOrder" :loading="hsloading" border :stripe="true" :columns="columnsPart" :data="templateData"></Table>
         <div ref="planPage">
-          <Page size="small" class-name="page-con tr" :current="page.num" :total="page.total" :page-size="page.size" @on-change="selectNum"
+          <Page size="small" class-name="page-con tr" :current="hspage.num" :total="hspage.total" :page-size="hspage.size" @on-change="selectNum"
                 @on-page-size-change="selectPage" show-sizer show-total></Page>
         </div>
       </div>
@@ -65,7 +65,7 @@
           },
         ],
         //分页
-        page: {
+        hspage: {
           total: 0,
           size:10,
           num: 1
@@ -124,7 +124,7 @@
           },
         ],
 
-        loading:false,
+        hsloading:false,
         //tabs切换标签
         //模板数据
         templateData:[],
@@ -156,14 +156,14 @@
         if(this.company){
           req['compcodes'] = [this.company];
         }
-        req.page = this.page.num;
-        req.pageSize = this.page.size;
-        this.loading = true;
+        req.page = this.hspage.num;
+        req.pageSize = this.hspage.size;
+        this.hsloading = true;
         let rep = await getStock(req,params);
-        this.loading = false;
+        this.hsloading = false;
         if(rep.code===0){
           this.templateData = rep.data.data.items||[];
-          this.page.total = rep.data.data.total;
+          this.hspage.total = rep.data.data.total;
         }
       },
       async getHsStoreFun(){
@@ -173,19 +173,19 @@
         }
       },
       resetData(){
-        this.page.num = 1;
-        this.page.size = 10;
+        this.hspage.num = 1;
+        this.hspage.size = 10;
         this.getTemplateList();
       },
       //切换页面
       selectNum(val) {
-        this.page.num = val;
+        this.hspage.num = val;
         this.getTemplateList();
       },
       //切换页数
       selectPage(val) {
-        this.page.num = 1;
-        this.page.size = val;
+        this.hspage.num = 1;
+        this.hspage.size = val;
         this.getTemplateList();
       },
     }
