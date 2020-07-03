@@ -530,16 +530,16 @@ export default [
         },
         component: () => import("@/view/business/policy/process/process.vue")
       },
-      {
-        path: "/hsStock/hsStockIndex",
-        name: "hsStock",
-        mark: "4005",
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "华胜库存查询"
-        },
-        component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
-      }
+      // {
+      //   path: "/hsStock/hsStockIndex",
+      //   name: "hsStock",
+      //   mark: "4005",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "华胜库存查询"
+      //   },
+      //   component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
+      // }
 
     ]
   },
@@ -1385,7 +1385,7 @@ export default [
               {
                 path: "priceManage",
                 name: "priceManage",
-                // mark: "9210",
+                mark: "9210",
                 meta: {
                   title: "价格管理"
                 },
@@ -1395,7 +1395,7 @@ export default [
               {
                 path: "priceSystemSearch",
                 name: "priceSystemSearch",
-                // mark: "9211",
+                mark: "9211",
                 meta: {
                   title: "价格体系查询"
                 },

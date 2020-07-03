@@ -96,20 +96,20 @@ export function approval(data) {
 }
 
 // 启用
-export function toggleDis(id) {
+export function toggleDis(partId) {
   return axios.request({
-    url: `${api.wmsApi}/part/disabled`,
+    url: `${api.omsProduct}/part/disabled`,
     method: "get",
-    params: { id }
+    params: { partId }
   });
 }
 
 // 可售
-export function toggleSale(id) {
+export function toggleSale(partId) {
   return axios.request({
-    url: `${api.wmsApi}/part/sell`,
+    url: `${api.omsProduct}/part/sell`,
     method: "get",
-    params: { id }
+    params: { partId }
   });
 }
 

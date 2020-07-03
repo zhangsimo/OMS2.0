@@ -182,6 +182,7 @@
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="ArrayValue"
+                  :edit-rules="validRules"
                   :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -199,14 +200,14 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     field="storeShelf"
-                    :edit-render="{autofocus: '.vxe-input--inner'}"
+                    :edit-render="{name: 'input'}"
                     title="入库仓位"
                     width="100"
                   >
-                    <template v-slot:edit="{ row }">
-                      <vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf)"></vxe-input>
-                    </template>
-                    <template v-slot="{ row }">{{ row.storeShelf }}</template>
+                    <!--<template v-slot:edit="{ row,rowIndex }">-->
+                      <!--<vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>-->
+                    <!--</template>-->
+                    <!--<template v-slot="{ row }">{{ row.storeShelf }}</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
@@ -284,7 +285,7 @@ import {
   getListDetail
 } from "@/api/AlotManagement/putStorage.js";
 
-import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
+import { queryByOrgid,validityPosition } from "../../../../api/AlotManagement/transferringOrder";
 export default {
   inject: ["reload"],
   components: {
@@ -296,6 +297,26 @@ export default {
     selectPartCom
   },
   data() {
+    const posValid = ({ cellValue }) => {
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          let req = {
+            "storeId":this.Leftcurrentrow.storeId,
+            "name":cellValue
+          }
+          validityPosition(req).then(res => {
+            if(!res){
+              reject(new Error('仓位不存在'))
+            }else{
+              resolve();
+            }
+          })
+        }else{
+          resolve();
+        }
+      })
+    }
+
     return {
       propPageObj:{},
       Status: 0,
@@ -518,7 +539,12 @@ export default {
       currentNum: 1,
       val: "0",
       diaochuName: "",
-      diaochuID: ""
+      diaochuID: "",
+      validRules: {
+        storeShelf: [
+          { validator: posValid,trigger:"blur"}
+        ]
+      }
     };
   },
   watch: {
@@ -537,8 +563,14 @@ export default {
     this.getArrayParams();
   },
   methods: {
-    blurFun(row){
-      console.log(row)
+    blurFun(pos,index){
+      let req = {
+        "storeId":this.Leftcurrentrow.storeId,
+        "name":pos
+      }
+      validityPosition(req).then(res => {
+
+      })
     },
     getArrayFun(data) {
       this.ArrayValue = data;
@@ -577,7 +609,7 @@ export default {
     selectChangeEvent({ checked, row }) {
       //console.log(checked ? "勾选事件" : "取消事件");
     },
-    baocun1() {
+    async baocun1() {
       if (this.ArrayValue != []) {
         for (var i = 0; i < this.ArrayValue.length; i++) {
           if (this.ArrayValue[i].hasInQty > this.ArrayValue[i].hasOutQty) {
@@ -598,6 +630,12 @@ export default {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
       }
+
+      const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      if (errMap) {
+        return
+      }
+
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;

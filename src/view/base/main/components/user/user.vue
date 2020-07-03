@@ -26,7 +26,11 @@
         <Button type='primary' @click='changePwdClick'>确定</Button>
       </div>
     </Modal>
-    <Modal v-model="passwodrShow" width="400" :mask-closable="false" :closable="false" title="修改原始密码">
+    <Modal v-model="passwodrShow" width="400" :mask-closable="false" :closable="false" title="修改密码">
+      <p style="line-height: 36px">
+        <span class="mr5"><i style="margin-right: 2px;color: red;">*</i>重要提示:</span>
+        <span >首次登录请修改密码</span>
+      </p>
       <Form :rules='rules' :label-width="80" ref='form' :model='data'>
         <FormItem label='新密码:' prop='newPwd'>
           <Input type="password" placeholder="新密码" v-model='data.newPwd'></Input>
@@ -122,6 +126,7 @@ export default {
         if (valid) {
           let oldPwd = '000000'
           let newPwd = this.data.newPwd.trim()
+          if (newPwd == '000000') return this.$Message.error('新密码不能为原始密码')
           this.changePwd({oldPwd, newPwd}).then((res) => {
             if (res.code == 0) {
               this.$Message.success(res.message)
