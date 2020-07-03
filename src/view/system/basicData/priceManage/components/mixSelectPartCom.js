@@ -18,7 +18,6 @@ import {
         partName: "", //配件名称查询名字
         treeData: [], //系统分类树形数据
         //查询选择
-  
         //配件名称查询层表头
         columnsPart: [
           {
@@ -30,12 +29,6 @@ import {
             title: "序号",
             type: "selection",
             minWidth: 80
-          },
-          {
-            title: "详情",
-            slot: "action",
-            width: 60,
-            align: "center"
           },
           {
             title: "内码",
@@ -223,6 +216,7 @@ import {
           this.loading = false;
           this.partData = res.data.content || [];
           this.page.total = res.data.totalElements;
+          this.apiDataId=""
         });
       },
   
@@ -301,6 +295,10 @@ import {
       },
       cancel() {
         this.searchPartLayer = false;
+        this.partData = [];
+        this.page.total =10;
+        this.partBrandData=[]
+        this.treeData = [];
       },
       //分页
       changePage(p) {
@@ -324,18 +322,6 @@ import {
         savePartInfo(obj).then(res => {
           this.$Message.success("保存成功！");
           this.reload();
-        });
-      },
-  
-      //点击详情
-      show(val) {
-        console.log(val)
-        let data = {};
-        data.partId = val.id;
-        getDetails(data).then(res => {
-          if (res.code === 0) {
-            this.allList = res.data;
-          }
         });
       }
     }

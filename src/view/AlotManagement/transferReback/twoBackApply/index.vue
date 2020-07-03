@@ -300,10 +300,14 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     field="applyQty"
-                    :edit-render="{ name: 'input' }"
+                    :edit-render="{autofocus: '.vxe-input--inner'}"
                     title="申请退回数量"
                     width="100"
-                  ></vxe-table-column>
+                  >
+                    <template v-slot:edit="{ row }">
+                      <vxe-input type="number" v-model="row.applyQty" :min="1" :max="row.rtnableQty"></vxe-input>
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column
                     field="remark"
                     :edit-render="{ name: 'input' }"
@@ -664,7 +668,7 @@ export default {
       currentNum: 1,
       val: "0",
       diaochuName: "",
-      diaochuID: ""
+      diaochuID: "",
     };
   },
   watch: {
@@ -1082,12 +1086,12 @@ export default {
 
     //选择采购入库单
     getPlanOrder(Msg) {
-      console.log(Msg)
       let arr = Msg || [];
 
       if (arr.length <= 0) return;
 
-      arr.map(item => {
+      let arrB = arr.map(itemb => {
+        let item = {...itemb}
         item.outUnitId = item.enterUnitId;
         item.unit = item.enterUnitId;
         item.systemUnitId = item.enterUnitId;
@@ -1096,9 +1100,10 @@ export default {
         item.applyQty = item.rtnableQty;
         item.orderPrice = item.enterPrice;
         item.partInnerId = item.partId;
+        return item;
       });
 
-      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arr);
+      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arrB);
       this.$message.success("已添加");
     },
 
@@ -1198,6 +1203,7 @@ export default {
         this.showit = false;
         this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.id;
+        this.Leftcurrentrow.guestOrgid = row.isInternalId;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;
