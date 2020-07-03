@@ -33,6 +33,7 @@ export default {
       }
     }
     return {
+      loading1: false,
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 2-查看true 3-审核true
       formInline:{
@@ -95,6 +96,7 @@ export default {
       documentTableData:[],//借支核销表格数据
       moneyTableData:[],//费用明细表格数据
       payeeList:[],//收款人列表
+      options1: [],
       payUserList:[],//付款人列表
       Pictures:{},//请求回来的图片地址状态
     }
@@ -139,6 +141,7 @@ export default {
     //模态框打开111
    async open(){
      this.payeeList = this.list.allSalesList
+     this.options1 = []
      this.payUserList = this.list.payList
      this.modelType = false
      this.getRate()
@@ -174,6 +177,22 @@ export default {
        this.getList()
        this.modelType = true
      }
+    },
+
+    remoteMethod1 (query) {
+      if (query !== '') {
+          this.loading1 = true;
+          this.loading1 = false;
+          const list = this.payeeList.map(item => {
+              return {
+                  value: item.value,
+                  label: item.label
+              };
+          });
+          this.options1 = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+      } else {
+          this.options1 = [];
+      }
     },
 
     //获取当前信息
