@@ -216,6 +216,7 @@ import {
           this.loading = false;
           this.partData = res.data.content || [];
           this.page.total = res.data.totalElements;
+          this.apiDataId=""
         });
       },
   

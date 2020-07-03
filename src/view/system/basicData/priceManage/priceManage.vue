@@ -466,6 +466,7 @@ export default {
     },
     removeLimitChangeAll({ checked, records }) {
       if (checked == true) {
+        
         this.part.tbdata.map(item=>{
           item.removeLimit=1
         })
