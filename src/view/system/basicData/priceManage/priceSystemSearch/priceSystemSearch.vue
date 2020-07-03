@@ -7,7 +7,7 @@
             <Input class="w250 mr10" v-model="partCode" placeholder="请输入配件内码/编码/名称/OE码"></Input>
           </div>
           <div class="db mr10">
-            <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
+            <Select placeholder="选择品牌" filterable v-model="selectBrandId" class="w150 mr10">
               <Option
                 v-for="item in partBrandData"
                 :value="item.value"
@@ -31,6 +31,7 @@
             stripe
             resizable
             auto-resize
+            :loading="loading"
             width="100"
             height="500"
             max-height="500"
@@ -47,15 +48,18 @@
             <vxe-table-column field="partStandardName" title="名称" fixed="left"></vxe-table-column>
             <vxe-table-column field="partBrand" title="配件品牌" fixed="left"></vxe-table-column>
             <vxe-table-column field="adapterCarBrand" title="品牌车型" fixed="left"></vxe-table-column>
-            <!-- field="priceNum" -->
             <vxe-table-column
               :title="item2.name"
               width="120"
               v-for="(item2,index2) in level.tbdata"
               :key="index2"
+              v-slot="{ row }"
             >
               <template>
-                <span>{{item2.priceNum}}</span>
+                <div v-for="(item3,index3) in row.priceListRen" :key="index3">
+                  <span v-if="item3.idTwo==item2.id && item3.idOne==row.id">{{item3.priceNum}}</span>
+                  <span v-else></span>
+                </div>
               </template>
             </vxe-table-column>
           </vxe-table>
@@ -64,17 +68,14 @@
           <Col span="24">
             <div>
               <Page
-                class-name="fr pt10"
+                class-name="fr pt10 page-con"
                 :current="page.num"
                 :total="page.total"
-                height="400"
-                max-height="400"
                 :page-size="page.size"
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
                 show-sizer
                 show-total
-                show-elevator
               ></Page>
             </div>
           </Col>
@@ -92,32 +93,33 @@ export default {
   data() {
     return {
       partCode: "", //配件名称查询名字
-      selectBrand: "", //所有配件品牌
-      selectBrandId: "", //所选配件品牌Id
+      selectBrandId: null, //所选配件品牌Id
       partBrandData: [
         {
           label: "全部",
-          value: "9999"
+          value: ""
         }
       ],
+      loading: false,
       level: {
         tbdata: []
       },
       //分页
       page: {
-        total: 0,
         size: 10,
-        num: 1
+        num: 1,
+        total: 0
       },
       priceSystemManage: [],
       tableData: []
     };
   },
   mounted() {
-    // this.getLevelList();
+    this.getLevelList();
     this.getPartBrandAll();
-    this.getAccessories();
+    // this.getAccessories();
   },
+
   methods: {
     //获取配件品牌
     getPartBrandAll() {
@@ -139,66 +141,51 @@ export default {
     },
     // 获取左侧整体表格数据 以及 对整体表格数据处理
     async getAccessories() {
-      let dataApi = {
-        page: this.page.num - 1,
-        size: this.page.size,
-        partCode: this.partCode,
-        partBrandId: this.selectBrandId
-      };
-      let res = await api.getPriceSystemSearchTable(dataApi);
+      this.loading = true;
+      let params = {};
+      params.page = this.page.num - 1;
+      params.size = this.page.size;
+      let dataApi = {};
+      dataApi.partCode = this.partCode;
+      dataApi.partBrandId = this.selectBrandId;
+      let res = await api.getPriceSystemSearchTable(params, dataApi);
       let arrPriceSystem = [];
       let that = this;
       if (res.code === 0) {
-        arrPriceSystem = res.data.content;
-      }
-      let res2 = await api.getPriceNotEnable();
-      if (res2.code === 0) {
-        this.level.tbdata = res2.data;
-      }
-      arrPriceSystem.forEach(item => {
-        var data = {};
-        let data2 = {};
-        // 内码、编码、名称·、配件品牌、品牌车型
-        data.partId = item.partId; //内码
-        data.partCode = item.partCode; //编码
-        data.partStandardName = item.partStandardName; //名称
-        data.partBrand = item.partBrand; //品牌
-        data.adapterCarBrand = item.adapterCarBrand; //品牌车型
-        // data.priceList
-        data.priceList = [];
-        this.level.tbdata.map(item2 => {
-          item.priceList.map(item3 => {
-            // console.log(item, item2, item3);
-            data2.id = item2.id;
-            data2.name = item2.name;
-            if (item2.id == item3.strategyId) {
-              data2.priceNum = item3.sellPrice;
-              item2.priceNum = item3.sellPrice;
-              data.priceList.push(data2);
-            } else {
-              data2.priceNum = "";
-              item2.priceNum = "";
-              data.priceList.push(data2);
-            }
+        this.loading = false;
+        let data = {};
+        this.tableData = res.data.content;
+        this.tableData.map(item => {
+          data = item;
+          data.priceListRen = [];
+          item.priceList.map(item2 => {
+            this.level.tbdata.map(item3 => {
+              let data2 = {};
+              data2.idOne = item.id; //配件id
+              data2.idTwo = item2.strategyId; //价格id
+              data2.name = item3.name; //价格名称
+              if (item2.strategyId == item3.id) {
+                data2.priceNum = item2.sellPrice; //价格
+              }
+              data.priceListRen.push(data2);
+            });
           });
+          let priceListRen = new Set(data.priceListRen);
+          item.priceListRen = priceListRen;
         });
-        that.tableData.push(data);
-      });
-      console.log(this.level.tbdata);
-      this.selectData = {};
-      this.page.total = res.data.totalPages;
-      this.page.num = res.data.pageable.pageNumber;
-      this.page.size = res.data.pageable.pageSize;
+        this.page.total = res.data.totalElements;
+      }
     },
     // 获取右侧价格
-    async getLevelList() {
+    getLevelList() {
       // isDisabled:0 启用
       // isDisabled:1 禁用
-      let res = await api.getPriceNotEnable();
-      if (res.code === 0) {
-        this.level.tbdata = res.data;
-        // console.log(this.level.tbdata)
-      }
+      api.getPriceNotEnable().then(res => {
+        if (res.code == 0) {
+          this.level.tbdata = res.data;
+          this.getAccessories();
+        }
+      });
     },
     //切换页面
     selectNum(val) {
@@ -211,12 +198,10 @@ export default {
       this.page.size = val;
       this.getAccessories();
     },
-    getTopList() {
-      // 分页
-    },
     search() {
+      this.page.num = 1;
       this.getAccessories();
-      this.partCode = "";
+      // this.partCode = "";
     }
   }
 };

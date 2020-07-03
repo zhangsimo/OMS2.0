@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
+    <Modal  v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
         <Input class="w250 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码"></Input>
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
@@ -9,7 +9,6 @@
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
         <Button class="mr10" type='default' @click="cancel"><Icon type="md-close" /> 取消</Button>
-        <!-- <Button type='default'  @click="applyPart"><Icon type="md-add" /> 配件申请</Button> -->
       </div>
       <div class="partCheck-main clearfix">
         <div class="partCheck-left fl">
@@ -19,11 +18,7 @@
           </div>
         </div>
         <div class="fr partCheck-right" style="width: 758px">
-          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData">
-            <template slot-scope="{ row, index }" slot="action">
-              <a @click="show(row)">查看</a>
-            </template>
-          </Table>
+          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
           <Page size="small" class-name="page-con fr pt10" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
                 @on-page-size-change="changeSize" show-sizer show-total></Page>
         </div>

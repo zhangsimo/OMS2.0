@@ -4,9 +4,11 @@ import { TOKEN_KEY } from "@/libs/util";
 // @ts-ignore
 import * as api from "_api/system/partManager";
 // @ts-ignore
+import { setApproval } from "_api/system/partsExamine/partsExamineApi";
+// @ts-ignore
 import * as tools from "_utils/tools";
 // @ts-ignore
-import PartInfo from "_c/partInfo/partInfo";
+import PartInfo from "./partInfo/partInfo";
 // @ts-ignore
 import { getCarPartClass } from "_api/parts";
 
@@ -84,7 +86,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "规格",
-          key: "specifications",
+          key: "spec",
           minWidth: 120
         },
         {
@@ -124,7 +126,7 @@ export default class Fittings extends Vue {
             let text: string = "";
             try {
               text = params.row.carTypef;
-            } catch (e) {}
+            } catch (e) { }
             return h("span", text);
           }
         },
@@ -135,7 +137,7 @@ export default class Fittings extends Vue {
             let text: string = "";
             try {
               text = params.row.carTypes;
-            } catch (e) {}
+            } catch (e) { }
             return h("span", text);
           }
         },
@@ -209,13 +211,13 @@ export default class Fittings extends Vue {
           title: "品牌车型",
           minWidth: 120,
           render: (h, p) => {
-            let brandArr = p.row.carBrand?p.row.carBrand.split("|"):[];
-            let carNameArr = p.row.carModelName?p.row.carModelName.split("|"):[];
-            let arrLength = brandArr.length>carNameArr.length?brandArr:carNameArr;
-            let textArr = arrLength.map((item,index) => {
-              return brandArr[index]+" "+carNameArr[index]
+            let brandArr = p.row.carBrand ? p.row.carBrand.split("|") : [];
+            let carNameArr = p.row.carModelName ? p.row.carModelName.split("|") : [];
+            let arrLength = brandArr.length > carNameArr.length ? brandArr : carNameArr;
+            let textArr = arrLength.map((item, index) => {
+              return brandArr[index] + " " + carNameArr[index]
             })
-            let text = textArr.length>1?textArr.join(" || "):textArr.join("");
+            let text = textArr.length > 1 ? textArr.join(" || ") : textArr.join("");
             return h("span", text);
           }
         },
@@ -506,9 +508,9 @@ export default class Fittings extends Vue {
   private async submitSave(row) {
     const ref: any = this.$refs.partInfo;
     if (!this.isAdd) {
-      row.id = this.currRow.id;
+      row.partId = this.currRow.id;
     }
-    let res: any = await api.approval(row);
+    let res: any = await setApproval(row);
     if (res.code == 0) {
       // const child: any = this.$refs;
       // child.partInfo.saveFlag = false;
@@ -517,6 +519,7 @@ export default class Fittings extends Vue {
       ref.proModal = false;
       this.queryHandle();
     }
+    ref.saveFlag = false;
   }
   // 启用 禁用
   private async changeDisable() {
@@ -531,8 +534,8 @@ export default class Fittings extends Vue {
     }
     if (res.code == 0) {
       self.$Message.success(success);
-      const localTable: any = this.$refs.localTable;
-      localTable.clearCurrentRow();
+      // const localTable: any = this.$refs.localTable;
+      // localTable.clearCurrentRow();
       if (this.tabIndex === 0) {
         this.initLocalPartInfo();
       } else {
@@ -541,9 +544,9 @@ export default class Fittings extends Vue {
     }
   }
   // 导入
-  private importOpen() {}
+  private importOpen() { }
   // 下载模板
-  private downTemplate() {}
+  private downTemplate() { }
   // 刷新
   private refresh() {
     this.initLocalPartInfo();
@@ -561,8 +564,8 @@ export default class Fittings extends Vue {
     }
     if (res.code == 0) {
       self.$Message.success(success);
-      const localTable: any = this.$refs.localTable;
-      localTable.clearCurrentRow();
+      // const localTable: any = this.$refs.localTable;
+      // localTable.clearCurrentRow();
       if (this.tabIndex === 0) {
         this.initLocalPartInfo();
       } else {

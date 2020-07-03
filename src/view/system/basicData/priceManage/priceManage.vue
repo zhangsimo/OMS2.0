@@ -26,12 +26,14 @@
             </Button>
           </div>
           <vxe-table
+            class="level"
             border
             resizable
             auto-resize
             height="549"
             :loading="level.loading"
             :data="level.tbdata"
+            :row-style="rowPriceLevelStyle"
             highlight-current-row
             @current-change="selectRow"
             :edit-config="{ trigger: 'click', mode: 'cell' }"
@@ -64,12 +66,6 @@
           </div>
           <div class="tabs-warp" v-show="tabIndex == 0">
             <div class="btns-warp">
-              <!-- <Input
-                v-model="customer.pinyin"
-                placeholder="请输入拼音"
-                style="width: 140px;"
-                class="mr10"
-              />-->
               <Input
                 v-model="customer.fullname"
                 placeholder="请输入全称"
@@ -131,12 +127,6 @@
           </div>
           <div class="tabs-warp" v-show="tabIndex == 1">
             <div class="btns-warp">
-              <!-- <Input
-                v-model="part.pinyin"
-                placeholder="请输入拼音"
-                style="width: 140px;"
-                class="mr10"
-              />-->
               <Input v-model="part.code" placeholder="请输入编码" style="width: 140px;" class="mr10" />
               <Input
                 v-model="part.fullname"
@@ -171,13 +161,17 @@
               auto-resize
               stripe
               sheetName="n1"
+              row-id="id"
               id="n1"
               height="440"
+              ref="part"
               :loading="part.loading"
-              :checkbox-change="removeLimitChange"
+              @checkbox-all="removeLimitChangeAll"
+              @checkbox-change="removeLimitChange"
               :data="part.tbdata"
               highlight-current-row
               :edit-config="{ trigger: 'click', mode: 'cell' }"
+              :checkbox-config="{checkRowKeys: defaultSelecteRows}"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
@@ -207,7 +201,6 @@
                 <template v-slot:edit="{ row }">
                   <el-input-number
                     :min="0"
-                    :precision="2"
                     v-model="row.minRequiredQty"
                     :controls="false"
                     size="mini"
@@ -223,7 +216,6 @@
                 <template v-slot:edit="{ row }">
                   <el-input-number
                     :min="0"
-                    :precision="2"
                     v-model="row.maxRequiredQty"
                     :controls="false"
                     size="mini"
@@ -231,12 +223,11 @@
                 </template>
               </vxe-table-column>
               <vxe-table-column
-                field="removeLimit"
                 title="解除限制"
                 type="checkbox"
                 v-if="rowPriceManege.name=='统一售价'"
+                field="removeLimitIn"
               ></vxe-table-column>
-              <!-- 最低要求数量，最高要求数量，解除限制 -->
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>
               <vxe-table-column field="operationTime" title="操作日期"></vxe-table-column>
             </vxe-table>
@@ -285,47 +276,47 @@ import * as api from "_api/system/priceManage";
 import DiaLog from "./dialog.vue";
 // import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
 import selectPartCom from "@/view/system/basicData/priceManage/components/selectPartCom.vue";
-import importXLS from '@/view/settlementManagement/components/importXLS.vue'
+import importXLS from "@/view/settlementManagement/components/importXLS.vue";
 // strategyId
 export default {
-  data(){
+  data() {
     return {
-      split:  0.34,
+      split: 0.34,
       // 按钮禁用
-       disabled: true,
+      disabled: true,
       // 价格启用禁用按钮 是否可以点击
-       priceEnableBool: true,
+      priceEnableBool: true,
       // 价格启用禁用
-       priceEnable: "启用",
+      priceEnable: "启用",
       // 左侧所被选中的行
-       rowPriceManege: {},
+      rowPriceManege: {},
       // 最低销价
-       sellPriceTitle:"最低销价",
+      sellPriceTitle: "最低销价",
       // modal显示
-       modal:false,
+      modal: false,
       // tab索引
-       tabIndex:0,
+      tabIndex: 0,
       // 选中的行
-       currRow:null,
+      currRow: null,
       // 选中是否第一行
-       curronly:false,
+      curronly: false,
       // 级别修改和新增数据
-       levelupOrSaveArr:[],
+      levelupOrSaveArr: [],
       // 级别删除的数据
-       leveldelarr: [],
+      leveldelarr: [],
       // 级别名称
-       level: {
+      level: {
         loading: false,
         name: "", // 修改的级别名称
         tbdata: [{ name: "统一售价", readonly: true }]
       },
-       selectCrr: [],
+      selectCrr: [],
       // 右边选择的客户
-       selectRightCR: [],
+      selectRightCR: [],
       // 右边删除的客户
-       removeRightCr: [],
+      removeRightCr: [],
       // 客户信息
-       customer :{
+      customer: {
         pinyin: "", //客户拼音
         fullname: "", //客户全程
         // 表头
@@ -340,7 +331,7 @@ export default {
           size: 10
         }
       },
-       part :{
+      part: {
         pinyin: "", // 拼音
         code: "", // 编码
         fullname: "", // 名称
@@ -355,21 +346,27 @@ export default {
           size: 10
         }
       },
-       impirtUrl: {
-        downId: '',
+      impirtUrl: {
+        downId: "",
         upUrl: api.impUrl
-      }
-    }
+      },
+      // 配件表格中默认选中
+      defaultSelecteRows: []
+    };
   },
   components: {
-    DiaLog, selectPartCom, importXLS
+    DiaLog,
+    selectPartCom,
+    importXLS
   },
-  methods:{
+  methods: {
     /**methods */
     /**==============左侧============= */
     // 获取表格
     async getLevelList() {
-      this.rowPriceManege = {} ? this.priceEnableBool = true : this.priceEnableBool = false
+      this.rowPriceManege = {}
+        ? (this.priceEnableBool = true)
+        : (this.priceEnableBool = false);
       this.level.tbdata = [{ name: "统一售价", readonly: true }];
       // isDisabled:0 启用
       // isDisabled:1 禁用
@@ -417,9 +414,7 @@ export default {
       if (this.part.fullname) {
         data.fullName = this.part.fullname;
       }
-      if (this.part.pinyin) {
-        data.pinyin = this.part.pinyin;
-      }
+
       if (this.part.code) {
         data.partCode = this.part.code;
       }
@@ -429,27 +424,57 @@ export default {
       let res = await api.queryPart(params, data);
       if (res.code == 0) {
         this.part.loading = false;
-        this.part.tbdata = res.data.content.map((el) => {
+        this.part.tbdata = res.data.content.map(el => {
+          let data = {};
+          data = el;
           el.sellPrice = parseFloat(el.sellPrice).toFixed(2);
           el.costPrice = parseFloat(el.costPrice).toFixed(2);
-          return el;
+          el.minRequiredQty = parseInt(el.minRequiredQty);
+          el.maxRequiredQty = parseInt(el.maxRequiredQty);
+          if (el.removeLimit == 1) {
+            this.defaultSelecteRows.push(data.id);
+          }
+          return data;
         });
         this.part.page.total = res.data.totalElements;
       }
     },
-    rowPriceLevelStyle(row){
-      if(row.isDisabled!=0){
-        return `backgroundColor:#f2f2f2 !important;`
-      }else{
-        return `backgroundColor:#f1f1f1 !important;`
+    rowPriceLevelStyle(row) {
+      if (row.row.isDisabled == 1) {
+        return `backgroundColor:#f2f2f2 !important;`;
       }
     },
-    selectPartName(selectPartName){
+    selectPartName(selectPartName) {
       // this.getPart()
-      this.part.tbdata.push(selectPartName)
+      this.part.tbdata.push(selectPartName);
     },
-    removeLimitChange(row){
-      row.removeLimit==0?row.removeLimit=1:row.removeLimit=0
+    removeLimitChange(checkbox) {
+      console.log(checkbox.selection)
+      // if (checkbox == true) {
+      //   this.$refs.part.setCheckboxRow(this.part.tbdata[checkbox.$rowIndex],true);
+      // } else {
+      //   // this.$refs.part.setCheckboxRow(this.part.tbdata[checkbox.$rowIndex],false);
+      //   // this.$refs.part.clearCheckboxRow(this.part.tbdata[checkbox.$rowIndex]);
+      // }
+      this.part.tbdata.map(item => {
+        if (item.id == checkbox.row.id) {
+          checkbox.checked == true
+            ? (item.removeLimit = 1)
+            : (item.removeLimit = 0);
+        }
+      });
+    },
+    removeLimitChangeAll({ checked, records }) {
+      if (checked == true) {
+        
+        this.part.tbdata.map(item=>{
+          item.removeLimit=1
+        })
+      } else {
+        this.part.tbdata.map(item=>{
+          item.removeLimit=0
+        })
+      }
     },
     // rest
     restTbdata() {
@@ -498,7 +523,7 @@ export default {
           arr.splice(index, 1);
         }
       });
-      let isOk = data.addList.every((el) => {
+      let isOk = data.addList.every(el => {
         let name = el.name.trim();
         if (name && name.length >= 1) {
           return true;
@@ -520,14 +545,21 @@ export default {
       this.level.tbdata.push({ name: "", isNew: true, oid: Date.now() });
     },
     // 单选行
-    selectRow({ row }) {
-      this.rowPriceManege = row
-      this.rowPriceLevelStyle(row)
-      row.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
-      row.readonly==true?this.priceEnableBool=true:this.priceEnableBool=false
-      row.readonly==true?this.sellPriceTitle="最低销价":this.sellPriceTitle="销售价格"
-      row.readonly==true?this.impirtUrlData="":this.impirtUrlData=this.rowPriceManege.id
-      row.readonly==true?this.impirtUrl.upUrl:this.impirtUrl.upUrl=`${this.impirtUrl.upUrl}?strategyId=${row.id}`
+    async selectRow({ row }) {
+      this.rowPriceManege = row;
+      // this.rowPriceLevelStyle(row);
+      this.rowPriceManege.isDisabled == 0
+        ? (this.priceEnable = "禁用")
+        : (this.priceEnable = "启用");
+      this.rowPriceManege.readonly == true
+        ? (this.priceEnableBool = true)
+        : (this.priceEnableBool = false);
+      this.rowPriceManege.readonly == true
+        ? (this.sellPriceTitle = "最低销价")
+        : (this.sellPriceTitle = "销售价格");
+      this.rowPriceManege.readonly == true
+        ? await (this.impirtUrl.upUrl = `${api.impUrl}`)
+        : await (this.impirtUrl.upUrl = `${api.impUrl}?strategyId=${this.rowPriceManege.id}`);
       const curs = this.$refs.curs;
       curs.custarr = new Array();
       this.currRow = row;
@@ -578,18 +610,20 @@ export default {
     },
     // 切换价格启用禁用
     priceEnableFun() {
-      let data = {}
-      data.id = this.rowPriceManege.id
-      api.tabPriceEnable(data).then(()=>{
-        if(this.rowPriceManege.isDisabled == 0 ){
-          this.priceEnable = "禁用"
-        }else{
-          this.priceEnable = "启用"
+      let data = {};
+      data.id = this.rowPriceManege.id;
+      api.tabPriceEnable(data).then(() => {
+        if (this.rowPriceManege.isDisabled == 0) {
+          this.priceEnable = "禁用";
+        } else {
+          this.priceEnable = "启用";
         }
-        this.$Message.success(`价格${this.priceEnable}成功`)
-        this.getLevelList()
-        this.rowPriceManege.isDisabled == 0 ? this.priceEnable = "禁用" : this.priceEnable = "启用"
-      })
+        this.$Message.success(`价格${this.priceEnable}成功`);
+        this.getLevelList();
+        this.rowPriceManege.isDisabled == 0
+          ? (this.priceEnable = "禁用")
+          : (this.priceEnable = "启用");
+      });
     },
     // tab切换
     setTab(index) {
@@ -671,7 +705,7 @@ export default {
         addList: new Array(),
         delList: new Array()
       };
-      data.addList = this.customer.tbdata.filter((el) => el.new);
+      data.addList = this.customer.tbdata.filter(el => el.new);
       this.removeRightCr.forEach(el => {
         if (el.oid) {
           data.delList.push(el);
@@ -694,61 +728,55 @@ export default {
       }
     },
     /**============配件============ */
-// 添加配件
-   addAccessories() {
-    this.rowPriceManege.name=="统一售价"?this.$refs.selectPartCom.apiDataId="":this.$refs.selectPartCom.apiDataId=this.rowPriceManege.id
-    this.$refs.selectPartCom.init()
-    // @Component.components.selectPartCom.init()
-  },
-  //配件返回的参数
-   getPartNameList(val) {
-    var arr = []
-    val.forEach(item => {
-      item.partName = item.partStandardName;
-      item.hasAcceptQty = undefined;
-      item.carBrandName = item.adapterCarModel;
-      item.orderPrice = item.minUnit;
-      item.oemCode = item.oeCode;
-      item.spec = item.specifications;
-      item.partId = item.orgid;
-      item.partInnerId = item.code;
-      item.unit = item.minUnit;
-      let el= Object.assign({}, item);
-      delete el.id;
-      delete el.orderPrice;
-      arr.push(el)
-    });
-    var allArr = []; //新数组
-    this.getPart()
-    this.part.tbdata = [
-      ...this.part.tbdata,
-      ...arr
-    ];
-    var allArr = [];
-    var oldArr = this.part.tbdata;
-    for (var i = 0; i < oldArr.length; i++) {
-      var flag = true;
-      for (var j = 0; j < allArr.length; j++) {
-        if (oldArr[i].oemCode == allArr[j].oemCode) {
-          flag = false;
-        }
+    // 添加配件
+    addAccessories() {
+      if (this.rowPriceManege != {}) {
+        this.rowPriceManege.name == "统一售价"
+          ? (this.$refs.selectPartCom.apiDataId = "")
+          : (this.$refs.selectPartCom.apiDataId = this.rowPriceManege.id);
+        this.$refs.selectPartCom.init();
+      } else {
+        this.$Message.error("请选择一个价格");
       }
-      if (flag) {
-        allArr.push(oldArr[i]);
+    },
+    //配件返回的参数
+    async getPartNameList(val) {
+      var arr = [];
+      val.forEach(item => {
+        item.partName = item.partStandardName;
+        item.hasAcceptQty = undefined;
+        item.carBrandName = item.adapterCarModel;
+        item.orderPrice = item.minUnit;
+        item.oemCode = item.oeCode;
+        item.spec = item.specifications;
+        item.partId = item.orgid;
+        item.partInnerId = item.code;
+        item.unit = item.minUnit;
+        item.minRequiredQty = 0;
+        item.maxRequiredQty = 0;
+        item.sellPrice = parseFloat(0).toFixed(2);
+        let el = Object.assign({}, item);
+        delete el.id;
+        delete el.orderPrice;
+        arr.push(el);
+      });
+      let params = {};
+      this.rowPriceManege.id == undefined || ""
+        ? (params.strategyId = null)
+        : (params.strategyId = this.rowPriceManege.id);
+      let res = await api.addWbParts(params, arr);
+      if (!res == false) {
+        this.$Message.success("添加成功");
+        this.getPart();
       }
-    }
-    this.part.tbdata = allArr;
-    setTimeout(()=>{
-      this.$Message.success("已添加");
-    },0)
-  },
-  // 导入模板
-  importModule() {
-    this.rowPriceManege.name == "统一售价"
-      ? (this.impirtUrl.downId = "2600000000")
-      : (this.impirtUrl.downId = "2700000000");
-    this.$refs.imp.openModal();
-  },
+    },
+    // 导入模板
+    importModule() {
+      this.rowPriceManege.name == "统一售价"
+        ? (this.impirtUrl.downId = "2600000000")
+        : (this.impirtUrl.downId = "2700000000");
+      this.$refs.imp.openModal();
+    },
     // 翻页-配件价格
     changePagePagePart(p) {
       this.part.page.num = p;
@@ -766,33 +794,26 @@ export default {
       this.getPart();
     },
     //导入成功后刷新页
-    getNew(data) { },
+    getNew(data) {},
     // 保存配件
     async savePart() {
       let res;
       let data = [...this.part.tbdata];
-      data.forEach((el) => {
-        el.pchsPrice = el.costPrice;
-      });
       if (this.curronly) {
         res = await api.partPriceSave(data);
       } else {
-        data.map((el) => {
-          el.strategyId = this.currRow.id;
-          return el;
-        });
         res = await api.partLevelSave(data);
       }
       if (res.code == 0) {
         this.$Message.success("保存成功");
         this.queryPart();
       }
-    },
+    }
   },
-   mounted() {
+  mounted() {
     this.getLevelList();
   }
-}
+};
 </script>
 <style lang="less" scoped>
 @import url("../../../lease/tenantres/icon");
