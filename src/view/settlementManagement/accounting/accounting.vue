@@ -476,7 +476,7 @@ export default {
       status: 0, // 当前tabs 0未审核， 1已审核
       tableData: [], // 未审核
       tableData1: [], // 已审核
-      date: new Date(), // 发生日期
+      date: '', // 发生日期
       store: "", // 门店id
       single:0,//复选框状态
       Branchstore: [{id:"0",name:"全部"}], //分店名称
