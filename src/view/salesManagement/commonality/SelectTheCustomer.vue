@@ -2,7 +2,7 @@
   <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
-        <Input v-model="clientName" placeholder="名称" class="mr10" style="width: 150px" />
+        <Input v-model="fullName" placeholder="全称" class="mr10" style="width: 150px" />
         <Input v-model="clientCode" placeholder="编码" class="mr10" style="width: 150px" />
         <Input v-model="clientPhone" placeholder="电话" class="mr10" style="width: 150px" />
         <Cascader
@@ -96,7 +96,7 @@ export default {
   data() {
     return {
       addressShow: false,
-      clientName: "", //名称
+      fullName: "", //名称
       clientCode: "", //编码
       clientPhone: "", //电话
       clientType: [], //类型
@@ -146,7 +146,7 @@ export default {
       this.addressShow = true;
     },
     reset() {
-      this.clientName = "";
+      this.fullName = "";
       this.clientPhone = "";
       this.clientCode = "";
       this.page1 = {
@@ -228,8 +228,8 @@ export default {
       if(this.clientCode){
         data.code = this.clientCode;
       }
-      if(this.clientName){
-        data.shortName = this.clientName;
+      if(this.fullName){
+        data.shortName = this.fullName;
       }
       if(this.clientPhone){
         data.contactorTel = this.clientPhone;
