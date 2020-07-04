@@ -156,7 +156,7 @@ export const minxParts = {
               render: (h, params) => {
                 let approval = params.row.auditSign || 0;
                 let className = "";
-                let apptxt = "待审核批";
+                let apptxt = "待审核";
                 if (approval == 1) {
                   className = "blue";
                   apptxt = "审批通过";
