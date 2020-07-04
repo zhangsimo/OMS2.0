@@ -163,7 +163,7 @@ export default {
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
-        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
+        this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
         this.formInline.applyTypeName = '费用报销'
