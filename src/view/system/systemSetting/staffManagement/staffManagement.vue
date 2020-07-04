@@ -316,11 +316,11 @@ export default {
           key: "userRoleName",
           minWidth: 80
         },
-        {
-          title: "公司地址",
-          align: "center",
-          key: "address"
-        }
+        // {
+        //   title: "公司地址",
+        //   align: "center",
+        //   key: "address"
+        // }
       ],
       companyList: [],
       title: "新增员工",
