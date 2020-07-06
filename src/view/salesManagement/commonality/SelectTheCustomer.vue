@@ -50,7 +50,7 @@
                 style="width: 1500px"
               >
                 <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-                <vxe-table-column field="fullName" title="名称" show-overflow></vxe-table-column>
+                <vxe-table-column field="shortName" title="名称" show-overflow></vxe-table-column>
                 <vxe-table-column field="code" title="编码"></vxe-table-column>
                 <vxe-table-column title="状态">
                   <template v-slot="{ row }">{{ row.isDisabled == 1 ? '无效' : '有效' }}</template>
