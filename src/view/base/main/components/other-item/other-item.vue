@@ -77,7 +77,12 @@
             return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
         },
         getPost(){
-           return Array.isArray(this.$store.state.user.userData.currentRoles) ? this.$store.state.user.userData.currentRoles[0] ? this.$store.state.user.userData.currentRoles[0].displayName: '' : ''
+           let name =  Array.isArray(this.$store.state.user.userData.currentRoles) ? this.$store.state.user.userData.currentRoles[0] ? this.$store.state.user.userData.currentRoles[0].displayName: '' : ''
+          if(this.$store.state.user.userData.currentRoles[0].systemType == 0){
+            return name
+          }else {
+            return
+          }
         }
       },
       mounted(){
