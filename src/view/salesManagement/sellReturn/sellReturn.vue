@@ -55,16 +55,6 @@
               <i class="iconfont mr5 iconziyuan2"></i>提交并入库
             </Button>
           </div>
-          <!--          <div class="db">-->
-          <!--            <Button-->
-          <!--              class="mr10"-->
-          <!--              @click="returnWarehouse"-->
-          <!--              :disabled="formPlan.isWms"-->
-          <!--              v-has="'returnWarehouse'"-->
-          <!--            >-->
-          <!--              <i class="iconfont mr5 iconshenheicon"></i> 退货入库-->
-          <!--            </Button>-->
-          <!--          </div>-->
           <div class="db">
             <Button
               class="mr10"
@@ -148,19 +138,6 @@
                         disabled
                         style="width:200px;"
                       />
-                      <!-- <Select
-                        v-model="formPlan.guestId"
-                        filterable
-                        style="width: 240px"
-                        @on-change="changeClient"
-                        :disabled="draftShow != 0||isNew"
-                      >
-                        <Option
-                          v-for="item in client"
-                          :value="item.id"
-                          :key="item.id"
-                        >{{ item.fullName }}</Option>
-                      </Select> -->
                       <Button
                         class="ml5"
                         size="small"
@@ -173,12 +150,6 @@
                     </Row>
                   </FormItem>
                   <FormItem label="退货员：" prop="orderManId">
-                    <!--                    <Input-->
-                    <!--                      class="w160"-->
-                    <!--                      placeholder="请输入退货员"-->
-                    <!--                      v-model="formPlan.orderMan"-->
-                    <!--                      :disabled="draftShow != 0||isNew"-->
-                    <!--                    />-->
                     <Select
                       :value="formPlan.orderManId"
                       @on-change="selectOrderMan"
@@ -446,6 +417,7 @@ import * as tools from "../../../utils/tools";
 import { save } from "../../../api/AlotManagement/transferringOrder";
 import { checkStore } from "@/api/system/systemApi";
 import Procurement from "@/components/Procurement";
+import { v4 } from "uuid"
 
 export default {
   name: "sellReturn",
@@ -869,6 +841,13 @@ export default {
       getLeftList(page, size, data).then(res => {
         if (res.code === 0) {
           this.sellOrderTable.tbdata = res.data.content || [];
+          this.sellOrderTable.tbdata.forEach(el => {
+            if(Array.isArray(el.details)) {
+              el.details.forEach(dl => {
+                dl.uuid = v4();
+              })
+            }
+          })
           this.page.total = res.data.totalElements;
         }
       });
@@ -891,6 +870,13 @@ export default {
       getLeftList(page, size, data).then(res => {
         if (res.code === 0) {
           this.sellOrderTable.tbdata = res.data.content || [];
+          this.sellOrderTable.tbdata.forEach(el => {
+            if(Array.isArray(el.details)) {
+              el.details.forEach(dl => {
+                dl.uuid = v4();
+              })
+            }
+          }) 
           this.page.total = res.data.totalElements;
           for (let b of this.sellOrderTable.tbdata) {
             b._highlight = false;
@@ -983,7 +969,7 @@ export default {
 
     getPlanOrder(Msg) {
       let arr = Msg || [];
-
+      arr = JSON.parse(JSON.stringify(arr));
       if (arr.length <= 0) return;
 
       arr.forEach(item => {
@@ -993,6 +979,8 @@ export default {
         item.enterUnitId = item.systemUnitId;
         item.orderQty = item.rtnableQty;
         item.orderPrice = item.sellPrice;
+        item.oid = v4();
+        item.uuid = item.oid;
         Reflect.deleteProperty(item, "sourceDetailId");
       });
       if (!this.formPlan.details) {
@@ -1054,45 +1042,48 @@ export default {
       val.forEach(item => {
         item.orderQty = item.rtnableQty;
         item.orderPrice = item.sellPrice;
+        item.uuid = v4();
         this.formPlan.details.push(item);
       });
       // console.log('我是formplan',this.formPlan.details)
     },
 
     //删除配件
-    deletePart() {
+    async deletePart() {
       if (this.selectTableList.length > 0) {
         let data = [];
         let arr = [];
+        let ids = [];
         this.selectTableList.forEach(item => {
-          if (item.oid) {
-            arr.push({ oid: item.oid });
-          } else {
+          if (item.id) {
             data.push({ id: item.id });
+            ids.push(item.uuid);
+          } else {
+            arr.push({ oid: item.oid });
+            ids.push(item.uuid);
           }
         });
-        if (arr.length > 0) {
-          arr.forEach(el => {
-            this.formPlan.details.forEach((el2, index) => {
-              if (el2.id == el.oid) {
-                this.formPlan.details.splice(index, 1);
-              }
-            });
-          });
+
+        let res = { code: 0 };
+
+        if(arr.length > 0) {
+          res = { code: 0 }
         }
-        if (data.length > 0) {
-          getDeleteList(data).then(res => {
-            if (res.code === 0) {
-              data.forEach(el => {
-                this.formPlan.details.forEach((el2, index) => {
-                  if (el2.id == el.id) {
-                    this.formPlan.details.splice(index, 1);
-                  }
-                });
-              });
-              this.$Message.success("删除配件成功");
-            }
-          });
+
+        if(data.length > 0) {
+          res = await getDeleteList(data);
+        }
+
+        if(res.code == 0) {
+          this.$Message.success("删除配件成功");
+
+          this.formPlan.details = this.formPlan.details.filter(el => {
+            return !ids.includes(el.uuid);
+          })
+
+          this.$refs.xTable.clearCheckboxRow();
+
+          this.selectTableList.length = 0;
         }
       } else {
         this.$Message.error("请选择一条有效数据");

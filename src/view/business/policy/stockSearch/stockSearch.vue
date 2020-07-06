@@ -165,11 +165,11 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Input
+            <!-- <Input
               v-model="searchForm1.shelf"
               placeholder="仓位"
               class="w120 mr10"
-            ></Input>
+            ></Input> -->
             <!--<span class="mr5">显示零库存:</span>-->
             <!--<Checkbox v-model="searchForm1.noStock"></Checkbox>-->
             <Button type="warning" class="mr10 w90" @click="queryBatch">
@@ -925,6 +925,7 @@ export default {
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
+      console.log(this.searchForm , 789)
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
