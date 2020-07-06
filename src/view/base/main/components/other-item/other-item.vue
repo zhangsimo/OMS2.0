@@ -43,7 +43,7 @@
           <vxe-table-column type="radio" title="选择" width="50">
           </vxe-table-column>
           <vxe-table-column field="orgid" title="门店编号" width="150"></vxe-table-column>
-          <vxe-table-column field="tenantCompanyName" title="公司名称"></vxe-table-column>
+          <vxe-table-column field="shortName" title="公司名称"></vxe-table-column>
         </vxe-table>
       </div>
     </Modal>
