@@ -918,14 +918,14 @@ export default {
     // 汇总库存请求
     async getAllStocks() {
       let data = {};
-      data = JSON.parse(JSON.stringify(this.searchForm)) ;
+      data = JSON.parse(JSON.stringify(this.searchForm));
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
-      console.log(this.searchForm , 789)
+      console.log(this.searchForm, 789);
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
@@ -963,7 +963,7 @@ export default {
     // 批次库存请求
     async getLotStocks() {
       let data = {};
-      data = JSON.parse(JSON.stringify(this.searchForm1)) ;
+      data = JSON.parse(JSON.stringify(this.searchForm1));
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -1189,10 +1189,33 @@ export default {
               return prev;
             }
           }, 0);
-          sums[key] = {
-            key,
-            value: v
-          };
+          if (
+            [
+              "enterQty",
+              "outableQty",
+              "enterPrice",
+              "enterAmt",
+              "noTaxPrice",
+              "noTaxAmt",
+              "stockQty",
+              "outableQty",
+              "costPrice",
+              "stockAmt",
+              "pchRoadQty",
+              "attotRoadQty",
+              "onRoadQty"
+            ].includes(key)
+          ) {
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          } else {
+            sums[key] = {
+              key,
+              value: ""
+            };
+          }
         } else {
           sums[key] = {
             key,
