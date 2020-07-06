@@ -537,6 +537,7 @@ export default {
     },
     //获取当前数据
     selection(currentRow) {
+      currentRow.groundIds = currentRow.groundIdsStr.split(',')
       this.oneStaffChange = currentRow;
     },
 
@@ -550,8 +551,8 @@ export default {
       }
       this.title = "修改员工信息";
       this.newStaff = JSON.parse(JSON.stringify(this.oneStaffChange)) //用户名
-      this.newStaff.single = this.newStaff.single == 1 ? true : false; //允许查看
-      this.newStaff.singtwo = this.newStaff.singtwo == 1 ? true : false; //允许提交
+      this.newStaff.single = this.newStaff.single ? 1 : 0; //允许查看
+      this.newStaff.singtwo = this.newStaff.singtwo ? 1 : 0; //允许提交
       // this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
       this.newStaff.groundIds = this.newStaff.groundIds||[];
       this.modalShow = true;
@@ -563,12 +564,8 @@ export default {
         return false;
       }
       let stop = this.$loading();
-      this.oneStaffChange.office = this.oneStaffChange.office == 0 ? 1 : 0;
-      (this.oneStaffChange.singtwo =
-        this.oneStaffChange.singtwo == 1 ? true : false), //允许提交
-        (this.oneStaffChange.groundIds = JSON.stringify(
-          this.oneStaffChange.groundIds
-        ));
+      this.oneStaffChange.office = this.oneStaffChange.office == 0 ? 1 : 0
+      this.oneStaffChange.singtwo = this.oneStaffChange.singtwo  ? 1 : 0 //允许提交
       changeeditUser(this.oneStaffChange)
         .then(res => {
           stop();
