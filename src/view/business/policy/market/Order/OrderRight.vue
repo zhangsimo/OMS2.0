@@ -234,7 +234,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
+          <!-- <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column> -->
           <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
           <vxe-table-column field title="批次">
             <template v-slot="{ row,rowIndex }">
