@@ -2,7 +2,7 @@
   <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
-        <Input v-model="fullName" placeholder="全称" class="mr10" style="width: 150px" />
+        <Input v-model="fullName" placeholder="简称" class="mr10" style="width: 150px" />
         <Input v-model="clientCode" placeholder="编码" class="mr10" style="width: 150px" />
         <Input v-model="clientPhone" placeholder="电话" class="mr10" style="width: 150px" />
         <Cascader
