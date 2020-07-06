@@ -488,7 +488,6 @@ export default {
     submit(type = "add") {
       this.$refs.child.handleSubmit(() => {
         let stop = this.$loading();
-        this.modalShow = false;
         if (this.title == "新增员工") {
           let data = {};
           data = JSON.parse(JSON.stringify(this.newStaff));
@@ -501,6 +500,7 @@ export default {
               stop();
               if (res.code == 0) {
                 this.$Message.success("新增成功");
+                this.modalShow = false;
                 this.$refs.child.resetFields();
                 this.cancel();
                 this.getAllStaffList();
