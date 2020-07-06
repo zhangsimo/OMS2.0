@@ -106,6 +106,8 @@
           :columns="columns1"
           :data="contentOne.dataOne"
           height="600"
+          show-summary
+          :summary-method="handleSummary"
         ></Table>
       </div>
       <!--      批次库存表-->
@@ -190,7 +192,9 @@
           :stripe="true"
           :columns="columns2"
           :data="contentTwo.dataTwo"
-          height="700"
+          height="600"
+          show-summary
+          :summary-method="handleSummary"
         ></Table>
       </div>
       <!-- hs -->
@@ -251,19 +255,30 @@
       </div>
       <!--      分页-->
       <div class="page-warp fw">
-
         <p v-if="tabIndex == 0">
           <span>查询结果统计</span>
-          <span>总库存：<span>{{ total1.stockQty }}</span></span>
-          <span>可售库存：<span>{{ total1.outableQty }}</span></span>
-          <span>总金额：<span>{{ total1.stockAmt }}</span></span>
+          <span
+            >总库存：<span>{{ total1.stockQty }}</span></span
+          >
+          <span
+            >可售库存：<span>{{ total1.outableQty }}</span></span
+          >
+          <span
+            >总金额：<span>{{ total1.stockAmt }}</span></span
+          >
         </p>
 
         <p v-if="tabIndex == 1">
           <span>查询结果统计</span>
-          <span>总库存：<span>{{ total2.enterQty }}</span></span>
-          <span>可售库存：<span>{{ total2.outableQty }}</span></span>
-          <span>总金额：<span>{{ total2.enterAmt }}</span></span>
+          <span
+            >总库存：<span>{{ total2.enterQty }}</span></span
+          >
+          <span
+            >可售库存：<span>{{ total2.outableQty }}</span></span
+          >
+          <span
+            >总金额：<span>{{ total2.enterAmt }}</span></span
+          >
         </p>
 
         <Page
@@ -317,7 +332,7 @@ import {
   findMasterOrgId,
   getStoreAll,
   PtabulatData,
-  EtabulatData,
+  EtabulatData
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -384,7 +399,7 @@ export default {
           title: "序号",
           key: "index",
           align: "center",
-          minWidth: 40
+          minWidth: 100
         },
         {
           title: "配件编码",
@@ -414,10 +429,6 @@ export default {
           title: "品牌车型",
           align: "center",
           key: "carModelName",
-          /*render:(h , params)=>{
-
-                          return h('span' ,{} ,tex)
-                        },*/
           minWidth: 120
         },
         {
@@ -682,7 +693,7 @@ export default {
           type: "index",
           key: "index",
           align: "center",
-          minWidth: 40,
+          minWidth: 100,
           render: (h, params) => {
             return h(
               "span",
@@ -926,7 +937,7 @@ export default {
       }
 
       let res1 = await PtabulatData(data);
-      if(res1.code == 0) {
+      if (res1.code == 0) {
         this.total1 = res1.data;
         // console.log(res1.data);
       }
@@ -971,7 +982,7 @@ export default {
       }
 
       let res1 = await EtabulatData(data);
-      if(res1.code == 0) {
+      if (res1.code == 0) {
         this.total2 = res1.data;
         // console.log(res1.data);
       }
@@ -1156,6 +1167,41 @@ export default {
       this.hspage.num = 1;
       this.hspage.size = val;
       this.getTemplateList();
+    },
+    handleSummary({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "当前页和值"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (!values.every(value => isNaN(value))) {
+          const v = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[key] = {
+            key,
+            value: v
+          };
+        } else {
+          sums[key] = {
+            key,
+            value: ""
+          };
+        }
+      });
+
+      return sums;
     }
   }
 };
