@@ -250,7 +250,22 @@
         ></Table>
       </div>
       <!--      分页-->
-      <div class="page-warp">
+      <div class="page-warp fw">
+
+        <p v-if="tabIndex == 0">
+          <span>查询结果统计</span>
+          <span>总库存：<span>{{ total1.stockQty }}</span></span>
+          <span>可售库存：<span>{{ total1.outableQty }}</span></span>
+          <span>总金额：<span>{{ total1.stockAmt }}</span></span>
+        </p>
+
+        <p v-if="tabIndex == 1">
+          <span>查询结果统计</span>
+          <span>总库存：<span>{{ total2.enterQty }}</span></span>
+          <span>可售库存：<span>{{ total2.outableQty }}</span></span>
+          <span>总金额：<span>{{ total2.enterAmt }}</span></span>
+        </p>
+
         <Page
           v-if="tabIndex == 0"
           class-name="page-con"
@@ -264,7 +279,7 @@
           show-total
         ></Page>
         <Page
-          v-else
+          v-if="tabIndex == 1"
           class-name="page-con"
           :current="contentTwo.page.num"
           :total="contentTwo.page.total"
@@ -276,13 +291,14 @@
           show-total
         ></Page>
         <Page
-          size="small"
-          class-name="page-con tr"
+          v-if="tabIndex == 2"
+          class-name="page-con"
           :current="hspage.num"
           :total="hspage.total"
           :page-size="hspage.size"
           @on-change="selectNum"
           @on-page-size-change="selectPage"
+          size="small"
           show-sizer
           show-total
         ></Page>
@@ -299,7 +315,9 @@ import {
   getPartBrand,
   getPartBrandNoWB,
   findMasterOrgId,
-  getStoreAll
+  getStoreAll,
+  PtabulatData,
+  EtabulatData,
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -314,6 +332,7 @@ import {
 import api from "_conf/url";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
+
 // import * as api from "_api/system/partManager";
 
 export default {
@@ -321,6 +340,8 @@ export default {
   components: { EnterStock },
   data() {
     return {
+      total1: {},
+      total2: {},
       shopkeeper: 0, // 1 总部
       shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopId,
       // 品牌选项
@@ -902,6 +923,12 @@ export default {
           this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
         }
       }
+
+      let res1 = await PtabulatData(data);
+      if(res1.code == 0) {
+        this.total1 = res1.data;
+        // console.log(res1.data);
+      }
     },
     //汇总分页
     changePageAlways(val) {
@@ -940,6 +967,12 @@ export default {
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
         this.contentTwo.page.total = res.data.totalElements;
+      }
+
+      let res1 = await EtabulatData(data);
+      if(res1.code == 0) {
+        this.total2 = res1.data;
+        // console.log(res1.data);
       }
     },
     // tab切换
@@ -983,13 +1016,6 @@ export default {
       if (res.code === 0) {
         let arr = [];
         let arrData = res.data.content || [];
-        // for(let v in res.data){
-        //   let obj = {}
-        //   obj.code = v;
-        //   obj.id = v;
-        //   obj.name = res.data[v]
-        //   arr.push(obj)
-        // }
         arrData.forEach(item => {
           arr.push(...item.children);
         });
@@ -1190,5 +1216,17 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%);
+}
+
+.fw {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  p {
+    padding: 0 20px;
+    span {
+      padding: 0 10px;
+    }
+  }
 }
 </style>

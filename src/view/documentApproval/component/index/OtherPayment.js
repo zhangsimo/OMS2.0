@@ -83,7 +83,7 @@ export default {
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
-        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
+       this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
         this.formInline.applyTypeName = '其他付款'
@@ -133,7 +133,7 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      
+
       let arr = this.company.filter( item => item.value == row.value)
       this.formInline.receiver = arr[0].receiver || ''
       this.formInline.receiveBank = arr[0].receiveBank || ''
