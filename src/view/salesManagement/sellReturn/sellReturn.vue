@@ -1080,15 +1080,6 @@ export default {
             });
           });
         }
-        // const arr = this.formPlan.details.filter(
-        //   v => !this.selectTableList.includes(v)
-        // );
-        // this.$set(this.formPlan, "details", arr);
-        // this.sellOrderTable.tbdata.map((item, index) => {
-        //   if (item.id === this.formPlan.id) {
-        //     this.$set(this.sellOrderTable.tbdata[index], "details", arr);
-        //   }
-        // });
         if (data.length > 0) {
           getDeleteList(data).then(res => {
             if (res.code === 0) {
