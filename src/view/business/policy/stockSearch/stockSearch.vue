@@ -907,13 +907,14 @@ export default {
     // 汇总库存请求
     async getAllStocks() {
       let data = {};
-      data = this.searchForm;
+      data = JSON.parse(JSON.stringify(this.searchForm)) ;
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
+      console.log(this.searchForm , 789)
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
@@ -951,7 +952,7 @@ export default {
     // 批次库存请求
     async getLotStocks() {
       let data = {};
-      data = this.searchForm1;
+      data = JSON.parse(JSON.stringify(this.searchForm1)) ;
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
