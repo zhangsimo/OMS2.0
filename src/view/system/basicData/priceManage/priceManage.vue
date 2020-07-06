@@ -47,7 +47,7 @@
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
-                <Input v-model="row.name" :disabled="row.readonly" />
+                <Input v-model="row.name" :disabled="row.readonly || row.isDisabled===1" />
               </template>
             </vxe-table-column>
           </vxe-table>
@@ -449,7 +449,7 @@ export default {
       this.part.tbdata.push(selectPartName);
     },
     removeLimitChange(checkbox) {
-      console.log(checkbox.selection)
+      console.log(checkbox.selection);
       // if (checkbox == true) {
       //   this.$refs.part.setCheckboxRow(this.part.tbdata[checkbox.$rowIndex],true);
       // } else {
@@ -466,14 +466,13 @@ export default {
     },
     removeLimitChangeAll({ checked, records }) {
       if (checked == true) {
-        
-        this.part.tbdata.map(item=>{
-          item.removeLimit=1
-        })
+        this.part.tbdata.map(item => {
+          item.removeLimit = 1;
+        });
       } else {
-        this.part.tbdata.map(item=>{
-          item.removeLimit=0
-        })
+        this.part.tbdata.map(item => {
+          item.removeLimit = 0;
+        });
       }
     },
     // rest
@@ -760,14 +759,15 @@ export default {
         delete el.orderPrice;
         arr.push(el);
       });
-      let params = {};
-      this.rowPriceManege.id == undefined || ""
-        ? (params.strategyId = null)
-        : (params.strategyId = this.rowPriceManege.id);
+      let params;
+      this.rowPriceManege.id == undefined
+        ? (params = "")
+        : (params = this.rowPriceManege.id);
       let res = await api.addWbParts(params, arr);
       if (!res == false) {
         this.$Message.success("添加成功");
         this.getPart();
+        // params={}
       }
     },
     // 导入模板
@@ -776,6 +776,9 @@ export default {
         ? (this.impirtUrl.downId = "2600000000")
         : (this.impirtUrl.downId = "2700000000");
       this.$refs.imp.openModal();
+      this.getPart();
+      this.getCus();
+      this.getLevelList();
     },
     // 翻页-配件价格
     changePagePagePart(p) {
@@ -819,7 +822,8 @@ export default {
 @import url("../../../lease/tenantres/icon");
 @import url("./index");
 </style>
-<style>
+<style lang="less">
+@enAbInt: 1px solid #000 !important;
 .edit {
   width: 100%;
   height: 40px;
@@ -828,5 +832,12 @@ export default {
   outline: none;
   border: 0;
   background-color: transparent;
+}
+.enAble {
+  // background-color: #000;
+      input {
+        border: 1px solid #000 !important;
+        // background-color: black !important;
+      }
 }
 </style>
