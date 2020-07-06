@@ -925,7 +925,6 @@ export default {
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
-      console.log(this.searchForm , 789)
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
