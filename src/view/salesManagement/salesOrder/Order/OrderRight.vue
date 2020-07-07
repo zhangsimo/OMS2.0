@@ -243,7 +243,7 @@
           </div>
         </div>
       </div>
-      <div class="tableBox">
+<!--      <div class="tableBox">-->
         <vxe-table
           border
           align="center"
@@ -259,22 +259,21 @@
           @select-change="selectTable"
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
-          style="width: 2000px"
           :height="rightTableHeight"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
           >
         >
-          <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column type="checkbox" width="50"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column fixed="left" type="index" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column fixed="left" type="checkbox" width="50"></vxe-table-column>
+          <vxe-table-column fixed="left" title="操作" width="80">
             <template v-slot="{ row,rowIndex }">
               <a @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-          <vxe-table-column min-width="150" field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+          <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+          <vxe-table-column fixed="left" min-width="150" field="partName" title="配件名称"></vxe-table-column>
+          <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="数量"
@@ -299,41 +298,41 @@
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
           </vxe-table-column>
-          <vxe-table-column title="金额">
+          <vxe-table-column title="金额" width="100">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="averagePrice" title="参考价"></vxe-table-column>
+          <vxe-table-column field="averagePrice" title="参考价" width="100"></vxe-table-column>
+          <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
+          <vxe-table-column title="品牌车型" width="100">
+            <template v-slot="{row,rowIndex}">
+              <span>{{row.carBrandName}} {{row.carModelName}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+          <vxe-table-column field title="批次" width="100">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="活动" width="100">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="storeShelf" title="仓位" width="100"></vxe-table-column>
           <vxe-table-column
             field="remark"
             title="备注"
             min-width="200"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
           ></vxe-table-column>
-          <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
-          <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
-          <vxe-table-column field title="批次">
-            <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="活动">
-            <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="品牌车型">
-            <template v-slot="{row,rowIndex}">
-              <span>{{row.carBrandName}} {{row.carModelName}}</span>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-          <vxe-table-column field="spec" title="规格"></vxe-table-column>
-          <vxe-table-column field="showDirection" title="方向"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+          <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
         </vxe-table>
-      </div>
+<!--      </div>-->
     </Form>
 
     <!--   新增客户资料-->
