@@ -732,7 +732,7 @@
               carTypef : item.baseType ? item.baseType.firstType ? item.baseType.firstType.typeName ? item.baseType.firstType.typeName : '' : '' : '',
               cartypes : item.baseType ? item.baseType.secondType ? item.baseType.secondType.typeName ? item.baseType.secondType.typeName : '' : '': '',
               carTypet : item.baseType ? item.baseType.thirdType ? item.baseType.thirdType.typeName ? item.baseType.thirdType.typeName : '': '': '',
-              spec : item.specifications,
+              spec : item.specifications || item.spec,
               partId : item.id,
               fullName : item.fullName,
               systemUnitId : item.minUnit,

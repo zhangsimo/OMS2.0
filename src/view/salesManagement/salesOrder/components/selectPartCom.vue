@@ -5,7 +5,7 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
           <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        <Input class="w250 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码"></Input>
+        <Input class="w250 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码" @on-enter="search"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="(item,index) in partBrandData" :value="item.code" :key="index">{{item.name}}</Option>
@@ -16,13 +16,14 @@
         <Button v-if="$route.name!='takeStock'&&$route.name!='moveStorehouse'" type='default'  @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">系统分类</div>
-          <div class="partCheck-left-tree">
-            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
-          </div>
-        </div>
-        <div class="fr partCheck-right" style="width: 758px">
+<!--        <div class="partCheck-left fl">-->
+<!--          <div class="partCheck-left-tit">系统分类</div>-->
+<!--          <div class="partCheck-left-tree">-->
+<!--            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--    partCheck-right原来为758px    -->
+        <div class="fr partCheck-right" style="width:100%">
           <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData" @on-row-dblclick="dblclick">
             <template slot-scope="{ row, index }" slot="action">
               <a @click="show(row)">查看</a>

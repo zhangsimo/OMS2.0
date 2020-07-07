@@ -2,7 +2,7 @@
   <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
-        <Input v-model="fullName" placeholder="全称" class="mr10" style="width: 150px" />
+        <Input v-model="fullName" placeholder="简称" class="mr10" style="width: 150px" />
         <Input v-model="clientCode" placeholder="编码" class="mr10" style="width: 150px" />
         <Input v-model="clientPhone" placeholder="电话" class="mr10" style="width: 150px" />
         <Cascader
@@ -50,7 +50,7 @@
                 style="width: 1500px"
               >
                 <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-                <vxe-table-column field="fullName" title="名称" show-overflow></vxe-table-column>
+                <vxe-table-column field="shortName" title="名称" show-overflow></vxe-table-column>
                 <vxe-table-column field="code" title="编码"></vxe-table-column>
                 <vxe-table-column title="状态">
                   <template v-slot="{ row }">{{ row.isDisabled == 1 ? '无效' : '有效' }}</template>

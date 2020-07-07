@@ -37,6 +37,7 @@
               v-model="searchForm.partName"
               placeholder="配件编码/名称"
               class="w200 mr10"
+              @on-enter="serch"
             />
             <Select
               filterable
@@ -85,6 +86,7 @@
               placeholder="仓位"
               class="w120 mr10"
               v-model="searchForm.shelf"
+              @on-enter="serch"
             ></Input>
             <span class="mr5">显示零库存:</span>
             <Checkbox v-model="searchForm.noStock"></Checkbox>
@@ -120,6 +122,7 @@
               v-model="searchForm1.partName"
               placeholder="配件编码/名称"
               class="w200 mr10"
+              @on-enter="queryBatch"
             ></Input>
             <Select
               filterable
@@ -228,7 +231,7 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Input v-model="searchData.partName" class="w250 mr10" />
+              <Input v-model="searchData.partName" class="w250 mr10" @on-enter="resetData"/>
             </div>
             <div class="db">
               <Button
@@ -461,12 +464,12 @@ export default {
           key: "storeName",
           minWidth: 120
         },
-        // {
-        //   title: "仓位",
-        //   align: "center",
-        //   key: "storeShelf",
-        //   minWidth: 120
-        // },
+        {
+          title: "仓位",
+          align: "center",
+          key: "storeShelf",
+          minWidth: 120
+        },
         {
           title: "库存单价",
           align: "center",
@@ -918,14 +921,14 @@ export default {
     // 汇总库存请求
     async getAllStocks() {
       let data = {};
-      data = JSON.parse(JSON.stringify(this.searchForm));
+      data = JSON.parse(JSON.stringify(this.searchForm)) ;
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
-      console.log(this.searchForm, 789);
+      console.log(this.searchForm , 789)
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
@@ -963,7 +966,7 @@ export default {
     // 批次库存请求
     async getLotStocks() {
       let data = {};
-      data = JSON.parse(JSON.stringify(this.searchForm1));
+      data = JSON.parse(JSON.stringify(this.searchForm1)) ;
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -1189,33 +1192,10 @@ export default {
               return prev;
             }
           }, 0);
-          if (
-            [
-              "enterQty",
-              "outableQty",
-              "enterPrice",
-              "enterAmt",
-              "noTaxPrice",
-              "noTaxAmt",
-              "stockQty",
-              "outableQty",
-              "costPrice",
-              "stockAmt",
-              "pchRoadQty",
-              "attotRoadQty",
-              "onRoadQty"
-            ].includes(key)
-          ) {
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          } else {
-            sums[key] = {
-              key,
-              value: ""
-            };
-          }
+          sums[key] = {
+            key,
+            value: v
+          };
         } else {
           sums[key] = {
             key,
