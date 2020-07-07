@@ -165,7 +165,8 @@ import {
   findCompanyList,
   putNewCompany,
   restpasswd,
-  setCliemt
+  setCliemt,
+  setOut
 } from "@/api/system/systemSetting/staffManagenebt";
 import { transTime } from "../utils";
 import addStaff from "./addStaff";
@@ -564,13 +565,14 @@ export default {
         return false;
       }
       let stop = this.$loading();
-      this.oneStaffChange.office = this.oneStaffChange.office == 0 ? 1 : 0
-      this.oneStaffChange.singtwo = this.oneStaffChange.singtwo  ? 1 : 0 //允许提交
-      changeeditUser(this.oneStaffChange)
+      let data ={}
+      data.office = this.oneStaffChange.office == 0 ? 1 : 0
+      data.id = this.oneStaffChange.id
+      setOut(data)
         .then(res => {
           stop();
           if (res.code == 0) {
-            this.$Message.success("修改成功");
+            this.$Message.success("操作完成");
             this.oneStaffChange = {};
             this.getAllStaffList();
           }
