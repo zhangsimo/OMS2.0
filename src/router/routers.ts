@@ -466,16 +466,16 @@ export default [
             "@/view/business/procurementAndStorage/procurementAndStorage.vue"
           )
       },
-      {
-        path: "/policy/market",
-        name: "market",
-        mark: "4002",
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "销售单"
-        },
-        component: () => import("@/view/business/policy/market/market.vue")
-      },
+      // {
+      //   path: "/policy/market",
+      //   name: "market",
+      //   mark: "4002",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "销售单"
+      //   },
+      //   component: () => import("@/view/business/policy/market/market.vue")
+      // },
       {
         path: "/policy/moveStorehouse",
         name: "moveStorehouse",
@@ -530,17 +530,6 @@ export default [
         },
         component: () => import("@/view/business/policy/process/process.vue")
       },
-      // {
-      //   path: "/hsStock/hsStockIndex",
-      //   name: "hsStock",
-      //   mark: "4005",
-      //   meta: {
-      //     icon: "arrow-graph-up-right",
-      //     title: "华胜库存查询"
-      //   },
-      //   component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
-      // }
-
     ]
   },
   {

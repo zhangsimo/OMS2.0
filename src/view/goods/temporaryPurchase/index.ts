@@ -760,6 +760,7 @@ export default class InterPurchase extends Vue {
       item.orderQty = undefined;
     })
     this.tableData = this.tableData.concat(arrData).map(el => {
+      el.specifications = el.spec;
       el.uuid = v4();
       return el;
     });
@@ -912,6 +913,7 @@ export default class InterPurchase extends Vue {
       })
     })
     this.tableData = row.details.map( el => {
+      el.specifications = el.spec;
       el.uuid = v4();
       return el;
     });

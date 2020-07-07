@@ -822,7 +822,6 @@ export default {
     //配件返回的参数
     getPartNameList(val) {
       let vals = conversionList(val);
-      console.log(vals)
       this.formPlan.detailList = [
         ...this.formPlan.detailList,
         ...conversionList(val)

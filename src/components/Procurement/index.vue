@@ -19,7 +19,7 @@
             <Option v-for="(item, index) in bands" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
         </div>
-        <div class="db mr5"><span>入库日期:</span></div>
+        <div class="db mr5"><span v-if="type == 'sale'">出库日期:</span><span v-else>入库日期:</span></div>
         <div class="db mr5">
           <DatePicker
             type="daterange"
