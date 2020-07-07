@@ -268,6 +268,7 @@
                   :data="Leftcurrentrow.detailVOS"
                   :stripe="true"
                   :footer-method="addFooter"
+                  :edit-rules="validRules"
                   :edit-config="
                     Leftcurrentrow.status.value === 0
                       ? { trigger: 'click', mode: 'cell' }
@@ -426,6 +427,11 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      validRules: {
+        applyQty: [
+          { required: true, message: '申请退回数量不能为空',trigger: "change"}
+        ]
+      },
       isWms: false,
       serviceId: "",
       newFlag: true,
@@ -708,7 +714,7 @@ export default {
     selectChangeEvent({ checked, row }) {
       // console.log(checked ? "勾选事件" : "取消事件");
     },
-    baocun1() {
+    async baocun1() {
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.guestName
@@ -716,6 +722,11 @@ export default {
         this.$Message.error("调出仓库为必填项");
         return;
       }
+      const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      if (errMap) {
+        return
+      }
+
       // if (!this.Leftcurrentrow.serviceId) {
       //   console.log(this.Leftcurrentrow)
       //   if (this.Leftcurrentrow.xinzeng === "1") {
@@ -842,7 +853,7 @@ export default {
         }
       });
     },
-    tijiao1() {
+    async tijiao1() {
       let len = this.Leftcurrentrow.detailVOS.filter(el => Number(el.stockOutQty) > 0).length;
       if(len > 0) {
         return this.$Message.error("存在缺货的配件");
@@ -858,6 +869,10 @@ export default {
       if (this.Leftcurrentrow.status.value === 1) {
         this.$Message.error("当前申请单已提交审核!无需重复操作");
         return;
+      }
+      const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      if (errMap) {
+        return
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       params.status = params.status.value;
