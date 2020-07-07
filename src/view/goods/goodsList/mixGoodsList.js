@@ -111,7 +111,7 @@ export const mixGoodsData = {
             let objData = {
               label: v,
               value: companyMap[v]
-            }; 
+            };
             this.companyMap.push(objData);
           }
         }
@@ -177,6 +177,13 @@ export const mixGoodsData = {
     //采购计划列表选中数据
     selectVxeData({ selection, rowIndex, reserves }) {
       this.delArr = selection;
+    },
+    //添加直发门店
+    addCompanyMap(v){
+      this.companyMap.push({
+        value:v,
+        label:v,
+      })
     },
     selectAll({ checked }) {
       if (checked) {

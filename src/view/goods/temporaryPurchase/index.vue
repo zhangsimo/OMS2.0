@@ -261,6 +261,9 @@
                       v-model="formPlanmain.directCompanyId"
                       :disabled="isInput"
                       clearable
+                      allow-create
+                      filterable
+                      @on-create="addPutStores"
                     >
                       <Option
                         v-for="(item, index) in putStores"
