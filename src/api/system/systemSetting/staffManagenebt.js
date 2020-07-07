@@ -92,3 +92,13 @@ export function setCliemt (params) {
     params
   })
 }
+
+
+//离职
+export function setOut (params) {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/updateUserOffices`,
+    method: 'get',
+    params
+  })
+}

@@ -24,13 +24,14 @@
         </Button>
       </div>
       <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">系统分类</div>
-          <div class="partCheck-left-tree">
-            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
-          </div>
-        </div>
-        <div class="fr partCheck-right" style="width: 758px">
+<!--        <div class="partCheck-left fl">-->
+<!--          <div class="partCheck-left-tit">系统分类</div>-->
+<!--          <div class="partCheck-left-tree">-->
+<!--            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--       partCheck-right之前是758px -->
+        <div class="fr partCheck-right" style="width: 100%">
           <Table
             height="389"
             @on-selection-change="selectTabelData"

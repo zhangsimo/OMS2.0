@@ -15,6 +15,22 @@
             <li
               v-if="!curronly"
               class="center lis"
+              :class="{ 'tab-active': tIndex == 4 }"
+              @click="setTab(4)"
+            >
+              级别销价
+            </li>
+            <li
+              v-if="!curronly"
+              class="center lis"
+              :class="{ 'tab-active': tIndex == 5 }"
+              @click="setTab(5)"
+            >
+              滞销信息
+            </li>
+            <li
+              v-if="!curronly"
+              class="center lis"
               :class="{ 'tab-active': tIndex == 1 }"
               @click="setTab(1)"
             >
@@ -159,6 +175,42 @@
             height="450"
           ></Table>
         </div>
+        <!--      级别销价-->
+        <div class="tabs-warp p10" v-if="tIndex == 4">
+          <p style="line-height: 30px">
+            本店可售库存: <span class="ml5">{{mainData.outableQty}}</span>
+          </p>
+          <!--      表-->
+          <Table
+            class="table-highlight-row"
+            highlight-row
+            size="small"
+            @on-current-change="selectTable"
+            border
+            :stripe="true"
+            :columns="levelType"
+            :data="levelList"
+            height="420"
+          ></Table>
+        </div>
+        <!--      滞销信息-->
+        <div class="tabs-warp p10" v-if="tIndex == 5">
+          <p style="line-height: 30px">
+            连锁库龄: <span class="ml5">{{branchAge}}</span>天
+          </p>
+          <!--      表-->
+          <Table
+            class="table-highlight-row"
+            highlight-row
+            size="small"
+            @on-current-change="selectTable"
+            border
+            :stripe="true"
+            :columns="unsalableType"
+            :data="unsalableList"
+            height="450"
+          ></Table>
+        </div>
         <!--      分页-->
         <div class="page-warp clearfix">
           <Page
@@ -211,7 +263,9 @@ import {
   getOut,
   getOccupy,
   OtotalData,
-  EtotalData
+  EtotalData,
+  getLevel,
+  getUnsalable
 } from "@/api/business/stockSearch";
 import QuickDate from "_c/getDate/dateget.vue";
 
@@ -232,7 +286,7 @@ export default {
       // modal显示
       modal1: false,
       // 切换菜单值
-      tIndex: 1,
+      tIndex: 4,
       // 存放点击选中的数据
       selectTableData: "",
       // 入库明细表
@@ -520,6 +574,77 @@ export default {
           minWidth: 120
         }
       ],
+      //级别销价
+      levelType:[
+        {
+          title: "配件编码",
+          align: "center",
+          key: "partCode",
+        },
+        {
+          title: "配件名称",
+          align: "center",
+          key: "partName",
+        },
+        {
+          title: "品牌",
+          align: "center",
+          key: "partBrand",
+        },
+        {
+          title: "级别",
+          align: "center",
+          key: "strategyName",
+        },
+        {
+          title: "销售价",
+          align: "center",
+          key: "sellPrice",
+        },
+        {
+          title: "更新人",
+          align: "center",
+          key: "createUname",
+        },
+        {
+          title: "更新日期",
+          align: "center",
+          key: "createTime",
+        },
+      ],
+      //滞销信息
+      unsalableType:[
+        {
+          title: "配件编码",
+          align: "center",
+          key: "partCode",
+          minWidth: 170
+        },
+        {
+          title: "配件名称",
+          align: "center",
+          key: "partName",
+          minWidth: 170
+        },
+        {
+          title: "品牌",
+          align: "center",
+          key: "partBrand",
+          minWidth: 170
+        },
+        {
+          title: "分店名称",
+          align: "center",
+          key: "orgName",
+          minWidth: 170
+        },
+        {
+          title: "滞销数量",
+          align: "center",
+          key: "enterQty",
+          minWidth: 170
+        },
+      ],
       //订单占用表
       occupy: [
         {
@@ -627,7 +752,12 @@ export default {
           }
         ]
       },
-
+      //级别销价
+      levelList:[],
+      //滞销信息
+      unsalableList:[],
+      //库龄
+      branchAge:0,
       //入库查询
       searchForm2: {},
       //出库查询
@@ -662,8 +792,8 @@ export default {
       this.searchForm2.startEnterDate = "";
       this.searchForm2.endEnterDate = "";
       this.modal1 = true;
-      this.tIndex = 1;
-      this.getList();
+      this.tIndex = 4;
+      this.getLevelList();
     },
     hander(type) {
       // this.modal1 = true
@@ -671,6 +801,32 @@ export default {
         this.getEnters();
       }
     },
+
+    //级别销价请求
+    async getLevelList(){
+      let data = {}
+         data.partId = this.mainData.partId
+      let res = await getUnsalable(data)
+        if (res.code === 0) {
+          this.levelList = res.data
+        }
+    },
+
+    //滞销信息请求
+    async getUnsalableList(){
+      let data = {}
+      data.partId = this.mainData.partId
+      let res = await getLevel(data)
+      if (res.code === 0) {
+        this.unsalableList = res.data
+        if (res.data.length > 0){
+          this.branchAge = res.data[0].branchStockAge ? res.data[0].branchStockAge : 0
+        }else {
+
+        }
+      }
+    },
+
     //入库明细请求
     async getList() {
       let data = {};
@@ -728,7 +884,6 @@ export default {
     // tab切换
     setTab(index) {
       this.tIndex = index;
-      console.log(this.tIndex);
       if (this.tIndex == 2) {
         this.getOuts();
       }
@@ -737,6 +892,12 @@ export default {
       }
       if (this.tIndex == 3) {
         this.getHold();
+      }
+      if (this.tIndex == 4) {
+        this.getLevelList();
+      }
+      if (this.tIndex == 5) {
+        this.getUnsalableList();
       }
     },
     // // 修改每页显示条数-客户信息

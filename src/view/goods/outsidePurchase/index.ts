@@ -490,42 +490,6 @@ export default class InterPurchase extends Vue {
           this.deletePartArr = [];
           this.$Message.success('删除成功');
         }
-        // if(this.deletePartArr.length > 0) {
-        //   let res:any = await api.delPchsOrderDetail(this.deletePartArr);
-        //   if(res.code == 0) {
-        //     delOk = true;
-        //     isNetWork = true;
-        //     this.deletePartArr.forEach((els: any) => {
-        //       this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-        //         if (el.partCode == els.partCode) {
-        //           arr.splice(index, 1);
-        //         }
-        //       })
-        //     })
-        //   }
-        // } else {
-        //   delOk = true;
-        // }
-        // if(this.tmpDeletePartArr.length > 0) {
-        //   this.tmpDeletePartArr.forEach((els:any) => {
-        //     this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-        //       if(el.partCode == els.partCode) {
-        //         arr.splice(index, 1);
-        //       }
-        //     })
-        //   })
-        //   this.tmpDeletePartArr = [];
-        //   delOk2 = true;
-        // } else {
-        //   delOk2 = true;
-        // }
-        // if (delOk && delOk2) {
-        //   this.$Message.success('删除成功');
-        //   this.deletePartArr = [];
-        //   // if(isNetWork) {
-        //   //   this.getListData();
-        //   // }
-        // }
       },
       onCancel: () => {
         // this.$Message.info('取消删除');

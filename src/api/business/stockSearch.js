@@ -113,3 +113,21 @@ export function EtabulatData (data) {
     data
   });
 }
+
+//级别销价
+export function getLevel (params) {
+  return axios.request({
+    url: `${api.omsOrder}/enterDetail/unsalableInfo`,
+    method: 'get',
+    params
+  });
+}
+
+//级别销价
+export function  getUnsalable(params) {
+  return axios.request({
+    url: `${api.wmsApi}/sellPricePart/findBySell`,
+    method: 'get',
+    params
+  });
+}
