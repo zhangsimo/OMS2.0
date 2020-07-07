@@ -30,7 +30,7 @@ export function findForAllot(data) {
 //调拨管理获取供应商
 export function transferringFindForAllot(data) {
   return axios.request({
-    url: `${api.wmsApi}/company/findPageByDynamicQuery?page=${data.page}&size=${data.size}`,
+    url: `${api.wmsApi}/company/pageList?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   })
