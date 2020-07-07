@@ -1,6 +1,6 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-import fetchs from 'axios'; 
+import fetchs from 'axios';
 
 // 数据字典
 export function getdictCode(code) {
@@ -23,11 +23,11 @@ export function getRoles() {
 }
 
 // 获取员工列表
-export function getStaffList (params) {
+export function getStaffList (data) {
   return axios.request({
-    url: `${api.authApi}/tenantUsers/findAllTenantUsersRole`,
-    method: 'get',
-    params
+    url: `${api.wmsApi}/employeeAttribute/pageList`,
+    method: 'post',
+    data
   })
 }
 

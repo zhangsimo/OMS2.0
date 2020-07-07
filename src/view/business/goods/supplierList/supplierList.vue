@@ -467,6 +467,7 @@ export default {
       }
     };
     return {
+      defaultStore: "",
       ArraySelect: [], //供应商下拉框
       checkboxArr: [], // checkbox选中
       disSave: false, // 保存按钮是否禁用
@@ -813,7 +814,7 @@ export default {
         (this.formPlan.storeId = this.$store.state.user.userData.id), //退货员
         (this.formPlan.orderDate = tools.transTime(new Date())), //退货日期
         (this.formPlan.remark = ""), //备注
-        (this.formPlan.warehouse = ""), //退货仓库
+        (this.formPlan.warehouse = this.defaultStore), //退货仓库
         (this.formPlan.serviceId = ""), //采购单号
         (this.formPlan.numbers = ""), //采退单号
         (this.Right.tbdata = []);
@@ -1452,7 +1453,8 @@ export default {
             sellOrderStatusMap,
             settlementMap,
             storeMap,
-            userMap
+            userMap,
+            defaultStore,
           } = res.data;
           // 结算方式
           for (let el in settlementMap) {
@@ -1462,6 +1464,7 @@ export default {
           for (let el in storeMap) {
             this.inStores.push({ value: storeMap[el], label: el });
           }
+          this.defaultStore = defaultStore;
           // 状态
           for (let el in sellOrderStatusMap) {
             if (["草稿", "已提交", "已作废", "已退货", "所有"].includes(el)) {
