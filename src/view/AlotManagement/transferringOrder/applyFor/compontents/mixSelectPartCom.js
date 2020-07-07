@@ -68,6 +68,11 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
+          title: "品质",
+          key: "quality",
+          minWidth: 120
+        },
+        {
           title: "规格",
           key: "specifications",
           minWidth: 120,
@@ -83,11 +88,7 @@ export const mixSelectPartCom = {
             return h('span',p.row.brandName||p.row.carModelName)
           }
         },
-        {
-          title: "品质",
-          key: "quality",
-          minWidth: 120
-        },
+       
         {
           title: "单位",
           key: "minUnit",
