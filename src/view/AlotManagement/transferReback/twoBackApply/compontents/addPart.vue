@@ -162,7 +162,11 @@
       // this.shows = false;
       this.selectRow.forEach((el:any) => {
         el.sourceDetailId = el.id;
-        Reflect.deleteProperty(el, 'id');
+        el.batchSourceId = el.id;
+        if(el.batchSourceId){
+          Reflect.deleteProperty(el, 'id');
+        }
+        return el;
       })
       return this.selectRow;
     }
