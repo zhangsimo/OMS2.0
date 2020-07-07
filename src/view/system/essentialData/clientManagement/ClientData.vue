@@ -3,11 +3,11 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled"  />
+        <Checkbox v-model="data.isDisabled" />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier"  />
+        <Checkbox v-model="data.isSupplier" />
       </span>
       <span class="isDisabeld">
         客户
@@ -158,42 +158,43 @@
             </div>
           </div>
           <span style="margin-left: 100px">
-            <Checkbox v-model="data.isNeedPack" ></Checkbox>需求打包发货
+            <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
           </span>
           <span style="margin-left: 100px">
-            <Checkbox v-model="data.isFatCompany"  ></Checkbox>是否成品油企业
+            <Checkbox v-model="data.isFatCompany"></Checkbox>是否成品油企业
           </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
           <div>
             <p style="margin-bottom: 10px">财务信息</p>
-            <div>
-              <FormItem label="收款户名:" prop="accountName">
-                <Input v-model="data.accountName" style="width: 450px" />
-              </FormItem>
-              <FormItem label="银行账号:" prop="accountBankNo">
-                <Input v-model="data.accountBankNo" style="width: 450px" />
-              </FormItem>
-              <FormItem label="开户银行:" prop="accountBank">
-                <Input v-model="data.accountBank" style="width: 450px" />
-              </FormItem>
-              <div style="display: flex">
-                <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人编码:" prop="phone">
-                    <Input v-model="data.taxpayerCode" style="width: 150px" />
-                  </FormItem>
-                </div>
-                <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人电话:" prop="phone">
-                    <Input v-model="data.taxpayerTel" style="width: 150px" />
-                  </FormItem>
-                </div>
+            <div class="finance">
+              <div class="financePlace">
+                <a class="mr10" @click="addPlaceFin">
+                  <Icon custom="iconfont iconxinzengicon icons" />新增
+                </a>
+                <a class="mr10" @click="changeplageFin">
+                  <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
+                </a>
+                <a class="mr10" @click="changePlaceFin">{{enAble}}</a>
               </div>
-              <FormItem label="纳税人名称:">
-                <Input v-model="data.taxpayerName" style="width: 450px" />
-              </FormItem>
+              <div class="financeTab">
+                <Table
+                  @on-current-change="selectFin"
+                  highlight-row
+                  border
+                  resizable
+                  auto-resize
+                  stripe
+                  size="small"
+                  height="200"
+                  max-height="200"
+                  ref="finance"
+                  :columns="columnsFin"
+                  :data="financeList"
+                ></Table>
+              </div>
             </div>
-            <p style="margin-bottom: 10px">其他信息</p>
+            <p style="margin-bottom: 10px;margin-top:10px;">其他信息</p>
             <FormItem label="网址:">
               <Input v-model="data.website" style="width: 450px" />
             </FormItem>
@@ -218,6 +219,13 @@
                 </FormItem>
               </div>
             </div>
+            <Modal v-model="bankAccount" :title="bankAccountTit" width="600">
+              <bank-account ref="bankAccount"></bank-account>
+              <div slot="footer">
+                <Button type="primary" @click="addNewClientBank">保存</Button>
+                <Button type="default" @click="bankAccount=false">取消</Button>
+              </div>
+            </Modal>
           </div>
         </TabPane>
         <TabPane label="收货地址" tab="clientBox">
@@ -325,30 +333,27 @@
               <a class="mr10" @click="changeBank">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </a>
-              <a class="mr10" @click="deletBank">
-                <Icon custom="iconfont iconlajitongicon icons" />删除
-              </a>
+              <a class="mr10" @click="deletBank">{{enAbleTax}}</a>
             </div>
-            <vxe-table
-              highlight-current-row
-              @current-change="pitchOnBank"
-              border
-              auto-resize
-              show-overflow
-              ref="validData"
-              :mouse-config="{selected: true}"
-              :data="invoice"
-              height="300px"
-              :edit-rules="validRules"
-              :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-              :edit-config="{trigger: 'click', mode: 'cell'}"
-            >
-              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column field="taxpayerName" title="开票名称" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="taxpayerCode" title="税号" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="taxpayerTel" title="地址电话" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="accountBankNo" title="开户行及账号" :edit-render="{name: 'input'}"></vxe-table-column>
-            </vxe-table>
+            <div class="financeTab">
+              <Table
+                @on-current-change="pitchOnBank"
+                highlight-row
+                border
+                resizable
+                auto-resize
+                stripe
+                size="small"
+                height="200"
+                max-height="200"
+                ref="validData"
+                :edit-rules="validRules"
+                :columns="columnsTax"
+                :data="invoice"
+                props="row"
+                :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+              ></Table>
+            </div>
           </div>
           <Modal v-model="newInoiceShow" :title="tit">
             <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
@@ -364,626 +369,936 @@
 </template>
 
 <script>
-  import Newplace from "./Newplace";
-  import AddInoice from "./AddInoice";
-  import {
-    getDigitalDictionary,
-    getCustomerInformation,
-    getCustomer
-  } from "@/api/system/essentialData/clientManagement";
-
-  export default {
-    name: "Data",
-    components: {
-      Newplace,
-      AddInoice
+import Newplace from "./Newplace";
+import AddInoice from "./AddInoice";
+import {
+  getDigitalDictionary,
+  getCustomerInformation,
+  getCustomer
+} from "@/api/system/essentialData/clientManagement";
+import bankAccount from "@/view/system/essentialData/clientManagement/components/bankAccount";
+import { forOf } from "xe-utils/methods";
+export default {
+  name: "Data",
+  components: {
+    Newplace,
+    AddInoice,
+    bankAccount
+  },
+  props: {
+    data: {
+      type: Object,
+      default: {}
     },
-    props: {
-      data: {
-        type:Object,
-        default:{}
-      },
-      provincearr: {
-        type:Array,
-        default:[]
-      },
-      treelist: {
-        type:Array,
-        default:[]
+    provincearr: {
+      type: Array,
+      default:()=>[]
+    },
+    treelist: {
+      type: Array,
+      default: ()=>[]
+    },
+    financeList: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
+  data() {
+    const contactorTel = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else if (!/^1[345789]\d{9}$/.test(value)) {
+        callback(new Error("手机号格式不正确"));
+      } else {
+        callback();
       }
-    },
-    data() {
-      const contactorTel = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error("手机号不能为空"));
-        } else if (!/^1[345789]\d{9}$/.test(value)) {
-          callback(new Error("手机号格式不正确"));
+    };
+    const creditLimit = (rule, value, callback) => {
+      if (value) {
+        if (!/^\d{1,}$/.test(value)) {
+          callback(new Error("只能输入数字"));
         } else {
           callback();
         }
-      };
-      const creditLimit = (rule, value, callback) => {
-        if (value) {
-          if (!/^\d{1,}$/.test(value)) {
-            callback(new Error("只能输入数字"));
+      } else {
+        callback(new Error("只能输入数字"));
+      }
+    };
+    const creditLimit2 = ({ cellValue }) => {
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          if (!/^\d{1,}$/.test(cellValue)) {
+            reject(new Error("只能输入数字"));
+          } else {
+            resolve();
+          }
+        } else {
+          reject(new Error("只能输入数字"));
+        }
+      });
+    };
+    const paragraph = ({ cellValue }) => {
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          if (!/^[0-9a-zA-Z]+$/.test(cellValue)) {
+            reject(new Error("只能输入数字和字母"));
+          } else {
+            resolve();
+          }
+        } else {
+          reject(new Error("只能输入数字和字母"));
+        }
+      });
+    };
+    const fullName = (rule, value, callback) => {
+      if (value) {
+        let obj = {};
+        if (this.data.id) {
+          obj.id = this.data.id;
+          obj.name = this.data.fullName;
+        } else {
+          obj.name = this.data.fullName;
+        }
+        // callback()
+        getCustomer(obj).then(res => {
+          if (res.data) {
+            callback(new Error("客户名称不可重复"));
           } else {
             callback();
           }
-        } else {
-          callback(new Error("只能输入数字"));
-        }
-      };
-      const creditLimit2 = ({cellValue}) => {
-        return new Promise((resolve, reject) => {
-          if (cellValue) {
-            if (!/^\d{1,}$/.test(cellValue)) {
-              reject(new Error('只能输入数字'))
-            } else {
-              resolve()
-            }
-          } else {
-            reject(new Error('只能输入数字'))
-          }
-        })
-      };
-      const paragraph = ({cellValue }) => {
-        return new Promise((resolve, reject) => {
-          if (cellValue) {
-            if (!/^[0-9a-zA-Z]+$/.test(cellValue)) {
-              reject(new Error('只能输入数字和字母'))
-            } else {
-              resolve()
-            }
-          } else {
-            reject(new Error('只能输入数字和字母'))
-          }
-        })
-
-      };
-      const fullName = (rule, value, callback) => {
-        if (value) {
-          let obj = {};
-          if (this.data.id) {
-            obj.id = this.data.id;
-            obj.name = this.data.fullName;
-          } else {
-            obj.name = this.data.fullName;
-          }
-          // callback()
-          getCustomer(obj).then(res => {
-            if (res.data) {
-              callback(new Error("客户名称不可重复"));
-            } else {
-              callback();
-            }
-          });
-        } else {
-          callback(new Error("客户全称不可为空"));
-        }
-      };
-      return {
-        sessionKey: "0",
-        Subordinate: [
-          {
-            label: "华胜连锁",
-            value: 0
-          },
-          {
-            label: "体系外",
-            value: 1
-          },
-          {
-            label: "体系内",
-            value: 2
-          }
-        ],
-        tree: this.treelist,
-        clinet: true, //是否客户 //是
-        list: [
-          {
-            label: 123,
-            value: 1
-          },
-          {
-            label: 456,
-            value: 2
-          }
-        ],
-        validRules: {
-          taxpayerName: [{ required: true, message: "", trigger: "change" }],
-          taxpayerCode: [
-            { required: true, validator: paragraph, trigger: "change" }
-          ],
-          taxpayerTel: [
-            {
-              required: true,
-              validator: creditLimit2,
-              type: "Number",
-              trigger: "change"
-            }
-          ],
-          accountBankNo: [{ required: true, message: "", trigger: "change" }]
-        },
-        columns: [
-          {
-            title: "收货单位",
-            align: "center",
-            key: "receiveCompName"
-          },
-          {
-            title: "收货人",
-            align: "center",
-            key: "receiveMan",
-            minWidth: 80
-          },
-          {
-            title: "联系方式",
-            align: "center",
-            key: "receiveManTel"
-          },
-          {
-            title: "收货地址",
-            align: "center",
-            key: "address"
-          },
-          {
-            title: "默认",
-            key: "id",
-            align: "isDefault",
-            render: (h, params) => {
-              let text = "";
-              params.row.isDefault ? (text = "是") : (text = "否");
-              return h("span", {}, text);
-            }
-          }
-        ],
-        columns1: [
-          {
-            title: "序号",
-            align: "center",
-            type: "index"
-          },
-          {
-            key: "id",
-            align: "center",
-            type: "selection",
-            width: 40
-          },
-          {
-            title: "客户简称",
-            align: "center",
-            key: "shortName",
-            minWidth: 80
-          },
-          {
-            title: "客户全称",
-            align: "center",
-            key: "fullName"
-          },
-          {
-            title: "创建日期",
-            align: "center",
-            key: "createTime"
-          }
-        ],
-        columns2: [
-          {
-            title: "序号",
-            align: "center",
-            type: "index"
-          },
-          {
-            key: "id",
-            align: "center",
-            type: "selection",
-            width: 40
-          },
-          {
-            title: "客户简称",
-            align: "center",
-            key: "shortName",
-            minWidth: 80
-          },
-          {
-            title: "客户全称",
-            align: "center",
-            key: "fullName"
-          },
-          {
-            title: "创建日期",
-            align: "center",
-            key: "createTime"
-          }
-        ],
-        columns3: [
-          {
-            title: "序号",
-            align: "center",
-            type: "index"
-          },
-          {
-            title: "开票名称",
-            align: "center",
-            key: "taxpayerName"
-          },
-          {
-            title: "税号",
-            align: "center",
-            key: "taxpayerCode"
-          },
-          {
-            title: "地址电话",
-            align: "center",
-            key: "taxpayerTel"
-          },
-          {
-            title: "开户行及账号",
-            align: "center",
-            key: "accountBankNo"
-          }
-        ],
-        relevanceClientShow: [],
-        invoice: [],
-        page: {
-          num: 1,
-          size: 10,
-          total: 0
-        },
-        placeList: [],
-        newplace: false, //收货地址
-        newInoiceShow: false, //开票
-        loading: true,
-        loading1: true,
-        title: "新增收货地址",
-        oneNew: {},
-        relevanceClient: [],
-        addInoiceOne: {},
-        rules: {
-          belongSystem: [
-            {
-              required: true,
-              message: "不能为空",
-              trigger: "change",
-              type: "number"
-            }
-          ],
-          // creditLimit: [
-          //   {
-          //     validator: creditLimit,
-          //     trigger: "change"
-          //   }
-          // ],
-          accountName: [
-            { required: true, message: " 不能为空", trigger: "change" }
-          ],
-          accountBankNo: [
-            {
-              required: true,
-              // validator: creditLimit,
-              message: "不能为空",
-              trigger: "change"
-            }
-          ],
-          accountBank: [
-            { required: true, message: " 不能为空", trigger: "change" }
-          ],
-          guestProperty: [{ required: true, message: " ", trigger: "change" }],
-          shortName: [{ required: true, message: " ", trigger: "blur" }],
-          settTypeId: [{ required: true, message: " ", trigger: "change" }],
-          billTypeId: [{ required: true, message: " ", trigger: "change" }],
-          fullName: [{ required: true, validator: fullName, trigger: "blur" }],
-          contactor: [{ required: true, message: " ", trigger: "blur" }],
-          provinceId: [{ required: true, message: " ", trigger: "change" }],
-          contactorTel: [
-            { required: true, validator: contactorTel, trigger: "blur" }
-          ],
-          tel: [{ required: true, validator: contactorTel, trigger: "blur" }],
-          salesmanTel: [
-            { required: true, validator: contactorTel, trigger: "blur" }
-          ],
-          cityId: [{ required: true, message: " ", trigger: "change" }],
-          guestType: [{ required: true, message: " ", trigger: "change" }],
-          guestTypeFloor: [{ required: true, message: " ", trigger: "change" }]
-        },
-        dataList: "",
-        id: 0,
-        bankId: 0,
-        customerName: "", //客户名称
-        pitchOnClientList: [], //选中关联客户
-        deleteOneClient: [], //获取删除项
-        pitchOneBank: [],
-        tit: "" //开票弹窗
-      };
-    },
-    // computed:{
-    //   place(){
-    //     return this.data
-    //   }
-    // },
-    mounted() {
-      this.placeList = this.data.guestLogisticsVOList || [];
-      this.relevanceClientShow = this.data.guestVOList || [];
-      this.invoice = this.data.guestTaxpayerVOList || [];
-      this.getList();
-      this.getClienlist();
-      this.sessionKey = sessionStorage.getItem("key");
-    },
-    methods: {
-      //获取关联客户
-      async getClienlist() {
-        this.loading1 = true;
-        let data = {};
-        data.page = this.page.num - 1;
-        data.size = this.page.size;
-        data.fullName = this.customerName;
-        let res = await getCustomerInformation(data);
-        if (res.code == 0) {
-          this.loading1 = false;
-          this.relevanceClient = res.data.content;
-          this.page.total = res.data.totalElements;
-        }
-      },
-      //获取客户属性
-      async getList() {
-        let data = {};
-        data = ["CS00105", "CS00106", "CS00107", "CS00112"];
-        let res = await getDigitalDictionary(data);
-        if (res.code == 0) {
-          this.dataList = res.data;
-        }
-      },
-      //校验表单
-      handleSubmit(callback) {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            this.$refs.validData.validate(valid => {
-              console.log(valid)
-              if (!valid) {
-                callback && callback();
-              } else {
-                this.$Message.error("带*为必填");
-              }
-            });
-          } else {
-            this.$Message.error("带*为必填");
-          }
         });
-      },
-      // 获取新增地址
-      selection(item) {
-        this.oneNew = item;
-        this.oneNew.isDefault == 1
-          ? (this.oneNew.isDefault = true)
-          : (this.oneNew.isDefault = false);
-      },
-      //新增地址表单校验
-      addplaceSure() {
-        // console.log(this.placeList)
-        this.$refs.child.handleSubmit(() => {
-          if (this.placeList.some(item => item.id == this.oneNew.id)) {
-            this.oneNew.isDefault
-              ? (this.oneNew.isDefault = 1)
-              : (this.oneNew.isDefault = 0);
-            let idx = this.placeList.findIndex(item => item.id == this.oneNew.id);
-            this.$set(this.placeList, idx, this.oneNew);
-            this.data.guestLogisticsVOList = this.placeList;
-            this.newplace = false;
-            this.oneNew = {};
-          } else {
-            this.oneNew.isDefault
-              ? (this.oneNew.isDefault = 1)
-              : (this.oneNew.isDefault = 0);
-            let newarr = {};
-            newarr = JSON.parse(JSON.stringify(this.oneNew));
-            newarr.id = this.id;
-            this.id++;
-            this.placeList.push(newarr);
-            this.data.guestLogisticsVOList = this.placeList;
-            this.newplace = false;
-          }
-        });
-      },
-      //修改地址表单
-      changeplage() {
-        // console.log(this.oneNew);
-        if (Object.keys(this.oneNew).length == 0) {
-          this.$Message.error("至少选项一条地址");
-          return false;
-        }
-        if (
-          this.oneNew.cityId == undefined ||
-          this.oneNew.provinceId == undefined
-        ) {
-          this.$Message.error("至少选项一条地址");
-          return false;
-        }
-        this.newplace = true;
-        this.title = "修改收货地址";
-      },
-
-      //表单清除
-      handleReset () {
-        this.data.isNeedPack = false
-        this.data.isFatCompany = false
-        this.data.isDisabled = false
-        this.data.isSupplier = false
-        this.$refs.form.resetFields();
-      },
-      //新增地址
-      addPlace() {
-        this.oneNew = {};
-        this.newplace = true;
-        this.$refs.child.resetFields();
-      },
-      //删除地址
-      deletPlace() {
-        if (Object.keys(this.oneNew).length == 0) {
-          this.$Message.error("至少选项一条地址");
-          return false;
-        }
-        this.placeList = this.placeList.filter(item => item.id != this.oneNew.id);
-        this.data.guestLogisticsVOList = this.placeList;
-        this.oneNew = {};
-      },
-      //查询关联客户
-      queryClientList() {
-        this.getClienlist();
-      },
-      //查询关联客户分页
-      changePage1(data) {
-        this.page.num = data;
-        this.getClienlist();
-      },
-      //查询关联客户切换条数
-      changeSize1() {
-        this.page.num = 1;
-        this.page.size = data;
-        this.getClienlist();
-      },
-      //选中查询关联客户
-      pitchOnClient(selection) {
-        this.pitchOnClientList = selection;
-      },
-      //加入查询
-      joinClientList() {
-        let can = true;
-        // console.log(this.pitchOnClientList, "this.pitchOnClientList");
-        // console.log(this.relevanceClientShow, "this.relevanceClientShow");
-        // if (this.pitchOnClientList.length != 0) {
-        //   for (var i = 0; i < this.pitchOnClientList.length; i++) {
-        //     console.log(1212);
-        //     for (var k = 0; k < this.relevanceClientShow.length; k++) {
-        //       if (
-        //         this.pitchOnClientList[i].id == this.relevanceClientShow[k].id
-        //       ) {
-        //         can = false;
-        //       }
-        //     }
-        //   }
-        this.relevanceClientShow = this.pitchOnClientList;
-        // this.pitchOnClientList.forEach(item => {
-        //   this.relevanceClientShow.forEach(val => {
-        //     if (item.id == val.id) {
-        //       can = false;
-        //     }
-        //   });
-        // });
-        // } else {
-        //   this.$message.error("请勾选客户");
-        //   return;
-        // }
-        if (can) {
-          this.relevanceClientShow = [
-            ...this.relevanceClientShow
-            // ...this.pitchOnClientList
-          ];
-          this.data.guestVOList = this.relevanceClientShow;
-          console.log("......" + this.data.guestVOList);
-        } else {
-          this.$Message.error("选择重复");
-        }
-      },
-      //获取删除关联客户
-      deleteClient(selection) {
-        this.deleteOneClient = selection;
-      },
-      //删除
-      deletAllClient() {
-        if (this.deleteOneClient.length !== 0) {
-          this.deleteOneClient.forEach(item => {
-            this.relevanceClientShow.forEach((val, index, arr) => {
-              if (val.id === item.id) {
-                arr.splice(index, 1);
-              }
-            });
-          });
-          this.data.guestVOList = this.relevanceClientShow;
-        } else {
-          this.$message.error("请勾选要删除的客户");
-        }
-      },
-      //新增银行
-      addInoice() {
-        this.addInoiceOne = {};
-        this.tit = "新增开票";
-        this.newInoiceShow = true;
-        this.$refs.AddInoice.resetFields();
-      },
-      // 确认新增银行
-      addNewBank() {
-        this.$refs.AddInoice.handleSubmit(() => {
-          if (
-            this.invoice.some(item => item.bankId == this.addInoiceOne.bankId)
-          ) {
-            let idx = this.invoice.findIndex(
-              item => item.bankId == this.addInoiceOne.bankId
-            );
-            // console.log(idx);
-            this.$set(this.invoice, idx, this.addInoiceOne);
-            this.data.guestTaxpayerVOList = this.invoice;
-            this.newInoiceShow = false;
-            this.addInoiceOne = {};
-          } else {
-            let newarr = {};
-            newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
-            newarr.bankId = this.bankId;
-            this.bankId++;
-            this.invoice.push(newarr);
-            // console.log(newarr, 638);
-            this.data.guestTaxpayerVOList = this.invoice;
-            this.newInoiceShow = false;
-          }
-        });
-      },
-      //选中银行
-      pitchOnBank(selection) {
-        this.addInoiceOne = selection;
-      },
-      //修改银行
-      changeBank() {
-        if (Object.keys(this.addInoiceOne).length == 0) {
-          this.$Message.error("请先选中需要修改的信息");
-          return false;
-        }
-        this.tit = "修改开票信息";
-        this.addInoiceOne = this.addInoiceOne.row;
-        this.newInoiceShow = true;
-      },
-      //删除银行
-      deletBank() {
-        if (Object.keys(this.addInoiceOne).length == 0) {
-          this.$Message.error("请先选中需要删除的信息");
-          return false;
-        }
-        this.invoice = this.invoice.filter(
-          item => item.bankId != this.addInoiceOne.row.bankId
-        );
-        console.log(this.invoice, this.addInoiceOne);
-        this.data.guestTaxpayerVOList = this.invoice;
-        this.addInoiceOne = {};
+      } else {
+        callback(new Error("客户全称不可为空"));
       }
+    };
+    return {
+      enAble: "启用", //启用 禁用 字段
+      enAbleTax: "启用", //启用 禁用 字段
+      selectFinTab: {}, // 财务信息 表格选中行的内容暂时性存储
+      selectTaxTab: {}, // 开票信息 表格选中行的内容暂时性存储
+      selectFinId: 0,
+      sessionKey: "0",
+      Subordinate: [
+        {
+          label: "华胜连锁",
+          value: 0
+        },
+        {
+          label: "体系外",
+          value: 1
+        },
+        {
+          label: "体系内",
+          value: 2
+        }
+      ],
+      tree: this.treelist,
+      clinet: true, //是否客户 //是
+      list: [
+        {
+          label: 123,
+          value: 1
+        },
+        {
+          label: 456,
+          value: 2
+        }
+      ],
+      validRules: {
+        taxpayerName: [{ required: true, message: "", trigger: "change" }],
+        taxpayerCode: [
+          { required: true, validator: paragraph, trigger: "change" }
+        ],
+        taxpayerTel: [
+          {
+            required: true,
+            validator: creditLimit2,
+            type: "Number",
+            trigger: "change"
+          }
+        ],
+        accountBankNo: [{ required: true, message: "", trigger: "change" }]
+      },
+      validRulesFin: {},
+      columnsFin: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
+        },
+        {
+          title: "账户类型",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
+            return h("span", {}, text);
+          }
+        },
+        {
+          title: "收款户名",
+          align: "center",
+          key: "accountName"
+        },
+        {
+          title: "银行卡号",
+          align: "center",
+          key: "accountBankNo"
+        },
+        {
+          title: "开户银行",
+          align: "center",
+          key: "accountBank"
+        },
+        {
+          title: "默认",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.acquiesce == true
+              ? (text = "已默认")
+              : (text = "设为默认");
+            return h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.financeList.map(item => {
+                      if (item.id == params.row.id) {
+                        item.acquiesce = !item.acquiesce;
+                      } else {
+                        if (item.acquiesce) {
+                          item.acquiesce = false;
+                        }
+                      }
+                    });
+                    this.disposeFinData();
+                  }
+                }
+              },
+              text
+            );
+          }
+        },
+        {
+          title: "状态",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.accountSign == true ? (text = "启用") : (text = "禁用");
+            return h("span", {}, text);
+          }
+        }
+      ],
+      columnsTax: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
+        },
+        {
+          title: "开票名称",
+          align: "center",
+          key: "taxpayerName"
+        },
+        {
+          title: "税号",
+          align: "center",
+          key: "taxpayerCode"
+        },
+        {
+          title: "开户行及账号",
+          align: "center",
+          key: "accountBankNo"
+        },
+        {
+          title: "地址电话",
+          align: "center",
+          key: "taxpayerTel"
+        },
+        {
+          title: "是否一般纳税人",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.taxpayerSign == true ? (text = "是") : (text = "否");
+            return h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.invoice.map(item => {
+                      if (item.id == params.row.id) {
+                        item.taxpayerSign = !item.taxpayerSign;
+                      } else {
+                        if (item.taxpayerSign) {
+                          item.taxpayerSign = false;
+                        }
+                      }
+                    });
+                    this.disposeTax();
+                  }
+                }
+              },
+              text
+            );
+          }
+        },
+        {
+          title: "状态",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.taxpayerType == true ? (text = "启用") : (text = "禁用");
+            return h("span", {}, text);
+          }
+        }
+      ],
+      columns: [
+        {
+          title: "收货单位",
+          align: "center",
+          key: "receiveCompName"
+        },
+        {
+          title: "收货人",
+          align: "center",
+          key: "receiveMan",
+          minWidth: 80
+        },
+        {
+          title: "联系方式",
+          align: "center",
+          key: "receiveManTel"
+        },
+        {
+          title: "收货地址",
+          align: "center",
+          key: "address"
+        },
+        {
+          title: "默认",
+          key: "id",
+          align: "isDefault",
+          render: (h, params) => {
+            let text = "";
+            params.row.isDefault ? (text = "是") : (text = "否");
+            return h("span", {}, text);
+          }
+        }
+      ],
+      columns1: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
+        },
+        {
+          key: "id",
+          align: "center",
+          type: "selection",
+          width: 40
+        },
+        {
+          title: "客户简称",
+          align: "center",
+          key: "shortName",
+          minWidth: 80
+        },
+        {
+          title: "客户全称",
+          align: "center",
+          key: "fullName"
+        },
+        {
+          title: "创建日期",
+          align: "center",
+          key: "createTime"
+        }
+      ],
+      columns2: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
+        },
+        {
+          key: "id",
+          align: "center",
+          type: "selection",
+          width: 40
+        },
+        {
+          title: "客户简称",
+          align: "center",
+          key: "shortName",
+          minWidth: 80
+        },
+        {
+          title: "客户全称",
+          align: "center",
+          key: "fullName"
+        },
+        {
+          title: "创建日期",
+          align: "center",
+          key: "createTime"
+        }
+      ],
+      columns3: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
+        },
+        {
+          title: "开票名称",
+          align: "center",
+          key: "taxpayerName"
+        },
+        {
+          title: "税号",
+          align: "center",
+          key: "taxpayerCode"
+        },
+        {
+          title: "地址电话",
+          align: "center",
+          key: "taxpayerTel"
+        },
+        {
+          title: "开户行及账号",
+          align: "center",
+          key: "accountBankNo"
+        }
+      ],
+      relevanceClientShow: [],
+      invoice: [],
+      page: {
+        num: 1,
+        size: 10,
+        total: 0
+      },
+      placeList: [],
+      newplace: false, //收货地址
+      newInoiceShow: false, //开票
+      bankAccount: false, //财务信息
+      loading: true,
+      loading1: true,
+      title: "新增收货地址",
+      bankAccountTit: "新增银行账户",
+      oneNew: {},
+      relevanceClient: [],
+      addInoiceOne: {},
+      rules: {
+        belongSystem: [
+          {
+            required: true,
+            message: "不能为空",
+            trigger: "change",
+            type: "number"
+          }
+        ],
+        // creditLimit: [
+        //   {
+        //     validator: creditLimit,
+        //     trigger: "change"
+        //   }
+        // ],
+        accountName: [
+          { required: true, message: " 不能为空", trigger: "change" }
+        ],
+        accountBankNo: [
+          { required: true, message: "不能为空", trigger: "change" }
+        ],
+        accountBank: [
+          { required: true, message: " 不能为空", trigger: "change" }
+        ],
+        guestProperty: [{ required: true, message: " ", trigger: "change" }],
+        shortName: [{ required: true, message: " ", trigger: "blur" }],
+        settTypeId: [{ required: true, message: " ", trigger: "change" }],
+        billTypeId: [{ required: true, message: " ", trigger: "change" }],
+        fullName: [{ required: true, validator: fullName, trigger: "blur" }],
+        contactor: [{ required: true, message: " ", trigger: "blur" }],
+        provinceId: [{ required: true, message: " ", trigger: "change" }],
+        contactorTel: [
+          { required: true, validator: contactorTel, trigger: "blur" }
+        ],
+        tel: [{ required: true, validator: contactorTel, trigger: "blur" }],
+        salesmanTel: [
+          { required: true, validator: contactorTel, trigger: "blur" }
+        ],
+        cityId: [{ required: true, message: " ", trigger: "change" }],
+        guestType: [{ required: true, message: " ", trigger: "change" }],
+        guestTypeFloor: [{ required: true, message: " ", trigger: "change" }]
+      },
+      dataList: "",
+      id: 0,
+      bankId: 0,
+      customerName: "", //客户名称
+      pitchOnClientList: [], //选中关联客户
+      deleteOneClient: [], //获取删除项
+      pitchOneBank: [],
+      tit: "" //开票弹窗
+    };
+  },
+  // computed:{
+  //   place(){
+  //     return this.data
+  //   }
+  // },
+  mounted() {
+    this.placeList = this.data.guestLogisticsVOList || [];
+    this.relevanceClientShow = this.data.guestVOList || [];
+    this.invoice = this.data.guestTaxpayerVOList || [];
+    this.financeList = this.data.guestAccountVoList || [];
+    this.getList();
+    this.getClienlist();
+    this.disposeFinData();
+    this.sessionKey = sessionStorage.getItem("key");
+  },
+  methods: {
+    //获取关联客户
+    async getClienlist() {
+      this.loading1 = true;
+      let data = {};
+      data.page = this.page.num - 1;
+      data.size = this.page.size;
+      data.fullName = this.customerName;
+      let res = await getCustomerInformation(data);
+      if (res.code == 0) {
+        this.loading1 = false;
+        this.relevanceClient = res.data.content;
+        this.page.total = res.data.totalElements;
+      }
+    },
+    //获取客户属性
+    async getList() {
+      let data = {};
+      data = ["CS00105", "CS00106", "CS00107", "CS00112"];
+      let res = await getDigitalDictionary(data);
+      if (res.code == 0) {
+        this.dataList = res.data;
+      }
+    },
+    // 处理财务信息数据
+    disposeFinData() {
+      let defauDat = [];
+      this.financeList.map(item => {
+        if (item.acquiesce == true) {
+          defauDat.push(item);
+        }
+      });
+      if (defauDat.length != 1) {
+        this.financeList.map(item => {
+          if (item != defauDat[0]) {
+            item.acquiesce = false;
+          }
+        });
+      }
+    },
+    // 财务信息表格中选中某一行
+    selectFin(row) {
+      this.selectFinTab = row || {};
+      if (row.accountSign == true) {
+        this.enAble = "禁用";
+      } else {
+        this.enAble = "启用";
+      }
+      this.disposeFinData();
+    },
+    // 财务信息银行卡弹框确定
+    addNewClientBank() {
+      this.$refs.bankAccount.handleSubmit(() => {
+        if (this.bankAccountTit == "修改银行账户信息") {
+          let bool = true;
+          this.selectFinTab = this.$refs.bankAccount.data;
+          this.financeList.map(item => {
+              if (item.id == this.selectFinTab.id) {
+                let newarr = {};
+                newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+                item.id = newarr.id;
+                item.tenantId = newarr.tenantId;
+                item.guestId = newarr.guestId;
+                item.accountBank = newarr.accountBank;
+                item.accountBankNo = newarr.accountBankNo;
+                item.accountName = newarr.accountName;
+                item.accountType = newarr.accountType;
+                item.acquiesce = newarr.acquiesce;
+              }
+            // if (item.accountBankNo == this.selectFinTab.accountBankNo) {
+            //   if(item.id == this.selectFinTab.id){
+            //     bool = true
+            //   }else{
+            //     bool = false
+            //   }
+            // }
+          });
+          // if (bool == true) {
+          //   if (item.id == this.selectFinTab.id) {
+          //     let newarr = {};
+          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          //     item.id = newarr.id;
+          //     item.tenantId = newarr.tenantId;
+          //     item.guestId = newarr.guestId;
+          //     item.accountBank = newarr.accountBank;
+          //     item.accountBankNo = newarr.accountBankNo;
+          //     item.accountName = newarr.accountName;
+          //     item.accountType = newarr.accountType;
+          //     item.acquiesce = newarr.acquiesce;
+          //   }
+            this.disposeFinData();
+            this.$Message.success("添加银行卡成功");
+            this.bankAccount = false;
+          // } else {
+          //   return this.$Message.error("该银行卡已添加过");
+          // }
+          this.data.guestAccountVoList = this.financeList;
+        } else {
+          let newarr = {};
+          let bool = true;
+          this.selectFinTab = this.$refs.bankAccount.data;
+          newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          this.financeList.map(item => {
+            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
+              bool = false;
+            }
+          });
+          if (bool == true) {
+            newarr.acquiesce = false;
+            newarr.accountSign = true;
+            this.financeList.push(newarr);
+            this.data.guestAccountVoList = this.financeList;
+            this.bankAccount = false;
+            this.disposeFinData();
+            this.$Message.success("添加银行卡成功");
+          } else {
+            return this.$Message.error("该银行卡已添加过");
+          }
+        }
+      });
+    },
+    // 其他信息 财务信息
+    addPlaceFin() {
+      this.bankAccount = true;
+      this.bankAccountTit = "新增银行账户";
+      this.$refs.bankAccount.data = {};
+      this.$refs.bankAccount.resetFields();
+    },
+    changeplageFin() {
+      if (Object.keys(this.selectFinTab).length == 0) {
+        this.$Message.error("请先选中需要修改的信息");
+        return false;
+      }
+      this.bankAccountTit = "修改银行账户信息";
+      this.bankAccount = true;
+      this.$refs.bankAccount.data = this.selectFinTab;
+    },
+    // 修改启用禁用
+    changePlaceFin() {
+      this.financeList.map(item => {
+        if (item.id == this.selectFinTab.id) {
+          item.accountSign = !item.accountSign;
+        } else {
+          item.accountSign;
+        }
+      });
+    },
+    //校验表单
+    handleSubmit(callback) {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          callback && callback();
+        } else {
+          this.$Message.error("带*为必填");
+        }
+      });
+    },
+    // 获取新增地址
+    selection(item) {
+      this.oneNew = item;
+      this.oneNew.isDefault == 1
+        ? (this.oneNew.isDefault = true)
+        : (this.oneNew.isDefault = false);
+    },
+    //新增地址表单校验
+    addplaceSure() {
+      // console.log(this.placeList)
+      this.$refs.child.handleSubmit(() => {
+        if (this.placeList.some(item => item.id == this.oneNew.id)) {
+          this.oneNew.isDefault
+            ? (this.oneNew.isDefault = 1)
+            : (this.oneNew.isDefault = 0);
+          let idx = this.placeList.findIndex(item => item.id == this.oneNew.id);
+          this.$set(this.placeList, idx, this.oneNew);
+          this.data.guestLogisticsVOList = this.placeList;
+          this.newplace = false;
+          this.oneNew = {};
+        } else {
+          this.oneNew.isDefault
+            ? (this.oneNew.isDefault = 1)
+            : (this.oneNew.isDefault = 0);
+          let newarr = {};
+          newarr = JSON.parse(JSON.stringify(this.oneNew));
+          newarr.id = this.id;
+          this.id++;
+          this.placeList.push(newarr);
+          this.data.guestLogisticsVOList = this.placeList;
+          this.newplace = false;
+        }
+      });
+    },
+    //修改地址表单
+    changeplage() {
+      // console.log(this.oneNew);
+      if (Object.keys(this.oneNew).length == 0) {
+        this.$Message.error("至少选项一条地址");
+        return false;
+      }
+      if (
+        this.oneNew.cityId == undefined ||
+        this.oneNew.provinceId == undefined
+      ) {
+        this.$Message.error("至少选项一条地址");
+        return false;
+      }
+      this.newplace = true;
+      this.title = "修改收货地址";
+    },
+    //表单清除
+    handleReset() {
+      this.data.isNeedPack = false;
+      this.data.isFatCompany = false;
+      this.data.isDisabled = false;
+      this.data.isSupplier = false;
+      this.$refs.form.resetFields();
+    },
+    //新增地址
+    addPlace() {
+      this.oneNew = {};
+      this.newplace = true;
+      this.$refs.child.resetFields();
+    },
+    //删除地址
+    deletPlace() {
+      if (Object.keys(this.oneNew).length == 0) {
+        this.$Message.error("至少选项一条地址");
+        return false;
+      }
+      this.placeList = this.placeList.filter(item => item.id != this.oneNew.id);
+      this.data.guestLogisticsVOList = this.placeList;
+      this.oneNew = {};
+    },
+    //查询关联客户
+    queryClientList() {
+      this.getClienlist();
+    },
+    //查询关联客户分页
+    changePage1(data) {
+      this.page.num = data;
+      this.getClienlist();
+    },
+    //查询关联客户切换条数
+    changeSize1() {
+      this.page.num = 1;
+      this.page.size = data;
+      this.getClienlist();
+    },
+    //选中查询关联客户
+    pitchOnClient(selection) {
+      this.pitchOnClientList = selection;
+    },
+    //加入查询
+    joinClientList() {
+      let can = true;
+      // console.log(this.pitchOnClientList, "this.pitchOnClientList");
+      // console.log(this.relevanceClientShow, "this.relevanceClientShow");
+      // if (this.pitchOnClientList.length != 0) {
+      //   for (var i = 0; i < this.pitchOnClientList.length; i++) {
+      //     console.log(1212);
+      //     for (var k = 0; k <script this.relevanceClientShow.length; k++) {
+      //       if (
+      //         this.pitchOnClientList[i].id == this.relevanceClientShow[k].id
+      //       ) {
+      //         can = false;
+      //       }
+      //     }
+      //   }
+      this.relevanceClientShow = this.pitchOnClientList;
+      // this.pitchOnClientList.forEach(item => {
+      //   this.relevanceClientShow.forEach(val => {
+      //     if (item.id == val.id) {
+      //       can = false;
+      //     }
+      //   });
+      // });
+      // } else {
+      //   this.$message.error("请勾选客户");
+      //   return;
+      // }
+      if (can) {
+        this.relevanceClientShow = [
+          ...this.relevanceClientShow
+          // ...this.pitchOnClientList
+        ];
+        this.data.guestVOList = this.relevanceClientShow;
+        console.log("......" + this.data.guestVOList);
+      } else {
+        this.$Message.error("选择重复");
+      }
+    },
+    //获取删除关联客户
+    deleteClient(selection) {
+      this.deleteOneClient = selection;
+    },
+    //删除
+    deletAllClient() {
+      if (this.deleteOneClient.length !== 0) {
+        this.deleteOneClient.forEach(item => {
+          this.relevanceClientShow.forEach((val, index, arr) => {
+            if (val.id === item.id) {
+              arr.splice(index, 1);
+            }
+          });
+        });
+        this.data.guestVOList = this.relevanceClientShow;
+      } else {
+        this.$message.error("请勾选要删除的客户");
+      }
+    },
+    //新增银行
+    addInoice() {
+      this.addInoiceOne = {};
+      this.tit = "新增开票";
+      this.newInoiceShow = true;
+      this.$refs.AddInoice.resetFields();
+    },
+    // 确认新增银行
+    addNewBank() {
+      this.$refs.AddInoice.handleSubmit(() => {
+        if (this.tit == "新增开票") {
+          let newarr = {};
+          newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+          newarr.bankId = this.bankId;
+          this.bankId++;
+          this.invoice.push(newarr);
+          this.data.guestTaxpayerVOList = this.invoice;
+          this.newInoiceShow = false;
+        } else {
+          this.invoice.map(item => {
+            this.addInoiceOne = this.$refs.AddInoice.data;
+            if (item.bankId == this.addInoiceOne.bankId) {
+              let newarr = {};
+              newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+              item.taxpayerName = newarr.taxpayerName;
+              item.taxpayerCode = newarr.taxpayerCode;
+              item.taxpayerTel = newarr.taxpayerTel;
+              item.accountBankNo = newarr.accountBankNo;
+              item.taxpayerSign = newarr.taxpayerSign;
+            }
+          });
+          this.data.guestTaxpayerVOList = this.invoice;
+          this.newInoiceShow = false;
+        }
+        // if (
+        //   this.invoice.some(item => item.bankId == this.addInoiceOne.bankId)
+        // ) {
+        //   let idx = this.invoice.findIndex(
+        //     item => item.bankId == this.addInoiceOne.bankId
+        //   );
+        //   // console.log(idx);
+        //   this.$set(this.invoice, idx, this.addInoiceOne);
+        //   this.data.guestTaxpayerVOList = this.invoice;
+        //   this.newInoiceShow = false;
+        //   this.addInoiceOne = {};
+        // } else {
+        // let newarr = {};
+        // newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+        // newarr.bankId = this.bankId;
+        // this.bankId++;
+        // this.invoice.push(newarr);
+        // // console.log(newarr, 638);
+        // this.data.guestTaxpayerVOList = this.invoice;
+        // this.newInoiceShow = false;
+        // }
+      });
+    },
+    disposeTax() {
+      let defauDat = [];
+      this.invoice.map(item => {
+        if (item.taxpayerSign == true) {
+          defauDat.push(item);
+        }
+      });
+      if (defauDat.length != 1) {
+        this.invoice.map(item => {
+          if (item != defauDat[0]) {
+            item.taxpayerSign = false;
+          }
+        });
+      }
+    },
+    //选中银行
+    pitchOnBank(selection) {
+      this.addInoiceOne = selection;
+      this.selectTaxTab = selection;
+      this.disposeTax();
+    },
+    //修改银行
+    changeBank() {
+      if (Object.keys(this.addInoiceOne).length == 0) {
+        this.$Message.error("请先选中需要修改的信息");
+        return false;
+      }
+      this.tit = "修改开票信息";
+      this.newInoiceShow = true;
+      this.disposeTax();
+    },
+    deletBank() {
+      this.invoice.map(item => {
+        if (item.id == this.selectTaxTab.id) {
+          item.taxpayerType = !item.taxpayerType;
+        } else {
+          item.taxpayerType;
+        }
+      });
     }
-  };
+  }
+};
 </script>
 
 <style scoped lang="less">
-  .isDisabeld {
-    float: right;
-  }
-  .place {
+.isDisabeld {
+  float: right;
+}
+.finance {
+  border: 1px solid #ccc;
+  .financePlace {
     line-height: 40px;
     padding-left: 10px;
-    border: 1px solid #eee;
+    border-bottom: 1px solid #ccc;
+    span {
+      padding: 5px;
+    }
   }
-  .staff-name {
-    width: 200px;
+  .financeTab {
+    padding: 5px 10px;
   }
+}
+.place {
+  line-height: 40px;
+  padding-left: 10px;
+  border: 1px solid #eee;
+}
+.staff-name {
+  width: 200px;
+}
 </style>
 <style scoped>
-  .tabList >>> .ivu-form-item {
-    margin-bottom: 10px;
-  }
-  .tabList >>> .ivu-form-item-content {
-    margin-bottom: 10px;
-  }
+.tabList >>> .ivu-form-item {
+  margin-bottom: 10px;
+}
+.tabList >>> .ivu-form-item-content {
+  margin-bottom: 10px;
+}
 </style>
