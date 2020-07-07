@@ -265,7 +265,7 @@
                   v-model="formInline.receiveBank"
                   style="width: 90%;padding-left: 5px"
                   :disabled="modelType"
-                ></Input>
+                />
               </FormItem>
             </Col>
             <Col span="8">

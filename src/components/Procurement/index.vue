@@ -73,17 +73,17 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column  field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column  width="160" field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column  field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column  width="160" field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column  field="partBrand" title="品牌"></vxe-table-column>
         <vxe-table-column  field="enterQty" title="库存数量"></vxe-table-column>
         <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
         <vxe-table-column  field="enterUnitId" title="单位"></vxe-table-column>
         <vxe-table-column  field="branchStockAge" title="库龄"></vxe-table-column>
-        <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column  field="code" title="入库单号"></vxe-table-column>
-        <vxe-table-column  field="enterDate" title="入库日期"></vxe-table-column>
+        <vxe-table-column  width="200" field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column  width="200" field="code" title="入库单号"></vxe-table-column>
+        <vxe-table-column  width="160" field="enterDate" title="入库日期"></vxe-table-column>
       </vxe-table>
 
       <vxe-table
@@ -113,9 +113,9 @@
           width="60"
           fixed="left"
         ></vxe-table-column>
-        <vxe-table-column  field="partCode" title="配件编码" fixed="left"></vxe-table-column>
+        <vxe-table-column  width="160"  field="partCode" title="配件编码" fixed="left"></vxe-table-column>
         <vxe-table-column  field="partName" title="配件名称" fixed="left"></vxe-table-column>
-        <vxe-table-column  field="oemCode" title="OE码" fixed="left"></vxe-table-column>
+        <vxe-table-column  width="160" field="oemCode" title="OE码" fixed="left"></vxe-table-column>
         <vxe-table-column  field="partBrand" title="品牌" fixed="left"></vxe-table-column>
         <vxe-table-column  field="taxSign" title="是否含税">
           <template v-slot="{ row }">
@@ -128,10 +128,10 @@
         <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
         <vxe-table-column  field="systemUnitId" title="单位"></vxe-table-column>
         <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column  field="serviceId" title="出库单号"></vxe-table-column>
-        <vxe-table-column  field="outDate" title="出库日期"></vxe-table-column>
-        <vxe-table-column  field="code" title="关联销售订单"></vxe-table-column>
-        <vxe-table-column  field="originGuestName" title="第一供应商"></vxe-table-column>
+        <vxe-table-column  width="200" field="serviceId" title="出库单号"></vxe-table-column>
+        <vxe-table-column  width="160" field="outDate" title="出库日期"></vxe-table-column>
+        <vxe-table-column  width="200" field="code" title="关联销售订单"></vxe-table-column>
+        <vxe-table-column  width="200" field="originGuestName" title="第一供应商"></vxe-table-column>
       </vxe-table>
 
       <div class="page-warp">
