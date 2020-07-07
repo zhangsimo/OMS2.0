@@ -215,7 +215,13 @@ export default class PlannedPurchaseOrder extends Vue {
     const orderDate = this.formPlanmain.orderDate;
     return date && orderDate && date.valueOf() < orderDate.valueOf()- 86399999;
   }
-
+//添加直发门店
+  private addPutStores(v:string):void{
+    this.putStores.push({
+      value:v,
+      label:v
+    })
+  }
   private salesList:Array<any> = new Array();
   private async getAllSales() {
     let res:any = await getSales();
@@ -753,7 +759,7 @@ export default class PlannedPurchaseOrder extends Vue {
         this.inStores.push({ value: storeMap[el], label: el })
       }
       // 直发门店guestMap
-      for (let el in companyMap) { 
+      for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
       }
       for (let el in billStatusMap) {

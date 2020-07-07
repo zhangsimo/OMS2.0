@@ -149,6 +149,13 @@ export default class InterPurchase extends Vue {
   onFormatError(file) {
     this.$Message.error('只支持xls xlsx后缀的文件')
   };
+  //添加直发门店
+  private addPutStores(v:string):void{
+    this.putStores.push({
+      value:v,
+      label:v
+    })
+  }
   // 上传成功函数
   onSuccess(response) {
     if (response.code == 0) {
@@ -404,7 +411,7 @@ export default class InterPurchase extends Vue {
   // 提交
   private submit(refname: string) {
     if(!this.selectTableRow.id) return this.$message.error("请先保存再提交");
-    
+
     let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
     if(zero) return;
 
@@ -760,6 +767,7 @@ export default class InterPurchase extends Vue {
       item.orderQty = undefined;
     })
     this.tableData = this.tableData.concat(arrData).map(el => {
+      el.specifications = el.spec;
       el.uuid = v4();
       return el;
     });
@@ -912,6 +920,7 @@ export default class InterPurchase extends Vue {
       })
     })
     this.tableData = row.details.map( el => {
+      el.specifications = el.spec;
       el.uuid = v4();
       return el;
     });

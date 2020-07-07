@@ -37,6 +37,7 @@
               v-model="searchForm.partName"
               placeholder="配件编码/名称"
               class="w200 mr10"
+              @on-enter="serch"
             />
             <Select
               filterable
@@ -85,6 +86,7 @@
               placeholder="仓位"
               class="w120 mr10"
               v-model="searchForm.shelf"
+              @on-enter="serch"
             ></Input>
             <span class="mr5">显示零库存:</span>
             <Checkbox v-model="searchForm.noStock"></Checkbox>
@@ -120,6 +122,7 @@
               v-model="searchForm1.partName"
               placeholder="配件编码/名称"
               class="w200 mr10"
+              @on-enter="queryBatch"
             ></Input>
             <Select
               filterable
@@ -228,7 +231,7 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Input v-model="searchData.partName" class="w250 mr10" />
+              <Input v-model="searchData.partName" class="w250 mr10" @on-enter="resetData"/>
             </div>
             <div class="db">
               <Button

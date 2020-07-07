@@ -28,7 +28,7 @@ export const mixSelectPartCom = {
         {
           title: "序号",
           type: "selection",
-          minWidth: 80
+          minWidth: 50
         },
         {
           title: "详情",

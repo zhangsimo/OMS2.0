@@ -11,7 +11,7 @@
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" />
+          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class=" mr5">品牌:</span>
@@ -162,7 +162,11 @@
       // this.shows = false;
       this.selectRow.forEach((el:any) => {
         el.sourceDetailId = el.id;
-        Reflect.deleteProperty(el, 'id');
+        el.batchSourceId = el.id;
+        if(el.batchSourceId){
+          Reflect.deleteProperty(el, 'id');
+        }
+        return el;
       })
       return this.selectRow;
     }

@@ -21,8 +21,8 @@ const dev = {
 
   /**oms系统接口设定 */
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  authApi: "http://192.168.30.221:5200", // 系统资源 5200
-  passportApi: "http://192.168.30.221:5200", // passport微服务API
+  authApi: "http://192.168.30.43:5200", // 系统资源 5200
+  passportApi: "http://192.168.30.43:5200", // passport微服务API
   // tokenApi: "http://192.168.30.226:5600",
   // authApi: "http://192.168.30.226:5200",
   // passportApi: "http://192.168.30.226:5200",

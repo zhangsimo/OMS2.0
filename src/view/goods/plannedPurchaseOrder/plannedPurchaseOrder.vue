@@ -260,6 +260,9 @@
                       v-model="formPlanmain.directCompanyId"
                       :disabled="isInput||isDirectCompanyId"
                       clearable
+                      allow-create
+                      filterable
+                      @on-create="addPutStores"
                     >
                       <Option
                         v-for="(item, index) in putStores"
@@ -299,7 +302,7 @@
                       @click="selectPlan"
                       :disabled="isInput || formPlanmain.guestId.length <= 0"
                       v-has="'selectProject'"
-                      >选择采购计划</Button
+                      >选择滚动计划</Button
                     >
                   </div>
                   <div class="fl mb5">

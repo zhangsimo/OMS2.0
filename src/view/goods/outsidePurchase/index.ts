@@ -688,6 +688,7 @@ export default class InterPurchase extends Vue {
     let arrData = v||[]
     arrData = JSON.parse(JSON.stringify(arrData));
     arrData.forEach(item => {
+      item.specifications = item.spec;
       item.orderPrice = item.recentPrice || undefined;
       item.orderQty = undefined;
     })

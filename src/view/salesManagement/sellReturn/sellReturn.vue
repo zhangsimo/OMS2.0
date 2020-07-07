@@ -287,19 +287,23 @@
                   <vxe-table-column
                     type="index"
                     title="序号"
+                    fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column type="checkbox"></vxe-table-column>
+                  <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
                   <vxe-table-column
                     field="partCode"
                     title="配件编码"
+                    fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="partName"
                     title="配件名称"
+                    fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="partBrand"
                     title="品牌"
+                    fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
@@ -876,7 +880,7 @@ export default {
                 dl.uuid = v4();
               })
             }
-          }) 
+          })
           this.page.total = res.data.totalElements;
           for (let b of this.sellOrderTable.tbdata) {
             b._highlight = false;
