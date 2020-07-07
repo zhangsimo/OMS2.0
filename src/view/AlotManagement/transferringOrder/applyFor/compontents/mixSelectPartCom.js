@@ -88,7 +88,7 @@ export const mixSelectPartCom = {
             return h('span',p.row.brandName||p.row.carModelName)
           }
         },
-       
+
         {
           title: "单位",
           key: "minUnit",
