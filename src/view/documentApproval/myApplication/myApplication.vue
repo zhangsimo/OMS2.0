@@ -381,6 +381,10 @@ export default {
         {
           value: "17",
           label: "客户信用额度"
+        },
+        {
+          value: "20",
+          label: "配件资料"
         }
       ], //申请类型数组
       tableData: [], //表格内容
