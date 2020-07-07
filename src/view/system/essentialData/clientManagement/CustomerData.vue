@@ -462,6 +462,7 @@ export default {
           this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
           this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
           this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
+          this.$refs.child.financeList=this.clientList.guestAccountVoList
         }
         // console.log(this.clientList);
         this.clientDataShow = true;

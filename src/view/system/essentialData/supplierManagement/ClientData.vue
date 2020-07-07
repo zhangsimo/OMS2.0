@@ -177,31 +177,32 @@
         <TabPane label="其他信息" tab="clientBox">
           <div>
             <p style="margin-bottom: 10px">财务信息</p>
-            <div>
-              <FormItem label="收款户名:" prop="receiveName" class="h50">
-                <Input v-model="data.receiveName" style="width: 450px" />
-              </FormItem>
-              <FormItem label="银行账号:" prop="accountBankNo" class="h50">
-                <Input v-model="data.accountBankNo" style="width: 450px" />
-              </FormItem>
-              <FormItem label="开户银行:" prop="accountBank" class="h50">
-                <Input v-model="data.accountBank" style="width: 450px" />
-              </FormItem>
-              <div style="display: flex">
-                <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人编码:" prop="phone" class="h50">
-                    <Input v-model="data.taxpayerCode" style="width: 150px" />
-                  </FormItem>
-                </div>
-                <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人电话:" prop="phone" class="h50">
-                    <Input v-model="data.taxpayerTel" style="width: 150px" />
-                  </FormItem>
-                </div>
+            <div class="finance">
+              <div class="financePlace">
+                <a class="mr10" @click="addPlaceFin">
+                  <Icon custom="iconfont iconxinzengicon icons" />新增
+                </a>
+                <a class="mr10" @click="changeplageFin">
+                  <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
+                </a>
+                <a class="mr10" @click="changePlaceFin">{{enAble}}</a>
               </div>
-              <FormItem label="纳税人名称:" class="h50">
-                <Input v-model="data.taxpayerName" style="width: 450px" />
-              </FormItem>
+              <div class="financeTab">
+                <Table
+                  @on-current-change="selectFin"
+                  highlight-row
+                  border
+                  resizable
+                  auto-resize
+                  stripe
+                  size="small"
+                  height="200"
+                  max-height="200"
+                  ref="finance"
+                  :columns="columnsFin"
+                  :data="financeList"
+                ></Table>
+              </div>
             </div>
             <p style="margin-bottom: 10px">其他信息</p>
             <FormItem label="网址:" class="h50">
@@ -228,6 +229,13 @@
                 </FormItem>
               </div>
             </div>
+            <Modal v-model="bankAccount" :title="bankAccountTit" width="600">
+              <bank-account ref="bankAccount"></bank-account>
+              <div slot="footer">
+                <Button type="primary" @click="addNewClientBank">保存</Button>
+                <Button type="default" @click="bankAccount=false">取消</Button>
+              </div>
+            </Modal>
           </div>
         </TabPane>
       </Tabs>
@@ -236,15 +244,23 @@
 </template>
 
 <script>
-import { getDigitalDictionary,getCustomer } from "@/api/system/essentialData/clientManagement";
+import {
+  getDigitalDictionary,
+  getCustomer
+} from "@/api/system/essentialData/clientManagement";
+import bankAccount from "@/view/system/essentialData/clientManagement/components/bankAccount";
 
 export default {
   name: "Data",
-  components: {},
+  components: { bankAccount },
   props: {
     data: "",
     provincearr: "",
-    treelist: ""
+    treelist: "",
+    financeList: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     // v-if="data.supplierTypeFirst == item.parentId"
@@ -299,6 +315,7 @@ export default {
       }
     };
     return {
+      enAble: "启用", //启用 禁用 字段
       Subordinate: [
         {
           label: "华胜连锁",
@@ -371,10 +388,85 @@ export default {
         cityId: [{ required: true, message: " ", trigger: "change" }],
         guestType: [{ required: true, message: " ", trigger: "change" }],
         guestTypeFloor: [{ required: true, message: " ", trigger: "change" }],
-        supplierTypeFirst: [{required: true, message: " ", trigger: "change"}],
-        supplierTypeSecond: [{required: true, message: " ", trigger: "change"}]
+        supplierTypeFirst: [
+          { required: true, message: " ", trigger: "change" }
+        ],
+        supplierTypeSecond: [
+          { required: true, message: " ", trigger: "change" }
+        ]
       },
-      dataList: ""
+      dataList: "",
+      columnsFin: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
+        },
+        {
+          title: "账户类型",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
+            return h("span", {}, text);
+          }
+        },
+        {
+          title: "收款户名",
+          align: "center",
+          key: "accountName"
+        },
+        {
+          title: "银行卡号",
+          align: "center",
+          key: "accountBankNo"
+        },
+        {
+          title: "开户银行",
+          align: "center",
+          key: "accountBank"
+        },
+        {
+          title: "默认",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.acquiesce == true
+              ? (text = "已默认")
+              : (text = "设为默认");
+            return h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.financeList.map(item => {
+                      if (item.id == params.row.id) {
+                        item.acquiesce = !item.acquiesce;
+                      } else {
+                        if (item.acquiesce) {
+                          item.acquiesce = false;
+                        }
+                      }
+                    });
+                    this.disposeFinData();
+                  }
+                }
+              },
+              text
+            );
+          }
+        },
+        {
+          title: "状态",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.accountSign == true ? (text = "启用") : (text = "禁用");
+            return h("span", {}, text);
+          }
+        }
+      ],
+      bankAccount:false,bankAccountTit:"新增银行账户"
     };
   },
   created() {
@@ -393,6 +485,114 @@ export default {
     //清除内容
     resetFields() {
       this.$refs.form.resetFields();
+    },
+    // 处理财务信息数据
+    disposeFinData() {
+      let defauDat = [];
+      this.financeList.map(item => {
+        if (item.acquiesce == true) {
+          defauDat.push(item);
+        }
+      });
+      if (defauDat.length != 1) {
+        this.financeList.map(item => {
+          if (item != defauDat[0]) {
+            item.acquiesce = false;
+          }
+        });
+      }
+    },
+    // 财务信息表格中选中某一行
+    selectFin(row) {
+      this.selectFinTab = row || {};
+      if (row.accountSign == true) {
+        this.enAble = "禁用";
+      } else {
+        this.enAble = "启用";
+      }
+      this.disposeFinData();
+    },
+    // 其他信息 财务信息
+    addPlaceFin() {
+      this.bankAccount = true;
+      this.bankAccountTit = "新增银行账户";
+      this.$refs.bankAccount.data = {};
+      this.$refs.bankAccount.resetFields();
+    },
+    changeplageFin() {
+      if (Object.keys(this.selectFinTab).length == 0) {
+        this.$Message.error("请先选中需要修改的信息");
+        return false;
+      }
+      this.bankAccountTit = "修改银行账户信息";
+      this.bankAccount = true;
+      this.$refs.bankAccount.data = this.selectFinTab;
+      console.log(this.$refs.bankAccount.data, "????");
+    },
+    // 修改启用禁用
+    changePlaceFin() {
+      this.financeList.map(item => {
+        if (item.id == this.selectFinTab.id) {
+          item.accountSign = !item.accountSign;
+        } else {
+          item.accountSign;
+        }
+      });
+    },
+    // 财务信息银行卡弹框确定
+    addNewClientBank() {
+      this.$refs.bankAccount.handleSubmit(() => {
+        if (this.bankAccountTit == "修改银行账户信息") {
+          let bool = true;
+          this.selectFinTab = this.$refs.bankAccount.data;
+          this.financeList.map(item => {
+            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
+              bool = false;
+            }
+          });
+          if (bool == true) {
+            if (item.id == this.selectFinTab.id) {
+              let newarr = {};
+              newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+              item.id = newarr.id;
+              item.tenantId = newarr.tenantId;
+              item.guestId = newarr.guestId;
+              item.accountBank = newarr.accountBank;
+              item.accountBankNo = newarr.accountBankNo;
+              item.accountName = newarr.accountName;
+              item.accountType = newarr.accountType;
+              item.acquiesce = newarr.acquiesce;
+            }
+            this.disposeFinData();
+            this.$Message.success("添加银行卡成功");
+            this.bankAccount = false;
+          } else {
+            return this.$Message.error("该银行卡已添加过");
+          }
+          this.data.guestAccountVoList = this.financeList;
+        } else {
+          let newarr = {};
+          let bool = true;
+          this.selectFinTab = this.$refs.bankAccount.data;
+          newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          this.financeList.map(item => {
+            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
+              bool = false;
+            }
+          });
+          if (bool == true) {
+            newarr.acquiesce = false;
+            newarr.accountSign = true;
+            this.financeList.push(newarr);
+            this.data.guestAccountVoList = this.financeList;
+            this.bankAccount = false;
+            this.disposeFinData();
+            this.$Message.success("添加银行卡成功");
+          } else {
+            return this.$Message.error("该银行卡已添加过");
+          }
+        }
+      });
     },
     selection() {},
     addPlace() {

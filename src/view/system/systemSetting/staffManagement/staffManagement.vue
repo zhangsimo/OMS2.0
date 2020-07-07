@@ -77,7 +77,7 @@
       ></Page>
     </div>
 
-    <!--      添加的萌态框-->
+    <!--      添加的模态框-->
     <Modal v-model="modalShow" :title="title" width="700px" :closable="false">
       <addStaff ref="child" :data="newStaff"></addStaff>
       <div slot="footer" style="padding: 10px 0">
@@ -347,7 +347,8 @@ export default {
         singtwo: false, //允许提交
         office: 0, //是否在职默认在职
         openSystem: 0,
-        groupId: 0 //所属机构
+        groupId: 0 ,//所属机构
+        financeList:[]
       },
       oneCliemt: {} //点击获取到当前要删除的兼职公司
     };
@@ -449,7 +450,7 @@ export default {
         (this.newStaff.office = 0), //是否在职默认在职
         (this.newStaff.openSystem = 0),
         (this.newStaff.groupId = 0); //所属机构
-
+        this.newStaff.financeList=[]
       this.$refs.child.resetFields();
     },
     //冻结
@@ -555,6 +556,8 @@ export default {
       this.newStaff.single = this.newStaff.single ? 1 : 0; //允许查看
       this.newStaff.singtwo = this.newStaff.singtwo ? 1 : 0; //允许提交
       // this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
+      this.newStaff.financeList= this.newStaff.staffAccountVoList || []
+      this.$refs.child.financeList=this.newStaff.financeList
       this.newStaff.groundIds = this.newStaff.groundIds||[];
       this.modalShow = true;
     },
