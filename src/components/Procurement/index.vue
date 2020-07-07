@@ -11,7 +11,7 @@
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" />
+          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class=" mr5">品牌:</span>
@@ -222,7 +222,7 @@ export default class ProcurementModal extends Vue {
   @Emit('getPlanOrder')
   private async selectOrder() {
     if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
-    
+
     let msg:any = this.$Message.loading({
       content: '加载中...',
       duration: 0
@@ -238,12 +238,12 @@ export default class ProcurementModal extends Vue {
     params.size = 9999;
     params.page = 0;
 
-    let res:any; 
+    let res:any;
     if(this.type === "good") {
-      res = await getParts(params); 
+      res = await getParts(params);
     }
     if(this.type === "sale") {
-      res = await getSaleParts(params); 
+      res = await getSaleParts(params);
     }
     let data:Array<any> = new Array();
     if(res.code == 0) {
@@ -251,7 +251,7 @@ export default class ProcurementModal extends Vue {
         el.sourceDetailId = el.id;
         Reflect.deleteProperty(el, 'id');
         return el;
-      });  
+      });
     }
     msg();
     return data;
@@ -356,12 +356,12 @@ export default class ProcurementModal extends Vue {
 
     let obj = {...params, ...formData}
 
-    let res:any; 
+    let res:any;
     if(this.type === "good") {
-      res = await getParts(obj); 
+      res = await getParts(obj);
     }
     if(this.type === "sale") {
-      res = await getSaleParts(obj); 
+      res = await getSaleParts(obj);
     }
     if(res.code == 0) {
       this.page.total = res.data.totalElements;
