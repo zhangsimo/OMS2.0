@@ -15,7 +15,7 @@
         </div>
         <div class="db mr5">
           <span class=" mr5">品牌:</span>
-          <Select  v-model="partBrand" filterable style="width:140px" class="mr20">
+          <Select  v-model="partBrand" filterable style="width:140px" class="mr20" @on-change="SelectChange">
             <Option v-for="(item, index) in bands" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
         </div>
@@ -303,6 +303,11 @@ export default class ProcurementModal extends Vue {
   //快速查询日期
   private getDataQuick(v){
     this.auditDate = v
+    this.getPchsPlanList();
+  }
+
+  private SelectChange(v) {
+    this.getPchsPlanList();
   }
 
 
@@ -312,7 +317,8 @@ export default class ProcurementModal extends Vue {
       v[0] = v[0] + " 00:00:00"
       v[1] = v[1] + " 23:59:59"
     }
-    this.auditDate = v
+    this.auditDate = v;
+    this.getPchsPlanList();
   }
 
   //获取品牌
