@@ -43,14 +43,7 @@ export const mixSelectPartCom = {
           width: 60,
           align: 'center'
         },
-        {
-          title: "内码",
-          key: "code",
-          minWidth: 120,
-          render:(h,p) => {
-            return h('span',p.row.code||p.row.partInnerId)
-          }
-        },
+
         {
           title: "编码",
           key: "partCode",
@@ -88,6 +81,14 @@ export const mixSelectPartCom = {
           minWidth: 120,
           render:(h,p) => {
             return h('span',p.row.oeCode||p.row.oemCode)
+          }
+        },
+        {
+          title: "内码",
+          key: "code",
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.code||p.row.partInnerId)
           }
         },
         {
