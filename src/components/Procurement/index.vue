@@ -131,7 +131,7 @@
         <vxe-table-column  width="200" field="serviceId" title="出库单号"></vxe-table-column>
         <vxe-table-column  width="160" field="outDate" title="出库日期"></vxe-table-column>
         <vxe-table-column  width="200" field="code" title="关联销售订单"></vxe-table-column>
-        <vxe-table-column  width="200" field="originGuestName" title="第一供应商"></vxe-table-column>
+        <vxe-table-column  v-if="changeShowFirst" width="200" field="originGuestName" title="第一供应商"></vxe-table-column>
       </vxe-table>
 
       <div class="page-warp">
@@ -207,7 +207,10 @@ export default class ProcurementModal extends Vue {
     this.getPchsPlanList();
     this.shows = true;
   }
-
+  // computed
+  get changeShowFirst(){
+    return this.$store.state.user.userData.currentCompany.isMaster == 0 ? true: false
+  }
   @Emit('getPlanOrder')
   private ok() {
     if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
