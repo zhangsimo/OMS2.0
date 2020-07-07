@@ -55,6 +55,16 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
+          title: "品牌",
+          key: "partBrand",
+          minWidth: 120
+        },
+        {
+          title: "OEM码",
+          key: "oemCode",
+          minWidth: 120
+        },
+        {
           title: "规格",
           key: "spec",
           minWidth: 80
@@ -67,16 +77,6 @@ export const mixSelectPartCom = {
         {
           title: "品质",
           key: "quality",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          minWidth: 120
-        },
-        {
-          title: "OEM码",
-          key: "oemCode",
           minWidth: 120
         },
         {
