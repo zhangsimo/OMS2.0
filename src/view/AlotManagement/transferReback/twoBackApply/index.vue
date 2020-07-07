@@ -1090,6 +1090,8 @@ export default {
 
       if (arr.length <= 0) return;
 
+      console.log(arr);
+
       let arrB = arr.map(itemb => {
         let item = {...itemb}
         item.outUnitId = item.enterUnitId;

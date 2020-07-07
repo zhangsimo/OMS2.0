@@ -106,7 +106,7 @@ export function getwbParts(data) {
 // 弹框组件添加配件
 export function addWbParts(params,data) {
   return axios.request({
-    url: `${api.wmsApi}/sellPricePart/savePart?strategyId=${params.strategyId}`,
+    url: `${api.wmsApi}/sellPricePart/savePart`,
     method: "post",
     data,
     params

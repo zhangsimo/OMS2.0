@@ -647,7 +647,7 @@ export default {
         item.carBrandName = item.adapterCarModel;
         item.orderPrice = item.minUnit;
         item.oemCode = item.oeCode;
-        item.spec = item.specifications;
+        item.spec = item.specifications || item.spec;
         item.partId = item.orgid;
         item.partInnerId = item.code;
         item.unit = item.minUnit;

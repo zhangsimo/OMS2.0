@@ -517,7 +517,7 @@ export const mixPartInfo = {
 
               objReq.direction = this.formValidate.direction
               //审批状态
-              objReq.auditSign = auditSign
+              objReq.auditSign = auditSign;
               //配件 1 2 3级类别
               objReq.carTypeF = this.formValidate.carTypeF
               objReq.carTypeS = this.formValidate.carTypeS
