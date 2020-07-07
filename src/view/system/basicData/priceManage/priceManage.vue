@@ -761,9 +761,9 @@ export default {
         arr.push(el);
       });
       let params = {};
-      this.rowPriceManege.id == undefined || ""
-        ? (params.strategyId = null)
-        : (params.strategyId = this.rowPriceManege.id);
+      if(this.rowPriceManege.id != undefined) {
+        params.strategyId = this.rowPriceManege.id
+      }
       let res = await api.addWbParts(params, arr);
       if (!res == false) {
         this.$Message.success("添加成功");
