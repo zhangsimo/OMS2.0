@@ -641,7 +641,7 @@ export default {
         {
           title: "滞销数量",
           align: "center",
-          key: "trnableQty",
+          key: "enterQty",
           minWidth: 170
         },
       ],
@@ -820,7 +820,7 @@ export default {
       if (res.code === 0) {
         this.unsalableList = res.data
         if (res.data.length > 0){
-          this.branchAge = res.data[0].baranchStockAge ? res.data[0].baranchStockAge : 0
+          this.branchAge = res.data[0].branchStockAge ? res.data[0].branchStockAge : 0
         }else {
 
         }
