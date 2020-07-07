@@ -16,13 +16,14 @@
         <Button type='default' v-if="isShowAddPartBtn" @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">系统分类</div>
-          <div class="partCheck-left-tree">
-            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
-          </div>
-        </div>
-        <div class="fr partCheck-right" style="width: 758px">
+<!--        <div class="partCheck-left fl">-->
+<!--          <div class="partCheck-left-tit">系统分类</div>-->
+<!--          <div class="partCheck-left-tree">-->
+<!--            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--   partCheck-right之前是758px-->
+        <div class="fr partCheck-right" style="width: 100%">
           <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
           <Page size="small" :current="page.num" class-name="page-con fr pt10" :total="page.total" :page-size="page.size" @on-change="changePage"
                 @on-page-size-change="changeSize" show-sizer show-total
