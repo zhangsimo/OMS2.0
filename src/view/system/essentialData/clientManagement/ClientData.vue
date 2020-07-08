@@ -531,7 +531,15 @@ export default {
           align: "center",
           render: (h, params) => {
             let text = "";
-            params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
+            if(params.row.accountType==0||params.row.accountType==1){
+              params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
+            }else{
+              if(params.row.accountType=="ZHLX001"){
+                text="个人账户"
+              } else if(params.row.accountType=="ZHLX002"){
+                text="公户"
+              }
+            }
             return h("span", {}, text);
           }
         },

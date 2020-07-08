@@ -486,6 +486,8 @@ export default {
       this.isNextAdd = true;
       this.$refs.currentRowTable.clearCurrentRow();
       this.oneStaffChange = {};
+      this.$refs.child.financeList=[]
+      this.oneStaffChange.staffAccountVoList=[]
     },
     // 确认
     submit(type = "add") {
@@ -496,6 +498,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
+          data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
           // data.groundIds = JSON.parse(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
@@ -559,8 +562,8 @@ export default {
       this.newStaff.single = this.newStaff.single ? true : false; //允许查看
       this.newStaff.singtwo = this.newStaff.singtwo ? true : false; //允许提交
       // this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
-      this.newStaff.financeList= this.newStaff.staffAccountVoList || []
-      this.$refs.child.financeList=this.newStaff.financeList
+      this.newStaff.staffAccountVoList= this.newStaff.staffAccountVoList || []
+      this.$refs.child.financeList=this.newStaff.staffAccountVoList
       this.newStaff.groundIds = this.newStaff.groundIds||[];
       this.modalShow = true;
     },

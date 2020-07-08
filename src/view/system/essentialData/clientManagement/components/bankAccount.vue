@@ -13,15 +13,16 @@
       <Select filterable v-model="data.accountType" style="width:180px" class="mr10">
         <Option
           v-for="item in listTree"
-          :key="item.accountType"
-          :value="item.accountType"
-        >{{ item.accountTypeLabel}}</Option>
+          :key="item.itemCode"
+          :value="item.itemCode"
+        >{{ item.itemName}}</Option>
       </Select>
     </FormItem>
   </Form>
 </template>
 
 <script>
+  import {getAccountType} from "@/api/system/essentialData/clientManagement"
 export default {
   name: "bankAccount",
   data() {
@@ -43,17 +44,11 @@ export default {
         accountBankNo: [{ required: true, validator: paragraph, trigger: "blur" }],
         accountBank: [{ required: true, message: "开户银行不能为空", trigger: "blur" }]
       },
-      listTree: [
-        {
-          accountType: 0,
-          accountTypeLabel: "公户"
-        },
-        {
-          accountType: 1,
-          accountTypeLabel: "个人账户"
-        }
-      ]
+      listTree: []
     };
+  },
+  mounted() {
+    this.getAccountTypeList()
   },
   methods: {
     resetFields() {
@@ -67,6 +62,13 @@ export default {
           this.$Message.error("信息填写错误");
         }
       });
+    },
+    getAccountTypeList(){
+      getAccountType().then(res=>{
+        if(res.code===0){
+          this.listTree=res.data
+        }
+      })
     }
   }
 };
