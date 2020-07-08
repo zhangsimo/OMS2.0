@@ -360,7 +360,8 @@ export default {
       selectFinTab:{},
       bankAccount:false,
       bankAccountTit:"新增银行账户",
-      enAble:"启用"
+      enAble:"启用",
+      financeList:[],
     };
   },
   mounted() {

@@ -392,6 +392,7 @@ export default {
               this.list = list
           }
       },
+
     getAllStaffList() {
       this.oneStaffChange = {};
       let stop = this.$loading();
@@ -499,6 +500,7 @@ export default {
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
           data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
+          data.groupId = data.groundIds[data.groundIds.length -1]
           // data.groundIds = JSON.parse(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
@@ -524,6 +526,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
+          data.groupId = data.groundIds[data.groundIds.length -1]
           // data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           changeeditUser(data)
@@ -546,7 +549,6 @@ export default {
     selection(currentRow) {
       currentRow.groundIds = currentRow.groundIdsStr.split(',')
       this.oneStaffChange = currentRow;
-      console.log(currentRow ,888)
     },
 
 
