@@ -64,6 +64,7 @@ export default {
           duration: 60
         });
         this.importShow = false;
+        this.$emit("getNewList", response);
       } else {
         this.$Notice.success({
           title: "导入成功",

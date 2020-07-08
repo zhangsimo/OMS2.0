@@ -54,7 +54,7 @@
         stripe
         align="center"
         ref="xTable1"
-        height="300"
+        height="500"
         column-min-width="100px"
         size="small"
         :data="tableData"
@@ -127,7 +127,7 @@
         <vxe-table-column  field="sellPrice" title="出库单价"></vxe-table-column>
         <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
         <vxe-table-column  field="systemUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column  width="200" field="guestName" title="供应商"></vxe-table-column>
         <vxe-table-column  width="200" field="serviceId" title="出库单号"></vxe-table-column>
         <vxe-table-column  width="160" field="outDate" title="出库日期"></vxe-table-column>
         <vxe-table-column  width="200" field="code" title="关联销售订单"></vxe-table-column>
@@ -211,7 +211,7 @@ export default class ProcurementModal extends Vue {
   get changeShowFirst(){
     return this.$store.state.user.userData.currentCompany.isMaster == 0 ? true: false
   }
-  
+
   @Emit('getPlanOrder')
   private ok() {
     if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };

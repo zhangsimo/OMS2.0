@@ -625,11 +625,12 @@ export default {
       req.page = 0;
       req.size = 1000;
       findForAllot(req).then(res => {
+        // console.log(res.data)
         const { content } = res.data;
         this.getArray = content;
         content.forEach(item => {
-          this.ArrayValue.push(item.fullName);
-          this.ArrayKeyValue.push({ name: item.fullName, orgid: item.orgid })
+          this.ArrayValue.push(item.shortName);
+          this.ArrayKeyValue.push({ name: item.shortName, orgid: item.orgid })
         });
       });
     },
@@ -735,7 +736,7 @@ export default {
         params.settleStatus = params.settleStatus.value;
       }
       for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+        if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
           params.guestOrgid = this.getArray[i].isInternalId;
           params.guestId = this.getArray[i].id;
         }
@@ -1201,14 +1202,14 @@ export default {
       this.guestOrgid = row.id;
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.name;
+        this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.guestId;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;
         }, 200);
       } else {
-        this.diaochuName = row.name;
+        this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
     },
