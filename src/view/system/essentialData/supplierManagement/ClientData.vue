@@ -531,7 +531,7 @@ export default {
       this.bankAccountTit = "修改银行账户信息";
       this.bankAccount = true;
       this.$refs.bankAccount.data = this.selectFinTab;
-      console.log(this.$refs.bankAccount.data, "????");
+      // console.log(this.$refs.bankAccount.data, "????");
     },
     // 修改启用禁用
     changePlaceFin() {
@@ -577,7 +577,7 @@ export default {
           //     item.acquiesce = newarr.acquiesce;
           //   }
             this.disposeFinData();
-            this.$Message.success("添加银行卡成功");
+            this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
           // } else {
           //   return this.$Message.error("该银行卡已添加过");
