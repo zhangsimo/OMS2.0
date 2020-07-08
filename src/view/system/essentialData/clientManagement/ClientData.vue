@@ -948,7 +948,7 @@ export default {
           //     item.acquiesce = newarr.acquiesce;
           //   }
             this.disposeFinData();
-            this.$Message.success("添加银行卡成功");
+            this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
           // } else {
           //   return this.$Message.error("该银行卡已添加过");
