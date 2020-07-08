@@ -25,8 +25,18 @@ export function getRoles() {
 // 获取员工列表
 export function getStaffList (data) {
   return axios.request({
+    // url: `http://192.168.21.95:9250/employeeAttribute/pageList`,
     url: `${api.wmsApi}/employeeAttribute/pageList`,
     method: 'post',
+    data
+  })
+}
+//获取可选员工列表
+
+export function getCanSelectStaff (data){
+  return axios.request({
+    url:`${api.passportApi}/tenantUsers/findAllTenantUsersRole`,
+    method:'post',
     data
   })
 }
