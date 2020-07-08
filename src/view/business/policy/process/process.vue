@@ -182,11 +182,11 @@
                       :footer-method="addFooter"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                      <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                      <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                      <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                      <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
+                      <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+                      <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+                      <vxe-table-column field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
                       <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                       <vxe-table-column
                         field="orderQty"
@@ -222,10 +222,10 @@
                         :footer-method="addFooter2"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-                        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-                        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                        <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                        <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
+                        <vxe-table-column field="partName" title="配件名称" fixed="left"></vxe-table-column>
+                        <vxe-table-column field="partBrand" title="品牌" fixed="left"></vxe-table-column>
                         <vxe-table-column field="unit" title="单位"></vxe-table-column>
                         <vxe-table-column field="qty" title="需要数量">
                           <template v-slot="{ row, seq }">
