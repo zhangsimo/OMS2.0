@@ -54,7 +54,7 @@
         stripe
         align="center"
         ref="xTable1"
-        height="300"
+        height="500"
         column-min-width="100px"
         size="small"
         :data="tableData"
@@ -211,7 +211,7 @@ export default class ProcurementModal extends Vue {
   get changeShowFirst(){
     return this.$store.state.user.userData.currentCompany.isMaster == 0 ? true: false
   }
-  
+
   @Emit('getPlanOrder')
   private ok() {
     if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
