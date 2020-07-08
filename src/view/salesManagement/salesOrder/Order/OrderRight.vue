@@ -266,14 +266,14 @@
         >
           <vxe-table-column fixed="left" type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column fixed="left" type="checkbox" width="50"></vxe-table-column>
-          <vxe-table-column fixed="left" title="操作" width="80">
+          <vxe-table-column fixed="left" title="操作" width="60">
             <template v-slot="{ row,rowIndex }">
               <a @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
           <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-          <vxe-table-column fixed="left" min-width="150" field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
+          <vxe-table-column fixed="left" width="110" field="partName" title="配件名称"></vxe-table-column>
+          <vxe-table-column fixed="left" field="partBrand" title="品牌" width="80"></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="数量"
@@ -298,26 +298,31 @@
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
           </vxe-table-column>
-          <vxe-table-column title="金额" width="100">
+          <vxe-table-column title="金额" width="110">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="averagePrice" title="参考价" width="100"></vxe-table-column>
-          <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+          <vxe-table-column field="averagePrice" title="参考价" width="70"></vxe-table-column>
+          <vxe-table-column field="stockOutQty" title="缺货数量" width="80">
+            <template v-slot="{row}">
+              <span style="color:#ed4014" v-if="row.stockOutQty*1>0">{{row.stockOutQty}}</span>
+              <span v-else>{{row.stockOutQty}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
           <vxe-table-column title="品牌车型" width="100">
             <template v-slot="{row,rowIndex}">
               <span>{{row.carBrandName}} {{row.carModelName}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-          <vxe-table-column field title="批次" width="100">
+          <vxe-table-column field="unit" title="单位" width="60"></vxe-table-column>
+          <vxe-table-column field title="批次" width="50">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="活动" width="100">
+          <vxe-table-column title="活动" width="50">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
             </template>
@@ -329,7 +334,7 @@
             min-width="200"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
           ></vxe-table-column>
-          <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="120"></vxe-table-column>
           <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
         </vxe-table>
 <!--      </div>-->
