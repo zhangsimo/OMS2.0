@@ -53,7 +53,7 @@
         stripe
         align="center"
         ref="xTable1"
-        height="300"
+        height="500"
         column-min-width="100px"
         size="small"
         :data="tableData"
