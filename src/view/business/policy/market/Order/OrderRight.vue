@@ -188,7 +188,7 @@
           </div>-->
         </div>
       </div>
-      <div class="tableBox">
+<!--      <div class="tableBox">-->
         <vxe-table
           border
           align="center"
@@ -198,64 +198,64 @@
           ref="xTable"
           show-footer
           :footer-method="footerMethod"
-          showOverflow="true"
           height="400"
           :edit-rules="validRules"
           :data="formPlan.details"
           @select-change="selectTable"
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
-          style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell',activeMethod: activeRowMethod}"
         >
-          <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column type="checkbox" width="50"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column type="index" width="50" title="序号" fixed="left"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column title="操作" fixed="left" width="100">
             <template v-slot="{ row,rowIndex }">
               <a @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" fixed="left" width="120"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" fixed="left" width="120"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
+            width="100"
           ></vxe-table-column>
           <vxe-table-column
             field="orderPrice"
             title="单价"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
+            width="100"
           ></vxe-table-column>
-          <vxe-table-column title="金额">
+          <vxe-table-column title="金额" width="100">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input'}" width="160"></vxe-table-column>
           <!-- <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column> -->
-          <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
-          <vxe-table-column field title="批次">
+          <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+          <vxe-table-column field title="批次" width="100">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="活动">
+          <vxe-table-column title="活动" width="100">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="品牌车型">
+          <vxe-table-column title="品牌车型" width="100">
             <template v-slot="{row,rowIndex}">
               <span>{{row.carBrandName}} {{row.carModelName}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-          <vxe-table-column field="spec" title="规格"></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
         </vxe-table>
-      </div>
+<!--      </div>-->
     </Form>
 
     <!--   新增客户资料-->

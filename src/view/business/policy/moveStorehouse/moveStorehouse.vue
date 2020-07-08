@@ -241,19 +241,19 @@
                 border
                 resizable
                 auto-resize
+                show-overflow
                 @edit-closed="editClosedEvent"
-                max-height="500"
-                min-height="100"
+                :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 @edit-actived="editActivedEvent">
               >
-                <vxe-table-column type="index" title="序号"></vxe-table-column>
-                <vxe-table-column type="checkbox"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                <vxe-table-column type="index" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称" fixed="left"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" fixed="left"></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"
                   title="数量"

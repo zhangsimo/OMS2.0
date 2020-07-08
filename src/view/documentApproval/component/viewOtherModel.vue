@@ -17,7 +17,7 @@
         </tr>
         <tr>
           <td class="table-th">出库仓库</td>
-          <td>{{storeName}}</td>
+          <td>{{getStoreName}}</td>
           <td class="table-th">票据类型</td>
           <td>{{getBillTypeName}}</td>
           <td class="table-th">备注</td>
@@ -72,7 +72,7 @@
         </tr>
         <tr>
           <td class="table-th">入库仓库</td>
-          <td>{{storeName}}</td>
+          <td>{{getStoreName}}</td>
           <td class="table-th">票据类型</td>
           <td>{{getBillTypeName}}</td>
           <td class="table-th">备注</td>
@@ -402,9 +402,10 @@
     },
     computed:{
 		  getStoreName(){
-        let storeName = this.mainStore.filter(item => item.id==this.mainData.storeId);
-        return storeName.length>0?storeName[0].name:"";
+        let storeName = this.mainStore.filter(item => item.id==this.mainData.storeId) || [];
+        return storeName.length>0?storeName[0].name: this.mainData.storeName;
       },
+
       getBillTypeName(){
 		    if(this.billTypeArr.CS00107){
           let storeName = this.billTypeArr.CS00107.filter(item => item.itemCode==this.mainData.billTypeId);

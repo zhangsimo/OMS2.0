@@ -340,16 +340,16 @@
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column type="index" title="序号"></vxe-table-column>
-                  <vxe-table-column type="checkbox"></vxe-table-column>
-                  <vxe-table-column title="操作">
+                  <vxe-table-column type="index" title="序号" fixed="left"></vxe-table-column>
+                  <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
+                  <vxe-table-column title="操作" fixed="left">
                     <template v-slot="{ row,rowIndex }">
                       <a @click="openFileModal(row)">查看</a>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                  <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partName" title="配件名称" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="品牌" fixed="left"></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
                     title="数量"

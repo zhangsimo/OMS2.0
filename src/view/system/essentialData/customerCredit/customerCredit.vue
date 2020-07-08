@@ -659,7 +659,10 @@ export default {
       this.$refs.imp.openModal()
     },
     // 额度批量调整
-    getNew(data){},
+    getNew(data){
+      this.$Message.warning("保存成功");
+      this.getListTop();
+    },
     //调整信用额度的确定
     adjustmentconfirm() {
       this.$refs["formRule"].$refs["formRule"].validate(valid => {

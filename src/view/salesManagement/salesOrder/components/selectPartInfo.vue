@@ -16,7 +16,7 @@
       <Row>
         <Col span="12">
           <FormItem label="品质：">
-            <Input disabled v-model="formItemData.qualityCode" class="w200" placeholder="品质"></Input>
+            <Input disabled v-model="formItemData.quality" class="w200" placeholder="品质"></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -114,7 +114,7 @@
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
         }
-        if(!this.formItemData.orderPrice || this.formItemData.orderPrice <= 0) {
+        if(!this.formItemData.orderPrice || this.formItemData.orderPrice < 0) {
           return this.$Message.error("单价不可为空");
         }
 		    this.searchPartLayer = false;

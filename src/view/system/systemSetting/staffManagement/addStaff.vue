@@ -205,7 +205,11 @@ import staffAccount from '@/view/system/systemSetting/staffManagement/components
 export default {
   name: "addStaff",
   props: {
-    data: ""
+    data: "",
+    financeList:{
+      type : Array,
+      default:()=>[]
+    }
   },
   components:{staffAccount},
   data() {
@@ -356,7 +360,8 @@ export default {
       selectFinTab:{},
       bankAccount:false,
       bankAccountTit:"新增银行账户",
-      enAble:"启用"
+      enAble:"启用",
+      // financeList:[],
     };
   },
   mounted() {
@@ -468,14 +473,9 @@ export default {
     addNewClientBank() {
       this.$refs.bankAccount.handleSubmit(() => {
         if (this.bankAccountTit == "修改银行账户信息") {
-          let bool = true;
+          // let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
-            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
-              bool = false;
-            }
-          });
-          if (bool == true) {
             if (item.id == this.selectFinTab.id) {
               let newarr = {};
               newarr = JSON.parse(JSON.stringify(this.selectFinTab));
@@ -488,13 +488,27 @@ export default {
               item.accountType = newarr.accountType;
               item.wagesSign = newarr.wagesSign;
             }
+          });
+          // if (bool == true) {
+          //   if (item.id == this.selectFinTab.id) {
+          //     let newarr = {};
+          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          //     item.id = newarr.id;
+          //     item.tenantId = newarr.tenantId;
+          //     item.guestId = newarr.guestId;
+          //     item.accountBank = newarr.accountBank;
+          //     item.accountBankNo = newarr.accountBankNo;
+          //     item.accountName = newarr.accountName;
+          //     item.accountType = newarr.accountType;
+          //     item.wagesSign = newarr.wagesSign;
+          //   }
             this.disposeFinData();
-            this.$Message.success("添加银行卡成功");
+            this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
-          } else {
-            return this.$Message.error("该银行卡已添加过");
-          }
-          this.data.guestAccountVoList = this.financeList;
+          // } else {
+          //   return this.$Message.error("该银行卡已添加过");
+          // }
+          this.data.staffAccountVoList = this.financeList;
         } else {
           let newarr = {};
           let bool = true;
@@ -506,13 +520,14 @@ export default {
             }
           });
           if (bool == true) {
-            newarr.wagesSign = false;
+            newarr.wagesSign = newarr.wagesSign || true;
             newarr.accountSign = true;
             this.financeList.push(newarr);
-            this.data.guestAccountVoList = this.financeList;
+            this.data.staffAccountVoList = this.financeList;
             this.bankAccount = false;
             this.disposeFinData();
             this.$Message.success("添加银行卡成功");
+            // console.log(this.data.staffAccountVoList,this.financeList,"???")
           } else {
             return this.$Message.error("该银行卡已添加过");
           }
