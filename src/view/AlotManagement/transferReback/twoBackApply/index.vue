@@ -432,6 +432,7 @@ export default {
           { required: true, message: '申请退回数量不能为空',trigger: "change"}
         ]
       },
+      defaultStoreId: "",
       isWms: false,
       serviceId: "",
       newFlag: true,
@@ -837,7 +838,7 @@ export default {
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
       this.Leftcurrentrow.createTime = "";
-      this.Leftcurrentrow.storeId = "";
+      this.Leftcurrentrow.storeId = this.defaultStoreId;
       this.Leftcurrentrow.detailVOS = [];
       this.Left.tbdata.unshift(item);
       this.Leftcurrentrow.status.value = 0;
@@ -850,6 +851,11 @@ export default {
       queryByOrgid().then(res => {
         if (res.code === 0) {
           this.cangkuListall = res.data;
+          res.data.forEach(el => {
+            if(el.isDefault) {
+              this.defaultStoreId = el.id;
+            }
+          })
         }
       });
     },
