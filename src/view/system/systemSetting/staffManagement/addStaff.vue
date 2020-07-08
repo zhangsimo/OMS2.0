@@ -208,7 +208,7 @@ export default {
     data: "",
     financeList:{
       type : Array,
-      default: ()=>[]
+      default:()=>[]
     }
   },
   components:{staffAccount},
@@ -361,7 +361,7 @@ export default {
       bankAccount:false,
       bankAccountTit:"新增银行账户",
       enAble:"启用",
-      financeList:[],
+      // financeList:[],
     };
   },
   mounted() {
@@ -520,7 +520,7 @@ export default {
             }
           });
           if (bool == true) {
-            newarr.wagesSign = false;
+            newarr.wagesSign = newarr.wagesSign || true;
             newarr.accountSign = true;
             this.financeList.push(newarr);
             this.data.staffAccountVoList = this.financeList;

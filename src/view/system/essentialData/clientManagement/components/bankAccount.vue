@@ -67,7 +67,6 @@ export default {
       getAccountType().then(res=>{
         if(res.code===0){
           this.listTree=res.data
-          console.log(res.data,"code")
         }
       })
     }

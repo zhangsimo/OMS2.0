@@ -488,6 +488,7 @@ export default {
       this.oneStaffChange = {};
       this.$refs.child.financeList=[]
       this.oneStaffChange.staffAccountVoList=[]
+      this.$refs.child.selectFinTab={}
     },
     // 确认
     submit(type = "add") {

@@ -903,7 +903,6 @@ export default {
     },
     // 财务信息表格中选中某一行
     selectFin(row) {
-      console.log(row,"row")
       this.selectFinTab = row || {};
       if (row.accountSign == true) {
         this.enAble = "禁用";
