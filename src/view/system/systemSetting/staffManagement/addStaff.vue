@@ -205,7 +205,11 @@ import staffAccount from '@/view/system/systemSetting/staffManagement/components
 export default {
   name: "addStaff",
   props: {
-    data: ""
+    data: "",
+    financeList:{
+      type : Array,
+      default: ()=>[]
+    }
   },
   components:{staffAccount},
   data() {
@@ -503,7 +507,7 @@ export default {
           // } else {
           //   return this.$Message.error("该银行卡已添加过");
           // }
-          this.data.guestAccountVoList = this.financeList;
+          this.data.staffAccountVoList = this.financeList;
         } else {
           let newarr = {};
           let bool = true;
@@ -518,10 +522,11 @@ export default {
             newarr.wagesSign = false;
             newarr.accountSign = true;
             this.financeList.push(newarr);
-            this.data.guestAccountVoList = this.financeList;
+            this.data.staffAccountVoList = this.financeList;
             this.bankAccount = false;
             this.disposeFinData();
             this.$Message.success("添加银行卡成功");
+            // console.log(this.data.staffAccountVoList,this.financeList,"???")
           } else {
             return this.$Message.error("该银行卡已添加过");
           }

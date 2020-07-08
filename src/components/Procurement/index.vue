@@ -8,7 +8,7 @@
       <div class="tools-bar mb10">
         <div class="db mr5">
           <span class="mr5">快速查询:</span>
-          <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
+          <getDate class="mr10" @quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
           <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
@@ -211,6 +211,7 @@ export default class ProcurementModal extends Vue {
   get changeShowFirst(){
     return this.$store.state.user.userData.currentCompany.isMaster == 0 ? true: false
   }
+  
   @Emit('getPlanOrder')
   private ok() {
     if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };

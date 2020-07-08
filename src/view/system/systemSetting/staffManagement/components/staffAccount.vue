@@ -37,17 +37,7 @@ export default {
         accountName: [{ required: true, message: "收款户名不能为空", trigger: "blur" }],
         accountBankNo: [{ required: true, validator: paragraph, trigger: "blur" }],
         accountBank: [{ required: true, message: "开户银行不能为空", trigger: "blur" }]
-      },
-      listTree: [
-        {
-          accountType: 0,
-          accountTypeLabel: "公户"
-        },
-        {
-          accountType: 1,
-          accountTypeLabel: "个人账户"
-        }
-      ]
+      }
     };
   },
   methods: {

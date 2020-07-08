@@ -465,12 +465,6 @@ export default {
           minWidth: 120
         },
         {
-          title: "仓位",
-          align: "center",
-          key: "storeShelf",
-          minWidth: 120
-        },
-        {
           title: "库存单价",
           align: "center",
           key: "enterPrice",

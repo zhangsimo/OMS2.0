@@ -68,4 +68,9 @@ export function getCustomer(params) {
   })
 }
 //账户类型
-// export function getAccountType()
+export function getAccountType() {
+  return axios.request({
+    url: `${api.omsProduct}/dictionariesItem/findBydictCode?dictCode=ZHLX`,
+    method: "get",
+  });
+}
