@@ -278,7 +278,7 @@
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-            width="160"
+            width="80"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
@@ -331,10 +331,10 @@
           <vxe-table-column
             field="remark"
             title="备注"
-            min-width="200"
+            min-width="120"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
           ></vxe-table-column>
-          <vxe-table-column field="spec" title="规格" width="120"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
           <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
         </vxe-table>
 <!--      </div>-->
