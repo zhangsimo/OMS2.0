@@ -404,6 +404,9 @@ export default {
     addClient() {
       this.$refs.child.placeList = [];
       this.$refs.child.$refs.form.resetFields()
+      this.$refs.child.invoice=[]
+      this.$refs.child.relevanceClientShow=[]
+      this.$refs.child.financeList=[]
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
       this.clientDataShow = true;

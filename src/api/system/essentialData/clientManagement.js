@@ -21,7 +21,7 @@ export function getAddClient (data) {
 }
 
 //导入文件地址
-export const impUrl = `${api.wmsApi}/guestAdjust/import` 
+export const impUrl = `${api.wmsApi}/guestAdjust/import`
 
 //右侧list
 export function getCustomerInformation (params) {
@@ -67,3 +67,5 @@ export function getCustomer(params) {
     params
   })
 }
+//账户类型
+// export function getAccountType()

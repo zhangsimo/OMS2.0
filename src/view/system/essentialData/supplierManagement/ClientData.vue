@@ -546,11 +546,6 @@ export default {
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
-            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
-              bool = false;
-            }
-          });
-          if (bool == true) {
             if (item.id == this.selectFinTab.id) {
               let newarr = {};
               newarr = JSON.parse(JSON.stringify(this.selectFinTab));
@@ -563,12 +558,26 @@ export default {
               item.accountType = newarr.accountType;
               item.acquiesce = newarr.acquiesce;
             }
+          });
+          // if (bool == true) {
+          //   if (item.id == this.selectFinTab.id) {
+          //     let newarr = {};
+          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          //     item.id = newarr.id;
+          //     item.tenantId = newarr.tenantId;
+          //     item.guestId = newarr.guestId;
+          //     item.accountBank = newarr.accountBank;
+          //     item.accountBankNo = newarr.accountBankNo;
+          //     item.accountName = newarr.accountName;
+          //     item.accountType = newarr.accountType;
+          //     item.acquiesce = newarr.acquiesce;
+          //   }
             this.disposeFinData();
             this.$Message.success("添加银行卡成功");
             this.bankAccount = false;
-          } else {
-            return this.$Message.error("该银行卡已添加过");
-          }
+          // } else {
+          //   return this.$Message.error("该银行卡已添加过");
+          // }
           this.data.guestAccountVoList = this.financeList;
         } else {
           let newarr = {};
