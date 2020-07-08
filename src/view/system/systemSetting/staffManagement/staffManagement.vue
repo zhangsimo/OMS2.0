@@ -348,7 +348,7 @@ export default {
         office: 0, //是否在职默认在职
         openSystem: 0,
         groupId: 0 ,//所属机构
-        financeList:[],
+        staffAccountVoList:[],
         groundIdsStr:''
       },
       oneCliemt: {} //点击获取到当前要删除的兼职公司
@@ -392,7 +392,6 @@ export default {
               this.list = list
           }
       },
-
     getAllStaffList() {
       this.oneStaffChange = {};
       let stop = this.$loading();
@@ -452,7 +451,7 @@ export default {
         (this.newStaff.office = 0), //是否在职默认在职
         (this.newStaff.openSystem = 0),
         (this.newStaff.groupId = 0); //所属机构
-        this.newStaff.financeList=[]
+        this.newStaff.staffAccountVoList=[]
       this.$refs.child.resetFields();
     },
     //冻结
@@ -499,8 +498,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
-          data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
-          data.groupId = data.groundIds[data.groundIds.length -1]
+          // data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
           // data.groundIds = JSON.parse(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
@@ -526,7 +524,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
-          data.groupId = data.groundIds[data.groundIds.length -1]
+          // data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
           // data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           changeeditUser(data)

@@ -475,7 +475,7 @@ export default {
       enAble: "启用", //启用 禁用 字段
       enAbleTax: "启用", //启用 禁用 字段
       selectFinTab: {}, // 财务信息 表格选中行的内容暂时性存储
-      selectTaxTab: {}, // 开票信息 表格选中行的内容暂时性存储
+      // selectTaxTab: {},
       selectFinId: 0,
       sessionKey: "0",
       Subordinate: [
@@ -531,14 +531,10 @@ export default {
           align: "center",
           render: (h, params) => {
             let text = "";
-            if(params.row.accountType==0||params.row.accountType==1){
-              params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
-            }else{
-              if(params.row.accountType=="ZHLX001"){
-                text="个人账户"
-              } else if(params.row.accountType=="ZHLX002"){
-                text="公户"
-              }
+            if(params.row.accountType=="ZHLX001"){
+              text="个人账户"
+            } else if(params.row.accountType=="ZHLX002"){
+              text="公户"
             }
             return h("span", {}, text);
           }
@@ -797,7 +793,7 @@ export default {
       bankAccountTit: "新增银行账户",
       oneNew: {},
       relevanceClient: [],
-      addInoiceOne: {},
+      addInoiceOne: {},// 开票信息 表格选中行的内容暂时性存储
       rules: {
         belongSystem: [
           {
@@ -907,6 +903,7 @@ export default {
     },
     // 财务信息表格中选中某一行
     selectFin(row) {
+      console.log(row,"row")
       this.selectFinTab = row || {};
       if (row.accountSign == true) {
         this.enAble = "禁用";
@@ -975,6 +972,7 @@ export default {
           if (bool == true) {
             newarr.acquiesce = false;
             newarr.accountSign = true;
+            newarr.accountType = newarr.accountType || "ZHLX002";
             this.financeList.push(newarr);
             this.data.guestAccountVoList = this.financeList;
             this.bankAccount = false;
@@ -1181,7 +1179,7 @@ export default {
       this.newInoiceShow = true;
       this.$refs.AddInoice.resetFields();
     },
-    // 确认新增银行
+    // 确认新增
     addNewBank() {
       this.$refs.AddInoice.handleSubmit(() => {
         if (this.tit == "新增开票") {
@@ -1190,19 +1188,21 @@ export default {
           newarr.bankId = this.bankId;
           this.bankId++;
           this.invoice.push(newarr);
+          console.log(this.invoice,"///???")
           this.data.guestTaxpayerVOList = this.invoice;
           this.newInoiceShow = false;
         } else {
           this.invoice.map(item => {
             this.addInoiceOne = this.$refs.AddInoice.data;
             if (item.bankId == this.addInoiceOne.bankId) {
+              console.log(item,item.bankId,"???")
               let newarr = {};
               newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
               item.taxpayerName = newarr.taxpayerName;
               item.taxpayerCode = newarr.taxpayerCode;
               item.taxpayerTel = newarr.taxpayerTel;
               item.accountBankNo = newarr.accountBankNo;
-              item.taxpayerSign = newarr.taxpayerSign;
+              item.taxpayerSign = newarr.taxpayerSign || false;
             }
           });
           this.data.guestTaxpayerVOList = this.invoice;
@@ -1249,7 +1249,6 @@ export default {
     //选中银行
     pitchOnBank(selection) {
       this.addInoiceOne = selection;
-      this.selectTaxTab = selection;
       this.disposeTax();
     },
     //修改银行
@@ -1264,7 +1263,7 @@ export default {
     },
     deletBank() {
       this.invoice.map(item => {
-        if (item.id == this.selectTaxTab.id) {
+        if (item.id == this.addInoiceOne.id) {
           item.taxpayerType = !item.taxpayerType;
         } else {
           item.taxpayerType;

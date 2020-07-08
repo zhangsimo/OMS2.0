@@ -407,7 +407,11 @@ export default {
           align: "center",
           render: (h, params) => {
             let text = "";
-            params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
+            if(params.row.accountType=="ZHLX001"){
+              text="个人账户"
+            } else if(params.row.accountType=="ZHLX002"){
+              text="公户"
+            }
             return h("span", {}, text);
           }
         },
@@ -592,6 +596,7 @@ export default {
           if (bool == true) {
             newarr.acquiesce = false;
             newarr.accountSign = true;
+            newarr.accountType = newarr.accountType || "ZHLX002";
             this.financeList.push(newarr);
             this.data.guestAccountVoList = this.financeList;
             this.bankAccount = false;
