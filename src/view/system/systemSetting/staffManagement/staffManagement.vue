@@ -499,7 +499,8 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
-          // data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
+          // data.staffAccountVoList = this.oneStaffChange.staffAccountVoList
+          data.groupId = data.groundIds[data.groundIds.length -1]
           // data.groundIds = JSON.parse(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
@@ -525,7 +526,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
-          // data.staffAccountVoList=this.oneStaffChange.staffAccountVoList
+          data.groupId = data.groundIds[data.groundIds.length -1]
           // data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           changeeditUser(data)
