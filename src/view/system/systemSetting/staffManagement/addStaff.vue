@@ -510,6 +510,7 @@ export default {
           // }
           this.data.staffAccountVoList = this.financeList;
         } else {
+
           let newarr = {};
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
