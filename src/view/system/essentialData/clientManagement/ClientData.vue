@@ -475,7 +475,7 @@ export default {
       enAble: "启用", //启用 禁用 字段
       enAbleTax: "启用", //启用 禁用 字段
       selectFinTab: {}, // 财务信息 表格选中行的内容暂时性存储
-      // selectTaxTab: {},
+      selectTaxTab: {},
       selectFinId: 0,
       sessionKey: "0",
       Subordinate: [
@@ -1248,6 +1248,12 @@ export default {
     //选中银行
     pitchOnBank(selection) {
       this.addInoiceOne = selection;
+      // this.selectTaxTab = selection;
+      if (selection.taxpayerType == true) {
+        this.enAbleTax = "禁用";
+      } else {
+        this.enAbleTax = "启用";
+      }
       this.disposeTax();
     },
     //修改银行
