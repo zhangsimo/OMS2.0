@@ -16,7 +16,7 @@
       <Row>
         <Col span="12">
           <FormItem label="品质：">
-            <Input disabled v-model="formItemData.qualityCode" class="w200" placeholder="品质"></Input>
+            <Input disabled v-model="formItemData.quality" class="w200" placeholder="品质"></Input>
           </FormItem>
         </Col>
         <Col span="12">

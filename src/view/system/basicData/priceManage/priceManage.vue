@@ -47,7 +47,8 @@
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
-                <Input v-model="row.name" :disabled="row.readonly" />
+                <Input v-model="row.name" :disabled="row.readonly" v-if="row.name === '统一售价'" />
+                <Input v-model="row.name" :disabled="row.isDisabled == 1" v-else />
               </template>
             </vxe-table-column>
           </vxe-table>
@@ -279,6 +280,7 @@ import selectPartCom from "@/view/system/basicData/priceManage/components/select
 import importXLS from "@/view/settlementManagement/components/importXLS.vue";
 // strategyId
 export default {
+  inject: ["reload"],
   data() {
     return {
       split: 0.34,
@@ -374,6 +376,7 @@ export default {
       if (res.code === 0) {
         res.data.forEach(el => {
           el.oid = el.id;
+          // el.readonly = el.isDisabled == 1 ? true : false;
           this.level.tbdata.push(el);
         });
       }
@@ -546,6 +549,7 @@ export default {
     },
     // 单选行
     async selectRow({ row }) {
+      // console.log(row);
       this.rowPriceManege = row;
       // this.rowPriceLevelStyle(row);
       this.rowPriceManege.isDisabled == 0
@@ -794,7 +798,11 @@ export default {
       this.getPart();
     },
     //导入成功后刷新页
-    getNew(data) {},
+    getNew(data) {
+      if(data.code == 0) {
+        this.reload();
+      }
+    },
     // 保存配件
     async savePart() {
       let res;
