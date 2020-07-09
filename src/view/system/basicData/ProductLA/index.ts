@@ -397,7 +397,7 @@ export default class ProductLA extends Vue {
       if(this.selectStaffList.length<1){
         this.$message.warning('请选择员工')
       }else{
-        api.employeeAddPart(this.selectStaffList).then(res=>{
+        api.addStaff(this.selectStaffList).then(res=>{
           if(res.code==0){
             this.$message.success('添加成功');
             this.getStaff();
