@@ -811,7 +811,8 @@ export default {
     //导入成功后刷新页
     getNew(data) {
       if(data.code == 0) {
-        this.reload();
+        // this.reload();
+        this.queryPart();
       }
     },
     // 保存配件
