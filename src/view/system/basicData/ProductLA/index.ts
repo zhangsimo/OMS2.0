@@ -339,7 +339,7 @@ export default class ProductLA extends Vue {
         let res = await api.getStaffList(params);
         if (res.code == 0) {
             this.employeeLoading = false;
-            this.employeeData = res.data;
+            this.employeeData = res.data.content;
             this.employeePage.total = res.data.totalElements
         } else {
             this.employeeLoading = false;
@@ -368,7 +368,11 @@ export default class ProductLA extends Vue {
   }
    //新增员工弹窗搜索
   private staffModalSearch(){
-    let data = Object.assign(this.staffModalSearchInfo,this.staffModalPage);
+      let page = {
+        size:this.staffModalPage.size,
+        page:this.staffModalPage.num
+      }
+    let data = Object.assign(this.staffModalSearchInfo,page);
     api.getCanSelectStaff(data).then(res=>{
       if(res.code==0){
         this.staffModalList=res.data.content||[];
