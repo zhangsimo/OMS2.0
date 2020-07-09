@@ -290,11 +290,18 @@
       @on-visible-change="visChangeClaim"
     >
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
-        <Option v-for="item in company" :value="item.value" :key="item.value">{{
-          item.label
-        }}</Option>
-      </Select>
+      <Select
+              v-model="companyId"
+              class="w150"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+              @on-change="query"
+            >
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
       <span class="ml10">对方户名：</span>
       <Input v-model="bankNameO" class="w100" />
       <span class="ml10">金额：</span>
@@ -396,7 +403,8 @@ export default {
         total: 0,
         opts: [20, 50, 100, 200]
       }, //分页
-      serviceId: "" //给子组件传的值
+      serviceId: "", //给子组件传的值
+      remoteloading: false,
     };
   },
   methods: {
@@ -590,17 +598,23 @@ export default {
       })
     },
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
     },
     // 选中行
     currentChangeEvent({ row }) {
@@ -650,7 +664,7 @@ export default {
       this.BranchstoreId = arr[1]
     })
     this.getShop()
-    this.getOne();
+    // this.getOne();
     this.getQuery();
   }
 };
