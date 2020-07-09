@@ -41,194 +41,205 @@ export function getClient () {
   return axios.request({
     url: `${api.wmsApi}/guest/findByQuery`,
     method: 'get',
-
   })
 }
 
 // 采购报表_采购订单明细
-export function getPjPchsOrderMainDetailList(data = {}) {
+export function getPjPchsOrderMainDetailList(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjPchsOrderMainDetailList`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 采购报表_采购入库订单明细
-export function getPjPchsEnterMainDetails(data = {}) {
+export function getPjPchsEnterMainDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjPchsEnterMainDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 采购报表_采购退货明细
-export function getPjPchsRtnMainDetails(data = {}) {
+export function getPjPchsRtnMainDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjPchsRtnMainDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 采购报表_采购计划明细
-export function getPjPchsPlanDetailList(data = {}) {
+export function getPjPchsPlanDetailList(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjPchsPlanDetailList`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 销售报表_销售订单明细
-export function getPjSellOrderMainDetailList(data = {}) {
+export function getPjSellOrderMainDetailList(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjSellOrderMainDetailList`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 销售报表_销售出库明细
-export function getPjSellOutMainDetails(data = {}) {
+export function getPjSellOutMainDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjSellOutMainDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 销售报表_销售退货明细表
-export function getPjSellOutRtnMainDetails(data = {}) {
+export function getPjSellOutRtnMainDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPjSellOutRtnMainDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 调拨报表_调拨入库明细
-export function getAllotApplyDetails(data = {}) {
+export function getAllotApplyDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getAllotApplyDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 调拨报表_调拨出库明细
-export function getAllotAcceptDetails(data = {}) {
+export function getAllotAcceptDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getAllotAcceptDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 调拨报表_调入退货明细
-export function getAllotAcceptRntDetails(data = {}) {
+export function getAllotAcceptRntDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getAllotAcceptRntDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 调拨报表_调出退货明细
-export function getAllotApplyRtnDetails(data = {}) {
+export function getAllotApplyRtnDetails(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getAllotApplyRtnDetails`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 调出在途信息
-export function getOnOrderStock(data = {}) {
+export function getOnOrderStock(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getOnOrderStock`,
       method: 'post',
-      data
+      data,
+      params,
   })
 }
 
 // 加工报表_配件组装明细表_入库
-export function getPartAssemblyEnter(data = {},params={}) {
+export function getPartAssemblyEnter(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartAssemblyEnter`,
       method: 'post',
       data,
-      params
+      params,
   })
 }
 
 // 加工报表_配件组装明细表_出库
-export function getPartAssemblyOut(data = {},params={}) {
+export function getPartAssemblyOut(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartAssemblyOut`,
       method: 'post',
       data,
-      params
+      params,
   })
 }
 
 // 加工报表_配件拆分明细表_入库
-export function getPartSplitEnter(data = {},params={}) {
+export function getPartSplitEnter(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartSplitEnter`,
       method: 'post',
       data,
-      params
+      params,
   })
 }
 
 // 加工报表_配件拆分明细表_出库
-export function getPartSplitOut(data = {},params={}) {
+export function getPartSplitOut(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartSplitOut`,
       method: 'post',
       data,
-      params
+      params,
   })
 }
 
 // 移仓报表_移仓入库明细表
-export function getStockShiftEnter(data = {},params={}) {
+export function getStockShiftEnter(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockShiftEnter`,
       method: 'post',
       data,
-    params
+      params,
   })
 }
 
 // 移仓报表_移仓出库明细表
-export function getStockShiftOut(data = {},params={}) {
+export function getStockShiftOut(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockShiftOut`,
       method: 'post',
       data,
-    params
+      params,
   })
 }
 
 // 盘点报表_盘亏出库明细表
-export function getStockCheckLoss(data = {},params={}) {
+export function getStockCheckLoss(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockCheckLoss`,
       method: 'post',
       data,
-      params
+      params,
   })
 }
 
 // 盘点报表_盘盈入库明细表
-export function getStockCheckProfit(data = {},params={}) {
+export function getStockCheckProfit(data = {}, params) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockCheckProfit`,
       method: 'post',
       data,
-      params
+      params,
   })
 }

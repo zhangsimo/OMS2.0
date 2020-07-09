@@ -24,41 +24,24 @@
               <div class="db ml20">
                 <span>往来单位：</span>
                 <Select
-                  ref="companyGuset"
-                  v-model="companyInfoGuestname"
+                  v-model="companyInfo"
+                  class="w150"
+                  clearable
                   filterable
                   remote
-                  class="w150"
-                  :remote-method="getOrignCompany"
-                  @on-change="getAccountNameListFun"
-                  :loading="searchLoading">
-                  <Option v-for="(option, index) in companyList" :value="option.id" :key="index">{{option.fullName}}</Option>
+                  :loading="remoteloading"
+                  :remote-method="getOne"
+                  @on-change="companySelect"
+                >
+                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
-                <!--<Select-->
-                  <!--filterable-->
-                  <!--v-model="companyInfo"-->
-                  <!--style="width:200px"-->
-                  <!--@on-change="companySelect"-->
-                  <!--clearable-->
-                <!--&gt;-->
-                  <!--<Option-->
-                    <!--v-for="item in companyList"-->
-                    <!--:value="item.value"-->
-                    <!--:key="item.value"-->
-                  <!--&gt;{{ item.label }}</Option>-->
-                <!--</Select>-->
                 <!-- <input type="text" class="h30" :value="companyInfo" />
                 <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
               </div>
-              <div class="db ml10">
-                <button class="ivu-btn ivu-btn-default" type="button" @click="query">
+              <div class="db ml5">
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
-                </button>
-              </div>
-              <div class="db ml10">
-                <button class="ivu-btn ivu-btn-default" type="button" @click="moreAccountShow">
-                  <span>更多</span>
                 </button>
               </div>
               <div class="db ml10">
@@ -95,49 +78,14 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <!--<Input type="text" class="w140 mr10" v-model="collectionAccountName" readonly />-->
-                <Select
-                  filterable
-                  v-model="collectionUname"
-                  label-in-value
-                  style="width:150px;margin-right: 10px"
-                  @on-change="changeCollectionUname"
-                  clearable
-                  @on-clear="collectionUnameClear"
-                >
-                  <Option
-                    v-for="item in collectionList"
-                    :value="item.id"
-                    :key="item.id"
-                  >{{ item.accountName }}</Option>
-                </Select>
+                <Input type="text" class="w140 mr10" v-model="collectionAccountName" readonly />
                 <span>开户行：</span>
                 <Input v-model="openingBank" class="w140 mr10" readonly />
                 <span>收款账号：</span>
                 <Input v-model="collectionAccount" class="w140 mr10" readonly />
                 <span style="color:red">*</span>
                 <span>本次申请付款账户：</span>
-                <!--<Input v-model="thisApplyAccount" class="w140 mr10" />-->
-                <Select
-                  filterable
-                  v-model="paymentUname"
-                  @on-change="payMentFun"
-                  label-in-value
-                  style="width:150px"
-                  clearable
-                >
-                  <Option
-                    v-for="item in paymentUnameList"
-                    :value="item.id"
-                    :key="item.id"
-                  >{{ item.accountName }}</Option>
-                </Select>
-                <button
-                  class="ml50 ivu-btn ivu-btn-default"
-                  type="button"
-                  v-show="changeBtn"
-                  @click="changeKh"
-                >修改</button>
+                <Input v-model="thisApplyAccount" class="w140 mr10" />
               </div>
             </div>
             <!-- 应收业务销售出库/退货对账 -->
@@ -146,7 +94,6 @@
               <Table
                 :columns="columns1"
                 :data="data1"
-                :loading="data1Loading"
                 border
                 max-height="400"
                 @on-select="collectCheckout"
@@ -154,7 +101,6 @@
                 @on-select-cancel="collectNoCheckout"
                 @on-select-all-cancel="collectNoCheckoutAll"
                 show-summary
-                :row-class-name="rowClassName"
                 ref="receivable"
               ></Table>
             </div>
@@ -170,7 +116,6 @@
                 @on-select-all="paymentCheckoutAll"
                 @on-select-cancel="paymentNoCheckout"
                 @on-select-all-cancel="paymentNoCheckoutAll"
-                :row-class-name="rowClassName"
                 show-summary
                 ref="payable"
               ></Table>
@@ -290,98 +235,29 @@
         <Button class="mr10" type="default" @click="Reconciliation = false">取消</Button>
       </div>
     </Modal>
-    <!--更多查询-->
-    <Modal v-model="accountLayer" class="accountLayer" title="高级查询" width="400">
-      <p>
-        <span class="sp-l">转单日期：</span>
-        <DatePicker type="daterange" placeholder="转单日期" style="width: 200px" @on-change="changedate"></DatePicker>
-      </p>
-      <p>
-        <span class="sp-l">业务类型：</span>
-        <Select v-model="moreSearch.businessType" style="width:200px">
-          <Option v-for="item in businessArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </p>
-      <p>
-        <span class="sp-l">含税标识：</span>
-        <Select v-model="moreSearch.taxMark" style="width:200px">
-          <Option v-for="item in markArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </p>
-      <p>
-        <span class="sp-l">业务单号：</span>
-        <Input v-model="moreSearch.orderNo" placeholder="业务单号" style="width: 200px" />
-      </p>
-      <div slot="footer">
-        <Button class="mr10" type="primary" @click="moreOk">确认</Button>
-        <Button class="mr10" type="default" @click="accountLayer = false">取消</Button>
-      </div>
-    </Modal>
-    <!--修改客户资料-->
-    <Modal v-model="clientDataShow" title="客户资料" width="700">
-      <ClientData
-        :data="clientList"
-        :provincearr="provinceArr"
-        :treelist="treeDiagramList"
-        ref="child"
-      ></ClientData>
-      <div slot="footer">
-        <Button type="primary" @click="addNewClient">确定</Button>
-        <Button type="default" @click="clientDataShow = false">取消</Button>
-      </div>
-    </Modal>
-    <!-- 供应商资料-->
-    <Modal
-      v-model="clientDataShow2"
-      title="供应商资料"
-      width="700"
-      height="2100"
-    >
-      <ClientData2
-        :data="clientList2"
-        :provincearr="provinceArr"
-        :treelist="treeDiagramList2"
-        ref="child2"
-      ></ClientData2>
-      <div class="footerMargin" slot="footer">
-        <Button type="primary" @click="addNewSupplier">确定</Button>
-        <Button type="default" @click="clientDataShow2=false">取消</Button>
-      </div>
-    </Modal>
   </div>
 </template>
 
 <script>
 import selectDealings from "./component/selectCompany";
-import ClientData from "../../system/essentialData/clientManagement/ClientData"
-import ClientData2 from "../../system/essentialData/supplierManagement/ClientData"
-
-
-import {getCustomerDetails,getNewClient,getClientTreeList} from "../../../api/system/essentialData/clientManagement";
-import {getSupplierTreeList,getNewSupplier} from "../../../api/system/essentialData/supplierManagement";
-
 import { creat } from "./../components";
-import {area} from "../../../api/lease/registerApi";
+import {
+  findGuest
+} from "_api/settlementManagement/advanceCollection.js";
 import {
   getReconciliation,
   getSettlement,
   Preservation,
-  getStore,
-  getAccountName,
-  getPaymentName
+  getStore
 } from "@/api/bill/saleOrder";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import index from "../../admin/roles";
 import render from "../../../components/message/base/render";
-import {findGuest} from "../../../api/settlementManagement/advanceCollection";
-
 export default {
   components: {
-    selectDealings,
-    ClientData,
-    ClientData2
+    selectDealings
   },
   data() {
     const roleValid = (rule, value, callback, { row }) => {
@@ -424,6 +300,7 @@ export default {
       }
     };
     return {
+      remoteloading: false,
       disabledBtn:false,
       summer: null, //计算费用合计
       validRules: {
@@ -438,7 +315,7 @@ export default {
       collectionAccount: "",
       thisApplyAccount: "",
       collectionAccountList: [],
-      companyList: [],
+      company: [],
       info: false,
       store: "",
       bill: "",
@@ -507,8 +384,7 @@ export default {
         {
           title: "日期",
           key: "transferDate",
-          className: "tc",
-          sortable: true
+          className: "tc"
         },
         {
           title: "业务单据号",
@@ -524,14 +400,12 @@ export default {
         {
           title: "业务类型",
           key: "serviceTypeName",
-          className: "tc",
-          width:'80'
+          className: "tc"
         },
         {
           title: "含税标志",
           key: "taxSignName",
-          className: "tc",
-          width:'80'
+          className: "tc"
         },
         // {
         //   title: "油品/配件",
@@ -541,9 +415,7 @@ export default {
         {
           title: "单据金额",
           key: "rpAmt",
-          className: "tc",
-          sortable: true,
-          width:'80'
+          className: "tc"
         },
         {
           title: "前期已对账金额",
@@ -594,8 +466,7 @@ export default {
         {
           title: "本次对账金额",
           key: "thisAccountAmt",
-          className: "tc",
-          sortable: true
+          className: "tc"
         }
       ],
       SettlementType: [
@@ -614,7 +485,6 @@ export default {
       ],
       data: [],
       data1: [],
-      data1Loading:false,
       data2: [],
       Reconciliationcontent: [],
       parameter: {},
@@ -622,61 +492,7 @@ export default {
       collectlist: [],
       companyInfoId: "",
       flag: false,
-      infoGet: [],
-      //更多查询
-      accountLayer:false,
-      valueDate:'',
-      moreSearch:{},
-      businessArr: [
-        {
-          value: "CGRK",
-          label: "采购入库"
-        },
-        {
-          value: "CGTH",
-          label: "采购退货"
-        },
-        {
-          value: "XSCK",
-          label: "销售出库"
-        },
-        {
-          value: "XSTH",
-          label: "销售退货"
-        }
-      ],
-      markArr:[
-        {
-          value:'1',
-          label:"是"
-        },
-        {
-          value:'0',
-          label:"否"
-        }
-      ],
-      //收款户名
-      collectionUname:'',
-      collectionList:[],
-      collectionObj:{},
-      //付款户名
-      paymentUname:'',
-      paymentUnameList:[],
-      paymentObj:{},
-      //往来单位
-      searchLoading:false,
-      companyInfoGuestname:"",
-      //添加客户资料修改按钮
-      changeBtn:false,
-      clientDataShow:false,
-      clientList:{},
-      provinceArr:[],
-      treeDiagramList:[],
-      //修改供应商资料
-      clientDataShow2:false,
-      clientList2:{},
-      provinceArr2:[],
-      treeDiagramList2:[],
+      infoGet: []
     };
   },
   async mounted() {
@@ -684,8 +500,6 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-
-
   },
   computed: {
     //实际应付合计
@@ -746,6 +560,26 @@ export default {
     }
   },
   methods: {
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
+    },
     // 在值发生改变时更新表尾合计
     updateFooterEvent(params) {
       let xTable = this.$refs.xTable;
@@ -802,7 +636,6 @@ export default {
       ];
     },
     query() {
-      this.moreSearch = {};
       this.Initialization();
     },
     // 计算应收业务销售出库/退货对账的总计
@@ -816,14 +649,12 @@ export default {
     // 对账单弹框出现加载数据
     hander(type) {
       if (type) {
-        console.log(this.parameter)
         this.handervis = false;
         this.flag = false;
         this.info = false;
         this.store = this.parameter.orgName;
         this.model1 = this.parameter.orgId;
         this.companyInfo = this.parameter.guestId;
-        this.$refs.companyGuset.query = this.parameter.guestName;
         this.Rebateid = "";
         this.BadDebtid = "";
         this.remark = "";
@@ -840,39 +671,15 @@ export default {
         this.otherFees = 0;
         this.collectlist = [];
         this.paymentlist = [];
-        // this.storeAccount(this.parameter.orgId);
+        this.storeAccount(this.parameter.orgId);
         this.Initialization();
-
       }
-    },
-    getAccountNameListFun(v){
-      this.companyInfo = v;
-      this.getAccountNameList();
-      this.Initialization();
     },
     // 获取数据
     Initialization() {
       // let { orgId, startDate, endDate, guestId } = this.parameter;
       let obj = { orgId: this.model1, guestId: this.companyInfo };
-      if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
-        obj.startDate = this.moreSearch.accountDate[0] + " 00:00:00";
-        obj.endDate = this.moreSearch.accountDate[1] + " 23:59:59";
-      }
-      if(this.moreSearch.businessType){
-        obj.serviceType = this.moreSearch.businessType;
-      }
-      if(this.moreSearch.orderNo){
-        obj.serviceId =  this.moreSearch.orderNo;
-      }
-      if(this.moreSearch.orderNo){
-        obj.serviceId =  this.moreSearch.orderNo;
-      }
-      if(this.moreSearch.taxMark){
-        obj.taxSign =  this.moreSearch.taxMark;
-      }
-      this.data1Loading = true;
       getReconciliation(obj).then(res => {
-        this.data1Loading = false;
         // let Statementexcludingtax = 0;
         // let Taxincludedpartsstatement = 0;
         // let Statementoilincludingtax = 0;
@@ -930,16 +737,28 @@ export default {
       });
     }, // 对账门店
     storeAccount(val) {
-      this.info = false;
-      this.handervis = false;
-      this.paymentlist = [];
-      this.collectlist = [];
-      this.totalcollect = 0;
-      this.Actualtotalcollect = 0;
-      this.Actualtotalpayment = 0;
-      this.Reconciliationtotal = 0;
-      this.getPaymentNameList();
-      this.Initialization();
+      this.Branchstore.map(item => {
+        if (item.value === val) {
+          getStore({ orgId: val, orgName: item.label }).then(res => {
+            this.infoGet = res.data;
+            this.company = [];
+            this.collectionAccountList = [];
+            this.companyInfo = this.parameter.guestId;
+            res.data.map((item, index) => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+              if (item.id === this.companyInfo) {
+                this.collectionAccountName = item.accountReceiveName // item.receiveName;
+                this.openingBank = item.accountBank;
+                this.collectionAccount = item.accountBankNo;
+              }
+            });
+            this.Initialization();
+          });
+        }
+      });
     },
     // 切换往来单位
     companySelect(val) {
@@ -1003,76 +822,8 @@ export default {
           }
         ];
         // this.accountData = JSON.parse(JSON.stringify(this.data));
-        this.getAccountNameList();
-        this.getPaymentNameList();
       });
     },
-    //获取收款户名
-    async getAccountNameList(type){
-      let rep = await getAccountName({"guestId":this.companyInfo});
-      if(rep.code==0){
-        this.collectionList = rep.data;
-        if(rep.data.length<=0){
-          this.changeBtn = true;
-        }else{
-          this.changeBtn = false;
-          //修改收款户默认选中第一条
-          if(type){
-            this.collectionUname = this.collectionList[0].id;
-            this.openingBank = this.collectionList[0].accountBank;
-            this.collectionAccount = this.collectionList[0].accountBankNo;
-          }
-        }
-      }
-    },
-    changeCollectionUname(v){
-      console.log(v)
-      this.collectionObj = v;
-      let arrData = this.collectionList.filter(item => item.id==this.collectionUname);
-      if(arrData.length>0){
-        this.openingBank = arrData[0].accountBank;
-        this.collectionAccount = arrData[0].accountBankNo;
-      }else{
-        this.openingBank = "";
-        this.collectionAccount = "";
-      }
-    },
-    collectionUnameClear(){
-      this.changeCollectionUname();
-    },
-
-    payMentFun(v){
-      console.log(v)
-      this.paymentObj = v;
-    },
-
-    //获取付款户名
-    async getPaymentNameList(){
-      let rep = await getPaymentName({"orgId":this.model1});
-      if(rep.code==0){
-        this.paymentUnameList = rep.data;
-      }
-    },
-
-    //获取往来单位
-    async getOrignCompany(query){
-      if (query !== '') {
-        this.searchLoading = true;
-        let req = {
-          fullName:query,
-          size:1000,
-        }
-        let rep = await findGuest(req);
-        this.searchLoading = false;
-        if(rep.code==0){
-          this.companyList = rep.data.content;
-        }
-      } else {
-        this.companyList = [];
-      }
-    },
-
-
     // 应付选中
     paymentCheckout(selection, row) {
       this.paymentlist = selection;
@@ -1081,8 +832,6 @@ export default {
         this.totalpayment += item.thisAccountAmt;
       });
       this.getSettlementComputed();
-
-      this.tipText(this.paymentlist);
     },
     // 应收选中
     collectCheckout(selection, row) {
@@ -1094,8 +843,6 @@ export default {
       //   this.totalcollect += item.thisAccountAmt;
       // });
       this.getSettlementComputed();
-
-      this.tipText(this.collectlist);
     },
     // 应收全选
     collectCheckoutAll(selection) {
@@ -1105,32 +852,6 @@ export default {
       //   this.totalcollect += item.thisAccountAmt;
       // });
       this.getSettlementComputed();
-
-      this.tipText(this.collectlist);
-    },
-    //选中提醒
-    tipText(row){
-      let dartArr = row.filter(item => item.existDraft===1);
-      if(dartArr.length==1){
-        this.$Modal.warning({
-          title:"提示",
-          content:"该业务单号已存在"+dartArr[0].draftUname+"草稿箱中，请及时提交申请"
-        })
-      }
-      if(dartArr.length>1){
-        let isRepeatArr = dartArr.filter(item => item.draftUname==dartArr[0].draftUname)
-        if(isRepeatArr.length==dartArr.length){
-          this.$Modal.warning({
-            title:"提示",
-            content:"置灰的业务单号已存在"+dartArr[0].draftUname+"草稿箱中，请及时提交申请"
-          })
-        }else{
-          this.$Modal.warning({
-            title:"提示",
-            content:"置灰的业务单号已存在草稿箱中，请及时提交申请"
-          })
-        }
-      }
     },
     // 应付全选
     paymentCheckoutAll(selection) {
@@ -1140,8 +861,6 @@ export default {
         this.totalpayment += item.thisAccountAmt;
       });
       this.getSettlementComputed();
-
-      this.tipText(this.paymentlist);
     },
     // 应付取消选中
     paymentNoCheckout(selection, row) {
@@ -1251,12 +970,12 @@ export default {
     // 保存接口
     getPreservation(num) {
       if (this.totalvalue === "0") {
-        if (num===1&&!this.collectionUname)
+        if (!this.collectionAccountName)
           return this.$message.error("收款户名不能为空");
-        if (num===1&&!this.openingBank) return this.$message.error("开户行不能为空");
-        if (num===1&&!this.collectionAccount)
+        if (!this.openingBank) return this.$message.error("开户行不能为空");
+        if (!this.collectionAccount)
           return this.$message.error("银行账号不能为空");
-        if (num===1&&!this.paymentUname)
+        if (!this.thisApplyAccount)
           return this.$message.error("付款账户不能为空");
       }
       if (this.collectBaddebt - this.paymentBaddebt > 100) {
@@ -1285,7 +1004,7 @@ export default {
 
 
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
-        if (num===1&&!this.remark) {
+        if (!this.remark) {
           // this.$message.error("请填写备注");
           this.$message({
             message: "请填写备注",
@@ -1333,12 +1052,10 @@ export default {
             buttonStatus: num,
             incomeType: this.totalvalue,
             remark: this.remark,
-            collectionName: this.collectionObj.label,
-            collectionId:this.collectionUname||"",
+            collectionName: this.collectionAccountName,
             bankName: this.openingBank,
             collectionAccount: this.collectionAccount,
-            thisPaymentAccount: this.paymentObj.label,
-            thisPaymentAccountId:this.paymentUname,
+            thisPaymentAccount: this.thisApplyAccount,
             transportExpenses: this.transportExpenses,
             insuranceExpenses: this.insuranceExpenses,
             serviceCharge: this.serviceCharge,
@@ -1444,129 +1161,7 @@ export default {
           customClass: "zZindex"
         });
       }
-    },
-    //更多查询
-    moreAccountShow(){
-      this.accountLayer = true;
-    },
-    // 选择日期
-    changedate(daterange) {
-      this.moreSearch.accountDate = daterange;
-    },
-    moreOk(){
-      this.Initialization();
-    },
-    rowClassName (row, index) {
-      if (row.existDraft === 1) {
-        return 'Isdraft';
-      }
-      return '';
-    },
-    //修改收款账户
-    async changeKh(){
-      this.getAdress();
-      let rep = await getCustomerDetails({id:this.companyInfo});
-      if(rep.code==0){
-        //修改供应商
-        if(this.paymentlist.length>0||(this.paymentlist.length>0&&this.collectlist.length>0)){
-          this.clientDataShow2 = true;
-          this.getList2();
-          this.clientList2 = rep.data||{};
-          this.clientList2.isDisabled == 1
-            ? (this.clientList2.isDisabled = true)
-            : (this.clientList2.isDisabled = false);
-          this.clientList2.isClient == 1
-            ? (this.clientList2.isClient = true)
-            : (this.clientList2.isClient = false);
-          this.clientList2.belongSystem = JSON.parse(
-            this.clientList2.belongSystem
-          ).value;
-          // this.clientList = this.pitchSupplierOne;
-          this.$refs.child2.financeList=this.clientList2.guestAccountVoList
-        }
-        //修改客户
-        if(this.collectlist.length>0&&this.paymentlist.length==0){
-          this.clientDataShow = true;
-          this.getList();
-          this.clientList = rep.data||{};
-          this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
-          this.clientList.isFatCompany = this.clientList.isFatCompany == 1 ? true : false
-          this.clientList.isDisabled = this.clientList.isDisabled == 1 ? true : false
-          this.clientList.isSupplier = this.clientList.isSupplier == 1 ? true : false
-          this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
-          this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
-          this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
-          this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
-          this.$refs.child.financeList=this.clientList.guestAccountVoList
-        }
-      }
-    },
-    //获取地址
-    getAdress() {
-      area().then(res => {
-        if (res.code == 0) {
-          this.provinceArr = res.data;
-        }
-      });
-    },
-    //新增客户确认
-    addNewClient() {
-      this.$refs.child.handleSubmit(async () => {
-        let data = {};
-        data = this.clientList;
-        data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
-        data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
-        data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
-        data.isFatCompany = data.isFatCompany ? 1 : 0
-        let res = await getNewClient(this.clientList);
-        if (res.code == 0) {
-          this.clientDataShow = false;
-          this.$refs.child.invoice=[];
-          this.getAccountNameList("add");
-        }
-      });
-    },
-    //确认添加一条信息
-    addNewSupplier() {
-      this.$refs.child2.$refs.form.validate(async valid => {
-        if (valid) {
-          let data = this.clientList2;
-          data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
-          data.isClient ? (data.isClient = 1) : (data.isClient = 0);
-          let res = await getNewSupplier(data);
-          if (res.code === 0) {
-            this.clientDataShow2 = false;
-            this.getAccountNameList("add");
-          }
-        } else {
-          this.$Message.error("信息填写错误");
-        }
-      });
-    },
-    //获取客户分类
-    getList() {
-      getClientTreeList().then(res => {
-        if (res.code == 0) {
-          res.data.map(item => {
-            item.children = [];
-            item.code = item.id;
-          });
-          this.treeDiagramList = res.data||[];
-        }
-      });
-    },
-    //获取供应商分类
-    getList2(){
-      getSupplierTreeList().then( res => {
-        if (res.code == 0){
-          res.data.map(item => {
-            item.children = [];
-            item.code = item.id;
-          });
-          this.treeDiagramList2 = res.data||[];
-        }
-      })
-    },
+    }
   },
   watch: {
     //应收坏账
@@ -1640,7 +1235,7 @@ export default {
           this.getSettlementComputed(val);
         }
       }
-    },
+    }
   }
 };
 </script>
@@ -1677,19 +1272,4 @@ export default {
 .zZindex {
   z-index: 3000 !important;
 }
-  .accountLayer{
-    p{
-      padding-bottom: 20px;
-    }
-    .sp-l{
-      display: inline-block;
-      width: 100px;
-      text-align: right;
-    }
-  }
-</style>
-<style lang="less">
-  .ivu-table .Isdraft *{
-    color: #bbb;
-  }
 </style>

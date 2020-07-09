@@ -249,22 +249,23 @@
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 @edit-actived="editActivedEvent">
               >
-                <vxe-table-column type="index" title="序号" fixed="left"></vxe-table-column>
-                <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" fixed="left"></vxe-table-column>
+                <vxe-table-column type="index" title="序号" fixed="left" width="60"></vxe-table-column>
+                <vxe-table-column type="checkbox" fixed="left"  width="60"></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"
                   title="数量"
+                  width="100"
                   :edit-render="{name: 'input', attrs: {type: 'number',disabled: false},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
-                <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
-                <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
-                <vxe-table-column field="unit" title="单位"></vxe-table-column>
-                <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-                <vxe-table-column field="spec" title="规格"></vxe-table-column>
-                <vxe-table-column field="date12" title="方向"></vxe-table-column>
+                <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
               </vxe-table>
             </div>
           </Split>
@@ -1151,9 +1152,9 @@ export default {
   height: 40px;
   margin-top: 20px;
 }
-.con-box {
-  height: 600px;
-}
+/*.con-box {*/
+/*  height: 600px;*/
+/*}*/
 .w550 {
   width: 580px;
 }

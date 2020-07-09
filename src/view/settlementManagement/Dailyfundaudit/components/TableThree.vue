@@ -29,7 +29,7 @@
         ></vxe-table-column>
         <vxe-table-column
           field="proposerName"
-          title="申请人"
+          title="往来单位"
         ></vxe-table-column>
 <!--        <vxe-table-column field="tmp" title="来源往来单位">-->
 <!--          <template v-slot="{ row }">-->

@@ -127,6 +127,9 @@ export default class ProductLA extends Vue {
     ]
   /**选择的品牌*/
   private waitPartTransListBrand='';
+  /**一键移入、移出提示*/
+  private tipShow:boolean=false
+  private tipWords:string=''
     /**员工表分页 */
     private employeePage: Page = {
         num: 1,
@@ -347,6 +350,22 @@ export default class ProductLA extends Vue {
      this.staffModalShow=true;
      this.staffModalSearch();
    }
+   //移出员工
+  private removeStaff(){
+    if(!this.employeeId){
+      this.$message.warning('请勾选员工')
+    }else{
+      api.removeStaffList({empId:this.employeeId}).then(res=>{
+        if(res.code==0){
+          this.$message.success('移出成功');
+          this.getStaff();
+        }else if(res.code==1){
+          this.$message.success('移出成功')
+        }
+      })
+    }
+
+  }
    //新增员工弹窗搜索
   private staffModalSearch(){
     let data = Object.assign(this.staffModalSearchInfo,this.staffModalPage);
@@ -557,27 +576,38 @@ export default class ProductLA extends Vue {
 
     //一键移入
     private async moveAllOn(){
-      let data:any =this.waitPartListData.map((el:any) => {
-        return {
-          partCode: el.partCode,
-          empId: this.employeeId,
-          partBrandCode: el.partBrandCode,
-          partId: el.code,
-          partInnerId: el.code,
-          partBrand: el.partBrand,
-          empName: this.loginName,
-          qualityName : el.quality,
-          name : el.partStandardName,
-          fullName : el.fullName,
-          unitld : el.minUnit,
-          spec : el.spec,
-          carModelName : el.adapterCarModel,
+      this.tipShow=true;
+      this.tipWords='确定将所有配件一键移入？';
+    }
+    private async submitTip(){
+      if(this.tipWords.includes('一键移入')){
+        let data:any =this.waitPartListData.map((el:any) => {
+          return {
+            partCode: el.partCode,
+            empId: this.employeeId,
+            partBrandCode: el.partBrandCode,
+            partId: el.code,
+            partInnerId: el.code,
+            partBrand: el.partBrand,
+            empName: this.loginName,
+            qualityName : el.quality,
+            name : el.partStandardName,
+            fullName : el.fullName,
+            unitld : el.minUnit,
+            spec : el.spec,
+            carModelName : el.adapterCarModel,
+          }
+        })
+        this.distPartListData = JSON.parse(JSON.stringify(this.waitPartListData))
+        let res:any = await api.employeeAddPart(data);
+        if(res.code == 0) {
+          this.$Message.success('移入成功')
         }
-      })
-      this.distPartListData = JSON.parse(JSON.stringify(this.waitPartListData))
-      let res:any = await api.employeeAddPart(data);
-      if(res.code == 0) {
-        this.$Message.success('移入成功')
+      }else if(this.tipWords.includes('一键移出')){
+        let res:any = await api.employeeDeleteAllPart({empId:this.employeeId});
+        if(res.code == 0) {
+          this.$Message.success('移出成功')
+        }
       }
       this.getwaitEmps();
       this.getEmps();
@@ -605,19 +635,14 @@ export default class ProductLA extends Vue {
     }
     //一键移出
   private async moveAllOff(){
-    let data:any = this.distPartListData.map((el:any) => {
-      return {
-        id: el.id
-      }
-    })
-    let res:any = await api.employeeDeletePart(data);
-    if(res.code == 0) {
-      this.$Message.success('移出成功')
-    }
-    this.getwaitEmps();
-    this.getEmps();
+    this.tipShow=true;
+    this.tipWords='确定将所有配件一键移出？';
   }
-
+  //关闭提示弹窗
+  private async CancelTipModal(){
+    this.tipShow=false;
+    this.tipWords='';
+  }
     // 上传前
     private handleBeforeUpload() {
         let refs:any =  this.$refs;

@@ -29,7 +29,16 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable clearable @on-change="query">
+            <Select
+              v-model="companyId"
+              class="w150"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+              @on-change="query"
+            >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -271,9 +280,18 @@
     <!-- 认领弹框 -->
     <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
-        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
+      <Select
+              v-model="companyId"
+              class="w150"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+              @on-change="query"
+            >
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
       <span class="ml10">金额：</span>
       <InputNumber v-model="amt" class="w50" />
       <span class="ml10">对方户名：</span>
@@ -345,6 +363,7 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       modelType: {
         type: 5, //新增
         id: "",
@@ -379,6 +398,26 @@ export default {
     };
   },
   methods: {
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
+    },
     //获取门店
     async getShop(){
       let data ={}
@@ -712,7 +751,7 @@ export default {
       this.BranchstoreId = arr[1]
     })
     this.getShop()
-    this.getOne();
+    // this.getOne();
     this.getQuery();
     this.modelType.allSalesList = await getAllSalesList();
     this.modelType.salesList = await getComenAndGo();

@@ -55,6 +55,11 @@
             </Button>
           </div>
           <div class="db">
+            <Button class="mr10" @click="removeStaff">
+              <Icon custom="iconfont iconfanhuiicon icons" />移出员工
+            </Button>
+          </div>
+          <div class="db">
             <Upload
               ref="upload"
               :show-upload-list="false"
@@ -247,6 +252,11 @@
 
       </div>
     </Modal>
+    <Modal title="提示" v-model="tipShow" :styles="{top:'100px',width:'300px'}" @on-cancel="CancelTipModal" @on-ok="submitTip">
+      <div class="tip">
+        {{tipWords}}
+      </div>
+    </Modal>
   </main>
 </template>
 
@@ -276,4 +286,8 @@
   padding:15px 0;
   text-align: right;
 }
+  .tip{
+    text-align: center;
+    padding: 15px 0;
+  }
 </style>

@@ -29,7 +29,16 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" @on-change="fendian" filterable>
+            <Select
+              v-model="companyId"
+              class="w150"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+              @on-change="query"
+            >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <!-- <input type="text" class="h30" v-model="company" />
@@ -149,6 +158,7 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       BranchstoreId: "",
       tab: "key1",
       value: [],
@@ -406,9 +416,32 @@ export default {
       this.BranchstoreId = arr[1]
     })
     this.getGeneral();
-    this.getOne();
+    // this.getOne();
   },
   methods: {
+    query() {
+      this.getQuery();
+    },
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
+    },
     //获取门店
     async getShop(){
       let data ={}
@@ -502,18 +535,18 @@ export default {
       this.getGeneral();
     },
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
-            });
-          });
-        }
-      });
-    },
+    // async getOne() {
+    //   findGuest({ size: 2000 }).then(res => {
+    //     if (res.code === 0) {
+    //       res.data.content.map(item => {
+    //         this.company.push({
+    //           value: item.id,
+    //           label: item.fullName
+    //         });
+    //       });
+    //     }
+    //   });
+    // },
     // 分店切换
     fendian(val) {
       this.BranchstoreId = val;
