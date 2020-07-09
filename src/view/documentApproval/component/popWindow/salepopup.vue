@@ -35,12 +35,12 @@
       @click="submission"
       :disabled="modelType.type==3"
     >提交申请</button>
-    <button
-      class="ivu-btn ivu-btn-default mr10"
-      type="button"
-      @click="add"
-      :disabled="modelType.type==3"
-    >增加不含税销售开票申请</button>
+<!--    <button-->
+<!--      class="ivu-btn ivu-btn-default mr10"-->
+<!--      type="button"-->
+<!--      @click="add"-->
+<!--      :disabled="modelType.type==3"-->
+<!--    >增加不含税销售开票申请</button>-->
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="6">
