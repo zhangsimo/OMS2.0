@@ -40,7 +40,7 @@
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="directCompanyId"
+          field="orgName"
           title="直发门店"
           width="120"
         ></vxe-table-column>
@@ -105,17 +105,17 @@
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="remark"
+          field="detailRemark"
           title="备注"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="totalAmt"
+          field="enterQty"
           title="转单数量"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="orderAmt"
+          field="adjustQty"
           title="取消数量"
           width="120"
         ></vxe-table-column>
@@ -210,7 +210,7 @@ export default {
           if ([0, "0", "否"].includes(el.taxSign)) {
             el.taxSign = false;
           }
-          el.statusName = el.status == 0 ? "未下订单" : (el.status == 1 ? "已下部分订单" : (el.status == 2 ? "完成订单" : ""));
+          el.statusName = el.statu == 0 ? "未下订单" : (el.statu == 1 ? "已下部分订单" : (el.statu == 2 ? "完成订单" : ""));
           return el;
         });
 
@@ -232,7 +232,7 @@ export default {
           if ([0, "0", "否"].includes(el.taxSign)) {
             el.taxSign = false;
           }
-          el.statusName = el.status == 0 ? "未下订单" : (el.status == 1 ? "已下部分订单" : (el.status == 2 ? "完成订单" : ""));
+          el.statusName = el.statu == 0 ? "未下订单" : (el.statu == 1 ? "已下部分订单" : (el.statu == 2 ? "完成订单" : ""));
           return el;
         });
 
@@ -262,14 +262,14 @@ export default {
               "orderPrice",
               "orderAmt",
               "totalAmt",
-              "orderAmt",
+              "enterQty",
               "fcPrice",
               "rmbPrice",
               "rmbAmt",
               "tariffAmt",
               "transportAmt",
               "vatAmt",
-              "otherAmt"
+              "adjustQty"
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
