@@ -248,6 +248,7 @@
               highlight-row
               :stripe="true"
               :columns="columns"
+              :edit-rules="validRulesAddress"
               :data="placeList"
               @on-current-change="selection"
             ></Table>
@@ -471,12 +472,27 @@ export default {
         callback(new Error("客户全称不可为空"));
       }
     };
+    const paragraphPhone = ({cellValue})=>{
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          if (!/^\d{3}-\d{8}|\d{4}-\{7,8}$/.test(cellValue)) {
+            reject(new Error("手机号格式不正确"));
+          } else {
+            resolve();
+          }
+        } else {
+          reject(new Error("手机号格式不正确"));
+        }
+      });
+    }
     return {
       enAble: "启用", //启用 禁用 字段
       enAbleTax: "启用", //启用 禁用 字段
       selectFinTab: {}, // 财务信息 表格选中行的内容暂时性存储
       selectTaxTab: {},
       selectFinId: 0,
+      // finAddArr:[],//新增财务信息数组
+      accountAddId:0,
       sessionKey: "0",
       Subordinate: [
         {
@@ -520,6 +536,9 @@ export default {
         accountBankNo: [{ required: true, message: "", trigger: "change" }]
       },
       validRulesFin: {},
+      validRulesAddress:{
+        receiveManTel:[{require:true,validator:paragraphPhone,trigger:"change"}]
+      },
       columnsFin: [
         {
           title: "序号",
@@ -673,7 +692,7 @@ export default {
         {
           title: "联系方式",
           align: "center",
-          key: "receiveManTel"
+          key: "receiveManTel"// ^[\+\-]?\d+(\.\d+)?$
         },
         {
           title: "收货地址",
@@ -918,7 +937,7 @@ export default {
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
-              if (item.id == this.selectFinTab.id) {
+              if (item.accountAddId == this.selectFinTab.accountAddId) {
                 let newarr = {};
                 newarr = JSON.parse(JSON.stringify(this.selectFinTab));
                 item.id = newarr.id;
@@ -972,7 +991,9 @@ export default {
             newarr.acquiesce = false;
             newarr.accountSign = true;
             newarr.accountType = newarr.accountType || "ZHLX002";
-            this.financeList.push(newarr);
+            newarr.accountAddId=this.accountAddId
+            this.accountAddId++;
+            this.financeList=[newarr,...this.financeList]
             this.data.guestAccountVoList = this.financeList;
             this.bankAccount = false;
             this.disposeFinData();
@@ -1002,10 +1023,18 @@ export default {
     // 修改启用禁用
     changePlaceFin() {
       this.financeList.map(item => {
-        if (item.id == this.selectFinTab.id) {
-          item.accountSign = !item.accountSign;
-        } else {
-          item.accountSign;
+        if(this.selectFinTab.id==undefined){
+          if (item.accountAddId == this.selectFinTab.accountAddId) {
+            item.accountSign = !item.accountSign;
+          } else {
+            item.accountSign;
+          }
+        }else{
+          if (item.id == this.selectFinTab.id) {
+            item.accountSign = !item.accountSign;
+          } else {
+            item.accountSign;
+          }
         }
       });
     },
@@ -1249,7 +1278,7 @@ export default {
     pitchOnBank(selection) {
       this.addInoiceOne = selection;
       // this.selectTaxTab = selection;
-      if (selection.taxpayerType == true) {
+      if (selection.taxpayerType == false) {
         this.enAbleTax = "禁用";
       } else {
         this.enAbleTax = "启用";

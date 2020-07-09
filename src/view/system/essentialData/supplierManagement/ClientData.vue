@@ -470,7 +470,9 @@ export default {
           }
         }
       ],
-      bankAccount:false,bankAccountTit:"新增银行账户"
+      bankAccount:false,
+      bankAccountTit:"新增银行账户",
+      accountAddId:0
     };
   },
   created() {
@@ -536,10 +538,18 @@ export default {
     // 修改启用禁用
     changePlaceFin() {
       this.financeList.map(item => {
-        if (item.id == this.selectFinTab.id) {
-          item.accountSign = !item.accountSign;
-        } else {
-          item.accountSign;
+        if(this.selectFinTab.id==undefined){
+          if (item.accountAddId == this.selectFinTab.accountAddId) {
+            item.accountSign = !item.accountSign;
+          } else {
+            item.accountSign;
+          }
+        }else{
+          if (item.id == this.selectFinTab.id) {
+            item.accountSign = !item.accountSign;
+          } else {
+            item.accountSign;
+          }
         }
       });
     },
@@ -550,7 +560,7 @@ export default {
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
-            if (item.id == this.selectFinTab.id) {
+            if (item.accountAddId == this.selectFinTab.accountAddId) {
               let newarr = {};
               newarr = JSON.parse(JSON.stringify(this.selectFinTab));
               item.id = newarr.id;
@@ -597,6 +607,8 @@ export default {
             newarr.acquiesce = false;
             newarr.accountSign = true;
             newarr.accountType = newarr.accountType || "ZHLX002";
+            newarr.accountAddId=this.accountAddId
+            this.accountAddId++;
             this.financeList.push(newarr);
             this.data.guestAccountVoList = this.financeList;
             this.bankAccount = false;

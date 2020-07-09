@@ -77,7 +77,8 @@ export default {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("手机号不能为空"));
-      } else if (!/^1[345789]\d{9}$/.test(value)) {
+      //  /^[\+\-]?\d+(\.\d+)?$/
+      } else if (!/^\d{3}-\d{8}|\d{4}-\{7,8}$/.test(value)) {
         callback(new Error("手机号格式不正确"));
       } else {
         callback();
