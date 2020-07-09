@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;">
+  <div>
     <Form
       inline
       :show-message="false"
@@ -7,6 +7,7 @@
       :model="formPlan"
       :rules="ruleValidate"
       :label-width="120"
+      style="overflow-y: scroll"
     >
       <div class="pane-made-hd fs12">
         <span class="titler mr5">固定额度:</span>
@@ -243,13 +244,11 @@
           </div>
         </div>
       </div>
-<!--      <div class="tableBox">-->
-        <vxe-table
+      <vxe-table
           border
           align="center"
           size="mini"
           resizable
-          stripe
           ref="xTable"
           show-footer
           :footer-method="footerMethod"
@@ -263,7 +262,6 @@
           :edit-config="{trigger: 'click', mode: 'cell'}"
           :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
           >
-        >
           <vxe-table-column fixed="left" type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column fixed="left" type="checkbox" width="50"></vxe-table-column>
           <vxe-table-column fixed="left" title="操作" width="60">
@@ -337,7 +335,6 @@
           <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
           <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
         </vxe-table>
-<!--      </div>-->
     </Form>
 
     <!--   新增客户资料-->
