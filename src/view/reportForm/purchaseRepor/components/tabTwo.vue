@@ -198,7 +198,8 @@
       @on-change="changePage"
       @on-page-size-change="changeSize"
       show-sizer
-      show-total transfer
+      show-total
+      transfer
     ></Page>
   </section>
 </template>
@@ -214,9 +215,9 @@ export default {
         total: 0
       },
       body: {},
-      tableData: [],
+      tableData: []
     };
-  },  
+  },
   mounted() {
     this.getList();
   },
@@ -225,7 +226,7 @@ export default {
     async getList() {
       let params = {
         page: this.page.num - 1,
-        size: this.page.size,
+        size: this.page.size
       };
       let res = await api.getPjPchsEnterMainDetails(this.body, params);
       if (res.code == 0) {
@@ -242,6 +243,27 @@ export default {
         this.page.total = res.data.totalElements;
       }
     },
+    async getAll() {
+      let tableDataAll = [];
+      let params = {
+        page: 0,
+        size: 10000
+      };
+      let res = await api.getPjPchsEnterMainDetails(this.body, params);
+      if (res.code == 0) {
+        tableDataAll = (res.data.content || []).map(el => {
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          return el;
+        });
+      }
+      
+      return tableDataAll;
+    },
     //分页
     changePage(p) {
       this.page.num = p;
@@ -253,29 +275,31 @@ export default {
       this.getList();
     },
     //表尾合计
-    footerMethod ({ columns, data }) {
+    footerMethod({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return '合计'
+            return "合计";
           }
-          if ([
-            "orderQty",
-            "orderPrice",
-            "orderAmt",
-            "enterPrice",
-            "enterAmt",
-            "taxPrice",
-            "taxAmt",
-            "noTaxPrice",
-            "noTaxAmt",
-          ].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+          if (
+            [
+              "orderQty",
+              "orderPrice",
+              "orderAmt",
+              "enterPrice",
+              "enterAmt",
+              "taxPrice",
+              "taxAmt",
+              "noTaxPrice",
+              "noTaxAmt"
+            ].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property);
           }
-          return null
+          return null;
         })
-      ]
-    },
-  },
+      ];
+    }
+  }
 };
 </script>

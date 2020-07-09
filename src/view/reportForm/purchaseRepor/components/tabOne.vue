@@ -269,6 +269,27 @@ export default {
         this.page.total = res.data.totalElements;
       }
     },
+    async getAll() {
+      let tableDataAll = [];
+      let params = {
+        page: 0,
+        size: 10000,
+      };
+      let res = await api.getPjPchsOrderMainDetailList(this.body, params);
+      if (res.code == 0) {
+        tableDataAll = (res.data.content || []).map(el => {
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          return el;
+        });
+      }
+
+      return tableDataAll;
+    },
     //分页
     changePage(p) {
       this.page.num = p;

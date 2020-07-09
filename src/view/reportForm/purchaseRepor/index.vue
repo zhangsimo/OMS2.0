@@ -123,14 +123,33 @@ export default {
         data.createUname ? data2.createUid = data.createUname : "";
       }
       this.$refs.tabFour.body = data2;
-      this.$refs.tabFour.getList(data2);
+      this.$refs.tabFour.getList();
     },
-    exportxls(refname) {
+    async exportxls(refname) {
+      let filename = "";
+      switch(refname) {
+        case "tabOne":
+          filename = "采购订单明细表";
+          break;
+        case "tabTwo":
+          filename = "采购入库明细表";
+          break;
+        case "tabThree":
+          filename = "采购退货明细表";
+          break;
+        case "tabFour":
+          filename = "采购计划明细表";
+          break;
+        default:
+          filename = "";
+          break;
+      }
+      let table = await this.$refs[refname].getAll();
       this.$refs[refname].$refs.xTable.exportData({
-        filename: '采购订单明细表',
+        filename,
         isHeader: true,
         isFooter: true,
-        data: this.$refs[refname].tableDataAll,
+        data: table,
       })
     },
   }

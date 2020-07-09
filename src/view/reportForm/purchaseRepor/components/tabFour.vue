@@ -110,12 +110,12 @@
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="adjustQty"
+          field="totalAmt"
           title="转单数量"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="trueEnterQty"
+          field="orderAmt"
           title="取消数量"
           width="120"
         ></vxe-table-column>
@@ -211,12 +211,32 @@ export default {
             el.taxSign = false;
           }
           el.statusName = el.status == 0 ? "未下订单" : (el.status == 1 ? "已下部分订单" : (el.status == 2 ? "完成订单" : ""));
-          el.adjustQty = el.details[0] ? el.details[0].adjustQty ? el.details[0].adjustQty:0 : 0;
-          el.trueEnterQty = el.details[0].adjustQty || 0;
           return el;
         });
 
         this.page.total = res.data.totalElements;
+      }
+    },
+    async getAll() {
+      let tableDataAll = [];
+      let params = {
+        page: 0,
+        size: 10000,
+      };
+      let res = await api.getPjPchsPlanDetailList(this.body, params);
+      if (res.code == 0) {
+        tableDataAll = (res.data.content || []).map(el => {
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          el.statusName = el.status == 0 ? "未下订单" : (el.status == 1 ? "已下部分订单" : (el.status == 2 ? "完成订单" : ""));
+          return el;
+        });
+
+        return tableDataAll;
       }
     },
     //分页
@@ -241,8 +261,8 @@ export default {
               "orderQty",
               "orderPrice",
               "orderAmt",
-              "adjustQty",
-              "trueEnterQty",
+              "totalAmt",
+              "orderAmt",
               "fcPrice",
               "rmbPrice",
               "rmbAmt",
