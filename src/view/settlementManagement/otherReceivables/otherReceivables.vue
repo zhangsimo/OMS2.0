@@ -660,10 +660,12 @@ export default {
     },
     // 往来单位选择
     async getOne(query) {
+      this.company = [];
       if (query != "") {
         this.remoteloading = true;
         findGuest({ fullName: query, size: 20 }).then(res => {
           if (res.code === 0) {
+            this.company = [];
             res.data.content.map(item => {
               this.company.push({
                 value: item.id,

@@ -41,6 +41,14 @@ export function getCanSelectStaff (data){
   })
 }
 
+//移出员工
+export function removeStaffList(data){
+  return axios.request({
+    url:`${api.wmsApi}/employeeAttribute/deleteUser`,
+    method:'post',
+    data
+  })
+}
 // 待分配配件
 export function findByEmp (params, data) {
   return axios.request({

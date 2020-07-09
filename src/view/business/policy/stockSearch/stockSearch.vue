@@ -857,7 +857,7 @@ export default {
         {
           title: "库存下限",
           align: "center",
-          key: "downLimitWinter",
+          key: "downLimit",
           minWidth: 120
         },
         {
