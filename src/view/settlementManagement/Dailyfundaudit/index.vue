@@ -30,13 +30,17 @@
           </div>
           <div class="db ml15">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150">
-              <Option
-                v-for="item in company"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+            <Select
+              v-model="companyId"
+              class="w150"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+              @on-change="query"
+            >
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -154,6 +158,7 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       // 数据类
       tabName: "capitalChain1", // tabs栏
       oneList: [], // 表格选中
@@ -186,7 +191,7 @@ export default {
       this.BranchstoreId = arr[1]
     })
     this.getShop()
-    this.getCompany();
+    // this.getCompany();
     this.query();
   },
   methods: {
@@ -206,17 +211,23 @@ export default {
       this.query()
     },
     // 往来单位
-    async getCompany() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      })
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
     },
     // 查询
     async query() {
