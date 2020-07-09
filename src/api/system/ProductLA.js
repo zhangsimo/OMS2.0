@@ -86,6 +86,14 @@ export function employeeDeletePart (data) {
   })
 }
 
+//一键移出配件
+export function employeeDeleteAllPart (data) {
+  return axios.request({
+    url: `${api.wmsApi}/employeeAttribute/removeAll`,
+    method: 'post',
+    data
+  })
+}
 export function down(id) {
   let url = `${api.downApi}/file/get?fileId=` + id;
   window.open(url, '_balnk');
