@@ -3,6 +3,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import * as api from "_api/system/ProductLA.js";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
+// @ts-ignore
+import {getAllBrand} from "_api/system/partsExamine/partsExamineApi.js";
 
 @Component
 export default class ProductLA extends Vue {
@@ -83,6 +85,48 @@ export default class ProductLA extends Vue {
     ]
     /**员工表数据 */
     private employeeData = []
+    /**添加员工弹窗*/
+    private staffModalShow = false
+  /**弹窗勾选的员工数据*/
+    private  selectStaffList:Array<any> = [];
+  /**添加员工弹窗搜索条件*/
+  private  staffModalSearchInfo ={
+    roleName:'',
+    userName:'',
+    productAuthority:1
+  }
+  private staffModalPage :Page = {
+    num: 1,
+    total: 0,
+    size: 10
+  }
+  /**添加员工弹窗数据列表*/
+  private staffModalList = []
+  /**添加员工弹窗列表头*/
+  private addStaffColumns = [
+    {
+      type:'selection',
+      width:60,
+      align:'center'
+    },
+    {
+      title:'员工名称',
+      key:'userName'
+    },
+    {
+      title:'角色',
+      key:'roleName'
+    }
+  ]
+  /**品牌数据*/
+  private partBrandData = [
+    {
+      name: "全部",
+      code: "9999"
+    }
+    ]
+  /**选择的品牌*/
+  private waitPartTransListBrand='';
     /**员工表分页 */
     private employeePage: Page = {
         num: 1,
@@ -261,6 +305,7 @@ export default class ProductLA extends Vue {
             })
             this.roleOptions.unshift({ label: "全部", value: '全部' })
         }
+        this.getPartBrandAll()
     }
 
     // methods
@@ -291,13 +336,80 @@ export default class ProductLA extends Vue {
         let res = await api.getStaffList(params);
         if (res.code == 0) {
             this.employeeLoading = false;
-            this.employeeData = res.data.content;
+            this.employeeData = res.data;
             this.employeePage.total = res.data.totalElements
         } else {
             this.employeeLoading = false;
         }
     }
+    //新增员工
+   private addStaff(){
+     this.staffModalShow=true;
+     this.staffModalSearch();
+   }
+   //新增员工弹窗搜索
+  private staffModalSearch(){
+    let data = Object.assign(this.staffModalSearchInfo,this.staffModalPage);
+    api.getCanSelectStaff(data).then(res=>{
+      if(res.code==0){
+        this.staffModalList=res.data.content||[];
+        this.staffModalPage.total=res.data.totalElements;
 
+      }
+    })
+  }
+  //新增员工弹窗页码change
+  private staffModalPageChange(v:number){
+      this.staffModalPage.num=v;
+      this.staffModalSearch();
+  }
+  //新增员工弹窗条目change
+  private staffModalPageSizeChange(v:number){
+    this.staffModalPage.num=1;
+    this.staffModalPage.size = v;
+    this.staffModalSearch();
+  }
+  //新增员工弹窗选择
+  private staffModalSelect(){
+      if(this.selectStaffList.length<1){
+        this.$message.warning('请选择员工')
+      }else{
+        api.employeeAddPart(this.selectStaffList).then(res=>{
+          if(res.code==0){
+            this.$message.success('添加成功');
+            this.getStaff();
+          }else{
+            this.$message.success('添加失败');
+          }
+        })
+      }
+  }
+  //新增员工勾选
+  private staffModalSelectData(v){
+      if(v.length<1){
+        this.selectStaffList = [];
+      }else{
+        v.map((item:any)=>{
+          this.selectStaffList.push({empId:item.id})
+        })
+      }
+  }
+  //新增员工弹窗关闭
+  private CancelStaffModal(){
+      this.selectStaffList=[];
+  }
+  //获取所有品牌
+  private getPartBrandAll() {
+    getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
+      if(!res.data){
+        return
+      }
+      let arrData = res.data.content||[]
+      arrData.map(item => {
+        this.partBrandData.push(...item.children);
+      })
+    });
+  }
     // 员工列表查询
     private queryStaff() {
         this.getStaff();
@@ -336,6 +448,8 @@ export default class ProductLA extends Vue {
         let params: any = {}
         let data: any = {};
         data.empId = this.employeeId;
+        data.partCode = this.waitPartTransListContent;
+       data.partBrandId = this.waitPartTransListBrand;
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
         if(this.waitPartTransListContent.trim().length > 0) {
@@ -441,6 +555,33 @@ export default class ProductLA extends Vue {
         this.getEmps();
     }
 
+    //一键移入
+    private async moveAllOn(){
+      let data:any =this.waitPartListData.map((el:any) => {
+        return {
+          partCode: el.partCode,
+          empId: this.employeeId,
+          partBrandCode: el.partBrandCode,
+          partId: el.code,
+          partInnerId: el.code,
+          partBrand: el.partBrand,
+          empName: this.loginName,
+          qualityName : el.quality,
+          name : el.partStandardName,
+          fullName : el.fullName,
+          unitld : el.minUnit,
+          spec : el.spec,
+          carModelName : el.adapterCarModel,
+        }
+      })
+      this.distPartListData = JSON.parse(JSON.stringify(this.waitPartListData))
+      let res:any = await api.employeeAddPart(data);
+      if(res.code == 0) {
+        this.$Message.success('移入成功')
+      }
+      this.getwaitEmps();
+      this.getEmps();
+    }
     // 移出
     private async moveOff() {
         if(this.selectionDistPartArr.length <=0 ) {
@@ -462,6 +603,20 @@ export default class ProductLA extends Vue {
         this.getwaitEmps();
         this.getEmps();
     }
+    //一键移出
+  private async moveAllOff(){
+    let data:any = this.distPartListData.map((el:any) => {
+      return {
+        id: el.id
+      }
+    })
+    let res:any = await api.employeeDeletePart(data);
+    if(res.code == 0) {
+      this.$Message.success('移出成功')
+    }
+    this.getwaitEmps();
+    this.getEmps();
+  }
 
     // 上传前
     private handleBeforeUpload() {

@@ -247,7 +247,7 @@
                     </div>-->
                   </div>
                 </div>
-                <div class="tableBox">
+<!--                <div class="tableBox">-->
                   <vxe-table
                     border
                     align="center"
@@ -258,61 +258,63 @@
                     show-footer
                     :footer-method="footerMethod"
                     :edit-rules="validRules"
-                    showOverflow="true"
                     height="425"
                     @select-change="selectSameList"
                     @select-all="selectAllList"
                     :data="formPlan.details"
-                    style="width: 2000px"
                     :edit-config="{trigger: 'click', mode: 'cell'}"
                   >
-                    <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-                    <vxe-table-column type="checkbox" width="50"></vxe-table-column>
-                    <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-                    <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-                    <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                    <vxe-table-column type="index" width="50" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
+                    <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
                     <vxe-table-column
                       field="orderQty"
+                      width="100"
                       title="数量"
                       :edit-render="{name: 'input',immediate: true,attrs: {disabled: billStatusValue != 0}, events: {input: updateFooterEvent}}"
                     ></vxe-table-column>
                     <vxe-table-column
                       field="orderPrice"
                       title="单价"
+                      width="100"
                     ></vxe-table-column>
-                    <vxe-table-column title="金额">
+                    <vxe-table-column title="金额" width="100">
                       <template v-slot="{ row }">
                         <span>{{ countAmount(row) | priceFilters }}</span>
                       </template>
                     </vxe-table-column>
-                    <vxe-table-column field="sourceEnterableQty" title="可入库数量"></vxe-table-column>
+                    <vxe-table-column field="sourceEnterableQty" title="可入库数量" width="100"></vxe-table-column>
                     <vxe-table-column
                       field="remark"
                       title="备注"
+                      width="160"
                       :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"
                     ></vxe-table-column>
                     <vxe-table-column
                       field="storeShelf"
                       title="仓位"
+                      width="100"
                       :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
                     ></vxe-table-column>
-                    <vxe-table-column title="不含税单价">
+                    <vxe-table-column title="不含税单价" width="100">
                       <template v-slot="{row}">
                         <span>{{countTaxRate(row) |priceFilters}}</span>
                       </template>
                     </vxe-table-column>
-                    <vxe-table-column title="不含税金额">
+                    <vxe-table-column title="不含税金额" width="100">
                       <template v-slot="{row}">
                         <span>{{countTaxRateAll(row) |priceFilters}}</span>
                       </template>
                     </vxe-table-column>
-                    <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
-                    <vxe-table-column field="unit" title="单位"></vxe-table-column>
-                    <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-                    <vxe-table-column field="spec" title="规格"></vxe-table-column>
+                    <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                    <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                    <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                    <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <!--                  <vxe-table-column field="name" title="已验收数量"></vxe-table-column>-->
                   </vxe-table>
-                </div>
+<!--                </div>-->
               </Form>
             </div>
           </div>

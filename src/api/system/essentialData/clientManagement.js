@@ -21,7 +21,7 @@ export function getAddClient (data) {
 }
 
 //导入文件地址
-export const impUrl = `${api.wmsApi}/guestAdjust/import` 
+export const impUrl = `${api.wmsApi}/guestAdjust/import`
 
 //右侧list
 export function getCustomerInformation (params) {
@@ -66,4 +66,11 @@ export function getCustomer(params) {
     method:'get',
     params
   })
+}
+//账户类型
+export function getAccountType() {
+  return axios.request({
+    url: `${api.omsProduct}/dictionariesItem/findBydictCode?dictCode=ZHLX`,
+    method: "get",
+  });
 }

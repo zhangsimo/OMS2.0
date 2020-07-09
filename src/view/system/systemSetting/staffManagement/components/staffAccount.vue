@@ -1,5 +1,5 @@
 <template>
-  <Form ref="form" :label-width="100" :rules="rules">
+  <Form ref="form" :label-width="100" :model="data" :rules="rules">
     <FormItem label="收款户名:" prop="accountName">
       <Input v-model="data.accountName" style="width: 300px" />
     </FormItem>
@@ -34,26 +34,10 @@ export default {
     return {
       data: {},
       rules: {
-        accountName: [
-          { required: true, message: "收款户名不能为空", trigger: "blur" },{}
-        ],
-        accountBankNo: [
-          { required: true, validator: paragraph, trigger: "blur" },{}
-        ],
-        accountBank: [
-          { required: true, message: "开户银行不能为空", trigger: "blur" },{}
-        ]
-      },
-      listTree: [
-        {
-          accountType: 0,
-          accountTypeLabel: "公户"
-        },
-        {
-          accountType: 1,
-          accountTypeLabel: "个人账户"
-        }
-      ]
+        accountName: [{ required: true, message: "收款户名不能为空", trigger: "blur" }],
+        accountBankNo: [{ required: true, validator: paragraph, trigger: "blur" }],
+        accountBank: [{ required: true, message: "开户银行不能为空", trigger: "blur" }]
+      }
     };
   },
   methods: {

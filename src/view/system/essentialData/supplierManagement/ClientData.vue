@@ -407,7 +407,11 @@ export default {
           align: "center",
           render: (h, params) => {
             let text = "";
-            params.row.accountType == 0 ? (text = "公户") : (text = "个人账户");
+            if(params.row.accountType=="ZHLX001"){
+              text="个人账户"
+            } else if(params.row.accountType=="ZHLX002"){
+              text="公户"
+            }
             return h("span", {}, text);
           }
         },
@@ -527,7 +531,7 @@ export default {
       this.bankAccountTit = "修改银行账户信息";
       this.bankAccount = true;
       this.$refs.bankAccount.data = this.selectFinTab;
-      console.log(this.$refs.bankAccount.data, "????");
+      // console.log(this.$refs.bankAccount.data, "????");
     },
     // 修改启用禁用
     changePlaceFin() {
@@ -546,11 +550,6 @@ export default {
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
-            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
-              bool = false;
-            }
-          });
-          if (bool == true) {
             if (item.id == this.selectFinTab.id) {
               let newarr = {};
               newarr = JSON.parse(JSON.stringify(this.selectFinTab));
@@ -563,12 +562,26 @@ export default {
               item.accountType = newarr.accountType;
               item.acquiesce = newarr.acquiesce;
             }
+          });
+          // if (bool == true) {
+          //   if (item.id == this.selectFinTab.id) {
+          //     let newarr = {};
+          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          //     item.id = newarr.id;
+          //     item.tenantId = newarr.tenantId;
+          //     item.guestId = newarr.guestId;
+          //     item.accountBank = newarr.accountBank;
+          //     item.accountBankNo = newarr.accountBankNo;
+          //     item.accountName = newarr.accountName;
+          //     item.accountType = newarr.accountType;
+          //     item.acquiesce = newarr.acquiesce;
+          //   }
             this.disposeFinData();
-            this.$Message.success("添加银行卡成功");
+            this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
-          } else {
-            return this.$Message.error("该银行卡已添加过");
-          }
+          // } else {
+          //   return this.$Message.error("该银行卡已添加过");
+          // }
           this.data.guestAccountVoList = this.financeList;
         } else {
           let newarr = {};
@@ -583,6 +596,7 @@ export default {
           if (bool == true) {
             newarr.acquiesce = false;
             newarr.accountSign = true;
+            newarr.accountType = newarr.accountType || "ZHLX002";
             this.financeList.push(newarr);
             this.data.guestAccountVoList = this.financeList;
             this.bankAccount = false;

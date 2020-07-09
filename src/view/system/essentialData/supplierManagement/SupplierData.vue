@@ -382,6 +382,8 @@ export default {
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.$refs.form.resetFields();
+      this.$refs.child.financeList=[]
+      this.$refs.child.selectFinTab={}
     },
     cancel() {
       this.clientDataShow = false;

@@ -231,7 +231,11 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Input v-model="searchData.partName" class="w250 mr10" @on-enter="resetData"/>
+              <Input
+                v-model="searchData.partName"
+                class="w250 mr10"
+                @on-enter="resetData"
+              />
             </div>
             <div class="db">
               <Button
@@ -462,12 +466,6 @@ export default {
           title: "仓库",
           align: "center",
           key: "storeName",
-          minWidth: 120
-        },
-        {
-          title: "仓位",
-          align: "center",
-          key: "storeShelf",
           minWidth: 120
         },
         {
@@ -921,14 +919,14 @@ export default {
     // 汇总库存请求
     async getAllStocks() {
       let data = {};
-      data = JSON.parse(JSON.stringify(this.searchForm)) ;
+      data = JSON.parse(JSON.stringify(this.searchForm));
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
-      console.log(this.searchForm , 789)
+      console.log(this.searchForm, 789);
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
@@ -966,7 +964,7 @@ export default {
     // 批次库存请求
     async getLotStocks() {
       let data = {};
-      data = JSON.parse(JSON.stringify(this.searchForm1)) ;
+      data = JSON.parse(JSON.stringify(this.searchForm1));
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -1192,10 +1190,27 @@ export default {
               return prev;
             }
           }, 0);
-          sums[key] = {
-            key,
-            value: v
-          };
+          if (
+            [
+              "stockQty",
+              "outableQty",
+              "stockAmt",
+              "pchRoadQty",
+              "attotRoadQty",
+              "onRoadQty",
+              "enterAmt",
+            ].includes(key)
+          ) {
+            sums[key] = {
+              key,
+              value: v
+            };
+          } else {
+            sums[key] = {
+              key,
+              value: ""
+            };
+          }
         } else {
           sums[key] = {
             key,
