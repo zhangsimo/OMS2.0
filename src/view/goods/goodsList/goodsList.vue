@@ -208,9 +208,7 @@
                       :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.directCompanyId"
                       clearable
-                      allow-create
                       filterable
-                      @on-create="addCompanyMap"
                     >
                       <Option
                         v-for="item in companyMap"
