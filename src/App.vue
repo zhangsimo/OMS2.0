@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view v-if="isRouterAlive"/>
+    <keep-alive>
+    <router-view :key="getRouteKey" v-if="isRouterAlive && $route.meta.keepAlive"/>
+    </keep-alive>
+    <router-view  :key="getRouteKey" v-if="isRouterAlive && !$route.meta.keepAlive"/>
+
   </div>
 </template>
 
@@ -25,6 +29,12 @@ export default {
       })
     },
   },
+ computed:{
+   getRouteKey () {
+     // 当前路由的唯一key
+     return this.$route.name + (this.$route.params.id || '')
+   }
+   },
 
   watch: {
       $route:{
