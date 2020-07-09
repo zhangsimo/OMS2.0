@@ -261,7 +261,6 @@
           ref="xTable"
           align="center"
           size="mini"
-          showOverflow="true"
           :edit-rules="validRules"
           :data="formPlan.detailList"
           :height="rightTableHeight"
