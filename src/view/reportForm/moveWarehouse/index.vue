@@ -30,7 +30,10 @@ export default {
       if(data.isPanne) {
         // 基本查询
         delete data.isPanne;
-        data2 = data;
+
+        data2 = {...data};
+        data2.receiveStoreId = data2.storeId;
+        delete data2.storeId;
       } else {
         data.commitStartDate ? data2.commitStartDate = data.commitStartDate : "";
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
@@ -40,7 +43,7 @@ export default {
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
-        data.orderman ? data2.orderMan = data.orderman : "";
+        data.orderman ? data2.orderManId = data.orderman : "";
       }
       this.$refs.tabOne.page.page=0;
       this.$refs.tabOne.getList(data2);
@@ -60,7 +63,7 @@ export default {
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
-        data.orderman ? data2.orderMan = data.orderman : "";
+        data.orderman ? data2.orderManId = data.orderman : "";
       }
       this.$refs.tabTwo.page.page = 0;
       this.$refs.tabTwo.getList(data2);

@@ -30,7 +30,9 @@ export default {
       if(data.isPanne) {
         // 基本查询
         delete data.isPanne;
-        data2 = data;
+        let quickDates = {...data};
+        data2.enterDateStart = quickDates.createTimeStart;
+        data2.enterDateEnd = quickDates.createTimeEnd;
       } else {
         data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.enterDateStart = data.startTime : "";
@@ -42,7 +44,7 @@ export default {
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.sourceId = data.warehouseId2 : "";
-        data.orderman ? data2.auditor = data.orderman : "";
+        data.orderman ? data2.auditorId = data.orderman : "";
       }
       this.$refs.tabOne.page.page=0;
       this.$refs.tabOne.getList(data2);
@@ -52,7 +54,9 @@ export default {
       if(data.isPanne) {
         // 基本查询
         delete data.isPanne;
-        data2 = data;
+        let quickDates = {...data};
+        data2.outDateStart = quickDates.createTimeStart;
+        data2.outDateEnd = quickDates.createTimeEnd;
       } else {
         data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.outDateStart = data.startTime : "";
@@ -62,7 +66,7 @@ export default {
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.sourceId = data.warehouseId2 : "";
-        data.orderman ? data2.auditor = data.orderman : "";
+        data.orderman ? data2.auditorId = data.orderman : "";
       }
       this.$refs.tabTwo.page.page=0;
       this.$refs.tabTwo.getList(data2);

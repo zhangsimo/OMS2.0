@@ -112,7 +112,7 @@ export default {
     getDataQuick(v) {
       this.quickDates = v;
       if(v.length >= 2) {
-        this.$emit("search", { isPanne: true, createStartDate: v[0], createEndDate: v[1] });
+        this.$emit("search", { isPanne: true, commitStartDate: v[0], commitEndDate: v[1] });
       } else {
         this.$emit("search", { isPanne: true });
       }
@@ -135,8 +135,8 @@ export default {
         }
       }
       if(this.quickDates.length >= 2 && this.quickDates[0]) {
-        data.createStartDate = this.quickDates[0];
-        data.createEndDate = this.quickDates[1];
+        data.commitStartDate = this.quickDates[0];
+        data.commitEndDate = this.quickDates[1];
       }
       this.$emit("search", data);
     },
@@ -145,7 +145,6 @@ export default {
       this.$refs.more.init();
     },
     getmoreData(data) {
-      //  console.log(data)
       if (data != null) {
         this.$emit("search", data);
       }
