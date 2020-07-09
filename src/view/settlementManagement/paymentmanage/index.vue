@@ -250,7 +250,7 @@ export default {
         // },
         {
           title: "店号",
-          key: "orgId",
+          key: "code",
           className: "tc"
         },
         {
