@@ -604,12 +604,7 @@ export default class ProductLA extends Vue {
           this.$Message.success('移入成功')
         }
       }else if(this.tipWords.includes('一键移出')){
-        let data:any = this.distPartListData.map((el:any) => {
-          return {
-            id: el.id
-          }
-        })
-        let res:any = await api.employeeDeletePart(data);
+        let res:any = await api.employeeDeleteAllPart({empId:this.employeeId});
         if(res.code == 0) {
           this.$Message.success('移出成功')
         }
