@@ -279,7 +279,7 @@
     </Modal>
 </template>
 <script>
-import {  
+import {
   queryCreditLike,
   getStaffList,
   getDataDictionaryType,
@@ -293,7 +293,7 @@ export default {
       currTab:'client',//当前tab页
       dealings: false, //内部往来勾选
       subjectModelShowassist: false, //辅助核算弹框
-      AssistAccounting: "", //辅助核算弹框绑定值  
+      AssistAccounting: "", //辅助核算弹框绑定值
       FullNameOrCode: "", //客户编码或名称、全称
       AssistTableDataKeHu: [], //辅助弹框客户
       client: {
@@ -364,6 +364,7 @@ export default {
         ]
       },
       fundList: [], //款项分类数组
+      voucherList:[]//选中内容
     }
   },
   mounted() {
@@ -399,20 +400,21 @@ export default {
     },
     //辅助核算确定弹框
     confirmFuzhu() {
+      console.log(this.AssistAccounting,"???")
       if (this.Classification) {
         this.$refs.formDynamic.validate(valid => {
         if (valid) {
             if(!this.AssistAccounting){
-            this.$message.error('请选择辅助核算');
-            this.subjectModelShowassist = true
+              this.$message.error('请选择辅助核算');
+              this.subjectModelShowassist = true
             } else {
-            this.subjectModelShowassist = false;
-            this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
-            // this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
-            // this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
-            // if (this.oneAccountent.auxiliaryTypeCode == "3") {
-            //   this.oneAccountent.auxiliaryCode = this.departmentVal;
-            // }
+              this.subjectModelShowassist = false;
+              this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
+              // this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
+              // this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
+              // if (this.oneAccountent.auxiliaryTypeCode == "3") {
+              //   this.oneAccountent.auxiliaryCode = this.departmentVal;
+              // }
             }
         } else {
             this.$Message.error("请选择款项分类!");
@@ -669,6 +671,7 @@ export default {
     },
     //新增辅助核算名称保存
     addAuxiliary() {
+      console.log(this.AssistAccounting,"???")
       this.$refs.formAdd.validate(valid => {
         if (valid) {
           let data = {};

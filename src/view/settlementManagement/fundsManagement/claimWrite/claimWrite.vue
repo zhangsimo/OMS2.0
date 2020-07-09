@@ -37,7 +37,15 @@
           <div slot="left">
             <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
             <span>往来单位：</span>
-            <Select v-model="companyIdNo" class="w100" filterable>
+            <Select
+              v-model="companyIdNo"
+              class="w100"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+            >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <span class="ml10">收付类型：</span>
@@ -81,12 +89,16 @@
               <div slot="top">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
                 <span class="ml10">往来单位：</span>
-                <Select v-model="companyIdClaim" class="w150" filterable>
-                  <Option
-                    v-for="item in company"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                <Select
+                  v-model="companyIdClaim"
+                  class="w100"
+                  clearable
+                  filterable
+                  remote
+                  :loading="remoteloading2"
+                  :remote-method="getOne2"
+                >
+                  <Option v-for="item in company2" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtClaim" class="w50" />
@@ -218,6 +230,8 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
+      remoteloading2: false,
       title: "预付款认领", //弹框标题
       split1: 0.4, //左右面板分割
       split2: 0.52, //上下面板分割
@@ -225,6 +239,7 @@ export default {
       companyIdNo: "", //未核销往来单位
       companyIdClaim: "", //待认领往来单位
       company: [], //往来单位下拉框
+      company2: [], //往来单位下拉框
       orgId: "", //门店
       orgList: [{ id: "0", name: "全部" }], //分店名称
       claimedSubjectList: [], //获取到点击到的本店认领数据
@@ -373,7 +388,7 @@ export default {
     };
   },
   async mounted() {
-    this.getOne();
+    // this.getOne();
     //收付类型数据字典
     getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(res => {
       res.data.map(item => {
@@ -414,17 +429,45 @@ export default {
         return (this.orgList = [...this.orgList, ...res.data]);
     },
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
+    },
+    async getOne2(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading2 = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company2.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading2 = false;
+          }
+        });
+      } else {
+        this.company2 = [];
+      }
     },
     //核销对账单
     write() {

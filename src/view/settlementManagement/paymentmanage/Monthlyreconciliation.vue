@@ -24,17 +24,16 @@
               <div class="db ml20">
                 <span>往来单位：</span>
                 <Select
-                  filterable
                   v-model="companyInfo"
-                  style="width:200px"
-                  @on-change="companySelect"
+                  class="w150"
                   clearable
+                  filterable
+                  remote
+                  :loading="remoteloading"
+                  :remote-method="getOne"
+                  @on-change="companySelect"
                 >
-                  <Option
-                    v-for="item in companyList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <!-- <input type="text" class="h30" :value="companyInfo" />
                 <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
@@ -243,6 +242,9 @@
 import selectDealings from "./component/selectCompany";
 import { creat } from "./../components";
 import {
+  findGuest
+} from "_api/settlementManagement/advanceCollection.js";
+import {
   getReconciliation,
   getSettlement,
   Preservation,
@@ -298,6 +300,7 @@ export default {
       }
     };
     return {
+      remoteloading: false,
       disabledBtn:false,
       summer: null, //计算费用合计
       validRules: {
@@ -312,7 +315,7 @@ export default {
       collectionAccount: "",
       thisApplyAccount: "",
       collectionAccountList: [],
-      companyList: [],
+      company: [],
       info: false,
       store: "",
       bill: "",
@@ -557,6 +560,26 @@ export default {
     }
   },
   methods: {
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
+    },
     // 在值发生改变时更新表尾合计
     updateFooterEvent(params) {
       let xTable = this.$refs.xTable;
@@ -718,11 +741,11 @@ export default {
         if (item.value === val) {
           getStore({ orgId: val, orgName: item.label }).then(res => {
             this.infoGet = res.data;
-            this.companyList = [];
+            this.company = [];
             this.collectionAccountList = [];
             this.companyInfo = this.parameter.guestId;
             res.data.map((item, index) => {
-              this.companyList.push({
+              this.company.push({
                 value: item.id,
                 label: item.fullName
               });

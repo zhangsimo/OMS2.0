@@ -81,7 +81,7 @@
             <div
               slot="left"
               class="con-split-pane-left"
-              style="overflow-y: auto; height: 100%;"
+              style="overflow-y:auto;"
             >
               <div class="pane-made-hd">
                 采购退货列表
@@ -92,7 +92,7 @@
                 size="small"
                 highlight-row
                 border
-                :stripe="false"
+                :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
                 @on-row-click="selection"
@@ -282,7 +282,6 @@
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
-                showOverflow="true"
                 @edit-actived="editActivedEvent"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
@@ -300,21 +299,17 @@
                 <vxe-table-column
                   field="partCode"
                   fixed="left"
-                  show-overflow
                   title="配件编码"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partName"
                   fixed="left"
-                  show-overflow
                   title="配件名称"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partBrand"
-                  fixed="left"
-                  show-overflow
                   title="品牌"
                   width="100"
                 ></vxe-table-column>
@@ -457,7 +452,7 @@ export default {
         return Promise.reject(new Error("数量输入不正确"));
       }
       if(canReQty < cellValue) {
-        return Promise.reject(new Error("数量输入不正确"));
+        return Promise.reject(new Error("退货数量不能大于可退数量"));
       }
     };
 
@@ -1507,20 +1502,14 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import url("../../../lease/product/lease.less");
-@import url("../../../goods/plannedPurchaseOrder/index");
-</style>
-
-<style scoped>
-.con-box {
-  height: 700px;
-}
-.w550 {
-  width: 580px;
-}
-</style>
+<!--<style scoped>-->
+<!--.con-box {-->
+<!--  height: 700px;-->
+<!--}-->
+<!--.w550 {-->
+<!--  width: 580px;-->
+<!--}-->
+<!--</style>-->
 <style lang="less">
 .remark-input {
   .ivu-input {

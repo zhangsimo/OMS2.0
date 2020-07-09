@@ -26,7 +26,7 @@ export async function getAllSalesList() {
   if (Salse.code == 0) {
     // console.log(Salse.data);
     Salse.data.content.map(item => {
-      
+
       (item.staffAccountVoList || []).forEach(el => {
         arr.push({
           value: el.id,
@@ -62,7 +62,6 @@ export async function getAllSalesList() {
   //   });
   // }
 
-  console.log(arr)
 
   return arr;
 }

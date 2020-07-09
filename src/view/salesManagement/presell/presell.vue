@@ -72,9 +72,9 @@
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
-          <Split v-model="split1" min="300" max="500">
+          <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
             <!--   左边表格-->
-            <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+            <div slot="left" class="con-split-pane-left" style="height: 100%;">
               <div class="pane-made-hd">预销售单列表</div>
               <Table
                 ref="currentRowTable"
@@ -109,7 +109,7 @@
             <div
               slot="right"
               class="con-split-pane-right pl5 goods-list-form"
-              style="overflow-y: auto; height: 100%;"
+              style="height: 100%;"
             >
               <div class="pane-made-hd">
                 <span class="titler mr5">固定额度:</span>
@@ -340,27 +340,29 @@
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column type="index" title="序号" fixed="left"></vxe-table-column>
-                  <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
-                  <vxe-table-column title="操作" fixed="left">
+                  <vxe-table-column type="index" title="序号" fixed="left" width="60"></vxe-table-column>
+                  <vxe-table-column type="checkbox" fixed="left" width="60"></vxe-table-column>
+                  <vxe-table-column title="操作" fixed="left" width="100">
                     <template v-slot="{ row,rowIndex }">
                       <a @click="openFileModal(row)">查看</a>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" fixed="left"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
                     title="数量"
+                    width="100"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="orderPrice"
                     title="销价"
+                    width="100"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
-                  <vxe-table-column title="金额">
+                  <vxe-table-column title="金额" width="100">
                     <template v-slot="{ row }">
                       <span>{{ countAmount(row) | priceFilters}}</span>
                     </template>
@@ -368,9 +370,10 @@
                   <vxe-table-column
                     field="remark"
                     title="备注"
+                    width="160"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
-                  <vxe-table-column field="storeName" title="仓库" disabled>
+                  <vxe-table-column field="storeName" title="仓库" disabled width="100">
                     <template v-slot:edit="{ row }">
                       <Select style="width:100px">
                         <Option
@@ -382,15 +385,15 @@
                     </template>
                   </vxe-table-column>
 
-                  <vxe-table-column title="品牌车型">
+                  <vxe-table-column title="品牌车型" width="100">
                     <template v-slot="{row, rowIndex}">
                       <span>{{row.carBrandName}} {{row.carModelName}}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="unit" title="单位"></vxe-table-column>
-                  <vxe-table-column field="oemCode" title="OEM码"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格"></vxe-table-column>
-                  <vxe-table-column field="showDirection" title="方向"></vxe-table-column>
+                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
+                  <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                  <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
                 </vxe-table>
               </Form>
             </div>
@@ -1272,7 +1275,7 @@ export default {
 }
 </style>
 <style scoped>
-  .purchase >>> .ivu-form-item .ivu-form-item-label{
+  .purchase .ivu-form-item .ivu-form-item-label{
     font-size: 12px!important;
   }
 </style>

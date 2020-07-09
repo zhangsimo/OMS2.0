@@ -19,14 +19,14 @@
            <!-- @change="changeModel" -->
         </i-col>
         <i-col span="10">
-          <Form :model="formValidate" :rules="ruleValidate">
-            <FormItem label="选择辅助核算">
+          <Form :model="formValidate" ref="form" :rules="ruleValidate">
+            <FormItem label="选择辅助核算" prop="voucherInput">
               <Row>
                 <i-col span="8">
-                    <i-input :value.sync="formValidate.voucherInput" ></i-input>
+                    <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
                 <i-col span="2">
-                    <Button type="default" @click="openVoucherInput">辅助核算</Button>                  
+                    <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
               </Row>
             </FormItem>
@@ -132,7 +132,7 @@ export default {
       voucherinputModel: false,
       formValidate:{voucherInput:""},
       ruleValidate:{
-        voucherInput:[{ required: true, message: '不能为空', trigger: 'blur' }]
+        voucherInput:[{ required: true, message: '必填项', trigger: 'blur' }]
       },
       // 表格验证  本次认领金额  是否符合条件
       validRules: {
@@ -182,9 +182,26 @@ export default {
         if(this.voucherinputModel==false){
           this.$refs.claimGuest.modal=true
         }else{
-          this.$refs.voucherInput.subjectModelShowassist = true;
-          this.claimedList(2);
+          this.getMessage()
+          if(this.MessageValue==""){
+            this.$Message.error("请选择辅助核算")
+            console.log(this.MessageValue,this.$refs.voucherInput.AssistAccounting,"???")
+          }else{
+            console.log(this.MessageValue,this.$refs.voucherInput.AssistAccounting,"???")
+            this.$message.success("其他收款认领成功")
+            this.claimedList(2);
+          }
         }
+    },
+    //校验表单
+    handleSubmit(callback) {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          callback && callback();
+        } else {
+          this.$Message.error("带*为必填");
+        }
+      });
     },
     //预收款弹框是否打开
     visChangeClaim(type) {
@@ -242,8 +259,9 @@ export default {
       }
     },
     //子组件的数据
-    getMessage(value) {
-      this.MessageValue = value[0].startStatus.name;
+    getMessage() {
+      this.MessageValue = this.$refs.voucherInput.AssistAccounting;
+      console.log(this.MessageValue,this.$refs.voucherInput.AssistAccounting,"???")
     },
     //认领弹框认领
     claimPay() {
@@ -320,7 +338,7 @@ export default {
         let data = {};
         data.detailId = this.accrued[0].id;
         if(this.claimTit=="预收款认领"){
-          data.subjectCode="1123"; 
+          data.subjectCode="1123";
           data.climeType=3
         }else{
           data.subjectCode="2241";
@@ -332,7 +350,7 @@ export default {
           this.claimTit=="预收款认领"?this.$Message.success("预收款认领成功"):this.$Message.success("其他收款认领成功")
         }
       }else{
-        
+
       }
     }
   }

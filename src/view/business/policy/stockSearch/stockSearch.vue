@@ -68,10 +68,11 @@
               >
             </Select>
             <Select
-              class="w120 mr10"
+              class="w240 mr10"
               multiple
               v-model="searchForm.storeIds"
               placeholder="仓库"
+              @on-change="select1"
             >
               <Option
                 :disabled="item.isDisabled"
@@ -154,10 +155,11 @@
               >
             </Select>
             <Select
-              class="w120 mr10"
+              class="w240 mr10"
               multiple
               v-model="searchForm1.storeIds"
               placeholder="仓库"
+              @on-change="select2"
             >
               <Option
                 :disabled="item.isDisabled"
@@ -369,7 +371,7 @@ export default {
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
-      storeList: [{ name: "请选择", id: 1 }],
+      storeList: [{ name: "全部", id: 1 }],
       //汇总库存查询条件表单
       searchForm: {
         partBrand: "", //品牌id
@@ -687,6 +689,22 @@ export default {
     this.getHsStoreFun();
   },
   methods: {
+    select1(option) {
+      if(option.slice(-1)[0] == 1) {
+        option = [1];
+      } else if(option.includes(1)) {
+        option = option.filter(el => el != 1);
+      }
+      this.searchForm.storeIds = option;
+    },
+    select2(option) {
+      if(option.slice(-1)[0] == 1) {
+        option = [1];
+      } else if(option.includes(1)) {
+        option = option.filter(el => el != 1);
+      }
+      this.searchForm1.storeIds = option;
+    },
     getColumns() {
       let arr = [
         {
@@ -839,7 +857,7 @@ export default {
         {
           title: "库存下限",
           align: "center",
-          key: "downLimitWinter",
+          key: "downLimit",
           minWidth: 120
         },
         {
@@ -920,6 +938,7 @@ export default {
     async getAllStocks() {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm));
+      data.partName = data.partName.trim();
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -965,6 +984,7 @@ export default {
     async getLotStocks() {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm1));
+      data.partName = data.partName.trim();
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }

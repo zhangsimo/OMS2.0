@@ -480,7 +480,7 @@ export default {
       this.newStaff = {
         single: false,
         singtwo: false,
-          gender: 0
+        gender: 0
       };
       this.modalShow = true;
       this.isNextAdd = true;

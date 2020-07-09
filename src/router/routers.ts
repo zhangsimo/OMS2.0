@@ -835,6 +835,7 @@ export default [
         mark: "5200",
         meta: {
           // hideInMenu: true,
+          keepAlive: true,
           title: "应收应付"
         },
         component: () =>
@@ -1801,7 +1802,7 @@ export default [
         name: "allotThree",
         mark: "9301",
         meta: {
-          notCache: true,
+          // notCache: true,
           title: "基本信息"
         },
         component: parentView,
@@ -1811,7 +1812,7 @@ export default [
             name: "/accountInformation",
             mark: "9301",
             meta: {
-              notCache: true,
+              // notCache: true,
               title: "基本信息"
             },
             component: () =>
@@ -1868,7 +1869,7 @@ export default [
         name: "templateIndex",
         mark: "9999",
         meta: {
-          notCache: true,
+          // notCache: true,
           title: "模板管理"
         },
         component: () =>
