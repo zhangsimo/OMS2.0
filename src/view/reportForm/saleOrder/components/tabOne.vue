@@ -204,7 +204,7 @@ export default {
         size: this.page.size,
       };
       let res = await api.getPjSellOrderMainDetailList(this.body, params);
-      if (res.code == 0) {
+      if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
             el.taxSign = true;
@@ -231,7 +231,7 @@ export default {
         size: 10000,
       };
       let res = await api.getPjSellOrderMainDetailList(this.body, params);
-      if (res.code == 0) {
+      if (res.code == 0 && res.data != null) {
         tableDataAll = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
             el.taxSign = true;
