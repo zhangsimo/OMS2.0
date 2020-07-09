@@ -100,7 +100,7 @@
           </div>
           <!--          右侧详情数据显示-->
           <div slot="right" class="demo-split-pane">
-            <div style="height: 100%;">
+<!--            <div style="height: 100%;">-->
               <Form
                 inline
                 ref="formPlan"
@@ -316,7 +316,7 @@
                   </vxe-table>
 <!--                </div>-->
               </Form>
-            </div>
+<!--            </div>-->
           </div>
         </Split>
       </div>
@@ -366,7 +366,7 @@
 }
 
 .conter {
-  height: 100%;
+  height: calc(~"100% - 63px");
   width: 100%;
   padding: 10px;
 }
@@ -419,7 +419,7 @@
 }
 </style>
 <style scoped>
-.purchase >>> .ivu-form-item {
+.purchase  .ivu-form-item {
   margin-bottom: 0px;
 }
 </style>
