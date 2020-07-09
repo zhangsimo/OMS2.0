@@ -221,7 +221,7 @@ export default {
         size: 10,
         total: 0
       },
-      tableDataAll: [],
+      body: {},
       tableData: []
     };
   },
@@ -230,10 +230,14 @@ export default {
   },
   methods: {
     // 查询表
-    async getList(data = {}) {
-      let res = await api.getPjPchsRtnMainDetails(data);
+    async getList() {
+      let params = {
+        page: this.page.num - 1,
+        size: this.page.size,
+      };
+      let res = await api.getPjPchsRtnMainDetails(this.body, params);
       if (res.code == 0) {
-        this.tableDataAll = (res.data || []).map(el => {
+        this.tableData = (res.data.content || []).map(el => {
           // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
           // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
           if ([1, "1", "是"].includes(el.taxSign)) {
@@ -245,24 +249,18 @@ export default {
           return el;
         });
 
-        this.tableData = this.tableDataAll.slice(0, this.page.size);
-        this.page.total = this.tableDataAll.length;
+        this.page.total = res.data.totalElements;
       }
     },
     //分页
     changePage(p) {
       this.page.num = p;
-      let start = (p - 1) * this.page.size;
-      let end = p * this.page.size;
-      this.tableData = this.tableDataAll.slice(start, end);
+      this.getList();
     },
     changeSize(size) {
       this.page.num = 1;
       this.page.size = size;
-      this.tableData = this.tableDataAll.slice(
-        this.page.num - 1,
-        this.page.size
-      );
+      this.getList();
     },
     //表尾合计
     footerMethod({ columns, data }) {
