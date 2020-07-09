@@ -3,6 +3,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import * as api from "_api/system/ProductLA.js";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
+// @ts-ignore
 import {getAllBrand} from "_api/system/partsExamine/partsExamineApi.js";
 
 @Component
