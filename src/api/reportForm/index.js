@@ -154,73 +154,81 @@ export function getOnOrderStock(data = {}) {
 }
 
 // 加工报表_配件组装明细表_入库
-export function getPartAssemblyEnter(data = {}) {
+export function getPartAssemblyEnter(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartAssemblyEnter`,
       method: 'post',
-      data
+      data,
+      params
   })
 }
 
 // 加工报表_配件组装明细表_出库
-export function getPartAssemblyOut(data = {}) {
+export function getPartAssemblyOut(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartAssemblyOut`,
       method: 'post',
-      data
+      data,
+      params
   })
 }
 
 // 加工报表_配件拆分明细表_入库
-export function getPartSplitEnter(data = {}) {
+export function getPartSplitEnter(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartSplitEnter`,
       method: 'post',
-      data
+      data,
+      params
   })
 }
 
 // 加工报表_配件拆分明细表_出库
-export function getPartSplitOut(data = {}) {
+export function getPartSplitOut(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getPartSplitOut`,
       method: 'post',
-      data
+      data,
+      params
   })
 }
 
 // 移仓报表_移仓入库明细表
-export function getStockShiftEnter(data = {}) {
+export function getStockShiftEnter(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockShiftEnter`,
       method: 'post',
-      data
+      data,
+    params
   })
 }
 
 // 移仓报表_移仓出库明细表
-export function getStockShiftOut(data = {}) {
+export function getStockShiftOut(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockShiftOut`,
       method: 'post',
-      data
+      data,
+    params
   })
 }
 
 // 盘点报表_盘亏出库明细表
-export function getStockCheckLoss(data = {}) {
+export function getStockCheckLoss(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockCheckLoss`,
       method: 'post',
-      data
+      data,
+      params
   })
 }
 
 // 盘点报表_盘盈入库明细表
-export function getStockCheckProfit(data = {}) {
+export function getStockCheckProfit(data = {},params={}) {
   return axios.request({
       url: `${api.omsBatch}/batchEdi/getStockCheckProfit`,
       method: 'post',
-      data
+      data,
+      params
   })
 }
