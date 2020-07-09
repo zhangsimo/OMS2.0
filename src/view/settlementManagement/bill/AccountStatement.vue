@@ -432,6 +432,10 @@ export default {
           label: "全部"
         },
         {
+          value: "SHZ",
+          label: "审批中"
+        },
+        {
           value: "SHTG",
           label: "审批通过"
         },

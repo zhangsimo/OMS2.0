@@ -37,8 +37,18 @@
           <div slot="left">
             <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
             <span>往来单位：</span>
-            <Select v-model="companyIdNo" class="w100" filterable>
-              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <!--<Select v-model="companyIdNo" class="w100" filterable>-->
+              <!--<Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+            <!--</Select>-->
+            <Select
+              ref="companyGuset"
+              v-model="companyIdNo"
+              filterable
+              remote
+              class="w120"
+              :remote-method="getOrignCompany"
+              :loading="searchLoading">
+              <Option v-for="(option, index) in company" :value="option.id" :key="index">{{option.fullName}}</Option>
             </Select>
             <span class="ml10">收付类型：</span>
             <Select v-model="paymentId" class="w100" filterable>
@@ -81,12 +91,22 @@
               <div slot="top">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
                 <span class="ml10">往来单位：</span>
-                <Select v-model="companyIdClaim" class="w150" filterable>
-                  <Option
-                    v-for="item in company"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                <!--<Select v-model="companyIdClaim" class="w150" filterable>-->
+                  <!--<Option-->
+                    <!--v-for="item in company"-->
+                    <!--:value="item.value"-->
+                    <!--:key="item.value"-->
+                  <!--&gt;{{ item.label }}</Option>-->
+                <!--</Select>-->
+                <Select
+                  ref="companyGuset2"
+                  v-model="companyIdClaim"
+                  filterable
+                  remote
+                  class="w150"
+                  :remote-method="getOrignCompany"
+                  :loading="searchLoading">
+                  <Option v-for="(option, index) in company" :value="option.id" :key="index">{{option.fullName}}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtClaim" class="w50" />
@@ -218,6 +238,7 @@ export default {
   },
   data() {
     return {
+      searchLoading:false,
       title: "预付款认领", //弹框标题
       split1: 0.4, //左右面板分割
       split2: 0.52, //上下面板分割
@@ -373,7 +394,7 @@ export default {
     };
   },
   async mounted() {
-    this.getOne();
+    // this.getOne();
     //收付类型数据字典
     getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(res => {
       res.data.map(item => {
@@ -674,7 +695,24 @@ export default {
       this.distributionPage.page = 1;
       this.distributionPage.size = val;
       this.distributionList();
-    }
+    },
+    //获取往来单位
+    async getOrignCompany(query){
+      if (query !== '') {
+        this.searchLoading = true;
+        let req = {
+          fullName:query,
+          size:1000,
+        }
+        let rep = await findGuest(req);
+        this.searchLoading = false;
+        if(rep.code==0){
+          this.company = rep.data.content;
+        }
+      } else {
+        this.company = [];
+      }
+    },
   }
 };
 </script>
