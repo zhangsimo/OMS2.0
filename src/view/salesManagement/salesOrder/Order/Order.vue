@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%">
+  <div class="content-oper content-oper-flex">
     <div class="headerBox">
       <span class="mr10">快速查询:</span>
       <getDate class="mr10" @quickDate="getvalue"></getDate>
@@ -55,8 +55,8 @@
     </div>
     <div class="conter">
       <div class="demo-split">
-        <Split v-model="split1">
-          <div slot="left" ref="paneLeft" style="height: 100%" class="demo-split-pane">
+        <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
+          <div slot="left" ref="paneLeft" style="overflow-y: auto; height: 100%;" class="demo-split-pane">
             <OrderLeft
               ref="OrderLeft"
               :queryTime="queryTime"
@@ -66,7 +66,7 @@
               @refresh="getDutyInfo"
             ></OrderLeft>
           </div>
-          <div slot="right" class="demo-split-pane">
+          <div slot="right" class="demo-split-pane pl5">
             <OrderRight @parentGetleft="parentGetleft" ref="right"></OrderRight>
           </div>
         </Split>
