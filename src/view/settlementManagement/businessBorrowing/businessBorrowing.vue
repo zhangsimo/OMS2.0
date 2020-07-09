@@ -48,23 +48,41 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button v-has="'clima'" class="ml10" @click="claimCollect(1)">因公借支认领</Button>
-        <Button v-has="'cancel'" class="ml10" @click="openWriteOffModel">因公借支核销</Button>
-        <Button v-has="'back'" class="ml10" @click="claimCollect(2)">因公借支收回</Button>
-        <Button v-has="'revoke'" class="ml10" @click="revokeCollection(3)"
+        <Button v-has="'clima'" class="ml10" @click="claimCollect(1)"
+          >因公借支认领</Button
+        >
+        <Button v-has="'cancel'" class="ml10" @click="openWriteOffModel"
+          >因公借支核销</Button
+        >
+        <Button v-has="'back'" class="ml10" @click="claimCollect(2)"
+          >因公借支收回</Button
+        >
+        <Button
+          v-has="'revoke'"
+          class="ml10"
+          @click="revokeCollection(3)"
           :disabled="currRow == null"
           >因公借支申请撤回</Button
         >
-        <Button class="ml10" @click="revokeCollection(0)"
-          :disabled="currRow == null" v-has="'claimRevoke'"
+        <Button
+          class="ml10"
+          @click="revokeCollection(0)"
+          :disabled="currRow == null"
+          v-has="'claimRevoke'"
           >因公借支认领撤回</Button
         >
-        <Button class="ml10" @click="revokeCollection(1)"
-          :disabled="currRow == null" v-has="'borrowRevoke'"
+        <Button
+          class="ml10"
+          @click="revokeCollection(1)"
+          :disabled="currRow == null"
+          v-has="'borrowRevoke'"
           >因公借支核销撤回</Button
         >
-        <Button class="ml10" @click="revokeCollection(2)"
-          :disabled="currRow == null" v-has="'payRevoke'"
+        <Button
+          class="ml10"
+          @click="revokeCollection(2)"
+          :disabled="currRow == null"
+          v-has="'payRevoke'"
           >因公借支收回撤回</Button
         >
         <!--<Button class="ml10">导出</Button>-->
@@ -288,7 +306,16 @@
       @on-visible-change="visChangeClaim"
     >
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
+      <Select
+        v-model="companyId"
+        class="w150"
+        clearable
+        filterable
+        remote
+        :loading="remoteloading"
+        :remote-method="getOne"
+        @on-change="query"
+      >
         <Option v-for="item in company" :value="item.value" :key="item.value">{{
           item.label
         }}</Option>
@@ -344,7 +371,7 @@ import {
   findByDynamicQuery,
   withdraw
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
-import { goshop } from '@/api/settlementManagement/shopList';
+import { goshop } from "@/api/settlementManagement/shopList";
 import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
@@ -353,7 +380,7 @@ import writeOff from "./components/writeOff";
 import moment from "moment";
 
 export default {
-  inject:['reload'],
+  inject: ["reload"],
   name: "businessBorrowing",
   components: {
     quickDate,
@@ -366,12 +393,11 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
-      Branchstore: [
-        {id:'0' ,name:'全部'}
-      ], //分店名称
+      Branchstore: [{ id: "0", name: "全部" }], //分店名称
       requestCode: "", //申请单号
       currRow: null, //选中行
       claimModal: false, //认领弹框
@@ -398,10 +424,11 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0)
+        return (this.Branchstore = [...this.Branchstore, ...res.data]);
     },
     // 快速查询
     quickDate(data) {
@@ -421,18 +448,18 @@ export default {
         page: 1,
         total: 0,
         size: 10
-      }
+      };
       if (type == 1) {
         this.claimModal = true;
         this.claimTit = "因公借支认领";
         this.claimCollectType = 1;
-        this.$store.commit("setClaimType", 2)
+        this.$store.commit("setClaimType", 2);
         this.claimedList(2);
       } else {
         this.claimModal = true;
         this.claimTit = "因公借支收回";
         this.claimCollectType = 2;
-        this.$store.commit("setClaimType", 3)
+        this.$store.commit("setClaimType", 3);
         this.claimedList(1);
       }
     },
@@ -459,9 +486,9 @@ export default {
     //预收款弹框是否打开
     visChangeClaim(type) {
       this.companyId = "";
-      this.amt =null;
+      this.amt = null;
       this.bankNameOthis = "";
-      this.claimSelection=[]
+      this.claimSelection = [];
       // if (!type) {
       //   this.companyId = "";
       //   this.amt =null;
@@ -474,7 +501,7 @@ export default {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
       }
-      if(this.currRow.paymentReturnBalance == 0) {
+      if (this.currRow.paymentReturnBalance == 0) {
         return this.$message.error("未认领资金不能核销");
       }
       this.$refs.writeOff.open();
@@ -515,11 +542,11 @@ export default {
     queryClaimed() {
       let t = 0;
       if (this.claimCollectType == 1) {
-        t = 2
+        t = 2;
       } else {
-        t = 1
+        t = 1;
       }
-      this.claimedList(t)
+      this.claimedList(t);
     },
     //初始化
     getQuery() {
@@ -560,11 +587,13 @@ export default {
         // currRow
         if (this.claimCollectType == 1) {
           if (this.selectionData.paidMoney > this.currRow.payAmt) {
-            return this.$message.error("金额大于因公借支金额金额，无法认领")
+            return this.$message.error("金额大于因公借支金额金额，无法认领");
           }
         } else {
-          if (this.selectionData.incomeMoney > this.currRow.paymentReturnBalance) {
-            return this.$message.error("金额大于因公借支金额金额，无法认领")
+          if (
+            this.selectionData.incomeMoney > this.currRow.paymentReturnBalance
+          ) {
+            return this.$message.error("金额大于因公借支金额金额，无法认领");
           }
         }
         this.$refs.claimGuest.modal = true;
@@ -577,7 +606,7 @@ export default {
     selection(selection) {
       this.claimSelection = [];
       this.selectionData = selection;
-      this.$store.commit("setFinanceAccountCashList", [{ id: selection.id }])
+      this.$store.commit("setFinanceAccountCashList", [{ id: selection.id }]);
       this.claimSelection.push({ id: selection.id });
     },
     //撤回弹框是否打开
@@ -591,38 +620,44 @@ export default {
     //撤销弹框确定按钮
     revokeDetaim() {
       if (this.reason.trim().length <= 0) {
-        return this.$message.error("请输入撤回原因")
+        return this.$message.error("请输入撤回原因");
       }
       let data = {
         revokeReason: this.reason.trim(),
         id: this.currRow.id,
-        sign: this.signType,
-      }
+        sign: this.signType
+      };
       api.loanRevoke(data).then(res => {
         if (res.code == 0) {
-          this.$message.success("撤销成功")
+          this.$message.success("撤销成功");
           this.revoke = false;
           // this.reload();
         }
-      })
+      });
     },
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
     },
     // 选中行
     currentChangeEvent({ row }) {
       this.currRow = row;
-      this.$store.commit("setLoanId", row.id)
+      this.$store.commit("setLoanId", row.id);
       // this.reconciliationStatement.accountNo = row.serviceId;
       this.serviceId = row.serviceId;
       this.$refs.Record.init();
@@ -662,11 +697,11 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.$nextTick( () => {
-      this.BranchstoreId = arr[1]
-    })
-    this.getShop()
-    this.getOne();
+    this.$nextTick(() => {
+      this.BranchstoreId = arr[1];
+    });
+    this.getShop();
+    // this.getOne();
     this.getQuery();
   }
 };
