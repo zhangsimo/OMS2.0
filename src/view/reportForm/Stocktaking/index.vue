@@ -68,7 +68,7 @@ export default {
       this.$refs.tabTwo.getList(data2);
     },
     async exportxls(refname) {
-      let aa = await this.$refs[refname].exportFun();
+      let expData = await this.$refs[refname].exportFun();
       let tabName = "盘盈入库明细表";
       switch (refname) {
         case "tabOne":
@@ -82,7 +82,7 @@ export default {
         filename: tabName,
         isHeader: true,
         isFooter: true,
-        data: aa,
+        data: expData,
       })
     },
   }
