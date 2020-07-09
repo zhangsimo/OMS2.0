@@ -7,7 +7,6 @@
       type="card"
       name="orderbox"
       class="it-box"
-      style="height: 100%"
       :active-key="tabKey"
       @on-click="tabChange"
     >
