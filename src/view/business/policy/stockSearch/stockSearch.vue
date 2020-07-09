@@ -938,6 +938,7 @@ export default {
     async getAllStocks() {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm));
+      data.partName = data.partName.trim();
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -983,6 +984,7 @@ export default {
     async getLotStocks() {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm1));
+      data.partName = data.partName.trim();
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }

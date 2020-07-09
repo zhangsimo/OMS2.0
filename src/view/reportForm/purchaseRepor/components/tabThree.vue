@@ -236,7 +236,7 @@ export default {
         size: this.page.size,
       };
       let res = await api.getPjPchsRtnMainDetails(this.body, params);
-      if (res.code == 0) {
+      if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
           // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
           // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
@@ -250,6 +250,29 @@ export default {
         });
 
         this.page.total = res.data.totalElements;
+      }
+    },
+    async getAll() {
+      let tableDataAll = [];
+      let params = {
+        page: 0,
+        size: 10000,
+      };
+      let res = await api.getPjPchsRtnMainDetails(this.body, params);
+      if (res.code == 0 && res.data != null) {
+        tableDataAll = (res.data.content || []).map(el => {
+          // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
+          // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          return el;
+        });
+
+        return tableDataAll;
       }
     },
     //分页

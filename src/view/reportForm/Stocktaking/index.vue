@@ -6,7 +6,7 @@
         <tabOne ref="tabOne" />
       </TabPane>
       <TabPane label="盘亏出库明细表">
-        <panne :type="2" @search="search2" @export="exportxls('tabOne')" />
+        <panne :type="2" @search="search2" @export="exportxls('tabTwo')" />
         <tabTwo ref="tabTwo" />
       </TabPane>
     </Tabs>
@@ -44,6 +44,7 @@ export default {
         data.warehouseId2 ? data2.sourceId = data.warehouseId2 : "";
         data.orderman ? data2.auditor = data.orderman : "";
       }
+      this.$refs.tabOne.page.page=0;
       this.$refs.tabOne.getList(data2);
     },
     search2(data) {
@@ -63,14 +64,25 @@ export default {
         data.warehouseId2 ? data2.sourceId = data.warehouseId2 : "";
         data.orderman ? data2.auditor = data.orderman : "";
       }
+      this.$refs.tabTwo.page.page=0;
       this.$refs.tabTwo.getList(data2);
     },
-    exportxls(refname) {
+    async exportxls(refname) {
+      let expData = await this.$refs[refname].exportFun();
+      let tabName = "盘盈入库明细表";
+      switch (refname) {
+        case "tabOne":
+          tabName = "盘盈入库明细表";
+          break;
+        case "tabTwo":
+          tabName = "盘亏出库明细表";
+          break;
+      }
       this.$refs[refname].$refs.xTable.exportData({
-        filename: '采购订单明细表',
+        filename: tabName,
         isHeader: true,
         isFooter: true,
-        data: this.$refs[refname].tableDataAll,
+        data: expData,
       })
     },
   }
