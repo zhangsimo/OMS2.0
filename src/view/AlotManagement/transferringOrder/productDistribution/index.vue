@@ -432,7 +432,7 @@ export default {
       });
     },
     baocunfenpei(row) {
-      if (row.hasAcceptQty === "" || row.hasAcceptQty === "0") {
+      if (row.hasAcceptQty === "") {
         this.$Message.info("请输入分配数");
         return;
       }

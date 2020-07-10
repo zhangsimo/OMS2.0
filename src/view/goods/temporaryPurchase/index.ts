@@ -149,13 +149,6 @@ export default class InterPurchase extends Vue {
   onFormatError(file) {
     this.$Message.error('只支持xls xlsx后缀的文件')
   };
-  //添加直发门店
-  private addPutStores(v:string):void{
-    this.putStores.push({
-      value:v,
-      label:v
-    })
-  }
   // 上传成功函数
   onSuccess(response) {
     if (response.code == 0) {

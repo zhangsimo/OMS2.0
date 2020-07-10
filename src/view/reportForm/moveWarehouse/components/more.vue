@@ -131,7 +131,7 @@ export default class MoreSearch extends Vue {
     this.guestName = "";
     this.createUname = "";
     // this.partName = "";
-    // new 
+    // new
     this.code = "";
     this.orderman = "";
     this.orderType = "";

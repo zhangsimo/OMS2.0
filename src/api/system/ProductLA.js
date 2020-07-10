@@ -49,6 +49,14 @@ export function removeStaffList(data){
     data
   })
 }
+//添加员工
+export function addStaff(data){
+  return axios.request({
+    url: `${api.wmsApi}/employeeAttribute/saveProductUser`,
+    method: 'post',
+    data
+  })
+}
 // 待分配配件
 export function findByEmp (params, data) {
   return axios.request({

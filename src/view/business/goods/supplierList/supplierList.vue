@@ -452,7 +452,7 @@ export default {
         return Promise.reject(new Error("数量输入不正确"));
       }
       if(canReQty < cellValue) {
-        return Promise.reject(new Error("数量输入不正确"));
+        return Promise.reject(new Error("退货数量不能大于可退数量"));
       }
     };
 
