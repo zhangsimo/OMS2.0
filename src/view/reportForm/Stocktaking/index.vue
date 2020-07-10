@@ -30,9 +30,7 @@ export default {
       if(data.isPanne) {
         // 基本查询
         delete data.isPanne;
-        let quickDates = {...data};
-        data2.enterDateStart = quickDates.createTimeStart;
-        data2.enterDateEnd = quickDates.createTimeEnd;
+        data2 = {...data};
       } else {
         data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.enterDateStart = data.startTime : "";
@@ -54,9 +52,7 @@ export default {
       if(data.isPanne) {
         // 基本查询
         delete data.isPanne;
-        let quickDates = {...data};
-        data2.outDateStart = quickDates.createTimeStart;
-        data2.outDateEnd = quickDates.createTimeEnd;
+        data2 = {...data};
       } else {
         data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.outDateStart = data.startTime : "";
