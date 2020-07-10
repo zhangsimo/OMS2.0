@@ -181,34 +181,102 @@ export default {
         {
           title: "序号",
           key: "num",
-          width: 40,
-          className: "tc"
+          minWidth: 40,
+          className: "tc",
         },
         {
           title: "公司名称",
           key: "groupName",
-          className: "tc"
+          minWidth:100,
+          className: "tc",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.groupName
+                }
+              }, params.row.groupName)
+            ])
+          }
         },
         {
           title: "对账单号",
           key: "accountNo",
-          className: "tc"
+          minWidth:100,
+          className: "tc",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountNo
+                }
+              }, params.row.accountNo)
+            ])
+          }
         },
         {
           title: "对账单收付款单号",
-          width: 120,
+          minWidth: 140,
           slot: "fno",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.num
+                }
+              }, params.row.num)
+            ])
+          }
         },
         {
           title: "往来单位",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "收付类型",
           key: "sortName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120
         },
         {
           title: "收付款金额",
@@ -219,7 +287,8 @@ export default {
               "span",
               params.row.cpAmt ? params.row.cpAmt.toFixed(2) : 0
             );
-          }
+          },
+          minWidth: 150
         },
         {
           title: "已冲减/已审核",
@@ -230,7 +299,8 @@ export default {
               "span",
               params.row.endAmt ? params.row.endAmt.toFixed(2) : 0
             );
-          }
+          },
+          minWidth: 100
         },
         {
           title: "未冲减/未审核",
@@ -241,42 +311,114 @@ export default {
               "span",
               params.row.unAmt ? params.row.unAmt.toFixed(2) : 0
             );
-          }
+          },
+          minWidth: 100
         },
         {
           title: "收款目的",
           key: "purpose",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.purpose
+                }
+              }, params.row.purpose)
+            ])
+          }
         },
         {
           title: "收付款人",
           key: "createUname",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "收付款时间",
           key: "rpDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+              style: {
+                display: 'inline-block',
+                width: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              },
+              domProps: {
+                title: params.row.rpDate
+              }
+            }, params.row.rpDate)
+          ])
+          }
         },
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "审核状态",
           key: "startStatusName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "审核人",
           key: "auditor",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "审核日期",
           key: "auditorDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.auditorDate
+                }
+              }, params.row.auditorDate)
+            ])
+          }
         }
       ],
       columns1: [

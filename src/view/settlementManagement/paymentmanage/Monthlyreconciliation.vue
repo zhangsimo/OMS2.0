@@ -952,50 +952,50 @@ export default {
     },
     // 保存接口
     getPreservation(num) {
-      if (this.totalvalue === "0") {
-        if (!this.collectionAccountName)
-          return this.$message.error("收款户名不能为空");
-        if (!this.openingBank) return this.$message.error("开户行不能为空");
-        if (!this.collectionAccount)
-          return this.$message.error("银行账号不能为空");
-        if (!this.thisApplyAccount)
-          return this.$message.error("付款账户不能为空");
-      }
-      if (this.collectBaddebt - this.paymentBaddebt > 100) {
-        if (!this.BadDebtid) {
-          // this.$message.error("请输入应收坏账请示单号");
-          this.$message({
-            message: "请输入应收坏账请示单号",
-            type: "error",
-            customClass: "zZindex"
-          });
-          return "";
-        }
-      }
-      if (this.collectRebate - this.paymentRebate > 100) {
-        if (!this.Rebateid) {
-          // this.$message.error("请输入应收返利请示单号");
-          this.$message({
-            message: "请输入应收返利请示单号",
-            type: "error",
-            customClass: "zZindex"
-          });
-          return "";
-        }
-      }
+      // if (this.totalvalue === "0") {
+      //   if (!this.collectionAccountName)
+      //     return this.$message.error("收款户名不能为空");
+      //   if (!this.openingBank) return this.$message.error("开户行不能为空");
+      //   if (!this.collectionAccount)
+      //     return this.$message.error("银行账号不能为空");
+      //   if (!this.thisApplyAccount)
+      //     return this.$message.error("付款账户不能为空");
+      // }
+      // if (this.collectBaddebt - this.paymentBaddebt > 100) {
+      //   if (!this.BadDebtid) {
+      //     // this.$message.error("请输入应收坏账请示单号");
+      //     this.$message({
+      //       message: "请输入应收坏账请示单号",
+      //       type: "error",
+      //       customClass: "zZindex"
+      //     });
+      //     return "";
+      //   }
+      // }
+      // if (this.collectRebate - this.paymentRebate > 100) {
+      //   if (!this.Rebateid) {
+      //     // this.$message.error("请输入应收返利请示单号");
+      //     this.$message({
+      //       message: "请输入应收返利请示单号",
+      //       type: "error",
+      //       customClass: "zZindex"
+      //     });
+      //     return "";
+      //   }
+      // }
 
 
 
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
-        if (!this.remark) {
-          // this.$message.error("请填写备注");
-          this.$message({
-            message: "请填写备注",
-            type: "error",
-            customClass: "zZindex"
-          });
-          return "";
-        }
+        // if (!this.remark) {
+        //   // this.$message.error("请填写备注");
+        //   this.$message({
+        //     message: "请填写备注",
+        //     type: "error",
+        //     customClass: "zZindex"
+        //   });
+        //   return "";
+        // }
         let one = [
           {
             number: "3",
