@@ -134,14 +134,21 @@
           ></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
+            width="160"
             field="enterStoreId"
             title="入库仓库"
-            :edit-render="{
+          >
+            <!-- :edit-render="{
               name: 'select',
               options: storeArray,
               events: { change: roleChangeEvent }
-            }"
-          ></vxe-table-column>
+            }" -->
+            <template v-slot="{ row }">
+              <vxe-select v-model="row.enterStoreId" transfer>
+                <vxe-option v-for="item in storeArray" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-table-column>
           <vxe-table-column
             field="enterTime"
             title="入库日期"
