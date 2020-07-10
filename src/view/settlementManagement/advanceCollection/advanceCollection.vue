@@ -52,7 +52,7 @@
         <Button
           class="ml10"
           @click="collectWirte"
-          :disabled="!currRow.writeOffReceiptNo || currRow.remainingAmt <= 0"
+          :disabled="currRow.remainingAmt <= 0"
           v-has="'cancel'"
         >预收款核销</Button>
         <Button

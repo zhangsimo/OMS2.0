@@ -1,10 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive>
-    <router-view  v-if="isRouterAlive && $route.meta.keepAlive"/>
-    </keep-alive>
-    <router-view   v-if="isRouterAlive && !$route.meta.keepAlive"/>
-
+    <router-view   v-if="isRouterAlive"/>
   </div>
 </template>
 
