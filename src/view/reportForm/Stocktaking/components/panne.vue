@@ -113,7 +113,11 @@ export default {
     getDataQuick(v) {
       this.quickDates = v;
       if(v.length >= 2) {
-        this.$emit("search", { isPanne: true, createTimeStart: v[0], createTimeEnd: v[1] });
+        if(this.type==1){
+          this.$emit("search", { isPanne: true, enterDateStart: v[0], enterDateEnd: v[1] });
+        }else{
+          this.$emit("search", { isPanne: true, outDateStart: v[0], outDateEnd: v[1] });
+        }
       } else {
         this.$emit("search", { isPanne: true });
       }
@@ -141,8 +145,13 @@ export default {
         }
       }
       if(this.quickDates.length >= 2 && this.quickDates[0]) {
-        data.createTimeStart = this.quickDates[0];
-        data.createTimeEnd = this.quickDates[1];
+        if(this.type==1){
+          data.enterDateStart = this.quickDates[0];
+          data.enterDateEnd = this.quickDates[1];
+        }else{
+          data.outDateStart = this.quickDates[0];
+          data.outDateEnd = this.quickDates[1];
+        }
       }
       this.$emit("search", data);
     },

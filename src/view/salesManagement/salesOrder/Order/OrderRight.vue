@@ -285,10 +285,11 @@
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-            width="80"
+            width="100"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
+                style="width:80px;"
                 :min="0"
                 :max="row.isMarkBatch == 1 ? row.adjustQty : 999999"
                 v-model="row.orderQty"

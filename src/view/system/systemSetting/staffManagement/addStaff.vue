@@ -197,7 +197,7 @@
 </template>
 
 <script>
-import { getcompany } from "@/api/system/systemSetting/staffManagenebt";
+import { getcompany ,setPhone } from "@/api/system/systemSetting/staffManagenebt";
 import { findGuest } from "@/api/settlementManagement/advanceCollection";
 import { queryRolesByPage } from "_api/admin/roleApi.js";
 import { goshop } from "@/api/settlementManagement/fundsManagement/capitalChain";
@@ -213,15 +213,37 @@ export default {
   },
   components:{staffAccount},
   data() {
+    //校验手机号
     const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("手机号不能为空"));
       } else if (!/^1[3456789]\d{9}$/.test(value)) {
         callback(new Error("手机号格式不正确"));
       } else {
-        callback();
+        let data = {}
+        data.mobile = value
+        setPhone(data).then( res => {
+          if (res.code != 0){
+            return callback(new Error("手机号码重复"));
+          }else {
+            callback();
+
+          }
+        })
       }
     };
+    // //手机号不能重复
+    // const PhoneDouble = (rule, value, callback) => {
+    //   let data = {}
+    //       data.mobile = value
+    //   if(value){
+    //     setPhone(data).then( res => {
+    //       if (res.code != 0){
+    //         return callback(new Error("手机号码重复"));
+    //       }
+    //     })
+    //   }
+    // }
     const cardId = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("身份证号不能为空"));
@@ -240,7 +262,10 @@ export default {
         userName: [
           { required: true, message: "姓名不能为空", trigger: "blur" }
         ],
-        phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
+        phone: [
+          { required: true, validator: validatePhone, trigger: "blur" },
+          // { required: true, validator: PhoneDouble, trigger: "blur" },
+          ],
         cardId: [{ required: true, validator: cardId, trigger: "blur" }],
         groundIds: [
           {

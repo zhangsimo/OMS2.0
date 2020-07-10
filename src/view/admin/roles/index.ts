@@ -9,7 +9,7 @@ import AddRolse from "./AddRolse.vue"
 import ChangeRolse from "@/view/admin/roles/ChangeRolse.vue";
 // import {v} from "xe-utils/dist/xe-utils";
 
-@Component({ 
+@Component({
   components: {
     AddRolse,
     ChangeRolse
@@ -45,8 +45,8 @@ export default class index extends Vue {
   }
   // 右侧分页数据
   private pageRight: any = {
-    size: 20, 
-    num: 1, 
+    size: 20,
+    num: 1,
     total: 0
   }
 
@@ -80,7 +80,7 @@ export default class index extends Vue {
       this.oneStaff = {}
     }
   }
- 
+
   //点击左侧表格获取当前数据
   private async setOneTable(val) {
     this.oneStaff = JSON.parse(JSON.stringify(val.row))
@@ -105,7 +105,7 @@ export default class index extends Vue {
     let res = await getStaff(data)
     if (res.code === 0) {
       this.rightTableData = res.data.content
-      /* 右侧分页数据*/ 
+      /* 右侧分页数据*/
       this.pageRight.total = res.data.totalElements
     }
   }
@@ -285,16 +285,14 @@ export default class index extends Vue {
 
   //员工权限保存
   private async saveStaff() {
-    let data: any = []
-    data.id = this.rightTableData[0].id
-    data.roleIds = []
-    this.rightTableData.forEach(item => {
-      if (item.allocation == 0) {
-        data.push({ id: item.id, roleIds: this.oneStaff.id, allocation: 0 })
-      } else {
-        data.push({ id: item.id, roleIds: [], allocation: 1 })
-      }
-    })
+    let data: any = {}
+   let arr : any = []
+    this.rightTableData.forEach(item =>
+   { if (item.allocation == 0){
+     arr.push(item.id)
+   } })
+    data.userIdsList = arr
+    data.userRoleId = this.oneStaff.id
     let res = await saveStaffJurisdiction(data)
     if (res.code === 0) {
       this.$message.success('保存成功')

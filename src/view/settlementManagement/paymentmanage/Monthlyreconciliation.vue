@@ -504,37 +504,20 @@ export default {
   computed: {
     //实际应付合计
     Actualtotalpayment() {
+      //对账应付-应付坏账-应付返利
       this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
       this.totalpayment = this.totalpayment ? this.totalpayment : 0;
       return (
-        this.totalpayment * 1 + this.paymentBaddebt * 1 + this.paymentRebate * 1
+        this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
       );
     },
     //实际应收合计
     Actualtotalcollect() {
-      this.totalcollect = this.totalcollect ? this.totalcollect : 0;
-      this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
-      this.collectRebate = this.collectRebate ? this.collectRebate : 0;
-      this.transportExpenses = this.transportExpenses
-        ? this.transportExpenses
-        : 0;
-      this.insuranceExpenses = this.insuranceExpenses
-        ? this.insuranceExpenses
-        : 0;
-      this.serviceCharge = this.serviceCharge ? this.serviceCharge : 0;
-      this.partsManagementFee = this.partsManagementFee
-        ? this.partsManagementFee
-        : 0;
-      this.otherFees = this.otherFees ? this.otherFees : 0;
+      //对账应付-应付坏账-应付返利
+      this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
+      this.totalpayment = this.totalpayment ? this.totalpayment : 0;
       return (
-        this.totalcollect * 1 +
-        this.collectBaddebt * 1 +
-        this.collectRebate * 1 +
-        this.transportExpenses * 1 +
-        this.insuranceExpenses * 1 +
-        this.serviceCharge * 1 +
-        this.partsManagementFee * 1 +
-        this.otherFees * 1
+        this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
       );
     },
     //本次对账结算合计
@@ -969,50 +952,50 @@ export default {
     },
     // 保存接口
     getPreservation(num) {
-      if (this.totalvalue === "0") {
-        if (!this.collectionAccountName)
-          return this.$message.error("收款户名不能为空");
-        if (!this.openingBank) return this.$message.error("开户行不能为空");
-        if (!this.collectionAccount)
-          return this.$message.error("银行账号不能为空");
-        if (!this.thisApplyAccount)
-          return this.$message.error("付款账户不能为空");
-      }
-      if (this.collectBaddebt - this.paymentBaddebt > 100) {
-        if (!this.BadDebtid) {
-          // this.$message.error("请输入应收坏账请示单号");
-          this.$message({
-            message: "请输入应收坏账请示单号",
-            type: "error",
-            customClass: "zZindex"
-          });
-          return "";
-        }
-      }
-      if (this.collectRebate - this.paymentRebate > 100) {
-        if (!this.Rebateid) {
-          // this.$message.error("请输入应收返利请示单号");
-          this.$message({
-            message: "请输入应收返利请示单号",
-            type: "error",
-            customClass: "zZindex"
-          });
-          return "";
-        }
-      }
+      // if (this.totalvalue === "0") {
+      //   if (!this.collectionAccountName)
+      //     return this.$message.error("收款户名不能为空");
+      //   if (!this.openingBank) return this.$message.error("开户行不能为空");
+      //   if (!this.collectionAccount)
+      //     return this.$message.error("银行账号不能为空");
+      //   if (!this.thisApplyAccount)
+      //     return this.$message.error("付款账户不能为空");
+      // }
+      // if (this.collectBaddebt - this.paymentBaddebt > 100) {
+      //   if (!this.BadDebtid) {
+      //     // this.$message.error("请输入应收坏账请示单号");
+      //     this.$message({
+      //       message: "请输入应收坏账请示单号",
+      //       type: "error",
+      //       customClass: "zZindex"
+      //     });
+      //     return "";
+      //   }
+      // }
+      // if (this.collectRebate - this.paymentRebate > 100) {
+      //   if (!this.Rebateid) {
+      //     // this.$message.error("请输入应收返利请示单号");
+      //     this.$message({
+      //       message: "请输入应收返利请示单号",
+      //       type: "error",
+      //       customClass: "zZindex"
+      //     });
+      //     return "";
+      //   }
+      // }
 
 
 
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
-        if (!this.remark) {
-          // this.$message.error("请填写备注");
-          this.$message({
-            message: "请填写备注",
-            type: "error",
-            customClass: "zZindex"
-          });
-          return "";
-        }
+        // if (!this.remark) {
+        //   // this.$message.error("请填写备注");
+        //   this.$message({
+        //     message: "请填写备注",
+        //     type: "error",
+        //     customClass: "zZindex"
+        //   });
+        //   return "";
+        // }
         let one = [
           {
             number: "3",

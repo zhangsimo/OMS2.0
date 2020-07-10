@@ -835,7 +835,7 @@ export default {
       data.orgid = this.mainData.orgid;
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
-      data.guestName = data.guestName.trim();
+      data.guestName = typeof data.guestName === "string" ? data.guestName.trim() : "";
 
       let res = await getEnter(data);
       if (res.code == 0) {
@@ -857,7 +857,7 @@ export default {
       data.orgid = this.mainData.orgid;
       data.page = this.contentTwo.page.num - 1;
       data.size = this.contentTwo.page.size;
-      data.guestName = data.guestName.trim();
+      data.guestName = typeof data.guestName === "string" ? data.guestName.trim() : "";
       let res = await getOut(data);
       if (res.code == 0) {
         this.contentTwo.dataTwo = res.data.content;

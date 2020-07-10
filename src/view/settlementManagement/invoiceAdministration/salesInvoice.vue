@@ -508,7 +508,7 @@ export default {
         },
         {
           title: "作废经办人",
-          key: "nullifyDate",
+          key: "nullifyId",
           className: "tc"
         },
         {

@@ -625,7 +625,6 @@ export default {
       req.page = 0;
       req.size = 1000;
       findForAllot(req).then(res => {
-        // console.log(res.data)
         const { content } = res.data;
         this.getArray = content;
         content.forEach(item => {
@@ -735,12 +734,12 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
-          params.guestOrgid = this.getArray[i].isInternalId;
-          params.guestId = this.getArray[i].id;
-        }
-      }
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
+      //     params.guestOrgid = this.getArray[i].isInternalId;
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
       params.createTime = moment(this.Leftcurrentrow.createTime).format(
         "YYYY-MM-DD HH:mm:ss"
       );
@@ -855,12 +854,12 @@ export default {
         if(params.orderTypeId && params.orderTypeId.value!=undefined){
             params.orderTypeId= params.orderTypeId.value
         }
-        for (var i = 0; i < this.getArray.length; i++) {
-            if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-                params.guestOrgid = this.getArray[i].isInternalId;
-                params.guestId = this.getArray[i].id;
-            }
-        }
+        // for (var i = 0; i < this.getArray.length; i++) {
+        //     if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+        //         params.guestOrgid = this.getArray[i].isInternalId;
+        //         params.guestId = this.getArray[i].id;
+        //     }
+        // }
         this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
         params.createTime = moment(this.Leftcurrentrow.createTime).format(
             "YYYY-MM-DD HH:mm:ss"
@@ -1204,6 +1203,7 @@ export default {
         this.showit = false;
         this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.guestId;
+        this.Leftcurrentrow.guestOrgid = row.id;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;
@@ -1307,7 +1307,7 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
-    this.getArrayParams();
+    // this.getArrayParams();
     this.warehouse();
     this.getList();
   }

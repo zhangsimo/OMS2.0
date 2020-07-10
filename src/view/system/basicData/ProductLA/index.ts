@@ -580,8 +580,13 @@ export default class ProductLA extends Vue {
 
     //一键移入
     private async moveAllOn(){
-      this.tipShow=true;
-      this.tipWords='确定将所有配件一键移入？';
+      if(this.employeeId){
+        this.tipShow=true;
+        this.tipWords='确定将所有配件一键移入？';
+      }else{
+        this.$message.warning('请勾选员工')
+      }
+
     }
     private async submitTip(){
       if(this.tipWords.includes('一键移入')){
@@ -639,8 +644,13 @@ export default class ProductLA extends Vue {
     }
     //一键移出
   private async moveAllOff(){
-    this.tipShow=true;
-    this.tipWords='确定将所有配件一键移出？';
+      if(this.employeeId){
+        this.tipShow=true;
+        this.tipWords='确定将所有配件一键移出？';
+      }else{
+        this.$message.warning('请勾选员工')
+      }
+
   }
   //关闭提示弹窗
   private async CancelTipModal(){

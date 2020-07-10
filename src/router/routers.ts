@@ -830,12 +830,11 @@ export default [
       },
       {
         path: "/settlementManagement/paymentmanage",
-        name: "settlementManagement-paymentmanage",
+        name: "paymentmanage",
         // mark: 'oms_orders_approve',
         mark: "5200",
         meta: {
           // hideInMenu: true,
-          keepAlive: true,
           title: "应收应付"
         },
         component: () =>
