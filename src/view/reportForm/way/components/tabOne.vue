@@ -245,18 +245,11 @@ export default {
           }
           if (
             [
-              "orderQty",
-              "orderPrice",
-              "orderAmt",
-              "adjustQty",
-              "trueEnterQty",
-              "fcPrice",
-              "rmbPrice",
-              "rmbAmt",
-              "tariffAmt",
-              "transportAmt",
-              "vatAmt",
-              "otherAmt"
+              "onOrderQty",
+              "inStockQty",
+              "noStockQty",
+              "taxPrice",
+              "taxAmt",
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
