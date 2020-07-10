@@ -204,7 +204,7 @@
       </vxe-table-column>
       <vxe-table-column field="group4" title="其他">
         <vxe-table-column
-          field="date3"
+          field="code"
           title="销退订单号"
           width="140"
         ></vxe-table-column>
@@ -225,12 +225,12 @@
           width="200"
           show-overflow
         ></vxe-table-column>
-        <vxe-table-column
+        <!--<vxe-table-column
           field="none"
           title="销售订单单号"
           width="200"
           show-overflow
-        ></vxe-table-column>
+        ></vxe-table-column>-->
       </vxe-table-column>
     </vxe-table>
     <Page

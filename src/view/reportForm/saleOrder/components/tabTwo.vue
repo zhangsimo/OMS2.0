@@ -207,7 +207,7 @@
           width="140"
         ></vxe-table-column>
         <vxe-table-column
-          field="maori"
+          field="maoLi"
           title="毛利"
           width="140"
         ></vxe-table-column>
@@ -227,7 +227,7 @@
           width="140"
         ></vxe-table-column>
         <vxe-table-column
-          field="maoriRate"
+          field="maoLiRate"
           title="毛利率"
           width="140"
         ></vxe-table-column>
@@ -239,7 +239,7 @@
       </vxe-table-column>
       <vxe-table-column field="group4" title="其他">
         <vxe-table-column
-          field="code"
+          field="manualCode"
           title="订单单号"
           width="140"
         ></vxe-table-column>
