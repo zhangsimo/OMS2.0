@@ -504,37 +504,20 @@ export default {
   computed: {
     //实际应付合计
     Actualtotalpayment() {
+      //对账应付-应付坏账-应付返利
       this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
       this.totalpayment = this.totalpayment ? this.totalpayment : 0;
       return (
-        this.totalpayment * 1 + this.paymentBaddebt * 1 + this.paymentRebate * 1
+        this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
       );
     },
     //实际应收合计
     Actualtotalcollect() {
-      this.totalcollect = this.totalcollect ? this.totalcollect : 0;
-      this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
-      this.collectRebate = this.collectRebate ? this.collectRebate : 0;
-      this.transportExpenses = this.transportExpenses
-        ? this.transportExpenses
-        : 0;
-      this.insuranceExpenses = this.insuranceExpenses
-        ? this.insuranceExpenses
-        : 0;
-      this.serviceCharge = this.serviceCharge ? this.serviceCharge : 0;
-      this.partsManagementFee = this.partsManagementFee
-        ? this.partsManagementFee
-        : 0;
-      this.otherFees = this.otherFees ? this.otherFees : 0;
+      //对账应付-应付坏账-应付返利
+      this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
+      this.totalpayment = this.totalpayment ? this.totalpayment : 0;
       return (
-        this.totalcollect * 1 +
-        this.collectBaddebt * 1 +
-        this.collectRebate * 1 +
-        this.transportExpenses * 1 +
-        this.insuranceExpenses * 1 +
-        this.serviceCharge * 1 +
-        this.partsManagementFee * 1 +
-        this.otherFees * 1
+        this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
       );
     },
     //本次对账结算合计
