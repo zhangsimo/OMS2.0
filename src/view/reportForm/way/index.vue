@@ -17,14 +17,16 @@ export default {
   mounted() {},
   methods: {
     search(data) {
-      this.$refs.tabOne.getList(data);
+      this.$refs.tabOne.body = data;
+      this.$refs.tabOne.getList();
     },
-    exportxls(refname) {
+    async exportxls(refname) {
+      let table = await this.$refs[refname].getAll();
       this.$refs[refname].$refs.xTable.exportData({
-        filename: '采购订单明细表',
+        filename: '调出在途信息',
         isHeader: true,
         isFooter: true,
-        data: this.$refs[refname].tableDataAll,
+        data: table,
       })
     },
   }
