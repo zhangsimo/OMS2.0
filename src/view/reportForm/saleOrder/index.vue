@@ -49,7 +49,7 @@ export default {
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";
-        data.createUname ? data2.createUname = data.createUname : "";
+        data.createUname ? data2.createUid = data.createUname : "";
       }
       this.$refs.tabOne.body = data2
       this.$refs.tabOne.getList();

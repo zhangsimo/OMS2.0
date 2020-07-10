@@ -376,7 +376,7 @@ export default {
       searchForm: {
         partBrand: "", //品牌id
         partCode: "", //配件编码
-        storeId: "", //仓库id
+        storeIds: [], //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: "", //零库存
@@ -386,7 +386,7 @@ export default {
       searchForm1: {
         partBrand: "", //品牌id
         partCode: "", //配件编码
-        storeId: "", //仓库id
+        storeIds: [], //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: "", //库存
@@ -892,11 +892,11 @@ export default {
       }
     },
     changecompanyFun() {
-      this.searchForm.storeId = "";
+      this.searchForm.storeIds = [];
       this.getColumns();
     },
     changecompanyFun2() {
-      this.searchForm1.storeId = "";
+      this.searchForm1.storeIds = [];
     },
     changeStore() {
       this.serch();
@@ -939,13 +939,15 @@ export default {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm));
       data.partName = data.partName.trim();
+      if(data.storeIds[0] == 1) {
+        data.storeIds = [];
+      }
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
-      console.log(this.searchForm, 789);
       let res = await getAllStock(data);
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
@@ -985,6 +987,9 @@ export default {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm1));
       data.partName = data.partName.trim();
+      if(data.storeIds[0] == 1) {
+        data.storeIds = [];
+      }
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }

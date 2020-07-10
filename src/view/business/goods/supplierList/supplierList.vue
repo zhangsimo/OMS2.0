@@ -656,10 +656,10 @@ export default {
   methods: {
     //计算表格数据
     countAmount(row) {
-      return (
+      row.orderAmt =
         this.$utils.toNumber(row.orderQty) *
-        this.$utils.toNumber(row.orderPrice)
-      );
+        this.$utils.toNumber(row.orderPrice);
+      return row.orderAmt;
     },
     //判断从表input能不能编辑
     editActivedEvent({ row }) {
@@ -909,7 +909,6 @@ export default {
             // data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata;
             let noBack = data.details.filter(item => {
-              // console.log(item.stockOutQty, item.orginOrderQty, item.orderQty, item.stockOutQty-(item.orginOrderQty-item.orderQty) > 0);
               return (
                 item.stockOutQty - (item.orginOrderQty - item.orderQty) > 0
               );
@@ -942,10 +941,10 @@ export default {
               }
             });
           } catch (errMap) {
-            this.$XModal.message({
-              status: "error",
-              message: "申请数量必须输入大于0的正整数！"
-            });
+            // this.$XModal.message({
+            //   status: "error",
+            //   message: "申请数量必须输入大于0的正整数！"
+            // });
           }
         } else {
           // console.log(this.isAdd)

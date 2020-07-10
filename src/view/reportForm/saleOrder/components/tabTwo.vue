@@ -319,6 +319,9 @@ export default {
         });
 
         this.page.total = res.data.totalElements;
+      } else {
+        this.page.total = 0;
+        this.tableData = [];
       }
     },
     async getAll() {

@@ -189,7 +189,7 @@ export default {
         size: 10,
         total: 0
       },
-      tableDataAll: [],
+      body: {},
       tableData: []
     };
   },
@@ -198,10 +198,14 @@ export default {
   },
   methods: {
     // 查询表
-    async getList(data = {}) {
-      let res = await api.getAllotApplyRtnDetails(data);
-      if (res.code == 0) {
-        this.tableDataAll = (res.data || []).map(el => {
+    async getList() {
+      let params = {
+        page: this.page.num - 1,
+        size: this.page.size,
+      };
+      let res = await api.getAllotApplyRtnDetails(this.body, params);
+      if (res.code == 0 && res.data != null) {
+        this.tableData = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
             el.taxSign = true;
           }
@@ -212,24 +216,43 @@ export default {
           return el;
         });
 
-        this.tableData = this.tableDataAll.slice(0, this.page.size);
-        this.page.total = this.tableDataAll.length;
+        this.page.total = res.data.totalElements;
+      } else {
+        this.page.total = 0;
+        this.tableData = [];
+      }
+    },
+    async getAll() {
+      let tableDataAll = [];
+      let params = {
+        page: 0,
+        size: 10000,
+      };
+      let res = await api.getAllotApplyRtnDetails(this.body, params);
+      if (res.code == 0 && res.data != null) {
+        tableDataAll = (res.data.content || []).map(el => {
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          el.isMakActivity = false;
+          return el;
+        });
+
+        return tableDataAll;
       }
     },
     //分页
     changePage(p) {
       this.page.num = p;
-      let start = (p - 1) * this.page.size;
-      let end = p * this.page.size;
-      this.tableData = this.tableDataAll.slice(start, end);
+      this.getList();
     },
     changeSize(size) {
       this.page.num = 1;
       this.page.size = size;
-      this.tableData = this.tableDataAll.slice(
-        this.page.num - 1,
-        this.page.size
-      );
+      this.getList();
     },
     //表尾合计
     footerMethod({ columns, data }) {
