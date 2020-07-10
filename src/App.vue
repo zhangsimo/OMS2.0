@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <keep-alive>
-    <router-view :key="getRouteKey" v-if="isRouterAlive && $route.meta.keepAlive"/>
+    <router-view  v-if="isRouterAlive && $route.meta.keepAlive"/>
     </keep-alive>
-    <router-view  :key="getRouteKey" v-if="isRouterAlive && !$route.meta.keepAlive"/>
+    <router-view   v-if="isRouterAlive && !$route.meta.keepAlive"/>
 
   </div>
 </template>
