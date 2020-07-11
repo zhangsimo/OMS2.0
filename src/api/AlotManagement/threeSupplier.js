@@ -41,3 +41,12 @@ export function daohuoruku(data) {
     data
   });
 }
+
+// 获取仓位
+export function getPartPos(data) {
+  return axios.request({
+    url: `${api.omsSotck}/partStoreStock/findPartInfo`,
+    method: "post",
+    data
+  });
+}
