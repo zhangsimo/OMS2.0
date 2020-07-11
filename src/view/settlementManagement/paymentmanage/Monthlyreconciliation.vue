@@ -125,27 +125,27 @@
                 <span class="mr5">对账应收</span>
                 <Input type="text" v-model="totalcollect" readonly class="w60 tc" />
                 <span class="mr5 ml10">应收坏账</span>
-                <InputNumber :min="0" v-model="collectBaddebt" class="w60 tc" />
+                <InputNumber  v-model="collectBaddebt" class="w60 tc" />
                 <span class="mr5 ml10">应收返利</span>
-                <InputNumber :min="0" v-model="collectRebate" class="w60 tc" />
+                <InputNumber  v-model="collectRebate" class="w60 tc" />
                 <span class="mr5 ml10">运费</span>
-                <InputNumber :min="0" v-model="transportExpenses" class="w60 tc" />
+                <InputNumber  v-model="transportExpenses" class="w60 tc" />
                 <span class="mr5 ml10">保险费</span>
-                <InputNumber :min="0" v-model="insuranceExpenses" class="w60 tc" />
+                <InputNumber  v-model="insuranceExpenses" class="w60 tc" />
                 <span class="mr5 ml10">手续费</span>
-                <InputNumber :min="0" v-model="serviceCharge" class="w60 tc" />
+                <InputNumber  v-model="serviceCharge" class="w60 tc" />
                 <span class="mr5 ml10">配件管理费</span>
-                <InputNumber :min="0" v-model="partsManagementFee" class="w60 tc" />
+                <InputNumber  v-model="partsManagementFee" class="w60 tc" />
                 <span class="mr5 ml10">其他费用</span>
-                <InputNumber :min="0" v-model="otherFees" class="w60 tc" />
+                <InputNumber  v-model="otherFees" class="w60 tc" />
               </div>
               <div class="db mt10 mb10">
                 <span class="mr5">对账应付</span>
                 <Input type="text" v-model="totalpayment" readonly class="w60 tc" />
                 <span class="mr5 ml10">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc" :min="0" />
+                <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc"  />
                 <span class="mr5 ml10">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w60 tc" :min="0" />
+                <InputNumber v-model="paymentRebate" class="w60 tc"  />
                 <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
                 <Input v-model="Actualtotalcollect" type="text" class="w60 tc" readonly />
                 <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
