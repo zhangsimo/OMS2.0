@@ -345,10 +345,10 @@ export default {
         return this.$Message.error("请选择客户");
       }
       if(this.currentrow.existInCurrent===1){
-        return this.$Message.error("同一客户只能存在于一个价格体系中");
+        return this.$Message.error("不可重复添加客户");
       }
       if(this.currentrow.existInOther===1){
-        return this.$Message.error("不可重复添加客户");
+        return this.$Message.error("同一客户只能存在于一个价格体系中");
       }
 
       if (this.custarr.length <= 0) {
