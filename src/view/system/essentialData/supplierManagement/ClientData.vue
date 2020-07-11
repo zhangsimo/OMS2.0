@@ -571,6 +571,8 @@ export default {
               item.accountName = newarr.accountName;
               item.accountType = newarr.accountType;
               item.acquiesce = newarr.acquiesce;
+              item.accountSign = true
+              this.disposeFinData();
             }
           });
           // if (bool == true) {
@@ -586,7 +588,6 @@ export default {
           //     item.accountType = newarr.accountType;
           //     item.acquiesce = newarr.acquiesce;
           //   }
-            this.disposeFinData();
             this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
           // } else {
@@ -604,7 +605,7 @@ export default {
             }
           });
           if (bool == true) {
-            newarr.acquiesce = false;
+            newarr.acquiesce = true;
             newarr.accountSign = true;
             newarr.accountType = newarr.accountType || "ZHLX002";
             newarr.accountAddId=this.accountAddId

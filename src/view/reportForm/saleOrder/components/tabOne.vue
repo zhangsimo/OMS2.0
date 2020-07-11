@@ -46,7 +46,7 @@
         ></vxe-table-column>
         <vxe-table-column
           field="orderType"
-          title="订单类型"
+          title="订单来源"
           width="120"
         ></vxe-table-column>
       </vxe-table-column>

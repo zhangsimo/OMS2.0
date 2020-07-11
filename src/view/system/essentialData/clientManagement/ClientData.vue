@@ -947,7 +947,8 @@ export default {
                 item.accountBankNo = newarr.accountBankNo;
                 item.accountName = newarr.accountName;
                 item.accountType = newarr.accountType;
-                item.acquiesce = newarr.acquiesce;
+                item.acquiesce = true;
+                this.disposeFinData();
               }
             // if (item.accountBankNo == this.selectFinTab.accountBankNo) {
             //   if(item.id == this.selectFinTab.id){
@@ -970,7 +971,6 @@ export default {
           //     item.accountType = newarr.accountType;
           //     item.acquiesce = newarr.acquiesce;
           //   }
-            this.disposeFinData();
             this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
           // } else {
@@ -988,7 +988,7 @@ export default {
             }
           });
           if (bool == true) {
-            newarr.acquiesce = false;
+            newarr.acquiesce = true;
             newarr.accountSign = true;
             newarr.accountType = newarr.accountType || "ZHLX002";
             newarr.accountAddId=this.accountAddId
@@ -1214,6 +1214,7 @@ export default {
           let newarr = {};
           newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
           newarr.bankId = this.bankId;
+          newarr.taxpayerType=true
           this.bankId++;
           this.invoice.push(newarr);
           console.log(this.invoice,"///???")
@@ -1230,7 +1231,8 @@ export default {
               item.taxpayerCode = newarr.taxpayerCode;
               item.taxpayerTel = newarr.taxpayerTel;
               item.accountBankNo = newarr.accountBankNo;
-              item.taxpayerSign = newarr.taxpayerSign || false;
+              item.taxpayerSign = newarr.taxpayerSign || true;
+              item.taxpayerType=true
             }
           });
           this.data.guestTaxpayerVOList = this.invoice;
@@ -1278,7 +1280,7 @@ export default {
     pitchOnBank(selection) {
       this.addInoiceOne = selection;
       // this.selectTaxTab = selection;
-      if (selection.taxpayerType == false) {
+      if (selection.taxpayerType == true) {
         this.enAbleTax = "禁用";
       } else {
         this.enAbleTax = "启用";
@@ -1303,6 +1305,7 @@ export default {
           item.taxpayerType;
         }
       });
+      this.pitchOnBank()
     }
   }
 };
