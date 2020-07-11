@@ -322,6 +322,7 @@ export default {
       } else {
         data.isDisabled = 1;
       }
+      data.strategyId = this.$parent.$parent.currRow.id||"";
       let res = await getCustomerInformation(data);
       if (res.code === 0) {
         this.loading = false;
@@ -343,6 +344,13 @@ export default {
       if (this.currentrow == null) {
         return this.$Message.error("请选择客户");
       }
+      if(this.currentrow.existInCurrent===1){
+        return this.$Message.error("同一客户只能存在于一个价格体系中");
+      }
+      if(this.currentrow.existInOther===1){
+        return this.$Message.error("不可重复添加客户");
+      }
+
       if (this.custarr.length <= 0) {
         this.currentrow.new = true;
         this.custarr.push(this.currentrow);
@@ -355,6 +363,7 @@ export default {
           this.$Message.error("该客户已选择");
         }
       }
+
       this.$emit("addcu", this.custarr);
     },
     // 取消
