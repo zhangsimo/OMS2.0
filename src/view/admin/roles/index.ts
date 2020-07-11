@@ -286,13 +286,18 @@ export default class index extends Vue {
   //员工权限保存
   private async saveStaff() {
     let data: any = {}
-   let arr : any = []
+    let arr : any = []
+    let leave: any = []
     this.rightTableData.forEach(item =>
    { if (item.allocation == 0){
      arr.push(item.id)
-   } })
+   }else {
+     leave.push(item.id)
+   }
+   })
     data.userIdsList = arr
     data.userRoleId = this.oneStaff.id
+    data.userIds = leave
     let res = await saveStaffJurisdiction(data)
     if (res.code === 0) {
       this.$message.success('保存成功')

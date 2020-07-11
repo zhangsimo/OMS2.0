@@ -238,7 +238,6 @@ export default {
     });
     this.getShop();
     this.getOne();
-    this.getQuery();
   },
   methods: {
     // 打开模态框

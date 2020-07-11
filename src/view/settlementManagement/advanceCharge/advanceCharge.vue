@@ -79,7 +79,7 @@
           @click="openShow('预付款核销撤回')"
         >预付款核销撤回</Button>
         <Button
-          v-has="'baclRrvoke'"
+          v-has="'baclRevoke'"
           :disabled="btnIsdisable.three"
           class="ml10"
           @click="openShow('预付款回收撤回')"
@@ -445,7 +445,7 @@ export default {
         this.btnIsdisable.three = false;
       }
       this.serviceId = row.serviceId;
-      this.$refs.Record.init(); 
+      this.$refs.Record.init();
     },
     // 撤回
     async reClose() {
