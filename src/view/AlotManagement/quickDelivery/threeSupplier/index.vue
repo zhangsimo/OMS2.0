@@ -414,7 +414,7 @@ export default {
       let rep = await getPartPos(reqObj);
       if(rep.code==0){
         this.BottomTableData.map(item => {
-          let filterData = rep.data.filter(iv => iv.partId==item.partId);
+          let filterData = rep.data.filter(iv => iv.partId == item.partId);
           if(filterData.length>0){
             item.storeShelf = filterData[0].shelf||"";
           }else{
