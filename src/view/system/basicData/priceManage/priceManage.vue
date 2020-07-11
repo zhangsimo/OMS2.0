@@ -47,7 +47,7 @@
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
-                <Input v-model="row.name" :disabled="row.readonly" v-if="row.name === '统一售价'" />
+                <Input v-model="row.name" :disabled="row.readonly" v-if="row.name === '最低售价'" />
                 <Input v-model="row.name" :disabled="row.isDisabled == 1" v-else />
               </template>
             </vxe-table-column>
@@ -197,7 +197,7 @@
               <vxe-table-column
                 field="minRequiredQty"
                 title="最低要求数量"
-                v-if="rowPriceManege.name=='统一售价'"
+                v-if="rowPriceManege.name=='最低售价'"
                 :edit-render="{ name: 'input' }"
               >
                 <template v-slot:edit="{ row }">
@@ -212,7 +212,7 @@
               <vxe-table-column
                 field="maxRequiredQty"
                 title="最高要求数量"
-                v-if="rowPriceManege.name=='统一售价'"
+                v-if="rowPriceManege.name=='最低售价'"
                 :edit-render="{ name: 'input' }"
               >
                 <template v-slot:edit="{ row }">
@@ -226,7 +226,7 @@
               </vxe-table-column>
               <vxe-table-column
                 title="解除限制"
-                v-if="rowPriceManege.name=='统一售价'"
+                v-if="rowPriceManege.name=='最低售价'"
                 field="removeLimitCheckBox"
                 :edit-render="{ name: 'checkbox' }"
               >
@@ -318,7 +318,7 @@ export default {
       level: {
         loading: false,
         name: "", // 修改的级别名称
-        tbdata: [{ name: "统一售价", readonly: true }]
+        tbdata: [{ name: "最低售价", readonly: true }]
       },
       selectCrr: [],
       // 右边选择的客户
@@ -377,7 +377,7 @@ export default {
       this.rowPriceManege = {}
         ? (this.priceEnableBool = true)
         : (this.priceEnableBool = false);
-      this.level.tbdata = [{ name: "统一售价", readonly: true }];
+      this.level.tbdata = [{ name: "最低售价", readonly: true }];
       // isDisabled:0 启用
       // isDisabled:1 禁用
       let res = await api.sellPsList();
@@ -746,7 +746,7 @@ export default {
     // 添加配件
     addAccessories() {
       if (this.rowPriceManege != {}) {
-        this.rowPriceManege.name == "统一售价"
+        this.rowPriceManege.name == "最低售价"
           ? (this.$refs.selectPartCom.apiDataId = "")
           : (this.$refs.selectPartCom.apiDataId = this.rowPriceManege.id);
         this.$refs.selectPartCom.init();
@@ -787,7 +787,7 @@ export default {
     },
     // 导入模板
     importModule() {
-      this.rowPriceManege.name == "统一售价"
+      this.rowPriceManege.name == "最低售价"
         ? (this.impirtUrl.downId = "2600000000")
         : (this.impirtUrl.downId = "2700000000");
       this.$refs.imp.openModal();

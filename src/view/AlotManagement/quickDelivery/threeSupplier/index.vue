@@ -144,7 +144,7 @@
               events: { change: roleChangeEvent }
             }" -->
             <template v-slot="{ row }">
-              <vxe-select v-model="row.enterStoreId" transfer>
+              <vxe-select v-model="row.enterStoreId" @change="getPartPosition(row)" transfer>
                 <vxe-option v-for="item in storeArray" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
               </vxe-select>
             </template>
@@ -260,7 +260,8 @@ import {
   ListDetail,
   getbayer,
   daohuoruku,
-  getcangku
+  getcangku,
+  getPartPos
 } from "../../../../api/AlotManagement/threeSupplier.js";
 import { checkStore } from "@/api/system/systemApi";
 
@@ -398,6 +399,29 @@ export default {
       //console.log("当前行" + row);
       this.BottomTableData = row.details;
       this.currentrow = row;
+      if(row&&row.details&&row.details.length>0) {
+        this.getPartPosition(row);
+      }
+    },
+
+    //获取仓位
+    async getPartPosition(row){
+      let partIds = row.details.filter(item => item.partId).map(b => b.partId);
+      let reqObj = {
+        storeId:row.enterStoreId,
+        partIds:partIds
+      }
+      let rep = await getPartPos(reqObj);
+      if(rep.code==0){
+        this.BottomTableData.map(item => {
+          let filterData = rep.data.filter(iv => iv.partId==item.partId);
+          if(filterData.length>0){
+            item.storeShelf = filterData[0].shelf||"";
+          }else{
+            item.storeShelf = "";
+          }
+        })
+      }
     },
 
     ok1() {
