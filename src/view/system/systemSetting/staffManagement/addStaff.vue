@@ -232,18 +232,6 @@ export default {
         })
       }
     };
-    // //手机号不能重复
-    // const PhoneDouble = (rule, value, callback) => {
-    //   let data = {}
-    //       data.mobile = value
-    //   if(value){
-    //     setPhone(data).then( res => {
-    //       if (res.code != 0){
-    //         return callback(new Error("手机号码重复"));
-    //       }
-    //     })
-    //   }
-    // }
     const cardId = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("身份证号不能为空"));
