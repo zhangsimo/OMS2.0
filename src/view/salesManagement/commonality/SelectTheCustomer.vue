@@ -2,9 +2,24 @@
   <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
-        <Input v-model="fullName" placeholder="简称" class="mr10" style="width: 150px" />
-        <Input v-model="clientCode" placeholder="编码" class="mr10" style="width: 150px" />
-        <Input v-model="clientPhone" placeholder="电话" class="mr10" style="width: 150px" />
+        <Input
+          v-model="fullName"
+          placeholder="简称"
+          class="mr10"
+          style="width: 150px"
+        />
+        <Input
+          v-model="clientCode"
+          placeholder="编码"
+          class="mr10"
+          style="width: 150px"
+        />
+        <Input
+          v-model="clientPhone"
+          placeholder="电话"
+          class="mr10"
+          style="width: 150px"
+        />
         <Cascader
           :data="clientType"
           @on-change="getType"
@@ -49,22 +64,77 @@
                 height="500"
                 style="width: 1500px"
               >
-                <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-                <vxe-table-column field="shortName" width="200" title="名称" show-overflow></vxe-table-column>
+                <vxe-table-column
+                  type="index"
+                  width="50"
+                  title="序号"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="shortName"
+                  width="200"
+                  title="名称"
+                  show-overflow
+                ></vxe-table-column>
                 <vxe-table-column field="code" title="编码"></vxe-table-column>
+                <vxe-table-column
+                  field="creditLimit"
+                  title="固定额度"
+                ></vxe-table-column>
+                <vxe-table-column field="tempCreditLimit" title="临时额度">
+                  <template v-slot="{ row }">{{
+                    row.tempEnd == null
+                      ? 0
+                      : Date(row.tempEnd) < Date()
+                      ? row.tempEnd
+                      : 0
+                  }}</template>
+                </vxe-table-column>
+                <vxe-table-column field="" title="可用额度">
+                  <template v-slot="{ row }">
+                    <Poptip title="可用额度" transfer>
+                      <span slot="content" >{{ content }}</span>
+                      <a @click="show(row)">查看</a>
+                    </Poptip>
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column title="状态">
-                  <template v-slot="{ row }">{{ row.isDisabled == 1 ? '无效' : '有效' }}</template>
+                  <template v-slot="{ row }">{{
+                    row.isDisabled == 1 ? "无效" : "有效"
+                  }}</template>
                 </vxe-table-column>
-                <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
-                <vxe-table-column field="settTypeName" title="结算方式"></vxe-table-column>
-                <vxe-table-column field="contactor" title="联系人"></vxe-table-column>
-                <vxe-table-column field="contactorTel" title="联系人手机号"></vxe-table-column>
-                <vxe-table-column field="salesman" title="业务员"></vxe-table-column>
-                <vxe-table-column field="salesmanTel" title="业务员电话"></vxe-table-column>
+                <vxe-table-column
+                  field="billTypeName"
+                  title="票据类型"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="settTypeName"
+                  title="结算方式"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="contactor"
+                  title="联系人"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="contactorTel"
+                  title="联系人手机号"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="salesman"
+                  title="业务员"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="salesmanTel"
+                  title="业务员电话"
+                ></vxe-table-column>
                 <vxe-table-column title="是否内部供应商">
-                  <template v-slot="{ row }">{{ row.isSupplier == 1 ? '是' : '否' }}</template>
+                  <template v-slot="{ row }">{{
+                    row.isSupplier == 1 ? "是" : "否"
+                  }}</template>
                 </vxe-table-column>
-                <vxe-table-column field="advantageCarbrandId" title="优势品牌/产品"></vxe-table-column>
+                <vxe-table-column
+                  field="advantageCarbrandId"
+                  title="优势品牌/产品"
+                ></vxe-table-column>
               </vxe-table>
             </div>
             <Page
@@ -90,6 +160,7 @@
 <script>
 import { area } from "@/api/lease/registerApi";
 import { getTreeClient, getClientType } from "@/api/salesManagment/salesOrder";
+import { getLimit } from "@/api/salesManagment/salesOrder";
 
 export default {
   name: "SelectTheCustomer",
@@ -129,7 +200,8 @@ export default {
       Area: {},
       clickCity: {}, //当前获取的地址
       queryType: {}, //获取到当前类型
-      oneClinet: {} //点击当前的信息
+      oneClinet: {}, //点击当前的信息
+      content: 0,
     };
   },
   mounted() {
@@ -138,9 +210,18 @@ export default {
     // this.getClientTypeList();
   },
   methods: {
+    async show(row) {
+      //获取客户额度
+      let data = {};
+      data.guestId = row.id;
+      let res = await getLimit(data);
+      if (res.code === 0) {
+        this.content = res.data.sumAmt;
+      }
+    },
     openModel() {
       this.reset();
-      this.getList(true)
+      this.getList(true);
       // this.getAdress();
       this.getClientTypeList();
       this.addressShow = true;
@@ -154,11 +235,11 @@ export default {
         total: 0,
         size: 20,
         sizeOpts: [20, 40, 60, 80, 100]
-      }
+      };
     },
     //获取地级市
     getAdress() {
-      if(this.treeData.length > 0) {
+      if (this.treeData.length > 0) {
         return;
       }
       area().then(res => {
@@ -215,23 +296,23 @@ export default {
       //   return;
       // }
       let data = {};
-      if(this.clickCity.grade){
+      if (this.clickCity.grade) {
         data.grade = this.clickCity.grade;
         data.id = this.clickCity.id;
       }
       data.page = this.page1.num - 1;
       data.size = this.page1.size;
-      if(this.queryType !== undefined){
+      if (this.queryType !== undefined) {
         data.lever = this.queryType.lever;
         data.leverId = this.queryType.id;
       }
-      if(this.clientCode){
+      if (this.clientCode) {
         data.code = this.clientCode;
       }
-      if(this.fullName){
+      if (this.fullName) {
         data.shortName = this.fullName;
       }
-      if(this.clientPhone){
+      if (this.clientPhone) {
         data.contactorTel = this.clientPhone;
       }
       let res = await getTreeClient(data);
@@ -246,7 +327,7 @@ export default {
     },
     //客户类型获取
     async getClientTypeList() {
-      if(this.clientType.length > 0) {
+      if (this.clientType.length > 0) {
         return;
       }
       let res = await getClientType();
@@ -290,7 +371,7 @@ export default {
     },
     //选择
     select() {
-      if (Object.keys(this.oneClinet).length!==0) {
+      if (Object.keys(this.oneClinet).length !== 0) {
         if (this.oneClinet.isDisabled == 1) {
           this.$message.error("改客户已被禁用");
           return false;
@@ -302,7 +383,7 @@ export default {
         this.$message.error("请选择客户");
       }
     },
-    dblclick(){
+    dblclick() {
       this.select();
     }
   }

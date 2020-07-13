@@ -106,8 +106,7 @@
               </Option>
             </Select>
           </FormItem>
-          <FormItem label="计划发货日期：" prop="planSendDate">
-            <!-- @on-change="getplanSendDate" -->
+          <!-- <FormItem label="计划发货日期：" prop="planSendDate">
             <DatePicker
               v-model="formPlan.planSendDate"
               :options="options1"
@@ -133,7 +132,7 @@
               clearable
               ref="clearplanArriveDate"
             ></DatePicker>
-          </FormItem>
+          </FormItem> -->
           <FormItem label="交货仓库：" prop="storeId">
             <Select
               v-model="formPlan.storeId"
@@ -772,7 +771,10 @@
             },
             //打开添加配件模态框
             addMountings() {
-                this.$refs.selectPartCom.init();
+              if(!this.formPlan.guestId) {
+                return this.$message.error("请先选择客户!")
+              }
+              this.$refs.selectPartCom.init();
             },
             //打开批次配件框
             openBarchModal() {
