@@ -267,12 +267,12 @@ export default {
       columns: [
         {
           title: "选择",
-          width: 50,
+          minWidth: 50,
           type: "selection"
         },
         {
           title: "序号",
-          width: 50,
+          minWidth: 50,
           render: (h, params) => {
             return h(
               "span",
@@ -283,104 +283,281 @@ export default {
         {
           title: "登记日期",
           key: "registrationDate",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.registrationDate
+                }
+              }, params.row.registrationDate)
+            ])
+          }
         },
         {
           title: "发票采购方名称",
           key: "invoicePurchaserName",
-          width: 100
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoicePurchaserName
+                }
+              }, params.row.invoicePurchaserName)
+            ])
+          }
         },
         {
           title: "店号",
           key: "shopNo",
-          width: 60
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.shopNo
+                }
+              }, params.row.shopNo)
+            ])
+          }
         },
         {
           title: "发票代码",
           key: "invoiceCode",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceCode
+                }
+              }, params.row.invoiceCode)
+            ])
+          }
         },
         {
           title: "发票号",
           key: "invoiceNo",
-          width: 65
+          minWidth: 65,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceNo
+                }
+              }, params.row.invoiceNo)
+            ])
+          }
         },
         {
           title: "发票销售方名称",
           key: "invoiceSellerName",
-          width: 110
+          minWidth: 110,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceSellerName
+                }
+              }, params.row.invoiceSellerName)
+            ])
+          }
         },
         {
           title: "开票日期",
           key: "billingDate",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.billingDate
+                }
+              }, params.row.billingDate)
+            ])
+          }
         },
         {
           title: "价税合计金额",
           key: "totalAmt",
-          width: 90
+          minWidth: 90
         },
         {
           title: "金额",
           key: "invoiceAmt",
-          width: 70
+          minWidth: 70
         },
         {
           title: "税额",
           key: "taxAmt",
-          width: 70
+          minWidth: 70
         },
         {
           title: "税率",
           key: "taxRate",
-          width: 70
+          minWidth: 70
         },
         {
           title: "往来单位",
           key: "guestName",
-          width: 70
+          minWidth: 70,
+          fixed:"left",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "付款方式",
           key: "payTypeName",
-          width: 70
+          minWidth: 70
         },
         {
           title: "发票分类",
           key: "invoiceSortName",
-          width: 70
+          minWidth: 70
         },
         {
           title: "开票清单类型",
           key: "billingTypeName",
-          width: 90
+          minWidth: 90
         },
         {
           title: "增加类型",
           key: "addTypeName",
-          width: 70
+          minWidth: 70
         },
         {
           title: "导入经办人",
           key: "importUname",
-          width: 80
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.importUname
+                }
+              }, params.row.importUname)
+            ])
+          }
         },
         {
           title: "登记时间",
           key: "registrationTime",
-          width: 70,
-          className: "tc"
+          minWidth: 70,
+          className: "tc",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.registrationTime
+                }
+              }, params.row.registrationTime)
+            ])
+          }
         },
         {
           title: "勾选认证时间",
           key: "checkCertificationTime",
-          width: 90
+          minWidth: 90,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.checkCertificationTime
+                }
+              }, params.row.checkCertificationTime)
+            ])
+          }
         },
         {
           title: "是否退回",
           key: "returned",
           className: "tc",
-          width: 70,
+          minWidth: 70,
           render: (h, params) => {
             return h("span", params.row.returned ? "是" : "否");
           }
@@ -388,17 +565,49 @@ export default {
         {
           title: "退回经办人",
           key: "returnUname",
-          width: 80
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.returnUname
+                }
+              }, params.row.returnUname)
+            ])
+          }
         },
         {
           title: "退回时间",
           key: "returnTime",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.returnTime
+                }
+              }, params.row.returnTime)
+            ])
+          }
         },
         {
           title: "是否红字转出",
           key: "redHedged",
-          width: 90,
+          minWidth: 90,
           render: (h, params) => {
             return h("span", params.row.redHedged ? "是" : "否");
           }
@@ -406,12 +615,44 @@ export default {
         {
           title: "红冲经办人",
           key: "hedgeUname",
-          width: 80
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.hedgeUname
+                }
+              }, params.row.hedgeUname)
+            ])
+          }
         },
         {
           title: "红冲时间",
           key: "hedgeTime",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.hedgeTime
+                }
+              }, params.row.hedgeTime)
+            ])
+          }
         },
         {
           title: "对号账单",
@@ -426,7 +667,12 @@ export default {
                     "span",
                     {
                       style: {
-                        color: "red"
+                        color: "red",
+                        display: 'inline-block',
+                        width: '100%',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
                       },
                       on: {
                         click: () => {
@@ -447,12 +693,44 @@ export default {
         {
           title: "核销人",
           key: "cancelUname",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.cancelUname
+                }
+              }, params.row.cancelUname)
+            ])
+          }
         },
         {
           title: "核销时间",
           key: "cancelTime",
-          width: 70
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.cancelTime
+                }
+              }, params.row.cancelTime)
+            ])
+          }
         }
       ],
       flag: true,

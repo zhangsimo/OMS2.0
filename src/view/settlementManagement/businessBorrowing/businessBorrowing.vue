@@ -104,16 +104,23 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column
+              field="serviceId"
+              title="因公借支申请单号"
+              width="140"
+              fixed="left"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="payAmt"
+              title="因公借支金额"
+              width="120"
+              fixed="left"
+            ></vxe-table-column>
             <vxe-table-column title="基本信息">
               <vxe-table-column
                 type="seq"
                 width="60"
                 title="序号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="serviceId"
-                title="因公借支申请单号"
-                width="140"
               ></vxe-table-column>
               <vxe-table-column
                 field="applyTime"
@@ -127,11 +134,6 @@
               ></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
-              <vxe-table-column
-                field="payAmt"
-                title="因公借支金额"
-                width="120"
-              ></vxe-table-column>
               <vxe-table-column
                 field="paymentNo"
                 title="因公借支付款单号"

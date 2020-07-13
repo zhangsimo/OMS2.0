@@ -169,7 +169,7 @@
             <p style="margin-bottom: 10px">财务信息</p>
             <div class="finance">
               <div class="financePlace">
-                <a class="mr10" @click="addPlaceFin" v-has="'finAddAccount'">
+                <a class="mr10" @click="addPlaceFin" v-has="'finAddAcount'">
                   <Icon custom="iconfont iconxinzengicon icons" />新增
                 </a>
                 <a class="mr10" @click="changeplageFin" v-has="'finChangeAccount'">
@@ -360,7 +360,7 @@
             <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
             <div slot="footer">
               <Button type="primary" @click="addNewBank">确定</Button>
-              <Button type="default" @click="newInoiceShow = false">取消</Button>
+              <Button type="default" @click="cancelNewBank">取消</Button>
             </div>
           </Modal>
         </TabPane>
@@ -1008,7 +1008,7 @@ export default {
     addPlaceFin() {
       this.bankAccount = true;
       this.bankAccountTit = "新增银行账户";
-      this.$refs.bankAccount.data = {};
+      this.$refs.bankAccount.data = {accountType:"ZHLX002"};
       this.$refs.bankAccount.resetFields();
     },
     changeplageFin() {
@@ -1176,7 +1176,6 @@ export default {
           // ...this.pitchOnClientList
         ];
         this.data.guestVOList = this.relevanceClientShow;
-        console.log("......" + this.data.guestVOList);
       } else {
         this.$Message.error("选择重复");
       }
@@ -1205,6 +1204,7 @@ export default {
       this.addInoiceOne = {};
       this.tit = "新增开票";
       this.newInoiceShow = true;
+      this.$refs.AddInoice.data={}
       this.$refs.AddInoice.resetFields();
     },
     // 确认新增
@@ -1217,14 +1217,13 @@ export default {
           newarr.taxpayerType=true
           this.bankId++;
           this.invoice.push(newarr);
-          console.log(this.invoice,"///???")
           this.data.guestTaxpayerVOList = this.invoice;
           this.newInoiceShow = false;
+          this.addInoiceOne={}
         } else {
           this.invoice.map(item => {
             this.addInoiceOne = this.$refs.AddInoice.data;
             if (item.bankId == this.addInoiceOne.bankId) {
-              console.log(item,item.bankId,"???")
               let newarr = {};
               newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
               item.taxpayerName = newarr.taxpayerName;
@@ -1238,28 +1237,11 @@ export default {
           this.data.guestTaxpayerVOList = this.invoice;
           this.newInoiceShow = false;
         }
-        // if (
-        //   this.invoice.some(item => item.bankId == this.addInoiceOne.bankId)
-        // ) {
-        //   let idx = this.invoice.findIndex(
-        //     item => item.bankId == this.addInoiceOne.bankId
-        //   );
-        //   // console.log(idx);
-        //   this.$set(this.invoice, idx, this.addInoiceOne);
-        //   this.data.guestTaxpayerVOList = this.invoice;
-        //   this.newInoiceShow = false;
-        //   this.addInoiceOne = {};
-        // } else {
-        // let newarr = {};
-        // newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
-        // newarr.bankId = this.bankId;
-        // this.bankId++;
-        // this.invoice.push(newarr);
-        // // console.log(newarr, 638);
-        // this.data.guestTaxpayerVOList = this.invoice;
-        // this.newInoiceShow = false;
-        // }
       });
+    },
+    cancelNewBank(){
+      this.newInoiceShow = false
+      this.addInoiceOne={}
     },
     disposeTax() {
       let defauDat = [];
