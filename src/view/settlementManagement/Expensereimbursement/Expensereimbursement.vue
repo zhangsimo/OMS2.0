@@ -549,11 +549,11 @@ export default {
         serviceId: this.requestCode
         // guestId: this.companyId,
       };
-      for (let d in data) {
-        if (!data[d]) {
-          delete data[d];
-        }
-      }
+      // for (let d in data) {
+      //   if (!data[d]) {
+      //     delete data[d];
+      //   }
+      // }
       restful.findByDynamicQuery(params, data).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;
