@@ -34,7 +34,7 @@
             <FormItem label="选择辅助核算">
               <Row>
                 <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput"></i-input>
+                  <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
                 <i-col span="2" style="paddingLeft:20px">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
@@ -227,7 +227,7 @@ export default {
       value: [],
       BranchstoreId: "",
       Branchstore: [{ id: 0, name: "全部" }],
-      currentAccount: {}
+      currentAccount: {},
     };
   },
   async mounted() {
@@ -352,8 +352,13 @@ export default {
       if (!this.voucherinputModel) {
         this.$refs.settlement.Settlement = true;
       } else {
-        this.$refs.voucherInput.subjectModelShowassist = true;
-        this.claimedList(2);
+        this.getMessage()
+        if(this.MessageValue==""){
+          this.$Message.error("请选择辅助核算")
+        }else{
+          this.$message.success("其他付款认领成功")
+          this.claimedList(2);
+        }
       }
     },
     //预收款弹框是否打开
@@ -412,8 +417,8 @@ export default {
       }
     },
     //子组件的数据
-    getMessage(value) {
-      this.MessageValue = value[0].startStatus.name;
+    getMessage() {
+      this.MessageValue = this.$refs.voucherInput.AssistAccounting;
     },
     //认领弹框认领
     claimPay() {
@@ -493,6 +498,14 @@ export default {
         } else {
           data.subjectCode = "1221";
           data.climeType = 6;
+          data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+          if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+            data.isAuxiliaryAccounting=0 //是否辅助核算类
+          }else{
+            data.isAuxiliaryAccounting=1
+          }
+          data.auxiliaryName=this.MessageValue //辅助核算名称
+          data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
         }
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {

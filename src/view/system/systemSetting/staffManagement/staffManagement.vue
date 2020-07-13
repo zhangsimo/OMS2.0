@@ -404,13 +404,21 @@ export default {
       data.groundIds=this.groundIds[this.groundIds.length-1] || '';
       getStaffList(data).then(res => {
           stop();
-          this.loading = false;
-          if (res.code == 0) {
-            this.staffList = res.data.content;
-            this.page.total = res.data.totalElements;
+          if (res.code === 0){
+            this.loading = false;
+            if (res.code == 0) {
+              this.staffList = res.data.content;
+              this.page.total = res.data.totalElements;
+            }
+          } else {
+            this.staffList = []
+            this.page.total = 0
           }
+
         })
         .catch(err => {
+          this.staffList = []
+          this.page.total = 0
           stop();
         });
     },

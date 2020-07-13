@@ -297,8 +297,12 @@ export default class ProductLA extends Vue {
 
     // mounted
     private async mounted() {
+      let data:any = {}
+          data.systemType = 0
+          data.page = 0
+          data.size = 1000
         this.getStaff();
-        const roles = await api.getRoles()
+        const roles = await api.getRoles(data)
         if (roles.code == 0) {
             this.roleOptions = roles.data.content.map((el: any) => {
                 return {

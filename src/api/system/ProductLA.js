@@ -11,14 +11,11 @@ export function getdictCode(code) {
 }
 
 // 获取角色
-export function getRoles() {
+export function getRoles(params) {
   return axios.request({
     url: `${api.authApi}/role/findAllByPage`,
     method: "get",
-    params: {
-      size: 10000,
-      page: 0,
-    }
+    params,
   });
 }
 

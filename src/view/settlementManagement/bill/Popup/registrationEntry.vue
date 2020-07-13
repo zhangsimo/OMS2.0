@@ -50,7 +50,7 @@
     >
       <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
       <vxe-table-column title="登记日期" field="registrationDate"></vxe-table-column>
-      <vxe-table-column field="发票采购方名称" title="发票采购方名称" :edit-render="{name: 'Select', options: purchaserList,optionProps: {value: 'id', label: 'name'}}"></vxe-table-column>
+      <vxe-table-column field="invoicePurchaserId" title="发票采购方名称" :edit-render="{name: 'Select', options: purchaserList, optionProps: {value: 'id', label: 'name'}}"></vxe-table-column>
       <vxe-table-column
         field="invoiceCode"
         title="发票代码"
