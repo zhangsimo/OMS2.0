@@ -649,7 +649,9 @@ export default class InterPurchase extends Vue {
     if (columnIndex === 8) {
       let totals = 0;
       let sumarr = data.map(el => {
-        return el.orderQty * el.orderPrice;
+          let allMoney = el.orderQty * el.orderPrice
+              allMoney = allMoney ? allMoney :0
+        return allMoney;
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
       this.totalAmt = totals;
