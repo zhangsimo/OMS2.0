@@ -169,13 +169,13 @@
             <p style="margin-bottom: 10px">财务信息</p>
             <div class="finance">
               <div class="financePlace">
-                <a class="mr10" @click="addPlaceFin">
+                <a class="mr10" @click="addPlaceFin" v-has="'finAddAccount'">
                   <Icon custom="iconfont iconxinzengicon icons" />新增
                 </a>
-                <a class="mr10" @click="changeplageFin">
+                <a class="mr10" @click="changeplageFin" v-has="'finChangeAccount'">
                   <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
                 </a>
-                <a class="mr10" @click="changePlaceFin">{{enAble}}</a>
+                <a class="mr10" @click="changePlaceFin" v-has="'finEnable'">{{enAble}}</a>
               </div>
               <div class="financeTab">
                 <Table
@@ -328,13 +328,13 @@
         <TabPane label="开票信息" tab="clientBox">
           <div>
             <div class="place">
-              <a class="mr10" @click="addInoice">
+              <a class="mr10" @click="addInoice" v-has="'taxAdd'">
                 <Icon custom="iconfont iconxinzengicon icons" />新增
               </a>
-              <a class="mr10" @click="changeBank">
+              <a class="mr10" @click="changeBank" v-has="'taxChange'">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </a>
-              <a class="mr10" @click="deletBank">{{enAbleTax}}</a>
+              <a class="mr10" @click="deletBank" v-has="'taxEnable'">{{enAbleTax}}</a>
             </div>
             <div class="financeTab">
               <Table
