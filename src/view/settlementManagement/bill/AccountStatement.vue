@@ -473,7 +473,8 @@ export default {
           title: "往来单位",
           key: "guestName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          fixed:"left"
         },
         {
           title: "收付类型",
@@ -629,7 +630,8 @@ export default {
           title: "计算结算类型",
           key: "billingTypeName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          fixed:"left"
         },
         {
           title: "对账单状态",

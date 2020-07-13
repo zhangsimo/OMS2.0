@@ -52,67 +52,240 @@ export default {
         {
           title: "所属区域",
           key: "area",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.area
+                }
+              }, params.row.area)
+            ])
+          }
         },
         {
           title: "所属门店",
           key: "shopName",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.shopName
+                }
+              }, params.row.shopName)
+            ])
+          }
         },
         {
           title: "所属店号",
           key: "shopCode",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.shopCode
+                }
+              }, params.row.shopCode)
+            ])
+          }
         },
         {
           title: "账户",
           key: "accountName",
-          align: "center"
+          align: "center",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountName
+                }
+              }, params.row.accountName)
+            ])
+          }
         },
         {
           title: "账号",
           key: "accountCode",
-          align: "center"
+          align: "center",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountCode
+                }
+              }, params.row.accountCode)
+            ])
+          }
         },
         {
           title: "开户行",
           key: "bankName",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.bankName
+                }
+              }, params.row.bankName)
+            ])
+          }
         },
         {
           title: "对应科目",
           key: "mateAccountName",
-          align: "center"
+          align: "center",
+          minWidth: 100
         },
         {
           title: "发生日期",
           key: "createTime",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createTime
+                }
+              }, params.row.createTime)
+            ])
+          }
         },
         {
           title: "收入金额",
           key: "incomeMoney",
-          align: "center"
+          align: "center",
+          minWidth: 100
         },
         {
           title: "支出金额",
           key: "paidMoney",
-          align: "center"
+          align: "center",
+          minWidth: 100
         },
         {
           title: "对方户名",
           key: "reciprocalAccountName",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.reciprocalAccountName
+                }
+              }, params.row.reciprocalAccountName)
+            ])
+          }
         },
         {
           title: "交易备注",
           key: "tradingNote",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.tradingNote
+                }
+              }, params.row.tradingNote)
+            ])
+          }
         },
         {
           title: "智能匹配往来单位",
           key: "suppliers",
-          align: "center"
+          align: "center",
+          minWidth: 160,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.suppliers
+                }
+              }, params.row.suppliers)
+            ])
+          }
         }
       ], //本店待认领款
       claimedData: [] //本店待认领款

@@ -179,13 +179,13 @@
             <p style="margin-bottom: 10px">财务信息</p>
             <div class="finance">
               <div class="financePlace">
-                <a class="mr10" @click="addPlaceFin">
+                <a class="mr10" @click="addPlaceFin" v-has="'finAdd'">
                   <Icon custom="iconfont iconxinzengicon icons" />新增
                 </a>
-                <a class="mr10" @click="changeplageFin">
+                <a class="mr10" @click="changeplageFin" v-has="'finChange'">
                   <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
                 </a>
-                <a class="mr10" @click="changePlaceFin">{{enAble}}</a>
+                <a class="mr10" @click="changePlaceFin" v-has="'finEnable'">{{enAble}}</a>
               </div>
               <div class="financeTab">
                 <Table
@@ -522,7 +522,7 @@ export default {
     addPlaceFin() {
       this.bankAccount = true;
       this.bankAccountTit = "新增银行账户";
-      this.$refs.bankAccount.data = {};
+      this.$refs.bankAccount.data = {accountType:"ZHLX002"};
       this.$refs.bankAccount.resetFields();
     },
     changeplageFin() {

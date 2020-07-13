@@ -97,7 +97,7 @@
             highlight-current-row
             @current-change="currentChangeEvent"
           >
-            <vxe-table-column title="基本信息">
+            <vxe-table-column title="基本信息" fixed="left">
               <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="serviceId" width="100" title="预收款单号"></vxe-table-column>
               <vxe-table-column field="guestName" width="100" title="往来单位"></vxe-table-column>
