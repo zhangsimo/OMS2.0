@@ -79,10 +79,10 @@
       <div class="inner-box">
         <div class="box mb10">
           <vxe-table
-            class="boxData"
             auto-resize
             resizable
             border
+            show-overflow
             highlight-hover-row
             highlight-current-row
             @current-change="currentChangeEvent"
@@ -94,25 +94,25 @@
           >
             <vxe-table-column title="基本信息">
               <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column field="serviceId" title="其他付款申请单号"></vxe-table-column>
-              <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类型">
+              <vxe-table-column field="serviceId" width="140" title="其他付款申请单号"></vxe-table-column>
+              <vxe-table-column field="guestName" width="100" title="往来单位"></vxe-table-column>
+              <vxe-table-column field="businessType" width="100" title="业务类型">
                 <template v-slot="{row}">{{row.businessType.name}}</template>
               </vxe-table-column>
-              <vxe-table-column field="payTime" title="付款时间"></vxe-table-column>
+              <vxe-table-column field="payTime" title="付款时间" width="100"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
-              <vxe-table-column field="applyAmt" title="其他付款申请金额"></vxe-table-column>
-              <vxe-table-column field="paymentClaimNo" title="其他付款认领单号"></vxe-table-column>
-              <vxe-table-column field="paymentClaimAmt" title="其他付款认领金额"></vxe-table-column>
-              <vxe-table-column field="writeOffReceiptNo" title="其他收付款核销单号"></vxe-table-column>
-              <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
-              <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
-              <vxe-table-column field="paymentRegainAmt" title="其他收款收回金额"></vxe-table-column>
-              <vxe-table-column field="paymentBalance" title="其他收款余额"></vxe-table-column>
+              <vxe-table-column field="applyAmt" title="其他付款申请金额" width="140"></vxe-table-column>
+              <vxe-table-column field="paymentClaimNo" title="其他付款认领单号" width="140"></vxe-table-column>
+              <vxe-table-column field="paymentClaimAmt" title="其他付款认领金额" width="140"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="其他收付款核销单号" width="160"></vxe-table-column>
+              <vxe-table-column field="writeOffAmount" title="其他收款核销金额" width="140"></vxe-table-column>
+              <vxe-table-column field="paymentRegainNo" title="其他收款收回单号" width="140"></vxe-table-column>
+              <vxe-table-column field="paymentRegainAmt" title="其他收款收回金额" width="140"></vxe-table-column>
+              <vxe-table-column field="paymentBalance" title="其他收款余额" width="120"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="收款方式">
-              <vxe-table-column field="account" title="账户">
+              <vxe-table-column field="account" title="账户" width="60">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
@@ -121,7 +121,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="amt" title="金额">
+              <vxe-table-column field="amt" title="金额" width="60">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
@@ -130,7 +130,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="age" title="收款所属门店">
+              <vxe-table-column field="age" title="收款所属门店" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
@@ -141,7 +141,7 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="付款方式">
-              <vxe-table-column field="role" title="账户">
+              <vxe-table-column field="role" title="账户" width="60">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
@@ -150,7 +150,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="sex" title="金额">
+              <vxe-table-column field="sex" title="金额" width="60">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
@@ -159,7 +159,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="age" title="付款所属门店">
+              <vxe-table-column field="age" title="付款所属门店" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
@@ -170,7 +170,7 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="其他信息">
-              <vxe-table-column field="receiver" title="收款人">
+              <vxe-table-column field="receiver" title="收款人" width="90">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -179,7 +179,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="receiveDate" title="收款日期">
+              <vxe-table-column field="receiveDate" title="收款日期" width="100">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -188,7 +188,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="receiveRemark" title="收款备注">
+              <vxe-table-column field="receiveRemark" title="收款备注" width="100">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -197,7 +197,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="receiveAuditor" title="收款审核人">
+              <vxe-table-column field="receiveAuditor" title="收款审核人" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -206,7 +206,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="receiveAuditDate" title="收款审核日期">
+              <vxe-table-column field="receiveAuditDate" title="收款审核日期" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -215,7 +215,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="payer" title="付款人">
+              <vxe-table-column field="payer" title="付款人" width="90">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -224,7 +224,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="paymentDate" title="付款日期">
+              <vxe-table-column field="paymentDate" title="付款日期" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -233,7 +233,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="paymentRemark" title="付款备注">
+              <vxe-table-column field="paymentRemark" title="付款备注" width="100">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -242,7 +242,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="paymentAuditor" title="付款审核人">
+              <vxe-table-column field="paymentAuditor" title="付款审核人" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
@@ -251,7 +251,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="paymentAuditDate" title="付款审核日期">
+              <vxe-table-column field="paymentAuditDate" title="付款审核日期" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
