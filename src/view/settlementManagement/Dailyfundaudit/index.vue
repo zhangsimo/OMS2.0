@@ -241,6 +241,7 @@ export default {
         guestSourceId: this.companyId,
         businessNumbers: this.payOrderNo,
         businessNumbersList: this.orderNo,
+        shopNumber: this.BranchstoreId,
         size: 10000,
       }
 

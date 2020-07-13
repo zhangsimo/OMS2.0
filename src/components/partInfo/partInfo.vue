@@ -263,6 +263,87 @@
             </vxe-table-column>
           </vxe-table>
         </TabPane>
+        <TabPane label="关联配件" tab="partInfoTab" name="active3" class="con-warp">
+          <div class="partCheck-hd">
+            <Input class="w200 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码" @on-enter="search"></Input>
+            <Select placeholder="配件一级分类" filterable v-model="selectLevelFirst" class="w100 mr10">
+              <Option v-for="(item,index) in levelType" :value="item.id" :key="item.id">{{item.name}}</Option>
+            </Select>
+            <Select
+              placeholder="配件二级分类"
+              filterable
+              v-model="selectLevelSecond"
+              class="w100 mr10"
+              v-for="(item,index) in levelType"
+              :key="index"
+              v-if="selectLevelFirst == item.id"
+            >
+              <Option v-for="(item2,index2) in item.secendType"  :value="item2.code" :key="index2">{{item2.name}}</Option>
+            </Select>
+            <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
+            <Button type='default'  @click="manyCodeSearch">多编码查询</Button>
+          </div>
+          <div class="tab-warps trans-list">
+            <div class="left target">
+              <Table
+                class="table"
+                border
+                highlight-row
+                resizable
+                auto-resize
+                size="small"
+                :loading="allPartLoading"
+                :stripe="true"
+                :columns="allPartColumns"
+                :data="allPartList"
+                height="280"
+                @on-selection-change="selectAllPart"
+              ></Table>
+              <Page
+                size="small"
+                class-name="page-con"
+                :current="page.num"
+                :total="page.total"
+                :page-size="page.size"
+                @on-change="allPartListChangePage"
+                @on-page-size-change="allPartListChangeSize"
+                show-sizer
+                show-total
+                show-elevator
+              ></Page>
+            </div>
+            <div class="trans-btn w110">
+              <Button class="ml10 w90" @click="addContact">新建关联</Button>
+              <Button class="ml10 w90 mt10" @click="moveContact">取消关联</Button>
+            </div>
+            <div class="right dist">
+              <Table
+                class="table"
+                border
+                highlight-row
+                resizable
+                auto-resize
+                size="small"
+                :loading="alreadyPartLoading"
+                :stripe="true"
+                :columns="allPartColumns"
+                :data="alreadyPartList"
+                height="300"
+                @on-selection-change="selectAlreadyPart"
+              ></Table>
+            </div>
+          </div>
+          <Modal v-model="manyCodeModal" title="多编码查询" width="300">
+            <Form :rules="rules">
+              输入多个配件编码，换行以区分：
+              <br/>
+              <el-input v-model="manyCodeInput" type="textarea" rows="5" cols="30" prop="manyCode"></el-input>
+            </Form>
+            <div slot="footer">
+              <Button class="mr10" type="warning" @click="manyCodeTrue">查询</Button>
+            </div>
+          </Modal>
+        </TabPane>
       </Tabs>
       <div slot="footer" v-if="isAddPart">
         <Button :loading="btnIsLoadding" class="mr10" type="warning" @click="submit('proModalForm',1)">保存</Button>
@@ -357,5 +438,44 @@ export default {
     font-size: 14px;
     color: #ed4014;
   }
+  }
+  .con-warp {
+    padding-bottom: 10px;
+    height: auto;
+    background-color: #fff;
+    .tab-warps {
+      padding: 10px;
+    }
+    .trans-list {
+      display: flex;
+      justify-content: space-between;
+      .trans-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .right, .left {
+        &>p{
+          background-color: #f8f8f8;
+          line-height: 40px;
+          height: 40px;
+          padding-left: 10px;
+          font-size: 14px;
+          font-weight: bold;
+          letter-spacing: 0px;
+          color: #333333;
+          border: 1px solid #e9e9e9;
+        }
+        .button-warp {
+          padding: 10px;
+          display: flex;
+          border-left: 1px solid #e9e9e9;
+          border-right: 1px solid #e9e9e9;
+        }
+        width: calc((100% - 110px) / 2);
+        padding: 10px;
+        border: solid 1px #e5e5e5;
+      }
+    }
   }
 </style>

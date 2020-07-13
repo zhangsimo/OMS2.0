@@ -206,7 +206,6 @@ export const minxParts = {
         }
       ],
       tbdata: [], //审批数据
-
       //配件审核标定点击选中的table数据
       selectTable: {},
       //高度
@@ -254,6 +253,7 @@ export const minxParts = {
         this.approvalLoading = false;
         if (res.code == 0) {
           this.$refs.partInfo.init(res.data || {});
+          this.$refs.partInfo.code=this.selectTable.id
         }
       });
     },

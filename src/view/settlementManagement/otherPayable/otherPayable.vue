@@ -93,11 +93,11 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column field="orderTypeName" width="100" title="业务类型" fixed="left"></vxe-table-column>
+            <vxe-table-column field="guestName" width="100" title="往来单位"  fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
               <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="serviceId" width="120" title="其他收款单号"></vxe-table-column>
-              <vxe-table-column field="guestName" width="100" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="orderTypeName" width="100" title="业务类型"></vxe-table-column>
               <vxe-table-column field="paymentDate" width="100" title="付款时间">
                 <!--<ul class="list">-->
                 <!--<li v-for="(item,index) of row.otherInfo" :key="index" class="flex">-->

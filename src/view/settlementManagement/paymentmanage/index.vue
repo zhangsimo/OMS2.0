@@ -241,7 +241,7 @@ export default {
         {
           title: "序号",
           type: "index",
-          width: 40,
+          minWidth: 40,
           className: "tc"
         },
         // {
@@ -252,77 +252,140 @@ export default {
         {
           title: "店号",
           key: "code",
-          className: "tc"
+          className: "tc",
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.code
+                }
+              }, params.row.code)
+            ])
+          }
         },
         {
           title: "客户/供应商名称",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "客户/供应商类别",
           key: "guestTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120
         },
         {
           title: "对账类别",
           key: "paymentTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "采购入库",
           key: "stockAmtIn",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "采购退货",
           key: "stockAmtOut",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "销售出库",
           key: "salesAmtOut",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "销售退货",
           key: "salesAmtReturn",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "应收应付金额",
           key: "duePayableAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.duePayableAmt
+                }
+              }, params.row.duePayableAmt)
+            ])
+          }
         },
         {
           title: "已对账未收金额",
           key: "receivedAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "已对账未付金额",
           key: "paidAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "已对账合计",
           key: "reconciledSumAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "未对账应收金额",
           key: "uncollectedAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "未对账应付金额",
           key: "unpaidAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "未对账合计",
           key: "unReconciledSumAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         }
       ],
       columns1: [

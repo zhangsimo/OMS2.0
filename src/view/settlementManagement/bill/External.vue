@@ -120,8 +120,7 @@ export default {
           key: "index",
           title: "序号",
           minWidth: 40,
-          className: "tc",
-          fixed:"left"
+          className: "tc"
         },
         {
           title: "分店名称",

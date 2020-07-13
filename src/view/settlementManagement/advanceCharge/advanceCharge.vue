@@ -104,11 +104,11 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column field="serviceId" title="预付款申请单号" width="140" fixed="left"></vxe-table-column>
+            <vxe-table-column field="guestName" title="往来单位" width="100" fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
               <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
-              <vxe-table-column field="serviceId" title="预付款申请单号" width="140"></vxe-table-column>
               <vxe-table-column field="orderNo" title="预付款采购订单号" width="140"></vxe-table-column>
-              <vxe-table-column field="guestName" title="往来单位" width="100"></vxe-table-column>
               <vxe-table-column field="applicant" title="申请人" width="90"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">

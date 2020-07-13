@@ -405,6 +405,9 @@ export default {
         this.$Message.info("请输入分配数");
         return;
       }
+      if(row.hasAcceptQty > row.applyQty) {
+        return this.$Message.info("分配数量不能大于申请数量");
+      }
       hotProductsSave(row)
         .then(res => {
           if (res.code == 0) {
@@ -435,6 +438,9 @@ export default {
       if (row.hasAcceptQty === "") {
         this.$Message.info("请输入分配数");
         return;
+      }
+      if(row.hasAcceptQty > row.applyQty) {
+        return this.$Message.info("分配数量不能大于申请数量");
       }
       baocun(row)
         .then(res => {
