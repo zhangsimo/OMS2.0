@@ -372,10 +372,11 @@ export default class ProductLA extends Vue {
   }
    //新增员工弹窗搜索
   private staffModalSearch(){
-      let page = {
-        size:this.staffModalPage.size,
-        page:this.staffModalPage.num
-      }
+    this.staffModalSearchInfo.roleName=this.staffModalSearchInfo.roleName=='全部'?'':this.staffModalSearchInfo.roleName;
+    let page = {
+      size: this.staffModalPage.size,
+      page: this.staffModalPage.num
+    }
     let data = Object.assign(this.staffModalSearchInfo,page);
     api.getCanSelectStaff(data).then(res=>{
       if(res.code==0){
