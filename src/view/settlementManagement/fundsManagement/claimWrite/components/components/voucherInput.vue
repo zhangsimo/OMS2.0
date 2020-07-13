@@ -400,7 +400,7 @@ export default {
     },
     //辅助核算确定弹框
     confirmFuzhu() {
-      console.log(this.AssistAccounting,"???")
+      console.log(this.auxiliaryTypeCode,"类型")
       if (this.Classification) {
         this.$refs.formDynamic.validate(valid => {
         if (valid) {

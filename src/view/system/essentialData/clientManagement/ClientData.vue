@@ -990,7 +990,7 @@ export default {
           if (bool == true) {
             newarr.acquiesce = true;
             newarr.accountSign = true;
-            newarr.accountType = newarr.accountType || "ZHLX002";
+            newarr.accountType = newarr.accountType || "ZHLX001";
             newarr.accountAddId=this.accountAddId
             this.accountAddId++;
             this.financeList=[newarr,...this.financeList]

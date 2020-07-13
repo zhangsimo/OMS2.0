@@ -185,9 +185,7 @@ export default {
           this.getMessage()
           if(this.MessageValue==""){
             this.$Message.error("请选择辅助核算")
-            console.log(this.MessageValue,this.$refs.voucherInput.AssistAccounting,"???")
           }else{
-            console.log(this.MessageValue,this.$refs.voucherInput.AssistAccounting,"???")
             this.$message.success("其他收款认领成功")
             this.claimedList(2);
           }
@@ -261,7 +259,6 @@ export default {
     //子组件的数据
     getMessage() {
       this.MessageValue = this.$refs.voucherInput.AssistAccounting;
-      console.log(this.MessageValue,this.$refs.voucherInput.AssistAccounting,"???")
     },
     //认领弹框认领
     claimPay() {
@@ -343,6 +340,14 @@ export default {
         }else{
           data.subjectCode="2241";
           data.climeType=5
+          data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+          if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+            data.isAuxiliaryAccounting=0 //是否辅助核算类
+          }else{
+            data.isAuxiliaryAccounting=1
+          }
+          data.auxiliaryName=this.MessageValue //辅助核算名称
+          data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
         }
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
