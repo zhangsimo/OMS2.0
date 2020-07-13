@@ -91,7 +91,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "型号",
-          key: "brandName",
+          key: "model",
           minWidth: 120
         },
         {

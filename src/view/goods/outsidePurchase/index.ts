@@ -638,7 +638,7 @@ export default class InterPurchase extends Vue {
     let total = 0
     data.map(item => {
       let value = item[type]
-      if (!value) {
+      if (!value || isNaN(value)) {
         value = 0
       }
       total += parseFloat(value)
@@ -649,9 +649,9 @@ export default class InterPurchase extends Vue {
     if (columnIndex === 8) {
       let totals = 0;
       let sumarr = data.map(el => {
-          let allMoney = el.orderQty * el.orderPrice
-              allMoney = allMoney ? allMoney :0
-        return allMoney;
+        let orderQty = isNaN(el.orderQty * 1) ? 0 : el.orderQty * 1;
+        let orderPrice = isNaN(el.orderPrice * 1) ? 0 : el.orderPrice * 1;
+        return orderQty * orderPrice;
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
       this.totalAmt = totals;

@@ -84,6 +84,11 @@ export const mixSelectPartCom = {
           }
         },
         {
+          title: "本店可售",
+          key: "outableQty",
+          minWidth: 120,
+        },
+        {
           title: "内码",
           key: "code",
           minWidth: 120,
@@ -267,19 +272,6 @@ export const mixSelectPartCom = {
     getPartBrandAll() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
         let arrData = res.data.content || []
-        // let filterData = arrData.filter(
-        //   item => item.qualityCode == "000070" || item.qualityCode == "000071"
-        // );
-        // if (filterData.length > 0) {
-        //   if (filterData[0].children && filterData[0].children.length > 0) {
-        //     filterData[0].children.map(item => {
-        //       let objData = {};
-        //       objData.label = item.name;
-        //       objData.value = item.code;
-        //       this.partBrandData.push(objData);
-        //     });
-        //   }
-        // }
         arrData.map(item => {
           this.partBrandData.push(...item.children);
         })
@@ -321,6 +313,7 @@ export const mixSelectPartCom = {
         return this.$Message.warning("请选择交货仓库")
       }
       this.searchPartLayer = true;
+      this.allList = {};
       this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();
@@ -333,10 +326,6 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
         this.$emit("selectPartName", item);
-        // this.searchPartLayer = false;
-        // setTimeout(()=>{
-        //   this.$Message.success("已添加");
-        // })
       } else {
         this.$Message.error("请选择数据");
       }
