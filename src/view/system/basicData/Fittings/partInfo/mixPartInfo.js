@@ -5,7 +5,7 @@ import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamine
 
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
 
-import { getCarPartClass } from "_api/parts";
+import { getCarPartClass,getAllParts,getByManyCode,getAlreadyParts,savePartChange } from "_api/parts";
 
 export const mixPartInfo = {
 
@@ -152,7 +152,80 @@ export const mixPartInfo = {
         carBrand:"",
         carName:""
       },
-      carList:[]
+      carList:[],
+      code:"",
+      //关联配件
+      partName:"",//关联配件查询input
+      levelType:[], //配件分类列表
+      page:{
+        num: 1,
+        total: 0,
+        size: 10
+      },
+      selectLevelFirst:"",//配件一级分类model
+      selectLevelSecond:"",//配件二级分类model
+      allPartLoading:false,//全部配件/左侧表格Loading
+      alreadyPartLoading:false,//已关联配件表格Loading
+      allPartList:[],//全部配件表格数据
+      alreadyPartList:[],//已关联配件表格数据
+      allPartColumns:[
+        {
+          title: "序号",
+          type: "index",
+          minWidth: 60,
+          align:"center"
+        },
+        {
+          type:"selection",
+          align:"center",
+          minWidth: 40
+        },
+        {
+          title: "内码",
+          key: "partId",
+          minWidth: 50,
+          align:"center"
+        },
+        {
+          title: "编码",
+          key: "partCode",
+          minWidth: 100,
+          align:"center"
+        },
+        {
+          title: "名称",
+          key: "fullName",
+          minWidth: 100,
+          align:"center"
+        },
+        {
+          title: "规格",
+          key: "spec",
+          minWidth: 100,
+          align:"center"
+        },
+        {
+          title: "品牌",
+          key: "partBrandName",
+          minWidth: 100,
+          align:"center"
+        },
+        {
+          title: "OEM码",
+          key: "oeCode",
+          minWidth: 100,
+          align:"center"
+        }
+      ],//配件表格数据columns
+      selectAllPartTab:[],//全部配件数据选中数据
+      selectAlreadyPartTab:[],//已关联配件选中数据
+      manyCodeModal:false,
+      manyCodeInput:"",
+      rules:{
+        manyCode:[
+          {required:true,message:"请输入多个配件编码",trigger:"blur"}
+        ]
+      }
     }
   },
   methods: {
@@ -163,7 +236,7 @@ export const mixPartInfo = {
         this.changetype(this.formValidate.partTypeF);
       }
     },
-    changetype(v) { 
+    changetype(v) {
       let item = this.typepf.filter(el => el.typeId === v)[0];
       this.formValidate.carTypefName = item.title || item.name;
       this.typeps = item.children
@@ -178,6 +251,62 @@ export const mixPartInfo = {
         this.$refs.proModalForm.resetFields()
       }
     },
+    //获取左侧全部配件数据接口
+    async getAllPartListData(){
+      this.allPartLoading = true;
+      let params= {};
+      let data={};
+      params.tenantId = 0;
+      params.page = this.page.num - 1;
+      params.size = this.page.size;
+      const qurry = this.partName.trim();
+      if (qurry.length > 0) {
+        data.partCode = qurry;
+      }
+      if (this.selectLevelSecond) {
+        data.typeId = this.selectLevelSecond;
+      }
+      let res = await getAllParts(params, data);
+      if (res.code == 0) {
+        this.page.total = res.data.totalElements;
+        this.allPartList = res.data.content
+        if(this.allPartList.length>0){  //data是请求后台返回的数据集
+          for (let i = 0; i < this.allPartList.length; i++) {
+            if (this.allPartList[i].isDistribution ==0 ) {//处理状态 1已处理 则勾选框禁止被勾选(置灰)
+              this.allPartList[i]._disabled = true; //给满足条件的行设置 _disabled 属性
+            }
+          }
+        }
+        this.allPartLoading = false;
+      }
+    },
+    //获取右侧已关联配件数据接口
+    async getAlreadyPartsData(code){
+      this.alreadyPartLoading=true
+      let data={partInnerId:code};
+      let res=await getAlreadyParts(data)
+      if(res.code===0){
+        this.alreadyPartLoading=false
+        this.alreadyPartList=res.data
+      }
+    },
+    //多编码查询接口
+    async getByManyCodeFun(data){
+      this.allPartLoading = true;
+      let res=await getByManyCode(data)
+      if (res.code == 0) {
+        this.page.total = res.data.totalElements;
+        this.allPartList = res.data.content
+        // if(this.allPartList.length>0){  //data是请求后台返回的数据集
+        //   for (let i = 0; i < this.allPartList.length; i++) {
+        //     if (this.allPartList[i].isDistribution ==0 ) {//处理状态 1已处理 则勾选框禁止被勾选(置灰)
+        //       this.allPartList[i]._disabled = true; //给满足条件的行设置 _disabled 属性
+        //     }
+        //   }
+        // }
+        this.allPartLoading = false;
+      }
+    },
     //初始化
     init(setData) {
       this.treeInit();
@@ -186,12 +315,13 @@ export const mixPartInfo = {
       this.carList = [];
       this.carItemObj.carName = "";
       this.carItemObj.carBrand = "";
-
       this.currRow = null
       this.btnIsLoadding = false;
       this.proModal = true;
       this.formValidate.specVOS=[];
       this.saveFlag = false;
+      this.selectLevelFirst="";
+      this.selectLevelSecond=""
       this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌submit
       this.getCarBrand();
@@ -210,9 +340,6 @@ export const mixPartInfo = {
       this.formValidate.fullName = ''
       if (setData) {
         this.formValidate = setData;
-
-        // console.log(setData)
-        
         //赋值适用车型
         let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
         let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
@@ -242,6 +369,9 @@ export const mixPartInfo = {
       this.prohibit = this.formValidate.disabled == 1 ? true : false
       this.forbidsale = this.formValidate.isStopSell == 1 ? true : false
       this.getFullName();
+      //配件资料 关联配件
+      this.getAllPartListData()
+      this.levelType=this.$parent.treeData
     },
 
     //获取所有车型品牌
@@ -507,7 +637,6 @@ export const mixPartInfo = {
               objReq.carBrand = carBrand.join("|");
               objReq.carBrandName = carBrandName.join("|");
               objReq.carModelName = carModelName.join("|");
-              console.log(objReq)
 
               objReq.commonId = this.formValidate.commonId
               objReq.manufacture = this.formValidate.manufacture
@@ -531,6 +660,16 @@ export const mixPartInfo = {
               //禁用禁售
               objReq.disabled = this.prohibit ? 1 : 0
               objReq.isStopSell = this.forbidsale ? 1 : 0
+              //右侧已关联配件集合
+              let partRelevanceList=[]
+              this.alreadyPartList.map(el=>{
+                let data={}
+                el.partRelevanceId?data.id=el.partRelevanceId:data.id=""
+                el.partRelevanceId?data.relevancePartId=el.id :data.relevancePartId=el.newPartId
+                data.relevancePartInnerId=el.partId;
+                partRelevanceList.push(data)
+              })
+              objReq.partRelevanceList= partRelevanceList || []
               this.saveFlag = true
               this.$emit('throwData', objReq)
               this.btnIsLoadding = false
@@ -550,6 +689,103 @@ export const mixPartInfo = {
           return
         }
       })
+    },
+    //关联配件查询
+    search(){
+      this.getAllPartListData()
+    },
+    //多编码查询弹框
+    manyCodeSearch(){
+      this.manyCodeInput=""
+      this.manyCodeModal=true
+    },
+    //多编码查询确定
+    manyCodeTrue(){
+      let data={}
+      data.codeList=this.manyCodeInput.split(/[\n,]/g)
+      this.getByManyCodeFun(data)
+      this.manyCodeModal=false
+    },
+    //关联配件一级分类二级分类
+    // getLevelType(){
+    //   this.levelTypeFirst=this.$parent.treeData
+    // },
+    //左侧全部配件分页
+    allPartListChangePage(num){
+      this.page.num=num;
+      this.getAllPartListData()
+    },
+    //左侧全部配件分页
+    allPartListChangeSize(size){
+      this.page.num=1;
+      this.page.size=size
+      this.getAllPartListData()
+    },
+    //左侧全部配件选中事件
+    selectAllPart(row){
+      this.selectAllPartTab=row;
+    },
+    //右侧已关联配件选中事件
+    selectAlreadyPart(row){
+      this.selectAlreadyPartTab=row;
+    },
+    //新增关联
+    addContact(){
+      if(this.selectAllPartTab.length<=0){
+        this.$Message.error("请在左侧表格选择需新增关联的配件")
+      }else{
+        let str="";
+        let bool=false;
+        this.selectAllPartTab.map(item2=>{
+          this.alreadyPartList.map(item=>{
+            if(item2.partId==item.partId){
+              str=item.fullName
+              bool=true
+            }
+          })
+        })
+        if(bool){
+          this.$Message.error(`${str}已添加`)
+          return
+        }else{
+          this.alreadyPartList=[...this.selectAllPartTab,...this.alreadyPartList]
+          let set= new Set(this.alreadyPartList)
+          this.alreadyPartList=Array.from(set)
+        }
+        // this.alreadyPartList=[...addArr,...this.alreadyPartList]
+        this.selectAlreadyPartTab=[]
+      }
+    },
+    //取消关联
+    moveContact(){
+      if(this.selectAlreadyPartTab.length<=0){
+        this.$Message.error("请在右侧表格中选择需取消关联的配件")
+      }else{
+        let selIdx=[];
+        // selectAlreadyPartTab
+        if(this.selectAlreadyPartTab.length==this.alreadyPartList.length){
+          this.alreadyPartList=[]
+        }else{
+          this.selectAlreadyPartTab.map((item2,index2)=>{
+            this.alreadyPartList.map((item,index)=>{
+              if(item2.id==item.id){
+                selIdx.push(index)
+              }
+            })
+          })
+          selIdx.map(i=>{
+            this.alreadyPartList.map((item,index)=>{
+              if(index==selIdx[i]){
+                // delete this.alreadyPartList[selIdx[i]]
+                this.alreadyPartList.splice(selIdx[i],1)
+              }
+            })
+          })
+        }
+        let set= new Set(this.alreadyPartList)
+        this.alreadyPartList=Array.from(set)
+        this.selectAlreadyPartTab=[]
+      }
     },
     //添加车型
     addCarItem(){
