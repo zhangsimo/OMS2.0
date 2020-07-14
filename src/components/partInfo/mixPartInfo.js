@@ -673,7 +673,7 @@ export const mixPartInfo = {
               let partRelevanceList=[]
               this.alreadyPartList.map(el=>{
                 let data={}
-                el.partRelevanceId?data.id=el.partRelevanceId:data.id=""
+                data.id=el.id
                 el.partRelevanceId?data.relevancePartId=el.id :data.relevancePartId=el.newPartId
                 data.relevancePartInnerId=el.code;
                 partRelevanceList.push(data)

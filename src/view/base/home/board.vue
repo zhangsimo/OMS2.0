@@ -68,7 +68,9 @@
             </a>
               </Col>
               <Col span="4">
-              <span class="munber">{{dataObj.submitMap.planQty}}</span>
+                <div v-if="dataObj.submitMap">
+                  <span class="munber">{{dataObj.submitMap.planQty}}</span>
+                </div>
               </Col>
             </Row>
           </li>
@@ -96,7 +98,9 @@
             </a>
               </Col>
               <Col span="4">
-              <span class="munber">{{dataObj.submitMap.tempQty}}</span>
+                <div v-if="dataObj.submitMap">
+                  <span class="munber">{{dataObj.submitMap.tempQty}}</span>
+                </div>
               </Col>
             </Row>
           </li>
@@ -122,7 +126,9 @@
             </a>
               </Col>
               <Col span="4">
-            <span class="munber">{{dataObj.submitMap.outQty}}</span>
+                <div v-if="dataObj.submitMap">
+                  <span class="munber">{{dataObj.submitMap.outQty}}</span>
+                </div>
               </Col>
             </Row>
           </li>
@@ -187,14 +193,17 @@
                 }
             },
         },
-        props:{
-            dataObj:{
-                type:Object,
-                default:function(){
-                    return {}
-                }
-            }
+      mounted() {
+          console.log(this.dataObj,typeof(this.dataObj),"???")
+      },
+      props:{
+        dataObj:{
+          type:Object,
+          dafault:function(){
+            return {}
+          }
         }
+      }
     }
 </script>
 
