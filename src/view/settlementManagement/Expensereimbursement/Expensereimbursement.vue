@@ -313,7 +313,7 @@
               remote
               :loading="remoteloading"
               :remote-method="getOne"
-              @on-change="query"
+              @on-change="query2"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -438,6 +438,10 @@ export default {
     query() {
       this.getQuery();
     },
+    query2(){
+      this.$refs.claim.claimedPage.page = 1;
+      this.claimedList();
+    },
     //其他付款认领/其他收款收回
     claimCollect() {
       if (!this.currRow || !this.currRow.id) {
@@ -462,7 +466,7 @@ export default {
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size,
         amountType: 2,
-        guestId: this.companyId
+        suppliers: this.companyId
       };
       if (this.bankNameO) {
         obj.reciprocalAccountName = this.bankNameO;
@@ -524,6 +528,8 @@ export default {
     },
     //认领弹框查询
     queryClaimed() {
+      this.$refs.claim.claimedPage.page = 1;
+
       let t = 0;
       if (this.claimCollectType == 1) {
         t = 2
