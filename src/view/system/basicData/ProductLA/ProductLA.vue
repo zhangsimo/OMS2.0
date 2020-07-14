@@ -50,6 +50,16 @@
             </Button>
           </div>
           <div class="db">
+            <Button class="mr10" @click="addStaff">
+              <Icon type="md-add" />添加员工
+            </Button>
+          </div>
+          <div class="db">
+            <Button class="mr10" @click="removeStaff">
+              <Icon custom="iconfont iconfanhuiicon icons" />移出员工
+            </Button>
+          </div>
+          <div class="db">
             <Upload
               ref="upload"
               :show-upload-list="false"
@@ -109,23 +119,29 @@
           <div class="left target">
             <p>待分配列表</p>
             <div class="button-warp">
-              <div class="db mr10">
-                <span>查询项: </span>
-                <Select v-model="waitPartTransListSelecteOption" style="width:120px">
-                  <Option
-                    v-for="(item, index) in waitPartTransListOptions"
-                    :value="item.value"
-                    :key="index"
-                  >{{ item.label }}</Option>
-                </Select>
-              </div>
+<!--              <div class="db mr10">-->
+<!--                <span>查询项: </span>-->
+<!--                <Select v-model="waitPartTransListSelecteOption" style="width:120px">-->
+<!--                  <Option-->
+<!--                    v-for="(item, index) in waitPartTransListOptions"-->
+<!--                    :value="item.value"-->
+<!--                    :key="index"-->
+<!--                  >{{ item.label }}</Option>-->
+<!--                </Select>-->
+<!--              </div>-->
               <div class="db">
                 <Input
                   v-model="waitPartTransListContent"
-                  placeholder="输入查询条件"
+                  placeholder="请输入配件内码/编码/名称/OE码"
                   style="width: 140px;"
                   class="mr10"
                 />
+              </div>
+              <div class="db">
+                <span>品牌：</span>
+                <Select placeholder="选择品牌" filterable v-model="waitPartTransListBrand" class="w150 mr10">
+                  <Option v-for="(item,index) in partBrandData" :value="item.code" :key="index">{{item.name}}</Option>
+                </Select>
               </div>
               <div class="db">
                 <Button class="mr10 w90" type="warning" @click="queryWaitPart" :disabled="buttonWaitQuery">
@@ -160,7 +176,12 @@
             ></Page>
           </div>
           <div class="trans-btn w110">
-            <Button class="ml10 w90" @click="moveOn" v-has="'shfit-in'">
+            <Button class="ml10 w90" @click="moveAllOn" v-has="'shfit-in'">
+              <span class="center">
+                <Icon custom="iconfont iconziyuan14 icons" />一键移入
+              </span>
+            </Button>
+            <Button class="ml10 w90 mt30" @click="moveOn" v-has="'shfit-in'">
               <span class="center">
                 <Icon custom="iconfont iconziyuan14 icons" />移入
               </span>
@@ -168,6 +189,11 @@
             <Button class="ml10 mt30 w90" @click="moveOff" v-has="'shfit-in'">
               <span class="center">
                 <Icon custom="iconfont iconfanhuiicon icons" />移出
+              </span>
+            </Button>
+            <Button class="ml10 mt30 w90" @click="moveAllOff" v-has="'shfit-in'">
+              <span class="center">
+                <Icon custom="iconfont iconfanhuiicon icons" />一键移出
               </span>
             </Button>
           </div>
@@ -188,6 +214,49 @@
         </div>
       </div>
     </section>
+    <Modal title="添加员工" v-model="staffModalShow" :styles="{ top: '100px', width: '700px' }" @on-cancel="CancelStaffModal">
+      <div class="modal-search">
+        <p class="search-box">
+          <Input placeholder="请输入员工名称" v-model="staffModalSearchInfo.userName"></Input>
+        </p>
+        <p class="search-box">
+          <span class="search-name">角色：</span>
+          <Select placeholder="请选择" class="w150 mr10" v-model="staffModalSearchInfo.roleName">
+            <Option v-for="(item,index) in roleOptions" :value="item.value" :key="index">{{item.label}}</Option>
+          </Select>
+        </p>
+        <p class="search-box">
+          <Button @click="staffModalSearch" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
+          <Button class="mr10" type='default' @click="staffModalSelect"><Icon type="md-checkmark" /> 选择</Button>
+        </p>
+      </div>
+      <div class="modal-content">
+        <Table border :columns="addStaffColumns" :data="staffModalList" @on-selection-change="staffModalSelectData"></Table>
+        <div class="page-container">
+          <Page
+            size="small"
+            class-name="page-con"
+            :current="staffModalPage.num"
+            :total="staffModalPage.total"
+            :page-size="staffModalPage.size"
+            @on-change="staffModalPageChange"
+            @on-page-size-change="staffModalPageSizeChange"
+            show-sizer
+            show-total
+            show-elevator
+          ></Page>
+        </div>
+
+      </div>
+      <div slot='footer'>
+
+      </div>
+    </Modal>
+    <Modal title="提示" v-model="tipShow" :styles="{top:'100px',width:'300px'}" @on-cancel="CancelTipModal" @on-ok="submitTip">
+      <div class="tip">
+        {{tipWords}}
+      </div>
+    </Modal>
   </main>
 </template>
 
@@ -195,4 +264,30 @@
 
 <style lang="less" scoped>
 @import url("./index.less");
+  .modal-search{
+    display: flex;
+    margin-bottom: 16px;
+    .search-box{
+      margin-right: 10px;
+      &:first-child{
+        width: 250px;
+      }
+      &:nth-child(2){
+        width: 200px;
+        display: flex;
+        line-height: 30px;
+        .search-name{
+          width: 50px;
+        }
+      }
+    }
+  }
+.page-container{
+  padding:15px 0;
+  text-align: right;
+}
+  .tip{
+    text-align: center;
+    padding: 15px 0;
+  }
 </style>

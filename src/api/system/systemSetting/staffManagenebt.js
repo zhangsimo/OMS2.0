@@ -92,3 +92,22 @@ export function setCliemt (params) {
     params
   })
 }
+
+
+//离职
+export function setOut (params) {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/updateUserOffices`,
+    method: 'get',
+    params
+  })
+}
+
+//校验手机号码是否重复
+export function setPhone (params) {
+  return axios.request({
+    url: `${api.authApi}/staff/checkExistMobile`,
+    method: 'get',
+    params
+  })
+}

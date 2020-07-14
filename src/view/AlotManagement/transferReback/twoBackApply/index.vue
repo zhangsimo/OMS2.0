@@ -268,6 +268,7 @@
                   :data="Leftcurrentrow.detailVOS"
                   :stripe="true"
                   :footer-method="addFooter"
+                  :edit-rules="validRules"
                   :edit-config="
                     Leftcurrentrow.status.value === 0
                       ? { trigger: 'click', mode: 'cell' }
@@ -426,6 +427,12 @@ export default {
   inject: ["reload"],
   data() {
     return {
+      validRules: {
+        applyQty: [
+          { required: true, message: '申请退回数量不能为空',trigger: "change"}
+        ]
+      },
+      defaultStoreId: "",
       isWms: false,
       serviceId: "",
       newFlag: true,
@@ -708,7 +715,7 @@ export default {
     selectChangeEvent({ checked, row }) {
       // console.log(checked ? "勾选事件" : "取消事件");
     },
-    baocun1() {
+    async baocun1() {
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.guestName
@@ -716,6 +723,11 @@ export default {
         this.$Message.error("调出仓库为必填项");
         return;
       }
+      const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      if (errMap) {
+        return
+      }
+
       // if (!this.Leftcurrentrow.serviceId) {
       //   console.log(this.Leftcurrentrow)
       //   if (this.Leftcurrentrow.xinzeng === "1") {
@@ -826,7 +838,7 @@ export default {
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
       this.Leftcurrentrow.createTime = "";
-      this.Leftcurrentrow.storeId = "";
+      this.Leftcurrentrow.storeId = this.defaultStoreId;
       this.Leftcurrentrow.detailVOS = [];
       this.Left.tbdata.unshift(item);
       this.Leftcurrentrow.status.value = 0;
@@ -839,10 +851,15 @@ export default {
       queryByOrgid().then(res => {
         if (res.code === 0) {
           this.cangkuListall = res.data;
+          res.data.forEach(el => {
+            if(el.isDefault) {
+              this.defaultStoreId = el.id;
+            }
+          })
         }
       });
     },
-    tijiao1() {
+    async tijiao1() {
       let len = this.Leftcurrentrow.detailVOS.filter(el => Number(el.stockOutQty) > 0).length;
       if(len > 0) {
         return this.$Message.error("存在缺货的配件");
@@ -858,6 +875,10 @@ export default {
       if (this.Leftcurrentrow.status.value === 1) {
         this.$Message.error("当前申请单已提交审核!无需重复操作");
         return;
+      }
+      const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
+      if (errMap) {
+        return
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       params.status = params.status.value;
@@ -1086,11 +1107,28 @@ export default {
 
     //选择采购入库单
     getPlanOrder(Msg) {
-      let arr = Msg || [];
+      let arr = JSON.parse(JSON.stringify(Msg || []));
 
       if (arr.length <= 0) return;
 
-      let arrB = arr.map(itemb => {
+      let flag = false;
+      for(let i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+        let el = this.Leftcurrentrow.detailVOS[i];
+        for(let j = 0; j < arr.length; j++) {
+          let em = arr[j];
+          // console.log(em.sourceDetailId, el.sourceDetailId)
+          if(el.sourceDetailId == em.sourceDetailId) {
+            arr.splice(j, 1);
+            flag = true;
+          }
+        }
+      }
+
+      if(flag) {
+        this.$message.error("同一批次配件不重复添加");
+      }
+
+      arr = arr.map(itemb => {
         let item = {...itemb}
         item.outUnitId = item.enterUnitId;
         item.unit = item.enterUnitId;
@@ -1103,8 +1141,10 @@ export default {
         return item;
       });
 
-      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arrB);
-      this.$message.success("已添加");
+      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arr);
+      if(!flag) {
+        this.$message.success("已添加");
+      }
     },
 
 

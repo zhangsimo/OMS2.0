@@ -185,10 +185,10 @@
                   :edit-rules="validRules"
                   :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
@@ -684,35 +684,6 @@ export default {
       }
       this.addProoo();
     },
-    // tijiao1() {
-    //   if (this.Leftcurrentrow.xinzeng === "1") {
-    //     this.$Message.info("请先保存新增加工单");
-    //     return;
-    //   }
-    //   if (!this.Leftcurrentrow.serviceId) {
-    //     this.$Message.info("请先选择加工单");
-    //     return;
-    //   }
-    //   if (this.Leftcurrentrow.status.value === 1) {
-    //     this.$Message.info("当前加工单号已提交审核!无需重复操作");
-    //     return;
-    //   }
-    //   const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-    //   params.status = params.status.value;
-    //   params.settleStatus = params.settleStatus.value;
-    //   params.orderTypeId = params.orderTypeId.value;
-    //   tijiao(params)
-    //     .then(res => {
-    //       // 点击列表行==>配件组装信息
-    //       if (res.code == 0) {
-    //         this.getList(this.form);
-    //         this.$Message.success("提交成功");
-    //       }
-    //     })
-    //     .catch(e => {
-    //       this.$Message.info("提交失败");
-    //     });
-    // },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增入库单！");

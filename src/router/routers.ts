@@ -466,16 +466,16 @@ export default [
             "@/view/business/procurementAndStorage/procurementAndStorage.vue"
           )
       },
-      {
-        path: "/policy/market",
-        name: "market",
-        mark: "4002",
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "销售单"
-        },
-        component: () => import("@/view/business/policy/market/market.vue")
-      },
+      // {
+      //   path: "/policy/market",
+      //   name: "market",
+      //   mark: "4002",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "销售单"
+      //   },
+      //   component: () => import("@/view/business/policy/market/market.vue")
+      // },
       {
         path: "/policy/moveStorehouse",
         name: "moveStorehouse",
@@ -530,17 +530,6 @@ export default [
         },
         component: () => import("@/view/business/policy/process/process.vue")
       },
-      // {
-      //   path: "/hsStock/hsStockIndex",
-      //   name: "hsStock",
-      //   mark: "4005",
-      //   meta: {
-      //     icon: "arrow-graph-up-right",
-      //     title: "华胜库存查询"
-      //   },
-      //   component: () => import("@/view/business/policy/hsStock/hsStockIndex.vue")
-      // }
-
     ]
   },
   {
@@ -841,7 +830,7 @@ export default [
       },
       {
         path: "/settlementManagement/paymentmanage",
-        name: "settlementManagement-paymentmanage",
+        name: "paymentmanage",
         // mark: 'oms_orders_approve',
         mark: "5200",
         meta: {
@@ -1812,7 +1801,7 @@ export default [
         name: "allotThree",
         mark: "9301",
         meta: {
-          notCache: true,
+          // notCache: true,
           title: "基本信息"
         },
         component: parentView,
@@ -1822,7 +1811,7 @@ export default [
             name: "/accountInformation",
             mark: "9301",
             meta: {
-              notCache: true,
+              // notCache: true,
               title: "基本信息"
             },
             component: () =>
@@ -1879,7 +1868,7 @@ export default [
         name: "templateIndex",
         mark: "9999",
         meta: {
-          notCache: true,
+          // notCache: true,
           title: "模板管理"
         },
         component: () =>

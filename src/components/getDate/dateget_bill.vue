@@ -39,7 +39,7 @@ export default {
   props: {},
   created() {},
   mounted() {
-    this.getval(this.searchQuick)
+    // this.getval(this.searchQuick)
   },
   methods: {
     getval(type) {

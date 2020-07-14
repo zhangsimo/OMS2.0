@@ -78,3 +78,56 @@ export function getStoreAll(params = {}) {
   });
 }
 
+// 获取出库明细合值
+export function OtotalData (data) {
+  return axios.request({
+    url: `${api.omsOrder}/outDetail/totalData`,
+    method: 'post',
+    data
+  });
+}
+
+// 获取入库明细合值
+export function EtotalData (data) {
+  return axios.request({
+    url: `${api.omsOrder}/enterDetail/totalData`,
+    method: 'post',
+    data
+  });
+}
+
+// 获取汇总合值
+export function PtabulatData (data) {
+  return axios.request({
+    url: `${api.omsSotck}/partStoreStock/tabulatData`,
+    method: 'post',
+    data
+  });
+}
+
+// 获取批次合值
+export function EtabulatData (data) {
+  return axios.request({
+    url: `${api.omsOrder}/enterMain/tabulatData`,
+    method: 'post',
+    data
+  });
+}
+
+//级别销价
+export function getLevel (params) {
+  return axios.request({
+    url: `${api.omsOrder}/enterDetail/unsalableInfo`,
+    method: 'get',
+    params
+  });
+}
+
+//级别销价
+export function  getUnsalable(params) {
+  return axios.request({
+    url: `${api.wmsApi}/sellPricePart/findBySell`,
+    method: 'get',
+    params
+  });
+}

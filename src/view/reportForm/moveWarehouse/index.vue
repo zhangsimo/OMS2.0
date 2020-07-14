@@ -6,7 +6,7 @@
         <tabOne ref="tabOne" />
       </TabPane>
       <TabPane label="移仓出库明细表">
-        <panne :type="2" @search="search2" @export="exportxls('tabOne')" />
+        <panne :type="2" @search="search2" @export="exportxls('tabTwo')" />
         <tabTwo ref="tabTwo" />
       </TabPane>
     </Tabs>
@@ -30,7 +30,10 @@ export default {
       if(data.isPanne) {
         // 基本查询
         delete data.isPanne;
-        data2 = data;
+
+        data2 = {...data};
+        data2.receiveStoreId = data2.storeId;
+        delete data2.storeId;
       } else {
         data.commitStartDate ? data2.commitStartDate = data.commitStartDate : "";
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
@@ -40,8 +43,9 @@ export default {
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
-        data.orderman ? data2.orderMan = data.orderman : "";
+        data.orderman ? data2.orderManId = data.orderman : "";
       }
+      this.$refs.tabOne.page.page=0;
       this.$refs.tabOne.getList(data2);
     },
     search2(data) {
@@ -59,16 +63,27 @@ export default {
         data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
-        data.orderman ? data2.orderMan = data.orderman : "";
+        data.orderman ? data2.orderManId = data.orderman : "";
       }
+      this.$refs.tabTwo.page.page = 0;
       this.$refs.tabTwo.getList(data2);
     },
-    exportxls(refname) {
+    async exportxls(refname) {
+      let expData = await this.$refs[refname].exportFun();
+      let tabName = "移仓入库明细表";
+      switch (refname) {
+        case "tabOne":
+          tabName = "移仓入库明细表";
+          break;
+        case "tabTwo":
+          tabName = "移仓出库明细表";
+          break;
+      }
       this.$refs[refname].$refs.xTable.exportData({
-        filename: '采购订单明细表',
+        filename: tabName,
         isHeader: true,
         isFooter: true,
-        data: this.$refs[refname].tableDataAll,
+        data: expData,
       })
     },
   }

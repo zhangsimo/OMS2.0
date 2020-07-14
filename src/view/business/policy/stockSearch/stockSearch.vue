@@ -37,6 +37,7 @@
               v-model="searchForm.partName"
               placeholder="配件编码/名称"
               class="w200 mr10"
+              @on-enter="serch"
             />
             <Select
               filterable
@@ -67,10 +68,11 @@
               >
             </Select>
             <Select
-              class="w120 mr10"
+              class="w240 mr10"
               multiple
               v-model="searchForm.storeIds"
               placeholder="仓库"
+              @on-change="select1"
             >
               <Option
                 :disabled="item.isDisabled"
@@ -85,6 +87,7 @@
               placeholder="仓位"
               class="w120 mr10"
               v-model="searchForm.shelf"
+              @on-enter="serch"
             ></Input>
             <span class="mr5">显示零库存:</span>
             <Checkbox v-model="searchForm.noStock"></Checkbox>
@@ -106,6 +109,8 @@
           :columns="columns1"
           :data="contentOne.dataOne"
           height="600"
+          show-summary
+          :summary-method="handleSummary"
         ></Table>
       </div>
       <!--      批次库存表-->
@@ -118,6 +123,7 @@
               v-model="searchForm1.partName"
               placeholder="配件编码/名称"
               class="w200 mr10"
+              @on-enter="queryBatch"
             ></Input>
             <Select
               filterable
@@ -149,10 +155,11 @@
               >
             </Select>
             <Select
-              class="w120 mr10"
+              class="w240 mr10"
               multiple
               v-model="searchForm1.storeIds"
               placeholder="仓库"
+              @on-change="select2"
             >
               <Option
                 :disabled="item.isDisabled"
@@ -163,11 +170,11 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Input
+            <!-- <Input
               v-model="searchForm1.shelf"
               placeholder="仓位"
               class="w120 mr10"
-            ></Input>
+            ></Input> -->
             <!--<span class="mr5">显示零库存:</span>-->
             <!--<Checkbox v-model="searchForm1.noStock"></Checkbox>-->
             <Button type="warning" class="mr10 w90" @click="queryBatch">
@@ -190,7 +197,9 @@
           :stripe="true"
           :columns="columns2"
           :data="contentTwo.dataTwo"
-          height="700"
+          height="600"
+          show-summary
+          :summary-method="handleSummary"
         ></Table>
       </div>
       <!-- hs -->
@@ -224,7 +233,11 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Input v-model="searchData.partName" class="w250 mr10" />
+              <Input
+                v-model="searchData.partName"
+                class="w250 mr10"
+                @on-enter="resetData"
+              />
             </div>
             <div class="db">
               <Button
@@ -250,7 +263,33 @@
         ></Table>
       </div>
       <!--      分页-->
-      <div class="page-warp">
+      <div class="page-warp fw">
+        <p v-if="tabIndex == 0">
+          <span>查询结果统计</span>
+          <span
+            >总库存：<span>{{ total1.stockQty }}</span></span
+          >
+          <span
+            >可售库存：<span>{{ total1.outableQty }}</span></span
+          >
+          <span
+            >总金额：<span>{{ total1.stockAmt }}</span></span
+          >
+        </p>
+
+        <p v-if="tabIndex == 1">
+          <span>查询结果统计</span>
+          <span
+            >总库存：<span>{{ total2.enterQty }}</span></span
+          >
+          <span
+            >可售库存：<span>{{ total2.outableQty }}</span></span
+          >
+          <span
+            >总金额：<span>{{ total2.enterAmt }}</span></span
+          >
+        </p>
+
         <Page
           v-if="tabIndex == 0"
           class-name="page-con"
@@ -264,7 +303,7 @@
           show-total
         ></Page>
         <Page
-          v-else
+          v-if="tabIndex == 1"
           class-name="page-con"
           :current="contentTwo.page.num"
           :total="contentTwo.page.total"
@@ -276,13 +315,14 @@
           show-total
         ></Page>
         <Page
-          size="small"
-          class-name="page-con tr"
+          v-if="tabIndex == 2"
+          class-name="page-con"
           :current="hspage.num"
           :total="hspage.total"
           :page-size="hspage.size"
           @on-change="selectNum"
           @on-page-size-change="selectPage"
+          size="small"
           show-sizer
           show-total
         ></Page>
@@ -299,7 +339,9 @@ import {
   getPartBrand,
   getPartBrandNoWB,
   findMasterOrgId,
-  getStoreAll
+  getStoreAll,
+  PtabulatData,
+  EtabulatData
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -314,6 +356,7 @@ import {
 import api from "_conf/url";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
+
 // import * as api from "_api/system/partManager";
 
 export default {
@@ -321,17 +364,19 @@ export default {
   components: { EnterStock },
   data() {
     return {
+      total1: {},
+      total2: {},
       shopkeeper: 0, // 1 总部
       shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopId,
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
-      storeList: [{ name: "请选择", id: 1 }],
+      storeList: [{ name: "全部", id: 1 }],
       //汇总库存查询条件表单
       searchForm: {
         partBrand: "", //品牌id
         partCode: "", //配件编码
-        storeId: "", //仓库id
+        storeIds: [], //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: "", //零库存
@@ -341,7 +386,7 @@ export default {
       searchForm1: {
         partBrand: "", //品牌id
         partCode: "", //配件编码
-        storeId: "", //仓库id
+        storeIds: [], //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: "", //库存
@@ -363,7 +408,7 @@ export default {
           title: "序号",
           key: "index",
           align: "center",
-          minWidth: 40
+          minWidth: 100
         },
         {
           title: "配件编码",
@@ -393,10 +438,6 @@ export default {
           title: "品牌车型",
           align: "center",
           key: "carModelName",
-          /*render:(h , params)=>{
-
-                          return h('span' ,{} ,tex)
-                        },*/
           minWidth: 120
         },
         {
@@ -427,12 +468,6 @@ export default {
           title: "仓库",
           align: "center",
           key: "storeName",
-          minWidth: 120
-        },
-        {
-          title: "仓位",
-          align: "center",
-          key: "storeShelf",
           minWidth: 120
         },
         {
@@ -654,6 +689,22 @@ export default {
     this.getHsStoreFun();
   },
   methods: {
+    select1(option) {
+      if(option.slice(-1)[0] == 1) {
+        option = [1];
+      } else if(option.includes(1)) {
+        option = option.filter(el => el != 1);
+      }
+      this.searchForm.storeIds = option;
+    },
+    select2(option) {
+      if(option.slice(-1)[0] == 1) {
+        option = [1];
+      } else if(option.includes(1)) {
+        option = option.filter(el => el != 1);
+      }
+      this.searchForm1.storeIds = option;
+    },
     getColumns() {
       let arr = [
         {
@@ -661,7 +712,7 @@ export default {
           type: "index",
           key: "index",
           align: "center",
-          minWidth: 40,
+          minWidth: 100,
           render: (h, params) => {
             return h(
               "span",
@@ -806,7 +857,7 @@ export default {
         {
           title: "库存下限",
           align: "center",
-          key: "downLimitWinter",
+          key: "downLimit",
           minWidth: 120
         },
         {
@@ -841,11 +892,11 @@ export default {
       }
     },
     changecompanyFun() {
-      this.searchForm.storeId = "";
+      this.searchForm.storeIds = [];
       this.getColumns();
     },
     changecompanyFun2() {
-      this.searchForm1.storeId = "";
+      this.searchForm1.storeIds = [];
     },
     changeStore() {
       this.serch();
@@ -886,7 +937,11 @@ export default {
     // 汇总库存请求
     async getAllStocks() {
       let data = {};
-      data = this.searchForm;
+      data = JSON.parse(JSON.stringify(this.searchForm));
+      data.partName = data.partName.trim();
+      if(data.storeIds[0] == 1) {
+        data.storeIds = [];
+      }
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -901,6 +956,12 @@ export default {
         if (row != undefined) {
           this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
         }
+      }
+
+      let res1 = await PtabulatData(data);
+      if (res1.code == 0) {
+        this.total1 = res1.data;
+        // console.log(res1.data);
       }
     },
     //汇总分页
@@ -924,7 +985,11 @@ export default {
     // 批次库存请求
     async getLotStocks() {
       let data = {};
-      data = this.searchForm1;
+      data = JSON.parse(JSON.stringify(this.searchForm1));
+      data.partName = data.partName.trim();
+      if(data.storeIds[0] == 1) {
+        data.storeIds = [];
+      }
       if (data.old === "all") {
         Reflect.deleteProperty(data, "old");
       }
@@ -940,6 +1005,12 @@ export default {
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
         this.contentTwo.page.total = res.data.totalElements;
+      }
+
+      let res1 = await EtabulatData(data);
+      if (res1.code == 0) {
+        this.total2 = res1.data;
+        // console.log(res1.data);
       }
     },
     // tab切换
@@ -983,13 +1054,6 @@ export default {
       if (res.code === 0) {
         let arr = [];
         let arrData = res.data.content || [];
-        // for(let v in res.data){
-        //   let obj = {}
-        //   obj.code = v;
-        //   obj.id = v;
-        //   obj.name = res.data[v]
-        //   arr.push(obj)
-        // }
         arrData.forEach(item => {
           arr.push(...item.children);
         });
@@ -1129,6 +1193,58 @@ export default {
       this.hspage.num = 1;
       this.hspage.size = val;
       this.getTemplateList();
+    },
+    handleSummary({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "当前页和值"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (!values.every(value => isNaN(value))) {
+          const v = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          if (
+            [
+              "stockQty",
+              "outableQty",
+              "stockAmt",
+              "pchRoadQty",
+              "attotRoadQty",
+              "onRoadQty",
+              "enterAmt",
+            ].includes(key)
+          ) {
+            sums[key] = {
+              key,
+              value: v
+            };
+          } else {
+            sums[key] = {
+              key,
+              value: ""
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: ""
+          };
+        }
+      });
+
+      return sums;
     }
   }
 };
@@ -1190,5 +1306,17 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%);
+}
+
+.fw {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  p {
+    padding: 0 20px;
+    span {
+      padding: 0 10px;
+    }
+  }
 }
 </style>

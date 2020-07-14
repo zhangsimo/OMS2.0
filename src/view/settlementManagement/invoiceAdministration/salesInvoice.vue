@@ -14,7 +14,6 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <div style="overflow-x: scroll">
         <Table
           border
           :columns="columns"
@@ -23,9 +22,7 @@
           highlight-row
           @on-selection-change="requires"
           max-height="500"
-         style="width: 3200px;"
         ></Table>
-        </div>
         <Page
           :total="pagetotal"
           show-elevator
@@ -309,13 +306,13 @@ export default {
       columns: [
         {
           title: "选择",
-          width: 50,
+          minWidth: 50,
           type: "selection"
         },
         {
           type: "index",
           title: "序号",
-          width: 40,
+          minWidth: 40,
           className: "tc",
           // render: (h, params) => {
           //   return h(
@@ -327,17 +324,68 @@ export default {
         {
           title: "开票申请单号",
           key: "requestCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 140,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.requestCode
+                }
+              }, params.row.requestCode)
+            ])
+          }
         },
         {
           title: "创建时间",
           key: "createTime",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createTime
+                }
+              }, params.row.createTime)
+            ])
+          }
         },
         {
           title: "开票时间",
           key: "invoiceDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceDate
+                }
+              }, params.row.invoiceDate)
+            ])
+          }
         },
         // {
         //   title: "开票类型",
@@ -347,7 +395,8 @@ export default {
         {
           title: "开票名称",
           key: "speciesName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         // {
         //   title: "发票种类",
@@ -357,80 +406,255 @@ export default {
         {
           title: "发票名称",
           key: "invoiceTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 180
         },
         {
           title: "发票代码",
           key: "invoiceCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceCode
+                }
+              }, params.row.invoiceCode)
+            ])
+          }
         },
         {
           title: "发票号码",
           key: "invoiceNo",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceNo
+                }
+              }, params.row.invoiceNo)
+            ])
+          }
         },
         {
           title: "购方名称",
           key: "receiptUnitName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.receiptUnitName
+                }
+              }, params.row.receiptUnitName)
+            ])
+          }
         },
         {
           title: "购方税号",
           key: "customDuty",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.customDuty
+                }
+              }, params.row.customDuty)
+            ])
+          }
         },
         {
           title: "购方手机号",
           key: "customPhone",
-          className: "tc"
+          className: "tc",
           // render: (h,params) =>{
           //     return h('span',(params.row.invoiceAmount).toFixed(2))
-          // }
+          // },
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.customPhone
+                }
+              }, params.row.customPhone)
+            ])
+          }
         },
         {
           title: "购方邮箱",
           key: "customMail",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.customMail
+                }
+              }, params.row.customMail)
+            ])
+          }
         },
         {
           title: "购方开户行及账号",
           key: "customAccount",
-          className: "tc"
+          className: "tc",
+          minWidth: 130,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.customAccount
+                }
+              }, params.row.customAccount)
+            ])
+          }
         },
         {
           title: "购方地址、电话",
           key: "customAddress",
-          className: "tc"
+          className: "tc",
+          minWidth: 130,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.customAddress
+                }
+              }, params.row.customAddress)
+            ])
+          }
         },
         {
           title: "合计含税金额",
           key: "priceTaxTotal",
-          className: "tc"
+          className: "tc",
+          minWidth: 130
         },
         {
           title: "合计不含税金额",
           key: "invoiceAmount",
-          className: "tc"
+          className: "tc",
+          minWidth: 130
         },
         {
           title: "合计税额",
           key: "invoiceTaxAmount",
-          className: "tc"
+          className: "tc",
+          minWidth: 130
         },
         {
           title: "备注信息",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "部门门店",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgName
+                }
+              }, params.row.orgName)
+            ])
+          }
         },
         {
           title: "开票方式",
           key: "invoiceWay",
           className: "tc",
+          minWidth: 130
           // render: (h, params) => {
           //   return h("span", params.row.status === 0 ? "否" : "是");
           // }
@@ -438,12 +662,46 @@ export default {
         {
           title: "开票员",
           key: "invoiceName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceName
+                }
+              }, params.row.invoiceName)
+            ])
+          }
         },
         {
           title: "收款人",
           key: "payeeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.payeeName
+                }
+              }, params.row.payeeName)
+            ])
+          }
         },
         {
           title: "复核人",
@@ -451,75 +709,249 @@ export default {
           className: "tc",
           // render: (h, params) => {
           //   return h("span", params.row.redRushStatus === 0 ? "否" : "是");
-          // }
+          // },
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.reviewerName
+                }
+              }, params.row.reviewerName)
+            ])
+          }
         },
         {
           title: "开票公司",
           key: "invoiceUnitName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.invoiceUnitName
+                }
+              }, params.row.invoiceUnitName)
+            ])
+          }
         },
         {
           title: "分店",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgName
+                }
+              }, params.row.orgName)
+            ])
+          }
         },
         {
           title: "店号",
           key: "orgCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgCode
+                }
+              }, params.row.orgCode)
+            ])
+          }
         },
         {
           title: "收款方式",
           key: "collectionType",
-          className: "tc"
+          className: "tc",
+          minWidth: 130
         },
         {
           title: "往来单位",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "开票清单类型（配件/油品）",
           key: "writeOffStatus",
-          className: "tc"
+          className: "tc",
+          minWidth: 200,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.writeOffStatus
+                }
+              }, params.row.writeOffStatus)
+            ])
+          }
         },
         {
           title: "开票业务（销售、房租、会议费、推广费）",
           key: "writeOffStatus",
-          className: "tc"
+          className: "tc",
+          minWidth: 250
         },
         {
           title: "导入人/修改人",
           key: "createUname",
-          className: "tc"
+          className: "tc",
+          minWidth: 130,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createUname
+                }
+              }, params.row.createUname)
+            ])
+          }
         },
         {
           title: "导入/修改时间",
           key: "importTime",
-          className: "tc"
+          className: "tc",
+          minWidth: 130,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.importTime
+                }
+              }, params.row.importTime)
+            ])
+          }
         },
         {
           title: "是否作废",
           key: "writeOffStatus",
           className: "tc",
+          minWidth: 100,
           render:(h,params)=>{
             return h("span", params.row.status === 0 ? "否" : "是");
           }
         },
         {
           title: "作废经办人",
-          key: "nullifyDate",
-          className: "tc"
+          key: "nullifyId",
+          className: "tc",
+          minWidth: 130,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.nullifyId
+                }
+              }, params.row.nullifyId)
+            ])
+          }
         },
         {
           title: "作废时间",
           key: "nullifyDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 130,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.nullifyDate
+                }
+              }, params.row.nullifyDate)
+            ])
+          }
         },
         {
           title: "是否红冲核销",
           key: "writeOffStatus",
           className: "tc",
+          minWidth: 160,
           render:(h , params) => {
             return h('span' ,params.row.redRushStatus === 0 ? "否" : "是")
           }
@@ -527,32 +959,134 @@ export default {
         {
           title: "红冲经办人",
           key: "redRushId",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.redRushId
+                }
+              }, params.row.redRushId)
+            ])
+          }
         },
         {
           title: "红冲时间",
           key: "redRushDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.redRushDate
+                }
+              }, params.row.redRushDate)
+            ])
+          }
         },
         {
           title: "核销开票申请单号",
           key: "writeOffNo",
-          className: "tc"
+          className: "tc",
+          minWidth: 150,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.writeOffNo
+                }
+              }, params.row.writeOffNo)
+            ])
+          }
         },
         {
           title: "所属对账单号",
           key: "writeOffStatus",
-          className: "tc"
+          className: "tc",
+          minWidth: 150,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.writeOffStatus
+                }
+              }, params.row.writeOffStatus)
+            ])
+          }
         },
         {
           title: "核销人",
           key: "writeOff",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.writeOff
+                }
+              }, params.row.writeOff)
+            ])
+          }
         },
         {
           title: "核销时间",
           key: "writeOffDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.writeOffDate
+                }
+              }, params.row.writeOffDate)
+            ])
+          }
         },
 
       ],

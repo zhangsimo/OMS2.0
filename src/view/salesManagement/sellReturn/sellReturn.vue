@@ -55,16 +55,6 @@
               <i class="iconfont mr5 iconziyuan2"></i>提交并入库
             </Button>
           </div>
-          <!--          <div class="db">-->
-          <!--            <Button-->
-          <!--              class="mr10"-->
-          <!--              @click="returnWarehouse"-->
-          <!--              :disabled="formPlan.isWms"-->
-          <!--              v-has="'returnWarehouse'"-->
-          <!--            >-->
-          <!--              <i class="iconfont mr5 iconshenheicon"></i> 退货入库-->
-          <!--            </Button>-->
-          <!--          </div>-->
           <div class="db">
             <Button
               class="mr10"
@@ -148,19 +138,6 @@
                         disabled
                         style="width:200px;"
                       />
-                      <!-- <Select
-                        v-model="formPlan.guestId"
-                        filterable
-                        style="width: 240px"
-                        @on-change="changeClient"
-                        :disabled="draftShow != 0||isNew"
-                      >
-                        <Option
-                          v-for="item in client"
-                          :value="item.id"
-                          :key="item.id"
-                        >{{ item.fullName }}</Option>
-                      </Select> -->
                       <Button
                         class="ml5"
                         size="small"
@@ -173,12 +150,6 @@
                     </Row>
                   </FormItem>
                   <FormItem label="退货员：" prop="orderManId">
-                    <!--                    <Input-->
-                    <!--                      class="w160"-->
-                    <!--                      placeholder="请输入退货员"-->
-                    <!--                      v-model="formPlan.orderMan"-->
-                    <!--                      :disabled="draftShow != 0||isNew"-->
-                    <!--                    />-->
                     <Select
                       :value="formPlan.orderManId"
                       @on-change="selectOrderMan"
@@ -316,19 +287,23 @@
                   <vxe-table-column
                     type="index"
                     title="序号"
+                    fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column type="checkbox"></vxe-table-column>
+                  <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
                   <vxe-table-column
                     field="partCode"
                     title="配件编码"
+                    fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="partName"
                     title="配件名称"
+                    fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="partBrand"
                     title="品牌"
+                    fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
@@ -446,6 +421,7 @@ import * as tools from "../../../utils/tools";
 import { save } from "../../../api/AlotManagement/transferringOrder";
 import { checkStore } from "@/api/system/systemApi";
 import Procurement from "@/components/Procurement";
+import { v4 } from "uuid"
 
 export default {
   name: "sellReturn",
@@ -869,6 +845,13 @@ export default {
       getLeftList(page, size, data).then(res => {
         if (res.code === 0) {
           this.sellOrderTable.tbdata = res.data.content || [];
+          this.sellOrderTable.tbdata.forEach(el => {
+            if(Array.isArray(el.details)) {
+              el.details.forEach(dl => {
+                dl.uuid = v4();
+              })
+            }
+          })
           this.page.total = res.data.totalElements;
         }
       });
@@ -891,6 +874,13 @@ export default {
       getLeftList(page, size, data).then(res => {
         if (res.code === 0) {
           this.sellOrderTable.tbdata = res.data.content || [];
+          this.sellOrderTable.tbdata.forEach(el => {
+            if(Array.isArray(el.details)) {
+              el.details.forEach(dl => {
+                dl.uuid = v4();
+              })
+            }
+          })
           this.page.total = res.data.totalElements;
           for (let b of this.sellOrderTable.tbdata) {
             b._highlight = false;
@@ -983,8 +973,26 @@ export default {
 
     getPlanOrder(Msg) {
       let arr = Msg || [];
-
+      arr = JSON.parse(JSON.stringify(arr));
       if (arr.length <= 0) return;
+
+      let flag = false;
+
+      for(let i = 0; i < this.formPlan.details.length; i++) {
+        let el = this.formPlan.details[i];
+        for(let j = 0; j < arr.length; j++) {
+          let em = arr[j];
+          // console.log(em.sourceDetailId, el.sourceDetailId)
+          if(el.sourceDetailId == em.sourceDetailId) {
+            arr.splice(j, 1);
+            flag = true;
+          }
+        }
+      }
+
+      if(flag) {
+        this.$message.error("同一批次配件不重复添加");
+      }
 
       arr.forEach(item => {
         item.prevDetailId = item.sourceDetailId;
@@ -993,13 +1001,17 @@ export default {
         item.enterUnitId = item.systemUnitId;
         item.orderQty = item.rtnableQty;
         item.orderPrice = item.sellPrice;
-        Reflect.deleteProperty(item, "sourceDetailId");
+        item.oid = v4();
+        item.uuid = item.oid;
+        // Reflect.deleteProperty(item, "sourceDetailId");
       });
       if (!this.formPlan.details) {
         this.formPlan.details = [];
       }
       this.formPlan.details = this.formPlan.details.concat(arr);
-      this.$message.success("已添加");
+      if(!flag) {
+        this.$message.success("已添加");
+      }
     },
 
     //提交
@@ -1054,54 +1066,48 @@ export default {
       val.forEach(item => {
         item.orderQty = item.rtnableQty;
         item.orderPrice = item.sellPrice;
+        item.uuid = v4();
         this.formPlan.details.push(item);
       });
       // console.log('我是formplan',this.formPlan.details)
     },
 
     //删除配件
-    deletePart() {
+    async deletePart() {
       if (this.selectTableList.length > 0) {
         let data = [];
         let arr = [];
+        let ids = [];
         this.selectTableList.forEach(item => {
-          if (item.oid) {
-            arr.push({ oid: item.oid });
-          } else {
+          if (item.id) {
             data.push({ id: item.id });
+            ids.push(item.uuid);
+          } else {
+            arr.push({ oid: item.oid });
+            ids.push(item.uuid);
           }
         });
-        if (arr.length > 0) {
-          arr.forEach(el => {
-            this.formPlan.details.forEach((el2, index) => {
-              if (el2.id == el.oid) {
-                this.formPlan.details.splice(index, 1);
-              }
-            });
-          });
+
+        let res = { code: 0 };
+
+        if(arr.length > 0) {
+          res = { code: 0 }
         }
-        // const arr = this.formPlan.details.filter(
-        //   v => !this.selectTableList.includes(v)
-        // );
-        // this.$set(this.formPlan, "details", arr);
-        // this.sellOrderTable.tbdata.map((item, index) => {
-        //   if (item.id === this.formPlan.id) {
-        //     this.$set(this.sellOrderTable.tbdata[index], "details", arr);
-        //   }
-        // });
-        if (data.length > 0) {
-          getDeleteList(data).then(res => {
-            if (res.code === 0) {
-              data.forEach(el => {
-                this.formPlan.details.forEach((el2, index) => {
-                  if (el2.id == el.id) {
-                    this.formPlan.details.splice(index, 1);
-                  }
-                });
-              });
-              this.$Message.success("删除配件成功");
-            }
-          });
+
+        if(data.length > 0) {
+          res = await getDeleteList(data);
+        }
+
+        if(res.code == 0) {
+          this.$Message.success("删除配件成功");
+
+          this.formPlan.details = this.formPlan.details.filter(el => {
+            return !ids.includes(el.uuid);
+          })
+
+          this.$refs.xTable.clearCheckboxRow();
+
+          this.selectTableList.length = 0;
         }
       } else {
         this.$Message.error("请选择一条有效数据");

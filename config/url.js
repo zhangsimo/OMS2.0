@@ -6,23 +6,36 @@ const dev = {
   omsOrder: "http://192.168.30.221:9210", // 徐林烽
   omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.221:9200",
+  omsEdit: 'http://192.168.30.221:9240', // 9220salesOrder
+  // omsOrder:'http://192.168.30.11:9210', //陈舒
+  // omsSettle: "http://192.168.30.11:9270",
   omsSettle: "http://192.168.30.221:9270",
-  omsEdit: 'http://192.168.21.221:9220', // 9220salesOrder
+  // omsProduct: '', // 9200
+  // omsOrder: 'http://192.168.30.221:9210', // 9210
+  // omsEdit: '', // 9220salesOrder
+  // omsTask: '', // 9230
+  // omsApi: '', // 9240
+  // wmsApi: '', // 9250
   omsBatch: 'http://192.168.30.221:9260', // 9260
+  // omsSettle: '', // 9270
   omsSotck: "http://192.168.30.221:9280", //9280
 
   /**oms系统接口设定 */
-  tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  authApi: "http://192.168.15.165:5200", // 系统资源 5200
-  passportApi: "http://192.168.15.165:5200", // passport微服务API
+  tokenApi: "https://tsapi2.g-parts.cn", // 登录接口API
+  authApi: "http://192.168.30.221:5200", // 系统资源 5200
+  passportApi: "http://192.168.30.221:5200", // passport微服务API
+  // tokenApi: "http://192.168.30.226:5600",
+  // authApi: "http://192.168.30.226:5200",
+  // passportApi: "http://192.168.30.226:5200",
 
+  //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
-  omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider",
-  templateApi:"http://192.168.221.109:5100"
+  // omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
+  omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
 };
 
 const test = {
@@ -32,11 +45,11 @@ const test = {
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
-  wmsApi: "http://192.168.21.59:9250",
-  // wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
+  // wmsApi: "http://192.168.21.59:9250",
+  wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
-  // omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  omsOrder: "http://192.168.21.59:9210",
+  omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  // omsOrder: "http://192.168.21.59:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",

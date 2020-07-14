@@ -89,58 +89,196 @@ export default {
         {
           key:'index',
           title: "序号",
-          width: 40,
+          minWidth: 40,
           className: "tc"
         },
         {
           title: "分店名称",
           key: "guestOrgName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestOrgName
+                }
+              }, params.row.guestOrgName)
+            ])
+          }
         },
         {
           title: "订单号",
           key: "serviceId",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.serviceId
+                }
+              }, params.row.serviceId)
+            ])
+          }
         },
         {
           title: "来源",
           key: "sourceType",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.sourceType
+                }
+              }, params.row.sourceType)
+            ])
+          }
         },
         {
           title: "客户",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "客户编码",
           key: "guestId",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestId
+                }
+              }, params.row.guestId)
+            ])
+          }
         },
         {
           title: "往来类型",
           key: "belongSystem",
-          className: "tc"
+          className: "tc",
+          minWidth: 140
         },
         {
           title: "仓库",
           key: "storeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.storeName
+                }
+              }, params.row.storeName)
+            ])
+          }
         },
         {
           title: "制单人",
           key: "createUname",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createUname
+                }
+              }, params.row.createUname)
+            ])
+          }
         },
         {
           title: "制单日期",
           key: "createTime",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createTime
+                }
+              }, params.row.createTime)
+            ])
+          }
         },
         {
           title: "金额",
           key: "orderAmt",
           className: "tc",
+          minWidth: 120,
           render: (h,params) =>{
             return h('span',(params.row.orderAmt).toFixed(2))
           }
@@ -148,12 +286,30 @@ export default {
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "单据状态",
           key: "billstate",
-          className: "tc"
+          className: "tc",
+          minWidth: 120
         }
       ],
       columns1: [

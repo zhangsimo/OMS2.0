@@ -75,93 +75,270 @@ export default {
         {
           title: '序号',
           key: 'index',
-          width: 40,
+          minWidth: 40,
           className: 'tc'
         },
         {
           title: '配件编码',
           key: 'partCode',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partCode
+                }
+              }, params.row.partCode)
+            ])
+          }
         },
         {
           title: '配件名称',
           key: 'partName',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partName
+                }
+              }, params.row.partName)
+            ])
+          }
         },
         {
           title: 'OEM码',
           key: 'oemCode',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.oemCode
+                }
+              }, params.row.oemCode)
+            ])
+          }
         },
         {
           title: '品牌车型',
           key: 'partBrand',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
         },
         {
           title: '单位',
           key: 'unit',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.unit
+                }
+              }, params.row.unit)
+            ])
+          }
         },
         {
           title: '规格',
           key: 'spec',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.spec
+                }
+              }, params.row.spec)
+            ])
+          }
         },
         {
           title: '出库数量',
           key: 'hasOutQty',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 120
         },
         {
           title: '在途数量',
           key: 'onOrderQty',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 120
         },
         {
           title: '已入库数量',
           key: 'inStockQty',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 120
         },
         {
           title: '未入库数量',
           key: 'noStockQty',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 120,
         },
         {
           title: '分店名称',
           key: 'groupName',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.groupName
+                }
+              }, params.row.groupName)
+            ])
+          }
         },
         {
           title: '出库单号',
           key: 'outOrderNo',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.outOrderNo
+                }
+              }, params.row.outOrderNo)
+            ])
+          }
         },
         {
           title: '客户名称',
           key: 'customerName',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.customerName
+                }
+              }, params.row.customerName)
+            ])
+          }
         },
         {
           title: '出库日期',
           key: 'outStockDate',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.outStockDate
+                }
+              }, params.row.outStockDate)
+            ])
+          }
         },
         {
           title: '仓库',
           key: 'storeName',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.storeName
+                }
+              }, params.row.storeName)
+            ])
+          }
         },
         {
           title: '含税标记',
           key: 'taxSign',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
         },
         {
           title: '税率',
           key: 'taxRate',
           className: 'tc',
+          minWidth: 100,
           render: (h,params) =>{
             return h('span',(params.row.taxRate).toFixed(2))
           }
@@ -170,6 +347,7 @@ export default {
           title: '调拨单价',
           key: 'taxPrice',
           className: 'tc',
+          minWidth: 100,
           render: (h,params) =>{
             return h('span',params.row.taxPrice ? (params.row.taxPrice).toFixed(2):'')
           }
@@ -178,14 +356,29 @@ export default {
           title: '调拨金额',
           key: 'taxAmt',
           className: 'tc',
-          render: (h,params) =>{
-            return h('span',params.row.taxAmt?  (params.row.taxAmt).toFixed(2):'')
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.taxAmt
+                }
+              }, params.row.taxAmt?  (params.row.taxAmt).toFixed(2):'')
+            ])
           }
         },
         {
           title: '成本单价',
           key: 'taxPrice',
           className: 'tc',
+          minWidth: 100,
           render: (h,params) =>{
             return h('span',(params.row.taxPrice).toFixed(2))
           }
@@ -194,6 +387,7 @@ export default {
           title: '成本金额',
           key: 'taxAmt',
           className: 'tc',
+          minWidth: 180,
           render: (h,params) =>{
             return h('span',(params.row.taxAmt).toFixed(2))
           }
@@ -201,22 +395,90 @@ export default {
         {
           title: '受理人',
           key: 'hasAcceptUname',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.hasAcceptUname
+                }
+              }, params.row.hasAcceptUname)
+            ])
+          }
         },
         {
           title: '受理单号',
           key: 'hasAcceptOrderNo',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.hasAcceptOrderNo
+                }
+              }, params.row.hasAcceptOrderNo)
+            ])
+          }
         },
         {
           title: '供应商',
           key: 'guestName',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: '订单备注',
           key: 'remark',
-          className: 'tc'
+          className: 'tc',
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         }
       ],
       data: [],

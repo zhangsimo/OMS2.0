@@ -79,7 +79,7 @@
           @click="openShow('预付款核销撤回')"
         >预付款核销撤回</Button>
         <Button
-          v-has="'baclRrvoke'"
+          v-has="'baclRevoke'"
           :disabled="btnIsdisable.three"
           class="ml10"
           @click="openShow('预付款回收撤回')"
@@ -91,10 +91,10 @@
       <div class="inner-box">
         <div class="box mb10">
           <vxe-table
-            class="boxData"
             auto-resize
             resizable
             border
+            show-overflow
             highlight-hover-row
             highlight-current-row
             @current-change="currentChangeEvent"
@@ -104,25 +104,25 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column title="序号" type="seq" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="serviceId" title="预付款申请单号" width="140" fixed="left"></vxe-table-column>
+            <vxe-table-column field="guestName" title="往来单位" width="100" fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
-              <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
-              <vxe-table-column field="serviceId" title="预付款申请单号"></vxe-table-column>
-              <vxe-table-column field="orderNo" title="预付款采购订单号"></vxe-table-column>
-              <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+              <vxe-table-column field="orderNo" title="预付款采购订单号" width="140"></vxe-table-column>
+              <vxe-table-column field="applicant" title="申请人" width="90"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
-              <vxe-table-column field="payAmt" title="预付款金额"></vxe-table-column>
-              <vxe-table-column field="paymentNo" title="预付款认领单号"></vxe-table-column>
-              <vxe-table-column field="claimAmt" title="预付款已认领金额"></vxe-table-column>
-              <vxe-table-column field="writeOffReceiptNo" title="预付款核销单号"></vxe-table-column>
-              <vxe-table-column field="writeOffAmt" title="预付款核销金额"></vxe-table-column>
-              <vxe-table-column field="returnNo" title="预付款收回单号"></vxe-table-column>
-              <vxe-table-column field="returnClaimAmt" title="预付款收回认领金额"></vxe-table-column>
-              <vxe-table-column field="remainingAmt" title="预付款余额"></vxe-table-column>
+              <vxe-table-column field="payAmt" title="预付款金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paymentNo" title="预付款认领单号" width="140"></vxe-table-column>
+              <vxe-table-column field="claimAmt" title="预付款已认领金额" width="140"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="预付款核销单号" width="140"></vxe-table-column>
+              <vxe-table-column field="writeOffAmt" title="预付款核销金额" width="140"></vxe-table-column>
+              <vxe-table-column field="returnNo" title="预付款收回单号" width="140"></vxe-table-column>
+              <vxe-table-column field="returnClaimAmt" title="预付款收回认领金额" width="160"></vxe-table-column>
+              <vxe-table-column field="remainingAmt" title="预付款余额" width="100"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="付款方式">
-              <vxe-table-column field="role" title="账户">
+              <vxe-table-column field="role" title="账户" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li v-for="(item, index) of row.paymentType" :key="index" class="flex">
@@ -131,7 +131,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="sex" title="金额">
+              <vxe-table-column field="sex" title="金额" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li v-for="(item, index) of row.paymentType" :key="index" class="flex">
@@ -140,7 +140,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="age" title="付款所属门店">
+              <vxe-table-column field="age" title="付款所属门店" width="120">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li v-for="(item, index) of row.paymentType" :key="index" class="flex">
@@ -151,7 +151,7 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="收款方式">
-              <vxe-table-column field="role" title="账户">
+              <vxe-table-column field="role" title="账户" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li v-for="(item, index) of row.receiveType" :key="index" class="flex">
@@ -160,7 +160,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="sex" title="金额">
+              <vxe-table-column field="sex" title="金额" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li v-for="(item, index) of row.receiveType" :key="index" class="flex">
@@ -169,7 +169,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="age" title="收款所属门店">
+              <vxe-table-column field="age" title="收款所属门店" width="120">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li v-for="(item, index) of row.receiveType" :key="index" class="flex">
@@ -180,16 +180,16 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="其他信息">
-              <vxe-table-column field="payer" title="付款人"></vxe-table-column>
-              <vxe-table-column field="paymentDate" title="付款日期"></vxe-table-column>
-              <vxe-table-column field="paymentRemark" title="付款备注"></vxe-table-column>
-              <vxe-table-column field="paymentAuditor" title="付款审核人"></vxe-table-column>
-              <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
-              <vxe-table-column field="receiver" title="收款人"></vxe-table-column>
-              <vxe-table-column field="receiveDate" title="收款日期"></vxe-table-column>
-              <vxe-table-column field="receiveRemark" title="收款备注"></vxe-table-column>
-              <vxe-table-column field="receiveAuditor" title="收款审核人"></vxe-table-column>
-              <vxe-table-column field="receiveAuditDate" title="收款审核日期"></vxe-table-column>
+              <vxe-table-column field="payer" title="付款人" width="90"></vxe-table-column>
+              <vxe-table-column field="paymentDate" title="付款日期" width="120"></vxe-table-column>
+              <vxe-table-column field="paymentRemark" title="付款备注" width="120"></vxe-table-column>
+              <vxe-table-column field="paymentAuditor" title="付款审核人" width="120"></vxe-table-column>
+              <vxe-table-column field="paymentAuditDate" title="付款审核日期" width="120"></vxe-table-column>
+              <vxe-table-column field="receiver" title="收款人" width="90"></vxe-table-column>
+              <vxe-table-column field="receiveDate" title="收款日期" width="120"></vxe-table-column>
+              <vxe-table-column field="receiveRemark" title="收款备注" width="120"></vxe-table-column>
+              <vxe-table-column field="receiveAuditor" title="收款审核人" width="120"></vxe-table-column>
+              <vxe-table-column field="receiveAuditDate" title="收款审核日期" width="120"></vxe-table-column>
             </vxe-table-column>
           </vxe-table>
         </div>
@@ -318,10 +318,12 @@ export default {
     },
     // 往来单位选择
     async getOne(query) {
+      this.company = [];
       if (query != "") {
         this.remoteloading = true;
         findGuest({ fullName: query, size: 20 }).then(res => {
           if (res.code === 0) {
+            this.company = [];
             res.data.content.map(item => {
               this.company.push({
                 value: item.id,
@@ -443,7 +445,7 @@ export default {
         this.btnIsdisable.three = false;
       }
       this.serviceId = row.serviceId;
-      this.$refs.Record.init(); 
+      this.$refs.Record.init();
     },
     // 撤回
     async reClose() {

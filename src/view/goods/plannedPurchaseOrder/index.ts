@@ -215,7 +215,6 @@ export default class PlannedPurchaseOrder extends Vue {
     const orderDate = this.formPlanmain.orderDate;
     return date && orderDate && date.valueOf() < orderDate.valueOf()- 86399999;
   }
-
   private salesList:Array<any> = new Array();
   private async getAllSales() {
     let res:any = await getSales();
@@ -282,6 +281,7 @@ export default class PlannedPurchaseOrder extends Vue {
       b._highlight = false
     }
     this.selectTableRow = null;
+    this.selectLeftItemId = "";
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -387,6 +387,9 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 提交
   private submit(refname: string) {
+    if(!this.selectLeftItemId) {
+      return this.$message.error('请先保存数据再提交!')
+    }
     this.$Modal.confirm({
       title: '是否提交',
       onOk: async () => {
@@ -749,7 +752,7 @@ export default class PlannedPurchaseOrder extends Vue {
         this.inStores.push({ value: storeMap[el], label: el })
       }
       // 直发门店guestMap
-      for (let el in companyMap) { 
+      for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
       }
       for (let el in billStatusMap) {

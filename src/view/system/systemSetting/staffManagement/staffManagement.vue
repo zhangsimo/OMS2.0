@@ -77,7 +77,7 @@
       ></Page>
     </div>
 
-    <!--      添加的萌态框-->
+    <!--      添加的模态框-->
     <Modal v-model="modalShow" :title="title" width="700px" :closable="false">
       <addStaff ref="child" :data="newStaff"></addStaff>
       <div slot="footer" style="padding: 10px 0">
@@ -165,7 +165,8 @@ import {
   findCompanyList,
   putNewCompany,
   restpasswd,
-  setCliemt
+  setCliemt,
+  setOut
 } from "@/api/system/systemSetting/staffManagenebt";
 import { transTime } from "../utils";
 import addStaff from "./addStaff";
@@ -316,11 +317,11 @@ export default {
           key: "userRoleName",
           minWidth: 80
         },
-        {
-          title: "公司地址",
-          align: "center",
-          key: "address"
-        }
+        // {
+        //   title: "公司地址",
+        //   align: "center",
+        //   key: "address"
+        // }
       ],
       companyList: [],
       title: "新增员工",
@@ -346,7 +347,9 @@ export default {
         singtwo: false, //允许提交
         office: 0, //是否在职默认在职
         openSystem: 0,
-        groupId: 0 //所属机构
+        groupId: 0 ,//所属机构
+        staffAccountVoList:[],
+        groundIdsStr:''
       },
       oneCliemt: {} //点击获取到当前要删除的兼职公司
     };
@@ -401,13 +404,21 @@ export default {
       data.groundIds=this.groundIds[this.groundIds.length-1] || '';
       getStaffList(data).then(res => {
           stop();
-          this.loading = false;
-          if (res.code == 0) {
-            this.staffList = res.data.content;
-            this.page.total = res.data.totalElements;
+          if (res.code === 0){
+            this.loading = false;
+            if (res.code == 0) {
+              this.staffList = res.data.content;
+              this.page.total = res.data.totalElements;
+            }
+          } else {
+            this.staffList = []
+            this.page.total = 0
           }
+
         })
         .catch(err => {
+          this.staffList = []
+          this.page.total = 0
           stop();
         });
     },
@@ -448,7 +459,7 @@ export default {
         (this.newStaff.office = 0), //是否在职默认在职
         (this.newStaff.openSystem = 0),
         (this.newStaff.groupId = 0); //所属机构
-
+        this.newStaff.staffAccountVoList=[]
       this.$refs.child.resetFields();
     },
     //冻结
@@ -477,23 +488,27 @@ export default {
       this.newStaff = {
         single: false,
         singtwo: false,
-          gender: 0
+        gender: 0
       };
       this.modalShow = true;
       this.isNextAdd = true;
       this.$refs.currentRowTable.clearCurrentRow();
       this.oneStaffChange = {};
+      this.$refs.child.financeList=[]
+      this.oneStaffChange.staffAccountVoList=[]
+      this.$refs.child.selectFinTab={}
     },
     // 确认
     submit(type = "add") {
       this.$refs.child.handleSubmit(() => {
         let stop = this.$loading();
-        this.modalShow = false;
         if (this.title == "新增员工") {
           let data = {};
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
+          // data.staffAccountVoList = this.oneStaffChange.staffAccountVoList
+          data.groupId = data.groundIds[data.groundIds.length -1]
           // data.groundIds = JSON.parse(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           editUser(data, this.$store.state.user.userData.groupId)
@@ -501,6 +516,7 @@ export default {
               stop();
               if (res.code == 0) {
                 this.$Message.success("新增成功");
+                this.modalShow = false;
                 this.$refs.child.resetFields();
                 this.cancel();
                 this.getAllStaffList();
@@ -518,6 +534,7 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
+          data.groupId = data.groundIds[data.groundIds.length -1]
           // data.groundIds = JSON.stringify(data.groundIds);
           // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
           changeeditUser(data)
@@ -526,6 +543,7 @@ export default {
               if (res.code == 0) {
                 this.$Message.success("修改成功");
                 // this.oneStaffChange = {};
+                this.cancel();
                 this.getAllStaffList();
               }
             })
@@ -537,6 +555,7 @@ export default {
     },
     //获取当前数据
     selection(currentRow) {
+      currentRow.groundIds = currentRow.groundIdsStr.split(',')
       this.oneStaffChange = currentRow;
     },
 
@@ -550,9 +569,11 @@ export default {
       }
       this.title = "修改员工信息";
       this.newStaff = JSON.parse(JSON.stringify(this.oneStaffChange)) //用户名
-      this.newStaff.single = this.newStaff.single == 1 ? true : false; //允许查看
-      this.newStaff.singtwo = this.newStaff.singtwo == 1 ? true : false; //允许提交
+      this.newStaff.single = this.newStaff.single ? true : false; //允许查看
+      this.newStaff.singtwo = this.newStaff.singtwo ? true : false; //允许提交
       // this.newStaff.groundIds = this.newStaff.groundIdsStr.split(',')
+      this.newStaff.staffAccountVoList= this.newStaff.staffAccountVoList || []
+      this.$refs.child.financeList=this.newStaff.staffAccountVoList
       this.newStaff.groundIds = this.newStaff.groundIds||[];
       this.modalShow = true;
     },
@@ -563,17 +584,14 @@ export default {
         return false;
       }
       let stop = this.$loading();
-      this.oneStaffChange.office = this.oneStaffChange.office == 0 ? 1 : 0;
-      (this.oneStaffChange.singtwo =
-        this.oneStaffChange.singtwo == 1 ? true : false), //允许提交
-        (this.oneStaffChange.groundIds = JSON.stringify(
-          this.oneStaffChange.groundIds
-        ));
-      changeeditUser(this.oneStaffChange)
+      let data ={}
+      data.office = this.oneStaffChange.office == 0 ? 1 : 0
+      data.id = this.oneStaffChange.id
+      setOut(data)
         .then(res => {
           stop();
           if (res.code == 0) {
-            this.$Message.success("修改成功");
+            this.$Message.success("操作完成");
             this.oneStaffChange = {};
             this.getAllStaffList();
           }

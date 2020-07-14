@@ -47,7 +47,8 @@
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
-                <Input v-model="row.name" :disabled="row.readonly" />
+                <Input v-model="row.name" :disabled="row.readonly" v-if="row.name === '最低售价'" />
+                <Input v-model="row.name" :disabled="row.isDisabled == 1" v-else />
               </template>
             </vxe-table-column>
           </vxe-table>
@@ -165,12 +166,13 @@
               id="n1"
               height="440"
               ref="part"
+              keep-source
               :loading="part.loading"
               @checkbox-all="removeLimitChangeAll"
               @checkbox-change="removeLimitChange"
               :data="part.tbdata"
               highlight-current-row
-              :edit-config="{ trigger: 'click', mode: 'cell' }"
+              :edit-config="{ trigger: 'click', mode: 'cell',showStatus: true}"
               :checkbox-config="{checkRowKeys: defaultSelecteRows}"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -195,7 +197,7 @@
               <vxe-table-column
                 field="minRequiredQty"
                 title="最低要求数量"
-                v-if="rowPriceManege.name=='统一售价'"
+                v-if="rowPriceManege.name=='最低售价'"
                 :edit-render="{ name: 'input' }"
               >
                 <template v-slot:edit="{ row }">
@@ -210,7 +212,7 @@
               <vxe-table-column
                 field="maxRequiredQty"
                 title="最高要求数量"
-                v-if="rowPriceManege.name=='统一售价'"
+                v-if="rowPriceManege.name=='最低售价'"
                 :edit-render="{ name: 'input' }"
               >
                 <template v-slot:edit="{ row }">
@@ -224,10 +226,17 @@
               </vxe-table-column>
               <vxe-table-column
                 title="解除限制"
-                type="checkbox"
-                v-if="rowPriceManege.name=='统一售价'"
-                field="removeLimitIn"
-              ></vxe-table-column>
+                v-if="rowPriceManege.name=='最低售价'"
+                field="removeLimitCheckBox"
+                :edit-render="{ name: 'checkbox' }"
+              >
+                <template v-slot:edit="{ row }">
+                  <vxe-checkbox v-model="row.removeLimitCheckBox"></vxe-checkbox>
+                </template>
+                <template v-slot="{ row }">
+                  <vxe-checkbox v-model="row.removeLimitCheckBox"></vxe-checkbox>
+                </template>
+              </vxe-table-column>
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>
               <vxe-table-column field="operationTime" title="操作日期"></vxe-table-column>
             </vxe-table>
@@ -279,6 +288,7 @@ import selectPartCom from "@/view/system/basicData/priceManage/components/select
 import importXLS from "@/view/settlementManagement/components/importXLS.vue";
 // strategyId
 export default {
+  inject: ["reload"],
   data() {
     return {
       split: 0.34,
@@ -308,7 +318,7 @@ export default {
       level: {
         loading: false,
         name: "", // 修改的级别名称
-        tbdata: [{ name: "统一售价", readonly: true }]
+        tbdata: [{ name: "最低售价", readonly: true }]
       },
       selectCrr: [],
       // 右边选择的客户
@@ -367,13 +377,14 @@ export default {
       this.rowPriceManege = {}
         ? (this.priceEnableBool = true)
         : (this.priceEnableBool = false);
-      this.level.tbdata = [{ name: "统一售价", readonly: true }];
+      this.level.tbdata = [{ name: "最低售价", readonly: true }];
       // isDisabled:0 启用
       // isDisabled:1 禁用
       let res = await api.sellPsList();
       if (res.code === 0) {
         res.data.forEach(el => {
           el.oid = el.id;
+          // el.readonly = el.isDisabled == 1 ? true : false;
           this.level.tbdata.push(el);
         });
       }
@@ -434,6 +445,9 @@ export default {
           if (el.removeLimit == 1) {
             this.defaultSelecteRows.push(data.id);
           }
+          if(el.hasOwnProperty('removeLimit')){
+            el.removeLimitCheckBox = el.removeLimit === 1?true:false
+          }
           return data;
         });
         this.part.page.total = res.data.totalElements;
@@ -456,25 +470,25 @@ export default {
       //   // this.$refs.part.setCheckboxRow(this.part.tbdata[checkbox.$rowIndex],false);
       //   // this.$refs.part.clearCheckboxRow(this.part.tbdata[checkbox.$rowIndex]);
       // }
-      this.part.tbdata.map(item => {
-        if (item.id == checkbox.row.id) {
-          checkbox.checked == true
-            ? (item.removeLimit = 1)
-            : (item.removeLimit = 0);
-        }
-      });
+      // this.part.tbdata.map(item => {
+      //   if (item.id == checkbox.row.id) {
+      //     checkbox.checked == true
+      //       ? (item.removeLimit = 1)
+      //       : (item.removeLimit = 0);
+      //   }
+      // });
     },
     removeLimitChangeAll({ checked, records }) {
-      if (checked == true) {
-        
-        this.part.tbdata.map(item=>{
-          item.removeLimit=1
-        })
-      } else {
-        this.part.tbdata.map(item=>{
-          item.removeLimit=0
-        })
-      }
+      // if (checked == true) {
+      //
+      //   this.part.tbdata.map(item=>{
+      //     item.removeLimit=1
+      //   })
+      // } else {
+      //   this.part.tbdata.map(item=>{
+      //     item.removeLimit=0
+      //   })
+      // }
     },
     // rest
     restTbdata() {
@@ -546,6 +560,7 @@ export default {
     },
     // 单选行
     async selectRow({ row }) {
+      // console.log(row);
       this.rowPriceManege = row;
       // this.rowPriceLevelStyle(row);
       this.rowPriceManege.isDisabled == 0
@@ -731,7 +746,7 @@ export default {
     // 添加配件
     addAccessories() {
       if (this.rowPriceManege != {}) {
-        this.rowPriceManege.name == "统一售价"
+        this.rowPriceManege.name == "最低售价"
           ? (this.$refs.selectPartCom.apiDataId = "")
           : (this.$refs.selectPartCom.apiDataId = this.rowPriceManege.id);
         this.$refs.selectPartCom.init();
@@ -761,9 +776,9 @@ export default {
         arr.push(el);
       });
       let params = {};
-      this.rowPriceManege.id == undefined || ""
-        ? (params.strategyId = null)
-        : (params.strategyId = this.rowPriceManege.id);
+      if(this.rowPriceManege.id != undefined) {
+        params.strategyId = this.rowPriceManege.id
+      }
       let res = await api.addWbParts(params, arr);
       if (!res == false) {
         this.$Message.success("添加成功");
@@ -772,7 +787,7 @@ export default {
     },
     // 导入模板
     importModule() {
-      this.rowPriceManege.name == "统一售价"
+      this.rowPriceManege.name == "最低售价"
         ? (this.impirtUrl.downId = "2600000000")
         : (this.impirtUrl.downId = "2700000000");
       this.$refs.imp.openModal();
@@ -794,11 +809,26 @@ export default {
       this.getPart();
     },
     //导入成功后刷新页
-    getNew(data) {},
+    getNew(data) {
+      if(data.code == 0) {
+        // this.reload();
+        this.queryPart();
+      }
+    },
     // 保存配件
     async savePart() {
+      let updateRecords = this.$refs.part.getUpdateRecords();
+      // console.log(updateRecords)
+      // return
       let res;
-      let data = [...this.part.tbdata];
+      // let data = [...this.part.tbdata];
+      let data = [...updateRecords];
+      data.map(item => {
+
+        if(item.hasOwnProperty('removeLimitCheckBox')){
+          item.removeLimit = item.removeLimitCheckBox ?1:0
+        }
+      })
       if (this.curronly) {
         res = await api.partPriceSave(data);
       } else {

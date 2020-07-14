@@ -81,7 +81,7 @@
             <div
               slot="left"
               class="con-split-pane-left"
-              style="overflow-y: auto; height: 100%;"
+              style="overflow-y:auto;"
             >
               <div class="pane-made-hd">
                 采购退货列表
@@ -92,7 +92,7 @@
                 size="small"
                 highlight-row
                 border
-                :stripe="false"
+                :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
                 @on-row-click="selection"
@@ -282,7 +282,6 @@
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
-                showOverflow="true"
                 @edit-actived="editActivedEvent"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
@@ -300,21 +299,17 @@
                 <vxe-table-column
                   field="partCode"
                   fixed="left"
-                  show-overflow
                   title="配件编码"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partName"
                   fixed="left"
-                  show-overflow
                   title="配件名称"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partBrand"
-                  fixed="left"
-                  show-overflow
                   title="品牌"
                   width="100"
                 ></vxe-table-column>
@@ -451,12 +446,13 @@ export default {
   },
   data() {
     let changeNumber = ({cellValue, row: { canReQty } }) => {
+      // console.log(canReQty, cellValue);
       const reg = /^[1-9]\d{0,}$/;
       if (!reg.test(cellValue)) {
         return Promise.reject(new Error("数量输入不正确"));
       }
       if(canReQty < cellValue) {
-        return Promise.reject(new Error("数量输入不正确"));
+        return Promise.reject(new Error("退货数量不能大于可退数量"));
       }
     };
 
@@ -467,6 +463,7 @@ export default {
       }
     };
     return {
+      defaultStore: "",
       ArraySelect: [], //供应商下拉框
       checkboxArr: [], // checkbox选中
       disSave: false, // 保存按钮是否禁用
@@ -659,10 +656,10 @@ export default {
   methods: {
     //计算表格数据
     countAmount(row) {
-      return (
+      row.orderAmt =
         this.$utils.toNumber(row.orderQty) *
-        this.$utils.toNumber(row.orderPrice)
-      );
+        this.$utils.toNumber(row.orderPrice);
+      return row.orderAmt;
     },
     //判断从表input能不能编辑
     editActivedEvent({ row }) {
@@ -813,7 +810,7 @@ export default {
         (this.formPlan.storeId = this.$store.state.user.userData.id), //退货员
         (this.formPlan.orderDate = tools.transTime(new Date())), //退货日期
         (this.formPlan.remark = ""), //备注
-        (this.formPlan.warehouse = ""), //退货仓库
+        (this.formPlan.warehouse = this.defaultStore), //退货仓库
         (this.formPlan.serviceId = ""), //采购单号
         (this.formPlan.numbers = ""), //采退单号
         (this.Right.tbdata = []);
@@ -870,15 +867,32 @@ export default {
     },
     //选择采购入库单
     getPlanOrder(Msg) {
-      let arr = Msg || [];
+      let arr = JSON.parse(JSON.stringify(Msg || []));
 
       if (arr.length <= 0) return;
+      // sourceDetailId
+      let flag = false;
+      for(let i = 0; i < this.Right.tbdata.length; i++) {
+        let el = this.Right.tbdata[i];
+        for(let j = 0; j < arr.length; j++) {
+          let em = arr[j];
+          // console.log(em.sourceDetailId, el.sourceDetailId)
+          if(el.sourceDetailId == em.sourceDetailId) {
+            arr.splice(j, 1);
+            flag = true;
+          }
+        }
+      }
+
+      if(flag) {
+        this.$message.error("同一批次配件不重复添加");
+      }
 
       arr.map(item => {
         item.outUnitId = item.enterUnitId;
         item.unit = item.enterUnitId;
         item.systemUnitId = item.enterUnitId;
-        item.canReQty = item.enterQty;
+        item.canReQty = item.rtnableQty;
         item.orginOrderQty = item.orderQty;
         item.orderQty = item.rtnableQty;
         item.orderPrice = item.enterPrice;
@@ -886,7 +900,10 @@ export default {
       });
 
       this.Right.tbdata = this.Right.tbdata.concat(arr);
-      this.$message.success("已添加");
+
+      if(!flag) {
+        this.$message.success("已添加");
+      }
     },
     selectTabelData() {},
     //保存按钮
@@ -912,7 +929,6 @@ export default {
             // data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata;
             let noBack = data.details.filter(item => {
-              // console.log(item.stockOutQty, item.orginOrderQty, item.orderQty, item.stockOutQty-(item.orginOrderQty-item.orderQty) > 0);
               return (
                 item.stockOutQty - (item.orginOrderQty - item.orderQty) > 0
               );
@@ -945,10 +961,10 @@ export default {
               }
             });
           } catch (errMap) {
-            this.$XModal.message({
-              status: "error",
-              message: "申请数量必须输入大于0的正整数！"
-            });
+            // this.$XModal.message({
+            //   status: "error",
+            //   message: "申请数量必须输入大于0的正整数！"
+            // });
           }
         } else {
           // console.log(this.isAdd)
@@ -1422,31 +1438,6 @@ export default {
           data.storeId = this.formPlan.warehouse; //退货仓库
           data.code = this.formPlan.serviceId; //采购订单
           data.details = this.Right.tbdata;
-
-          // let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
-          // if(noBack.length>0){
-          //   this.$message.error('明细中存在缺货数量，请调整')
-          //   return
-          // }
-
-          // data.details = this.Right.tbdata.map(item => {
-          //   // return {
-          //   //   id: item.id,
-          //   //   partId: item.partId,
-          //   //   partCode: item.partCode,
-          //   //   partName: item.partName,
-          //   //   partBrand: item.partBrand,
-          //   //   outUnitId: item.outUnitId,
-          //   //   canReQty: item.canReQty,
-          //   //   orderQty: item.orderQty,
-          //   //   orderPrice: item.orderPrice,
-          //   //   orderAmt: item.orderAmt,
-          //   //   remark: item.remark,
-          //   //   stockOutQty: item.stockOutQty,
-          //   //   oemCode: item.oemCode,
-          //   //   spec: item.spec
-          //   // }
-          // }) //子表格
           let res = await returnPchs(data);
           if (res.code == 0) {
             this.$Message.success("退货成功");
@@ -1477,7 +1468,8 @@ export default {
             sellOrderStatusMap,
             settlementMap,
             storeMap,
-            userMap
+            userMap,
+            defaultStore,
           } = res.data;
           // 结算方式
           for (let el in settlementMap) {
@@ -1487,6 +1479,7 @@ export default {
           for (let el in storeMap) {
             this.inStores.push({ value: storeMap[el], label: el });
           }
+          this.defaultStore = defaultStore;
           // 状态
           for (let el in sellOrderStatusMap) {
             if (["草稿", "已提交", "已作废", "已退货", "所有"].includes(el)) {
@@ -1528,20 +1521,14 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import url("../../../lease/product/lease.less");
-@import url("../../../goods/plannedPurchaseOrder/index");
-</style>
-
-<style scoped>
-.con-box {
-  height: 700px;
-}
-.w550 {
-  width: 580px;
-}
-</style>
+<!--<style scoped>-->
+<!--.con-box {-->
+<!--  height: 700px;-->
+<!--}-->
+<!--.w550 {-->
+<!--  width: 580px;-->
+<!--}-->
+<!--</style>-->
 <style lang="less">
 .remark-input {
   .ivu-input {

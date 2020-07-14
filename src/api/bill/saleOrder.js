@@ -319,3 +319,22 @@ export function CheckForSubmit(data , modelType) {
     data
   })
 }
+
+
+//对账单获取收款款户名
+export function getAccountName(params) {
+  return axios.request({
+    url: `${api.wmsApi}/guestAccount/accountInfoList`,
+    method: 'get',
+    params
+  })
+}
+
+//对账单获取付款户名
+export function getPaymentName(params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountRegister/getPaymentInfo`,
+    method: 'get',
+    params
+  })
+}

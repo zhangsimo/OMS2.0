@@ -8,18 +8,18 @@
       <div class="tools-bar mb10">
         <div class="db mr5">
           <span class="mr5">快速查询:</span>
-          <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
+          <getDate class="mr10" @quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" />
+          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class=" mr5">品牌:</span>
-          <Select  v-model="partBrand" filterable style="width:140px" class="mr20">
+          <Select  v-model="partBrand" filterable style="width:140px" class="mr20" @on-change="SelectChange">
             <Option v-for="(item, index) in bands" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
         </div>
-        <div class="db mr5"><span>入库日期:</span></div>
+        <div class="db mr5"><span v-if="type == 'sale'">出库日期:</span><span v-else>入库日期:</span></div>
         <div class="db mr5">
           <DatePicker
             type="daterange"
@@ -54,7 +54,7 @@
         stripe
         align="center"
         ref="xTable1"
-        height="300"
+        height="500"
         column-min-width="100px"
         size="small"
         :data="tableData"
@@ -73,17 +73,17 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column  field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column  width="160" field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column  field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column  width="160" field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column  field="partBrand" title="品牌"></vxe-table-column>
         <vxe-table-column  field="enterQty" title="库存数量"></vxe-table-column>
         <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
         <vxe-table-column  field="enterUnitId" title="单位"></vxe-table-column>
         <vxe-table-column  field="branchStockAge" title="库龄"></vxe-table-column>
-        <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column  field="code" title="入库单号"></vxe-table-column>
-        <vxe-table-column  field="enterDate" title="入库日期"></vxe-table-column>
+        <vxe-table-column  width="200" field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column  width="200" field="code" title="入库单号"></vxe-table-column>
+        <vxe-table-column  width="160" field="enterDate" title="入库日期"></vxe-table-column>
       </vxe-table>
 
       <vxe-table
@@ -105,16 +105,18 @@
         <vxe-table-column
           type="checkbox"
           width="60"
+          fixed="left"
         ></vxe-table-column>
         <vxe-table-column
           type="index"
           title="序号"
           width="60"
+          fixed="left"
         ></vxe-table-column>
-        <vxe-table-column  field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column  field="oemCode" title="OE码"></vxe-table-column>
-        <vxe-table-column  field="partBrand" title="品牌"></vxe-table-column>
+        <vxe-table-column  width="160"  field="partCode" title="配件编码" fixed="left"></vxe-table-column>
+        <vxe-table-column  field="partName" title="配件名称" fixed="left"></vxe-table-column>
+        <vxe-table-column  width="160" field="oemCode" title="OE码" fixed="left"></vxe-table-column>
+        <vxe-table-column  field="partBrand" title="品牌" fixed="left"></vxe-table-column>
         <vxe-table-column  field="taxSign" title="是否含税">
           <template v-slot="{ row }">
             <span>{{ row.taxSign ? "是" : "否" }}</span>
@@ -125,11 +127,11 @@
         <vxe-table-column  field="sellPrice" title="出库单价"></vxe-table-column>
         <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
         <vxe-table-column  field="systemUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column  field="serviceId" title="出库单号"></vxe-table-column>
-        <vxe-table-column  field="outDate" title="出库日期"></vxe-table-column>
-        <vxe-table-column  field="code" title="关联销售订单"></vxe-table-column>
-        <vxe-table-column  field="originGuestName" title="第一供应商"></vxe-table-column>
+        <vxe-table-column  width="200" field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column  width="200" field="serviceId" title="出库单号"></vxe-table-column>
+        <vxe-table-column  width="160" field="outDate" title="出库日期"></vxe-table-column>
+        <vxe-table-column  width="200" field="code" title="关联销售订单"></vxe-table-column>
+        <vxe-table-column  v-if="changeShowFirst" width="200" field="originGuestName" title="第一供应商"></vxe-table-column>
       </vxe-table>
 
       <div class="page-warp">
@@ -205,28 +207,34 @@ export default class ProcurementModal extends Vue {
     this.getPchsPlanList();
     this.shows = true;
   }
+  // computed
+  get changeShowFirst(){
+    return this.$store.state.user.userData.currentCompany.isMaster == 0 ? true: false
+  }
 
   @Emit('getPlanOrder')
   private ok() {
-    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    let selectRow = JSON.parse(JSON.stringify(this.selectRow));
+    if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
     // this.shows = false;
-    this.selectRow.forEach((el:any) => {
+    selectRow.forEach((el:any) => {
       el.sourceDetailId = el.id;
       Reflect.deleteProperty(el, 'id');
     })
-    return this.selectRow;
+    return selectRow;
   }
 
   @Emit('getPlanOrder')
   private async selectOrder() {
-    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
-    
+    let selectRow = JSON.parse(JSON.stringify(this.selectRow));
+    if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+
     let msg:any = this.$Message.loading({
       content: '加载中...',
       duration: 0
     });
 
-    let row = this.selectRow[0];
+    let row = selectRow[0];
 
     let params: any = {
       guestId: this.guestId,
@@ -236,12 +244,12 @@ export default class ProcurementModal extends Vue {
     params.size = 9999;
     params.page = 0;
 
-    let res:any; 
+    let res:any;
     if(this.type === "good") {
-      res = await getParts(params); 
+      res = await getParts(params);
     }
     if(this.type === "sale") {
-      res = await getSaleParts(params); 
+      res = await getSaleParts(params);
     }
     let data:Array<any> = new Array();
     if(res.code == 0) {
@@ -249,7 +257,7 @@ export default class ProcurementModal extends Vue {
         el.sourceDetailId = el.id;
         Reflect.deleteProperty(el, 'id');
         return el;
-      });  
+      });
     }
     msg();
     return data;
@@ -301,6 +309,11 @@ export default class ProcurementModal extends Vue {
   //快速查询日期
   private getDataQuick(v){
     this.auditDate = v
+    this.getPchsPlanList();
+  }
+
+  private SelectChange(v) {
+    this.getPchsPlanList();
   }
 
 
@@ -310,7 +323,8 @@ export default class ProcurementModal extends Vue {
       v[0] = v[0] + " 00:00:00"
       v[1] = v[1] + " 23:59:59"
     }
-    this.auditDate = v
+    this.auditDate = v;
+    this.getPchsPlanList();
   }
 
   //获取品牌
@@ -354,12 +368,12 @@ export default class ProcurementModal extends Vue {
 
     let obj = {...params, ...formData}
 
-    let res:any; 
+    let res:any;
     if(this.type === "good") {
-      res = await getParts(obj); 
+      res = await getParts(obj);
     }
     if(this.type === "sale") {
-      res = await getSaleParts(params); 
+      res = await getSaleParts(obj);
     }
     if(res.code == 0) {
       this.page.total = res.data.totalElements;

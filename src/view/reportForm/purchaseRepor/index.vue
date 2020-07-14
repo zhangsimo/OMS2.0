@@ -57,7 +57,8 @@ export default {
         data.auditor ? data2.auditorId = data.auditor : "";
         data.createUname ? data2.createUid = data.createUname : "";
       }
-      this.$refs.tabOne.getList(data2);
+      this.$refs.tabOne.body = data2
+      this.$refs.tabOne.getList();
     },
     search2(data) {
       let data2 = {};
@@ -76,7 +77,8 @@ export default {
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
-      this.$refs.tabTwo.getList(data2);
+      this.$refs.tabTwo.body = data2;
+      this.$refs.tabTwo.getList();
     },
     search3(data) {
       let data2 = {};
@@ -96,7 +98,8 @@ export default {
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
-      this.$refs.tabThree.getList(data2);
+      this.$refs.tabThree.body = data2;
+      this.$refs.tabThree.getList();
     },
     search4(data) {
       let data2 = {};
@@ -119,14 +122,34 @@ export default {
         data.auditor ? data2.auditorId = data.auditor : "";
         data.createUname ? data2.createUid = data.createUname : "";
       }
-      this.$refs.tabFour.getList(data2);
+      this.$refs.tabFour.body = data2;
+      this.$refs.tabFour.getList();
     },
-    exportxls(refname) {
+    async exportxls(refname) {
+      let filename = "";
+      switch(refname) {
+        case "tabOne":
+          filename = "采购订单明细表";
+          break;
+        case "tabTwo":
+          filename = "采购入库明细表";
+          break;
+        case "tabThree":
+          filename = "采购退货明细表";
+          break;
+        case "tabFour":
+          filename = "采购计划明细表";
+          break;
+        default:
+          filename = "";
+          break;
+      }
+      let table = await this.$refs[refname].getAll();
       this.$refs[refname].$refs.xTable.exportData({
-        filename: '采购订单明细表',
+        filename,
         isHeader: true,
         isFooter: true,
-        data: this.$refs[refname].tableDataAll,
+        data: table,
       })
     },
   }

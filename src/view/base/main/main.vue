@@ -54,11 +54,11 @@
             class="content-wrapper"
             style="position: absolute;top: 67px;left: 0;right: 0;bottom: 0;overflow-y: auto"
           >
-            <keep-alive :include="cacheList">
               <div class="image_tofile" ref="imageTofile">
-                <router-view />
+                  <keep-alive :include="cacheList">
+                  <router-view />
+                  </keep-alive>
               </div>
-            </keep-alive>
             <!--            反馈模态框-->
             <Modal v-model="screenshot" fullscreen title="反馈意见">
               <div style="display: flex;border-bottom: 1px #cccccc solid">
@@ -127,7 +127,7 @@
       </Content>
     </Layout>
   </Layout>
-</template> 
+</template>
 <script>
 import SideMenu from "./components/side-menu";
 import HeaderBar from "./components/header-bar";

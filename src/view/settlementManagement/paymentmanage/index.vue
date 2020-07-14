@@ -213,6 +213,7 @@ import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
+  name:'paymentmanage',
   components: {
     quickDate,
     // selectDealings,
@@ -240,7 +241,7 @@ export default {
         {
           title: "序号",
           type: "index",
-          width: 40,
+          minWidth: 40,
           className: "tc"
         },
         // {
@@ -250,78 +251,141 @@ export default {
         // },
         {
           title: "店号",
-          key: "orgId",
-          className: "tc"
+          key: "code",
+          className: "tc",
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.code
+                }
+              }, params.row.code)
+            ])
+          }
         },
         {
           title: "客户/供应商名称",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "客户/供应商类别",
           key: "guestTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120
         },
         {
           title: "对账类别",
           key: "paymentTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "采购入库",
           key: "stockAmtIn",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "采购退货",
           key: "stockAmtOut",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "销售出库",
           key: "salesAmtOut",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "销售退货",
           key: "salesAmtReturn",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "应收应付金额",
           key: "duePayableAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.duePayableAmt
+                }
+              }, params.row.duePayableAmt)
+            ])
+          }
         },
         {
           title: "已对账未收金额",
           key: "receivedAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "已对账未付金额",
           key: "paidAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "已对账合计",
           key: "reconciledSumAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "未对账应收金额",
           key: "uncollectedAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "未对账应付金额",
           key: "unpaidAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "未对账合计",
           key: "unReconciledSumAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         }
       ],
       columns1: [
@@ -340,34 +404,108 @@ export default {
         {
           title: "店号",
           key: "orgId",
-          className: "tc"
+          className: "tc",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgId
+                }
+              }, params.row.orgId)
+            ])
+          }
         },
         {
           title: "客户/供应商名称",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "客户供应商类别",
           key: "guestTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestTypeName
+                }
+              }, params.row.guestTypeName)
+            ])
+          }
         },
         {
           title: "销售订单号",
           key: "orderNo",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orderNo
+                }
+              }, params.row.orderNo)
+            ])
+          }
         },
         {
           title: "出库单号",
           key: "serviceId",
           className: "tc",
+          minWidth: 80,
           render: (h, params) => {
             return h(
               "span",
               {
                 style: {
                   cursor: "pointer",
-                  color: "#87CEFA"
+                  color: "#87CEFA",
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
                 },
                 on: {
                   click: async () => {
@@ -390,6 +528,9 @@ export default {
                     });
                     this.data3 = res.detailed;
                   }
+                },
+                domProps: {
+                  title: params.row.serviceId
                 }
               },
               params.row.serviceId
@@ -399,17 +540,68 @@ export default {
         {
           title: "来源",
           key: "serviceSourceName",
-          className: "tc"
+          className: "tc",
+          minWidth: 50,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.serviceSourceName
+                }
+              }, params.row.serviceSourceName)
+            ])
+          }
         },
         {
           title: "业务类型",
           key: "serviceTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.serviceTypeName
+                }
+              }, params.row.serviceTypeName)
+            ])
+          }
         },
         {
           title: "含税标志",
           key: "taxSignName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.taxSignName
+                }
+              }, params.row.taxSignName)
+            ])
+          }
         },
         // {
         //   title: "油品/配件",
@@ -419,62 +611,122 @@ export default {
         {
           title: "转单日期",
           key: "transferDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.transferDate
+                }
+              }, params.row.transferDate)
+            ])
+          }
         },
         {
           title: "应收金额",
           key: "rpAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "已收金额",
           key: "charOffAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "未收金额",
           key: "noCharOffAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "业务员",
           key: "salesman",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "已对账金额",
           key: "accountAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "未对账金额",
           key: "noAccountAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "草稿金额",
           key: "draftAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "对账门店",
           key: "accountOrgName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountOrgName
+                }
+              }, params.row.accountOrgName)
+            ])
+          }
         },
         {
           title: "对账人",
           key: "accountMan",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "对账订单",
           key: "accountNo",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         }
       ],
       columns2: [
@@ -493,34 +745,108 @@ export default {
         {
           title: "店号",
           key: "orgId",
-          className: "tc"
+          className: "tc",
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.code
+                }
+              }, params.row.code)
+            ])
+          }
         },
         {
           title: "客户/供应商名称",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "客户供应商类别",
           key: "guestTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestTypeName
+                }
+              }, params.row.guestTypeName)
+            ])
+          }
         },
         {
           title: "采购订单号",
           key: "orderNo",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orderNo
+                }
+              }, params.row.orderNo)
+            ])
+          }
         },
         {
           title: "入库单号",
           key: "serviceId",
           className: "tc",
+          minWidth: 80,
           render: (h, params) => {
             return h(
               "span",
               {
                 style: {
                   cursor: "pointer",
-                  color: "#87CEFA"
+                  color: "#87CEFA",
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
                 },
                 on: {
                   click: async () => {
@@ -538,6 +864,9 @@ export default {
                     });
                     this.data4 = res.detailed;
                   }
+                },
+                domProps: {
+                  title: params.row.serviceId
                 }
               },
               params.row.serviceId
@@ -547,17 +876,68 @@ export default {
         {
           title: "来源",
           key: "serviceSourceName",
-          className: "tc"
+          className: "tc",
+          minWidth: 50,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.serviceSourceName
+                }
+              }, params.row.serviceSourceName)
+            ])
+          }
         },
         {
           title: "业务类型",
           key: "serviceTypeName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.serviceTypeName
+                }
+              }, params.row.serviceTypeName)
+            ])
+          }
         },
         {
           title: "含税标志",
           key: "taxSignName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.taxSignName
+                }
+              }, params.row.taxSignName)
+            ])
+          }
         },
         // {
         //   title: "油品/配件",
@@ -567,62 +947,122 @@ export default {
         {
           title: "转单日期",
           key: "transferDate",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.transferDate
+                }
+              }, params.row.transferDate)
+            ])
+          }
         },
         {
           title: "应付金额",
           key: "rpAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "已付金额",
           key: "charOffAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "未付金额",
           key: "noCharOffAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "业务员",
           key: "salesman",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "已对账金额",
           key: "accountAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "未对账金额",
           key: "noAccountAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "草稿金额",
           key: "draftAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "对账门店",
           key: "accountOrgName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountOrgName
+                }
+              }, params.row.accountOrgName)
+            ])
+          }
         },
         {
           title: "对账人",
           key: "accountMan",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "对账订单",
           key: "accountNo",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         }
       ],
       columns3: [
@@ -635,67 +1075,160 @@ export default {
         {
           title: "配件编码",
           key: "partCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partCode
+                }
+              }, params.row.partCode)
+            ])
+          }
         },
         {
           title: "配件名称",
           key: "partName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partName
+                }
+              }, params.row.partName)
+            ])
+          }
         },
         {
           title: "配件规格",
           key: "specification",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "配件车型",
           key: "carModel",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "配件品牌",
           key: "partBrand",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partBrand
+                }
+              }, params.row.partBrand)
+            ])
+          }
         },
         {
           title: "配件厂牌",
           key: "factoryBrand",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "OEM码",
           key: "oemCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.oemCode
+                }
+              }, params.row.oemCode)
+            ])
+          }
         },
         {
           title: "税率",
           key: "taxRate",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "数量",
           key: "qty",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "单位",
           key: "unitId",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "单价",
           key: "price",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "金额",
           key: "orderAmt",
-          className: "tc"
+          className: "tc",
+          minWidth:60
         },
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         }
       ],
       columns4: [
@@ -708,82 +1241,258 @@ export default {
         {
           title: "门店名称",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgName
+                }
+              }, params.row.orgName)
+            ])
+          }
         },
         {
           title: "是否直发",
           key: "isDirect",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "配件编码",
           key: "partCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partCode
+                }
+              }, params.row.partCode)
+            ])
+          }
         },
         {
           title: "配件名称",
           key: "partName",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partName
+                }
+              }, params.row.partName)
+            ])
+          }
         },
         {
           title: "配件规格",
           key: "specification",
-          className: "tc"
+          className: "tc",
+          minWidth: 80
         },
         {
           title: "配件车型",
           key: "carModel",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.carModel
+                }
+              }, params.row.carModel)
+            ])
+          }
         },
         {
           title: "配件品牌",
           key: "partBrand",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.partBrand
+                }
+              }, params.row.partBrand)
+            ])
+          }
         },
         {
           title: "配件厂牌",
           key: "factoryBrand",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.factoryBrand
+                }
+              }, params.row.factoryBrand)
+            ])
+          }
         },
         {
           title: "OEM码",
           key: "oemCode",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.oemCode
+                }
+              }, params.row.oemCode)
+            ])
+          }
         },
         {
           title: "税率",
           key: "taxRate",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "数量",
           key: "qty",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "单位",
           key: "unitId",
-          className: "tc"
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.unitId
+                }
+              }, params.row.unitId)
+            ])
+          }
         },
         {
           title: "单价",
           key: "price",
-          className: "tc"
+          className: "tc",
+          minWidth: 60
         },
         {
           title: "金额",
           key: "orderAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orderAmt
+                }
+              }, params.row.orderAmt)
+            ])
+          }
         },
         {
           title: "备注",
           key: "remark",
-          className: "tc"
+          className: "tc",
+          minWidth: 60,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "不含税价格",
           key: "noTaxPrice",
           className: "tc",
+          minWidth: 80,
           render:(h,params) => {
             let noTaxPrice = parseFloat(params.row.noTaxPrice||0).toFixed(2)
             return h('span',noTaxPrice)
@@ -793,6 +1502,7 @@ export default {
           title: "不含税金额",
           key: "noTaxAmt",
           className: "tc",
+          minWidth: 80,
           render:(h,params) => {
             let noTaxPrice = parseFloat(params.row.noTaxAmt||0).toFixed(2)
             return h('span',noTaxPrice)
@@ -802,6 +1512,7 @@ export default {
           title: "含税单价",
           key: "taxPrice",
           className: "tc",
+          minWidth: 80,
           render:(h,params) => {
             let noTaxPrice = parseFloat(params.row.taxPrice||0).toFixed(2)
             return h('span',noTaxPrice)
@@ -811,6 +1522,7 @@ export default {
           title: "含税金额",
           key: "taxAmt",
           className: "tc",
+          minWidth: 80,
           render:(h,params) => {
             let noTaxPrice = parseFloat(params.row.taxAmt||0).toFixed(2)
             return h('span',noTaxPrice)

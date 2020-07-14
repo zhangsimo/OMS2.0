@@ -297,7 +297,6 @@ export default {
       upurl: getup //批量导入地址
     };
   },
-
   created() {
     this.getlist();
     this.getAdress();
@@ -383,6 +382,8 @@ export default {
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.$refs.form.resetFields();
+      this.$refs.child.financeList=[]
+      this.$refs.child.selectFinTab={}
     },
     cancel() {
       this.clientDataShow = false;
@@ -427,6 +428,7 @@ export default {
         this.pitchSupplierOne.belongSystem
       ).value;
       this.clientList = this.pitchSupplierOne;
+      this.$refs.child.financeList=this.clientList.guestAccountVoList
     },
     //批量上传失败
     onFormatError(file) {

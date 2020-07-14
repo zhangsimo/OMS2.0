@@ -95,7 +95,7 @@
               <!-- 表格 @on-current-change开启 highlight-row（是否支持高亮选中的行，即单选） 后有效，当表格的当前行发生变化的时候会触发-->
               <Table
                 :height="leftTableHeight"
-                @on-current-change="selectTabelData" 
+                @on-current-change="selectTabelData"
                 ref="planOrderTable"
                 size="small"
                 highlight-row
@@ -208,11 +208,12 @@
                       :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.directCompanyId"
                       clearable
+                      filterable
                     >
                       <Option
                         v-for="item in companyMap"
                         :value="item.value"
-                        :key="item.value" 
+                        :key="item.value"
                         v-show="item.value!=$store.state.user.userData.shopId"
                       >{{ item.label}}</Option>
                     </Select>
@@ -462,7 +463,7 @@
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectPlanOrderItem"></status-model>
-  </div> 
+  </div>
 </template>
 <script>
 import adjustModel from "./components/AdjustModel.vue";

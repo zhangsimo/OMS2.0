@@ -3,9 +3,20 @@
     <span class="mr5">对账期间：</span>
     <DatePicker v-model="dateQuery" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
     <span class="ml10">往来单位：</span>
-    <Select v-model="companyId" class="w150" filterable>
-      <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <Select
+      ref="companyGuset"
+      v-model="companyName"
+      filterable
+      remote
+      class="w150"
+      :remote-method="getOrignCompany"
+      @on-change="getAccountNameListFun"
+      :loading="searchLoading">
+      <Option v-for="(option, index) in company" :value="option.id" :key="index">{{option.fullName}}</Option>
     </Select>
+    <!--<Select v-model="companyId" class="w150" filterable>-->
+      <!--<Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+    <!--</Select>-->
     <span class="ml10">收付款类型：</span>
     <Select v-model="paymentId" class="w150" filterable :disabled="paymentId == 'YJDZ'">
       <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -46,6 +57,8 @@ export default {
       dateQuery: "", //时间
       company: [], //往来单位
       companyId: "", //往来单位id
+      companyName:"",//往来单位name
+      searchLoading:false,
       modal1: false, //弹窗展示
       account: [
         {
@@ -117,22 +130,44 @@ export default {
   },
   methods: {
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          this.company = [];
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
-            });
-          });
+    // async getOne() {
+    //   findGuest({ size: 2000 }).then(res => {
+    //     if (res.code === 0) {
+    //       this.company = [];
+    //       res.data.content.map(item => {
+    //         this.company.push({
+    //           value: item.id,
+    //           label: item.fullName
+    //         });
+    //       });
+    //     }
+    //   });
+    // },
+
+    //获取往来单位
+    async getOrignCompany(query){
+      if (query !== '') {
+        this.searchLoading = true;
+        let req = {
+          fullName:query,
+          size:1000,
         }
-      });
+        let rep = await findGuest(req);
+        this.searchLoading = false;
+        if(rep.code==0){
+          this.company = rep.data.content;
+        }
+      } else {
+        this.company = [];
+      }
     },
+
+
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
+        this.companyId = this.$parent.$parent.reconciliationStatement.guestId||"";
+        this.$refs.companyGuset.query = this.$parent.$parent.reconciliationStatement.guestName||""
         //收付类型数据字典
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
@@ -146,9 +181,13 @@ export default {
             });
           }
         );
-        this.getOne();
+        // this.getOne();
         this.seleteQuery();
       }
+    },
+    getAccountNameListFun(v){
+      this.companyId = v;
+      this.seleteQuery();
     },
     seleteQuery() {
       let obj = {

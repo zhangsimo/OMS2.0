@@ -43,7 +43,7 @@
           <vxe-table-column type="radio" title="选择" width="50">
           </vxe-table-column>
           <vxe-table-column field="orgid" title="门店编号" width="150"></vxe-table-column>
-          <vxe-table-column field="tenantCompanyName" title="公司名称"></vxe-table-column>
+          <vxe-table-column field="shortName" title="公司名称"></vxe-table-column>
         </vxe-table>
       </div>
     </Modal>
@@ -77,7 +77,13 @@
             return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
         },
         getPost(){
-           return Array.isArray(this.$store.state.user.userData.currentRoles) ? this.$store.state.user.userData.currentRoles[0] ? this.$store.state.user.userData.currentRoles[0].displayName: '' : ''
+            let list = this.$store.state.user.userData.currentRoles || []
+            let arr =   list.filter( item => item.systemType == 0)
+          if(arr.length > 0){
+            return arr[0].displayName
+          }else {
+            return
+          }
         }
       },
       mounted(){

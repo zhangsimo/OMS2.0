@@ -5,7 +5,7 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10">-->
           <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        <Input class="w250 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码"></Input>
+        <Input class="w250 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码" @on-enter="search"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -24,13 +24,14 @@
         </Button>
       </div>
       <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">系统分类</div>
-          <div class="partCheck-left-tree">
-            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
-          </div>
-        </div>
-        <div class="fr partCheck-right" style="width: 758px">
+<!--        <div class="partCheck-left fl">-->
+<!--          <div class="partCheck-left-tit">系统分类</div>-->
+<!--          <div class="partCheck-left-tree">-->
+<!--            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--       partCheck-right之前是758px -->
+        <div class="fr partCheck-right" style="width: 100%">
           <Table
             height="389"
             @on-selection-change="selectTabelData"

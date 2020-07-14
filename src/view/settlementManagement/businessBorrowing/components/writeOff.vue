@@ -21,7 +21,7 @@
         ></vxe-table-column>
         <vxe-table-column field="applyTime" title="申请时间"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
-        <vxe-table-column field="payAmt" title="因公借支金额"></vxe-table-column>
+        <vxe-table-column field="paymentReturnBalance" title="因公借支金额"></vxe-table-column>
         <vxe-table-column field="totalPrice" title="报销金额"></vxe-table-column>
         <vxe-table-column
           field="writeOffAmount"
@@ -195,8 +195,9 @@ export default {
       }
       let data = {
         writeOffStatus: 0,
+        reimbursementAmount:1
       }
-      
+
       if (this.date.length === 2 && this.date[0]) {
         data.startTime = moment(this.date[0]).format("YYYY-MM-DD") + " 00:00:00";
         data.endTime = moment(this.date[1]).format("YYYY-MM-DD") + " 23:59:59";
