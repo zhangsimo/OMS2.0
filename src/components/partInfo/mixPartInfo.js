@@ -182,7 +182,7 @@ export const mixPartInfo = {
         },
         {
           title: "内码",
-          key: "partId",
+          key: "code",
           minWidth: 50,
           align:"center"
         },
@@ -675,7 +675,7 @@ export const mixPartInfo = {
                 let data={}
                 el.partRelevanceId?data.id=el.partRelevanceId:data.id=""
                 el.partRelevanceId?data.relevancePartId=el.id :data.relevancePartId=el.newPartId
-                data.relevancePartInnerId=el.partId;
+                data.relevancePartInnerId=el.code;
                 partRelevanceList.push(data)
               })
               objReq.partRelevanceList= partRelevanceList || []
@@ -746,7 +746,7 @@ export const mixPartInfo = {
         let bool=false;
         this.selectAllPartTab.map(item2=>{
           this.alreadyPartList.map(item=>{
-            if(item2.partId==item.partId){
+            if(item2.code==item.code){
               str=item.fullName
               bool=true
             }
