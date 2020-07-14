@@ -455,26 +455,75 @@ export default {
           title: "序号",
           key: "index",
           width: 40,
-          className: "tc"
+          className: "tc",
+          fixed:"left"
         },
         {
           title: "公司名称",
           key: "orgName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgName
+                }
+              }, params.row.orgName)
+            ])
+          }
         },
         {
           title: "对账单号",
           key: "accountNo",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountNo
+                }
+              }, params.row.accountNo)
+            ])
+          }
         },
         {
           title: "往来单位",
           key: "guestName",
           className: "tc",
           minWidth:120,
-          fixed:"left"
+          fixed:"left",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "收付类型",
@@ -649,13 +698,45 @@ export default {
           title: "最近一次回款时间",
           key: "lastPaymentDate",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.lastPaymentDate
+                }
+              }, params.row.lastPaymentDate)
+            ])
+          }
         },
         {
           title: "备注",
           key: "remark",
           className: "tc",
-          minWidth:120
+          minWidth:100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "流程是否通过",
@@ -673,7 +754,23 @@ export default {
           title: "最近一次开票申请时间",
           key: "recentTime",
           className: "tc",
-          minWidth:140
+          minWidth:140,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.recentTime
+                }
+              }, params.row.recentTime)
+            ])
+          }
         },
         {
           title: "含税配件金额",
@@ -762,13 +859,45 @@ export default {
           title: "最近一次开票公司",
           key: "recentInvoiceCompany",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.recentInvoiceCompany
+                }
+              }, params.row.recentInvoiceCompany)
+            ])
+          }
         },
         {
           title: "最近一次开票名称",
           key: "recentInvoiceName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.recentInvoiceName
+                }
+              }, params.row.recentInvoiceName)
+            ])
+          }
         }
       ],
       columns2: [
