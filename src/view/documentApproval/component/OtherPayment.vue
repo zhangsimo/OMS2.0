@@ -106,7 +106,9 @@
             </Col>
             <Col span="6">
               <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.receiver" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+                <Select @on-change="getCompany" v-model="formInline.receiveGuestId"  label-in-value  filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
               </FormItem>
             </Col>
             <Col span="6">
@@ -168,7 +170,7 @@
 </template>
 
 <script>
-  import index from './index/OtherPayment.js' 
+  import index from './index/OtherPayment.js'
   export default index
 </script>
 

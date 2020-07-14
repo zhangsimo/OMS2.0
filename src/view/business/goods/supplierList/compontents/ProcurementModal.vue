@@ -158,25 +158,27 @@ export default class ProcurementModal extends Vue {
 
   @Emit('getPlanOrder')
   private ok() {
-    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    let selectRow = JSON.parse(JSON.stringify(this.selectRow))
+    if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
     // this.shows = false;
-    this.selectRow.forEach((el:any) => {
+    selectRow.forEach((el:any) => {
       el.sourceDetailId = el.id;
       Reflect.deleteProperty(el, 'id');
     })
-    return this.selectRow;
+    return selectRow;
   }
 
   @Emit('getPlanOrder')
   private async selectOrder() {
-    if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+    let selectRow = JSON.parse(JSON.stringify(this.selectRow))
+    if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
     
     let msg:any = this.$Message.loading({
       content: '加载中...',
       duration: 0
     });
 
-    let row = this.selectRow[0];
+    let row = selectRow[0];
 
     let params: any = {
       guestId: this.guestId,

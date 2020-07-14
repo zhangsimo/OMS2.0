@@ -91,7 +91,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "型号",
-          key: "brandName",
+          key: "model",
           minWidth: 120
         },
         {
@@ -497,6 +497,7 @@ export default class Fittings extends Vue {
     this.isAdd = true;
     const ref: any = this.$refs.partInfo;
     ref.init();
+    ref.alreadyPartList=[]
   }
   // 修改
   private async change() {
@@ -504,6 +505,7 @@ export default class Fittings extends Vue {
     const ref: any = this.$refs.partInfo;
     let res: any = await api.findbyidInfo(this.currRow.id);
     ref.init(res.data || {});
+    ref.getAlreadyPartsData(this.currRow.code)
   }
   private async submitSave(row) {
     const ref: any = this.$refs.partInfo;

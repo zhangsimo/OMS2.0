@@ -91,7 +91,9 @@
             </Col>
             <Col span="6">
               <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.receiver" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+                <Select @on-change="changeCollectionUname" v-model="formInline.receiver"  filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+                  <Option v-for="item in receiverArr" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
+                </Select>
               </FormItem>
             </Col>
             <Col span="6">

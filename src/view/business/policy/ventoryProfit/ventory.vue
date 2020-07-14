@@ -187,6 +187,7 @@
                 ref="xTable1"
                 border
                 resizable
+                auto-resize
                 @edit-closed="editClosedEvent"
                 @edit-actived="editActivedEvent"
                 size="mini"
@@ -196,10 +197,10 @@
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column field="sysQty" title="系统数量" width="100" v-if="formPlan.source != 1"></vxe-table-column>
                 <vxe-table-column

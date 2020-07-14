@@ -4,6 +4,7 @@ import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getPublicSave} from '_api/documentApproval/PublicRequest'
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import {getPost} from "../utils";
 
 export default {
   name: "PublicRequest",
@@ -68,12 +69,12 @@ export default {
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
-        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
+        this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.orgName = user.shopName
+        this.formInline.orgName = getPost();
         this.formInline.applyTypeName = '因公借支'
         this.formInline.applyTime = date
-        this.formInline.paymentOrgName = user.shopName
+        this.formInline.paymentOrgName = getPost();
       }
       if (this.list.type == 2){
         this.getList()

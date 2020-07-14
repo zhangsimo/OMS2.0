@@ -78,12 +78,12 @@
             <TabPane label="员工" name="name2">
               <div>
                 <div class="treeHeader">
-                  <Button class="ml10 w90" @click="saveStaff">
-                    <span class="center">
-                      <Icon custom="iconfont iconbaocunicon icons" />保存
-                    </span>
-                  </Button>
-                  <div class="fr">
+<!--                  <Button class="ml10 w90" @click="saveStaff">-->
+<!--                    <span class="center">-->
+<!--                      <Icon custom="iconfont iconbaocunicon icons" />保存-->
+<!--                    </span>-->
+<!--                  </Button>-->
+<!--                  <div class="fr">-->
                     <span class="mr10">机构名称:</span>
                     <Input
                       class="mr10"
@@ -101,17 +101,22 @@
                     <Button @click="search" class="mr10" type="warning">
                       <Icon type="ios-search" size="14" />查询
                     </Button>
-                  </div>                  
+                </div>
                   <div style="max-height: 600px;height:600px;overflow-y: auto">
-                    <vxe-table border align="center" resizable :data="rightTableData">
+                    <vxe-table
+                      border
+                      align="center"
+                      resizable
+                      :data="rightTableData"
+                    >
                       <vxe-table-column field="loginName" title="登录账号"></vxe-table-column>
                       <vxe-table-column field="userName" title="员工姓名"></vxe-table-column>
                       <vxe-table-column field="shopName" title="所属机构"></vxe-table-column>
-                      <vxe-table-column field="role" title="授权">
-                        <template v-slot="{ row,rowIndex }">
-                          <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>
-                        </template>
-                      </vxe-table-column>
+<!--                      <vxe-table-column field="role" title="授权">-->
+<!--                        <template v-slot="{ row,rowIndex }">-->
+<!--                          <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>-->
+<!--                        </template>-->
+<!--                      </vxe-table-column>-->
                     </vxe-table>
                   </div>
                     <Page
@@ -126,8 +131,7 @@
                       @on-change="selectNumRight"
                       @on-page-size-change="selectPageRight"
                       style="float: right;margin-right: 10px"
-                    ></Page>                  
-                </div>
+                    ></Page>
               </div>
             </TabPane>
           </Tabs>
@@ -137,7 +141,7 @@
   </div>
 </template>
 <script src="./index.ts">
-</script> 
+</script>
 <style scoped lang="less">
 .bigbox {
   height: 100%;

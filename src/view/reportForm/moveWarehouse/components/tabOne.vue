@@ -175,12 +175,13 @@ export default {
   data() {
     return {
       page: {
-        num: 1,
+        page: 0,
         size: 10,
         total: 0
       },
       tableDataAll: [],
-      tableData: []
+      tableData: [],
+      searchData:{}
     };
   },
   mounted() {
@@ -189,9 +190,10 @@ export default {
   methods: {
     // 查询表
     async getList(data = {}) {
-      let res = await api.getStockShiftEnter(data);
+      this.searchData = data;
+      let res = await api.getStockShiftEnter(data,this.page);
       if (res.code == 0) {
-        this.tableDataAll = (res.data || []).map(el => {
+        this.tableDataAll = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
             el.taxSign = true;
           }
@@ -201,24 +203,19 @@ export default {
           return el;
         });
 
-        this.tableData = this.tableDataAll.slice(0, this.page.size);
-        this.page.total = this.tableDataAll.length;
+        this.tableData = this.tableDataAll;
+        this.page.total = res.data.totalElements;
       }
     },
     //分页
     changePage(p) {
-      this.page.num = p;
-      let start = (p - 1) * this.page.size;
-      let end = p * this.page.size;
-      this.tableData = this.tableDataAll.slice(start, end);
+      this.page.page = p-1;
+      this.getList();
     },
     changeSize(size) {
-      this.page.num = 1;
+      this.page.page = 0;
       this.page.size = size;
-      this.tableData = this.tableDataAll.slice(
-        this.page.num - 1,
-        this.page.size
-      );
+      this.getList();
     },
     //表尾合计
     footerMethod({ columns, data }) {
@@ -243,6 +240,30 @@ export default {
           return null;
         })
       ];
+    },
+    //导出
+    async exportFun(){
+      let pageObj = {
+        page:0,
+        size:this.page.total
+      }
+      return new Promise(async (resolve, reject) => {
+        let res = await api.getStockShiftEnter(this.searchData,pageObj);
+        if (res.code == 0) {
+          let arrData = (res.data.content || []).map(el => {
+            if ([1, "1", "是"].includes(el.taxSign)) {
+              el.taxSign = true;
+            }
+            if ([0, "0", "否"].includes(el.taxSign)) {
+              el.taxSign = false;
+            }
+            return el;
+          });
+          resolve(arrData);
+        }else{
+          reject()
+        }
+      })
     }
   }
 };

@@ -32,7 +32,7 @@ export const mixSelectPartCom = {
         {
           title: "序号",
           type: "selection",
-          minWidth: 80
+          minWidth: 50
         },
         {
           title: "配件内码",
@@ -55,13 +55,13 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "规格",
-          key: "spec",
-          minWidth: 80
+          title: "品牌",
+          key: "partBrand",
+          minWidth: 120
         },
         {
-          title: "型号",
-          key: "brandName",
+          title: "OEM码",
+          key: "oemCode",
           minWidth: 120
         },
         {
@@ -70,13 +70,13 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "品牌",
-          key: "partBrand",
-          minWidth: 120
+          title: "规格",
+          key: "spec",
+          minWidth: 80
         },
         {
-          title: "OEM码",
-          key: "oemCode",
+          title: "型号",
+          key: "brandName",
           minWidth: 120
         },
         {

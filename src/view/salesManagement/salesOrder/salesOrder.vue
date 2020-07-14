@@ -1,5 +1,5 @@
 <template>
-    <main class="bigBox main-wrap lightbox-wrap">
+    <main class="lightbox-wrap bigBox main-wrap ">
       <Tabs type="card" name="orderbox">
         <TabPane  label="销售订单" tab="orderbox">
         <div class="marketBox">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import Order from "./Order/Order"; 
+  import Order from "./Order/Order";
     export default {
         name: "salesOrder",
         components:{
@@ -36,13 +36,16 @@
       height: 100%;
     }
   }
+.content-oper{
+  box-shadow: none;
+}
 </style>
 <style lang="less">
   .main-wrap{
     .ivu-tabs-content{
       height: 94%;
     }
-    
+
   }
   .lightbox-wrap{
     .ivu-tabs-bar{

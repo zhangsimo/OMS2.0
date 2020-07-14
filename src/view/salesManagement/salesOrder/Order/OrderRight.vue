@@ -1,288 +1,294 @@
 <template>
   <div style="height: 100%;">
-    <Form
-      inline
-      :show-message="false"
-      ref="formPlan"
-      :model="formPlan"
-      :rules="ruleValidate"
-      :label-width="120"
-    >
-      <div class="pane-made-hd fs12">
-        <span class="titler mr5">固定额度:</span>
-        <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
-        <span class="titler mr5">临时额度:</span>
-        <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
-        <span class="titler mr5">可用余额:</span>
-<!--        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>-->
-        <span class="titler mr5">{{ limitList.sumAmt  |priceFilters}}</span>
-      </div>
-      <div class="clearfix purchase pb10" ref="planForm">
-        <FormItem label="客户：" prop="guestId" :show-message="false" inline>
-          <Row>
-            <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:260px;" />
-            <!-- <Select
-              v-model="formPlan.guestId"
+    <div class="tablebox">
+      <Form
+        inline
+        :show-message="false"
+        ref="formPlan"
+        :model="formPlan"
+        :rules="ruleValidate"
+        :label-width="120"
+      >
+        <div class="pane-made-hd fs12">
+          <span class="titler mr5">固定额度:</span>
+          <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
+          <span class="titler mr5">临时额度:</span>
+          <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
+          <span class="titler mr5">可用余额:</span>
+          <!--        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>-->
+          <span class="titler mr5">{{ limitList.sumAmt  |priceFilters}}</span>
+        </div>
+        <div class="clearfix purchase pb10" ref="planForm">
+          <FormItem label="客户：" prop="guestId" :show-message="false" inline>
+            <Row>
+              <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:260px;"/>
+              <!-- <Select
+                v-model="formPlan.guestId"
+                filterable
+                style="width: 240px"
+                :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+                @on-change="changeClient"
+              >
+                <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+              </Select> -->
+              <!--            <Input-->
+              <!--              class="w240"-->
+              <!--              v-model="formPlan.fullName"-->
+              <!--              :disabled="draftShow != 0"-->
+              <!--              @on-change="changeClient"-->
+              <!--            />-->
+              <Button
+                class="ml5"
+                size="small"
+                type="default"
+                @click="openAddCustomer"
+                :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+              >
+                <Icon type="md-checkmark"/>
+              </Button>
+              <Button
+                class="ml5"
+                size="small"
+                type="default"
+                @click="openAddNewClient"
+                :disabled="draftShow != 0"
+              >
+                <Icon type="md-add"/>
+              </Button>
+            </Row>
+          </FormItem>
+          <FormItem label="销售员：" prop="orderManId">
+            <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
+            <Select
+              :value="formPlan.orderManId"
+              @on-change="selectOrderMan"
               filterable
-              style="width: 240px"
+              style="width: 140px"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-              @on-change="changeClient"
+              label-in-value
             >
-              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select> -->
-            <!--            <Input-->
-            <!--              class="w240"-->
-            <!--              v-model="formPlan.fullName"-->
-            <!--              :disabled="draftShow != 0"-->
-            <!--              @on-change="changeClient"-->
-            <!--            />-->
-            <Button
-              class="ml5"
-              size="small"
-              type="default"
-              @click="openAddCustomer"
+              <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="订单类型：">
+            <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
+              <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="往来单号：">
+            <Input class="w210" v-model="formPlan.code" disabled/>
+          </FormItem>
+          <FormItem label="票据类型：" prop="billTypeId">
+            <Select
+              v-model="formPlan.billTypeId"
+              style="width:100px"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             >
-              <Icon type="md-checkmark" />
-            </Button>
-            <Button
-              class="ml5"
-              size="small"
-              type="default"
-              @click="openAddNewClient"
-              :disabled="draftShow != 0"
+              <Option
+                v-for="item in settleTypeList.CS00107"
+                :value="item.itemCode"
+                :key="item.itemCode"
+              >{{ item.itemName }}
+              </Option>
+            </Select>
+          </FormItem>
+          <FormItem label="结算方式：" prop="settleTypeId">
+            <Select
+              v-model="formPlan.settleTypeId"
+              style="width:100px"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             >
-              <Icon type="md-add" />
-            </Button>
-          </Row>
-        </FormItem>
-        <FormItem label="销售员：" prop="orderManId">
-          <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
-          <Select
-            :value="formPlan.orderManId"
-            @on-change="selectOrderMan"
-            filterable
-            style="width: 140px"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-            label-in-value
-          >
-            <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="订单类型：">
-          <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
-            <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="往来单号：">
-          <Input class="w210" v-model="formPlan.code" disabled />
-        </FormItem>
-        <FormItem label="票据类型：" prop="billTypeId">
-          <Select
-            v-model="formPlan.billTypeId"
-            style="width:100px"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-          >
-            <Option
-              v-for="item in settleTypeList.CS00107"
-              :value="item.itemCode"
-              :key="item.itemCode"
-            >{{ item.itemName }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="结算方式：" prop="settleTypeId">
-          <Select
-            v-model="formPlan.settleTypeId"
-            style="width:100px"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-          >
-            <Option
-              v-for="item in settleTypeList.CS00106"
-              :value="item.itemCode"
-              :key="item.itemCode"
-            >{{ item.itemName }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="计划发货日期：" prop="planSendDate">
-          <!-- @on-change="getplanSendDate" -->
-          <DatePicker
-            v-model="formPlan.planSendDate"
-            :options="options1"
-            type="date"
-            class="w140"
-            @on-change="getplanSendDate"
-            placeholder="选择日期"
-            style="width: 120px"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-            clearable
-          ></DatePicker>
-        </FormItem>
-        <FormItem label="计划到货日期：" prop="planArriveDate">
-          <DatePicker
-            :value="formPlan.planArriveDate"
-            @on-change="getplanArriveDate"
-            :options="options2"
-            type="date"
-            class="w130"
-            placeholder="选择日期"
-            style="width: 120px"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-            clearable
-            ref="clearplanArriveDate"
-          ></DatePicker>
-        </FormItem>
-        <FormItem label="交货仓库：" prop="storeId">
-          <Select
-            v-model="formPlan.storeId"
-            style="width:180px"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-          >
-            <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="备注：">
-          <Input
-            style="width: 330px"
-            v-model="formPlan.remark"
-            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-          />
-        </FormItem>
+              <Option
+                v-for="item in settleTypeList.CS00106"
+                :value="item.itemCode"
+                :key="item.itemCode"
+              >{{ item.itemName }}
+              </Option>
+            </Select>
+          </FormItem>
+          <!-- <FormItem label="计划发货日期：" prop="planSendDate">
+            <DatePicker
+              v-model="formPlan.planSendDate"
+              :options="options1"
+              type="date"
+              class="w140"
+              @on-change="getplanSendDate"
+              placeholder="选择日期"
+              style="width: 120px"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+              clearable
+            ></DatePicker>
+          </FormItem>
+          <FormItem label="计划到货日期：" prop="planArriveDate">
+            <DatePicker
+              :value="formPlan.planArriveDate"
+              @on-change="getplanArriveDate"
+              :options="options2"
+              type="date"
+              class="w130"
+              placeholder="选择日期"
+              style="width: 120px"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+              clearable
+              ref="clearplanArriveDate"
+            ></DatePicker>
+          </FormItem> -->
+          <FormItem label="交货仓库：" prop="storeId">
+            <Select
+              v-model="formPlan.storeId"
+              style="width:180px"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+            >
+              <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id"
+                      :key="item.id">{{ item.name }}
+              </Option>
+            </Select>
+          </FormItem>
+          <FormItem label="备注：">
+            <Input
+              style="width: 330px"
+              v-model="formPlan.remark"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+            />
+          </FormItem>
 
-        <FormItem label="订单号：">
-          <Input class="w210" v-model="formPlan.serviceId" disabled />
-        </FormItem>
-      </div>
-      <div class="flex plan-cz-btn" ref="planBtn">
-        <div class="clearfix">
-          <div class="fl mb5">
-            <Button
-              size="small"
-              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-              class="mr10"
-              @click="addMountings "
-              v-has="'addMountings'"
-            >
-              <Icon type="md-add" />添加配件
-            </Button>
-          </div>
-          <div class="fl mb5">
-            <Button
-              size="small"
-              :disabled="draftShow != 0 || this.$parent.$parent.ispart"
-              class="mr10"
-              @click="deletePart"
-              v-has="'deletePart'"
-            >
-              <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
-            </Button>
-          </div>
-          <div class="fl mb5">
-            <Button
-              size="small"
-              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-              class="mr10"
-              @click="openBarchModal"
-              v-has="'Barch'"
-            >批次配件</Button>
-          </div>
-          <div class="fl mb5">
-            <Upload
-              ref="upload"
-              style="display: inline-block"
-              :show-upload-list="false"
-              :action="upurl"
-              :headers="headers"
-              :format="['xlsx','xls']"
-              :on-format-error="onFormatError"
-              :on-success="onSuccess"
-              :before-upload="beforeUpload"
-            >
+          <FormItem label="订单号：">
+            <Input class="w210" v-model="formPlan.serviceId" disabled/>
+          </FormItem>
+        </div>
+        <div class="flex plan-cz-btn" ref="planBtn">
+          <div class="clearfix">
+            <div class="fl mb5">
               <Button
                 size="small"
+                :disabled="draftShow != 0|| this.$parent.$parent.ispart"
                 class="mr10"
-                @click="getRUl"
-                :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd"
-                v-has="'getBarch'"
+                @click="addMountings "
+                v-has="'addMountings'"
               >
-                <span class="center">
-                  <Icon custom="iconfont icondaoruicon icons" />导入配件
-                </span>
+                <Icon type="md-add"/>
+                添加配件
               </Button>
-            </Upload>
-          </div>
-          <div class="fl mr10">
-            <Button size="small" @click="down">
-              <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-            </Button>
-          </div>
-          <div class="fl mb5">
-            <Button
-              size="small"
-              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-              class="mr10"
-              @click="openActivityModal"
-            >选择活动</Button>
-          </div>
-          <div class="fl mb5">
-            <Button
-              size="small"
-              :disabled="draftShow != 0|| this.$parent.$parent.ispart "
-              class="mr10"
-              @click="openGodownEntryModal"
-              v-has="'goDown'"
-            >选择入库单</Button>
-          </div>
-          <div class="fl mb5">
-            <Button
-              size="small"
-              :disabled="draftShow != 0 || this.$parent.$parent.ispart"
-              class="mr10"
-              @click="openAddressShow"
-              v-has="'openAddress'"
-            >编辑发货信息</Button>
+            </div>
+            <div class="fl mb5">
+              <Button
+                size="small"
+                :disabled="draftShow != 0 || this.$parent.$parent.ispart"
+                class="mr10"
+                @click="deletePart"
+                v-has="'deletePart'"
+              >
+                <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
+              </Button>
+            </div>
+            <div class="fl mb5">
+              <Button
+                size="small"
+                :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+                class="mr10"
+                @click="openBarchModal"
+                v-has="'Barch'"
+              >批次配件
+              </Button>
+            </div>
+            <div class="fl mb5">
+              <Upload
+                ref="upload"
+                style="display: inline-block"
+                :show-upload-list="false"
+                :action="upurl"
+                :headers="headers"
+                :format="['xlsx','xls']"
+                :on-format-error="onFormatError"
+                :on-success="onSuccess"
+                :before-upload="beforeUpload"
+              >
+                <Button
+                  size="small"
+                  class="mr10"
+                  @click="getRUl"
+                  :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd"
+                  v-has="'getBarch'"
+                >
+                <span class="center">
+                  <Icon custom="iconfont icondaoruicon icons"/>导入配件
+                </span>
+                </Button>
+              </Upload>
+            </div>
+            <div class="fl mr10">
+              <Button size="small" @click="down">
+                <Icon custom="iconfont iconxiazaiicon icons"/>
+                下载模板
+              </Button>
+            </div>
+            <div class="fl mb5">
+              <Button
+                size="small"
+                :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+                class="mr10"
+                @click="openActivityModal"
+              >选择活动
+              </Button>
+            </div>
+            <div class="fl mb5">
+              <Button
+                size="small"
+                :disabled="draftShow != 0|| this.$parent.$parent.ispart "
+                class="mr10"
+                @click="openGodownEntryModal"
+                v-has="'goDown'"
+              >选择入库单
+              </Button>
+            </div>
+            <div class="fl mb5">
+              <Button
+                size="small"
+                :disabled="draftShow != 0 || this.$parent.$parent.ispart"
+                class="mr10"
+                @click="openAddressShow"
+                v-has="'openAddress'"
+              >编辑发货信息
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="tableBox">
         <vxe-table
           border
+          resizable
+          show-footer
+          ref="xTable"
           align="center"
           size="mini"
-          resizable
-          stripe
-          ref="xTable"
-          show-footer
-          :footer-method="footerMethod"
-          showOverflow="true"
           :edit-rules="validRules"
           :data="formPlan.detailList"
-          @select-change="selectTable"
-          @select-all="selectAllTable"
-          @edit-actived="editActivedEvent"
-          style="width: 2000px"
           :height="rightTableHeight"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
-          >
+          @select-change="selectTable"
+          @select-all="selectAllTable"
+          @edit-actived="editActivedEvent"
+          :footer-method="footerMethod"
         >
-          <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column type="checkbox" width="50"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column fixed="left" type="index" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column fixed="left" type="checkbox" width="50"></vxe-table-column>
+          <vxe-table-column fixed="left" title="操作" width="60">
             <template v-slot="{ row,rowIndex }">
               <a @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-          <vxe-table-column min-width="150" field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+          <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+          <vxe-table-column fixed="left" width="110" field="partName" title="配件名称"></vxe-table-column>
+          <vxe-table-column fixed="left" field="partBrand" title="品牌" width="80"></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',attrs: {disabled: false}}"
-            width="160"
+            width="100"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
+                style="width:80px;"
                 :min="0"
                 :max="row.isMarkBatch == 1 ? row.adjustQty : 999999"
                 v-model="row.orderQty"
@@ -299,42 +305,47 @@
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
           </vxe-table-column>
-          <vxe-table-column title="金额">
+          <vxe-table-column title="金额" width="110">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="averagePrice" title="参考价"></vxe-table-column>
-          <vxe-table-column
-            field="remark"
-            title="备注"
-            min-width="200"
-            :edit-render="{name: 'input',attrs: {disabled: false}}"
-          ></vxe-table-column>
-          <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
-          <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
-          <vxe-table-column field title="批次">
-            <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
+          <vxe-table-column field="averagePrice" title="参考价" width="70"></vxe-table-column>
+          <vxe-table-column field="stockOutQty" title="缺货数量" width="80">
+            <template v-slot="{row}">
+              <span style="color:#ed4014" v-if="row.stockOutQty*1>0">{{row.stockOutQty}}</span>
+              <span v-else>{{row.stockOutQty}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="活动">
-            <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="品牌车型">
+          <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
+          <vxe-table-column title="品牌车型" width="100">
             <template v-slot="{row,rowIndex}">
               <span>{{row.carBrandName}} {{row.carModelName}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-          <vxe-table-column field="spec" title="规格"></vxe-table-column>
-          <vxe-table-column field="showDirection" title="方向"></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="60"></vxe-table-column>
+          <vxe-table-column field title="批次" width="50">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="活动" width="50">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="storeShelf" title="仓位" width="100"></vxe-table-column>
+          <vxe-table-column
+            field="remark"
+            title="备注"
+            min-width="120"
+            :edit-render="{name: 'input',attrs: {disabled: false}}"
+          ></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+          <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
         </vxe-table>
-      </div>
-    </Form>
+      </Form>
+    </div>
 
     <!--   新增客户资料-->
     <Modal v-model="clientDataShow" title="客户资料" width="700">
@@ -353,7 +364,8 @@
     <!--  编辑发货地址 -->
     <goods-info ref="goodsInfo" :guestId="formPlan.guestId" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"  @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"
+                     @selectPartName="getPartNameList"></select-part-com>
     <!--      批次配件-->
     <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList"></barch>
     <!--      选择客户-->
@@ -368,830 +380,843 @@
 </template>
 
 <script>
-import ClientData from "../../../system/essentialData/clientManagement/ClientData";
-import goodsInfo from "../../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
-import selectPartCom from "../components/selectPartCom";
-import SelectTheCustomer from "../../commonality/SelectTheCustomer";
-import GodownEntry from "../../commonality/GodownEntry";
-import Activity from "../../commonality/Activity";
-import SeeFile from "../../commonality/SeeFile";
-import * as tools from "../../../../utils/tools";
-import { area } from "@/api/lease/registerApi";
-import {
-  getSales,
-  getClient,
-  getRightList,
-  getWarehouseList,
-  getLimit,
-  getSave,
-  getStockOut,
-  getSubmitList,
-  getAccessories,
-  getDeleteList,
-  getup,
-  getAccessList
-} from "@/api/salesManagment/salesOrder";
-import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
-import { getNewClient } from "@/api/system/essentialData/clientManagement";
-import { getClientTreeList } from "@/api/system/essentialData/clientManagement";
-import Cookies from "js-cookie";
-import { TOKEN_KEY } from "@/libs/util";
-import barch from "../batch/selectPartCom";
-import baseUrl from "_conf/url";
-import { conversionList,conversionListNoNum } from "@/components/changeWbList/changewblist";
-import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
-export default {
-  name: "OrderRight",
-  inject: ["reload"],
-  components: {
-    ClientData,
-    goodsInfo,
-    selectPartCom,
-    SelectTheCustomer,
-    GodownEntry,
-    Activity,
-    SeeFile,
-    barch
-  },
-  data() {
-    let changeNumber = ({cellValue }) => {
-      const reg = /^[1-9]\d{0,}$/;
-      if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('数量输入不正确'))
-      }
-    };
+    import ClientData from "../../../system/essentialData/clientManagement/ClientData";
+    import goodsInfo from "../../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
+    import selectPartCom from "../components/selectPartCom";
+    import SelectTheCustomer from "../../commonality/SelectTheCustomer";
+    import GodownEntry from "../../commonality/GodownEntry";
+    import Activity from "../../commonality/Activity";
+    import SeeFile from "../../commonality/SeeFile";
+    import * as tools from "../../../../utils/tools";
+    import {area} from "@/api/lease/registerApi";
+    import {
+        getSales,
+        getClient,
+        getRightList,
+        getWarehouseList,
+        getLimit,
+        getSave,
+        getStockOut,
+        getSubmitList,
+        getAccessories,
+        getDeleteList,
+        getup,
+        getAccessList
+    } from "@/api/salesManagment/salesOrder";
+    import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
+    import {getNewClient} from "@/api/system/essentialData/clientManagement";
+    import {getClientTreeList} from "@/api/system/essentialData/clientManagement";
+    import Cookies from "js-cookie";
+    import {TOKEN_KEY} from "@/libs/util";
+    import barch from "../batch/selectPartCom";
+    import baseUrl from "_conf/url";
+    import {conversionList, conversionListNoNum} from "@/components/changeWbList/changewblist";
+    import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
 
-    let money = ({cellValue}) => {
-      const reg = /^\d+(\.\d{0,2})?$/i;
-      if (!reg.test(cellValue)) {
-          return Promise.reject(new Error('最多保留2位小数'))
-      }
-    };
-    let options2DisabledDate = date => {
-      const orderDate = this.formPlan.planSendDate;
-      if(orderDate){
-        return date && orderDate && date.valueOf() < orderDate;
-      }else{
-        return true
-      }
-    };
-    return {
-      options1: {
-        disabledDate(date) {
-          return date && date.valueOf() < Date.now() - 86400000;
-        }
-      },
-      options2: {
-        disabledDate: options2DisabledDate
-      },
-      formPlan: {
-        detailList: [],
-        storeId:'',
-        orderManId: '',
-        planSendDate:''
-        // orderTypeValue:'0'
-      }, //获取到数据
-      headers: {
-        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-      }, //请求头
-      upurl: getup, //导入地址
-      orderType: [
-        {
-          value: 0,
-          label: "销售开单"
+    export default {
+        name: "OrderRight",
+        inject: ["reload"],
+        components: {
+            ClientData,
+            goodsInfo,
+            selectPartCom,
+            SelectTheCustomer,
+            GodownEntry,
+            Activity,
+            SeeFile,
+            barch
         },
-        {
-          value: 1,
-          label: "电商订单"
-        }
-      ], //订单类型
-      clientList: {}, //新增客户资料
-      provinceArr: [], //获取数据字典地址
-      treeDiagramList: [], //新增客户树形图信息
-      clientDataShow: false, //新增客户模态框关闭
-      addressShow: false, //收货地址显示
-      leftOneOrder: {}, //获取到的左侧数据
-      draftShow: "", //判定是不是草稿
-      settleTypeList: {}, //结账类型
-      WarehouseList: [], //仓库
-      oneRow: {}, //点击详情的数据
-      limitList: {}, //额度信息
-      totalMoney: "", //总价
-      client: [], //客户列表
-      salesList: [], //销售员列表
-      ruleValidate: {
-        guestId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
-        ],
-        orderManId: [
-          { required: true, type: "string", message: "  ", trigger: "change" }
-        ],
-        billTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
-        ],
-        settleTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
-        ],
-        storeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
-        ],
-        // planSendDate: [
-        //   { required: true, type: "date", message: " ", trigger: "change" }
-        // ],
-      },
-      //form表单校验
-      validRules: {
-        orderQty: [{ required: true, validator: changeNumber }],
-        orderPrice: [{ required: true, validator: money }]
-      }, //表格校验
-      selectTableList: [], //table表格选中的数据
-      door: {
-        outStockDoor: true
-      },
-      ispart: true, //添加配件状态
-      rightTableHeight:0
-    };
-  },
-  mounted() {
-    // this.getAdress();
-    // this.getAllClient();
-
-    this.getType();/*获取客户属性*/
-    this.getWarehouse();/*获取仓库*/
-    this.getClassifyList();/*获取新增客户二级分类*/
-    this.getAllSales();/*获取销售员*/
-  },
-  computed: {
-    getOneOrder() {
-      return this.$store.state.dataList.oneOrder;
-    }
-  },
-  methods: {
-    //获取右侧数据
-    async getList() {
-      let data = {};
-      let stop = this.$loading();
-      data.id = this.leftOneOrder.id;
-      let res = await getRightList(data);
-      if (res.code === 0) {
-        stop();
-        this.draftShow = res.data.billStatusId;
-        res.data.orderTypeValue = res.data.orderType.value;
-        this.formPlan = res.data;
-        this.formPlan.fullName = this.formPlan.guestName;
-        this.draftShow = this.draftShow.value;
-      }
-      if (res.code !== 0) {
-        stop();
-      }
-    },
-    //获取销售员
-    selectOrderMan(val) {
-      this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
-      this.formPlan.orderManId = val ? (val.value ? val.value : "") : "";
-    },
-    //获取客户额度
-    async getAllLimit() {
-      let data = {};
-      data.guestId = this.leftOneOrder.guestId;
-      data.id = this.leftOneOrder?this.leftOneOrder.id:''
-      let res = await getLimit(data);
-      if (res.code === 0) {
-        // console.log(res.data)
-        this.limitList = res.data;
-      }
-    },
-    //改变客户
-    async changeClient(value) {
-      if (!value) {
-        return false;
-      }
-      // console.log(this.client)
-      let oneClient = [];
-      oneClient = this.client.filter(item => {
-        return item.id === value;
-      });
-      for (let i in oneClient) {
-        this.formPlan.billTypeId = oneClient[i].billTypeId;
-        this.formPlan.settleTypeId = oneClient[i].settTypeId;
-      }
-      this.leftOneOrder.guestId = value
-      const res = await this.getAllLimit()
-    },
-
-    //获取客户属性
-    async getType() {
-      let data = {};
-      //107票据类型
-      //106结算方式
-      data = ["CS00106", "CS00107"];
-      let res = await getDigitalDictionary(data);
-      if (res.code == 0) {
-        this.settleTypeList = res.data;
-      }
-    },
-    //获取公司
-    async getAllClient() {
-      if(this.client.length <= 0) {
-        let res = await getClient();
-        if (res.code === 0) {
-          this.client = res.data;
-        }
-      }
-    },
-    //获取销售员
-    async getAllSales() {
-      let res = await getSales();
-      if (res.code === 0) {
-        this.salesList = res.data.content;
-        this.salesList.map(item => {
-          item.label = item.userName;
-        });
-      }
-    },
-    //是否禁用
-    checkMethod(){
-      return this.draftShow == 0
-    },
-    // 获取仓库
-    async getWarehouse() {
-      let res = await getWarehouseList({
-        groupId: this.$store.state.user.userData.groupId
-      });
-      if (res.code === 0) {
-        this.WarehouseList = res.data;
-      }
-    },
-    //打开新增客户
-    openAddNewClient() {
-      this.clientList = {};
-      this.getAdress();
-      this.getClassifyList();
-      this.clientDataShow = true;
-    },
-    //获取新增客户二级分类
-    getClassifyList() {
-      getClientTreeList().then(res => {
-        if (res.code == 0) {
-          this.treeDiagramList = res.data;
-          let leverOne = res.data.filter(item => item.lever == 1);
-          leverOne.map(item => {
-            item.children = [];
-            item.code = item.id;
-            this.treeDiagramList.forEach(el => {
-              if (item.id == el.parentId) {
-                item.children.push(el);
-              }
-            });
-          });
-        }
-      });
-    },
-
-    //新增客户确认
-    addNewClient() {
-      this.$refs.child.handleSubmit(async () => {
-        let data = {};
-        data = this.clientList;
-        data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
-        data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
-        data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
-        let res = await getNewClient(this.clientList);
-        if (res.code == 0) {
-          this.clientDataShow = false;
-        }
-      });
-    },
-    //获取数据字典地址
-    getAdress() {
-      area().then(res => {
-        if (res.code == 0) {
-          this.provinceArr = res.data;
-        }
-      });
-    },
-    //计算表格数据
-    countAmount(row) {
-      return (
-        this.$utils.toNumber(row.orderQty) *
-        this.$utils.toNumber(row.orderPrice)
-      );
-    },
-    // 计算尾部总和
-    countAllAmount(data) {
-      let count = 0;
-      data.forEach(row => {
-        count += this.countAmount(row);
-      });
-      count = count.toFixed(2);
-      this.totalMoney = count;
-      return count;
-    },
-    //获取尾部总数
-    footerMethod({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return "合计";
-          }
-          if (["orderPrice"].includes(column.property)) {
-            return this.$utils.sum(data, column.property).toFixed(2);
-          }
-          if (columnIndex === 7) {
-            return ` ${this.countAllPrice(data)} `;
-          }
-          if (columnIndex === 8) {
-            return ` ${this.countAllAmount(data)} `;
-          }
-          return null;
-        })
-      ];
-    },
-    //下载模板
-    down() {
-      // location.href =
-      //   baseUrl.omsOrder +
-      //   "/sellOrderMain/template?access_token=" +
-      //   Cookies.get(TOKEN_KEY);
-      down('2200000000');
-    },
-    //批量上传失败
-    onFormatError(file) {
-      this.$Message.error("只支持xls xlsx后缀的文件");
-    },
-    // 上传成功函数
-    onSuccess(response) {
-      if (response.code == 0) {
-        let txt = "上传成功";
-        if (response.data.length > 0) {
-          txt = response.data.join(",");
-        }
-        this.$Notice.warning({
-          title: "导入成功",
-          desc: txt,
-          duration: 0
-        });
-        this.getList()
-      } else {
-        this.$Message.error(response.message);
-      }
-    },
-    warning(nodesc) {
-      this.$Notice.warning({
-        title: "上传错误信息",
-        desc: nodesc
-      });
-    },
-    //上传之前清空
-    beforeUpload() {
-      this.$refs.upload.clearFiles();
-    },
-    //打开收货地址
-    openAddressShow() {
-      if(!this.formPlan.id) {
-        return this.$message.error("请先保存销售单")
-      }
-      this.$refs.goodsInfo.init();
-    },
-    //确认收货地址
-    changeShippingAddress() {},
-    //打开添加配件模态框
-    addMountings() {
-      this.$refs.selectPartCom.init();
-    },
-    //打开批次配件框
-    openBarchModal() {
-      this.$refs.barch.init();
-    },
-    //多选内容
-    selectTable(data) {
-      this.selectTableList = data.selection;
-    },
-    //全选内容
-    selectAllTable(data) {
-      this.selectTableList = data.selection;
-    },
-    //删除配件
-    deletePart() {
-      if (this.selectTableList.length > 0) {
-        let data = [];
-        this.selectTableList.forEach(item => {
-          data.push({ id: item.id });
-        });
-        const arr = this.formPlan.detailList.filter(
-          item => !this.selectTableList.includes(item)
-        );
-        this.formPlan.detailList = arr;
-        if (!data[0].id) return;
-        getDeleteList(data).then(res => {
-          if (res.code === 0) {
-            this.$message.success(res.data);
-            this.$parent.$parent.$refs.OrderLeft.tableData.map(
-              (item, index) => {
-                if (item.id === this.formPlan.id) {
-                  this.$set(
-                    this.$parent.$parent.$refs.OrderLeft.tableData[index],
-                    "detailList",
-                    arr
-                  );
+        data() {
+            let changeNumber = ({cellValue}) => {
+                const reg = /^[1-9]\d{0,}$/;
+                if (!reg.test(cellValue)) {
+                    return Promise.reject(new Error('数量输入不正确'))
                 }
-              }
-            );
-          }
-        });
-      } else {
-        this.$message.error("请选择一条有效数据");
-      }
-    },
-    //计划发货日期
-    getplanSendDate(data) {
-      const orderDate = this.formPlan.planSendDate;
-      console.log(this.formPlan , 111)
-      console.log(data , 222)
-      this.options2 = {
-        disabledDate(date) {
-          return date && orderDate && date.valueOf() < new Date(orderDate);
-        }
-      };
-      this.formPlan.planArriveDate = "";
-    },
-    //计划到货日期
-    getplanArriveDate(data) {
-      this.formPlan.planArriveDate = data;
-    },
-    //配件返回的参数
-    getPartNameList(val) {
-      let vals = conversionList(val);
-      console.log(vals)
-      this.formPlan.detailList = [
-        ...this.formPlan.detailList,
-        ...conversionList(val)
-      ];
-      this.formPlan.detailList.forEach(el => {
-        if(!el.orderQty) {
-          el.orderQty = undefined;
-        }
-        if(!(el.orderPrice * 1)) {
-          el.orderPrice = undefined;
-        }
-      });
-      this.$Message.success("已添加");
-    },
+            };
 
-    //配件返回的参数
-    getPartNameList2(val) {
-      this.formPlan.detailList = [
-        ...this.formPlan.detailList,
-        ...conversionListNoNum(val)
-      ];
-      this.formPlan.detailList.forEach(el => {
-        if(!el.orderQty) {
-          el.orderQty = undefined;
-        }
-        if(!(el.orderPrice * 1)) {
-          el.orderPrice = undefined;
-        }
-      });
-      this.$Message.success("已添加");
-    },
+            let money = ({cellValue}) => {
+                const reg = /^\d+(\.\d{0,2})?$/i;
+                if (!reg.test(cellValue)) {
+                    return Promise.reject(new Error('最多保留2位小数'))
+                }
+            };
+            let options2DisabledDate = date => {
+                const orderDate = this.formPlan.planSendDate;
+                if (orderDate) {
+                    return date && orderDate && date.valueOf() < orderDate;
+                } else {
+                    return true
+                }
+            };
+            return {
+                options1: {
+                    disabledDate(date) {
+                        return date && date.valueOf() < Date.now() - 86400000;
+                    }
+                },
+                options2: {
+                    disabledDate: options2DisabledDate
+                },
+                formPlan: {
+                    detailList: [],
+                    storeId: '',
+                    orderManId: '',
+                    planSendDate: ''
+                    // orderTypeValue:'0'
+                }, //获取到数据
+                headers: {
+                    Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+                }, //请求头
+                upurl: getup, //导入地址
+                orderType: [
+                    {
+                        value: 0,
+                        label: "销售开单"
+                    },
+                    {
+                        value: 1,
+                        label: "电商订单"
+                    }
+                ], //订单类型
+                clientList: {}, //新增客户资料
+                provinceArr: [], //获取数据字典地址
+                treeDiagramList: [], //新增客户树形图信息
+                clientDataShow: false, //新增客户模态框关闭
+                addressShow: false, //收货地址显示
+                leftOneOrder: {}, //获取到的左侧数据
+                draftShow: "", //判定是不是草稿
+                settleTypeList: {}, //结账类型
+                WarehouseList: [], //仓库
+                oneRow: {}, //点击详情的数据
+                limitList: {}, //额度信息
+                totalMoney: "", //总价
+                client: [], //客户列表
+                salesList: [], //销售员列表
+                ruleValidate: {
+                    guestId: [
+                        {required: true, type: "string", message: " ", trigger: "change"}
+                    ],
+                    orderManId: [
+                        {required: true, type: "string", message: "  ", trigger: "change"}
+                    ],
+                    billTypeId: [
+                        {required: true, type: "string", message: " ", trigger: "change"}
+                    ],
+                    settleTypeId: [
+                        {required: true, type: "string", message: " ", trigger: "change"}
+                    ],
+                    storeId: [
+                        {required: true, type: "string", message: " ", trigger: "change"}
+                    ],
+                    // planSendDate: [
+                    //   { required: true, type: "date", message: " ", trigger: "change" }
+                    // ],
+                },
+                //form表单校验
+                validRules: {
+                    orderQty: [{required: true, validator: changeNumber}],
+                    orderPrice: [{required: true, validator: money}]
+                }, //表格校验
+                selectTableList: [], //table表格选中的数据
+                door: {
+                    outStockDoor: true
+                },
+                ispart: true, //添加配件状态
+                rightTableHeight: 0
+            };
+        },
+        mounted() {
+            // this.getAdress();
+            // this.getAllClient();
 
-    // 批次配件
-    async getBarchList(val) {
-      val.map(item => {
-        if(!item.orderQty) {
-          item.orderQty = undefined;
-        }
-        if(!(item.orderPrice * 1)) {
-          item.orderPrice = undefined;
-        }
-        item.isMarkBatch = 1;
-        item.batchSourceId = item.id||item.batchSourceId;
-        item.adjustQty = item.outableQty;
-        Reflect.deleteProperty(item, 'id');
-      });
-      this.formPlan.detailList = [
-          ...this.formPlan.detailList,
-          ...val
-      ]
-    },
-    //打开客户选择
-    openAddCustomer() {
-      this.$refs.AddCustomerModel.openModel();
-    },
-    //打开选择入库单
-    openGodownEntryModal() {
-        if(!this.formPlan.storeId){
-            this.$message.error("请选择交货仓库");
-        }else{
-            this.$refs.GodownEntryModal.reset();
-            this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
-        }
-    },
-    //打开活动
-    openActivityModal() {
-      if(!this.$parent.$parent.$refs.OrderLeft.selectItemId) {
-        return this.$message.error("请先保存单据!");
-      }
-      this.$refs.activity.openModal();
-    },
-    //获取活动内的数据
-    async activiyList(arr) {
-      let data = {};
-      arr = arr.map(el => {
-        el.isMarkActivity = 1;
-        el.orderPrice = el.price;
-        return el;
-      });
-      for(let key in this.formPlan) {
-        if(this.formPlan[key]) {
-          data[key] = this.formPlan[key]
-        }
-      }
-      data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
-      data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
-      data.detailList = arr;
-      let res = await getAccessories(data);
-      if (res.code === 0) {
-        // this.getList();
-        this.reload();
-        // this.$parent.$parent.$refs.OrderLeft.gitlistValue()
-      }
-    },
-    //打开查看模态框
-    openFileModal(row) {
-      this.oneRow = row;
-      this.$nextTick(function() {
-        this.$refs.fileList.openModal(this.leftOneOrder.guestId);
-      });
-    },
-    //保存
-    save() {
-      // if(!this.formPlan.planSendDate) {
-      //   return this.$Message.error("*为必填项");
-      // }
-      this.$refs.formPlan.validate(async valid => {
-        let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
-        if(zero) return;
-        if (valid) {
-          try {
-            await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
-              return this.$message.error("可用余额不足");
+            this.getType();/*获取客户属性*/
+            this.getWarehouse();/*获取仓库*/
+            this.getClassifyList();/*获取新增客户二级分类*/
+            this.getAllSales();/*获取销售员*/
+        },
+        computed: {
+            getOneOrder() {
+                return this.$store.state.dataList.oneOrder;
             }
-            let data = JSON.parse(JSON.stringify(this.formPlan));
-            data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
-            data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
-            let res = await getSave(data);
-            if (res.code === 0) {
-              this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd = false;
-              this.$store.commit("setleftList", res);
-              this.$refs.formPlan.resetFields();
-              this.limitList = {};
-              this.reload();
-            }
-          } catch (errMap) {
-            this.$XModal.message({
-              status: "error",
-              message: "表格校验不通过！"
-            });
-          }
-        } else {
-          this.$Message.error("*为必填项");
-        }
-      });
-    },
-    //获取搜索框内的数据
-    setOneClient(val) {
-      this.$set(this.formPlan, "guestId", val.id);
-      this.$set(this.formPlan, "fullName", val.fullName);
-      this.$set(this.formPlan, "billTypeId", val.billTypeId);
-      this.$set(this.formPlan, "settleTypeId", val.settTypeId);
-      this.leftOneOrder.guestId = val.id
-      this.getAllLimit()
-    },
-    //判断表格能不能编辑
-    editActivedEvent({ row }) {
-      let xTable = this.$refs.xTable;
-      let orderQtyColumn = xTable.getColumnByField("orderQty");
-      let orderPriceColumn = xTable.getColumnByField("orderPrice");
-      let remarkColumn = xTable.getColumnByField("remark");
-      let isDisabled = this.draftShow != 0;
-      orderQtyColumn.editRender.attrs.disabled = isDisabled;
-      orderPriceColumn.editRender.attrs.disabled = isDisabled;
-        if(row.isMarkActivity==1){
-            orderQtyColumn.editRender.attrs.disabled=false;
-            orderPriceColumn.editRender.attrs.disabled=true;
-        }
-      remarkColumn.editRender.attrs.disabled = isDisabled;
-    },
-    //出库
-    stockOut() {
-      let str = '是否确定出库';
-        if(this.formPlan.orderAmt*1==0){
-            str='存在配件单价为0，是否确定出库';
-        }
-      //this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
-      this.$Modal.confirm({
-            title: str,
-            onOk:  () => {
-                if (this.door.outStockDoor) {
-                    let data = JSON.parse(JSON.stringify(this.formPlan));
-                    this.door.outStockDoor = false;
-                    this.$refs.formPlan.validate(async valid => {
-                        if (valid) {
-                            try {
-                                await this.$refs.xTable.validate();
-                                if (+this.totalMoney > +this.limitList.sumAmt) {
-                                    return this.$message.error("可用余额不足");
-                                }
-                              data.planSendDate = tools.transTime(data.planSendDate)
-                              data.planArriveDate = tools.transTime(data.planArriveDate)
-                                let res = await getStockOut(data);
-                                if (res.code === 0) {
-                                    this.$Message.success("出库成功");
-                                    this.$store.commit("setleftList", res);
-                                    this.door.outStockDoor = true;
-                                    return res;
-                                } else {
-                                    this.door.outStockDoor = true;
-                                }
-                            } catch (errMap) {
-                                this.$XModal.message({
-                                    status: "error",
-                                    message: "表格校验不通过！"
-                                });
-                            }
-                        } else {
-                            this.$Message.error("*为必填项");
-                        }
+        },
+        methods: {
+            //获取右侧数据
+            async getList() {
+                let data = {};
+                let stop = this.$loading();
+                data.id = this.leftOneOrder.id;
+                let res = await getRightList(data);
+                if (res.code === 0) {
+                    stop();
+                    this.draftShow = res.data.billStatusId;
+                    res.data.orderTypeValue = res.data.orderType.value;
+                    this.formPlan = res.data;
+                    this.formPlan.fullName = this.formPlan.guestName;
+                    this.draftShow = this.draftShow.value;
+                }
+                if (res.code !== 0) {
+                    stop();
+                }
+            },
+            //获取销售员
+            selectOrderMan(val) {
+                this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
+                this.formPlan.orderManId = val ? (val.value ? val.value : "") : "";
+            },
+            //获取客户额度
+            async getAllLimit() {
+                let data = {};
+                data.guestId = this.leftOneOrder.guestId;
+                data.id = this.leftOneOrder ? this.leftOneOrder.id : ''
+                let res = await getLimit(data);
+                if (res.code === 0) {
+                    // console.log(res.data)
+                    this.limitList = res.data;
+                }
+            },
+            //改变客户
+            async changeClient(value) {
+                if (!value) {
+                    return false;
+                }
+                // console.log(this.client)
+                let oneClient = [];
+                oneClient = this.client.filter(item => {
+                    return item.id === value;
+                });
+                for (let i in oneClient) {
+                    this.formPlan.billTypeId = oneClient[i].billTypeId;
+                    this.formPlan.settleTypeId = oneClient[i].settTypeId;
+                }
+                this.leftOneOrder.guestId = value
+                const res = await this.getAllLimit()
+            },
+
+            //获取客户属性
+            async getType() {
+                let data = {};
+                //107票据类型
+                //106结算方式
+                data = ["CS00106", "CS00107"];
+                let res = await getDigitalDictionary(data);
+                if (res.code == 0) {
+                    this.settleTypeList = res.data;
+                }
+            },
+            //获取公司
+            async getAllClient() {
+                if (this.client.length <= 0) {
+                    let res = await getClient();
+                    if (res.code === 0) {
+                        this.client = res.data;
+                    }
+                }
+            },
+            //获取销售员
+            async getAllSales() {
+                let res = await getSales();
+                if (res.code === 0) {
+                    this.salesList = res.data.content;
+                    this.salesList.map(item => {
+                        item.label = item.userName;
                     });
                 }
             },
-            onCancel: () => {
-                this.$Message.info('已取消出库');
+            //是否禁用
+            checkMethod() {
+                return this.draftShow == 0
             },
-        })
-    },
-    //提交
-    submitList() {
-      // if(!this.formPlan.planSendDate) {
-      //   return this.$Message.error("*为必填项");
-      // }
-      this.$refs.formPlan.validate(async valid => {
-        let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
-        if(zero) return;
-        if (valid) {
-          try {
-            await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
-              return this.$message.error("可用余额不足");
-            }
-            let data = JSON.parse(JSON.stringify(this.formPlan));
-            data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
-            data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
-            let orderList = [];
-            orderList = data.detailList.filter(
-              item => item.orderPrice*1 < item.averagePrice*1
-            );
-            if (orderList.length > 0) {
-              let text = "";
-              orderList.forEach(item => {
-                text += `<p>${item.partName}的销售价格低于进货价</p>`;
-              });
-              let timer = null;
-              clearTimeout(timer);
-              timer = setTimeout(() => {
-                this.$Modal.confirm({
-                  title: "提示",
-                  content: text,
-                  onOk: async () => {
-                    let res = await getSubmitList(data);
-                    if (res.code === 0) {
-                      this.$Message.success("提交成功");
-                        this.$parent.$parent.isAdd = false;
-                        this.$parent.$parent.orderlistType.value = 1;
-                        this.limitList = {};
-                        this.$store.commit("setleftList", res);
-                        this.$refs.formPlan.resetFields();
-                    }
-                  },
-                  onCancel: () => {}
+            // 获取仓库
+            async getWarehouse() {
+                let res = await getWarehouseList({
+                    groupId: this.$store.state.user.userData.groupId
                 });
-              }, 500);
-            } else {
-              let res = await getSubmitList(data);
-              if (res.code === 0) {
-                this.$Message.success("提交成功");
-                  this.$parent.$parent.isAdd = false;
-                this.limitList = {};
-                this.$store.commit("setleftList", res);
-                  this.$refs.formPlan.resetFields();
-                  this.reload();
+                if (res.code === 0) {
+                    this.WarehouseList = res.data;
+                }
+            },
+            //打开新增客户
+            openAddNewClient() {
+                this.clientList = {};
+                this.getAdress();
+                this.getClassifyList();
+                this.clientDataShow = true;
+            },
+            //获取新增客户二级分类
+            getClassifyList() {
+                getClientTreeList().then(res => {
+                    if (res.code == 0) {
+                        this.treeDiagramList = res.data;
+                        let leverOne = res.data.filter(item => item.lever == 1);
+                        leverOne.map(item => {
+                            item.children = [];
+                            item.code = item.id;
+                            this.treeDiagramList.forEach(el => {
+                                if (item.id == el.parentId) {
+                                    item.children.push(el);
+                                }
+                            });
+                        });
+                    }
+                });
+            },
+
+            //新增客户确认
+            addNewClient() {
+                this.$refs.child.handleSubmit(async () => {
+                    let data = {};
+                    data = this.clientList;
+                    data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
+                    data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
+                    data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
+                    let res = await getNewClient(this.clientList);
+                    if (res.code == 0) {
+                        this.clientDataShow = false;
+                    }
+                });
+            },
+            //获取数据字典地址
+            getAdress() {
+                area().then(res => {
+                    if (res.code == 0) {
+                        this.provinceArr = res.data;
+                    }
+                });
+            },
+            //计算表格数据
+            countAmount(row) {
+                return (
+                    this.$utils.toNumber(row.orderQty) *
+                    this.$utils.toNumber(row.orderPrice)
+                );
+            },
+            // 计算尾部总和
+            countAllAmount(data) {
+                let count = 0;
+                data.forEach(row => {
+                    count += this.countAmount(row);
+                });
+                count = count.toFixed(2);
+                this.totalMoney = count;
+                return count;
+            },
+            //获取尾部总数
+            footerMethod({columns, data}) {
+                return [
+                    columns.map((column, columnIndex) => {
+                        if (columnIndex === 0) {
+                            return "合计";
+                        }
+                        if (["orderPrice"].includes(column.property)) {
+                            return this.$utils.sum(data, column.property).toFixed(2);
+                        }
+                        if (columnIndex === 7) {
+                            return ` ${this.countAllPrice(data)} `;
+                        }
+                        if (columnIndex === 8) {
+                            return ` ${this.countAllAmount(data)} `;
+                        }
+                        return null;
+                    })
+                ];
+            },
+            //下载模板
+            down() {
+                // location.href =
+                //   baseUrl.omsOrder +
+                //   "/sellOrderMain/template?access_token=" +
+                //   Cookies.get(TOKEN_KEY);
+                down('2200000000');
+            },
+            //批量上传失败
+            onFormatError(file) {
+                this.$Message.error("只支持xls xlsx后缀的文件");
+            },
+            // 上传成功函数
+            onSuccess(response) {
+                if (response.code == 0) {
+                    let txt = "上传成功";
+                    if (response.data.length > 0) {
+                        txt = response.data.join(",");
+                    }
+                    this.$Notice.warning({
+                        title: "导入成功",
+                        desc: txt,
+                        duration: 0
+                    });
+                    this.getList()
+                } else {
+                    this.$Message.error(response.message);
+                }
+            },
+            warning(nodesc) {
+                this.$Notice.warning({
+                    title: "上传错误信息",
+                    desc: nodesc
+                });
+            },
+            //上传之前清空
+            beforeUpload() {
+                this.$refs.upload.clearFiles();
+            },
+            //打开收货地址
+            openAddressShow() {
+                if (!this.formPlan.id) {
+                    return this.$message.error("请先保存销售单")
+                }
+                this.$refs.goodsInfo.init();
+            },
+            //确认收货地址
+            changeShippingAddress() {
+            },
+            //打开添加配件模态框
+            addMountings() {
+              if(!this.formPlan.guestId) {
+                return this.$message.error("请先选择客户!")
               }
+              this.$refs.selectPartCom.init();
+            },
+            //打开批次配件框
+            openBarchModal() {
+                this.$refs.barch.init();
+            },
+            //多选内容
+            selectTable(data) {
+                this.selectTableList = data.selection;
+            },
+            //全选内容
+            selectAllTable(data) {
+                this.selectTableList = data.selection;
+            },
+            //删除配件
+            deletePart() {
+                if (this.selectTableList.length > 0) {
+                    let data = [];
+                    this.selectTableList.forEach(item => {
+                        data.push({id: item.id});
+                    });
+                    const arr = this.formPlan.detailList.filter(
+                        item => !this.selectTableList.includes(item)
+                    );
+                    this.formPlan.detailList = arr;
+                    if (!data[0].id) return;
+                    getDeleteList(data).then(res => {
+                        if (res.code === 0) {
+                            this.$message.success(res.data);
+                            this.$parent.$parent.$refs.OrderLeft.tableData.map(
+                                (item, index) => {
+                                    if (item.id === this.formPlan.id) {
+                                        this.$set(
+                                            this.$parent.$parent.$refs.OrderLeft.tableData[index],
+                                            "detailList",
+                                            arr
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    });
+                } else {
+                    this.$message.error("请选择一条有效数据");
+                }
+            },
+            //计划发货日期
+            getplanSendDate(data) {
+                const orderDate = this.formPlan.planSendDate;
+                console.log(this.formPlan, 111)
+                console.log(data, 222)
+                this.options2 = {
+                    disabledDate(date) {
+                        return date && orderDate && date.valueOf() < new Date(orderDate);
+                    }
+                };
+                this.formPlan.planArriveDate = "";
+            },
+            //计划到货日期
+            getplanArriveDate(data) {
+                this.formPlan.planArriveDate = data;
+            },
+            //配件返回的参数
+            getPartNameList(val) {
+                let vals = conversionList(val);
+                this.formPlan.detailList = [
+                    ...this.formPlan.detailList,
+                    ...conversionList(val)
+                ];
+                this.formPlan.detailList.forEach(el => {
+                    if (!el.orderQty) {
+                        el.orderQty = undefined;
+                    }
+                    if (!(el.orderPrice * 1)) {
+                        el.orderPrice = undefined;
+                    }
+                });
+                this.$Message.success("已添加");
+            },
+
+            //配件返回的参数
+            getPartNameList2(val) {
+                this.formPlan.detailList = [
+                    ...this.formPlan.detailList,
+                    ...conversionListNoNum(val)
+                ];
+                this.formPlan.detailList.forEach(el => {
+                    if (!el.orderQty) {
+                        el.orderQty = undefined;
+                    }
+                    if (!(el.orderPrice * 1)) {
+                        el.orderPrice = undefined;
+                    }
+                });
+                this.$Message.success("已添加");
+            },
+
+            // 批次配件
+            async getBarchList(val) {
+                val.map(item => {
+                    if (!item.orderQty) {
+                        item.orderQty = undefined;
+                    }
+                    if (!(item.orderPrice * 1)) {
+                        item.orderPrice = undefined;
+                    }
+                    item.isMarkBatch = 1;
+                    item.batchSourceId = item.id || item.batchSourceId;
+                    item.adjustQty = item.outableQty;
+                    Reflect.deleteProperty(item, 'id');
+                });
+                this.formPlan.detailList = [
+                    ...this.formPlan.detailList,
+                    ...val
+                ]
+            },
+            //打开客户选择
+            openAddCustomer() {
+                this.$refs.AddCustomerModel.openModel();
+            },
+            //打开选择入库单
+            openGodownEntryModal() {
+                if (!this.formPlan.storeId) {
+                    this.$message.error("请选择交货仓库");
+                } else {
+                    this.$refs.GodownEntryModal.reset();
+                    this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
+                }
+            },
+            //打开活动
+            openActivityModal() {
+                if (!this.$parent.$parent.$refs.OrderLeft.selectItemId) {
+                    return this.$message.error("请先保存单据!");
+                }
+                this.$refs.activity.openModal();
+            },
+            //获取活动内的数据
+            async activiyList(arr) {
+                let data = {};
+                arr = arr.map(el => {
+                    el.isMarkActivity = 1;
+                    el.orderPrice = el.price;
+                    return el;
+                });
+                for (let key in this.formPlan) {
+                    if (this.formPlan[key]) {
+                        data[key] = this.formPlan[key]
+                    }
+                }
+                data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
+                data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+                data.detailList = arr;
+                let res = await getAccessories(data);
+                if (res.code === 0) {
+                    // this.getList();
+                    this.reload();
+                    // this.$parent.$parent.$refs.OrderLeft.gitlistValue()
+                }
+            },
+            //打开查看模态框
+            openFileModal(row) {
+                this.oneRow = row;
+                this.$nextTick(function () {
+                    this.$refs.fileList.openModal(this.leftOneOrder.guestId);
+                });
+            },
+            //保存
+            save() {
+                // if(!this.formPlan.planSendDate) {
+                //   return this.$Message.error("*为必填项");
+                // }
+                this.$refs.formPlan.validate(async valid => {
+                    let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+                    if (zero) return;
+                    if (valid) {
+                        try {
+                            await this.$refs.xTable.validate();
+                            // if (+this.totalMoney > +this.limitList.sumAmt) {
+                            //     return this.$message.error("可用余额不足");
+                            // }
+                            let data = JSON.parse(JSON.stringify(this.formPlan));
+                            data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
+                            data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+                            let res = await getSave(data);
+                            if (res.code === 0) {
+                                this.$Message.success("保存成功");
+                                this.$parent.$parent.isAdd = false;
+                                this.$store.commit("setleftList", res);
+                                this.$refs.formPlan.resetFields();
+                                this.limitList = {};
+                                this.reload();
+                            }
+                        } catch (errMap) {
+                            this.$XModal.message({
+                                status: "error",
+                                message: "表格校验不通过！"
+                            });
+                        }
+                    } else {
+                        this.$Message.error("*为必填项");
+                    }
+                });
+            },
+            //获取搜索框内的数据
+            setOneClient(val) {
+                this.$set(this.formPlan, "guestId", val.id);
+                this.$set(this.formPlan, "fullName", val.fullName);
+                this.$set(this.formPlan, "billTypeId", val.billTypeId);
+                this.$set(this.formPlan, "settleTypeId", val.settTypeId);
+                this.leftOneOrder.guestId = val.id
+                this.getAllLimit()
+            },
+            //判断表格能不能编辑
+            editActivedEvent({row}) {
+                let xTable = this.$refs.xTable;
+                let orderQtyColumn = xTable.getColumnByField("orderQty");
+                let orderPriceColumn = xTable.getColumnByField("orderPrice");
+                let remarkColumn = xTable.getColumnByField("remark");
+                let isDisabled = this.draftShow != 0;
+                orderQtyColumn.editRender.attrs.disabled = isDisabled;
+                orderPriceColumn.editRender.attrs.disabled = isDisabled;
+                if (row.isMarkActivity == 1) {
+                    orderQtyColumn.editRender.attrs.disabled = false;
+                    orderPriceColumn.editRender.attrs.disabled = true;
+                }
+                remarkColumn.editRender.attrs.disabled = isDisabled;
+            },
+            //出库
+            stockOut() {
+                let str = '是否确定出库';
+                if (this.formPlan.orderAmt * 1 == 0) {
+                    str = '存在配件单价为0，是否确定出库';
+                }
+                //this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+                this.$Modal.confirm({
+                    title: str,
+                    onOk: () => {
+                        if (this.door.outStockDoor) {
+                            let data = JSON.parse(JSON.stringify(this.formPlan));
+                            this.door.outStockDoor = false;
+                            this.$refs.formPlan.validate(async valid => {
+                                if (valid) {
+                                    try {
+                                        await this.$refs.xTable.validate();
+                                        if (+this.totalMoney > +this.limitList.sumAmt) {
+                                            return this.$message.error("可用余额不足");
+                                        }
+                                        data.planSendDate = tools.transTime(data.planSendDate)
+                                        data.planArriveDate = tools.transTime(data.planArriveDate)
+                                        let res = await getStockOut(data);
+                                        if (res.code === 0) {
+                                            this.$Message.success("出库成功");
+                                            this.$store.commit("setleftList", res);
+                                            this.door.outStockDoor = true;
+                                            return res;
+                                        } else {
+                                            this.door.outStockDoor = true;
+                                        }
+                                    } catch (errMap) {
+                                        this.$XModal.message({
+                                            status: "error",
+                                            message: "表格校验不通过！"
+                                        });
+                                    }
+                                } else {
+                                    this.$Message.error("*为必填项");
+                                }
+                            });
+                        }
+                    },
+                    onCancel: () => {
+                        this.$Message.info('已取消出库');
+                    },
+                })
+            },
+            //提交
+            submitList() {
+                // if(!this.formPlan.planSendDate) {
+                //   return this.$Message.error("*为必填项");
+                // }
+                this.$refs.formPlan.validate(async valid => {
+                    let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+                    if (zero) return;
+                    if (valid) {
+                        try {
+                            await this.$refs.xTable.validate();
+                            if (+this.totalMoney > +this.limitList.sumAmt) {
+                                return this.$message.error("可用余额不足");
+                            }
+                            let data = JSON.parse(JSON.stringify(this.formPlan));
+                            data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
+                            data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+                            let orderList = [];
+                            orderList = data.detailList.filter(
+                                item => item.orderPrice * 1 < item.averagePrice * 1
+                            );
+                            if (orderList.length > 0) {
+                                let text = "";
+                                orderList.forEach(item => {
+                                    text += `<p>${item.partName}的销售价格低于进货价</p>`;
+                                });
+                                let timer = null;
+                                clearTimeout(timer);
+                                timer = setTimeout(() => {
+                                    this.$Modal.confirm({
+                                        title: "提示",
+                                        content: text,
+                                        onOk: async () => {
+                                            let res = await getSubmitList(data);
+                                            if (res.code === 0) {
+                                                this.$Message.success("提交成功");
+                                                this.$parent.$parent.isAdd = false;
+                                                this.$parent.$parent.orderlistType.value = 1;
+                                                this.limitList = {};
+                                                this.$store.commit("setleftList", res);
+                                                this.$refs.formPlan.resetFields();
+                                            }
+                                        },
+                                        onCancel: () => {
+                                        }
+                                    });
+                                }, 500);
+                            } else {
+                                let res = await getSubmitList(data);
+                                if (res.code === 0) {
+                                    this.$Message.success("提交成功");
+                                    this.$parent.$parent.isAdd = false;
+                                    this.limitList = {};
+                                    this.$store.commit("setleftList", res);
+                                    this.$refs.formPlan.resetFields();
+                                    this.reload();
+                                }
+                            }
+                        } catch (errMap) {
+                            // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+                        }
+                    } else {
+                        this.$Message.error("*为必填项");
+                    }
+                });
+            },
+            //获取选择入库单的信息
+            async getGodown(val) {
+                let data = JSON.parse(JSON.stringify(this.formPlan));
+                if (data.planSendDate) {
+                    data.planSendDate = tools.transTime(data.planSendDate)
+                }
+                if (data.planArriveDate) {
+                    data.planArriveDate = tools.transTime(data.planArriveDate)
+                }
+                val.details.map(item => {
+                    item.isMarkBatch = 1;
+                    item.adjustQty = item.outableQty;
+                });
+                data.detailList = val.details;
+                data.sign = 1;
+                let res = await getAccessories(data);
+                if (res.code === 0) {
+                    // this.getList();
+                    this.reload();
+                    // this.$parent.$parent.parentGetleft();
+                }
+            },
+            getRUl(val) {
+                this.upurl = getup + "id=" + this.formPlan.id;
             }
-          } catch (errMap) {
-            // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
-          }
-        } else {
-          this.$Message.error("*为必填项");
+        },
+        watch: {
+            getOneOrder: {
+                handler(old, ov) {
+                    this.$parent.$parent.ispart = false;
+                    if (!old.id) {
+                        this.formPlan = Object.assign({}, {
+                                billStatusId: {name: "草稿", value: 0},
+                                detailList: [],
+                                storeId: this.formPlan.storeId,
+                                orderTypeValue: 0,
+                                orderManId: this.$store.state.user.userData.id,
+                                orderMan: this.$store.state.user.userData.staffName,
+                                guestId: this.formPlan.guestId
+                            }
+                        );
+                        this.draftShow = 0;
+                        this.leftOneOrder = this.formPlan
+                        return false;
+                    }
+                    this.leftOneOrder = old;
+                    this.getList();
+                    this.getAllLimit();
+                },
+                // deep: true
+            }
         }
-      });
-    },
-    //获取选择入库单的信息
-    async getGodown(val) {
-      let data = JSON.parse(JSON.stringify(this.formPlan));
-      if (data.planSendDate) {
-        data.planSendDate = tools.transTime(data.planSendDate)
-      }
-      if (data.planArriveDate) {
-        data.planArriveDate = tools.transTime(data.planArriveDate)
-      }
-      val.details.map(item => {
-        item.isMarkBatch = 1;
-        item.adjustQty = item.outableQty;
-      });
-      data.detailList = val.details;
-      data.sign = 1;
-      let res = await getAccessories(data);
-      if (res.code === 0) {
-        // this.getList();
-        this.reload();
-        // this.$parent.$parent.parentGetleft();
-      }
-    },
-    getRUl(val) {
-      this.upurl = getup + "id=" + this.formPlan.id;
-    }
-  },
-  watch: {
-    getOneOrder: {
-      handler(old, ov) {
-        this.$parent.$parent.ispart=false;
-        if (!old.id) {
-          this.formPlan =Object.assign({},{
-              billStatusId: { name: "草稿", value: 0 },
-              detailList: [],
-              storeId:this.formPlan.storeId,
-              orderTypeValue:0,
-              orderManId:this.$store.state.user.userData.id,
-              orderMan: this.$store.state.user.userData.staffName,
-              guestId:this.formPlan.guestId}
-              ) ;
-          this.draftShow = 0;
-          this.leftOneOrder = this.formPlan
-          return false;
-        }
-        this.leftOneOrder = old;
-        this.getList();
-        this.getAllLimit();
-      },
-      // deep: true
-    }
-  }
-};
+    };
 </script>
 
 <style scoped lang="less">
-.purchase {
-  padding-top: 10px;
-  padding-left: 10px;
-  border-bottom: 1px #e8eaec solid;
-}
-.pane-made-hd {
-  line-height: 30px;
-  border-bottom: 1px #e8eaec solid;
-  background-color: #f8f8f8;
-  padding-left: 15px;
-}
-.plan-cz-btn {
-  justify-content: space-between;
-  padding: 10px 15px 10px;
-  align-items: center;
-}
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.tableBox {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overflow-x: scroll;
-}
+  .purchase {
+    padding-top: 10px;
+    padding-left: 10px;
+    border-bottom: 1px #e8eaec solid;
+  }
+
+  .pane-made-hd {
+    line-height: 30px;
+    border-bottom: 1px #e8eaec solid;
+    background-color: #f8f8f8;
+    padding-left: 15px;
+  }
+
+  .plan-cz-btn {
+    justify-content: space-between;
+    padding: 10px 15px 10px;
+    align-items: center;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tableBox {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-x: scroll;
+  }
 </style>
 <style scoped>
-.purchase >>> .ivu-form-item {
-  margin-bottom: 0px;
-}
-.purchase >>> .ivu-form-item .ivu-form-item-label{
-  font-size: 12px!important;
-}
-.demo-spin-icon-load {
-  animation: ani-demo-spin 1s linear infinite;
-}
-  .plan-cz-btn .ivu-btn-small{
+  .purchase >>> .ivu-form-item {
+    margin-bottom: 0px;
+  }
+
+  .purchase >>> .ivu-form-item .ivu-form-item-label {
+    font-size: 12px !important;
+  }
+
+  .demo-spin-icon-load {
+    animation: ani-demo-spin 1s linear infinite;
+  }
+
+  .plan-cz-btn .ivu-btn-small {
     font-size: 12px;
   }
 </style>

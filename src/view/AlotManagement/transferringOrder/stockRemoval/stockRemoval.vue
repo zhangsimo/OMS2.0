@@ -234,15 +234,14 @@
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
                   :edit-rules="validRules"
-                  showOverflow="true"
                   show-overflow
                   :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                  <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="hasAcceptQty"
@@ -629,8 +628,8 @@ export default {
         const { content } = res.data;
         this.getArray = content;
         content.forEach(item => {
-          this.ArrayValue.push(item.fullName);
-          this.ArrayKeyValue.push({ name: item.fullName, orgid: item.orgid })
+          this.ArrayValue.push(item.shortName);
+          this.ArrayKeyValue.push({ name: item.shortName, orgid: item.orgid })
         });
       });
     },
@@ -647,7 +646,7 @@ export default {
         item.carBrandName = item.adapterCarModel;
         item.orderPrice = item.minUnit;
         item.oemCode = item.oeCode;
-        item.spec = item.specifications;
+        item.spec = item.specifications || item.spec;
         item.partId = item.orgid;
         item.partInnerId = item.code;
         item.unit = item.minUnit;
@@ -735,12 +734,12 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          params.guestOrgid = this.getArray[i].isInternalId;
-          params.guestId = this.getArray[i].id;
-        }
-      }
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
+      //     params.guestOrgid = this.getArray[i].isInternalId;
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
       params.createTime = moment(this.Leftcurrentrow.createTime).format(
         "YYYY-MM-DD HH:mm:ss"
       );
@@ -855,12 +854,12 @@ export default {
         if(params.orderTypeId && params.orderTypeId.value!=undefined){
             params.orderTypeId= params.orderTypeId.value
         }
-        for (var i = 0; i < this.getArray.length; i++) {
-            if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-                params.guestOrgid = this.getArray[i].isInternalId;
-                params.guestId = this.getArray[i].id;
-            }
-        }
+        // for (var i = 0; i < this.getArray.length; i++) {
+        //     if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+        //         params.guestOrgid = this.getArray[i].isInternalId;
+        //         params.guestId = this.getArray[i].id;
+        //     }
+        // }
         this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
         params.createTime = moment(this.Leftcurrentrow.createTime).format(
             "YYYY-MM-DD HH:mm:ss"
@@ -1202,14 +1201,15 @@ export default {
       this.guestOrgid = row.id;
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.name;
+        this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.guestId;
+        this.Leftcurrentrow.guestOrgid = row.id;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;
         }, 200);
       } else {
-        this.diaochuName = row.name;
+        this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
     },
@@ -1307,7 +1307,7 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
-    this.getArrayParams();
+    // this.getArrayParams();
     this.warehouse();
     this.getList();
   }

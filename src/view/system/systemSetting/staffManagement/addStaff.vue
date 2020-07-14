@@ -1,309 +1,607 @@
 <template>
-    <Form :label-width="150" label-position="left" :rules='rules' :model='data' style="text-align: left" ref="form">
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='姓名：'prop="userName">
-            <Input placeholder='请输入姓名' v-model='data.userName' style="width: 150px" ></Input>
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='性别：' >
-            <Radio-group v-model="data.gender">
-              <Radio :label="0" >
-                <span>男</span>
-              </Radio>
-              <Radio :label="1">
-                <span>女</span>
-              </Radio>
-            </Radio-group>
-          </FormItem>
-        </div>
-      </div>
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='手机号码:' prop="phone">
-            <Input placeholder='请输入手机号码' v-model='data.phone' style="width: 150px" ></Input>
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='生日：' >
-            <Date-picker :value="data.birthDay" type="date" placeholder="选择日期" style="width: 150px" @on-change="changeBirthday"></Date-picker>
-          </FormItem>
-        </div>
-      </div>
-      <FormItem label='身份证号码:' prop="cardId" >
-        <Input placeholder='请输入身份证号码' v-model='data.cardId' style="width: 250px" ></Input>
-      </FormItem>
-
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='入职公司:' prop="shopNumber" >
-            <Select v-model="data.shopNumber" style="width:150px" >
-              <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-            </Select>
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='入职部门:' prop="groundIds" >
-            <Cascader :data="list" v-model="data.groundIds" placeholder='选择部门' style="width: 150px" ></Cascader>
-          </FormItem>
-        </div>
-      </div>
-
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='角色名称:' prop="userRoleId" >
-            <Select v-model="data.userRoleId" style="width:150px" >
-              <Option v-for="item in jobList" :value="item.id" :key="item.id">{{ item.displayName }}</Option>
-            </Select>
-          </FormItem>
-        </div>
-
-      </div>
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='入职时间：' style="" prop="entryTime">
-            <Date-picker v-model="data.entryTime" type="date" placeholder="选择日期" style="width: 150px" ></Date-picker>
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='微信/QQ号：' >
-            <Input placeholder='请输入微信/QQ号码' v-model='data.wechatId' style="width: 150px" ></Input>
-          </FormItem>
-        </div>
-      </div>
-      <div style="display: flex">
-      <div style="flex-flow: row nowrap;width: 100%" >
-        <FormItem label='紧急联系人：' >
-          <Input placeholder='请输入紧急联系人名称' v-model='data.emergencyContact' style="width: 150px" ></Input>
-        </FormItem>
-      </div>
-      <div style="flex-flow: row nowrap;width: 100%" >
-        <FormItem label='紧急联系人电话：' >
-          <Input placeholder='请输入紧急联系人电话' v-model='data.emergencyContactPhone' style="width: 150px" ></Input>
-        </FormItem>
-      </div>
-      </div>
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='是否低于成本价销售:' >
-            <Select v-model="data.sureCost" style="width:150px" >
-              <Option v-for="item in costList" :value="item.value" :key="item.value">{{ item.name }}</Option>
-            </Select>
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='是否业务人员：' >
-            <Select v-model="data.business" style="width:150px" >
-              <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.name }}</Option>
-            </Select>
-          </FormItem>
-        </div>
-      </div>
-      <div style="display: flex">
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <div>
-            是否允许查看他人创建的单据：
-            <Checkbox v-model="data.single"></Checkbox>
+  <Form
+    :label-width="150"
+    label-position="left"
+    :rules="rules"
+    :model="data"
+    style="text-align: left"
+    ref="form"
+  >
+    <Tabs type="card">
+      <TabPane label="基本信息">
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="姓名：" prop="userName">
+              <Input placeholder="请输入姓名" v-model="data.userName" style="width: 150px"></Input>
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="性别：">
+              <Radio-group v-model="data.gender">
+                <Radio :label="0">
+                  <span>男</span>
+                </Radio>
+                <Radio :label="1">
+                  <span>女</span>
+                </Radio>
+              </Radio-group>
+            </FormItem>
           </div>
         </div>
-        <div style="flex-flow: row nowrap;width: 100%" >
-          <div>
-            是否允许提交他人创建的单据：
-            <Checkbox v-model="data.singtwo"></Checkbox>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="手机号码:" prop="phone">
+              <Input placeholder="请输入手机号码" v-model="data.phone" style="width: 150px"></Input>
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="生日：">
+              <Date-picker
+                :value="data.birthDay"
+                type="date"
+                placeholder="选择日期"
+                style="width: 150px"
+                @on-change="changeBirthday"
+              ></Date-picker>
+            </FormItem>
           </div>
         </div>
-      </div>
-      <div class="addForm">
-        <FormItem label='工资卡信息' ></FormItem>
-        <FormItem label='收款户名：' prop="accountPayee">
-          <Input placeholder='请输入收款户名' v-model='data.accountPayee' style="width: 400px" ></Input>
+        <FormItem label="身份证号码:" prop="cardId">
+          <Input placeholder="请输入身份证号码" v-model="data.cardId" style="width: 250px"></Input>
         </FormItem>
-        <FormItem label='银行账号：' prop="bankNumber">
-          <Input type="number" placeholder='请输入银行账号' v-model='data.bankNumber' style="width: 400px" ></Input>
-        </FormItem>
-        <FormItem label='开户银行：' prop="bankName">
-          <Input placeholder='请输入开户银行' v-model='data.bankName' style="width: 400px" ></Input>
-        </FormItem>
-      </div>
-
-    </Form>
-
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="入职公司:" prop="shopNumber">
+              <Select v-model="data.shopNumber" style="width:150px">
+                <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="入职部门:" prop="groundIds">
+              <Cascader
+                :data="list"
+                v-model="data.groundIds"
+                placeholder="选择部门"
+                style="width: 150px"
+              ></Cascader>
+            </FormItem>
+          </div>
+        </div>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="角色名称:" prop="userRoleId">
+              <Select v-model="data.userRoleId" style="width:150px">
+                <Option
+                  v-for="item in jobList"
+                  :value="item.id"
+                  :key="item.id"
+                >{{ item.displayName }}</Option>
+              </Select>
+            </FormItem>
+          </div>
+        </div>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="入职时间：" style prop="entryTime">
+              <Date-picker
+                v-model="data.entryTime"
+                type="date"
+                placeholder="选择日期"
+                style="width: 150px"
+              ></Date-picker>
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="微信/QQ号：">
+              <Input placeholder="请输入微信/QQ号码" v-model="data.wechatId" style="width: 150px"></Input>
+            </FormItem>
+          </div>
+        </div>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="紧急联系人：">
+              <Input placeholder="请输入紧急联系人名称" v-model="data.emergencyContact" style="width: 150px"></Input>
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="紧急联系人电话：">
+              <Input
+                placeholder="请输入紧急联系人电话"
+                v-model="data.emergencyContactPhone"
+                style="width: 150px"
+              ></Input>
+            </FormItem>
+          </div>
+        </div>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="是否低于成本价销售:">
+              <Select v-model="data.sureCost" style="width:150px">
+                <Option
+                  v-for="item in costList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <FormItem label="是否业务人员：">
+              <Select v-model="data.business" style="width:150px">
+                <Option
+                  v-for="item in businessList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </div>
+        </div>
+        <div style="display: flex">
+          <div style="flex-flow: row nowrap;width: 100%">
+            <div>
+              是否允许查看他人创建的单据：
+              <Checkbox v-model="data.single"></Checkbox>
+            </div>
+          </div>
+          <div style="flex-flow: row nowrap;width: 100%">
+            <div>
+              是否允许提交他人创建的单据：
+              <Checkbox v-model="data.singtwo"></Checkbox>
+            </div>
+          </div>
+        </div>
+      </TabPane>
+      <TabPane label="其他信息">
+        <div>
+          <p style="margin-bottom: 10px">财务信息</p>
+          <div class="finance">
+            <div class="financePlace">
+              <a class="mr10" @click="addPlaceFin">
+                <Icon custom="iconfont iconxinzengicon icons" />新增
+              </a>
+              <a class="mr10" @click="changeplageFin">
+                <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
+              </a>
+              <a class="mr10" @click="changePlaceFin">{{enAble}}</a>
+            </div>
+            <div class="financeTab">
+              <Table
+                @on-current-change="selectFin"
+                highlight-row
+                border
+                resizable
+                auto-resize
+                stripe
+                size="small"
+                height="200"
+                max-height="200"
+                ref="finance"
+                :columns="columnsFin"
+                :data="financeList"
+              ></Table>
+            </div>
+          </div>
+          <Modal v-model="bankAccount" :title="bankAccountTit" width="600">
+            <staff-account ref="bankAccount"></staff-account>
+            <div slot="footer">
+              <Button type="primary" @click="addNewClientBank">保存</Button>
+              <Button type="default" @click="bankAccount=false">取消</Button>
+            </div>
+          </Modal>
+        </div>
+      </TabPane>
+    </Tabs>
+  </Form>
 </template>
 
 <script>
-  import {getcompany} from '@/api/system/systemSetting/staffManagenebt'
-  import {findGuest} from '@/api/settlementManagement/advanceCollection'
-  import {queryRolesByPage } from '_api/admin/roleApi.js';
-  import {goshop} from "@/api/settlementManagement/fundsManagement/capitalChain";
-    export default {
-        name: "addStaff",
-        props:{
-            data:''
+import { getcompany ,setPhone } from "@/api/system/systemSetting/staffManagenebt";
+import { findGuest } from "@/api/settlementManagement/advanceCollection";
+import { queryRolesByPage } from "_api/admin/roleApi.js";
+import { goshop } from "@/api/settlementManagement/fundsManagement/capitalChain";
+import staffAccount from '@/view/system/systemSetting/staffManagement/components/staffAccount'
+export default {
+  name: "addStaff",
+  props: {
+    data: "",
+    financeList:{
+      type : Array,
+      default:()=>[]
+    }
+  },
+  components:{staffAccount},
+  data() {
+    //校验手机号
+    const validatePhone = (rule, value, callback,source, options,a) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else if (!/^1[3456789]\d{9}$/.test(value)) {
+        callback(new Error("手机号格式不正确"));
+      } else {
+        // let data = {}
+        // data.mobile = value
+        // setPhone(data).then( res => {
+        //   if (res.code != 0){
+        //     return callback(new Error("手机号码重复"));
+        //   }else {
+            callback();
+          // }
+        // })
+      }
+    };
+    const cardId = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("身份证号不能为空"));
+      } else if (
+        !/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(
+          value
+        )
+      ) {
+        callback(new Error("身份证号格式不正确"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      rules: {
+        userName: [
+          { required: true, message: "姓名不能为空", trigger: "blur" }
+        ],
+        phone: [
+          { required: true, validator: validatePhone, trigger: "blur" },
+          // { required: true, validator: PhoneDouble, trigger: "blur" },
+          ],
+        cardId: [{ required: true, validator: cardId, trigger: "blur" }],
+        groundIds: [
+          {
+            required: true,
+            type: "array",
+            message: "请选择部门",
+            trigger: "change"
+          }
+        ],
+        userRoleId: [
+          {
+            required: true,
+            type: "string",
+            message: "请选择岗位",
+            trigger: "change"
+          }
+        ],
+        entryTime: [
+          {
+            required: true,
+            type: "date",
+            message: "入职时间不能为空",
+            trigger: "change"
+          }
+        ],
+        accountPayee: [
+          { required: true, message: "收款户名不能为空", trigger: "blur" }
+        ],
+        bankNumber: [
+          { required: true, message: "银行账号不能为空", trigger: "blur" }
+        ],
+        bankName: [
+          { required: true, message: "开户银行不能为空", trigger: "blur" }
+        ],
+        shopNumber: [
+          {
+            required: true,
+            type: "string",
+            message: "请选择入职公司",
+            trigger: "change"
+          }
+        ]
+      },
+      costList: [
+        { name: "是", value: 0 },
+        { name: "否", value: 1 }
+      ],
+      businessList: [
+        { name: "是", value: 0 },
+        { name: "否", value: 1 }
+      ],
+      jobList: [], //获取当前岗位
+      business: 0,
+      list: [], //公司信息
+      gusetList: [], //往来单位信息
+      columnsFin: [
+        {
+          title: "序号",
+          align: "center",
+          type: "index"
         },
-        data(){
-            const validatePhone = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('手机号不能为空'));
-                } else if (!/^1[3456789]\d{9}$/.test(value)) {
-                    callback(new Error('手机号格式不正确'));
-                } else {
-                    callback();
+        {
+          title: "收款户名",
+          align: "center",
+          key: "accountName"
+        },
+        {
+          title: "银行卡号",
+          align: "center",
+          key: "accountBankNo"
+        },
+        {
+          title: "开户银行",
+          align: "center",
+          key: "accountBank"
+        },
+        {
+          title: "是否是工资卡",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.wagesSign == true
+              ? (text = "已默认")
+              : (text = "设为默认");
+            return h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.financeList.map(item => {
+                      if (item.id == params.row.id) {
+                        item.wagesSign = !item.wagesSign;
+                      } else {
+                        if (item.wagesSign) {
+                          item.wagesSign = false;
+                        }
+                      }
+                    });
+                    this.disposeFinData();
+                  }
                 }
-            };
-            const cardId=(rule, value, callback) => {
-            if (!value) {
-              return callback(new Error('身份证号不能为空'));
-            } else if (!/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(value)) {
-              callback(new Error('身份证号格式不正确'));
-            } else {
-              callback();
-            }
-          };
-            return {
-                rules: {
-                    userName: [
-                        {required: true, message: '姓名不能为空', trigger: 'blur'}
-                    ],
-                    phone: [
-                        { required: true,validator:validatePhone,trigger:'blur'}
-                    ],
-                    cardId:[
-                        {required: true, validator:cardId, trigger: 'blur'}
-                    ],
-                    groundIds:[
-                        {required: true,type:'array', message: '请选择部门', trigger: 'change'}
-                    ],
-                  userRoleId:[
-                      {required: true,type:'string', message: '请选择岗位', trigger: 'change'}
-                    ],
-                    entryTime:[
-                        {required: true , type:'date' ,message:'入职时间不能为空' ,trigger:'change'}
-                    ],
-                    accountPayee:[
-                      {required: true, message: '收款户名不能为空', trigger: 'blur'}
-                    ],
-                    bankNumber:[
-                      {required: true, message: '银行账号不能为空', trigger: 'blur'}
-                    ],
-                    bankName:[
-                      {required: true, message: '开户银行不能为空', trigger: 'blur'}
-                    ],
-                  shopNumber:[
-                    {required: true,type:'string', message: '请选择入职公司', trigger: 'change'}
-
-                  ]
-
-                },
-                costList:[
-                    {name:'是',value:0},
-                    {name:'否',value:1}
-                ],
-                businessList:[
-                    {name:'是',value:0},
-                    {name:'否',value:1}
-                ],
-              jobList:[],//获取当前岗位
-                business:0,
-                list:[], //公司信息
-              gusetList:[],//往来单位信息
-            }
+              },
+              text
+            );
+          }
         },
-    mounted(){
-      this.getList()
-      this.getfindGuestList()
-      this.getLeftList()
+        {
+          title: "状态",
+          align: "center",
+          render: (h, params) => {
+            let text = "";
+            params.row.accountSign == true ? (text = "启用") : (text = "禁用");
+            return h("span", {}, text);
+          }
+        }
+      ],
+      selectFinTab:{},
+
+      bankAccount:false,
+      bankAccountTit:"新增银行账户",
+      enAble:"启用",
+      accountAddId:0,
+      // financeList:[],
+    };
+  },
+  mounted() {
+    this.getList();
+    this.getfindGuestList();
+    this.getLeftList();
+  },
+  methods: {
+    //获取公司
+    async getList() {
+      let data = {};
+      data.groupId = this.$store.state.user.userData.tenantGroupId;
+      let res = await getcompany(data);
+      if (res.code === 0) {
+        let list = [];
+        res.data.childs.forEach(item => {
+          if (item.childs.length > 0) {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: item.childs
+            });
+          } else {
+            list.push({ value: item.id, label: item.name, children: [] });
+          }
+        });
+        list.forEach(item => {
+          if (item.children.length > 0) {
+            item.children.map(val => {
+              val.value = val.id;
+              val.label = val.name;
+              if (val.childs.length > 0) {
+                val.children = val.childs;
+                val.children.map(v => {
+                  v.value = v.id;
+                  v.label = v.name;
+                });
+              } else {
+                val.children = [];
+              }
+            });
+          }
+        });
+        this.list = list;
+      }
     },
-    methods:{
-            //获取公司
-       async getList(){
-           let data = {}
-              data.groupId = this.$store.state.user.userData.tenantGroupId
-           let res = await getcompany(data)
-           if(res.code === 0){
-               let list = []
-               res.data.childs.forEach(item => {
-                   if(item.childs.length > 0){
-                    list.push({value: item.id ,label: item.name ,children:item.childs})
-                   }else {
-                       list.push({value: item.id ,label: item.name ,children:[]})
-                   }
-               })
-                list.forEach( item => {
-                    if(item.children.length > 0){
-                        item.children.map( val => {
-                           val.value = val.id
-                           val.label = val.name
-                           if(val.childs.length > 0){
-                               val.children = val.childs
-                               val.children.map( v => {
-                                   v.value = v.id
-                                   v.label = v.name
-                               })
-                           }else{
-                               val.children = []
-                           }
-                        })
-                    }
-                })
-               this.list = list
-           }
-        },
-
-      //获取往来的单位
-     async getfindGuestList(){
-         let data = {}
-       data.supplierTypeSecond =''
-       let res = await goshop(data)
-       if (res.code === 0){
-         this.gusetList = res.data || []
-       }
-
-      },
-
-      //获取全部岗位
-       async getLeftList(){
-        let data ={}
-        data.size = 9999
-        data.page = 0
-        data.systemType = 0
-        let res = await queryRolesByPage(data)
-        if(res.code == 0){
-          this.jobList = res.data.content
+    // 处理财务信息数据
+    disposeFinData() {
+      let defauDat = [];
+      this.financeList.map(item => {
+        if (item.wagesSign == true) {
+          defauDat.push(item);
         }
-      },
-        //删除校验
-        resetFields() {
-            this.$refs.form.resetFields()
-        },
-        changeEntryTime(data){
-            this.data.entryTime = data
-        },
-        handleSubmit (callback) {
-            this.$refs.form.validate(valid => {
-                if (valid) {
-                    callback && callback()
-                } else {
-                    this.$Message.error('信息填写错误');
-                }
-            })
-        },
-        changeBirthday(data){
-            this.data.birthDay = data
-        },
-        //获取到公司
-        selectGroust(value , selectedData){
-            this.data.groundIds = JSON.stringify(value)
+      });
+      if (defauDat.length != 1) {
+        this.financeList.map(item => {
+          if (item != defauDat[0]) {
+            item.wagesSign = false;
+          }
+        });
+      }
+    },
+    //获取往来的单位
+    async getfindGuestList() {
+      let data = {};
+      data.supplierTypeSecond = "";
+      let res = await goshop(data);
+      if (res.code === 0) {
+        this.gusetList = res.data || [];
+      }
+    },
+    // 财务信息表格中选中某一行
+    selectFin(row) {
+      this.selectFinTab = row || {};
+      if (row.accountSign == true) {
+        this.enAble = "禁用";
+      } else {
+        this.enAble = "启用";
+      }
+      this.disposeFinData();
+    },
+    // 其他信息 财务信息
+    addPlaceFin() {
+      this.bankAccount = true;
+      this.bankAccountTit = "新增银行账户";
+      this.$refs.bankAccount.data = {};
+      this.$refs.bankAccount.resetFields();
+    },
+    changeplageFin() {
+      if (Object.keys(this.selectFinTab).length == 0) {
+        this.$Message.error("请先选中需要修改的信息");
+        return false;
+      }
+      this.bankAccountTit = "修改银行账户信息";
+      this.bankAccount = true;
+      this.$refs.bankAccount.data = this.selectFinTab;
+    },
+    // 修改启用禁用
+    changePlaceFin() {
+      this.financeList.map(item => {
+        if(this.selectFinTab.id==undefined){
+          if (item.accountAddId == this.selectFinTab.accountAddId) {
+            item.accountSign = !item.accountSign;
+          } else {
+            item.accountSign;
+          }
+        }else{
+          if (item.id == this.selectFinTab.id) {
+            item.accountSign = !item.accountSign;
+          } else {
+            item.accountSign;
+          }
         }
+      });
+    },
+    // 财务信息银行卡弹框确定
+    addNewClientBank() {
+      this.$refs.bankAccount.handleSubmit(() => {
+        if (this.bankAccountTit == "修改银行账户信息") {
+          // let bool = true;
+          this.selectFinTab = this.$refs.bankAccount.data;
+          this.financeList.map(item => {
+            if (item.accountAddId == this.selectFinTab.accountAddId) {
+              let newarr = {};
+              newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+              item.id = newarr.id;
+              item.tenantId = newarr.tenantId;
+              item.guestId = newarr.guestId;
+              item.accountBank = newarr.accountBank;
+              item.accountBankNo = newarr.accountBankNo;
+              item.accountName = newarr.accountName;
+              item.accountType = newarr.accountType;
+              item.wagesSign = newarr.wagesSign;
+            }
+          });
+          // if (bool == true) {
+          //   if (item.id == this.selectFinTab.id) {
+          //     let newarr = {};
+          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          //     item.id = newarr.id;
+          //     item.tenantId = newarr.tenantId;
+          //     item.guestId = newarr.guestId;
+          //     item.accountBank = newarr.accountBank;
+          //     item.accountBankNo = newarr.accountBankNo;
+          //     item.accountName = newarr.accountName;
+          //     item.accountType = newarr.accountType;
+          //     item.wagesSign = newarr.wagesSign;
+          //   }
+            this.disposeFinData();
+            this.$Message.success("修改银行卡信息成功");
+            this.bankAccount = false;
+          // } else {
+          //   return this.$Message.error("该银行卡已添加过");
+          // }
+          this.data.staffAccountVoList = this.financeList;
+        } else {
+
+          let newarr = {};
+          let bool = true;
+          this.selectFinTab = this.$refs.bankAccount.data;
+          newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+          this.financeList.map(item => {
+            if (item.accountBankNo == this.selectFinTab.accountBankNo) {
+              bool = false;
+            }
+          });
+          if (bool == true) {
+            newarr.wagesSign = newarr.wagesSign || true;
+            newarr.accountSign = true;
+            newarr.accountAddId=this.accountAddId;
+            this.accountAddId++;
+            this.financeList.push(newarr);
+            this.data.staffAccountVoList = this.financeList;
+            this.bankAccount = false;
+            this.disposeFinData();
+            this.$Message.success("添加银行卡成功");
+            // console.log(this.data.staffAccountVoList,this.financeList,"???")
+          } else {
+            return this.$Message.error("该银行卡已添加过");
+          }
+        }
+      });
+    },
+    //获取全部岗位
+    async getLeftList() {
+      let data = {};
+      data.size = 9999;
+      data.page = 0;
+      data.systemType = 0;
+      let res = await queryRolesByPage(data);
+      if (res.code == 0) {
+        this.jobList = res.data.content;
+      }
+    },
+    //删除校验
+    resetFields() {
+      this.$refs.form.resetFields();
+    },
+    changeEntryTime(data) {
+      this.data.entryTime = data;
+    },
+    handleSubmit(callback) {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          callback && callback();
+        } else {
+          this.$Message.error("信息填写错误");
+        }
+      });
+    },
+    changeBirthday(data) {
+      this.data.birthDay = data;
+    },
+    //获取到公司
+    selectGroust(value, selectedData) {
+      this.data.groundIds = JSON.stringify(value);
     }
-    }
+  }
+};
 </script>
 
 <style scoped>
-  .addForm{
-    margin-top: 15px;
-  }
-  .addForm .ivu-form-item{
-    margin-bottom: 10px!important;
-  }
+.addForm {
+  margin-top: 15px;
+}
+.addForm .ivu-form-item {
+  margin-bottom: 10px !important;
+}
 </style>

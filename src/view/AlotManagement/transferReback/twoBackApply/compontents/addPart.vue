@@ -11,7 +11,7 @@
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" />
+          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class=" mr5">品牌:</span>
@@ -53,7 +53,7 @@
         stripe
         align="center"
         ref="xTable1"
-        height="300"
+        height="500"
         column-min-width="100px"
         size="small"
         :data="tableData"
@@ -158,13 +158,18 @@
 
     @Emit('getPlanOrder')
     private ok() {
-      if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+      let selectRow = JSON.parse(JSON.stringify(this.selectRow));
+      if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
       // this.shows = false;
-      this.selectRow.forEach((el:any) => {
+      selectRow.forEach((el:any) => {
         el.sourceDetailId = el.id;
-        Reflect.deleteProperty(el, 'id');
+        el.batchSourceId = el.id;
+        if(el.batchSourceId){
+          Reflect.deleteProperty(el, 'id');
+        }
+        return el;
       })
-      return this.selectRow;
+      return selectRow;
     }
 
     @Emit('getPlanOrder')

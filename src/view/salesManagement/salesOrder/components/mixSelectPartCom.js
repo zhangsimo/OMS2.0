@@ -16,6 +16,7 @@ export const mixSelectPartCom = {
   },
   data() {
     return {
+      partId: "",
       Name: '名称',
       loading: false,
       treeLoading: false,
@@ -35,7 +36,7 @@ export const mixSelectPartCom = {
         {
           title: "序号",
           type: "selection",
-          minWidth: 80
+          minWidth: 50
         },
         {
           title: '详情',
@@ -43,24 +44,7 @@ export const mixSelectPartCom = {
           width: 60,
           align: 'center'
         },
-        {
-          title: "内码",
-          key: "code",
-          minWidth: 120,
-          render:(h,p) => {
-            return h('span',p.row.code||p.row.partInnerId)
-          }
-        },
-        {
-          title: "品质",
-          key: "quality",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          minWidth: 120
-        },
+
         {
           title: "编码",
           key: "partCode",
@@ -75,9 +59,22 @@ export const mixSelectPartCom = {
           }
         },
         {
-          title: "全称",
-          key: "fullName",
-          minWidth: 240
+          title: "品牌车型",
+          key: "adapterCarModel",
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.adapterCarModel||p.row.carBrandName)
+          }
+        },
+        {
+          title: "品牌",
+          key: "partBrand",
+          minWidth: 120
+        },
+        {
+          title: "品质",
+          key: "quality",
+          minWidth: 120
         },
         {
           title: "OEM码",
@@ -88,9 +85,17 @@ export const mixSelectPartCom = {
           }
         },
         {
-          title: "产地",
-          key: "placeOfOrigin",
-          minWidth: 120
+          title: "本店可售",
+          key: "outableQty",
+          minWidth: 120,
+        },
+        {
+          title: "内码",
+          key: "code",
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.code||p.row.partInnerId)
+          }
         },
         {
           title: "单位",
@@ -109,19 +114,16 @@ export const mixSelectPartCom = {
           }
         },
         {
+          title: "全称",
+          key: "fullName",
+          minWidth: 240
+        },
+        {
           title: "型号",
           key: "brandName",
           minWidth: 120,
           render:(h,p) => {
             return h('span',p.row.brandName||p.row.carModelName)
-          }
-        },
-        {
-          title: "品牌车型",
-          key: "adapterCarModel",
-          minWidth: 120,
-          render:(h,p) => {
-            return h('span',p.row.adapterCarModel||p.row.carBrandName)
           }
         },
         {
@@ -147,6 +149,16 @@ export const mixSelectPartCom = {
           }
         },
         {
+          title: "产地",
+          key: "placeOfOrigin",
+          minWidth: 120
+        },
+        {
+          title: "生产厂家",
+          key: "manufactor",
+          minWidth: 120
+        },
+        {
           title: "备注",
           key: "remark",
           minWidth: 120
@@ -159,19 +171,15 @@ export const mixSelectPartCom = {
             return h('span', text);
           }
         },
-        {
-          title: "禁售",
-          minWidth: 80,
-          render: (h, params) => {
-            let text = params.row.isSale ? '禁售' : '可售';
-            return h('span', text);
-          }
-        },
-        {
-          title: "生产厂家",
-          key: "manufactor",
-          minWidth: 120
-        },
+        // {
+        //   title: "禁售",
+        //   minWidth: 80,
+        //   render: (h, params) => {
+        //     let text = params.row.isSale ? '禁售' : '可售';
+        //     return h('span', text);
+        //   }
+        // },
+
       ],
       //配件名称查询层配件数据
       partData: [],
@@ -265,19 +273,6 @@ export const mixSelectPartCom = {
     getPartBrandAll() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
         let arrData = res.data.content || []
-        // let filterData = arrData.filter(
-        //   item => item.qualityCode == "000070" || item.qualityCode == "000071"
-        // );
-        // if (filterData.length > 0) {
-        //   if (filterData[0].children && filterData[0].children.length > 0) {
-        //     filterData[0].children.map(item => {
-        //       let objData = {};
-        //       objData.label = item.name;
-        //       objData.value = item.code;
-        //       this.partBrandData.push(objData);
-        //     });
-        //   }
-        // }
         arrData.map(item => {
           this.partBrandData.push(...item.children);
         })
@@ -319,6 +314,7 @@ export const mixSelectPartCom = {
         return this.$Message.warning("请选择交货仓库")
       }
       this.searchPartLayer = true;
+      this.allList = {};
       this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();
@@ -331,10 +327,6 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
         this.$emit("selectPartName", item);
-        // this.searchPartLayer = false;
-        // setTimeout(()=>{
-        //   this.$Message.success("已添加");
-        // })
       } else {
         this.$Message.error("请选择数据");
       }
@@ -372,7 +364,12 @@ export const mixSelectPartCom = {
         // this.reload();
       });
     },
-
+    showLink(row) {
+      this.partId = row.partId;
+      this.$nextTick(() => {
+        this.$refs.LinkPart.init();
+      })
+    },
     //点击详情
     show(val) {
       let data = {};
@@ -381,9 +378,8 @@ export const mixSelectPartCom = {
       } else {
         data.partId = val.id;
       }
-      if(this.guestId){
-        data.guestId = this.guestId
-      }
+      data.guestId = this.guestId
+      data.storeId = this.storeId;
       getDetails(data).then(res => {
         if (res.code === 0) {
           this.allList = res.data;

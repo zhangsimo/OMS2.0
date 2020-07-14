@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="importShow" title="资金导入" width="600px">
+  <Modal v-model="importShow" title="导入" width="600px">
     <div class="navbox">导入前请先下载模板</div>
     <div slot="footer">
       <Button type="default" @click="downLoding" class="mr20">下载模板</Button>
@@ -64,6 +64,7 @@ export default {
           duration: 60
         });
         this.importShow = false;
+        this.$emit("getNewList", response);
       } else {
         this.$Notice.success({
           title: "导入成功",

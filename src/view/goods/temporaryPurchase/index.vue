@@ -261,6 +261,7 @@
                       v-model="formPlanmain.directCompanyId"
                       :disabled="isInput"
                       clearable
+                      filterable
                     >
                       <Option
                         v-for="(item, index) in putStores"
@@ -481,7 +482,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="specifications"
+                  field="spec"
                   title="规格"
                   width="100"
                 ></vxe-table-column>

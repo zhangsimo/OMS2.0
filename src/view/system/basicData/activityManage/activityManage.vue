@@ -822,6 +822,7 @@ export default {
         this.data1 = res.data;
         this.data4 = [];
       });
+      this.checkedData.length = 0;
     },
     // 活动信息页面
     getActTable() {

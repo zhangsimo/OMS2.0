@@ -74,7 +74,7 @@
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
   </div>
-</template> 
+</template>
 
 <script>
 import ExpenseReimbursement from "../component/ExpenseReimbursement";
@@ -112,6 +112,7 @@ export default {
     this.modelType.allSalesList = await getAllSalesList();
     this.modelType.salesList = await getComenAndGo();
     this.modelType.payList = await getPayList();
+    console.log(this.modelType.allSalesList,this.modelType.salesList)
   },
   methods: {
     open(index) {

@@ -163,6 +163,8 @@
           :total="pagetotal"
           show-elevator
           class="mt10 tr"
+          :page-size="page.size"
+          :current="page.num"
           @on-change="pageCode"
           show-total
           size="small"
@@ -432,6 +434,10 @@ export default {
           label: "全部"
         },
         {
+          value: "SHZ",
+          label: "审批中"
+        },
+        {
           value: "SHTG",
           label: "审批通过"
         },
@@ -449,25 +455,75 @@ export default {
           title: "序号",
           key: "index",
           width: 40,
-          className: "tc"
+          className: "tc",
+          fixed:"left"
         },
         {
           title: "公司名称",
           key: "orgName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.orgName
+                }
+              }, params.row.orgName)
+            ])
+          }
         },
         {
           title: "对账单号",
           key: "accountNo",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountNo
+                }
+              }, params.row.accountNo)
+            ])
+          }
         },
         {
           title: "往来单位",
           key: "guestName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          fixed:"left",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "收付类型",
@@ -623,7 +679,8 @@ export default {
           title: "计算结算类型",
           key: "billingTypeName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          fixed:"left"
         },
         {
           title: "对账单状态",
@@ -641,13 +698,45 @@ export default {
           title: "最近一次回款时间",
           key: "lastPaymentDate",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.lastPaymentDate
+                }
+              }, params.row.lastPaymentDate)
+            ])
+          }
         },
         {
           title: "备注",
           key: "remark",
           className: "tc",
-          minWidth:120
+          minWidth:100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.remark
+                }
+              }, params.row.remark)
+            ])
+          }
         },
         {
           title: "流程是否通过",
@@ -665,7 +754,23 @@ export default {
           title: "最近一次开票申请时间",
           key: "recentTime",
           className: "tc",
-          minWidth:140
+          minWidth:140,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.recentTime
+                }
+              }, params.row.recentTime)
+            ])
+          }
         },
         {
           title: "含税配件金额",
@@ -754,13 +859,45 @@ export default {
           title: "最近一次开票公司",
           key: "recentInvoiceCompany",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.recentInvoiceCompany
+                }
+              }, params.row.recentInvoiceCompany)
+            ])
+          }
         },
         {
           title: "最近一次开票名称",
           key: "recentInvoiceName",
           className: "tc",
-          minWidth:120
+          minWidth:120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.recentInvoiceName
+                }
+              }, params.row.recentInvoiceName)
+            ])
+          }
         }
       ],
       columns2: [
@@ -978,6 +1115,10 @@ export default {
       data3: [],
       data4: [],
       total: 0,
+      page:{
+        num:1,
+        size:10
+      },
       statementStatusflag:false,//对账单状态是结算完成，不能点击对账单对冲、冲减预收、冲减预付、认领款核销
       taxArrearsfalg: false,//含税配件欠票、含税油品欠票都是0 ，不能点击销售开票申请；
       hedgingfalg:false,//对冲配件发票/对冲油品发票=含税配件/油品金额，不能点击发票对冲;
@@ -989,19 +1130,23 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    let obj = {
-      startDate: this.value[0]
-        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-        : "",
-      endDate: this.value[1]
-        ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-        : "",
-      orgId: this.model1,
-      statementStatus: this.Reconciliationtype
-    };
-    this.getAccountStatement(obj);
+    // let obj = {
+    //   startDate: this.value[0]
+    //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+    //     : "",
+    //   endDate: this.value[1]
+    //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+    //     : "",
+    //   orgId: this.model1,
+    //   statementStatus: this.Reconciliationtype
+    // };
+    // obj.page = this.page.num -1
+    // obj.size = this.page.size
+    // this.getAccountStatement(obj);
+    // this.query()
     this.$nextTick( () => {
       this.model1 = arr[1]
+      this.getAccountStatement()
     })
     this.getShop()
   },
@@ -1221,17 +1366,8 @@ export default {
     // 快速查询日期
     quickDate(data) {
       this.value = data;
-      let obj = {
-        startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        orgId: this.model1,
-        statementStatus: this.Reconciliationtype
-      };
-      this.getAccountStatement(obj);
+      this.page.num = 1
+      this.getAccountStatement();
     },
     // 选择日期
     changedate(daterange) {
@@ -1274,7 +1410,19 @@ export default {
       });
     },
     // 对账总表
-    getAccountStatement(obj) {
+    getAccountStatement() {
+      let obj = {
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        orgId: this.model1,
+        statementStatus: this.Reconciliationtype
+      };
+      obj.page = this.page.num -1
+      obj.size = this.page.size
       AccountStatement(obj).then(res => {
         this.pagetotal = res.data.totalElements;
         if (res.data.content.length !== 0) {
@@ -1292,36 +1440,12 @@ export default {
     },
     // 页码
     pageCode(page) {
-      let obj = {
-        startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        orgId: this.model1,
-        page: page - 1,
-        statementStatus: this.Reconciliationtype
-      };
-      this.getAccountStatement(obj);
+      this.page.num = page
+      this.getAccountStatement();
     },
     // 查询
     query() {
-      let obj = {
-        startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        endDate: this.value[1]
-          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        orgId: this.model1,
-        statementStatus: this.Reconciliationtype
-      };
-      this.data4 = [];
-      this.data2 = [];
-      this.data3 = [];
-      this.falg = false;
-      this.getAccountStatement(obj);
+      this.getAccountStatement();
     },
 
     // 点击总表查询明细
@@ -1338,26 +1462,21 @@ export default {
           this.taxArrearsfalg = true
         }
       }
-
       if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil){this.hedgingfalg = true}
       if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
-      // console.log(row)
-      // account({id:row.id}).then(res => {
-      //   console.log(res);
-      // });
       this.data2 = []
       this.data3 = []
       this.data4 = []
-      if (row.processInstance) {
+      // if (row.processInstance) {
         // approvalStatus({ instanceId: row.processInstance }).then(res => {
         //   if (res.code == 0) {
         //     this.falg = true;
         //     this.statusData = res.data.operationRecords;
         //   }
         // });
-      }
+      // }
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;

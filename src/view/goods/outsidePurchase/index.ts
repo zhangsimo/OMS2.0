@@ -490,42 +490,6 @@ export default class InterPurchase extends Vue {
           this.deletePartArr = [];
           this.$Message.success('删除成功');
         }
-        // if(this.deletePartArr.length > 0) {
-        //   let res:any = await api.delPchsOrderDetail(this.deletePartArr);
-        //   if(res.code == 0) {
-        //     delOk = true;
-        //     isNetWork = true;
-        //     this.deletePartArr.forEach((els: any) => {
-        //       this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-        //         if (el.partCode == els.partCode) {
-        //           arr.splice(index, 1);
-        //         }
-        //       })
-        //     })
-        //   }
-        // } else {
-        //   delOk = true;
-        // }
-        // if(this.tmpDeletePartArr.length > 0) {
-        //   this.tmpDeletePartArr.forEach((els:any) => {
-        //     this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-        //       if(el.partCode == els.partCode) {
-        //         arr.splice(index, 1);
-        //       }
-        //     })
-        //   })
-        //   this.tmpDeletePartArr = [];
-        //   delOk2 = true;
-        // } else {
-        //   delOk2 = true;
-        // }
-        // if (delOk && delOk2) {
-        //   this.$Message.success('删除成功');
-        //   this.deletePartArr = [];
-        //   // if(isNetWork) {
-        //   //   this.getListData();
-        //   // }
-        // }
       },
       onCancel: () => {
         // this.$Message.info('取消删除');
@@ -674,7 +638,7 @@ export default class InterPurchase extends Vue {
     let total = 0
     data.map(item => {
       let value = item[type]
-      if (!value) {
+      if (!value || isNaN(value)) {
         value = 0
       }
       total += parseFloat(value)
@@ -685,7 +649,9 @@ export default class InterPurchase extends Vue {
     if (columnIndex === 8) {
       let totals = 0;
       let sumarr = data.map(el => {
-        return el.orderQty * el.orderPrice;
+        let orderQty = isNaN(el.orderQty * 1) ? 0 : el.orderQty * 1;
+        let orderPrice = isNaN(el.orderPrice * 1) ? 0 : el.orderPrice * 1;
+        return orderQty * orderPrice;
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
       this.totalAmt = totals;
@@ -724,6 +690,7 @@ export default class InterPurchase extends Vue {
     let arrData = v||[]
     arrData = JSON.parse(JSON.stringify(arrData));
     arrData.forEach(item => {
+      item.specifications = item.spec;
       item.orderPrice = item.recentPrice || undefined;
       item.orderQty = undefined;
     })

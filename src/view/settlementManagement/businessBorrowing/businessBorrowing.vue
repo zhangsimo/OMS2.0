@@ -48,23 +48,41 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button v-has="'clima'" class="ml10" @click="claimCollect(1)">因公借支认领</Button>
-        <Button v-has="'cancel'" class="ml10" @click="openWriteOffModel">因公借支核销</Button>
-        <Button v-has="'back'" class="ml10" @click="claimCollect(2)">因公借支收回</Button>
-        <Button v-has="'revoke'" class="ml10" @click="revokeCollection(3)"
+        <Button v-has="'clima'" class="ml10" @click="claimCollect(1)"
+          >因公借支认领</Button
+        >
+        <Button v-has="'cancel'" class="ml10" @click="openWriteOffModel"
+          >因公借支核销</Button
+        >
+        <Button v-has="'back'" class="ml10" @click="claimCollect(2)"
+          >因公借支收回</Button
+        >
+        <Button
+          v-has="'revoke'"
+          class="ml10"
+          @click="revokeCollection(3)"
           :disabled="currRow == null"
           >因公借支申请撤回</Button
         >
-        <Button class="ml10" @click="revokeCollection(0)"
-          :disabled="currRow == null" v-has="'claimRevoke'"
+        <Button
+          class="ml10"
+          @click="revokeCollection(0)"
+          :disabled="currRow == null"
+          v-has="'claimRevoke'"
           >因公借支认领撤回</Button
         >
-        <Button class="ml10" @click="revokeCollection(1)"
-          :disabled="currRow == null" v-has="'borrowRevoke'"
+        <Button
+          class="ml10"
+          @click="revokeCollection(1)"
+          :disabled="currRow == null"
+          v-has="'borrowRevoke'"
           >因公借支核销撤回</Button
         >
-        <Button class="ml10" @click="revokeCollection(2)"
-          :disabled="currRow == null" v-has="'payRevoke'"
+        <Button
+          class="ml10"
+          @click="revokeCollection(2)"
+          :disabled="currRow == null"
+          v-has="'payRevoke'"
           >因公借支收回撤回</Button
         >
         <!--<Button class="ml10">导出</Button>-->
@@ -74,10 +92,10 @@
       <div class="inner-box">
         <div class="box mb10">
           <vxe-table
-            class="boxData"
             auto-resize
             resizable
             border
+            show-overflow
             highlight-hover-row
             highlight-current-row
             ref="xTable"
@@ -87,61 +105,75 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column
+              type="seq"
+              width="60"
+              title="序号"
+              fixed="left"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="serviceId"
+              title="因公借支申请单号"
+              width="140"
+              fixed="left"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="payAmt"
+              title="因公借支金额"
+              width="120"
+              fixed="left"
+            ></vxe-table-column>
             <vxe-table-column title="基本信息">
-              <vxe-table-column
-                type="seq"
-                width="60"
-                title="序号"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="serviceId"
-                title="因公借支申请单号"
-              ></vxe-table-column>
               <vxe-table-column
                 field="applyTime"
                 title="申请时间"
+                width="100"
               ></vxe-table-column>
               <vxe-table-column
                 field="applicant"
                 title="申请人"
+                width="90"
               ></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column
-                field="payAmt"
-                title="因公借支金额"
-              ></vxe-table-column>
-              <vxe-table-column
                 field="paymentNo"
                 title="因公借支付款单号"
+                width="140"
               ></vxe-table-column>
               <vxe-table-column
                 field="expenseClaimAmount"
                 title="因公借支已认领金额"
+                width="150"
               ></vxe-table-column>
               <vxe-table-column
                 field="writeOffReceiptNo"
                 title="因公借支核销单号"
+                width="140"
               ></vxe-table-column>
               <vxe-table-column
                 field="writeOffAmount"
                 title="因公借支核销金额"
+                width="140"
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentReturnNo"
                 title="因公借支收回单号"
+                width="140"
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentReturnAmount"
                 title="因公借支收回金额"
+                width="140"
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentReturnBalance"
                 title="因公借支未核销余额"
+                width="150"
               ></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="收款方式">
-              <vxe-table-column field="role" title="账户">
+              <vxe-table-column field="role" title="账户" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -154,7 +186,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="amt" title="金额">
+              <vxe-table-column field="amt" title="金额" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -167,7 +199,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="age" title="收款所属门店">
+              <vxe-table-column field="age" title="收款所属门店" width="120">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -182,7 +214,7 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="付款方式">
-              <vxe-table-column field="role" title="账户">
+              <vxe-table-column field="role" title="账户" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -195,7 +227,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="sex" title="金额">
+              <vxe-table-column field="sex" title="金额" width="60">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -208,7 +240,7 @@
                   </ul>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="age" title="付款所属门店">
+              <vxe-table-column field="age" title="付款所属门店" width="120">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -226,39 +258,48 @@
               <vxe-table-column
                 field="receiver"
                 title="收款人"
+                width="90"
               ></vxe-table-column>
               <vxe-table-column
                 field="receiveDate"
                 title="收款日期"
+                width="100"
               ></vxe-table-column>
               <vxe-table-column
                 field="receiveRemark"
                 title="收款备注"
+                width="100"
               ></vxe-table-column>
               <vxe-table-column
                 field="receiveAuditor"
                 title="收款审核人"
+                width="120"
               ></vxe-table-column>
               <vxe-table-column
                 field="receiveAuditDate"
                 title="收款审核日期"
+                width="120"
               ></vxe-table-column>
-              <vxe-table-column field="payer" title="付款人"></vxe-table-column>
+              <vxe-table-column field="payer" title="付款人" width="90"></vxe-table-column>
               <vxe-table-column
                 field="paymentDate"
                 title="付款日期"
+                width="100"
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentRemark"
                 title="付款备注"
+                width="100"
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentAuditor"
                 title="付款审核人"
+                width="120"
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentAuditDate"
                 title="付款审核日期"
+                width="120"
               ></vxe-table-column>
             </vxe-table-column>
           </vxe-table>
@@ -288,7 +329,16 @@
       @on-visible-change="visChangeClaim"
     >
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
+      <Select
+        v-model="companyId"
+        class="w150"
+        clearable
+        filterable
+        remote
+        :loading="remoteloading"
+        :remote-method="getOne"
+        @on-change="query"
+      >
         <Option v-for="item in company" :value="item.value" :key="item.value">{{
           item.label
         }}</Option>
@@ -344,7 +394,7 @@ import {
   findByDynamicQuery,
   withdraw
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
-import { goshop } from '@/api/settlementManagement/shopList';
+import { goshop } from "@/api/settlementManagement/shopList";
 import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
@@ -353,7 +403,7 @@ import writeOff from "./components/writeOff";
 import moment from "moment";
 
 export default {
-  inject:['reload'],
+  inject: ["reload"],
   name: "businessBorrowing",
   components: {
     quickDate,
@@ -366,12 +416,11 @@ export default {
   },
   data() {
     return {
+      remoteloading: false,
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
-      Branchstore: [
-        {id:'0' ,name:'全部'}
-      ], //分店名称
+      Branchstore: [{ id: "0", name: "全部" }], //分店名称
       requestCode: "", //申请单号
       currRow: null, //选中行
       claimModal: false, //认领弹框
@@ -398,10 +447,11 @@ export default {
   },
   methods: {
     //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0)
+        return (this.Branchstore = [...this.Branchstore, ...res.data]);
     },
     // 快速查询
     quickDate(data) {
@@ -421,18 +471,18 @@ export default {
         page: 1,
         total: 0,
         size: 10
-      }
+      };
       if (type == 1) {
         this.claimModal = true;
         this.claimTit = "因公借支认领";
         this.claimCollectType = 1;
-        this.$store.commit("setClaimType", 2)
+        this.$store.commit("setClaimType", 2);
         this.claimedList(2);
       } else {
         this.claimModal = true;
         this.claimTit = "因公借支收回";
         this.claimCollectType = 2;
-        this.$store.commit("setClaimType", 3)
+        this.$store.commit("setClaimType", 3);
         this.claimedList(1);
       }
     },
@@ -459,9 +509,9 @@ export default {
     //预收款弹框是否打开
     visChangeClaim(type) {
       this.companyId = "";
-      this.amt =null;
+      this.amt = null;
       this.bankNameOthis = "";
-      this.claimSelection=[]
+      this.claimSelection = [];
       // if (!type) {
       //   this.companyId = "";
       //   this.amt =null;
@@ -474,7 +524,7 @@ export default {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
       }
-      if(this.currRow.paymentReturnBalance == 0) {
+      if (this.currRow.paymentReturnBalance == 0) {
         return this.$message.error("未认领资金不能核销");
       }
       this.$refs.writeOff.open();
@@ -515,11 +565,11 @@ export default {
     queryClaimed() {
       let t = 0;
       if (this.claimCollectType == 1) {
-        t = 2
+        t = 2;
       } else {
-        t = 1
+        t = 1;
       }
-      this.claimedList(t)
+      this.claimedList(t);
     },
     //初始化
     getQuery() {
@@ -560,11 +610,13 @@ export default {
         // currRow
         if (this.claimCollectType == 1) {
           if (this.selectionData.paidMoney > this.currRow.payAmt) {
-            return this.$message.error("金额大于因公借支金额金额，无法认领")
+            return this.$message.error("金额大于因公借支金额金额，无法认领");
           }
         } else {
-          if (this.selectionData.incomeMoney > this.currRow.paymentReturnBalance) {
-            return this.$message.error("金额大于因公借支金额金额，无法认领")
+          if (
+            this.selectionData.incomeMoney > this.currRow.paymentReturnBalance
+          ) {
+            return this.$message.error("金额大于因公借支金额金额，无法认领");
           }
         }
         this.$refs.claimGuest.modal = true;
@@ -577,7 +629,7 @@ export default {
     selection(selection) {
       this.claimSelection = [];
       this.selectionData = selection;
-      this.$store.commit("setFinanceAccountCashList", [{ id: selection.id }])
+      this.$store.commit("setFinanceAccountCashList", [{ id: selection.id }]);
       this.claimSelection.push({ id: selection.id });
     },
     //撤回弹框是否打开
@@ -591,38 +643,46 @@ export default {
     //撤销弹框确定按钮
     revokeDetaim() {
       if (this.reason.trim().length <= 0) {
-        return this.$message.error("请输入撤回原因")
+        return this.$message.error("请输入撤回原因");
       }
       let data = {
         revokeReason: this.reason.trim(),
         id: this.currRow.id,
-        sign: this.signType,
-      }
+        sign: this.signType
+      };
       api.loanRevoke(data).then(res => {
         if (res.code == 0) {
-          this.$message.success("撤销成功")
+          this.$message.success("撤销成功");
           this.revoke = false;
           // this.reload();
         }
-      })
+      });
     },
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
     },
     // 选中行
     currentChangeEvent({ row }) {
       this.currRow = row;
-      this.$store.commit("setLoanId", row.id)
+      this.$store.commit("setLoanId", row.id);
       // this.reconciliationStatement.accountNo = row.serviceId;
       this.serviceId = row.serviceId;
       this.$refs.Record.init();
@@ -662,11 +722,11 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.$nextTick( () => {
-      this.BranchstoreId = arr[1]
-    })
-    this.getShop()
-    this.getOne();
+    this.$nextTick(() => {
+      this.BranchstoreId = arr[1];
+    });
+    this.getShop();
+    // this.getOne();
     this.getQuery();
   }
 };

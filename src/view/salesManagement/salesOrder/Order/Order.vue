@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%">
+  <div class="content-oper content-oper-flex">
     <div class="headerBox">
       <span class="mr10">快速查询:</span>
       <getDate class="mr10" @quickDate="getvalue"></getDate>
@@ -36,7 +36,7 @@
         class="mr10"
         @click="setBackOrder"
         :loading="backloading"
-        :disabled="orderlistType.value != 1 || backShow"
+        :disabled="backShow"
         v-has="'BackOrder'"
       >
         <i class="iconfont mr5 iconziyuan14"></i> 返单
@@ -55,8 +55,8 @@
     </div>
     <div class="conter">
       <div class="demo-split">
-        <Split v-model="split1">
-          <div slot="left" ref="paneLeft" style="height: 100%" class="demo-split-pane">
+        <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
+          <div slot="left" ref="paneLeft" style="overflow-y: auto; height: 100%;" class="demo-split-pane">
             <OrderLeft
               ref="OrderLeft"
               :queryTime="queryTime"
@@ -66,7 +66,7 @@
               @refresh="getDutyInfo"
             ></OrderLeft>
           </div>
-          <div slot="right" class="demo-split-pane">
+          <div slot="right" class="demo-split-pane pl5">
             <OrderRight @parentGetleft="parentGetleft" ref="right"></OrderRight>
           </div>
         </Split>
@@ -169,12 +169,15 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
-      console.log(data);
       this.isWms = false;
-      this.backShow = false;
+      this.backShow = true;
       this.orderlistType = data.billStatusId;
-      if (data.billStatusId.value == 1 && data.isWms == 1) {
-        this.backShow = true;
+      if(data.billStatusId.value == 1 || (data.billStatusId.value == 0 && data.id)) {
+        if (data.isWms == 1) {
+          this.backShow = true;
+        } else {
+          this.backShow = false;
+        }
       }
       if (
         this.orderlistType &&

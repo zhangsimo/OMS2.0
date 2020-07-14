@@ -6,6 +6,8 @@ import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getDictionary , getExpSve} from '_api/documentApproval/ExpenseReimbursement'
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import {getDigitalDictionary} from "../../../../api/system/essentialData/clientManagement";
+import {getPost} from "../utils";
 
 export default {
   name: "ExpenseReimbursement",
@@ -30,6 +32,13 @@ export default {
       if (rows.cellValue && rows.row.totalAmt && rows.row.taxAmt && rows.cellValue != this.$utils.subtract(rows.row.totalAmt ,rows.row.taxAmt )){
         return Promise.reject(new Error('不含税金额计算错误'))
 
+      }
+    }
+    const taxRateCodeValid = ({cellValue , row}) => {
+      if(row.billTypeId&&row.billTypeId!="010102"){
+        if(cellValue=="TR001"){
+          return Promise.reject(new Error('费率必填'))
+        }
       }
     }
     return {
@@ -69,7 +78,7 @@ export default {
           { required: true, message: '必填' },
         ],
         taxRateCode:[
-          { required: true, message: '必填' },
+          { validator:taxRateCodeValid  },
         ],
         accountEntry:[
           { required: true, message: '必填' },
@@ -99,6 +108,8 @@ export default {
       options1: [],
       payUserList:[],//付款人列表
       Pictures:{},//请求回来的图片地址状态
+      //票据类型
+      invoiceMap:[],
     }
   },
   mounted(){
@@ -144,8 +155,7 @@ export default {
      this.options1 = []
      this.payUserList = this.list.payList
      this.modelType = false
-     this.getRate()
-     this.getTaxList()
+     this.getRate();
      this.$refs['formInline'].resetFields();
      this.formInline = {}
      this.$refs.upImg.uploadListModal = []
@@ -163,12 +173,12 @@ export default {
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
-        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
+        this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.orgName = user.shopName
+        this.formInline.orgName = getPost();
         this.formInline.applyTypeName = '费用报销'
         this.formInline.applyTime = date
-        this.formInline.paymentOrgName = user.shopName
+        this.formInline.paymentOrgName = getPost();
       }
      if (this.list.type == 2){
        this.getList()
@@ -215,23 +225,20 @@ export default {
 
     //获取费用类型
     async getRate(){
-     let data = {}
-     data.dictCode = 'FYLX'
-     let res = await getDictionary(data)
-      if(res.code === 0) {
-        this.moneyTypeList = res.data
+      let data = {};
+      //107票据类型
+      data = ["CS00107",'FYLX','TaxRate'];
+      let res = await getDigitalDictionary(data);
+      if (res.code == 0) {
+        //费用类型
+        this.moneyTypeList = res.data['FYLX']||[];
+        //税率
+        this.taxRate = res.data['TaxRate']||[];
+        //票据类型
+        this.invoiceMap = res.data['CS00107']||[];
       }
     },
 
-    //获取税率
-    async getTaxList(){
-      let data = {}
-      data.dictCode = 'TaxRate'
-      let res = await getDictionary(data)
-      if(res.code === 0) {
-        this.taxRate = res.data
-      }
-    },
 
     //获取往来单位
     getCompany(row) {
@@ -440,14 +447,13 @@ export default {
 
     //保存审核
     save(type){
-
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
           const errTwo = await this.$refs.documentTable.fullValidate().catch(errTwo => errTwo)
           if (errMap || errTwo){
             if (errTwo)  return  this.$Message.error('核销金额不能大于借支金额')
-            this.$Message.error('表格校验失败')
+            //this.$Message.error('表格校验失败')
           } else {
             this.formInline.step = type
             this.formInline.details = this.details
@@ -462,7 +468,7 @@ export default {
         }
       })
 
-    }
+    },
 
   }
 }
