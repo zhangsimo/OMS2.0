@@ -16,6 +16,7 @@ export const mixSelectPartCom = {
   },
   data() {
     return {
+      partId: "",
       Name: '名称',
       loading: false,
       treeLoading: false,
@@ -363,7 +364,12 @@ export const mixSelectPartCom = {
         // this.reload();
       });
     },
-
+    showLink(row) {
+      this.partId = row.partId;
+      this.$nextTick(() => {
+        this.$refs.LinkPart.init();
+      })
+    },
     //点击详情
     show(val) {
       let data = {};
@@ -372,9 +378,8 @@ export const mixSelectPartCom = {
       } else {
         data.partId = val.id;
       }
-      if(this.guestId){
-        data.guestId = this.guestId
-      }
+      data.guestId = this.guestId
+      data.storeId = this.storeId;
       getDetails(data).then(res => {
         if (res.code === 0) {
           this.allList = res.data;
