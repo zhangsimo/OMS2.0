@@ -169,7 +169,7 @@
             <p style="margin-bottom: 10px">财务信息</p>
             <div class="finance">
               <div class="financePlace">
-                <a class="mr10" @click="addPlaceFin" v-has="'finAddAcount'">
+                <a class="mr10" @click="addPlaceFin" v-has="'finAddAccount'">
                   <Icon custom="iconfont iconxinzengicon icons" />新增
                 </a>
                 <a class="mr10" @click="changeplageFin" v-has="'finChangeAccount'">
@@ -491,7 +491,7 @@ export default {
       selectFinTab: {}, // 财务信息 表格选中行的内容暂时性存储
       selectTaxTab: {},
       selectFinId: 0,
-      // finAddArr:[],//新增财务信息数组
+      finAddArr:[],//新增财务信息数组
       accountAddId:0,
       sessionKey: "0",
       Subordinate: [
@@ -822,12 +822,6 @@ export default {
             type: "number"
           }
         ],
-        // creditLimit: [
-        //   {
-        //     validator: creditLimit,
-        //     trigger: "change"
-        //   }
-        // ],
         accountName: [
           { required: true, message: " 不能为空", trigger: "change" }
         ],
@@ -937,6 +931,7 @@ export default {
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
+            if(item.accountAddId!=undefined){
               if (item.accountAddId == this.selectFinTab.accountAddId) {
                 let newarr = {};
                 newarr = JSON.parse(JSON.stringify(this.selectFinTab));
@@ -950,32 +945,24 @@ export default {
                 item.acquiesce = true;
                 this.disposeFinData();
               }
-            // if (item.accountBankNo == this.selectFinTab.accountBankNo) {
-            //   if(item.id == this.selectFinTab.id){
-            //     bool = true
-            //   }else{
-            //     bool = false
-            //   }
-            // }
+            }else{
+              if (item.id == this.selectFinTab.id) {
+                let newarr = {};
+                newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+                item.id = newarr.id;
+                item.tenantId = newarr.tenantId;
+                item.guestId = newarr.guestId;
+                item.accountBank = newarr.accountBank;
+                item.accountBankNo = newarr.accountBankNo;
+                item.accountName = newarr.accountName;
+                item.accountType = newarr.accountType;
+                item.acquiesce = true;
+                this.disposeFinData();
+              }
+            }
           });
-          // if (bool == true) {
-          //   if (item.id == this.selectFinTab.id) {
-          //     let newarr = {};
-          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
-          //     item.id = newarr.id;
-          //     item.tenantId = newarr.tenantId;
-          //     item.guestId = newarr.guestId;
-          //     item.accountBank = newarr.accountBank;
-          //     item.accountBankNo = newarr.accountBankNo;
-          //     item.accountName = newarr.accountName;
-          //     item.accountType = newarr.accountType;
-          //     item.acquiesce = newarr.acquiesce;
-          //   }
-            this.$Message.success("修改银行卡信息成功");
-            this.bankAccount = false;
-          // } else {
-          //   return this.$Message.error("该银行卡已添加过");
-          // }
+          this.$Message.success("修改银行卡信息成功");
+          this.bankAccount = false;
           this.data.guestAccountVoList = this.financeList;
         } else {
           let newarr = {};
@@ -1223,15 +1210,28 @@ export default {
         } else {
           this.invoice.map(item => {
             this.addInoiceOne = this.$refs.AddInoice.data;
-            if (item.bankId == this.addInoiceOne.bankId) {
-              let newarr = {};
-              newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
-              item.taxpayerName = newarr.taxpayerName;
-              item.taxpayerCode = newarr.taxpayerCode;
-              item.taxpayerTel = newarr.taxpayerTel;
-              item.accountBankNo = newarr.accountBankNo;
-              item.taxpayerSign = newarr.taxpayerSign || true;
-              item.taxpayerType=true
+            if(item.bankId!=undefined){
+              if (item.bankId == this.addInoiceOne.bankId) {
+                let newarr = {};
+                newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+                item.taxpayerName = newarr.taxpayerName;
+                item.taxpayerCode = newarr.taxpayerCode;
+                item.taxpayerTel = newarr.taxpayerTel;
+                item.accountBankNo = newarr.accountBankNo;
+                item.taxpayerSign = newarr.taxpayerSign || true;
+                item.taxpayerType=true
+              }
+            }else{
+              if (item.id == this.addInoiceOne.id) {
+                let newarr = {};
+                newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+                item.taxpayerName = newarr.taxpayerName;
+                item.taxpayerCode = newarr.taxpayerCode;
+                item.taxpayerTel = newarr.taxpayerTel;
+                item.accountBankNo = newarr.accountBankNo;
+                item.taxpayerSign = newarr.taxpayerSign || true;
+                item.taxpayerType=true
+              }
             }
           });
           this.data.guestTaxpayerVOList = this.invoice;
