@@ -163,7 +163,11 @@
           field="sourceId"
           title="来源"
           width="140"
-        ></vxe-table-column>
+        >
+          <template v-slot="{ row }">
+            <span>{{ row == 0 ? "oms" : "wms" }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           field="auditor"
           title="提交人"

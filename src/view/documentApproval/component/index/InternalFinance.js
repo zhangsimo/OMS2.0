@@ -4,6 +4,7 @@ import flowbox from '../Flow'
 import {getShiftTo , getIFSave} from '_api/documentApproval/InternalFinace.js'
 import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js"
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import {getPost} from "../utils";
 
 export default {
   name: "Interna",
@@ -83,10 +84,10 @@ export default {
         this.formInline.applicant = user.staffName
         this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.orgName = user.shopName
+        this.formInline.orgName = getPost();
         this.formInline.applyTypeName = '内部资金调拨'
         this.formInline.applyTime = date
-        this.formInline.outOrgName = user.shopName
+        this.formInline.outOrgName = getPost();
       }
       if (this.list.type == 2){
         this.getList()

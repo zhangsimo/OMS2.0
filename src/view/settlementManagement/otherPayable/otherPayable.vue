@@ -89,14 +89,15 @@
             highlight-current-row
             @current-change="currentChangeEvent"
             max-height="400"
+            :data="tableData"
             align="center"
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
             <vxe-table-column field="orderTypeName" width="100" title="业务类型" fixed="left"></vxe-table-column>
             <vxe-table-column field="guestName" width="100" title="往来单位"  fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
-              <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="serviceId" width="120" title="其他收款单号"></vxe-table-column>
               <vxe-table-column field="paymentDate" width="100" title="付款时间">
                 <!--<ul class="list">-->
@@ -280,14 +281,14 @@
     <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select
-              v-model="companyId"
-              class="w150"
-              clearable
-              filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne"
-              @on-change="query"
+          v-model="companyId"
+          class="w150"
+          clearable
+          filterable
+          remote
+          :loading="remoteloading"
+          :remote-method="getOne"
+          @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -329,7 +330,8 @@ import claim from "./components/claimed";
 import settlement from "./components/settlement";
 import { creat } from "@/view/settlementManagement/components";
 // import { creat } from "./../components";
-import Record from "./components/Record";
+// import Record from "./components/Record";
+import Record from "../components/Record";
 import claimGuest from "./components/claimGuest";
 import OtherPayment from "../../documentApproval/component/OtherPayment";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";

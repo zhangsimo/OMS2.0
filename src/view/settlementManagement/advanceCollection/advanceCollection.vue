@@ -583,6 +583,6 @@ export default {
   padding: 0;
 }
 .vxe-table .vxe-body--column:not(.col--ellipsis) {
-  padding: 0;
+  padding: 0px 10px !important;
 }
 </style>

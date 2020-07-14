@@ -92,12 +92,12 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
             <vxe-table-column field="businessType" width="100" title="业务类型" fixed="left">
               <template v-slot="{row}">{{row.businessType.name}}</template>
             </vxe-table-column>
             <vxe-table-column field="guestName" width="100" title="往来单位" fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
-              <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="serviceId" width="140" title="其他付款申请单号"></vxe-table-column>
               <vxe-table-column field="payTime" title="付款时间" width="100"></vxe-table-column>
             </vxe-table-column>
@@ -329,8 +329,10 @@ import claim from "./components/claimed";
 import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
 // import settlement from "./components/settlement";
 import { creat } from "./../components";
-import Record from "./components/Record";
+// import Record from "./components/Record";
+import Record from "../components/Record";
 import {
+
   findAdvance,
   revoke,
   findGuest

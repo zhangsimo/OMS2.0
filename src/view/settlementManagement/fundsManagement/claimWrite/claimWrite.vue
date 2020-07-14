@@ -603,18 +603,19 @@ export default {
       }
     },
     async getOne2(query) {
-      this.company = [];
+      this.company2 = [];
       if (query != "") {
         this.remoteloading2 = true;
         findGuest({ fullName: query, size: 20 }).then(res => {
           if (res.code === 0) {
-            this.company = [];
+            this.company2 = [];
             res.data.content.map(item => {
               this.company2.push({
                 value: item.id,
                 label: item.fullName
               });
             });
+
             this.remoteloading2 = false;
           }
         });

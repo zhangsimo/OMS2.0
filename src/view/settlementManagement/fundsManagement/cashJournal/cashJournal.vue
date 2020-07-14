@@ -158,7 +158,7 @@
               size="mini"
               :data="tableData"
             >
-              <vxe-table-column type="seq" title="序号" min-width="60"></vxe-table-column>
+              <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
               <vxe-table-column field="shopName" title="所属门店" min-width="100"></vxe-table-column>
               <vxe-table-column field="createTime" title="日期" min-width="100"></vxe-table-column>
               <vxe-table-column field="tradingNote" title="交易备注" min-width="100"></vxe-table-column>
@@ -200,7 +200,7 @@
               size="mini"
               :data="tableData1"
             >
-              <vxe-table-column type="seq" title="序号" min-width="60"></vxe-table-column>
+              <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
               <vxe-table-column field="shopName" title="所属门店" min-width="100"></vxe-table-column>
               <vxe-table-column field="createTime" title="日期" min-width="100"></vxe-table-column>
               <vxe-table-column field="tradingNote" title="交易备注" min-width="100"></vxe-table-column>
@@ -242,7 +242,7 @@
               size="mini"
               :data="tableData2"
             >
-              <vxe-table-column type="seq" title="序号" min-width="60"></vxe-table-column>
+              <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
               <vxe-table-column field="shopName" title="所属门店" min-width="100"></vxe-table-column>
               <vxe-table-column field="createTime" title="日期" min-width="60"></vxe-table-column>
               <vxe-table-column field="tradingNote" title="交易备注" min-width="100"></vxe-table-column>

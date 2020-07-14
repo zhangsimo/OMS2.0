@@ -951,9 +951,9 @@
                     if (valid) {
                         try {
                             await this.$refs.xTable.validate();
-                            if (+this.totalMoney > +this.limitList.sumAmt) {
-                                return this.$message.error("可用余额不足");
-                            }
+                            // if (+this.totalMoney > +this.limitList.sumAmt) {
+                            //     return this.$message.error("可用余额不足");
+                            // }
                             let data = JSON.parse(JSON.stringify(this.formPlan));
                             data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
                             data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
