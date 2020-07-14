@@ -867,9 +867,26 @@ export default {
     },
     //选择采购入库单
     getPlanOrder(Msg) {
-      let arr = Msg || [];
+      let arr = JSON.parse(JSON.stringify(Msg || []));
 
       if (arr.length <= 0) return;
+      // sourceDetailId
+      let flag = false;
+      for(let i = 0; i < this.Right.tbdata.length; i++) {
+        let el = this.Right.tbdata[i];
+        for(let j = 0; j < arr.length; j++) {
+          let em = arr[j];
+          // console.log(em.sourceDetailId, el.sourceDetailId)
+          if(el.sourceDetailId == em.sourceDetailId) {
+            arr.splice(j, 1);
+            flag = true;
+          }
+        }
+      }
+
+      if(flag) {
+        this.$message.error("同一批次配件不重复添加");
+      }
 
       arr.map(item => {
         item.outUnitId = item.enterUnitId;
@@ -883,7 +900,10 @@ export default {
       });
 
       this.Right.tbdata = this.Right.tbdata.concat(arr);
-      this.$message.success("已添加");
+
+      if(!flag) {
+        this.$message.success("已添加");
+      }
     },
     selectTabelData() {},
     //保存按钮
