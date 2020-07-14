@@ -220,15 +220,15 @@ export default {
       } else if (!/^1[3456789]\d{9}$/.test(value)) {
         callback(new Error("手机号格式不正确"));
       } else {
-        let data = {}
-        data.mobile = value
-        setPhone(data).then( res => {
-          if (res.code != 0){
-            return callback(new Error("手机号码重复"));
-          }else {
+        // let data = {}
+        // data.mobile = value
+        // setPhone(data).then( res => {
+        //   if (res.code != 0){
+        //     return callback(new Error("手机号码重复"));
+        //   }else {
             callback();
-          }
-        })
+          // }
+        // })
       }
     };
     const cardId = (rule, value, callback) => {
