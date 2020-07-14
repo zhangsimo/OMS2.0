@@ -74,8 +74,9 @@
           ref="xTable"
           show-footer
           show-overflow
-          size="mine"
+          size="mini"
           align="center"
+          height="200"
           :footer-method="footerMethod"
           :data="formInline.expenseDetails"
           :edit-rules="validRules"
@@ -114,6 +115,16 @@
               name: 'input',
               attrs: { disabled: false, placeholder: '选择会计科目' },
               events: { focus: getSubject }
+            }"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="billTypeId"
+            title="票据类型"
+            :edit-render="{
+              name: 'select',
+              options: invoiceMap,
+              attrs: { disabled: false },
+              optionProps: { value: 'itemCode', label: 'itemName' }
             }"
           ></vxe-table-column>
           <vxe-table-column
@@ -176,7 +187,7 @@
           ref="documentTable"
           show-footer
           show-overflow
-          size="mine"
+          size="mini"
           align="center"
           :footer-method="documentFooterMethod"
           :data="details"
