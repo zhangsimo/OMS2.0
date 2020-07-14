@@ -193,9 +193,6 @@
                 }
             },
         },
-      mounted() {
-          console.log(this.dataObj,typeof(this.dataObj),"???")
-      },
       props:{
         dataObj:{
           type:Object,
