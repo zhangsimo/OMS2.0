@@ -84,6 +84,12 @@
             :footer-method="footerMethod"
           >
             <vxe-table-column
+              type="seq"
+              width="60"
+              title="序号"
+              fixed="left"
+            ></vxe-table-column>
+            <vxe-table-column
               field="serviceId"
               title="费用报销申请单号"
               width="140"
@@ -96,11 +102,6 @@
               fixed="left"
             ></vxe-table-column>
             <vxe-table-column title="基本信息">
-              <vxe-table-column
-                type="seq"
-                width="60"
-                title="序号"
-              ></vxe-table-column>
               <vxe-table-column
                 field="applicationTime"
                 title="申请时间"

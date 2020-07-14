@@ -15,6 +15,8 @@
       border="full"
       :data="tableData"
     >
+      <vxe-table-column type="checkbox" min-width="80" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" min-width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="tmp" title="往来单位" fixed="left" min-width="100">
         <template v-slot="{ row }">
           <ul class="list">
@@ -29,8 +31,6 @@
         </template>
       </vxe-table-column>
       <vxe-table-column title="基本信息">
-        <vxe-table-column type="checkbox" min-width="80"></vxe-table-column>
-        <vxe-table-column type="seq" title="序号" min-width="80"></vxe-table-column>
         <vxe-table-column
           field="businessNumbers"
           title="付款单号"

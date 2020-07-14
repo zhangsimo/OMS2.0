@@ -502,24 +502,75 @@ export default {
         {
           title: "客户名称",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "日期",
           key: "transferDate",
           className: "tc",
-          sortable: true
+          sortable: true,
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.transferDate
+                }
+              }, params.row.transferDate)
+            ])
+          }
         },
         {
           title: "业务单据号",
           key: "serviceId",
-          width: 120,
-          className: "tc"
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.serviceId
+                }
+              }, params.row.serviceId)
+            ])
+          }
         },
         {
           title: "来源",
           key: "serviceSourceName",
-          className: "tc"
+          className: "tc",
+          minWidth: 100
         },
         {
           title: "业务类型",
@@ -548,17 +599,20 @@ export default {
         {
           title: "前期已对账金额",
           key: "accountAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 140
         },
         {
           title: "前期未对账金额",
           key: "noAccountAmt",
-          className: "tc"
+          className: "tc",
+          minWidth: 140
         },
         {
           title: "本次不对账金额",
           key: "thisNoAccountAmt",
           className: "tc",
+          minWidth: 140,
           render: (h, params) => {
             return h(
               "span",
@@ -595,7 +649,8 @@ export default {
           title: "本次对账金额",
           key: "thisAccountAmt",
           className: "tc",
-          sortable: true
+          sortable: true,
+          minWidth: 140
         }
       ],
       SettlementType: [
