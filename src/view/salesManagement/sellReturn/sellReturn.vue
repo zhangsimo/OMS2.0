@@ -976,6 +976,24 @@ export default {
       arr = JSON.parse(JSON.stringify(arr));
       if (arr.length <= 0) return;
 
+      let flag = false;
+
+      for(let i = 0; i < this.formPlan.details.length; i++) {
+        let el = this.formPlan.details[i];
+        for(let j = 0; j < arr.length; j++) {
+          let em = arr[j];
+          // console.log(em.sourceDetailId, el.sourceDetailId)
+          if(el.sourceDetailId == em.sourceDetailId) {
+            arr.splice(j, 1);
+            flag = true;
+          }
+        }
+      }
+
+      if(flag) {
+        this.$message.error("同一批次配件不重复添加");
+      }
+
       arr.forEach(item => {
         item.prevDetailId = item.sourceDetailId;
         item.outUnitId = item.systemUnitId;
@@ -985,13 +1003,15 @@ export default {
         item.orderPrice = item.sellPrice;
         item.oid = v4();
         item.uuid = item.oid;
-        Reflect.deleteProperty(item, "sourceDetailId");
+        // Reflect.deleteProperty(item, "sourceDetailId");
       });
       if (!this.formPlan.details) {
         this.formPlan.details = [];
       }
       this.formPlan.details = this.formPlan.details.concat(arr);
-      this.$message.success("已添加");
+      if(!flag) {
+        this.$message.success("已添加");
+      }
     },
 
     //提交
