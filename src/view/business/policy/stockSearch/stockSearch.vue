@@ -666,7 +666,7 @@ export default {
           minWidth: 60,
           render:(h,p) => {
             if(p.row.deliveryDue){
-              let day = moment(p.row.deliveryDue).format("YYYY-MM-DD hh:mm:ss");
+              let day = moment(p.row.deliveryDue).format("YYYY-MM-DD HH:mm:ss");
               return h('span',day)
             }
           }
