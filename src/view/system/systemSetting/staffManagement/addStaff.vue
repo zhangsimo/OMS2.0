@@ -7,8 +7,28 @@
     style="text-align: left"
     ref="form"
   >
-    <Tabs type="card">
-      <TabPane label="基本信息">
+<!--    <Tabs type="card">-->
+<!--      <TabPane label="基本信息">-->
+    <div class="db pl10 tabs-ulwarp">
+      <ul class="tabs">
+        <li
+          class="center"
+          :class="{ 'tab-active': tabIndex == 0 }"
+          @click="setTab(0)"
+        >
+          基本信息
+        </li>
+        <li
+          class="center"
+          :class="{ 'tab-active': tabIndex == 1 }"
+          @click="setTab(1)"
+        >
+          其他信息
+        </li>
+      </ul>
+    </div>
+
+        <div v-if="tabIndex == 0" class="pt20">
         <div style="display: flex">
           <div style="flex-flow: row nowrap;width: 100%">
             <FormItem label="姓名：" prop="userName">
@@ -152,9 +172,8 @@
             </div>
           </div>
         </div>
-      </TabPane>
-      <TabPane label="其他信息">
-        <div>
+        </div>
+        <div v-if="tabIndex == 1" class="pt20">
           <p style="margin-bottom: 10px">财务信息</p>
           <div class="finance">
             <div class="financePlace">
@@ -191,8 +210,6 @@
             </div>
           </Modal>
         </div>
-      </TabPane>
-    </Tabs>
   </Form>
 </template>
 
@@ -245,6 +262,8 @@ export default {
       }
     };
     return {
+      // tab索引
+      tabIndex: 0,
       rules: {
         userName: [
           { required: true, message: "姓名不能为空", trigger: "blur" }
@@ -384,6 +403,11 @@ export default {
     this.getLeftList();
   },
   methods: {
+    // tab切换
+    setTab(index) {
+      this.tabIndex = index;
+      this.showSearch = this.shopkeeper == 1 || index == 0;
+    },
     //获取公司
     async getList() {
       let data = {};
@@ -597,11 +621,45 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .addForm {
   margin-top: 15px;
 }
 .addForm .ivu-form-item {
   margin-bottom: 10px !important;
 }
+.tabs-ulwarp {
+  padding-top: 17px;
+  border-bottom: solid 1px #ddd;
+}
+
+.tabs {
+  list-style: none;
+  display: flex;
+
+  li {
+    margin: 0;
+    margin-right: 4px;
+    height: 31px;
+    padding: 5px 16px 4px;
+    border: 1px solid #ddd;
+    border-bottom: 0;
+    border-radius: 2px 2px 0 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background: #f8f8f8;
+    cursor: pointer;
+  }
+
+  li.tab-active {
+    height: 32px;
+    padding-bottom: 5px;
+    background: #fff;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    border-color: #ddd;
+    color: #fd5c5c;
+  }
+}
+
 </style>
