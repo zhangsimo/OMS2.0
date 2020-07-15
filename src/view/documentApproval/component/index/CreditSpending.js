@@ -4,6 +4,8 @@ import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getCreditSave} from '_api/documentApproval/CreditSpending.js'
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import {getAccountName} from "../../../../api/bill/saleOrder";
+import {getPost} from "../utils";
 
 
 export default {
@@ -18,6 +20,7 @@ export default {
   },
   data(){
     return {
+      remoteloading: false,
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
       formInline:{
@@ -60,7 +63,10 @@ export default {
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
       company:[],//往来单位
+      options: [],
       Pictures:{},//请求回来的图片地址状态
+      //收款账号
+      receiverArr:[]
     }
   },
   mounted(){
@@ -69,7 +75,8 @@ export default {
   methods:{
     //模态框打开111
     open(){
-      this.company = this.list.salesList
+      this.company = [];
+      this.options = this.list.salesList;
       this.payUserList = this.list.payList
       this.formInline = {}
       this.$refs.upImg.uploadListModal = []
@@ -84,10 +91,10 @@ export default {
         this.formInline.applicant = user.staffName
         this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.orgName = user.shopName
+        this.formInline.orgName = getPost();
         this.formInline.applyTypeName = '预收款支出'
         this.formInline.applyTime = date
-        this.formInline.paymentOrgName = user.shopName
+        this.formInline.paymentOrgName = getPost();
       }
       if (this.list.type == 2){
         this.getList()
@@ -104,10 +111,10 @@ export default {
         this.formInline.applicant = user.staffName
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.orgName = user.shopName
+        this.formInline.orgName = getPost();
         this.formInline.applyTypeName = '预收款支出'
         this.formInline.applyTime = date
-        this.formInline.paymentOrgName = user.shopName
+        this.formInline.paymentOrgName = getPost();
         delete this.list.rowMessage.id
         this.$set(this.formInline,'details' ,[this.list.rowMessage])
       }
@@ -130,14 +137,57 @@ export default {
       }
     },
 
-
+    remoteMethod(query) {
+      this.company = [];
+      if (query !== "") {
+        this.remoteloading = true;
+        this.company = [];
+        const list = this.options.map(item => {
+          return {
+            value: item.value,
+            label: item.label
+          };
+        });
+        this.company = list.filter(
+          item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+        );
+        this.remoteloading = false;
+      } else {
+        this.company = [];
+      }
+    },
 
     //获取往来单位
     getCompany(row) {
-      let arr = this.company.filter( item => item.value == row.value)
-      this.formInline.receiver = arr[0].receiver || ''
-      this.formInline.receiveBank = arr[0].receiveBank || ''
-      this.formInline.receiveBankNo = arr[0].receiveBankNo || ''
+      // let arr = this.company.filter( item => item.value == row.value)
+      this.getAccountNameList(row)
+    },
+
+
+    //获取收款户名
+    async getAccountNameList(row){
+      let rep = await getAccountName({"guestId":row.value});
+      if(rep.code==0){
+        this.receiverArr = rep.data;
+        if(rep.data.length==1){
+          this.setReceiverInfo(this.receiverArr[0])
+        }else{
+          this.formInline.receiver = ''
+          this.formInline.receiveBank = ''
+          this.formInline.receiveBankNo = '';
+        }
+      }
+    },
+
+    setReceiverInfo(row){
+      this.formInline.receiver = row.id;
+      this.formInline.receiveBank = row.accountBank;
+      this.formInline.receiveBankNo = row.accountBankNo;
+    },
+
+    changeCollectionUname(v){
+      let arr = this.receiverArr.filter(item => item.id==v);
+      this.setReceiverInfo(arr[0]);
     },
 
 

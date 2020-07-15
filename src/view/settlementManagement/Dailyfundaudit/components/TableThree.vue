@@ -15,6 +15,8 @@
       border="full"
       :data="tableData"
     >
+      <vxe-table-column type="checkbox" min-width="60" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
       <vxe-table-column
         field="proposerName"
         title="往来单位"
@@ -22,8 +24,6 @@
         min-width="120"
       ></vxe-table-column>
       <vxe-table-column title="基本信息">
-        <vxe-table-column type="checkbox" min-width="60"></vxe-table-column>
-        <vxe-table-column type="seq" title="序号" min-width="60"></vxe-table-column>
         <vxe-table-column
           field="businessNumbers"
           title="收付款单号"

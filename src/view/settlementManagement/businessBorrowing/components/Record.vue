@@ -25,12 +25,46 @@ export default {
         {
           title: "因公借支申请单号",
           key: "accountNo",
-          align: "center"
+          align: "center",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountNo
+                }
+              }, params.row.accountNo)
+            ])
+          }
         },
         {
           title: "收付款单号",
           key: "fno",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.fno
+                }
+              }, params.row.fno)
+            ])
+          }
         },
         // {
         //   title: "对账单号",
@@ -40,12 +74,46 @@ export default {
         {
           title: "收款人/付款人",
           key: "createUname",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createUname
+                }
+              }, params.row.createUname)
+            ])
+          }
         },
         {
           title: "收付款时间",
           key: "rpDate",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.rpDate
+                }
+              }, params.row.rpDate)
+            ])
+          }
         },
         // {
         //   title: "收付款业务类型",
@@ -71,12 +139,30 @@ export default {
         {
           title: "往来单位",
           key: "guestName",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
         },
         {
           title: "收付款类型",
           key: "sort",
           align: "center",
+          minWidth: 100,
           render: (h, p) => {
             let val = p.row.sort.name;
             return h("span", val);
@@ -85,42 +171,162 @@ export default {
         {
           title: "账户所属门店",
           key: "accountStoreName",
-          align: "center"
+          align: "center",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountStoreName
+                }
+              }, params.row.accountStoreName)
+            ])
+          }
         },
         {
           title: "收付款账户",
           key: "account",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.account
+                }
+              }, params.row.account)
+            ])
+          }
         },
         {
           title: "收付款开户行",
           key: "accountBank",
-          align: "center"
+          align: "center",
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountBank
+                }
+              }, params.row.accountBank)
+            ])
+          }
         },
         {
           title: "收付款账号",
           key: "accountBankNo",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.accountBankNo
+                }
+              }, params.row.accountBankNo)
+            ])
+          }
         },
         {
           title: "对方户名",
           key: "otherAccountName",
-          align: "center"
+          align: "center",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.otherAccountName
+                }
+              }, params.row.otherAccountName)
+            ])
+          }
         },
         {
           title: "对方开户行",
           key: "otherAccountBank",
-          align: "center"
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.otherAccountBank
+                }
+              }, params.row.otherAccountBank)
+            ])
+          }
         },
         {
           title: "对方账号",
           key: "otherAccountBankNo",
-          align: "center"
+          align: "center",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.otherAccountBankNo
+                }
+              }, params.row.otherAccountBankNo)
+            ])
+          }
         },
         {
           title: "收付款金额",
           key: "checkAmt",
           align: "center",
+          minWidth: 100,
           render: (h, p) => {
             let val = p.row.checkAmt;
             let value = p.row.sort.value;
@@ -134,6 +340,7 @@ export default {
           title: "审核状态",
           key: "startStatus",
           align: "center",
+          minWidth: 80,
           render: (h, p) => {
             let val = p.row.startStatus.name;
             return h("span", val);
@@ -142,12 +349,46 @@ export default {
         {
           title: "审核人",
           key: "auditor",
-          align: "center"
+          align: "center",
+          minWidth: 70,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.auditor
+                }
+              }, params.row.auditor)
+            ])
+          }
         },
         {
           title: "审核日期",
           key: "auditorDate",
-          align: "center"
+          align: "center",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.auditorDate
+                }
+              }, params.row.auditorDate)
+            ])
+          }
         },
         // {
         //   title: "备注",

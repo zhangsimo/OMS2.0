@@ -36,7 +36,7 @@
         class="mr10"
         @click="setBackOrder"
         :loading="backloading"
-        :disabled="orderlistType.value != 1 || backShow"
+        :disabled="backShow"
         v-has="'BackOrder'"
       >
         <i class="iconfont mr5 iconziyuan14"></i> 返单
@@ -169,12 +169,15 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
-      console.log(data);
       this.isWms = false;
-      this.backShow = false;
+      this.backShow = true;
       this.orderlistType = data.billStatusId;
-      if (data.billStatusId.value == 1 && data.isWms == 1) {
-        this.backShow = true;
+      if(data.billStatusId.value == 1 || (data.billStatusId.value == 0 && data.id)) {
+        if (data.isWms == 1) {
+          this.backShow = true;
+        } else {
+          this.backShow = false;
+        }
       }
       if (
         this.orderlistType &&

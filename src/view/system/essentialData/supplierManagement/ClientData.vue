@@ -560,39 +560,40 @@ export default {
           let bool = true;
           this.selectFinTab = this.$refs.bankAccount.data;
           this.financeList.map(item => {
-            if (item.accountAddId == this.selectFinTab.accountAddId) {
-              let newarr = {};
-              newarr = JSON.parse(JSON.stringify(this.selectFinTab));
-              item.id = newarr.id;
-              item.tenantId = newarr.tenantId;
-              item.guestId = newarr.guestId;
-              item.accountBank = newarr.accountBank;
-              item.accountBankNo = newarr.accountBankNo;
-              item.accountName = newarr.accountName;
-              item.accountType = newarr.accountType;
-              item.acquiesce = newarr.acquiesce;
-              item.accountSign = true
-              this.disposeFinData();
+            if(item.accountAddId!=undefined){
+              if (item.accountAddId == this.selectFinTab.accountAddId) {
+                let newarr = {};
+                newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+                item.id = newarr.id;
+                item.tenantId = newarr.tenantId;
+                item.guestId = newarr.guestId;
+                item.accountBank = newarr.accountBank;
+                item.accountBankNo = newarr.accountBankNo;
+                item.accountName = newarr.accountName;
+                item.accountType = newarr.accountType;
+                item.acquiesce = newarr.acquiesce;
+                item.accountSign = true
+                this.disposeFinData();
+              }
+            }else{
+              if (item.id == this.selectFinTab.id) {
+                let newarr = {};
+                newarr = JSON.parse(JSON.stringify(this.selectFinTab));
+                item.id = newarr.id;
+                item.tenantId = newarr.tenantId;
+                item.guestId = newarr.guestId;
+                item.accountBank = newarr.accountBank;
+                item.accountBankNo = newarr.accountBankNo;
+                item.accountName = newarr.accountName;
+                item.accountType = newarr.accountType;
+                item.acquiesce = newarr.acquiesce;
+                item.accountSign = true
+                this.disposeFinData();
+              }
             }
           });
-          // if (bool == true) {
-          //   if (item.id == this.selectFinTab.id) {
-          //     let newarr = {};
-          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
-          //     item.id = newarr.id;
-          //     item.tenantId = newarr.tenantId;
-          //     item.guestId = newarr.guestId;
-          //     item.accountBank = newarr.accountBank;
-          //     item.accountBankNo = newarr.accountBankNo;
-          //     item.accountName = newarr.accountName;
-          //     item.accountType = newarr.accountType;
-          //     item.acquiesce = newarr.acquiesce;
-          //   }
-            this.$Message.success("修改银行卡信息成功");
-            this.bankAccount = false;
-          // } else {
-          //   return this.$Message.error("该银行卡已添加过");
-          // }
+          this.$Message.success("修改银行卡信息成功");
+          this.bankAccount = false;
           this.data.guestAccountVoList = this.financeList;
         } else {
           let newarr = {};

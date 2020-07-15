@@ -82,3 +82,13 @@ export async function getComenAndGo() {
   }
   return arr;
 }
+
+export function getPost(){
+  let list = store.state.user.userData.currentRoles || []
+  let arr =   list.filter( item => item.systemType == 0)
+  if(arr.length > 0){
+    return arr[0].displayName
+  }else {
+    return
+  }
+}

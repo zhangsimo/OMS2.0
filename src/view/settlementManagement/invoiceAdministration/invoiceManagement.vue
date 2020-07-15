@@ -268,11 +268,13 @@ export default {
         {
           title: "选择",
           minWidth: 50,
-          type: "selection"
+          type: "selection",
+          fixed: "left"
         },
         {
           title: "序号",
           minWidth: 50,
+          fixed: "left",
           render: (h, params) => {
             return h(
               "span",

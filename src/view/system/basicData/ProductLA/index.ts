@@ -333,7 +333,7 @@ export default class ProductLA extends Vue {
         if (this.DistributionStateSelecteOption != '0') {
             if (this.DistributionStateSelecteOption == '1') {
                 params.allocation = 1;
-            } else {
+            } else if(this.DistributionStateSelecteOption=='2') {
                 params.allocation = 0;
             }
         }
@@ -476,8 +476,12 @@ export default class ProductLA extends Vue {
         let params: any = {}
         let data: any = {};
         data.empId = this.employeeId;
-        data.partCode = this.waitPartTransListContent;
-       data.partBrandId = this.waitPartTransListBrand;
+        if(this.waitPartTransListContent){
+          data.partCode = this.waitPartTransListContent;
+        }
+        if(this.waitPartTransListBrand && this.waitPartTransListBrand!='9999'){
+          data.partBrandId = this.waitPartTransListBrand;
+        }
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
         if(this.waitPartTransListContent.trim().length > 0) {
@@ -595,25 +599,19 @@ export default class ProductLA extends Vue {
     }
     private async submitTip(){
       if(this.tipWords.includes('一键移入')){
-        let data:any =this.waitPartListData.map((el:any) => {
-          return {
-            partCode: el.partCode,
-            empId: this.employeeId,
-            partBrandCode: el.partBrandCode,
-            partId: el.code,
-            partInnerId: el.code,
-            partBrand: el.partBrand,
-            empName: this.loginName,
-            qualityName : el.quality,
-            name : el.partStandardName,
-            fullName : el.fullName,
-            unitld : el.minUnit,
-            spec : el.spec,
-            carModelName : el.adapterCarModel,
-          }
-        })
+        let data:any = {};
+        data ={
+          empId: this.employeeId,
+          empName: this.loginName,
+        }
+        if(this.waitPartTransListContent){
+          data.partCode=this.waitPartTransListContent;
+        }
+        if(this.waitPartTransListBrand&&this.waitPartTransListBrand!='9999'){
+          data.partBrandId=this.waitPartTransListBrand;
+        }
         this.distPartListData = JSON.parse(JSON.stringify(this.waitPartListData))
-        let res:any = await api.employeeAddPart(data);
+        let res:any = await api.employeeAddAllPart(data);
         if(res.code == 0) {
           this.$Message.success('移入成功')
         }

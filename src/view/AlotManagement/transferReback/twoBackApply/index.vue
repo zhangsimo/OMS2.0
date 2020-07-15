@@ -1107,13 +1107,28 @@ export default {
 
     //选择采购入库单
     getPlanOrder(Msg) {
-      let arr = Msg || [];
+      let arr = JSON.parse(JSON.stringify(Msg || []));
 
       if (arr.length <= 0) return;
 
-      console.log(arr);
+      let flag = false;
+      for(let i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+        let el = this.Leftcurrentrow.detailVOS[i];
+        for(let j = 0; j < arr.length; j++) {
+          let em = arr[j];
+          // console.log(em.sourceDetailId, el.sourceDetailId)
+          if(el.sourceDetailId == em.sourceDetailId) {
+            arr.splice(j, 1);
+            flag = true;
+          }
+        }
+      }
 
-      let arrB = arr.map(itemb => {
+      if(flag) {
+        this.$message.error("同一批次配件不重复添加");
+      }
+
+      arr = arr.map(itemb => {
         let item = {...itemb}
         item.outUnitId = item.enterUnitId;
         item.unit = item.enterUnitId;
@@ -1126,8 +1141,10 @@ export default {
         return item;
       });
 
-      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arrB);
-      this.$message.success("已添加");
+      this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arr);
+      if(!flag) {
+        this.$message.success("已添加");
+      }
     },
 
 

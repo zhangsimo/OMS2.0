@@ -95,6 +95,7 @@
             auto-resize
             resizable
             border
+            show-overflow
             highlight-hover-row
             highlight-current-row
             ref="xTable"
@@ -104,6 +105,12 @@
             show-footer
             :footer-method="footerMethod"
           >
+            <vxe-table-column
+              type="seq"
+              width="60"
+              title="序号"
+              fixed="left"
+            ></vxe-table-column>
             <vxe-table-column
               field="serviceId"
               title="因公借支申请单号"
@@ -117,11 +124,6 @@
               fixed="left"
             ></vxe-table-column>
             <vxe-table-column title="基本信息">
-              <vxe-table-column
-                type="seq"
-                width="60"
-                title="序号"
-              ></vxe-table-column>
               <vxe-table-column
                 field="applyTime"
                 title="申请时间"

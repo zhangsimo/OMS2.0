@@ -81,6 +81,14 @@ export function employeeAddPart (data) {
     data
   })
 }
+//一键移入
+export function employeeAddAllPart (data) {
+  return axios.request({
+    url: `${api.wmsApi}/employeeAttribute/saveAll`,
+    method: 'post',
+    data
+  })
+}
 
 // 批量给员工删除配件
 export function employeeDeletePart (data) {
