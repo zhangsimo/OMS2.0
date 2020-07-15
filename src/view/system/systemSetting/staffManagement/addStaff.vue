@@ -353,6 +353,9 @@ export default {
           align: "center",
           render: (h, params) => {
             let text = "";
+            if(params.row.wagesSign ==null){
+              params.row.wagesSign =false
+            }
             params.row.wagesSign == true
               ? (text = "已默认")
               : (text = "设为默认");
