@@ -17,12 +17,16 @@
     >
       <vxe-table-column type="checkbox" min-width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column
-        field="proposerName"
-        title="往来单位"
-        fixed="left"
-        min-width="120"
-      ></vxe-table-column>
+      <vxe-table-column title="往来单位" fixed="left" min-width="120">
+        <template v-slot="{row}">
+          <ul class="list">
+            <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
+              <span class="listChild" v-if="item.guestSourceName!=null">{{ item.guestSourceName }}</span>
+              <span class="listChild" v-else>该值为null</span>
+            </li>
+          </ul>
+        </template>
+      </vxe-table-column>
       <vxe-table-column title="基本信息">
         <vxe-table-column
           field="businessNumbers"

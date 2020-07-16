@@ -355,17 +355,18 @@ export default {
         {
           title: "序号",
           type: "index",
-          align: "center"
+          align: "center",
+          width:"60"
         },
         {
           title: "申请额度原因",
           align: "center",
-          key: "quotaReason"
+          key: "quotaReason",
         },
         {
           title: "申请增加额度合计",
           align: "center",
-          key: "addTotalQuota"
+          key: "addTotalQuota",
         },
         {
           title: "调整后总额度",
@@ -376,6 +377,20 @@ export default {
           title: "调整后剩余余额",
           align: "center",
           key: "afterAdjustQuota"
+        },
+        {
+          title: "申请类型",
+          align: "center",
+          key: "adjustType",
+          render:(h,p)=>{
+            let adjustType = p.row.adjustType;
+            return h('span',adjustType===1?"额度调整":"额度申请");
+          }
+        },
+        {
+          title: "申请人",
+          align: "center",
+          key: "applyMan"
         },
         {
           title: "申请时间",

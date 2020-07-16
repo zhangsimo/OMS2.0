@@ -218,7 +218,7 @@
                 <Option
                   v-for="item in hsStore"
                   :value="item.erpCompCode"
-                  :key="item.erpCompCode"
+                  :key="item.id"
                   >{{ item.fullName }}</Option
                 >
               </Select>
@@ -356,6 +356,7 @@ import {
 import api from "_conf/url";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
+import moment from 'moment'
 
 // import * as api from "_api/system/partManager";
 
@@ -662,7 +663,13 @@ export default {
         {
           title: "入库日期",
           key: "deliveryDue",
-          minWidth: 60
+          minWidth: 60,
+          render:(h,p) => {
+            if(p.row.deliveryDue){
+              let day = moment(p.row.deliveryDue).format("YYYY-MM-DD HH:mm:ss");
+              return h('span',day)
+            }
+          }
         }
       ],
 
@@ -1175,7 +1182,8 @@ export default {
     async getHsStoreFun() {
       let rep = await getHsStore();
       if (rep.code == 0) {
-        this.hsStore = rep.data;
+        // console.log(rep);
+        this.hsStore = rep.data || [];
       }
     },
     resetData() {

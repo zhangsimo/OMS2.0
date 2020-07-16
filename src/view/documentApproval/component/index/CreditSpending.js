@@ -20,6 +20,7 @@ export default {
   },
   data(){
     return {
+      remoteloading: false,
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
       formInline:{
@@ -62,6 +63,7 @@ export default {
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
       company:[],//往来单位
+      options: [],
       Pictures:{},//请求回来的图片地址状态
       //收款账号
       receiverArr:[]
@@ -73,7 +75,8 @@ export default {
   methods:{
     //模态框打开111
     open(){
-      this.company = this.list.salesList
+      this.company = [];
+      this.options = this.list.salesList;
       this.payUserList = this.list.payList
       this.formInline = {}
       this.$refs.upImg.uploadListModal = []
@@ -134,7 +137,25 @@ export default {
       }
     },
 
-
+    remoteMethod(query) {
+      this.company = [];
+      if (query !== "") {
+        this.remoteloading = true;
+        this.company = [];
+        const list = this.options.map(item => {
+          return {
+            value: item.value,
+            label: item.label
+          };
+        });
+        this.company = list.filter(
+          item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+        );
+        this.remoteloading = false;
+      } else {
+        this.company = [];
+      }
+    },
 
     //获取往来单位
     getCompany(row) {

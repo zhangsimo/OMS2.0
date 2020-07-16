@@ -20,7 +20,8 @@
         <template v-slot="{row}">
           <ul class="list">
             <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
-              <span class="listChild">{{ item.guestSourceName }}</span>
+              <span class="listChild" v-if="item.guestSourceName!=null">{{ item.guestSourceName }}</span>
+              <span class="listChild" v-else>该值为null</span>
             </li>
           </ul>
         </template>
@@ -181,6 +182,9 @@ export default {
   data() {
     return {
     };
+  },
+  mounted() {
+    console.log(this.tableData,"?????")
   },
   methods: {
     clear() {
