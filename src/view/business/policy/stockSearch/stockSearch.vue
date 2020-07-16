@@ -1175,7 +1175,8 @@ export default {
     async getHsStoreFun() {
       let rep = await getHsStore();
       if (rep.code == 0) {
-        this.hsStore = rep.data;
+        // console.log(rep);
+        this.hsStore = rep.data || [];
       }
     },
     resetData() {
