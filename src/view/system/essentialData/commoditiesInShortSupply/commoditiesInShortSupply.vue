@@ -268,22 +268,6 @@ export default {
       if (this.band != "0" && this.band) {
         data.partBrandCode = this.band;
       }
-      // switch (this.searchType) {
-      //   case "0":
-      //     data.queryCode = this.query;
-      //     break;
-      //   case "1":
-      //     data.fullName = this.query;
-      //     break;
-      //   case "2":
-      //     data.carBrandModel = this.query;
-      //     break;
-      //   case "3":
-      //     data.namePy = this.query;
-      //     break;
-      //   default:
-      //     break;
-      // }
       if(this.query.trim()){
         data.fullName = this.query
       }
