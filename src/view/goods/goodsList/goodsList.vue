@@ -82,6 +82,9 @@
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
             </Button>
           </div>
+          <div class="db">
+            <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+          </div>
         </div>
       </div>
     </section>
@@ -538,6 +541,7 @@ export default {
       }
     };
     return {
+      showSelf: true,
       submitloading: false,
       getBrand: [],
       newadd: false,
@@ -712,7 +716,7 @@ export default {
       this.$refs[name].init();
     },
     getmoreData(data) {
-      console.log(data)
+      // console.log(data)
       this.moreData = data;
       if (data != null) {
         this.isMore = true;

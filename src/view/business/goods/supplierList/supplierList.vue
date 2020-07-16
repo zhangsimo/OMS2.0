@@ -71,6 +71,9 @@
               ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
             >
           </div>
+          <div class="db">
+            <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+          </div>
         </div>
       </div>
     </section>
@@ -463,6 +466,7 @@ export default {
       }
     };
     return {
+      showSelf: true,
       defaultStore: "",
       ArraySelect: [], //供应商下拉框
       checkboxArr: [], // checkbox选中
@@ -1024,6 +1028,7 @@ export default {
     leftgetList() {
       let data = {};
       let params = {};
+      data.showSelf = this.showSelf;
       params.page = this.Left.page.num - 1;
       params.size = this.Left.page.size;
       //快速选择
@@ -1035,6 +1040,8 @@ export default {
       if (this.purchaseType !== "99") {
         data.billStatusId = this.purchaseType;
       }
+
+      // console.log(data);
 
       findPageByDynamicQuery({ params: params, data: data }).then(res => {
         if (res.code === 0) {
@@ -1060,6 +1067,7 @@ export default {
     LeftgetlistTwo() {
       let data = {};
       let params = {};
+      data.showSelf = this.showSelf;
       params.page = this.Left.page.num - 1;
       params.size = this.Left.page.size;
       //创建日期
@@ -1106,11 +1114,11 @@ export default {
         data.auditor = this.moreArr.submitter;
       }
       //是否显示单据
-      if (this.moreArr.Ischeck) {
-        data.showSelf = true;
-      } else {
-        data.showSelf = false;
-      }
+      // if (this.moreArr.Ischeck) {
+      //   data.showSelf = true;
+      // } else {
+      //   data.showSelf = false;
+      // }
       queryByConditions({ params: params, data: data }).then(res => {
         if (res.code === 0) {
           this.Left.tbdata = res.data.content || [];
@@ -1393,9 +1401,15 @@ export default {
         //获取右侧表格高度
         this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
       });
-    }
+    },
+    showOwen() {
+      tools.setSession("self", { supplierList: this.showSelf });
+      this.leftgetList();
+    },
   },
   mounted() {
+    let self = tools.getSession("self");
+    this.showSelf = Reflect.has(self, "supplierList") ? self.supplierList : true;
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
