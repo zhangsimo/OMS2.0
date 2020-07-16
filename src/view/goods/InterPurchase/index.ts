@@ -36,6 +36,8 @@ import ApportionmentExpenses from '../plannedPurchaseOrder/components/Apportionm
 export default class InterPurchase extends Vue {
   @State('user') user;
 
+  private showSelf: boolean = true;
+
   private split1: number = 0.2;
 
   private selectLeftItemId = '';
@@ -775,6 +777,7 @@ export default class InterPurchase extends Vue {
     this.purchaseOrderTable.loading = true;
     let params: any = {}
     let data: any = {}
+    data.showSelf = this.showSelf;
     params.size = this.purchaseOrderTable.page.size;
     params.page = this.purchaseOrderTable.page.num - 1;
     if (this.quickDate.length > 0) {
@@ -904,7 +907,15 @@ export default class InterPurchase extends Vue {
     }
   }
 
+  private showOwen() {
+    tools.setSession("self", { interPurchase: this.showSelf });
+    this.getListData();
+  }
+
   private mounted() {
+    let self:any = tools.getSession("self");
+    this.showSelf = Reflect.has(self, "interPurchase") ? self.interPurchase : true;
+
     setTimeout(() => {
       this.getDomHeight();
     }, 0);

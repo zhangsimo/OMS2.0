@@ -73,9 +73,6 @@
           <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
-      <FormItem>
-        <Checkbox v-model="showSelf">显示个人单据</Checkbox>
-      </FormItem>
     </Form>
     <div slot="footer">
       <Button class="mr15" type="primary" @click="ok">确定</Button>
@@ -116,7 +113,6 @@ export default class MoreSearch extends Vue {
   private createUname: string = "";
   private guestId: string = "";
   private guestName: string = "";
-  private showSelf: boolean = true;
   private aaaa: string = "";
 
   private salesList: Array<any> = new Array();
@@ -146,7 +142,6 @@ export default class MoreSearch extends Vue {
     this.guestName = "";
     this.createUname = "";
     this.partName = "";
-    this.showSelf = true;
   }
 
   private brandLists: Array<any> = new Array();
@@ -222,7 +217,6 @@ export default class MoreSearch extends Vue {
       createUname: this.createUname,
       partName: this.partName.trim(),
       guestId: this.guestId,
-      showSelf: this.showSelf
     };
     if(data.endTime) {
       data.endTime = data.endTime.split(" ")[0] + " 23:59:59"
@@ -236,9 +230,7 @@ export default class MoreSearch extends Vue {
     // console.log(data)
     let subdata: Map<string, string> = new Map();
     for (let key in data) {
-      if (["showSelf"].includes(key)) {
-        subdata.set(key, data[key]);
-      } else if (data[key] && data[key].trim().length > 0) {
+      if (data[key] && data[key].trim().length > 0) {
         subdata.set(key, data[key]);
       }
     }

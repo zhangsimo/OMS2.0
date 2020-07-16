@@ -60,7 +60,14 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="auditMoney" title="付款金额">
+        <vxe-table-column title="付款金额">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.auditMoney }}</span>
+              </li>
+            </ul>
+          </template>
         </vxe-table-column>
         <vxe-table-column title="账户所属门店">
           <template v-slot="{ row }">

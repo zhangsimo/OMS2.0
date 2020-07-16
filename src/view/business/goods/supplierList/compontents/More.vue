@@ -48,9 +48,6 @@
             <span class="ml5">提 交 人：</span>
             <Input v-model="submitter" placeholder="请输入提交人" style="width: 450px" />
           </Row>
-          <Row class="mt15">
-            <Checkbox v-model="Ischeck" class="ml20"> :显示个人单据</Checkbox>
-          </Row>
         </div>
         <div slot='footer'>
           <Button type='primary' @click="Determined">确定</Button>
