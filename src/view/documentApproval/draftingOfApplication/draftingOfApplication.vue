@@ -112,7 +112,6 @@ export default {
     this.modelType.allSalesList = await getAllSalesList();
     this.modelType.salesList = await getComenAndGo();
     this.modelType.payList = await getPayList();
-    console.log(this.modelType.allSalesList,this.modelType.salesList)
   },
   methods: {
     open(index) {
@@ -143,7 +142,7 @@ export default {
           this.$refs.CreditSpending.open();
           break;
         case 6:
-          console.log(index);
+          // console.log(index);
           break;
         case 7:
           this.$refs.AdvanceApply.open();
