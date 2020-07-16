@@ -450,7 +450,8 @@ export default {
         {
           title: "对应科目",
           key: "mateAccountName",
-          align: "center"
+          align: "center",
+          minWidth: 100,
         },
         {
           title: "发生日期",
@@ -477,12 +478,14 @@ export default {
         {
           title: "收入金额",
           key: "incomeMoney",
-          align: "center"
+          align: "center",
+          minWidth: 100,
         },
         {
           title: "支出金额",
           key: "paidMoney",
-          align: "center"
+          align: "center",
+          minWidth: 100,
         },
         {
           title: "对方户名",
@@ -689,7 +692,7 @@ export default {
         if (this.claimedSubjectList[0].paidMoney<0) {
           this.$refs.otherPaymentClaim.open();
         } else {
-          claimTit = "预付款认领"
+          claimTit == "预付款认领"
             ? this.$message.error("预付款认领不能选择收入类资金")
             : this.$message.error("其他付款认领不能选择收入类资金");
         }

@@ -409,7 +409,7 @@ export default {
               this.subjectModelShowassist = true
             } else {
               this.subjectModelShowassist = false;
-              this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
+              //this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
               // this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
               // this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
               // if (this.oneAccountent.auxiliaryTypeCode == "3") {
@@ -423,13 +423,14 @@ export default {
         });
     } else {
         this.subjectModelShowassist = false;
-        this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
+        //this.addNewAssistAccounting.paymentTypeCode = this.formDynamic.fund;
         // this.oneAccountent.auxiliaryTypeCode = this.auxiliaryTypeCode; //是什么类型；
         // this.oneAccountent.auxiliaryCode = this.auxiliaryCode; //辅助核算的编码；
         // if (this.oneAccountent.auxiliaryTypeCode == "3") {
         //   this.oneAccountent.auxiliaryCode = this.departmentVal;
         // }
       }
+      this.$parent.getMessage();
     },
     //获取公司
     async getListCompany() {
