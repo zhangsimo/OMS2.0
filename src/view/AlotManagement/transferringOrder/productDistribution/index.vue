@@ -183,7 +183,7 @@
             <Page
               :current="form.pageNumber + 1"
               :total="pageList.total"
-              :page-size="pageList.pageSize"
+              :page-size="pageList.size"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -286,7 +286,7 @@ export default {
       //搜索
       form: {
         pageNumber: 0,
-        pageSize: 10,
+        size: 10,
         queryCode: "",
         fullName: "",
         partBrandCode: "",
@@ -309,7 +309,7 @@ export default {
       pageList: {
         page: 0,
         total: 0,
-        pageSize: 20,
+        size: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
@@ -369,12 +369,13 @@ export default {
         });
     },
     search(params) {
+      params = {...params, ...this.pageList};
       // params.storeId = this.idValue;
       jinqiaopinliebiao(params)
         .then(res => {
           if (res.code == 0) {
             this.TopTableData = res.data.content || [];
-            this.pageList.total = res.totalElements;
+            this.pageList.total = res.data.totalElements;
           }
         })
         .catch(e => {
@@ -382,12 +383,12 @@ export default {
         });
     },
     changePage(p) {
-      this.params.page = p;
+      this.pageList.page = p;
       this.search(this.form);
     },
     changeSize(s) {
-      this.params.page = 1;
-      this.params.size = s;
+      this.pageList.page = 1;
+      this.pageList.size = s;
       this.search(this.form);
     },
     // save

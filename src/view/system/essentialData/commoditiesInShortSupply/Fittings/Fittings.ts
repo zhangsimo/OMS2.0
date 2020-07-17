@@ -455,7 +455,7 @@ export default class Fittings extends Vue {
   private selectRow(row: any) {
     this.currRow = row;
     // this.isCanbutton = true;
-    // this.isDisable = row.disabled == 0 ? true : false;
+    this.isDisable = row.isDisabled;
     // this.isSale = row.isSell == 0 ? true : false;
   }
   // 翻页-本地
