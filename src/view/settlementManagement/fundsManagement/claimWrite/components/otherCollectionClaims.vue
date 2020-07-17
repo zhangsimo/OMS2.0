@@ -2,12 +2,26 @@
   <div>
     <Modal v-model="modal" :title="claimTit" width="800" on-ok="ok">
       <Row class="dbd" v-if="claimTit=='预收款认领'">
-        <i-col span="12">
+        <i-col span="8">
           <button class="ivu-btn ivu-btn-default mr10" type="button" @click="openClimed('预收款认领')">{{claimTit}}</button>
         </i-col>
-        <i-col span="12">
+        <i-col span="6">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
            <!-- @change="changeModel" -->
+        </i-col>
+        <i-col span="10" v-show="voucherinputModel">
+          <Form :model="formValidate" ref="form" :rules="ruleValidate">
+            <FormItem label="选择辅助核算" prop="voucherInput">
+              <Row>
+                <i-col span="8">
+                  <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
+                </i-col>
+                <i-col span="2">
+                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
+                </i-col>
+              </Row>
+            </FormItem>
+          </Form>
         </i-col>
       </Row>
       <Row  class="dbd" v-else>
@@ -186,7 +200,7 @@ export default {
           if(this.MessageValue==""){
             this.$Message.error("请选择辅助核算")
           }else{
-            this.$message.success("其他收款认领成功")
+            this.$message.success(claimTit+"成功")
             this.claimedList(2);
           }
         }

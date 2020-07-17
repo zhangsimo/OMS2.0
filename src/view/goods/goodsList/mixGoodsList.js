@@ -87,6 +87,10 @@ export const mixGoodsData = {
     };
   },
   mounted() {
+    
+    let self = tools.getSession("self");
+    this.showSelf = Reflect.has(self, "goodsList") ? self.goodsList : true;
+
     getPurchaseInit({}).then(res => {
       console.log(res)
       //票据类型
@@ -120,6 +124,10 @@ export const mixGoodsData = {
   },
 
   methods: {
+    showOwen() {
+      tools.setSession("self", { goodsList: this.showSelf });
+      this.getList();
+    },
     //初始化
     async getList() {
       let params = {};
@@ -131,6 +139,7 @@ export const mixGoodsData = {
         data.startTime = this.dateTime[0];
         data.endTime = this.dateTime[1];
       }
+      data.showSelf = this.showSelf;
       params.page = this.page.num - 1;
       params.size = this.page.size;
       let res;

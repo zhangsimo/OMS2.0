@@ -157,6 +157,7 @@
     <!-- 辅助核销计算 -->
     <voucherInput ref="voucherInput"></voucherInput>
     <settlement ref="settlement"></settlement>
+    <claimGuest ref="claimGuest"></claimGuest>
   </div>
 </template>
 <script>
@@ -173,6 +174,7 @@ import { findByDynamicQuery } from "@/api/settlementManagement/otherPayable/othe
 import { findPageByDynamicQueryFirst } from "@/api/settlementManagement/advanceCharge";
 import { creat } from "@/view/settlementManagement/components";
 import moment from "moment";
+import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
 export default {
   props: {
     accrued: ""
@@ -181,7 +183,8 @@ export default {
     voucherInput,
     claim,
     settlement,
-    quickDate
+    quickDate,
+    claimGuest
   },
   data() {
     const amtValid = ({ row }) => {
@@ -350,7 +353,7 @@ export default {
     },
     openClimed() {
       if (!this.voucherinputModel) {
-        this.$refs.settlement.Settlement = true;
+        this.$refs.claimGuest.modal=true
       } else {
         this.getMessage()
         if(this.MessageValue==""){

@@ -347,6 +347,7 @@ export default {
       }
     }
     return {
+      isCanRequest:true, //请求拦截
       parameter: {}, //销售单参数
       information: {}, //基本信息数据
       approvalTit: "开票申请流程", //审批流程
@@ -796,6 +797,7 @@ export default {
 
     // 保存草稿
    async preservation() {
+     if (!this.isCanRequest) return
      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
      const errMap2 = await this.$refs.xTable2.validate().catch(errMap => errMap)
      if (errMap1){
@@ -827,7 +829,10 @@ export default {
             info,
             this.invoice
           );
+
+          this.isCanRequest = !this.isCanRequest
           saveDraft(obj).then(res => {
+            this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
               this.$message.success("保存成功");
               this.modal1 = false;
@@ -839,6 +844,7 @@ export default {
     },
     // 提交申请
    async submission() {
+     if (!this.isCanRequest) return
      const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
      const errMap2 = await this.$refs.xTable2.validate().catch(errMap => errMap)
           if (errMap1){
@@ -869,7 +875,9 @@ export default {
             info,
             this.invoice
           );
+          this.isCanRequest = !this.isCanRequest
           submitDraft(obj).then(res => {
+            this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
               this.$message.success("提交成功");
               this.modal1 = false;
