@@ -129,7 +129,7 @@
                   <div class="flex plan-cz-btn" ref="planBtn">
                     <div class="clearfix">
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro" v-has="'addAccessories'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
+                        <Button size="small" class="mr10" @click="addPro" v-has="'addAccessories'" :disabled="buttonDisable || presentrowMsg !== 0||!formPlan.guestName"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
                         <Upload
