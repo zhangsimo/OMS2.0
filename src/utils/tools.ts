@@ -58,7 +58,7 @@ export function transTree(tree: Array<Tree>, name: string = "name") {
   if (Array.isArray(tree) && tree.length > 0) {
     tree.forEach(tel => {
       tel.title = tel[name];
-      if(tel.disabled) {
+      if (tel.disabled) {
         Reflect.deleteProperty(tel, 'disabled');
       }
       transTree(tel.children as Array<Tree>, name);
@@ -170,7 +170,7 @@ export function editRow(
  * @param {string} value 手机号
  * @param {Function} callback 回调函数
  */
-export function checkPhone(rule:any, value:string, callback:Function) {
+export function checkPhone(rule: any, value: string, callback: Function) {
   if (!value) {
     callback(new Error("手机号不能为空"));
   } else {
@@ -184,28 +184,58 @@ export function checkPhone(rule:any, value:string, callback:Function) {
 };
 
 // 判断数量和单价是否为空
-export function isZero(data: Array<any>, { qty, price }) : boolean {
-  let message :any = Message;
-  let zero1:any, zero2:any;
+export function isZero(data: Array<any>, { qty, price }): boolean {
+  let message: any = Message;
+  let zero1: any, zero2: any;
 
-  if(qty) {
+  if (qty) {
     zero1 = data.find(el => el[qty] === undefined); // || el[qty] * 1 <= 0
   }
 
-  if(price) {
+  if (price) {
     // zero2 = data.find(el => el[price] === undefined);
   }
 
-  if(zero1) {
+  if (zero1) {
     message.error("数量不能为空");
     return true;
   }
 
-  if(zero2) {
+  if (zero2) {
     message.error("单价不可为空");
     return true;
   }
 
   return false;
 
+}
+
+// import * as tools from "_utils/tools";
+
+export function getSession(key: string): object {
+  let str: string | null = sessionStorage.getItem(key);
+  let obj: object = {};
+  if (str !== null) {
+    try {
+      obj = JSON.parse(str);
+    } catch (e) {
+      obj = {};
+    }
+  }
+  return obj;
+}
+
+export function setSession(key:string, value:object) {
+  let str: string | null = sessionStorage.getItem(key);
+  let obj: object = {};
+
+  if(str !== null) {
+    try {
+      obj = JSON.parse(str);
+    } catch (e) {
+      obj = {};
+    }
+  }
+  obj = {...obj, ...value};
+  sessionStorage.setItem(key, JSON.stringify(obj));
 }

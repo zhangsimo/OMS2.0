@@ -40,7 +40,7 @@
             <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <Checkbox v-model="formData.showPerson" class="ml100 ">显示个人单据</Checkbox>
+        <!-- <Checkbox v-model="formData.showPerson" class="ml100 ">显示个人单据</Checkbox> -->
       </Form>
     </div>
     <div slot='footer'>
