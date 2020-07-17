@@ -85,11 +85,11 @@ export function getcompany (params) {
 
 
 //删除兼职公司
-export function setCliemt (params) {
+export function setCliemt (data) {
   return axios.request({
     url: `${api.authApi}/tenantUsers/cancelUserCompany`,
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 

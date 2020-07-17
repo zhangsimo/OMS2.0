@@ -54,6 +54,7 @@ const test = {
   // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
   // authApi: "http://192.168.30.226:5200",
+  // authApi: "http://192.168.15.142:5200",
   authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // omsBatch: 'http://192.168.30.179:9260', // 9260
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
