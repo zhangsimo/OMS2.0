@@ -138,7 +138,8 @@
             :data="companyList"
             height="200"
             size="small"
-            @on-current-change="getOneCliemt"
+            @on-selection-change="getOneCliemt"
+
           ></Table>
         </div>
         <Page
@@ -300,6 +301,10 @@ export default {
         }
       ],
       columns2: [
+        {
+          type: 'selection',
+          align: "center",
+        },
         {
           title: "店号",
           align: "center",
@@ -706,20 +711,21 @@ export default {
       this.page2.size = size;
       this.getLookCompany();
     },
-    getOneCliemt(val) {
-      this.oneCliemt = val;
+    getOneCliemt(selection) {
+      this.oneCliemt = selection;
     },
     //删除兼职公司
     async delect() {
-      if (!this.oneCliemt.id) {
-        this.$message.error("请选择一条需要删除的兼职公司");
+      if (!this.oneCliemt.length) {
+        this.$message.error("请选择一条记录");
         return;
       }
       let data = {};
-      data.staffId = this.oneStaffChange.id;
-      data.cmpyId = this.oneCliemt.id ;
+      data.id = this.oneStaffChange.id;
+      data.cmpyIds = this.oneCliemt.map(el => el.id);
       let res = await setCliemt(data);
       if (res.code === 0) {
+        this.$message.success(res.data);
         this.page2.num = 1;
         this.getLookCompany();
         this.oneCliemt = {};
