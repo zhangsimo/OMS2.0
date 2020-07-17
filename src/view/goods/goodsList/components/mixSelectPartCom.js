@@ -268,6 +268,7 @@ export const mixSelectPartCom = {
     //提交申请配件
     addPartFun(obj) {
       //添加未审核属性
+      this.$refs.partInfo.saveFlag = false;
       obj.auditSign = 0;
       savePartInfo(obj).then(res => {
         if(res.code == 0) {
