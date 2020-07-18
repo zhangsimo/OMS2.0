@@ -383,6 +383,9 @@ export const mixSelectPartCom = {
       getDetails(data).then(res => {
         if (res.code === 0) {
           this.allList = res.data;
+          this.allList.priceLever.forEach(element => {
+            element.sellPrice = parseFloat(element.sellPrice).toFixed(2);
+          });
         }
       });
     },
