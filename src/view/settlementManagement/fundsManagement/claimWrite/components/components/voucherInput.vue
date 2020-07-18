@@ -430,7 +430,7 @@ export default {
         //   this.oneAccountent.auxiliaryCode = this.departmentVal;
         // }
       }
-      this.$parent.getMessage();
+      this.$emit("callBackFun");
     },
     //获取公司
     async getListCompany() {

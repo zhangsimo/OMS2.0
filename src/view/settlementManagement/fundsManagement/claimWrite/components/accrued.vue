@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modal" title="转应收应付" width="800" on-ok="ok">
+    <Modal v-model="modal" title="转应收应付" width="800" footer-hide>
       <div class="db dbd">
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -38,9 +38,13 @@
         <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
         <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
         <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-        <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+        <vxe-table-column field="paidMoney" title="支出金额">
+          <template v-slot="{row}">
+            {{Math.abs(row.paidMoney)}}
+          </template>
+        </vxe-table-column>
         <vxe-table-column
-          field="rpAmt || balanceMoney"
+          field="balanceMoney"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
           title="本次认领金额"
           align="center"
@@ -54,7 +58,7 @@
         ></vxe-table-column>
       </vxe-table>
     </Modal>
-    <voucherInput ref="voucherInput" :oneAccountent="accrued"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
   </div>
 </template>
 <script>
@@ -66,21 +70,26 @@ export default {
     voucherInput
   },
   data() {
-    const amtValid = ({ row }) => {
+    const amtValid = ({cellValue, row }) => {
       return new Promise((resolve, reject) => {
-        let trueValue =
-          Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
-        if (trueValue) {
-          reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
-        } else {
-          resolve(true);
+        if(cellValue){
+          let trueValue =
+            Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
+          if (trueValue) {
+            reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+          } else {
+            resolve();
+          }
+        }else{
+          reject(new Error("本次认领金额必填"));
         }
       });
     };
     return {
       // 表格验证  本次认领金额  是否符合条件
       validRules: {
-        rpAmt: [{ required: true, validator: amtValid }]
+        rpAmt: [{validator: amtValid }],
+        balanceMoney:[{validator: amtValid }]
       },
       modal: false, //模态框展示
       oneSubject: {}, //单选获取到的数据
@@ -101,24 +110,45 @@ export default {
     getRaido({ row }) {
       this.oneSubject = row;
     },
-    openVoucherInput() {
-      this.$refs.voucherInput.subjectModelShowassist = true;
+    async openVoucherInput() {
+      const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+      if (errMap) {
+      } else {
+        this.$refs.voucherInput.subjectModelShowassist = true;
+      }
+
     },
     async ok(){
       let data = {};
       data.detailId = this.accrued[0].id;
       if(this.bool){
-        data.subjectCode="2202"; 
-        data.climeType=2
+        data.subjectCode="2202";
+        data.claimType=2
       }else{
         data.subjectCode="1122";
-        data.climeType=1
+        data.claimType=1
+
+
+        data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+        if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+          data.isAuxiliaryAccounting=0 //是否辅助核算类
+        }else{
+          data.isAuxiliaryAccounting=1
+        }
+        data.auxiliaryName=this.MessageValue //辅助核算名称
+        data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
+
+
       }
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.modal = false;
         this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")
       }
+    },
+    //选择辅助核算回调
+    getCallBack(){
+      this.ok();
     }
   }
 };

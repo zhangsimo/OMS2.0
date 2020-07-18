@@ -791,6 +791,7 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
+      console.log(this.currentDistribution)
     },
     //未核销对账单查询接口
     noWrite() {
@@ -819,6 +820,7 @@ export default {
       };
       claimedFund(obj).then(res => {
         if (res.code === 0) {
+          console.log(res.data.content)
           this.$refs.claim.claimedData = res.data.content;
           this.$refs.claim.claimedPage.total = res.data.totalElements;
         }
