@@ -216,7 +216,7 @@ export const mixSelectPartCom = {
       if (this.partName.trim()) {
         data.partCode = this.partName.trim();
       }
-      data.orgid = this.$parent.isInternalId||"";
+      data.orgId = this.$parent.isInternalId||"";
       req.page = this.page.num - 1;
       req.size = this.page.size;
       getCarPartsTwo(req, data).then(res => {
