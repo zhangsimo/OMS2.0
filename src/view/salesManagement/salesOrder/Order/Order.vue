@@ -52,6 +52,9 @@
       <Button class @click="setDerive" v-has="'Derive'">
         <i class="iconfont mr5 icondaochuicon"></i> 导出
       </Button>
+      <div class="db">
+        <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+      </div>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -93,6 +96,7 @@ import {
   getReorder,
   getLeftList
 } from "@/api/salesManagment/salesOrder";
+import * as tools from "_utils/tools";
 
 export default {
   name: "Order",
@@ -105,6 +109,7 @@ export default {
   },
   data() {
     return {
+      showSelf: true,
       backloading: false,
       isNew: true, //页面开始禁用
       isAdd: false, //判断是否新增
@@ -133,9 +138,15 @@ export default {
     };
   },
   mounted() {
+    let self = tools.getSession("self");
+    this.showSelf = Reflect.has(self, "salesOrder") ? self.salesOrder : true;
     this.getDomHeight();
   },
   methods: {
+    showOwen() {
+      tools.setSession("self", { salesOrder: this.showSelf });
+      this.reset();
+    },
     getDomHeight() {
       this.$nextTick(() => {
         let wrapH = this.$refs.paneLeft.offsetHeight;
@@ -301,13 +312,14 @@ export default {
     },
     //重置额度
     reset(v) {
+      v = {...v};
       const left = this.$refs.OrderLeft;
       this.$refs.right.limitList = {
         fixationQuota: "",
         tempQuota: "",
         sumAmt: ""
       };
-      v.showPerson = v.showPerson ? 1 : 0;
+      v.showPerson = this.showSelf ? 1 : 0;
       left.page.num = 1;
       // this.page.size = 10;
       let page = left.page.num - 1;

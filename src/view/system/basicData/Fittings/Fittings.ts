@@ -168,7 +168,7 @@ export default class Fittings extends Vue {
           title: "禁售",
           minWidth: 80,
           render: (h, params) => {
-            let text: string = params.row.isSale ? "禁售" : "可售";
+            let text: string = params.row.isSale ? "可售": "禁售";
             return h("span", text);
           }
         },
@@ -450,8 +450,9 @@ export default class Fittings extends Vue {
     }
     if (this.band.length > 1) {
       // data.partBrandId = this.band;
-      data.partCodes = [];
-      data.partBrandCodes = [this.band];
+      // data.partCodes = [];
+      // data.partBrandCodes = [this.band];
+      data.partBrandId = this.band;
     }
     if (this.selectTreeId) {
       // data.carTypeIdThr = this.selectTreeId;
@@ -467,8 +468,10 @@ export default class Fittings extends Vue {
   // 查询
   private queryHandle() {
     if (this.tabIndex === 0) {
+      this.local.page.num = 1;
       this.initLocalPartInfo();
     } else {
+      this.cloud.page.num = 1;
       this.initCloudPartInfo();
     }
   }
@@ -559,10 +562,10 @@ export default class Fittings extends Vue {
     let id = this.currRow.id;
     let res: any = await api.toggleSale(id);
     let success: string = "";
-    if (this.isDisable) {
-      success = "可售成功";
+    if (this.isSale) {
+      success = "禁售成功";      
     } else {
-      success = "禁售成功";
+      success = "可售成功";
     }
     if (res.code == 0) {
       self.$Message.success(success);
@@ -580,13 +583,8 @@ export default class Fittings extends Vue {
     if (!row) return;
     this.currRow = row;
     this.isCanbutton = true;
-    if (this.tabIndex === 0) {
-      this.isDisable = row.disabled == 0 ? true : false;
-      this.isSale = row.isStopSell == 0 ? true : false;
-    } else {
-      this.isDisable = row.isDisabled == 0 ? true : false;
-      this.isSale = row.isSale == 0 ? true : false;
-    }
+    this.isSale = row.isSale;
+    this.isDisable = row.isDisabled;
   }
   // 翻页-本地
   private changePagelocal(p: number) {

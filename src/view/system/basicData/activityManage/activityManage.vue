@@ -51,7 +51,7 @@
               class="mr10"
               @click="showApplication('edit')"
               v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
-              v-has="'audit'"
+              v-has="'compile'"
             >编辑/重新提交</Button>
             <Button
               type="warning"

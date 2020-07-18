@@ -37,7 +37,7 @@ export default class ProductLA extends Vue {
         },
     ]
     /**员工表选中的分配状态选项 */
-    private DistributionStateSelecteOption: string = ""
+    private DistributionStateSelecteOption: string = "0"
     /**角色选项 */
     private roleOptions: Array<Option> = []
     /**角色选项选中的项 */
