@@ -458,7 +458,7 @@ export default {
       ID: "", //保存当前行id
       state: -1, //保存当前行的客户调查状态
       Limitstate: "", //保存当前的额度状态
-      rowMessage: "", //当前的客户信息
+      rowMessage:{}, //当前的客户信息
       costList: "", //数据字典数据
       researchStatus: "", //保存当前的申请状态
       adjustmentMsg: "", //给子组件的调整信息
@@ -496,6 +496,7 @@ export default {
       if(!row){
         return
       }
+      console.log(row)
       this.editTopItemId = row.id
       this.rowMessage = row;
       this.state = row.isGuestResearch;
@@ -556,6 +557,7 @@ export default {
         this.$Message.warning("信用额度审批中，请等待审批完成！");
         return
       }
+      if (Object.keys( this.rowMessage) == 0 ) return this.$Message.error('请至少选择一条信息')
       this.adjustment = true;
       this.adjustmenttt();
     },
@@ -662,7 +664,7 @@ export default {
     adjustmenttt() {
       let params = {};
       params.guestId = this.rowMessage.guestId;
-      params.orgId = this.rowMessage.orgid;
+      // params.orgId = this.rowMessage.orgid;
       adjustment(params).then(res => {
         if (res.code === 0) {
           this.adjustmentMsg = res.data;

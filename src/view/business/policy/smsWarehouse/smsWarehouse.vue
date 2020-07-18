@@ -115,7 +115,7 @@
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" :disabled="draftShow != 0"> 
+                    <Button size="small" class="mr10" :disabled="draftShow != 0">
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除
                     </Button>
                   </div>
@@ -496,7 +496,7 @@ export default {
       }
       const data = {}
       data.receiveStoreId = this.formPlan.receiveStoreId
-      data.storeId = this.formPlan.storeId 
+      data.storeId = this.formPlan.storeId
       data.detailVOList = this.Right.tbdata
       updata(data)
       .then(res => {
@@ -514,7 +514,7 @@ export default {
     //确认作废
     removeOk() {
       console.log(this.formPlan)
-      const data = {} 
+      const data = {}
       data.id = this.formPlan.id
       if(this.draftShow && this.draftShow !== 0) {
         this.$Message.error('只有草稿状态才能作废')
@@ -557,15 +557,13 @@ export default {
        .catch(err => {
          // this.$Message.info('作废草稿失败')
         })
-      
+
     },
     //配件返回的参数
     getPartNameList(val){
-      console.log(val,999)
-      console.log(conversionList(val),8888)
       var datas = conversionList(val)
       console.log(datas)
-      
+
       datas.forEach(item => {
         //this.Right.tbdata.push(item)
         this.formPlan.detailVOList.push(item)
@@ -580,7 +578,7 @@ export default {
           this.showRemove = false
           this.$Message.info('添加失败')
         })
-      
+
     },
      shanchu() {
       if (this.draftShow !== 0) {
@@ -609,7 +607,7 @@ export default {
          .catch(err => {
           this.showRemove = false
         })
-        
+
     },
     //分页
     changePage(p) {
