@@ -78,21 +78,22 @@
           <Col span="22">
             <FormItem label="适用车型：" class="car-item-w" prop="">
               <div class="car-con-item" v-for="(v,vi) in carList">
-                <Select
-                  @on-change="getSelectCarBrand"
-                  class="w140 mr5"
-                  v-model="v.carBrand"
-                  filterable
-                >
-                  <Option
-                    v-for="item in carObj.carBrandData"
-                    :value="item.id"
-                    :key="item.id"
-                  >{{item.nameCn}}</Option>
-                </Select>
+                <!--<Select-->
+                  <!--@on-change="getSelectCarBrand"-->
+                  <!--class="w140 mr5"-->
+                  <!--v-model="v.carBrand"-->
+                  <!--filterable-->
+                <!--&gt;-->
+                  <!--<Option-->
+                    <!--v-for="item in carObj.carBrandData"-->
+                    <!--:value="item.id"-->
+                    <!--:key="item.id"-->
+                  <!--&gt;{{item.nameCn}}</Option>-->
+                <!--</Select>-->
+                <Input class="w140 mr5" v-model="v.carBrand"></Input>
                 <Input class="w260" v-model="v.carName"></Input>
-                <Button type="text" class="car-btn add" @click="addCarItem" v-if="vi==0"><Icon type="md-add" />添加车型</Button>
-                <Button v-if="vi>0" @click="removeCarItem(vi)" type="text" class="car-btn del"><Icon type="md-close" />删除</Button>
+                <!--<Button type="text" class="car-btn add" @click="addCarItem" v-if="vi==0"><Icon type="md-add" />添加车型</Button>-->
+                <!--<Button v-if="vi>0" @click="removeCarItem(vi)" type="text" class="car-btn del"><Icon type="md-close" />删除</Button>-->
               </div>
               <div v-show="isCart" class="ivu-form-item-error-tip">最少填入一个适用车型</div>
 
