@@ -1,6 +1,6 @@
 <template>
   <Modal v-model="searchPartLayer" title="添加配件录入" width="700">
-    <Form :model="formItemData" :label-width="80">
+    <Form :model="formItemData" :label-width="80" @keyup.enter.native="submit">
       <Row>
         <Col span="12">
           <FormItem label="配件编码：">
@@ -111,6 +111,7 @@
       },
 
       submit(){
+        console.log(123);
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
         }
