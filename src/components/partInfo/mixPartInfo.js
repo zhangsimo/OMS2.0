@@ -359,6 +359,7 @@ export const mixPartInfo = {
       }else{
         this.carList.push({...this.carItemObj});
       }
+      // console.log(this.carList);
       //添加自定义分类名称属性
       this.formValidate.customClassName = '';
       //匹配包装规格
