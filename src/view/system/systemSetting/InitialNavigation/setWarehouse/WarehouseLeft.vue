@@ -77,7 +77,9 @@
         },
         methods:{
          async getList(){
-            let res = await getwarehouse()
+           let data ={}
+           data.shopNumber = this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.id ? this.$store.state.user.userData.currentCompany.id : '' : ''
+            let res = await getwarehouse(data)
              if(res.code == 0){
                  this.list = res.data
              }
