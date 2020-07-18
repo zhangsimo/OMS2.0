@@ -189,10 +189,10 @@ export default {
     this.dates = arr[0];
     this.$nextTick( () => {
       this.BranchstoreId = arr[1]
+      this.query();
     })
     this.getShop()
     // this.getCompany();
-    this.query();
   },
   methods: {
     //获取门店
