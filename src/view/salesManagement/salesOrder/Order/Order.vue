@@ -163,8 +163,7 @@ export default {
     },
     //  调用left方法
     parentGetleft() {
-      let showPerson = this.showSelf ? 1 : 0;
-      this.$refs.OrderLeft.showPerson = showPerson;
+      this.$refs.OrderLeft.showPerson = this.showSelf ? 1 : 0;
       this.$refs.OrderLeft.gitlistValue();
     },
     //获取时间
