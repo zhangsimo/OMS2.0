@@ -686,10 +686,10 @@ export default {
     this.value = arr[0];
     this.$nextTick( () => {
       this.BranchstoreId = arr[1]
+      this.getQuery();
     })
     this.getShop()
     // this.getOne();
-    this.getQuery();
   }
 };
 </script>

@@ -978,6 +978,10 @@ export default {
 
       let flag = false;
 
+      if(this.formPlan.details == null) {
+        this.formPlan.details = [];
+      }
+
       for(let i = 0; i < this.formPlan.details.length; i++) {
         let el = this.formPlan.details[i];
         for(let j = 0; j < arr.length; j++) {
@@ -1107,7 +1111,7 @@ export default {
 
           this.$refs.xTable.clearCheckboxRow();
 
-          this.selectTableList.length = 0;
+          this.selectTableList = [];
         }
       } else {
         this.$Message.error("请选择一条有效数据");
@@ -1123,9 +1127,6 @@ export default {
           if (["orderPrice", "orderAmt"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
-          // if (["orderQty"].includes(column.property)) {
-          //   return this.$utils.sum(data, column.property).toFixed(0);
-          // }
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `;
           }

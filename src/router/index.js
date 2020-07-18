@@ -14,7 +14,6 @@ const LOGIN_PAGE_NAME = 'login'
 const REGISTER_PAGE_NAME = 'register'
 
 router.beforeEach((to, from, next) => {
-
   // _hmt.push(['_trackPageview', pageURL]) 必须是以"/"（斜杠）开头的相对路径
   if (to.path) {
      // @ts-ignore

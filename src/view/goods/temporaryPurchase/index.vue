@@ -77,6 +77,9 @@
             ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
+          <div class="db">
+            <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+          </div>
         </div>
       </div>
     </section>

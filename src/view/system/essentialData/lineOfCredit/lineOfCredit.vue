@@ -134,7 +134,21 @@ export default {
                 : params.row.afterAdjustQuota;
             return h("span", {}, tex);
           }
-        }
+        },
+        {
+          title: "是否禁止额度调整申请",
+          align: "center",
+          key: "auditSign",
+          render:(h,p) => {
+            let auditSign = p.row.auditSign?JSON.parse(p.row.auditSign):{};
+            return h('span',auditSign&&auditSign.value==3?"是":"否");
+          }
+        },
+        {
+          title: "额度调整原因",
+          align: "center",
+          key: "quotaReason"
+        },
       ],
       staffList: [],
       thisdata: [],

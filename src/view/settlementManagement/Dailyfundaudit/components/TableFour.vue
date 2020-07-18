@@ -182,6 +182,9 @@ export default {
     return {
     };
   },
+  mounted() {
+    console.log(this.tableData,"?????")
+  },
   methods: {
     clear() {
       this.$refs.xTable.clearCheckboxRow();
