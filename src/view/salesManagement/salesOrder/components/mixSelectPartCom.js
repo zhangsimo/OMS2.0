@@ -390,6 +390,9 @@ export const mixSelectPartCom = {
     dblclick(v){
       if(this.$route.name=="salesOrder"){
         this.$refs.selectPartInfo.init(v);
+      } else {
+        this.selectTableItem = [v];
+        this.$emit("selectPartName", this.selectTableItem);
       }
     }
   }
