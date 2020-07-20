@@ -108,7 +108,7 @@
             </Row>
             <Row>
               <Col span="22">
-                <FormItem label="适用车型：" class="car-item-w" :class="{'ivu-form-item-error':isCart}" prop="">
+                <FormItem label="适用车型：" class="car-item-w" :class="{'ivu-form-item-error':isCart}">
                   <div class="car-con-item" v-for="(v,vi) in carList" :key="vi">
                     <Select
                       @on-change="getSelectCarBrand"
@@ -267,7 +267,7 @@
           <div class="partCheck-hd">
             <Input class="w200 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码" @on-enter="search"></Input>
             <Select placeholder="配件一级分类" filterable v-model="selectLevelFirst" class="w100 mr10">
-              <Option v-for="(item,index) in levelType" :value="item.id" :key="item.id">{{item.name}}</Option>
+              <Option v-for="(item,index) in levelType" :value="item.typeId" :key="item.id">{{item.name}}</Option>
             </Select>
             <Select
               placeholder="配件二级分类"
@@ -276,9 +276,9 @@
               class="w100 mr10"
               v-for="(item,index) in levelType"
               :key="index"
-              v-if="selectLevelFirst == item.id"
+              v-if="selectLevelFirst == item.typeId"
             >
-                <Option v-for="(item2,index2) in item.children"  :value="item2.code" :key="index2">{{item2.name}}</Option>
+                <Option v-for="(item2,index2) in item.children"  :value="item2.typeId" :key="index2">{{item2.name}}</Option>
             </Select>
             <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
             <Button type='default'  @click="manyCodeSearch">多编码查询</Button>
@@ -301,7 +301,7 @@
               ></Table>
               <Page
                 size="small"
-                class-name="page-con"
+                class="page-con"
                 :current="page.num"
                 :total="page.total"
                 :page-size="page.size"
@@ -449,6 +449,7 @@ export default {
     .trans-list {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 60px;
       .trans-btn {
         display: flex;
         flex-direction: column;
@@ -474,6 +475,7 @@ export default {
         }
         width: calc((100% - 110px) / 2);
         padding: 10px;
+        margin-bottom: 60px;
         border: solid 1px #e5e5e5;
       }
     }

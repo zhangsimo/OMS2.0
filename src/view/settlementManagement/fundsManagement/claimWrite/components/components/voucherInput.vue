@@ -400,7 +400,6 @@ export default {
     },
     //辅助核算确定弹框
     confirmFuzhu() {
-      console.log(this.auxiliaryTypeCode,"类型")
       if (this.Classification) {
         this.$refs.formDynamic.validate(valid => {
         if (valid) {
@@ -596,7 +595,6 @@ export default {
       this.AssistAccounting = row.userName;
       this.auxiliaryTypeCode = "4";
       this.auxiliaryCode = row.id;
-      // console.log(row,this.auxiliaryTypeCode)
     },
     //个人分页切换页数
     selectNumpersonage(page) {
@@ -672,7 +670,6 @@ export default {
     },
     //新增辅助核算名称保存
     addAuxiliary() {
-      console.log(this.AssistAccounting,"???")
       this.$refs.formAdd.validate(valid => {
         if (valid) {
           let data = {};

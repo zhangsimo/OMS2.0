@@ -292,7 +292,7 @@ export default {
           guestId: this.companyId,
           size: this.page.size,
           page: this.page.num - 1,
-          isClaimed: true,
+          isClaimed: 0,
           claimAmt:0
         };
         // for (let key in obj) {

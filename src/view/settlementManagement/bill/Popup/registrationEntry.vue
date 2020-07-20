@@ -78,7 +78,7 @@
         :edit-render="{}"
       >
         <template v-slot:edit="{ row }">
-          <DatePicker type="date" v-model="row.billingDate" transfer placeholder="Select date" ></DatePicker>
+          <DatePicker type="date" v-model="row.billingDate" transfer placeholder="输入开票日期" ></DatePicker>
         </template>
         <template v-slot="{ row }">
           {{row.billingDate|filtersDate}}
@@ -94,14 +94,20 @@
         field="invoiceAmt"
         title="不含税金额"
         width="120"
-        :edit-render="{name: 'input', attrs: {type: 'number'}}"
-      ></vxe-table-column>
+      >
+        <template v-slot="{ row }">
+          {{((row.totalAmt||0)/(1+row.taxRate)).toFixed(2)}}
+        </template>
+      </vxe-table-column>
       <vxe-table-column
         field="taxAmt"
         title="税额"
         width="100"
-        :edit-render="{name: 'input', attrs: {type: 'number'}}"
-      ></vxe-table-column>
+      >
+        <template v-slot="{ row }">
+          {{((row.totalAmt||0)/(1+row.taxRate)*row.taxRate).toFixed(2)}}
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="taxRate" title="税率" width="100">
         <template v-slot="{row}">
           <Select v-model="row.taxRate">
@@ -178,8 +184,8 @@ export default {
         invoiceSellerName: [{ required: true, message: "发票销售方名称必填" }],
         billingDate: [{ required: true, message: "开票日期必填" }],
         totalAmt: [{ required: true, message: "价税合计金额必填" }],
-        invoiceAmt: [{ required: true, message: "不含税金额必填" }],
-        taxAmt: [{ required: true, message: "税额必填" }],
+        // invoiceAmt: [{ required: true, message: "不含税金额必填" }],
+        // taxAmt: [{ required: true, message: "税额必填" }],
         taxRate: [{ required: true, message: "税率必填" }],
         payType: [{ required: true, message: "付款方式必填" }],
         billingType: [{ required: true, message: "开票清单类型必填" }]
@@ -332,6 +338,10 @@ export default {
         }
       });
     },
+    totalAmtChange($event){
+      // let value = v.target.value||0
+      console.log($event)
+    },
     // 数据字典
     getDictionary(dictCode) {
       getDataDictionaryTable({ dictCode }).then(res => {
@@ -360,6 +370,7 @@ export default {
               label: item.itemName
             });
           });
+          console.log(this.listType)
         } else if (res.data[0].dictCode === "INVOICE_TYPE") {
           res.data.map(item => {
             this.invoiceSortList.push({
@@ -386,6 +397,9 @@ export default {
           } else {
             item.billingDate = data;
           }
+          //计算税额，不含税金额
+          item.taxAmt = ((item.totalAmt||0)/(1+item.taxRate)*item.taxRate).toFixed(2);
+          item.invoiceAmt = ((item.totalAmt||0)/(1+item.taxRate)).toFixed(2);
           return item
         });
         this.accountData.map(item => {
@@ -474,10 +488,34 @@ export default {
       let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
       date = date.getFullYear().toString() + m + d;
       this.purchaserList = this.$parent.Branchstore;
-      this.tableData.push({
-        registrationDate: date,
-        registrationTypeName: "人工登记"
-      });
+      //获取该对账单是油品还是配件
+      let statementType = this.$parent.reconciliationStatement.statementType&&this.$parent.reconciliationStatement.statementType.value||"";
+      if(this.tableData.length>0){
+        let lastData = this.tableData[this.tableData.length-1]
+        this.tableData.push({
+          registrationDate: date,
+          registrationTypeName: "人工登记",
+          taxRate:0.13,
+          payType:"DG",
+          invoiceSort:"CG",
+          invoicePurchaserId:lastData.invoicePurchaserId||"",
+          billingType:statementType===1?"0":"YP",
+          invoiceCode:lastData.invoiceCode||"",
+          invoiceNo:lastData.invoiceNo||"",
+          invoiceSellerName:lastData.invoiceSellerName||"",
+          billingDate:lastData.billingDate||""
+        });
+      }else{
+        this.tableData.push({
+          registrationDate: date,
+          registrationTypeName: "人工登记",
+          taxRate:0.13,
+          payType:"DG",
+          invoiceSort:"CG",
+          invoicePurchaserId:this.$store.state.user.userData.currentShopId||"",
+          billingType:statementType===1?"0":"YP"
+        });
+      }
     },
     // 删除行
     deleteRows() {
