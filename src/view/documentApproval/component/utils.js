@@ -32,7 +32,7 @@ export async function getAllSalesList() {
           value: el.id,
           label: `${el.accountName} ${el.wagesSign ? "(工资卡)" : ""}`,
           receiver: el.accountBank,
-          receiveBank: el.accountName,
+          receiveBank: el.accountBank,
           receiveBankNo: el.accountBankNo,
         })
       })

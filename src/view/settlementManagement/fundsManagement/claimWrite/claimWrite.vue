@@ -820,7 +820,6 @@ export default {
       };
       claimedFund(obj).then(res => {
         if (res.code === 0) {
-          console.log(res.data.content)
           this.$refs.claim.claimedData = res.data.content;
           this.$refs.claim.claimedPage.total = res.data.totalElements;
         }

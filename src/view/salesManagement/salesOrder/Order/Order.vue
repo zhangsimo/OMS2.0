@@ -139,7 +139,8 @@ export default {
   },
   mounted() {
     let self = tools.getSession("self");
-    this.showSelf = Reflect.has(self, "salesOrder") ? self.salesOrder : true;
+    let showSelf = Reflect.has(self, "salesOrder") ? self.salesOrder : true;
+    this.showSelf = showSelf;
     this.getDomHeight();
   },
   methods: {
@@ -163,7 +164,6 @@ export default {
     },
     //  调用left方法
     parentGetleft() {
-      this.$refs.OrderLeft.showPerson = this.showSelf ? 1 : 0;
       this.$refs.OrderLeft.gitlistValue();
     },
     //获取时间

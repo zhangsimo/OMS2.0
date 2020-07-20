@@ -116,7 +116,7 @@
         @colseMdole="colsePtCompany"
       ></PTCompany>
     </Modal>
-    <!--      查询兼职公司-->
+    <!--  查询兼职公司-->
     <Modal title="查看兼职公司" v-model="findAllCompany" width="800px" :footer-hide="true">
       <div class="clearfix pb20">
         <div class="headr-box2">
@@ -560,7 +560,9 @@ export default {
     },
     //获取当前数据
     selection(currentRow) {
-      currentRow.groundIds = currentRow.groundIdsStr.split(',')
+      if(currentRow.groundIdsStr!=null){
+        currentRow.groundIds = currentRow.groundIdsStr.split(',')
+      }
       this.oneStaffChange = currentRow;
     },
 
