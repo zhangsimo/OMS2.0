@@ -791,6 +791,7 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
+      console.log(this.currentDistribution)
     },
     //未核销对账单查询接口
     noWrite() {

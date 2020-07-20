@@ -268,8 +268,15 @@ export const mixPartInfo = {
       if (qurry.length > 0) {
         data.partCode = qurry;
       }
+      if(this.selectLevelFirst){
+        if(!this.selectLevelSecond){
+          data.typef = this.selectLevelFirst
+          data.types = "";
+        }
+      }
       if (this.selectLevelSecond) {
-        data.typeId = this.selectLevelSecond;
+        data.typef = this.selectLevelFirst
+        data.types = this.selectLevelSecond;
       }
       let res = await getAllParts(params, data);
       if (res.code == 0) {
@@ -359,6 +366,7 @@ export const mixPartInfo = {
       }else{
         this.carList.push({...this.carItemObj});
       }
+      // console.log(this.carList);
       //添加自定义分类名称属性
       this.formValidate.customClassName = '';
       //匹配包装规格
@@ -629,6 +637,7 @@ export const mixPartInfo = {
               if(!this.carList[0].carName&&!this.carList[0].id){
                 this.btnIsLoadding = false;
                 this.isCart = true;
+                this.tabsActive = 'active1'
                 return
               }
 

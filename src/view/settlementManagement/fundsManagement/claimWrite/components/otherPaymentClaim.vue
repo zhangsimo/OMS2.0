@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modal" :title="claimTit" width="800">
+    <Modal v-model="modal" :title="claimTit" width="800" footer-hide>
       <Row class="dbd" v-if="claimTit=='预付款认领'">
         <i-col span="12">
           <button
@@ -155,7 +155,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput"></voucherInput>
+    <voucherInput ref="voucherInput" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement"></settlement>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
@@ -170,11 +170,14 @@ import settlement from "@/view/settlementManagement/bill/components/settlement";
 import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { goshop } from "@/api/settlementManagement/shopList";
-import { findByDynamicQuery } from "@/api/settlementManagement/otherPayable/otherPayable";
+import {
+  findByDynamicQuery
+} from "_api/settlementManagement/otherReceivables/otherReceivables";
 import { findPageByDynamicQueryFirst } from "@/api/settlementManagement/advanceCharge";
 import { creat } from "@/view/settlementManagement/components";
 import moment from "moment";
 import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
+
 export default {
   props: {
     accrued: ""
@@ -289,13 +292,14 @@ export default {
           guestId: this.companyId,
           size: this.page.size,
           page: this.page.num - 1,
-          isClaimed: true
+          isClaimed: 0,
+          claimAmt:0
         };
-        for (let key in obj) {
-          if (!obj[key]) {
-            Reflect.deleteProperty(obj, key);
-          }
-        }
+        // for (let key in obj) {
+        //   if (!obj[key]) {
+        //     Reflect.deleteProperty(obj, key);
+        //   }
+        // }
         let res = await findPageByDynamicQueryFirst(obj);
         if (res.code == 0) {
           if (res.data.content.length <= 0) {
@@ -312,12 +316,12 @@ export default {
     },
     // 选中
     selected({ row }) {
+      console.log(row)
       this.claimTit == "其他付款认领"
         ? (this.currentAccount.accountNo =
-            row.paymentNo)
+            row.serviceId)
         : (this.currentAccount.accountNo =
             row.serviceId);
-      console.log(row);
     },
     //获取门店
     async getShop() {
@@ -353,14 +357,19 @@ export default {
     },
     openClimed() {
       if (!this.voucherinputModel) {
-        this.$refs.claimGuest.modal=true
+        if(this.currentAccount.accountNo){
+          this.$refs.settlement.Settlement = true;
+        }else{
+          this.$Message.error("请选择明细")
+        }
       } else {
         this.getMessage()
         if(this.MessageValue==""){
           this.$Message.error("请选择辅助核算")
         }else{
-          this.$message.success("其他付款认领成功")
-          this.claimedList(2);
+          // this.$message.success("其他付款认领成功")
+          // this.claimedList(2);
+          this.ok();
         }
       }
     },
@@ -497,10 +506,10 @@ export default {
         data.detailId = this.accrued[0].id;
         if (this.claimTit == "预付款认领") {
           data.subjectCode = "2203";
-          data.climeType = 4;
+          data.claimType = 4;
         } else {
           data.subjectCode = "1221";
-          data.climeType = 6;
+          data.claimType = 6;
           data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
             data.isAuxiliaryAccounting=0 //是否辅助核算类
@@ -518,6 +527,10 @@ export default {
             : this.$Message.success("其他付款认领成功");
         }
       }
+    },
+    //选择辅助核算回调
+    getCallBack(){
+      this.getMessage();
     }
   }
 };

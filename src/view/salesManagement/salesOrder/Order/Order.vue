@@ -1,27 +1,27 @@
 <template>
   <div class="content-oper content-oper-flex">
     <div class="headerBox">
-      <span class="mr10">快速查询:</span>
-      <getDate class="mr10" @quickDate="getvalue"></getDate>
-      <Select v-model="orderType" style="width:100px" class="mr10">
+      <span class="mr5">快速查询:</span>
+      <getDate class="mr5" @quickDate="getvalue"></getDate>
+      <Select v-model="orderType" style="width:100px" class="mr5">
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
-      <Button type="default" class="mr10" @click="openQueryModal">
+      <Button type="default" class="mr5" @click="openQueryModal">
         <Icon type="ios-more" />更多
       </Button>
-      <Button type="default" @click="addNew" class="mr10 w90" v-has="'add'">
+      <Button type="default" @click="addNew" class="mr5 w90" v-has="'add'">
         <Icon type="md-add" size="14" />新增
       </Button>
-      <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0" v-has="'save'">
+      <Button class="mr5 w90" @click="setSave" :disabled="orderlistType.value != 0" v-has="'save'">
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons" />保存
         </span>
       </Button>
-      <Button class="mr10" @click="sumbit" :disabled="orderlistType.value != 0" v-has="'submit'">
+      <Button class="mr5" @click="sumbit" :disabled="orderlistType.value != 0" v-has="'submit'">
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
       </Button>
       <Button
-        class="mr10"
+        class="mr5"
         @click="setStockOut"
         :disabled="orderlistType.value != 1||isWms"
         v-has="'StockOut'"
@@ -29,11 +29,11 @@
         <!--orderlistType.isWms == 1 || ^-->
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
       </Button>
-      <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0" v-has="'print'">
+      <Button class="mr5" @click="printTable" :disabled="orderlistType.value == 0" v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
       <Button
-        class="mr10"
+        class="mr5"
         @click="setBackOrder"
         :loading="backloading"
         :disabled="backShow"
@@ -42,14 +42,14 @@
         <i class="iconfont mr5 iconziyuan14"></i> 返单
       </Button>
       <Button
-        class="mr10"
+        class="mr5"
         @click="setCancellation"
         :disabled="orderlistType.value != 0"
         v-has="'Cancellation'"
       >
         <Icon type="md-close" size="14" />作废
       </Button>
-      <Button class @click="setDerive" v-has="'Derive'">
+      <Button class="mr5" @click="setDerive" v-has="'Derive'">
         <i class="iconfont mr5 icondaochuicon"></i> 导出
       </Button>
       <div class="db">
@@ -163,6 +163,7 @@ export default {
     },
     //  调用left方法
     parentGetleft() {
+      this.$refs.OrderLeft.showPerson = this.showSelf ? 1 : 0;
       this.$refs.OrderLeft.gitlistValue();
     },
     //获取时间
@@ -175,7 +176,7 @@ export default {
     },
     //打开更多搜索
     openQueryModal() {
-      this.queryList = { showPerson: true };
+      // this.queryList = { showPerson: true };
       this.$refs.morequeryModal.openModal();
     },
     //左侧点击数据
@@ -341,6 +342,7 @@ export default {
   border-bottom: 1px #e0e0e0 solid;
   padding-left: 10px;
   padding-bottom: 16px;
+  display: flex;
 }
 .demo-split {
   height: 100%;
