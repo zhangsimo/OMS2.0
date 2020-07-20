@@ -74,9 +74,16 @@
       <vxe-table-column
         field="billingDate"
         title="开票日期"
-        width="120"
-        :edit-render="{name: 'input', attrs: {type: 'date'}}"
-      ></vxe-table-column>
+        width="150"
+        :edit-render="{}"
+      >
+        <template v-slot:edit="{ row }">
+          <DatePicker type="date" v-model="row.billingDate" transfer placeholder="Select date" ></DatePicker>
+        </template>
+        <template v-slot="{ row }">
+          {{row.billingDate|filtersDate}}
+        </template>
+      </vxe-table-column>
       <vxe-table-column
         field="totalAmt"
         title="价税合计金额"
@@ -142,6 +149,7 @@
 import account from "./accountregistration";
 import idDetailed from "../components/idDetailed";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import moment from 'moment'
 import {
   submit,
   deleteRows,
@@ -362,20 +370,23 @@ export default {
         }
       });
     },
+
     // 保存并提交
     async submission() {
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
       if (!errMap) {
         let pay = 0;
         let pei = 0;
-        this.tableData.map(item => {
+        let newTableData =  this.tableData.map(item1 => {
+          let item = {...item1}
           pei += item.totalAmt * 1;
-          const data = item.billingDate.split("-");
+          const data = moment(item.billingDate).format('YYYY-MM-DD').split("-");
           if (data.length > 1) {
             item.billingDate = data[0] + data[1] + data[2];
           } else {
             item.billingDate = data;
           }
+          return item
         });
         this.accountData.map(item => {
           pay += item.actualPayment * 1;
@@ -383,7 +394,7 @@ export default {
         if (pei > pay)
           return this.$message.error("价税合计金额不能大于应付合计");
         let data = {
-          details: this.tableData,
+          details: newTableData,
           masterList: this.accountData
         };
         submit(data).then(res => {
@@ -451,6 +462,8 @@ export default {
       });
       return sums;
     },
+
+
     // 添加行
     addRows() {
       let date = new Date();
@@ -508,6 +521,15 @@ export default {
       deleteRows({ id: this.currentRow.id }).then(res => {
         console.log(res);
       });
+    }
+  },
+  filters:{
+    filtersDate(value){
+      if(!value){
+        return ""
+      }
+      value = moment(value).format('YYYY-MM-DD');
+      return value;
     }
   }
   // watch:{

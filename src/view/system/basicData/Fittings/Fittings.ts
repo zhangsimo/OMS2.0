@@ -523,6 +523,8 @@ export default class Fittings extends Vue {
       const ref: any = this.$refs.partInfo;
       ref.proModal = false;
       this.queryHandle();
+    } else {
+      ref.saveFlag = false;
     }
     ref.saveFlag = false;
   }

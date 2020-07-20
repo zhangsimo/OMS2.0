@@ -59,6 +59,7 @@ export default {
   },
   data() {
     return {
+      showPerson: true,
       PtRow:{
         billStatusId: { enum: "", value: "0", name: "草稿" },
         orderMan: this.$store.state.user.userData.staffName,
@@ -74,9 +75,6 @@ export default {
         num: 1
       },
       tableData: [],
-      query: {
-        showPerson: 1
-      }, //更多搜索信息
       Flaga: true,
       selectItemId:'',
       leftTableHeight:0,
@@ -118,9 +116,11 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;
+      data.showPerson = this.showPerson ? 1: 0;
       let page = this.page.num - 1;
       let size = this.page.size;
       let res = await getLeftList(page, size, data);
+      // console.log(data)
       if (res.code === 0) {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
