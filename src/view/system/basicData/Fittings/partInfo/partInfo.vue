@@ -301,7 +301,7 @@
               ></Table>
               <Page
                 size="small"
-                class-name="page-con"
+                class="page-con"
                 :current="page.num"
                 :total="page.total"
                 :page-size="page.size"
@@ -449,6 +449,7 @@ export default {
     .trans-list {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 60px;
       .trans-btn {
         display: flex;
         flex-direction: column;
@@ -474,6 +475,7 @@ export default {
         }
         width: calc((100% - 110px) / 2);
         padding: 10px;
+        margin-bottom: 60px;
         border: solid 1px #e5e5e5;
       }
     }
