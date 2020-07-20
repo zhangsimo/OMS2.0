@@ -138,7 +138,7 @@ export default {
     //增加核销对账单接口
     addSelete() {
       let obj = {
-        orgId: this.arrId[0],
+        // orgId: this.arrId[0],
         guestId: this.arrId[1],
         id: this.arrId[2],
         startDate: this.accountDate[0] ? moment(
