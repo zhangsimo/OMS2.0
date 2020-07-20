@@ -158,7 +158,7 @@ export default {
       window.print();
       // 重新加载页面，以刷新数据
       window.location.reload();
-      document.body.innerHTML = oldstr;
+      // document.body.innerHTML = oldstr;
     },
     async openModal() {
       if (this.orderId) {
