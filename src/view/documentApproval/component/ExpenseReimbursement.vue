@@ -255,6 +255,7 @@
                   label-in-value
                   @on-change="getCompany"
                   :disabled="modelType"
+                  placeholder="请输入姓名查询选择"
                 >
                   <Option
                     v-for="item in options1"
