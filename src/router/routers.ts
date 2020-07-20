@@ -72,7 +72,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "滚动计划单",
-          notCache: true,
+          // notCache: true,
         },
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },
@@ -83,7 +83,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "计划采购订单",
-          notCache: true,
+          // notCache: true,
         },
         component: () =>
           import("@/view/goods/plannedPurchaseOrder/plannedPurchaseOrder.vue")
