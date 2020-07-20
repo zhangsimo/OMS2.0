@@ -17,13 +17,15 @@
           <vxe-table-column field="strategyName" title="级别名称"></vxe-table-column>
           <vxe-table-column title="级别销价" >
             <template v-slot="{ row }">
-              <el-input-number
+              <span v-if="row.strategyName == '最低售价'">{{ row.sellPrice | priceFilters }} - {{ row.minRequiredQty }}</span>
+              <span v-else>{{ row.sellPrice | priceFilters }}</span>
+              <!-- <el-input-number
                 :disabled="true"
                 v-model="row.sellPrice"
                 :controls="false"
                 size="small"
                 :precision="2"
-              />
+              /> -->
               </template>
           </vxe-table-column>
           <vxe-table-column field="updateUname" title="更新人" ></vxe-table-column>
