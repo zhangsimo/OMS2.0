@@ -150,6 +150,11 @@
                   <Icon type="md-add" />导入
                 </span>
               </Button>
+              <Button class="mr10 w90" @click="deletePart">
+                <span class="center">
+                  <Icon type="md-add" />删除
+                </span>
+              </Button>
               <Button :disabled="disabled" class="mr10 w90" @click="savePart" v-has="'saveRight3'">
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
@@ -173,9 +178,9 @@
               :data="part.tbdata"
               highlight-current-row
               :edit-config="{ trigger: 'click', mode: 'cell',showStatus: true}"
-              :checkbox-config="{checkRowKeys: defaultSelecteRows}"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
               <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
               <!-- <vxe-table-column field="costPrice" title="成本单价" v-if="rowPriceManege.name=='统一售价'"></vxe-table-column> -->
@@ -228,7 +233,7 @@
                 title="解除限制"
                 v-if="rowPriceManege.name=='最低售价'"
                 field="removeLimitCheckBox"
-                :edit-render="{ name: 'checkbox' }"
+                :edit-render="{}"
               >
                 <template v-slot:edit="{ row }">
                   <vxe-checkbox v-model="row.removeLimitCheckBox"></vxe-checkbox>
@@ -559,7 +564,7 @@ export default {
       this.level.tbdata.push({ name: "", isNew: true, oid: Date.now() });
     },
     // 单选行
-    async selectRow({ row }) {
+    async selectRow({ row },tabIndex1) {
       // console.log(row);
       this.rowPriceManege = row;
       // this.rowPriceLevelStyle(row);
@@ -838,6 +843,33 @@ export default {
         this.$Message.success("保存成功");
         this.queryPart();
       }
+    },
+    async deletePart(){
+      let selectRecords = this.$refs.part.getCheckboxRecords();
+      if(selectRecords.length==0){
+        this.$Message.error("请选择一条配件记录");
+      }else {
+        let ids = selectRecords.map(item => {
+          let objData = {
+            id:item.id
+          }
+          return objData
+        })
+        if(this.rowPriceManege.readonly){
+          let rep = await api.deleteLastPricePart(ids);
+          if(rep.code==0){
+            this.$Message.success("删除成功");
+            this.getPart();
+          }
+        }else{
+          let rep = await api.deletePricePart(ids);
+          if(rep.code==0){
+            this.$Message.success("删除成功");
+            this.getPart();
+          }
+        }
+      }
+
     }
   },
   mounted() {
