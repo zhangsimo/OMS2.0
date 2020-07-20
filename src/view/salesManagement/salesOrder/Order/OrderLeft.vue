@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import * as tools from "_utils/tools";
 import { getLeftList } from "@/api/salesManagment/salesOrder";
 
 export default {
@@ -112,15 +113,20 @@ export default {
     },
     //获取表格数据
     async gitlistValue() {
+      let self = tools.getSession("self");
+      let showSelf =  true;
+      if(Reflect.has(self, "salesOrder")) {
+        showSelf = self.salesOrder;
+      }
+      this.showPerson = showSelf ? 1 : 0;
       let data = {};
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;
-      data.showPerson = this.showPerson ? 1: 0;
+      data.showPerson = this.showPerson;
       let page = this.page.num - 1;
       let size = this.page.size;
       let res = await getLeftList(page, size, data);
-      // console.log(data)
       if (res.code === 0) {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
