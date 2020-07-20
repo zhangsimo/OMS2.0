@@ -45,10 +45,11 @@ export function distributionRevoke(data) {
 
 
 //转当期损益
-export function TurnToTheProfitAndLoss(data) {
+export function TurnToTheProfitAndLoss(params,data) {
   return axios.request({
-    url: `${api.omsSettle}/cashAccountServer/transferProfitsLosses`,
+    url: `${api.omsSettle}/cashAccountServer/transferProfitsLosses?claimMoney=${params}`,
     method: "post",
+    params,
     data
   });
 }
