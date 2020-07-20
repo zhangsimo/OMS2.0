@@ -116,7 +116,7 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;
-      data.showPerson = this.showPerson;
+      data.showPerson = this.showPerson ? 1: 0;
       let page = this.page.num - 1;
       let size = this.page.size;
       let res = await getLeftList(page, size, data);
