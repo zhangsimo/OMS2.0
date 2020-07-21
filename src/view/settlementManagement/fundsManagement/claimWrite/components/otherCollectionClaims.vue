@@ -74,7 +74,6 @@
         <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
-          v-model="accrued[0].rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
@@ -82,7 +81,6 @@
         ></vxe-table-column>
         <vxe-table-column
           field="balanceMoney"
-          v-model="accrued[0].balanceMoney"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
@@ -142,14 +140,18 @@ export default {
     voucherInput,claim,settlement,claimGuest
   },
   data() {
-    const amtValid = ({ row }) => {
+    const amtValid = ({cellValue, row }) => {
       return new Promise((resolve, reject) => {
-        let trueValue =
-          Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
-        if (trueValue) {
-          reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
-        } else {
-          resolve(true);
+        if(cellValue){
+          let trueValue =
+            Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
+          if (trueValue) {
+            reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+          } else {
+            resolve();
+          }
+        }else{
+          reject(new Error("本次认领金额必填"));
         }
       });
     };
@@ -161,7 +163,8 @@ export default {
       },
       // 表格验证  本次认领金额  是否符合条件
       validRules: {
-        rpAmt: [{ required: true, validator: amtValid }]
+        rpAmt: [{ validator: amtValid }],
+        balanceMoney: [{ required: true, validator: amtValid }]
       },
       modal: false, //模态框展示
       oneSubject: {}, //单选获取到的数据
@@ -203,9 +206,13 @@ export default {
     openVoucherInput() {
       this.$refs.voucherInput.subjectModelShowassist = true;
     },
-    openClimed(claimTit){
+    async openClimed(claimTit){
         if(this.voucherinputModel==false){
-          this.$refs.claimGuest.modal=true
+          const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+          if (errMap) {
+          } else {
+            this.$refs.claimGuest.modal=true
+          }
         }else{
           this.getMessage()
           if(this.MessageValue==""){

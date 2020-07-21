@@ -51,7 +51,7 @@
           </template>
         </vxe-table-column>
         <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
-        <vxe-table-column title="借支金额">
+        <vxe-table-column title="因公借支未核销余额">
           <template v-slot="{ row }">
             <span>
               {{

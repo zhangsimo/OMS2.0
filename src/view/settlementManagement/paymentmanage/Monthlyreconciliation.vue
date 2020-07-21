@@ -178,11 +178,11 @@
             <div class="totalcollect p10 mt20">
               <div class="db">
                 <span class="mr5">对账应收</span>
-                <Input type="text" v-model="totalcollect" readonly class="w60 tc" />
+                <Input type="text" v-model="totalcollect" readonly class="w80 tc" />
                 <span class="mr5 ml10">应收坏账</span>
-                <InputNumber  v-model="collectBaddebt" class="w60 tc" />
+                <InputNumber  v-model="collectBaddebt" class="w80 tc" />
                 <span class="mr5 ml10">应收返利</span>
-                <InputNumber  v-model="collectRebate" class="w60 tc" />
+                <InputNumber  v-model="collectRebate" class="w80 tc" />
                 <span class="mr5 ml10">运费</span>
                 <InputNumber  v-model="transportExpenses" class="w60 tc" />
                 <span class="mr5 ml10">保险费</span>
@@ -196,17 +196,17 @@
               </div>
               <div class="db mt10 mb10">
                 <span class="mr5">对账应付</span>
-                <Input type="text" v-model="totalpayment" readonly class="w60 tc" />
+                <Input type="text" v-model="totalpayment" readonly class="w80 tc" />
                 <span class="mr5 ml10">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc"  />
+                <InputNumber v-model="paymentBaddebt" type="text" class="w80 tc"  />
                 <span class="mr5 ml10">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w60 tc"  />
+                <InputNumber v-model="paymentRebate" class="w80 tc"  />
                 <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
-                <Input v-model="Actualtotalcollect" type="text" class="w60 tc" readonly />
+                <Input v-model="Actualtotalcollect" type="text" class="w80 tc" readonly />
                 <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
-                <Input :value="Actualtotalpayment" class="w60 tc" readonly />
+                <Input :value="Actualtotalpayment" class="w80 tc" readonly />
                 <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
-                <Input type="text" v-model="Reconciliationtotal" readonly class="w60 tc" />
+                <Input type="text" v-model="Reconciliationtotal" readonly class="w80 tc" />
               </div>
               <div class="db">
                 <span class="mr5">计划结算类型</span>
@@ -756,7 +756,7 @@ export default {
       this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
       this.totalcollect = this.totalcollect ? this.totalcollect : 0;
       return (
-        this.totalcollect * 1 - this.totalcollect * 1 - this.collectRebate * 1
+        this.totalcollect * 1 - this.collectBaddebt * 1 - this.collectRebate * 1
       );
     },
     //本次对账结算合计
@@ -881,9 +881,23 @@ export default {
     },
     getAccountNameListFun(v){
       this.companyInfo = v;
+      this.changeGuestName();
+    },
+
+    //往来单位切换数据还原
+    changeGuestName(){
+      this.info = false;
+      this.handervis = false;
+      this.paymentlist = [];
+      this.collectlist = [];
+      this.totalcollect = 0;
+      this.Actualtotalcollect = 0;
+      this.Actualtotalpayment = 0;
+      this.Reconciliationtotal = 0;
       this.getAccountNameList();
       this.Initialization();
     },
+
     // 获取数据
     Initialization() {
       // let { orgId, startDate, endDate, guestId } = this.parameter;

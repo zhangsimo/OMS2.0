@@ -1086,7 +1086,7 @@ export default {
         arrData.map((item, index) => {
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
-              item[b] = item[b].replace(/,/g, "，");
+              item[b] = (item[b].replace(/,/g, "，")).replace(/\n/g, "");
             }
           }
           item.index = index + 1;
