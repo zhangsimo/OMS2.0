@@ -5,7 +5,7 @@ import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamine
 
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
 
-import { getCarPartClass,getAllParts,getByManyCode,getAlreadyParts } from "_api/parts";
+import { getCarPartClass,getAllParts,getByManyCode,getAlreadyParts,savePartChange } from "_api/parts";
 
 export const mixPartInfo = {
 
@@ -251,11 +251,6 @@ export const mixPartInfo = {
         this.$refs.proModalForm.resetFields()
       }
     },
-    //获取一级分类二级分类
-    async getLevelListData(){
-      let res= await getCarPartClass();
-      this.levelType = res;
-    },
     //获取左侧全部配件数据接口
     async getAllPartListData(){
       this.allPartLoading = true;
@@ -293,9 +288,9 @@ export const mixPartInfo = {
       }
     },
     //获取右侧已关联配件数据接口
-    async getAlreadyPartsData(){
+    async getAlreadyPartsData(code){
       this.alreadyPartLoading=true
-      let data={partApplyId:this.$parent.selectTable.id};
+      let data={partInnerId:code};
       let res=await getAlreadyParts(data)
       if(res.code===0){
         this.alreadyPartLoading=false
@@ -327,12 +322,13 @@ export const mixPartInfo = {
       this.carList = [];
       this.carItemObj.carName = "";
       this.carItemObj.carBrand = "";
-
       this.currRow = null
       this.btnIsLoadding = false;
       this.proModal = true;
       this.formValidate.specVOS=[];
       this.saveFlag = false;
+      this.selectLevelFirst="";
+      this.selectLevelSecond=""
       this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌submit
       this.getCarBrand();
@@ -351,22 +347,19 @@ export const mixPartInfo = {
       this.formValidate.fullName = ''
       if (setData) {
         this.formValidate = setData;
-
-        // console.log(setData)
-
         //赋值适用车型
-        let carModelName = setData.carModelName.split("|");//车系
-        let carBrandName = setData.carBrandName.split("|");//车品牌
+        let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
+        let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
         let arrNew = carModelName.length>carBrandName.length?carModelName:carBrandName
         arrNew.map((vItem,vindex) => {
           this.carItemObj.carBrand = carBrandName[vindex];
           this.carItemObj.carName = carModelName[vindex];
           this.carList.push({...this.carItemObj});
         });
+        // this.carList.push({...this.carItemObj});
       }else{
         this.carList.push({...this.carItemObj});
       }
-      // console.log(this.carList);
       //添加自定义分类名称属性
       this.formValidate.customClassName = '';
       //匹配包装规格
@@ -385,28 +378,26 @@ export const mixPartInfo = {
       this.getFullName();
       //配件资料 关联配件
       this.getAllPartListData()
-      if(this.$parent.selectTable!=null){
-        this.getAlreadyPartsData()
-      }
-      this.getLevelListData()
+      this.levelType=this.$parent.treeData
     },
 
     //获取所有车型品牌
     getCarBrand() {
       let req = {}
-      req.page = 1;
-      req.pageSize = 500;
+      // req.page = 1;
+      // req.pageSize = 500;
       getCarBrandAll(req).then(res => {
-        let arrData = res.data.content || []
+        let arrData = res.data || []
+        console.log(arrData);
         this.carObj.carBrandData = arrData.map(item => {
-          let obj = {}
+          let obj = {...item};
           obj.id = item.id
           obj.nameCn = item.nameCn
           return obj
         })
-        if (this.formValidate.carBrandName) {
-          this.getCarModelFun();
-        }
+        // if (this.formValidate.carBrandName) {
+        //   this.getCarModelFun();
+        // }
       })
     },
     //获取车型
@@ -634,7 +625,7 @@ export const mixPartInfo = {
               objReq.partTypeF = this.formValidate.partTypeF
               objReq.partTypeS = this.formValidate.partTypeS
               this.isCart = false;
-              if(!this.carList[0].carName&&!this.carList[0].id){
+              if(!this.carList[0].carName && !this.carList[0].id){
                 this.btnIsLoadding = false;
                 this.isCart = true;
                 this.tabsActive = 'active1'
@@ -645,14 +636,14 @@ export const mixPartInfo = {
               let carBrandName = [];
               let carModelName = [];
               this.carList.map(vb => {
-                let selectBrandData = this.carObj.carBrandData.filter(item => item.id == vb.carBrand);
+                let selectBrandData = this.carObj.carBrandData.filter(item => item.erpCarBrandId == vb.carBrand);
                 if (selectBrandData.length > 0) {
                   carBrand.push(selectBrandData[0].nameCn);
-                  carBrandName.push(selectBrandData[0].id);
+                  carBrandName.push(selectBrandData[0].erpCarBrandId);
                   carModelName.push(vb.carName);
                 }
               });
-              objReq.carBrand = carBrand.join("|");
+              // objReq.carBrand = carBrand.join("|");
               objReq.carBrandName = carBrandName.join("|");
               objReq.carModelName = carModelName.join("|");
 
@@ -664,7 +655,7 @@ export const mixPartInfo = {
 
               objReq.direction = this.formValidate.direction
               //审批状态
-              objReq.auditSign = auditSign
+              objReq.auditSign = auditSign;
               //配件 1 2 3级类别
               objReq.carTypeF = this.formValidate.carTypeF
               objReq.carTypeS = this.formValidate.carTypeS
@@ -700,6 +691,7 @@ export const mixPartInfo = {
           })
         } else {
          // this.$Message.error('带*必填')
+          this.saveFlag = false;
           this.tabsActive = 'active1'
           this.btnIsLoadding = false;
           this.changeTab()

@@ -84,8 +84,8 @@
                   <template v-slot="{ row }">{{
                     row.tempEnd == null
                       ? 0
-                      : Date(row.tempEnd) < Date()
-                      ? row.tempEnd
+                      : s2d(row.tempEnd) < Date.now()
+                      ? row.tempCreditLimit
                       : 0
                   }}</template>
                 </vxe-table-column>
@@ -214,6 +214,13 @@ export default {
     // this.getClientTypeList();
   },
   methods: {
+    s2d(date) {
+      date = date.substring(0,19);    
+      date = date.replace(/-/g,'/'); 
+      let timestamp = new Date(date).getTime();
+      // console.log(timestamp < Date.now())
+      return timestamp;
+    },
     async show(row) {
       //获取客户额度
       let data = {};
