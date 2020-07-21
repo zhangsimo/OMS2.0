@@ -223,10 +223,6 @@ export default {
   name: "addStaff",
   props: {
     data: "",
-    financeList:{
-      type : Array,
-      default:()=>[]
-    }
   },
   components:{staffAccount},
   data() {
@@ -392,12 +388,11 @@ export default {
         }
       ],
       selectFinTab:{},
-
       bankAccount:false,
       bankAccountTit:"新增银行账户",
       enAble:"启用",
       accountAddId:0,
-      // financeList:[],
+      financeList:[],
     };
   },
   mounted() {
