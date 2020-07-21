@@ -288,7 +288,7 @@
               >
                 <Input
                   type="text"
-                  v-model="formInline.receiveBankNo"
+                  :value="formInline.receiveBankNo|filterApplyNo"
                   style="width: 90%;padding-left: 5px"
                   :disabled="modelType"
                 ></Input>
@@ -345,7 +345,7 @@
               <FormItem label="支付账号" style="margin-bottom: 0px">
                 <Input
                   type="text"
-                  v-model="formInline.paymentBankNo"
+                  :value="formInline.paymentBankNo|filterApplyNo"
                   style="width: 90%;padding-left: 5px"
                   disabled
                 ></Input>

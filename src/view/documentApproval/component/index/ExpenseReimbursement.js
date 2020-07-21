@@ -83,25 +83,25 @@ export default {
       taxRate: [], //税率
       //费用支出表格的数据校验
       validRules: {
-        summary: [{ required: true, message: "必填" }],
+        summary: [{ required: true, message: "摘要必填" }],
         taxRateCode: [{ validator: taxRateCodeValid }],
-        accountEntry: [{ required: true, message: "必填" }],
+        accountEntry: [{ required: true, message: "入账科目必填" }],
         totalAmt: [
-          { required: true, message: "必填" },
+          { required: true, message: "价税合计必填" },
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
           }
         ],
         taxAmt: [
-          { required: true, message: "必填" },
+          { required: true, message: "税额必填" },
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
           }
         ],
         noTaxAmt: [
-          { required: true, message: "必填" },
+          { required: true, message: "不含税金额必填" },
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
@@ -109,7 +109,7 @@ export default {
           { validator: notaxValid }
         ],
         writeOffAmt: [
-          { required: true, message: "必填" },
+          { required: true, message: "因公借支核销金额必填" },
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
@@ -466,15 +466,15 @@ export default {
     },
 
     //保存审核
-    save(type) {
+    async save(type) {
+      const errMap = await this.$refs.xTable
+        .fullValidate()
+        .catch(errMap => errMap);
+      const errTwo = await this.$refs.documentTable
+        .fullValidate()
+        .catch(errTwo => errTwo);
       this.$refs.formInline.validate(async valid => {
         if (valid) {
-          const errMap = await this.$refs.xTable
-            .fullValidate()
-            .catch(errMap => errMap);
-          const errTwo = await this.$refs.documentTable
-            .fullValidate()
-            .catch(errTwo => errTwo);
           if (errMap || errTwo) {
             if (errTwo) return this.$Message.error("核销金额不能大于借支金额");
             //this.$Message.error('表格校验失败')
@@ -493,9 +493,30 @@ export default {
             }
           }
         } else {
-          this.$Message.error("带*必填");
+          //this.$Message.error("带*必填");
         }
       });
+    }
+  },
+  filters:{
+    filterApplyNo(v){
+      if(v){
+        let value = [...v];
+        if(value<=4){
+          return value.join('')
+        }else{
+          let arr = value.map((item,index) => {
+            if(index<value.length-4){
+              return "*"
+            }else{
+              return item
+            }
+          })
+          return arr.join('')
+        }
+      }else{
+        return ""
+      }
     }
   }
 };
