@@ -118,8 +118,8 @@
                     >
                       <Option
                         v-for="item in carObj.carBrandData"
-                        :value="item.nameCn"
-                        :key="item.nameCn"
+                        :value="item.erpCarBrandId"
+                        :key="item.erpCarBrandId"
                       >{{item.nameCn}}</Option>
                     </Select>
                     <Input class="w260" v-model="v.carName" />
