@@ -123,9 +123,10 @@ export default {
 
     },
     async ok(){
-      let params=this.accrued[0].balanceMoney
+      // let params=this.accrued[0].balanceMoney
       let data = {};
       data.detailId = this.accrued[0].id;
+      data.claimMoney=this.accrued[0].balanceMoney
       if(this.bool){
         data.subjectCode="2202";
         data.claimType=2
