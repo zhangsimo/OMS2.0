@@ -75,10 +75,10 @@
             </button>
           </div>
           <div class="db ml15">
-            <el-checkbox v-model="apply" @click="myApply">我的申请</el-checkbox>
+            <el-checkbox v-model="apply" >我的申请</el-checkbox>
           </div>
           <div class="db ml15">
-            <el-checkbox v-model="approve" @click="myApprove">经我审批</el-checkbox>
+            <el-checkbox v-model="approve">经我审批</el-checkbox>
           </div>
         </div>
       </div>
@@ -475,66 +475,6 @@ export default {
     query() {
       this.getList();
     },
-    async myApply() {
-      let params = {};
-      if (this.apply == true) {
-        this.apply = false;
-        this.query();
-        return;
-      } else {
-        this.apply = true;
-        params.applicant = this.$store.user.userData.staffName; //申请人
-        params.page = this.page.num - 1;
-        params.size = this.page.size;
-        if (this.value.length != 0) {
-          params.startTime = moment(this.value[0])
-            .startOf("day")
-            .format("YYYY-MM-DD HH:mm:ss");
-          params.endTime = moment(this.value[1])
-            .endOf("day")
-            .format("YYYY-MM-DD HH:mm:ss");
-        }
-        params.billStatus = this.Reconciliationtype;
-        params.applyType = this.ApplicationType;
-        params.orgid = this.shopCode;
-        let res = await findPageByDynamicQuery(params);
-        if (res.code === 0) {
-          this.tableData = res.data.content;
-          this.page.total = res.data.totalElements;
-          // console.log(this.$route)
-        }
-      }
-    },
-    async myApprove() {
-      let params = {};
-      if (this.approve == true) {
-        this.approve = false;
-        this.query();
-        return;
-      } else {
-        this.approve = true;
-        params.approveUname = this.$store.user.userData.staffName; //申请人
-        params.page = this.page.num - 1;
-        params.size = this.page.size;
-        if (this.value.length != 0) {
-          params.startTime = moment(this.value[0])
-            .startOf("day")
-            .format("YYYY-MM-DD HH:mm:ss");
-          params.endTime = moment(this.value[1])
-            .endOf("day")
-            .format("YYYY-MM-DD HH:mm:ss");
-        }
-        params.billStatus = this.Reconciliationtype;
-        params.applyType = this.ApplicationType;
-        params.orgid = this.shopCode;
-        let res = await findPageByDynamicQuery(params);
-        if (res.code === 0) {
-          this.tableData = res.data.content;
-          this.page.total = res.data.totalElements;
-          // console.log(this.$route)
-        }
-      }
-    },
     //获取仓库
     async getStroe() {
       let rep = await findByStore();
@@ -569,6 +509,8 @@ export default {
       params.billStatus = this.Reconciliationtype;
       params.applyType = this.ApplicationType;
       params.orgid = this.shopCode;
+      this.apply ? params.applicant = this.$store.state.user.userData.staffName : params
+      this.approve ? params.approveUname = this.$store.state.user.userData.staffName : params
       switch (this.searchType) {
         case "0":
           params.applyNo = this.searchTypeValue;
@@ -584,7 +526,6 @@ export default {
       if (res.code === 0) {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
-        // console.log(this.$route)
       }
     },
 

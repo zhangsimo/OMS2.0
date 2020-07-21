@@ -44,8 +44,8 @@ export default {
               localStorage.setItem("username", username);
               this.getUserInfo(username).then(res => {
                 let data = {};
-                data.tenantId = res.tenantId;
-                data.shopId = res.shopId;
+                data.tenantId = res.currentCompany ? res.currentCompany.tenantId ?res.currentCompany.tenantId : '' : ''
+                data.shopId = res.currentCompany ? res.currentCompany.id ?res.currentCompany.id : '' : ''
                 data.shopkeeper = res.shopkeeper;
                 localStorage.setItem("oms2-userList", JSON.stringify(data));
                 this.$router.go(-1)

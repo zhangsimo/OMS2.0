@@ -294,6 +294,15 @@ export default {
   methods: {
     //本店待认领款选中的数据
     claimedSelection(selection) {
+      // selection.map(item=>{
+      //   console.log(item.paidMoney,"1")
+      //   if(item.paidMoney<0){
+      //     console.log(item,"2")
+      //     let paidMoney2=JSON.stringify(item.paidMoney).split("-")[1]
+      //     item.paidMoney2=paidMoney2
+      //   }
+      // })
+      // console.log(selection)
       if (selection.length !== 1 && selection.length) {
         let s = 0;
         let n = 0;

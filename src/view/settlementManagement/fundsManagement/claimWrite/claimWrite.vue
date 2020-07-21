@@ -659,6 +659,9 @@ export default {
         } else {
           this.$refs.accrued.bool = true;
         }
+        this.claimedSubjectList.map(item => {
+          item.balanceMoney = Math.abs(item.paidMoney||item.incomeMoney)
+        })
         this.$refs.accrued.open();
       }
     },
@@ -687,6 +690,9 @@ export default {
       } else if (this.$refs.claim.currentClaimed.length > 1) {
         this.$message.error("只能为一条数据进行转应收应付操作");
       } else {
+        // this.claimedSubjectList.map(item=>{
+        //   item.paidMoney=JSON.stringify(item.paidMoney).split("-")[1]
+        // })
         this.claimedSubjectList = this.$refs.claim.currentClaimed;
         this.$refs.otherPaymentClaim.claimTit = claimTit;
         if (this.claimedSubjectList[0].paidMoney<0) {
@@ -791,6 +797,7 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
+      console.log(this.currentDistribution)
     },
     //未核销对账单查询接口
     noWrite() {

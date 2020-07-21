@@ -15,8 +15,8 @@
           style="width: 150px"
         />
         <Input
-          v-model="clientPhone"
-          placeholder="电话"
+          v-model="pyName"
+          placeholder="拼音"
           class="mr10"
           style="width: 150px"
         />
@@ -111,6 +111,10 @@
                   title="结算方式"
                 ></vxe-table-column>
                 <vxe-table-column
+                  field="pyName"
+                  title="拼音"
+                ></vxe-table-column>
+                <vxe-table-column
                   field="contactor"
                   title="联系人"
                 ></vxe-table-column>
@@ -169,7 +173,7 @@ export default {
       addressShow: false,
       fullName: "", //名称
       clientCode: "", //编码
-      clientPhone: "", //电话
+      pyName: "", //电话
       clientType: [], //类型
       clientList: [
         {
@@ -228,7 +232,7 @@ export default {
     },
     reset() {
       this.fullName = "";
-      this.clientPhone = "";
+      this.pyName = "";
       this.clientCode = "";
       this.page1 = {
         num: 1,
@@ -312,8 +316,8 @@ export default {
       if (this.fullName) {
         data.shortName = this.fullName;
       }
-      if (this.clientPhone) {
-        data.contactorTel = this.clientPhone;
+      if (this.pyName) {
+        data.pyName = this.pyName;
       }
       let res = await getTreeClient(data);
       if (res.code === 0) {

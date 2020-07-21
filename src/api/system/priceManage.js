@@ -90,7 +90,7 @@ export function area(params) {
 //     methods:"post",
 //     data
 //   })
-// } 
+// }
 // export const impUrl = `${api.wmsApi}/sellPricePart/import`
 export const impUrl = `${api.wmsApi}/sellPricePart/import`
 
@@ -110,5 +110,23 @@ export function addWbParts(params,data) {
     method: "post",
     data,
     params
+  });
+}
+
+// 删除配件最低价格配件数据
+export function deleteLastPricePart(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partPrice/deleteAll`,
+    method: "post",
+    data
+  });
+}
+
+// 删除配件价格配件数据
+export function deletePricePart(data) {
+  return axios.request({
+    url: `${api.wmsApi}/sellPricePart/deleteAll`,
+    method: "post",
+    data
   });
 }

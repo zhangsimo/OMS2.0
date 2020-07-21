@@ -600,6 +600,13 @@ export default {
           title: "销售价",
           align: "center",
           key: "sellPrice",
+          render(h, params) {
+            if(params.row.strategyName == "最低售价") {
+              return h("span", `${params.row.sellPrice} - ${params.row.minRequiredQty}`);
+            } else {
+              return h("span", params.row.sellPrice);
+            }
+          },
         },
         {
           title: "更新人",

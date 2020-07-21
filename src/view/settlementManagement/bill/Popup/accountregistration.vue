@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="选择不含税对账单" @on-visible-change="visChange">
+  <Modal v-model="modal1" title="选择对账单" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
     <DatePicker type="daterange" placement="bottom-start" style="width: 200px" v-model="accountDate"></DatePicker>
     <Button @click="query" class="ml10">查询</Button>
@@ -108,10 +108,10 @@ export default {
     };
   },
   // mounted(){
-    
+
   // },
   methods: {
-    
+
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
@@ -138,7 +138,7 @@ export default {
     //增加核销对账单接口
     addSelete() {
       let obj = {
-        orgId: this.arrId[0],
+        // orgId: this.arrId[0],
         guestId: this.arrId[1],
         id: this.arrId[2],
         startDate: this.accountDate[0] ? moment(

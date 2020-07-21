@@ -383,6 +383,9 @@ export const mixSelectPartCom = {
       getDetails(data).then(res => {
         if (res.code === 0) {
           this.allList = res.data;
+          this.allList.priceLever.forEach(element => {
+            element.sellPrice = parseFloat(element.sellPrice).toFixed(2);
+          });
         }
       });
     },
@@ -390,6 +393,9 @@ export const mixSelectPartCom = {
     dblclick(v){
       if(this.$route.name=="salesOrder"){
         this.$refs.selectPartInfo.init(v);
+      } else {
+        this.selectTableItem = [v];
+        this.$emit("selectPartName", this.selectTableItem);
       }
     }
   }

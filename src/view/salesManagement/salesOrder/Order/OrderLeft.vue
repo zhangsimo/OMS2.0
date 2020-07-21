@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import * as tools from "_utils/tools";
 import { getLeftList } from "@/api/salesManagment/salesOrder";
 
 export default {
@@ -59,6 +60,7 @@ export default {
   },
   data() {
     return {
+      showPerson: true,
       PtRow:{
         billStatusId: { enum: "", value: "0", name: "草稿" },
         orderMan: this.$store.state.user.userData.staffName,
@@ -74,9 +76,6 @@ export default {
         num: 1
       },
       tableData: [],
-      query: {
-        showPerson: 1
-      }, //更多搜索信息
       Flaga: true,
       selectItemId:'',
       leftTableHeight:0,
@@ -114,10 +113,17 @@ export default {
     },
     //获取表格数据
     async gitlistValue() {
+      let self = tools.getSession("self");
+      let showSelf =  true;
+      if(Reflect.has(self, "salesOrder")) {
+        showSelf = self.salesOrder;
+      }
+      this.showPerson = showSelf ? 1 : 0;
       let data = {};
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;
+      data.showPerson = this.showPerson;
       let page = this.page.num - 1;
       let size = this.page.size;
       let res = await getLeftList(page, size, data);

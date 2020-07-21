@@ -355,16 +355,16 @@ export default class ProcurementModal extends Vue {
 
     let data:any = {
       partId: this.partId,
-      partBrand: this.partBrand,
       startEnterDate: this.auditDate[0]?this.auditDate[0]:"",
       endEnterDate: this.auditDate[1]?this.auditDate[1]:"",
     };
-    let formData = {};
+    let formData:any = {};
     for(let k in data) {
-      if(data[k] && data[k].trim().length > 0) {
+      if(data[k] && data[k].trim()) {
         formData[k] = data[k];
       }
     }
+    this.partBrand == 0 ? "" : formData.partBrand = this.partBrand;
 
     let obj = {...params, ...formData}
 

@@ -85,7 +85,11 @@ export default {
         {
           title: "销售价",
           key: "sellPrice",
-          align: "center"
+          align: "center",
+          render:(h , params)=>{
+            let num =  +params.row.sellPrice
+            return h('span', {} ,num.toFixed(2) )
+          }
         },
         {
           title: "更新人",
