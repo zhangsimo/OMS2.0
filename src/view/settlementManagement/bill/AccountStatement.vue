@@ -1197,7 +1197,7 @@ export default {
     registrationEntry() {
       if (
         Object.keys(this.reconciliationStatement).length !== 0 &&
-        this.reconciliationStatement.billingTypeName === "付款"
+        this.reconciliationStatement.ownEnterList === 1
       ) {
         this.$refs.registrationEntry.accountData = [];
         this.$refs.registrationEntry.accountData.push(

@@ -515,6 +515,7 @@ export default class Fittings extends Vue {
     if (!this.isAdd) {
       row.partId = this.currRow.id;
     }
+    // console.log("???",row)
     let res: any = await setApproval(row);
     if (res.code == 0) {
       // const child: any = this.$refs;
@@ -523,6 +524,8 @@ export default class Fittings extends Vue {
       const ref: any = this.$refs.partInfo;
       ref.proModal = false;
       this.queryHandle();
+    } else {
+      ref.saveFlag = false;
     }
     ref.saveFlag = false;
   }
@@ -563,7 +566,7 @@ export default class Fittings extends Vue {
     let res: any = await api.toggleSale(id);
     let success: string = "";
     if (this.isSale) {
-      success = "禁售成功";      
+      success = "禁售成功";
     } else {
       success = "可售成功";
     }

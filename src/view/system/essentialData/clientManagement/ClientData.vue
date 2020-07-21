@@ -398,10 +398,6 @@ export default {
     treelist: {
       type: Array,
       default: ()=>[]
-    },
-    financeList: {
-      type: Array,
-      default: ()=>[]
     }
   },
   data() {
@@ -856,7 +852,8 @@ export default {
       pitchOnClientList: [], //选中关联客户
       deleteOneClient: [], //获取删除项
       pitchOneBank: [],
-      tit: "" //开票弹窗
+      tit: "", //开票弹窗
+      financeList:[]
     };
   },
   // computed:{
@@ -868,7 +865,6 @@ export default {
     this.placeList = this.data.guestLogisticsVOList || [];
     this.relevanceClientShow = this.data.guestVOList || [];
     this.invoice = this.data.guestTaxpayerVOList || [];
-    this.financeList = this.data.guestAccountVoList || [];
     this.getList();
     this.getClienlist();
     this.disposeFinData();

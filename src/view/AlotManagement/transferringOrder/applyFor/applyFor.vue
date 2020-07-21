@@ -712,6 +712,7 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
+          console.log(ChildMessage)
           let parts = ChildMessage.map( item => {
 
             return {
@@ -937,7 +938,8 @@
           this.rowOrgId = row.orgid
           this.mainId = row.id
           this.guestidId = row.guestId
-          this.datadata = row
+          this.datadata = row;
+          this.isInternalId = row.guestOrgid;
           this.formPlan.guestName = this.datadata.guestName
           // this.formPlan.guestName = this.datadata.guestId
           this.formPlan.storeId = this.datadata.storeId

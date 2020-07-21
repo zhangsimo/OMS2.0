@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modal" :title="claimTit" width="800" on-ok="ok">
+    <Modal v-model="modal" :title="claimTit" width="800">
       <Row class="dbd" v-if="claimTit=='预收款认领'">
         <i-col span="8">
           <button class="ivu-btn ivu-btn-default mr10" type="button" @click="openClimed('预收款认领')">{{claimTit}}</button>
@@ -53,6 +53,7 @@
         ref="xTable"
         :edit-rules="validRules"
         highlight-hover-row
+        highlight-current-row
         auto-resize
         height="300"
         @current-change="currentChangeEvent"
@@ -72,10 +73,20 @@
         <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
         <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
         <vxe-table-column
-          field="rpAmt || balanceMoney"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+          field="rpAmt"
+          v-model="accrued[0].rpAmt"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
+          v-if="claimTit=='预收款认领'"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="balanceMoney"
+          v-model="accrued[0].balanceMoney"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
+          title="本次认领金额"
+          align="center"
+          v-else
         ></vxe-table-column>
         <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
         <vxe-table-column
@@ -107,7 +118,7 @@
     </Modal>
     <claimGuest ref="claimGuest"></claimGuest>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accrued"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
     <!--其他收款核销-->
     <settlement ref="settlement"></settlement>
   </div>
@@ -116,7 +127,7 @@
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
 import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
+import claimGuest from "@/view/settlementManagement/otherPayable/components/claimGuest";
 
 import {findGuest} from "@/api/settlementManagement/advanceCollection.js";
 import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
@@ -200,8 +211,9 @@ export default {
           if(this.MessageValue==""){
             this.$Message.error("请选择辅助核算")
           }else{
-            this.$message.success(claimTit+"成功")
-            this.claimedList(2);
+            //this.$message.success(claimTit+"成功")
+            // this.claimedList(2);
+            this.ok()
           }
         }
     },
@@ -311,6 +323,7 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.oneSubject = row;
+      console.log(row,"???")
     //   this.reconciliationStatement.accountNo = row.serviceId;
     //   this.serviceId = row.serviceId;
     //   this.$refs.Record.init();
@@ -345,15 +358,26 @@ export default {
       }
     },
     async ok(){
-      if(!this.voucherinputModel){
+      if(this.voucherinputModel){
         let data = {};
         data.detailId = this.accrued[0].id;
+        if(this.accrued[0].balanceMoney==undefined){
+          data.claimMoney=this.accrued[0].rpAmt
+        }else{
+          data.claimMoney=this.accrued[0].balanceMoney
+        }
+        if(data.claimMoney==null || data.claimMoney<=0){
+          this.$Message.error("本次认领金额不可为零或小于零")
+          return
+        }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
+          this.$Message.error("本次认领金额不可大于收入金额")
+        }
         if(this.claimTit=="预收款认领"){
           data.subjectCode="1123";
-          data.climeType=3
+          data.claimType=3
         }else{
           data.subjectCode="2241";
-          data.climeType=5
+          data.claimType=5
           data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
             data.isAuxiliaryAccounting=0 //是否辅助核算类
@@ -367,10 +391,15 @@ export default {
         if (res.code === 0) {
           this.modal = false;
           this.claimTit=="预收款认领"?this.$Message.success("预收款认领成功"):this.$Message.success("其他收款认领成功")
+
         }
       }else{
 
       }
+    },
+    //选择辅助核算回调
+    getCallBack(){
+      this.getMessage();
     }
   }
 };

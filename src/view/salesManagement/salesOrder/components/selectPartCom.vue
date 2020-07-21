@@ -139,10 +139,7 @@
                 highlight-hover-row
                 :data="allList.relearnedPart"
               >
-                <vxe-table-column
-                  title="操作"
-                  width="50"
-                >
+                <vxe-table-column title="操作" width="50">
                   <template v-slot="{ row }">
                     <a @click="showLink(row)">查看</a>
                   </template>
@@ -199,8 +196,8 @@
                   title="仓库"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="stockQty"
-                  title="库存数量"
+                  field="outableQty"
+                  title="可售数量"
                 ></vxe-table-column>
               </vxe-table>
             </div>
@@ -269,10 +266,15 @@
                   field="strategyName"
                   title="级别"
                 ></vxe-table-column>
-                <vxe-table-column
-                  field="sellPrice"
-                  title="销售价"
-                ></vxe-table-column>
+                <vxe-table-column field="sellPrice" title="销售价">
+                  <template v-slot="{ row }">
+                    <span v-if="row.strategyName == '最低售价'"
+                      >{{ row.sellPrice | priceFilters }} -
+                      {{ row.minRequiredQty }}</span
+                    >
+                    <span v-else>{{ row.sellPrice | priceFilters }}</span>
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="updateUname"
                   title="更新人"
@@ -298,10 +300,11 @@
     ></part-info>
     <select-part-info ref="selectPartInfo"></select-part-info>
     <link-part
-      ref="LinkPart" 
+      ref="LinkPart"
       :guestId="guestId"
       :storeId="storeId"
-      :partId="partId"></link-part>
+      :partId="partId"
+    ></link-part>
   </div>
 </template>
 

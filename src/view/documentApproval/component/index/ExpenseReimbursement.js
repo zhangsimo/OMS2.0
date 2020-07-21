@@ -170,6 +170,9 @@ export default {
     async open() {
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
+      if(this.$route.name === "documentApproval-myApplication") {
+        this.options1 = this.list.allSalesList;
+      }
       this.payUserList = this.list.payList;
       this.modelType = false;
       this.getRate();
@@ -478,7 +481,12 @@ export default {
           } else {
             this.formInline.step = type;
             this.formInline.details = this.details;
+            let msg = this.$Message.loading({
+              content: '处理中...',
+              duration: 0
+            });
             let res = await getExpSve(this.formInline);
+            msg();
             if (res.code == 0) {
               this.$Message.success("操作成功");
               this.model = false;

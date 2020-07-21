@@ -134,8 +134,8 @@
                   if(res.code === 0){
                       // this.$store.commit('setUserShopName' , res.data.shopName)
                       let data = {}
-                      data.tenantId = res.data.tenantId
-                      data.shopId = res.data.shopId
+                      data.tenantId = res.currentCompany ? res.currentCompany.tenantId ?res.currentCompany.tenantId : '' : ''
+                      data.shopId = res.currentCompany ? res.currentCompany.id ?res.currentCompany.id : '' : ''
                       data.shopkeeper = res.data.shopkeeper
                       localStorage.setItem('oms2-userList' , JSON.stringify(data))
                      res.data.username = this.$store.state.user.userData.username
@@ -145,8 +145,8 @@
                         let username = this.$store.state.user.username
                         this.getUserInfo(username).then(res => {
                           let data = {};
-                          data.tenantId = res.tenantId;
-                          data.shopId = res.shopId;
+                          data.tenantId = res.currentCompany ? res.currentCompany.tenantId ?res.currentCompany.tenantId : '' : ''
+                          data.shopId = res.currentCompany ? res.currentCompany.id ?res.currentCompany.id : '' : ''
                           data.shopkeeper = res.shopkeeper;
                           localStorage.setItem("oms2-userList", JSON.stringify(data));
                           this.$nextTick( () => {

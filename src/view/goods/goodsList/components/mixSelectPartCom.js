@@ -233,6 +233,11 @@ export const mixSelectPartCom = {
     selectTabelData(v) {
       this.selectTableItem = v;
     },
+    dblclick(row) {
+      this.selectTableItem = [row];
+      this.$emit("selectPartName", this.selectTableItem);
+      this.$Message.success("已添加");
+    },
     throwData() {
       // console.log(this.selectTableItem);
       if (this.selectTableItem.length > 0) {

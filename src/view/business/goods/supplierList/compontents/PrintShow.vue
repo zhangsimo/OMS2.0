@@ -54,16 +54,50 @@
             </p>
           </Col>
         </Row>
-        <Table
-          resizable
-          size="small"
-          style="margin: 0 auto"
-          width="990"
-          border
-          :columns="columns2"
-          :data="details"
-          class="ml10"
-        ></Table>
+<!--        <Table-->
+<!--          resizable-->
+<!--          size="small"-->
+<!--          style="margin: 0 auto"-->
+<!--          width="990"-->
+<!--          border-->
+<!--          :columns="columns2"-->
+<!--          :data="details"-->
+<!--          class="ml10"-->
+<!--        ></Table>-->
+        <table class="gridtable">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th>配件编码</th>
+            <th>配件名称</th>
+            <th>品牌</th>
+            <th>品牌车型</th>
+            <th>规格	</th>
+            <th>单位	</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>金额</th>
+            <th>仓库	</th>
+            <th>仓位</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item ,index) in details" :key="index">
+            <td>{{index + 1}}</td>
+            <td>{{item.partCode}}</td>
+            <td>{{item.partName}}</td>
+            <td>{{item.partBrand}}</td>
+            <td>{{item.carModelName}}</td>
+            <td>{{item.spec}}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.orderQty}}</td>
+            <td>{{item.orderPrice}}</td>
+            <td>{{item.orderAmt}}</td>
+            <td>{{item.storeName}}</td>
+            <td>{{item.storeShelf}}</td>
+          </tr>
+          </tbody>
+        </table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
             <span>合计:</span>
@@ -260,5 +294,33 @@
   }
   #printBox {
     overflow: -moz-scrollbars-none;
+  }
+  //表格样式
+  table.gridtable {
+    width: 100%;
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#000000;
+    border-width: 1px;
+    border-color: #000000;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  table.gridtable th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #dedede;
+  }
+  table.gridtable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #ffffff;
+  }
+  table.gridtable tr {
+    page-break-inside:avoid;
   }
 </style>

@@ -200,7 +200,7 @@ export default {
         placement: [20, 40, 60, 80, 100]
       },
       Loading: true, //状态
-      storeId: "" //参考id
+      // storeId: "" //参考id
     };
   },
   mounted() {},

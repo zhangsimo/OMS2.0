@@ -36,7 +36,35 @@
             <p><span>盘点日期:</span> <span>{{onelist.checkDate}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailVOList" class="ml10"></Table>
+        <table class="gridtable">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th>配件编码</th>
+            <th>配件名称</th>
+            <th>品牌</th>
+            <th>品牌车型</th>
+            <th>规格	</th>
+            <th>单位	</th>
+            <th>数量</th>
+            <th>oe码</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item ,index) in onelist.detailVOList" :key="index">
+            <td>{{index + 1}}</td>
+            <td>{{item.partCode}}</td>
+            <td>{{item.partName}}</td>
+            <td>{{item.partBrand}}</td>
+            <td>{{item.carModelName}}</td>
+            <td>{{item.spec}}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.orderQty}}</td>
+            <td>{{item.oemCode}}</td>
+          </tr>
+          </tbody>
+        </table>
+<!--         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailVOList" class="ml10"></Table>-->
         <!--<Row style="border: 1px #000000 solid">-->
           <!--<Col class="pl10" span="8" style="border-right: 1px #000000 solid">-->
             <!--<span>合计:</span>-->
@@ -83,79 +111,79 @@
         data(){
             return{
                 printShow: false, //模态框隐藏
-                columns2: [
-                    {
-                        title: '序号',
-                        type:'index',
-                        align: 'center'
-                    },
-                    {
-                        title: '配件编码',
-                        key: 'partCode',
-                        align: 'center'
-                    },
-                    {
-                        title: '配件名称',
-                        key: 'partName',
-                        align: 'center'
-                    },
-                    {
-                        title: '品牌',
-                        key: 'partBrand',
-                        align: 'center'
-
-                    },
-                    {
-                        title: '品牌车型',
-                        key: 'spec',
-                        align: 'center',
-                        render:(h,params) => {
-                          let text = params.row.carBrandName+params.row.carModelName
-                          return h('span',text||"")
-                        }
-
-                    },
-                    {
-                      title: '规格',
-                      key: 'spec',
-                      align: 'center'
-
-                    },
-                    {
-                        title: '单位',
-                        key: 'unit',
-                        align: 'center'
-
-                    },
-                    {
-                        title: '盘点数量',
-                        key: 'trueQty',
-                        align: 'center'
-
-                    },                    {
-                        title: 'OE码',
-                        key: 'oemCode',
-                        align: 'center'
-
-                    },
-                    // {
-                    //     title: '仓库',
-                    //     key: 'storeName',
-                    //     align: 'center',
-                    //     render:(h,params) => {
-                    //       let storeName = this.onelist.storeName
-                    //       return h('span',storeName)
-                    //     }
-                    //
-                    // },
-                    // {
-                    //     title: '仓位',
-                    //     key: 'storeShelf',
-                    //     align: 'center'
-                    //
-                    // },
-
-                ],
+                // columns2: [
+                //     {
+                //         title: '序号',
+                //         type:'index',
+                //         align: 'center'
+                //     },
+                //     {
+                //         title: '配件编码',
+                //         key: 'partCode',
+                //         align: 'center'
+                //     },
+                //     {
+                //         title: '配件名称',
+                //         key: 'partName',
+                //         align: 'center'
+                //     },
+                //     {
+                //         title: '品牌',
+                //         key: 'partBrand',
+                //         align: 'center'
+                //
+                //     },
+                //     {
+                //         title: '品牌车型',
+                //         key: 'spec',
+                //         align: 'center',
+                //         render:(h,params) => {
+                //           let text = params.row.carBrandName+params.row.carModelName
+                //           return h('span',text||"")
+                //         }
+                //
+                //     },
+                //     {
+                //       title: '规格',
+                //       key: 'spec',
+                //       align: 'center'
+                //
+                //     },
+                //     {
+                //         title: '单位',
+                //         key: 'unit',
+                //         align: 'center'
+                //
+                //     },
+                //     {
+                //         title: '盘点数量',
+                //         key: 'trueQty',
+                //         align: 'center'
+                //
+                //     },                    {
+                //         title: 'OE码',
+                //         key: 'oemCode',
+                //         align: 'center'
+                //
+                //     },
+                //     // {
+                //     //     title: '仓库',
+                //     //     key: 'storeName',
+                //     //     align: 'center',
+                //     //     render:(h,params) => {
+                //     //       let storeName = this.onelist.storeName
+                //     //       return h('span',storeName)
+                //     //     }
+                //     //
+                //     // },
+                //     // {
+                //     //     title: '仓位',
+                //     //     key: 'storeShelf',
+                //     //     align: 'center'
+                //     //
+                //     // },
+                //
+                // ],
                 onelist:{}, //打印数据
                 num: '12323.09',
                 num2: 78723,
@@ -165,16 +193,18 @@
         methods:{
             //打印
             print(){
-                    // 1.设置要打印的区域 div的className
-                    var newstr = document.getElementById('printBox').innerHTML
-                    // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
-                    var oldstr = document.body.innerHTML
-                    // 3. 复制给body，并执行window.print打印功能
-                    document.body.innerHTML = newstr
-                    window.print()
-                    // 重新加载页面，以刷新数据
-                    window.location.reload()
-                    document.body.innerHTML = oldstr
+              // 1.设置要打印的区域 div的className
+              var newstr = document.getElementById("printBox").innerHTML
+              // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
+              // var oldstr = document.body.innerHTML;
+              // 3. 复制给body，并执行window.print打印功能
+              let body = document.body
+              body.style.overflow = 'visible'
+              body.innerHTML = newstr;
+              window.print();
+              // 重新加载页面，以刷新数据
+              window.location.reload();
+              // document.body.innerHTML = oldstr;
             },
             openModal(id,warehouseList){
                 //let order = this.$store.state.dataList.oneOrder
@@ -229,4 +259,32 @@
   #printBox { -ms-overflow-style: none; }
   #printBox::-webkit-scrollbar { width: 0 !important }
   #printBox { overflow: -moz-scrollbars-none; }
+  //表格样式
+  table.gridtable {
+    width: 100%;
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#000000;
+    border-width: 1px;
+    border-color: #000000;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  table.gridtable th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #dedede;
+  }
+  table.gridtable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #ffffff;
+  }
+  table.gridtable tr {
+    page-break-inside:avoid;
+  }
 </style>

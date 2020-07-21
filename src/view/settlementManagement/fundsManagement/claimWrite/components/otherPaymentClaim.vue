@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modal" :title="claimTit" width="800">
+    <Modal v-model="modal" :title="claimTit" width="800" footer-hide>
       <Row class="dbd" v-if="claimTit=='预付款认领'">
         <i-col span="12">
           <button
@@ -50,6 +50,7 @@
         ref="xTable"
         :edit-rules="validRules"
         highlight-hover-row
+        highlight-current-row
         auto-resize
         height="280"
         @current-change="currentChangeEvent"
@@ -67,12 +68,26 @@
         <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
         <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
         <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-        <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+        <vxe-table-column title="支出金额">
+          <template v-slot="{row}">
+            <div>{{Math.abs(row.paidMoney)}}</div>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
-          field="rpAmt || balanceMoney"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+          field="rpAmt"
+          v-model="accrued[0].rpAmt"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
+          v-if="claimTit=='预付款认领'"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="balanceMoney"
+          v-model="accrued[0].balanceMoney"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
+          title="本次认领金额"
+          align="center"
+          v-else
         ></vxe-table-column>
         <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
         <vxe-table-column
@@ -109,15 +124,15 @@
           >
             <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->
             <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-            <vxe-table-column field="paymentNo" title="其他应付款申请单号" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="serviceId" title="其他应付款申请单号" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="serviceId" title="预付款申请单号" v-else></vxe-table-column>
             <vxe-table-column field="orderNo" title="预付款采购单号" v-if="claimTit=='预付款认领'"></vxe-table-column>
             <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
             <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
-            <vxe-table-column field="paymentBalance" title="其他付款金额" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="applyAmt" title="其他付款金额" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="payAmt" title="预付款金额" v-else></vxe-table-column>
-            <vxe-table-column field="orderTypeName" title="业务类别" v-if="claimTit=='其他付款认领'"></vxe-table-column>
-            <vxe-table-column field="paymentDate" title="付款时间" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="businessType.name" title="业务类别" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="payTime" title="付款时间" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="receiveRemark" title="付款备注"></vxe-table-column>
           </vxe-table>
           <Page
@@ -155,7 +170,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput"></voucherInput>
+    <voucherInput ref="voucherInput" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement"></settlement>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
@@ -170,11 +185,14 @@ import settlement from "@/view/settlementManagement/bill/components/settlement";
 import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { goshop } from "@/api/settlementManagement/shopList";
-import { findByDynamicQuery } from "@/api/settlementManagement/otherPayable/otherPayable";
+import {
+  findByDynamicQuery
+} from "_api/settlementManagement/otherReceivables/otherReceivables";
 import { findPageByDynamicQueryFirst } from "@/api/settlementManagement/advanceCharge";
 import { creat } from "@/view/settlementManagement/components";
 import moment from "moment";
 import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
+
 export default {
   props: {
     accrued: ""
@@ -289,13 +307,14 @@ export default {
           guestId: this.companyId,
           size: this.page.size,
           page: this.page.num - 1,
-          isClaimed: true
+          isClaimed: 0,
+          claimAmt:0
         };
-        for (let key in obj) {
-          if (!obj[key]) {
-            Reflect.deleteProperty(obj, key);
-          }
-        }
+        // for (let key in obj) {
+        //   if (!obj[key]) {
+        //     Reflect.deleteProperty(obj, key);
+        //   }
+        // }
         let res = await findPageByDynamicQueryFirst(obj);
         if (res.code == 0) {
           if (res.data.content.length <= 0) {
@@ -312,12 +331,12 @@ export default {
     },
     // 选中
     selected({ row }) {
+      console.log(row)
       this.claimTit == "其他付款认领"
         ? (this.currentAccount.accountNo =
-            row.paymentNo)
+            row.serviceId)
         : (this.currentAccount.accountNo =
             row.serviceId);
-      console.log(row);
     },
     //获取门店
     async getShop() {
@@ -353,14 +372,19 @@ export default {
     },
     openClimed() {
       if (!this.voucherinputModel) {
-        this.$refs.claimGuest.modal=true
+        if(this.currentAccount.accountNo){
+          this.$refs.settlement.Settlement = true;
+        }else{
+          this.$Message.error("请选择明细")
+        }
       } else {
         this.getMessage()
         if(this.MessageValue==""){
           this.$Message.error("请选择辅助核算")
         }else{
-          this.$message.success("其他付款认领成功")
-          this.claimedList(2);
+          // this.$message.success("其他付款认领成功")
+          // this.claimedList(2);
+          this.ok();
         }
       }
     },
@@ -495,12 +519,23 @@ export default {
       if (this.voucherinputModel) {
         let data = {};
         data.detailId = this.accrued[0].id;
+        if(this.accrued[0].balanceMoney==undefined){
+          data.claimMoney=this.accrued[0].rpAmt
+        }else{
+          data.claimMoney=this.accrued[0].balanceMoney
+        }
+        if(data.claimMoney==null || data.claimMoney<=0){
+          this.$Message.error("本次认领金额不可为零或小于零")
+          return
+        }else if(data.claimMoney>Math.abs(this.accrued[0].paidMoney)){
+          this.$Message.error("本次认领金额不可大于支付金额")
+        }
         if (this.claimTit == "预付款认领") {
           data.subjectCode = "2203";
-          data.climeType = 4;
+          data.claimType = 4;
         } else {
           data.subjectCode = "1221";
-          data.climeType = 6;
+          data.claimType = 6;
           data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
             data.isAuxiliaryAccounting=0 //是否辅助核算类
@@ -518,6 +553,10 @@ export default {
             : this.$Message.success("其他付款认领成功");
         }
       }
+    },
+    //选择辅助核算回调
+    getCallBack(){
+      this.getMessage();
     }
   }
 };
