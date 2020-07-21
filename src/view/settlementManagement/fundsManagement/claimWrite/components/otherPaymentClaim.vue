@@ -50,6 +50,7 @@
         ref="xTable"
         :edit-rules="validRules"
         highlight-hover-row
+        highlight-current-row
         auto-resize
         height="280"
         @current-change="currentChangeEvent"
@@ -67,12 +68,26 @@
         <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
         <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
         <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-        <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+        <vxe-table-column title="支出金额">
+          <template v-slot="{row}">
+            <div>{{Math.abs(row.paidMoney)}}</div>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
-          field="rpAmt || balanceMoney"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+          field="rpAmt"
+          v-model="accrued[0].rpAmt"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
+          v-if="claimTit=='预付款认领'"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="balanceMoney"
+          v-model="accrued[0].balanceMoney"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
+          title="本次认领金额"
+          align="center"
+          v-else
         ></vxe-table-column>
         <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
         <vxe-table-column
@@ -109,15 +124,15 @@
           >
             <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->
             <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-            <vxe-table-column field="paymentNo" title="其他应付款申请单号" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="serviceId" title="其他应付款申请单号" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="serviceId" title="预付款申请单号" v-else></vxe-table-column>
             <vxe-table-column field="orderNo" title="预付款采购单号" v-if="claimTit=='预付款认领'"></vxe-table-column>
             <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
             <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
-            <vxe-table-column field="paymentBalance" title="其他付款金额" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="applyAmt" title="其他付款金额" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="payAmt" title="预付款金额" v-else></vxe-table-column>
-            <vxe-table-column field="orderTypeName" title="业务类别" v-if="claimTit=='其他付款认领'"></vxe-table-column>
-            <vxe-table-column field="paymentDate" title="付款时间" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="businessType.name" title="业务类别" v-if="claimTit=='其他付款认领'"></vxe-table-column>
+            <vxe-table-column field="payTime" title="付款时间" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="receiveRemark" title="付款备注"></vxe-table-column>
           </vxe-table>
           <Page
@@ -504,6 +519,17 @@ export default {
       if (this.voucherinputModel) {
         let data = {};
         data.detailId = this.accrued[0].id;
+        if(this.accrued[0].balanceMoney==undefined){
+          data.claimMoney=this.accrued[0].rpAmt
+        }else{
+          data.claimMoney=this.accrued[0].balanceMoney
+        }
+        if(data.claimMoney==null || data.claimMoney<=0){
+          this.$Message.error("本次认领金额不可为零或小于零")
+          return
+        }else if(data.claimMoney>Math.abs(this.accrued[0].paidMoney)){
+          this.$Message.error("本次认领金额不可大于支付金额")
+        }
         if (this.claimTit == "预付款认领") {
           data.subjectCode = "2203";
           data.claimType = 4;

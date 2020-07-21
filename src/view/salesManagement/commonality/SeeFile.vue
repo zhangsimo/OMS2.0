@@ -70,7 +70,7 @@
           <vxe-table-column field='partCode' title="配件编码"></vxe-table-column>
           <vxe-table-column field="companyName" title="公司名称" ></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" ></vxe-table-column>
-          <vxe-table-column field="stockQty" title="库存数量" ></vxe-table-column>
+          <vxe-table-column field="outableQty" title="可售数量" ></vxe-table-column>
         </vxe-table>
       </div>
     </TabPane>

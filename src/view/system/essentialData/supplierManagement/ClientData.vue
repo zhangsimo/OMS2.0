@@ -257,10 +257,6 @@ export default {
     data: "",
     provincearr: "",
     treelist: "",
-    financeList: {
-      type: Array,
-      default: () => []
-    }
   },
   data() {
     // v-if="data.supplierTypeFirst == item.parentId"
@@ -472,7 +468,8 @@ export default {
       ],
       bankAccount:false,
       bankAccountTit:"新增银行账户",
-      accountAddId:0
+      accountAddId:0,
+      financeList:[]
     };
   },
   created() {

@@ -778,23 +778,14 @@ export const mixPartInfo = {
       if(this.selectAlreadyPartTab.length<=0){
         this.$Message.error("请在右侧表格中选择需取消关联的配件")
       }else{
-        let selIdx=[];
         // selectAlreadyPartTab
         if(this.selectAlreadyPartTab.length==this.alreadyPartList.length){
           this.alreadyPartList=[]
         }else{
           this.selectAlreadyPartTab.map((item2,index2)=>{
             this.alreadyPartList.map((item,index)=>{
-              if(item2.id==item.id){
-                selIdx.push(index)
-              }
-            })
-          })
-          selIdx.map(i=>{
-            this.alreadyPartList.map((item,index)=>{
-              if(index==selIdx[i]){
-                // delete this.alreadyPartList[selIdx[i]]
-                this.alreadyPartList.splice(selIdx[i],1)
+              if(item2.code==item.code){
+                this.alreadyPartList.splice(index,1)
               }
             })
           })

@@ -659,6 +659,9 @@ export default {
         } else {
           this.$refs.accrued.bool = true;
         }
+        this.claimedSubjectList.map(item => {
+          item.balanceMoney = Math.abs(item.paidMoney||item.incomeMoney)
+        })
         this.$refs.accrued.open();
       }
     },
