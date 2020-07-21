@@ -196,8 +196,8 @@
                   title="仓库"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="stockQty"
-                  title="库存数量"
+                  field="outableQty"
+                  title="可售数量"
                 ></vxe-table-column>
               </vxe-table>
             </div>

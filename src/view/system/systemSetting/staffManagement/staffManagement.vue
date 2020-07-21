@@ -744,7 +744,11 @@ export default {
       findCompanyList(data).then(res => {
         if (res.code == 0) {
           this.companyList =  res.data ? res.data.content ? res.data.content : [] : []
-          this.page2.total = res.data.totalElements;
+          if(res.data!=null){
+            this.page2.total = res.data.totalElements;
+          }else{
+            this.page2.total=0
+          }
         }
       });
     },

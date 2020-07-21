@@ -57,6 +57,10 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
+      <div slot="footer">
+        <Button type="primary" @click="ok" class="mr10">保存</Button>
+        <Button type="default" @click="modal = false">取消</Button>
+      </div>
     </Modal>
     <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
   </div>
@@ -119,15 +123,16 @@ export default {
 
     },
     async ok(){
+      // let params=this.accrued[0].balanceMoney
       let data = {};
       data.detailId = this.accrued[0].id;
+      data.claimMoney=this.accrued[0].balanceMoney
       if(this.bool){
         data.subjectCode="2202";
         data.claimType=2
       }else{
         data.subjectCode="1122";
         data.claimType=1
-
 
         data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
@@ -140,7 +145,7 @@ export default {
 
 
       }
-      let res = await TurnToTheProfitAndLoss(data);
+      let res = await TurnToTheProfitAndLoss(params,data);
       if (res.code === 0) {
         this.modal = false;
         this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")

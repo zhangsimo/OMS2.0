@@ -53,6 +53,7 @@
         ref="xTable"
         :edit-rules="validRules"
         highlight-hover-row
+        highlight-current-row
         auto-resize
         height="300"
         @current-change="currentChangeEvent"
@@ -72,10 +73,20 @@
         <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
         <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
         <vxe-table-column
-          field="rpAmt || balanceMoney"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+          field="rpAmt"
+          v-model="accrued[0].rpAmt"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
+          v-if="claimTit=='预收款认领'"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="balanceMoney"
+          v-model="accrued[0].balanceMoney"
+          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
+          title="本次认领金额"
+          align="center"
+          v-else
         ></vxe-table-column>
         <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
         <vxe-table-column
@@ -312,6 +323,7 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.oneSubject = row;
+      console.log(row,"???")
     //   this.reconciliationStatement.accountNo = row.serviceId;
     //   this.serviceId = row.serviceId;
     //   this.$refs.Record.init();
@@ -349,6 +361,17 @@ export default {
       if(this.voucherinputModel){
         let data = {};
         data.detailId = this.accrued[0].id;
+        if(this.accrued[0].balanceMoney==undefined){
+          data.claimMoney=this.accrued[0].rpAmt
+        }else{
+          data.claimMoney=this.accrued[0].balanceMoney
+        }
+        if(data.claimMoney==null || data.claimMoney<=0){
+          this.$Message.error("本次认领金额不可为零或小于零")
+          return
+        }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
+          this.$Message.error("本次认领金额不可大于收入金额")
+        }
         if(this.claimTit=="预收款认领"){
           data.subjectCode="1123";
           data.claimType=3
