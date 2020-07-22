@@ -509,9 +509,10 @@ export default {
           key: "taxRate",
           minWidth: 120,
           render: (h, params) => {
+            let checked = params.row.taxSign == 0 ? false : true;
             return h("Checkbox", {
               props: {
-                value: true,
+                value: checked,
                 disabled: true
               }
             });

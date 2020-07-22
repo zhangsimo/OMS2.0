@@ -384,51 +384,45 @@ export default {
     ClientData2
   },
   data() {
-    const roleValid = (rule, value, callback, { row }) => {
-      if (value >= 0) {
-        //如果金额是负数，说明是退货活
-        if (row.amount < 0) {
-          console.log(
-            parseFloat(value) + parseFloat(row.amount + row.accountAmt)
-          );
-          if (parseFloat(value) + parseFloat(row.amount + row.accountAmt) > 0) {
-            callback(
-              new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
-            );
-            return;
+    const roleValid = ({ cellValue ,row}) => {
+        return new Promise((resolve, reject) => {
+          if (cellValue >= 0) {
+            //如果金额是负数，说明是退货活
+            if (row.amount < 0) {
+              if (parseFloat(cellValue) + parseFloat(row.amount + row.accountAmt) > 0) {
+                reject(
+                  new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+                );
+                return;
+              } else {
+                resolve();
+              }
+            } else {
+              if (cellValue > row.amount - row.accountAmt) {
+                reject(
+                  new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+                );
+              } else {
+                resolve();
+              }
+            }
           } else {
-            callback();
+            reject(new Error("不能小于0"));
           }
-        } else {
-          if (value > row.amount - row.accountAmt) {
-            callback(
-              new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
-            );
-          } else {
-            callback();
-          }
-        }
-      } else {
-        callback(new Error("不能小于0"));
-      }
-    };
-    const diffeReason = (rule, value, callback, { row }) => {
-      if (row.thisNoAccountAmt > 0) {
-        if (!value) {
-          callback(new Error("差异原因必填"));
-        } else {
-          callback();
-        }
-      } else {
-        callback();
-      }
+        })
+
     };
     return {
       disabledBtn:false,
       summer: null, //计算费用合计
       validRules: {
-        thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
-        diffeReason: [{ validator: diffeReason }]
+        thisNoAccountAmt: [
+          { required: true, message: '不对账金额必填' },
+          { validator: roleValid}
+          ],
+        diffeReason: [
+          { required: true, message: '原因必填' },
+          ]
       },
       arrId: [],
       accountData: [], //浅拷贝数据
@@ -629,7 +623,6 @@ export default {
                       item.index = params.index;
                     });
                     this.Reconciliationcontent = params.row.detailDtoList;
-                    console.log(params.row);
                     const store = this.Branchstore.filter(
                       item => item.value === this.model1
                     );
@@ -813,7 +806,6 @@ export default {
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {
-      //   console.log(columns,data)return [
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
@@ -894,6 +886,16 @@ export default {
       this.Actualtotalcollect = 0;
       this.Actualtotalpayment = 0;
       this.Reconciliationtotal = 0;
+      this.totalpayment = 0;
+      this.collectBaddebt = 0;
+      this.collectRebate = 0;
+      this.transportExpenses = 0;
+      this.insuranceExpenses = 0;
+      this.serviceCharge = 0;
+      this.partsManagementFee = 0;
+      this.otherFees = 0;
+      this.paymentBaddebt = 0;
+      this.paymentRebate = 0;
       this.getAccountNameList();
       this.Initialization();
     },
@@ -1077,7 +1079,6 @@ export default {
       }
     },
     changeCollectionUname(v){
-      console.log(v)
       this.collectionObj = v;
       let arrData = this.collectionList.filter(item => item.id==this.collectionUname);
       if(arrData.length>0){
@@ -1093,7 +1094,6 @@ export default {
     },
 
     payMentFun(v){
-      console.log(v)
       this.paymentObj = v;
     },
 
@@ -1221,9 +1221,9 @@ export default {
       this.getSettlementComputed();
     },
     // 本次不对帐金额弹窗
-    noReconciliation() {
-      this.$refs.xTable.validate(val => {
-        if (val) {
+    async noReconciliation() {
+      const errMap  = await this.$refs.xTable.validate().catch(errMap => errMap)
+        if (!errMap) {
           // if (this.flag) {
           //   if (this.Reason) {
           //     this.$message({
@@ -1294,10 +1294,8 @@ export default {
           }
           this.Reconciliation = false;
         } else {
-          this.Reconciliation = true;
           this.$message.error("信息填写错误");
         }
-      });
     },
     // 保存接口
     getPreservation(num) {

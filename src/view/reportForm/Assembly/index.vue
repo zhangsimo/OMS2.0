@@ -36,7 +36,7 @@ export default {
   mounted() {},
   methods: {
     search1(data) {
-      console.log(data)
+      // console.log(data)
       let data2 = {}
       if (data.isPanne) {
         // 基本查询
