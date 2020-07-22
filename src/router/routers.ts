@@ -61,7 +61,6 @@ export default [
       icon: "md-cloud-done",
       title: "采购管理",
       notCache: true,
-
     },
     component: Main,
     children: [
@@ -292,7 +291,8 @@ export default [
     redirect: "/allot/one/apply",
     meta: {
       icon: "ios-paper",
-      title: "调拨管理"
+      title: "调拨管理",
+      notCache: true,
     },
     component: Main,
     children: [
@@ -467,7 +467,8 @@ export default [
     mark: "4",
     meta: {
       icon: "ios-paper",
-      title: "库存管理"
+      title: "库存管理",
+      notCache: true,
     },
     component: Main,
     children: [
@@ -1097,39 +1098,17 @@ export default [
       },
       {
         path: "/documentApproval/myApplication",
-        name: "documentApproval-myApplication",
+        name: "myApplication",
         mark: "11002",
         meta: {
           title: "申请单",
-          notCache: true
+          // notCache: true
         },
         component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
       },
     ]
   },
 
-  // {
-  //   path:'/financial',
-  //   name:'financial',
-  //   // mark:'',
-  //   meta: {
-  //     icon: "ios-paper",
-  //     title: '财务系统'
-  //   },
-  //   component: Main,
-  //   children:[
-  //     {
-  //       path: "/accounting",
-  //       name: "accounting",
-  //       // mark: "4002",
-  //       meta: {
-  //         icon: "arrow-graph-up-right",
-  //         title: "会计科目管理"
-  //       },
-  //       component: () => import("@/view/financial/accounting/accounting.vue")
-  //     },
-  //   ]
-  // },
   {
     path: "",
     name: "reportForm",
@@ -1138,7 +1117,8 @@ export default [
     redirect: "/reportForm",
     meta: {
       icon: "ios-paper",
-      title: "报表统计"
+      title: "报表统计",
+      notCache: true,
     },
     component: Main,
     children: [
@@ -1221,114 +1201,14 @@ export default [
       },
     ]
   },
-  // {
-  //   path: "",
-  //   name: "baseSetting",
-  //   mark: "6",
-  //   meta: {
-  //     icon: "md-basket",
-  //     title: "售后管理"
-  //   },
-  //   component: Main,
-  //   children: [
-  //     {
-  //       path: "/baseSetting/storeArea",
-  //       name: "storeArea",
-  //       // mark: 'oms_policy_approve',
-  //       mark: '6100',
-  //       meta: {
-  //         icon: "arrow-graph-up-right",
-  //         title: "采退开单"
-  //       },
-  //       component: () => import("@/view/business/baseSetting/storeArea.vue")
-  //     },
-  //     {
-  //       path: "/baseSetting/shellStoreSupplier",
-  //       name: "shellStoreSupplier",
-  //       mark: '6101',
-  //       meta: {
-  //         icon: "arrow-graph-up-right",
-  //         title: "直发退货"
-  //       },
-  //       component: () =>
-  //         import("@/view/business/baseSetting/shellStoreSupplier.vue")
-  //     },
-  //     {
-  //       path: "/baseSetting/setArea",
-  //       name: "setArea",
-  //       // mark: 'oms_policy_approve',
-  //       mark: '6102',
-  //       meta: {
-  //         icon: "arrow-graph-up-right",
-  //         title: " 销退开单"
-  //       },
-  //       component: () => import("@/view/business/baseSetting/setArea.vue")
-  //     },
-  //     {
-  //       path: "/baseSetting/setAreaStore",
-  //       name: "setAreaStore",
-  //       // mark: 'oms_policy_approve',
-  //       mark: '6103',
-  //       meta: {
-  //         icon: "arrow-graph-up-right",
-  //         title: "客户理赔登记"
-  //       },
-  //       component: () => import("@/view/business/baseSetting/setAreaStore.vue")
-  //     },
-  //     {
-  //       path: "/baseSetting/hsStoreSupplier",
-  //       name: "hsStoreSupplier",
-  //       // mark: 'oms_policy_approve',
-  //       mark: '6104',
-  //       meta: {
-  //         icon: "arrow-graph-up-right",
-  //         title: "客户理赔处理"
-  //       },
-  //       component: () =>
-  //         import("@/view/business/baseSetting/hsStoreSupplier.vue")
-  //     },
-  //     {
-  //       path: "/",
-  //       name: "",
-  //       // mark: 'oms_orders_approve',
-  //       // mark: '6105',
-  //       meta: {
-  //         // hideInMenu: true,
-  //         title: "向供应商理赔登记"
-  //       }
-  //       // component: () => import()
-  //     },
-  //     {
-  //       path: "/",
-  //       name: "",
-  //       // mark: 'oms_orders_approve',
-  //       mark: '6106',
-  //       meta: {
-  //         // hideInMenu: true,
-  //         title: "返回单据确认"
-  //       }
-  //       // component: () => import()
-  //     },
-  //     {
-  //       path: "/",
-  //       name: "",
-  //       // mark: 'oms_orders_approve',
-  //       mark: '6107',
-  //       meta: {
-  //         // hideInMenu: true,
-  //         title: "反馈结果登记"
-  //       }
-  //       // component: () => import()
-  //     }
-  //   ]
-  // },
   {
     path: "/systemSetting",
     name: "systemSetting",
     mark: "9",
     meta: {
       icon: "md-settings",
-      title: "系统设置"
+      title: "系统设置",
+      notCache: true,
     },
     component: Main,
     children: [
@@ -1966,7 +1846,8 @@ export default [
     mark: "8",
     meta: {
       icon: "ios-transgender",
-      title: "租赁管理"
+      title: "租赁管理",
+      notCache: true,
     },
     component: Main,
     children: [

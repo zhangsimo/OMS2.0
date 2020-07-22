@@ -145,6 +145,7 @@ import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
+  name:'settlementManagement-Dailyfundaudit',
   components: {
     QuickDate,
     TableOne,

@@ -21,6 +21,7 @@
         ref="xTable"
         :edit-rules="validRules"
         highlight-hover-row
+        highlight-current-row
         auto-resize
         height="300"
         @radio-change="getRaido"
@@ -45,6 +46,7 @@
         </vxe-table-column>
         <vxe-table-column
           field="balanceMoney"
+          v-model="accrued[0].balanceMoney"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
           title="本次认领金额"
           align="center"
@@ -123,7 +125,6 @@ export default {
 
     },
     async ok(){
-      // let params=this.accrued[0].balanceMoney
       let data = {};
       data.detailId = this.accrued[0].id;
       data.claimMoney=this.accrued[0].balanceMoney
@@ -142,10 +143,8 @@ export default {
         }
         data.auxiliaryName=this.MessageValue //辅助核算名称
         data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
-
-
       }
-      let res = await TurnToTheProfitAndLoss(params,data);
+      let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.modal = false;
         this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")

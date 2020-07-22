@@ -294,6 +294,7 @@ import amtData from "../../components/amtData";
 
 import moment from "moment";
 export default {
+  name:'shopJournal',
   components: {
     quickDate,
     importXLS,
