@@ -97,7 +97,7 @@
                 @on-change="selectLogis"
               >
                 <Option v-for="item in logisArr" :disabled="item.isDisabled==1"
-                v-show="item.isDisabled!==1" 
+                v-show="item.isDisabled!==1"
                 :value="item.id" :key="item.id">{{ item.fullName }}</Option>
               </Select>
               <div class="ivu-form-item-error-tip" v-show="logisRequired">发货物流未选择</div>
@@ -204,8 +204,8 @@ export default class GoodsInfo extends Vue {
     receiveManTel: [
       {
         required: true,
-        message: "联系电话错误",
-        validator: checkPhone,
+        message: "联系电话不能为空",
+        // validator: checkPhone,
         trigger: "blur",
         type: "string"
       }
@@ -519,12 +519,12 @@ export default class GoodsInfo extends Vue {
         });
         if (res.code == 0) {
           ref.resetFields();
-          this.$Message.success("保存成功");
+          this.showInfo = false;
           this.reset();
           this.searchInfo();
+          this.$Message.success("保存成功");
         }
       } else {
-        console.log(logisc);
         this.$Message.error("请完善收货信息后再保存!");
       }
     });
