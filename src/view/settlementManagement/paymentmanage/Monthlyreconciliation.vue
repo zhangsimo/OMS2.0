@@ -886,6 +886,16 @@ export default {
       this.Actualtotalcollect = 0;
       this.Actualtotalpayment = 0;
       this.Reconciliationtotal = 0;
+      this.totalpayment = 0;
+      this.collectBaddebt = 0;
+      this.collectRebate = 0;
+      this.transportExpenses = 0;
+      this.insuranceExpenses = 0;
+      this.serviceCharge = 0;
+      this.partsManagementFee = 0;
+      this.otherFees = 0;
+      this.paymentBaddebt = 0;
+      this.paymentRebate = 0;
       this.getAccountNameList();
       this.Initialization();
     },

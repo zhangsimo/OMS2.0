@@ -1083,26 +1083,28 @@ export default {
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content || [];
-        arrData.map((item, index) => {
+        let newData = arrData.map((item1, index) => {
+          let item = {...item1}
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
-              item[b] = (item[b].replace(/,/g, "，")).replace(/\n/g, "");
+              item[b] = item[b].replace(/[\n|,]/g, "");
             }
           }
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
-          item.partCode = "\t" + item.partCode;
-          item.oemCode = "\t" + item.oemCode;
+          item.partCode = item.partCode + "\t";
+          item.oemCode = item.oemCode + "\t";
           return item;
         });
-        if (arrData.length > 0) {
+        console.log(newData)
+        if (newData.length > 0) {
           this.$refs.table1.exportCsv({
             filename: "汇总库存",
             original: false,
             columns: this.columns1,
-            data: arrData
+            data: newData
           });
         }
       }
