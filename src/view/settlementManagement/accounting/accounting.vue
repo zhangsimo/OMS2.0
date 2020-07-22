@@ -530,6 +530,7 @@ import * as api from "@/api/settlementManagement/financialStatement";
 import moment from "moment";
 import { creat } from "./../components";
 export default {
+  name:'accountings',
   components: {},
   data() {
     return {

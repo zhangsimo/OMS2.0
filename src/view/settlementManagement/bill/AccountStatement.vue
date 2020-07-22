@@ -387,6 +387,7 @@ import Monthlyreconciliation from "./components/Monthlyreconciliation";
 import bus from './Popup/Bus'
 import NoTax from "./Popup/noTax";
 export default {
+  name:'bill-AccountStatement',
   components: {
     NoTax,
     registrationEntry,
