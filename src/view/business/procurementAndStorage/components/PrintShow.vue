@@ -6,7 +6,7 @@
     >
     <div id="printBox" style="height: 600px">
       <div class="titler">
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col span="12" class="pl10" style="line-height: 24px">
             <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.orgName || ' '}}</h5>
           </Col>
@@ -15,7 +15,7 @@
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
@@ -35,7 +35,7 @@
             </p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>供应商:</span> <span>{{onelist.guestName}}</span></p>
             <p><span>地址:</span> <span>{{onelist.streetAddress}}</span></p>
@@ -85,7 +85,7 @@
           </tbody>
         </table>
 <!--         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.details" class="ml10"></Table>-->
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
             <span>{{ onelist.orderAmt | toChies}}</span>
@@ -99,7 +99,7 @@
             <span>{{onelist.orderAmt}}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{onelist.orderMan}}</span>
@@ -114,7 +114,7 @@
             <span>{{onelist.receiver}}</span>
           </Col>
         </Row>
-        <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
+        <p style="border: 1px #000000 solid;border-top: none;color:#000;" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
       </div>
 
       <div>
