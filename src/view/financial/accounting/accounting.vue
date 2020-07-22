@@ -375,6 +375,8 @@ export default {
           let res = await getSave(this.ChangeData);
           if (res.code == 0) {
             let data = {};
+            this.changeModal = false
+            this.$Message.success('修改成功')
             data.parentCode = this.oneTreeList.titleCode || "";
             let res = await getTableList(data);
             if (res.code === 0) {
