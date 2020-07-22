@@ -6,7 +6,7 @@
     >
     <div id="printBox" style="height: 600px">
       <div class="titler">
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col span="12" class="pl10">
             <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.orgName}}</h5>
           </Col>
@@ -15,7 +15,7 @@
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>地址:</span> <span>{{onelist.orgAddr}}</span></p>
             <p><span>电话:</span><span>{{onelist.orgTel}}</span></p>
@@ -28,7 +28,7 @@
             </p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>盘点仓库:</span> <span>{{onelist.storeName}}</span></p>
           </Col>
@@ -79,7 +79,7 @@
             <!--<span>{{onelist.trueAmt}}</span>-->
           <!--</Col>-->
         <!--</Row>-->
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{onelist.createUname}}</span>
