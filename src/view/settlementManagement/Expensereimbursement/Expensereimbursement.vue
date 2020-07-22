@@ -497,6 +497,9 @@ export default {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
       }
+      if(this.currRow.paymentBalance==0){
+        return this.$message.error("因公借支未核销金额为0不能再次核销");
+      }
       this.$refs.writeOff.open();
     },
     //撤回按钮点击事件
