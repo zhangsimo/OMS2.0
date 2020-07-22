@@ -2,7 +2,7 @@
   <Modal v-model="printShow" width="1300" closable>
     <div id="printBox" style="height: 600px">
       <div class="titler">
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col span="12" class="pl10">
             <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">
               {{ onelist.orgName }}
@@ -13,7 +13,7 @@
             <p>No: {{ onelist.serviceId }}</p>
           </Col>
         </Row>
-        <Row class="pt10 pd10" style="border: 1px #000000 solid;border-top: none">
+        <Row class="pt10 pd10" style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>地址: {{ onelist.orgAddress }}</span></p>
             <p><span>电话: {{ onelist.orgTel }}</span></p>
@@ -28,7 +28,7 @@
             </p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>供应商:</span> <span>{{ onelist.guestName }}</span>
@@ -98,7 +98,7 @@
           </tr>
           </tbody>
         </table>
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
             <span>合计:</span>
             <span>{{ totalsPrice | toChies }}</span>
@@ -112,7 +112,7 @@
             <span>{{ totalsPrice|priceFilters }}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{ onelist.orderMan }}</span>

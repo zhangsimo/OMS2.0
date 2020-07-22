@@ -623,7 +623,7 @@ export default [
         children: [
           {
             path: "/settlementManagement/bill/AccountStatement",
-            name: "bill-AccountStatement",
+            name: "accountStatement",
             redirect: "",
             mark: "5101",
             meta: {

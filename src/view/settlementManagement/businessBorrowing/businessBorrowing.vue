@@ -524,8 +524,11 @@ export default {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
       }
-      if (this.currRow.paymentReturnBalance == 0) {
+      if (this.currRow.expenseClaimAmount == 0) {
         return this.$message.error("未认领资金不能核销");
+      }
+      if (this.currRow.paymentReturnBalance == 0) {
+        return this.$message.error("因公借支未核销金额为0不能再次核销");
       }
       this.$refs.writeOff.open();
     },

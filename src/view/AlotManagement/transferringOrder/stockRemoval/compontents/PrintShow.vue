@@ -2,7 +2,7 @@
   <Modal v-model="printShow" width="1300" closable>
     <div id="printBox" style="height: 600px">
       <div class="titler">
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col span="12" class="pl10">
             <h5
               style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
@@ -13,7 +13,7 @@
             <p>No: {{onelist.apply.serviceId}}</p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:{{onelist.applyGuest.addr ||
@@ -36,7 +36,7 @@
             </p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调入方:</span>
@@ -112,13 +112,13 @@
           </tr>
           </tbody>
         </table>
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col class="pl10 marginLeft" span="8">
             <span>合计:</span>
             <span>{{totalQty}}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{username}}</span>

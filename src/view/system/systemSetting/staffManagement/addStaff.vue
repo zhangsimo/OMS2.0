@@ -83,6 +83,7 @@
                 :data="list"
                 v-model="data.groundIds"
                 placeholder="选择部门"
+                change-on-select
                 style="width: 150px"
               ></Cascader>
             </FormItem>
