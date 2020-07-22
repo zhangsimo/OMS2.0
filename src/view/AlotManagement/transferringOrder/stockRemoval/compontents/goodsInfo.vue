@@ -304,8 +304,8 @@ export default class GoodsInfo extends Vue {
     receiveManTel: [
       {
         required: true,
-        message: "联系电话错误",
-        validator: checkPhone,
+        message: "联系电话不可为空",
+        // validator: checkPhone,
         trigger: "blur",
         type: "string"
       }
@@ -625,9 +625,10 @@ export default class GoodsInfo extends Vue {
           mainId: this.mainId
         });
         if (res.code == 0) {
-          this.$Message.success("保存成功");
           this.reset();
           this.searchInfo();
+          this.showInfo=false
+          this.$Message.success("保存成功");
         }
       } else {
         this.$Message.error("请完善收货信息后再保存!");

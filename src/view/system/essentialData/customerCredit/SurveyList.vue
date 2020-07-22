@@ -165,7 +165,7 @@
           <Select v-model="data.cashMode" style="width:180px">
             <Option
               v-for="item in dataMsg.CS00106"
-              :value="item.id"
+              :value="item.itemCode"
               :key="item.id"
             >{{ item.itemName }}</Option>
           </Select>
