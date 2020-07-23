@@ -7,7 +7,7 @@
             <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位" />
           </FormItem>
           <FormItem>
-            <Input type="text" v-model="formDateTop.streetAddress" placeholder="收货地址" />
+            <Input type="text" v-model="formDateTop.address" placeholder="收货地址" />
           </FormItem>
           <FormItem>
             <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人" />
@@ -41,7 +41,7 @@
             <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
             <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
             <vxe-table-column field="receiveCompName" title="收货单位" width="100"></vxe-table-column>
-            <vxe-table-column field="streetAddress" title="收货地址" width="100"></vxe-table-column>
+            <vxe-table-column field="address" title="收货地址" width="100"></vxe-table-column>
             <vxe-table-column field="receiveMan" title="收货人" width="100"></vxe-table-column>
             <vxe-table-column field="receiveManTel" title="联系电话" width="100"></vxe-table-column>
           </vxe-table>
@@ -59,8 +59,8 @@
             <FormItem label="收货单位：" prop="receiveCompName">
               <Input v-model="formDateRight.receiveCompName" class="w200" :disabled="disabled" />
             </FormItem>
-            <FormItem label="收货地址：" prop="streetAddress">
-              <Input v-model="formDateRight.streetAddress" class="w200" :disabled="disabled" />
+            <FormItem label="收货地址：" prop="address">
+              <Input v-model="formDateRight.address" class="w200" :disabled="disabled" />
             </FormItem>
             <FormItem label="收货人：" prop="receiveMan">
               <Input v-model="formDateRight.receiveMan" class="w200" :disabled="disabled" />
@@ -185,7 +185,7 @@ export default class GoodsInfo extends Vue {
         type: "string"
       }
     ],
-    streetAddress: [
+    address: [
       {
         required: true,
         message: "收货地址不能为空",
@@ -308,7 +308,7 @@ export default class GoodsInfo extends Vue {
   private formDateTop: any = {
     receiveComp: null, //收货单位
     receiver: null, //收货人
-    streetAddress: null, //详细收货地址
+    address: null, //详细收货地址
     receiverMobile: null //联系电话
   };
 
@@ -375,7 +375,7 @@ export default class GoodsInfo extends Vue {
     //收货信息
     receiveAddress: "", //收货单位地址
     //发货信息
-    streetAddress: "", //收货详细地址
+    address: "", //收货详细地址
     deliveryType: "", //配送方式
     transportCost: 0, //运输费用
     remark: "", //备注
@@ -485,7 +485,7 @@ export default class GoodsInfo extends Vue {
         delete this.formDateRight.id;
         let params: any = {};
         params.receiveComp = this.formDateRight.receiveCompName;
-        params.receiveAddress = this.formDateRight.streetAddress;
+        params.receiveAddress = this.formDateRight.address;
         params.receiver = this.formDateRight.receiveMan;
         params.receiverMobile = this.formDateRight.receiveManTel;
         params.deliveryType = this.formDateRight.deliveryType;
@@ -500,7 +500,7 @@ export default class GoodsInfo extends Vue {
           params.id = this.SaveId;
           params = this.logisticsRecordVO;
           params.receiveComp = this.formDateRight.receiveCompName;
-          params.receiveAddress = this.formDateRight.streetAddress;
+          params.receiveAddress = this.formDateRight.address;
           params.receiver = this.formDateRight.receiveMan;
           params.receiverMobile = this.formDateRight.receiveManTel;
           params.deliveryType = this.formDateRight.deliveryType;
@@ -542,7 +542,7 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight.receiveCompName = row.logisticsRecordVO.receiveComp;
-      this.formDateRight.streetAddress = row.logisticsRecordVO.receiveAddress;
+      this.formDateRight.address = row.logisticsRecordVO.receiveAddress;
       this.formDateRight.receiveMan = row.logisticsRecordVO.receiver;
       this.formDateRight.receiveManTel = row.logisticsRecordVO.receiverMobile;
       this.formDateRight.deliveryType = row.logisticsRecordVO.deliveryType;
@@ -563,7 +563,7 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
       this.formDateRight.receiveComp = row.receiveCompName;
-      // this.formDateRight.streetAddress = row.streetAddress;
+      // this.formDateRight.address = row.address;
       // this.formDateRight.receiver = row.receiveMan;
       // this.formDateRight.receiverMobile = row.receiveManTel;
       // this.formDateRight.provinceId = row.provinceId;
@@ -588,7 +588,7 @@ export default class GoodsInfo extends Vue {
     this.formDateTop = {
       receiveCompName: null, //收货单位
       receiveMan: null, //收货人
-      streetAddress: null, //详细收货地址
+      address: null, //详细收货地址
       receiveManTel: null //联系电话
     };
     const ref: any = this.$refs["formTwo"];
@@ -603,7 +603,7 @@ export default class GoodsInfo extends Vue {
       //收货信息
       receiveAddress: "", //收货单位地址
       //发货信息
-      streetAddress: "", //收货详细地址
+      address: "", //收货详细地址
       deliveryType: "", //配送方式
       transportCost: 0, //运输费用
       remark: "", //备注
