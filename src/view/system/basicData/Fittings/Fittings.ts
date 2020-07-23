@@ -160,7 +160,7 @@ export default class Fittings extends Vue {
           title: "状态",
           minWidth: 80,
           render: (h, params) => {
-            let text: string = params.row.isDisabled ? "禁用" : "启用";
+            let text: string = params.row.isDisabled ? "启用" : "禁用";
             return h("span", text);
           }
         },
