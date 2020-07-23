@@ -18,7 +18,7 @@ const dev = {
   // wmsApi: '', // 9250
   omsBatch: 'http://192.168.30.221:9260', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.221:9280", //9280
+  omsSotck: "http://192.168.21.59:9280", //9280
 
   /**oms系统接口设定 */
   tokenApi: "https://tsapi2.g-parts.cn", // 登录接口API
@@ -62,6 +62,7 @@ const test = {
   // omsSettle: "http://192.168.30.43:9270",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
+  // omsSotck: "http://192.168.21.59:9280", //9280
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:

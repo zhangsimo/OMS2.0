@@ -279,9 +279,6 @@
           //校验输入框的值
           validRules: {
             applyQty:[{ required: true, validator: changeNumber }]
-            // remark: [
-            //   { required: true, validator:changeNumber }
-            // ]
           },
           options1: {
             disabledDate (date) {
