@@ -114,7 +114,7 @@
                 width="160"
               >
               </vxe-table-column>
-              <vxe-table-column field="" title="对方库存"></vxe-table-column>
+              <vxe-table-column field="itQty" title="对方库存"></vxe-table-column>
               <vxe-table-column field="unit" title="单位"></vxe-table-column>
               <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
               <vxe-table-column field="" title="品牌车型">
@@ -124,10 +124,10 @@
               </vxe-table-column>
               <vxe-table-column field="spec" title="规格"></vxe-table-column>
               <vxe-table-column
-                field="enterUnitId"
+                field="showDirection"
                 title="方向"
               ></vxe-table-column>
-              <vxe-table-column field="" title="配件内码"></vxe-table-column>
+              <vxe-table-column field="partInnerId" title="配件内码"></vxe-table-column>
             </vxe-table>
           </Row>
         </div>
@@ -145,6 +145,8 @@
 <script>
 import { queryByOrgid } from "_api/AlotManagement/transferringOrder";
 import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier2";
+import * as api from "@/api/salesManagment/salesOrder";
+import * as tools from "_utils/tools";
 export default {
   components: {
     SelectSupplier
@@ -199,11 +201,14 @@ export default {
   },
   methods: {
     init(data) {
-      this.tbdata = data;
+      this.tbdata = data.map(el => {
+          el.applyQty = el.stockOutQty * 1;
+          return el;
+      });
       this.formPlan = {
         guestName: "",
         storeId: "",
-        orderDate: "",
+        orderDate: new Date(),
         remark: ""
       };
       this.currRow = undefined;
@@ -233,6 +238,25 @@ export default {
       this.formPlan.guestName = a.shortName || "";
       this.guestidId = a.guestId;
       this.isInternalId = a.id;
+      this.getpartStock();
+    },
+    // 获取对方库存
+    async getpartStock() {
+        let data = {
+            orgid: this.isInternalId,
+            partIds: this.tbdata.map(el => el.partId),
+        }
+        let res = await api.partStock(data);
+        if(res.code == 0 && Array.isArray(res.data)) {
+          res.data.forEach(el => {
+            this.tbdata.forEach(item => {
+              if(el.partId === item.partId) {
+                item.itQty = el.outableQty;
+              }
+            })
+          })
+        }
+        this.tbdata.push();
     },
     // 调入仓库下拉改变事件
     selectStoreId(val) {
@@ -258,6 +282,12 @@ export default {
           if (this.formPlan.guestName == "") {
             return this.$message.error("请选择调出方!");
           }
+          let hasZero = this.tbdata.find(el => {
+            return el.applyQty <= 0 || !el.applyQty;
+          })
+          if(hasZero) {
+              return this.$message.error("申请数量不能为空或者小于等于0!");
+          }
           this.save();
         },
         onCancel: () => {}
@@ -269,7 +299,17 @@ export default {
     save() {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-        } else {
+          let data = {}
+          data.guestId = this.guestidId;
+          data.guestOrgid = this.isInternalId;
+          data.guestOrgid = this.formPlan.guestOrgid;
+          data.storeId = this.formPlan.storeId;
+          data.remark = this.formPlan.remark;
+          data.orderDate = tools.transTime(this.formPlan.orderDate);
+          data.detailVOS = this.tbdata;
+          let res = await api.allotApplySave(data);
+          this.$message.success("操作成功!");
+          this.cancel();
         }
       });
     }
