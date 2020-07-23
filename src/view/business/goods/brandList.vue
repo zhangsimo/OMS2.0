@@ -5,8 +5,7 @@
       <div class="oper-top flex" v-if="tabValue === 'name1'">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询：</span>
-            <Select v-model="conditionData.character" class="w100 mr10" clearable>
+            <Select v-model="conditionData.character" class="w100 mr10" clearable @on-change="searchData">
               <Option
                 v-for="item in quickArray"
                 :value="item.value"
@@ -25,7 +24,7 @@
             ></Date-picker>
           </div>
           <div class="db mr10">
-            <Select v-model="conditionData.status" class="w100 mr10" clearable>
+            <Select v-model="conditionData.status" class="w100 mr10" clearable @on-change="searchData">
               <Option value="1" label="待受理"></Option>
               <Option value="3" label="已受理"></Option>
               <Option value="2" label="部分受理"></Option>
@@ -38,6 +37,7 @@
               class="w200 mr10"
               clearable
               placeholder="选择公司"
+              @on-change="searchData"
             >
               <Option
                 v-for="item in companyListOptions"
@@ -54,6 +54,7 @@
               clearable
               class="w100 mr10"
               placeholder="选择品牌"
+              @on-change="searchData"
             >
               <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
@@ -72,8 +73,7 @@
       <div class="oper-top flex" v-if="tabValue === 'name2'">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询：</span>
-            <Select v-model="penPurchaseData.character" class="w100 mr10" clearable>
+            <Select v-model="penPurchaseData.character" class="w100 mr10" clearable @on-change="showGeneratePurchaseOrder">
               <Option
                 v-for="item in quickArray2"
                 :value="item.value"
@@ -98,6 +98,7 @@
               placeholder="选择公司"
               filterable
               clearable
+              @on-change="showGeneratePurchaseOrder"
             >
               <Option
                 v-for="item in companyListOptions"
@@ -114,6 +115,7 @@
               placeholder="选择品牌"
               filterable
               clearable
+              @on-change="showGeneratePurchaseOrder"
             >
               <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
@@ -960,6 +962,11 @@ export default {
         this.conditionData.commitTimeEnd = value[1] + " " + "23:59:59";
         this.penPurchaseData.commitTimeStart = value[0] + " " + "00:00:00";
         this.penPurchaseData.commitTimeEnd = value[1] + " " + "23:59:59";
+      }
+      if(this.tabValue === "name1") {
+        this.searchData()
+      } else {
+        this.penPurchaseSearch();
       }
     },
     newArr(arr) {

@@ -4,9 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf wlf-center">
           <div class="db">
-            <span>快速查询：</span>
-          </div>
-          <div class="db">
             <getDate class="mr10" @quickDate="getvalue"></getDate>
           </div>
           <div class="db">

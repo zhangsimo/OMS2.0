@@ -4,7 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
             <Select
               v-model="purchaseType"
