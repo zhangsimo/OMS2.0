@@ -1087,22 +1087,21 @@ export default {
           let item = {...item1}
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
-              item[b] = item[b].replace(/[\n|,]/g, "");
+              item[b] = item[b].replace(/[\r\n,"]/g, "");
             }
           }
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
-          item.partCode = item.partCode + "\t";
-          item.oemCode = item.oemCode + "\t";
+          item.partCode = "\t"+item.partCode;
+          item.oemCode = "\t"+item.oemCode;
           return item;
         });
-        console.log(newData)
         if (newData.length > 0) {
           this.$refs.table1.exportCsv({
             filename: "汇总库存",
-            original: false,
+            original: true,
             columns: this.columns1,
             data: newData
           });
@@ -1135,7 +1134,7 @@ export default {
             let objData = { ...item };
             for (let b in objData) {
               if (objData[b] && typeof objData[b] == "string") {
-                objData[b] = objData[b].replace(/,/g, "，");
+                objData[b] = objData[b].replace(/[\r\n,"]/g, "");
               }
             }
             objData.enterPrice = objData.enterPrice.toFixed(2);
