@@ -257,3 +257,21 @@ export function getSaleParts (params) {
     params
   })
 }
+
+// 获取对方库存
+export function partStock (data) {
+  return axios.request({
+    url: `${api.omsSotck}/partStoreStock/partStock`,
+    method: 'post',
+    data
+  })
+}
+
+// 生成调拨单
+export function allotApplySave (data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/save`,
+    method: 'post',
+    data
+  })
+}

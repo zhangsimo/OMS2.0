@@ -242,7 +242,7 @@ export default {
 
     //点击单选框获取会计科目资产
     radioChangeEventAsset({row}){
-      console.log(row)
+      // console.log(row)
       this.accountingSubject = row
       this.SendData = this.subjectTableDataZiChan
       this.$refs.two.clearRadioRow()

@@ -340,7 +340,7 @@ export default {
     },
     totalAmtChange($event){
       // let value = v.target.value||0
-      console.log($event)
+      // console.log($event)
     },
     // 数据字典
     getDictionary(dictCode) {

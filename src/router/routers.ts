@@ -867,7 +867,7 @@ export default [
       },
       {
         path: "/settlementManagement/paymentmanage",
-        name: "paymentmanage",
+        name: "payMentmanage",
         // mark: 'oms_orders_approve',
         mark: "5200",
         meta: {
