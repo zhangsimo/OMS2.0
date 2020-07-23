@@ -1,6 +1,6 @@
 <template>
   <Modal v-model="searchPartLayer" title="添加配件录入" width="700">
-    <Form :model="formItemData" :label-width="80">
+    <Form :model="formItemData" :label-width="80" @keyup.enter.native="submit">
       <Row>
         <Col span="12">
           <FormItem label="配件编码：">
@@ -40,7 +40,7 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber @on-focus="changeNum" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <InputNumber autofocus @on-focus="changeNum" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
           </FormItem>
         </Col>
         <Col span="12">
