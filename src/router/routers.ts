@@ -624,7 +624,6 @@ export default [
           {
             path: "/settlementManagement/bill/AccountStatement",
             name: "accountStatement",
-            redirect: "",
             mark: "5101",
             meta: {
               title: "对账单"
@@ -973,7 +972,6 @@ export default [
           {
             path: "capitalChain",
             name: "capitalChain",
-            redirect: "",
             mark: "51101",
             meta: {
               title: "连锁资金日记账"
@@ -984,7 +982,6 @@ export default [
           {
             path: "shopJournal",
             name: "shopJournal",
-            redirect: "",
             mark: "51102",
             meta: {
               title: "门店资金日记账"
@@ -995,7 +992,6 @@ export default [
           {
             path: "accountRegistration",
             name: "accountRegistration",
-            redirect: "",
             mark: "51103",
             meta: {
               title: "账户登记表"

@@ -541,10 +541,10 @@ export default {
       tableData1: [], // 已审核
       date: '', // 发生日期
       store: "", // 门店id
-      single:0,//复选框状态
+      // single:0,//复选框状态
       Branchstore: [{id:"0",name:"全部"}], //分店名称
-      subjectId: 0 , // 对应科目id
-      subjecties: [{ id: 0, titleName: "全部" }], // 科目
+      subjectId: '0' , // 对应科目id
+      subjecties: [{ id: '0', titleName: "全部" }], // 科目
       content: "", // 撤销原因
       // 状态类
       isShow: false, // 撤销原因modal
