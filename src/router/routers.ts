@@ -573,7 +573,7 @@ export default [
     path: "/settlementManagement",
     name: "settlementManagement",
     mark: "5",
-    // redirect: "/reportForm",
+    redirect: "/reportForm",
     meta: {
       icon: "ios-paper",
       title: "结算管理"
