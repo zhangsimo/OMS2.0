@@ -276,17 +276,17 @@ export default {
       this.$Modal.confirm({
         content: "<p>是否确定生成调拨申请单！</p>",
         onOk: async () => {
-          if (this.tbdata.length <= 0) {
-            return this.$message.error("无配件明细!");
-          }
-          if (this.formPlan.guestName == "") {
-            return this.$message.error("请选择调出方!");
-          }
+          // if (this.tbdata.length <= 0) {
+          //   return this.$message.error("无配件明细!");
+          // }
+          // if (this.formPlan.guestName == "") {
+          //   return this.$message.error("请选择调出方!");
+          // }
           let hasZero = this.tbdata.find(el => {
             return el.applyQty <= 0 || !el.applyQty;
           })
           if(hasZero) {
-              return this.$message.error("申请数量不能为空或者小于等于0!");
+              return this.$message.error("单据明细申请数量不规范！");
           }
           this.save();
         },
@@ -310,6 +310,8 @@ export default {
           let res = await api.allotApplySave(data);
           this.$message.success("操作成功!");
           this.cancel();
+        } else {
+          this.$message.error("请完善信息！");
         }
       });
     }
