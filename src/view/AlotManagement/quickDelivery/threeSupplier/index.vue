@@ -4,7 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span class="mr10">快速：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db mr10">
@@ -71,7 +70,7 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Button type="warning" class="mr20" @click="search(form)">
+            <Button type="warning" class="mr20" @click="search">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
           </div>
@@ -365,6 +364,7 @@ export default {
         this.form.auditStartDate = "";
         this.form.auditEndDate = "";
       }
+      this.search();
     },
     selectStatus() {
       this.search();
