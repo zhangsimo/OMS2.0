@@ -643,7 +643,7 @@ export const mixPartInfo = {
                   carModelName.push(vb.carName);
                 }
               });
-              // objReq.carBrand = carBrand.join("|");
+              objReq.carBrand = carBrand.join("|");
               objReq.carBrandName = carBrandName.join("|");
               objReq.carModelName = carModelName.join("|");
 

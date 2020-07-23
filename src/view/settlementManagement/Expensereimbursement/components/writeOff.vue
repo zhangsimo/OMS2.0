@@ -331,17 +331,19 @@ export default {
             return "合计";
           }
           if (["writeOffAmount"].includes(column.property)) {
-            if (
-              this.tableData[0].reimbursementAmount <
-              this.tableData[0].totalPrice
-            ) {
-              this.totalfooter =
-                this.tableData[0].reimbursementAmount -
-                xeUtils.sum(data, column.property);
-            } else {
-              this.totalfooter =
-                this.tableData[0].totalPrice -
-                xeUtils.sum(data, column.property);
+            if(this.tableData) {
+              if (
+                this.tableData[0].reimbursementAmount <
+                this.tableData[0].totalPrice
+              ) {
+                this.totalfooter =
+                  this.tableData[0].reimbursementAmount -
+                  xeUtils.sum(data, column.property);
+              } else {
+                this.totalfooter =
+                  this.tableData[0].totalPrice -
+                  xeUtils.sum(data, column.property);
+              }
             }
             return this.totalfooter;
           }

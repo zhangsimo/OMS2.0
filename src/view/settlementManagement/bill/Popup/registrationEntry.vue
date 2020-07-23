@@ -370,7 +370,7 @@ export default {
               label: item.itemName
             });
           });
-          console.log(this.listType)
+          // console.log(this.listType)
         } else if (res.data[0].dictCode === "INVOICE_TYPE") {
           res.data.map(item => {
             this.invoiceSortList.push({

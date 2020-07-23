@@ -330,7 +330,7 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.oneSubject = row;
-      console.log(row,"???")
+      // console.log(row,"???")
     //   this.reconciliationStatement.accountNo = row.serviceId;
     //   this.serviceId = row.serviceId;
     //   this.$refs.Record.init();

@@ -124,7 +124,7 @@ export default {
       let four = this.data.streetAddres;
       // console.log(one,two,three)
       // console.log(one+two+three)
-      return (this.data.address = one + two + four || "");
+      return (this.data.address = one + four + two || "");
     }
   },
   methods: {

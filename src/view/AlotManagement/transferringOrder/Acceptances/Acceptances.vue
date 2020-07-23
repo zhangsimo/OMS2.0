@@ -4,7 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询：</span>
             <quickDate @quickDate="getData"></quickDate>
           </div>
           <div class="db flex">
@@ -19,13 +18,13 @@
             ></DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="searchType2" class="w100">
+            <Select v-model="searchType2" class="w100" @on-change="search">
               <Option v-for="item in ListTwo" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db">
             <!--<Input v-model="productName" placeholder="请输入申请公司" style="width: 120px" class="mr10"></Input>-->
-            <Select v-model="productName" class="w100 mr10">
+            <Select v-model="productName" class="w100 mr10" @on-change="search">
               <Option
                 v-for="item in purchaseNameArr"
                 :value="item.orgid"
@@ -183,10 +182,12 @@ export default {
     //  日期选择器从子组件哪来的数据
     getData(A) {
       this.selectOne = A;
+      this.search();
     },
     //选中的日期
     selectDate(date) {
       this.dateTime = date;
+      this.search();
     },
     //搜索
     search() {

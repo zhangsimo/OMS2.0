@@ -4,9 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf wlf-center">
           <div class="db">
-            <span>快速查询：</span>
-          </div>
-          <div class="db">
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db">
