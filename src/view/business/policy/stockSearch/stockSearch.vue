@@ -1087,6 +1087,7 @@ export default {
       data.page = 0;
       data.size = this.contentOne.page.total;
       data.noStock = data.noStock ? 1 : 0;
+      data.isImport = 1;
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content || [];
@@ -1242,10 +1243,18 @@ export default {
               "enterAmt",
             ].includes(key)
           ) {
-            sums[key] = {
-              key,
-              value: v
-            };
+            if(key=='stockAmt'){
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            }else{
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
+
           } else {
             sums[key] = {
               key,
@@ -1259,7 +1268,7 @@ export default {
           };
         }
       });
-
+      console.log(sums)
       return sums;
     }
   }

@@ -160,7 +160,7 @@ export default class Fittings extends Vue {
           title: "状态",
           minWidth: 80,
           render: (h, params) => {
-            let text: string = params.row.isDisabled ? "启用" : "禁用";
+            let text: string = params.row.isDisabled ? "禁用" : "启用";
             return h("span", text);
           }
         },
@@ -168,7 +168,7 @@ export default class Fittings extends Vue {
           title: "禁售",
           minWidth: 80,
           render: (h, params) => {
-            let text: string = params.row.isSale ? "可售": "禁售";
+            let text: string = params.row.isSale ? "禁售": "可售";
             return h("span", text);
           }
         },
@@ -408,6 +408,7 @@ export default class Fittings extends Vue {
 
   // 初始化本地配件资料
   private async initLocalPartInfo() {
+    this.currRow = null
     this.local.loading = true;
     let params: Kv = {};
     let data: Kv = {};
@@ -438,6 +439,7 @@ export default class Fittings extends Vue {
   }
   // 初始化wb维保平台配件资料
   private async initCloudPartInfo() {
+    this.currRow = null
     this.cloud.loading = true;
     let params: Kv = {};
     let data: Kv = {};
@@ -504,6 +506,7 @@ export default class Fittings extends Vue {
   }
   // 修改
   private async change() {
+    if(!this.currRow ) return this.$Message.error('请选择一条数据')
     this.isAdd = false;
     const ref: any = this.$refs.partInfo;
     let res: any = await api.findbyidInfo(this.currRow.id);
@@ -531,6 +534,7 @@ export default class Fittings extends Vue {
   }
   // 启用 禁用
   private async changeDisable() {
+    if(!this.currRow ) return this.$Message.error('请选择一条数据')
     let self: any = this;
     let id = this.currRow.id;
     let res: any = await api.toggleDis(id);
@@ -561,6 +565,7 @@ export default class Fittings extends Vue {
   }
   // 可售 禁售
   private async changeSale() {
+    if(!this.currRow ) return this.$Message.error('请选择一条数据')
     let self: any = this;
     let id = this.currRow.id;
     let res: any = await api.toggleSale(id);
