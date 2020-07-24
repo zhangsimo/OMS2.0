@@ -4,6 +4,10 @@
     title="选择会计科目"
     width="800px"
   >
+    <div class="partCheck-hd" style="padding-bottom: 20px">
+      <Input class="w200 mr10" v-model="subjectModel" placeholder="请输入科目" @on-enter="search"></Input>
+      <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
+    </div>
     <vxe-table
       border
       align="center"
@@ -32,8 +36,9 @@
 
 <script>
   import {getSubjectList} from '_api/documentApproval/ExpenseReimbursement'
+  import {getSubjectMsg} from "_api/settlementManagement/fundsManagement/claimWrite.js";
   export default {
-        name: "subject",
+      name: "subject",
       props:{
         subjet:''
       },
@@ -42,6 +47,7 @@
             subjectModelShow: false, //模态框展示
             oneSubject:{},//单选获取到的数据
             tableData:[],//表格数据
+            subjectModel:""
           }
       },
       methods:{
@@ -71,10 +77,16 @@
                 data.parentCode = 6711
                 break;
             }
-            let res = await getSubjectList(data)
+          data.titleTypeCode="601"
+          data.titleCode=this.subjectModel
+            let res = await getSubjectMsg(data)
           if (res.code === 0){
             this.tableData = res.data
           }
+        },
+        //科目查询
+        search(){
+          this.getList(this.subjet)
         },
         //判断是否可选择
         checkMethod({ row }){

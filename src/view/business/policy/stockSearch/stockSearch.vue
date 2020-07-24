@@ -45,6 +45,7 @@
               class="w120 mr10"
               v-model="searchForm.partBrand"
               placeholder="品牌"
+              @on-change="serch"
             >
               <Option
                 v-for="item in partBrandList"
@@ -88,7 +89,7 @@
               class="w120 mr10"
               v-model="searchForm.shelf"
               @on-enter="serch"
-            ></Input>
+            />
             <span class="mr5">显示零库存:</span>
             <Checkbox v-model="searchForm.noStock"></Checkbox>
             <Button type="warning" class="mr10 w90" @click="serch">
@@ -131,6 +132,7 @@
               class="w120 mr10"
               v-model="searchForm1.partBrand"
               placeholder="品牌"
+              @on-change="queryBatch"
             >
               <Option
                 v-for="item in partBrandList"
@@ -214,6 +216,7 @@
                 placeholder="选择公司"
                 filterable
                 clearable
+                @on-change="resetData"
               >
                 <Option
                   v-for="item in hsStore"
@@ -703,6 +706,7 @@ export default {
         option = option.filter(el => el != 1);
       }
       this.searchForm.storeIds = option;
+      this.serch();
     },
     select2(option) {
       if(option.slice(-1)[0] == 1) {
@@ -711,6 +715,7 @@ export default {
         option = option.filter(el => el != 1);
       }
       this.searchForm1.storeIds = option;
+      this.queryBatch();
     },
     getColumns() {
       let arr = [
@@ -901,9 +906,11 @@ export default {
     changecompanyFun() {
       this.searchForm.storeIds = [];
       this.getColumns();
+      this.serch();
     },
     changecompanyFun2() {
       this.searchForm1.storeIds = [];
+      this.queryBatch();
     },
     changeStore() {
       this.serch();

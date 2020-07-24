@@ -251,7 +251,7 @@ export default {
           res.data.forEach(el => {
             this.tbdata.forEach(item => {
               if(el.partId === item.partId) {
-                item.itQty = el.outableQty;
+                item.itQty = el.outableQty || 0;
               }
             })
           })
