@@ -871,6 +871,7 @@ export default [
         mark: "5200",
         meta: {
           // hideInMenu: true,
+          keepAlive:true,
           title: "应收应付"
         },
         component: () =>
@@ -984,6 +985,7 @@ export default [
             name: "shopJournal",
             mark: "51102",
             meta: {
+              keepAlive:true,
               title: "门店资金日记账"
             },
             component: () =>
@@ -1026,7 +1028,7 @@ export default [
             name: "accountings",
             mark: "51106",
             meta: {
-              // hideInMenu: true,
+              keepAlive:true,
               title: "资金日记账审核"
             },
             component: () =>
@@ -1038,6 +1040,7 @@ export default [
             redirect: "",
             mark: "51107",
             meta: {
+              keepAlive:true,
               title: "现金日记账"
             },
             component: () =>
