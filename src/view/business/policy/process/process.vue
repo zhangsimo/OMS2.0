@@ -16,7 +16,6 @@
             <div class="oper-top flex">
               <div class="wlf">
                 <div class="db">
-                  <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
                   <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
                     <Option
@@ -262,7 +261,6 @@
             <div class="oper-top flex">
               <div class="wlf">
                 <div class="db">
-                  <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick1"></quick-date>
                   <Select v-model="form.status" @on-change="getDataType1" class="w90 mr10">
                     <Option
