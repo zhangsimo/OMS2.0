@@ -1,5 +1,9 @@
 <template>
   <Modal v-model="subjectModelShow" title="选择会计科目" width="800px">
+    <div class="partCheck-hd" style="padding-bottom: 20px">
+      <Input class="w200 mr10" v-model="subjectModel" placeholder="请输入科目" @on-enter="search"></Input>
+      <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
+    </div>
     <vxe-table
       border
       align="center"
@@ -38,7 +42,7 @@
 
 <script>
 import { getSubjectList } from "_api/documentApproval/ExpenseReimbursement";
-import { TurnToTheProfitAndLoss } from "_api/settlementManagement/fundsManagement/claimWrite.js";
+import { TurnToTheProfitAndLoss,getSubjectMsg } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 export default {
   name: "subject",
   props: {
@@ -49,7 +53,8 @@ export default {
       subjectModelShow: false, //模态框展示
       oneSubject: {}, //单选获取到的数据
       tableData: [], //表格数据
-      maker: "" //备注
+      maker: "", //备注
+      subjectModel:""
     };
   },
   mounted() {},
@@ -85,6 +90,17 @@ export default {
       if (res.code === 0) {
         this.tableData = res.data;
       }
+    },
+    //科目查询
+    search(){
+      let data={}
+      data.titleTypeCode="601"
+      data.titleCode=this.subjectModel
+      getSubjectMsg(data).then(res=>{
+        if(res.code==0){
+          this.tableData = res.data
+        }
+      })
     },
     //判断是否可选择
     checkMethod({ row }) {
