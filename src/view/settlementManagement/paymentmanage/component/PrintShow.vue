@@ -67,16 +67,50 @@
             </p>
           </Col>
         </Row>
-        <Table
-          resizable
-          size="small"
-          style="margin: 0 auto"
-          width="990"
-          border
-          :columns="columns2"
-          :data="onelist.orderDetailList"
-          class="ml10"
-        ></Table>
+<!--        <Table-->
+<!--          resizable-->
+<!--          size="small"-->
+<!--          style="margin: 0 auto"-->
+<!--          width="990"-->
+<!--          border-->
+<!--          :columns="columns2"-->
+<!--          :data="onelist.orderDetailList"-->
+<!--          class="ml10"-->
+<!--        ></Table>-->
+        <table class="gridtable">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th>配件编码</th>
+            <th>配件名称</th>
+            <th>品牌</th>
+            <th>品牌车型</th>
+            <th>规格	</th>
+            <th>单位	</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>金额</th>
+            <th>仓库	</th>
+            <th>仓位</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item ,index) in onelist.orderDetailList" :key="index">
+            <td>{{index + 1}}</td>
+            <td>{{item.partCode}}</td>
+            <td>{{item.partName}}</td>
+            <td>{{item.partBrand}}</td>
+            <td>{{item.carModelName}}</td>
+            <td>{{item.spec}}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.orderQty}}</td>
+            <td>{{item.orderPrice}}</td>
+            <td>{{item.orderAmt}}</td>
+            <td>{{item.storeName}}</td>
+            <td>{{item.storeShelf}}</td>
+          </tr>
+          </tbody>
+        </table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
@@ -126,7 +160,7 @@ import { Printing } from "@/api/bill/saleOrder";
 
 export default {
   name: "PrintShow",
-  props: { title: "" }, 
+  props: { title: "" },
   data() {
     return {
       printShow: false, //模态框隐藏
@@ -210,15 +244,17 @@ export default {
     //打印
     print() {
       // 1.设置要打印的区域 div的className
-      var newstr = document.getElementById("printBox").innerHTML;
+      var newstr = document.getElementById("printBox").innerHTML
       // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
-      var oldstr = document.body.innerHTML;
+      // var oldstr = document.body.innerHTML;
       // 3. 复制给body，并执行window.print打印功能
-      document.body.innerHTML = newstr;
+      let body = document.body
+      body.style.overflow = 'visible'
+      body.innerHTML = newstr;
       window.print();
       // 重新加载页面，以刷新数据
       window.location.reload();
-      document.body.innerHTML = oldstr;
+      // document.body.innerHTML = oldstr;
     },
     async openModal() {
       this.printShow = true;
@@ -279,5 +315,33 @@ export default {
 }
 #printBox {
   overflow: -moz-scrollbars-none;
+}
+//表格样式
+table.gridtable {
+  width: 100%;
+  font-family: verdana,arial,sans-serif;
+  font-size:11px;
+  color:#000000;
+  border-width: 1px;
+  border-color: #000000;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.gridtable th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #000000;
+  background-color: #dedede;
+}
+table.gridtable td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #000000;
+  background-color: #ffffff;
+}
+table.gridtable tr {
+  page-break-inside:avoid;
 }
 </style>

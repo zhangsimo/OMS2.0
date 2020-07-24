@@ -624,7 +624,6 @@ export default [
           {
             path: "/settlementManagement/bill/AccountStatement",
             name: "accountStatement",
-            redirect: "",
             mark: "5101",
             meta: {
               title: "对账单"
@@ -872,6 +871,7 @@ export default [
         mark: "5200",
         meta: {
           // hideInMenu: true,
+          keepAlive:true,
           title: "应收应付"
         },
         component: () =>
@@ -973,7 +973,6 @@ export default [
           {
             path: "capitalChain",
             name: "capitalChain",
-            redirect: "",
             mark: "51101",
             meta: {
               title: "连锁资金日记账"
@@ -984,9 +983,9 @@ export default [
           {
             path: "shopJournal",
             name: "shopJournal",
-            redirect: "",
             mark: "51102",
             meta: {
+              keepAlive:true,
               title: "门店资金日记账"
             },
             component: () =>
@@ -995,7 +994,6 @@ export default [
           {
             path: "accountRegistration",
             name: "accountRegistration",
-            redirect: "",
             mark: "51103",
             meta: {
               title: "账户登记表"
@@ -1030,7 +1028,7 @@ export default [
             name: "accountings",
             mark: "51106",
             meta: {
-              // hideInMenu: true,
+              keepAlive:true,
               title: "资金日记账审核"
             },
             component: () =>
@@ -1042,6 +1040,7 @@ export default [
             redirect: "",
             mark: "51107",
             meta: {
+              keepAlive:true,
               title: "现金日记账"
             },
             component: () =>
