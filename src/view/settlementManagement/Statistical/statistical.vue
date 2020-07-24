@@ -24,7 +24,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select v-model="areaId" class="w150" @on-change="changeArea">
+            <Select v-model="areaId" class="w150" @on-change="changeArea" :disabled="selectShopList">
               <Option v-for="item in areas" :value="item.id" :key="item.id">{{
                 item.companyName
               }}</Option>
@@ -32,7 +32,7 @@
           </div>
           <div class="db ml15">
             <span>门店名称：</span>
-            <Select v-model="BranchstoreId" class="w150">
+            <Select v-model="BranchstoreId" class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -293,6 +293,12 @@ export default {
     this.getArea();
     this.getShop();
     this.query();
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     // 快速查询
