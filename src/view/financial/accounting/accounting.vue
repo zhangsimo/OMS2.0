@@ -11,6 +11,7 @@
           class="mt10"
           resizable
           :data="tableData"
+          height="80%"
           stripe
           size="mini"
           align="center"
@@ -417,7 +418,7 @@ export default {
 
     //修改节点数据
     change(row) {
-      // console.log(row)
+      console.log(row)
       this.ChangeData = row;
       if (row.titleLevel == 1) {
         this.ChangeData.parentCodeTwo =
@@ -425,12 +426,13 @@ export default {
         this.ChangeData.titleTypeCode =
           row.titleTypeCode + " - " + row.titleTypeName;
       } else {
-        let FindArr = this.tableData.filter(
-          item => item.titleCode == row.parentCode
-        );
-        // console.log(FindArr)
+        // let FindArr = this.tableData.filter(
+        //   item => item.titleCode == row.parentCode
+        // );
+        // console.log(FindArr , 99999)
+        row.parentTitle = row.parentTitle ? row.parentTitle : ''
         this.ChangeData.parentCodeTwo =
-          row.parentCode + " - " + FindArr[0].titleName;
+          row.parentCode + " - " + row.parentTitle;
         this.ChangeData.titleTypeCode =
           row.titleTypeCode + " - " + row.titleTypeName;
       }

@@ -55,9 +55,10 @@
             style="position: absolute;top: 67px;left: 0;right: 0;bottom: 0;overflow-y: auto"
           >
               <div class="image_tofile" ref="imageTofile">
-                  <keep-alive :include="cacheList">
-                  <router-view />
+                  <keep-alive>
+                    <router-view v-if="$route.meta.keepAlive" />
                   </keep-alive>
+                <router-view v-if="!$route.meta.keepAlive" />
               </div>
             <!--            反馈模态框-->
             <Modal v-model="screenshot" fullscreen title="反馈意见">
@@ -214,22 +215,22 @@ export default {
     tagNavList() {
       return this.$store.state.app.tagNavList;
     },
-    tagRouter() {
-      return this.$store.state.app.tagRouter;
-    },
+    // tagRouter() {
+    //   return this.$store.state.app.tagRouter;
+    // },
     userAvator() {
       return this.$store.state.user.avatorImgPath;
     },
     userData() {
       return this.$store.state.user.userData;
     },
-    cacheList() {
-      return this.tagNavList.length
-        ? this.tagNavList
-            .filter(item => !(item.meta && item.meta.notCache))
-            .map(item => item.name)
-        : [];
-    },
+    // cacheList() {
+    //   return this.tagNavList.length
+    //     ? this.tagNavList
+    //         .filter(item => !(item.meta && item.meta.notCache))
+    //         .map(item => item.name)
+    //     : [];
+    // },
     menuList() {
       return this.$store.getters.menuList;
     },

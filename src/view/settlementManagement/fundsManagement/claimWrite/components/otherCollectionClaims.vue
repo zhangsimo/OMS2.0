@@ -368,11 +368,12 @@ export default {
       if(this.voucherinputModel){
         let data = {};
         data.detailId = this.accrued[0].id;
-        if(this.accrued[0].balanceMoney==undefined){
-          data.claimMoney=this.accrued[0].rpAmt
-        }else{
-          data.claimMoney=this.accrued[0].balanceMoney
-        }
+        // if(this.accrued[0].balanceMoney==undefined){
+        //   data.claimMoney=this.accrued[0].rpAmt
+        // }else{
+        //   data.claimMoney=this.accrued[0].balanceMoney
+        // }
+        data.claimMoney=this.accrued[0].balanceMoney||this.accrued[0].rpAmt
         if(data.claimMoney==null || data.claimMoney<=0){
           this.$Message.error("本次认领金额不可为零或小于零")
           return
