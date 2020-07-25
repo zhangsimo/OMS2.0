@@ -949,7 +949,7 @@ export default {
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
-      this.$refs.SelectPartRef.searchPartLayer = false;
+      // this.$refs.SelectPartRef.searchPartLayer = false;
       this.$Message.success("已添加");
     },
     //分页

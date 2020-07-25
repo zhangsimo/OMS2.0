@@ -293,6 +293,7 @@ export const minxParts = {
       if (this.selectTable.id) {
         obj.id = this.selectTable.id;
       }
+      this.$refs.partInfo.saveFlag = false;
       setApproval(obj).then(res => {
         if (res.code == 0) {
           this.$refs.partInfo.proModal = false;

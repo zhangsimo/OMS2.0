@@ -546,7 +546,7 @@
               if(!hasOutQty) {
                 return this.$message.error("明细中无配件缺货！");
               }
-              this.$refs.AlotModel.init(arr);
+              this.$refs.AlotModel.init(this.formPlan.serviceId, arr);
             },
             //获取右侧数据
             async getList() {
