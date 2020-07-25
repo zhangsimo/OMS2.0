@@ -200,7 +200,7 @@ export default {
     };
   },
   methods: {
-    init(data) {
+    init(orderId, data) {
       this.tbdata = data.map(el => {
           el.applyQty = el.stockOutQty * 1;
           return el;
@@ -209,7 +209,7 @@ export default {
         guestName: "",
         storeId: "",
         orderDate: new Date(),
-        remark: ""
+        remark: orderId,
       };
       this.currRow = undefined;
       this.warehouse();
