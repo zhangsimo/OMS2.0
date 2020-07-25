@@ -62,53 +62,54 @@
 
 
         <h5 class="mt20 mb10" style="font-size: 18px">调拨信息</h5>
-        <div class="proceeds mb20">
-          <Row>
-            <Col span="8">
-              <FormItem label="转出门店"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.outOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem label="转出账户" prop="outAccount" style="margin-bottom: 0px">
-                <Select v-model="formInline.outAccount" style="width: 90%;padding-left: 5px" @on-change="getOutApply" :disabled="modelType">
+        <div class="financePlace">
+          <a class="mr10" @click="addAccountRow" v-has="'intFAdd'">
+            <Icon custom="iconfont iconxinzengicon icons" />添加行
+          </a>
+          <a class="mr10" @click="delAccountRow">
+            <Icon custom="iconfont iconbianjixiugaiicon icons" v-has="'intFDel'" />删除行
+          </a>
+        </div>
+        <div class="financeTab">
+          <vxe-table
+            auto-resize
+            resizable
+            border
+            show-overflow
+            highlight-hover-row
+            highlight-current-row
+            @current-change="currentChangeEvent"
+            max-height="400"
+            :data="accountList"
+            align="center"
+          >
+            <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
+            <vxe-table-column field="outOrgName" title="转出门店"></vxe-table-column>
+            <vxe-table-column title="转出账户">
+              <template v-slot="{row}">
+                <Select v-model="row.outAccount" style="width: 90%;padding-left: 5px;overflow-y: scroll" @on-change="getOutApply(row)" :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem label="转出账号" prop="outAccountNo" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.outAccountNo" style="width: 90%;padding-left: 5px"  disabled></Input>
-              </FormItem>
-            </Col>
-          </Row>
-        </div>
-
-
-        <div class="proceeds">
-          <Row>
-            <Col span="8">
-              <FormItem label="转入门店" style="margin-bottom: 0px" prop="enterOrgid">
-                <Select @on-change="getCompany" v-model="formInline.enterOrgid" style="width: 90%;padding-left: 5px" :disabled="modelType">
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="outAccountNo" title="转出账号"></vxe-table-column>
+            <vxe-table-column title="转入门店">
+              <template v-slot="{row}">
+                <Select @on-change="getCompany" v-model="row.enterOrgid" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in company" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem label="转入账户"  prop="enterAccount" style="margin-bottom: 0px">
-                <Select  v-model="formInline.enterAccount" @on-change="getinto" style="width: 90%;padding-left: 5px" :disabled="modelType">
+              </template>
+            </vxe-table-column>
+            <vxe-table-column title="转入账户">
+              <template v-slot="{row}">
+                <Select  v-model="row.enterAccount" @on-change="getinto" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in IntoAccountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
                 </Select>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem label="转入账号" prop="enterAccountNo" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.enterAccountNo" style="width: 90%;padding-left: 5px"  disabled></Input>
-              </FormItem>
-            </Col>
-          </Row>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="enterAccountNo" title="转入账号"></vxe-table-column>
+          </vxe-table>
         </div>
-
         <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
         <upphoto @backUpImgList="getImgList" ref="upImg" :list="Pictures"></upphoto>
         <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
