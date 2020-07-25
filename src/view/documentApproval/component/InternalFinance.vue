@@ -63,11 +63,11 @@
 
         <h5 class="mt20 mb10" style="font-size: 18px">调拨信息</h5>
         <div class="financePlace">
-          <a class="mr10" @click="addAccountRow" v-has="'intFAdd'">
+          <a class="mr10" @click="addAccountRow">
             <Icon custom="iconfont iconxinzengicon icons" />添加行
           </a>
           <a class="mr10" @click="delAccountRow">
-            <Icon custom="iconfont iconbianjixiugaiicon icons" v-has="'intFDel'" />删除行
+            <Icon custom="iconfont iconbianjixiugaiicon icons" />删除行
           </a>
         </div>
         <div class="financeTab">
