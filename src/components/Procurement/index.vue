@@ -308,6 +308,7 @@ export default class ProcurementModal extends Vue {
 
   //快速查询日期
   private getDataQuick(v){
+    if(!this.shows) return;
     this.auditDate = v
     this.getPchsPlanList();
   }
