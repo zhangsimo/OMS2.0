@@ -35,7 +35,7 @@
           <div class="wlf" style="line-height: 54px">
             <Input
               v-model="searchForm.partName"
-              placeholder="配件编码/名称"
+              placeholder="配件编码/名称/内码/OEM码"
               class="w200 mr10"
               @on-enter="serch"
             />
@@ -122,7 +122,7 @@
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input
               v-model="searchForm1.partName"
-              placeholder="配件编码/名称"
+              placeholder="配件编码/名称/内码/OEM码"
               class="w200 mr10"
               @on-enter="queryBatch"
             ></Input>
@@ -454,6 +454,12 @@ export default {
           title: "规格",
           align: "center",
           key: "spec",
+          minWidth: 120
+        },
+        {
+          title: "配件内码",
+          align: "center",
+          key: "partInnerId",
           minWidth: 120
         },
         {
@@ -846,6 +852,12 @@ export default {
           title: "规格",
           align: "center",
           key: "spec",
+          minWidth: 120
+        },
+        {
+          title: "配件内码",
+          align: "center",
+          key: "partInnerId",
           minWidth: 120
         },
         {

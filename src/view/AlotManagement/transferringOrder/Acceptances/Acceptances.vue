@@ -110,6 +110,7 @@
               <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
               <vxe-table-column field="unit" title="单位"></vxe-table-column>
               <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+              <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
               <vxe-table-column title="紧销品" width="100">
                 <template v-slot="{ row,rowIndex }">

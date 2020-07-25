@@ -253,6 +253,7 @@
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                  <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>

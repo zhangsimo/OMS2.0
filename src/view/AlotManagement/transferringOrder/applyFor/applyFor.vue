@@ -196,6 +196,7 @@
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
+                    <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                     <vxe-table-column title="紧销品" width="100">
                       <template v-slot="{ row }">
                         <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
