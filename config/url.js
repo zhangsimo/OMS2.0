@@ -21,10 +21,10 @@ const dev = {
   omsSotck: "http://192.168.21.59:9280", //9280
 
   /**oms系统接口设定 */
-  tokenApi: "https://tsapi2.g-parts.cn", // 登录接口API
+  // tokenApi: "http://192.168.30.226:5600", // 登录接口API
   authApi: "http://192.168.30.221:5200", // 系统资源 5200
   passportApi: "http://192.168.30.221:5200", // passport微服务API
-  // tokenApi: "http://192.168.30.226:5600",
+  tokenApi: "http://192.168.30.226:5600",
   // authApi: "http://192.168.30.226:5200",
   // passportApi: "http://192.168.30.226:5200",
 

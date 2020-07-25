@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query">
+            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -387,6 +387,12 @@ export default {
       typeA: "", //是否收回按钮
       Types: "" //是否点击其他收款核销按钮
     };
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取门店

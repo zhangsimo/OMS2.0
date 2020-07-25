@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query">
+            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query" :disabled="selectShopList">
               <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
@@ -324,6 +324,12 @@ export default {
     this.modelType.allSalesList = await getAllSalesList();
     this.modelType.salesList = await getComenAndGo();
     this.modelType.payList = await getPayList();
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取门店

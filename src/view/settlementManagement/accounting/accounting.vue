@@ -15,7 +15,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select disabled class="w150" v-model="store">
+            <Select  :disabled="selectShopList" class="w150" v-model="store">
               <Option
                 v-for="(item,index) in Branchstore"
                 :value="item.id"
@@ -575,6 +575,12 @@ export default {
     })
     this.getShop()
     this.query();
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取门店

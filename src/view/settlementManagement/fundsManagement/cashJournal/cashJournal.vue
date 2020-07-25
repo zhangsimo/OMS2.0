@@ -19,7 +19,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select v-model="model1" filterable class="w150" @on-change="changeArea">
+            <Select v-model="model1" filterable class="w150" @on-change="changeArea" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -29,7 +29,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="shopCode" filterable class="w150 mr15">
+            <Select v-model="shopCode" filterable class="w150 mr15" :disabled="selectShopList">
               <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
@@ -336,6 +336,12 @@ export default {
     this.getShop(); //获取门店
     this.getAllAre(); //获取区域
     this.getSubject(); //获取会计科目
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取全部地址

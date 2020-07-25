@@ -22,7 +22,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable>
+            <Select v-model="BranchstoreId"  :disabled="selectShopList" class="w150" filterable clearable>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -445,13 +445,18 @@ export default {
       serviceId: "" //给子组件传的值
     };
   },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
+  },
   methods: {
     //获取门店
-    async getShop() {
-      let data = {};
-      let res = await goshop(data);
-      if (res.code === 0)
-        return (this.Branchstore = [...this.Branchstore, ...res.data]);
+    async getShop(){
+      let data ={}
+      let res = await goshop(data)
+      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
     // 快速查询
     quickDate(data) {

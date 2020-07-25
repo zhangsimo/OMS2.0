@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150" @on-change="getTransferWarehousing">
+            <Select v-model="model1" filterable class="w150" @on-change="getTransferWarehousing" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -450,6 +450,12 @@ export default {
     this.model1 = arr[1];
     this.getShop()
     this.getTransferWarehousing();
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取门店
