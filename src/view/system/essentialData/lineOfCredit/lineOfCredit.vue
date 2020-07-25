@@ -101,7 +101,7 @@ export default {
           align: "center",
           render: (h, params) => {
             let tex =
-              params.row.tempQuotaTotal == null ? 0 : params.row.tempQuotaTotal;
+              params.row.beforeAdjustTempQuota == null ? 0 : params.row.beforeAdjustTempQuota;
             return h("span", {}, tex);
           }
         },
