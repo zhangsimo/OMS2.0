@@ -191,7 +191,7 @@ export default {
       //   item.businessTypeName = item.businessType.name;
       // });
       // this.BusinessType = [...this.BusinessType, ...val];
-      console.log(val)
+      // console.log(val)
       let jsonArr = [val]
       jsonArr.map(item => {
         item.orgName = this.reconciliationStatement.orgName;
@@ -312,8 +312,8 @@ export default {
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.reconciliationStatement = res.data.one;
-            console.log(this.reconciliationStatement);
-            console.log(this.showModalOne)
+            // console.log(this.reconciliationStatement);
+            // console.log(this.showModalOne)
             if(this.showModalOne !== 1){
               this.reconciliationStatement.accountNo = '';
             }

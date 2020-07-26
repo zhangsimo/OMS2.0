@@ -127,7 +127,7 @@
               class="mr10 w90"
               :disabled="!isCanbutton"
               @click="changeDisable"
-              v-if="!isDisable"
+              v-if="isDisable"
               v-has="'disabled'"
             >
               <span class="center">
@@ -149,7 +149,7 @@
               class="mr10 w90"
               :disabled="!isCanbutton"
               @click="changeSale"
-              v-if="isSale"
+              v-if="!isSale"
               v-has="'noSales'"
             >
               <span class="center">

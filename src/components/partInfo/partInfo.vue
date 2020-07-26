@@ -109,7 +109,7 @@
             <Row>
               <Col span="22">
                 <FormItem label="适用车型：" class="car-item-w" :class="{'ivu-form-item-error':isCart}" prop="">
-                  <div class="car-con-item" v-for="(v,vi) in carList">
+                  <div class="car-con-item" v-for="(v,vi) in carList" :key="vi">
                     <Select
                       @on-change="getSelectCarBrand"
                       class="w140 mr5"
@@ -118,11 +118,11 @@
                     >
                       <Option
                         v-for="item in carObj.carBrandData"
-                        :value="item.id"
-                        :key="item.id"
+                        :value="item.erpCarBrandId"
+                        :key="item.erpCarBrandId"
                       >{{item.nameCn}}</Option>
                     </Select>
-                    <Input class="w260" v-model="v.carName"></Input>
+                    <Input class="w260" v-model="v.carName" />
                     <Button type="text" class="car-btn add" @click="addCarItem" v-if="vi==0"><Icon type="md-add" />添加车型</Button>
                     <Button v-if="vi>0" @click="removeCarItem(vi)" type="text" class="car-btn del"><Icon type="md-close" />删除</Button>
                   </div>

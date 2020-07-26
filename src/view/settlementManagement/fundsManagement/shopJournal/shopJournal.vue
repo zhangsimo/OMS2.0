@@ -290,10 +290,11 @@
   import {getTableList}from '@/api/accountant/accountant'
   import amtData from '../../components/amtData'
   import changeJournal from '../components/changeJournal'
-   
+
 
   import moment from 'moment'
   export default {
+    name:'shopJournal',
     components: {
       quickDate,
       importXLS,

@@ -1,7 +1,6 @@
 <template>
   <div style="height:100%" class="bigBox">
     <div class="headerBox">
-      <span class="mr10">快速查询:</span>
       <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
       <Select v-model="orderType" style="width:100px" class="mr10" @on-change="selectTypetList">
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>

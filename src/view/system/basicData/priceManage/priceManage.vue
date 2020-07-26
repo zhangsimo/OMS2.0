@@ -187,6 +187,7 @@
               <vxe-table-column
                 field="sellPrice"
                 :title="sellPriceTitle"
+                min-width="60"
                 :edit-render="{ name: 'input' }"
               >
                 <template v-slot:edit="{ row }">
@@ -202,6 +203,7 @@
               <vxe-table-column
                 field="minRequiredQty"
                 title="最低要求数量"
+                min-width="60"
                 v-if="rowPriceManege.name=='最低售价'"
                 :edit-render="{ name: 'input' }"
               >
@@ -217,6 +219,7 @@
               <vxe-table-column
                 field="maxRequiredQty"
                 title="最高要求数量"
+                min-width="60"
                 v-if="rowPriceManege.name=='最低售价'"
                 :edit-render="{ name: 'input' }"
               >

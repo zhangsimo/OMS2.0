@@ -6,7 +6,7 @@ export  async function  creat(dates, store) {
   value = dates
     let res = await getStorelist({ groupId: store.state.user.userData.groupId });
     if(Object.keys(res.data).length !== 0){
-      model = store.state.user.userData.shopId
+      model = store.state.user.userData.currentCompany ? store.state.user.userData.currentCompany.id ? store.state.user.userData.currentCompany.id : '' : ''
       Object.keys(res.data).forEach(function (key) {
         if(model ===key) name = res.data[key]
         Branchstore.push({
@@ -14,6 +14,6 @@ export  async function  creat(dates, store) {
           label: res.data[key]
         })
       });
-    return [value, model, Branchstore,name]
+      return [value, model, Branchstore,name]
   }
 }

@@ -405,7 +405,7 @@ export default {
     },
 
     taxPointChange(){
-      console.log(this.invoicedAmountTotal)
+      // console.log(this.invoicedAmountTotal)
       this.pointComputed(this.invoicedAmountTotal);
     },
 

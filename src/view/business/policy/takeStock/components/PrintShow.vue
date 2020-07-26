@@ -6,7 +6,7 @@
     >
     <div id="printBox" style="height: 600px">
       <div class="titler">
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col span="12" class="pl10">
             <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.userCompany}}</h5>
           </Col>
@@ -15,7 +15,7 @@
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>地址:</span></p>
             <p><span>电话:</span></p>
@@ -28,7 +28,7 @@
             </p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>客户:</span> <span>{{onelist.guestName}}</span></p>
             <p><span>地址:</span> <span>{{onelist.addr}}</span></p>
@@ -72,7 +72,7 @@
           </tbody>
         </table>
 <!--         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailList" class="ml10"></Table>-->
-        <Row style="border: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
             <span>{{ onelist.orderAmt}}</span>
@@ -86,7 +86,7 @@
             <span>{{onelist.orderAmt}}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{onelist.orderMan}}</span>
@@ -104,7 +104,7 @@
             <span>{{onelist.receiver}}</span>
           </Col>
         </Row>
-        <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
+        <p style="border: 1px #000000 solid;border-top: none;color:#000;" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
         <p class="pl10">
           兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！
         </p>

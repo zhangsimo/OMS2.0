@@ -130,13 +130,16 @@ export default {
   },
   data() {
     //自定义校验方法
-    const validatePass = (rule, value, callback) => {
-      let reg = /^[A-Za-z0-9\-]+$/;
-      if (!reg.test(value)) {
-        callback(new Error("编码不能输入汉字、字符且不能为空!"));
-      } else {
-        callback();
-      }
+    const validatePass = ({cellValue}) => {
+      return  new Promise((resolve, reject) => {
+        let reg = /^[A-Za-z0-9\-]+$/;
+        if (!reg.test(cellValue )) {
+          reject(new Error("编码不能输入汉字、字符且不能为空!"));
+        } else {
+          resolve();
+        }
+      })
+
     };
     return {
       columns1: [
@@ -232,9 +235,10 @@ export default {
       this.oneWarehouse = data.row;
     },
     //保存
-    save() {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
+    async save() {
+
+     let valid = await this.$refs.xTable.validate()
+        if (!valid) {
           getSaveWarehouse(this.warehouseList).then(res => {
             if (res.code == 0) {
               this.$Message.success(res.message);
@@ -244,7 +248,6 @@ export default {
         } else {
           this.$Message.error("验证不通过");
         }
-      });
     },
     //切换状态
     changeType() {

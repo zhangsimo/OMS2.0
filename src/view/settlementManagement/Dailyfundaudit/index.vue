@@ -19,13 +19,12 @@
           </div>
           <div class="db ml15">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" @on-change="query">
+            <Select v-model="BranchstoreId" :disabled="selectShopList" class="w150" @on-change="query">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
-              >
+                >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -145,6 +144,7 @@ import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
+  name:'settlementManagement-Dailyfundaudit',
   components: {
     QuickDate,
     TableOne,
@@ -193,6 +193,12 @@ export default {
     })
     this.getShop()
     // this.getCompany();
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取门店

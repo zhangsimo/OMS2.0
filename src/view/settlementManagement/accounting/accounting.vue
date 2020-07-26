@@ -15,7 +15,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select disabled class="w150" v-model="store">
+            <Select  :disabled="selectShopList" class="w150" v-model="store">
               <Option
                 v-for="(item,index) in Branchstore"
                 :value="item.id"
@@ -530,6 +530,7 @@ import * as api from "@/api/settlementManagement/financialStatement";
 import moment from "moment";
 import { creat } from "./../components";
 export default {
+  name:'accountings',
   components: {},
   data() {
     return {
@@ -540,10 +541,10 @@ export default {
       tableData1: [], // 已审核
       date: '', // 发生日期
       store: "", // 门店id
-      single:0,//复选框状态
+      // single:0,//复选框状态
       Branchstore: [{id:"0",name:"全部"}], //分店名称
-      subjectId: 0 , // 对应科目id
-      subjecties: [{ id: 0, titleName: "全部" }], // 科目
+      subjectId: '0' , // 对应科目id
+      subjecties: [{ id: '0', titleName: "全部" }], // 科目
       content: "", // 撤销原因
       // 状态类
       isShow: false, // 撤销原因modal
@@ -574,6 +575,12 @@ export default {
     })
     this.getShop()
     this.query();
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   methods: {
     //获取门店

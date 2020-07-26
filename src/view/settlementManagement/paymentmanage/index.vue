@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150">
+            <Select v-model="model1" filterable class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -213,7 +213,7 @@ import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from "moment";
 export default {
-  name:'paymentmanage',
+  name:'payMentmanage',
   components: {
     quickDate,
     // selectDealings,
@@ -1570,6 +1570,12 @@ export default {
         }
       ]
     };
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   async mounted() {
     this.parameter = [];

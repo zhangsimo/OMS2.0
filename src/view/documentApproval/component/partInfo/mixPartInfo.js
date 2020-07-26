@@ -5,7 +5,7 @@ import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamine
 
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
 import {getExamineDetail} from "../../../../api/system/partsExamine/partsExamineApi";
-
+import { getCarPartClass,getAllParts,getByManyCode,getAlreadyParts,savePartChange } from "_api/parts";
 export const mixPartInfo = {
 
   data() {
@@ -140,21 +140,41 @@ export const mixPartInfo = {
         carBrand:"",
         carName:""
       },
-      carList:[]
+      carList:[],
+      typepf: [],
+      typeps: [],
     }
   },
+  mounted(){
+
+  },
   methods: {
+    async treeInit() {
+      let res = await getCarPartClass();
+      this.typepf = res;
+      if(this.formValidate.partTypeF) {
+        this.changetype(this.formValidate.partTypeF);
+      }
+
+    },
+    changetype(v) {
+      let item = this.typepf.filter(el => el.typeId === v)[0];
+      this.formValidate.carTypefName = item.name?item.name :item.title;
+      this.typeps = item.children
+    },
+    changetypeS(v) {
+      let item = this.typeps.filter(el => el.typeId === v)[0];
+      this.formValidate.carTypesName = item.name?item.name :item.title;
+    },
     // 弹框打开关闭
     visible(type) {
       if (type) {
-        this.$refs.proModalForm.resetFields()
+        // this.$refs.proModalForm.resetFields()
       }
     },
     //初始化
-    init(setData) {
+    async init(setData) {
       this.proModal = true;
-      //清空数据重新赋值
-      this.$refs.proModalForm.resetFields();
       this.carList = [];
       this.carItemObj.carName = "";
       this.carItemObj.carBrand = "";
@@ -191,6 +211,7 @@ export const mixPartInfo = {
           this.carItemObj.carName = carModelName[vindex];
           this.carList.push({...this.carItemObj});
         });
+        this.treeInit();
       }else{
         this.carList.push({...this.carItemObj});
       }
@@ -213,6 +234,8 @@ export const mixPartInfo = {
     },
 
     async getPartDetail(row){
+      //清空数据重新赋值
+      this.$refs.proModalForm.resetFields();
       let rep = await getExamineDetail({'id':row.applyNo})
       if (rep.code==0){
         this.init(rep.data);
@@ -225,9 +248,9 @@ export const mixPartInfo = {
       req.page = 1;
       req.pageSize = 500;
       getCarBrandAll(req).then(res => {
-        let arrData = res.data.content || []
+        let arrData = res.data || []
         this.carObj.carBrandData = arrData.map(item => {
-          let obj = {}
+          let obj = {...item};
           obj.id = item.id
           obj.nameCn = item.nameCn
           return obj

@@ -40,7 +40,7 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <InputNumber autofocus :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
           </FormItem>
         </Col>
         <Col span="12">

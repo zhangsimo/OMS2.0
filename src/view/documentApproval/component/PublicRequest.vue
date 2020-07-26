@@ -72,7 +72,7 @@
             </Col>
             <Col span="8">
               <FormItem label="银行账号" prop="receiveBankNo" style="margin-bottom: 0px;border-right: none">
-                <Input type="text" v-model="formInline.receiveBankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
+                <Input type="text" :value="formInline.receiveBankNo|filterApplyNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -101,7 +101,7 @@
             </Col>
             <Col span="6">
               <FormItem label="支付账号"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.paymentBankNo" style="width: 90%;padding-left: 5px" disabled></Input>
+                <Input type="text" :value="formInline.paymentBankNo|filterApplyNo" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
           </Row>

@@ -5,7 +5,6 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
             <Select v-model="purchaseType" class="w90 mr10">
               <Option
@@ -950,7 +949,7 @@ export default {
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
-      this.$refs.SelectPartRef.searchPartLayer = false;
+      // this.$refs.SelectPartRef.searchPartLayer = false;
       this.$Message.success("已添加");
     },
     //分页

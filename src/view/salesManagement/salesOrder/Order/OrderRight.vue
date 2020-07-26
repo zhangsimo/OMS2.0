@@ -15,28 +15,12 @@
           <span class="titler mr5">临时额度:</span>
           <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
           <span class="titler mr5">可用余额:</span>
-          <!--        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>-->
           <span class="titler mr5">{{ limitList.sumAmt  |priceFilters}}</span>
         </div>
         <div class="clearfix purchase pb10" ref="planForm">
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
             <Row>
               <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:260px;"/>
-              <!-- <Select
-                v-model="formPlan.guestId"
-                filterable
-                style="width: 240px"
-                :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-                @on-change="changeClient"
-              >
-                <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-              </Select> -->
-              <!--            <Input-->
-              <!--              class="w240"-->
-              <!--              v-model="formPlan.fullName"-->
-              <!--              :disabled="draftShow != 0"-->
-              <!--              @on-change="changeClient"-->
-              <!--            />-->
               <Button
                 class="ml5"
                 size="small"
@@ -251,6 +235,15 @@
               >编辑发货信息
               </Button>
             </div>
+            <div class="fl mb5">
+              <Button
+                size="small"
+                class="mr10"
+                @click="openAlot"
+              >
+              调拨申请
+              </Button>
+            </div>
           </div>
         </div>
         <vxe-table
@@ -376,6 +369,7 @@
     <Activity ref="activity" @getActivity="activiyList"></Activity>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
+    <alot-model ref="AlotModel"></alot-model>
   </div>
 </template>
 
@@ -412,6 +406,7 @@
     import baseUrl from "_conf/url";
     import {conversionList, conversionListNoNum} from "@/components/changeWbList/changewblist";
     import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
+    import AlotModel from "../components/AlotModel"
 
     export default {
         name: "OrderRight",
@@ -424,7 +419,8 @@
             GodownEntry,
             Activity,
             SeeFile,
-            barch
+            barch,
+            AlotModel
         },
         data() {
             let changeNumber = ({cellValue}) => {
@@ -540,6 +536,18 @@
             }
         },
         methods: {
+            openAlot() {
+              let detailList = JSON.parse(JSON.stringify(this.formPlan.detailList || []));
+              if(!detailList.length) {
+                return this.$message.error("该订单中没有配件数据!");
+              }
+              let arr = detailList.filter(el => el.stockOutQty * 1 > 0);
+              let hasOutQty = arr.length > 0 ? true : false;
+              if(!hasOutQty) {
+                return this.$message.error("明细中无配件缺货！");
+              }
+              this.$refs.AlotModel.init(this.formPlan.serviceId, arr);
+            },
             //获取右侧数据
             async getList() {
                 let data = {};

@@ -149,5 +149,26 @@ export default {
       })
     }
 
+  },
+  filters:{
+    filterApplyNo(v){
+      if(v){
+        let value = [...v];
+        if(value<=4){
+          return value.join('')
+        }else{
+          let arr = value.map((item,index) => {
+            if(index<value.length-4){
+              return "*"
+            }else{
+              return item
+            }
+          })
+          return arr.join('')
+        }
+      }else{
+        return ""
+      }
+    }
   }
 }

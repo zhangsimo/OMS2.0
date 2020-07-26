@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       val: [],
-      searchQuick: "3",
+      searchQuick: "1",
       dateQiuck: [
         { value: "0", label: "请选择" },
         { value: "1", label: "今天" },
@@ -39,7 +39,7 @@ export default {
   props: {},
   created() {},
   mounted() {
-    // this.getval(this.searchQuick)
+    this.getval(this.searchQuick)
   },
   methods: {
     getval(type) {
