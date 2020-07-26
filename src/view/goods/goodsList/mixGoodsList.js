@@ -87,12 +87,11 @@ export const mixGoodsData = {
     };
   },
   mounted() {
-    
+
     let self = tools.getSession("self");
     this.showSelf = Reflect.has(self, "goodsList") ? self.goodsList : true;
 
     getPurchaseInit({}).then(res => {
-      console.log(res)
       //票据类型
       let { invoiceMap, settlementMap } = res.data || {};
       if (invoiceMap) {

@@ -252,7 +252,7 @@ export function partBrandOrgDeleteAll(data) {
 //获取所有车品牌
 export function getCarBrandAll(data) {
   return axios.request({
-    url: `${api.wmsApi}/wbPub/getBrands`,
+    url: `${api.omsProduct}/carBrand/queryByConditions`,
     method: 'post',
     data:data
   })

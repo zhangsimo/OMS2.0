@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -387,6 +387,7 @@ import Monthlyreconciliation from "./components/Monthlyreconciliation";
 import bus from './Popup/Bus'
 import NoTax from "./Popup/noTax";
 export default {
+  name:'accountStatement',
   components: {
     NoTax,
     registrationEntry,
@@ -1149,6 +1150,12 @@ export default {
       this.getAccountStatement()
     })
     this.getShop()
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   filters: {
     date(value = 0) {

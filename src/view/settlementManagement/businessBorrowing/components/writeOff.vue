@@ -10,10 +10,14 @@
         border
         highlight-hover-row
         highlight-current-row
+        height="150"
+        size="mini"
         @current-change="currentChangeEvent"
         :data="tableData"
         align="center"
         :edit-config="{ trigger: 'click', mode: 'cell' }"
+        :edit-rules="validRules"
+        ref="tableXt"
       >
         <vxe-table-column
           field="serviceId"
@@ -77,6 +81,7 @@
         highlight-hover-row
         highlight-current-row
         @radio-change="radioChangeEventCost"
+        size="mini"
         :data="tbdata"
         align="center"
         ref="xTable1"
@@ -90,6 +95,7 @@
         <vxe-table-column field="applicationTime" title="申请时间"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
         <vxe-table-column field="reimbursementAmount" title="报销金额"></vxe-table-column>
+        <vxe-table-column field="paymentBalance" title="报销未核销余额"></vxe-table-column>
         <vxe-table-column field="summary" title="摘要"></vxe-table-column>
       </vxe-table>
       <Page
@@ -120,7 +126,44 @@ export default {
     }
   },
   data() {
+    const amtValid = ({ row, cellValue }) => {
+      return new Promise((resolve, reject) => {
+        if(cellValue&&cellValue>0){
+          if(cellValue>row.totalPrice){
+            reject(new Error("因公借支核销金额不能大于报销未核销余额"));
+
+          }else {
+            resolve();
+          }
+        }else{
+          if(cellValue==0){
+            reject(new Error("因公借支核销金额不能为0"));
+          }else{
+            reject(new Error("因公借支核销金额必填"));
+          }
+        }
+
+
+        // row.paymentReturnBalance <= 0
+        //   ? row.payAmt
+        //   : row.paymentReturnBalance
+        //
+        // let max =
+        //   this.tableData[0].paymentBalance < this.tableData[0].totalPrice ?  this.tableData[0].paymentBalance : this.tableData[0].totalPrice ;
+        // if (cellValue > max) {
+        //   reject(new Error(`因公借支核销金额不能大于借支金额${max}`));
+        // } else {
+        //   resolve(true);
+        // }
+      });
+    };
     return {
+      validRules: {
+        maxWidth:100,
+        writeOffAmount: [
+          {  required: true,validator: amtValid } // message: "因公借支核销金额必填" ,
+        ]
+      },
       show: false,
       disabled: true,
       currRow: null,
@@ -214,29 +257,27 @@ export default {
       }
     },
     async submit() {
-      if (this.tableData[0].writeOffAmount < 0) {
-        return this.$message.error("因公借支核销金额，不能小于0")
-      }
-      let max = this.tableData[0].payAmt > this.tableData[0].totalPrice ? this.tableData[0].totalPrice : this.tableData[0].payAmt;
-      if (this.tableData[0].writeOffAmount > max) {
-        return this.$message.error("因公借支核销金额，不能大于报销金额和因公借支金额中的较小值")
-      }
-      let data = {
-        sourceDto: {
-          id: this.tableData[0].id,
-          rpAmt: this.tableData[0].writeOffAmount,
-        },
-        wrtiteOffDto: {
-          id: this.currRow.id,
-        },
-      }
+      const errMap = await this.$refs.tableXt.validate().catch(errMap => errMap)
+      if(errMap){
 
-      let res = await api.orderWriteOff(data)
-      if (res.code == 0) {
-        this.$message.success(res.data);
-        this.$parent.getQuery();
-        this.query();
-        this.cancel();
+      }else{
+        let data = {
+          sourceDto: {
+            id: this.tableData[0].id,
+            rpAmt: this.tableData[0].writeOffAmount,
+          },
+          wrtiteOffDto: {
+            id: this.currRow.id,
+          },
+        }
+
+        let res = await api.orderWriteOff(data)
+        if (res.code == 0) {
+          this.$message.success(res.data);
+          this.$parent.getQuery();
+          this.query();
+          this.cancel();
+        }
       }
     },
   }

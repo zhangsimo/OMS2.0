@@ -185,7 +185,7 @@
                 <a class="mr10" @click="changeplageFin" v-has="'finChange'">
                   <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
                 </a>
-                <a class="mr10" @click="changePlaceFin" v-has="'finEnable'">{{enAble}}</a>
+                <a class="mr10" @click="changePlaceFin" v-has="'finAble'">{{enAble}}</a>
               </div>
               <div class="financeTab">
                 <Table

@@ -4,7 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span class="mr10">快速查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db mr10">
@@ -18,7 +17,7 @@
             ></DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="form.isEnter" class="w100 mr10" clearable>
+            <Select v-model="form.isEnter" class="w100 mr10" clearable @on-change="search">
               <Option value="0" label="待入库"></Option>
               <Option value="1" label="已入库"></Option>
             </Select>
@@ -48,7 +47,7 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Button type="warning" class="mr20" @click="search(form)">
+            <Button type="warning" class="mr20" @click="search">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
           </div>
@@ -348,6 +347,7 @@ export default {
         this.form.startDate = "";
         this.form.endDate = "";
       }
+      this.search();
     },
     //选择当前行
     currentChangeEvent({ row }) {

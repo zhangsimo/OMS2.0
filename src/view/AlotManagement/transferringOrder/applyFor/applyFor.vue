@@ -6,7 +6,6 @@
           <div class="oper-top flex">
             <div class="wlf">
               <div class="db">
-                <span>快速查询：</span>
                 <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
                 <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
                   <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -279,9 +278,6 @@
           //校验输入框的值
           validRules: {
             applyQty:[{ required: true, validator: changeNumber }]
-            // remark: [
-            //   { required: true, validator:changeNumber }
-            // ]
           },
           options1: {
             disabledDate (date) {

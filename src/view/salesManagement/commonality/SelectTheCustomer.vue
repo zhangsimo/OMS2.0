@@ -82,11 +82,7 @@
                 ></vxe-table-column>
                 <vxe-table-column field="tempCreditLimit" title="临时额度">
                   <template v-slot="{ row }">{{
-                    row.tempEnd == null
-                      ? 0
-                      : Date(row.tempEnd) < Date()
-                      ? row.tempEnd
-                      : 0
+                    s2d(row)
                   }}</template>
                 </vxe-table-column>
                 <vxe-table-column field="" title="可用额度">
@@ -214,6 +210,18 @@ export default {
     // this.getClientTypeList();
   },
   methods: {
+    s2d(row) {
+      let date = row.tempEnd;
+      if(date == null) return 0;
+      date = date.substring(0,19);    
+      date = date.replace(/-/g,'/'); 
+      let timestamp = new Date(date).getTime();
+      let now = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+      if(timestamp < now) {
+        return row.tempCreditLimit
+      }
+      return 0;
+    },
     async show(row) {
       //获取客户额度
       let data = {};

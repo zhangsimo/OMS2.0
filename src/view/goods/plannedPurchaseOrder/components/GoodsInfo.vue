@@ -265,8 +265,8 @@ export default class GoodsInfo extends Vue {
     receiverMobile: [
       {
         required: true,
-        message: "联系电话错误",
-        validator: checkPhone,
+        message: "联系电话不可为空",
+        // validator: checkPhone,
         trigger: "blur"
       }
     ],

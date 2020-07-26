@@ -38,6 +38,8 @@
         highlight-hover-row
         highlight-current-row
         show-footer
+        size="mini"
+        height="200"
         ref="vxtable"
         :footer-method="footerMethod"
         :data="selectArr"
@@ -51,7 +53,7 @@
           </template>
         </vxe-table-column>
         <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
-        <vxe-table-column title="借支金额">
+        <vxe-table-column title="因公借支未核销余额">
           <template v-slot="{ row }">
             <span>
               {{
@@ -135,19 +137,43 @@ export default {
   data() {
     const amtValid = ({ row, cellValue }) => {
       return new Promise((resolve, reject) => {
-        let max =
-          this.tableData[0].paymentBalance < this.tableData[0].totalPrice ?  this.tableData[0].paymentBalance : this.tableData[0].totalPrice ;
-        if (cellValue > max) {
-          reject(new Error(`因公借支核销金额不能大于借支金额${max}`));
-        } else {
-          resolve(true);
+        if(cellValue&&cellValue>0){
+          if(cellValue>(row.paymentReturnBalance <= 0? row.payAmt : row.paymentReturnBalance)){
+            reject(new Error("因公借支核销金额不能大于因公借支未核销余额"));
+
+          }else {
+            if(cellValue>this.tableData[0].paymentBalance){
+              reject(new Error("因公借支核销金额不能大于费用报销核销总金额"));
+            }else{
+              resolve();
+            }
+          }
+        }else{
+          if(cellValue==0){
+            reject(new Error("因公借支核销金额不能为0"));
+          }else{
+            reject(new Error("因公借支核销金额必填"));
+          }
         }
+
+
+        // row.paymentReturnBalance <= 0
+        //   ? row.payAmt
+        //   : row.paymentReturnBalance
+        //
+        // let max =
+        //   this.tableData[0].paymentBalance < this.tableData[0].totalPrice ?  this.tableData[0].paymentBalance : this.tableData[0].totalPrice ;
+        // if (cellValue > max) {
+        //   reject(new Error(`因公借支核销金额不能大于借支金额${max}`));
+        // } else {
+        //   resolve(true);
+        // }
       });
     };
     return {
       validRules: {
         writeOffAmount: [
-          { validator: amtValid } // message: "因公借支核销金额必填" ,
+          {  required: true,validator: amtValid } // message: "因公借支核销金额必填" ,
         ]
       },
       show: false,
@@ -275,7 +301,7 @@ export default {
     selectChangeEvent({ checked, records }) {
       this.selectTmpArr = records || [];
     },
-    ok() {
+    async ok() {
       this.showChild = false;
       this.selectArr = this.selectTmpArr;
       this.selectTmpArr = [];
@@ -305,17 +331,19 @@ export default {
             return "合计";
           }
           if (["writeOffAmount"].includes(column.property)) {
-            if (
-              this.tableData[0].reimbursementAmount <
-              this.tableData[0].totalPrice
-            ) {
-              this.totalfooter =
-                this.tableData[0].reimbursementAmount -
-                xeUtils.sum(data, column.property);
-            } else {
-              this.totalfooter =
-                this.tableData[0].totalPrice -
-                xeUtils.sum(data, column.property);
+            if(this.tableData) {
+              if (
+                this.tableData[0].reimbursementAmount <
+                this.tableData[0].totalPrice
+              ) {
+                this.totalfooter =
+                  this.tableData[0].reimbursementAmount -
+                  xeUtils.sum(data, column.property);
+              } else {
+                this.totalfooter =
+                  this.tableData[0].totalPrice -
+                  xeUtils.sum(data, column.property);
+              }
             }
             return this.totalfooter;
           }
@@ -323,38 +351,42 @@ export default {
         })
       ];
     },
-    submit() {
-      if (this.tableData[0].reimbursementAmount < this.totalPrice) {
-        if (this.totalfooter > this.tableData[0].reimbursementAmount) {
-          return this.$message.error(
-            "因公借支核销总金额不能大于费用报销总金额!"
-          );
-        }
+    async submit() {
+      // if (this.tableData[0].reimbursementAmount < this.totalPrice) {
+      //   if (this.totalfooter > this.tableData[0].reimbursementAmount) {
+      //     return this.$message.error(
+      //       "因公借支核销总金额不能大于费用报销总金额!"
+      //     );
+      //   }
+      // }
+
+      const errMap = await this.$refs.vxtable.validate().catch(errMap => errMap)
+      if(errMap){}else{
+        let data = {
+          sourceDto: {
+            id: this.tableData[0].id,
+            rpAmt: this.totalfooter
+          },
+          wrtiteOffDtos: this.selectArr.map(el => {
+            return { id: el.id, rpAmt: el.writeOffAmount };
+          })
+        };
+
+        api.orderWriteOff2(data).then(res => {
+          if (res.code == 0) {
+            this.$message.success(res.data);
+            this.$parent.getQuery();
+            this.cancel();
+          }
+        });
       }
-
-      this.$refs.vxtable.validate(valid => {
-        if (valid == true || valid === undefined) {
-          let data = {
-            sourceDto: {
-              id: this.tableData[0].id,
-              rpAmt: this.totalfooter
-            },
-            wrtiteOffDtos: this.selectArr.map(el => {
-              return { id: el.id, rpAmt: el.writeOffAmount };
-            })
-          };
-
-          api.orderWriteOff2(data).then(res => {
-            if (res.code == 0) {
-              this.$message.success(res.data);
-              this.$parent.getQuery();
-              this.cancel();
-            }
-          });
-        } else {
-          return this.$message.error("因公借支核销金额不能大于借支金额");
-        }
-      });
+      // this.$refs.vxtable.validate(valid => {
+      //   if (valid == true || valid === undefined) {
+      //
+      //   } else {
+      //     return this.$message.error("因公借支核销金额不能大于借支金额");
+      //   }
+      // });
     }
   }
 };

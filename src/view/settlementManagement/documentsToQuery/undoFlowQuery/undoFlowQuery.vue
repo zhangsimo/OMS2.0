@@ -12,8 +12,8 @@
         @on-change="dateChange"
       ></Date-picker>
       <span class="mr5">分店名称：</span>
-      <Select v-model="shopCode" filterable class="w150 mr15">
-        <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+      <Select v-model="shopCode" filterable class="w150 mr15" :disabled="selectShopList">
+        <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
       </Select>
       <button class="mr15 ivu-btn ivu-btn-default" type="button" @click="query">
         <i class="iconfont iconchaxunicon"></i>
@@ -72,25 +72,34 @@ export default {
     return {
       fno: "", //调拨单号
       value: [],
-      shopList: [{ id: 0, name: "全部" }],
+      shopList: [{ id: 0, shortName: "全部" }],
       shopCode: 0,
       tableData: [] //表格数据
     };
   },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
+  },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    // this.shopCode = arr[1]
-    this.getShop(); //获取门店
+    this.getShop(arr); //获取门店
   },
   methods: {
     //获取门店
-    async getShop() {
+    async getShop(arr) {
       let data = {};
       data.supplierTypeSecond = 0;
       let res = await goshop(data);
-      if (res.code === 0)
-        return (this.shopList = [...this.shopList, ...res.data]);
+      if (res.code === 0){
+        this.shopList = [...this.shopList, ...res.data]
+        if (this.$store.state.user.userData.currentCompany.isMaster){
+          this.shopCode = arr[1]
+        }
+      }
     },
 
     //获取表格数据

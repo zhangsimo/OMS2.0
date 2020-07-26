@@ -1,6 +1,14 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
 
+//转当期损益tab切换查询
+export function getSubjectMsg(data) {
+  return axios.request({
+    url: `${api.wmsApi}/financeManage/selectAccountList`,
+    method: "post",
+    data
+  });
+}
 
 //未核销对账单查询
 export function accountNoSelete(params) {

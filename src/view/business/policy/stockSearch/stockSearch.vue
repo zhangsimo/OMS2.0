@@ -45,6 +45,7 @@
               class="w120 mr10"
               v-model="searchForm.partBrand"
               placeholder="品牌"
+              @on-change="serch"
             >
               <Option
                 v-for="item in partBrandList"
@@ -88,7 +89,7 @@
               class="w120 mr10"
               v-model="searchForm.shelf"
               @on-enter="serch"
-            ></Input>
+            />
             <span class="mr5">显示零库存:</span>
             <Checkbox v-model="searchForm.noStock"></Checkbox>
             <Button type="warning" class="mr10 w90" @click="serch">
@@ -131,6 +132,7 @@
               class="w120 mr10"
               v-model="searchForm1.partBrand"
               placeholder="品牌"
+              @on-change="queryBatch"
             >
               <Option
                 v-for="item in partBrandList"
@@ -214,6 +216,7 @@
                 placeholder="选择公司"
                 filterable
                 clearable
+                @on-change="resetData"
               >
                 <Option
                   v-for="item in hsStore"
@@ -703,6 +706,7 @@ export default {
         option = option.filter(el => el != 1);
       }
       this.searchForm.storeIds = option;
+      this.serch();
     },
     select2(option) {
       if(option.slice(-1)[0] == 1) {
@@ -711,6 +715,7 @@ export default {
         option = option.filter(el => el != 1);
       }
       this.searchForm1.storeIds = option;
+      this.queryBatch();
     },
     getColumns() {
       let arr = [
@@ -901,9 +906,11 @@ export default {
     changecompanyFun() {
       this.searchForm.storeIds = [];
       this.getColumns();
+      this.serch();
     },
     changecompanyFun2() {
       this.searchForm1.storeIds = [];
+      this.queryBatch();
     },
     changeStore() {
       this.serch();
@@ -1080,29 +1087,31 @@ export default {
       data.page = 0;
       data.size = this.contentOne.page.total;
       data.noStock = data.noStock ? 1 : 0;
+      data.isImport = 1;
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content || [];
-        arrData.map((item, index) => {
+        let newData = arrData.map((item1, index) => {
+          let item = {...item1}
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
-              item[b] = item[b].replace(/,/g, "，");
+              item[b] = item[b].replace(/[\r\n,"]/g, "");
             }
           }
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
-          item.partCode = "\t" + item.partCode;
-          item.oemCode = "\t" + item.oemCode;
+          item.partCode = "\t"+item.partCode;
+          item.oemCode = "\t"+item.oemCode;
           return item;
         });
-        if (arrData.length > 0) {
+        if (newData.length > 0) {
           this.$refs.table1.exportCsv({
             filename: "汇总库存",
-            original: false,
+            original: true,
             columns: this.columns1,
-            data: arrData
+            data: newData
           });
         }
       }
@@ -1133,7 +1142,7 @@ export default {
             let objData = { ...item };
             for (let b in objData) {
               if (objData[b] && typeof objData[b] == "string") {
-                objData[b] = objData[b].replace(/,/g, "，");
+                objData[b] = objData[b].replace(/[\r\n,"]/g, "");
               }
             }
             objData.enterPrice = objData.enterPrice.toFixed(2);
@@ -1234,10 +1243,18 @@ export default {
               "enterAmt",
             ].includes(key)
           ) {
-            sums[key] = {
-              key,
-              value: v
-            };
+            if(key=='stockAmt'){
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            }else{
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
+
           } else {
             sums[key] = {
               key,
@@ -1251,7 +1268,7 @@ export default {
           };
         }
       });
-
+      console.log(sums)
       return sums;
     }
   }

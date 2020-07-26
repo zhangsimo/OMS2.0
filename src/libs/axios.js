@@ -3,6 +3,7 @@ import qs from 'qs'
 import baseURL from '_conf/url'
 import Cookies from 'js-cookie'
 import { TOKEN_KEY, REFRESH_TOKEN_KEY, isTokenExpired } from '@/libs/util'
+import { v4 } from "uuid"
 
 let lock = true;
 let isFailure = false;
@@ -55,6 +56,7 @@ class httpRequest {
               config.params.tenantId = res.tenantId || 0
               config.params.shopId = res.shopId || 0
               config.params.shopkeeper = res.shopkeeper || 0
+              config.params.uuid = v4()
             }
             if(config.params.scope == null) {
               if(localStorage.getItem('userScope') != null){

@@ -384,19 +384,20 @@ export const mixPartInfo = {
     //获取所有车型品牌
     getCarBrand() {
       let req = {}
-      req.page = 1;
-      req.pageSize = 500;
+      // req.page = 1;
+      // req.pageSize = 500;
       getCarBrandAll(req).then(res => {
-        let arrData = res.data.content || []
+        let arrData = res.data || []
+        console.log(arrData);
         this.carObj.carBrandData = arrData.map(item => {
-          let obj = {}
+          let obj = {...item};
           obj.id = item.id
           obj.nameCn = item.nameCn
           return obj
         })
-        if (this.formValidate.carBrandName) {
-          this.getCarModelFun();
-        }
+        // if (this.formValidate.carBrandName) {
+        //   this.getCarModelFun();
+        // }
       })
     },
     //获取车型
@@ -635,10 +636,10 @@ export const mixPartInfo = {
               let carBrandName = [];
               let carModelName = [];
               this.carList.map(vb => {
-                let selectBrandData = this.carObj.carBrandData.filter(item => item.nameCn == vb.carBrand);
+                let selectBrandData = this.carObj.carBrandData.filter(item => item.erpCarBrandId == vb.carBrand);
                 if (selectBrandData.length > 0) {
                   carBrand.push(selectBrandData[0].nameCn);
-                  carBrandName.push(selectBrandData[0].nameCn);
+                  carBrandName.push(selectBrandData[0].erpCarBrandId);
                   carModelName.push(vb.carName);
                 }
               });

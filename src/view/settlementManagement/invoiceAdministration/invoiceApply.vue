@@ -20,7 +20,7 @@
           </div>
           <div class="ml20 flexd" >
              <span>分店名称：</span>
-              <Select v-model="form.orgName" style="width:180px">
+              <Select v-model="form.orgName" style="width:180px" :disabled="selectShopList">
                 <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
               </Select>
             <!-- <i class="iconfont iconcaidan input" @click="Dealings(1)"></i> -->
@@ -737,6 +737,12 @@ export default {
       flag: true
     };
   },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
+  },
   methods: {
     //选择查询条件
     chooseTable(num) {
@@ -860,14 +866,11 @@ export default {
         this.proTypeList = [...this.proTypeList , ...res.data]
         this.$nextTick( () => {
           if (localStorage.getItem('oms2-userList')){
-            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+            this.form.orgName = JSON.parse(localStorage.getItem("oms2-userList")).shopId
           } else {
-            this.BranchstoreId = this.$store.state.user.userData.shopId
+            this.form.orgName = this.$store.state.user.userData.shopId
           }
         })
-        if (this.$store.state.user.userData.shopkeeper != 0){
-          this.getThisArea()//获取当前门店地址
-        }
       }
     }
   },

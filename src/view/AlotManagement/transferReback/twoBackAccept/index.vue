@@ -4,7 +4,6 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span>查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
 
@@ -19,14 +18,14 @@
             ></DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="form.status" class="w100 mr10" clearable>
+            <Select v-model="form.status" class="w100 mr10" clearable @on-change="search">
               <Option value="UNACCEPTED" label="待受理"></Option>
               <Option value="ACCEPTED" label="已受理"></Option>
               <Option value="REJECTED" label="已拒绝"></Option>
             </Select>
           </div>
           <div class="db mr10">
-            <Select v-model="form.orgid" class="w100 mr10" placeholder="选择公司" filterable clearable>
+            <Select v-model="form.orgid" class="w100 mr10" placeholder="选择公司" filterable clearable @on-change="search">
               <Option
                 v-for="item in customerListOptions"
                 :value="item.value"
@@ -305,6 +304,7 @@ export default {
     selectDate(val) {
       this.form.commitDateStart = val[0] + " " + "00:00:00";
       this.form.commitDateEnd = val[1] + " " + "23:59:59";
+      this.search();
     },
     changePage(p) {
       this.pageList.page = p

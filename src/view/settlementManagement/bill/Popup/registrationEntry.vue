@@ -340,7 +340,7 @@ export default {
     },
     totalAmtChange($event){
       // let value = v.target.value||0
-      console.log($event)
+      // console.log($event)
     },
     // 数据字典
     getDictionary(dictCode) {
@@ -370,7 +370,7 @@ export default {
               label: item.itemName
             });
           });
-          console.log(this.listType)
+          // console.log(this.listType)
         } else if (res.data[0].dictCode === "INVOICE_TYPE") {
           res.data.map(item => {
             this.invoiceSortList.push({

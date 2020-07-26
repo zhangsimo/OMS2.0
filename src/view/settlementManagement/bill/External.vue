@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150" filterable @on-change="getGeneral">
+            <Select v-model="model1" class="w150" filterable @on-change="getGeneral"  :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -460,6 +460,12 @@ export default {
       company: "", //往来单位
       companyId: "" //往来单位id
     };
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
+    }
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);

@@ -121,7 +121,7 @@
               <div slot="bottom">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">连锁待分配款项</h4>
                 <span class="ml10">区域：</span>
-                <Select v-model="areaId" class="w100" filterable>
+                <Select v-model="areaId" class="w100" filterable :disabled="selectShopList">
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
@@ -129,7 +129,7 @@
                   >{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">门店：</span>
-                <Select v-model="orgId" class="w150" filterable>
+                <Select v-model="orgId" class="w150" filterable :disabled="selectShopList">
                   <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
@@ -574,6 +574,12 @@ export default {
         this.$route.params.data.amountNoCharOffOrUnpaid = this.$route.params.data.noCharOffAmt;
       }
       this.accountNoWriteData.push(this.$route.params.data);
+    }
+  },
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
     }
   },
   methods: {
