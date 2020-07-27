@@ -1108,6 +1108,7 @@ export default {
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
               item[b] = item[b].replace(/[\r\n,"]/g, "");
+              item[b] = "\t"+item[b];
             }
           }
           item.index = index + 1;

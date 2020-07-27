@@ -299,25 +299,31 @@
     </Modal>
     <!--添加-编辑产品线-->
     <Modal :title="proLineTitle" v-model="proLineModel" footer-hide>
-      <Form ref="formValidate" :model="proLineForm" :rules="proLineFormValidate" :label-width="100">
+      <Form ref="proLineForm" :model="proLineForm" :rules="proLineFormValidate" :label-width="100">
         <FormItem label="上级菜单：" prop="parentId">
           <Select :disabled="proLineTitle=='编辑产品线'" v-model="proLineForm.id" placeholder="上级菜单" class="w300">
             <Option v-for="item in treeDataList" v-show="!item.parentId" :value="item.id" :key="item.id">{{ item.title }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="产品线名称：" prop="title">
+
+        <FormItem v-if="proLineSelectData.lever==1" label="品牌名称：" prop="title">
+          <Select placeholder="选择品牌" label-in-value @on-change="proLineBrandNameChange" filterable v-model="proLineBrandName" class="w300">
+            <Option v-for="(item,index) in partBrandData" :disabled="item.isDisable" :value="item.code" :key="index">{{item.name}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem v-else label="产品线名称：" prop="title">
           <Input v-model="proLineForm.title" placeholder="产品线名称" class="w300"></Input>
         </FormItem>
       </Form>
       <div class="tc pb20 pt10">
-        <Button type="primary" class="w80" @click="proLineSubmit('formValidate')">保 存</Button>
+        <Button type="primary" class="w80" @click="proLineSubmit('proLineForm')">保 存</Button>
         <Button @click="proLineModel=false" class="w80" style="margin-left: 8px">取消</Button>
       </div>
     </Modal>
     <!--产品线分配-->
     <Modal title="产品线分配" v-model="proLineDis" footer-hide>
-      <Form ref="formValidate" :model="proLineForm" :rules="proLineFormValidate" :label-width="100">
-        <FormItem label="选择员工：" prop="parentId">
+      <Form ref="formValidate"  :label-width="100">
+        <FormItem label="选择员工：">
           <Select
             v-model="StaffName"
             placeholder="==请选择=="
@@ -330,7 +336,7 @@
             <Option v-for="(option, index) in StaffList" :value="option.id" :key="index">{{option.staffName}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="负责品牌：" prop="title">
+        <FormItem label="负责品牌：">
           <div class="w300" style="height: 200px; overflow-y: auto">
             <el-tree
               :data="treeData"

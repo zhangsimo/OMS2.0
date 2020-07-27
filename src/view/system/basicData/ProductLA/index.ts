@@ -119,12 +119,7 @@ export default class ProductLA extends Vue {
     }
   ]
   /**品牌数据*/
-  private partBrandData = [
-    {
-      name: "全部",
-      code: "9999"
-    }
-    ]
+  private partBrandData:Array<any> = []
   /**选择的品牌*/
   private waitPartTransListBrand='';
   /**一键移入、移出提示*/
@@ -338,7 +333,7 @@ export default class ProductLA extends Vue {
 
     private proLineFormValidate = {
       title:[
-        {required:true,message: '产品线名称必填', trigger: 'blur'}
+        {required:true, message: '名称必填', trigger: 'blur'}
       ]
     }
     //树形列表
@@ -357,6 +352,7 @@ export default class ProductLA extends Vue {
     private loading1:boolean = false;
     private StaffList:Array<any>=[];
     private StaffName:any = "";
+    private proLineBrandName:any = "";
 
 
     // mounted
@@ -376,7 +372,7 @@ export default class ProductLA extends Vue {
       //       })
       //       this.roleOptions.unshift({ label: "全部", value: '全部' })
       //   }
-      //   this.getPartBrandAll()
+
       //获取产品线列表
       this.getProLineList();
       this.$nextTick(()=>{
@@ -498,7 +494,7 @@ export default class ProductLA extends Vue {
       this.selectStaffList=[];
   }
   //获取所有品牌
-  private getPartBrandAll() {
+  private getPartBrandAll(treeData) {
     getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
       if(!res.data){
         return
@@ -506,6 +502,13 @@ export default class ProductLA extends Vue {
       let arrData = res.data.content||[]
       arrData.map(item => {
         this.partBrandData.push(...item.children);
+      })
+      this.partBrandData.map(item => {
+        item.isDisable = false;
+        let brandArr = treeData.filter(item1=>item1.title==item.name)
+        if(brandArr.length>0){
+          item.isDisable = true;
+        }
       })
     });
   }
@@ -601,26 +604,31 @@ export default class ProductLA extends Vue {
 
     //添加产品线
     private addProLine(type){
+      let proLineForm:any = this.$refs.proLineForm;
+      proLineForm.resetFields();
+      this.proLineBrandName = "";
+      // @ts-ignore
+      this.proLineForm = {...this.proLineSelectData};
       if(type=='add'){
         this.proLineTitle = "添加产品线";
-        this.proLineForm = {...this.proLineFormObj};
-        this.proLineSelectData = {};
+        this.proLineForm.title = "";
       }
       if(type=='edit'){
         this.proLineTitle = "编辑产品线"
         if(!this.proLineSelectData.hasOwnProperty("id")){
           return this.$message.error("请选择要编辑的产品线");
-        }else{
-          // @ts-ignore
-          this.proLineForm = {...this.proLineSelectData};
-          // @ts-ignore
-          this.proLineForm.idCopy = this.proLineForm.id;
-          if(!this.proLineForm.parentId){
-            this.proLineForm.id = '000000';
-          }else{
-            this.proLineForm.id = this.proLineForm.parentId;
-          }
         }
+        let selectBrand = this.partBrandData.filter(item => item.name==this.proLineForm.title)
+        if(selectBrand.length>0){
+          this.proLineBrandName = selectBrand[0].code
+        }
+      }
+      // @ts-ignore
+      this.proLineForm.idCopy = this.proLineForm.id;
+      if(!this.proLineForm.parentId){
+        this.proLineForm.id = '000000';
+      }else{
+        this.proLineForm.id = this.proLineForm.parentId;
       }
       this.proLineModel = true;
     }
@@ -665,6 +673,8 @@ export default class ProductLA extends Vue {
         this.treeDataList =[this.treeDataList[0],...rep.data];
 
         this.getProLineDisList(rep.data);
+
+        this.getPartBrandAll(rep.data)
       }
     }
 
@@ -762,6 +772,11 @@ export default class ProductLA extends Vue {
       }
     }
 
+    private proLineBrandNameChange(v){
+      if(v){
+        this.proLineForm.title = v.label
+      }
+    }
 
 
 

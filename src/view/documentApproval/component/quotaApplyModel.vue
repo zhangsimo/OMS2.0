@@ -26,7 +26,7 @@
               <Input :value="data.tempCreditLimit || 0" style="width: 150px" disabled></Input>
             </FormItem>
             <FormItem label="预收款:">
-              <Input :value="payable.preAmt || 0" style="width: 150px" disabled></Input>
+              <Input :value="data.preAmt || 0" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -71,7 +71,7 @@
               ></Input>
             </FormItem>
             <FormItem label="当前应付账款:">
-              <Input v-model="payable.payableAmt || 0" style="width: 150px" disabled></Input>
+              <Input v-model="data.payableAmt || 0" style="width: 150px" disabled></Input>
             </FormItem>
             <FormItem label="信用等级:">
               <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
@@ -85,42 +85,42 @@
               <Input :value="sum" style="width: 150px" disabled></Input>
             </FormItem>
             <FormItem label="当前应收账款:">
-              <Input v-model="payable.receivableAmt || 0" style="width: 150px" disabled></Input>
+              <Input v-model="data.receivableAmt || 0" style="width: 150px" disabled></Input>
             </FormItem>
             <FormItem label="调整前剩余额度:">
-              <Input v-model="sum2" style="width: 150px" disabled></Input>
+              <Input v-model="data.beforeAdjustQuota" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="调整后累计额度:">
               <Input
-                :value="(data.applyQuota*1||0) + (data.creditLimit*1||0)+(data.tempCreditLimit*1 || 0)+(data.tempQuota*1||0)"
+                :value="(+data.applyQuota+data.creditLimit) + (+data.tempQuota + data.beforeAdjustTempQuota)"
                 style="width: 150px"
                 disabled
               ></Input>
             </FormItem>
             <FormItem label="当前欠款总额:">
-              <Input v-model="payable.sumAmt || 0 " style="width: 150px" disabled></Input>
+              <Input v-model="data.sumAmt || 0 " style="width: 150px" disabled></Input>
             </FormItem>
             <FormItem label="调整后剩余额度:">
-              <Input v-model="sum3" style="width: 150px" disabled></Input>
+              <Input v-model="data.afterAdjustQuota||0" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="8">
             <FormItem label="当前应收30天内:">
-              <Input v-model="payable.thirtyAmt || 0" style="width: 150px" disabled></Input>
+              <Input v-model="data.thirtyAmt || 0" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="当前应收30-60天:">
-              <Input v-model="payable.sixtyAmt || 0" style="width: 150px" disabled></Input>
+              <Input v-model="data.sixtyAmt || 0" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="当前应收60天以上:">
-              <Input v-model="payable.moreSixtyAmt || 0" style="width: 150px" disabled></Input>
+              <Input v-model="data.moreSixtyAmt || 0" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
         </Row>
@@ -333,6 +333,7 @@
       sum2() {
         let sum =this.data.creditLimit*1 + this.data.tempCreditLimit*1-this.payable.receivableAmt*1-this.payable.occupyAmt*1+this.payable.preAmt*1
         this.beforeAdjustQuota = isNaN(sum) ? 0 : sum;
+        console.log(this.data.creditLimit*1,this.data.tempCreditLimit*1,this.payable.receivableAmt,this.payable.occupyAmt,this.payable.preAmt)
         return isNaN(sum) ? 0 : sum;
       },
       //调整后剩余额度
