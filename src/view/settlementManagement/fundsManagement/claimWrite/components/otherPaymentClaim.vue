@@ -551,6 +551,7 @@ export default {
           return
         }else if(data.claimMoney>Math.abs(this.accrued[0].paidMoney)){
           this.$Message.error("本次认领金额不可大于支付金额")
+          return
         }
         if (this.claimTit == "预付款认领") {
           data.subjectCode = "2203";
