@@ -218,9 +218,9 @@
                   >{{ item.label }}</Option>
                 </Select>
                 <span class="mr5 ml10">应收返利请示单号</span>
-                <Input type="text" v-model="Rebateid" class="w60 tc" />
+                <Input type="text" icon="code" v-model="Rebateid" class="w60 tc" @on-click="openSelect(request)"/>
                 <span class="mr5 ml10">应收坏账请示单号</span>
-                <Input type="text" v-model="BadDebtid" class="w60 tc" />
+                <Input type="text" icon="code" v-model="BadDebtid" class="w60 tc" @on-click="openSelect(request2)"/>
                 <span class="ml10" style="color:red">*</span>
                 <span class="mr5">备注</span>
                 <Input type="text" v-model="remark" class="w260 tc" />
@@ -347,6 +347,9 @@
         <Button type="primary" @click="addNewSupplier">确定</Button>
         <Button type="default" @click="clientDataShow2=false">取消</Button>
       </div>
+      <!--    选择的模态框-->
+      <requestCode ref="request" @backList="getBackList"></requestCode>
+      <requestCode ref="request2" @backList="getBackList2"></requestCode>
     </Modal>
   </div>
 </template>
@@ -355,7 +358,7 @@
 import selectDealings from "./component/selectCompany";
 import ClientData from "../../system/essentialData/clientManagement/ClientData"
 import ClientData2 from "../../system/essentialData/supplierManagement/ClientData"
-
+import requestCode from "@/view/documentApproval/component/popWindow/RequestCode"
 
 import {getCustomerDetails,getNewClient,getClientTreeList} from "../../../api/system/essentialData/clientManagement";
 import {getSupplierTreeList,getNewSupplier} from "../../../api/system/essentialData/supplierManagement";
@@ -381,7 +384,8 @@ export default {
   components: {
     selectDealings,
     ClientData,
-    ClientData2
+    ClientData2,
+    requestCode
   },
   data() {
     const roleValid = ({ cellValue ,row}) => {
@@ -832,6 +836,17 @@ export default {
     query() {
       this.moreSearch = {};
       this.Initialization();
+    },
+    //打开模态框
+    openSelect(request) {
+      this.$refs.request.open();
+    },
+    //获取选择的信息
+    getBackList(row) {
+      this.$set(this.Rebateid, row.applyNo);
+    },
+    getBackList2(row) {
+      this.$set(this.BadDebtid, row.applyNo);
     },
     // 计算应收业务销售出库/退货对账的总计
     collectSum(sumData){

@@ -212,6 +212,7 @@
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" ></vxe-table-column>
+                  <vxe-table-column field="partInnerId" title="配件内码" width="100"></vxe-table-column>
                 </vxe-table>
               </div>
             </Split>
@@ -742,28 +743,30 @@ export default {
       this.$refs.printBox.openModal();
     },
     async chuku() {
-      const params = {
-        id: this.Leftcurrentrow.id,
-        voList: this.ArrayValue,
-        storeId:this.Leftcurrentrow.storeId
-      };
-      // 配件组装作废
-      let res = await outDataList(params);
-      // console.log("res", res);
-      if (res.code == 0) {
-        this.getList(this.form);
-        this.$Message.success("入库成功");
-        this.reload();
-        return;
-      }
-      if(res && res.message && res.message.indexOf("成功") > -1) {
-        this.reload();
-        return;
-      }
-      // if(res.message.indexOf("成功") > -1) {
-      //   this.Status = 1;
-      // }
-      // this.reload();
+      this.$Modal.confirm({
+          title: "是否确定入库？",
+          onOk: async () => {
+            const params = {
+              id: this.Leftcurrentrow.id,
+              voList: this.ArrayValue,
+              storeId:this.Leftcurrentrow.storeId
+            };
+            // 配件组装作废
+            let res = await outDataList(params);
+            // console.log("res", res);
+            if (res.code == 0) {
+              this.getList(this.form);
+              this.$Message.success("入库成功");
+              this.reload();
+              return;
+            }
+            if(res && res.message && res.message.indexOf("成功") > -1) {
+              this.reload();
+              return;
+            }
+          },
+          onCancel: () => {}
+        });
     },
     searchPro(params, size, page) {
       chengping({ ...params }, size, page)

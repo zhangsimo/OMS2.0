@@ -297,24 +297,95 @@ export default class ProductLA extends Vue {
     // 上传地址
     private upurl:string = api.upxlxs;
 
+
+
+  private defaultProps = {
+    children: 'children',
+    label: 'title'
+  }
+  private columns1:Array<any> = [
+    {
+      title: '序号',
+      type: 'index',
+      width:"100",
+    },
+    {
+      title: '员工名称',
+      key: 'userName',
+      align:"center"
+    },
+    {
+      title: '角色',
+      key: 'roleName',
+      align:"center"
+    }
+    ];
+    private tableHeight:number = 0;
+    private data1:Array<any> = [];
+    private proLineTitle:string = "添加产品线";
+    private proLineModel:boolean = false;
+
+    private proLineFormObj = {
+      id:"000000",
+      parentId:"",
+      title:""
+    }
+    private proLineForm = {
+      id:"000000",
+      parentId:"",
+      title:""
+    }
+
+    private proLineSelectData = {};
+
+    private proLineFormValidate = {
+      title:[
+        {required:true,message: '产品线名称必填', trigger: 'blur'}
+      ]
+    }
+    //树形列表
+    private treeData:Array<any> = [];
+
+    private treeDataList:Array<any> = [
+      {
+        id:"000000",
+        parentId:"",
+        title:"顶级"
+      }
+    ]
+
+    //产品线分配
+    private proLineDis:boolean = false;
+    private loading1:boolean = false;
+    private StaffList:Array<any>=[];
+    private StaffName:any = "";
+
+
     // mounted
     private async mounted() {
-      let data:any = {}
-          data.systemType = 0
-          data.page = 0
-          data.size = 1000
-        this.getStaff();
-        const roles = await api.getRoles(data)
-        if (roles.code == 0) {
-            this.roleOptions = roles.data.content.map((el: any) => {
-                return {
-                    label: el.displayName,
-                    value: el.displayName
-                }
-            })
-            this.roleOptions.unshift({ label: "全部", value: '全部' })
-        }
-        this.getPartBrandAll()
+      // let data:any = {}
+      //     data.systemType = 0
+      //     data.page = 0
+      //     data.size = 1000
+      //   this.getStaff();
+      //   const roles = await api.getRoles(data)
+      //   if (roles.code == 0) {
+      //       this.roleOptions = roles.data.content.map((el: any) => {
+      //           return {
+      //               label: el.displayName,
+      //               value: el.displayName
+      //           }
+      //       })
+      //       this.roleOptions.unshift({ label: "全部", value: '全部' })
+      //   }
+      //   this.getPartBrandAll()
+      //获取产品线列表
+      this.getProLineList();
+      this.$nextTick(()=>{
+        let tableWrap:any = this.$refs.tabelWrap;
+        // @ts-ignore
+        this.tableHeight = tableWrap.offsetHeight-50;
+      })
     }
 
     // methods
@@ -530,6 +601,172 @@ export default class ProductLA extends Vue {
         }
     }
 
+    //添加产品线
+    private addProLine(type){
+      if(type=='add'){
+        this.proLineTitle = "添加产品线";
+        this.proLineForm = {...this.proLineFormObj};
+        this.proLineSelectData = {};
+      }
+      if(type=='edit'){
+        this.proLineTitle = "编辑产品线"
+        if(!this.proLineSelectData.hasOwnProperty("id")){
+          return this.$message.error("请选择要编辑的产品线");
+        }else{
+          // @ts-ignore
+          this.proLineForm = {...this.proLineSelectData};
+          // @ts-ignore
+          this.proLineForm.idCopy = this.proLineForm.id;
+          if(!this.proLineForm.parentId){
+            this.proLineForm.id = '000000';
+          }else{
+            this.proLineForm.id = this.proLineForm.parentId;
+          }
+        }
+      }
+      this.proLineModel = true;
+    }
+
+    private proLineSubmit(v){
+      let refsName:any = this.$refs[v];
+      refsName.validate(async (valid) => {
+        if (valid) {
+          let req = {...this.proLineForm}
+          if(this.proLineTitle=="添加产品线"){
+            if(req.id=="000000"){
+              Reflect.deleteProperty(req,'parentId');
+            }else{
+              req.parentId = req.id
+            }
+            Reflect.deleteProperty(req,'id');
+          }
+          if(this.proLineTitle=="编辑产品线"){
+            // @ts-ignore
+            req.id = req.idCopy
+            Reflect.deleteProperty(req,'idCopy');
+          }
+          let rep = await api.addOrEditProLine(req);
+          if(rep.code==0){
+            this.$message.success("添加成功");
+            this.proLineModel = false;
+            this.proLineForm = this.proLineFormObj;
+            this.proLineSelectData = {};
+            this.getProLineList();
+          }
+        }
+      })
+    }
+    //获取产品线列表
+    private async getProLineList(){
+      let rep = await api.getProLine();
+      if(rep.code==0){
+        this.treeData = rep.data.filter(item => item.lever===0);
+        this.treeData.map(item => {
+          item.children = rep.data.filter(item1 => item1.lever===1&&item1.parentId==item.id);
+        })
+        this.treeDataList =[this.treeDataList[0],...rep.data];
+
+        this.getProLineDisList(rep.data);
+      }
+    }
+
+    //产品线点击选中
+    private handleNodeClick(data){
+      this.proLineSelectData = {...data}
+      let sourceData:Array<any> = [];
+      if(data.lever==0){
+        sourceData = this.treeDataList.filter(item => item.parentId==data.id)
+      }else{
+        sourceData.push(data)
+      }
+      this.getProLineDisList(sourceData);
+    }
+
+    //删除产品线
+    private async deleteProLine(){
+      if(!this.proLineSelectData.hasOwnProperty("id")){
+        return this.$message.error("请选择要删除的数据")
+      }
+      let rep = await api.deleteProLine(this.proLineSelectData);
+      if(rep.code==0){
+        this.$message.success("删除成功")
+        this.getProLineList();
+      }
+    }
+    //打开产品线分配层
+    private disProLine(){
+      this.proLineDis = true;
+      this.StaffName = "";
+      let treeRef:any = this.$refs.tree;
+      treeRef.setCheckedKeys([]);
+      this.StaffName = "";
+      this.StaffList = [];
+    }
+
+    //获取员工
+    private async getStaffList(query){
+      if (query !== '') {
+        this.loading1 = true;
+        let rep = await api.getAllStaff({"staffName":query});
+        this.loading1 = false;
+        if(rep.code==0){
+          this.StaffList = rep.data.content||[]
+        }
+      } else {
+        this.StaffList = [];
+      }
+    }
+
+    private async proLineDisSubmit(){
+      if(this.StaffName){
+        let treeRef:any = this.$refs.tree;
+        let treeSelectData = treeRef.getCheckedNodes();
+        let newArr = treeSelectData.filter(item => item.id&&item.lever==1).map(item => item.id)
+        let reqArr:Array<any> = [];
+        if(newArr.length>0){
+          newArr.map(item => {
+            let req:any = {
+              userId:this.StaffList[0].id,
+              userName:this.StaffList[0].staffName,
+              roleName:this.StaffList[0].roles&&this.StaffList[0].roles.length>0?this.StaffList[0].roles[0].displayName:"",
+              classTypeId:item
+            }
+            reqArr.push(req)
+          })
+        }else{
+          let req:any = {
+            userId:this.StaffList[0].id,
+            userName:this.StaffList[0].staffName,
+            roleName:this.StaffList[0].roles&&this.StaffList[0].roles.length>0?this.StaffList[0].roles[0].displayName:""
+          }
+          reqArr.push(req)
+        }
+        let rep = await api.setProLineDis(reqArr)
+        if(rep.code==0){
+          this.$message.success("分配成功");
+          this.getProLineList();
+          this.proLineDis = false;
+        }
+      }else{
+        this.$message.error("请选择员工");
+      }
+    }
+
+    async getProLineDisList(ids){
+      let arrData = ids.filter(item => item.lever==1).map(item => {
+        let objData:any = {}
+        objData.id = item.id;
+        return objData
+      })
+      let rep = await api.getProLineDis(arrData)
+      if(rep.code==0){
+        this.data1 = rep.data||[];
+      }
+    }
+
+
+
+
     // 查询待分配列表
     private queryWaitPart() {
         this.getwaitEmps();
@@ -682,5 +919,18 @@ export default class ProductLA extends Vue {
 
     private down() {
         down('1100000000');
+    }
+
+    private async selectStaff(v){
+      if(v){
+        let req = {
+          userId:v
+        }
+        let rep = await api.getAllocatedProLine(req);
+        if(rep.code==0){
+          let treeRef:any = this.$refs.tree;
+          treeRef.setCheckedNodes(rep.data);
+        }
+      }
     }
 }

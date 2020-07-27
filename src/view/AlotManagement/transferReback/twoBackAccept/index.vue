@@ -175,6 +175,7 @@
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
+          <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
           <vxe-table-column field="applyQty" title="申请退回数量"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>

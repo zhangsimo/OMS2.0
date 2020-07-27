@@ -247,7 +247,7 @@ export default {
             partIds: this.tbdata.map(el => el.partId),
         }
         let res = await api.partStock(data);
-        if(res.code == 0 && Array.isArray(res.data)) {
+        if(res.code == 0 && Array.isArray(res.data) && res.data.length > 0) {
           res.data.forEach(el => {
             this.tbdata.forEach(item => {
               if(el.partId === item.partId) {
@@ -255,12 +255,25 @@ export default {
               }
             })
           })
+        } else {
+          this.tbdata.forEach(item => {
+            item.itQty = 0;
+          })
         }
         this.tbdata.push();
     },
     // 调入仓库下拉改变事件
     selectStoreId(val) {
       // console.log(val)
+    },
+    // 是否紧俏品
+    async isT() {
+      let data = {
+        orgid: this.isInternalId,
+        partIds: this.tbdata.map(el => el.partId),
+      }
+      let res = await api.findAllByDTO(data);
+      return res.data || [];
     },
     currentChangeEvent({ row }) {
       this.currRow = row;
@@ -299,6 +312,14 @@ export default {
     save() {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
+          let arr = await this.isT();
+          arr.forEach(el => {
+            this.tbdata.forEach(item => {
+              if(el.partId === item.partId) {
+                item.isTight = 1;
+              }
+            })
+          })
           let data = {}
           data.guestId = this.guestidId;
           data.guestOrgid = this.isInternalId;
@@ -306,7 +327,7 @@ export default {
           data.storeId = this.formPlan.storeId;
           data.remark = this.formPlan.remark;
           data.orderDate = tools.transTime(this.formPlan.orderDate);
-          data.detailVOS = this.tbdata;
+          data.detailVOS = [...this.tbdata];
           let res = await api.allotApplySave(data);
           this.$message.success("操作成功!");
           this.cancel();

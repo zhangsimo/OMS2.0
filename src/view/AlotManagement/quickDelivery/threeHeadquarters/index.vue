@@ -191,6 +191,7 @@
           ></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
+          <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
         </vxe-table>
       </div>
     </section>

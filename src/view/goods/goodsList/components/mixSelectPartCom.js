@@ -225,7 +225,7 @@ export const mixSelectPartCom = {
     init() {
       this.searchPartLayer = true;
       this.partName = "";
-      this.getPartBrandAll();
+      // this.getPartBrandAll();
       this.getCarClassifysFun();
       this.getList();
     },

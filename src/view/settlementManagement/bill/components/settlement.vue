@@ -129,7 +129,11 @@
             <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-            <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+            <vxe-table-column field="paidMoney" title="支出金额">
+              <template v-slot="{row}">
+                {{Math.abs(row.paidMoney)}}
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
@@ -380,6 +384,9 @@ export default {
             return "合计";
           }
           if (["incomeMoney", "paidMoney"].includes(column.property)) {
+            if(["paidMoney"].includes(column.property)){
+              return Math.abs(this.$utils.sum(data, column.property)).toFixed(2);
+            }
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           return null;
@@ -398,7 +405,8 @@ export default {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
         sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });
-      this.check = (sum1 - sum2 - sum3).toFixed(2);
+      //this.check = (sum1 - sum2 - sum3).toFixed(2);
+      this.check = (Math.abs(sum3) - Math.abs(sum1)).toFixed(2);
     }
   }
 };
