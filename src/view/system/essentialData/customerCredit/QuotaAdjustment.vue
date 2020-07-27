@@ -25,7 +25,7 @@
       <FormItem label='应收60天以上:' >
         <Input v-model='dataMsg.moreSixtyAmt' style="width: 180px" disabled></Input>
       </FormItem>
-      <FormItem label='客户当前额度:' >
+      <FormItem label='客户当前总额度:' >
         <Input v-model='+data.creditLimit + data.tempCreditLimit' style="width: 180px" disabled></Input>
       </FormItem>
       <FormItem label='调整后固定额度:' prop="fixationQuotaTotal">
