@@ -1,6 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 // @ts-ignore
 import * as api from "_api/system/ProductLA.js";
+import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
+
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 // @ts-ignore
@@ -931,7 +933,7 @@ export default class ProductLA extends Vue {
     }
 
     private down() {
-        api.down('1100000000');
+        down('1100000000');
     }
 
     private async selectStaff(v){
