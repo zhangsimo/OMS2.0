@@ -3,66 +3,76 @@
     <div id="printBox" style="height: 600px">
       <div class="titler">
         <Row style="border: 1px #000000 solid;color:#000;">
-          <Col span="12" class="pl10">
+          <Col span="16" class="pl10">
             <h5
-              style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
+              style="font-size: 20px;line-height: 44px;"
             >{{onelist.guestVO.fullName}}</h5>
           </Col>
-          <Col span="12" class="pl10">
-            <p>调拨入库单</p>
-            <p>No: {{onelist.enterOrder.serviceId}}</p>
+          <Col span="8" class="pl10">
+            <p style="font-weight: 600;font-size: 12px">调拨入库单</p>
+            <p style="font-size: 12px">No: {{onelist.enterOrder.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="16" class="pl10">
             <p>
-              <span>地址:{{onelist.guestVO.addr || onelist.guestVO.streetAddress}}</span>
+              <span style="font-size: 12px">地址:{{onelist.guestVO.addr || onelist.guestVO.streetAddress}}</span>
             </p>
             <p>
-              <span>电话:{{onelist.guestVO.tel}}</span>
-            </p>
-          </Col>
-          <Col span="12" class="pl10">
-            <p>
-              <span>订单日期:</span>
-              <span>{{onelist.enterOrder.orderDate}}</span>
-            </p>
-            <p>
-              <span>打印日期:</span>
-              <span>{{printDate}}</span>
-            </p>
-          </Col>
-        </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <p>
-              <span>调出方:</span>
-              <span>{{onelist.applyGuest.fullName}}</span>
-            </p>
-            <p>
-              <span>地址:</span>
-              <span>{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
-            </p>
-          </Col>
-          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <p>
-              <span>联系人:</span>
-              <span>{{onelist.applyGuest.contactor}}</span>
-            </p>
-            <p>
-              <span>入库仓库:</span>
-              <span>{{onelist.store.name}}</span>
+              <span style="font-size: 12px">电话:{{onelist.guestVO.tel}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>联系电话:</span>
-              <span>{{onelist.applyGuest.tel}}</span>
+              <span style="font-size: 12px">订单日期:</span>
+              <span style="font-size: 12px">{{onelist.enterOrder.orderDate}}</span>
             </p>
             <p>
-              <span>备注:</span>
-              <span>{{onelist.enterOrder.remark}}</span>
+              <span style="font-size: 12px">打印日期:</span>
+              <span style="font-size: 12px">{{printDate}}</span>
             </p>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
+          <Col span="10" class="pl10" style="border-right: 1px #000000 solid">
+            <p>
+              <span style="font-size: 12px">调出方:</span>
+              <span style="font-size: 12px">{{onelist.applyGuest.fullName}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">地址:</span>
+              <span style="font-size: 12px">{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
+            </p>
+          </Col>
+          <Col span="4" class="pl10" style="border-right: 1px #000000 solid">
+            <p>
+              <span style="font-size: 12px">联系人:</span>
+              <span style="font-size: 12px">{{onelist.applyGuest.contactor}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">入库仓库:</span>
+              <span style="font-size: 12px">{{onelist.store.name}}</span>
+            </p>
+          </Col>
+          <Col span="10" class="pl10">
+            <p>
+              <span style="font-size: 12px">联系电话:</span>
+              <span style="font-size: 12px">{{onelist.applyGuest.tel}}</span>
+            </p>
+            <Row>
+              <Col span="12">
+                <p>
+                  <span style="font-size: 12px">备注:</span>
+                  <span style="font-size: 12px">{{ onelist.remark }}</span>
+                </p>
+              </Col>
+              <Col span="12">
+                <p>
+                  <span style="font-size: 12px">出库仓库:</span>
+                  <span style="font-size: 12px">{{onelist.storeName}}</span>
+                </p>
+              </Col>
+            </Row>
           </Col>
         </Row>
 <!--        <Table-->
@@ -78,34 +88,34 @@
         <table class="gridtable">
           <thead>
           <tr>
-            <th>序号</th>
-            <th>配件编码</th>
-            <th>配件名称</th>
+            <th style="width:40px">序号</th>
+            <th style="width:90px">配件编码</th>
+            <th style="width:90px">配件名称</th>
+            <th style="max-width:90px;white-space:nowrap;overflow: hidden;">OEM码</th>
             <th>品牌</th>
-            <th>品牌车型</th>
+            <th style="max-width: 40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th>规格	</th>
             <th>单位	</th>
             <th>数量</th>
-            <th>单价</th>
-            <th>金额</th>
-            <th>仓库	</th>
-            <th>仓位</th>
+            <th style="width:50px">单价</th>
+            <th style="width:50px">金额</th>
+            <th style="width:50px">仓位</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item ,index) in onelist.enterOrder.voList" :key="index">
-            <td>{{index + 1}}</td>
-            <td>{{item.partCode}}</td>
-            <td>{{item.partName}}</td>
+            <td style="width:40px">{{index + 1}}</td>
+            <td style="width:90px">{{item.partCode}}</td>
+            <td style="width:90px">{{item.partName}}</td>
+            <td style="max-width: 80px;white-space:nowrap;overflow:hidden;">{{item.oemCode}}</td>
             <td>{{item.partBrand}}</td>
-            <td>{{item.carModelName}}</td>
+            <td style="max-width: 40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td>{{item.orderPrice}}</td>
-            <td>{{item.orderAmt}}</td>
-            <td>{{item.storeName}}</td>
-            <td>{{item.storeShelf}}</td>
+            <td style="width:50px">{{item.orderPrice}}</td>
+            <td style="width:50px">{{item.orderAmt}}</td>
+            <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>
         </table>
@@ -234,8 +244,16 @@ export default {
         if (res.code == 0) {
           this.printShow = true;
           this.onelist = res.data;
-          console.log(this.onelist)
           this.totalQty = this.onelist.enterOrder.voList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
+          if(this.onelist.enterOrder.voList==[] || this.onelist.enterOrder.voList==undefined){
+            this.onelist.storeName=""
+          }else{
+            this.onelist.enterOrder.voList.map((item,index)=>{
+              if(index==0){
+                this.onelist.storeName=item.storeName
+              }
+            })
+          }
         }
       } else {
         this.$message.error("至少选择一条信息");
@@ -283,28 +301,31 @@ export default {
 table.gridtable {
   width: 100%;
   font-family: verdana,arial,sans-serif;
-  font-size:11px;
+  font-size:12px !important;
   color:#000000;
   border-width: 1px;
   border-color: #000000;
-  text-align: center;
+  text-align: left;
   border-collapse: collapse;
 }
 table.gridtable th {
   border-width: 1px;
-  padding: 8px;
+  padding: 4px;
   border-style: solid;
   border-color: #000000;
   background-color: #dedede;
 }
 table.gridtable td {
   border-width: 1px;
-  padding: 8px;
+  padding: 4px;
   border-style: solid;
   border-color: #000000;
   background-color: #ffffff;
 }
 table.gridtable tr {
   page-break-inside:avoid;
+}
+table.gridtable tr th{
+  font-weight: 400 !important;
 }
 </style>

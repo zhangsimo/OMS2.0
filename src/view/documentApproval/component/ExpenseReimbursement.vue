@@ -124,7 +124,8 @@
               name: 'select',
               options: invoiceMap,
               attrs: { disabled: false },
-              optionProps: { value: 'itemCode', label: 'itemName' }
+              optionProps: { value: 'itemCode', label: 'itemName' },
+              events: { change: changeExpenseType2 }
             }"
           ></vxe-table-column>
           <vxe-table-column
@@ -238,6 +239,7 @@
 
         <h5 class="mt20 mb10" style="font-size: 18px">收款人信息</h5>
         <div class="proceeds">
+          <Checkbox v-model="formInline.accountType" class="ml10">是否搜索内部员工</Checkbox>
           <Row>
             <Col span="8">
               <FormItem
@@ -259,9 +261,9 @@
                 >
                   <Option
                     v-for="item in options1"
-                    :value="item.value"
-                    :key="item.value"
-                    >{{ item.label }}</Option
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.accountName }}</Option
                   >
                 </Select>
               </FormItem>
