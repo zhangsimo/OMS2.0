@@ -408,7 +408,6 @@ export default {
         let res = await api.findByAccountNo({ accountNo: this.$parent.serviceId });
         if(res.code == 0) {
           this.recordLists = res.data;
-          console.log(this.recordLists)
         }
       }
     },
