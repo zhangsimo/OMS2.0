@@ -8,8 +8,8 @@ import {
   getDictionary,
   getExpSve
 } from "_api/documentApproval/ExpenseReimbursement";
-import { getThisAllList } from "@/api/documentApproval/documentApproval/documentApproval";
-import { getDigitalDictionary } from "../../../../api/system/essentialData/clientManagement";
+import { getThisAllList ,getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
+import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import { getPost } from "../utils";
 
 export default {
@@ -170,14 +170,15 @@ export default {
     async open() {
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
-      if(this.$route.name === "documentApproval-myApplication") {
-        this.options1 = this.list.allSalesList;
-      }
+      // if(this.$route.name === "documentApproval-myApplication") {
+      //   this.options1 = this.list.allSalesList;
+      // }
       this.payUserList = this.list.payList;
       this.modelType = false;
       this.getRate();
       this.$refs["formInline"].resetFields();
       this.formInline = {};
+      this.formInline.accountType = true;
       this.$refs.upImg.uploadListModal = [];
       this.$refs.upImg.uploadList = [];
       this.model = true;
@@ -212,21 +213,19 @@ export default {
       }
     },
 
-    remoteMethod1(query) {
+   async remoteMethod1(query) {
       this.options1 = [];
       if (query !== "") {
         this.loading1 = true;
-        this.options1 = [];
-        const list = this.payeeList.map(item => {
-          return {
-            value: item.value,
-            label: item.label
-          };
-        });
-        this.options1 = list.filter(
-          item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
-        );
-        this.loading1 = false;
+        let data = {}
+        data.accountName = query
+        data.page = 0
+        data.size = 100
+        let res = await getBackList(data)
+        if(res.code == 0){
+          this.loading1 = false
+          this.options1 = res.data.content || []
+        }
       } else {
         this.options1 = [];
       }
@@ -267,9 +266,9 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      let arr = this.payeeList.filter(item => item.value == row.value);
-      this.formInline.receiveBank = arr[0].receiveBank || "";
-      this.formInline.receiveBankNo = arr[0].receiveBankNo || "";
+      let arr = this.options1.filter(item => item.id == row.value);
+      this.formInline.receiveBank = arr[0].accountBank || "";
+      this.formInline.receiveBankNo = arr[0].accountBankNo || "";
     },
 
     //判断表格是否可以编辑
@@ -485,6 +484,7 @@ export default {
               content: '处理中...',
               duration: 0
             });
+            this.formInline.accountType = this.formInline.accountType ? 1 : 0
             let res = await getExpSve(this.formInline);
             msg();
             if (res.code == 0) {
