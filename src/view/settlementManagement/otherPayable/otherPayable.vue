@@ -476,7 +476,7 @@ export default {
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
-          console.log(res.data.content)
+          // console.log(res.data.content)
           this.page.total = res.data.totalElements;
         }
       });
