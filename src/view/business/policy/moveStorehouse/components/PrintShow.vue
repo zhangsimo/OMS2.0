@@ -207,8 +207,10 @@
               // 重新加载页面，以刷新数据
               window.location.reload();
               // document.body.innerHTML = oldstr;
+              this.orderQty=0
             },
             openModal(id, status){
+              this.orderQty=0
                 //let order = this.$store.state.dataList.oneOrder
                 if(id){
                     let data ={}

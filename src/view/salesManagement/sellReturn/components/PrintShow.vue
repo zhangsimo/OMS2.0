@@ -84,8 +84,8 @@
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td style="width:50px">{{item.orderPrice}}</td>
-            <td style="width:50px">{{item.orderAmt}}</td>
+            <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
             <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>
