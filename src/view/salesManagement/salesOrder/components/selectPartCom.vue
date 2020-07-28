@@ -12,7 +12,7 @@
           @on-enter="search"
         ></Input>
 
-        <Select
+        <!-- <Select
           placeholder="选择品牌"
           filterable
           v-model="selectBrand"
@@ -24,7 +24,7 @@
             :key="index"
             >{{ item.name }}</Option
           >
-        </Select>
+        </Select> -->
         <Button @click="search" class="mr10" type="primary"
           ><Icon type="ios-search" size="14" /> 查询</Button
         >

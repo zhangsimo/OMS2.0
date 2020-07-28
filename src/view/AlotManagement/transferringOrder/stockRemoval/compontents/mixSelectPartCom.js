@@ -62,7 +62,11 @@ export const mixSelectPartCom = {
         {
           title: "品牌",
           key: "partBrand",
-          minWidth: 120
+          minWidth: 120,
+          filters: [],
+          filterMethod(value, row) {
+            return row.partBrand.indexOf(value) > -1;
+          }
         },
         {
           title: "品质",
@@ -224,6 +228,13 @@ export const mixSelectPartCom = {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
+        this.bands = [];
+        let arr = res.data.content.map(el => el.partBrand);
+        let set = new Set(arr);
+        set.forEach(el => {
+          this.bands.push({label: el, value: el});
+        })
+        this.columnsPart[7].filters = this.bands;
       });
     },
 
@@ -279,7 +290,7 @@ export const mixSelectPartCom = {
     init() {
       this.searchPartLayer = true;
       this.getList();
-      this.getPartBrandAll();
+      // this.getPartBrandAll();
       this.getCarClassifysFun();
     },
     //配件表格点击的行

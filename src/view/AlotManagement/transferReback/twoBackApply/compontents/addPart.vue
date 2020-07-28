@@ -13,12 +13,12 @@
         <div class="db mr5">
           <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
         </div>
-        <div class="db mr5">
+        <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
           <Select  v-model="partBrand" filterable style="width:140px" class="mr20">
             <Option v-for="(item, index) in bands" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
-        </div>
+        </div> -->
         <div class="db mr5"><span>入库日期:</span></div>
         <div class="db mr5">
           <DatePicker
@@ -75,7 +75,7 @@
         <vxe-table-column  field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
         <vxe-table-column  field="oemCode" title="OE码"></vxe-table-column>
-        <vxe-table-column  field="partBrand" title="品牌"></vxe-table-column>
+        <vxe-table-column  field="partBrand" title="品牌" :filters="[]" :filter-method="filterNameMethod"></vxe-table-column>
         <vxe-table-column  field="enterQty" title="库存数量"></vxe-table-column>
         <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
         <vxe-table-column  field="enterUnitId" title="单位"></vxe-table-column>
@@ -146,7 +146,9 @@
 
     private partBrand:any = '' //获取当前品牌code
 
-    private bands: Array<any> =[{ value: "0", label: "全部" }] //品牌列表
+    private bands: Array<any> =[] //品牌列表
+    private filters: Array<any> =[] //品牌列表
+    
 
     private tableDataBm: Array<any> = new Array();
 
@@ -209,7 +211,7 @@
 
 //生命周期
     created () {
-      this.getBand() //调用品牌接口
+      // this.getBand() //调用品牌接口
     }
 
     private showModel(name) {
@@ -226,6 +228,10 @@
       this.auditDate = new Array();
       this.tableDataBm = new Array();
       this.partId = "";
+    }
+
+    private filterNameMethod({ value, row, column }) {
+      return row.partBrand.indexOf(value) > -1
     }
 
     //点击全选
@@ -309,6 +315,16 @@
       if(res.code == 0) {
         this.page.total = res.data.totalElements;
         this.tableData = res.data.content;
+        this.filters = [];
+        let arr = res.data.content.map(el => el.partBrand);
+        let set = new Set(arr);
+        set.forEach(el => {
+          this.filters.push({label: el, value: el});
+        })
+        const xTable:any = this.$refs.xTable1;
+        const column = xTable.getColumnByField('partBrand');
+        xTable.setFilter(column, this.filters);
+        xTable.updateData();
       }
     }
 
