@@ -124,7 +124,8 @@
               name: 'select',
               options: invoiceMap,
               attrs: { disabled: false },
-              optionProps: { value: 'itemCode', label: 'itemName' }
+              optionProps: { value: 'itemCode', label: 'itemName' },
+              events: { change: changeExpenseType2 }
             }"
           ></vxe-table-column>
           <vxe-table-column

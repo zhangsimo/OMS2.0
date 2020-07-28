@@ -59,10 +59,10 @@ export default {
         topic: [{ required: true, message: "主题为必填", trigger: "blur" }],
         receiverId: [
           { required: true, message: "收款人账户为必填", trigger: "change" }
-        ],
+        ],//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
         receiveBank: [
           { required: true, message: "开户行名称必填", trigger: "blur" }
-        ],
+        ],//开户行只显示 /^(\d{6})\d+(\d{4})$/
         paymentAccount: [
           {
             required: true,
@@ -70,10 +70,10 @@ export default {
             message: "付款账户必选",
             trigger: "change"
           }
-        ],
+        ],//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
         receiveBankNo: [
           { required: true, message: "银行账号必填", trigger: "blur" }
-        ]
+        ]//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
       },
 
       //费用类型列表
@@ -184,7 +184,7 @@ export default {
       if (this.list.type == 1) {
         this.details = [];
         let arr = [
-          { expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0 }
+          { expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0 ,billTypeId :"010102"}
         ];
         this.$set(this.formInline, "expenseDetails", arr);
 
@@ -328,8 +328,11 @@ export default {
     //修改费用类型改变科目
     changeExpenseType({ row }) {
       row.accountEntry = "";
+      console.log(this.formInline)
     },
-
+    changeExpenseType2({row}){
+      console.log(row)
+    },
     //价税合计变更计算
     gettotal(v) {
       let row = v.row,
@@ -398,6 +401,7 @@ export default {
       data.totalAmt = 0;
       data.taxRateCode = "TR001";
       data.taxAmt = 0;
+      data.billTypeId = "010102"
       this.formInline.expenseDetails.splice(1, 0, data);
     },
 
