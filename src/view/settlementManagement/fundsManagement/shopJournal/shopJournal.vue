@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea' disabled>
+            <Select  v-model="model1" filterable class="w150"  :disabled="selectShopList" @on-change = 'changeArea'>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150" disabled>
+            <Select  v-model="shopCode" filterable class="w150"   :disabled="selectShopList">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -340,8 +340,12 @@
       this.getAllAre() //获取区域
       this.getShop()  //获取门店
       this.getSubject()//获取科目
-
-
+    },
+    computed:{
+      selectShopList(){
+        let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        return canSelect
+      }
     },
     methods: {
 
@@ -353,8 +357,21 @@
 
       //当前非管理员状态情况下获取门店地址
       async getThisArea(){
-        let arr = this.shopList.filter( item=> item.id == this.shopCode)
-        this.model1 = arr[0].supplierTypeSecond
+        // let arr = this.shopList.filter( item=> item.id == this.shopCode)
+        // this.model1 = arr[0].supplierTypeSecond
+        let data ={}
+        data.supplierTypeSecond = this.model1
+        this.shopList = [{id:0 , name:'全部'}]
+        let res = await goshop(data)
+        if (res.code === 0) {
+          this.shopList = [...this.shopList , ...res.data]
+          this.$nextTick( () => {
+            this.shopCode = 0
+          })
+          if (this.$store.state.user.userData.shopkeeper != 0){
+            this.getThisArea()//获取当前门店地址
+          }
+        }
       },
 
       // //切换地址重新调取门店接口

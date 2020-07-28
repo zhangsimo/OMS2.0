@@ -294,7 +294,7 @@
     <Modal v-model="accountLayer" class="accountLayer" title="高级查询" width="400">
       <p>
         <span class="sp-l">转单日期：</span>
-        <DatePicker type="daterange" placeholder="转单日期" style="width: 200px" @on-change="changedate"></DatePicker>
+        <DatePicker type="daterange" v-model="moreSearch.accountDate" placeholder="转单日期" style="width: 200px" @on-change="changedate"></DatePicker>
       </p>
       <p>
         <span class="sp-l">业务类型：</span>
@@ -1521,6 +1521,7 @@ export default {
     //更多查询
     moreAccountShow(){
       this.accountLayer = true;
+      this.moreSearch={}
     },
     // 选择日期
     changedate(daterange) {
@@ -1528,6 +1529,8 @@ export default {
     },
     moreOk(){
       this.Initialization();
+      this.accountLayer=false;
+      this.moreSearch={}
     },
     rowClassName (row, index) {
       if (row.existDraft === 1) {

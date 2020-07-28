@@ -179,10 +179,10 @@ export default {
           this.onelist = res.data;
           this.onelist.printDate = tools.transTime(new Date());
           this.details = res.data.details;
-          if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
+          if(this.details==[] || this.details==undefined){
             this.onelist.storeName=""
           }else{
-            this.onelist.detailList.map((item,index)=>{
+            this.details.map((item,index)=>{
               if(index==0){
                 this.onelist.storeName=item.storeName
               }
