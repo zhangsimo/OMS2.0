@@ -557,7 +557,7 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList(this.form);
+    // this.getList(this.form);
     //调取仓库
     this.getWareHouse();
     this.getArrayParams();
