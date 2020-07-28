@@ -336,6 +336,7 @@
           ></vxe-table-column>
           <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
           <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
+          <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
         </vxe-table>
       </Form>
     </div>
