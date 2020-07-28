@@ -385,6 +385,7 @@
                   title="规格"
                   width="100"
                 ></vxe-table-column>
+                <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->

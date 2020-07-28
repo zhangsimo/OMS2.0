@@ -275,3 +275,12 @@ export function allotApplySave (data) {
     data
   })
 }
+
+// 是否紧俏品
+export function findAllByDTO (data) {
+  return axios.request({
+    url: `${api.wmsApi}/tightPart/findAllByDTO`,
+    method: 'post',
+    data
+  })
+}

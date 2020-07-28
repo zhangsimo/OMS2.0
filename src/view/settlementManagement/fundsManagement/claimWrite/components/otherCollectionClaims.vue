@@ -125,7 +125,7 @@
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
 import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import claimGuest from "@/view/settlementManagement/otherPayable/components/claimGuest";
+import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
 
 import {findGuest} from "@/api/settlementManagement/advanceCollection.js";
 import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";

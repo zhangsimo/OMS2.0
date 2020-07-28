@@ -84,7 +84,7 @@
               @on-page-size-change="sizeChangeNo"
             />
           </div>
-          <div slot="right" class="h500">
+          <div slot="right" style="height:100%">
             <Split v-model="split2" mode="vertical">
               <div slot="top">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>

@@ -2,19 +2,33 @@
   <div>
     <Modal v-model="modal" :title="claimTit" width="800" footer-hide>
       <Row class="dbd" v-if="claimTit=='预付款认领'">
-        <i-col span="12">
+        <i-col span="8">
           <button
             class="ivu-btn ivu-btn-default mr10"
             type="button"
             @click="openClimed()"
           >{{claimTit}}</button>
         </i-col>
-        <i-col span="12">
+        <i-col span="6">
           <Checkbox
             v-model="voucherinputModel"
             :checked.sync="voucherinputModel"
             @change="changeModel"
           >是否不生成预付款单号</Checkbox>
+        </i-col>
+        <i-col span="10" v-show="voucherinputModel">
+          <Form :model="formValidate" ref="form" :rules="ruleValidate">
+            <FormItem label="选择辅助核算" prop="voucherInput">
+              <Row>
+                <i-col span="8">
+                  <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
+                </i-col>
+                <i-col span="2">
+                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
+                </i-col>
+              </Row>
+            </FormItem>
+          </Form>
         </i-col>
       </Row>
       <Row class="dbd" v-else>
@@ -526,11 +540,12 @@ export default {
       if (this.voucherinputModel) {
         let data = {};
         data.detailId = this.accrued[0].id;
-        if(this.accrued[0].balanceMoney==undefined){
-          data.claimMoney=this.accrued[0].rpAmt
-        }else{
-          data.claimMoney=this.accrued[0].balanceMoney
-        }
+        // if(this.accrued[0].balanceMoney==undefined){
+        //   data.claimMoney=this.accrued[0].rpAmt
+        // }else{
+        //   data.claimMoney=this.accrued[0].balanceMoney
+        // }
+        data.claimMoney=this.accrued[0].rpAmt||this.accrued[0].balanceMoney;
         if(data.claimMoney==null || data.claimMoney<=0){
           this.$Message.error("本次认领金额不可为零或小于零")
           return
