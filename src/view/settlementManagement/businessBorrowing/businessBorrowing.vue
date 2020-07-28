@@ -328,7 +328,7 @@
       width="1000"
       @on-visible-change="visChangeClaim"
     >
-      <span>往来单位：</span>
+      <!-- <span>往来单位：</span>
       <Select
         v-model="companyId"
         class="w150"
@@ -342,7 +342,7 @@
         <Option v-for="item in company" :value="item.value" :key="item.value">{{
           item.label
         }}</Option>
-      </Select>
+      </Select> -->
       <span class="ml10">金额：</span>
       <InputNumber v-model="amt" class="w50" />
       <span class="ml10">对方户名：</span>
@@ -417,6 +417,7 @@ export default {
   data() {
     return {
       remoteloading: false,
+      loanId: "",
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
@@ -494,12 +495,12 @@ export default {
     //其他收款认领弹窗查询
     claimedList(type) {
       let obj = {
-        loanId: this.currRow.id,
+        loanId: this.loanId,
         amount: this.amt,
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size,
         amountType: type,
-        guestId: this.companyId
+        suppliers: this.companyId
       };
       if (this.bankNameO) {
         obj.reciprocalAccountName = this.bankNameO;
@@ -690,6 +691,7 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.currRow = row;
+      this.loanId = row.id;
       this.$store.commit("setLoanId", row.id);
       // this.reconciliationStatement.accountNo = row.serviceId;
       this.serviceId = row.serviceId;
