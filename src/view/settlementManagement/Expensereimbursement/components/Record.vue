@@ -1,13 +1,14 @@
 <template>
-  <Table
-    class="mt10"
-    border
-    show-summary
-    :summary-method="handleSummary"
-    :columns="columns1"
-    :data="recordLists"
-    max-height="300px"
-  ></Table>
+  <div>
+    <Table
+      class="mt10"
+      border
+      show-summary
+      :summary-method="handleSummary"
+      :columns="columns1"
+      :data="recordLists"
+    ></Table>
+  </div>
 </template>
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
