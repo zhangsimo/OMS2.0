@@ -405,7 +405,7 @@ export default {
     }
   },
   methods: {
-    async getOne(query) {
+    getOne(query) {
       this.company = [];
       if (query != "") {
         this.remoteloading = true;
@@ -425,6 +425,19 @@ export default {
         this.company = [];
       }
     },
+    // // 往来单位选择
+    // async getOne() {
+    //   findGuest({ size: 2000 }).then(res => {
+    //     if (res.code === 0) {
+    //       res.data.content.map(item => {
+    //         this.company.push({
+    //           value: item.id,
+    //           label: item.fullName
+    //         });
+    //       });
+    //     }
+    //   });
+    // },
     //获取门店
     async getShop(){
       let data ={}
@@ -689,19 +702,6 @@ export default {
         } else {
           this.reason = "";
           this.revoke = false;
-        }
-      });
-    },
-    // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
-            });
-          });
         }
       });
     },
