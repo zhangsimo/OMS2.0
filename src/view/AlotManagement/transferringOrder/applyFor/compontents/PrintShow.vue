@@ -113,8 +113,8 @@
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td style="width:50px">{{item.orderPrice}}</td>
-            <td style="width:50px">{{item.orderAmt}}</td>
+            <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
             <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>
@@ -255,15 +255,6 @@ export default {
           // this.onelist.printDate = tools.transTime(new Date());
           this.details = res.data.detailVOS;
           this.logistics = res.data.logisticsRecordVO;
-          if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
-            this.onelist.storeName=""
-          }else{
-            this.onelist.detailList.map((item,index)=>{
-              if(index==0){
-                this.onelist.storeName=item.storeName
-              }
-            })
-          }
         }
       } else {
         this.$message.error("至少选择一条信息");

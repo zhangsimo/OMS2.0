@@ -19,7 +19,7 @@
               <Option
                 v-for="(item,index) in Branchstore"
                 :value="item.id"
-                :key="index"
+                :key="item.id"
                 >{{ item.name }}</Option
               >
             </Select>
@@ -602,7 +602,6 @@ export default {
     async getTable() {
       let userdata = this.$store.state.user.userData;
       this.store = userdata.shopId;
-      this.Branchstore = [{ id: this.store, name: userdata.tenantCompanyName }];
       this.oneList = [];
       let params = {
         shopNumber: this.store,
