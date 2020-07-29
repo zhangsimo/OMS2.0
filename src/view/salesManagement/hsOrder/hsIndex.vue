@@ -282,204 +282,244 @@
           {
             title: "序号",
             width: 50,
-            type: "index"
+            type: "index",
+            tooltip: true,
           },
           {
             title: "序号",
             type: "selection",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "订单单号",
             key: "ordersNo",
-            minWidth: 150
+            minWidth: 150,
+            tooltip: true,
           },
           {
             title: "下单门店",
             key: "companyName",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "备注",
             key: "remark",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "配件内码",
             key: "partInnerId",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "配件编码",
             key: "partCode",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "配件名称",
             key: "partName",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "规格",
             key: "unit",
-            minWidth: 60
+            minWidth: 60,
+            tooltip: true,
           },
           {
             title: "OEM码",
             key: "oemCode",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "实物码",
             key: "inkindNo",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "订单数量",
             key: "orderQty",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "转销售订单数",
             key: "sellOrderQty",
-            minWidth: 100
+            minWidth: 100,
+            tooltip: true,
           },
           {
             title: "转调拨单数",
             key: "allotOrderQty",
-            minWidth: 100
+            minWidth: 100,
+            tooltip: true,
           },
           {
             title: "本店库存",
             key: "shopStock",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "总部库存",
             key: "headquartersStock",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "配件品质",
             key: "partQuality",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "品牌",
             key: "partBrand",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "厂牌",
             key: "carBrandName",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "品牌车型",
             key: "carModelName",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "单位",
             key: "spec",
-            minWidth: 60
+            minWidth: 60,
+            tooltip: true,
           },
           {
             title: "一级分类",
             key: "carTypef",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "二级分类",
             key: "carTypes",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "订单来源",
             key: "orderSource",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "订单人",
             key: "createUname",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "订单日期",
             key: "createTime",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
         ],
         columnsPart2: [
           {
             title: "序号",
             width: 50,
-            type: "index"
+            type: "index",
+            tooltip: true,
           },
           {
             title: "订单单号",
             key: "ordersNo",
-            minWidth: 150
+            minWidth: 150,
+            tooltip: true,
           },
           {
             title: "下单门店",
             key: "companyName",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "备注",
             key: "remark",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "配件内码",
             key: "partInnerId",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "配件编码",
             key: "partCode",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "配件名称",
             key: "partName",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "规格",
             key: "unit",
-            minWidth: 60
+            minWidth: 60,
+            tooltip: true,
           },
           {
             title: "OEM码",
             key: "oemCode",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "实物码",
             key: "inkindNo",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "订单数量",
             key: "orderQty",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "转销售订单数",
             key: "sellOrderQty",
-            minWidth: 100
+            minWidth: 100,
+            tooltip: true,
           },
           {
             title: "转调拨单数",
             key: "allotOrderQty",
-            minWidth: 100
+            minWidth: 100,
+            tooltip: true,
           },
           {
             title: "处理数量",
             key: "setOrderNum",
             minWidth: 100,
+            tooltip: true,
             render:(h,p) => {
               return h('span',p.row.sellOrderQty||p.row.allotOrderQty)
             }
@@ -490,82 +530,98 @@
             minWidth: 100,
             render:(h,p) => {
               return h('span',p.row.state===1?"转销售订单":"转调拨订单")
-            }
+            },
+            tooltip: true,
           },
           {
             title: "生成单号",
             key: "serviceId",
-            minWidth: 200
+            minWidth: 200,
+            tooltip: true,
           },
           {
             title: "处理人",
             key: "updateUname",
-            minWidth: 100
+            minWidth: 100,
+            tooltip: true,
           },
           {
             title: "处理日期",
             key: "updateTime",
-            minWidth: 150
+            minWidth: 150,
+            tooltip: true,
           },
           {
             title: "本店库存",
             key: "shopStock",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "总部库存",
             key: "headquartersStock",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "配件品质",
             key: "partQuality",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "品牌",
             key: "partBrand",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "厂牌",
             key: "carBrandName",
-            minWidth: 80
+            minWidth: 80,
+            tooltip: true,
           },
           {
             title: "品牌车型",
             key: "carModelName",
-            minWidth: 120
+            minWidth: 120,
+            tooltip: true,
           },
           {
             title: "单位",
             key: "spec",
-            minWidth: 60
+            minWidth: 60,
+            tooltip: true,
           },
           {
             title: "一级分类",
             key: "carTypef",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "二级分类",
             key: "carTypes",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "订单来源",
             key: "orderSource",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "订单人",
             key: "createUname",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
           {
             title: "订单日期",
             key: "createTime",
-            minWidth: 180
+            minWidth: 180,
+            tooltip: true,
           },
         ],
         loading:false,
