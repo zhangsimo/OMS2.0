@@ -409,200 +409,7 @@ export default {
       // 汇总库存列表
       columns1: [],
       //批次库存列表
-      columns2: [
-        {
-          title: "序号",
-          key: "index",
-          align: "center",
-          minWidth: 100,
-          tooltip: true
-        },
-        {
-          title: "配件编码",
-          align: "center",
-          minWidth: 80,
-          key: "partCode",
-          tooltip: true
-        },
-        {
-          title: "配件名称",
-          align: "center",
-          key: "partName",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "OE码",
-          align: "center",
-          key: "oemCode",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "品牌",
-          align: "center",
-          key: "partBrand",
-          minWidth: 120,
-          filters: [],
-          filterMethod(value, row) {
-            return row.partBrand.indexOf(value) > -1;
-          },
-          tooltip: true
-        },
-        {
-          title: "品牌车型",
-          align: "center",
-          key: "carModelName",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "单位",
-          align: "center",
-          key: "enterUnitId",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "规格",
-          align: "center",
-          key: "spec",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "配件内码",
-          align: "center",
-          key: "partInnerId",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "入库数量",
-          align: "center",
-          key: "enterQty",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "可售数量",
-          align: "center",
-          key: "outableQty",
-          minWidth: 80,
-          tooltip: true
-        },
-        {
-          title: "仓库",
-          align: "center",
-          key: "storeName",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "库存单价",
-          align: "center",
-          key: "enterPrice",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.enterPrice.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "库存金额",
-          align: "center",
-          key: "enterAmt",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.enterAmt.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "税率",
-          align: "center",
-          key: "taxRate",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "不含税单价",
-          align: "center",
-          key: "noTaxPrice",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.noTaxPrice.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "不含税金额",
-          align: "center",
-          key: "noTaxAmt",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.noTaxAmt.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "连锁库龄",
-          align: "center",
-          key: "chainStockAge",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "本店库龄",
-          align: "center",
-          key: "branchStockAge",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "滞销",
-          align: "center",
-          key: "isUnsalable",
-          render: (h, params) => {
-            let tex = params.row.isUnsalable == 0 ? "否" : "是";
-            return h("span", {}, tex);
-          },
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "入库单号",
-          align: "center",
-          key: "serviceId",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "第一供应商",
-          align: "center",
-          key: "originGuestName",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "最近供应商",
-          align: "center",
-          key: "guestName",
-          minWidth: 120,
-          tooltip: true
-        },
-        {
-          title: "机构名称",
-          align: "center",
-          key: "orgName",
-          minWidth: 120,
-          tooltip: true
-        }
-      ],
+      columns2: [],
       // 汇总库存的数据
       contentOne: {
         //数据
@@ -977,10 +784,237 @@ export default {
           tooltip: true
         }
       ];
+      let arr2 = [
+        {
+          title: "序号",
+          key: "index",
+          align: "center",
+          minWidth: 100,
+          tooltip: true
+        },
+        {
+          title: "配件编码",
+          align: "center",
+          minWidth: 80,
+          key: "partCode",
+          tooltip: true
+        },
+        {
+          title: "配件名称",
+          align: "center",
+          key: "partName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "OE码",
+          align: "center",
+          key: "oemCode",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "品牌",
+          align: "center",
+          key: "partBrand",
+          minWidth: 120,
+          filters: [],
+          filterMethod(value, row) {
+            return row.partBrand.indexOf(value) > -1;
+          },
+          tooltip: true
+        },
+        {
+          title: "品牌车型",
+          align: "center",
+          key: "carModelName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "单位",
+          align: "center",
+          key: "enterUnitId",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "规格",
+          align: "center",
+          key: "spec",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "配件内码",
+          align: "center",
+          key: "partInnerId",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "入库数量",
+          align: "center",
+          key: "enterQty",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "可售数量",
+          align: "center",
+          key: "outableQty",
+          minWidth: 80,
+          tooltip: true
+        },
+        {
+          title: "仓库",
+          align: "center",
+          key: "storeName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "库存单价",
+          align: "center",
+          key: "enterPrice",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.enterPrice.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "库存金额",
+          align: "center",
+          key: "enterAmt",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.enterAmt.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "税率",
+          align: "center",
+          key: "taxRate",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "含税单价",
+          align: "center",
+          key: "taxPrice",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.taxPrice || 0;
+            tex = tex.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "含税金额",
+          align: "center",
+          key: "taxAmt",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.taxAmt || 0;
+            tex = tex.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "不含税单价",
+          align: "center",
+          key: "noTaxPrice",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.noTaxPrice.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "不含税金额",
+          align: "center",
+          key: "noTaxAmt",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.noTaxAmt.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "连锁库龄",
+          align: "center",
+          key: "chainStockAge",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "本店库龄",
+          align: "center",
+          key: "branchStockAge",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "滞销",
+          align: "center",
+          key: "isUnsalable",
+          render: (h, params) => {
+            let tex = params.row.isUnsalable == 0 ? "否" : "是";
+            return h("span", {}, tex);
+          },
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "入库日期",
+          align: "center",
+          key: "enterDate",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "入库单号",
+          align: "center",
+          key: "serviceId",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "第一供应商",
+          align: "center",
+          key: "originGuestName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "最近供应商",
+          align: "center",
+          key: "guestName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "机构名称",
+          align: "center",
+          key: "orgName",
+          minWidth: 120,
+          tooltip: true
+        }
+      ];
       if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
-        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
+        this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
       } else {
         this.columns1 = arr;
+        this.columns2 = arr2;
       }
     },
     changecompanyFun() {
@@ -1336,7 +1370,8 @@ export default {
               "pchRoadQty",
               "attotRoadQty",
               "onRoadQty",
-              "enterAmt"
+              "enterAmt",
+              "taxAmt",
             ].includes(key)
           ) {
             if (key == "stockAmt") {
