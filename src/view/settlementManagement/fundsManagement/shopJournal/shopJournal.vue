@@ -286,8 +286,9 @@
   import {creat} from '../../components'
   import importXLS from '@/view/settlementManagement/components/importXLS'
   import artificial from '../../components/artificial'
-  import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are  , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getTableList}from '@/api/accountant/accountant'
+  import { goshop } from "@/api/settlementManagement/shopList";
   import amtData from '../../components/amtData'
   import changeJournal from '../components/changeJournal'
 
@@ -312,9 +313,7 @@
         ],
         model1: 0, //获取到地址id
         shopCode:0,//获取到门店id
-        shopList: [
-          {id:0 , name:'全部'}
-        ], //门店列表
+        shopList: [], //门店列表
         subjectCode:0,//科目id
         subJectList:[
           {id:0 ,titleName:'全部'}
@@ -337,8 +336,11 @@
     async mounted () {
       let arr = await creat (this.$refs.quickDate.val,this.$store)
       this.value = arr[0]
+      this.$nextTick( () => {
+        this.shopCode = arr[1]
+      })
       this.getAllAre() //获取区域
-      this.getShop()  //获取门店
+      this.getThisArea()
       this.getSubject()//获取科目
     },
     computed:{
@@ -348,13 +350,11 @@
       }
     },
     methods: {
-
       //获取全部地址
       async getAllAre(){
         let res = await are()
         if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
       },
-
       //当前非管理员状态情况下获取门店地址
       async getThisArea(){
         // let arr = this.shopList.filter( item=> item.id == this.shopCode)
@@ -365,15 +365,8 @@
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList , ...res.data]
-          this.$nextTick( () => {
-            this.shopCode = 0
-          })
-          if (this.$store.state.user.userData.shopkeeper != 0){
-            this.getThisArea()//获取当前门店地址
-          }
         }
       },
-
       // //切换地址重新调取门店接口
       changeArea(){
         if (this.$store.state.user.userData.shopkeeper == 0) {
@@ -381,23 +374,22 @@
           this.getShop()
         }
       },
-
       //获取门店
-      async getShop(){
-        let data ={}
-        data.supplierTypeSecond = this.model1
-        this.shopList = [{id:0 , name:'全部'}]
-        let res = await goshop(data)
-        if (res.code === 0) {
-          this.shopList = [...this.shopList , ...res.data]
-            this.shopCode = this.$store.state.user.userData.shopId
-            if (this.$store.state.user.userData.shopkeeper != 0){
-              this.getThisArea()//获取当前门店地址
-            }
-
-        }
-      },
-
+      // async getShop(){
+      //   let data ={}
+      //   data.supplierTypeSecond = this.model1
+      //   this.shopList = [{id:0 , name:'全部'}]
+      //   let res = await goshop(data)
+      //   if (res.code === 0) {
+      //     this.shopList = [...this.shopList , ...res.data]
+      //   }
+      // },
+      // async getShop() {
+      //   let data = {};
+      //   let res = await goshop(data);
+      //   if (res.code === 0)
+      //     return (this.shopList = [...this.shopList, ...res.data]);
+      // },
       //获取科目
       async getSubject(){
         let data = {}

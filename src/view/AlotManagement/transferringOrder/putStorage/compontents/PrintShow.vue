@@ -245,15 +245,15 @@ export default {
           this.printShow = true;
           this.onelist = res.data;
           this.totalQty = this.onelist.enterOrder.voList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
-          if(this.onelist.enterOrder.voList==[] || this.onelist.enterOrder.voList==undefined){
-            this.onelist.storeName=""
-          }else{
-            this.onelist.enterOrder.voList.map((item,index)=>{
-              if(index==0){
-                this.onelist.storeName=item.storeName
-              }
-            })
-          }
+          // if(this.onelist.enterOrder.voList==[] || this.onelist.enterOrder.voList==undefined){
+          //   this.onelist.storeName=""
+          // }else{
+          //   this.onelist.enterOrder.voList.map((item,index)=>{
+          //     if(index==0){
+          //       this.onelist.storeName=item.storeName
+          //     }
+          //   })
+          // }
         }
       } else {
         this.$message.error("至少选择一条信息");

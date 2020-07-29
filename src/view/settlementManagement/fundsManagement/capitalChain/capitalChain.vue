@@ -278,7 +278,8 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
-  import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { goshop } from "@/api/settlementManagement/shopList";
   import {getTableList}from '@/api/accountant/accountant'
   import amtData from '../../components/amtData'
 
@@ -301,9 +302,7 @@
         ],
         model1: 0, //获取到地址id
         shopCode:0,//获取到门店id
-        shopList: [
-          {id:0 , name:'全部'}
-        ], //门店列表
+        shopList: [], //门店列表
         subjectCode:0,//科目id
         subJectList:[
           {id:0 ,titleName:'全部'}
@@ -326,6 +325,9 @@
     async mounted () {
       let arr = await creat (this.$refs.quickDate.val,this.$store)
       this.value = arr[0]
+      this.$nextTick( () => {
+        this.shopCode = arr[1]
+      })
       this.getAllAre() //获取区域
       this.getShop()  //获取门店
       this.getSubject()//获取科目
@@ -351,8 +353,8 @@
         data.shopNumber = this.$store.state.user.userData.shopId
         data.tenantId = this.$store.state.user.userData.tenantId
         let res = await are(data)
-        if (res.code === 0){
-        this.model1 = 0
+          if (res.code === 0){
+          this.model1 = 0
         }
       },
 
@@ -369,16 +371,10 @@
         let data ={}
         data.supplierTypeSecond = this.model1
         this.shopList = [{id:0 , name:'全部'}]
-       let res = await goshop(data)
-       if (res.code === 0) {
-         this.shopList = [...this.shopList , ...res.data]
-         this.$nextTick( () => {
-           this.shopCode = 0
-         })
-         if (this.$store.state.user.userData.shopkeeper != 0){
-           this.getThisArea()//获取当前门店地址
+         let res = await goshop(data)
+         if (res.code === 0) {
+           this.shopList = [...this.shopList , ...res.data]
          }
-       }
       },
 
       //获取科目
