@@ -21,8 +21,7 @@
                   v-for="item in purchaseTypeArr"
                   :value="item.value"
                   :key="item.value"
-                  >{{ item.label }}</Option
-                >
+                  >{{ item.label }}</Option>
               </Select>
             </div>
             <div class="db">

@@ -3,33 +3,33 @@
     <div id="printBox" style="height: 600px">
       <div class="titler">
         <Row style="border: 1px #000000 solid;color:#000;">
-          <Col span="12" class="pl10">
+          <Col span="16" class="pl10">
             <h5
-              style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
+              style="font-size: 20px;line-height: 44px;"
             >{{onelist.guestVO.fullName}}</h5>
           </Col>
-          <Col span="12" class="pl10">
-            <p>调出退回入库</p>
-            <p>No: {{onelist.enterOrder.serviceId}}</p>
+          <Col span="8" class="pl10">
+            <p style="font-weight:600;font-size: 12px">调出退回入库</p>
+            <p style="font-size: 12px">No: {{onelist.enterOrder.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="12" class="pl10">
             <p>
-              <span>地址:{{onelist.guestVO.addr || onelist.guestVO.streetAddress}}</span>
+              <span style="font-size: 12px">地址:{{onelist.guestVO.addr || onelist.guestVO.streetAddress}}</span>
             </p>
             <p>
-              <span>电话:{{onelist.guestVO.tel}}</span>
+              <span style="font-size: 12px">电话:{{onelist.guestVO.tel}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
             <p>
-              <span>订单日期:</span>
-              <span>{{onelist.enterOrder.orderDate}}</span>
+              <span style="font-size: 12px">订单日期:</span>
+              <span style="font-size: 12px">{{onelist.enterOrder.orderDate}}</span>
             </p>
             <p>
-              <span>打印日期:</span>
-              <span>{{printDate}}</span>
+              <span style="font-size: 12px">打印日期:</span>
+              <span style="font-size: 12px">{{printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -56,12 +56,8 @@
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>备注:</span>
-              <span>{{onelist.enterOrder.remark}}</span>
-            </p>
-            <p>
-              <!-- <span>入库仓库:</span>
-              <span>{{onelist.store.name}}</span> -->
+              <span>入库仓库:</span>
+              <span>{{onelist.storeName}}</span>
             </p>
           </Col>
         </Row>
@@ -78,34 +74,34 @@
         <table class="gridtable">
           <thead>
           <tr>
-            <th>序号</th>
-            <th>配件编码</th>
-            <th>配件名称</th>
+            <th style="width:40px">序号</th>
+            <th style="width:90px">配件编码</th>
+            <th style="width:90px">配件名称</th>
+            <th style="max-width:90px;white-space:nowrap;overflow: hidden;">OEM码</th>
             <th>品牌</th>
-            <th>品牌车型</th>
+            <th style="max-width: 40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th>规格	</th>
             <th>单位	</th>
             <th>数量</th>
-            <th>单价</th>
-            <th>金额</th>
-            <th>仓库	</th>
-            <th>仓位</th>
+            <th style="width:50px">单价</th>
+            <th style="width:50px">金额</th>
+            <th style="width:50px">仓位</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item ,index) in onelist.enterOrder.voList" :key="index">
-            <td>{{index + 1}}</td>
-            <td>{{item.partCode}}</td>
-            <td>{{item.partName}}</td>
+            <td style="width:40px">{{index + 1}}</td>
+            <td style="width:90px">{{item.partCode}}</td>
+            <td style="width:90px">{{item.partName}}</td>
+            <td style="max-width: 80px;white-space:nowrap;overflow:hidden;">{{item.oemCode}}</td>
             <td>{{item.partBrand}}</td>
-            <td>{{item.carModelName}}</td>
+            <td style="max-width: 40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td>{{item.orderPrice}}</td>
-            <td>{{item.orderAmt}}</td>
-            <td>{{item.storeName}}</td>
-            <td>{{item.storeShelf}}</td>
+            <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
+            <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>
         </table>
@@ -127,6 +123,14 @@
           <Col span="8" class="pl10">
             <span>收货人:</span>
             <span></span>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
+          <Col span="24" class="pl10">
+            <p>
+              <span>备注:</span>
+              <span>{{onelist.enterOrder.remark}}</span>
+            </p>
           </Col>
         </Row>
       </div>
@@ -235,8 +239,11 @@ export default {
           this.printShow = true;
           this.onelist = res.data;
           this.totalQty = this.onelist.enterOrder.voList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
-
-          console.log(this.onelist, "this.onelist ==>202");
+          if(this.onelist.apply.detailVOS){
+            this.onelist.storeName=this.onelist.apply.detailVOS[0].storeName
+          }else{
+            this.onelist.storeName=""
+          }
         }
       } else {
         this.$message.error("至少选择一条信息");
