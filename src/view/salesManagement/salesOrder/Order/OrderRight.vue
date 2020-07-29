@@ -307,7 +307,7 @@
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="averagePrice" title="参考价" width="70"></vxe-table-column>
+          <!-- <vxe-table-column  show-overflow="tooltip" field="averagePrice" title="参考价" width="70"></vxe-table-column> -->
           <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="80">
             <template v-slot="{row}">
               <span style="color:#ed4014" v-if="row.stockOutQty*1>0">{{row.stockOutQty}}</span>
@@ -327,6 +327,11 @@
             </template>
           </vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" title="活动" width="50">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" title="赠送" width="50">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
             </template>
@@ -720,12 +725,15 @@
                         if (columnIndex === 0) {
                             return "合计";
                         }
-                        if (["orderPrice"].includes(column.property)) {
-                            return this.$utils.sum(data, column.property).toFixed(2);
+                        // if (["orderPrice"].includes(column.property)) {
+                        //     return this.$utils.sum(data, column.property).toFixed(2);
+                        // }
+                        if (columnIndex === 6) {
+                            return this.$utils.sum(data, column.property);
                         }
-                        if (columnIndex === 7) {
-                            return ` ${this.countAllPrice(data)} `;
-                        }
+                        // if (columnIndex === 7) {
+                        //     return ` ${this.countAllPrice(data)} `;
+                        // }
                         if (columnIndex === 8) {
                             return ` ${this.countAllAmount(data)} `;
                         }

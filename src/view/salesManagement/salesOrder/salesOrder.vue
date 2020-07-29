@@ -1,14 +1,12 @@
 <template>
     <main class="lightbox-wrap bigBox main-wrap ">
-      <Tabs type="card" name="orderbox">
+      <!-- <Tabs type="card" name="orderbox">
         <TabPane  label="销售订单" tab="orderbox">
-        <div class="marketBox">
-          <Order></Order>
-        </div>
         </TabPane>
-<!--        <TabPane  label="配件信息" tab="orderbox"><div></div></TabPane>-->
-<!--        <TabPane  label="报价列表" tab="orderbox"><div></div></TabPane>-->
-      </Tabs>
+      </Tabs> -->
+      <div class="marketBox">
+        <Order></Order>
+      </div>
     </main>
 </template>
 
@@ -43,7 +41,7 @@
 <style lang="less">
   .main-wrap{
     .ivu-tabs-content{
-      height: 94%;
+      height: 100%;
     }
 
   }

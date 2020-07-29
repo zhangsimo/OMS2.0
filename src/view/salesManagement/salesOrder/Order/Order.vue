@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="warps content-oper content-oper-flex">
     <div class="headerBox">
       <getDate class="mr5" @quickDate="getvalue"></getDate>
       <Select v-model="orderType" style="width:100px" class="mr5">
@@ -337,11 +337,17 @@ export default {
 </script>
 
 <style scoped lang="less">
+.warps {
+  height: 100%;
+}
+
 .headerBox {
+  height: 46px;
   border-bottom: 1px #e0e0e0 solid;
-  padding-left: 10px;
-  padding-bottom: 16px;
+  padding: 10px;
+  // padding-bottom: 16px;
   display: flex;
+  align-items: center;
 }
 .demo-split {
   height: 100%;
@@ -351,6 +357,5 @@ export default {
 .conter {
   height: 100%;
   width: 100%;
-  padding: 10px;
 }
 </style>
