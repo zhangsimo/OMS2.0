@@ -1,6 +1,7 @@
 <template>
     <div>
       <Modal title="高级查询" width="600px" v-model="moreAndMore">
+        <Form @keydown.native.enter="Determined">
         <div class="navbox">
           <Row>
             <Col span="12">
@@ -44,6 +45,7 @@
             <Input v-model="Accessories" placeholder="请输入提交人" style="width: 450px" />
           </Row>
         </div>
+        </Form>
         <div slot='footer'>
           <Button type='primary' @click="Determined">确定</Button>
           <Button type='default' @click="cancel">取消</Button>
@@ -125,16 +127,16 @@
         Determined(){
           this.sendMsg()
           this.moreAndMore = false
-          this.callout =  ''
-          this.numbers = ''
-          this.coding = ''
-          this.Accessories = ''
-          this.Name = ''
-          this.create = ''
-          this.submita = ''
-          this.brand = ''
-          this.createData = null
-          this.submitData = null
+          // this.callout =  ''
+          // this.numbers = ''
+          // this.coding = ''
+          // this.Accessories = ''
+          // this.Name = ''
+          // this.create = ''
+          // this.submita = ''
+          // this.brand = ''
+          // this.createData = null
+          // this.submitData = null
         },
         //取消
         cancel(){

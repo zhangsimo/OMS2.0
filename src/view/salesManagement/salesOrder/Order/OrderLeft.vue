@@ -7,7 +7,7 @@
       <vxe-table
         ref="currentRowTable"
         border
-        align="center"
+        align="left"
         size="mini"
         @current-change="clickOnesList"
         highlight-hover-row
@@ -15,17 +15,17 @@
         :height="leftTableHeight"
         :data="tableData"
       >
-        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="billStatusId" title="状态" min-width="80">
+        <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+        <vxe-table-column field="billStatusId" title="状态" width="60">
           <template v-slot="{ row }">
             <span>{{row.billStatusId?row.billStatusId.name:""}}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column field="guestName" title="客户" min-width="180"></vxe-table-column>
+        <vxe-table-column field="printTimes" title="打印次数" min-width="80"></vxe-table-column>
         <vxe-table-column field="createTime" title="创建日期" min-width="180"></vxe-table-column>
         <vxe-table-column field="orderMan" title="销售员" min-width="80"></vxe-table-column>
         <vxe-table-column field="serviceId" title="销售订单单号" width="200"></vxe-table-column>
-        <vxe-table-column field="printTimes" title="打印次数" min-width="80"></vxe-table-column>
         <vxe-table-column field="auditor" title="提交人" min-width="120"></vxe-table-column>
         <vxe-table-column field="auditDate" title="提交日期" min-width="180"></vxe-table-column>
         <vxe-table-column field="createUname" title="创建人" min-width="120"></vxe-table-column>

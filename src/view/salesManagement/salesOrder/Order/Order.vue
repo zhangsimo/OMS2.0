@@ -1,64 +1,124 @@
 <template>
-  <div class="content-oper content-oper-flex">
-    <div class="headerBox">
-      <getDate class="mr5" @quickDate="getvalue"></getDate>
-      <Select v-model="orderType" style="width:100px" class="mr5">
-        <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
-      </Select>
-      <Button type="default" class="mr5" @click="openQueryModal">
-        <Icon type="ios-more" />更多
-      </Button>
-      <Button type="default" @click="addNew" class="mr5 w90" v-has="'add'">
-        <Icon type="md-add" size="14" />新增
-      </Button>
-      <Button class="mr5 w90" @click="setSave" :disabled="orderlistType.value != 0" v-has="'save'">
-        <span class="center">
-          <Icon custom="iconfont iconbaocunicon icons" />保存
-        </span>
-      </Button>
-      <Button class="mr5" @click="sumbit" :disabled="orderlistType.value != 0" v-has="'submit'">
-        <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
-      </Button>
-      <Button
-        class="mr5"
-        @click="setStockOut"
-        :disabled="orderlistType.value != 1||isWms"
-        v-has="'StockOut'"
-      >
-        <!--orderlistType.isWms == 1 || ^-->
-        <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
-      </Button>
-      <Button class="mr5" @click="printTable" :disabled="orderlistType.value == 0" v-has="'print'">
-        <i class="iconfont mr5 icondayinicon"></i> 打印
-      </Button>
-      <Button
-        class="mr5"
-        @click="setBackOrder"
-        :loading="backloading"
-        :disabled="backShow"
-        v-has="'BackOrder'"
-      >
-        <i class="iconfont mr5 iconziyuan14"></i> 返单
-      </Button>
-      <Button
-        class="mr5"
-        @click="setCancellation"
-        :disabled="orderlistType.value != 0"
-        v-has="'Cancellation'"
-      >
-        <Icon type="md-close" size="14" />作废
-      </Button>
-      <Button class="mr5" @click="setDerive" v-has="'Derive'">
-        <i class="iconfont mr5 icondaochuicon"></i> 导出
-      </Button>
-      <div class="db">
-        <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+  <div class="warps content-oper content-oper-flex">
+    <section class="oper-box">
+      <div class="oper-top flex">
+        <div class="wlf wlf-center">
+          <div class="db">
+            <getDate class="mr5" @quickDate="getvalue"></getDate>
+          </div>
+          <div class="db">
+            <Select v-model="orderType" style="width:100px" class="mr5">
+              <Option
+                v-for="item in typeList"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db">
+            <Button type="default" class="mr5" @click="openQueryModal">
+              <Icon type="ios-more" />更多
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              type="default"
+              @click="addNew"
+              class="mr5 w90"
+              v-has="'add'"
+            >
+              <Icon type="md-add" size="14" />新增
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5 w90"
+              @click="setSave"
+              :disabled="orderlistType.value != 0"
+              v-has="'save'"
+            >
+              <span class="center">
+                <Icon custom="iconfont iconbaocunicon icons" />保存
+              </span>
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              @click="sumbit"
+              :disabled="orderlistType.value != 0"
+              v-has="'submit'"
+            >
+              <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              @click="setStockOut"
+              :disabled="orderlistType.value != 1 || isWms"
+              v-has="'StockOut'"
+            >
+              <!--orderlistType.isWms == 1 || ^-->
+              <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              @click="printTable"
+              :disabled="orderlistType.value == 0"
+              v-has="'print'"
+            >
+              <i class="iconfont mr5 icondayinicon"></i> 打印
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              @click="setBackOrder"
+              :loading="backloading"
+              :disabled="backShow"
+              v-has="'BackOrder'"
+            >
+              <i class="iconfont mr5 iconziyuan14"></i> 返单
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              @click="setCancellation"
+              :disabled="orderlistType.value != 0"
+              v-has="'Cancellation'"
+            >
+              <Icon type="md-close" size="14" />作废
+            </Button>
+          </div>
+          <div class="db">
+            <Button class="mr5" @click="setDerive" v-has="'Derive'">
+              <i class="iconfont mr5 icondaochuicon"></i> 导出
+            </Button>
+          </div>
+          <div class="db">
+            <div class="mt5">
+              <Checkbox v-model="showSelf" @on-change="showOwen"
+                >显示个人单据</Checkbox
+              >
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
     <div class="conter">
       <div class="demo-split">
         <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
-          <div slot="left" ref="paneLeft" style="overflow-y: auto; height: 100%;" class="demo-split-pane">
+          <div
+            slot="left"
+            ref="paneLeft"
+            style="overflow-y: auto; height: 100%;"
+            class="demo-split-pane"
+          >
             <OrderLeft
               ref="OrderLeft"
               :queryTime="queryTime"
@@ -74,7 +134,11 @@
         </Split>
       </div>
       <!--        更多搜索-->
-      <More-query :data="queryList" ref="morequeryModal" @resetData="reset"></More-query>
+      <More-query
+        :data="queryList"
+        ref="morequeryModal"
+        @resetData="reset"
+      ></More-query>
       <!--        打印-->
       <Print-show ref="printBox"></Print-show>
     </div>
@@ -183,7 +247,10 @@ export default {
       this.isWms = false;
       this.backShow = true;
       this.orderlistType = data.billStatusId;
-      if(data.billStatusId.value == 1 || (data.billStatusId.value == 0 && data.id)) {
+      if (
+        data.billStatusId.value == 1 ||
+        (data.billStatusId.value == 0 && data.id)
+      ) {
         if (data.isWms == 1) {
           this.backShow = true;
         } else {
@@ -312,7 +379,7 @@ export default {
     },
     //重置额度
     reset(v) {
-      v = {...v};
+      v = { ...v };
       const left = this.$refs.OrderLeft;
       this.$refs.right.limitList = {
         fixationQuota: "",
@@ -337,11 +404,17 @@ export default {
 </script>
 
 <style scoped lang="less">
-.headerBox {
+.warps {
+  height: 100%;
+}
+
+.headerBoxqq {
+  height: 46px;
   border-bottom: 1px #e0e0e0 solid;
-  padding-left: 10px;
-  padding-bottom: 16px;
+  padding: 10px;
+  // padding-bottom: 16px;
   display: flex;
+  align-items: center;
 }
 .demo-split {
   height: 100%;
@@ -349,8 +422,7 @@ export default {
 }
 
 .conter {
-  height: 100%;
+  height: 92%;
   width: 100%;
-  padding: 10px;
 }
 </style>
