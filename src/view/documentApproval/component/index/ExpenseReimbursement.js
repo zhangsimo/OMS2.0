@@ -8,8 +8,8 @@ import {
   getDictionary,
   getExpSve
 } from "_api/documentApproval/ExpenseReimbursement";
-import { getThisAllList } from "@/api/documentApproval/documentApproval/documentApproval";
-import { getDigitalDictionary } from "../../../../api/system/essentialData/clientManagement";
+import { getThisAllList ,getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
+import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import { getPost } from "../utils";
 
 export default {
@@ -59,10 +59,10 @@ export default {
         topic: [{ required: true, message: "主题为必填", trigger: "blur" }],
         receiverId: [
           { required: true, message: "收款人账户为必填", trigger: "change" }
-        ],
+        ],//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
         receiveBank: [
           { required: true, message: "开户行名称必填", trigger: "blur" }
-        ],
+        ],//开户行只显示 /^(\d{6})\d+(\d{4})$/
         paymentAccount: [
           {
             required: true,
@@ -70,10 +70,10 @@ export default {
             message: "付款账户必选",
             trigger: "change"
           }
-        ],
+        ],//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
         receiveBankNo: [
           { required: true, message: "银行账号必填", trigger: "blur" }
-        ]
+        ]//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
       },
 
       //费用类型列表
@@ -170,21 +170,22 @@ export default {
     async open() {
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
-      if(this.$route.name === "documentApproval-myApplication") {
-        this.options1 = this.list.allSalesList;
-      }
+      // if(this.$route.name === "documentApproval-myApplication") {
+      //   this.options1 = this.list.allSalesList;
+      // }
       this.payUserList = this.list.payList;
       this.modelType = false;
       this.getRate();
       this.$refs["formInline"].resetFields();
       this.formInline = {};
+      this.formInline.accountType = true;
       this.$refs.upImg.uploadListModal = [];
       this.$refs.upImg.uploadList = [];
       this.model = true;
       if (this.list.type == 1) {
         this.details = [];
         let arr = [
-          { expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0 }
+          { expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0 ,billTypeId :"010102"}
         ];
         this.$set(this.formInline, "expenseDetails", arr);
 
@@ -212,21 +213,19 @@ export default {
       }
     },
 
-    remoteMethod1(query) {
+   async remoteMethod1(query) {
       this.options1 = [];
       if (query !== "") {
         this.loading1 = true;
-        this.options1 = [];
-        const list = this.payeeList.map(item => {
-          return {
-            value: item.value,
-            label: item.label
-          };
-        });
-        this.options1 = list.filter(
-          item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
-        );
-        this.loading1 = false;
+        let data = {}
+        data.accountName = query
+        data.page = 0
+        data.size = 100
+        let res = await getBackList(data)
+        if(res.code == 0){
+          this.loading1 = false
+          this.options1 = res.data.content || []
+        }
       } else {
         this.options1 = [];
       }
@@ -267,9 +266,9 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      let arr = this.payeeList.filter(item => item.value == row.value);
-      this.formInline.receiveBank = arr[0].receiveBank || "";
-      this.formInline.receiveBankNo = arr[0].receiveBankNo || "";
+      let arr = this.options1.filter(item => item.id == row.value);
+      this.formInline.receiveBank = arr[0].accountBank || "";
+      this.formInline.receiveBankNo = arr[0].accountBankNo || "";
     },
 
     //判断表格是否可以编辑
@@ -328,8 +327,11 @@ export default {
     //修改费用类型改变科目
     changeExpenseType({ row }) {
       row.accountEntry = "";
+      console.log(this.formInline)
     },
-
+    changeExpenseType2({row}){
+      console.log(row)
+    },
     //价税合计变更计算
     gettotal(v) {
       let row = v.row,
@@ -398,6 +400,7 @@ export default {
       data.totalAmt = 0;
       data.taxRateCode = "TR001";
       data.taxAmt = 0;
+      data.billTypeId = "010102"
       this.formInline.expenseDetails.splice(1, 0, data);
     },
 
@@ -485,6 +488,7 @@ export default {
               content: '处理中...',
               duration: 0
             });
+            this.formInline.accountType = this.formInline.accountType ? 1 : 0
             let res = await getExpSve(this.formInline);
             msg();
             if (res.code == 0) {

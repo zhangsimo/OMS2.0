@@ -551,6 +551,7 @@ export default {
           return
         }else if(data.claimMoney>Math.abs(this.accrued[0].paidMoney)){
           this.$Message.error("本次认领金额不可大于支付金额")
+          return
         }
         if (this.claimTit == "预付款认领") {
           data.subjectCode = "2203";
@@ -558,15 +559,15 @@ export default {
         } else {
           data.subjectCode = "1221";
           data.claimType = 6;
-          data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
-          if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
-            data.isAuxiliaryAccounting=0 //是否辅助核算类
-          }else{
-            data.isAuxiliaryAccounting=1
-          }
-          data.auxiliaryName=this.MessageValue //辅助核算名称
-          data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
         }
+        data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+        if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+          data.isAuxiliaryAccounting=0 //是否辅助核算类
+        }else{
+          data.isAuxiliaryAccounting=1
+        }
+        data.auxiliaryName=this.MessageValue //辅助核算名称
+        data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
           this.modal = false;

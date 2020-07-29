@@ -3,18 +3,18 @@
     <div id="printBox" style="height: 600px">
       <div class="titler">
         <Row style="border: 1px #000000 solid;color:#000;">
-          <Col span="12" class="pl10">
+          <Col span="16" class="pl10">
             <h5
-              style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
+              style="font-size: 20px;line-height: 44px;"
             >{{onelist.applyGuest.shortName||onelist.applyGuest.name}}</h5>
           </Col>
-          <Col span="12" class="pl10">
-            <p>调拨出库单</p>
-            <p>No: {{onelist.apply.serviceId}}</p>
+          <Col span="8" class="pl10">
+            <p style="font-weight: 600;font-size: 12px">调拨出库单</p>
+            <p style="font-size: 12px">No: {{onelist.apply.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="16" class="pl10">
             <p>
               <span>地址:{{onelist.applyGuest.addr ||
                ( (onelist.applyGuest.province || "") + (onelist.applyGuest.city || "") +
@@ -25,46 +25,46 @@
               <span>电话:{{onelist.applyGuest.tel||""}}</span>
             </p>
           </Col>
-          <Col span="12" class="pl10">
+          <Col span="8" class="pl10">
             <p>
-              <span>订单日期:</span>
-              <span>{{onelist.apply.orderDate}}</span>
+              <span style="font-size: 12px">订单日期:</span>
+              <span style="font-size: 12px">{{onelist.apply.orderDate}}</span>
             </p>
             <p>
-              <span>打印日期:</span>
-              <span>{{printDate}}</span>
+              <span style="font-size: 12px">打印日期:</span>
+              <span style="font-size: 12px">{{printDate}}</span>
             </p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>调入方:</span>
-              <span>{{onelist.logisticsRecord.guestName}}</span>
+              <span style="font-size: 12px">调入方:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord.guestName}}</span>
             </p>
             <p>
-              <span>地址:</span>
-              <span>{{onelist.logisticsRecord.receiveAddress }}</span>
+              <span style="font-size: 12px">地址:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord.receiveAddress }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>收货单位:</span>
-              <span>{{onelist.logisticsRecord.receiveComp ||""}}</span>
+              <span style="font-size: 12px">收货单位:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord.receiveComp ||""}}</span>
             </p>
             <p>
-              <span>收货人:</span>
-              <span>{{onelist.logisticsRecord.receiver||""}}</span>
+              <span style="font-size: 12px">收货人:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord.receiver||""}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>联系电话:</span>
-              <span>{{onelist.logisticsRecord.receiverMobile||""}}</span>
+              <span style="font-size: 12px">联系电话:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord.receiverMobile||""}}</span>
             </p>
             <p>
-              <span>出库仓库:</span>
-              <span>{{onelist.storeVO.name||""}}</span>
+              <span style="font-size: 12px">出库仓库:</span>
+              <span style="font-size: 12px">{{onelist.storeVO.name||""}}</span>
             </p>
           </Col>
         </Row>
@@ -81,34 +81,34 @@
         <table class="gridtable">
           <thead>
           <tr>
-            <th>序号</th>
-            <th>配件编码</th>
-            <th>配件名称</th>
+            <th style="width:40px">序号</th>
+            <th style="width:90px">配件编码</th>
+            <th style="width:90px">配件名称</th>
+            <th style="max-width:90px;white-space:nowrap;overflow: hidden;">OEM码</th>
             <th>品牌</th>
-            <th>品牌车型</th>
+            <th style="max-width: 40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th>规格	</th>
             <th>单位	</th>
             <th>数量</th>
-            <th>单价</th>
-            <th>金额</th>
-            <th>仓库	</th>
-            <th>仓位</th>
+            <th style="width:50px">单价</th>
+            <th style="width:50px">金额</th>
+            <th style="width:50px">仓位</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item ,index) in onelist.apply.detailVOS" :key="index">
-            <td>{{index + 1}}</td>
-            <td>{{item.partCode}}</td>
-            <td>{{item.partName}}</td>
+            <td style="width:40px">{{index + 1}}</td>
+            <td style="width:90px">{{item.partCode}}</td>
+            <td style="width:90px">{{item.partName}}</td>
+            <td style="max-width: 80px;white-space:nowrap;overflow:hidden;">{{item.oemCode}}</td>
             <td>{{item.partBrand}}</td>
-            <td>{{item.carModelName}}</td>
+            <td style="max-width: 40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td>{{item.orderPrice}}</td>
-            <td>{{item.orderAmt}}</td>
-            <td>{{item.storeName}}</td>
-            <td>{{item.storeShelf}}</td>
+            <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
+            <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>
         </table>
@@ -248,6 +248,15 @@ export default {
             el.storeName = storeName;
           })
           this.totalQty = this.onelist.apply.detailVOS.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
+          if(this.onelist.apply.detailVOS==[] || this.onelist.apply.detailVOS==undefined){
+            this.onelist.storeName=""
+          }else{
+            this.onelist.apply.detailVOS.map((item,index)=>{
+              if(index==0){
+                this.onelist.storeName=item.storeName
+              }
+            })
+          }
         }
       } else {
         this.$message.error("至少选择一条信息");
@@ -295,28 +304,31 @@ export default {
 table.gridtable {
   width: 100%;
   font-family: verdana,arial,sans-serif;
-  font-size:11px;
+  font-size:12px !important;
   color:#000000;
   border-width: 1px;
   border-color: #000000;
-  text-align: center;
+  text-align: left;
   border-collapse: collapse;
 }
 table.gridtable th {
   border-width: 1px;
-  padding: 8px;
+  padding: 4px;
   border-style: solid;
   border-color: #000000;
   background-color: #dedede;
 }
 table.gridtable td {
   border-width: 1px;
-  padding: 8px;
+  padding: 4px;
   border-style: solid;
   border-color: #000000;
   background-color: #ffffff;
 }
 table.gridtable tr {
   page-break-inside:avoid;
+}
+table.gridtable tr th{
+  font-weight: 400 !important;
 }
 </style>

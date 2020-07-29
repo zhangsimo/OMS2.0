@@ -112,4 +112,68 @@ export function down(id) {
   window.open(url, '_balnk');
 }
 
+
+//添加编辑产品线
+export function addOrEditProLine(data){
+  return axios.request({
+    url: `${api.wmsApi}/productClassType/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}
+
+//获取产品线
+export function getProLine(){
+  return axios.request({
+    url: `${api.wmsApi}/productClassType/findAll`,
+    method: 'get'
+  })
+}
+
+//获取产品线
+export function deleteProLine(data){
+  return axios.request({
+    url: `${api.wmsApi}/productClassType/delete`,
+    method: 'post',
+    data
+  })
+}
+
+//获取员工
+export function getAllStaff(params){
+  return axios.request({
+    url: `${api.passportApi}/staff/findAll`,
+    method: 'get',
+    params
+  })
+}
+
+//获取员工
+export function setProLineDis(data){
+  return axios.request({
+    url: `${api.wmsApi}/productUserInfo/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}
+
+//获取产品线已分配员工
+export function getProLineDis(data){
+  return axios.request({
+    url: `${api.wmsApi}/productUserInfo/findByClassTypeId`,
+    method: 'post',
+    data
+  })
+}
+
+//获取产品线已分配员工
+export function getAllocatedProLine(params){
+  return axios.request({
+    url: `${api.wmsApi}/productUserInfo/findByStaff`,
+    method: 'get',
+    params
+  })
+}
+
+
 export const upxlxs = `${api.wmsApi}/employeeAttribute/import`;

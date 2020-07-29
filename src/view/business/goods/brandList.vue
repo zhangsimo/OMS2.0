@@ -107,7 +107,7 @@
               >{{ item.name }}</Option>
             </Select>
           </div>
-          <div class="db mr10">
+          <!-- <div class="db mr10">
             <span>品牌：</span>
             <Select
               v-model="penPurchaseData.partBrand"
@@ -119,7 +119,7 @@
             >
               <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
-          </div>
+          </div> -->
           <div class="db">
             <Button type="warning" class="mr20" @click="penPurchaseSearch">
               <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -479,6 +479,7 @@ export default {
       // 品牌选择数据
       brandList: [],
       brand: "",
+      brands: [],
       // 分页数据
       List: {
         page: 1,
@@ -672,7 +673,11 @@ export default {
         {
           title: "品牌",
           key: "partBrand",
-          align: "center"
+          align: "center",
+          filters: [],
+          filterMethod(value, row) {
+            return row.partBrand.indexOf(value) > -1;
+          }
         },
         {
           title: "配件内码",
@@ -819,7 +824,7 @@ export default {
     this.getPjType();
     this.getJsStyle();
     this.getActiveCompany();
-    this.getAllBrand();
+    // this.getAllBrand();
     // this.getBrandIfoList()
   },
   methods: {
@@ -901,6 +906,13 @@ export default {
       getBrandList(this.conditionData).then(res => {
         // 撒打发
         if (res.code === 0) {
+          this.bands = [];
+          let arr = res.data.content.map(el => el.partBrand);
+          let set = new Set(arr);
+          set.forEach(el => {
+            this.bands.push({label: el, value: el});
+          })
+          this.columns3[4].filters = this.bands;
           this.data = res.data.content;
           this.orgid = res.data.content[0].orgid;
           this.data.map(item => {

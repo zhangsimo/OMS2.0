@@ -17,6 +17,7 @@
               align="center"
               :auto-resize="true"
               @radio-change="radioChangeEventAsset"
+              :radio-config="{labelField: 'name', checkMethod}"
               highlight-hover-row
               highlight-current-row
               show-overflow
@@ -24,7 +25,7 @@
               ref="one"
 
             >
-              <vxe-table-column type="radio" title="选择"></vxe-table-column>
+              <vxe-table-column type="radio" title="选择" :editRender="{attrs: { disabled: true } }"></vxe-table-column>
               <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
               <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
               <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -42,6 +43,7 @@
             align="center"
             :auto-resize="true"
             @radio-change="radioChangeEventLiabilities"
+            :radio-config="{labelField: 'name', checkMethod}"
             highlight-hover-row
             highlight-current-row
             show-overflow
@@ -49,7 +51,7 @@
             ref="two"
 
           >
-            <vxe-table-column type="radio" title="选择"></vxe-table-column>
+            <vxe-table-column type="radio" title="选择" :editRender="{attrs: { disabled: true } }"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
             <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
             <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -66,6 +68,7 @@
             align="center"
             :auto-resize="true"
             @radio-change="radioChangeEventCommon"
+            :radio-config="{labelField: 'name', checkMethod}"
             highlight-hover-row
             highlight-current-row
             show-overflow
@@ -73,7 +76,7 @@
             ref="three"
 
           >
-            <vxe-table-column type="radio" title="选择"></vxe-table-column>
+            <vxe-table-column type="radio" title="选择"  :editRender="{attrs: { disabled: true } }"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
             <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
             <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -90,6 +93,7 @@
             align="center"
             :auto-resize="true"
             @radio-change="radioChangeEventEquity"
+            :radio-config="{labelField: 'name', checkMethod}"
             highlight-hover-row
             highlight-current-row
             show-overflow
@@ -97,7 +101,7 @@
             ref="four"
 
           >
-            <vxe-table-column type="radio" title="选择"></vxe-table-column>
+            <vxe-table-column type="radio" title="选择"  :editRender="{attrs: { disabled: true } }"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
             <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
             <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -114,6 +118,7 @@
             align="center"
             :auto-resize="true"
             @radio-change="radioChangeEventCost"
+            :radio-config="{labelField: 'name', checkMethod}"
             highlight-hover-row
             highlight-current-row
             show-overflow
@@ -121,7 +126,7 @@
             ref="five"
 
           >
-            <vxe-table-column type="radio" title="选择"></vxe-table-column>
+            <vxe-table-column type="radio" title="选择"  :editRender="{attrs: { disabled: true } }"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
             <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
             <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -138,6 +143,7 @@
             align="center"
             :auto-resize="true"
             @radio-change="radioChangeEventProfit"
+            :radio-config="{labelField: 'name', checkMethod}"
             highlight-hover-row
             highlight-current-row
             show-overflow
@@ -145,7 +151,7 @@
             ref="six"
 
           >
-            <vxe-table-column type="radio" title="选择"></vxe-table-column>
+            <vxe-table-column type="radio" title="选择" :editRender="{attrs: { disabled: true } }"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
             <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
             <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -262,13 +268,15 @@ export default {
         this.tabTypeCode="601"
       }
     },
+    //判断是否可选择
+    checkMethod({ row }) {
+      return row.isDetailSubject == 0;
+    },
     //科目查询
     search(){
       let data={}
-      //this.tabTypeCode
       data.titleTypeCode=this.tabTypeCode
       data.titleCode=this.subjectModel
-      console.log(data)
       getSubjectMsg(data).then(res=>{
         if(res.code==0){
           if(data.titleTypeCode=="101"){

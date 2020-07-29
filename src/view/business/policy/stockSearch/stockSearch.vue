@@ -39,7 +39,7 @@
               class="w200 mr10"
               @on-enter="serch"
             />
-            <Select
+            <!-- <Select
               filterable
               clearable
               class="w120 mr10"
@@ -53,7 +53,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
             <Select
               class="w200 mr10"
               filterable
@@ -126,7 +126,7 @@
               class="w200 mr10"
               @on-enter="queryBatch"
             ></Input>
-            <Select
+            <!-- <Select
               filterable
               clearable
               class="w120 mr10"
@@ -140,7 +140,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
             <Select
               v-if="showSearch == true"
               class="w200 mr10"
@@ -368,6 +368,8 @@ export default {
   components: { EnterStock },
   data() {
     return {
+      bands1: [], 
+      bands2: [], 
       total1: {},
       total2: {},
       shopkeeper: 0, // 1 总部
@@ -436,7 +438,11 @@ export default {
           title: "品牌",
           align: "center",
           key: "partBrand",
-          minWidth: 120
+          minWidth: 120,
+          filters: [],
+          filterMethod(value, row) {
+            return row.partBrand.indexOf(value) > -1;
+          }
         },
         {
           title: "品牌车型",
@@ -647,7 +653,7 @@ export default {
         {
           title: "品牌名称",
           key: "brandName",
-          minWidth: 120
+          minWidth: 120,
         },
         {
           title: "入库数量",
@@ -786,7 +792,11 @@ export default {
           title: "品牌",
           align: "center",
           key: "partBrand",
-          minWidth: 120
+          minWidth: 120,
+          filters: this.bands1,
+          filterMethod(value, row) {
+            return row.partBrand.indexOf(value) > -1;
+          }
         },
         {
           title: "品牌车型",
@@ -951,7 +961,7 @@ export default {
       this.searchForm1.old = arr[1] || "";
       this.getAllStocks(); //table请求
       this.getStoreHoure();
-      this.getBand(); //获取品牌
+      // this.getBand(); //获取品牌
       this.getLotStocks(); //获取批次
       this.getColumns();
     },
@@ -982,6 +992,14 @@ export default {
         if (row != undefined) {
           this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
         }
+        this.bands1 = [];
+        let arr = res.data.content.map(el => el.partBrand);
+        let set = new Set(arr);
+        set.forEach(el => {
+          this.bands1.push({label: el, value: el});
+        })
+        // this.columnsPart[6].filters = this.bands1;
+        this.getColumns();
       }
 
       let res1 = await PtabulatData(data);
@@ -1031,6 +1049,13 @@ export default {
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
         this.contentTwo.page.total = res.data.totalElements;
+        this.bands2 = [];
+        let arr = res.data.content.map(el => el.partBrand);
+        let set = new Set(arr);
+        set.forEach(el => {
+          this.bands2.push({label: el, value: el});
+        })
+        this.columns2[4].filters = this.bands2;
       }
 
       let res1 = await EtabulatData(data);
@@ -1108,6 +1133,7 @@ export default {
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
               item[b] = item[b].replace(/[\r\n,"]/g, "");
+              item[b] = "\t"+item[b];
             }
           }
           item.index = index + 1;

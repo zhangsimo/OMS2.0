@@ -216,7 +216,7 @@ export default {
     radioChangeEventCost({ row }) {
       this.disabled = false;
       this.currRow = row;
-      this.totalPrice = row.reimbursementAmount;
+      this.totalPrice = row.paymentBalance;
       // this.tableData[0].totalPrice = this.totalPrice;
     },
     //分页

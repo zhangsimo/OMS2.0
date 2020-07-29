@@ -111,3 +111,13 @@ export function findSupplerDetail (params) {
     params
   })
 }
+
+
+//模糊查询获取查询的数据
+export function getBackList (params) {
+  return axios.request({
+    url: `${api.authApi}/staffaccount/queryAll`,
+    method: 'get',
+    params
+  })
+}
