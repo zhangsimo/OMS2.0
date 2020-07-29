@@ -348,13 +348,11 @@
       }
     },
     methods: {
-
       //获取全部地址
       async getAllAre(){
         let res = await are()
         if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
       },
-
       //当前非管理员状态情况下获取门店地址
       async getThisArea(){
         // let arr = this.shopList.filter( item=> item.id == this.shopCode)
@@ -373,7 +371,6 @@
           }
         }
       },
-
       // //切换地址重新调取门店接口
       changeArea(){
         if (this.$store.state.user.userData.shopkeeper == 0) {
@@ -381,22 +378,17 @@
           this.getShop()
         }
       },
-
       //获取门店
-      async getShop(){
-        let data ={}
-        data.supplierTypeSecond = this.model1
-        this.shopList = [{id:0 , name:'全部'}]
-        let res = await goshop(data)
-        if (res.code === 0) {
-          this.shopList = [...this.shopList , ...res.data]
-            this.shopCode = this.$store.state.user.userData.shopId
-            if (this.$store.state.user.userData.shopkeeper != 0){
-              this.getThisArea()//获取当前门店地址
-            }
-
-        }
-      },
+      // async getShop(){
+      //   let data ={}
+      //   data.supplierTypeSecond = this.model1
+      //   this.shopList = [{id:0 , name:'全部'}]
+      //   let res = await goshop(data)
+      //   if (res.code === 0) {
+      //     this.shopList = [...this.shopList , ...res.data]
+      //       this.shopCode = this.$store.state.user.userData.shopId
+      //   }
+      // },
 
       //获取科目
       async getSubject(){

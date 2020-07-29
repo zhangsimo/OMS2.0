@@ -62,20 +62,10 @@
               <span style="font-size: 12px">联系电话:</span>
               <span style="font-size: 12px">{{onelist.logisticsRecord.receiverMobile||""}}</span>
             </p>
-            <Row>
-              <Col span="12">
-                <p>
-                  <span style="font-size: 12px">出库仓库:</span>
-                  <span style="font-size: 12px">{{onelist.storeVO.name||""}}</span>
-                </p>
-              </Col>
-              <Col span="12">
-                <p>
-                  <span style="font-size: 12px">出库仓库:</span>
-                  <span style="font-size: 12px">{{onelist.storeName}}</span>
-                </p>
-              </Col>
-            </Row>
+            <p>
+              <span style="font-size: 12px">出库仓库:</span>
+              <span style="font-size: 12px">{{onelist.storeVO.name||""}}</span>
+            </p>
           </Col>
         </Row>
 <!--        <Table-->
@@ -116,8 +106,8 @@
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td style="width:50px">{{item.orderPrice}}</td>
-            <td style="width:50px">{{item.orderAmt}}</td>
+            <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
             <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>

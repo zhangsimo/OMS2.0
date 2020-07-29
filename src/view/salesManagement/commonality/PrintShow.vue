@@ -263,15 +263,6 @@ export default {
         if (res.code === 0) {
           this.printShow = true;
           this.onelist = res.data;
-          if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
-            this.onelist.storeName=""
-          }else{
-            this.onelist.detailList.map((item,index)=>{
-              if(index==0){
-                this.onelist.storeName=item.storeName
-              }
-            })
-          }
         }
       } else {
         this.$message.error("至少选择一条信息");
