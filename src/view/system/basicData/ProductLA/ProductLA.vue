@@ -1,9 +1,9 @@
 <template>
-  <main class="tenant-res page">
+  <main class="tenant-res page" style="height: 100%;">
     <!--上部-->
     <section class="oper-box">
       <div class="oper-top flex">
-        <div class="wlf">
+        <div class="wlf" style="display: none">
           <div class="db mr10">
             <span>查询项:</span>
             <Select v-model="employeeSelecteOption" style="width:140px">
@@ -81,10 +81,50 @@
             </Button>
           </div>
         </div>
+        <div class="wlf">
+          <div class="db">
+            <Button class="mr10" @click="addProLine('add')">
+              添加产品线
+            </Button>
+          </div>
+          <div class="db">
+            <Button class="mr10" @click="addProLine('edit')">
+              编辑产品线
+            </Button>
+          </div>
+          <div class="db">
+            <Button class="mr10" @click="deleteProLine">
+              删除
+            </Button>
+          </div>
+          <div class="db">
+            <Button class="mr10" @click="disProLine">
+              分配产品线
+            </Button>
+          </div>
+          <!--<div class="db">-->
+            <!--<Button class="mr10" @click="addStaff">-->
+              <!--调整产品线分配-->
+            <!--</Button>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </section>
+    <section class="con-warp clearfix" style="height:calc(100% - 58px)">
+      <div class="qx-l fl w300" style="height: 100%; overflow-y: auto">
+        <el-tree
+          :data="treeData"
+          node-key="id"
+          @node-click="handleNodeClick"
+          :props="defaultProps">
+        </el-tree>
+      </div>
+      <div class="qx-r" style="height: 100%" ref="tabelWrap">
+        <Table border :columns="columns1" :max-height="tableHeight" size="small" :data="data1"></Table>
       </div>
     </section>
     <!--上部-->
-    <section class="con-warp">
+    <section class="con-warp" style="display: none;">
       <div class="box-list-top">
         <h5>员工列表</h5>
         <div class="tab-warps">
@@ -257,6 +297,66 @@
         {{tipWords}}
       </div>
     </Modal>
+    <!--添加-编辑产品线-->
+    <Modal :title="proLineTitle" v-model="proLineModel" footer-hide>
+      <Form ref="proLineForm" :model="proLineForm" :rules="proLineFormValidate" :label-width="100">
+        <FormItem label="上级菜单：" prop="parentId">
+          <Select :disabled="proLineTitle=='编辑产品线'" v-model="proLineForm.id" placeholder="上级菜单" class="w300">
+            <Option v-for="item in treeDataList" v-show="!item.parentId" :value="item.id" :key="item.id">{{ item.title }}</Option>
+          </Select>
+        </FormItem>
+
+        <FormItem v-if="proLineSelectData.lever==1" label="品牌名称：" prop="title">
+          <Select placeholder="选择品牌" label-in-value @on-change="proLineBrandNameChange" filterable v-model="proLineBrandName" class="w300">
+            <Option v-for="(item,index) in partBrandData" :disabled="item.isDisable" :value="item.code" :key="index">{{item.name}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem v-else label="产品线名称：" prop="title">
+          <Input v-model="proLineForm.title" placeholder="产品线名称" class="w300"></Input>
+        </FormItem>
+      </Form>
+      <div class="tc pb20 pt10">
+        <Button type="primary" class="w80" @click="proLineSubmit('proLineForm')">保 存</Button>
+        <Button @click="proLineModel=false" class="w80" style="margin-left: 8px">取消</Button>
+      </div>
+    </Modal>
+    <!--产品线分配-->
+    <Modal title="产品线分配" v-model="proLineDis" footer-hide>
+      <Form ref="formValidate"  :label-width="100">
+        <FormItem label="选择员工：">
+          <Select
+            v-model="StaffName"
+            placeholder="==请选择=="
+            class="w300"
+            filterable
+            remote
+            @on-change="selectStaff"
+            :remote-method="getStaffList"
+            :loading="loading1">
+            <Option v-for="(option, index) in StaffList" :value="option.id" :key="index">{{option.staffName}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="负责品牌：">
+          <div class="w300" style="height: 200px; overflow-y: auto">
+            <el-tree
+              :data="treeData"
+              default-expand-all
+              show-checkbox
+              class="w270"
+              node-key="id"
+              ref="tree"
+              highlight-current
+              @node-click="handleNodeClick"
+              :props="defaultProps">
+            </el-tree>
+          </div>
+        </FormItem>
+      </Form>
+      <div class="tc pb20 pt10">
+        <Button type="primary" class="w80" @click="proLineDisSubmit">保 存</Button>
+        <Button @click="proLineDis=false" class="w80" style="margin-left: 8px">取消</Button>
+      </div>
+    </Modal>
   </main>
 </template>
 
@@ -289,5 +389,14 @@
   .tip{
     text-align: center;
     padding: 15px 0;
+  }
+  .qx-l{
+    border: 1px solid #ddd;
+    margin-left: 20px;
+    padding: 10px;
+  }
+  .qx-r{
+    padding-left: 340px;
+    margin-right: 20px;
   }
 </style>

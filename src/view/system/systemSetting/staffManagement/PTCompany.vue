@@ -66,7 +66,7 @@
                     {
                         title: '公司名称',
                         align: 'center',
-                        key: 'tenantCompanyName',
+                        key: 'shortName',
                         minWidth: 80
                     },
                     {
@@ -95,7 +95,7 @@
               data.size = this.page.size
               data.page = this.page.num -1
               data.orgid = this.shopCode
-              data.tenantCompanyName = this.compentName
+              data.shortName = this.compentName
               data.id = this.data.id
               getCompanyList(data).then( res => {
                   this.loading =false

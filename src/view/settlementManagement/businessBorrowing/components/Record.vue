@@ -126,8 +126,9 @@ export default {
         // },
         {
           title: "核销方式",
-          key: "",
+          key: "furpose",
           align: "center",
+          minWidth: 100,
           render: (h, p) => {
             let val = "";
             if (p.row.furpose) {

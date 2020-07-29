@@ -2,7 +2,7 @@
   <Modal
     v-model="showInfo"
     title="选择入库单"
-    width="1000"
+    width="1200"
     @on-visible-change="openOrClose"
   >
     <div class="OutboundInfo">
@@ -64,7 +64,9 @@
           resizable
           auto-resize
           align="center"
+          highlight-current-row
           @radio-change="selectOne"
+          @current-change="selectOne"
           size="mini"
           :data="tableDataTop"
         >
@@ -85,6 +87,10 @@
           <vxe-table-column
             field="guestName"
             title="供应商名称"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="remark"
+            title="备注"
           ></vxe-table-column>
           <vxe-table-column
             field="enterAmt"
