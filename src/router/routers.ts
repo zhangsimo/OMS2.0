@@ -521,8 +521,8 @@ export default [
           import("@/view/business/policy/moveStorehouse/moveStorehouse.vue")
       },
       {
-        path: "/policy/takeStock",
-        name: "takeStock",
+        path: "/policy/smsInventory",
+        name: "smsInventory",
         mark: "4004",
         meta: {
           icon: "arrow-graph-up-right",

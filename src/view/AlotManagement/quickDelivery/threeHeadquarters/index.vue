@@ -71,30 +71,30 @@
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" title="操作">
             <template v-slot="{ row, rowIndex }">
               <Button type="text" @click="ruku">到货入库</Button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="orgName" title="调出方"></vxe-table-column>
-          <vxe-table-column field="code" title="受理单号"></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip" field="orgName" title="调出方"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="code" title="受理单号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
             field="serviceId"
             title="出库单号"
           ></vxe-table-column>
-          <vxe-table-column field="enterStatus" title="状态"></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip" field="enterStatus" title="状态"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
             field="createTime"
             title="出库日期"
           ></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <!-- <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
+          <!-- <vxe-table-column  show-overflow="tooltip"
             field="enterStoreId"
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
           ></vxe-table-column>-->
-          <!-- <vxe-table-column title="入库仓库"> -->
+          <!-- <vxe-table-column  show-overflow="tooltip" title="入库仓库"> -->
           <!-- <template v-slot="{ row,rowIndex }">
               <select >
                 <option
@@ -105,7 +105,7 @@
               </select>
             </template>
           </vxe-table-column>-->
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip"
             field="enterStoreId"
             title="入库仓库"
             :edit-render="{
@@ -114,12 +114,12 @@
               events: { change: roleChangeEvent }
             }"
           ></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip"
             field="enterDate"
             title="入库日期"
             width="100"
           ></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip"
             field="enterUname"
             title="操作人"
             width="100"
@@ -154,24 +154,24 @@
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
             field="partCode"
             title="配件编码"
           ></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip"
             field="partName"
             title="配件名称"
             width="100"
           ></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
             field="hasOutQty"
             title="出库数量"
           ></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
             field="hasInQty"
             title="入库数量"
             :edit-render="{
@@ -180,7 +180,7 @@
               events: { change: numChangeEvent }
             }"
           ></vxe-table-column>
-          <vxe-table-column
+          <vxe-table-column  show-overflow="tooltip"
             field="storeShelf"
             title="仓位"
             :edit-render="{
@@ -189,9 +189,9 @@
               events: { blur: checkSelf }
             }"
           ></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-          <vxe-table-column field="spec" title="规格"></vxe-table-column>
-          <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="spec" title="规格"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
         </vxe-table>
       </div>
     </section>

@@ -79,20 +79,20 @@
           @current-change="currentChangeEvent"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" title="操作">
             <template v-slot="{ row,rowIndex }">
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 2)">受理</Button>
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 7)">拒绝</Button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
-          <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
-          <vxe-table-column field="status.name" title="状态"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="guestName" title="申请方"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="serviceId" title="调入退回申请单号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="status.name" title="状态"></vxe-table-column>
 
-          <vxe-table-column field="commitDate" title="提交日期"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <!--<vxe-table-column-->
+          <vxe-table-column  show-overflow="tooltip" field="commitDate" title="提交日期"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
+          <!--<vxe-table-column  show-overflow="tooltip"-->
             <!--field="storeId"-->
             <!--title="受理仓库"-->
             <!--:edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"-->
@@ -100,21 +100,21 @@
             <!---->
           <!--</vxe-table-column>-->
 
-          <!-- <vxe-table-column
+          <!-- <vxe-table-column  show-overflow="tooltip"
             field="defaultValue"
             title="受理仓库"
             :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>-->
 
-          <vxe-table-column title="受理仓库" field="defaultValue">
+          <vxe-table-column  show-overflow="tooltip" title="受理仓库" field="defaultValue">
             <template v-slot="{ row,rowIndex }">
               <vxe-select v-model="row.defaultValue">
                 <vxe-option v-for="(num,index) in storeArray" :key="index" :value="num.value" :label="`${num.label}`"></vxe-option>
               </vxe-select>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
-          <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="auditDate" title="受理日期" width="100"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
@@ -170,14 +170,14 @@
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-          <vxe-table-column field="applyQty" title="申请退回数量"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请退回数量"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
     </section>

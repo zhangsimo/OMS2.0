@@ -137,7 +137,7 @@
                     </Select>
                     <!-- <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" /> -->
                   </FormItem>
-                  <FormItem label="盘点日期" prop="checkDate">
+                  <FormItem label="盘点日期：" prop="checkDate">
                     <DatePicker
                       :disabled="draftShow != 0"
                       type="datetime"
@@ -147,13 +147,15 @@
                       @on-change="dateType"
                     ></DatePicker>
                   </FormItem>
-                  <FormItem label="盘点单号" prop="serviceId">
+                  <FormItem label="盘点单号：" prop="serviceId">
+                    <Tooltip :content="formPlan.serviceId">
                     <Input
                       v-model="formPlan.serviceId"
                       class="w160"
                       value="YCSDFD839239320"
                       disabled
                     />
+                    </Tooltip>
                   </FormItem>
                 </Form>
               </div>
@@ -227,16 +229,16 @@
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
-                <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip"
                   field="trueQty"
                   title="实盘数量"
                   width="160"
@@ -253,7 +255,7 @@
                     />
                   </template>
                 </vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="truePrice"
                   title="成本单价"
                   width="100"
@@ -264,26 +266,26 @@
                   </template>
                   <template v-slot="{ row }">{{ row.truePrice|priceFilters}}</template>
                 </vxe-table-column>
-                <vxe-table-column field="dc" title="盈亏状态" width="100">
+                <vxe-table-column  show-overflow="tooltip" field="dc" title="盈亏状态" width="100">
                   <template v-slot="{ row, seq }">
                     <span v-show="row.sysQty- row.trueQty < 0">{{ "盈利" }}</span>
                     <span v-show="row.sysQty- row.trueQty > 0">{{ "亏损" }}</span>
                     <span v-show="row.sysQty- row.trueQty == 0">{{ "无盈亏" }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="exhibitQty" title="盈亏数量" width="100">
+                <vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="100">
                   <template v-slot="{ row, seq }">
                     <span>{{(Math.abs(row.sysQty - row.trueQty))||0 }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="exhibitAmt" title="盈亏金额" width="120">
+                <vxe-table-column  show-overflow="tooltip" field="exhibitAmt" title="盈亏金额" width="120">
                   <template v-slot="{ row, seq }">
                     <span>{{(Math.abs(row.exhibitQty * row.truePrice))||0 }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="sysAmt" title="系统成本" width="100"></vxe-table-column>
-                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
             </div>
           </Split>

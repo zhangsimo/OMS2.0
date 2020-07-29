@@ -92,12 +92,14 @@
                     <FormItem label="调出方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
+                          <Tooltip :content="Leftcurrentrow.guestName">
                           <Input
                             readonly
                             :disabled="true"
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
                           ></Input>
+                          </Tooltip>
                         </Col>
                         <!--<Col span="2">-->
                         <!--&lt;!&ndash;<Button&ndash;&gt;-->
@@ -141,16 +143,22 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
+                      <Tooltip :content="Leftcurrentrow.remark">
                       <Input disabled v-model="Leftcurrentrow.remark" class="w160"></Input>
+                      </Tooltip>
                     </FormItem>
                     <FormItem label="创建人：" prop="createUname">
                       <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="code">
+                      <Tooltip :content="Leftcurrentrow.code">
                       <Input disabled :value="Leftcurrentrow.code" class="w160"></Input>
+                      </Tooltip>
                     </FormItem>
                     <FormItem label="入库单号：" prop="serviceId">
+                      <Tooltip :content="Leftcurrentrow.serviceId">
                       <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
+                      </Tooltip>
                     </FormItem>
                   </Form>
                 </div>
@@ -184,20 +192,20 @@
                   :edit-rules="validRules"
                   :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
-                  <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasInQty"
                     title="入库数量"
                     :edit-render="{name: 'input'}"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="storeShelf"
                     :edit-render="{name: 'input'}"
                     title="入库仓位"
@@ -208,11 +216,11 @@
                     <!--</template>-->
                     <!--<template v-slot="{ row }">{{ row.storeShelf }}</template>-->
                   </vxe-table-column>
-                  <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格" ></vxe-table-column>
-                  <vxe-table-column field="partInnerId" title="配件内码" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" ></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
                 </vxe-table>
               </div>
             </Split>

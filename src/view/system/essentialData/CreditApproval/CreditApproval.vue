@@ -241,7 +241,7 @@ export default {
     };
   },
   mounted() {
-    this.getCredit();
+    this.serchCredit();
   },
   filters: {
     date(value = 0) {

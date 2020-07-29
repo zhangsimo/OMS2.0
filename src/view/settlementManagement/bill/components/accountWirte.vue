@@ -125,7 +125,6 @@ export default {
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框,
       sort:'', // 判断是预收款还是预付款其他为空
-
     };
   },
   methods: {
@@ -216,7 +215,7 @@ export default {
     // 确认按钮
     determine() {
       if (this.seleteData&&Object.keys(this.seleteData).length !== 0) {
-        bus.$emit("accountHedNo", this.seleteData);
+        bus.$emit("accountHedNo", this.seleteData,this.seleteData.accountNo);
         this.modal1 = false;
       } else {
         this.$message.error("请选择一条对账单");
@@ -224,7 +223,7 @@ export default {
     },
     // 单选数据
     seleteDate(currentRow) {
-      let account = this.$parent.$parent.$parent.reconciliationStatement;
+      let account = this.$parent.$parent.reconciliationStatement;
       if (currentRow&&account && account.accountNo === currentRow.accountNo) {
         this.$refs.table.clearCurrentRow()
         return this.$message.error("对账单号已存在");

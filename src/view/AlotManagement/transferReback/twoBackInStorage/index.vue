@@ -86,12 +86,14 @@
                   <FormItem label="申请方：" class="fs12">
                     <Row class="w500">
                       <Col span="22">
+                      <Tooltip :content="formPlan.guestName">
                         <Input
                           disabled
                           readonly
                           v-model="formPlan.guestName"
                           placeholder
                         ></Input>
+                      </Tooltip>
                       </Col>
                     </Row>
                   </FormItem>
@@ -118,6 +120,7 @@
                     ></Date-picker>
                   </FormItem>
                   <FormItem label="备注：">
+                    <Tooltip :content="formPlan.remark">
                     <Input
                       :disabled="this.flag"
                       class="w500"
@@ -125,6 +128,7 @@
                       placeholder="选填"
                       maxlength="100"
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="处理人：">
                     <Input
@@ -136,6 +140,7 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
+                    <Tooltip :content="formPlan.code">
                     <Input
                       disabled
                       readonly
@@ -143,8 +148,10 @@
                       v-model="formPlan.code"
                       placeholder
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="退回单号：" class="ml50">
+                    <Tooltip :content="formPlan.serviceId">
                     <Input
                       disabled
                       readonly
@@ -152,6 +159,7 @@
                       v-model="formPlan.serviceId"
                       placeholder
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                 </Form>
               </div>
@@ -168,64 +176,64 @@
                 :data="tableData"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   type="index"
                   width="60"
                   title="序号"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="applyQty"
                   title="退回数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   width="120"
                   field="storeShelf"
                   title="仓位"
                   :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="unit"
                   title="单位"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="carBrandName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="spec"
                   title="规格"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip"
                   field="hasCancelQty"
                   title="统计退回数量"
                   width="100"

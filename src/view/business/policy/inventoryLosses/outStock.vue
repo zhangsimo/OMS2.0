@@ -107,20 +107,24 @@
                   :rules="ruleValidate"
                 >
                   <FormItem label="出库单号：" prop="serviceId">
+                    <Tooltip :content="formPlan.serviceId">
                     <Input
                       v-model="formPlan.serviceId"
                       class="w160"
                       value="YCSDFD839239320"
                       disabled
                     />
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="关联单号：" prop="code">
+                    <Tooltip :content="formPlan.code">
                     <Input
                       v-model="formPlan.code"
                       class="w160"
                       value="YCSDFD839239320"
                       disabled
                     />
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="创建日期：" prop="createTime">
                     <Input
@@ -158,18 +162,22 @@
                     </Select>
                   </FormItem>
                   <FormItem label="客户：" prop="orderMan">
+                    <Tooltip :content="formPlan.orderMan">
                     <Input
                       v-model="formPlan.orderMan"
                       class="w160"
                       value="YCSDFD839239320"
                       disabled
                     />
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="备注：" prop="remark">
+                    <Tooltip :content="formPlan.remark">
                     <Input
                       v-model="formPlan.remark"
                       class="w160"
                     />
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="来源：">
                     <Input
@@ -243,28 +251,28 @@
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column type="index" width="80" title="序号" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="120" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="120" fixed="left"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip" type="index" width="80" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="120" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="120" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip"
                   field="trueQty"
                   title="实盘数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="exhibitQty"
                   title="出库数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="exhibitPrice"
                   title="出库单价"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="exhibitPrice"
                   title="出库金额"
                   width="100"
@@ -273,15 +281,15 @@
                     <span>{{(Math.abs(row.exhibitPrice * row.exhibitQty))||0 }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="oemCode"
                   title="OE"
                   width="100"
                 >
                 </vxe-table-column>
-                <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
             </div>
           </Split>
