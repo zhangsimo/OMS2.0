@@ -691,7 +691,7 @@ export default {
         },
         {
           title: "对账人",
-          key: "auditor",
+          key: "createUname",
           className: "tc",
           minWidth:120
         },

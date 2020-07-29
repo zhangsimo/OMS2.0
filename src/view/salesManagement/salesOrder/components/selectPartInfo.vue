@@ -40,7 +40,8 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber autofocus ref="reply" v-if="aa" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <!--<InputNumber autofocus ref="orderQty" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>-->
+            <vxe-input type="number" ref="orderQty" placeholder="数量" class="w200" size="mini"  v-model="formItemData.orderQty" :min="0" digits="0"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -77,7 +78,6 @@
 		  return {
         searchPartLayer:false,
         formItemData: {},
-        aa: false,
       }
     },
     computed: {
@@ -92,14 +92,13 @@
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};
-          this.formItemData.orderQty = null;
+          this.formItemData.orderQty = undefined;
           this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
+          this.$nextTick(()=>{
+            this.$refs['orderQty'].focus();
+          })
         }
-        let a=this;
-        setTimeout(function () {
-          a.aa = true;
-          a.$refs['reply'].focus();
-        },100);
+
       },
       changeFocuse(v){
         let vl = v.target.value;
@@ -116,7 +115,6 @@
       },
 
       submit(){
-        this.aa = false;
         console.log(123);
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
