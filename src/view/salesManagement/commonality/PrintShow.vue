@@ -248,10 +248,25 @@ export default {
       let body = document.body
       body.style.overflow = 'visible'
       body.innerHTML = newstr;
+      if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
+        this.remove_ie_header_and_footer();
+      }
       window.print();
+
       // 重新加载页面，以刷新数据
       window.location.reload();
-      // document.body.innerHTML = oldstr;
+      document.body.innerHTML = oldstr;
+    },
+    //去除页眉页脚
+    remove_ie_header_and_footer() {
+      var hkey_path;
+      hkey_path = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+      try {
+        var RegWsh = new ActiveXObject("WScript.Shell");
+        RegWsh.RegWrite(hkey_path + "header", "");
+        RegWsh.RegWrite(hkey_path + "footer", "");
+      } catch (e) {
+      }
     },
     async openModal() {
       let order = this.$store.state.dataList.oneOrder;
