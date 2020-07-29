@@ -451,7 +451,7 @@ export default {
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `;
           }
-          if (columnIndex === 11) {
+          if (columnIndex === 12) {
             return ` ${this.countTaxAll(data)} `;
           }
           return null;

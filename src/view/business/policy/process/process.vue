@@ -138,14 +138,18 @@
                           <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
+                          <Tooltip :content="Leftcurrentrow.remark">
                           <Input
                             :disabled="Leftcurrentrow.status.value !== 0"
                             v-model="Leftcurrentrow.remark"
                             class="w160"
                           ></Input>
+                          </Tooltip>
                         </FormItem>
                         <FormItem label="组装单号：" prop="planOrderNum">
+                          <Tooltip :content="Leftcurrentrow.serviceId">
                           <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
+                          </Tooltip>
                         </FormItem>
                       </Form>
                     </div>
@@ -180,32 +184,32 @@
                       :footer-method="addFooter"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
-                      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-                      <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
-                      <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-                      <vxe-table-column field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
-                      <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                      <vxe-table-column
+                      <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip"
                         field="orderQty"
                         :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="组装数量"
                         width="100"
                       ></vxe-table-column>
-                      <!--                      <vxe-table-column field="orderPrice" title="单价" width="100"></vxe-table-column>-->
-                      <!--                      <vxe-table-column field="orderAmt" title="金额" width="100"></vxe-table-column>-->
-                      <vxe-table-column field="taxPrice" title="含税单价" width="100"></vxe-table-column>
-                      <vxe-table-column field="taxAmt" title="含税金额" width="100"></vxe-table-column>
-                      <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
-                      <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
-                      <vxe-table-column title="品牌车型">
+                      <!--                      <vxe-table-column  show-overflow="tooltip" field="orderPrice" title="单价" width="100"></vxe-table-column>-->
+                      <!--                      <vxe-table-column  show-overflow="tooltip" field="orderAmt" title="金额" width="100"></vxe-table-column>-->
+                      <vxe-table-column  show-overflow="tooltip" field="taxPrice" title="含税单价" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="taxAmt" title="含税金额" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" title="品牌车型">
                         <template v-slot="{row,rowIndex}">
                           <span>{{row.carBrandName}} {{row.carModelName}}</span>
                         </template>
                       </vxe-table-column>
-                      <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                      <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                      <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                     </vxe-table>
 
                     <div class="wrapper">
@@ -221,25 +225,25 @@
                         :footer-method="addFooter2"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
-                        <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
-                        <vxe-table-column field="partName" title="配件名称" fixed="left"></vxe-table-column>
-                        <vxe-table-column field="partBrand" title="品牌" fixed="left"></vxe-table-column>
-                        <vxe-table-column field="unit" title="单位"></vxe-table-column>
-                        <vxe-table-column field="qty" title="需要数量">
+                        <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="qty" title="需要数量">
                           <template v-slot="{ row, seq }">
                             <span>{{ currentNum * row.qty}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="storeStockQty" title="库存"></vxe-table-column>
-                        <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
-                        <vxe-table-column title="品牌车型">
+                        <vxe-table-column  show-overflow="tooltip" field="storeStockQty" title="库存"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" title="品牌车型">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="spec" title="规格"></vxe-table-column>
-                        <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="spec" title="规格"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                       </vxe-table>
                     </div>
                   </div>
@@ -386,15 +390,19 @@
                           <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
+                          <Tooltip :content="Leftcurrentrow.remark">
                           <Input
                             :disabled="Leftcurrentrow.status.value !== 0"
                             :value="Leftcurrentrow.remark"
                             class="w160"
                           ></Input>
+                          </Tooltip>
                         </FormItem>
                         <FormItem label="拆分单号：" prop="planOrderNum">
                           <!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
+                          <Tooltip :content="Leftcurrentrow.serviceId">
                           <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
+                          </Tooltip>
                         </FormItem>
                       </Form>
                     </div>
@@ -427,35 +435,35 @@
                       :data="Leftcurrentrow.processProductVO"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                      <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                      <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                      <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                      <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                      <vxe-table-column
+                      <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip"
                         field="orderQty"
                         :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="数量"
                         width="100"
                       ></vxe-table-column>
-                      <vxe-table-column
+                      <vxe-table-column  show-overflow="tooltip"
                         field="remark"
                         title="备注"
                         width="100"
                         :edit-render="{name: 'input'}"
                       ></vxe-table-column>
-                      <vxe-table-column field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
-                      <vxe-table-column field="outableQty" title="可用数量" width="100"></vxe-table-column>
-                      <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
-                      <vxe-table-column title="品牌车型">
+                      <vxe-table-column  show-overflow="tooltip" field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="outableQty" title="可用数量" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" title="品牌车型">
                         <template v-slot="{row,rowIndex}">
                           <span>{{row.carBrandName}} {{row.carModelName}}</span>
                         </template>
                       </vxe-table-column>
-                      <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                      <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                      <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                     </vxe-table>
 
                     <div class="wrapper">
@@ -468,24 +476,24 @@
                         :data="currentData"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                        <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                        <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                        <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                        <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                        <vxe-table-column field="orderQty" title="拆分数量" width="100">
+                        <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
                             <span>{{ row.qty * currentNum }}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
-                        <vxe-table-column title="品牌车型">
+                        <vxe-table-column  show-overflow="tooltip" field="costRatio" title="成本比例" width="100"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" title="品牌车型">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                        <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                       </vxe-table>
                     </div>
                   </div>

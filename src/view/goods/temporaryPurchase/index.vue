@@ -133,11 +133,15 @@
                   <FormItem class="form-Item" label="供应商：" prop="guestName">
                     <Row class="w160">
                       <Col span="19"
-                      ><Input
+                      >
+                      <Tooltip :content="formPlanmain.guestName">
+                      <Input
                         v-model="formPlanmain.guestName"
                         placeholder="请选择供应商"
                         :disabled="isInput"
-                      /></Col>
+                      />
+                      </Tooltip>
+                      </Col>
                       <Col span="5"
                       ><Button
                         @click="showModel('selectSupplier')"
@@ -247,6 +251,7 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="备注：">
+                    <Tooltip :content="formPlanmain.remark">
                     <Input
                       placeholder="请输入备注"
                       class="w160"
@@ -254,6 +259,7 @@
                       :disabled="isInput"
                       maxlength="100"
                     />
+                    </Tooltip>
                   </FormItem>
                   <FormItem class="form-Item" label="直发门店：">
                     <Select
@@ -273,6 +279,7 @@
                     </Select>
                   </FormItem>
                   <FormItem class="form-Item" label="订单号：">
+                    <Tooltip :content="formPlanmain.serviceId">
                     <Input
                       readonly
                       placeholder=""
@@ -280,6 +287,7 @@
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"
                     />
+                    </Tooltip>
                   </FormItem>
                 </Form>
               </div>
@@ -378,37 +386,37 @@
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   type="index"
                   width="60"
                   title="序号"
                   fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column fixed="left" type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column fixed="left" title="操作" width="80">
+                <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="80">
                   <template v-slot="{ row }">
                     <Button type="text" @click="watch(row.partId)">查看</Button>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
                   width="100"
                   fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
                   width="100"
                   fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
                   width="100"
                   fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
                   :edit-render="{ name: 'input' }"
@@ -425,7 +433,7 @@
                     />
                   </template>
                 </vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="orderPrice"
                   title="采购单价"
                   :edit-render="{ name: 'input' }"
@@ -445,59 +453,59 @@
                     {{ row.orderPrice | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column title="采购金额" filed="orderAmt" width="120">
+                <vxe-table-column show-overflow="tooltip" title="采购金额" filed="orderAmt" width="120">
                   <template v-slot="{ row }">
                     {{ (row.orderPrice * row.orderQty) | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   :edit-render="{ name: 'input' }"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="noTaxPrice"
                   title="不含税单价"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="noTaxAmt"
                   title="不含税金额"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="carModelName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="unit"
                   title="单位"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="spec"
                   title="规格"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
                   field="direction"
                   title="方向"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="adjustQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="trueEnterQty"
                   title="验收数量"
                   width="100"

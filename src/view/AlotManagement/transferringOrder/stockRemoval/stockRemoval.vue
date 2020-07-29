@@ -132,11 +132,13 @@
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
+                          <Tooltip :content="Leftcurrentrow.guestName">
                           <Input
                             readonly
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调入方"
                           />
+                          </Tooltip>
                           <!-- <Select
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
@@ -203,10 +205,12 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
+                      <Tooltip :content="Leftcurrentrow.remark">
                       <Input
                         v-model="Leftcurrentrow.remark"
                         class="w160"
                       ></Input>
+                      </Tooltip>
                     </FormItem>
                     <FormItem label="受理人：" prop="createUname">
                       <Input
@@ -216,19 +220,23 @@
                       ></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="code">
+                      <Tooltip :content="Leftcurrentrow.code">
                       <Input
                         class="w160"
                         disabled
                         :value="Leftcurrentrow.code"
                       ></Input>
+                      </Tooltip>
                     </FormItem>
                     <FormItem label="受理单号：" prop="serviceId">
+                      <Tooltip :content="Leftcurrentrow.serviceId">
                       <Input
                         class="w160"
                         :disabled="Leftcurrentrow.status.value !== 0"
                         :value="Leftcurrentrow.serviceId"
                         disabled
                       />
+                      </Tooltip>
                     </FormItem>
                   </Form>
                 </div>
@@ -288,87 +296,87 @@
                   show-overflow
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     type="index"
                     width="60"
                     title="序号"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     type="checkbox"
                     width="60"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partCode"
                     title="配件编码"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partName"
                     title="配件名称"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="applyQty"
                     title="申请数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasAcceptQty"
                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="stockOutQty"
                     title="缺货数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="storeShelf"
                     title="仓位"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="carBrandName"
                     title="品牌车型"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="unit"
                     title="单位"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="oemCode"
                     title="OE码"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partInnerId"
                     title="配件内码"
                     width="120"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="spec"
                     title="规格"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasOutQty"
                     title="出库数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasCancelQty"
                     title="取消数量"
                     width="100"
