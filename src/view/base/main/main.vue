@@ -55,7 +55,8 @@
             style="position: absolute;top: 67px;left: 0;right: 0;bottom: 0;overflow-y: auto"
           >
               <div class="image_tofile" ref="imageTofile">
-                  <keep-alive :include="cacheList">
+                  <!-- <keep-alive :include="cacheList"> -->
+                  <keep-alive>
                   <router-view />
                   </keep-alive>
               </div>
