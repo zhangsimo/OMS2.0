@@ -40,7 +40,7 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber autofocus :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <InputNumber autofocus ref="reply" v-if="aa" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
           </FormItem>
         </Col>
         <Col span="12">
@@ -77,6 +77,7 @@
 		  return {
         searchPartLayer:false,
         formItemData: {},
+        aa: false,
       }
     },
     computed: {
@@ -94,7 +95,11 @@
           this.formItemData.orderQty = null;
           this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
         }
-
+        let a=this;
+        setTimeout(function () {
+          a.aa = true;
+          a.$refs['reply'].focus();
+        },100);
       },
       changeFocuse(v){
         let vl = v.target.value;
@@ -111,6 +116,7 @@
       },
 
       submit(){
+        this.aa = false;
         console.log(123);
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
