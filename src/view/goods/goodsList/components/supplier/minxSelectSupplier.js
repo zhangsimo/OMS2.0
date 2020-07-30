@@ -30,12 +30,14 @@ export const mixSelectSupplier = {
         {
           title: "供应商名称",
           key: "fullName",
-          minWidth: 200
+          minWidth: 200,
+          tooltip: true,
         },
         {
           title: "编码",
           key: "code",
-          minWidth: 200
+          minWidth: 100,
+          tooltip: true,
         },
         {
           title: "简称",

@@ -817,7 +817,7 @@ export default {
       //   createTimeEnd: v[1]
       // };
       this.form.createTimeStart = v[0];
-      this.form.createTimeStart = v[1];
+      this.form.createTimeEnd = v[1];
       this.getList();
     },
     //更多按钮
@@ -945,18 +945,23 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
-      row.fullName;
-      if (this.val === "0") {
+      // row.fullName;
+      if (this.val == "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.fullName;
+        this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.id;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;
         }, 200);
       } else {
-        this.Leftcurrentrow.guestName = row.fullName;
-        this.diaochuName = row.fullName;
+        let more = this.$refs.naform;
+        if(!more.ArrayValue1.includes(row.shortName)) {
+          more.ArrayValue1.push(row.shortName);
+        }
+        more.form.guestName = row.shortName;
+        this.Leftcurrentrow.guestName = row.shortName;
+        this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
     },
@@ -999,9 +1004,9 @@ export default {
     getList() {
       let params = this.form;
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
-          (params.endTime = params.qucikTime[1]);
-        delete params.qucikTime;
+        params.createTime = params.qucikTime[0]
+        params.endTime = params.qucikTime[1]
+        // delete params.qucikTime;
       } else {
         delete params.qucikTime;
       }

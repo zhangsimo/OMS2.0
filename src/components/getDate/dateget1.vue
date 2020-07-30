@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       val: [],
-      searchQuick: "0",
+      searchQuick: "3",
       dateQiuck: [
         { value: "0", label: "请选择" },
         // { value: "1", label: "今天" },
@@ -34,16 +34,18 @@ export default {
     };
   },
   props: {},
-  watch: {
-    dataSource: {
-      immediate: true, // 这句重要
-      handler(val) {
-        this.searchQuick = val;
-      }
-    }
-  },
+  // watch: {
+  //   dataSource: {
+  //     immediate: true, // 这句重要
+  //     handler(val) {
+  //       this.searchQuick = val;
+  //     }
+  //   }
+  // },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getval(this.searchQuick)
+  },
   methods: {
     getval(type) {
       console.log(type, "type");
