@@ -467,6 +467,7 @@ export default {
       draftShow: "", //判定是不是草稿
       isAdd: true, //判断是否新增
       isWms: true, //判断是否提交,返回
+      currentRow: null,
       PTrow: {
         _highlight: true,
         billStatusId: { name: "草稿", value: 0 },
@@ -683,6 +684,7 @@ export default {
     selectTabelData(v) {
       if (v == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
+      this.currentRow = v;
       if (!this.Flag && !this.isAdd) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -800,7 +802,7 @@ export default {
     //选择更多
     moreQueryShowModal(row) {
       this.oneRow = row;
-      this.moreQueryList = {};
+      // this.moreQueryList = {};
       this.$refs.morequeryModal.openModal();
     },
     //获取时间
@@ -845,22 +847,23 @@ export default {
     //更多搜索
     queryList() {
       this.page.num = 1;
-      let page = this.page.num - 1;
-      let size = this.page.size;
-      let data = this.moreQueryList;
-      getLeftList(page, size, data).then(res => {
-        if (res.code === 0) {
-          this.sellOrderTable.tbdata = res.data.content || [];
-          this.sellOrderTable.tbdata.forEach(el => {
-            if(Array.isArray(el.details)) {
-              el.details.forEach(dl => {
-                dl.uuid = v4();
-              })
-            }
-          })
-          this.page.total = res.data.totalElements;
-        }
-      });
+      this.getLeftList();
+      // let page = this.page.num - 1;
+      // let size = this.page.size;
+      // let data = this.moreQueryList;
+      // getLeftList(page, size, data).then(res => {
+      //   if (res.code === 0) {
+      //     this.sellOrderTable.tbdata = res.data.content || [];
+      //     this.sellOrderTable.tbdata.forEach(el => {
+      //       if(Array.isArray(el.details)) {
+      //         el.details.forEach(dl => {
+      //           dl.uuid = v4();
+      //         })
+      //       }
+      //     })
+      //     this.page.total = res.data.totalElements;
+      //   }
+      // });
     },
     //获取搜索框内的数
     setOneClient(val) {
@@ -871,7 +874,7 @@ export default {
     },
     //获取左侧表格数据
     getLeftList() {
-      let data = {};
+      let data = {...this.moreQueryList};
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.billStatusId;
@@ -890,7 +893,7 @@ export default {
           this.page.total = res.data.totalElements;
           for (let b of this.sellOrderTable.tbdata) {
             b._highlight = false;
-            if (b.id == this.id) {
+            if (b.id == this.currentRow.id) {
               b._highlight = true;
               this.selectTabelData(b);
               break;
@@ -910,8 +913,8 @@ export default {
             let res = await getDelete(id);
             if (res.code == 0) {
               this.$Message.success("作废成功");
-              this.getLeftList();
               this.formPlan = {};
+              this.getLeftList();
               this.id = null;
               this.$refs.formPlan.resetFields();
             }
@@ -958,9 +961,9 @@ export default {
               this.isAdd = true;
               this.isNew = true;
               this.$Message.success("保存成功");
+              this.formPlan = {};
               this.getLeftList();
               this.$refs.formPlan.resetFields();
-              this.formPlan = {};
             } else {
               this.formPlan.orderDate = preTime;
             }
@@ -1049,8 +1052,8 @@ export default {
                   this.formPlan = {};
                   this.id = null;
                   this.$refs.formPlan.resetFields();
-                  // this.getLeftList();
-                  this.reload();
+                  this.getLeftList();
+                  // this.reload();
                 } else {
                   this.formPlan.orderDate = preTime;
                 }

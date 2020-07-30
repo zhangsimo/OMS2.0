@@ -94,6 +94,7 @@
               >
                 <div class="pane-made-hd">调拨受理列表</div>
                 <Table
+                  ref="leftTable"
                   :height="leftTableHeight"
                   @on-current-change="selectTabelData"
                   size="small"
@@ -394,6 +395,7 @@
         width="600px"
         @on-visible-change="moreChange"
       >
+        <Form @keydown.native.enter="Determined">
         <More
           ref="naform"
           :ArrayValue="ArrayValue"
@@ -401,6 +403,7 @@
           :dcName="diaochuName"
           :dcId="diaochuID"
         ></More>
+        </Form>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced = false">取消</Button>
@@ -741,14 +744,14 @@ export default {
       isWms: false //仓库是否启用wms
     };
   },
-  watch: {
-    Leftcurrentrow: {
-      handler(newVal) {
-        this.Leftcurrentrow = newVal;
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   Leftcurrentrow: {
+  //     handler(newVal) {
+  //       this.Leftcurrentrow = newVal;
+  //     },
+  //     deep: true
+  //   }
+  // },
   created() {
     // 调接口获取配件组装列表信息
   },
@@ -813,6 +816,7 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
+      // console.log(this.Leftcurrentrow.detailVOS);
       setTimeout(() => {
         this.$Message.success("已添加");
       }, 0);
@@ -892,11 +896,11 @@ export default {
           .then(res => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getList();
-              this.$Message.success("保存成功");
               this.flag = 0;
               this.flag1 = false;
               this.buttonDisable = null;
+              this.getList();
+              this.$Message.success("保存成功");
               // this.Leftcurrentrow.storeId = ""
               // this.Leftcurrentrow.guestName = ""
               // this.Leftcurrentrow.storeName =  "",
@@ -918,17 +922,21 @@ export default {
       }
     },
     xinzeng() {
+      this.$refs.leftTable.clearCurrentRow();
       this.flag1 = true;
       this.flagState = 1;
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
+      this.Leftcurrentrow = this.Leftcurrentrow !== null ? this.Leftcurrentrow : {};
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.status.value = 0;
+      this.Leftcurrentrow.status = {
+        value: 0,
+      };
       if (this.cangkuListall.length > 0) {
         this.cangkuListall.forEach(el => {
           if (el.isDefault) {
@@ -1064,8 +1072,8 @@ export default {
             });
         },
         onCancel: () => {
-          this.getList();
           this.Leftcurrentrow.serviceId = "";
+          this.getList();
         }
       });
     },
@@ -1414,7 +1422,7 @@ export default {
       delete params.status;
       delete params.guestName;
       getList1(params, this.Left.page.size, this.Left.page.num)
-        .then(res => {
+        .then(async res => {
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -1428,10 +1436,25 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
           }
+          // Leftcurrentrow
+          for (let b of this.Left.tbdata) {
+            b._highlight = false;
+            if(b.id == this.Leftcurrentrow.id) {
+              b._highlight = true;
+              this.Leftcurrentrow = b;
+              const params = {
+                mainId: b.id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = res.data || [];
+              return;
+            }
+            // this.Leftcurrentrow.detailVOS = [];
+          }
         })
-        .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取配件组装列表失败");
+        // });
     },
     getListPro() {
       chengping()
