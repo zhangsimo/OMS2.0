@@ -386,18 +386,20 @@ export default {
         tempQuota: "",
         sumAmt: ""
       };
-      v.showPerson = this.showSelf ? 1 : 0;
+      // v.showPerson = this.showSelf ? 1 : 0;
       left.page.num = 1;
+      left.v = v;
+      left.gitlistValue();
       // this.page.size = 10;
-      let page = left.page.num - 1;
-      let size = left.page.size;
-      getLeftList(page, size, v).then(res => {
-        if (res.code === 0) {
-          // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
-          left.tableData = res.data.content;
-          left.page.total = res.data.totalElements;
-        }
-      });
+      // let page = left.page.num - 1;
+      // let size = left.page.size;
+      // getLeftList(page, size, v).then(res => {
+      //   if (res.code === 0) {
+      //     // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
+      //     left.tableData = res.data.content;
+      //     left.page.total = res.data.totalElements;
+      //   }
+      // });
     }
   }
 };

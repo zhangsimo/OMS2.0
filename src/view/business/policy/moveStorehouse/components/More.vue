@@ -1,5 +1,6 @@
 <template>
   <Modal v-model="getShowMore" title="高级查询" width="600px" @on-ok="moreOk" @on-cancel="moreCancel">
+    <Form @keydown.native.enter="moreOk">
     <div class="navbox">
       <Row class="mb15">
         <span class="w40">创建日期：</span>
@@ -37,6 +38,7 @@
         <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
+    </Form>
   </Modal>
 </template>
 

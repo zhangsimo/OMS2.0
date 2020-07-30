@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       showPerson: true,
+      v: {},
       PtRow:{
         billStatusId: { enum: "", value: "0", name: "草稿" },
         orderMan: this.$store.state.user.userData.staffName,
@@ -119,7 +120,7 @@ export default {
         showSelf = self.salesOrder;
       }
       this.showPerson = showSelf ? 1 : 0;
-      let data = {};
+      let data = { ...this.v };
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;

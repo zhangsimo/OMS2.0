@@ -1,5 +1,6 @@
 <template>
   <Modal v-model="getShowMore" title="高级查询" width="600px" @on-ok="moreOk" @on-cancel="moreCancel">
+    <Form @keydown.native.enter="moreOk">
     <div class="navbox">
       <Row class="mb15">
         <Col>
@@ -38,6 +39,7 @@
         <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
+    </Form>
   </Modal>
 </template>
 
@@ -121,17 +123,17 @@ export default {
       this.$emit("getMoreStatus", false);
     },
     reset() {
-      this.moreData = {
-        createTime:'',//创建时间
-        enterTime:'',//提交日期
-        startTime: "", //创建日期开始
-        endTime: "", //创建日期结束
-        auditStartTime: "", //提交时间开始
-        auditEndTime: "", //提交时间结束
-        serviceId: "", //移库仓号
-        partCode: "", //配件编码
-        partName: "" //配件名称
-      };
+      // this.moreData = {
+      //   createTime:'',//创建时间
+      //   enterTime:'',//提交日期
+      //   startTime: "", //创建日期开始
+      //   endTime: "", //创建日期结束
+      //   auditStartTime: "", //提交时间开始
+      //   auditEndTime: "", //提交时间结束
+      //   serviceId: "", //移库仓号
+      //   partCode: "", //配件编码
+      //   partName: "" //配件名称
+      // };
     }
   }
 };

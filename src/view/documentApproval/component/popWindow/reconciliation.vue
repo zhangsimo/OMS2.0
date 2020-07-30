@@ -61,13 +61,13 @@
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
-              >{{accountData[1].accountNo}}</div>
+              >{{accountData[0].accountNo }}</div>
             </Col>
             <Col span="6">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
-              >{{accountData[0].accountNo}}</div>
+              >{{accountData[1].accountNo}}</div>
             </Col>
           </Row>
           <Row>
@@ -84,13 +84,13 @@
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
-              >{{accountData[1].accountSumAmt}}</div>
+              >{{accountData[0].accountSumAmt}}</div>
             </Col>
             <Col span="6">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
-              >{{accountData[0].accountSumAmt}}</div>
+              >{{accountData[1].accountSumAmt}}</div>
             </Col>
           </Row>
           <div class="db mt10 info" v-if="infoBase.billingType.value==0">
