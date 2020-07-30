@@ -564,7 +564,7 @@ export default {
         {name:'成功' , id: 1},
         {name:'失败' , id: 2},
       ],
-      noclear:false
+      noclear:true
     };
   },
   async mounted() {
