@@ -168,7 +168,6 @@ export default {
   methods: {
     //模态框打开111
     async open() {
-      console.log(this.list.type , 123)
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
       // if(this.$route.name === "documentApproval-myApplication") {
@@ -333,10 +332,10 @@ export default {
     //修改费用类型改变科目
     changeExpenseType({ row }) {
       row.accountEntry = "";
-      console.log(this.formInline)
+      // console.log(this.formInline)
     },
     changeExpenseType2({row}){
-      console.log(row)
+      // console.log(row)
     },
     //价税合计变更计算
     gettotal(v) {
