@@ -301,6 +301,7 @@
     <Select-part-com
       ref="SelectPartCom"
       @selectPartName="getPartNameList"
+      @selectPartName2="getPartNameList2"
       :is-show-add-part-btn="true"
       @isShow="false"
     ></Select-part-com>
@@ -852,6 +853,38 @@ export default {
       //   item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
       // );
     },
+
+    getPartNameList2(ChildMessage) {
+      // console.log(ChildMessage)
+      let parts = [];
+      ChildMessage.map(item => {
+        parts.push({
+          partCode: item.partCode, //编码
+          partName: item.partName, //名称
+          unit: item.unit, //单位
+          partBrand: item.partBrand, //品牌
+          spec: item.spec, //规格
+          preQty: item.orderQty||1, //预定数量
+          remark: "", //备注
+          acceptQty: 0, //受理数量
+          oemCode: item.oemCode, //oe码
+          partInnerId: item.partInnerId, //配件内码
+          partId: item.partId
+        });
+      });
+      if (this.Right.tbdata) {
+        this.Right.tbdata = [...this.Right.tbdata, ...parts];
+        this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, "oemCode");
+      } else {
+        this.Right.tbdata = parts;
+      }
+      this.$Message.success("已添加");
+
+      // this.Right.tbdata.map(
+      //   item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
+      // );
+    },
+
     //编辑收货信息弹框显示
     GoodsInfoModal() {
       if (!this.datadata || this.datadata.new)

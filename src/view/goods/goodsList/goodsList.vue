@@ -461,6 +461,7 @@
       ref="selectPartCom"
       :formPlanmain="formPlan"
       @selectPartName="getPartNameList"
+      @selectPartName2="getPartNameList2"
       :is-show-add-part-btn="true"
     ></select-part-com>
     <!--选择供应商-->

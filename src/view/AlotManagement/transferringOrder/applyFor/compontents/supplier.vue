@@ -61,7 +61,7 @@
       </div>
     </Modal>
     <!--<part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>-->
-    <select-part-info ref="selectPartInfo"></select-part-info>
+    <select-part-info ref="selectPartInfo" @throwData2="throwChangeData"></select-part-info>
   </div>
 </template>
 
