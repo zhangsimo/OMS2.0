@@ -292,9 +292,9 @@
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
-                  :data="Leftcurrentrow.detailVOS"
                   :edit-rules="validRules"
                   show-overflow
+                  :data="Leftcurrentrow.detailVOS"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
                   <vxe-table-column  show-overflow="tooltip"
@@ -816,10 +816,7 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
-      // console.log(this.Leftcurrentrow.detailVOS);
-      setTimeout(() => {
-        this.$Message.success("已添加");
-      }, 0);
+      this.$Message.success("已添加");
     },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()
@@ -928,38 +925,6 @@ export default {
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
-      this.Leftcurrentrow = this.Leftcurrentrow !== null ? this.Leftcurrentrow : {};
-      this.Leftcurrentrow.detailVOS = [];
-      this.Leftcurrentrow.guestName = "";
-      this.Leftcurrentrow.code = "";
-      this.Leftcurrentrow.remark = "";
-      this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.status = {
-        value: 0,
-      };
-      if (this.cangkuListall.length > 0) {
-        this.cangkuListall.forEach(el => {
-          if (el.isDefault) {
-            this.Leftcurrentrow.storeId = el.id;
-          }
-        });
-      } else {
-        this.Leftcurrentrow.storeId = "";
-      }
-      this.buttonShow = false;
-      this.tuneOut = false;
-      this.Leftcurrentrow.createTime = moment(new Date()).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      if (this.Left.tbdata.length === 0) {
-      } else {
-        if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info("请先保存数据");
-          return;
-        }
-      }
-      this.flag = 1;
-      this.Leftcurrentrow.statuName = "草稿";
       const item = {
         new: true,
         _highlight: true,
@@ -978,11 +943,44 @@ export default {
         serviceId: "",
         detailVOS: []
       };
+      // this.Leftcurrentrow = this.Leftcurrentrow !== null ? this.Leftcurrentrow : {};
+      // this.Leftcurrentrow.detailVOS = [];
+      // this.Leftcurrentrow.guestName = "";
+      // this.Leftcurrentrow.code = "";
+      // this.Leftcurrentrow.remark = "";
+      // this.Leftcurrentrow.serviceId = "";
+      // this.Leftcurrentrow.status = {
+      //   value: 0,
+      // };
+      // this.Leftcurrentrow.statuName = "草稿";
+      if (this.cangkuListall.length > 0) {
+        this.cangkuListall.forEach(el => {
+          if (el.isDefault) {
+            item.storeId = el.id;
+          }
+        });
+      } else {
+        item.storeId = "";
+      }
+      this.buttonShow = false;
+      this.tuneOut = false;
+      item.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      if (this.Left.tbdata.length === 0) {
+      } else {
+        if (this.Left.tbdata[0]["xinzeng"] === "1") {
+          this.$Message.info("请先保存数据");
+          return;
+        }
+      }
+      this.flag = 1;
       this.datadata = null;
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
+      this.Leftcurrentrow = this.Left.tbdata[0];
     },
     tijiao1() {
       this.$Modal.confirm({
