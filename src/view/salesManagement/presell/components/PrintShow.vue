@@ -50,7 +50,6 @@
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p><span style="font-size: 12px">预计发货日期:{{onelist.planSendDate}}</span></p>
-
           </Col>
           <Col span="8" class="pl10" >
             <p><span style="font-size: 12px">预计到货日期:</span><span>{{onelist.planArriveDate}}</span></p>
@@ -102,7 +101,7 @@
           </Col>
           <Col class="pl10" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{parseFloat(onelist.orderAmt).toFixed(2)}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
@@ -231,6 +230,8 @@
                  getPrint(id).then(res=>{
                    this.onelist = res.data;
                    this.details = res.data.detailVOList;
+                   this.onelist.planSendDate=this.onelist.planSendDate.slice(0,10)
+                   this.onelist.planArriveDate=this.onelist.planArriveDate.slice(0,10)
                  })
                }else{
                  this.$message.error("至少选择一条信息");

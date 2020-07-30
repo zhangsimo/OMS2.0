@@ -57,7 +57,7 @@
               <div class="image_tofile" ref="imageTofile">
                   <!-- <keep-alive :include="cacheList"> -->
                   <keep-alive>
-                  <router-view />
+                    <router-view />
                   </keep-alive>
               </div>
             <!--            反馈模态框-->

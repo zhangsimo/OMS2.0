@@ -514,7 +514,7 @@ export default {
           this.allMoney = 0;
           this.$refs.formPlan.resetFields();
           this.$Message.success("保存成功");
-          this.reload();
+          // this.reload();
           // this.setSelected(this.dataChange.row);
         }
         try {

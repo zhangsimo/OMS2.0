@@ -60,9 +60,9 @@
                 highlight-current-row
                 @current-change="getOneClinet"
                 @cell-dblclick="dblclick"
-                show-overflow
                 height="500"
                 style="width: 1500px"
+                show-overflow="tooltip"
               >
                 <vxe-table-column
                   type="index"
@@ -73,9 +73,9 @@
                   field="shortName"
                   width="200"
                   title="名称"
-                  show-overflow
+                  show-overflow="tooltip"
                 ></vxe-table-column>
-                <vxe-table-column field="code" title="编码"></vxe-table-column>
+                <vxe-table-column field="code" title="编码" show-overflow="tooltip"></vxe-table-column>
                 <vxe-table-column
                   field="creditLimit"
                   title="固定额度"

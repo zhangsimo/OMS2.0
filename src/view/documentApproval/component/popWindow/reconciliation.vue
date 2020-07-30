@@ -55,7 +55,13 @@
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
-              >{{accountData[0].accountNo}}</div>
+              >{{accountData[2].accountNo}}</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[0].accountNo }}</div>
             </Col>
             <Col span="6">
               <div
@@ -63,16 +69,16 @@
                 class="tc h40"
               >{{accountData[1].accountNo}}</div>
             </Col>
-            <Col span="6">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[2].accountNo}}</div>
-            </Col>
           </Row>
           <Row>
             <Col span="6">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[2].accountSumAmt}}</div>
             </Col>
             <Col span="6">
               <div
@@ -85,12 +91,6 @@
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
               >{{accountData[1].accountSumAmt}}</div>
-            </Col>
-            <Col span="6">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[2].accountSumAmt}}</div>
             </Col>
           </Row>
           <div class="db mt10 info" v-if="infoBase.billingType.value==0">

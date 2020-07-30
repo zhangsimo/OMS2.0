@@ -459,7 +459,7 @@ export default {
     };
   },
   created() {
-    this.getinfo(this.params);
+    this.getinfo();
   },
   methods: {
     checkSelf({ row : { storeShelf } }) {
@@ -476,9 +476,10 @@ export default {
       }
     },
     //获取调拨申请列表
-    getinfo(params) {
+    getinfo() {
+      let params = {...this.params, ...this.form}
       getList(params)
-        .then(res => {
+        .then(async res => {
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
@@ -488,6 +489,21 @@ export default {
             this.$Message.info("未查到数据");
             this.Left.tbdata = [];
           }
+          // this.Leftcurrentrow
+          for (let b of this.Left.tbdata) {
+            b._highlight = false;
+            if(b.id == this.Leftcurrentrow.id) {
+              b._highlight = true;
+              this.Leftcurrentrow = b;
+              const params = {
+                mainId: b.id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = this.tableData = res.data;
+              return;
+            }
+            // this.Leftcurrentrow.detailVOS = [];
+          }
         })
         .catch(err => {
           this.$Message.info("初始化数据失败");
@@ -496,11 +512,11 @@ export default {
     getDataQuick(val) {
       this.form.createTimeStart = val[0];
       this.form.createTimeEnd = val[1];
-      this.getinfo(this.form);
+      this.getinfo();
     },
     //类型查询
     getDataType() {
-      this.getinfo(this.form);
+      this.getinfo();
     },
     //显示更多弹窗
     more() {
@@ -514,7 +530,7 @@ export default {
     //更多搜索接收调拨申请列表
     getMoreData(val) {
       this.params = { ...this.params, ...val };
-      this.getinfo(this.params);
+      this.getinfo();
     },
     //
     // 仓库下拉框
@@ -539,7 +555,8 @@ export default {
           if (res.code === 0) {
             this.showIn = false;
             this.$Message.info("确定入库成功");
-            this.reload();
+            this.getinfo();
+            // this.reload();
           } else if (res.code === 1) {
             this.$Message.info("提示入库失败");
           }
@@ -599,11 +616,11 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      this.getinfo(this.params);
+      this.getinfo();
     },
     changeSize(s) {
       this.Left.page.size = s;
-      this.getinfo(this.params);
+      this.getinfo();
     }
   },
   mounted() {

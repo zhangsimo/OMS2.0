@@ -137,7 +137,7 @@ export default {
         const { content } = res.data;
         this.getArray = content;
         content.forEach(item => {
-          this.ArrayValue1.push(item.fullName);
+          this.ArrayValue1.push(item.shortName);
         });
       });
     },
@@ -191,17 +191,17 @@ export default {
     },
     reset() {
       this.getArrayParams();
-      this.form = {
-        partCode: "", //申请单号
-        partName: "", //申请单号
-        productPartCode: "", //编码
-        startData: "", //配件人
-        endDate: "",
-        createTimeEnd: "",
-        guestId: "",
-        guestName: "",
-        createTimeStart: ""
-      };
+      // this.form = {
+      //   partCode: "", //申请单号
+      //   partName: "", //申请单号
+      //   productPartCode: "", //编码
+      //   startData: "", //配件人
+      //   endDate: "",
+      //   createTimeEnd: "",
+      //   guestId: "",
+      //   guestName: "",
+      //   createTimeStart: ""
+      // };
     }
   }
 };

@@ -333,7 +333,7 @@
           </vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" title="赠送" width="50">
             <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
+              <Checkbox disabled :value="row.isGift == 1"></Checkbox>
             </template>
           </vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="storeShelf" title="仓位" width="100"></vxe-table-column>
@@ -950,7 +950,7 @@
                 let res = await getAccessories(data);
                 if (res.code === 0) {
                     // this.getList();
-                    this.reload();
+                    // this.reload();
                     // this.$parent.$parent.$refs.OrderLeft.gitlistValue()
                 }
             },
@@ -985,7 +985,7 @@
                                 this.$store.commit("setleftList", res);
                                 this.$refs.formPlan.resetFields();
                                 this.limitList = {};
-                                this.reload();
+                                // this.reload();
                             }
                         } catch (errMap) {
                             this.$XModal.message({
@@ -1125,7 +1125,7 @@
                                     this.limitList = {};
                                     this.$store.commit("setleftList", res);
                                     this.$refs.formPlan.resetFields();
-                                    this.reload();
+                                    // this.reload();
                                 }
                             }
                         } catch (errMap) {
@@ -1154,7 +1154,7 @@
                 let res = await getAccessories(data);
                 if (res.code === 0) {
                     // this.getList();
-                    this.reload();
+                    // this.reload();
                     // this.$parent.$parent.parentGetleft();
                 }
             },

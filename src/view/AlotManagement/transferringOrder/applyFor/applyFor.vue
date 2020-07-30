@@ -432,6 +432,7 @@
           Flaga: false,
           ArrayValue: [],
           getArray: [],
+          currentRow: {},
         }
       },
       methods: {
@@ -583,7 +584,6 @@
                     save(data).then(res => {
                       if(res.code === 0){
                         this.$message.success('保存成功！');
-                        this.leftgetList()
                         this.formPlan.guestName = '',
                         this.formPlan.shortName = '',
                         this.formPlan.storeId =  '',
@@ -594,6 +594,7 @@
                         this.Right.tbdata = []
                         this.isAdd = true
                         this.$refs.formPlan.resetFields();
+                        this.leftgetList()
                       }
                     })
                   // try {
@@ -837,7 +838,7 @@
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
               this.Left.tbdata.forEach(el => {
-                if (el.id == this.selectRowId) {
+                if (el.id == this.currentRow.id) {
                   el._highlight = true;
                   this.isAdd = true;
                   this.setRow(el)
@@ -857,6 +858,7 @@
         selection(row){
           if (row == null) return;
           this.selectRowId = row.id;
+          this.currentRow = row;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
             this.$Modal.confirm({
