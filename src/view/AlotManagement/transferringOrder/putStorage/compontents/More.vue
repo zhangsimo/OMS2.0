@@ -137,7 +137,7 @@ export default {
         const { content } = res.data;
         this.getArray = content;
         content.forEach(item => {
-          this.ArrayValue1.push(item.shortName);
+          this.ArrayValue1.push(item.fullName);
         });
       });
     },

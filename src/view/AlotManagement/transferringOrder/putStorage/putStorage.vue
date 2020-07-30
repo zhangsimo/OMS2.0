@@ -959,8 +959,8 @@ export default {
         if(!more.ArrayValue1.includes(row.shortName)) {
           more.ArrayValue1.push(row.shortName);
         }
-        more.form.guestName = row.shortName;
-        this.Leftcurrentrow.guestName = row.shortName;
+        more.form.guestId = row.shortName;
+        this.Leftcurrentrow.guestId = row.id;
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
