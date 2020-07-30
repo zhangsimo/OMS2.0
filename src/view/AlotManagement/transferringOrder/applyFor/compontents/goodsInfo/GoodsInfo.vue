@@ -41,7 +41,11 @@
             <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
             <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
             <vxe-table-column field="receiveCompName" title="收货单位" width="100"></vxe-table-column>
-            <vxe-table-column field="address" title="收货地址" width="100"></vxe-table-column>
+            <vxe-table-column field="address" title="收货地址" width="100">
+              <template v-slot="{row}">
+                {{row.address||row.streetAddress}}
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="receiveMan" title="收货人" width="100"></vxe-table-column>
             <vxe-table-column field="receiveManTel" title="联系电话" width="100"></vxe-table-column>
           </vxe-table>
@@ -485,7 +489,7 @@ export default class GoodsInfo extends Vue {
         delete this.formDateRight.id;
         let params: any = {};
         params.receiveComp = this.formDateRight.receiveCompName;
-        params.receiveAddress = this.formDateRight.address;
+        params.receiveAddress = this.formDateRight.address||this.formDateRight.streetAddress;
         params.receiver = this.formDateRight.receiveMan;
         params.receiverMobile = this.formDateRight.receiveManTel;
         params.deliveryType = this.formDateRight.deliveryType;
@@ -500,7 +504,7 @@ export default class GoodsInfo extends Vue {
           params.id = this.SaveId;
           params = this.logisticsRecordVO;
           params.receiveComp = this.formDateRight.receiveCompName;
-          params.receiveAddress = this.formDateRight.address;
+          params.receiveAddress = this.formDateRight.address||this.formDateRight.streetAddress;
           params.receiver = this.formDateRight.receiveMan;
           params.receiverMobile = this.formDateRight.receiveManTel;
           params.deliveryType = this.formDateRight.deliveryType;
@@ -542,7 +546,7 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight.receiveCompName = row.logisticsRecordVO.receiveComp;
-      this.formDateRight.address = row.logisticsRecordVO.receiveAddress;
+      this.formDateRight.address = row.logisticsRecordVO.address||row.logisticsRecordVO.streetAddress;
       this.formDateRight.receiveMan = row.logisticsRecordVO.receiver;
       this.formDateRight.receiveManTel = row.logisticsRecordVO.receiverMobile;
       this.formDateRight.deliveryType = row.logisticsRecordVO.deliveryType;
@@ -563,6 +567,7 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
       this.formDateRight.receiveComp = row.receiveCompName;
+      this.formDateRight.address = row.address||row.streetAddress;
       // this.formDateRight.address = row.address;
       // this.formDateRight.receiver = row.receiveMan;
       // this.formDateRight.receiverMobile = row.receiveManTel;

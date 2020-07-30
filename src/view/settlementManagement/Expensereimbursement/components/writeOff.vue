@@ -206,8 +206,9 @@ export default {
         this.compay = pay;
         this.ownpay = 0;
       } else {
-        this.ownpay = pay;
-        this.compay = this.$utils.multiply(this.totalPrice , this.table.paymentBalance)
+        this.ownpay = -pay;
+        this.compay = 0
+          // this.$utils.multiply(this.totalPrice , this.table.paymentBalance)
       }
       return [
         {

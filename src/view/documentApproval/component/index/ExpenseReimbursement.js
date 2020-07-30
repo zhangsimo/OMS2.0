@@ -188,7 +188,6 @@ export default {
           { expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0 ,billTypeId :"010102"}
         ];
         this.$set(this.formInline, "expenseDetails", arr);
-
         //判断模态框状态
         this.modelType = false;
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
@@ -355,13 +354,15 @@ export default {
         item => item.itemCode == column.model.value
       );
       let str = 0;
+      let str1=0;
+      let str2=0
       if (tax[0].itemName != "0%") {
         str = tax[0].itemName.replace("%", "");
-        str = str / 100;
+        str1 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))*parseFloat(tax[0].itemValueOne);
+        str2 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))
       }
-
-      //
-      row.taxAmt = this.$utils.multiply(row.totalAmt, str).toFixed(2);
+      row.taxAmt=str1.toFixed(2)
+      row.noTaxAmt=str2.toFixed(2)
     },
 
     //判断手动输入税额
@@ -370,11 +371,15 @@ export default {
         column = v.column,
         tax = this.taxRate.filter(item => item.itemCode == row.taxRateCode);
       let str = 0;
+      let str1=0;
+      let str2=0
       if (tax[0].itemName != "0%") {
         str = tax[0].itemName.replace("%", "");
-        str = str / 100;
+        str1 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))*parseFloat(tax[0].itemValueOne);
+        str2 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))
       }
-      let taxMoney = this.$utils.multiply(row.totalAmt, str).toFixed(2);
+      row.taxAmt=str1.toFixed(2)
+      row.noTaxAmt=str2.toFixed(2)
       let diff = this.$utils.subtract(column.model.value, taxMoney);
       if (diff > 0.01) {
         this.$Modal.confirm({
@@ -382,7 +387,8 @@ export default {
           content: "<p>税额有误差，是否确认提交</p>",
           onOk: () => {},
           onCancel: () => {
-            row.taxAmt = taxMoney;
+            row.taxAmt=str1.toFixed(2)
+            row.noTaxAmt=str2.toFixed(2)
           }
         });
       }
