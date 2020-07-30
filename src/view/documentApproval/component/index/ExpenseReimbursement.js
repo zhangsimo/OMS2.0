@@ -212,17 +212,21 @@ export default {
       }
     },
 
-   async remoteMethod1(query) {
-      this.options1 = [];
+    //收款人账号搜索触发
+    remoteMethod1(query) {
+      // this.options1 = [];
+      this.getOptionsList(query)
+    },
+
+    //收款人账号搜索框
+    async getOptionsList(query){
       if (query !== "") {
-        this.loading1 = true;
         let data = {}
         data.accountName = query
         data.page = 0
         data.size = 100
         let res = await getBackList(data)
         if(res.code == 0){
-          this.loading1 = false
           this.options1 = res.data.content || []
         }
       } else {
@@ -238,6 +242,7 @@ export default {
       if (res.code === 0) {
         this.$nextTick(() => {
           this.formInline = res.data;
+          this.getOptionsList(res.data.receiver)
           this.details = res.data.details || [];
           this.Pictures = {
             voucherPictures: res.data.voucherPictures || [],
@@ -266,6 +271,7 @@ export default {
     //获取往来单位
     getCompany(row) {
       let arr = this.options1.filter(item => item.id == row.value);
+      this.formInline.receiver = arr[0].accountName || ''
       this.formInline.receiveBank = arr[0].accountBank || "";
       this.formInline.receiveBankNo = arr[0].accountBankNo || "";
     },
@@ -326,10 +332,10 @@ export default {
     //修改费用类型改变科目
     changeExpenseType({ row }) {
       row.accountEntry = "";
-      console.log(this.formInline)
+      // console.log(this.formInline)
     },
     changeExpenseType2({row}){
-      console.log(row)
+      // console.log(row)
     },
     //价税合计变更计算
     gettotal(v) {
