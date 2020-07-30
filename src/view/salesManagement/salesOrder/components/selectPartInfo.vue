@@ -96,6 +96,7 @@
           this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
           this.$nextTick(()=>{
             this.$refs['orderQty'].focus();
+            //this.enterKeyup();
           })
         }
 
@@ -115,7 +116,6 @@
       },
 
       submit(){
-        console.log(123);
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
         }
@@ -123,8 +123,9 @@
           return this.$Message.error("单价不可为空");
         }
 		    this.searchPartLayer = false;
-		    this.$parent.$parent.getPartNameList2([this.formItemData]);
-      }
+		    //this.$parent.$parent.getPartNameList2([this.formItemData]);
+		    this.$emit("throwData",[this.formItemData])
+      },
     }
 	}
 </script>

@@ -84,6 +84,8 @@
       @throwData="addPartFun"
       :show-spe="false"
     ></part-info>
+    <select-part-info2 ref="selectPartInfo2" @throwData2="throwDataChangeNum"></select-part-info2>
+    <select-part-info  ref="selectPartInfo" @throwData="throwDataChangeNum"></select-part-info>
   </div>
 </template>
 
@@ -95,11 +97,14 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import PartInfo from "_c/partInfo/partInfo";
 import { mixSelectPartCom } from "./mixSelectPartCom";
+import SelectPartInfo from "../../../salesManagement/salesOrder/components/selectPartInfo";
+import SelectPartInfo2 from "../../../AlotManagement/transferringOrder/applyFor/compontents/selectPartInfo";
+
 
 export default {
   name: "selectPartCom",
   mixins: [mixSelectPartCom],
-  components: { PartInfo },
+  components: {SelectPartInfo, PartInfo,SelectPartInfo2 },
   props: {
     isShowAddPartBtn: false
   }

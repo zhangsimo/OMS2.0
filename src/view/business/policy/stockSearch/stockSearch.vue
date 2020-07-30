@@ -64,9 +64,8 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+                :key="item.label"
+                >{{ item.label }}</Option>
             </Select>
             <Select
               class="w240 mr10"
@@ -152,9 +151,8 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+                :key="item.label"
+              >{{ item.label }}</Option>
             </Select>
             <Select
               class="w240 mr10"
@@ -1126,9 +1124,9 @@ export default {
       if (data.storeIds[0] == 1) {
         data.storeIds = [];
       }
-      if (data.old === "all") {
-        Reflect.deleteProperty(data, "old");
-      }
+      // if (data.old === "all") {
+      //   Reflect.deleteProperty(data, "old");
+      // }
       data.page = this.contentTwo.page.num - 1;
       data.size = this.contentTwo.page.size;
       data.noStock = data.noStock ? 1 : 0;
@@ -1217,6 +1215,10 @@ export default {
       data.size = this.contentOne.page.total;
       data.noStock = data.noStock ? 1 : 0;
       data.isImport = 1;
+      if(this.contentOne.dataOne.length<=0){
+        this.$Message.error("这个公司暂时没有库存呢")
+        return
+      }
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content || [];
@@ -1236,13 +1238,15 @@ export default {
           item.oemCode = "\t" + item.oemCode;
           return item;
         });
-        if (newData.length > 0) {
+        if (newData.length >= 0) {
           this.$refs.table1.exportCsv({
             filename: "汇总库存",
             original: true,
             columns: this.columns1,
             data: newData
           });
+        }else{
+          this.$Message.error("这个公司暂时没有库存呢")
         }
       }
     },
@@ -1260,6 +1264,12 @@ export default {
       data.size = this.contentTwo.page.total;
       data.noStock = data.noStock ? 1 : 0;
       // console.log('数据',data)
+
+      if(this.contentTwo.dataTwo.length<=0){
+        this.$Message.error("这个公司暂时没有库存呢")
+        return
+      }
+
       let res = await getLotStock(data);
       if (res.code == 0) {
         let arrData2 = res.data.content || [];
@@ -1398,7 +1408,7 @@ export default {
           };
         }
       });
-      console.log(sums);
+      // console.log(sums);
       return sums;
     }
   }

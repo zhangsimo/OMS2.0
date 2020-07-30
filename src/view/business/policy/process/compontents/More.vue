@@ -86,15 +86,15 @@ export default {
       return this.form
     },
     reset() {
-      this.form = {
-        showPerson: '', //调出方
-        partCode: '', //申请单号
-        productPartCode: '', //编码
-        endAuditDate: '', //配件人
-        startAuditDate: '', //配件名称,
-        startTime: '',
-        endTime: ''
-      }
+      // this.form = {
+      //   showPerson: '', //调出方
+      //   partCode: '', //申请单号
+      //   productPartCode: '', //编码
+      //   endAuditDate: '', //配件人
+      //   startAuditDate: '', //配件名称,
+      //   startTime: '',
+      //   endTime: ''
+      // }
     }
   }
 }

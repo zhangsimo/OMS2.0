@@ -358,6 +358,7 @@ export default {
   },
   data() {
     return {
+      currRow: {},
       salesList: [], //盘点员列表
       dis: false,
       split1: 0.2,
@@ -579,7 +580,6 @@ export default {
       let size = this.Left.page.size;
       getLeftList(data, page, size)
         .then(res => {
-          // console.log(res)
           if (res.code === 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -593,6 +593,17 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
           }
+          for (let b of this.Left.tbdata) {
+              b._highlight = false;
+              if(b.id == this.currRow.id) {
+                b._highlight = true;
+                this.currRow = b;
+                this.Right.tbdata = b.detailVOList;
+                this.formPlan = b;
+                this.draftShow = b.billStatusId.value;
+                return;
+              }
+            }
         })
         .catch(err => {
           this.$Message.info("获取盘点列表失败");
@@ -765,10 +776,9 @@ export default {
                 this.flag = 0;
                 this.isAddRight = true;
                 this.Right.tbdata = [];
-                this.formPlan = {};
                 this.$Message.success("保存成功");
-                this.getList();
                 this.handleReset();
+                this.getList();
               }
               // else{
               //   this.formPlan.checkDate = preTime;
@@ -801,7 +811,7 @@ export default {
     //确认作废
     removeOk() {
       if (this.Right.tbdata.length < 1) {
-        this.$Message.error("请选择数据");
+        this.$Message.error("请添加配件数据");
         return;
       }
       //判断是否为草稿状态
@@ -837,7 +847,7 @@ export default {
       this.$refs.SelectPartRef.init();
     },
     //左边列表选中当前行
-    selectTabelData(data, val) {
+    selectTabelData(data) {
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -856,6 +866,7 @@ export default {
       //     data.orderManId = item.id;
       //   }
       // });
+      this.currRow = data;
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;
       this.draftShow = data.billStatusId.value;

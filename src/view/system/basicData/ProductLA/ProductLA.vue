@@ -301,7 +301,7 @@
     <Modal :title="proLineTitle" v-model="proLineModel" footer-hide>
       <Form ref="proLineForm" :model="proLineForm" :rules="proLineFormValidate" :label-width="100">
         <FormItem label="上级菜单：" prop="parentId">
-          <Select :disabled="proLineTitle=='编辑产品线'" v-model="proLineForm.id" placeholder="上级菜单" class="w300">
+          <Select @on-change="changeLever" :disabled="proLineTitle=='编辑产品线'" v-model="proLineForm.id" placeholder="上级菜单" class="w300">
             <Option v-for="item in treeDataList" v-show="!item.parentId" :value="item.id" :key="item.id">{{ item.title }}</Option>
           </Select>
         </FormItem>

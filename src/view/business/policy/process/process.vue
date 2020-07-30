@@ -253,7 +253,9 @@
           </section>
           <!--更多弹框-->
           <Modal v-model="advanced" title="高级查询" width="600px">
-            <More ref="naform"></More>
+            <Form @keydown.native.enter="Determined">
+              <More ref="naform"></More>
+            </Form>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
               <Button type="default" @click="cancel">取消</Button>
@@ -503,7 +505,9 @@
           </section>
           <!--更多弹框-->
           <Modal v-model="advanced" title="高级查询" width="600px">
+            <Form @keydown.native.enter="Determined">
             <More ref="naform"></More>
+            </Form>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
               <Button type="default" @click="cancel">取消</Button>
@@ -561,6 +565,8 @@ export default {
         status: 99,
         qucikTime: ""
       },
+      v1: [],
+      v2: [],
       rowId: "", //选择配件明细的id
       tabKey: 0,
       modal2: true,
@@ -772,10 +778,10 @@ export default {
   created() {
     if (this.tabKey === 0) {
       // 调接口获取配件组装列表信息
-      this.getListzu(this.form);
+      this.getListzu();
     } else {
       // 调接口获取配件拆分列表信息
-      this.getListchai(this.form);
+      this.getListchai();
     }
   },
   methods: {
@@ -819,9 +825,9 @@ export default {
       };
       if (this.tabKey === 0) {
         // console.log(444444)
-        this.getListzu(this.form);
+        this.getListzu();
       } else {
-        this.getListchai(this.form);
+        this.getListchai();
       }
     },
     baocun1() {
@@ -860,7 +866,7 @@ export default {
           .then(res => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getListzu(this.form);
+              this.getListzu();
               this.Leftcurrentrow.processProductVO = [];
               this.currentData = [];
               this.Leftcurrentrow.createTime = "";
@@ -883,7 +889,7 @@ export default {
           .then(res => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getListchai(this.form);
+              this.getListchai();
               this.Leftcurrentrow.processProductVO = [];
               this.currentData = [];
               this.Leftcurrentrow.createTime = "";
@@ -971,7 +977,7 @@ export default {
               .then(res => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
-                  this.getListzu(this.form);
+                  this.getListzu();
                   this.$Message.success("作废成功");
                 }
               })
@@ -984,7 +990,7 @@ export default {
               .then(res => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
-                  this.getListchai(this.form);
+                  this.getListchai();
                   this.$Message.success("作废成功");
                 }
               })
@@ -1055,31 +1061,33 @@ export default {
       }
     },
     getDataQuick(v) {
-      const params = {
-        startTime: v[0],
-        endTime: v[1]
-      };
-      this.getListzu(params);
+      // const params = {
+      //   startTime: v[0],
+      //   endTime: v[1]
+      // };
+      this.v1 = v;
+      this.getListzu();
     },
     //快速查询日期
     getDataQuick1(v) {
-      const params = {
-        startTime: v[0],
-        endTime: v[1]
-      };
-      this.getListchai(params);
+      // const params = {
+      //   startTime: v[0],
+      //   endTime: v[1]
+      // };
+      this.v2 = v;
+      this.getListchai();
     },
     getDataType() {
-      const params = {
-        status: this.form.status
-      };
-      this.getListzu(params);
+      // const params = {
+      //   status: this.form.status
+      // };
+      this.getListzu();
     },
     getDataType1() {
-      const params = {
-        status: this.form.status
-      };
-      this.getListchai(params);
+      // const params = {
+      //   status: this.form.status
+      // };
+      this.getListchai();
     },
     //更多按钮
     more() {
@@ -1109,7 +1117,7 @@ export default {
           .then(res => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getListzu(this.form);
+              this.getListzu();
               this.$Message.success("提交成功");
             }
           })
@@ -1122,7 +1130,7 @@ export default {
           .then(res => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getListchai(this.form);
+              this.getListchai();
               this.$Message.success("提交成功");
             }
           })
@@ -1150,10 +1158,10 @@ export default {
           onCancel: () => {
             if (this.tabKey === 0) {
               // 调接口获取配件组装列表信息
-              this.getListzu(this.form);
+              this.getListzu();
             } else {
               // 调接口获取配件拆分列表信息
-              this.getListchai(this.form);
+              this.getListchai();
             }
             this.flag = 0;
           }
@@ -1195,17 +1203,17 @@ export default {
     changePage(p) {
       this.Left.page.num = p;
       if (this.tabKey === 0) {
-        this.getListzu(this.form);
+        this.getListzu();
       } else {
-        this.getListchai(this.form);
+        this.getListchai();
       }
     },
     changeSize(size) {
       this.Left.page.size = size;
       if (this.tabKey === 0) {
-        this.getListzu(this.form);
+        this.getListzu();
       } else {
-        this.getListchai(this.form);
+        this.getListchai();
       }
     },
     //表格编辑状态下被关闭的事件
@@ -1241,9 +1249,9 @@ export default {
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
       if (this.tabKey === 0) {
-        this.getListzu(params);
+        this.getListzu();
       } else {
-        this.getListchai(params);
+        this.getListchai();
       }
       this.$refs.naform.reset();
       this.advanced = false;
@@ -1327,7 +1335,10 @@ export default {
       }, 200);
       this.$refs.addInCom.init1();
     },
-    getListzu(params) {
+    getListzu() {
+      let params = {...this.form};
+      params.startTime = this.v1[0];
+      params.endTime = this.v1[1];
       if (params.qucikTime) {
         (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
@@ -1367,7 +1378,10 @@ export default {
           this.$Message.info("获取配件组装列表失败");
         });
     },
-    getListchai(params) {
+    getListchai() {
+      let params = {...this.form};
+      params.startTime = this.v2[0];
+      params.endTime = this.v2[1];
       // if (params.qucikTime) {
       //   (params.startTime = params.qucikTime[0]),
       //     (params.endTime = params.qucikTime[1]);
@@ -1390,6 +1404,15 @@ export default {
             });
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
+            if(this.leftClickItemId){
+              for(let b of this.Left.tbdata){
+                if(b.id==this.leftClickItemId){
+                  b._highlight = true;
+                  this.selectTabelData(b);
+                  break;
+                }
+              }
+            }
           }
         })
         .catch(e => {

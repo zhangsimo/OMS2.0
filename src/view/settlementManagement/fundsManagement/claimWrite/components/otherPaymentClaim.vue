@@ -224,7 +224,8 @@ export default {
         if(cellValue){
           let trueValue =
             Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
-          if (trueValue) {
+          let trueValue2 = Math.abs(row.rpAmt) > Math.abs(this.currentAccountItem.payAmt || this.currentAccountItem.applyAmt);
+          if (trueValue||trueValue2) {
             reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
           } else {
             resolve();
@@ -268,6 +269,7 @@ export default {
       BranchstoreId: "",
       Branchstore: [{ id: 0, name: "全部" }],
       currentAccount: {},
+      currentAccountItem:{},
     };
   },
   async mounted() {
@@ -350,6 +352,7 @@ export default {
     },
     // 选中
     selected({ row }) {
+      this.currentAccountItem = row;
       this.claimTit == "其他付款认领"
         ? (this.currentAccount.accountNo =
             row.serviceId)

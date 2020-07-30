@@ -349,12 +349,14 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px">
+        <Form @keydown.native.enter="Determined">
         <More
           ref="naform"
           @getName="showModel2"
           :dcName="diaochuName"
           :dcId="diaochuID"
         ></More>
+        </Form>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced = false">取消</Button>
@@ -693,7 +695,7 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList(this.form);
+    this.getList();
     // this.getArrayParams();
   },
   methods: {
@@ -711,10 +713,7 @@ export default {
     },
 
     getDataType() {
-      const params = {
-        status: this.form.status
-      };
-      this.getList(params);
+      this.getList();
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
@@ -776,16 +775,16 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
+            this.getList();
             this.$Message.success("保存成功");
             this.flag = 0;
-            this.Leftcurrentrow.guestName = "";
-            this.Leftcurrentrow.storeId = "";
-            this.Leftcurrentrow.createTime = "";
-            this.Leftcurrentrow.remark = "";
-            this.Leftcurrentrow.serviceId = "";
-            this.Leftcurrentrow.orderMan = "";
-            this.Leftcurrentrow.detailVOS = [];
+            // this.Leftcurrentrow.guestName = "";
+            // this.Leftcurrentrow.storeId = "";
+            // this.Leftcurrentrow.createTime = "";
+            // this.Leftcurrentrow.remark = "";
+            // this.Leftcurrentrow.serviceId = "";
+            // this.Leftcurrentrow.orderMan = "";
+            // this.Leftcurrentrow.detailVOS = [];
           }
         })
         .catch(e => {
@@ -893,7 +892,8 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0 || res.message.indexOf("成功") > -1) {
-            this.reload();
+            this.getList();
+            // this.reload();
             this.$Message.success("提交成功");
           }
         })
@@ -923,7 +923,7 @@ export default {
             .then(res => {
               // 点击列表行==>配件组装信息
               if (res.code == 0) {
-                this.getList(this.form);
+                this.getList();
                 this.$Message.success("作废成功");
               }
             })
@@ -932,7 +932,7 @@ export default {
             });
         },
         onCancel: () => {
-          this.getList(this.form);
+          this.getList();
         }
       });
     },
@@ -992,7 +992,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
+            this.getList();
             this.$Message.success("出库成功");
           }
         })
@@ -1027,11 +1027,9 @@ export default {
     },
     //快速查询日期
     getDataQuick(v) {
-      const params = {
-        createTimeStart: v[0],
-        createTimeEnd: v[1]
-      };
-      this.getList(params);
+      this.form.createTimeStart = v[0];
+      this.form.createTimeEnd = v[1];
+      this.getList();
     },
     //更多按钮
     more() {
@@ -1062,7 +1060,7 @@ export default {
               this.baocun1();
             },
             onCancel: () => {
-              this.getList(this.form);
+              this.getList();
               this.flag = 0;
             }
           });
@@ -1156,11 +1154,11 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      this.getList(this.form);
+      this.getList();
     },
     changeSize(size) {
       this.Left.page.size = size;
-      this.getList(this.form);
+      this.getList();
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
@@ -1169,7 +1167,8 @@ export default {
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      this.getList(params);
+      this.form = params;
+      this.getList();
       this.advanced = false;
     },
     ok() {},
@@ -1295,7 +1294,8 @@ export default {
       }, 200);
       this.$refs.addInCom.init1();
     },
-    getList(params) {
+    getList() {
+      let params = this.form;
       if (params.qucikTime) {
         (params.createTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
@@ -1306,7 +1306,7 @@ export default {
       var array = [];
       var allArr = []; //新数组
       getList1(params, this.Left.page.size, this.Left.page.num)
-        .then(res => {
+        .then(async res => {
           if (res.code == 0) {
             for (var i = 0; i < res.data.content.length; i++) {
               array.push(res.data.content[i].status);
@@ -1329,6 +1329,21 @@ export default {
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
+            }
+            // this.Leftcurrentrow
+            for (let b of this.Left.tbdata) {
+              b._highlight = false;
+              if(b.id == this.Leftcurrentrow.id) {
+                b._highlight = true;
+                this.Leftcurrentrow = b;
+                const params = {
+                  mainId: b.id
+                };
+                const res = await getListDetail(params);
+                this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                return;
+              }
+              // this.Leftcurrentrow.detailVOS = [];
             }
           }
         })
