@@ -1285,7 +1285,7 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == this.form.guestName) {
+        if (this.getArray[i].shortName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
       }
@@ -1356,7 +1356,7 @@ export default {
     },
     // 供应商子组件内容
     getSupplierName(a) {
-      this.formPlan.guestName = a.fullName;
+      this.formPlan.guestName = a.shortName;
       this.formPlan.guestidId = a.id;
     },
     //选择方

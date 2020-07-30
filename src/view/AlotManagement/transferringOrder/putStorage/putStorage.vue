@@ -273,7 +273,7 @@
 </template>
 
 <script>
-import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
@@ -651,7 +651,7 @@ export default {
         delete params.status;
       }
       for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+        if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
           params.guestOrgid = this.getArray[i].isInternalId;
           params.guestId = this.getArray[i].id;
         }
@@ -897,11 +897,12 @@ export default {
       // this.$refs.naform.getSupplierNamea();
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
       for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == params.guestName) {
+        if (this.getArray[i].shortName == params.guestName) {
           params.guestId = this.getArray[i].id;
         }
       }
       this.form = params;
+      delete this.form.gustName;
       this.getList();
       this.advanced = false;
     },
@@ -945,7 +946,7 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
-      // row.fullName;
+      // row.shortName;
       if (this.val == "0") {
         this.showit = false;
         this.Leftcurrentrow.guestName = row.shortName;
@@ -959,7 +960,7 @@ export default {
         if(!more.ArrayValue1.includes(row.shortName)) {
           more.ArrayValue1.push(row.shortName);
         }
-        more.form.guestId = row.shortName;
+        more.form.guestId = row.id;
         this.Leftcurrentrow.guestId = row.id;
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
