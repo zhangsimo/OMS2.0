@@ -10,7 +10,6 @@
             <span>开始日期：</span>
             <DatePicker
               @on-change="selectDate"
-              @on-clear="aaa"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
@@ -29,7 +28,7 @@
                 v-for="item in purchaseNameArr"
                 :value="item.orgid"
                 :key="item.id"
-              >{{item.fullName}}</Option>
+              >{{item.shortName}}</Option>
             </Select>
             <Button type="warning" class="mr10 w90" @click="search">
               <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -147,7 +146,7 @@ export default {
   data() {
     return {
       rightTableHeight: 0,
-      purchaseNameArr: [{ fullName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
+      purchaseNameArr: [{ shortName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
       selectOne: "", //定义变量赋值日期子组件的数据
       searchType2: "9999", //绑定的下拉框
       ListTwo: [
@@ -189,6 +188,9 @@ export default {
     selectDate(date) {
       this.dateTime = date;
       this.search();
+    },
+    aaa() {
+      this.dateTime = [];
     },
     //搜索
     search() {
@@ -241,7 +243,6 @@ export default {
       this.Bottom.page.size = size;
       // this.getList()
     },
-    aaa() {},
     //点击一行
     clickOnesList(a) {
       this.RowMessage = a.row;
@@ -263,7 +264,7 @@ export default {
         params.startTime = this.selectOne[0];
         params.endTime = this.selectOne[1];
       }
-      if (this.dateTime) {
+      if (Array.isArray(this.dateTime) && this.dateTime[0] != "" && this.dateTime[1] != "") {
         params.startDate = this.dateTime[0] + " 00:00:00";
         params.endDate = this.dateTime[1] + " 23:59:59";
       }

@@ -275,7 +275,7 @@ export default {
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.orgid,
-                label: element.fullName
+                label: element.shortName
               });
             });
           }
@@ -303,8 +303,13 @@ export default {
     },
     //time2
     selectDate(val) {
-      this.form.commitDateStart = val[0] + " " + "00:00:00";
-      this.form.commitDateEnd = val[1] + " " + "23:59:59";
+      if(Array.isArray(val) && val[0] != "" && val[1] != "" ) {
+        this.form.commitDateStart = val[0] + " " + "00:00:00";
+        this.form.commitDateEnd = val[1] + " " + "23:59:59";
+      } else {
+        delete this.form.commitDateStart;
+        delete this.form.commitDateEnd;
+      }
       this.search();
     },
     changePage(p) {

@@ -34,12 +34,14 @@ export const mixSelectSupplier2 = {
         {
           title: "机构简称",
           key: "shortName",
-          minWidth: 100
+          width: 200,
+          tooltip: true,
         },
         {
           title: "编码",
           key: "code",
-          minWidth: 200
+          width: 100,
+          tooltip: true,
         },
         {
           title: "状态",
