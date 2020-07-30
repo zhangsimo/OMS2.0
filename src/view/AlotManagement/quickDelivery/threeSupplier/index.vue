@@ -229,7 +229,7 @@
             title="本次入库数量"
             :edit-render="{
               name: 'input',
-              attrs: { type: 'number' },
+              attrs: { type: 'number',min:0 },
               events: { change: numChangeEvent }
             }"
           ></vxe-table-column>
