@@ -388,6 +388,9 @@ export default class ProductLA extends Vue {
         this.tableHeight = tableWrap.offsetHeight-50;
       })
     }
+    private activated(){
+      this.getProLineList();
+    }
 
     // methods
     //获取员工表
