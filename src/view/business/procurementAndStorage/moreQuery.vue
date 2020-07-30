@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="moreQueryShow" title="高级查询">
     <div class="box">
-      <Form ref="formInline" :model="data" :label-width="100">
+      <Form ref="formInline" :model="data" :label-width="100" @keydown.native.enter="suerQuery">
         <FormItem label="创建日期:">
           <DatePicker
             type="daterange"
@@ -95,8 +95,8 @@ export default {
     openModal() {
       this.getAllClient();
       this.getAllSales();
-      this.dateOne = "";
-      this.dateTwo = "";
+      // this.dateOne = "";
+      // this.dateTwo = "";
       this.moreQueryShow = true;
     },
     //获取公司
