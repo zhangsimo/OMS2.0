@@ -1,5 +1,6 @@
 <template>
   <Modal v-model="getShowMore" title="高级查询" width="600px" @on-ok="moreOk" @on-cancel="moreCancel">
+    <Form @keydown.native.enter="moreOk">
     <div class="navbox">
       <Row>
         <Col span="12">
@@ -62,6 +63,7 @@
         <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
+    </Form>
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea"></select-supplier>
   </Modal>
 </template>
@@ -142,23 +144,23 @@ export default {
       // console.log(this.moreData, "this.moreData ==>94");
       this.$emit("getMoreData", this.moreData);
       this.$emit("getMoreStatus", false); //弹框false传出
-      this.Time1 = [];
-      this.Time2 = [];
-      this.moreData.acceptEnterTimeStart = "";
-      this.moreData.acceptEnterTimeEnd = "";
-      this.moreData.allotEnterTimeStart = "";
-      this.moreData.allotEnterTimeEnd = "";
-      this.moreData = {
-        acceptEnterTimeStart: "", //创建日期
-        acceptEnterTimeEnd: "", //创建日期
-        allotEnterTimeStart: "", //完成日期
-        allotEnterTimeEnd: "", //完成日期
-        orderMan: "", //申请人
-        serviceId: "", //返回单号
-        code: "", //申请单号
-        partCode: "", //配件编码
-        partName: "" //配件名称
-      };
+      // this.Time1 = [];
+      // this.Time2 = [];
+      // this.moreData.acceptEnterTimeStart = "";
+      // this.moreData.acceptEnterTimeEnd = "";
+      // this.moreData.allotEnterTimeStart = "";
+      // this.moreData.allotEnterTimeEnd = "";
+      // this.moreData = {
+      //   acceptEnterTimeStart: "", //创建日期
+      //   acceptEnterTimeEnd: "", //创建日期
+      //   allotEnterTimeStart: "", //完成日期
+      //   allotEnterTimeEnd: "", //完成日期
+      //   orderMan: "", //申请人
+      //   serviceId: "", //返回单号
+      //   code: "", //申请单号
+      //   partCode: "", //配件编码
+      //   partName: "" //配件名称
+      // };
     },
     submit(s) {
       this.moreData.allotEnterTimeStart = s[0] + " 00:00:00";
