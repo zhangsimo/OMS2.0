@@ -44,6 +44,7 @@
         <!--         上表格-->
         <div class="topTableDate">
           <vxe-table
+            ref="xTable"
             border
             resizable
             size="mini"
@@ -360,7 +361,7 @@
       },
       showNewOrder(row) { //弹出生成采购订单模态框
         this.clickRow = JSON.parse(JSON.stringify(row));
-        console.log(this.clickRow)
+        // console.log(this.clickRow)
         this.$refs.newOrder.openModal()
       },
       //分页查询预售单受理信息上
@@ -383,8 +384,14 @@
             // res.data.content.map(item => item.status = JSON.parse(item.status))
             this.page.total = res.data.totalElements
             this.TopTableData = res.data.content
+            this.$refs.xTable.clearCurrentRow();
+            for(let b of this.TopTableData) {
+              if(b.id === this.currentRow.id) {
+                this.$refs.xTable.setCurrentRow(b)
+                this.BottomTableData = b.detailVOList
+              }
+            }
           }
-
         })
 
       },

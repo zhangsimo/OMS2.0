@@ -4,7 +4,7 @@
     title="高级查询"
   >
     <div class="box">
-      <Form ref="formInline" :model="data" :label-width="100">
+      <Form ref="formInline" :model="data" :label-width="100" @keydown.native.enter="getMoreSearch">
         <FormItem label="创建日期:" >
           <DatePicker type="daterange" v-model="data.start"  :editable=false @on-change="getCreatDate"  placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>

@@ -459,7 +459,7 @@ export default {
     let changeNumber = ({cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
       if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+        return Promise.reject(new Error('数量输入不正确'))
       }
     };
 
@@ -484,7 +484,7 @@ export default {
       model1: "",
       WareHouseList: [], //交货仓库
       limitList: [], //客户额度
-      currentRow:{},
+      currentRow: null,
       //分页
       page: {
         total: 0,
@@ -867,7 +867,7 @@ export default {
           this.page.total = res.data.totalElements;
           for(let b of this.preSellOrderTable.tbData){
             b._highlight = false
-            if(b.id==this.id){
+            if(b.id==this.currentRow.id){
               b._highlight = true;
               this.setRightData(b);
               break;
@@ -881,6 +881,7 @@ export default {
     selectTabelData(v) {
       if (v == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
+      this.currentRow = v;
       if (!this.Flag && !this.isAdd) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1024,9 +1025,9 @@ export default {
             let res = await getDelete(id);
             if (res.code == 0) {
               this.$Message.success("作废成功");
-              this.getLeftList();
               this.id = null;
               this.formPlan = {};
+              this.getLeftList();
               this.isNew = true;
               this.$refs.formPlan.resetFields();
             }
@@ -1055,9 +1056,9 @@ export default {
               this.isAdd = true;
               this.isNew = true;
               this.$Message.success("保存成功");
-              this.getLeftList();
               this.formPlan = {};
               this.limitList = {};
+              this.getLeftList();
               this.$refs.formPlan.resetFields();
             }
           } catch (errMap) {
@@ -1123,11 +1124,11 @@ export default {
             let res = await finishSales(id);
             if (res.code == 0) {
               this.$Message.success("操作成功");
-              this.getLeftList();
               this.id = null;
               this.limitList = [];
               this.$refs.formPlan.resetFields();
               this.formPlan = {};
+              this.getLeftList();
             }
           },
           onCancel: () => {
