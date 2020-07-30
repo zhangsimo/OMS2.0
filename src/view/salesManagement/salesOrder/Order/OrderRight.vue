@@ -950,7 +950,7 @@
                 let res = await getAccessories(data);
                 if (res.code === 0) {
                     // this.getList();
-                    this.reload();
+                    // this.reload();
                     // this.$parent.$parent.$refs.OrderLeft.gitlistValue()
                 }
             },
@@ -985,7 +985,7 @@
                                 this.$store.commit("setleftList", res);
                                 this.$refs.formPlan.resetFields();
                                 this.limitList = {};
-                                this.reload();
+                                // this.reload();
                             }
                         } catch (errMap) {
                             this.$XModal.message({
@@ -1125,7 +1125,7 @@
                                     this.limitList = {};
                                     this.$store.commit("setleftList", res);
                                     this.$refs.formPlan.resetFields();
-                                    this.reload();
+                                    // this.reload();
                                 }
                             }
                         } catch (errMap) {
@@ -1154,7 +1154,7 @@
                 let res = await getAccessories(data);
                 if (res.code === 0) {
                     // this.getList();
-                    this.reload();
+                    // this.reload();
                     // this.$parent.$parent.parentGetleft();
                 }
             },
