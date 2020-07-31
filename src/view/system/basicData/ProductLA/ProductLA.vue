@@ -349,8 +349,6 @@
               class="w270"
               node-key="id"
               ref="tree"
-              highlight-current
-              @node-click="handleNodeClick"
               :props="defaultProps">
             </el-tree>
           </div>
