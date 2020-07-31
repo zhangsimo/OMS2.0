@@ -1102,7 +1102,6 @@ export default [
             mark: "51106",
             meta: {
               keepAlive: true,
-              keepAlive: true,
               title: "资金日记账审核"
             },
             component: () =>
