@@ -345,6 +345,7 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
+      console.log(v)
       v = JSON.parse(JSON.stringify(v));
 
       v.forEach(item => {
@@ -361,6 +362,19 @@ export const mixGoodsData = {
         return item;
       })
       this.tableData = allArr;
+    },
+
+    //添加配件修改数量的数据
+    getPartNameList2(v) {
+      let oldArr = [...this.tableData, ...v]
+      var allArr = [...oldArr];
+
+      allArr.map(item => {
+        item.uuid = v4();
+        return item;
+      })
+      this.tableData = allArr;
+      this.$Message.success("已添加")
     },
 
     selectOrderMan(val) {

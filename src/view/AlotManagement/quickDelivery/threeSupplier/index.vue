@@ -229,7 +229,8 @@
             title="本次入库数量"
             :edit-render="{
               name: 'input',
-              attrs: { type: 'number' },
+              immediate: true,
+              attrs: { type: 'number',min:0 },
               events: { change: numChangeEvent }
             }"
           ></vxe-table-column>
@@ -447,7 +448,12 @@ export default {
       this.modal2 = true;
     },
     numChangeEvent({ row }, evnt) {
-      //console.log(evnt.target.value);
+      if(parseInt(evnt.target.value)<0){
+        this.$Message.error("本次入库数量不能小于零")
+        this.currentrow.details.trueEnterQty=0
+        row.thisQty=0
+        return
+      }
       this.currentrow.details.trueEnterQty = evnt.target.value;
     },
     roleChangeEvent({ row }, evnt) {

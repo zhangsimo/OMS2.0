@@ -368,7 +368,7 @@
     <goods-info ref="goodsInfo" :guestId="formPlan.guestId" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"
-                     @selectPartName="getPartNameList"></select-part-com>
+                     @selectPartName="getPartNameList" @throwPartNameList2="getPartNameList2"></select-part-com>
     <!--      批次配件-->
     <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList"></barch>
     <!--      选择客户-->

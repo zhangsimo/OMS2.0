@@ -336,6 +336,9 @@ export const mixSelectPartCom = {
       if(this.$route.name=="applyFor"){
         this.$refs.selectPartInfo.init(v);
       }
+    },
+    throwChangeData(v){
+      this.$emit("selectPartName2", v);
     }
   }
 };

@@ -223,7 +223,7 @@
         <!--更多弹框-->
               <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
-        <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
+        <supplier ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
         <!--编辑收货信息-->
           <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata" :guestId="guestidId"></goods-info>
       </div>
