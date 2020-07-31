@@ -1124,9 +1124,9 @@ export default {
       if (data.storeIds[0] == 1) {
         data.storeIds = [];
       }
-      // if (data.old === "all") {
-      //   Reflect.deleteProperty(data, "old");
-      // }
+      if (data.old === "all") {
+        Reflect.deleteProperty(data, "old");
+      }
       data.page = this.contentTwo.page.num - 1;
       data.size = this.contentTwo.page.size;
       data.noStock = data.noStock ? 1 : 0;
@@ -1269,11 +1269,10 @@ export default {
         this.$Message.error("这个公司暂时没有库存呢")
         return
       }
-
       let res = await getLotStock(data);
       if (res.code == 0) {
         let arrData2 = res.data.content || [];
-        arrData2.map((item, index) => {
+        let newData=arrData2.map((item, index) => {
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
@@ -1294,12 +1293,16 @@ export default {
             objData.oemCode = "\t" + objData.oemCode;
             return objData;
           });
-          this.$refs.table2.exportCsv({
-            filename: "批次库存",
-            original: false,
-            columns: this.columns2,
-            data: arrData
-          });
+          if (newData.length >= 0) {
+            this.$refs.table2.exportCsv({
+              filename: "批次库存",
+              original: false,
+              columns: this.columns2,
+              data: arrData
+            });
+          }else{
+            this.$Message.error("这个公司暂时没有库存呢")
+          }
         }
       }
     },
