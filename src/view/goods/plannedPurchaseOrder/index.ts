@@ -34,6 +34,7 @@ import StatusModal from './components/checkApprovalModal.vue';
   }
 })
 export default class PlannedPurchaseOrder extends Vue {
+
   @State('user') user;
 
   private showSelf: boolean = true;
