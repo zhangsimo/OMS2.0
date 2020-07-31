@@ -749,11 +749,11 @@ export default {
     },
     //实际应收合计
     Actualtotalcollect() {
-      //对账应收-应收坏账-应收返利
+      //对账应收-应收坏账-应收返利  +运费(transportExpenses)+保险费(insuranceExpenses)+手续费(serviceCharge)+配件管理费(partsManagementFee)+其他费用(otherFees)
       this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
       this.totalcollect = this.totalcollect ? this.totalcollect : 0;
       return (
-        this.totalcollect * 1 - this.collectBaddebt * 1 - this.collectRebate * 1
+        this.totalcollect * 1 - this.collectBaddebt * 1 - this.collectRebate * 1  + this.transportExpenses * 1 + this.insuranceExpenses * 1 + this.serviceCharge * 1 + this.partsManagementFee * 1 + this.otherFees * 1
       );
     },
     //本次对账结算合计
