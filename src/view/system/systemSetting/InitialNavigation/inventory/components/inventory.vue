@@ -197,6 +197,7 @@ import axios from "axios";
 import baseUrl from "_conf/url";
 
 export default {
+  name: "inventory",
   components: {
     selectPartCom
   },

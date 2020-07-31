@@ -143,7 +143,7 @@
   import {mixBrandCar} from "./mixBrandCar";
 
   export default {
-    name: "brandCar",
+    name: "brandCarModel",
     mixins:[mixBrandCar],
     data(){
       return {

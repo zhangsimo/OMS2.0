@@ -404,7 +404,7 @@ import moment from "moment";
 
 export default {
   inject: ["reload"],
-  name: "businessBorrowing",
+  name: "settlementManagementBusinessBorrowing",
   components: {
     quickDate,
     claim,

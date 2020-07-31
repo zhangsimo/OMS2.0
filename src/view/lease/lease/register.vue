@@ -60,7 +60,7 @@
   import {getMessagelist,findAllTenantType,Reviewtenant,SHstate,trialRegister,findByCode,getMessagelist2} from '../../../api/lease/registerApi'
 
     export default {
-        name: "register",
+        name: "registers",
         data(){
           return {
             auditBtnDis: false,

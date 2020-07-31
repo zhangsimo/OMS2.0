@@ -353,7 +353,7 @@ import {
 
 import moment from "moment";
 export default {
-  name: "otherPayable",
+  name: "settlementManagementOtherPayable",
   components: {
     quickDate,
     claim,

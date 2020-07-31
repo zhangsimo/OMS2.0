@@ -25,7 +25,7 @@ import { Object } from "core-js";
 import { checkStore } from "@/api/system/systemApi";
 
 export default {
-  name: "market",
+  name: "procurementAndStorage",
   inject: ["reload"],
   components: {
     QuickDate,

@@ -59,6 +59,7 @@ import {getOnWay} from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
 import moment from 'moment'
 export default {
+  name: "billOnway",
   components: {
     quickDate,
     selectDealings

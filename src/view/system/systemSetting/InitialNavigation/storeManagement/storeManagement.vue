@@ -15,6 +15,7 @@ import SupplierClassification from "./SupplierClassification";
 import SupplierData from "./SupplierData";
 import { getSupplierTreeList } from "@/api/system/systemSetting/storeManagement";
 export default {
+  name: "storeManagement",
   components: {
     SupplierClassification,
     SupplierData

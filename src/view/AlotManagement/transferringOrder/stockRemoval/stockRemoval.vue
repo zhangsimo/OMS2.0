@@ -480,6 +480,7 @@ import * as tools from "_utils/tools";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 export default {
+  name: "stockRemoval",
   components: {
     More,
     QuickDate,

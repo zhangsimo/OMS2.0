@@ -379,7 +379,7 @@ import moment from "moment";
 
 export default {
   inject:['reload'],
-  name: "businessBorrowing",
+  name: "settlementManagementExpensereimbursement",
   components: {
     quickDate,
     claim,

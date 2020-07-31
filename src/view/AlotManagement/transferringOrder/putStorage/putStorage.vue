@@ -297,6 +297,7 @@ import {
 
 import { queryByOrgid,validityPosition } from "../../../../api/AlotManagement/transferringOrder";
 export default {
+  name: "putStorage",
   inject: ["reload"],
   components: {
     More,

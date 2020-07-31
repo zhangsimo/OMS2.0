@@ -73,6 +73,7 @@ import { goshop } from '@/api/settlementManagement/shopList'
 import { transferWarehousing, wouseParts } from "@/api/bill/saleOrder";
 import moment from 'moment'
 export default {
+  name: "billAllocationwarehousing",
   components: {
     quickDate,
     selectDealings

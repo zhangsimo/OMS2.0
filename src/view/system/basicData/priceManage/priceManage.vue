@@ -296,6 +296,7 @@ import selectPartCom from "@/view/system/basicData/priceManage/components/select
 import importXLS from "@/view/settlementManagement/components/importXLS.vue";
 // strategyId
 export default {
+  name: "priceManage",
   inject: ["reload"],
   data() {
     return {

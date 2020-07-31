@@ -55,8 +55,7 @@
             style="position: absolute;top: 67px;left: 0;right: 0;bottom: 0;overflow-y: auto"
           >
               <div class="image_tofile" ref="imageTofile">
-                  <!-- <keep-alive :include="cacheList"> -->
-                  <keep-alive>
+                  <keep-alive :include="cacheList">
                     <router-view />
                   </keep-alive>
               </div>
@@ -225,11 +224,12 @@ export default {
       return this.$store.state.user.userData;
     },
     cacheList() {
-      return this.tagNavList.length
+      let arr = this.tagNavList.length
         ? this.tagNavList
             .filter(item => !(item.meta && item.meta.notCache))
             .map(item => item.name)
         : [];
+      return arr;
     },
     menuList() {
       return this.$store.getters.menuList;

@@ -257,6 +257,7 @@
   import {upxlxsDBo} from "../../../../api/purchasing/purchasePlan";
 
   export default {
+      name: "applyFor",
       components: {
         QuickDate,
         More,

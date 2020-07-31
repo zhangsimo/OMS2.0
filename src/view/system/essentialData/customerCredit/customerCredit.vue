@@ -171,7 +171,7 @@ import * as tools from "../../../../utils/tools";
 import moment from "moment";
 
 export default {
-  name: "customerCredit",
+  name: "clientCredit",
   components: {
     CreditLineApplication,
     SurveyList,
