@@ -269,6 +269,7 @@ import _ from "lodash";
 
 import moment from "moment";
 export default {
+  name: "settlementManagementAdvanceCollection",
   components: {
     quickDate,
     claim,

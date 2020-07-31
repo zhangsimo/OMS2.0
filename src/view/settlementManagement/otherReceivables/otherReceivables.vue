@@ -347,7 +347,7 @@ import {
 // otherReceivables
 import moment from "moment";
 export default {
-  name: "otherReceivables",
+  name: "settlementManagementOtherReceivables",
   components: {
     quickDate,
     claim,

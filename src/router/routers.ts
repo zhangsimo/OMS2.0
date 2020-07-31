@@ -879,7 +879,7 @@ export default [
       },
       {
         path: "/settlementManagement/advanceCollection",
-        name: "settlementManagement-advanceCollection",
+        name: "settlementManagementAdvanceCollection",
         // mark: 'oms_orders_approve',
         mark: "5300",
         meta: {
@@ -891,7 +891,7 @@ export default [
       },
       {
         path: "/settlementManagement/advanceCharge",
-        name: "settlementManagement-advanceCharge",
+        name: "settlementManagementAdvanceCharge",
         // mark: 'oms_orders_approve',
         mark: "5600",
         meta: {
@@ -903,7 +903,7 @@ export default [
       },
       {
         path: "/settlementManagement/otherReceivables",
-        name: "settlementManagement-otherReceivables",
+        name: "settlementManagementOtherReceivables",
         // mark: 'oms_orders_approve',
         mark: "5700",
         meta: {
@@ -915,7 +915,7 @@ export default [
       },
       {
         path: "/settlementManagement/otherPayable",
-        name: "settlementManagement-otherPayable",
+        name: "settlementManagementOtherPayable",
         // mark: 'oms_orders_approve',
         mark: "5800",
         meta: {
@@ -927,7 +927,7 @@ export default [
       },
       {
         path: "/settlementManagement/businessBorrowing",
-        name: "settlementManagement-businessBorrowing",
+        name: "settlementManagementBusinessBorrowing",
         // mark: 'oms_orders_approve',
         mark: "5900",
         meta: {
@@ -939,7 +939,7 @@ export default [
       },
       {
         path: "/settlementManagement/Dailyfundaudit",
-        name: "settlementManagement-Dailyfundaudit",
+        name: "settlementManagementDailyfundaudit",
         // mark: 'oms_orders_approve',
         mark: "5301",
         meta: {
@@ -951,7 +951,7 @@ export default [
       },
       {
         path: "/settlementManagement/Expensereimbursement",
-        name: "settlementManagement-Expensereimbursement",
+        name: "settlementManagementExpensereimbursement",
         // mark: 'oms_orders_approve',
         mark: "51000",
         meta: {
