@@ -77,7 +77,7 @@ export default [
           keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "滚动计划单",
-          // 
+          //
         },
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },
@@ -89,7 +89,7 @@ export default [
           keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "计划采购订单",
-          // 
+          //
         },
         component: () =>
           import("@/view/goods/plannedPurchaseOrder/plannedPurchaseOrder.vue")
@@ -1115,7 +1115,6 @@ export default [
             mark: "51107",
             meta: {
               keepAlive: true,
-              keepAlive: true,
               title: "现金日记账"
             },
             component: () =>
@@ -1180,7 +1179,7 @@ export default [
         meta: {
           keepAlive: true,
           title: "申请单",
-          // 
+          //
         },
         component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
       },
@@ -1881,7 +1880,7 @@ export default [
         mark: "9301",
         meta: {
           keepAlive: true,
-          // 
+          //
           title: "基本信息"
         },
         component: parentView,
@@ -1892,7 +1891,7 @@ export default [
             mark: "9301",
             meta: {
               keepAlive: true,
-              // 
+              //
               title: "基本信息",
 
             },
@@ -1957,7 +1956,7 @@ export default [
         mark: "9999",
         meta: {
           keepAlive: true,
-          // 
+          //
           title: "模板管理",
 
         },
