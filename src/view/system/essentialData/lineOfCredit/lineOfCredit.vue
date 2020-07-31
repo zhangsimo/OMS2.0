@@ -36,7 +36,7 @@
 import quickDate from "@/components/getDate/dateget";
 import { getTableList } from "@/api/system/essentialData/lineOfCredit";
 export default {
-  name: "lineOfCredit",
+  name: "LineOfCredit",
   components: {
     quickDate
   },

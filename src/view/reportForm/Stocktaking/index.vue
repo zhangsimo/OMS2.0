@@ -18,7 +18,7 @@ import tabOne from "./components/tabOne";
 import tabTwo from "./components/tabTwo";
 
 export default {
-  name: "reporIndex",
+  name: "procurementStocktaking",
   components: { panne, tabOne, tabTwo },
   data() {
     return {};

@@ -1085,7 +1085,7 @@ export default [
     children: [
       {
         path: '/documentApproval/draftingOfApplication',
-        name: 'documentApproval-draftingOfApplication',
+        name: 'documentApprovalDraftingOfApplication',
         // redirect: "/multilevel/level_2_1",
         mark: '11001',
         meta: {
@@ -1222,8 +1222,8 @@ export default [
         component: parentView,
         children: [
           {
-            path: "partManage",
-            name: "partManage",
+            path: "Fittings",
+            name: "Fittings",
             mark: "9101",
             meta: {
               // hideInMenu: true,

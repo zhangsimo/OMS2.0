@@ -15,6 +15,7 @@
   import SupplierData from "./SupplierData";
   import {getSupplierTreeList} from '@/api/system/essentialData/supplierManagement'
     export default {
+      name: "supplierManagement",
         components:{
             SupplierClassification,
             SupplierData,

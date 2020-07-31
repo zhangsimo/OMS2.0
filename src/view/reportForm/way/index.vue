@@ -9,7 +9,7 @@ import panne from "./components/panne";
 import tabOne from "./components/tabOne";
 
 export default {
-  name: "reporIndex",
+  name: "procurementWay",
   components: { panne, tabOne },
   data() {
     return {};
