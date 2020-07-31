@@ -64,9 +64,8 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+                :key="item.label"
+                >{{ item.label }}</Option>
             </Select>
             <Select
               class="w240 mr10"
@@ -152,9 +151,8 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+                :key="item.label"
+              >{{ item.label }}</Option>
             </Select>
             <Select
               class="w240 mr10"
@@ -1010,8 +1008,10 @@ export default {
         }
       ];
       if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
-        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
-        this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
+        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+        this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
+        // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
+        // this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
       } else {
         this.columns1 = arr;
         this.columns2 = arr2;
@@ -1217,6 +1217,10 @@ export default {
       data.size = this.contentOne.page.total;
       data.noStock = data.noStock ? 1 : 0;
       data.isImport = 1;
+      if(this.contentOne.dataOne.length<=0){
+        this.$Message.error("这个公司暂时没有库存呢")
+        return
+      }
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content || [];
@@ -1236,13 +1240,15 @@ export default {
           item.oemCode = "\t" + item.oemCode;
           return item;
         });
-        if (newData.length > 0) {
+        if (newData.length >= 0) {
           this.$refs.table1.exportCsv({
             filename: "汇总库存",
             original: true,
             columns: this.columns1,
             data: newData
           });
+        }else{
+          this.$Message.error("这个公司暂时没有库存呢")
         }
       }
     },
@@ -1260,10 +1266,15 @@ export default {
       data.size = this.contentTwo.page.total;
       data.noStock = data.noStock ? 1 : 0;
       // console.log('数据',data)
+
+      if(this.contentTwo.dataTwo.length<=0){
+        this.$Message.error("这个公司暂时没有库存呢")
+        return
+      }
       let res = await getLotStock(data);
       if (res.code == 0) {
         let arrData2 = res.data.content || [];
-        arrData2.map((item, index) => {
+        let newData=arrData2.map((item, index) => {
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
@@ -1284,12 +1295,16 @@ export default {
             objData.oemCode = "\t" + objData.oemCode;
             return objData;
           });
-          this.$refs.table2.exportCsv({
-            filename: "批次库存",
-            original: false,
-            columns: this.columns2,
-            data: arrData
-          });
+          if (newData.length >= 0) {
+            this.$refs.table2.exportCsv({
+              filename: "批次库存",
+              original: false,
+              columns: this.columns2,
+              data: arrData
+            });
+          }else{
+            this.$Message.error("这个公司暂时没有库存呢")
+          }
         }
       }
     },
@@ -1398,7 +1413,7 @@ export default {
           };
         }
       });
-      console.log(sums);
+      // console.log(sums);
       return sums;
     }
   }

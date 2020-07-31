@@ -1752,10 +1752,11 @@ export default {
       this.model1 = ''
       this.model3 = ''
       this.text = ''
+      this.clientList=[]
+      this.Branchstore=[]
       this.getAllClient();
       this.modal1 = true
       this.getShop()
-
     },
     // 更多条件查询
     senior() {
@@ -1965,6 +1966,7 @@ export default {
       let res = await getClient()
       if(res.code === 0 ){
         this.clientList = res.data
+        // console.log(res)
       }
     },
   }
