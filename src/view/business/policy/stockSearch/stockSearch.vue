@@ -1010,8 +1010,10 @@ export default {
         }
       ];
       if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
-        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
-        this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
+        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+        this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
+        // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
+        // this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
       } else {
         this.columns1 = arr;
         this.columns2 = arr2;
