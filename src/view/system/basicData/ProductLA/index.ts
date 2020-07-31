@@ -645,6 +645,7 @@ export default class ProductLA extends Vue {
         this.proLineForm.id = '000000';
       }else{
         this.proLineForm.id = this.proLineForm.parentId;
+        this.proLineSelectData.lever = 1;
       }
       this.proLineModel = true;
     }
@@ -700,6 +701,8 @@ export default class ProductLA extends Vue {
 
     //产品线点击选中
     private handleNodeClick(data){
+      // @ts-ignore
+      this.selectTableItem = {};
       this.proLineSelectData = {...data}
       let sourceData:Array<any> = [];
       if(data.lever==0){
@@ -727,8 +730,9 @@ export default class ProductLA extends Vue {
       let treeRef:any = this.$refs.tree;
       treeRef.setCheckedKeys([]);
       this.StaffList = [];
+      let StaffNameRef:any = this.$refs.StaffName;
+      StaffNameRef.query = "";
       if(this.selectTableItem.hasOwnProperty("userId")){
-        let StaffNameRef:any = this.$refs.StaffName;
         StaffNameRef.query = this.selectTableItem.userName;
         this.selectStaff(this.selectTableItem.userId)
       }else{
