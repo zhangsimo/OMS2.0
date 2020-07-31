@@ -53,7 +53,7 @@
   import {getLeaseOrderlist,getExpire30list,closeNoPayOrder} from '../../../api/lease/leaseApi'
 
   export default {
-    name: 'orderlist',
+    name: 'leaseOrder',
     data() {
       return {
         orderNo: '',

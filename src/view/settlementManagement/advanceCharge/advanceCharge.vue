@@ -261,6 +261,7 @@ import moment from "moment";
 import { mapMutations } from "vuex";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 export default {
+  name: "settlementManagementAdvanceCharge",
   components: {
     quickDate,
     claim,

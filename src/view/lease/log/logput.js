@@ -80,7 +80,7 @@ const methods = {
 };
 
 export default {
-  name: "",
+  name: "putlog",
   components,
   data,
   mounted,

@@ -273,6 +273,7 @@ import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 export default {
+  name: "invoiceAdministrationSalesInvoice",
   data() {
     return {
       exportData: false,

@@ -254,6 +254,7 @@ import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import modelToast from "./modelToast.vue";
 export default {
+  name: "invoiceAdministrationInvoiceManagement",
   components: {
     modelToast
   },

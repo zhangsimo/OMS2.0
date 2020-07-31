@@ -345,6 +345,7 @@ export const mixPartInfo = {
       this.formValidate.carBrandName = ''
       this.formValidate.carModelName = ''
       this.formValidate.fullName = ''
+      this.formValidate.customType = ""
       if (setData) {
         this.formValidate = setData;
         //赋值适用车型
@@ -467,7 +468,7 @@ export const mixPartInfo = {
       this.getCustomData();
     },
     //拉取自定义分类
-    getCustomData() {
+    getCustomData(t) {
       getAllCustom().then(res => {
         if (res.code == 0) {
           this.customAll = res.data || [];

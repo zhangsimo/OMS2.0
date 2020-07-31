@@ -83,7 +83,7 @@ export default {
     };
   },
   mounted() {
-    this.gitlistValue();
+    // this.gitlistValue();
   },
   computed: {
     queryall() {

@@ -23,12 +23,12 @@
         <vxe-table-column field="mateAccountName" title="会计科目"></vxe-table-column>
         <vxe-table-column field="tmp" title="收付类型">
           <template v-slot="{ row }">
-            <span>{{ row.receiptPaymentType.name }}</span>
+            <span>{{ row.receiptPaymentType?row.receiptPaymentType.name:"" }}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column field="tmp" title="核销方式">
           <template v-slot="{ row }">
-            <span>{{ row.verificationType.name }}</span>
+            <span>{{ row.verificationType?row.verificationType.name:"" }}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column title="业务类型" field="tmp">

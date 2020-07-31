@@ -129,6 +129,7 @@ import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 import XEUtils from "xe-utils";
 export default {
+  name: "cashflow",
   components: {
     QuickDate
   },

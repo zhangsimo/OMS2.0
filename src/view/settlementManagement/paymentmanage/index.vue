@@ -120,8 +120,12 @@
         </Select>
       </div>
       <div class="db pro mt20">
-        <span>客户名称：</span>
-        <Select v-model="guestId" filterable class="w200">
+        <span>往来单位：</span>
+        <Select v-model="guestId" filterable class="w200"
+              :loading="searchLoading"
+              :remote-method="getAllClient"
+              @on-change="getAccountNameListFun"
+        >
           <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
         </Select>
       </div>
@@ -210,8 +214,10 @@ import {
   getNumberList
 } from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
+import {getCustomerInformation} from "@/api/system/essentialData/clientManagement";
 import { creat } from "./../components";
 import moment from "moment";
+import {findGuest} from "../../../api/settlementManagement/advanceCollection";
 export default {
   name:'payMentmanage',
   components: {
@@ -236,6 +242,7 @@ export default {
       onStock: false,
       flag: false,
       clientList:[],//客户下拉数据
+      searchLoading:true,
       guestId:"",//客户选中id
       columns: [
         {
@@ -1754,7 +1761,6 @@ export default {
       this.text = ''
       this.clientList=[]
       this.Branchstore=[]
-      this.getAllClient();
       this.modal1 = true
       this.getShop()
     },
@@ -1962,12 +1968,25 @@ export default {
 
     },
     //获取公司
-    async getAllClient(){
-      let res = await getClient()
-      if(res.code === 0 ){
-        this.clientList = res.data
-        // console.log(res)
+    async getAllClient(query){
+      if (query !== '') {
+        this.searchLoading = true;
+        let req = {
+          fullName:query,
+          size:1000,
+        }
+        let rep = await getCustomerInformation(req);
+        this.searchLoading = false;
+        if(rep.code==0){
+          this.clientList = rep.data.content;
+        }
+      } else {
+        this.companyList = [];
       }
+    },
+    getAccountNameListFun(v){
+      this.guestId = v;
+
     },
   }
 };

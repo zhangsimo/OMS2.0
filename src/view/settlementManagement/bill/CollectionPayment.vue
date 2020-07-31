@@ -153,6 +153,7 @@ import moment from "moment";
 import { set } from "xe-utils/methods";
 import index from "../../admin/roles";
 export default {
+  name: "billCollectionPayment",
   components: {
     quickDate
   },

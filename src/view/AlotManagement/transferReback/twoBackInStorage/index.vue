@@ -276,6 +276,7 @@ import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { checkStore } from '@/api/system/systemApi'
 
 export default {
+  name: "twoBackInStorage",
   inject: ["reload"],
   components: {
     More,

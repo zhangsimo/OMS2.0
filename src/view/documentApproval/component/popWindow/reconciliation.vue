@@ -446,6 +446,11 @@ export default {
   methods: {
     // 获取数据
     async Initialization() {
+      this.accountData=[
+        { accountNo: "", accountSumAmt: "" },
+        { accountNo: "", accountSumAmt: "" },
+        { accountNo: "", accountSumAmt: "" }
+      ]
       if (this.modelType.type == 3){
         this.disabletype = true
       }else {

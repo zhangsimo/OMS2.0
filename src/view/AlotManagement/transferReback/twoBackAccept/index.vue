@@ -197,6 +197,7 @@ import {
   tuihuishouliliebiaomingxi
 } from "../../../../api/AlotManagement/twoBackAccept.js";
 export default {
+  name: "twoBackAccept",
   components: {
     QuickDate
   },
@@ -297,8 +298,8 @@ export default {
     },
     //time1
     getDataQuick(val) {
-      this.form.startTime = val[0];
-      this.form.endTime = val[1];
+      this.form.createTimeStart = val[0];
+      this.form.createTimeEnd = val[1];
       this.search();
     },
     //time2

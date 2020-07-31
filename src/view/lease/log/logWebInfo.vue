@@ -17,7 +17,7 @@
 <script>
 import * as api from "_api/lease/log";
 export default {
-  name: "logwebinfo",
+  name: "logWebInfo",
   data() {
     return {
       log: "",

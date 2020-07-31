@@ -178,6 +178,8 @@ export default {
     //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
+        mateAccountCode: val.titleCode,
+        mateAccountName: val.titleName,
         businessTypeName: val.titleName,
         reconciliationAmt: 0,
         hasAmt: 0,

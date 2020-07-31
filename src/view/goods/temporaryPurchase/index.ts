@@ -41,7 +41,7 @@ import { v4 } from "uuid"
     SelectPartCom
   }
 })
-export default class InterPurchase extends Vue {
+export default class TemporaryPurchase extends Vue {
   @State('user') user;
 
   private showSelf: boolean = true;

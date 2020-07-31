@@ -200,8 +200,6 @@
                         disabled
                         @on-change="changeDate"
                         v-model="Leftcurrentrow.createTime"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        type="date"
                         class="w160"
                       ></DatePicker>
                     </FormItem>
@@ -482,6 +480,7 @@ import * as tools from "_utils/tools";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 export default {
+  name: "stockRemoval",
   components: {
     More,
     QuickDate,
@@ -628,7 +627,10 @@ export default {
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140
+            minWidth: 140,
+            render(h, params) {
+              return h("span", {}, moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss"));
+            }
           },
           {
             title: "受理人",
@@ -925,6 +927,7 @@ export default {
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
+      let createTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
       const item = {
         new: true,
         _highlight: true,
@@ -937,22 +940,13 @@ export default {
         },
         statuName: "草稿",
         storeName: "",
-        createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+        createTime,
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
         serviceId: "",
-        detailVOS: []
+        detailVOS: [],
       };
-      // this.Leftcurrentrow = this.Leftcurrentrow !== null ? this.Leftcurrentrow : {};
-      // this.Leftcurrentrow.detailVOS = [];
-      // this.Leftcurrentrow.guestName = "";
-      // this.Leftcurrentrow.code = "";
-      // this.Leftcurrentrow.remark = "";
-      // this.Leftcurrentrow.serviceId = "";
-      // this.Leftcurrentrow.status = {
-      //   value: 0,
-      // };
-      // this.Leftcurrentrow.statuName = "草稿";
+      console.log(item);
       if (this.cangkuListall.length > 0) {
         this.cangkuListall.forEach(el => {
           if (el.isDefault) {
@@ -964,9 +958,6 @@ export default {
       }
       this.buttonShow = false;
       this.tuneOut = false;
-      item.createTime = moment(new Date()).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -1440,6 +1431,22 @@ export default {
             if(b.id == this.Leftcurrentrow.id) {
               b._highlight = true;
               this.Leftcurrentrow = b;
+              this.buttonDisable = 0;
+              if (b.statuName == "待出库") {
+                this.buttonDisable = 1;
+              }
+              if (b.statuName == "已出库") {
+                this.buttonDisable = 2;
+              }
+              if (b.statuName == "已作废") {
+                this.buttonDisable = 3;
+              }
+
+              //判断仓库是否启用wms
+              this.isWms = false;
+              if (this.buttonDisable === 1 && b.isWms === 1) {
+                this.isWms = true;
+              }
               const params = {
                 mainId: b.id
               };

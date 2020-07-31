@@ -297,6 +297,7 @@ import {
 
 import { queryByOrgid,validityPosition } from "../../../../api/AlotManagement/transferringOrder";
 export default {
+  name: "putStorage",
   inject: ["reload"],
   components: {
     More,
@@ -436,7 +437,10 @@ export default {
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140
+            minWidth: 140,
+            render(h, params) {
+              return h("span", {}, moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss"));
+            }
           },
           {
             title: "创建人",

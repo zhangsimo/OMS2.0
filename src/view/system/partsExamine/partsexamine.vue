@@ -101,7 +101,7 @@
   import PartInfo from "_c/partInfo/partInfo";
 
   export default {
-    name: 'mixtureRatio',
+    name: 'partsExamine',
     components: {PartInfo},
     inject:['reload'],
     mixins:[minxParts],

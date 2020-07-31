@@ -103,6 +103,7 @@ import {
 import { goshop } from '@/api/settlementManagement/shopList';
 import moment from "moment";
 export default {
+  name: "billExternal",
   components: {
     quickDate,
     selectDealings

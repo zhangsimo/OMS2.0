@@ -286,6 +286,7 @@
 
   import moment from 'moment'
   export default {
+    name: "capitalChain",
     components: {
       quickDate,
       importXLS,

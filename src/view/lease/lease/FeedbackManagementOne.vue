@@ -33,7 +33,7 @@
 <script>
   import {allMessage} from '../../../api/lease/FeedbackManagement'
     export default {
-        name: "FeedbackManagementOne",
+        name: "feedback_management",
         data(){
           return {
             json:{},

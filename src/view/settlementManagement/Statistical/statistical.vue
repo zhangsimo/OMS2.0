@@ -78,6 +78,7 @@ import * as api from "_api/settlementManagement/financialStatement.js";
 import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 export default {
+  name: "statistical",
   components: {
     QuickDate
   },
