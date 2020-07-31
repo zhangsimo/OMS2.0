@@ -360,7 +360,10 @@ export default class ProductLA extends Vue {
     private StaffList:Array<any>=[];
     private StaffName:any = "";
     private proLineBrandName:any = "";
-
+    private selectTableItem = {
+      userName:"",
+      userId:""
+    };
 
     // mounted
     private async mounted() {
@@ -390,6 +393,7 @@ export default class ProductLA extends Vue {
     }
     private activated(){
       this.getProLineList();
+      this.proLineSelectData = {};
     }
 
     // methods
@@ -720,11 +724,16 @@ export default class ProductLA extends Vue {
     //打开产品线分配层
     private disProLine(){
       this.proLineDis = true;
-      this.StaffName = "";
       let treeRef:any = this.$refs.tree;
       treeRef.setCheckedKeys([]);
-      this.StaffName = "";
       this.StaffList = [];
+      if(this.selectTableItem.hasOwnProperty("userId")){
+        let StaffNameRef:any = this.$refs.StaffName;
+        StaffNameRef.query = this.selectTableItem.userName;
+        this.selectStaff(this.selectTableItem.userId)
+      }else{
+        this.StaffName = "";
+      }
     }
 
     private changeLever(v){
@@ -750,6 +759,9 @@ export default class ProductLA extends Vue {
     }
 
     private async proLineDisSubmit(){
+      if(this.selectTableItem.userId){
+        this.StaffName = this.selectTableItem.userId;
+      }
       if(this.StaffName){
         let treeRef:any = this.$refs.tree;
         let treeSelectData = treeRef.getCheckedNodes();
@@ -784,7 +796,7 @@ export default class ProductLA extends Vue {
         this.$message.error("请选择员工");
       }
     }
-
+    //获取分配员工列表
     async getProLineDisList(ids){
       let arrData = ids.filter(item => item.lever==1).map(item => {
         let objData:any = {}
@@ -970,5 +982,9 @@ export default class ProductLA extends Vue {
           treeRef.setCheckedNodes(rep.data);
         }
       }
+    }
+
+    private selectTable(v){
+      this.selectTableItem = v;
     }
 }

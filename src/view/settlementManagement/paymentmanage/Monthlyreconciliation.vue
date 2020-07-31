@@ -135,9 +135,8 @@
                 <button
                   class="ml50 ivu-btn ivu-btn-default"
                   type="button"
-                  v-show="changeBtn"
                   @click="changeKh"
-                >修改</button>
+                >新增</button>
               </div>
             </div>
             <!-- 应收业务销售出库/退货对账 -->

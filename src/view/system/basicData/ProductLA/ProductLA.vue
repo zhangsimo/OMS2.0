@@ -114,13 +114,16 @@
       <div class="qx-l fl w300" style="height: 100%; overflow-y: auto">
         <el-tree
           :data="treeData"
+          ref="treeList"
+          highlight-current
+          default-expand-all
           node-key="id"
           @node-click="handleNodeClick"
           :props="defaultProps">
         </el-tree>
       </div>
       <div class="qx-r" style="height: 100%" ref="tabelWrap">
-        <Table border :columns="columns1" :max-height="tableHeight" size="small" :data="data1"></Table>
+        <Table border highlight-row @on-current-change="selectTable" :columns="columns1" :max-height="tableHeight" size="small" :data="data1"></Table>
       </div>
     </section>
     <!--上部-->
@@ -325,6 +328,7 @@
       <Form ref="formValidate"  :label-width="100">
         <FormItem label="选择员工：">
           <Select
+            ref="StaffName"
             v-model="StaffName"
             placeholder="==请选择=="
             class="w300"
