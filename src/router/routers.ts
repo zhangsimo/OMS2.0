@@ -929,7 +929,6 @@ export default [
         // mark: 'oms_orders_approve',
         mark: "5200",
         meta: {
-          keepAlive: true,
           // hideInMenu: true,
           keepAlive: true,
           title: "应收应付"
