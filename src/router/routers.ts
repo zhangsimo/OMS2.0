@@ -89,7 +89,7 @@ export default [
       },
       {
         path: "interPurchase",
-        name: "interPurchase",
+        name: "InterPurchase",
         mark: "1002",
         meta: {
           icon: "arrow-graph-up-right",
@@ -100,7 +100,7 @@ export default [
       },
       {
         path: "/goods/temporary-purchase",
-        name: "temporaryPurchase",
+        name: "TemporaryPurchase",
         mark: "1003",
         meta: {
           icon: "arrow-graph-up-right",
@@ -111,7 +111,7 @@ export default [
       },
       {
         path: "/goods/outside-purchase",
-        name: "outsidePurchase",
+        name: "OutsidePurchase",
         mark: "1004",
         meta: {
           // hideInMenu: true,
@@ -614,7 +614,7 @@ export default [
       },
       {
         path: "/settlementManagement/bill",
-        name: "settlementManagement-bill",
+        name: "settlementManagementBill",
         mark: "5100",
         meta: {
           title: "对账与结算"
@@ -633,7 +633,7 @@ export default [
           },
           {
             path: "/settlementManagement/bill/CollectionPayment",
-            name: "bill-CollectionPayment",
+            name: "billCollectionPayment",
             mark: "5102",
             meta: {
               // hideInMenu: true,
@@ -645,7 +645,7 @@ export default [
           {
             path:
               "/settlementManagement/settlementManagement/bill/Allocationstock",
-            name: "bill-Allocationstock",
+            name: "billAllocationstock",
             mark: "5103",
             meta: {
               // hideInMenu: true,
@@ -656,7 +656,7 @@ export default [
           },
           {
             path: "/settlementManagement/bill/Allocationwarehousing",
-            name: "bill-Allocationwarehousing",
+            name: "billAllocationwarehousing",
             // mark: 'oms_orders_approve',
             mark: "5104",
             meta: {
@@ -670,7 +670,7 @@ export default [
           },
           {
             path: "/settlementManagement/bill/Onway",
-            name: "bill_Onway",
+            name: "billOnway",
             mark: "5105",
             meta: {
               // hideInMenu: true,
@@ -681,7 +681,7 @@ export default [
           },
           {
             path: "/settlementManagement/settlementManagement/bill/External",
-            name: "bill_External",
+            name: "billExternal",
             mark: "5106",
             meta: {
               // hideInMenu: true,
@@ -692,7 +692,7 @@ export default [
           },
           {
             path: "/settlementManagement/bill/Sales",
-            name: "bill_Sales",
+            name: "billSales",
             // mark: 'oms_orders_approve',
             mark: "5107",
             meta: {
@@ -704,7 +704,7 @@ export default [
           },
           {
             path: "/settlementManagement/settlementManagement/bill/stock",
-            name: "bill_stock",
+            name: "billStock",
             // mark: 'oms_orders_approve',
             mark: "5108",
             meta: {
@@ -775,7 +775,7 @@ export default [
           // },
           {
             path: "/invoiceAdministration/invoiceApply",
-            name: "invoiceAdministration-invoiceApply",
+            name: "invoiceAdministrationInvoiceApply",
             redirect: "",
             mark: "5502",
             meta: {
@@ -788,7 +788,7 @@ export default [
           },
           {
             path: "/invoiceAdministration/salesInvoice",
-            name: "invoiceAdministration-salesInvoice",
+            name: "invoiceAdministrationSalesInvoice",
             redirect: "",
             mark: "5503",
             meta: {
@@ -801,7 +801,7 @@ export default [
           },
           {
             path: "/invoiceAdministration/invoiceManagement",
-            name: "invoiceAdministration-invoiceManagement",
+            name: "invoiceAdministrationInvoiceManagement",
             redirect: "",
             // mark: "5200",
             meta: {

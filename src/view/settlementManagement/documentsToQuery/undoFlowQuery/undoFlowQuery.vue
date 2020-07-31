@@ -65,6 +65,7 @@ import { goshop } from "@/api/settlementManagement/shopList";
 
 import moment from "moment";
 export default {
+  name: "UndoFlowQuery",
   components: {
     quickDate
   },

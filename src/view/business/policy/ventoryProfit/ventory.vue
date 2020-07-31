@@ -322,7 +322,7 @@
   import { TOKEN_KEY } from "@/libs/util";
   import * as tools from "../../../../utils/tools";
   export default {
-    name: "ventory",
+    name: "ventoryProfit",
     components: {
       QuickDate,
       PrintShow,
