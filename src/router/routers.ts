@@ -36,7 +36,7 @@ export default [
     redirect: "/home",
     component: Main,
     meta: {
-      notCache: true,
+
       title: "首页"
     },
     children: [
@@ -44,7 +44,7 @@ export default [
         path: "home",
         name: "home",
         meta: {
-          notCache: true,
+
           icon: "md-home",
           title: "首页"
         },
@@ -60,7 +60,7 @@ export default [
     meta: {
       icon: "md-cloud-done",
       title: "采购管理",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -71,18 +71,18 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "滚动计划单",
-          // notCache: true,
+          // 
         },
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },
       {
         path: "plannedPurchaseOrder",
-        name: "plannedPurchaseOrder",
+        name: "PlannedPurchaseOrder",
         mark: "1001",
         meta: {
           icon: "arrow-graph-up-right",
           title: "计划采购订单",
-          // notCache: true,
+          // 
         },
         component: () =>
           import("@/view/goods/plannedPurchaseOrder/plannedPurchaseOrder.vue")
@@ -94,7 +94,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "国际采购订单",
-          notCache: true,
+
         },
         component: () => import("@/view/goods/InterPurchase/InterPurchase.vue")
       },
@@ -105,7 +105,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "临时采购订单",
-          notCache: true,
+
         },
         component: () => import("@/view/goods/temporaryPurchase/index.vue")
       },
@@ -117,7 +117,7 @@ export default [
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "外采订单",
-          notCache: true,
+
         },
         component: () => import("@/view/goods/outsidePurchase/index.vue")
       },
@@ -129,7 +129,7 @@ export default [
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "采购退货",
-          notCache: true,
+
         },
         component: () =>
           import("@/view/business/goods/supplierList/supplierList.vue")
@@ -141,7 +141,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "预订单",
-          notCache: true,
+
         },
         component: () =>
           import("@/view/business/goods/bookingSheet/bookingSheet.vue")
@@ -154,7 +154,7 @@ export default [
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "预订单受理",
-          notCache: true,
+
         },
         component: () => import("@/view/business/goods/brandList.vue")
       },
@@ -166,7 +166,7 @@ export default [
           hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "条码管理",
-          notCache: true,
+
         },
         component: () => import("@/view/business/goods/barcodeList.vue")
       },
@@ -178,7 +178,7 @@ export default [
           hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "规格管理",
-          notCache: true,
+
         },
         component: () => import("@/view/business/goods/specificationsList.vue")
       },
@@ -190,7 +190,7 @@ export default [
           hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "价格管理",
-          notCache: true,
+
         },
         component: () => import("@/view/business/goods/priceList.vue")
       },
@@ -202,7 +202,7 @@ export default [
           hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "商品同步",
-          notCache: true,
+
         },
         component: () => import("@/view/business/goods/goodsSync.vue")
       }
@@ -217,7 +217,7 @@ export default [
       // hideInMenu: true,
       icon: "ios-paper",
       title: "销售管理",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -229,7 +229,7 @@ export default [
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "销售订单",
-          notCache: true,
+
         },
         component: () =>
           import("@/view/salesManagement/salesOrder/salesOrder.vue")
@@ -241,7 +241,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "销售退货",
-          notCache: true,
+
         },
         component: () =>
           import("@/view/salesManagement/sellReturn/sellReturn.vue")
@@ -253,7 +253,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "预售单",
-          notCache: true,
+
         },
         component: () => import("@/view/salesManagement/presell/presell.vue")
       },
@@ -264,7 +264,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "预售单受理",
-          notCache: true,
+
         },
         component: () =>
           import("@/view/salesManagement/acceptance/acceptance.vue")
@@ -292,7 +292,7 @@ export default [
     meta: {
       icon: "ios-paper",
       title: "调拨管理",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -314,7 +314,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "调拨申请",
-              notCache: true,
+
             },
             component: () =>
               import(
@@ -357,7 +357,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调拨入库",
-              notCache: true,
+
             },
             component: () =>
               import(
@@ -383,7 +383,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调入退回申请",
-              notCache: true,
+
             },
             component: () =>
               import(
@@ -397,7 +397,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调出退回入库",
-              notCache: true
+              notCache: true,
             },
             component: () =>
               import(
@@ -411,7 +411,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调入退回受理",
-              notCache: true
+              notCache: true,
             },
             component: () =>
               import(
@@ -436,7 +436,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "总部直调入库",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -450,7 +450,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "供应商直发入库",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -468,7 +468,7 @@ export default [
     meta: {
       icon: "ios-paper",
       title: "库存管理",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -479,7 +479,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "库存查询",
-          notCache: true
+
         },
         component: () =>
           import("@/view/business/policy/stockSearch/stockSearch.vue")
@@ -491,7 +491,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "采购入库",
-          notCache: true
+          notCache: true,
         },
         component: () =>
           import(
@@ -515,7 +515,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "移仓单",
-          notCache: true
+
         },
         component: () =>
           import("@/view/business/policy/moveStorehouse/moveStorehouse.vue")
@@ -527,7 +527,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘点单",
-          notCache: true
+
         },
         component: () =>
           import("@/view/business/policy/smsInventory/smsInventory.vue")
@@ -539,7 +539,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘盈入库",
-          notCache: true
+
         },
         component: () =>
           import("@/view/business/policy/ventoryProfit/ventory.vue")
@@ -551,7 +551,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘亏出库",
-          notCache: true
+
         },
         component: () =>
           import("@/view/business/policy/inventoryLosses/outStock.vue")
@@ -563,7 +563,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "加工单",
-          notCache: true
+
         },
         component: () => import("@/view/business/policy/process/process.vue")
       },
@@ -581,23 +581,23 @@ export default [
     component: Main,
     children: [
       {
-        path:'/documentsToQuery',
-        name:'DocumentsToQuery',
+        path: '/documentsToQuery',
+        name: 'DocumentsToQuery',
         redirect: "/multilevel/level_2_1",
-        mark:'5400',
+        mark: '5400',
         meta: {
-          title:'单据查询'
+          title: '单据查询'
         },
         component: parentView,
-        children:[
+        children: [
           {
             path: 'undoFlowQuery',
             name: 'UndoFlowQuery',
-            mark:'5401',
-            meta:{
-              title:'撤销流水帐查询',
+            mark: '5401',
+            meta: {
+              title: '撤销流水帐查询',
             },
-            component:() =>
+            component: () =>
               import("@/view/settlementManagement/documentsToQuery/undoFlowQuery/undoFlowQuery.vue")
           },
           // {
@@ -871,7 +871,7 @@ export default [
         mark: "5200",
         meta: {
           // hideInMenu: true,
-          keepAlive:true,
+          keepAlive: true,
           title: "应收应付"
         },
         component: () =>
@@ -985,7 +985,7 @@ export default [
             name: "shopJournal",
             mark: "51102",
             meta: {
-              keepAlive:true,
+              keepAlive: true,
               title: "门店资金日记账"
             },
             component: () =>
@@ -1028,7 +1028,7 @@ export default [
             name: "accountings",
             mark: "51106",
             meta: {
-              keepAlive:true,
+              keepAlive: true,
               title: "资金日记账审核"
             },
             component: () =>
@@ -1040,7 +1040,7 @@ export default [
             redirect: "",
             mark: "51107",
             meta: {
-              keepAlive:true,
+              keepAlive: true,
               title: "现金日记账"
             },
             component: () =>
@@ -1084,13 +1084,13 @@ export default [
     component: Main,
     children: [
       {
-        path:'/documentApproval/draftingOfApplication',
-        name:'documentApproval-draftingOfApplication',
+        path: '/documentApproval/draftingOfApplication',
+        name: 'documentApproval-draftingOfApplication',
         // redirect: "/multilevel/level_2_1",
-        mark:'11001',
+        mark: '11001',
         meta: {
-          title:'申请流程',
-          notCache: true
+          title: '申请流程',
+
         },
         component: () =>
           import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
@@ -1101,7 +1101,7 @@ export default [
         mark: "11002",
         meta: {
           title: "申请单",
-          // notCache: true
+          // 
         },
         component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
       },
@@ -1117,7 +1117,7 @@ export default [
     meta: {
       icon: "ios-paper",
       title: "报表统计",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -1128,7 +1128,7 @@ export default [
         mark: "7100",
         meta: {
           title: "采购报表",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/purchaseRepor/index.vue"),
       },
@@ -1139,7 +1139,7 @@ export default [
         mark: "7101",
         meta: {
           title: "销售报表",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/saleOrder/index.vue"),
       },
@@ -1150,7 +1150,7 @@ export default [
         mark: "7102",
         meta: {
           title: "调拨报表",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/transfer/index.vue"),
       },
@@ -1161,7 +1161,7 @@ export default [
         mark: "7103",
         meta: {
           title: "调出在途信息",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/way/index.vue"),
       },
@@ -1172,7 +1172,7 @@ export default [
         mark: "7104",
         meta: {
           title: "移仓报表",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/moveWarehouse/index.vue"),
       },
@@ -1183,7 +1183,7 @@ export default [
         mark: "7105",
         meta: {
           title: "盘点报表",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/Stocktaking/index.vue"),
       },
@@ -1194,7 +1194,7 @@ export default [
         mark: "7106",
         meta: {
           title: "加工报表",
-          notCache: true
+
         },
         component: () => import("@/view/reportForm/Assembly/index.vue"),
       },
@@ -1207,7 +1207,7 @@ export default [
     meta: {
       icon: "md-settings",
       title: "系统设置",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -1229,7 +1229,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "配件管理",
-              notCache: true,
+
             },
             component: () =>
               import("@/view/system/basicData/Fittings/Fittings.vue")
@@ -1242,7 +1242,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "配件审核与标定",
-              notCache: true
+
             },
             component: () =>
               import("@/view/system/partsExamine/partsexamine.vue")
@@ -1255,7 +1255,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "产品权限管理",
-              notCache: true
+
             },
             component: () =>
               import("@/view/system/basicData/ProductLA/ProductLA.vue")
@@ -1268,7 +1268,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "紧俏品管理",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1282,12 +1282,12 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "紧俏品分配",
-              notCache: true
+
             },
             component: () =>
               import(
                 "@/view/AlotManagement/transferringOrder/productDistribution/index.vue"
-                )
+              )
           },
           {
             path: "priceManage",
@@ -1299,14 +1299,14 @@ export default [
               title: "价格管理"
             },
             component: parentView,
-            children:[
+            children: [
               {
                 path: "priceManage",
                 name: "priceManage",
                 mark: "9210",
                 meta: {
                   title: "价格管理",
-                  notCache: true
+
                 },
                 component: () =>
                   import("@/view/system/basicData/priceManage/priceManage.vue")
@@ -1317,7 +1317,7 @@ export default [
                 mark: "9211",
                 meta: {
                   title: "价格体系查询",
-                  notCache: true
+
                 },
                 component: () =>
                   import("@/view/system/basicData/priceManage/priceSystemSearch/priceSystemSearch.vue")
@@ -1343,7 +1343,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "活动管理",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1358,7 +1358,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "客户管理",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1373,7 +1373,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "客户信用管理",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1388,7 +1388,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "额度审批数据查询",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1403,7 +1403,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "信用额度调整查询",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1418,7 +1418,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "供应商管理",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1433,7 +1433,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "物流快递管理",
-              notCache: true
+
             },
             component: () =>
               import("@/view/system/essentialData/logistics/logistics.vue")
@@ -1469,7 +1469,7 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "配比清单",
-              notCache: true
+
             },
             component: () =>
               import("@/view/system/basicData/mixTure/mixtureRatio.vue")
@@ -1481,7 +1481,7 @@ export default [
             meta: {
               icon: "gear-b",
               title: "数据字典",
-              notCache: true
+
             },
             component: () =>
               import("@/view/lease/dataDictionary/dataDictionary.vue")
@@ -1505,7 +1505,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "初始导航",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1519,7 +1519,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "业务参数",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1533,7 +1533,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "结算账户",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1547,7 +1547,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "期初库存",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1562,7 +1562,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "备货级别设置",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1577,7 +1577,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "自定义分类设置",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1592,7 +1592,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "配件提成",
-              notCache: true
+
             }
             // component: () =>
             //   import(
@@ -1607,7 +1607,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "配件品牌",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1623,7 +1623,7 @@ export default [
               hideInMenu: true,
               title: "品牌车型",
               activeName: "navigationFater",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1638,7 +1638,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "期初应收应付",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1653,7 +1653,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "配件分类",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1668,7 +1668,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "门店设置",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1682,7 +1682,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "仓库设置",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1696,7 +1696,7 @@ export default [
             meta: {
               hideInMenu: true,
               title: "期初现金银行",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1710,7 +1710,7 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "员工管理",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1724,7 +1724,7 @@ export default [
             meta: {
               icon: "arrow-graph-up-right",
               title: "会计科目管理",
-              notCache: true
+
             },
             component: () =>
               import("@/view/financial/accounting/accounting.vue")
@@ -1757,7 +1757,7 @@ export default [
         name: "allotThree",
         mark: "9301",
         meta: {
-          // notCache: true,
+          // 
           title: "基本信息"
         },
         component: parentView,
@@ -1767,9 +1767,9 @@ export default [
             name: "/accountInformation",
             mark: "9301",
             meta: {
-              // notCache: true,
+              // 
               title: "基本信息",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1784,7 +1784,7 @@ export default [
               hideInMenu: true,
               // icon: "gear-b",
               title: "充值消费记录",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1799,7 +1799,7 @@ export default [
               hideInMenu: true,
               icon: "gear-b",
               title: "华币充值",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1814,7 +1814,7 @@ export default [
               hideInMenu: true,
               icon: "gear-b",
               title: "产品购买",
-              notCache: true
+
             },
             component: () =>
               import(
@@ -1828,14 +1828,14 @@ export default [
         name: "templateIndex",
         mark: "9999",
         meta: {
-          // notCache: true,
+          // 
           title: "模板管理",
-          notCache: true
+
         },
         component: () =>
           import(
             "@/view/system/systemSetting/template/templateIndex.vue"
-            )
+          )
       }
     ]
   },
@@ -1846,7 +1846,7 @@ export default [
     meta: {
       icon: "ios-transgender",
       title: "租赁管理",
-      notCache: true,
+
     },
     component: Main,
     children: [
@@ -1857,7 +1857,7 @@ export default [
         meta: {
           icon: "",
           title: "注册管理",
-          notCache: true
+
         },
         component: () => import("@/view/lease/lease/register.vue")
       },
@@ -1868,7 +1868,7 @@ export default [
         meta: {
           icon: "",
           title: "租户管理",
-          notCache: true
+
         },
         component: () => import("@/view/lease/lease/lessee.vue")
       },
@@ -1889,7 +1889,7 @@ export default [
         meta: {
           icon: "gear-b",
           title: "产品管理",
-          notCache: true
+
         },
         component: () => import("@/view/lease/product/prolist.vue")
       },
@@ -1900,7 +1900,7 @@ export default [
         meta: {
           icon: "gear-b",
           title: "订单管理",
-          notCache: true
+
         },
         component: () => import("@/view/lease/order/orderlist.vue")
       },
@@ -1911,7 +1911,7 @@ export default [
         meta: {
           icon: "gear-b",
           title: "租户资源",
-          notCache: true
+
         },
         component: () => import("@/view/lease/tenantres/tenantres.vue")
       },
@@ -1922,7 +1922,7 @@ export default [
         meta: {
           icon: "gear-b",
           title: "反馈管理",
-          notCache: true
+
         },
         component: () => import("@/view/lease/lease/FeedbackManagementOne.vue")
       },
@@ -1934,7 +1934,7 @@ export default [
           hideInMenu: true,
           icon: "gear-b",
           title: "反馈管理详情",
-          notCache: true
+
         },
         component: () => import("@/view/lease/lease/feedback_management.vue")
       },
@@ -1947,7 +1947,7 @@ export default [
         meta: {
           icon: "gear-b",
           title: "发布日志",
-          notCache: true
+
         },
         component: () => import("@/view/lease/log/Logput.vue")
       },
@@ -1970,7 +1970,7 @@ export default [
               icon: "gear-b",
               title: "历史日志",
               hideInMenu: true,
-              notCache: true
+
             },
             component: () => import("@/view/lease/log/historyLog.vue")
           },
@@ -1982,7 +1982,7 @@ export default [
               icon: "gear-b",
               title: "日志详情",
               hideInMenu: true,
-              notCache: true
+
             },
             component: () => import("@/view/lease/log/logWebInfo.vue")
           }
@@ -1995,7 +1995,7 @@ export default [
         meta: {
           icon: "gear-b",
           title: "客服管理",
-          notCache: true
+
         },
         component: () =>
           import(
@@ -2023,7 +2023,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "登录用户",
-          notCache: true
+
           // access: ['admin', 'auth_staff']
         },
         component: () => import("@/view/admin/user/user.vue")
@@ -2035,7 +2035,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "组织管理",
-          notCache: true
+
           // access: ['admin', 'auth_staff']
         },
         component: () => import("@/view/admin/group/group.vue")
@@ -2047,7 +2047,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "角色管理",
-          notCache: true
+
           // access: ['admin', 'auth_staff']
         },
         component: () => import("@/view/admin/roles/roles.vue")
@@ -2059,7 +2059,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "wms角色管理",
-          notCache: true
+
           // access: ['admin', 'auth_staff']
         },
         component: () => import("@/view/admin/roles/roleswms.vue")
@@ -2071,7 +2071,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "租户模板",
-          notCache: true
+
         },
         component: () => import("@/view/admin/lessee/lessee.vue")
       },
@@ -2082,7 +2082,7 @@ export default [
         meta: {
           icon: "arrow-graph-up-right",
           title: "资源管理",
-          notCache: true
+
         },
         component: () => import("@/view/admin/resource/resource.vue")
       }

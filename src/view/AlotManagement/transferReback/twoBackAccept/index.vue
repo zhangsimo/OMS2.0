@@ -197,6 +197,7 @@ import {
   tuihuishouliliebiaomingxi
 } from "../../../../api/AlotManagement/twoBackAccept.js";
 export default {
+  name: "twoBackAccept",
   components: {
     QuickDate
   },
