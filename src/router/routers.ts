@@ -2042,7 +2042,7 @@ export default [
       },
       {
         path: "/auth/role",
-        name: "role",
+        name: "Role",
         mark: "10003",
         meta: {
           icon: "arrow-graph-up-right",
@@ -2054,7 +2054,7 @@ export default [
       },
       {
         path: "/auth/roleswms",
-        name: "roleswms",
+        name: "Roleswms",
         mark: "10006",
         meta: {
           icon: "arrow-graph-up-right",
@@ -2066,7 +2066,7 @@ export default [
       },
       {
         path: "/auth/lessee",
-        name: "authLessee",
+        name: "AuthLessee",
         mark: "10005",
         meta: {
           icon: "arrow-graph-up-right",

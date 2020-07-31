@@ -16,7 +16,7 @@ import ChangeLessee from "@/view/admin/lessee/ChangeLessee.vue";
   }
 })
 
-export default class index extends Vue{
+export default class AuthLessee extends Vue{
 
   //中间分割线比例
   private split1:number = 0.3

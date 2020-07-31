@@ -376,7 +376,7 @@ const methods = {
 };
 
 export default {
-  name: "systemset",
+  name: "sysetmset",
   data,
   mounted,
   methods
