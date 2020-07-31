@@ -1055,7 +1055,6 @@ export default [
             mark: "51102",
             meta: {
               keepAlive: true,
-              keepAlive: true,
               title: "门店资金日记账"
             },
             component: () =>
