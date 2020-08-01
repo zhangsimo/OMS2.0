@@ -211,7 +211,7 @@ export default {
                 },
                 {
                 title: "发票单位",
-                key: "receiptUnit",
+                key: "receiptUnitName",
                 className: "tc"
                 },
                 {
@@ -239,7 +239,7 @@ export default {
                 },
                 {
                 title: "往来单位",
-                key: "receiptUnit",
+                key: "receiptUnitName",
                 className: "tc"
                 },
                 // {
@@ -269,7 +269,7 @@ export default {
                 },
                 {
                 title: "导入时间",
-                key: "createTime",
+                key: "importTime",
                 className: "tc"
                 }
             ],
