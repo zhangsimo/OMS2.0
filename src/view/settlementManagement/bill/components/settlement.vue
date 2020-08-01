@@ -255,6 +255,9 @@ export default {
     });
   },
   methods: {
+    setData(d){
+      this.tableData = d;
+    },
     // 选择科目弹框
     subject() {
       this.$refs.subjexts.subjectModelShow = true;
@@ -406,7 +409,7 @@ export default {
         sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });
       //this.check = (sum1 - sum2 - sum3).toFixed(2);
-      this.check = (Math.abs(sum3) - Math.abs(sum1)).toFixed(2);
+      this.check = (Math.abs(sum1) - Math.abs(sum3)).toFixed(2);
     }
   }
 };

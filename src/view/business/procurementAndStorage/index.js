@@ -25,7 +25,7 @@ import { Object } from "core-js";
 import { checkStore } from "@/api/system/systemApi";
 
 export default {
-  name: "market",
+  name: "procurementAndStorage",
   inject: ["reload"],
   components: {
     QuickDate,
@@ -451,7 +451,7 @@ export default {
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `;
           }
-          if (columnIndex === 11) {
+          if (columnIndex === 12) {
             return ` ${this.countTaxAll(data)} `;
           }
           return null;
@@ -514,7 +514,7 @@ export default {
           this.allMoney = 0;
           this.$refs.formPlan.resetFields();
           this.$Message.success("保存成功");
-          this.reload();
+          // this.reload();
           // this.setSelected(this.dataChange.row);
         }
         try {

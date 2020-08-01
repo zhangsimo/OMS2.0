@@ -40,7 +40,8 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber autofocus @on-focus="changeNum" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <!--<InputNumber autofocus @on-focus="changeNum" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>-->
+            <vxe-input type="number" ref="orderQty" placeholder="数量" class="w200" size="mini"  v-model="formItemData.orderQty" :min="0" digits="0"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -85,6 +86,9 @@
           this.searchPartLayer = true;
           this.formItemData = {...v};
           this.formItemData.orderQty = null
+          this.$nextTick(()=>{
+            this.$refs.orderQty.focus();
+          })
         }
 
       },
@@ -102,7 +106,8 @@
       submit(){
 		    if(this.formItemData.orderQty>0){
           this.searchPartLayer = false;
-          this.$parent.$parent.getPartNameList2([this.formItemData]);
+          // this.$parent.$parent.getPartNameList2([this.formItemData]);
+          this.$emit("throwData2",[this.formItemData])
         }else{
 		      setTimeout(() => {
             this.$message.error("数量请输入大于0的正整数")

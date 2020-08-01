@@ -28,7 +28,7 @@ import tabThree from "./components/tabThree";
 import tabFour from "./components/tabFour";
 
 export default {
-  name: "reporIndex",
+  name: "procurementTransfer",
   components: { panne, tabOne, tabTwo, tabThree, tabFour },
   data() {
     return {};

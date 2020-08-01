@@ -92,12 +92,14 @@ export default class SelectSupplier extends Vue {
     {
       title: "供应商名称",
       key: "fullName",
-      minWidth: 120
+      minWidth: 200,
+      tooltip: true,
     },
     {
       title: "编码",
       key: "code",
-      minWidth: 120
+      minWidth: 100,
+      tooltip: true,
     },
     {
       title: "简称",

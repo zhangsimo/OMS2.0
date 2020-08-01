@@ -40,7 +40,8 @@
       <Row>
         <Col span="12">
           <FormItem label="数量：">
-            <InputNumber autofocus :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>
+            <!--<InputNumber autofocus ref="orderQty" :min="0" class="w200" :precision="0" placeholder="数量" v-model="formItemData.orderQty"></InputNumber>-->
+            <vxe-input type="number" ref="orderQty" placeholder="数量" class="w200" size="mini"  v-model="formItemData.orderQty" :min="0" digits="0"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -91,8 +92,12 @@
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};
-          this.formItemData.orderQty = null;
+          this.formItemData.orderQty = undefined;
           this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
+          this.$nextTick(()=>{
+            this.$refs['orderQty'].focus();
+            //this.enterKeyup();
+          })
         }
 
       },
@@ -111,7 +116,6 @@
       },
 
       submit(){
-        console.log(123);
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
         }
@@ -119,8 +123,9 @@
           return this.$Message.error("单价不可为空");
         }
 		    this.searchPartLayer = false;
-		    this.$parent.$parent.getPartNameList2([this.formItemData]);
-      }
+		    //this.$parent.$parent.getPartNameList2([this.formItemData]);
+		    this.$emit("throwData",[this.formItemData])
+      },
     }
 	}
 </script>

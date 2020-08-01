@@ -240,7 +240,7 @@
                     v-for="(item,index) in transitUnitList"
                     :key="index"
                     :value="item.id"
-                  >{{item.fullName}}</Option>
+                  >{{item.shortName}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -503,13 +503,13 @@ export default {
         {
           type: "index",
           width: 60,
-          align: "center",
+          align: "center", tooltip: true,
           title: "序号"
         },
         {
           title: "操作",
           slot: "action",
-          align: "center",
+          align: "center", tooltip: true,
           render: (h, params) => {
             let className = "white";
             return h("div", [
@@ -539,17 +539,17 @@ export default {
         {
           title: "公司",
           key: "company",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "预订单单号",
           key: "orderNo",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "状态",
           key: "status",
-          align: "center",
+          align: "center", tooltip: true,
           render(h, params) {
             // console.log(auditsign)
             return h("span", {}, params.row.status.name);
@@ -558,22 +558,22 @@ export default {
         {
           title: "期望到货日期",
           key: "expectedArrivalDate",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "提交日期",
           key: "commitTime",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "提交人",
           key: "commitUname",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "备注",
           key: "remark",
-          align: "center"
+          align: "center", tooltip: true,
         }
       ],
       data: [],
@@ -582,43 +582,43 @@ export default {
         {
           type: "index",
           width: 60,
-          align: "center",
+          align: "center", tooltip: true,
           title: "序号"
         },
         {
           title: "配件编码",
           key: "partCode",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "配件名称",
           key: "partName",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "品牌",
           key: "partBrand",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "配件内码",
           key: "partInnerId",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "单位",
           key: "unit",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "预订数量",
           key: "preQty",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "受理数量",
           key: "acceptQty",
-          align: "center",
+          align: "center", tooltip: true,
           render: (h, params) => {
             let _this = this;
             let statusObj = JSON.parse(params.row.status)||{}
@@ -643,7 +643,7 @@ export default {
         {
           title: "备注",
           key: "remark",
-          align: "center"
+          align: "center", tooltip: true,
         }
       ],
       data2: [],
@@ -652,28 +652,28 @@ export default {
         {
           type: "index",
           width: 60,
-          align: "center",
+          align: "center", tooltip: true,
           title: "序号"
         },
         {
           type: "selection",
           width: 60,
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "配件编码",
           key: "partCode",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "配件名称",
           key: "partName",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "品牌",
           key: "partBrand",
-          align: "center",
+          align: "center", tooltip: true,
           filters: [],
           filterMethod(value, row) {
             return row.partBrand.indexOf(value) > -1;
@@ -682,42 +682,42 @@ export default {
         {
           title: "配件内码",
           key: "partInnerId",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "单位",
           key: "unit",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "预定数量",
           key: "preQty",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "受理数量",
           key: "acceptQty",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "公司",
           key: "company",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "预定单号",
           key: "orderNo",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "备注",
           key: "remark",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "期望到货日期",
           key: "expectedArrivalDate",
-          align: "center"
+          align: "center", tooltip: true,
         }
       ],
       data3: [],
@@ -727,13 +727,13 @@ export default {
         {
           type: "index",
           width: 60,
-          align: "center",
+          align: "center", tooltip: true,
           title: "序号"
         },
         {
           title: "操作",
           width: 60,
-          align: "center",
+          align: "center", tooltip: true,
           slot: "del"
           // render: (h, params) =>{
           //   return h('Button', {}, "删除")
@@ -742,27 +742,27 @@ export default {
         {
           title: "配件编码",
           key: "partCode",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "配件名称",
           key: "partName",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "品牌",
           key: "partBrand",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "单位",
           key: "unit",
-          align: "center"
+          align: "center", tooltip: true,
         },
         {
           title: "采购数量",
           key: "orderQty",
-          align: "center",
+          align: "center", tooltip: true,
           render: (h, params) => {
             let _this = this;
             return h("InputNumber", {
@@ -783,7 +783,7 @@ export default {
         {
           title: "采购单价",
           key: "orderPrice",
-          align: "center",
+          align: "center", tooltip: true,
           render: (h, params) => {
             return h("InputNumber", {
               props: {

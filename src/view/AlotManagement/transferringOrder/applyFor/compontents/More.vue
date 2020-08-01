@@ -1,6 +1,7 @@
 <template>
   <div>
     <Modal title="高级查询" width="600px" v-model="moreAndMore">
+      <Form @keydown.native.enter="Determined">
       <div class="navbox">
         <Row>
           <Col span="12">
@@ -76,6 +77,7 @@
           />
         </Row>
       </div>
+      </Form>
       <div slot="footer">
         <Button type="primary" @click="Determined">确定</Button>
         <Button type="default" @click="cancel">取消</Button>
@@ -128,18 +130,18 @@ export default {
       this.guestId = a;
     },
     init() {
-      this.callout = ""; //调出方
-      this.numbers = ""; //申请单号
-      this.coding = ""; //编码
-      this.Accessories = ""; //配件人
-      this.Name = ""; //配件名称
-      this.createData = ""; //创建日期
-      this.submitData = ""; //提交日期
-      (this.moreAndMore = false), (this.submita = "");
-      this.create = "";
-      this.guestId = "";
       this.getArrayParams();
       this.moreAndMore = true;
+      // this.callout = ""; //调出方
+      // this.numbers = ""; //申请单号
+      // this.coding = ""; //编码
+      // this.Accessories = ""; //配件人
+      // this.Name = ""; //配件名称
+      // this.createData = ""; //创建日期
+      // this.submitData = ""; //提交日期
+      // (this.moreAndMore = false), (this.submita = "");
+      // this.create = "";
+      // this.guestId = "";
     },
     sendMsg() {
       let a = {

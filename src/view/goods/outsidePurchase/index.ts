@@ -38,7 +38,7 @@ import { v4 } from "uuid"
     SelectPartCom
   }
 })
-export default class InterPurchase extends Vue {
+export default class OutsidePurchase extends Vue {
   @State('user') user;
 
   private showSelf: boolean = true;
@@ -702,6 +702,17 @@ export default class InterPurchase extends Vue {
     });
     // this.tableData = tools.arrRemoval(this.tableData, 'partCode');
   }
+
+  //添加配件修改数量价格数据
+  private getPartNameList2(v){
+    let arrData = v||[]
+    this.tableData = this.tableData.concat(arrData).map(el => {
+      el.uuid = v4();
+      return el;
+    });
+    this.$Message.success("已添加");
+  }
+
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
   private showModel(name) {
     let ref: any = this.$refs[name];

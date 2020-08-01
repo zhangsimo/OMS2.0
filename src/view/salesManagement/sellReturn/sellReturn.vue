@@ -128,6 +128,7 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
+                      <Tooltip :content="formPlan.fullName">
                       <Input
                         placeholder="请选择客户"
                         v-model="formPlan.fullName"
@@ -135,6 +136,7 @@
                         disabled
                         style="width:200px;"
                       />
+                      </Tooltip>
                       <Button
                         class="ml5"
                         size="small"
@@ -173,7 +175,9 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="往来单号：">
+                    <Tooltip :content="formPlan.code">
                     <Input class="w160" v-model="formPlan.code" disabled />
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="入库仓库：" prop="storeId">
                     <Select
@@ -221,6 +225,7 @@
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
+                    <Tooltip :content="formPlan.remark">
                     <Input
                       placeholder="请输入备注"
                       class="w160"
@@ -231,10 +236,13 @@
                         attrs: { disabled: false }
                       }"
                     />
+                    </Tooltip>
                   </FormItem>
 
                   <FormItem label="退货单号：">
+                    <Tooltip :content="formPlan.serviceId">
                     <Input class="w160" v-model="formPlan.serviceId" disabled />
+                    </Tooltip>
                   </FormItem>
                 </div>
                 <div class="flex plan-cz-btn" ref="planBtn">
@@ -281,48 +289,48 @@
                   :data="formPlan.details"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     type="index"
                     title="序号"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column type="checkbox" fixed="left"></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip" type="checkbox" fixed="left"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partCode"
                     title="配件编码"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partName"
                     title="配件名称"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="orderQty"
                     title="数量"
                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="orderPrice"
                     title="销价"
                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
-                  <vxe-table-column title="金额">
+                  <vxe-table-column  show-overflow="tooltip" title="金额">
                     <template v-slot="{ row }">
                       <span>{{ countAmount(row) | priceFilters }}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="remark"
                     title="备注"
                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
-                  <vxe-table-column field="storeName" title="仓库" disabled>
+                  <vxe-table-column  show-overflow="tooltip" field="storeName" title="仓库" disabled>
                     <template v-slot:edit="{ row }">
                       <Select style="width:100px">
                         <Option
@@ -334,7 +342,7 @@
                       </Select>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="storeShelf"
                     title="仓位"
                     :edit-render="{
@@ -343,24 +351,24 @@
                       events: { blur: checkSelf }
                     }"
                   ></vxe-table-column>
-                  <vxe-table-column title="品牌车型">
+                  <vxe-table-column  show-overflow="tooltip" title="品牌车型">
                     <template v-slot="{ row, rowIndex }">
                       <span>{{ row.carBrandName }} {{ row.carModelName }}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="unit"
                     title="单位"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="oemCode"
                     title="OE码"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="spec"
                     title="规格"
                   ></vxe-table-column>
-                  <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 </vxe-table>
               </Form>
             </div>
@@ -459,6 +467,7 @@ export default {
       draftShow: "", //判定是不是草稿
       isAdd: true, //判断是否新增
       isWms: true, //判断是否提交,返回
+      currentRow: null,
       PTrow: {
         _highlight: true,
         billStatusId: { name: "草稿", value: 0 },
@@ -675,6 +684,7 @@ export default {
     selectTabelData(v) {
       if (v == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
+      this.currentRow = v;
       if (!this.Flag && !this.isAdd) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -792,7 +802,7 @@ export default {
     //选择更多
     moreQueryShowModal(row) {
       this.oneRow = row;
-      this.moreQueryList = {};
+      // this.moreQueryList = {};
       this.$refs.morequeryModal.openModal();
     },
     //获取时间
@@ -837,22 +847,23 @@ export default {
     //更多搜索
     queryList() {
       this.page.num = 1;
-      let page = this.page.num - 1;
-      let size = this.page.size;
-      let data = this.moreQueryList;
-      getLeftList(page, size, data).then(res => {
-        if (res.code === 0) {
-          this.sellOrderTable.tbdata = res.data.content || [];
-          this.sellOrderTable.tbdata.forEach(el => {
-            if(Array.isArray(el.details)) {
-              el.details.forEach(dl => {
-                dl.uuid = v4();
-              })
-            }
-          })
-          this.page.total = res.data.totalElements;
-        }
-      });
+      this.getLeftList();
+      // let page = this.page.num - 1;
+      // let size = this.page.size;
+      // let data = this.moreQueryList;
+      // getLeftList(page, size, data).then(res => {
+      //   if (res.code === 0) {
+      //     this.sellOrderTable.tbdata = res.data.content || [];
+      //     this.sellOrderTable.tbdata.forEach(el => {
+      //       if(Array.isArray(el.details)) {
+      //         el.details.forEach(dl => {
+      //           dl.uuid = v4();
+      //         })
+      //       }
+      //     })
+      //     this.page.total = res.data.totalElements;
+      //   }
+      // });
     },
     //获取搜索框内的数
     setOneClient(val) {
@@ -863,7 +874,7 @@ export default {
     },
     //获取左侧表格数据
     getLeftList() {
-      let data = {};
+      let data = {...this.moreQueryList};
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.billStatusId;
@@ -882,7 +893,7 @@ export default {
           this.page.total = res.data.totalElements;
           for (let b of this.sellOrderTable.tbdata) {
             b._highlight = false;
-            if (b.id == this.id) {
+            if (b.id == this.currentRow.id) {
               b._highlight = true;
               this.selectTabelData(b);
               break;
@@ -902,8 +913,8 @@ export default {
             let res = await getDelete(id);
             if (res.code == 0) {
               this.$Message.success("作废成功");
-              this.getLeftList();
               this.formPlan = {};
+              this.getLeftList();
               this.id = null;
               this.$refs.formPlan.resetFields();
             }
@@ -950,9 +961,9 @@ export default {
               this.isAdd = true;
               this.isNew = true;
               this.$Message.success("保存成功");
+              this.formPlan = {};
               this.getLeftList();
               this.$refs.formPlan.resetFields();
-              this.formPlan = {};
             } else {
               this.formPlan.orderDate = preTime;
             }
@@ -1041,8 +1052,8 @@ export default {
                   this.formPlan = {};
                   this.id = null;
                   this.$refs.formPlan.resetFields();
-                  // this.getLeftList();
-                  this.reload();
+                  this.getLeftList();
+                  // this.reload();
                 } else {
                   this.formPlan.orderDate = preTime;
                 }

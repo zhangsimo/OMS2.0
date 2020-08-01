@@ -93,6 +93,7 @@ import { goshop } from '@/api/settlementManagement/shopList'
 import moment from 'moment';
 // import { dragTable } from '@/libs/dragtable'
 export default {
+  name: "billAllocationstock",
   components: {
     quickDate,
     selectDealings

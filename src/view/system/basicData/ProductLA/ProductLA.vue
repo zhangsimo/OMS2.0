@@ -114,13 +114,16 @@
       <div class="qx-l fl w300" style="height: 100%; overflow-y: auto">
         <el-tree
           :data="treeData"
+          ref="treeList"
+          highlight-current
+          default-expand-all
           node-key="id"
           @node-click="handleNodeClick"
           :props="defaultProps">
         </el-tree>
       </div>
       <div class="qx-r" style="height: 100%" ref="tabelWrap">
-        <Table border :columns="columns1" :max-height="tableHeight" size="small" :data="data1"></Table>
+        <Table border highlight-row @on-current-change="selectTable" :columns="columns1" :max-height="tableHeight" size="small" :data="data1"></Table>
       </div>
     </section>
     <!--上部-->
@@ -301,7 +304,7 @@
     <Modal :title="proLineTitle" v-model="proLineModel" footer-hide>
       <Form ref="proLineForm" :model="proLineForm" :rules="proLineFormValidate" :label-width="100">
         <FormItem label="上级菜单：" prop="parentId">
-          <Select :disabled="proLineTitle=='编辑产品线'" v-model="proLineForm.id" placeholder="上级菜单" class="w300">
+          <Select @on-change="changeLever" :disabled="proLineTitle=='编辑产品线'" v-model="proLineForm.id" placeholder="上级菜单" class="w300">
             <Option v-for="item in treeDataList" v-show="!item.parentId" :value="item.id" :key="item.id">{{ item.title }}</Option>
           </Select>
         </FormItem>
@@ -325,6 +328,7 @@
       <Form ref="formValidate"  :label-width="100">
         <FormItem label="选择员工：">
           <Select
+            ref="StaffName"
             v-model="StaffName"
             placeholder="==请选择=="
             class="w300"
@@ -345,8 +349,6 @@
               class="w270"
               node-key="id"
               ref="tree"
-              highlight-current
-              @node-click="handleNodeClick"
               :props="defaultProps">
             </el-tree>
           </div>

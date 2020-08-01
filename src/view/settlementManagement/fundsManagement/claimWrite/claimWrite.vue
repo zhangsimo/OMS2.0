@@ -217,6 +217,7 @@ import accrued from "./components/accrued";
 import otherCollectionClaims from "./components/otherCollectionClaims";
 import otherPaymentClaim from "@/view/settlementManagement/fundsManagement/claimWrite/components/otherPaymentClaim";
 export default {
+  name: "claimWrite",
   components: {
     advance,
     expenditure,

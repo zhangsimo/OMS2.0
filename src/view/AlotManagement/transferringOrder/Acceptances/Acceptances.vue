@@ -10,7 +10,6 @@
             <span>开始日期：</span>
             <DatePicker
               @on-change="selectDate"
-              @on-clear="aaa"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
@@ -29,7 +28,7 @@
                 v-for="item in purchaseNameArr"
                 :value="item.orgid"
                 :key="item.id"
-              >{{item.fullName}}</Option>
+              >{{item.shortName}}</Option>
             </Select>
             <Button type="warning" class="mr10 w90" @click="search">
               <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -55,8 +54,8 @@
                 @edit-actived="editActivedEvent"
                 @edit-closed="editClosedEvent"
               >
-                <vxe-table-column title="序号" type="index" width="60"></vxe-table-column>
-                <vxe-table-column field title="操作">
+                <vxe-table-column  show-overflow="tooltip" title="序号" type="index" width="60"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field title="操作">
                   <template v-slot="{row,rowIndex}">
                     <div v-show="row.status.value === 1">
                       <vxe-button type="primary" size="small" @click="acceptance">受理</vxe-button>
@@ -64,18 +63,18 @@
                     </div>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="orgName" title="申请公司"></vxe-table-column>
-                <vxe-table-column field="serviceId" title="调拨申请单号"></vxe-table-column>
-                <vxe-table-column field="status" title="状态">
+                <vxe-table-column  show-overflow="tooltip" field="orgName" title="申请公司"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="serviceId" title="调拨申请单号"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="status" title="状态">
                   <template v-slot="{row,rowIndex}">
                     <span>{{row.status.name}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="commitDate" title="提交日期"></vxe-table-column>
-                <vxe-table-column field="orderDate" title="申请日期"></vxe-table-column>
-                <vxe-table-column field="remark" title="备注"></vxe-table-column>
-                <vxe-table-column field="acceptUname" title="受理人"></vxe-table-column>
-                <vxe-table-column field="acceptTime" title="受理日期"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="commitDate" title="提交日期"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="orderDate" title="申请日期"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="acceptUname" title="受理人"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="acceptTime" title="受理日期"></vxe-table-column>
               </vxe-table>
               <Page
                 class-name="page-con"
@@ -104,20 +103,20 @@
               @edit-actived="editActivedEvent"
               @edit-closed="editClosedEvent"
             >
-              <vxe-table-column title="序号" type="index" width="60"></vxe-table-column>
-              <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-              <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-              <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-              <vxe-table-column field="unit" title="单位"></vxe-table-column>
-              <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-              <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-              <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
-              <vxe-table-column title="紧销品" width="100">
+              <vxe-table-column  show-overflow="tooltip" title="序号" type="index" width="60"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" title="紧销品" width="100">
                 <template v-slot="{ row,rowIndex }">
                   <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="remark" title="备注"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
             </vxe-table>
             <!--<Page class-name="page-con" :current="Bottom.page.num" :total="Bottom.page.total" :page-size="Bottom.page.size" @on-change="changePageBottom"-->
             <!--@on-page-size-change="changeSizeBottom" show-sizer show-total>-->
@@ -141,13 +140,14 @@ import {
 } from "../../../../api/AlotManagement/transferringOrder";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
+  name: "Acceptances",
   components: {
     QuickDate
   },
   data() {
     return {
       rightTableHeight: 0,
-      purchaseNameArr: [{ fullName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
+      purchaseNameArr: [{ shortName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
       selectOne: "", //定义变量赋值日期子组件的数据
       searchType2: "9999", //绑定的下拉框
       ListTwo: [
@@ -189,6 +189,9 @@ export default {
     selectDate(date) {
       this.dateTime = date;
       this.search();
+    },
+    aaa() {
+      this.dateTime = [];
     },
     //搜索
     search() {
@@ -241,7 +244,6 @@ export default {
       this.Bottom.page.size = size;
       // this.getList()
     },
-    aaa() {},
     //点击一行
     clickOnesList(a) {
       this.RowMessage = a.row;
@@ -263,7 +265,7 @@ export default {
         params.startTime = this.selectOne[0];
         params.endTime = this.selectOne[1];
       }
-      if (this.dateTime) {
+      if (Array.isArray(this.dateTime) && this.dateTime[0] != "" && this.dateTime[1] != "") {
         params.startDate = this.dateTime[0] + " 00:00:00";
         params.endDate = this.dateTime[1] + " 23:59:59";
       }

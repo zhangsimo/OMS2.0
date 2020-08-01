@@ -7,7 +7,7 @@
       :style="{ textAlign: !hideTitle ? 'left' : '' }"
     >
       <Icon :size="rootIconSize" :type="parentItem.icon"/>
-      <span class="menu-title" v-if="!hideTitle">{{
+      <span class="menu-title" style="color: #000000" v-if="!hideTitle">{{
         showTitle(parentItem)
       }}</span>
       <Icon
@@ -23,15 +23,17 @@
           v-if="showChildren(child)"
           :icon-size="iconSize"
           :parent-item="child"
+          class="titleColor"
           :key="`drop-${child.name}`"
-        ></collapsed-menu>
+        >
+        </collapsed-menu>
 
         <template v-else-if="child.children && child.children.length === 1">
           <DropdownItem
             :key="`drop-${child.children[0].name}`"
             :name="child.children[0].name"
             ><span class="menu-title">{{
-              showTitle(child.children[0])
+              showTitle(child.children[0]) + 1
             }}</span></DropdownItem
           >
         </template>

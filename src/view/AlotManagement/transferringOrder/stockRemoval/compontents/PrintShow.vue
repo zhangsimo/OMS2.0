@@ -105,7 +105,7 @@
             <td style="max-width: 40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
-            <td>{{item.orderQty}}</td>
+            <td>{{item.acceptQty}}</td>
             <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
             <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
             <td style="width:50px">{{item.storeShelf}}</td>

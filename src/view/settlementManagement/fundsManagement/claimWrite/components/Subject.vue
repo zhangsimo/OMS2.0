@@ -11,6 +11,7 @@
       highlight-hover-row
       auto-resize
       height="300"
+      :loading="loadingTable"
       @radio-change="getRaido"
       :radio-config="{labelField: 'name', checkMethod}"
       size="mini"
@@ -54,7 +55,8 @@ export default {
       oneSubject: {}, //单选获取到的数据
       tableData: [], //表格数据
       maker: "", //备注
-      subjectModel:""
+      subjectModel:"",
+      loadingTable:false
     };
   },
   mounted() {},
@@ -86,7 +88,9 @@ export default {
           data.parentCode = 6711;
           break;
       }
+      this.loadingTable = true;
       let res = await getSubjectList(data);
+      this.loadingTable = false;
       if (res.code === 0) {
         this.tableData = res.data;
       }
@@ -121,7 +125,8 @@ export default {
       data.subjectName = this.oneSubject.titleName;
       data.subjectCode = this.oneSubject.titleCode;
       data.subjectId = this.oneSubject.id;
-      data.claimType=8
+      data.claimType=8;
+      data.claimAmt = Math.abs(this.clime[0].incomeMoney||this.clime[0].paidMoney);
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.subjectModelShow = false;

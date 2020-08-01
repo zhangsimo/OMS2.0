@@ -96,7 +96,9 @@ export default {
         this.getList()
         this.modelType = true
       }
-      this.addAccountRow()
+      if(this.accountList.length<=0){
+        this.addAccountRow()
+      }
     },
 
     //获取当前信息
@@ -125,25 +127,27 @@ export default {
    },
 
     //选择转入门店
-    async getCompany(v) {
+     getCompany(v) {
       let arr = this.company.filter( item => item.id == v)[0]
       this.selAccount.enterAccountNo = ''
       this.formInline.receiver = ''
       let  data = {
         shopNumber: arr.id
       }
-      let res = await getPayAccount(data)
-      if (res.code === 0) {
-        this.IntoAccountList = res.data.content
-      }
+      getPayAccount(data).then(res=>{
+        if (res.code === 0) {
+          this.selAccount.enterAccount = res.data.content
+        }
+      })
     },
 
 
-    //获取转入账户\
+    //获取转入账户
     getinto(v){
       if (!v) return
-      let arr = this.IntoAccountList.filter( item => item.id == v)[0]
-      this.$set(this.selAccount, 'enterAccountNo' , arr.accountCode)
+      // // this.selAccount.enterAccount=this.IntoAccountList
+      // let arr = this.selAccount.enterAccount.filter( item => item.id == v)[0]
+      this.$set(this.selAccount, 'enterAccountNo' , v)
     },
 
 
@@ -159,7 +163,8 @@ export default {
         outAccount: this.payUserList || [],
         outAccountNo:"",
         enterOrgid:this.company || [],
-        enterAccount:this.IntoAccountList || [],
+        enterAccount:[],
+        enterAccountMo:"",
         enterAccountNo:""
       }
       this.accountList.push(json)
@@ -176,15 +181,12 @@ export default {
     getImgList(row){
       this.formInline.voucherPictures = row.list
     },
-
     //保存提交
     save(type){
-
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
           this.formInline.allotInfo=this.accountList
-          console.log(this.formInline)
           let res = await getIFSave(this.formInline)
           if (res.code == 0) {
             this.$Message.success('操作成功')

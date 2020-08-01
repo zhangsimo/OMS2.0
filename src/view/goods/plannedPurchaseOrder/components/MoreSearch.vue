@@ -1,35 +1,38 @@
 <template>
   <Modal title="高级查询" v-model="serchN" :styles="{ top: '50px', width: '500px' }">
-    <div class="data ml30 pl25">
-      <Row class="mb30" v-if="!['采购计划'].includes(type)">
-        <span>订货日期:</span>
+    <Form :label-width="80" class="ml10 pl25" @keydown.native.enter="ok">
+    <div class="data">
+      <Row  v-if="!['采购计划'].includes(type)">
+        <FormItem label="订货日期: ">
         <DatePicker
           type="daterange"
           placement="bottom-end"
           style="width: 300px"
           v-model="orderDate"
         ></DatePicker>
+        </FormItem>
       </Row>
-      <Row class="mb30">
-        <span>创建日期:</span>
+      <Row >
+        <FormItem label="创建日期: ">
         <DatePicker
           type="daterange"
           placement="bottom-end"
           style="width: 300px"
           v-model="createDate"
         ></DatePicker>
+        </FormItem>
       </Row>
-      <Row class="mb30">
-        <span>提交日期:</span>
+      <Row >
+        <FormItem label="提交日期: ">
         <DatePicker
           type="daterange"
           placement="bottom-end"
           style="width: 300px"
           v-model="auditDate"
         ></DatePicker>
+        </FormItem>
       </Row>
     </div>
-    <Form :label-width="80" class="ml10 pl25">
       <FormItem label="供 应 商: ">
         <!-- <Input type="text" placeholder="前选择供应商" v-model="guestName" class="w300 ml5" @on-focus="showModel('selectSupplier')"/> -->
         <Select
@@ -176,7 +179,7 @@ export default class MoreSearch extends Vue {
   }
 
   private init() {
-    this.reset();
+    // this.reset();
     if (this.salesList.length <= 0) {
       this.getAllSales();
     }

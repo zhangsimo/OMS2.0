@@ -56,7 +56,7 @@
           >
               <div class="image_tofile" ref="imageTofile">
                   <keep-alive :include="cacheList">
-                  <router-view />
+                    <router-view />
                   </keep-alive>
               </div>
             <!--            反馈模态框-->
@@ -224,11 +224,12 @@ export default {
       return this.$store.state.user.userData;
     },
     cacheList() {
-      return this.tagNavList.length
+      let arr = this.tagNavList.length
         ? this.tagNavList
             .filter(item => !(item.meta && item.meta.notCache))
             .map(item => item.name)
         : [];
+      return arr;
     },
     menuList() {
       return this.$store.getters.menuList;

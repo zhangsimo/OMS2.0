@@ -14,6 +14,7 @@ export const mixSelectPartCom = {
   inject: ["reload"],
   data() {
     return {
+      routeName:"",
       loading: false,
       treeLoading: false,
 
@@ -154,7 +155,12 @@ export const mixSelectPartCom = {
   props: {
     formPlanmain: Object
   },
-  mounted() {},
+  mounted() {
+    this.routeName = this.$route.name;
+  },
+  activated(){
+    this.routeName = this.$route.name;
+  },
   methods: {
     // 初始化数据
     getList() {
@@ -245,11 +251,6 @@ export const mixSelectPartCom = {
     selectTabelData(v) {
       this.selectTableItem = v;
     },
-    dblclick(row) {
-      this.selectTableItem = [row];
-      this.$emit("selectPartName", this.selectTableItem);
-      this.$Message.success("已添加");
-    },
     throwData() {
       // console.log(this.selectTableItem);
       if (this.selectTableItem.length > 0) {
@@ -293,6 +294,19 @@ export const mixSelectPartCom = {
           this.reload();
         }
       });
+    },
+    //双击显示
+    dblclick(v){
+      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="temporaryPurchase"||this.$route.name=="outsidePurchase"){
+        this.$refs.selectPartInfo.init(v);
+      }
+      if(this.$route.name=="bookingSheet"){
+        this.$refs.selectPartInfo2.init(v);
+      }
+    },
+
+    throwDataChangeNum(v){
+      this.$emit("selectPartName2", v);
     }
   }
 };

@@ -64,9 +64,8 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+                :key="item.label"
+                >{{ item.label }}</Option>
             </Select>
             <Select
               class="w240 mr10"
@@ -152,9 +151,8 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+                :key="item.label"
+              >{{ item.label }}</Option>
             </Select>
             <Select
               class="w240 mr10"
@@ -359,7 +357,7 @@ import {
 import api from "_conf/url";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
-import moment from 'moment'
+import moment from "moment";
 
 // import * as api from "_api/system/partManager";
 
@@ -368,8 +366,8 @@ export default {
   components: { EnterStock },
   data() {
     return {
-      bands1: [], 
-      bands2: [], 
+      bands1: [],
+      bands2: [],
       total1: {},
       total2: {},
       shopkeeper: 0, // 1 总部
@@ -409,176 +407,7 @@ export default {
       // 汇总库存列表
       columns1: [],
       //批次库存列表
-      columns2: [
-        {
-          title: "序号",
-          key: "index",
-          align: "center",
-          minWidth: 100
-        },
-        {
-          title: "配件编码",
-          align: "center",
-          minWidth: 80,
-          key: "partCode"
-        },
-        {
-          title: "配件名称",
-          align: "center",
-          key: "partName",
-          minWidth: 120
-        },
-        {
-          title: "OE码",
-          align: "center",
-          key: "oemCode",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          align: "center",
-          key: "partBrand",
-          minWidth: 120,
-          filters: [],
-          filterMethod(value, row) {
-            return row.partBrand.indexOf(value) > -1;
-          }
-        },
-        {
-          title: "品牌车型",
-          align: "center",
-          key: "carModelName",
-          minWidth: 120
-        },
-        {
-          title: "单位",
-          align: "center",
-          key: "enterUnitId",
-          minWidth: 120
-        },
-        {
-          title: "规格",
-          align: "center",
-          key: "spec",
-          minWidth: 120
-        },
-        {
-          title: "配件内码",
-          align: "center",
-          key: "partInnerId",
-          minWidth: 120
-        },
-        {
-          title: "入库数量",
-          align: "center",
-          key: "enterQty",
-          minWidth: 120
-        },
-        {
-          title: "可售数量",
-          align: "center",
-          key: "outableQty",
-          minWidth: 80
-        },
-        {
-          title: "仓库",
-          align: "center",
-          key: "storeName",
-          minWidth: 120
-        },
-        {
-          title: "库存单价",
-          align: "center",
-          key: "enterPrice",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.enterPrice.toFixed(2);
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "库存金额",
-          align: "center",
-          key: "enterAmt",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.enterAmt.toFixed(2);
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "税率",
-          align: "center",
-          key: "taxRate",
-          minWidth: 120
-        },
-        {
-          title: "不含税单价",
-          align: "center",
-          key: "noTaxPrice",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.noTaxPrice.toFixed(2);
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "不含税金额",
-          align: "center",
-          key: "noTaxAmt",
-          minWidth: 120,
-          render: (h, params) => {
-            let tex = params.row.noTaxAmt.toFixed(2);
-            return h("span", {}, tex);
-          }
-        },
-        {
-          title: "连锁库龄",
-          align: "center",
-          key: "chainStockAge",
-          minWidth: 120
-        },
-        {
-          title: "本店库龄",
-          align: "center",
-          key: "branchStockAge",
-          minWidth: 120
-        },
-        {
-          title: "滞销",
-          align: "center",
-          key: "isUnsalable",
-          render: (h, params) => {
-            let tex = params.row.isUnsalable == 0 ? "否" : "是";
-            return h("span", {}, tex);
-          },
-          minWidth: 120
-        },
-        {
-          title: "入库单号",
-          align: "center",
-          key: "serviceId",
-          minWidth: 120
-        },
-        {
-          title: "第一供应商",
-          align: "center",
-          key: "originGuestName",
-          minWidth: 120
-        },
-        {
-          title: "最近供应商",
-          align: "center",
-          key: "guestName",
-          minWidth: 120
-        },
-        {
-          title: "机构名称",
-          align: "center",
-          key: "orgName",
-          minWidth: 120
-        }
-      ],
+      columns2: [],
       // 汇总库存的数据
       contentOne: {
         //数据
@@ -633,58 +462,68 @@ export default {
         {
           title: "序号",
           width: 50,
-          type: "index"
+          type: "index",
+          tooltip: true
         },
         {
           title: "配件ID",
           key: "partID",
-          minWidth: 150
+          minWidth: 150,
+          tooltip: true
         },
         {
           title: "配件编码",
           key: "partCode",
-          minWidth: 150
+          minWidth: 150,
+          tooltip: true
         },
         {
           title: "配件名称",
           key: "partName",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "品牌名称",
           key: "brandName",
           minWidth: 120,
+          tooltip: true
         },
         {
           title: "入库数量",
           key: "amount",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "可出库数",
           key: "outAmount",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "门店名称",
           key: "shortname",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "单位",
           key: "unit",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "入库日期",
           key: "deliveryDue",
           minWidth: 60,
-          render:(h,p) => {
-            if(p.row.deliveryDue){
+          render: (h, p) => {
+            if (p.row.deliveryDue) {
               let day = moment(p.row.deliveryDue).format("YYYY-MM-DD HH:mm:ss");
-              return h('span',day)
+              return h("span", day);
             }
-          }
+          },
+          tooltip: true
         }
       ],
 
@@ -712,18 +551,18 @@ export default {
   },
   methods: {
     select1(option) {
-      if(option.slice(-1)[0] == 1) {
+      if (option.slice(-1)[0] == 1) {
         option = [1];
-      } else if(option.includes(1)) {
+      } else if (option.includes(1)) {
         option = option.filter(el => el != 1);
       }
       this.searchForm.storeIds = option;
       this.serch();
     },
     select2(option) {
-      if(option.slice(-1)[0] == 1) {
+      if (option.slice(-1)[0] == 1) {
         option = [1];
-      } else if(option.includes(1)) {
+      } else if (option.includes(1)) {
         option = option.filter(el => el != 1);
       }
       this.searchForm1.storeIds = option;
@@ -744,7 +583,8 @@ export default {
                 (this.contentOne.page.num - 1) * this.contentOne.page.size +
                 1
             );
-          }
+          },
+          tooltip: true
         },
         {
           title: "操作",
@@ -768,25 +608,29 @@ export default {
                 "查看"
               )
             ]);
-          }
+          },
+          tooltip: true
         },
         {
           title: "配件编码",
           align: "center",
           key: "partCode",
-          minWidth: 170
+          minWidth: 170,
+          tooltip: true
         },
         {
           title: "配件名称",
           align: "center",
           key: "partName",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "OE码",
           align: "center",
           key: "oemCode",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "品牌",
@@ -796,25 +640,29 @@ export default {
           filters: this.bands1,
           filterMethod(value, row) {
             return row.partBrand.indexOf(value) > -1;
-          }
+          },
+          tooltip: true
         },
         {
           title: "品牌车型",
           align: "center",
           key: "carModelName",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "单位",
           align: "center",
           key: "unit",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "库存数量",
           align: "center",
           key: "stockQty",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "可售数量",
@@ -824,19 +672,22 @@ export default {
           render: (h, params) => {
             let tex = params.row.sellSign ? 0 : params.row.outableQty;
             return h("span", {}, tex);
-          }
+          },
+          tooltip: true
         },
         {
           title: "仓库",
           align: "center",
           key: "storeName",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "仓位",
           align: "center",
           key: "shelf",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "库存单价",
@@ -846,7 +697,8 @@ export default {
           render: (h, params) => {
             let tex = params.row.costPrice.toFixed(2);
             return h("span", {}, tex);
-          }
+          },
+          tooltip: true
         },
         {
           title: "库存金额",
@@ -856,73 +708,313 @@ export default {
           render: (h, params) => {
             let tex = params.row.stockAmt.toFixed(2);
             return h("span", {}, tex);
-          }
+          },
+          tooltip: true
         },
         {
           title: "规格",
           align: "center",
           key: "spec",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "配件内码",
           align: "center",
           key: "partInnerId",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "最近入库日期",
           align: "center",
           key: "lastEnterDate",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "最近出库日期",
           align: "center",
           key: "lastOutDate",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "库存上限",
           align: "center",
           key: "upLimit",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "库存下限",
           align: "center",
           key: "downLimit",
+          tooltip: true,
           minWidth: 120
         },
         {
           title: "采购在途库存",
           align: "center",
           key: "pchRoadQty",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "调拨在途库存",
           align: "center",
           key: "attotRoadQty",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "合计在途库存",
           align: "center",
           key: "onRoadQty",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
         },
         {
           title: "机构名称",
           align: "center",
           key: "orgName",
-          minWidth: 120
+          minWidth: 120,
+          tooltip: true
+        }
+      ];
+      let arr2 = [
+        {
+          title: "序号",
+          key: "index",
+          align: "center",
+          minWidth: 100,
+          tooltip: true
+        },
+        {
+          title: "配件编码",
+          align: "center",
+          minWidth: 80,
+          key: "partCode",
+          tooltip: true
+        },
+        {
+          title: "配件名称",
+          align: "center",
+          key: "partName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "OE码",
+          align: "center",
+          key: "oemCode",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "品牌",
+          align: "center",
+          key: "partBrand",
+          minWidth: 120,
+          filters: [],
+          filterMethod(value, row) {
+            return row.partBrand.indexOf(value) > -1;
+          },
+          tooltip: true
+        },
+        {
+          title: "品牌车型",
+          align: "center",
+          key: "carModelName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "单位",
+          align: "center",
+          key: "enterUnitId",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "规格",
+          align: "center",
+          key: "spec",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "配件内码",
+          align: "center",
+          key: "partInnerId",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "入库数量",
+          align: "center",
+          key: "enterQty",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "可售数量",
+          align: "center",
+          key: "outableQty",
+          minWidth: 80,
+          tooltip: true
+        },
+        {
+          title: "仓库",
+          align: "center",
+          key: "storeName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "库存单价",
+          align: "center",
+          key: "enterPrice",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.enterPrice.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "库存金额",
+          align: "center",
+          key: "enterAmt",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.enterAmt.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "税率",
+          align: "center",
+          key: "taxRate",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "含税单价",
+          align: "center",
+          key: "taxPrice",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.taxPrice || 0;
+            tex = tex.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "含税金额",
+          align: "center",
+          key: "taxAmt",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.taxAmt || 0;
+            tex = tex.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "不含税单价",
+          align: "center",
+          key: "noTaxPrice",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.noTaxPrice.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "不含税金额",
+          align: "center",
+          key: "noTaxAmt",
+          minWidth: 120,
+          render: (h, params) => {
+            let tex = params.row.noTaxAmt.toFixed(2);
+            return h("span", {}, tex);
+          },
+          tooltip: true
+        },
+        {
+          title: "连锁库龄",
+          align: "center",
+          key: "chainStockAge",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "本店库龄",
+          align: "center",
+          key: "branchStockAge",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "滞销",
+          align: "center",
+          key: "isUnsalable",
+          render: (h, params) => {
+            let tex = params.row.isUnsalable == 0 ? "否" : "是";
+            return h("span", {}, tex);
+          },
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "入库日期",
+          align: "center",
+          key: "enterDate",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "入库单号",
+          align: "center",
+          key: "serviceId",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "第一供应商",
+          align: "center",
+          key: "originGuestName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "最近供应商",
+          align: "center",
+          key: "guestName",
+          minWidth: 120,
+          tooltip: true
+        },
+        {
+          title: "机构名称",
+          align: "center",
+          key: "orgName",
+          minWidth: 120,
+          tooltip: true
         }
       ];
       if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
         this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+        this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
+        // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
+        // this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
       } else {
         this.columns1 = arr;
+        this.columns2 = arr2;
       }
     },
     changecompanyFun() {
@@ -975,7 +1067,7 @@ export default {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm));
       data.partName = data.partName.trim();
-      if(data.storeIds[0] == 1) {
+      if (data.storeIds[0] == 1) {
         data.storeIds = [];
       }
       if (data.old === "all") {
@@ -996,8 +1088,8 @@ export default {
         let arr = res.data.content.map(el => el.partBrand);
         let set = new Set(arr);
         set.forEach(el => {
-          this.bands1.push({label: el, value: el});
-        })
+          this.bands1.push({ label: el, value: el });
+        });
         // this.columnsPart[6].filters = this.bands1;
         this.getColumns();
       }
@@ -1031,7 +1123,7 @@ export default {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm1));
       data.partName = data.partName.trim();
-      if(data.storeIds[0] == 1) {
+      if (data.storeIds[0] == 1) {
         data.storeIds = [];
       }
       if (data.old === "all") {
@@ -1053,8 +1145,8 @@ export default {
         let arr = res.data.content.map(el => el.partBrand);
         let set = new Set(arr);
         set.forEach(el => {
-          this.bands2.push({label: el, value: el});
-        })
+          this.bands2.push({ label: el, value: el });
+        });
         this.columns2[4].filters = this.bands2;
       }
 
@@ -1125,32 +1217,38 @@ export default {
       data.size = this.contentOne.page.total;
       data.noStock = data.noStock ? 1 : 0;
       data.isImport = 1;
+      if(this.contentOne.dataOne.length<=0){
+        this.$Message.error("这个公司暂时没有库存呢")
+        return
+      }
       let res = await getAllStock(data);
       if (res.code == 0) {
         let arrData = res.data.content || [];
         let newData = arrData.map((item1, index) => {
-          let item = {...item1}
+          let item = { ...item1 };
           for (let b in item) {
             if (item[b] && typeof item[b] == "string") {
               item[b] = item[b].replace(/[\r\n,"]/g, "");
-              item[b] = "\t"+item[b];
+              item[b] = "\t" + item[b];
             }
           }
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
           item.costPrice = item.costPrice.toFixed(2);
           item.stockAmt = item.stockAmt.toFixed(2);
-          item.partCode = "\t"+item.partCode;
-          item.oemCode = "\t"+item.oemCode;
+          item.partCode = "\t" + item.partCode;
+          item.oemCode = "\t" + item.oemCode;
           return item;
         });
-        if (newData.length > 0) {
+        if (newData.length >= 0) {
           this.$refs.table1.exportCsv({
             filename: "汇总库存",
             original: true,
             columns: this.columns1,
             data: newData
           });
+        }else{
+          this.$Message.error("这个公司暂时没有库存呢")
         }
       }
     },
@@ -1168,10 +1266,15 @@ export default {
       data.size = this.contentTwo.page.total;
       data.noStock = data.noStock ? 1 : 0;
       // console.log('数据',data)
+
+      if(this.contentTwo.dataTwo.length<=0){
+        this.$Message.error("这个公司暂时没有库存呢")
+        return
+      }
       let res = await getLotStock(data);
       if (res.code == 0) {
         let arrData2 = res.data.content || [];
-        arrData2.map((item, index) => {
+        let newData=arrData2.map((item, index) => {
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
@@ -1192,12 +1295,16 @@ export default {
             objData.oemCode = "\t" + objData.oemCode;
             return objData;
           });
-          this.$refs.table2.exportCsv({
-            filename: "批次库存",
-            original: false,
-            columns: this.columns2,
-            data: arrData
-          });
+          if (newData.length >= 0) {
+            this.$refs.table2.exportCsv({
+              filename: "批次库存",
+              original: false,
+              columns: this.columns2,
+              data: arrData
+            });
+          }else{
+            this.$Message.error("这个公司暂时没有库存呢")
+          }
         }
       }
     },
@@ -1279,20 +1386,20 @@ export default {
               "attotRoadQty",
               "onRoadQty",
               "enterAmt",
+              "taxAmt",
             ].includes(key)
           ) {
-            if(key=='stockAmt'){
+            if (key == "stockAmt") {
               sums[key] = {
                 key,
                 value: v.toFixed(2)
               };
-            }else{
+            } else {
               sums[key] = {
                 key,
                 value: v
               };
             }
-
           } else {
             sums[key] = {
               key,
@@ -1306,7 +1413,7 @@ export default {
           };
         }
       });
-      console.log(sums)
+      // console.log(sums);
       return sums;
     }
   }

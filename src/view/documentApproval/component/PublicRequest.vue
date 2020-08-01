@@ -60,8 +60,23 @@
           <Row>
             <Col span="8">
               <FormItem label="收款人账户" prop="receiverId" style="margin-bottom: 0px">
-                <Select v-model="formInline.receiverId" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
-                  <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Select
+                  v-model="formInline.receiverId"
+                  filterable
+                  remote
+                  :remote-method="remoteMethod1"
+                  style="width: 90%;padding-left: 5px"
+                  label-in-value
+                  @on-change="getCompany"
+                  :disabled="modelType"
+                  placeholder="请输入姓名查询选择"
+                >
+                  <Option
+                    v-for="item in options1"
+                    :value="item.id"
+                    :key="item.id"
+                  >{{ item.accountName }}</Option
+                  >
                 </Select>
               </FormItem>
             </Col>

@@ -115,13 +115,17 @@
                         ></DatePicker>
                       </FormItem>
                       <FormItem class="formItem" label="备注：" prop="remark">
+                        <Tooltip :content="formPlan.remark">
                         <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                        </Tooltip>
                       </FormItem>
                       <FormItem label="申请人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
                       </FormItem>
                       <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
+                        <Tooltip :content="formPlan.serviceId">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
+                        </Tooltip>
                       </FormItem>
                     </Form>
                   </div>
@@ -180,32 +184,32 @@
                     @select-all="selectAll"
                     @edit-actived="editActivedEvent"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
-                    <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
-                    <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-                    <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
-                     <vxe-table-column
+                    <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                     <vxe-table-column  show-overflow="tooltip"
                        field="applyQty"
                        title="申请数量"
                        :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
                     </vxe-table-column>
-                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="100"></vxe-table-column>
-                    <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
-                    <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                    <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                    <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                    <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-                    <vxe-table-column title="紧销品" width="100">
+                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="enterUnitId" title="方向" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" title="紧销品" width="100">
                       <template v-slot="{ row }">
                         <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                       </template>
                     </vxe-table-column>
-                    <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="入库数量" width="100"></vxe-table-column>
                   </vxe-table>
                   <!-- <div ref="planPage">
                   <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
@@ -219,7 +223,7 @@
         <!--更多弹框-->
               <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
-        <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
+        <supplier ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
         <!--编辑收货信息-->
           <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata" :guestId="guestidId"></goods-info>
       </div>
@@ -253,6 +257,7 @@
   import {upxlxsDBo} from "../../../../api/purchasing/purchasePlan";
 
   export default {
+      name: "applyFor",
       components: {
         QuickDate,
         More,
@@ -428,6 +433,7 @@
           Flaga: false,
           ArrayValue: [],
           getArray: [],
+          currentRow: {},
         }
       },
       methods: {
@@ -579,7 +585,6 @@
                     save(data).then(res => {
                       if(res.code === 0){
                         this.$message.success('保存成功！');
-                        this.leftgetList()
                         this.formPlan.guestName = '',
                         this.formPlan.shortName = '',
                         this.formPlan.storeId =  '',
@@ -590,6 +595,7 @@
                         this.Right.tbdata = []
                         this.isAdd = true
                         this.$refs.formPlan.resetFields();
+                        this.leftgetList()
                       }
                     })
                   // try {
@@ -833,7 +839,7 @@
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
               this.Left.tbdata.forEach(el => {
-                if (el.id == this.selectRowId) {
+                if (el.id == this.currentRow.id) {
                   el._highlight = true;
                   this.isAdd = true;
                   this.setRow(el)
@@ -853,6 +859,7 @@
         selection(row){
           if (row == null) return;
           this.selectRowId = row.id;
+          this.currentRow = row;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
             this.$Modal.confirm({

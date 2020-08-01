@@ -7,6 +7,8 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 // @ts-ignore
 import {getAllBrand} from "_api/system/partsExamine/partsExamineApi.js";
+// @ts-ignore
+import {getParamsBrand} from "@/api/purchasing/purchasePlan";
 
 @Component
 export default class ProductLA extends Vue {
@@ -331,7 +333,9 @@ export default class ProductLA extends Vue {
       title:""
     }
 
-    private proLineSelectData = {};
+    private proLineSelectData:any = {
+      lever : 0
+    };
 
     private proLineFormValidate = {
       title:[
@@ -340,6 +344,7 @@ export default class ProductLA extends Vue {
     }
     //树形列表
     private treeData:Array<any> = [];
+
 
     private treeDataList:Array<any> = [
       {
@@ -355,7 +360,10 @@ export default class ProductLA extends Vue {
     private StaffList:Array<any>=[];
     private StaffName:any = "";
     private proLineBrandName:any = "";
-
+    private selectTableItem = {
+      userName:"",
+      userId:""
+    };
 
     // mounted
     private async mounted() {
@@ -382,6 +390,10 @@ export default class ProductLA extends Vue {
         // @ts-ignore
         this.tableHeight = tableWrap.offsetHeight-50;
       })
+    }
+    private activated(){
+      this.getProLineList();
+      this.proLineSelectData = {};
     }
 
     // methods
@@ -497,20 +509,18 @@ export default class ProductLA extends Vue {
   }
   //获取所有品牌
   private getPartBrandAll(treeData) {
-    getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
-      if(!res.data){
-        return
-      }
-      let arrData = res.data.content||[]
-      arrData.map(item => {
-        this.partBrandData.push(...item.children);
-      })
-      this.partBrandData.map(item => {
-        item.isDisable = false;
-        let brandArr = treeData.filter(item1=>item1.title==item.name)
+    getParamsBrand().then(res => {
+      let arrData = res.data||[]
+      this.partBrandData = arrData.map((item,index) => {
+        let objData:any = {}
+        objData.name = item;
+        objData.code = `item+${index}`
+        objData.isDisable = false;
+        let brandArr = treeData.filter(item1=>item1.title==item)
         if(brandArr.length>0){
-          item.isDisable = true;
+          objData.isDisable = true;
         }
+        return objData;
       })
     });
   }
@@ -609,8 +619,12 @@ export default class ProductLA extends Vue {
       let proLineForm:any = this.$refs.proLineForm;
       proLineForm.resetFields();
       this.proLineBrandName = "";
-      // @ts-ignore
-      this.proLineForm = {...this.proLineSelectData};
+      this.proLineSelectData.lever = 0;
+      if(this.proLineSelectData.hasOwnProperty("id")){
+        // @ts-ignore
+        this.proLineForm = {...this.proLineSelectData};
+      }
+
       if(type=='add'){
         this.proLineTitle = "添加产品线";
         this.proLineForm.title = "";
@@ -631,6 +645,7 @@ export default class ProductLA extends Vue {
         this.proLineForm.id = '000000';
       }else{
         this.proLineForm.id = this.proLineForm.parentId;
+        this.proLineSelectData.lever = 1;
       }
       this.proLineModel = true;
     }
@@ -670,7 +685,11 @@ export default class ProductLA extends Vue {
       if(rep.code==0){
         this.treeData = rep.data.filter(item => item.lever===0);
         this.treeData.map(item => {
-          item.children = rep.data.filter(item1 => item1.lever===1&&item1.parentId==item.id);
+          let arrData = rep.data.filter(item1 => item1.lever===1&&item1.parentId==item.id);
+          item.children = arrData;
+          if(arrData.length==0){
+            item.disabled = true;
+          }
         })
         this.treeDataList =[this.treeDataList[0],...rep.data];
 
@@ -682,6 +701,8 @@ export default class ProductLA extends Vue {
 
     //产品线点击选中
     private handleNodeClick(data){
+      // @ts-ignore
+      this.selectTableItem = {};
       this.proLineSelectData = {...data}
       let sourceData:Array<any> = [];
       if(data.lever==0){
@@ -706,11 +727,25 @@ export default class ProductLA extends Vue {
     //打开产品线分配层
     private disProLine(){
       this.proLineDis = true;
-      this.StaffName = "";
       let treeRef:any = this.$refs.tree;
       treeRef.setCheckedKeys([]);
-      this.StaffName = "";
       this.StaffList = [];
+      let StaffNameRef:any = this.$refs.StaffName;
+      StaffNameRef.query = "";
+      if(this.selectTableItem.hasOwnProperty("userId")){
+        StaffNameRef.query = this.selectTableItem.userName;
+        this.selectStaff(this.selectTableItem.userId)
+      }else{
+        this.StaffName = "";
+      }
+    }
+
+    private changeLever(v){
+      if(this.proLineForm.id&&this.proLineForm.id!='000000'){
+        this.proLineSelectData.lever = 1;
+      }else{
+        this.proLineSelectData.lever = 0;
+      }
     }
 
     //获取员工
@@ -728,6 +763,9 @@ export default class ProductLA extends Vue {
     }
 
     private async proLineDisSubmit(){
+      if(this.selectTableItem.userId){
+        this.StaffName = this.selectTableItem.userId;
+      }
       if(this.StaffName){
         let treeRef:any = this.$refs.tree;
         let treeSelectData = treeRef.getCheckedNodes();
@@ -744,12 +782,13 @@ export default class ProductLA extends Vue {
             reqArr.push(req)
           })
         }else{
-          let req:any = {
-            userId:this.StaffList[0].id,
-            userName:this.StaffList[0].staffName,
-            roleName:this.StaffList[0].roles&&this.StaffList[0].roles.length>0?this.StaffList[0].roles[0].displayName:""
-          }
-          reqArr.push(req)
+          // let req:any = {
+          //   userId:this.StaffList[0].id,
+          //   userName:this.StaffList[0].staffName,
+          //   roleName:this.StaffList[0].roles&&this.StaffList[0].roles.length>0?this.StaffList[0].roles[0].displayName:""
+          // }
+          // reqArr.push(req)
+          return this.$Message.error("请选择要分配的产品线品牌");
         }
         let rep = await api.setProLineDis(reqArr)
         if(rep.code==0){
@@ -761,7 +800,7 @@ export default class ProductLA extends Vue {
         this.$message.error("请选择员工");
       }
     }
-
+    //获取分配员工列表
     async getProLineDisList(ids){
       let arrData = ids.filter(item => item.lever==1).map(item => {
         let objData:any = {}
@@ -947,5 +986,9 @@ export default class ProductLA extends Vue {
           treeRef.setCheckedNodes(rep.data);
         }
       }
+    }
+
+    private selectTable(v){
+      this.selectTableItem = v;
     }
 }

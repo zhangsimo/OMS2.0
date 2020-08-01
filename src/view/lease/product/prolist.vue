@@ -187,7 +187,7 @@ import { proTypeList } from "./prolist";
 import { getOmsAuth } from "../../../api/lease/tenantres";
 
 export default {
-  name: "prolist",
+  name: "leaseProduct",
   inject: ["reload"],
   data() {
     let price = (rule, value, callback) => {
