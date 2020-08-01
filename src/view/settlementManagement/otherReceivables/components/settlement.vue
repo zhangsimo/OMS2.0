@@ -256,6 +256,10 @@ export default {
     });
   },
   methods: {
+    setData(d){
+      // console.log(d)
+      // this.tableData = d;
+    },
     // 选择科目弹框
     subject() {
       this.$refs.subjexts.subjectModelShow = true;

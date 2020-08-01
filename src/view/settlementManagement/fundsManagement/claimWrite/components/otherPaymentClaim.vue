@@ -184,6 +184,7 @@
     <!-- 辅助核销计算 -->
     <voucherInput ref="voucherInput" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement"></settlement>
+    <settlement2 ref="settlement2"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
 </template>
@@ -194,6 +195,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import { findGuest } from "@/api/settlementManagement/advanceCollection.js";
 import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
 import settlement from "@/view/settlementManagement/bill/components/settlement";
+import settlement2 from "@/view/settlementManagement/otherReceivables/components/settlement";
 import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { goshop } from "@/api/settlementManagement/shopList";
@@ -215,6 +217,7 @@ export default {
     voucherInput,
     claim,
     settlement,
+    settlement2,
     quickDate,
     claimGuest
   },
@@ -280,6 +283,7 @@ export default {
     });
     this.getShop();
     this.getOne();
+    console.log(this.accrued)
   },
   methods: {
     // 打开模态框
@@ -302,7 +306,7 @@ export default {
           guestId: this.companyId,
           size: this.page.size,
           page: this.page.num - 1,
-          claimed: 0
+          claimAmt: 0
         };
         findByDynamicQuery(obj).then(res => {
           if (res.code === 0) {
@@ -398,7 +402,8 @@ export default {
           if (errMap) {
           } else {
             this.changeAmt();
-            this.$refs.settlement.Settlement = true;
+            this.paymentId = "YJDZ";
+            this.$refs.settlement2.Settlement = true;
           }
         }else{
           this.$Message.error("请选择明细")
@@ -480,7 +485,7 @@ export default {
           Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
           this.oneSubject.applyAmt
         ) {
-          this.$refs.settlement.Settlement = true;
+          this.$refs.settlement2.Settlement = true;
           this.paymentId = "YJDZ";
         } else {
           this.$message.error("金额大于其他付款申请金额，无法认领");
@@ -596,6 +601,7 @@ export default {
         }
         return item
       })
+      console.log(thisData)
       // bus.$emit("paymentInfo", thisData);
       this.$refs.settlement.setData(thisData)
     }
