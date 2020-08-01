@@ -49,7 +49,7 @@ export default {
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
@@ -71,7 +71,7 @@ export default {
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
@@ -93,7 +93,7 @@ export default {
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
@@ -115,7 +115,7 @@ export default {
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
