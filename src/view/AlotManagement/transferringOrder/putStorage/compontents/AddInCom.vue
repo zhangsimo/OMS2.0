@@ -72,7 +72,7 @@
           <vxe-table-column field="serviceId" title="申请单" width="150"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="160"></vxe-table-column>
           <vxe-table-column field="status.name" title="受理状态" width="70"></vxe-table-column>
-          <vxe-table-column field="" title="备注" width="130"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注" width="130"></vxe-table-column>
           <vxe-table-column field="orderMan" title="申请人" width="80"></vxe-table-column>
           <vxe-table-column field="createTime" title="申请日期" width="86"></vxe-table-column>
           <vxe-table-column field="createUname" title="提交人" width="80"></vxe-table-column>
@@ -106,8 +106,8 @@
           <vxe-table-column field="oemCode" title="OE码" width="170"></vxe-table-column>
           <vxe-table-column field="unit" title="单位" width="60"></vxe-table-column>
           <vxe-table-column field="applyQty" title="申请数量" width="90"></vxe-table-column>
-          <vxe-table-column field="" title="受理数量" width="90"></vxe-table-column>
-          <vxe-table-column field="" title="出库数量" width="90"></vxe-table-column>
+          <vxe-table-column field="hasAcceptQty" title="受理数量" width="90"></vxe-table-column>
+          <vxe-table-column field="hasOutQty" title="出库数量" width="90"></vxe-table-column>
         </vxe-table>
       </div>
     </section>
@@ -278,6 +278,7 @@ export default {
         }
       }
       reqData.enterSelect = 123;
+      reqData.status = "STOCKING";
       if(this.showSelf) {
         let createUid = this.$store.state.user.userData.id;
         reqData.createUid = createUid;
@@ -294,6 +295,7 @@ export default {
       } else {
         Reflect.deleteProperty(data, "createUid")
       }
+      data.status = "STOCKING";
       this.$emit("getLisw", data);
     },
     //确定

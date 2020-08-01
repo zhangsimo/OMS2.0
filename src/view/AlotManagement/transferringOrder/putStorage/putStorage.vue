@@ -751,6 +751,7 @@ export default {
       } else {
         Reflect.deleteProperty(data, "createUid")
       }
+      data.status = "STOCKING";
       chengping(data, 10, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
@@ -1081,6 +1082,7 @@ export default {
       } else {
         Reflect.deleteProperty(data, "createUid")
       }
+      data.status = "STOCKING";
       chengping(data)
         .then(res => {
           if (res.code == 0) {
