@@ -258,7 +258,7 @@
             ></vxe-table-column>
             <vxe-table-column fixed="right" field="checkboxsing" title="最小计量单位" width="100">
               <template v-slot="{ row,rowIndex }">
-                <Checkbox v-model="row.checkboxsing" @on-change="changeCheckbox(rowIndex)"></Checkbox>
+                <Checkbox disabled v-model="row.checkboxsing" @on-change="changeCheckbox(rowIndex)"></Checkbox>
               </template>
             </vxe-table-column>
           </vxe-table>

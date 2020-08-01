@@ -1,5 +1,6 @@
 <template>
   <Modal v-model="getShowMore" title="高级查询" width="600px" @on-ok="moreOk" @on-cancel="moreCancel">
+    <Form @keydown.native.enter="moreOk">
     <div class="navbox">
       <Row class="mb15">
         <Col>
@@ -79,6 +80,7 @@
         </Select>
       </row>
     </div>
+    </Form>
   </Modal>
 </template>
 
@@ -238,23 +240,23 @@
         this.getBrand();
         this.getAllSales();
         this.getWouse();
-        this.moreData = {
-          createTime:'',//创建时间
-          enterTime:'',//提交日期
-          startTime: "", //创建日期开始
-          endTime: "", //创建日期结束
-          auditStartTime: "", //提交时间开始
-          auditEndTime: "", //提交时间结束
-          serviceId: "", //移库仓号
-          partCode: "", //配件编码
-          partName: "", //配件名称
-          partBrand:"",//配件品牌
-          auditor:"",//提交人
-          subMan:"",
-          createUname:"",//创建人
-          storeId:"",
-          source:3
-        };
+        // this.moreData = {
+        //   createTime:'',//创建时间
+        //   enterTime:'',//提交日期
+        //   startTime: "", //创建日期开始
+        //   endTime: "", //创建日期结束
+        //   auditStartTime: "", //提交时间开始
+        //   auditEndTime: "", //提交时间结束
+        //   serviceId: "", //移库仓号
+        //   partCode: "", //配件编码
+        //   partName: "", //配件名称
+        //   partBrand:"",//配件品牌
+        //   auditor:"",//提交人
+        //   subMan:"",
+        //   createUname:"",//创建人
+        //   storeId:"",
+        //   source:3
+        // };
       }
     }
   };

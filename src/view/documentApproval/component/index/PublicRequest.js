@@ -3,7 +3,7 @@ import requestCode from '../popWindow/RequestCode'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getPublicSave} from '_api/documentApproval/PublicRequest'
-import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import { getThisAllList ,getBackList} from '@/api/documentApproval/documentApproval/documentApproval'
 import {getPost} from "../utils";
 
 export default {
@@ -47,6 +47,7 @@ export default {
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
       Pictures:{},//请求回来的图片地址状态
+      options1: [],
 
     }
   },
@@ -59,6 +60,7 @@ export default {
       this.payeeList = this.list.allSalesList
       this.payUserList = this.list.payList
       this.formInline = {}
+      this.options1 = [];
       this.$refs.upImg.uploadListModal = []
       this.$refs.upImg.uploadList = []
       this.$refs['formInline'].resetFields();
@@ -93,6 +95,7 @@ export default {
       if(res.code === 0){
         this.$nextTick( () => {
           this.formInline = res.data
+          this.getOptionsList(res.data.receiver)
           this.details = res.data.details || []
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
@@ -102,10 +105,33 @@ export default {
 
       }
     },
+    //收款人账号搜索触发
+    remoteMethod1(query) {
+      // this.options1 = [];
+      this.getOptionsList(query)
+    },
+
+    //收款人账号搜索框
+    async getOptionsList(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        data.page = 0
+        data.size = 100
+        let res = await getBackList(data)
+        if(res.code == 0){
+          this.options1 = res.data.content || []
+        }
+      } else {
+        this.options1 = [];
+      }
+    },
+
 
     //获取往来单位
     getCompany(row) {
       let arr = this.payeeList.filter( item => item.value == row.value)
+      this.formInline.receiver = arr[0].accountName || ''
       this.formInline.receiveBank = arr[0].receiveBank || ''
       this.formInline.receiveBankNo = arr[0].receiveBankNo || ''
     },

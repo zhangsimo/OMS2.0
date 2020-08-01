@@ -7,81 +7,87 @@
     <div id="printBox" style="height: 600px">
       <div class="titler">
         <Row style="border: 1px #000000 solid;color:#000;">
-          <Col span="12" class="pl10">
+          <Col span="16" class="pl10">
             <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist['applyGuest'].fullName}}</h5>
           </Col>
-          <Col span="12" class="pl10" >
-            <p>移仓单</p>
-            <p>No: {{onelist['stockShift'].serviceId}}</p>
+          <Col span="8" class="pl10" >
+            <p style="font-weight:600;font-size: 12px">移仓单</p>
+            <p style="font-size: 12px">No: {{onelist['stockShift'].serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址:</span> <span>{{onelist['applyGuest'].streetAddress}}</span></p>
-            <p><span>电话:</span><span>{{onelist['applyGuest'].contactorTel}}</span></p>
+          <Col span="16" class="pl10" style="border-right: 1px #000000 solid">
+            <p><span style="font-size: 12px">地址:</span> <span style="font-size: 12px">{{onelist['applyGuest'].streetAddress}}</span></p>
+            <p><span style="font-size: 12px">电话:</span><span style="font-size: 12px">{{onelist['applyGuest'].contactorTel}}</span></p>
           </Col>
-          <Col span="12" class="pl10" >
-            <p><span>订单日期:</span><span>{{onelist['stockShift'].createTime}}</span></p>
+          <Col span="8" class="pl10" >
+            <p><span style="font-size: 12px">订单日期:</span><span style="font-size: 12px">{{onelist['stockShift'].createTime}}</span></p>
             <p>
-              <span>打印日期:</span>
-              <span>{{printDate}}</span>
+              <span style="font-size: 12px">打印日期:</span>
+              <span style="font-size: 12px">{{printDate}}</span>
             </p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="24" class="pl10" style="border-right: 1px #000000 solid;display:flex;">
-            <p style="width:33%"><span>移出仓库:</span> <span>{{onelist['store'].name}}</span></p>
-            <p style="width:33%"><span>移入仓库:</span> <span>{{onelist['receiveStore'].name}}</span></p>
-            <p style="width:33%"><span>移仓日期:</span> <span>{{onelist['stockShift'].auditDate}}</span></p>
+            <p style="width:33%"><span style="font-size: 12px">移出仓库:</span> <span style="font-size: 12px">{{onelist['store'].name}}</span></p>
+            <p style="width:33%"><span style="font-size: 12px">移入仓库:</span> <span style="font-size: 12px">{{onelist['receiveStore'].name}}</span></p>
+            <p style="width:33%"><span style="font-size: 12px">移仓日期:</span> <span style="font-size: 12px">{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
         <table class="gridtable">
           <thead>
           <tr>
-            <th>序号</th>
-            <th>配件编码</th>
-            <th>配件名称</th>
+            <th style="width:40px">序号</th>
+            <th style="width:90px">配件编码</th>
+            <th style="width:90px">配件名称</th>
+            <th style="max-width:90px;white-space:nowrap;overflow: hidden;">OEM码</th>
             <th>品牌</th>
-            <th>品牌车型</th>
+            <th style="max-width: 40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th>规格	</th>
             <th>单位	</th>
             <th>数量</th>
-            <th>oe码</th>
+            <th style="width:50px">单价</th>
+            <th style="width:50px">金额</th>
+            <th style="width:50px">仓位</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item ,index) in onelist['stockShift'].detailVOList" :key="index">
-            <td>{{index + 1}}</td>
-            <td>{{item.partCode}}</td>
-            <td>{{item.partName}}</td>
+            <td style="width:40px">{{index + 1}}</td>
+            <td style="width:90px">{{item.partCode}}</td>
+            <td style="width:90px">{{item.partName}}</td>
+            <td style="max-width: 80px;white-space:nowrap;overflow:hidden;">{{item.oemCode}}</td>
             <td>{{item.partBrand}}</td>
-            <td>{{item.carModelName}}</td>
+            <td style="max-width: 40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td>{{item.spec}}</td>
             <td>{{item.unit}}</td>
             <td>{{item.orderQty}}</td>
-            <td>{{item.oemCode}}</td>
+            <td style="width:50px">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:50px">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
+            <td style="width:50px">{{item.storeShelf}}</td>
           </tr>
           </tbody>
         </table>
 <!--         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist['stockShift'].detailVOList" class="ml10"></Table>-->
         <Row style="border: 1px #000000 solid;color:#000;">
           <Col class="pl10 tr" span="17">
-            <span>合计:</span>
-            <span>{{orderQty}}</span>
+            <span style="font-size: 12px">合计:</span>
+            <span style="font-size: 12px">{{orderQty}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <span>制单人:</span>
-            <span>{{onelist['stockShift'].orderMan}}</span>
+            <span style="font-size: 12px">制单人:</span>
+            <span style="font-size: 12px">{{onelist['stockShift'].orderMan}}</span>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <span>提交人:</span>
-            <span>{{onelist['stockShift'].createUname}}</span>
+            <span style="font-size: 12px">提交人:</span>
+            <span style="font-size: 12px">{{onelist['stockShift'].createUname}}</span>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <span>审核人:</span>
-            <span>{{onelist['stockShift'].createUname}}</span>
+            <span style="font-size: 12px">审核人:</span>
+            <span style="font-size: 12px">{{onelist['stockShift'].createUname}}</span>
           </Col>
         </Row>
       </div>
@@ -218,18 +224,18 @@
                      getPrint(data)
                      .then(res => {
                        if(res.code === 0){
-                         console.log(res)
-                        this.printShow = true
-                         this.onelist = res.data
-                        //this.onelist = res.data
-                         let arr = this.onelist['stockShift'].detailVOList||[]
-                         arr.map(item => {
+                          this.printShow = true
+                          this.onelist = res.data
+                          //this.onelist = res.data
+                          let arr = this.onelist['stockShift'].detailVOList||[]
+                          arr.map(item => {
                            this.orderQty += item.orderQty
                            this.orderAmt += item.orderAmt||0
-                         })
-                         if (status == 0) {
+                          })
+
+                          if (status == 0) {
                            this.onelist['stockShift']['createUname'] = "";
-                         }
+                          }
                       }
                     })
                 }else {
@@ -241,54 +247,65 @@
 </script>
 
 <style scoped lang="less">
-  .vertical-center-modal{
+  .vertical-center-modal {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .ivu-modal{
+    .ivu-modal {
       top: 0;
     }
   }
-#printBox {
-  width: 1000px;
-  margin: 0 auto ;
-  overflow: hidden;
-  overflow-y: scroll;
-  .titler {
-  padding-left: 10px;
+  #printBox {
+    width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    overflow-y: scroll;
+    .titler {
+      padding-left: 10px;
+    }
   }
-}
-  #printBox::-webkit-scrollbar {display:none}
-  #printBox { -ms-overflow-style: none; }
-  #printBox::-webkit-scrollbar { width: 0 !important }
-  #printBox { overflow: -moz-scrollbars-none; }
+  #printBox::-webkit-scrollbar {
+    display: none;
+  }
+  #printBox {
+    -ms-overflow-style: none;
+  }
+  #printBox::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  #printBox {
+    overflow: -moz-scrollbars-none;
+  }
   //表格样式
   table.gridtable {
     width: 100%;
     font-family: verdana,arial,sans-serif;
-    font-size:11px;
+    font-size:12px !important;
     color:#000000;
     border-width: 1px;
     border-color: #000000;
-    text-align: center;
+    text-align: left;
     border-collapse: collapse;
   }
   table.gridtable th {
     border-width: 1px;
-    padding: 8px;
+    padding: 4px;
     border-style: solid;
     border-color: #000000;
     background-color: #dedede;
   }
   table.gridtable td {
     border-width: 1px;
-    padding: 8px;
+    padding: 4px;
     border-style: solid;
     border-color: #000000;
     background-color: #ffffff;
   }
   table.gridtable tr {
     page-break-inside:avoid;
+  }
+  table.gridtable tr th{
+    font-weight: 400 !important;
   }
 </style>

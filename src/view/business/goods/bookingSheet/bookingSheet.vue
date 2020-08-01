@@ -119,11 +119,13 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="预订单号:" prop="Reservation" class="ml50">
+                    <Tooltip :content="formPlan.Reservation">
                     <Input
                       class="w160"
                       :disabled="true"
                       v-model="formPlan.Reservation"
-                    ></Input>
+                    />
+                    </Tooltip>
                   </FormItem>
                   <FormItem
                     label="期望到货日期："
@@ -140,12 +142,14 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="备注：" prop="remark">
+                    <Tooltip :content="formPlan.remark">
                     <Input
                       class="w160"
                       :disabled="presentrowMsg !== 0 || buttonDisable"
                       v-model="formPlan.remark"
                       :maxlength="100"
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                 </Form>
               </div>
@@ -224,36 +228,36 @@
                 @edit-actived="editActivedEvent"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column type="index" title="序号"></vxe-table-column>
-                <vxe-table-column type="checkbox"></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" type="checkbox"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
                   width="150"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="unit"
                   title="单位"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="preQty"
                   title="预定数量"
                   :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   width="100"
                 >
                 </vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   :edit-render="{
@@ -263,23 +267,23 @@
                   }"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="acceptQty"
                   title="受理数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column show-overflow="tooltip"
                   field="spec"
                   title="规格"
                   width="100"
                 ></vxe-table-column>
-                <!--<vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>-->
-                <vxe-table-column
+                <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
+                <vxe-table-column show-overflow="tooltip"
                   field="partInnerId"
                   title="配件内码"
                   width="150"
@@ -297,6 +301,7 @@
     <Select-part-com
       ref="SelectPartCom"
       @selectPartName="getPartNameList"
+      @selectPartName2="getPartNameList2"
       :is-show-add-part-btn="true"
       @isShow="false"
     ></Select-part-com>
@@ -848,6 +853,38 @@ export default {
       //   item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
       // );
     },
+
+    getPartNameList2(ChildMessage) {
+      // console.log(ChildMessage)
+      let parts = [];
+      ChildMessage.map(item => {
+        parts.push({
+          partCode: item.partCode, //编码
+          partName: item.partName, //名称
+          unit: item.unit, //单位
+          partBrand: item.partBrand, //品牌
+          spec: item.spec, //规格
+          preQty: item.orderQty||1, //预定数量
+          remark: "", //备注
+          acceptQty: 0, //受理数量
+          oemCode: item.oemCode, //oe码
+          partInnerId: item.partInnerId, //配件内码
+          partId: item.partId
+        });
+      });
+      if (this.Right.tbdata) {
+        this.Right.tbdata = [...this.Right.tbdata, ...parts];
+        this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, "oemCode");
+      } else {
+        this.Right.tbdata = parts;
+      }
+      this.$Message.success("已添加");
+
+      // this.Right.tbdata.map(
+      //   item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
+      // );
+    },
+
     //编辑收货信息弹框显示
     GoodsInfoModal() {
       if (!this.datadata || this.datadata.new)

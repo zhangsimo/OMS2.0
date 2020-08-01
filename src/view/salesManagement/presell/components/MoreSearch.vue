@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="moreQueryShow" title="高级查询">
     <div class="box">
-      <Form ref="formInline" :model="data" :label-width="100">
+      <Form ref="formInline" :model="data" :label-width="100" @keydown.native.enter="getMoreSearch">
         <FormItem label="创建日期:">
           <DatePicker
             type="daterange"

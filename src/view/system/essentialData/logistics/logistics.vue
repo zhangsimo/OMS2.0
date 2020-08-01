@@ -60,7 +60,7 @@
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 
     export default {
-        name: "logistics",
+        name: "essentialDataLogistics",
         components:{
             AddLogistics
         },

@@ -125,6 +125,7 @@ import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 export default {
+  name: "invoiceAdministrationInvoiceApply",
   components: {
     invoiceApplyModelTost,
     quickDate

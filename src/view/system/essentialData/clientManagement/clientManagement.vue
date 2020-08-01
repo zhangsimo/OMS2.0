@@ -16,7 +16,7 @@ import CustomerData from "./CustomerData";
 import { getClientTreeList } from "@/api/system/essentialData/clientManagement";
 
 export default {
-  name: "client",
+  name: "clientManagement",
   components: {
     CustomerClassification,
     CustomerData

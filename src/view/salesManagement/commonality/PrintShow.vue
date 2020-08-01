@@ -243,7 +243,7 @@ export default {
       // 1.设置要打印的区域 div的className
       var newstr = document.getElementById("printBox").innerHTML
       // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
-      // var oldstr = document.body.innerHTML;
+      var oldstr = document.body.innerHTML;
       // 3. 复制给body，并执行window.print打印功能
       let body = document.body
       body.style.overflow = 'visible'
@@ -252,10 +252,9 @@ export default {
         this.remove_ie_header_and_footer();
       }
       window.print();
-
+      document.body.innerHTML = oldstr;
       // 重新加载页面，以刷新数据
       window.location.reload();
-      document.body.innerHTML = oldstr;
     },
     //去除页眉页脚
     remove_ie_header_and_footer() {

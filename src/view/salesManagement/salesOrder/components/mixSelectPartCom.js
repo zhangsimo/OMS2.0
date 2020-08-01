@@ -416,6 +416,10 @@ export const mixSelectPartCom = {
         this.selectTableItem = [v];
         this.$emit("selectPartName", this.selectTableItem);
       }
+    },
+    //修改数量价格选中配件
+    throwDataChangeNum(v){
+      this.$emit("throwPartNameList2",v)
     }
   }
 };

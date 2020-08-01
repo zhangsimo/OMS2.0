@@ -94,6 +94,7 @@
               >
                 <div class="pane-made-hd">调拨受理列表</div>
                 <Table
+                  ref="leftTable"
                   :height="leftTableHeight"
                   @on-current-change="selectTabelData"
                   size="small"
@@ -132,11 +133,13 @@
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
+                          <Tooltip :content="Leftcurrentrow.guestName">
                           <Input
                             readonly
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调入方"
                           />
+                          </Tooltip>
                           <!-- <Select
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
@@ -197,16 +200,16 @@
                         disabled
                         @on-change="changeDate"
                         v-model="Leftcurrentrow.createTime"
-                        format="yyyy-MM-dd HH:mm:ss"
-                        type="date"
                         class="w160"
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
+                      <Tooltip :content="Leftcurrentrow.remark">
                       <Input
                         v-model="Leftcurrentrow.remark"
                         class="w160"
                       ></Input>
+                      </Tooltip>
                     </FormItem>
                     <FormItem label="受理人：" prop="createUname">
                       <Input
@@ -216,19 +219,23 @@
                       ></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="code">
+                      <Tooltip :content="Leftcurrentrow.code">
                       <Input
                         class="w160"
                         disabled
                         :value="Leftcurrentrow.code"
                       ></Input>
+                      </Tooltip>
                     </FormItem>
                     <FormItem label="受理单号：" prop="serviceId">
+                      <Tooltip :content="Leftcurrentrow.serviceId">
                       <Input
                         class="w160"
                         :disabled="Leftcurrentrow.status.value !== 0"
                         :value="Leftcurrentrow.serviceId"
                         disabled
                       />
+                      </Tooltip>
                     </FormItem>
                   </Form>
                 </div>
@@ -283,92 +290,92 @@
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
-                  :data="Leftcurrentrow.detailVOS"
                   :edit-rules="validRules"
                   show-overflow
+                  :data="Leftcurrentrow.detailVOS"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     type="index"
                     width="60"
                     title="序号"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     type="checkbox"
                     width="60"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partCode"
                     title="配件编码"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partName"
                     title="配件名称"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="applyQty"
                     title="申请数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasAcceptQty"
                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="stockOutQty"
                     title="缺货数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="storeShelf"
                     title="仓位"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="carBrandName"
                     title="品牌车型"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="unit"
                     title="单位"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="oemCode"
                     title="OE码"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="partInnerId"
                     title="配件内码"
                     width="120"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="spec"
                     title="规格"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasOutQty"
                     title="出库数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="hasCancelQty"
                     title="取消数量"
                     width="100"
@@ -386,6 +393,7 @@
         width="600px"
         @on-visible-change="moreChange"
       >
+        <Form @keydown.native.enter="Determined">
         <More
           ref="naform"
           :ArrayValue="ArrayValue"
@@ -393,6 +401,7 @@
           :dcName="diaochuName"
           :dcId="diaochuID"
         ></More>
+        </Form>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced = false">取消</Button>
@@ -471,6 +480,7 @@ import * as tools from "_utils/tools";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 export default {
+  name: "stockRemoval",
   components: {
     More,
     QuickDate,
@@ -617,7 +627,10 @@ export default {
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140
+            minWidth: 140,
+            render(h, params) {
+              return h("span", {}, moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss"));
+            }
           },
           {
             title: "受理人",
@@ -733,14 +746,14 @@ export default {
       isWms: false //仓库是否启用wms
     };
   },
-  watch: {
-    Leftcurrentrow: {
-      handler(newVal) {
-        this.Leftcurrentrow = newVal;
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   Leftcurrentrow: {
+  //     handler(newVal) {
+  //       this.Leftcurrentrow = newVal;
+  //     },
+  //     deep: true
+  //   }
+  // },
   created() {
     // 调接口获取配件组装列表信息
   },
@@ -805,9 +818,7 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
-      setTimeout(() => {
-        this.$Message.success("已添加");
-      }, 0);
+      this.$Message.success("已添加");
     },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()
@@ -884,11 +895,11 @@ export default {
           .then(res => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getList();
-              this.$Message.success("保存成功");
               this.flag = 0;
               this.flag1 = false;
               this.buttonDisable = null;
+              this.getList();
+              this.$Message.success("保存成功");
               // this.Leftcurrentrow.storeId = ""
               // this.Leftcurrentrow.guestName = ""
               // this.Leftcurrentrow.storeName =  "",
@@ -910,40 +921,13 @@ export default {
       }
     },
     xinzeng() {
+      this.$refs.leftTable.clearCurrentRow();
       this.flag1 = true;
       this.flagState = 1;
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
-      this.Leftcurrentrow.detailVOS = [];
-      this.Leftcurrentrow.guestName = "";
-      this.Leftcurrentrow.code = "";
-      this.Leftcurrentrow.remark = "";
-      this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.status.value = 0;
-      if (this.cangkuListall.length > 0) {
-        this.cangkuListall.forEach(el => {
-          if (el.isDefault) {
-            this.Leftcurrentrow.storeId = el.id;
-          }
-        });
-      } else {
-        this.Leftcurrentrow.storeId = "";
-      }
-      this.buttonShow = false;
-      this.tuneOut = false;
-      this.Leftcurrentrow.createTime = moment(new Date()).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      if (this.Left.tbdata.length === 0) {
-      } else {
-        if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info("请先保存数据");
-          return;
-        }
-      }
-      this.flag = 1;
-      this.Leftcurrentrow.statuName = "草稿";
+      let createTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
       const item = {
         new: true,
         _highlight: true,
@@ -956,17 +940,38 @@ export default {
         },
         statuName: "草稿",
         storeName: "",
-        createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+        createTime,
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
         serviceId: "",
-        detailVOS: []
+        detailVOS: [],
       };
+      console.log(item);
+      if (this.cangkuListall.length > 0) {
+        this.cangkuListall.forEach(el => {
+          if (el.isDefault) {
+            item.storeId = el.id;
+          }
+        });
+      } else {
+        item.storeId = "";
+      }
+      this.buttonShow = false;
+      this.tuneOut = false;
+      if (this.Left.tbdata.length === 0) {
+      } else {
+        if (this.Left.tbdata[0]["xinzeng"] === "1") {
+          this.$Message.info("请先保存数据");
+          return;
+        }
+      }
+      this.flag = 1;
       this.datadata = null;
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
+      this.Leftcurrentrow = this.Left.tbdata[0];
     },
     tijiao1() {
       this.$Modal.confirm({
@@ -1056,8 +1061,8 @@ export default {
             });
         },
         onCancel: () => {
-          this.getList();
           this.Leftcurrentrow.serviceId = "";
+          this.getList();
         }
       });
     },
@@ -1271,7 +1276,7 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == this.form.guestName) {
+        if (this.getArray[i].shortName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
       }
@@ -1342,7 +1347,7 @@ export default {
     },
     // 供应商子组件内容
     getSupplierName(a) {
-      this.formPlan.guestName = a.fullName;
+      this.formPlan.guestName = a.shortName;
       this.formPlan.guestidId = a.id;
     },
     //选择方
@@ -1406,7 +1411,7 @@ export default {
       delete params.status;
       delete params.guestName;
       getList1(params, this.Left.page.size, this.Left.page.num)
-        .then(res => {
+        .then(async res => {
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -1420,10 +1425,41 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
           }
+          // Leftcurrentrow
+          for (let b of this.Left.tbdata) {
+            b._highlight = false;
+            if(b.id == this.Leftcurrentrow.id) {
+              b._highlight = true;
+              this.Leftcurrentrow = b;
+              this.buttonDisable = 0;
+              if (b.statuName == "待出库") {
+                this.buttonDisable = 1;
+              }
+              if (b.statuName == "已出库") {
+                this.buttonDisable = 2;
+              }
+              if (b.statuName == "已作废") {
+                this.buttonDisable = 3;
+              }
+
+              //判断仓库是否启用wms
+              this.isWms = false;
+              if (this.buttonDisable === 1 && b.isWms === 1) {
+                this.isWms = true;
+              }
+              const params = {
+                mainId: b.id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = res.data || [];
+              return;
+            }
+            // this.Leftcurrentrow.detailVOS = [];
+          }
         })
-        .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取配件组装列表失败");
+        // });
     },
     getListPro() {
       chengping()

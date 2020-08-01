@@ -86,12 +86,14 @@
                   <FormItem label="申请方：" class="fs12">
                     <Row class="w500">
                       <Col span="22">
+                      <Tooltip :content="formPlan.guestName">
                         <Input
                           disabled
                           readonly
                           v-model="formPlan.guestName"
                           placeholder
                         ></Input>
+                      </Tooltip>
                       </Col>
                     </Row>
                   </FormItem>
@@ -118,6 +120,7 @@
                     ></Date-picker>
                   </FormItem>
                   <FormItem label="备注：">
+                    <Tooltip :content="formPlan.remark">
                     <Input
                       :disabled="this.flag"
                       class="w500"
@@ -125,6 +128,7 @@
                       placeholder="选填"
                       maxlength="100"
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="处理人：">
                     <Input
@@ -136,6 +140,7 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
+                    <Tooltip :content="formPlan.code">
                     <Input
                       disabled
                       readonly
@@ -143,8 +148,10 @@
                       v-model="formPlan.code"
                       placeholder
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                   <FormItem label="退回单号：" class="ml50">
+                    <Tooltip :content="formPlan.serviceId">
                     <Input
                       disabled
                       readonly
@@ -152,6 +159,7 @@
                       v-model="formPlan.serviceId"
                       placeholder
                     ></Input>
+                    </Tooltip>
                   </FormItem>
                 </Form>
               </div>
@@ -168,64 +176,64 @@
                 :data="tableData"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   type="index"
                   width="60"
                   title="序号"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="applyQty"
                   title="退回数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   width="120"
                   field="storeShelf"
                   title="仓位"
                   :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="unit"
                   title="单位"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="carBrandName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip"
                   field="spec"
                   title="规格"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-                <vxe-table-column
+                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip"
                   field="hasCancelQty"
                   title="统计退回数量"
                   width="100"
@@ -268,6 +276,7 @@ import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { checkStore } from '@/api/system/systemApi'
 
 export default {
+  name: "twoBackInStorage",
   inject: ["reload"],
   components: {
     More,
@@ -451,7 +460,7 @@ export default {
     };
   },
   created() {
-    this.getinfo(this.params);
+    this.getinfo();
   },
   methods: {
     checkSelf({ row : { storeShelf } }) {
@@ -468,9 +477,10 @@ export default {
       }
     },
     //获取调拨申请列表
-    getinfo(params) {
+    getinfo() {
+      let params = {...this.params, ...this.form}
       getList(params)
-        .then(res => {
+        .then(async res => {
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
@@ -480,6 +490,21 @@ export default {
             this.$Message.info("未查到数据");
             this.Left.tbdata = [];
           }
+          // this.Leftcurrentrow
+          for (let b of this.Left.tbdata) {
+            b._highlight = false;
+            if(b.id == this.Leftcurrentrow.id) {
+              b._highlight = true;
+              this.Leftcurrentrow = b;
+              const params = {
+                mainId: b.id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = this.tableData = res.data;
+              return;
+            }
+            // this.Leftcurrentrow.detailVOS = [];
+          }
         })
         .catch(err => {
           this.$Message.info("初始化数据失败");
@@ -488,11 +513,11 @@ export default {
     getDataQuick(val) {
       this.form.createTimeStart = val[0];
       this.form.createTimeEnd = val[1];
-      this.getinfo(this.form);
+      this.getinfo();
     },
     //类型查询
     getDataType() {
-      this.getinfo(this.form);
+      this.getinfo();
     },
     //显示更多弹窗
     more() {
@@ -506,7 +531,7 @@ export default {
     //更多搜索接收调拨申请列表
     getMoreData(val) {
       this.params = { ...this.params, ...val };
-      this.getinfo(this.params);
+      this.getinfo();
     },
     //
     // 仓库下拉框
@@ -531,7 +556,8 @@ export default {
           if (res.code === 0) {
             this.showIn = false;
             this.$Message.info("确定入库成功");
-            this.reload();
+            this.getinfo();
+            // this.reload();
           } else if (res.code === 1) {
             this.$Message.info("提示入库失败");
           }
@@ -591,11 +617,11 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      this.getinfo(this.params);
+      this.getinfo();
     },
     changeSize(s) {
       this.Left.page.size = s;
-      this.getinfo(this.params);
+      this.getinfo();
     }
   },
   mounted() {

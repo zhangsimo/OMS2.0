@@ -559,7 +559,7 @@ const components = {
 };
 
 export default {
-  name: "StockLevel",
+  name: "mixtureRatio",
   data,
   components,
   mounted,

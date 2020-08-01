@@ -179,19 +179,19 @@ export default {
     },
     reset() {
       this.getArrayParams();
-      this.createDate = [];
-      this.commitDate = [];
-      this.form = {
-        partCode: "", //申请单号
-        partName: "", //申请单号
-        productPartCode: "", //编码
-        startData: "", //配件人
-        commitDateEnd: "",
-        createTimeEnd: "",
-        guestId: "",
-        guestName: "",
-        createTimeStart: ""
-      };
+      // this.createDate = [];
+      // this.commitDate = [];
+      // this.form = {
+      //   partCode: "", //申请单号
+      //   partName: "", //申请单号
+      //   productPartCode: "", //编码
+      //   startData: "", //配件人
+      //   commitDateEnd: "",
+      //   createTimeEnd: "",
+      //   guestId: "",
+      //   guestName: "",
+      //   createTimeStart: ""
+      // };
     }
   }
 };

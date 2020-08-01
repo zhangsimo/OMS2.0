@@ -127,7 +127,9 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
+                      <Tooltip :content="formPlan.fullName">
                       <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
+                      </Tooltip>
                       <!-- <Select
                         v-model="formPlan.guestId"
                         filterable
@@ -249,11 +251,13 @@
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
+                    <Tooltip :content="formPlan.remark">
                     <Input
                       style="width: 370px"
                       v-model="formPlan.remark"
                       :disabled="draftShow != 0||isNew"
                     />
+                    </Tooltip>
                   </FormItem>
                 </div>
                 <div class="flex plan-cz-btn" ref="planBtn">
@@ -337,40 +341,40 @@
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column type="index" title="序号" fixed="left" width="60"></vxe-table-column>
-                  <vxe-table-column type="checkbox" fixed="left" width="60"></vxe-table-column>
-                  <vxe-table-column title="操作" fixed="left" width="100">
+                  <vxe-table-column  show-overflow="tooltip" type="index" title="序号" fixed="left" width="60"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" type="checkbox" fixed="left" width="60"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" title="操作" fixed="left" width="100">
                     <template v-slot="{ row,rowIndex }">
                       <a @click="openFileModal(row)">查看</a>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip"
                     field="orderQty"
                     title="数量"
                     width="100"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="orderPrice"
                     title="销价"
                     width="100"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
-                  <vxe-table-column title="金额" width="100">
+                  <vxe-table-column  show-overflow="tooltip" title="金额" width="100">
                     <template v-slot="{ row }">
                       <span>{{ countAmount(row) | priceFilters}}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column
+                  <vxe-table-column  show-overflow="tooltip"
                     field="remark"
                     title="备注"
                     width="160"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
-                  <vxe-table-column field="storeName" title="仓库" disabled width="100">
+                  <vxe-table-column  show-overflow="tooltip" field="storeName" title="仓库" disabled width="100">
                     <template v-slot:edit="{ row }">
                       <Select style="width:100px">
                         <Option
@@ -382,16 +386,16 @@
                     </template>
                   </vxe-table-column>
 
-                  <vxe-table-column title="品牌车型" width="100">
+                  <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
                     <template v-slot="{row, rowIndex}">
                       <span>{{row.carBrandName}} {{row.carModelName}}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                  <vxe-table-column field="showDirection" title="方向" width="100"></vxe-table-column>
-                  <vxe-table-column field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OEM码" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="showDirection" title="方向" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 </vxe-table>
               </Form>
             </div>
@@ -455,7 +459,7 @@ export default {
     let changeNumber = ({cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
       if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+        return Promise.reject(new Error('数量输入不正确'))
       }
     };
 
@@ -480,7 +484,7 @@ export default {
       model1: "",
       WareHouseList: [], //交货仓库
       limitList: [], //客户额度
-      currentRow:{},
+      currentRow: null,
       //分页
       page: {
         total: 0,
@@ -863,7 +867,7 @@ export default {
           this.page.total = res.data.totalElements;
           for(let b of this.preSellOrderTable.tbData){
             b._highlight = false
-            if(b.id==this.id){
+            if(b.id==this.currentRow.id){
               b._highlight = true;
               this.setRightData(b);
               break;
@@ -877,6 +881,7 @@ export default {
     selectTabelData(v) {
       if (v == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
+      this.currentRow = v;
       if (!this.Flag && !this.isAdd) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1020,9 +1025,9 @@ export default {
             let res = await getDelete(id);
             if (res.code == 0) {
               this.$Message.success("作废成功");
-              this.getLeftList();
               this.id = null;
               this.formPlan = {};
+              this.getLeftList();
               this.isNew = true;
               this.$refs.formPlan.resetFields();
             }
@@ -1051,9 +1056,9 @@ export default {
               this.isAdd = true;
               this.isNew = true;
               this.$Message.success("保存成功");
-              this.getLeftList();
               this.formPlan = {};
               this.limitList = {};
+              this.getLeftList();
               this.$refs.formPlan.resetFields();
             }
           } catch (errMap) {
@@ -1119,11 +1124,11 @@ export default {
             let res = await finishSales(id);
             if (res.code == 0) {
               this.$Message.success("操作成功");
-              this.getLeftList();
               this.id = null;
               this.limitList = [];
               this.$refs.formPlan.resetFields();
               this.formPlan = {};
+              this.getLeftList();
             }
           },
           onCancel: () => {

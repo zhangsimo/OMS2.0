@@ -205,6 +205,8 @@ import { creat } from "@/view/settlementManagement/components";
 import moment from "moment";
 import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
 
+import bus from "@/view/settlementManagement/bill/Popup/Bus";
+
 export default {
   props: {
     accrued: ""
@@ -222,7 +224,8 @@ export default {
         if(cellValue){
           let trueValue =
             Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
-          if (trueValue) {
+          let trueValue2 = Math.abs(row.rpAmt) > Math.abs(this.currentAccountItem.payAmt || this.currentAccountItem.applyAmt);
+          if (trueValue||trueValue2) {
             reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
           } else {
             resolve();
@@ -266,6 +269,7 @@ export default {
       BranchstoreId: "",
       Branchstore: [{ id: 0, name: "全部" }],
       currentAccount: {},
+      currentAccountItem:{},
     };
   },
   async mounted() {
@@ -348,7 +352,7 @@ export default {
     },
     // 选中
     selected({ row }) {
-      console.log(row)
+      this.currentAccountItem = row;
       this.claimTit == "其他付款认领"
         ? (this.currentAccount.accountNo =
             row.serviceId)
@@ -393,6 +397,7 @@ export default {
           const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
           if (errMap) {
           } else {
+            this.changeAmt();
             this.$refs.settlement.Settlement = true;
           }
         }else{
@@ -580,6 +585,19 @@ export default {
     //选择辅助核算回调
     getCallBack(){
       this.getMessage();
+    },
+    changeAmt(){
+      let thisData = this.accrued.map(item1 => {
+        let item = {...item1}
+        if(this.claimTit=="预付款认领"){
+          item.paidMoney = item.rpAmt
+        }else{
+          item.paidMoney = item.balanceMoney
+        }
+        return item
+      })
+      // bus.$emit("paymentInfo", thisData);
+      this.$refs.settlement.setData(thisData)
     }
   }
 };

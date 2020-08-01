@@ -166,17 +166,20 @@ export default {
   },
   mounted() {
     // 对账单号
-    bus.$on("accountHedNo", val => {
+    bus.$on("accountHedNo", (val ,val1)=> {
       this.reconciliationStatement.accountNo =
-        this.reconciliationStatement.accountNo + "," + val.accountNo;
+        this.reconciliationStatement.accountNo + "," + val1;
       val.two.map(item => {
         item.businessTypeName = item.businessType.name;
       });
       this.BusinessType = [...this.BusinessType, ...val.two];
+      this.checkComputed()
     });
     //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
+        mateAccountCode: val.titleCode,
+        mateAccountName: val.titleName,
         businessTypeName: val.titleName,
         reconciliationAmt: 0,
         hasAmt: 0,
