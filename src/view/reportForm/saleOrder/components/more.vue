@@ -24,22 +24,23 @@
     </div>
     <Form :label-width="100" class="ml10 pl25">
       <FormItem label="客户: ">
-        <Select
-          class="w300 ml5"
-          v-model="guestId"
-          filterable clearable
-          remote
-          label-in-value
-          :remote-method="remoteMethod"
-          :loading="guseData.loading"
-          @on-change="geseChange"
-        >
-          <Option
-            v-for="option in guseData.lists"
-            :value="option.id"
-            :key="option.id"
-          >{{ option.fullName }}</Option>
-        </Select>
+        <Input type="text" class="w300 ml5" v-model="guestFullName" />
+<!--        <Select-->
+<!--          class="w300 ml5"-->
+<!--          v-model="guestId"-->
+<!--          filterable clearable-->
+<!--          remote-->
+<!--          label-in-value-->
+<!--          :remote-method="remoteMethod"-->
+<!--          :loading="guseData.loading"-->
+<!--          @on-change="geseChange"-->
+<!--        >-->
+<!--          <Option-->
+<!--            v-for="option in guseData.lists"-->
+<!--            :value="option.id"-->
+<!--            :key="option.id"-->
+<!--          >{{ option.fullName }}</Option>-->
+<!--        </Select>-->
       </FormItem>
       <FormItem :label="type == 1 ? '销售订单号: ' : (type == 2 ? '销售出库单号:' : (type == 3 ? '销退入库单号:' : '采购计划单号'))">
         <Input type="text" class="w300 ml5" v-model="serviceId" />
@@ -59,8 +60,19 @@
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
       <FormItem label="品牌: ">
-        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable clearable>
-          <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
+        <Select
+          class="w300 ml5"
+          multiple
+          v-model="partBrandList"
+          placeholder="请选择品牌"
+          @on-change="select1"
+        >
+          <Option
+            v-for="item in brandLists"
+            :value="item.label"
+            :key="item.id"
+          >{{ item.label }}</Option
+          >
         </Select>
       </FormItem>
       <FormItem label="采购订单类型: " v-if="type == 4">
@@ -103,9 +115,21 @@ import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 // @ts-ignore
+import Api from "_conf/url";
+// @ts-ignore
+import Cookies from "js-cookie";
+// @ts-ignore
+import { TOKEN_KEY } from "@/libs/util";
+// @ts-ignore
+import baseURL from '_conf/url'
+// @ts-ignore
+import {v4} from "uuid";
+// @ts-ignore
 import { getSales } from "@/api/salesManagment/salesOrder";
 // @ts-ignore
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
+import { getParamsBrandPart } from "@/api/reportForm";
+
 // @ts-ignore
 import { getWarehouse } from "_api/reportForm/index.js";
 
@@ -123,11 +147,11 @@ export default class MoreSearch extends Vue {
   private auditDate: Array<any> = new Array();
   private serviceId: string = "";
   private partCode: string = "";
-  private partBrand: string = "";
+  private partBrandList: Array<any> = new Array();
   private auditor: string = "";
   // private partName: string = "";
   private createUname: string = "";
-  private guestId: string = "";
+  private guestFullName: string = "";
   private guestName: string = "";
   private aaaa: string = "";
   // new
@@ -140,13 +164,33 @@ export default class MoreSearch extends Vue {
   private stores: Array<any> = new Array();
   private orderTypeList: Array<any> = new Array();
   private warehouse: Array<any> = new Array();
-  private async getWares() {
-    let res: any = await getWarehouse();
-    if(res.code == 0) {
-      this.warehouse = res.data;
-    }
-  }
+  private async getWares(orgId) {
+    let getitem:any=localStorage.getItem('oms2-userList')
+    let res:any = JSON.parse(getitem)
 
+    let tenantId = res.tenantId || 0
+    let shopkeeper = res.shopkeeper || 0
+    let uuid = v4()
+    let params:any={tenantId:tenantId,shopId:orgId,shopkeeper:shopkeeper,uuid:uuid,scope:"oms"}
+    await this.ajaxAll.get(`${Api.wmsApi}/comStore/stores/findByShopId`,{
+      params:params,
+      headers:{
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+      }
+    }).then((res2:any)=>{
+      if(res2.data.code === 0) {
+        this.warehouse = res2.data.data;
+      }
+    })
+  }
+  private select1(option:any) {
+    if (option.slice(-1)[0] == 1) {
+      option = [1];
+    } else if (option.includes(1)) {
+      option = option.filter(el => el != 1);
+    }
+    this.partBrandList = option;
+  }
   private salesList: Array<any> = new Array();
   private async getAllSales() {
     let res: any = await getSales();
@@ -168,13 +212,13 @@ export default class MoreSearch extends Vue {
     this.auditDate = new Array();
     this.serviceId = "";
     this.partCode = "";
-    this.partBrand = "";
+    this.partBrandList = new Array();
     this.auditor = "";
-    this.guestId = "";
+    this.guestFullName = "";
     this.guestName = "";
     this.createUname = "";
     // this.partName = "";
-    // new 
+    // new
     this.code = "";
     this.orderman = "";
     this.orderType = "";
@@ -184,9 +228,19 @@ export default class MoreSearch extends Vue {
 
   private brandLists: Array<any> = new Array();
   private async getBrand() {
-    let res: any = await getParamsBrand();
+    let res: any = await getParamsBrandPart();
     if (res.code == 0) {
-      this.brandLists = res.data;
+      for (let quality of res.data.content) {
+        if (quality.children.length <= 0) {
+          break;
+        }
+        quality.children.forEach(el => {
+          el.label = el.name;
+          el.value = el.code;
+          el.id = el.id;
+          this.brandLists.push(el);
+        });
+      }
     }
   }
 
@@ -195,25 +249,16 @@ export default class MoreSearch extends Vue {
     lists: new Array()
   };
 
-  private async remoteMethod(query: string) {
-    if (query == "" || query.trim().length <= 0) {
-      this.guseData.lists = [];
-      return;
-    }
-    this.guseData.loading = true;
-    const res: any = await api.getMoteSupplier(query);
-    this.guseData.loading = false;
-    if (res.code == 0) {
-      this.guseData.lists = res.data;
-    }
-  }
-
   private geseChange(val: any) {
-    this.guestId = val.value;
+    this.guestFullName = val.value;
     this.guestName = val.label;
   }
 
   private init() {
+    let parent:any=this.$parent
+    let search:any=parent.search
+    let orgId:any=search.orgid
+    this.warehouse=new Array<any>()
     this.reset();
     if (this.salesList.length <= 0) {
       this.getAllSales();
@@ -222,7 +267,7 @@ export default class MoreSearch extends Vue {
       this.getBrand();
     }
     if(this.warehouse.length <= 0) {
-      this.getWares();
+      this.getWares(orgId);
     }
     this.serchN = true;
   }
@@ -245,11 +290,11 @@ export default class MoreSearch extends Vue {
       atimeEnd: this.auditDate[1] ? moment(this.auditDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       serviceId: this.serviceId,
       partCode: this.partCode.trim(),
-      partBrand: this.partBrand,
+      partBrandList: this.partBrandList,
       auditor: this.auditor,
       createUname: this.createUname,
       // partName: this.partName.trim(),
-      guestId: this.guestId,
+      guestFullName: this.guestFullName,
       // new
       code: this.code,
       orderman: this.orderman,
@@ -262,7 +307,11 @@ export default class MoreSearch extends Vue {
     for (let key in data) {
       if (["showSelf"].includes(key)) {
         subdata.set(key, data[key]);
-      } else if (data[key] && data[key].trim().length > 0) {
+      } else if (typeof(data[key])=="string") {
+        if(data[key] && data[key].trim().length > 0){
+          subdata.set(key, data[key]);
+        }
+      }else{
         subdata.set(key, data[key]);
       }
     }

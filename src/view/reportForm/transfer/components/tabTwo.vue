@@ -10,8 +10,10 @@
       :footer-method="footerMethod"
       :data="tableData"
     >
-      <vxe-table-column  show-overflow="tooltip" field="group0" title="">
+      <vxe-table-column  show-overflow="tooltip" field="group0" title="基本信息">
         <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group1" title="出库单信息">
         <vxe-table-column  show-overflow="tooltip"
@@ -20,9 +22,9 @@
           width="180"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
-          field="guestFullName"
-          title="申请方"
-          width="120"
+           field="guestShortName"
+           title="调入方"
+           width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="auditor"
@@ -156,19 +158,19 @@
           field="outDate"
           title="受理日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="applyServiceId"
           title="申请单号"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="auditor"
           title="申请人"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
@@ -212,7 +214,7 @@ export default {
       };
       let res = await api.getAllotAcceptDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
-        this.tableDataAll = (res.data.content || []).map(el => {
+        this.tableData = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
             el.taxSign = true;
           }

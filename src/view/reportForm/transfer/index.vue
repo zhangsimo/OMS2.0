@@ -1,7 +1,7 @@
 <template>
   <div class="content-oper" style="background: #fff">
     <Tabs style="min-height: 500px">
-      <TabPane label="调拨入库单明细表">
+      <TabPane label="调拨入库明细表">
         <panne :type="1" @search="search1" @export="exportxls('tabOne')" />
         <tabOne ref="tabOne" />
       </TabPane>
@@ -47,10 +47,11 @@ export default {
         data.timeEnd ? data2.allotEnterTimeEnd = data.timeEnd : "";
         data.timeStart ? data2.allotEnterTimeStart = data.timeStart : "";
         data.guestId ? data2.guestId = data.guestId : "";
-        data.serviceId ? data2.acceptCode = data.serviceId : "";
-        data.code ? data2.code = data.code : "";
+        data.inCode ? data2.serviceId = data.inCode  : "";//入库单号
+        data.code ? data2.code = data.code : "";  //受理单号
+        data.serviceId ? data2.acceptCode=data.serviceId:"" //申请单号
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }
@@ -71,7 +72,7 @@ export default {
         data.code ? data2.code = data.code : "";
         data.outCode ? data2.serviceId = data.outCode : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }
@@ -89,10 +90,10 @@ export default {
         data.timeStart ? data2.allotFinishedStartDate = data.timeStart : "";
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.acceptCode = data.serviceId : "";
-        data.code ? data2.code = data.code : "";
-        data.outCode ? data2.serviceId = data.outCode : "";
+        data.outCode ? data2.code = data.outCode : "";
+        data. code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }
@@ -113,7 +114,7 @@ export default {
         data.code ? data2.code = data.code : "";
         data.outCode ? data2.serviceId = data.outCode : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }

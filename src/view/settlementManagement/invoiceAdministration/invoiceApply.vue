@@ -526,40 +526,48 @@ export default {
         {
           title: "分店名称",
           key: "orgName",
+          minWidth: 100,
           className: "tc"
         },
         {
           title: "店号",
           key: "orgId",
+          minWidth: 40,
           className: "tc"
         },
         {
           title: "往来单位",
+          minWidth: 100,
           key: "guestName",
           className: "tc"
         },
         {
           title: "申请日期",
+          minWidth: 100,
           key: "applyDate",
           className: "tc"
         },
         {
           title: "对账单号",
+          minWidth: 100,
           key: "accountNo",
           className: "tc"
         },
         {
           title: "油品清单开票申请单号",
+          minWidth: 150,
           key: "oilsListOrder",
           className: "tc"
         },
         {
           title: "配件清单开票申请单号",
+          minWidth: 150,
           key: "partsListOrder",
           className: "tc"
         },
         {
           title: "发票种类",
+          minWidth: 100,
           className: "tc",
           render: (h , params) => {
             return h('span' , params.row.invoiceKind == 1 ? '增值税普通发票' : '增值税专用发票')
@@ -567,146 +575,175 @@ export default {
         },
         {
           title: "购方税号",
+          minWidth: 100,
           key: "customDuty",
           className: "tc"
         },
         {
           title: "购方手机号",
+          minWidth: 100,
           key: "customPhone",
           className: "tc"
         },
         {
           title: "购方邮箱",
+          minWidth: 100,
           key: "customMail",
           className: "tc"
         },
         {
           title: "购方开户行及账号",
+          minWidth: 100,
           key: "customAccount",
           className: "tc"
         },
         {
           title: "购方开户行",
+          minWidth: 100,
           key: "customBank",
           className: "tc"
         },
         {
           title: "购方地址、电话",
+          minWidth: 100,
           key: "customAddress",
           className: "tc"
         },
         {
           title: "开票申请单号",
+          minWidth: 100,
           key: "applyNo",
           className: "tc"
         },
         {
           title: "开票单位",
+          minWidth: 100,
           key: "invoiceUnit",
           className: "tc"
         },
         {
           title: "客户税号",
+          minWidth: 100,
           key: "taxNo",
           className: "tc"
         },
         {
           title: "地址电话",
+          minWidth: 100,
           key: "tel",
           className: "tc"
         },
         {
           title: "银行账号",
+          minWidth: 100,
           key: "bankAccountNumber",
           className: "tc"
         },
         {
           title: "配件名称",
+          minWidth: 100,
           key: "partName",
           className: "tc"
         },
         {
           title: "配件编码",
           key: "partCode",
+          minWidth: 100,
           className: "tc"
         },
         {
           title: "单位",
+          minWidth: 100,
           key: "company",
           className: "tc"
         },
         {
           title: "数量",
+          minWidth: 100,
           key: "qty",
           className: "tc"
         },
         {
           title: "商品含税单价",
+          minWidth: 100,
           key: "taxPrice",
           className: "tc"
         },
         {
           title: "商品含税金额",
+          minWidth: 100,
           key: "taxAmt",
           className: "tc"
         },
         {
           title: "开票税率",
+          minWidth: 100,
           key: "taxRate",
           className: "tc"
         },
         {
           title: "出库单号",
+          minWidth: 100,
           key: "outNo",
           className: "tc"
         },
         {
           title: "销售单价",
+          minWidth: 100,
           key: "salePrice",
           className: "tc"
         },
         {
           title: "销售金额",
+          minWidth: 100,
           key: "saleAmt",
           className: "tc"
         },
         {
           title: "外加税点",
+          minWidth: 100,
           key: "additionalTaxPoint",
           className: "tc"
         },
         {
           title: "申请开票总金额",
           key: "billstate",
+          minWidth: 100,
           className: "tc"
         },
         {
           title: "开票公司",
+          minWidth: 100,
           key: "receiptUnit",
           className: "tc"
         },
         {
           title: "收款方式",
+          minWidth: 100,
           key: "collection_type",
           className: "tc"
         },
         {
           title: "发票类型",
+          minWidth: 100,
           key: "invoiceType",
           className: "tc"
         },
         {
           title: "开票清单类型",
+          minWidth: 100,
           key: "species",
           className: "tc"
         },
         {
           title: "备注",
+          minWidth: 100,
           key: "remark",
           className: "tc"
         },
         {
           title: "快递方式",
+          minWidth: 100,
           key: "sendingWay",
           className: "tc"
         }
