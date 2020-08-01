@@ -29,9 +29,9 @@
               <div class="db">
                 <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
               </div>
-              <!-- <div class="db">
+              <div class="db">
                 <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
-              </div> -->
+              </div>
             </div>
           </div>
         </section>
@@ -842,6 +842,12 @@
           if(this.moreArr.Name){
             params.fullName = this.moreArr.Name
           }
+          if(this.showSelf) {
+            let createUid = this.$store.state.user.userData.id;
+            params.createUid = createUid;
+          } else {
+            Reflect.deleteProperty(params, "createUid")
+          }
           queryAll(params).then(res => {
             if(res.code === 0){
               this.Left.tbdata = res.data.content
@@ -1092,7 +1098,7 @@
       mounted(){
         let self = tools.getSession("self");
         this.showSelf = Reflect.has(self, "applyFor") ? self.applyFor : true;
-
+        
         setTimeout(() => {
           this.getDomHeight();
         }, 0);

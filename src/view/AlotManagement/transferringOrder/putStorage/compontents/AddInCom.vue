@@ -43,9 +43,9 @@
           <div class="db mr10 btn">
             <Button @click="init1" type="warning" class="mr20">取消</Button>
           </div>
-          <!-- <div class="db">
+          <div class="db">
             <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
-          </div> -->
+          </div>
         </div>
         </Form>
       </div>
@@ -99,7 +99,7 @@
       <!--        下表格-->
       <div class="bottomTableDate">
         <vxe-table border resizable auto-resize height="230" :data="currentData" size="mini">
-          <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+          <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="140"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="130"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌" width="90"></vxe-table-column>
@@ -278,10 +278,23 @@ export default {
         }
       }
       reqData.enterSelect = 123;
+      if(this.showSelf) {
+        let createUid = this.$store.state.user.userData.id;
+        reqData.createUid = createUid;
+      } else {
+        Reflect.deleteProperty(reqData, "createUid")
+      }
       this.$emit("search21", reqData, size, num);
     },
     getParams() {
-      this.$emit("getLisw", this.penSalesData);
+      let data = {...this.penSalesData}
+      if(this.showSelf) {
+        let createUid = this.$store.state.user.userData.id;
+        data.createUid = createUid;
+      } else {
+        Reflect.deleteProperty(data, "createUid")
+      }
+      this.$emit("getLisw", data);
     },
     //确定
     chose() {
