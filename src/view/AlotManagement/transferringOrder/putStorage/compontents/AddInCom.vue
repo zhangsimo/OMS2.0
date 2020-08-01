@@ -1,41 +1,30 @@
 <template>
   <Modal v-model="searchPartLayer" title="选择调拨申请单" width="1000" @on-ok="ok">
     <section class="oper-box">
-      <div class="oper-top flex">
+      <div class="oper-top flex mb10">
+        <Form @keydown.native.enter="search2">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询:</span>
-          </div>
-          <div class="db mr10">
-            <span class>申请日期从：</span>
+            <span class>申请日期：</span>
             <DatePicker
-              v-model="penSalesData.startTime"
-              type="datetime"
-              format="yyyy-MM-dd HH:mm:ss"
-              style="width:120px"
-            ></DatePicker>
-          </div>
-          <div class="db mr10">
-            <span class="ml10">至：</span>
-            <DatePicker
-              v-model="penSalesData.endTime"
-              type="datetime"
-              format="yyyy-MM-dd HH:mm:ss"
-              style="width:120px"
+              @on-change="getDate"
+              type="daterange"
+              style="width:140px"
             ></DatePicker>
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <Input
+            <Input style="width: 120px"  placeholder="简称/编码/全称" v-model="penSalesData.guestName" />
+            <!-- <Input
               clearable
               @on-focus="getName"
               @on-clear="clearNameId"
               v-model="penSalesData.guestName"
               style="width: 128px"
-            />
-            <Button @click="getName" class="ml5" size="small" type="default">
+            /> -->
+            <!-- <Button @click="getName" class="ml5" size="small" type="default">
               <i class="iconfont iconxuanzetichengchengyuanicon"></i>
-            </Button>
+            </Button> -->
           </div>
           <div class="db mr10">
             <Input
@@ -46,7 +35,7 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Button @click="search(pageList.size, 1)" type="primary" class="mr20">查询</Button>
+            <Button @click="search2" type="primary" class="mr20">查询</Button>
           </div>
           <div class="db mr10 btn">
             <Button @click="ok" type="warning" class="mr20">选入</Button>
@@ -54,7 +43,11 @@
           <div class="db mr10 btn">
             <Button @click="init1" type="warning" class="mr20">取消</Button>
           </div>
+          <!-- <div class="db">
+            <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+          </div> -->
         </div>
+        </Form>
       </div>
     </section>
     <section class="con-box">
@@ -73,16 +66,17 @@
           @current-change="selectTabelData"
           :radio-config="{labelField: 'name', trigger: 'row'}"
         >
-          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-          <vxe-table-column type="radio" width="60" title=" "></vxe-table-column>
+          <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="serviceId" title="申请单" width="100"></vxe-table-column>
-          <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
-          <vxe-table-column field="status.name" title="受理状态" width="100"></vxe-table-column>
-          <vxe-table-column field="orderMan" title="申请人" width="100"></vxe-table-column>
-          <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
-          <vxe-table-column field="createUname" title="提交人" width="100"></vxe-table-column>
-          <vxe-table-column field="createTime" title="提交日期" width="100"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="申请单" width="150"></vxe-table-column>
+          <vxe-table-column field="guestName" title="调出方" width="160"></vxe-table-column>
+          <vxe-table-column field="status.name" title="受理状态" width="70"></vxe-table-column>
+          <vxe-table-column field="" title="备注" width="130"></vxe-table-column>
+          <vxe-table-column field="orderMan" title="申请人" width="80"></vxe-table-column>
+          <vxe-table-column field="createTime" title="申请日期" width="86"></vxe-table-column>
+          <vxe-table-column field="createUname" title="提交人" width="80"></vxe-table-column>
+          <vxe-table-column field="createTime" title="提交日期" width="86"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -104,16 +98,16 @@
       </Row>
       <!--        下表格-->
       <div class="bottomTableDate">
-        <vxe-table border resizable auto-resize height="150" :data="currentData">
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-          <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
-          <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        <vxe-table border resizable auto-resize height="230" :data="currentData" size="mini">
+          <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" width="140"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" width="130"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="90"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="170"></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="60"></vxe-table-column>
+          <vxe-table-column field="applyQty" title="申请数量" width="90"></vxe-table-column>
+          <vxe-table-column field="" title="受理数量" width="90"></vxe-table-column>
+          <vxe-table-column field="" title="出库数量" width="90"></vxe-table-column>
         </vxe-table>
       </div>
     </section>
@@ -124,12 +118,14 @@
 <script >
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
+import * as tools from "../../../../../utils/tools";
 import moment from "moment";
 import { getParticulars } from "_api/system/partsExamine/partsExamineApi";
 
 export default {
   data() {
     return {
+      showSelf: true,
       searchPartLayer: false,
       // 日期数据
       options1: [],
@@ -211,38 +207,45 @@ export default {
     }
   },
   methods: {
-    // radioChangeEvent({ row }) {
-    //   console.log(row);
-    //   this.checkRow = row;
-    //   this.currentData = row.detailVOS;
-    // },
+    showOwen() {
+      tools.setSession("self", { addInCom: this.showSelf });
+      this.search();
+    },
+    getDate(v) {
+      penSalesData.startTime = v[0] + " 00:00:00";
+      penSalesData.endTime = v[1] + " 23:59:59";
+    },
     //分页
     changePage(p) {
       this.pageList.page = p;
-      this.search(this.pageList.size, p);
+      this.search();
     },
     changeSize(size) {
       this.pageList.size = size;
-      this.search(size, this.pageList.page);
+      this.search();
     },
     getName() {
       this.$emit("getName", 2);
     },
     init() {
+      let self = tools.getSession("self");
+      this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
       this.searchPartLayer = true;
-      this.reset()
+      this.reset();
     },
     init1() {
+      let self = tools.getSession("self");
+      this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
       this.searchPartLayer = false;
     },
     reset() {
-      this.penSalesData = {
-        endTime: "", //申请单号
-        startTime: "",
-        guestName: "",
-        guestId: "",
-        serviceId: ""
-      }
+      // this.penSalesData = {
+      //   endTime: "", //申请单号
+      //   startTime: "",
+      //   guestName: "",
+      //   guestId: "",
+      //   serviceId: ""
+      // }
       this.currentData = [];
     },
     //选中的日期
@@ -251,7 +254,13 @@ export default {
       // console.log(this.penSalesData.option1);
     },
     //搜索
-    search(size, num) {
+    search2() {
+      this.pageList.page = 1;
+      this.search();
+    },
+    search() {
+      let size = this.pageList.size;
+      let num = this.pageList.page;
       if (this.penSalesData.startTime) {
         this.penSalesData.startTime = moment(
           this.penSalesData.startTime
@@ -270,9 +279,6 @@ export default {
       }
       reqData.enterSelect = 123;
       this.$emit("search21", reqData, size, num);
-      // setTimeout(() => {
-      //   this.$parent.addProoo();
-      // }, 2000);
     },
     getParams() {
       this.$emit("getLisw", this.penSalesData);
@@ -315,6 +321,9 @@ export default {
 <style lang="less" scoped>
 .wlf {
   margin-bottom: 10px;
+  .db {
+    padding-top: 0px;
+  }
   .abd {
     padding-top: 18px;
     margin-right: -15px;

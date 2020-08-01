@@ -52,6 +52,9 @@
                 <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
+            <!-- <div class="db">
+              <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+            </div> -->
           </div>
         </div>
       </section>
@@ -273,6 +276,7 @@
 </template>
 
 <script>
+import * as tools from "../../../../utils/tools";
 import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
@@ -329,6 +333,7 @@ export default {
     }
 
     return {
+      showSelf: true,
       propPageObj:{},
       Status: 0,
       // serviceIdValue: "",
@@ -577,6 +582,10 @@ export default {
     this.getArrayParams();
   },
   methods: {
+    showOwen() {
+      tools.setSession("self", { putStorage: this.showSelf });
+      this.getList();
+    },
     blurFun(pos,index){
       let req = {
         "storeId":this.Leftcurrentrow.storeId,
@@ -1074,6 +1083,8 @@ export default {
     }
   },
   mounted() {
+    let self = tools.getSession("self");
+    this.showSelf = Reflect.has(self, "putStorage") ? self.putStorage : true;
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
