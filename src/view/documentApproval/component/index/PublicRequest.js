@@ -48,7 +48,7 @@ export default {
       payUserList:[],//付款人列表
       Pictures:{},//请求回来的图片地址状态
       options1: [],
-
+      canSave:false,//节流阀
     }
   },
   mounted(){
@@ -163,8 +163,14 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
+          if (this.canSave)return this.$Message.warning('处理中...')
+          this.canSave = true
           this.formInline.step = type
           let res = await getPublicSave(this.formInline)
+          setTimeout(()=>{
+            this.canSave = false
+
+          },1000)
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
