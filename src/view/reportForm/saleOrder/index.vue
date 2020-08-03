@@ -41,11 +41,11 @@ export default {
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartTime = data.atimeStart : "";
         data.atimeEnd ? data2.auditEndTime = data.atimeEnd : "";
-        data.guestId ? data2.guestId = data.guestId : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrandCode = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";
@@ -63,11 +63,11 @@ export default {
       } else {
         data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
-        data.guestId ? data2.guestId = data.guestId : "";
-        data.serviceId ? data2.outCode = data.serviceId : "";
-        data.code ? data2.serviceId = data.code : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
+        data.code? data2.outCode = data.code : "";
+        data.serviceId ? data2.serviceId = data.serviceId : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
@@ -83,11 +83,11 @@ export default {
       } else {
         data.ctimeStart ? data2.auditStartDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.auditEndDate = data.ctimeEnd : "";
-        data.guestId ? data2.guestId = data.guestId : "";
-        data.serviceId ? data2.outCode = data.serviceId : "";
-        data.code ? data2.serviceId = data.code : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
+        data.code? data2.outCode = data.code : "";
+        data.serviceId ? data2.serviceId = data.serviceId : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }

@@ -1,6 +1,10 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-
+import Axios from 'axios'
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import baseURL from '_conf/url'
+import {v4} from "uuid";
 // 供应商/往来单位
 export function getSupplier(data={}) {
   return axios.request({
@@ -14,6 +18,14 @@ export function getSupplier(data={}) {
 export function getParamsBrand(data) {
   return axios.request({
     url: `${api.omsOrder}/optGroup/optPartBrand`,
+    method: 'post',
+    data
+  })
+}
+//获取部分品牌
+export function getParamsBrandPart(data) {
+  return axios.request({
+    url: `${api.omsOrder}/stPartBrand/getPartBrand`,
     method: 'post',
     data
   })
@@ -32,7 +44,7 @@ export function getStorelist(params = {}) {
 export function getWarehouse() {
   return axios.request({
     url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
-    method: "get"
+    method: "get",
   });
 }
 

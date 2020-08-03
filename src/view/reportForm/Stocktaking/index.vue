@@ -39,7 +39,7 @@ export default {
         data.atimeEnd ? data2.createTimeEnd = data.atimeEnd : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.sourceId = data.warehouseId2 : "";
         data.orderman ? data2.auditorId = data.orderman : "";
@@ -59,10 +59,10 @@ export default {
         data.endTime ? data2.outDateEnd = data.endTime : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.sourceId = data.warehouseId2 : "";
-        data.orderman ? data2.auditorId = data.orderman : "";
+        data.orderman ? data2.auditor = data.orderman : "";
       }
       this.$refs.tabTwo.page.page=0;
       this.$refs.tabTwo.getList(data2);
