@@ -534,6 +534,7 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
+    console.log(row)
     // this.reset();
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
@@ -546,7 +547,7 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight.receiveCompName = row.logisticsRecordVO.receiveComp;
-      this.formDateRight.address = row.logisticsRecordVO.address||row.logisticsRecordVO.streetAddress;
+      this.formDateRight.address = row.logisticsRecordVO.address||row.logisticsRecordVO.receiveAddress;
       this.formDateRight.receiveMan = row.logisticsRecordVO.receiver;
       this.formDateRight.receiveManTel = row.logisticsRecordVO.receiverMobile;
       this.formDateRight.deliveryType = row.logisticsRecordVO.deliveryType;
