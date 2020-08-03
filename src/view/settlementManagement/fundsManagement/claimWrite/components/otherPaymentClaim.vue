@@ -95,7 +95,7 @@
           v-if="claimTit=='预付款认领'"
         ></vxe-table-column>
         <vxe-table-column
-          field="balanceMoney"
+          field="rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
@@ -283,7 +283,6 @@ export default {
     });
     this.getShop();
     this.getOne();
-    console.log(this.accrued)
   },
   methods: {
     // 打开模态框
@@ -594,16 +593,15 @@ export default {
     changeAmt(){
       let thisData = this.accrued.map(item1 => {
         let item = {...item1}
-        if(this.claimTit=="预付款认领"){
-          item.paidMoney = item.rpAmt
-        }else{
-          item.paidMoney = item.balanceMoney
-        }
+        item.paidMoney = item.rpAmt
         return item
       })
-      console.log(thisData)
       // bus.$emit("paymentInfo", thisData);
-      this.$refs.settlement.setData(thisData)
+      if(this.claimTit=="预付款认领"){
+        this.$refs.settlement.setData(thisData)
+      }else{
+        this.$refs.settlement2.setData(thisData)
+      }
     }
   }
 };
