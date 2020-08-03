@@ -339,9 +339,6 @@ export default {
                         this.BranchstoreId = this.$store.state.user.userData.shopId
                     }
                 })
-                if (this.$store.state.user.userData.shopkeeper != 0){
-                    this.getThisArea()//获取当前门店地址
-                }
             }
         }
     },

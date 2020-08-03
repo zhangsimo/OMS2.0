@@ -32,7 +32,7 @@
               </Select>
           </div>
           <div class="db ml10">
-            <button class="ivu-btn ivu-btn-default" type="button" @click="query">
+            <button class="ivu-btn ivu-btn-default" v-noresub="1000" @click="query" type="button">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -132,6 +132,8 @@ export default {
   },
   data() {
     return {
+      btnTestDir:false,
+
       proTypeList:[],//分店
       columns: [
         {
