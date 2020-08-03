@@ -1072,12 +1072,12 @@ export default {
       let self = this;
       if (res.code == 0) {
         this.getList();
-        self.$Message.success("导入成功");
-        // if (res.data.errosMsg.length > 0) {
-        //   this.warning(res.data.errosMsg);
-        // } else  {
-        //   self.$Message.success("导入成功");
-        // }
+        // self.$Message.success("导入成功");
+        if (res.data.length > 0) {
+          self.$Message.warning(res.data[0]);
+        } else  {
+          self.$Message.success("导入成功");
+        }
         // this.tableData = [...this.tableData, ...res.data.details].map(item => {
         //   item.uuid = v4();
         //   return item;
