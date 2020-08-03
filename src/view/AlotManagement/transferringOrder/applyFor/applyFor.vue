@@ -1073,14 +1073,18 @@
         handleSuccess(res, file) {
           let self = this;
           if (res.code == 0) {
-            this.Left.tbdata.forEach(el => {
-              if (el.id == this.selectRowId) {
-                el._highlight = true;
-                this.isAdd = true;
-                this.setRow(el);
-                self.$Message.success("导入成功");
-              }
-            })
+            if(res.data.length<=0){
+              self.$Message.success("导入成功");
+            }else{
+              this.Left.tbdata.forEach(el => {
+                if (el.id == this.selectRowId) {
+                  el._highlight = true;
+                  this.isAdd = true;
+                  this.setRow(el);
+                  self.$Message.error(res.data.join(";"));
+                }
+              })
+            }
           } else {
             self.$Message.error(res.message);
           }
@@ -1098,7 +1102,7 @@
       mounted(){
         let self = tools.getSession("self");
         this.showSelf = Reflect.has(self, "applyFor") ? self.applyFor : true;
-        
+
         setTimeout(() => {
           this.getDomHeight();
         }, 0);
