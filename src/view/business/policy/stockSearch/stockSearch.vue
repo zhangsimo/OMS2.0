@@ -1048,8 +1048,8 @@ export default {
     //获取风电
     async getCommpany() {
       let arr = await creat([], this.$store);
-      this.Branchstore = [{ value: "all", label: "全连锁" }, ...arr[2]] || [
-        { value: "all", label: "全连锁" }
+      this.Branchstore = [{ value: "", label: "全连锁" }, ...arr[2]] || [
+        { value: "", label: "全连锁" }
       ];
       this.searchForm.old = arr[1] || "";
       this.searchForm1.old = arr[1] || "";
