@@ -1838,7 +1838,7 @@ export default [
           {
             path: "/system/outstaff/management",
             name: "outStaffManagement",
-            // mark: "9203",
+            mark: "9206",
             meta: {
               keepAlive: true,
               // hideInMenu: true,
