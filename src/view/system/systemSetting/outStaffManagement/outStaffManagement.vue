@@ -157,13 +157,18 @@
     },
     computed:{
       selectShopList(){
-        let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        let canSelect ;
+        if(this.$store.state.user.userData.currentCompany!=undefined){
+          canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        }
         return canSelect
       }
     },
     async mounted() {
       let arr = await creat("", this.$store);
-      this.orgid=arr[1]
+      if(arr.length>0){
+        this.orgid=arr[1]
+      }
       this.getAllStaffList()
       this.getList()
     },
