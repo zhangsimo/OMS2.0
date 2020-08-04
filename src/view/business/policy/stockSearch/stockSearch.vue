@@ -1220,7 +1220,7 @@ export default {
       data.noStock = data.noStock ? 1 : 0;
       data.isImport = 1;
       if(this.contentOne.dataOne.length<=0){
-        this.$Message.error("这个公司暂时没有库存呢")
+        this.$Message.error("这个公司暂时没有库存")
         return
       }
       let res = await getAllStock(data);
@@ -1250,7 +1250,7 @@ export default {
             data: newData
           });
         }else{
-          this.$Message.error("这个公司暂时没有库存呢")
+          this.$Message.error("这个公司暂时没有库存")
         }
       }
     },
@@ -1267,11 +1267,13 @@ export default {
       data.page = 0;
       data.size = this.contentTwo.page.total;
       data.noStock = data.noStock ? 1 : 0;
-      // console.log('数据',data)
 
       if(this.contentTwo.dataTwo.length<=0){
-        this.$Message.error("这个公司暂时没有库存呢")
+        this.$Message.error("这个公司暂时没有库存")
         return
+      }
+      if (data.old === "all") {
+        Reflect.deleteProperty(data, "old");
       }
       let res = await getLotStock(data);
       if (res.code == 0) {
