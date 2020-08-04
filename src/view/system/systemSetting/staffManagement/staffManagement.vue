@@ -189,7 +189,7 @@ export default {
       isNextAdd: true,
       closeAcc: false,
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
-        list:[],//机构数组
+      list:[],//机构数组
       shopCode: "",
       loading: true,
       compentName: "",

@@ -6,6 +6,8 @@ import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
+import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
+import { getComenAndGo } from "../utils";
 
 export default {
   name: "OtherPayment",
@@ -73,7 +75,7 @@ export default {
   methods:{
     //模态框打开111
    open(){
-    this.company = this.list.salesList
+    this.company = []
      this.payUserList = this.list.payList
      this.formInline = {}
      this.$refs.upImg.uploadListModal = []
@@ -140,15 +142,40 @@ export default {
       // let arr = this.company.filter( item => item.value == row.value)
       this.getAccountNameList(row)
     },
-
+    //获取往来单位
+    async getOrignCompany(query){
+      if (query !== '') {
+        let arr=[]
+        let req = {
+          fullName:query,
+          size:100,
+        }
+        let res = await findGuest(req);
+        if (res.code == 0) {
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.fullName,
+              receiver: item.accountReceiveName || "",
+              receiveBank: item.accountBank || "",
+              receiveBankNo: item.accountBankNo || ""
+            });
+          });
+          let arrJson=new Set(arr)
+          this.company=Array.from(arrJson)
+        }
+      } else {
+        this.company = [];
+      }
+    },
 
     //获取收款户名
     async getAccountNameList(row){
       let rep = await getAccountName({"guestId":row.value});
       if(rep.code==0){
         this.receiverArr = rep.data;
-        if(rep.data.length==1){
-          this.setReceiverInfo(this.receiverArr[0])
+        if(rep.data.length>=1){
+          this.setReceiverInfo(rep.data[0])
         }else{
           this.formInline.receiver = ''
           this.formInline.receiveBank = ''
@@ -167,9 +194,6 @@ export default {
       let arr = this.receiverArr.filter(item => item.id==v);
       this.setReceiverInfo(arr[0]);
     },
-
-
-
 
     //打开选择模态框
     openSelect(){

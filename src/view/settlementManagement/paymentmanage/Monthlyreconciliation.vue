@@ -1125,7 +1125,7 @@ export default {
         this.searchLoading = true;
         let req = {
           fullName:query,
-          size:1000,
+          size:100,
         }
         let rep = await findGuest(req);
         this.searchLoading = false;
