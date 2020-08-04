@@ -10,8 +10,10 @@
       :footer-method="footerMethod"
       :data="tableData"
     >
-      <vxe-table-column  show-overflow="tooltip" field="group0" title="">
+      <vxe-table-column  show-overflow="tooltip" field="group0" title="基本信息">
         <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group1" title="订单信息">
         <vxe-table-column  show-overflow="tooltip"
@@ -63,37 +65,37 @@
         <vxe-table-column  show-overflow="tooltip"
           field="partCode"
           title="配件编码"
-          width="300"
+          width="150"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="partName"
           title="配件名称"
-          width="200"
+          width="150"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="oemCode"
           title="OE码"
-          width="200"
+          width="150"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="partBrand"
           title="品牌"
-          width="200"
+          width="150"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
-          width="200"
+          width="150"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="unit"
           title="单位"
-          width="200"
+          width="100"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="spec"
           title="规格"
-          width="200"
+          width="100"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="数量/价格">
@@ -115,17 +117,17 @@
         <vxe-table-column  show-overflow="tooltip"
           field="adjustQty"
           title="调整数量"
-          width="120"
+          width="100"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="trueEnterQty"
           title="入库数量"
-          width="120"
+          width="100"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="detailRemark"
           title="备注"
-          width="120"
+          width="100"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="税率信息">
@@ -137,63 +139,62 @@
         <vxe-table-column  show-overflow="tooltip"
           field="taxRate"
           title="税率"
-          width="200"
-          
+          width="150"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="国际采购各项费用">
         <vxe-table-column  show-overflow="tooltip"
           field="currency"
           title="币种"
-          width="140"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="exchangeRate"
           title="汇率"
-          width="200"
-          
+          width="100"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="fcPrice"
           title="裸价外币"
-          width="200"
-          
+          width="150"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="rmbPrice"
           title="裸价人民币"
-          width="200"
-          
+          width="150"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="rmbAmt"
           title="裸价金额"
-          width="200"
-          
+          width="150"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="tariffAmt"
           title="关税费"
-          width="200"
-          
+          width="100"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="transportAmt"
           title="运杂费"
-          width="200"
-          
+          width="100"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="vatAmt"
           title="增值税费"
-          width="200"
-          
+          width="150"
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="otherAmt"
           title="其他费用"
-          width="200"
-          
+          width="150"
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
@@ -206,13 +207,13 @@
           field="auditDate"
           title="提交日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="mainRemark"
           title="订单备注"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
@@ -265,7 +266,6 @@ export default {
           }
           return el;
         });
-
         this.page.total = res.data.totalElements;
       } else {
         this.page.total = 0;

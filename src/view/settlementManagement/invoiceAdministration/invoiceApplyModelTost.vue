@@ -211,7 +211,7 @@ export default {
                 },
                 {
                 title: "发票单位",
-                key: "receiptUnit",
+                key: "receiptUnitName",
                 className: "tc"
                 },
                 {
@@ -239,7 +239,7 @@ export default {
                 },
                 {
                 title: "往来单位",
-                key: "receiptUnit",
+                key: "receiptUnitName",
                 className: "tc"
                 },
                 // {
@@ -269,7 +269,7 @@ export default {
                 },
                 {
                 title: "导入时间",
-                key: "createTime",
+                key: "importTime",
                 className: "tc"
                 }
             ],
@@ -339,9 +339,6 @@ export default {
                         this.BranchstoreId = this.$store.state.user.userData.shopId
                     }
                 })
-                if (this.$store.state.user.userData.shopkeeper != 0){
-                    this.getThisArea()//获取当前门店地址
-                }
             }
         }
     },

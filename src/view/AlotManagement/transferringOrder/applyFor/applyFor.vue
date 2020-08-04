@@ -29,6 +29,9 @@
               <div class="db">
                 <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
               </div>
+              <div class="db">
+                <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+              </div>
             </div>
           </div>
         </section>
@@ -275,6 +278,7 @@
           }
         };
         return {
+          showSelf: true,
           headers: {
             Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
           },
@@ -437,6 +441,10 @@
         }
       },
       methods: {
+        showOwen() {
+          tools.setSession("self", { applyFor: this.showSelf });
+          this.leftgetList();
+        },
         selectOption(date) {
           this.selectvalue = date.value
         },
@@ -743,7 +751,7 @@
             }
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'partInnerId')
           this.$Message.success("已添加");
         },
 
@@ -776,7 +784,7 @@
             }
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'partInnerId')
           this.$Message.success("已添加");
         },
 
@@ -833,6 +841,12 @@
           }
           if(this.moreArr.Name){
             params.fullName = this.moreArr.Name
+          }
+          if(this.showSelf) {
+            let createUid = this.$store.state.user.userData.id;
+            params.createUid = createUid;
+          } else {
+            Reflect.deleteProperty(params, "createUid")
           }
           queryAll(params).then(res => {
             if(res.code === 0){
@@ -1059,14 +1073,18 @@
         handleSuccess(res, file) {
           let self = this;
           if (res.code == 0) {
-            this.Left.tbdata.forEach(el => {
-              if (el.id == this.selectRowId) {
-                el._highlight = true;
-                this.isAdd = true;
-                this.setRow(el);
-                self.$Message.success("导入成功");
-              }
-            })
+            if(res.data.length<=0){
+              self.$Message.success("导入成功");
+            }else{
+              this.Left.tbdata.forEach(el => {
+                if (el.id == this.selectRowId) {
+                  el._highlight = true;
+                  this.isAdd = true;
+                  this.setRow(el);
+                  self.$Message.error(res.data.join(";"));
+                }
+              })
+            }
           } else {
             self.$Message.error(res.message);
           }
@@ -1082,6 +1100,9 @@
         },
       },
       mounted(){
+        let self = tools.getSession("self");
+        this.showSelf = Reflect.has(self, "applyFor") ? self.applyFor : true;
+
         setTimeout(() => {
           this.getDomHeight();
         }, 0);

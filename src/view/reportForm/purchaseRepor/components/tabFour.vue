@@ -10,8 +10,10 @@
       :footer-method="footerMethod"
       :data="tableData"
     >
-      <vxe-table-column  show-overflow="tooltip" field="group0" title="">
-        <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column   show-overflow="tooltip" field="group0" title="基本信息">
+        <vxe-table-column   show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group1" title="订单信息">
         <vxe-table-column  show-overflow="tooltip"
@@ -130,7 +132,7 @@
           field="taxRate"
           title="税率"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
@@ -143,7 +145,7 @@
           field="createTime"
           title="创建日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="auditor"
@@ -154,13 +156,13 @@
           field="auditDate"
           title="提交日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="mainRemark"
           title="订单备注"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
@@ -213,7 +215,6 @@ export default {
           el.statusName = el.statu == 0 ? "未下订单" : (el.statu == 1 ? "已下部分订单" : (el.statu == 2 ? "完成订单" : ""));
           return el;
         });
-
         this.page.total = res.data.totalElements;
       } else {
         this.page.total = 0;

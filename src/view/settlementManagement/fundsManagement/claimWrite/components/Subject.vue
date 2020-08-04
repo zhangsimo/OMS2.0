@@ -126,7 +126,7 @@ export default {
       data.subjectCode = this.oneSubject.titleCode;
       data.subjectId = this.oneSubject.id;
       data.claimType=8;
-      data.claimAmt = Math.abs(this.clime[0].incomeMoney||this.clime[0].paidMoney);
+      data.claimMoney = Math.abs(this.clime[0].incomeMoney||this.clime[0].paidMoney);
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.subjectModelShow = false;

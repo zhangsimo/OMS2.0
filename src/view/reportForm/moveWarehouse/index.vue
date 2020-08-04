@@ -40,7 +40,7 @@ export default {
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
         data.orderman ? data2.orderManId = data.orderman : "";
@@ -60,7 +60,7 @@ export default {
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
         data.orderman ? data2.orderManId = data.orderman : "";

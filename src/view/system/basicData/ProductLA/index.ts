@@ -123,7 +123,7 @@ export default class ProductLA extends Vue {
     }
   ]
   /**品牌数据*/
-  private partBrandData:Array<any> = []
+  private partBrandData:Array<any> = [];
   /**选择的品牌*/
   private waitPartTransListBrand='';
   /**一键移入、移出提示*/
@@ -514,7 +514,7 @@ export default class ProductLA extends Vue {
       this.partBrandData = arrData.map((item,index) => {
         let objData:any = {}
         objData.name = item;
-        objData.code = `item+${index}`
+        objData.code = `item${index}`
         objData.isDisable = false;
         let brandArr = treeData.filter(item1=>item1.title==item)
         if(brandArr.length>0){
@@ -624,7 +624,6 @@ export default class ProductLA extends Vue {
         // @ts-ignore
         this.proLineForm = {...this.proLineSelectData};
       }
-
       if(type=='add'){
         this.proLineTitle = "添加产品线";
         this.proLineForm.title = "";
@@ -636,7 +635,11 @@ export default class ProductLA extends Vue {
         }
         let selectBrand = this.partBrandData.filter(item => item.name==this.proLineForm.title)
         if(selectBrand.length>0){
-          this.proLineBrandName = selectBrand[0].code
+          let refProLineBrandName:any = this.$refs.proLineBrandName;
+          refProLineBrandName.setQuery(selectBrand[0].name);
+          this.$nextTick(()=>{
+            this.proLineBrandName = selectBrand[0].code
+          })
         }
       }
       // @ts-ignore
@@ -772,11 +775,15 @@ export default class ProductLA extends Vue {
         let newArr = treeSelectData.filter(item => item.id&&item.lever==1).map(item => item.id)
         let reqArr:Array<any> = [];
         if(newArr.length>0){
+          let rolesNames = "";
+          if(this.StaffList[0].roles&&this.StaffList[0].roles.length>0){
+            rolesNames = this.StaffList[0].roles.filter(item => item.displayName).map(item=> item.displayName).join("，");
+          }
           newArr.map(item => {
             let req:any = {
               userId:this.StaffList[0].id,
               userName:this.StaffList[0].staffName,
-              roleName:this.StaffList[0].roles&&this.StaffList[0].roles.length>0?this.StaffList[0].roles[0].displayName:"",
+              roleName:rolesNames||"",
               classTypeId:item
             }
             reqArr.push(req)

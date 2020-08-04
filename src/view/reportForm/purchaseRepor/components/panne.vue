@@ -30,48 +30,41 @@
           </div>
           <div class="db mr10">
             <Select
-              v-model="search.partBrand"
-              class="w120"
+              class="w240"
+              multiple
+              v-model="search.partBrandList"
               placeholder="请选择品牌"
-              filterable
-              clearable
+              @on-change="select1"
             >
               <Option
-                v-for="(item, index) in bandArr"
-                :value="item"
-                :key="index"
-                >{{ item }}</Option
+                v-for="item in bandArr"
+                :value="item.label"
+                :key="item.id"
+              >{{ item.label }}</Option
               >
             </Select>
           </div>
           <div class="db mr10">
-            <Select
+            <Input
               v-model="search.guestFullName"
+              placeholder="请输入供应商"
               class="w120"
-              placeholder="请选择供应商"
-              filterable
               clearable
-            >
-              <Option
-                v-for="item in supplityArr"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.fullName }}</Option
-              >
-            </Select>
+            />
           </div>
           <div class="db mr10">
             <Select
               v-model="search.orgid"
               class="w120"
               placeholder="请选择门店"
+              :disabled="selectShopList"
               filterable
               clearable
             >
               <Option
                 v-for="item in stores"
-                :value="item.value"
-                :key="item.value"
+                :value="item.id"
+                :key="item.id"
                 >{{ item.name }}</Option
               >
             </Select>
@@ -93,6 +86,7 @@ import moment from "moment";
 import QuickDate from "_c/getDate/dateget";
 import more from "./more";
 import * as api from "_api/reportForm/index.js";
+import { creat } from "@/view/settlementManagement/components";
 export default {
   components: { QuickDate, more },
   props: {
@@ -104,44 +98,67 @@ export default {
   data() {
     return {
       bandArr: [], // 品牌
-      supplityArr: [], // 供应商
-      stores: [], // 门店
+      stores: [{id:0,name:"全部"}], // 门店
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
         auditDate: [], // 提交日期
         content: "", // 编码名称
-        partBrand: "", // 品牌
+        partBrandList: [], // 品牌
         guestFullName: "", // 供应商
         orgid: "" // 门店
       }
     };
   },
-  async mounted() {
-    let resS = await api.getSupplier();
-    let resB = await api.getParamsBrand();
-    let resE = await api.getStorelist();
-    if (resS.code == 0) {
-      this.supplityArr = resS.data;
+  computed:{
+    selectShopList(){
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
     }
+  },
+  async mounted() {
+    let resB = await api.getParamsBrandPart();
+    let resE = await api.getStorelist();
     if (resB.code == 0) {
-      this.bandArr = resB.data;
+      for (let quality of resB.data.content) {
+        if (quality.children.length <= 0) {
+          break;
+        }
+        quality.children.forEach(el => {
+          el.label = el.name;
+          el.value = el.code;
+          el.id = el.id;
+          this.bandArr.push(el);
+        });
+      }
     }
     if (resE.code == 0) {
       let data = resE.data;
       Object.keys(data).forEach(key => {
-        this.stores.push({ value: key, name: data[key] });
+        this.stores.push({ id: key, name: data[key] });
       });
     }
   },
   methods: {
+    select1(option) {
+      if (option.slice(-1)[0] == 1) {
+        option = [1];
+      } else if (option.includes(1)) {
+        option = option.filter(el => el != 1);
+      }
+      this.search.partBrandList = option;
+    },
     // 快速日期查询
-    getDataQuick(v) {
+    async getDataQuick(v) {
       this.quickDates = v;
+      let arr = await creat("", this.$store);
+      this.search.orgid = arr[1];
       if (v.length >= 2) {
-        this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1] });
+        this.search.content="";this.search.partBrandList=[];this.search.guestFullName=""
+        this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1] ,orgid:this.search.orgid});
       } else {
-        this.$emit("search", { isPanne: true });
+        this.search.content="";this.search.partBrandList=[];this.search.guestFullName=""
+        this.$emit("search", { isPanne: true, orgid:this.search.orgid });
       }
     },
     // 查询
@@ -202,7 +219,6 @@ export default {
       this.$refs.more.init();
     },
     getmoreData(data) {
-      //  console.log(data)
       if (data != null) {
         this.$emit("search", data);
       }

@@ -10,8 +10,10 @@
       :footer-method="footerMethod"
       :data="tableData"
     >
-      <vxe-table-column  show-overflow="tooltip" field="group0" title="">
-        <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column   show-overflow="tooltip" field="group0" title="基本信息">
+        <vxe-table-column   show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column   show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
+        <vxe-table-column   show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group1" title="订单信息">
         <vxe-table-column  show-overflow="tooltip"
@@ -125,7 +127,7 @@
           field="enterAmt"
           title="成本金额"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="含税信息">
@@ -138,7 +140,7 @@
           field="taxRate"
           title="税率"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="taxPrice"
@@ -149,7 +151,7 @@
           field="taxAmt"
           title="含税金额"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="不含税信息">
@@ -162,7 +164,7 @@
           field="noTaxAmt"
           title="不含税金额"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
@@ -180,19 +182,19 @@
           field="auditDate"
           title="提交日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="detailRemark"
           title="订单备注"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="pcshOrderCode"
           title="采购订单"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
@@ -248,7 +250,6 @@ export default {
           }
           return el;
         });
-
         this.page.total = res.data.totalElements;
       } else {
         this.page.total = 0;
