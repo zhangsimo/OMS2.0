@@ -751,7 +751,7 @@
             }
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'partInnerId')
           this.$Message.success("已添加");
         },
 
@@ -784,7 +784,7 @@
             }
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'partInnerId')
           this.$Message.success("已添加");
         },
 
