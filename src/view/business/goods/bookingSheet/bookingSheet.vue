@@ -751,10 +751,10 @@ export default {
       if (response.code === 0) {
         if (response.data.length === 0) {
           this.$Message.warning("导入成功！");
-          this.leftgetList();
         } else {
           this.$Message.error(response.data.join(";"));
         }
+        this.leftgetList();
       } else {
         this.$Message.error(response.message);
       }

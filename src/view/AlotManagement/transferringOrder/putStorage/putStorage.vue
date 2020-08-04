@@ -52,6 +52,9 @@
                 <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
+            <div class="db">
+              <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+            </div>
           </div>
         </div>
       </section>
@@ -273,6 +276,7 @@
 </template>
 
 <script>
+import * as tools from "../../../../utils/tools";
 import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
@@ -329,6 +333,7 @@ export default {
     }
 
     return {
+      showSelf: true,
       propPageObj:{},
       Status: 0,
       // serviceIdValue: "",
@@ -577,6 +582,10 @@ export default {
     this.getArrayParams();
   },
   methods: {
+    showOwen() {
+      tools.setSession("self", { putStorage: this.showSelf });
+      this.getList();
+    },
     blurFun(pos,index){
       let req = {
         "storeId":this.Leftcurrentrow.storeId,
@@ -734,7 +743,16 @@ export default {
     // 新增按钮
     addProoo() {
       this.$refs.addInCom.init();
-      chengping({ enterSelect: 123, orderTypeId: "ALLOT_APPLY" }, 10, 1)
+      let showSelf = this.$refs.addInCom.showSelf;
+      let data = { enterSelect: 123, orderTypeId: "ALLOT_APPLY" };
+      if(showSelf) {
+        let createUid = this.$store.state.user.userData.id;
+        data.createUid = createUid;
+      } else {
+        Reflect.deleteProperty(data, "createUid")
+      }
+      data.status = "STOCKING";
+      chengping(data, 10, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -1015,6 +1033,12 @@ export default {
       } else {
         delete params.qucikTime;
       }
+      if(this.showSelf) {
+        let createUid = this.$store.state.user.userData.id;
+        params.createUid = createUid;
+      } else {
+        Reflect.deleteProperty(params, "createUid")
+      }
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(async res => {
           if (res.code == 0) {
@@ -1050,7 +1074,16 @@ export default {
         });
     },
     getListPro() {
-      chengping()
+      let showSelf = this.$refs.addInCom.showSelf
+      let data = {};
+      if(showSelf) {
+        let createUid = this.$store.state.user.userData.id;
+        data.createUid = createUid;
+      } else {
+        Reflect.deleteProperty(data, "createUid")
+      }
+      data.status = "STOCKING";
+      chengping(data)
         .then(res => {
           if (res.code == 0) {
             this.tbdata = res.data || [];
@@ -1074,6 +1107,8 @@ export default {
     }
   },
   mounted() {
+    let self = tools.getSession("self");
+    this.showSelf = Reflect.has(self, "putStorage") ? self.putStorage : true;
     setTimeout(() => {
       this.getDomHeight();
     }, 0);

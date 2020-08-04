@@ -310,7 +310,7 @@
         </FormItem>
 
         <FormItem v-if="proLineSelectData.lever==1" label="品牌名称：" prop="title">
-          <Select placeholder="选择品牌" label-in-value @on-change="proLineBrandNameChange" filterable v-model="proLineBrandName" class="w300">
+          <Select ref="proLineBrandName" placeholder="选择品牌" label-in-value @on-change="proLineBrandNameChange" filterable v-model="proLineBrandName" class="w300">
             <Option v-for="(item,index) in partBrandData" :disabled="item.isDisable" :value="item.code" :key="index">{{item.name}}</Option>
           </Select>
         </FormItem>

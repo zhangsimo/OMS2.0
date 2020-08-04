@@ -629,7 +629,8 @@ export default {
             key: "createTime",
             minWidth: 140,
             render(h, params) {
-              return h("span", {}, moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss"));
+              let time = moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss");
+              return h("span", {}, time);
             }
           },
           {
@@ -743,7 +744,8 @@ export default {
       diaochuName: "",
       diaochuID: "",
       clickdelivery: false,
-      isWms: false //仓库是否启用wms
+      isWms: false, //仓库是否启用wms
+      createTime: new Date(),
     };
   },
   // watch: {
@@ -861,6 +863,7 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      
       params.detailVOS.forEach(el => (el.systemUnitId = el.unit));
       if (params.xinzeng) {
         delete params.status;
@@ -876,15 +879,12 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      // for (var i = 0; i < this.getArray.length; i++) {
-      //   if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
-      //     params.guestOrgid = this.getArray[i].isInternalId;
-      //     params.guestId = this.getArray[i].id;
-      //   }
+      // if(typeof this.Leftcurrentrow.createTime !== "string") {
+      //   params.createTime = moment(this.Leftcurrentrow.createTime).format(
+      //     "YYYY-MM-DD HH:mm:ss"
+      //   );
       // }
-      params.createTime = moment(this.Leftcurrentrow.createTime).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
+      params.createTime = this.createTime;
       if (this.flag1 == true) {
         params.id = "";
       }
@@ -900,14 +900,6 @@ export default {
               this.buttonDisable = null;
               this.getList();
               this.$Message.success("保存成功");
-              // this.Leftcurrentrow.storeId = ""
-              // this.Leftcurrentrow.guestName = ""
-              // this.Leftcurrentrow.storeName =  "",
-              // this.Leftcurrentrow.createTime =  "",
-              // this.Leftcurrentrow.orderMan = "",
-              // this.Leftcurrentrow.remark =  "",
-              // this.Leftcurrentrow.serviceId =  "",
-              // this.Leftcurrentrow.detailVOS =  []
             }
           })
           .catch(e => {
@@ -928,6 +920,7 @@ export default {
       this.flagValue1 = 0;
       this.buttonDisable = 0;
       let createTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+      this.createTime = createTime;
       const item = {
         new: true,
         _highlight: true,
@@ -946,7 +939,7 @@ export default {
         serviceId: "",
         detailVOS: [],
       };
-      console.log(item);
+      // console.log(item);
       if (this.cangkuListall.length > 0) {
         this.cangkuListall.forEach(el => {
           if (el.isDefault) {
@@ -996,18 +989,13 @@ export default {
           if (params.orderTypeId && params.orderTypeId.value != undefined) {
             params.orderTypeId = params.orderTypeId.value;
           }
-          // for (var i = 0; i < this.getArray.length; i++) {
-          //     if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          //         params.guestOrgid = this.getArray[i].isInternalId;
-          //         params.guestId = this.getArray[i].id;
-          //     }
-          // }
-          this.Leftcurrentrow.createTime = this.Leftcurrentrow.createTime
-            ? this.Leftcurrentrow.createTime
-            : new Date();
-          params.createTime = moment(this.Leftcurrentrow.createTime).format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
+          // this.Leftcurrentrow.createTime = this.Leftcurrentrow.createTime
+          //   ? this.Leftcurrentrow.createTime
+          //   : new Date();
+          // params.createTime = moment(this.Leftcurrentrow.createTime).format(
+          //   "YYYY-MM-DD HH:mm:ss"
+          // );
+          params.createTime = this.createTime;
           tijiao(params)
             .then(res => {
               // 点击列表行==>配件组装信息
@@ -1203,6 +1191,7 @@ export default {
       this.buttonDisable = 0; // 草稿
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.createTime = row.createTime;
       if (row.statuName == "待出库") {
         this.buttonDisable = 1;
       }

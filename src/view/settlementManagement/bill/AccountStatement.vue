@@ -1274,8 +1274,13 @@ export default {
               if (res.code === 0) {
                 this.$refs.salepopup.information.applyNo = res.data.applyNo;
                 this.$refs.salepopup.information.code = res.data.orgCode;
-                this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
-                this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
+                if(this.reconciliationStatement.statementType.value==1){
+                  this.$refs.salepopup.information.oilsListOrder = ""
+                  this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
+                }else if(this.reconciliationStatement.statementType.value==2){
+                  this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
+                  this.$refs.salepopup.information.partsListOrder=""
+                }
               }
             });
           }

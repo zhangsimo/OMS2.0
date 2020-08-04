@@ -10,8 +10,10 @@
       :footer-method="footerMethod"
       :data="tableData"
     >
-      <vxe-table-column  show-overflow="tooltip" field="group0" title="">
+      <vxe-table-column  show-overflow="tooltip" field="group0" title="基本信息">
         <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group1" title="单据信息">
         <vxe-table-column  show-overflow="tooltip"
@@ -99,7 +101,7 @@
           field="taxRate"
           title="税点"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="taxPrice"
@@ -110,7 +112,7 @@
           field="taxAmt"
           title="含税金额"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="noTaxPrice"
@@ -121,7 +123,7 @@
           field="noTaxAmt"
           title="不含税金额"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
        <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
@@ -134,7 +136,7 @@
           field="createTime"
           title="创建日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="auditor"
@@ -145,13 +147,13 @@
           field="auditDate"
           title="提交日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="mainRemark"
           title="备注"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>

@@ -13,7 +13,7 @@
         <panne :type="3" @search="search3" @export="exportxls('tabThree')" />
         <tabThree ref="tabThree" />
       </TabPane>
-      <TabPane label="采购计划明细表">
+      <TabPane label="滚动计划明细表">
         <panne :type="4" @search="search4" @export="exportxls('tabFour')" />
         <tabFour ref="tabFour" />
       </TabPane>
@@ -46,13 +46,13 @@ export default {
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
         data.atimeEnd ? data2.auditEndDate = data.atimeEnd : "";
-        data.guestId ? data2.guestFullName = data.guestId : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.orderType ? data2.orderType = data.orderType : "";
-        data.warehouseId ? data2.storeId = data.warehouseId : "";
+        data.warehouseId ? data2.directCompanyId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";
         data.createUname ? data2.createUid = data.createUname : "";
@@ -69,12 +69,12 @@ export default {
       } else {
         data.ctimeStart ? data2.startEnterDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endEnterDate = data.ctimeEnd : "";
-        data.guestId ? data2.guestFullName = data.guestId : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
-        data.warehouseId ? data2.storeId = data.warehouseId : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.warehouseId ? data2.directCompanyId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
       this.$refs.tabTwo.body = data2;
@@ -90,12 +90,12 @@ export default {
         // 更多查询
         data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
-        data.guestId ? data2.guestFullName = data.guestId : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
-        data.warehouseId ? data2.storeId = data.warehouseId : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.warehouseId ? data2.directCompanyId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
       this.$refs.tabThree.body = data2;
@@ -113,14 +113,15 @@ export default {
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
         data.atimeEnd ? data2.auditEndDate = data.atimeEnd : "";
-        data.guestId ? data2.guestFullName = data.guestId : "";
+        data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.directCompanyId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrand ? data2.partBrand = data.partBrand : "";
+        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";
         data.createUname ? data2.createUid = data.createUname : "";
+        data.directCompanyId ? data2.directCompanyId = data.directCompanyId : "";
       }
       this.$refs.tabFour.body = data2;
       this.$refs.tabFour.getList();
