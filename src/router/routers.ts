@@ -1836,6 +1836,21 @@ export default [
               )
           },
           {
+            path: "/system/outstaff/management",
+            name: "outStaffManagement",
+            // mark: "9203",
+            meta: {
+              keepAlive: true,
+              // hideInMenu: true,
+              title: "外部员工管理",
+
+            },
+            component: () =>
+              import(
+                "@/view/system/systemSetting/outStaffManagement/outStaffManagement.vue"
+                )
+          },
+          {
             path: "/accounting",
             name: "accounting",
             // mark: "4002",
