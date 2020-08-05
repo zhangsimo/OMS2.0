@@ -1008,6 +1008,7 @@ export default {
       }
 
       arr.forEach(item => {
+        item.partInnerId = item.partId;
         item.prevDetailId = item.sourceDetailId;
         item.outUnitId = item.systemUnitId;
         item.unit = item.systemUnitId;

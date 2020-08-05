@@ -861,7 +861,7 @@
                     this.setRow(el)
                   }
                 })
-              } else {
+              } else if(Object.keys(this.currentRow).length > 0) {
                 this.Left.tbdata[0]._highlight = true;
                 this.isAdd = true;
                 this.setRow(this.Left.tbdata[0]);
