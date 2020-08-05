@@ -110,7 +110,7 @@ export default {
   },
   async mounted() {
     this.modelType.allSalesList = await getAllSalesList();
-    this.modelType.salesList = await getComenAndGo();
+    // this.modelType.salesList = await getComenAndGo();
     this.modelType.payList = await getPayList();
   },
   methods: {
