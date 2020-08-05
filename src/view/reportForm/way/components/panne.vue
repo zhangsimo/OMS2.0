@@ -117,7 +117,7 @@ export default {
     getDataQuick(v) {
       this.quickDates = v;
       if(v.length >= 2) {
-        this.$emit("search", { createTime: v[0], endTime: v[1] });
+        this.$emit("search", { allotFinishedStartDate: v[0], allotFinishedEndDate: v[1] });
       } else {
         this.$emit("search", {});
       }
