@@ -1070,7 +1070,6 @@
         },
         // 导入
         handleBeforeUpload() {
-          console.log(this.upurl)
           if (this.datadata.new) {
             return this.$Message.error("请先保存数据!");
           }
@@ -1082,6 +1081,7 @@
           if (res.code == 0) {
             if(res.data.length<=0){
               self.$Message.success("导入成功");
+              this.leftgetList()
             }else{
               this.Left.tbdata.forEach(el => {
                 if (el.id == this.selectRowId) {
