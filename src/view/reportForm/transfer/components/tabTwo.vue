@@ -150,7 +150,7 @@
           width="140"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
-          field="createUname"
+          field="acceptUname"
           title="受理人"
           width="140"
         ></vxe-table-column>
@@ -167,7 +167,7 @@
 
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
-          field="auditor"
+          field="orderMan"
           title="申请人"
           width="200"
 
