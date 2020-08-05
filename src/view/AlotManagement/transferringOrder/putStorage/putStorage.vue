@@ -65,6 +65,7 @@
               <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
                 <div class="pane-made-hd">调拨入库列表</div>
                 <Table
+                  ref="tableref"
                   :height="leftTableHeight"
                   @on-current-change="selectTabelData"
                   size="small"
@@ -696,6 +697,7 @@ export default {
         });
     },
     xinzeng() {
+      this.$refs.tableref.clearCurrentRow();
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -989,6 +991,8 @@ export default {
       }
     },
     getOkList(list) {
+      this.$refs.tableref.clearCurrentRow();
+      this.Left.tbdata.forEach(el=> el._highlight = false);
       this.codeValue = list.id;
       const item = {
         index: 1,
@@ -1053,19 +1057,29 @@ export default {
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
             }
-            for (let b of this.Left.tbdata) {
-              b._highlight = false;
-              if(b.id == this.Leftcurrentrow.id) {
-                b._highlight = true;
-                this.Leftcurrentrow = b;
-                const params = {
-                  mainId: b.id
-                };
-                const res = await getListDetail(params);
-                this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
-                return;
+            if(this.Leftcurrentrow.id) {
+              for (let b of this.Left.tbdata) {
+                b._highlight = false;
+                if(b.id == this.Leftcurrentrow.id) {
+                  b._highlight = true;
+                  this.Leftcurrentrow = b;
+                  const params = {
+                    mainId: b.id
+                  };
+                  const res = await getListDetail(params);
+                  this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  return;
+                }
               }
-              // this.Leftcurrentrow.detailVOS = [];
+            } else {
+              this.Left.tbdata[0]._highlight = true;
+              this.Leftcurrentrow = this.Left.tbdata[0];
+              const params = {
+                mainId: b.id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+              return;
             }
           }
         })
