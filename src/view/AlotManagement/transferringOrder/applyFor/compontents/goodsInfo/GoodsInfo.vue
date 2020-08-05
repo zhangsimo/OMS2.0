@@ -534,7 +534,6 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
-    console.log(row)
     // this.reset();
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
