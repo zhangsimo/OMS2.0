@@ -154,20 +154,20 @@ export default {
         submitData: this.submitData,
         guestId: this.guestId
       };
-      console.log(a)
+      // console.log(a)
       this.$emit("sendMsg", a);
     },
     //更多弹框的确定按钮
     Determined() {
       this.sendMsg();
       this.moreAndMore = false;
-      this.callout = "";
-      this.numbers = "";
-      this.coding = "";
-      this.Accessories = "";
-      this.Name = "";
-      this.create = "";
-      this.submita = "";
+      // this.callout = "";
+      // this.numbers = "";
+      // this.coding = "";
+      // this.Accessories = "";
+      // this.Name = "";
+      // this.create = "";
+      // this.submita = "";
     },
     //供应商弹框
     addSuppler() {
