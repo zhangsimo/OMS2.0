@@ -299,7 +299,6 @@ export default [
           keepAlive: false,
           icon: "arrow-graph-up-right",
           title: "华胜订单处理",
-          notCache: true,
           // hideInMenu:true
         },
         component: () =>
@@ -329,7 +328,7 @@ export default [
           keepAlive: true,
           title: "调拨单"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "/AlotManagement/transferringOrder/applyFor",
@@ -356,7 +355,6 @@ export default [
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "调拨申请受理",
-              notCache: true,
             },
             component: () =>
               import(
@@ -371,7 +369,6 @@ export default [
               keepAlive: false,
               // hideInMenu: true,
               title: "调拨出库",
-              notCache: true,
             },
             component: () =>
               import(
@@ -403,7 +400,7 @@ export default [
           keepAlive: true,
           title: "调拨退货"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "/allot/two/backApply",
@@ -428,7 +425,6 @@ export default [
               keepAlive: false,
               // hideInMenu: true,
               title: "调出退回入库",
-              notCache: true,
             },
             component: () =>
               import(
@@ -443,7 +439,6 @@ export default [
               keepAlive: false,
               // hideInMenu: true,
               title: "调入退回受理",
-              notCache: true,
             },
             component: () =>
               import(
@@ -460,7 +455,7 @@ export default [
           keepAlive: true,
           title: "直调直发"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "/allot/three/headquarters",
@@ -529,7 +524,6 @@ export default [
           keepAlive: false,
           icon: "arrow-graph-up-right",
           title: "采购入库",
-          notCache: true,
         },
         component: () =>
           import(
@@ -633,7 +627,7 @@ export default [
           keepAlive: true,
           title: '单据查询'
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: 'undoFlowQuery',
@@ -666,7 +660,7 @@ export default [
           keepAlive: true,
           title: "对账与结算"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "/settlementManagement/bill/AccountStatement",
@@ -814,7 +808,7 @@ export default [
           // icon: "ios-paper",
           title: "发票管理"
         },
-        component: parentView,
+        component: Main,
         children: [
           // {
           //   path: "/invoiceAdministration/costOpening",
@@ -877,7 +871,7 @@ export default [
           //   meta: { keepAlive: true,
           //     title: "设置"
           //   },
-          //   component: parentView,
+          //   component: Main,
           //   children: [
           //     {
           //       path: "",
@@ -1035,7 +1029,7 @@ export default [
           keepAlive: true,
           title: "资金管理"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "capitalChain",
@@ -1304,7 +1298,7 @@ export default [
           keepAlive: true,
           title: "基础数据"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "Fittings",
@@ -1389,7 +1383,7 @@ export default [
               icon: "arrow-graph-up-right",
               title: "价格管理"
             },
-            component: parentView,
+            component: Main,
             children: [
               {
                 path: "priceManage",
@@ -1599,7 +1593,7 @@ export default [
           keepAlive: true,
           title: "系统设置"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "/system/systemSetting/navigationFater/navigationFater",
@@ -1880,7 +1874,7 @@ export default [
           //
           title: "基本信息"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "/system/systemSetting/accountInformation/accountInformation",
@@ -2095,7 +2089,7 @@ export default [
           icon: "gear-b",
           title: "历史日志"
         },
-        component: parentView,
+        component: Main,
         children: [
           {
             path: "historylog",
