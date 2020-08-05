@@ -81,7 +81,7 @@
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="数量/价格">
         <vxe-table-column  show-overflow="tooltip"
-          field="orderQty"
+          field="hasOutQty"
           title="出库数量"
           width="120"
         ></vxe-table-column>

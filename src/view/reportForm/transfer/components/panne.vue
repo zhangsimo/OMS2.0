@@ -172,9 +172,9 @@ export default {
       let arr = await creat("", this.$store);
       this.search.orgid = arr[1];
       if(v.length >= 2) {
-        this.search.content="";this.search.guestId="";this.search.storeId=""
+        this.search.content="";this.search.guestId="";this.search.storeId="";
         this.getWares(this.search.orgid)
-        this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1], orgid:this.search.orgid });
+        this.$emit("search", { isPanne: true, createTimeStart: v[0], createTimeEnd: v[1] , orgid:this.search.orgid });
       } else {
         this.search.content="";this.search.guestId="";this.search.storeId=""
         this.$emit("search", { isPanne: true, orgid:this.search.orgid});
