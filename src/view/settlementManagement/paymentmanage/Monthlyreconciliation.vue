@@ -5,12 +5,27 @@
         <section class="oper-box mb10">
           <div class="oper-top flex">
             <div class="wlf">
-              <div class="db ml20">
+              <div class="db">
+                <span>快速查询：</span>
+                <quickDate class="mr8" ref="quickDate" @quickDate="quickDate"></quickDate>
+              </div>
+              <div class="db ml18">
+                <span>转单期间：</span>
+                <Date-picker
+                  format="yyyy-MM-dd"
+                  :value="value"
+                  @on-change="changedate"
+                  type="daterange"
+                  placeholder="选择日期"
+                  class="w160"
+                ></Date-picker>
+              </div>
+              <div class="db ml18">
                 <span>对账门店：</span>
                 <Select
                   filterable
                   v-model="model1"
-                  class="w150"
+                  class="w130"
                   @on-change="storeAccount"
                   clearable
                 >
@@ -21,7 +36,7 @@
                   >{{ item.label }}</Option>
                 </Select>
               </div>
-              <div class="db ml20">
+              <div class="db ml18">
                 <span>往来单位：</span>
                 <Select
                   ref="companyGuset"
@@ -34,21 +49,6 @@
                   :loading="searchLoading">
                   <Option v-for="(option, index) in companyList" :value="option.id" :key="index">{{option.fullName}}</Option>
                 </Select>
-                <!--<Select-->
-                  <!--filterable-->
-                  <!--v-model="companyInfo"-->
-                  <!--style="width:200px"-->
-                  <!--@on-change="companySelect"-->
-                  <!--clearable-->
-                <!--&gt;-->
-                  <!--<Option-->
-                    <!--v-for="item in companyList"-->
-                    <!--:value="item.value"-->
-                    <!--:key="item.value"-->
-                  <!--&gt;{{ item.label }}</Option>-->
-                <!--</Select>-->
-                <!-- <input type="text" class="h30" :value="companyInfo" />
-                <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
               </div>
               <div class="db ml10">
                 <button class="ivu-btn ivu-btn-default" type="button" @click="query">
@@ -62,28 +62,33 @@
                 </button>
               </div>
               <div class="db ml10">
+                <Poptip placement="bottom">
+                  <button class="mr8 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
+                  <div slot="content">
+                    <button
+                      class="mr8 ivu-btn ivu-btn-default"
+                      type="button"
+                      @click="getReportReconciliationt"
+                    >导出对账清单</button>
+                    <button
+                      class="mr8 ivu-btn ivu-btn-default"
+                      type="button"
+                      @click="getReportParts"
+                    >导出配件明细</button>
+                  </div>
+                </Poptip>
                 <button
-                  class="mr10 ivu-btn ivu-btn-default"
+                  class="mr8 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationDraft"
                   :disabled="disabledBtn"
-                >保存草稿</button>
+                >保存</button>
                 <button
-                  class="mr10 ivu-btn ivu-btn-default"
+                  class="mr8 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationSubmission"
                   :disabled="disabledBtn"
-                >保存并提交</button>
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="getReportReconciliationt"
-                >导出对账清单</button>
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="getReportParts"
-                >导出配件明细</button>
+                >提交</button>
               </div>
             </div>
           </div>
@@ -291,10 +296,10 @@
     </Modal>
     <!--更多查询-->
     <Modal v-model="accountLayer" class="accountLayer" title="高级查询" width="400">
-      <p>
-        <span class="sp-l">转单日期：</span>
-        <DatePicker type="daterange" v-model="moreSearch.accountDate" placeholder="转单日期" style="width: 200px" @on-change="changedate"></DatePicker>
-      </p>
+<!--      <p>-->
+<!--        <span class="sp-l">转单日期：</span>-->
+<!--        <DatePicker type="daterange" v-model="moreSearch.accountDate" placeholder="转单日期" style="width: 200px" @on-change="changedate"></DatePicker>-->
+<!--      </p>-->
       <p>
         <span class="sp-l">业务类型：</span>
         <Select v-model="moreSearch.businessType" style="width:200px">
@@ -378,13 +383,16 @@ import baseUrl from "_conf/url";
 import index from "../../admin/roles";
 import render from "../../../components/message/base/render";
 import {findGuest} from "../../../api/settlementManagement/advanceCollection";
+import quickDate from "@/components/getDate/dateget_bill.vue";
+import moment from "moment";
 
 export default {
   components: {
     selectDealings,
     ClientData,
     ClientData2,
-    requestCode
+    requestCode,
+    quickDate,
   },
   data() {
     const roleValid = ({ cellValue ,row}) => {
@@ -416,6 +424,7 @@ export default {
 
     };
     return {
+      value:[],
       disabledBtn:false,
       summer: null, //计算费用合计
       validRules: {
@@ -731,10 +740,19 @@ export default {
     };
   },
   async mounted() {
-    let arr = await creat([], this.$store);
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    // let obj={
+    //   startDate: this.value[0]
+    //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+    //     : "",
+    //   endDate: this.value[1]
+    //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+    //     : ""
+    // }
+    this.queryDate(this.value)
   },
   computed: {
     //实际应付合计
@@ -778,6 +796,22 @@ export default {
     }
   },
   methods: {
+    // 快速查询
+    quickDate(data) {
+      this.value = data ? data : ["", ""];
+      // this.data1 = [];
+      // this.data2 = [];
+      let obj = {
+        orgId: this.model1,
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
+      };
+      this.query(obj);
+    },
     // 在值发生改变时更新表尾合计
     updateFooterEvent(params) {
       let xTable = this.$refs.xTable;
@@ -918,10 +952,10 @@ export default {
     Initialization() {
       // let { orgId, startDate, endDate, guestId } = this.parameter;
       let obj = { orgId: this.model1, guestId: this.companyInfo };
-      if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
-        obj.startDate = this.moreSearch.accountDate[0] + " 00:00:00";
-        obj.endDate = this.moreSearch.accountDate[1] + " 23:59:59";
-      }
+      // if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
+        obj.startDate = this.value[0];
+        obj.endDate = this.value[1];
+      // }
       if(this.moreSearch.businessType){
         obj.serviceType = this.moreSearch.businessType;
       }
@@ -1523,9 +1557,9 @@ export default {
       this.moreSearch={}
     },
     // 选择日期
-    changedate(daterange) {
-      this.moreSearch.accountDate = daterange;
-    },
+    // changedate(daterange) {
+    //   this.moreSearch.accountDate = daterange;
+    // },
     moreOk(){
       this.Initialization();
       this.accountLayer=false;

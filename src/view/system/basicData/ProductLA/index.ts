@@ -295,7 +295,6 @@ export default class ProductLA extends Vue {
     private upurl:string = api.upxlxs;
 
 
-
   private defaultProps = {
     children: 'children',
     label: 'title'
@@ -511,6 +510,9 @@ export default class ProductLA extends Vue {
   private getPartBrandAll(treeData) {
     getParamsBrand().then(res => {
       let arrData = res.data||[]
+      if(arrData.length==0){
+        return this.$Message.error("产品线品牌获取失败");
+      }
       this.partBrandData = arrData.map((item,index) => {
         let objData:any = {}
         objData.name = item;
@@ -629,7 +631,7 @@ export default class ProductLA extends Vue {
         this.proLineForm.title = "";
       }
       if(type=='edit'){
-        this.proLineTitle = "编辑产品线"
+        this.proLineTitle = "编辑产品线";
         if(!this.proLineSelectData.hasOwnProperty("id")){
           return this.$message.error("请选择要编辑的产品线");
         }
@@ -649,6 +651,8 @@ export default class ProductLA extends Vue {
       }else{
         this.proLineForm.id = this.proLineForm.parentId;
         this.proLineSelectData.lever = 1;
+        // @ts-ignore
+        this.proLineForm.lever = 1;
       }
       this.proLineModel = true;
     }
@@ -668,7 +672,7 @@ export default class ProductLA extends Vue {
           }
           if(this.proLineTitle=="编辑产品线"){
             // @ts-ignore
-            req.id = req.idCopy
+            req.id = req.idCopy;
             Reflect.deleteProperty(req,'idCopy');
           }
           let rep = await api.addOrEditProLine(req);
@@ -730,6 +734,7 @@ export default class ProductLA extends Vue {
     //打开产品线分配层
     private disProLine(){
       this.proLineDis = true;
+      this.StaffName = "";
       let treeRef:any = this.$refs.tree;
       treeRef.setCheckedKeys([]);
       this.StaffList = [];
@@ -766,7 +771,7 @@ export default class ProductLA extends Vue {
     }
 
     private async proLineDisSubmit(){
-      if(this.selectTableItem.userId){
+      if(this.selectTableItem.userId&&(this.selectTableItem.userId==this.StaffName||this.StaffName=="")){
         this.StaffName = this.selectTableItem.userId;
       }
       if(this.StaffName){
@@ -774,34 +779,40 @@ export default class ProductLA extends Vue {
         let treeSelectData = treeRef.getCheckedNodes();
         let newArr = treeSelectData.filter(item => item.id&&item.lever==1).map(item => item.id)
         let reqArr:Array<any> = [];
+        let arrList = this.StaffList.filter(item => item.id == this.StaffName);
+        if(arrList.length == 0){
+          return
+        }
+        let rolesNames = "";
+        if(arrList[0].roles&&arrList[0].roles.length>0){
+          rolesNames = arrList[0].roles.filter(item => item.displayName).map(item=> item.displayName).join("，");
+        }
         if(newArr.length>0){
-          let rolesNames = "";
-          if(this.StaffList[0].roles&&this.StaffList[0].roles.length>0){
-            rolesNames = this.StaffList[0].roles.filter(item => item.displayName).map(item=> item.displayName).join("，");
-          }
           newArr.map(item => {
             let req:any = {
-              userId:this.StaffList[0].id,
-              userName:this.StaffList[0].staffName,
+              userId:arrList[0].id,
+              userName:arrList[0].staffName,
               roleName:rolesNames||"",
               classTypeId:item
             }
             reqArr.push(req)
           })
         }else{
-          // let req:any = {
-          //   userId:this.StaffList[0].id,
-          //   userName:this.StaffList[0].staffName,
-          //   roleName:this.StaffList[0].roles&&this.StaffList[0].roles.length>0?this.StaffList[0].roles[0].displayName:""
-          // }
-          // reqArr.push(req)
-          return this.$Message.error("请选择要分配的产品线品牌");
+          let req:any = {
+            userId:arrList[0].id,
+            userName:arrList[0].staffName,
+            roleName:rolesNames||""
+          }
+          reqArr.push(req)
+          // return this.$Message.error("请选择要分配的产品线品牌");
         }
         let rep = await api.setProLineDis(reqArr)
         if(rep.code==0){
           this.$message.success("分配成功");
           this.getProLineList();
           this.proLineDis = false;
+          // @ts-ignore
+          this.selectTableItem = {};
         }
       }else{
         this.$message.error("请选择员工");

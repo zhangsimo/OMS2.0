@@ -739,11 +739,11 @@ export default {
 
     //仓库改变右侧表格改变
     getStore(data) {
-      let house = this.WareHouseList.filter(item => item.id == data);
-      this.formPlan.detailVOList = [];
-      this.formPlan.detailVOList.map(val => {
-        val.storeName = house[0].name;
-      });
+      // let house = this.WareHouseList.filter(item => item.id == data);
+      // this.formPlan.detailVOList = [];
+      // this.formPlan.detailVOList.map(val => {
+      //   val.storeName = house[0].name;
+      // });
     },
     //获取搜索框内的数据
     setOneClient(val) {

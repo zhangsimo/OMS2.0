@@ -7,7 +7,7 @@
         ref="formPlan"
         :model="formPlan"
         :rules="ruleValidate"
-        :label-width="120"
+        :label-width="80"
       >
         <div class="pane-made-hd fs12">
           <span class="titler mr5">固定额度:</span>
@@ -21,7 +21,7 @@
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
             <Row>
               <Tooltip :content="formPlan.fullName">
-                <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:260px;"/>
+                <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:130px;"/>
               </Tooltip>
               <Button
                 class="ml5"
@@ -49,7 +49,7 @@
               :value="formPlan.orderManId"
               @on-change="selectOrderMan"
               filterable
-              style="width: 140px"
+              style="width: 200px"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
               label-in-value
             >
@@ -57,17 +57,17 @@
             </Select>
           </FormItem>
           <FormItem label="订单类型：">
-            <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
+            <Select v-model="formPlan.orderTypeValue" style="width:200px" disabled>
               <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
           <FormItem label="往来单号：">
-            <Input class="w210" v-model="formPlan.code" disabled/>
+            <Input class="w200 orderNo" v-model="formPlan.code" disabled/>
           </FormItem>
           <FormItem label="票据类型：" prop="billTypeId">
             <Select
               v-model="formPlan.billTypeId"
-              style="width:100px"
+              style="width:200px"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             >
               <Option
@@ -81,7 +81,7 @@
           <FormItem label="结算方式：" prop="settleTypeId">
             <Select
               v-model="formPlan.settleTypeId"
-              style="width:100px"
+              style="width:200px"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             >
               <Option
@@ -122,7 +122,7 @@
           <FormItem label="交货仓库：" prop="storeId">
             <Select
               v-model="formPlan.storeId"
-              style="width:180px"
+              style="width:200px"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             >
               <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id"
@@ -133,7 +133,7 @@
           <FormItem label="备注：">
             <Tooltip :content="formPlan.remark">
             <Input
-              style="width: 330px"
+              style="width: 200px"
               v-model="formPlan.remark"
               :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             />
@@ -141,10 +141,10 @@
           </FormItem>
 
           <FormItem label="订单号：">
-            <Input class="w210" v-model="formPlan.serviceId" disabled/>
+            <Input class="w200 orderNo" v-model="formPlan.serviceId" disabled/>
           </FormItem>
         </div>
-        <div class="flex plan-cz-btn" ref="planBtn">
+        <div class="flex plan-cz-btn" style="padding-bottom: 5px" ref="planBtn">
           <div class="clearfix">
             <div class="fl mb5">
               <Button
@@ -271,7 +271,7 @@
           <vxe-table-column  show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" fixed="left" title="操作" width="60">
             <template v-slot="{ row,rowIndex }">
-              <a @click="openFileModal(row)">查看</a>
+              <a class="blue" @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
@@ -951,7 +951,7 @@
                 if (res.code === 0) {
                     // this.getList();
                     // this.reload();
-                    // this.$parent.$parent.$refs.OrderLeft.gitlistValue()
+                    this.$parent.$parent.$refs.OrderLeft.gitlistValue()
                 }
             },
             //打开查看模态框
@@ -1155,7 +1155,7 @@
                 if (res.code === 0) {
                     // this.getList();
                     // this.reload();
-                    // this.$parent.$parent.parentGetleft();
+                    this.$parent.$parent.parentGetleft();
                 }
             },
             getRUl(val) {

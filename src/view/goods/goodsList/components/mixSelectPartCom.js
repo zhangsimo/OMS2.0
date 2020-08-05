@@ -297,7 +297,7 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="temporaryPurchase"||this.$route.name=="outsidePurchase"){
+      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase"){
         this.$refs.selectPartInfo.init(v);
       }
       if(this.$route.name=="bookingSheet"){

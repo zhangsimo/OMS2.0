@@ -53,5 +53,44 @@
       display: none;
     }
   }
+
+
+  .main .ivu-layout-wrap{
+    padding: 16px;
+  }
+  .main .content-wrapper{
+    padding: 0 16px;
+    top: 60px!important;
+  }
+  .ivu-btn-default.ivu-btn:not([disabled]):hover{
+    color: #1890ff;
+    border-color: #1890ff;
+  }
+  .tags-nav .tag-item:hover{
+    border-color: #1890ff;
+    box-shadow: 0px 3px 3px rgba(24, 144, 255, 0.15)
+  }
+  .tags-nav .tag-item:hover .ivu-tag-text, .tags-nav .tag-item:hover i{
+    color: #1890ff;
+  }
+  .tags-nav .tag-item.tag-item-selected{
+    background: #1890ff;
+  }
+  .ivu-avatar{
+    margin-right: 5px;
+  }
+  .main .ivu-layout .oper-box .oper-top, .main .ivu-layout .oper-box .oper-bottom{
+    min-height: 24px;
+    padding-bottom: 10px;
+  }
+  .wlf > div{
+    padding-top: 10px;
+  }
+  .orderNo .ivu-input{
+    font-size: 12px;
+  }
+  a.blue{
+    color:#1890ff;
+  }
 </style>
 

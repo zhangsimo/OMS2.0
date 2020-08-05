@@ -512,6 +512,7 @@
           }
           this.$refs.formPlan.resetFields();
           this.Left.tbdata.unshift(this.PTrow)
+          this.currentRow = this.PTrow;
           this.isAdd = false;
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
@@ -852,13 +853,19 @@
             if(res.code === 0){
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
-              this.Left.tbdata.forEach(el => {
-                if (el.id == this.currentRow.id) {
-                  el._highlight = true;
-                  this.isAdd = true;
-                  this.setRow(el)
-                }
-              })
+              if(this.currentRow.id) {
+                this.Left.tbdata.forEach(el => {
+                  if (el.id == this.currentRow.id) {
+                    el._highlight = true;
+                    this.isAdd = true;
+                    this.setRow(el)
+                  }
+                })
+              } else if(Object.keys(this.currentRow).length > 0) {
+                this.Left.tbdata[0]._highlight = true;
+                this.isAdd = true;
+                this.setRow(this.Left.tbdata[0]);
+              }
             }else {
               this.Left.page.total = 0
             }
@@ -1063,7 +1070,6 @@
         },
         // 导入
         handleBeforeUpload() {
-          console.log(this.upurl)
           if (this.datadata.new) {
             return this.$Message.error("请先保存数据!");
           }
@@ -1075,6 +1081,7 @@
           if (res.code == 0) {
             if(res.data.length<=0){
               self.$Message.success("导入成功");
+              this.leftgetList()
             }else{
               this.Left.tbdata.forEach(el => {
                 if (el.id == this.selectRowId) {
