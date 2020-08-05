@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+import * as api from "_api/reportForm/index.js";
 import panne from "./components/panne";
 import tabOne from "./components/tabOne";
 import tabTwo from "./components/tabTwo";
@@ -32,7 +33,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  async mounted() {},
   methods: {
     search1(data) {
       let data2 = {};
