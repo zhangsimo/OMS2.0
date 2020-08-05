@@ -149,7 +149,7 @@
             key: "createTime"
           }
         ],
-        stores:[{id:0,name:"全部"}],
+        stores:[{id:"",name:"全部"}],
         oneStaffChange:{},
         modalShow:false,
         title:"新增外部人员"
