@@ -114,10 +114,11 @@ export function setPhone (params) {
 
 
 //外部员工管理 查询
-export function getOutStaff (data){
+export function getOutStaff (params,data){
   return axios.request({
     url:`${api.authApi}/authorityOutsideStaff/queryAll`,
     method:"post",
+    params,
     data
   })
 }

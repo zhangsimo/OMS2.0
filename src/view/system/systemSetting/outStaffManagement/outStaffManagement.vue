@@ -88,7 +88,7 @@
         page:{
           size:10,
           num:1,
-          total:10
+          total:0
         },
         enAble:"启用",
         loading:false,
@@ -183,20 +183,18 @@
         }
       },
       async getAllStaffList(){
-        let data={
-          num:this.page.num,
+        let params={
+          page:this.page.num-1,
           size:this.page.size,
         }
+        let data={}
         data.orgid=this.orgid;
         data.name=this.staffName
         //参数
-        let res=await getOutStaff(data)
+        let res=await getOutStaff(params,data)
         if(res.code===0){
-          // console.log(res.data)
           this.staffList=res.data.content
           this.page.total=res.data.totalElements
-          this.page.size=res.data.size
-          this.page.num=res.data.totalPages
         }
       },
       //查询外部员工
