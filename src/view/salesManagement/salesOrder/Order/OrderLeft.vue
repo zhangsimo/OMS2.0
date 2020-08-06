@@ -15,7 +15,7 @@
         :height="leftTableHeight"
         :data="tableData"
       >
-        <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="billStatusId" title="状态" width="60">
           <template v-slot="{ row }">
             <span>{{row.billStatusId?row.billStatusId.name:""}}</span>
@@ -43,7 +43,8 @@
       @on-page-size-change="selectPage"
       :page-size-opts="[20, 50, 100, 200]"
       class="mr10"
-    ></Page>
+    >
+    </Page>
   </div>
 </template>
 
