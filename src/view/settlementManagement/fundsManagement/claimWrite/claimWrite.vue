@@ -559,11 +559,11 @@ export default {
     this.orgName = arr[3];
     this.$nextTick(() => {
       this.orgId = arr[1];
-    });
+    })
+    this.getAllAre();
     this.getShop();
     this.claimedList();
     this.distributionList();
-    this.getAllAre();
     if (Object.keys(this.$route.params).length !== 0) {
       this.$route.params.data.receivePaymentTypeName = this.$route.params.data.paymentTypeName;
       this.$route.params.data.actualCollectionOrPayment = this.$route.params.data.receiptPayment;
@@ -588,8 +588,18 @@ export default {
     async getShop() {
       let data = {};
       let res = await goshop(data);
-      if (res.code === 0)
-        return (this.orgList = [...this.orgList, ...res.data]);
+      if (res.code === 0){
+        this.orgList = [...this.orgList, ...res.data]
+        if(this.areaList.length>0){
+          this.areaList.map(item=>{
+            this.orgList.map(item2=>{
+              if(item.parentId==item2.supplierTypeFirst && item.value==item2.supplierTypeSecond){
+                this.areaId=item.value
+              }
+            })
+          })
+        }
+      }
     },
     // 往来单位选择
     async getOne(query) {
@@ -804,7 +814,6 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
-      console.log(this.currentDistribution)
     },
     //未核销对账单查询接口
     noWrite() {
@@ -862,7 +871,8 @@ export default {
         res.data.map(item => {
           this.areaList.push({
             value: item.id,
-            label: item.companyName
+            label: item.companyName,
+            parentId:item.parentId
           });
         });
       }
