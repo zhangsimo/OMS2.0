@@ -83,14 +83,12 @@
             </Col>
             <Col span="8">
               <FormItem label="开户行名称" prop="receiveBank" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px"
-                       :disabled="modelType"></Input>
+                <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
             <Col span="8">
               <FormItem label="银行账号" prop="receiveBankNo" style="margin-bottom: 0px;border-right: none">
-                <Input type="text" :value="formInline.receiveBankNo|filterApplyNo" style="width: 90%;padding-left: 5px"
-                       :disabled="modelType"></Input>
+                <Input type="text" :value="formInline.receiveBankNo|filterApplyNo" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
           </Row>

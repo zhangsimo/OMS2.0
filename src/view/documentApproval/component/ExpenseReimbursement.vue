@@ -283,7 +283,7 @@
                   type="text"
                   v-model="formInline.receiveBank"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 />
               </FormItem>
             </Col>
@@ -297,7 +297,7 @@
                   type="text"
                   :value="formInline.receiveBankNo|filterApplyNo"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 ></Input>
               </FormItem>
             </Col>

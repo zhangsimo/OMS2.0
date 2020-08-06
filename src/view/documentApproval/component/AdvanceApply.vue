@@ -172,7 +172,7 @@
                   type="text"
                   v-model="formInline.receiveBank"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 ></Input>
               </FormItem>
             </Col>
@@ -187,7 +187,7 @@
                   type="text"
                   v-model="formInline.receiveBankNo"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 ></Input>
               </FormItem>
             </Col>
