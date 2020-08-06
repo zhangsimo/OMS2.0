@@ -10,7 +10,9 @@ import {
 } from "_api/documentApproval/ExpenseReimbursement";
 import { getThisAllList ,getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
+import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
 import { getPost } from "../utils";
+import store from "@/store/index.js";
 
 export default {
   name: "ExpenseReimbursement",
@@ -173,7 +175,7 @@ export default {
       // if(this.$route.name === "documentApproval-myApplication") {
       //   this.options1 = this.list.allSalesList;
       // }
-      this.payUserList = this.list.payList;
+      this.payUserList = [];
       this.modelType = false;
       this.getRate();
       this.$refs["formInline"].resetFields();
@@ -217,7 +219,10 @@ export default {
       // this.options1 = [];
       this.getOptionsList(query)
     },
-
+    //付款人账号搜索出发
+    remoteMethod2(query){
+      this.getOptionsList2(query)
+    },
     //收款人账号搜索框
     async getOptionsList(query){
       if (query !== "") {
@@ -233,7 +238,26 @@ export default {
         this.options1 = [];
       }
     },
-
+    //付款人账号搜索框
+    async getOptionsList2(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        shopNumber: store.state.user.userData;
+        data.page = 0
+        data.size = 100
+        let res = await getPayAccount(data)
+        if(res.code == 0){
+          res.data.content.map(item => {
+            item.value = item.id;
+            item.label = item.accountName;
+          });
+          this.payUserList = res.data.content || []
+        }
+      } else {
+        this.payUserList = [];
+      }
+    },
     //获取当前信息
     async getList() {
       let data = {};

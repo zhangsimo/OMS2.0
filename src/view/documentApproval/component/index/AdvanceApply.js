@@ -7,7 +7,8 @@ import { getThisAllList } from "@/api/documentApproval/documentApproval/document
 import { getAccountName } from "../../../../api/bill/saleOrder";
 import { getPost } from "../utils";
 import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
-
+import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
+import store from "@/store/index.js";
 export default {
   name: "AdvanceApply",
   components: {
@@ -167,7 +168,10 @@ export default {
       // let arr = this.company.filter( item => item.value == row.value)
       this.getAccountNameList(row);
     },
-
+    //付款人账号搜索出发
+    remoteMethod2(query){
+      this.getOptionsList2(query)
+    },
     //获取收款户名
     async getAccountNameList(row) {
       let rep = await getAccountName({ guestId: row.value });
@@ -182,7 +186,26 @@ export default {
         }
       }
     },
-
+    //付款人账号搜索框
+    async getOptionsList2(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        shopNumber: store.state.user.userData;
+        data.page = 0
+        data.size = 100
+        let res = await getPayAccount(data)
+        if(res.code == 0){
+          res.data.content.map(item => {
+            item.value = item.id;
+            item.label = item.accountName;
+          });
+          this.payUserList = res.data.content || []
+        }
+      } else {
+        this.payUserList = [];
+      }
+    },
     setReceiverInfo(row) {
       this.formInline.receiver = row.id;
       this.formInline.receiveBank = row.accountBank;

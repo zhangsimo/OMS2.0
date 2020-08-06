@@ -5,6 +5,9 @@ import flowbox from '../Flow'
 import {getPublicSave} from '_api/documentApproval/PublicRequest'
 import { getThisAllList ,getBackList} from '@/api/documentApproval/documentApproval/documentApproval'
 import {getPost} from "../utils";
+// import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
+import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
+import store from "@/store/index.js";
 
 export default {
   name: "PublicRequest",
@@ -59,7 +62,7 @@ export default {
     //模态框打开111
     open(){
       this.payeeList = this.list.allSalesList
-      this.payUserList = this.list.payList
+      this.payUserList = []
       this.formInline = {}
       this.options1 = [];
       this.$refs.upImg.uploadListModal = []
@@ -111,7 +114,10 @@ export default {
       // this.options1 = [];
       this.getOptionsList(query)
     },
-
+    //付款人账号搜索出发
+    remoteMethod2(query){
+      this.getOptionsList2(query)
+    },
     //收款人账号搜索框
     async getOptionsList(query){
       if (query !== "") {
@@ -127,8 +133,26 @@ export default {
         this.options1 = [];
       }
     },
-
-
+    //付款人账号搜索框
+    async getOptionsList2(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        shopNumber: store.state.user.userData;
+        data.page = 0
+        data.size = 100
+        let res = await getPayAccount(data)
+        if(res.code == 0){
+          res.data.content.map(item => {
+            item.value = item.id;
+            item.label = item.accountName;
+          });
+          this.payUserList = res.data.content || []
+        }
+      } else {
+        this.payUserList = [];
+      }
+    },
     //获取往来单位
     getCompany(row) {
       let arr = this.payeeList.filter( item => item.value == row.value)
