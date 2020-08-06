@@ -205,11 +205,12 @@ export default class ProcurementModal extends Vue {
   private tableDataBm: Array<any> = new Array();
 
   private init() {
+    let tableRef:any = this.$refs.xTable1;
+    tableRef.refreshColumn();
+    console.log(tableRef)
     this.reset();
     this.getPchsPlanList();
     this.shows = true;
-    let tableRef:any = this.$refs.xTable1;
-    tableRef.refreshColumn();
   }
   // computed
   get changeShowFirst(){

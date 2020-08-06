@@ -1218,7 +1218,7 @@ export default {
       data.page = 0;
       data.size = this.contentTwo.page.total;
       data.noStock = data.noStock ? 1 : 0;
-
+      data.isImport = 1;
       if(this.contentTwo.dataTwo.length<=0){
         this.$Message.error("这个公司暂时没有库存")
         return

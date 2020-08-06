@@ -67,6 +67,7 @@
           highlight-current-row
           @radio-change="selectOne"
           @current-change="selectOne"
+          :radio-config="{trigger: 'row'}"
           size="mini"
           :data="tableDataTop"
         >
