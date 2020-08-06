@@ -174,11 +174,11 @@ export default {
     },
     //获取收款户名
     async getAccountNameList(row) {
-      let rep = await getAccountName({ guestId: row.value });
+      let rep = await getAccountName({ "guestId": row.value });
       if (rep.code == 0) {
         this.receiverArr = rep.data;
-        if (rep.data.length == 1) {
-          this.setReceiverInfo(this.receiverArr[0]);
+        if (rep.data.length >= 1) {
+          this.setReceiverInfo(rep.data[0]);
         } else {
           this.formInline.receiver = "";
           this.formInline.receiveBank = "";

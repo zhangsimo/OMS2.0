@@ -148,16 +148,16 @@
               >
                 <Select
                   @on-change="changeCollectionUname"
-                  v-model="formInline.receiver"
+                  v-model="formInline.receiveGuestId"
                   filterable
                   style="width: 90%;padding-left: 5px"
                   :disabled="modelType"
                 >
                   <Option
-                    v-for="item in receiverArr"
-                    :value="item.id"
-                    :key="item.id"
-                    >{{ item.accountName }}</Option
+                    v-for="item in company"
+                    :value="item.value"
+                    :key="item.value"
+                    >{{ item.label }}</Option
                   >
                 </Select>
               </FormItem>
