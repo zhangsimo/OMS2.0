@@ -1,4 +1,4 @@
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
@@ -377,7 +377,6 @@ export default class TemporaryPurchase extends Vue {
     if (!data) {
       return null;
     }
-    // obj.details = [];
     if(!obj.directCompanyId) {
       obj.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : "0";
     }
@@ -388,7 +387,6 @@ export default class TemporaryPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
-
     let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
     if(zero) return;
 
@@ -591,6 +589,7 @@ export default class TemporaryPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
+    v = JSON.parse(JSON.stringify(v));
     //记录当前点击的id
     this.selectLeftItemId = v.id
 
@@ -647,6 +646,7 @@ export default class TemporaryPurchase extends Vue {
 
   private setFormPlanmain(v:any){
     if (v) {
+      v = JSON.parse(JSON.stringify(v));
       this.selectTableRow = v;
       this.mainId = v.id;
       this.tableData = (v.details || []).map( el => {
@@ -977,5 +977,12 @@ export default class TemporaryPurchase extends Vue {
     this.init();
     this.getListData();
     this.getAllSales();
+  }
+
+  @Watch("formPlanmain.orderDate")
+  private changeDate(newval: any, oldval: any) {
+    if(typeof newval === "string") {
+      this.formPlanmain.orderDate = new Date(newval);
+    }
   }
 }

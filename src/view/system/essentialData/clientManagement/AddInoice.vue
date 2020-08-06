@@ -59,7 +59,7 @@ export default {
       rules: {
         taxpayerName: [{ required: true, message: "开票名称不能为空", trigger: "blur" }],
         taxpayerCode: [{ required: true, validator: paragraph, trigger: "blur" }],
-        taxpayerTel: [{ required: true, validator: taxpayerTel,trigger: "blur" }],
+        taxpayerTel: [{ required: true, message:"地址电话不能为空",trigger: "blur" }],
         accountBankNo: [{ required: true, message: "开户行不能为空", trigger: "blur" }]
       }
     };

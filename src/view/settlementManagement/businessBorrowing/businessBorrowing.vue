@@ -385,6 +385,7 @@ import claim from "./components/claimed";
 import { creat } from "./../components";
 import Record from "./components/Record";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
+import * as api from "_api/settlementManagement/businessBorrowing";
 import {
   findAdvance,
   revoke,
@@ -395,7 +396,6 @@ import {
   withdraw
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
 import { goshop } from "@/api/settlementManagement/shopList";
-import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
 import writeOff from "./components/writeOff";
@@ -628,7 +628,19 @@ export default {
             return this.$message.error("金额大于因公借支金额金额，无法认领");
           }
         }
-        this.$refs.claimGuest.modal = true;
+        let obj = {
+          financeAccountCashList: this.$store.state.businessBorrowing.financeAccountCashList,
+          loanId: this.$store.state.businessBorrowing.loanId,
+          claimType: this.$store.state.businessBorrowing.claimType,
+        }
+        api.addClaim(obj).then(res => {
+          if (res.code === 0) {
+            this.$message.success('认领成功')
+            this.modal = false
+            this.getQuery()
+            // this.$parent.reload();
+          }
+        })
         this.claimModal = false;
       } else {
         this.$message.error("请选择因公借支数据");

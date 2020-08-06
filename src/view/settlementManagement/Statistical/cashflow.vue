@@ -202,9 +202,8 @@ export default {
       data.shopNumber = this.$store.state.user.userData.shopId;
       data.tenantId = this.$store.state.user.userData.tenantId;
       let res = await are(data);
-
       if (res.code === 0) {
-        this.areaId = res.data[0].id;
+        this.areas=res.data
       }
     },
 
@@ -227,6 +226,15 @@ export default {
         this.$nextTick(() => {
           this.BranchstoreId = this.$store.state.user.userData.shopId;
         });
+        if(this.areas.length>0){
+          this.areas.map(item=>{
+            this.Branchstore.map(item2=>{
+              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                this.areaId=item.id
+              }
+            })
+          })
+        }
         if (this.$store.state.user.userData.shopkeeper != 0) {
           this.getThisArea(); //获取当前门店地址
         }
@@ -239,24 +247,19 @@ export default {
         shopNumber: this.BranchstoreId,
         size: 10000
       };
-
       if (this.dates.length === 2 && this.dates[0]) {
         params.startTime =
           moment(this.dates[0]).format("YYYY-MM-DD");
         params.endTime =
           moment(this.dates[1]).format("YYYY-MM-DD");
       }
-
       params.page = 0;
-
       for (let key in params) {
         if (!params[key]) {
           Reflect.deleteProperty(params, key);
         }
       }
-
       let res = await api.findListPageAllCashFlow(params);
-
       if (res.code == 0) {
         this.tableData = res.data.content;
         this.headData = res.data.content[0]["heandMoney"];
