@@ -8,10 +8,10 @@ import {
   getDictionary,
   getExpSve
 } from "_api/documentApproval/ExpenseReimbursement";
-import { getThisAllList ,getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
-import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
-import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
-import { getPost } from "../utils";
+import {getThisAllList, getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
+import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
+import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js";
+import {getPost} from "../utils";
 import store from "@/store/index.js";
 
 export default {
@@ -28,7 +28,7 @@ export default {
     list: ""
   },
   data() {
-    const roleValid = ({ cellValue, row }) => {
+    const roleValid = ({cellValue, row}) => {
       if (cellValue && +row.applyAmt < +cellValue) {
         return Promise.reject(new Error("核销金额不能大于借支金额"));
       }
@@ -39,12 +39,12 @@ export default {
         rows.row.totalAmt &&
         rows.row.taxAmt &&
         rows.cellValue !=
-          this.$utils.subtract(rows.row.totalAmt, rows.row.taxAmt)
+        this.$utils.subtract(rows.row.totalAmt, rows.row.taxAmt)
       ) {
         return Promise.reject(new Error("不含税金额计算错误"));
       }
     };
-    const taxRateCodeValid = ({ cellValue, row }) => {
+    const taxRateCodeValid = ({cellValue, row}) => {
       if (row.billTypeId && row.billTypeId != "010102") {
         if (cellValue == "TR001") {
           return Promise.reject(new Error("费率必填"));
@@ -58,12 +58,12 @@ export default {
       formInline: {}, //所有数据对象
       //表单校验
       ruleValidate: {
-        topic: [{ required: true, message: "主题为必填", trigger: "blur" }],
+        topic: [{required: true, message: "主题为必填", trigger: "blur"}],
         receiverId: [
-          { required: true, message: "收款人账户为必填", trigger: "change" }
+          {required: true, message: "收款人账户为必填", trigger: "change"}
         ],//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
         receiveBank: [
-          { required: true, message: "开户行名称必填", trigger: "blur" }
+          {required: true, message: "开户行名称必填", trigger: "blur"}
         ],//开户行只显示 /^(\d{6})\d+(\d{4})$/
         paymentAccount: [
           {
@@ -74,7 +74,7 @@ export default {
           }
         ],//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
         receiveBankNo: [
-          { required: true, message: "银行账号必填", trigger: "blur" }
+          {required: true, message: "银行账号必填", trigger: "blur"}
         ]//只显示前六位和后四位中间部分全部掩码正则  /^(\d{6})\d+(\d{4})$/
       },
 
@@ -85,38 +85,38 @@ export default {
       taxRate: [], //税率
       //费用支出表格的数据校验
       validRules: {
-        summary: [{ required: true, message: "摘要必填" }],
-        taxRateCode: [{ validator: taxRateCodeValid }],
-        accountEntry: [{ required: true, message: "入账科目必填" }],
+        summary: [{required: true, message: "摘要必填"}],
+        taxRateCode: [{validator: taxRateCodeValid}],
+        accountEntry: [{required: true, message: "入账科目必填"}],
         totalAmt: [
-          { required: true, message: "价税合计必填" },
+          {required: true, message: "价税合计必填"},
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
           }
         ],
         taxAmt: [
-          { required: true, message: "税额必填" },
+          {required: true, message: "税额必填"},
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
           }
         ],
         noTaxAmt: [
-          { required: true, message: "不含税金额必填" },
+          {required: true, message: "不含税金额必填"},
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
           },
-          { validator: notaxValid }
+          {validator: notaxValid}
         ],
         writeOffAmt: [
-          { required: true, message: "因公借支核销金额必填" },
+          {required: true, message: "因公借支核销金额必填"},
           {
             pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
             message: "最多保留2为小数"
           },
-          { validator: roleValid }
+          {validator: roleValid}
         ]
       },
       documentTableData: [], //借支核销表格数据
@@ -129,9 +129,10 @@ export default {
       invoiceMap: []
     };
   },
-  mounted() {},
+  mounted() {
+  },
   computed: {
-    aggregateCosts: function() {
+    aggregateCosts: function () {
       if (
         this.formInline.expenseDetails &&
         this.formInline.expenseDetails.length > 0
@@ -140,13 +141,13 @@ export default {
       }
       return 0;
     },
-    businessMoney: function() {
+    businessMoney: function () {
       if (this.details && this.details.length > 0) {
         return this.$utils.sum(this.details, "applyAmt");
       }
       return 0;
     },
-    company: function() {
+    company: function () {
       let agg = this.aggregateCosts,
         bus = this.businessMoney,
         sum = this.$utils.subtract(agg, bus);
@@ -156,7 +157,7 @@ export default {
         return sum;
       }
     },
-    personage: function() {
+    personage: function () {
       let agg = this.aggregateCosts,
         bus = this.businessMoney,
         sum = this.$utils.subtract(agg, bus);
@@ -187,7 +188,7 @@ export default {
       if (this.list.type == 1) {
         this.details = [];
         let arr = [
-          { expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0 ,billTypeId :"010102"}
+          {expenseType: "FY001", totalAmt: 0, taxRateCode: "TR001", taxAmt: 0, billTypeId: "010102"}
         ];
         this.$set(this.formInline, "expenseDetails", arr);
         //判断模态框状态
@@ -220,18 +221,18 @@ export default {
       this.getOptionsList(query)
     },
     //付款人账号搜索出发
-    remoteMethod2(query){
+    remoteMethod2(query) {
       this.getOptionsList2(query)
     },
     //收款人账号搜索框
-    async getOptionsList(query){
+    async getOptionsList(query) {
       if (query !== "") {
         let data = {}
         data.accountName = query
         data.page = 0
         data.size = 100
         let res = await getBackList(data)
-        if(res.code == 0){
+        if (res.code == 0) {
           this.options1 = res.data.content || []
         }
       } else {
@@ -239,7 +240,7 @@ export default {
       }
     },
     //付款人账号搜索框
-    async getOptionsList2(query){
+    async getOptionsList2(query) {
       if (query !== "") {
         let data = {}
         data.accountName = query
@@ -247,7 +248,7 @@ export default {
         data.page = 0
         data.size = 100
         let res = await getPayAccount(data)
-        if(res.code == 0){
+        if (res.code == 0) {
           res.data.content.map(item => {
             item.value = item.id;
             item.label = item.accountName;
@@ -301,7 +302,7 @@ export default {
     },
 
     //判断表格是否可以编辑
-    editActivedEvent({ row }) {
+    editActivedEvent({row}) {
       let xTable = this.$refs.xTable;
       let isDisable = this.modelType;
       let summary = xTable.getColumnByField("summary");
@@ -323,7 +324,7 @@ export default {
     },
 
     //信息不可编辑
-    editisDisabled({ row }) {
+    editisDisabled({row}) {
       let xTable = this.$refs.documentTable;
       let isDisable = this.modelType;
       let writeOffAmt = xTable.getColumnByField("writeOffAmt");
@@ -341,7 +342,7 @@ export default {
     },
 
     //科目获取焦点
-    getSubject({ row }) {
+    getSubject({row}) {
       this.subjectType = row;
       this.$refs.subjectModel.open();
     },
@@ -354,11 +355,11 @@ export default {
     },
 
     //修改费用类型改变科目
-    changeExpenseType({ row }) {
+    changeExpenseType({row}) {
       row.accountEntry = "";
       // console.log(this.formInline)
     },
-    changeExpenseType2({row}){
+    changeExpenseType2({row}) {
       // console.log(row)
     },
     //价税合计变更计算
@@ -384,15 +385,15 @@ export default {
         item => item.itemCode == column.model.value
       );
       let str = 0;
-      let str1=0;
-      let str2=0
+      let str1 = 0;
+      let str2 = 0
       if (tax[0].itemName != "0%") {
         str = tax[0].itemName.replace("%", "");
-        str1 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))*parseFloat(tax[0].itemValueOne);
-        str2 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))
+        str1 = row.totalAmt / (1 + parseFloat(tax[0].itemValueOne)) * parseFloat(tax[0].itemValueOne);
+        str2 = row.totalAmt / (1 + parseFloat(tax[0].itemValueOne))
       }
-      row.taxAmt=str1.toFixed(2)
-      row.noTaxAmt=str2.toFixed(2)
+      row.taxAmt = str1.toFixed(2)
+      row.noTaxAmt = str2.toFixed(2)
     },
 
     //判断手动输入税额
@@ -401,24 +402,25 @@ export default {
         column = v.column,
         tax = this.taxRate.filter(item => item.itemCode == row.taxRateCode);
       let str = 0;
-      let str1=0;
-      let str2=0
+      let str1 = 0;
+      let str2 = 0
       if (tax[0].itemName != "0%") {
         str = tax[0].itemName.replace("%", "");
-        str1 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))*parseFloat(tax[0].itemValueOne);
-        str2 = row.totalAmt / (1+parseFloat(tax[0].itemValueOne))
+        str1 = row.totalAmt / (1 + parseFloat(tax[0].itemValueOne)) * parseFloat(tax[0].itemValueOne);
+        str2 = row.totalAmt / (1 + parseFloat(tax[0].itemValueOne))
       }
-      row.taxAmt=str1.toFixed(2)
-      row.noTaxAmt=str2.toFixed(2)
+      row.taxAmt = str1.toFixed(2)
+      row.noTaxAmt = str2.toFixed(2)
       let diff = this.$utils.subtract(column.model.value, taxMoney);
       if (diff > 0.01) {
         this.$Modal.confirm({
           title: "警告",
           content: "<p>税额有误差，是否确认提交</p>",
-          onOk: () => {},
+          onOk: () => {
+          },
           onCancel: () => {
-            row.taxAmt=str1.toFixed(2)
-            row.noTaxAmt=str2.toFixed(2)
+            row.taxAmt = str1.toFixed(2)
+            row.noTaxAmt = str2.toFixed(2)
           }
         });
       }
@@ -441,7 +443,7 @@ export default {
     },
 
     // 表格尾部合计
-    footerMethod({ columns, data }) {
+    footerMethod({columns, data}) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
@@ -461,7 +463,7 @@ export default {
     },
 
     //借支核销尾部合计
-    documentFooterMethod({ columns, data }) {
+    documentFooterMethod({columns, data}) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
@@ -506,6 +508,40 @@ export default {
 
     //保存审核
     async save(type) {
+      if (this.formInline.expenseDetails[0].billTypeId == "010101") {
+        const roleValid = ({cellValue, row}) => {
+          if (cellValue && +row.applyAmt < +cellValue) {
+            return Promise.reject(new Error("核销金额不能大于借支金额"));
+          }
+        };
+        const taxRateCodeValid = ({cellValue, row}) => {
+          if (row.billTypeId && row.billTypeId != "010102") {
+            if (cellValue == "TR001") {
+              return Promise.reject(new Error("费率必填"));
+            }
+          }
+        };
+        this.validRules = {
+          summary: [{required: true, message: "摘要必填"}],
+          taxRateCode: [{validator: taxRateCodeValid}],
+          accountEntry: [{required: true, message: "入账科目必填"}],
+          totalAmt: [
+            {required: true, message: "价税合计必填"},
+            {
+              pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
+              message: "最多保留2为小数"
+            }
+          ],
+          writeOffAmt: [
+            {required: true, message: "因公借支核销金额必填"},
+            {
+              pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
+              message: "最多保留2为小数"
+            },
+            {validator: roleValid}
+          ]
+        }
+      }
       const errMap = await this.$refs.xTable
         .fullValidate()
         .catch(errMap => errMap);
@@ -538,23 +574,23 @@ export default {
       });
     }
   },
-  filters:{
-    filterApplyNo(v){
-      if(v){
+  filters: {
+    filterApplyNo(v) {
+      if (v) {
         let value = [...v];
-        if(value<=4){
+        if (value <= 4) {
           return value.join('')
-        }else{
-          let arr = value.map((item,index) => {
-            if(index<value.length-4){
+        } else {
+          let arr = value.map((item, index) => {
+            if (index < value.length - 4) {
               return "*"
-            }else{
+            } else {
               return item
             }
           })
           return arr.join('')
         }
-      }else{
+      } else {
         return ""
       }
     }
