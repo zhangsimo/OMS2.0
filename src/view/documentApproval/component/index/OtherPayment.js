@@ -23,8 +23,7 @@ export default {
     return {
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
-      formInline:{
-      },//所有数据对象
+      formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
         topic: [
@@ -66,7 +65,6 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       //收款账号
       receiverArr:[]
-
     }
   },
   mounted(){
@@ -118,8 +116,6 @@ export default {
        this.modelType = true
      }
     },
-
-
     //获取当前信息
     async getList(){
       let data ={}

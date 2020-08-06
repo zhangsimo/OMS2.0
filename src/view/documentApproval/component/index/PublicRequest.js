@@ -49,6 +49,7 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       options1: [],
       canSave:false,//节流阀
+      QSMoney:0,
     }
   },
   mounted(){
@@ -144,6 +145,7 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
+      this.QSMoney=parseFloat(row.amtTotal)
     },
 
     //获取付款信息
@@ -163,13 +165,18 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
+          if(type==1){
+            if(parseFloat(this.formInline.applyAmt)>=this.QSMoney){
+              this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
+              return
+            }
+          }
           if (this.canSave)return this.$Message.warning('处理中...')
           this.canSave = true
           this.formInline.step = type
           let res = await getPublicSave(this.formInline)
           setTimeout(()=>{
             this.canSave = false
-
           },1000)
           if (res.code == 0) {
             this.$Message.success('操作成功')
