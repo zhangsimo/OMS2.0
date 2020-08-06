@@ -494,7 +494,7 @@ export default {
     //获取付款信息
     getPayList(value) {
       if (!value) return;
-      let list = this.payUserList.filter(item => item.id == value)[0];
+      let list = this.payUserList.filter(item => item.id == value.value)[0];
       this.formInline.paymentBank = list.bankName || "";
       this.formInline.paymentBankNo = list.accountCode;
     },

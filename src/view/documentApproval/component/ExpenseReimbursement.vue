@@ -329,7 +329,8 @@
                   @on-change="getPayList"
                   :disabled="modelType"
                   filterable remote
-                  :remote-method="remoteMethod2" label-in-value
+                  :remote-method="remoteMethod2"
+                  label-in-value
                 >
                   <Option
                     v-for="item in payUserList"
