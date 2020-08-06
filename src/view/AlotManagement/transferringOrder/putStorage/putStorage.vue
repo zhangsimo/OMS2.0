@@ -692,9 +692,9 @@ export default {
             this.$Message.success("保存成功");
           }
         })
-        .catch(e => {
-          this.$Message.info("保存配件组装信息失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("保存配件组装信息失败");
+        // });
     },
     xinzeng() {
       this.$refs.tableref.clearCurrentRow();
@@ -762,9 +762,9 @@ export default {
             this.propPageObj = res.data||{};
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取成品失败");
+        // });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -812,9 +812,9 @@ export default {
             this.propPageObj = res.data||{};
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取成品失败");
+        // });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -881,9 +881,9 @@ export default {
             this.dcData = res.data;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取仓库列表失败");
+        // });
     },
     //获取仓库
     getWareHouse() {
@@ -898,9 +898,9 @@ export default {
             this.dcData = res.data;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取仓库列表失败");
+        // });
     },
 
     //分页
@@ -951,9 +951,9 @@ export default {
             this.$Message.success("删除成功");
           }
         })
-        .catch(e => {
-          this.$Message.info("删除成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("删除成品失败");
+        // });
     },
     //展示方
     showModel() {
@@ -1083,9 +1083,6 @@ export default {
             }
           }
         })
-        .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
-        });
     },
     getListPro() {
       let showSelf = this.$refs.addInCom.showSelf
@@ -1104,9 +1101,6 @@ export default {
             this.page.total = res.totalElements;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品列表失败");
-        });
     },
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {
