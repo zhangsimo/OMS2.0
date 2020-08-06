@@ -1446,8 +1446,8 @@ export default {
 }
 </style>
 <style scoped>
-  .table-highlight-row >>> .ivu-table-column-center {
-    height: 40px;
+  .table-highlight-row >>> td {
+    height: 40px !important;
   }
 
 </style>
