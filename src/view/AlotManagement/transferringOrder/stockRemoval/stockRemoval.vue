@@ -902,9 +902,9 @@ export default {
               this.$Message.success("保存成功");
             }
           })
-          .catch(e => {
-            this.$Message.info("保存配件组装信息失败");
-          });
+          // .catch(e => {
+          //   this.$Message.info("保存配件组装信息失败");
+          // });
       } catch (errMap) {
         this.$XModal.message({
           status: "error",
@@ -1006,9 +1006,9 @@ export default {
                 this.$Message.success("提交成功");
               }
             })
-            .catch(e => {
-              this.$Message.info("提交失败");
-            });
+            // .catch(e => {
+            //   this.$Message.info("提交失败");
+            // });
         },
         onCancel: () => {
           return;
@@ -1043,10 +1043,10 @@ export default {
                 this.getList();
               }
             })
-            .catch(e => {
-              this.$Message.info("作废失败");
-              this.getList();
-            });
+            // .catch(e => {
+            //   this.$Message.info("作废失败");
+            //   this.getList();
+            // });
         },
         onCancel: () => {
           this.Leftcurrentrow.serviceId = "";
@@ -1070,9 +1070,9 @@ export default {
             this.$Message.success("获取成品列表成功");
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取成品失败");
+        // });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -1122,9 +1122,9 @@ export default {
                 this.$Message.success("出库成功");
               }
             })
-            .catch(e => {
-              this.$Message.info("出库失败");
-            });
+            // .catch(e => {
+            //   this.$Message.info("出库失败");
+            // });
         },
         onCancel: () => {}
       });
@@ -1137,9 +1137,9 @@ export default {
             this.tableData1 = res.data;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取成品失败");
+        // });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -1313,9 +1313,9 @@ export default {
               this.$Message.success("删除成功");
             }
           })
-          .catch(e => {
-            this.$Message.info("删除成品失败");
-          });
+          // .catch(e => {
+          //   this.$Message.info("删除成品失败");
+          // });
       } else {
         this.$Message.error("请选择要删除的配件!");
         return;
@@ -1458,9 +1458,6 @@ export default {
             this.page.total = res.totalElements;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品列表失败");
-        });
     },
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {
