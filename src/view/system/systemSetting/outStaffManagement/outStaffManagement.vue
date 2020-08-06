@@ -207,7 +207,7 @@
       async addOutStaffTrue(data){
         let res=await addOutStaffe(data)
         if(res.code===0){
-          this.$Message.success("新增外部人员成功")
+          this.title="修改外部人员"?this.$Message.success("新增外部人员成功"):this.$Message.success("修改外部人员信息成功")
           this.getAllStaffList()
         }
       },
