@@ -234,6 +234,7 @@ export default {
     },
     //  调用left方法
     parentGetleft() {
+      this.$refs.OrderLeft.selectItemId = ''
       this.$refs.OrderLeft.gitlistValue();
     },
     //获取时间
