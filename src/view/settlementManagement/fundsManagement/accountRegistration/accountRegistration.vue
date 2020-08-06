@@ -162,6 +162,15 @@ export default {
         this.shopCode = this.shopListArr[0].id
         this.getList(); //查询
       }
+      if(this.Branchstore.length>0){
+        this.Branchstore.map(item=>{
+          this.shopListArr.map(item2=>{
+            if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+              this.model1=item.id
+            }
+          })
+        })
+      }
     },
 
     //获取科目

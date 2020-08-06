@@ -7,7 +7,8 @@ import { getThisAllList } from '@/api/documentApproval/documentApproval/document
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
 import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
-
+import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
+import store from "@/store/index.js";
 
 export default {
   name: "OtherPayment",
@@ -24,8 +25,7 @@ export default {
       remoteloading: false,
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
-      formInline:{
-      },//所有数据对象
+      formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
         topic: [
@@ -166,14 +166,15 @@ export default {
         this.company = [];
       }
     },
-
     //获取往来单位
     getCompany(row) {
       // let arr = this.company.filter( item => item.value == row.value)
       this.getAccountNameList(row)
     },
-
-
+    //付款人账号搜索出发
+    remoteMethod2(query){
+      this.getOptionsList2(query)
+    },
     //获取收款户名
     async getAccountNameList(row){
       let rep = await getAccountName({"guestId":row.value});
@@ -188,7 +189,26 @@ export default {
         }
       }
     },
-
+    //付款人账号搜索框
+    async getOptionsList2(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        shopNumber: store.state.user.userData;
+        data.page = 0
+        data.size = 100
+        let res = await getPayAccount(data)
+        if(res.code == 0){
+          res.data.content.map(item => {
+            item.value = item.id;
+            item.label = item.accountName;
+          });
+          this.payUserList = res.data.content || []
+        }
+      } else {
+        this.payUserList = [];
+      }
+    },
     setReceiverInfo(row){
       this.formInline.receiver = row.id;
       this.formInline.receiveBank = row.accountBank;
@@ -228,7 +248,7 @@ export default {
     //获取付款信息
     getPayList(value){
       if (!value) return
-      let list = this.payUserList.filter(item => item.id == value)[0]
+      let list = this.payUserList.filter(item => item.id == value.value)[0]
       this.formInline.paymentBank  = list.bankName
       this.formInline.paymentBankNo = list.accountCode
     },
@@ -242,6 +262,11 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
+          let valg = false
+          if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
+            valg = this.formInline.details[0].claimAmt < this.formInline.applyAmt ? true : false
+          }
+          if (valg) return  this.$Message.error('申请金额不能大于其他收款金额')
           this.formInline.step = type
           let res = await getCreditSave(this.formInline)
           if (res.code == 0) {

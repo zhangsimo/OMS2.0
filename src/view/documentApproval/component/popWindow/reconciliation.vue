@@ -244,7 +244,7 @@ export default {
         dealingRebates: 0, //应付返利
         payingBadDebts: 0, //应付坏账
         actualPayment: this.Actualtotalpayment, //实际付款
-        settlementTotal: 0, //结算对账合计
+        settlementTotal: this.Actualtotalcollect-this.Actualtotalpayment, //结算对账合计
         transportExpenses: 0, //运费
         insuranceExpenses: 0, //保险费
         serviceCharge: 0, //手续费
@@ -449,9 +449,8 @@ export default {
       //对账应付-应付坏账-应付返利
       this.infoBase.payingBadDebts = this.infoBase.payingBadDebts ? this.infoBase.payingBadDebts : 0;
       this.infoBase.dealingRebates = this.infoBase.dealingRebates ? this.infoBase.dealingRebates : 0;
-      console.log(this.infoBase.dealingRebates * 1 - this.infoBase.payingBadDebts * 1 - this.infoBase.dealingRebates * 1)
       return (
-        this.infoBase.dealingRebates * 1 - this.infoBase.payingBadDebts * 1 - this.infoBase.dealingRebates * 1
+        this.infoBase.reconciliation * 1 - this.infoBase.payingBadDebts * 1 - this.infoBase.dealingRebates * 1
       );
     },
     //实际应收合计
@@ -459,7 +458,6 @@ export default {
       //对账应收-应收坏账-应收返利  +运费(infoBase.transportExpenses)+保险费(infoBase.insuranceExpenses)+手续费(infoBase.serviceCharge)+配件管理费(infoBase.partsManagementFee)+其他费用(infoBase.otherFees)
       this.infoBase.badDebtReceivable = this.infoBase.badDebtReceivable ? this.infoBase.badDebtReceivable : 0;
       this.infoBase.accountReceivable = this.infoBase.accountReceivable ? this.infoBase.accountReceivable : 0;
-      console.log(this.infoBase.accountReceivable * 1 - this.infoBase.badDebtReceivable * 1 - this.infoBase.receivableRebate * 1 + this.infoBase.transportExpenses * 1 + this.infoBase.insuranceExpenses * 1 + this.infoBase.serviceCharge * 1 + this.infoBase.partsManagementFee * 1 + this.infoBase.otherFees * 1)
       return (
         this.infoBase.accountReceivable * 1 - this.infoBase.badDebtReceivable * 1 - this.infoBase.receivableRebate * 1 + this.infoBase.transportExpenses * 1 + this.infoBase.insuranceExpenses * 1 + this.infoBase.serviceCharge * 1 + this.infoBase.partsManagementFee * 1 + this.infoBase.otherFees * 1
       );

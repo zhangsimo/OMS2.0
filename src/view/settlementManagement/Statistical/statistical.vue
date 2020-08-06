@@ -322,7 +322,7 @@ export default {
       let res = await are(data);
 
       if (res.code === 0) {
-        this.areaId = res.data[0].id;
+        this.areas=res.data
       }
     },
 
@@ -345,6 +345,15 @@ export default {
         this.$nextTick(() => {
           this.BranchstoreId = this.$store.state.user.userData.shopId;
         });
+        if(this.areas.length>0){
+          this.areas.map(item=>{
+            this.Branchstore.map(item2=>{
+              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                this.areaId=item.id
+              }
+            })
+          })
+        }
         if (this.$store.state.user.userData.shopkeeper != 0) {
           this.getThisArea(); //获取当前门店地址
         }
