@@ -3,7 +3,7 @@ import selectAdvanceApply from "../popWindow/SelectAdvanceApply";
 import upphoto from "../Upphoto";
 import flowbox from "../Flow";
 import { getAdvanceSave } from "_api/documentApproval/AdvanceApply.js";
-import { getThisAllList } from "@/api/documentApproval/documentApproval/documentApproval";
+import { getThisAllList,getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import { getAccountName } from "../../../../api/bill/saleOrder";
 import { getPost } from "../utils";
 import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
@@ -38,9 +38,9 @@ export default {
         receiveGuestId: [
           { required: true, message: "往来单位", trigger: "change" }
         ],
-        receiver: [
-          { required: true, message: "收款人账户必填", trigger: "change" }
-        ],
+        // receiver: [
+        //   { required: true, message: "收款人账户必填", trigger: "change" }
+        // ],
         receiveBank: [
           { required: true, message: "开户行名称必填", trigger: "blur" }
         ],
@@ -126,6 +126,9 @@ export default {
       if (res.code === 0) {
         this.$nextTick(() => {
           this.formInline = res.data;
+          this.formInline.receiver=res.data.receiverId
+          this.remoteMethod(res.data.receiveGuestName)
+          this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
             voucherPictures: res.data.voucherPictures,
             billStatus: res.data.billStatus
@@ -133,17 +136,52 @@ export default {
         });
       }
     },
+    async remoteMethodShort(query){
+      this.company = [];
+      if (query !== "") {
+        this.remoteloading = true;
+        let arr=[]
+        let req = {
+          shortName:query,
+          size:50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
+          console.log(res.data.content,111)
+          // res.data.content.map(item => {
+          //   arr.push({
+          //     value: item.id,
+          //     label: item.fullName,
+          //     receiver: item.accountReceiveName || "",
+          //     receiveBank: item.accountBank || "",
+          //     receiveBankNo: item.accountBankNo || ""
+          //   });
+          // });
+        }
+        let arrJson=new Set(arr)
+        this.company=Array.from(arrJson)
+        this.remoteloading = false;
+      } else {
+        this.company = [];
+      }
+    },
+
 
     async remoteMethod(query) {
       this.company = [];
       if (query !== "") {
         this.remoteloading = true;
         let arr=[]
+        // let req = {
+        //   fullName:query,
+        //   size:100,
+        // }
+        // let res = await findGuest(req);
         let req = {
-          fullName:query,
-          size:100,
+          shortName:query,
+          size:50,
         }
-        let res = await findGuest(req);
+        let res = await getGuestShortName(req);
         if (res.code == 0) {
           res.data.content.map(item => {
             arr.push({
@@ -177,7 +215,7 @@ export default {
       let rep = await getAccountName({ "guestId": row.value });
       if (rep.code == 0) {
         this.receiverArr = rep.data;
-        if (rep.data.length >= 1) {
+        if (rep.data.length >0) {
           this.setReceiverInfo(rep.data[0]);
         } else {
           this.formInline.receiver = "";
@@ -207,7 +245,7 @@ export default {
       }
     },
     setReceiverInfo(row) {
-      this.formInline.receiver = row.id;
+      this.formInline.receiverId = row.id;
       this.formInline.receiveBank = row.accountBank;
       this.formInline.receiveBankNo = row.accountBankNo;
     },
@@ -273,7 +311,7 @@ export default {
         if (valid) {
           let valg = false
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
-            valg = this.formInline.details[0].claimAmt < this.formInline.applyAmt ? true : false
+            valg = this.formInline.details[0].payAmt < this.formInline.applyAmt ? true : false
           }
           if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
           this.formInline.step = type;

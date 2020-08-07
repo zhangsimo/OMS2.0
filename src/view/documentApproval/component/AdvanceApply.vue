@@ -143,7 +143,6 @@
             <Col span="6">
               <FormItem
                 label="收款人账户"
-                prop="receiver"
                 style="margin-bottom: 0px"
               >
                 <Select
@@ -225,7 +224,7 @@
                 >
                   <Option
                     v-for="item in payUserList"
-                    :value="item.value"
+                    :value="item.label"
                     :key="item.value"
                     >{{ item.label }}</Option
                   >

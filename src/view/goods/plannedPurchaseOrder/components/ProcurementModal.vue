@@ -50,7 +50,8 @@
         :data="tableData"
         @cell-click="cellClickEvent"
         @radio-change="radioChangeEvent"
-        auto-resize
+        :auto-resize="true"
+        width="1000"
       >
         <vxe-table-column
           type="radio"

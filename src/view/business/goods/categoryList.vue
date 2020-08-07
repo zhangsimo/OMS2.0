@@ -263,10 +263,10 @@
           <Input type="text" placeholder="请选择供应商..." class="w300 ml5"></Input>
         </FormItem>
         <FormItem  label="订单单号: ">
-          <Input type="text" class="w300 ml5" size="large"></Input>
+          <Input type="text" class="w300 ml5 normal-size" size="large"></Input>
         </FormItem>
         <FormItem  label="配件编码: ">
-          <Input type="text" class="w300 ml5" size="large"></Input>
+          <Input type="text" class="w300 ml5 normal-size" size="large"></Input>
         </FormItem>
         <FormItem label="品牌: ">
           <Input type="password" class="w300 ml5"></Input>
@@ -673,7 +673,13 @@ export default {
   computed: {}
 };
 </script>
-
+<style lang="less">
+  .normal-size{
+    .ivu-input-large{
+      font-size:14px;
+    }
+  }
+</style>
 <style lang="less" scoped>
 .goods-list-form {
   * {

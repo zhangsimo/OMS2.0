@@ -759,6 +759,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            this.$refs.addInCom.tabList = res.data.content;
             this.propPageObj = res.data||{};
           }
         })
@@ -809,6 +810,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            this.$refs.addInCom.tabList = res.data.content;
             this.propPageObj = res.data||{};
           }
         })
@@ -989,6 +991,7 @@ export default {
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
+      this.$refs['naform'].form.guestName=row.shortName
     },
     getOkList(list) {
       this.$refs.tableref.clearCurrentRow();

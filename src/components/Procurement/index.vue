@@ -207,7 +207,7 @@ export default class ProcurementModal extends Vue {
   private init() {
     let tableRef:any = this.$refs.xTable1;
     tableRef.refreshColumn();
-    console.log(tableRef)
+    tableRef.recalculate(true)
     this.reset();
     this.getPchsPlanList();
     this.shows = true;

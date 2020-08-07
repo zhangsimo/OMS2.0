@@ -25,9 +25,10 @@
     <row class="mt15">
       <span>调 入 方 ：</span>
       <!-- <Input v-model="form.guestName" style="width: 398px" readonly /> -->
-      <Select style="width: 398px" v-model="form.guestName" label-in-value filterable>
+      <!-- <Select style="width: 398px" v-model="form.guestName" label-in-value filterable>
         <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
-      </Select>
+      </Select> -->
+      <Input class="w240" disabled v-model="form.guestName" />
       <Button @click="showModel" class="ml5" size="small" type="default">
         <i class="iconfont iconxuanzetichengchengyuanicon"></i>
       </Button>
