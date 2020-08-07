@@ -566,10 +566,10 @@
         data.accountName = this.accountName
         data.bankName = this.bankName
 
-        data.guestId = this.guestId;
-        data.claimShopName = this.claimShopName;
-        data.accountMoney = this.accountMoney;
-        data.accountCode = this.accountCode;
+        // data.guestId = this.guestId;
+        // data.claimShopName = this.claimShopName;
+        // data.accountMoney = this.accountMoney;
+        // data.accountCode = this.accountCode;
         this.allMoneyList = {}
         let res = await goList(data)
         if(res.code === 0){
