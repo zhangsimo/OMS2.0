@@ -3,7 +3,8 @@ import selectCredit from '../popWindow/SelectCredit'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getCreditSave} from '_api/documentApproval/CreditSpending.js'
-import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+// import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import { getThisAllList,getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
 import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
@@ -144,10 +145,10 @@ export default {
         this.remoteloading = true;
         let arr=[]
         let req = {
-          fullName:query,
-          size:100,
+          shortName:query,
+          size:50,
         }
-        let res = await findGuest(req);
+        let res = await getGuestShortName(req);
         if (res.code == 0) {
           res.data.content.map(item => {
             arr.push({
@@ -180,8 +181,8 @@ export default {
       let rep = await getAccountName({"guestId":row.value});
       if(rep.code==0){
         this.receiverArr = rep.data;
-        if(rep.data.length==1){
-          this.setReceiverInfo(this.receiverArr[0])
+        if(rep.data.length>0){
+          this.setReceiverInfo(rep.data[0])
         }else{
           this.formInline.receiver = ''
           this.formInline.receiveBank = ''

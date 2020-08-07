@@ -3,7 +3,7 @@ import selectAdvanceApply from "../popWindow/SelectAdvanceApply";
 import upphoto from "../Upphoto";
 import flowbox from "../Flow";
 import { getAdvanceSave } from "_api/documentApproval/AdvanceApply.js";
-import { getThisAllList } from "@/api/documentApproval/documentApproval/documentApproval";
+import { getThisAllList,getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import { getAccountName } from "../../../../api/bill/saleOrder";
 import { getPost } from "../utils";
 import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
@@ -133,17 +133,52 @@ export default {
         });
       }
     },
+    async remoteMethodShort(query){
+      this.company = [];
+      if (query !== "") {
+        this.remoteloading = true;
+        let arr=[]
+        let req = {
+          shortName:query,
+          size:50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
+          console.log(res.data.content,111)
+          // res.data.content.map(item => {
+          //   arr.push({
+          //     value: item.id,
+          //     label: item.fullName,
+          //     receiver: item.accountReceiveName || "",
+          //     receiveBank: item.accountBank || "",
+          //     receiveBankNo: item.accountBankNo || ""
+          //   });
+          // });
+        }
+        let arrJson=new Set(arr)
+        this.company=Array.from(arrJson)
+        this.remoteloading = false;
+      } else {
+        this.company = [];
+      }
+    },
+
 
     async remoteMethod(query) {
       this.company = [];
       if (query !== "") {
         this.remoteloading = true;
         let arr=[]
+        // let req = {
+        //   fullName:query,
+        //   size:100,
+        // }
+        // let res = await findGuest(req);
         let req = {
-          fullName:query,
-          size:100,
+          shortName:query,
+          size:50,
         }
-        let res = await findGuest(req);
+        let res = await getGuestShortName(req);
         if (res.code == 0) {
           res.data.content.map(item => {
             arr.push({
@@ -177,7 +212,7 @@ export default {
       let rep = await getAccountName({ "guestId": row.value });
       if (rep.code == 0) {
         this.receiverArr = rep.data;
-        if (rep.data.length >= 1) {
+        if (rep.data.length >0) {
           this.setReceiverInfo(rep.data[0]);
         } else {
           this.formInline.receiver = "";
