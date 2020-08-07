@@ -1393,7 +1393,7 @@
           }
         }
         if(this.remark==""){
-          this.$Message.error("备注必填")
+          this.$Message.error("请填入备注")
           return
         }
 
