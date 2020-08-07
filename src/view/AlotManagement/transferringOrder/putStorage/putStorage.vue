@@ -991,6 +991,7 @@ export default {
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
+      this.$refs['naform'].form.guestName=row.shortName
     },
     getOkList(list) {
       this.$refs.tableref.clearCurrentRow();

@@ -289,12 +289,6 @@ export default {
           }
         },
         {
-          title: "税点",
-          key: "additionalTaxPoint",
-          className: "tc",
-          minWidth: 180,
-        },
-        {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",

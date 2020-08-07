@@ -29,7 +29,8 @@
 export default {
   name: "AddInoice",
   props: {
-    data: ""
+    data: "",
+      meTit:''
   },
   data() {
     const paragraph = (rule, value, callback) => {
@@ -55,7 +56,6 @@ export default {
       }
     }
     return {
-      meTit:this.$parent.tit,
       rules: {
         taxpayerName: [{ required: true, message: "开票名称不能为空", trigger: "blur" }],
         taxpayerCode: [{ required: true, validator: paragraph, trigger: "blur" }],

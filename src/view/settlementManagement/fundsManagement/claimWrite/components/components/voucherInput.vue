@@ -364,7 +364,8 @@ export default {
         ]
       },
       fundList: [], //款项分类数组
-      voucherList:[]//选中内容
+      voucherList:[],//选中内容
+      voucherItem:{},
     }
   },
   mounted() {
@@ -502,6 +503,7 @@ export default {
       this.AssistAccounting = row.fullName;
       this.auxiliaryTypeCode = "1";
       this.auxiliaryCode = row.code;
+      this.voucherItem = row;
     },
     //客户分页切换页数
     selectNumClient(page) {
@@ -540,6 +542,7 @@ export default {
       this.AssistAccounting = row.fullName;
       this.auxiliaryTypeCode = "2";
       this.auxiliaryCode = row.code;
+      this.voucherItem = row;
       // console.log(row)
     },
     //供应商切换页数
@@ -564,6 +567,7 @@ export default {
         this.departmentVal = selectedData[selectedData.length - 1].groupCode;
         this.auxiliaryTypeCode = "3";
       }
+      this.voucherItem = {};
     },
     // 辅助弹框个人搜索
     SearchPersonal() {
@@ -595,6 +599,7 @@ export default {
       this.AssistAccounting = row.userName;
       this.auxiliaryTypeCode = "4";
       this.auxiliaryCode = row.id;
+      this.voucherItem = {};
     },
     //个人分页切换页数
     selectNumpersonage(page) {
@@ -665,7 +670,7 @@ export default {
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row.itemName;
       this.auxiliaryTypeCode = "CW0011X";
-      this.auxiliaryCode = row.itemCode;
+      this.voucherItem = {};
       // console.log(row)
     },
     //新增辅助核算名称保存
