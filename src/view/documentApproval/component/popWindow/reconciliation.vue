@@ -165,7 +165,7 @@
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
               <Input :value="Actualtotalpayment" class="w60 tc" :disabled="disabletype" />
               <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
-              <Input type="text" v-model="infoBase.settlementTotal" :disabled="disabletype" class="w60 tc" />
+              <Input type="text" v-model="Reconciliationtotal" :disabled="disabletype" class="w60 tc" />
             </div>
             <div class="db">
               <span class="mr5">计划结算类型</span>
@@ -244,7 +244,7 @@ export default {
         dealingRebates: 0, //应付返利
         payingBadDebts: 0, //应付坏账
         actualPayment: this.Actualtotalpayment, //实际付款
-        settlementTotal: this.Actualtotalcollect-this.Actualtotalpayment, //结算对账合计
+        settlementTotal: this.Reconciliationtotal, //结算对账合计
         transportExpenses: 0, //运费
         insuranceExpenses: 0, //保险费
         serviceCharge: 0, //手续费
@@ -461,6 +461,10 @@ export default {
       return (
         this.infoBase.accountReceivable * 1 - this.infoBase.badDebtReceivable * 1 - this.infoBase.receivableRebate * 1 + this.infoBase.transportExpenses * 1 + this.infoBase.insuranceExpenses * 1 + this.infoBase.serviceCharge * 1 + this.infoBase.partsManagementFee * 1 + this.infoBase.otherFees * 1
       );
+    },
+    //本次对账结算合计
+    Reconciliationtotal() {
+      return this.Actualtotalcollect - this.Actualtotalpayment;
     },
   },
   methods: {
