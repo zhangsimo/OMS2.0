@@ -4,13 +4,13 @@
       <Input v-model="data.taxpayerName" style="width: 300px"/>
     </FormItem>
     <FormItem label="开票名称:" prop="taxpayerName" v-else>
-      <Input v-model="data.taxpayerName" readonly style="width: 300px"/>
+      <Input v-model="data.taxpayerName" disabled style="width: 300px"/>
     </FormItem>
     <FormItem label="税号:" prop="taxpayerCode" v-if="meTit=='新增开票'">
       <Input v-model="data.taxpayerCode" style="width: 300px"/>
     </FormItem>
-    <FormItem label="税号:" prop="taxpayerCode" v-else>
-      <Input v-model="data.taxpayerCode" readonly style="width: 300px"/>
+    <FormItem label="税号:" prop="taxpayerCode"  v-else>
+      <Input v-model="data.taxpayerCode" disabled style="width: 300px"/>
     </FormItem>
     <FormItem label="地址电话:" prop="taxpayerTel">
       <Input v-model="data.taxpayerTel" style="width: 300px"/>
