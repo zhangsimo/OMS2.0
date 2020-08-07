@@ -1,12 +1,41 @@
 <template>
   <div class="content-oper content-oper-flex">
     <section class="oper-box paddinSize">
-      <Button class="mr10" v-has="'export'" @click="operation(1)">导入发票</Button>
-      <Button class="mr10" v-has="'change'" @click="operation(2)">修改</Button>
-      <Button class="mr10" v-has="'delete'" @click="operation(3)">删除导入</Button>
-      <Button class="mr10" v-has="'cancellation'" @click="operation(4)">发票作废</Button>
-      <Button class="mr10" v-has="'cancel'" @click="operation(5)">红字核销</Button>
-      <div class="mt20">
+      <div class="flex">
+        <div class="wlf">
+          <div>
+            <span>快速查询：</span>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+          </div>
+          <div class="mr10">
+            <span>申请时间：</span>
+            <Date-picker
+              format="yyyy-MM-dd"
+              :value="value"
+              @on-change="changedate"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+            ></Date-picker>
+          </div>
+          <div class="mr10 flexd" >
+             <span>分店名称：</span>
+              <Select v-model="form.orgName" style="width:180px">
+                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+              </Select>
+          </div>
+          <button class="ivu-btn ivu-btn-default" @click="query" type="button">
+            <i class="iconfont iconchaxunicon"></i>
+            <span>查询</span>
+          </button>
+        </div>
+      </div>
+      <div class="mt10">
+        <Button class="mr10" v-has="'export'" @click="operation(1)">导入发票</Button>
+        <Button class="mr10" v-has="'change'" @click="operation(2)">修改</Button>
+        <Button class="mr10" v-has="'delete'" @click="operation(3)">删除导入</Button>
+        <Button class="mr10" v-has="'cancellation'" @click="operation(4)">发票作废</Button>
+        <Button class="mr10" v-has="'cancel'" @click="operation(5)">红字核销</Button>
         <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
         <Button class="mr10" :type="isActive===1?'info':'default'" @click="chooseTable(1)">已核销</Button>
         <Button :type="isActive===0?'info':'default'" @click="chooseTable(0)">未核销</Button>
@@ -268,20 +297,30 @@ import {
   getInvoiceType,
   getTypeOfInvoice
 } from "_api/salesManagment/salesInvoice";
+import { goshop } from '@/api/settlementManagement/shopList';
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
+import quickDate from "@/components/getDate/dateget_bill.vue";
+import moment from "moment";
+
 export default {
   name: "invoiceAdministrationSalesInvoice",
+  components: {
+    quickDate,
+  },
   data() {
     return {
+      value: [],
+      proTypeList:[],//分店
       exportData: false,
       upurl: getup,
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
       form: {
+        orgName: "",
         page: 0,
         size: 10,
         writeOffStatus: 0
@@ -1114,6 +1153,38 @@ export default {
     };
   },
   methods: {
+    query() {
+      this.form.invoiceDate = this.value.length ? this.value[0] : "";
+      this.form.invoiceEndDate = this.value.length ? this.value[1] : "";
+      this.getTabList();
+    },
+    quickDate(data){
+      this.value = data;
+      this.form.invoiceDate = this.value[0]?moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"): ""
+      this.form.invoiceEndDate = this.value[1]? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"): "",
+      this.query();
+    },
+    changedate(daterange) {
+      this.value = daterange;
+      this.query();
+    },
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      let res = await goshop(data)
+      if (res.code === 0) {
+        this.proTypeList = [...this.proTypeList , ...res.data]
+        this.$nextTick( () => {
+          // if (localStorage.getItem('oms2-userList')){
+          //   this.form.orgName = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          // } else {
+          //   this.form.orgName = this.$store.state.user.userData.shopId
+          // }
+          this.form.orgName = this.$store.state.user.userData.shopId
+          this.getTabList();
+        })
+      }
+    },
     //模板下载
     exportDown() {
       down(1700000000)
@@ -1326,7 +1397,7 @@ export default {
     },
     //获取列表数据
     getTabList() {
-      this.form.page = this.form.page - 1
+      this.form.page = this.form.page;
       getSalesList(this.form).then(res => {
         if (res.code === 0) {
           this.data = res.data.content;
@@ -1404,7 +1475,7 @@ export default {
     }
   },
   mounted() {
-    this.getTabList();
+    this.getShop();
     this.getOption();
   }
 };
@@ -1414,5 +1485,8 @@ export default {
   display: flex;
   justify-content: space-around;
   margin: 20px;
+}
+.wlf > div {
+  padding-top: 0;
 }
 </style>
