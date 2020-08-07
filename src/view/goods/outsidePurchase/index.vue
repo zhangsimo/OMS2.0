@@ -336,6 +336,8 @@
                 @edit-closed="editClosedEvent"
                 @select-change="selectChange"
                 @select-all="selectAll"
+                :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                @keydown="keydown"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
