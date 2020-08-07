@@ -93,7 +93,6 @@
 </template>
 
 <script>
-  transferringFindForAllot
 import { findForAllot,transferringFindForAllot } from "_api/purchasing/purchasePlan";
   import SelectSupplier from "../compontents/supplier/selectSupplier";
 export default {
@@ -187,7 +186,7 @@ export default {
       transferringFindForAllot(req).then(res => {
         const { content } = res.data;
         content.forEach(item => {
-          this.ArrayValue.push({ value: item.guestId, label: item.shortName });
+          this.ArrayValue.push({ value: item.id, label: item.shortName });
         });
       });
     }
