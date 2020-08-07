@@ -174,12 +174,12 @@
           <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
             <Input v-model="invoice.applyTaxAmt" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
-          <FormItem label="不含税金额" prop="amountExcludingTax">
-            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
-          </FormItem>
-          <FormItem label="外加税点" prop="additionalTaxPoint">
-            <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />
-          </FormItem>
+<!--          <FormItem label="不含税金额" prop="amountExcludingTax">-->
+<!--            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />-->
+<!--          </FormItem>-->
+<!--          <FormItem label="外加税点" prop="additionalTaxPoint">-->
+<!--            <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />-->
+<!--          </FormItem>-->
           <FormItem label="申请开票金额" prop="applyMoney">
             <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
           </FormItem>
@@ -215,7 +215,7 @@
         <Table
           border
           :columns="accessoriesBilling1"
-          :data="accessoriesBillingData"
+          :data="accessoriesBillingData2"
           show-summary
           :summary-method="billSum"
         ></Table>
@@ -643,6 +643,7 @@ export default {
         }
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
+      accessoriesBillingData2:[],//开票油品数据
       copyData: [] //开票配件复制数据
     };
   },
@@ -788,7 +789,7 @@ export default {
                 item.taxPrice = item.taxAmt / item.orderQty;
               });
               this.invoice.invoiceType = "010103";
-              this.invoice.taxRate = "010103";
+              this.invoice.taxRate = "010103" ;
               this.accessoriesBillingData = res.data;
               this.copyData = res.data;
             }
@@ -817,6 +818,16 @@ export default {
               this.information.applyNo = res.data.applyNo;
               this.information.applicationDate = res.data.applyDate;
               this.information.guestName = res.data.guestName;
+              ditInvoice({ guestId: this.information.guestId }).then(res2 => {
+                if (res2.code === 0) {
+                  res2.data.map(item => {
+                    item.label = item.taxpayerName;
+                    item.value = item.id;
+                  });
+                  this.invoice.receiptUnitList = res2.data;
+                }
+              });
+              const rate = res.data.invoiceType
               this.invoice = res.data;
               this.invoice.statementAmountOwed = res.data.statementAmtOwed;
               this.invoice.amountExcludingTax = res.data.notTaxAmt;
@@ -828,17 +839,15 @@ export default {
               this.invoice.issuingOfficeList = [];
               this.invoice.receiptUnit = Number(res.data.receiptUnit);
               await this.getListOne();
-              this.accessoriesBillingData = res.data.partList;
-              ditInvoice({ guestId: this.information.guestId }).then(res => {
-                if (res.code === 0) {
-                  res.data.map(item => {
-                    item.label = item.taxpayerName;
-                    item.value = item.id;
-                  });
-                  this.invoice.receiptUnitList = res.data;
-                }
-              });
-
+              if(res.data.isOilPart==1){
+                this.accessoriesBillingData =[];
+                this.accessoriesBillingData2 =res.data.partList
+              }else{
+                this.accessoriesBillingData = res.data.partList;
+                this.accessoriesBillingData2 =[]
+              }
+              this.invoice.invoiceType = rate
+              this.invoice.taxRate = rate
           }
         };
         // 发票单位

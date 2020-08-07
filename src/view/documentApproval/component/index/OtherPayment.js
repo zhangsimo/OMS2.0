@@ -3,7 +3,8 @@ import selectOther from '../popWindow/SelectOther'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
-import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+// import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import { getThisAllList,getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
 import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
@@ -148,10 +149,10 @@ export default {
       if (query !== '') {
         let arr=[]
         let req = {
-          fullName:query,
-          size:100,
+          shortName:query,
+          size:50,
         }
-        let res = await findGuest(req);
+        let res = await getGuestShortName(req);
         if (res.code == 0) {
           res.data.content.map(item => {
             arr.push({
