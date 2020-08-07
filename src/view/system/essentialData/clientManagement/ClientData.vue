@@ -357,7 +357,7 @@
             </div>
           </div>
           <Modal v-model="newInoiceShow" :title="tit">
-            <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
+            <AddInoice :data="addInoiceOne" ref="AddInoice" :me-tit="tit"></AddInoice>
             <div slot="footer">
               <Button type="primary" @click="addNewBank">确定</Button>
               <Button type="default" @click="cancelNewBank">取消</Button>
@@ -852,7 +852,7 @@ export default {
       pitchOnClientList: [], //选中关联客户
       deleteOneClient: [], //获取删除项
       pitchOneBank: [],
-      tit: "", //开票弹窗
+      tit: "新增开票", //开票弹窗
       financeList:[]
     };
   },
