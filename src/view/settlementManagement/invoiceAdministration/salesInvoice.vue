@@ -5,10 +5,14 @@
         <div class="wlf">
           <div>
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+            <quickDate
+              class="mr10"
+              ref="quickDate"
+              @quickDate="quickDate"
+            ></quickDate>
           </div>
           <div class="mr10">
-            <span>申请时间：</span>
+            <span>开票时间：</span>
             <Date-picker
               format="yyyy-MM-dd"
               :value="value"
@@ -18,11 +22,16 @@
               class="w200"
             ></Date-picker>
           </div>
-          <div class="mr10 flexd" >
-             <span>分店名称：</span>
-              <Select v-model="form.orgName" style="width:180px">
-                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
-              </Select>
+          <div class="mr10 flexd">
+            <span>分店名称：</span>
+            <Select v-model="form.orgId" style="width:180px">
+              <Option
+                v-for="item in proTypeList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
           </div>
           <button class="ivu-btn ivu-btn-default" @click="query" type="button">
             <i class="iconfont iconchaxunicon"></i>
@@ -31,14 +40,38 @@
         </div>
       </div>
       <div class="mt10">
-        <Button class="mr10" v-has="'export'" @click="operation(1)">导入发票</Button>
-        <Button class="mr10" v-has="'change'" @click="operation(2)">修改</Button>
-        <Button class="mr10" v-has="'delete'" @click="operation(3)">删除导入</Button>
-        <Button class="mr10" v-has="'cancellation'" @click="operation(4)">发票作废</Button>
-        <Button class="mr10" v-has="'cancel'" @click="operation(5)">红字核销</Button>
-        <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
-        <Button class="mr10" :type="isActive===1?'info':'default'" @click="chooseTable(1)">已核销</Button>
-        <Button :type="isActive===0?'info':'default'" @click="chooseTable(0)">未核销</Button>
+        <Button class="mr10" v-has="'export'" @click="operation(1)"
+          >导入发票</Button
+        >
+        <Button class="mr10" v-has="'change'" @click="operation(2)"
+          >修改</Button
+        >
+        <Button class="mr10" v-has="'delete'" @click="operation(3)"
+          >删除导入</Button
+        >
+        <Button class="mr10" v-has="'cancellation'" @click="operation(4)"
+          >发票作废</Button
+        >
+        <Button class="mr10" v-has="'cancel'" @click="operation(5)"
+          >红字核销</Button
+        >
+        <Button
+          class="mr10"
+          :type="isActive === '' ? 'info' : 'default'"
+          @click="chooseTable('')"
+          >全部显示</Button
+        >
+        <Button
+          class="mr10"
+          :type="isActive === 1 ? 'info' : 'default'"
+          @click="chooseTable(1)"
+          >已核销</Button
+        >
+        <Button
+          :type="isActive === 0 ? 'info' : 'default'"
+          @click="chooseTable(0)"
+          >未核销</Button
+        >
       </div>
     </section>
     <section class="con-box">
@@ -65,10 +98,14 @@
       </div>
     </section>
 
-
     <!-- 弹出框 -->
     <Modal v-model="proModal" title="销售发票修改" width="650">
-      <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="130">
+      <Form
+        ref="proModal"
+        :model="formValidate"
+        :rules="ruleValidate"
+        :label-width="130"
+      >
         <Row>
           <Col span="11">
             <FormItem label="发票类型：" prop="species">
@@ -77,18 +114,20 @@
                   v-for="item in invoiceTypeOption"
                   :value="item.itemCode"
                   :key="item.itemCode"
-                >{{item.itemName}}</Option>
+                  >{{ item.itemName }}</Option
+                >
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="发票种类：" prop="invoiceType  ">
-              <Select v-model="formValidate.invoiceType  ">
+              <Select v-model="formValidate.invoiceType">
                 <Option
                   v-for="item in invoiceTypeList"
                   :value="item.itemCode"
                   :key="item.itemCode"
-                >{{item.itemName}}</Option>
+                  >{{ item.itemName }}</Option
+                >
               </Select>
             </FormItem>
           </Col>
@@ -96,7 +135,7 @@
         <Row>
           <Col span="11">
             <FormItem label="购方名称：" prop="receiptUnit">
-              <Input v-model="formValidate.receiptUnitName"/>
+              <Input v-model="formValidate.receiptUnitName" />
             </FormItem>
           </Col>
           <Col span="11">
@@ -111,11 +150,11 @@
               <Input v-model="formValidate.invoiceNo" />
             </FormItem>
 
-<!--            <FormItem label="部门门店：" prop="orgBranchId">-->
-<!--              <Select v-model="formValidate.orgBranchId">-->
-<!--                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>-->
-<!--              </Select>-->
-<!--            </FormItem>-->
+            <!--            <FormItem label="部门门店：" prop="orgBranchId">-->
+            <!--              <Select v-model="formValidate.orgBranchId">-->
+            <!--                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>-->
+            <!--              </Select>-->
+            <!--            </FormItem>-->
           </Col>
           <Col span="11">
             <FormItem label="购方税号：" prop="customDuty">
@@ -140,29 +179,29 @@
             <FormItem label="购方开户行及账号：" prop="customAccount">
               <Input v-model="formValidate.customAccount" />
             </FormItem>
-<!--            <FormItem label="开票清单类型：" prop="species">-->
-<!--              <Select v-model="formValidate.species" clearable>-->
-<!--                <Option-->
-<!--                  v-for="item in speciesOptionList"-->
-<!--                  :value="item.itemCode"-->
-<!--                  :key="item.itemCode"-->
-<!--                >{{item.itemName}}</Option>-->
-<!--              </Select>-->
-<!--            </FormItem>-->
+            <!--            <FormItem label="开票清单类型：" prop="species">-->
+            <!--              <Select v-model="formValidate.species" clearable>-->
+            <!--                <Option-->
+            <!--                  v-for="item in speciesOptionList"-->
+            <!--                  :value="item.itemCode"-->
+            <!--                  :key="item.itemCode"-->
+            <!--                >{{item.itemName}}</Option>-->
+            <!--              </Select>-->
+            <!--            </FormItem>-->
           </Col>
           <Col span="11">
             <FormItem label="购方地址、电话：" prop="customAddress">
               <Input v-model="formValidate.customAddress" />
             </FormItem>
-<!--            <FormItem label="收款方式：" prop="collectionType">-->
-<!--              <Select v-model="formValidate.collectionType">-->
-<!--                <Option-->
-<!--                  v-for="item in collectionTypeOption"-->
-<!--                  :value="item.itemCode"-->
-<!--                  :key="item.itemCode"-->
-<!--                >{{item.itemName}}</Option>-->
-<!--              </Select>-->
-<!--            </FormItem>-->
+            <!--            <FormItem label="收款方式：" prop="collectionType">-->
+            <!--              <Select v-model="formValidate.collectionType">-->
+            <!--                <Option-->
+            <!--                  v-for="item in collectionTypeOption"-->
+            <!--                  :value="item.itemCode"-->
+            <!--                  :key="item.itemCode"-->
+            <!--                >{{item.itemName}}</Option>-->
+            <!--              </Select>-->
+            <!--            </FormItem>-->
           </Col>
         </Row>
         <Row>
@@ -175,15 +214,15 @@
             <FormItem label="合计不含税金额：" prop="invoiceAmount">
               <Input v-model="formValidate.invoiceAmount" />
             </FormItem>
-<!--            <FormItem label="开票业务：" prop="invoiceService">-->
-<!--              <Select v-model="formValidate.invoiceService">-->
-<!--                <Option-->
-<!--                  v-for="item in invoiceServiceOption"-->
-<!--                  :value="item.itemCode"-->
-<!--                  :key="item.itemCode"-->
-<!--                >{{item.itemName}}</Option>-->
-<!--              </Select>-->
-<!--            </FormItem>-->
+            <!--            <FormItem label="开票业务：" prop="invoiceService">-->
+            <!--              <Select v-model="formValidate.invoiceService">-->
+            <!--                <Option-->
+            <!--                  v-for="item in invoiceServiceOption"-->
+            <!--                  :value="item.itemCode"-->
+            <!--                  :key="item.itemCode"-->
+            <!--                >{{item.itemName}}</Option>-->
+            <!--              </Select>-->
+            <!--            </FormItem>-->
           </Col>
         </Row>
         <Row>
@@ -196,29 +235,34 @@
             <FormItem label="复核人：" prop="reviewerName">
               <Input v-model="formValidate.reviewerName" />
             </FormItem>
-<!--            <FormItem label="税率：" prop="invoiceTax">-->
-<!--              <Select v-model="formValidate.invoiceTax" clearable>-->
-<!--                <Option-->
-<!--                  v-for="item in taxOptionList"-->
-<!--                  :value="item.itemValueOne"-->
-<!--                  :key="item.value"-->
-<!--                >{{Math.floor(item.itemValueOne * 100)}} %</Option>-->
-<!--              </Select>-->
-<!--            </FormItem>-->
+            <!--            <FormItem label="税率：" prop="invoiceTax">-->
+            <!--              <Select v-model="formValidate.invoiceTax" clearable>-->
+            <!--                <Option-->
+            <!--                  v-for="item in taxOptionList"-->
+            <!--                  :value="item.itemValueOne"-->
+            <!--                  :key="item.value"-->
+            <!--                >{{Math.floor(item.itemValueOne * 100)}} %</Option>-->
+            <!--              </Select>-->
+            <!--            </FormItem>-->
           </Col>
         </Row>
         <Row>
           <Col span="11">
-              <FormItem label="部门门店：" prop="orgBranchId">
-                <Select v-model="formValidate.orgBranchId">
-                  <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
-                </Select>
-              </FormItem>
+            <FormItem label="部门门店：" prop="orgBranchId">
+              <Select v-model="formValidate.orgBranchId">
+                <Option
+                  v-for="item in proTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
           </Col>
           <Col span="11">
-              <FormItem label="开票方式：" prop="invoiceWay">
-                <Input v-model="formValidate.invoiceWay" />
-              </FormItem>
+            <FormItem label="开票方式：" prop="invoiceWay">
+              <Input v-model="formValidate.invoiceWay" />
+            </FormItem>
           </Col>
         </Row>
         <Row>
@@ -249,7 +293,7 @@
               <Input
                 v-model="formValidate.remark"
                 type="textarea"
-                :autosize="{minRows: 2,maxRows: 5}"
+                :autosize="{ minRows: 2, maxRows: 5 }"
               />
             </FormItem>
           </Col>
@@ -261,11 +305,12 @@
       </div>
     </Modal>
 
-
     <Modal v-model="exportData" title="发票导入" width="400">
       <p class="mt20 mb20">导入前请先下载模板</p>
       <div slot="footer" class="exportBtn">
-        <Button type="info" v-has="'export'" @click="exportDown">模板下载</Button>
+        <Button type="info" v-has="'export'" @click="exportDown"
+          >模板下载</Button
+        >
         <Upload
           ref="upload"
           :show-upload-list="false"
@@ -297,8 +342,8 @@ import {
   getInvoiceType,
   getTypeOfInvoice
 } from "_api/salesManagment/salesInvoice";
-import { goshop } from '@/api/settlementManagement/shopList';
-import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+import { goshop } from "@/api/settlementManagement/shopList";
+import { down } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
@@ -308,26 +353,26 @@ import moment from "moment";
 export default {
   name: "invoiceAdministrationSalesInvoice",
   components: {
-    quickDate,
+    quickDate
   },
   data() {
     return {
       value: [],
-      proTypeList:[],//分店
+      proTypeList: [], //分店
       exportData: false,
       upurl: getup,
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
       form: {
-        orgName: "",
+        orgId: "",
         page: 0,
         size: 10,
         writeOffStatus: 0
       },
       formValidate: {
-        invoiceDate: '',
-        id: '',
+        invoiceDate: "",
+        id: "",
         invoiceType: "",
         priceTaxTotal: "",
         invoiceUnit: "",
@@ -353,7 +398,7 @@ export default {
           type: "index",
           title: "序号",
           minWidth: 40,
-          className: "tc",
+          className: "tc"
           // render: (h, params) => {
           //   return h(
           //     "span",
@@ -367,20 +412,24 @@ export default {
           className: "tc",
           minWidth: 140,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.requestCode
+                  }
                 },
-                domProps: {
-                  title: params.row.requestCode
-                }
-              }, params.row.requestCode)
-            ])
+                params.row.requestCode
+              )
+            ]);
           }
         },
         {
@@ -389,20 +438,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.createTime
+                  }
                 },
-                domProps: {
-                  title: params.row.createTime
-                }
-              }, params.row.createTime)
-            ])
+                params.row.createTime
+              )
+            ]);
           }
         },
         {
@@ -411,20 +464,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.invoiceDate
+                  }
                 },
-                domProps: {
-                  title: params.row.invoiceDate
-                }
-              }, params.row.invoiceDate)
-            ])
+                params.row.invoiceDate
+              )
+            ]);
           }
         },
         // {
@@ -455,20 +512,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.invoiceCode
+                  }
                 },
-                domProps: {
-                  title: params.row.invoiceCode
-                }
-              }, params.row.invoiceCode)
-            ])
+                params.row.invoiceCode
+              )
+            ]);
           }
         },
         {
@@ -477,20 +538,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.invoiceNo
+                  }
                 },
-                domProps: {
-                  title: params.row.invoiceNo
-                }
-              }, params.row.invoiceNo)
-            ])
+                params.row.invoiceNo
+              )
+            ]);
           }
         },
         {
@@ -499,20 +564,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.receiptUnitName
+                  }
                 },
-                domProps: {
-                  title: params.row.receiptUnitName
-                }
-              }, params.row.receiptUnitName)
-            ])
+                params.row.receiptUnitName
+              )
+            ]);
           }
         },
         {
@@ -521,20 +590,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.customDuty
+                  }
                 },
-                domProps: {
-                  title: params.row.customDuty
-                }
-              }, params.row.customDuty)
-            ])
+                params.row.customDuty
+              )
+            ]);
           }
         },
         {
@@ -546,20 +619,24 @@ export default {
           // },
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.customPhone
+                  }
                 },
-                domProps: {
-                  title: params.row.customPhone
-                }
-              }, params.row.customPhone)
-            ])
+                params.row.customPhone
+              )
+            ]);
           }
         },
         {
@@ -568,20 +645,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.customMail
+                  }
                 },
-                domProps: {
-                  title: params.row.customMail
-                }
-              }, params.row.customMail)
-            ])
+                params.row.customMail
+              )
+            ]);
           }
         },
         {
@@ -590,20 +671,24 @@ export default {
           className: "tc",
           minWidth: 130,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.customAccount
+                  }
                 },
-                domProps: {
-                  title: params.row.customAccount
-                }
-              }, params.row.customAccount)
-            ])
+                params.row.customAccount
+              )
+            ]);
           }
         },
         {
@@ -612,20 +697,24 @@ export default {
           className: "tc",
           minWidth: 130,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.customAddress
+                  }
                 },
-                domProps: {
-                  title: params.row.customAddress
-                }
-              }, params.row.customAddress)
-            ])
+                params.row.customAddress
+              )
+            ]);
           }
         },
         {
@@ -652,20 +741,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.remark
+                  }
                 },
-                domProps: {
-                  title: params.row.remark
-                }
-              }, params.row.remark)
-            ])
+                params.row.remark
+              )
+            ]);
           }
         },
         {
@@ -674,20 +767,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.orgName
+                  }
                 },
-                domProps: {
-                  title: params.row.orgName
-                }
-              }, params.row.orgName)
-            ])
+                params.row.orgName
+              )
+            ]);
           }
         },
         {
@@ -705,20 +802,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.invoiceName
+                  }
                 },
-                domProps: {
-                  title: params.row.invoiceName
-                }
-              }, params.row.invoiceName)
-            ])
+                params.row.invoiceName
+              )
+            ]);
           }
         },
         {
@@ -727,20 +828,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.payeeName
+                  }
                 },
-                domProps: {
-                  title: params.row.payeeName
-                }
-              }, params.row.payeeName)
-            ])
+                params.row.payeeName
+              )
+            ]);
           }
         },
         {
@@ -752,20 +857,24 @@ export default {
           // },
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.reviewerName
+                  }
                 },
-                domProps: {
-                  title: params.row.reviewerName
-                }
-              }, params.row.reviewerName)
-            ])
+                params.row.reviewerName
+              )
+            ]);
           }
         },
         {
@@ -774,20 +883,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.invoiceUnitName
+                  }
                 },
-                domProps: {
-                  title: params.row.invoiceUnitName
-                }
-              }, params.row.invoiceUnitName)
-            ])
+                params.row.invoiceUnitName
+              )
+            ]);
           }
         },
         {
@@ -796,20 +909,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.orgName
+                  }
                 },
-                domProps: {
-                  title: params.row.orgName
-                }
-              }, params.row.orgName)
-            ])
+                params.row.orgName
+              )
+            ]);
           }
         },
         {
@@ -818,20 +935,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.orgCode
+                  }
                 },
-                domProps: {
-                  title: params.row.orgCode
-                }
-              }, params.row.orgCode)
-            ])
+                params.row.orgCode
+              )
+            ]);
           }
         },
         {
@@ -846,20 +967,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.guestName
+                  }
                 },
-                domProps: {
-                  title: params.row.guestName
-                }
-              }, params.row.guestName)
-            ])
+                params.row.guestName
+              )
+            ]);
           }
         },
         {
@@ -868,20 +993,24 @@ export default {
           className: "tc",
           minWidth: 200,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.writeOffStatus
+                  }
                 },
-                domProps: {
-                  title: params.row.writeOffStatus
-                }
-              }, params.row.writeOffStatus)
-            ])
+                params.row.writeOffStatus
+              )
+            ]);
           }
         },
         {
@@ -896,20 +1025,24 @@ export default {
           className: "tc",
           minWidth: 130,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.createUname
+                  }
                 },
-                domProps: {
-                  title: params.row.createUname
-                }
-              }, params.row.createUname)
-            ])
+                params.row.createUname
+              )
+            ]);
           }
         },
         {
@@ -918,20 +1051,24 @@ export default {
           className: "tc",
           minWidth: 130,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.importTime
+                  }
                 },
-                domProps: {
-                  title: params.row.importTime
-                }
-              }, params.row.importTime)
-            ])
+                params.row.importTime
+              )
+            ]);
           }
         },
         {
@@ -939,7 +1076,7 @@ export default {
           key: "writeOffStatus",
           className: "tc",
           minWidth: 100,
-          render:(h,params)=>{
+          render: (h, params) => {
             return h("span", params.row.status === 0 ? "否" : "是");
           }
         },
@@ -949,20 +1086,24 @@ export default {
           className: "tc",
           minWidth: 130,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.nullifyId
+                  }
                 },
-                domProps: {
-                  title: params.row.nullifyId
-                }
-              }, params.row.nullifyId)
-            ])
+                params.row.nullifyId
+              )
+            ]);
           }
         },
         {
@@ -971,20 +1112,24 @@ export default {
           className: "tc",
           minWidth: 130,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.nullifyDate
+                  }
                 },
-                domProps: {
-                  title: params.row.nullifyDate
-                }
-              }, params.row.nullifyDate)
-            ])
+                params.row.nullifyDate
+              )
+            ]);
           }
         },
         {
@@ -992,8 +1137,8 @@ export default {
           key: "writeOffStatus",
           className: "tc",
           minWidth: 160,
-          render:(h , params) => {
-            return h('span' ,params.row.redRushStatus === 0 ? "否" : "是")
+          render: (h, params) => {
+            return h("span", params.row.redRushStatus === 0 ? "否" : "是");
           }
         },
         {
@@ -1002,20 +1147,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.redRushId
+                  }
                 },
-                domProps: {
-                  title: params.row.redRushId
-                }
-              }, params.row.redRushId)
-            ])
+                params.row.redRushId
+              )
+            ]);
           }
         },
         {
@@ -1024,20 +1173,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.redRushDate
+                  }
                 },
-                domProps: {
-                  title: params.row.redRushDate
-                }
-              }, params.row.redRushDate)
-            ])
+                params.row.redRushDate
+              )
+            ]);
           }
         },
         {
@@ -1046,20 +1199,24 @@ export default {
           className: "tc",
           minWidth: 150,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.writeOffNo
+                  }
                 },
-                domProps: {
-                  title: params.row.writeOffNo
-                }
-              }, params.row.writeOffNo)
-            ])
+                params.row.writeOffNo
+              )
+            ]);
           }
         },
         {
@@ -1068,20 +1225,24 @@ export default {
           className: "tc",
           minWidth: 150,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.writeOffStatus
+                  }
                 },
-                domProps: {
-                  title: params.row.writeOffStatus
-                }
-              }, params.row.writeOffStatus)
-            ])
+                params.row.writeOffStatus
+              )
+            ]);
           }
         },
         {
@@ -1090,20 +1251,24 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.writeOff
+                  }
                 },
-                domProps: {
-                  title: params.row.writeOff
-                }
-              }, params.row.writeOff)
-            ])
+                params.row.writeOff
+              )
+            ]);
           }
         },
         {
@@ -1112,23 +1277,26 @@ export default {
           className: "tc",
           minWidth: 100,
           render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.writeOffDate
+                  }
                 },
-                domProps: {
-                  title: params.row.writeOffDate
-                }
-              }, params.row.writeOffDate)
-            ])
+                params.row.writeOffDate
+              )
+            ]);
           }
-        },
-
+        }
       ],
       data: [],
       pagetotal: 0,
@@ -1143,7 +1311,7 @@ export default {
       proType: [],
       allTablist: [],
       invoiceTypeOption: [], //发票类型
-      invoiceTypeList:[],//发票种类
+      invoiceTypeList: [], //发票种类
       taxOptionList: [], //税率
       collectionTypeOption: [], //收款方式
       speciesOptionList: [], //开票清单类型
@@ -1158,36 +1326,40 @@ export default {
       this.form.invoiceEndDate = this.value.length ? this.value[1] : "";
       this.getTabList();
     },
-    quickDate(data){
+    quickDate(data) {
       this.value = data;
-      this.form.invoiceDate = this.value[0]?moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"): ""
-      this.form.invoiceEndDate = this.value[1]? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"): "",
-      this.query();
+      this.form.invoiceDate = this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+        : "";
+      (this.form.invoiceEndDate = this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        : ""),
+        this.query();
     },
     changedate(daterange) {
       this.value = daterange;
       this.query();
     },
-    async getShop(){
-      let data ={}
-      data.supplierTypeSecond = this.model1
-      let res = await goshop(data)
+    async getShop() {
+      let data = {};
+      data.supplierTypeSecond = this.model1;
+      let res = await goshop(data);
       if (res.code === 0) {
-        this.proTypeList = [...this.proTypeList , ...res.data]
-        this.$nextTick( () => {
+        this.proTypeList = [...this.proTypeList, ...res.data];
+        this.$nextTick(() => {
           // if (localStorage.getItem('oms2-userList')){
-          //   this.form.orgName = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          //   this.form.orgId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
           // } else {
-          //   this.form.orgName = this.$store.state.user.userData.shopId
+          //   this.form.orgId = this.$store.state.user.userData.shopId
           // }
-          this.form.orgName = this.$store.state.user.userData.shopId
+          this.form.orgId = this.$store.state.user.userData.shopId;
           this.getTabList();
-        })
+        });
       }
     },
     //模板下载
     exportDown() {
-      down(1700000000)
+      down(1700000000);
     },
     handleBeforeUpload() {},
     onFormatError(file) {
@@ -1208,7 +1380,7 @@ export default {
         this.getTabList();
       } else {
         let txt = "上传成功";
-          txt = response.message;
+        txt = response.message;
         this.$Notice.success({
           title: "导入失败",
           desc: txt,
@@ -1238,7 +1410,7 @@ export default {
           this.exportData = true;
           break;
         case 2:
-            this.modifyData();
+          this.modifyData();
           break;
         case 3:
           this.deleteList("delete");
@@ -1388,7 +1560,7 @@ export default {
     getDetailInfor() {
       // await this.getSelectOptions()
       // for (let key in this.formValidate) {
-        this.formValidate = JSON.parse(JSON.stringify(this.allTablist[0] ))
+      this.formValidate = JSON.parse(JSON.stringify(this.allTablist[0]));
       // }
     },
     //表格全选的时候
@@ -1417,11 +1589,11 @@ export default {
           this.invoiceTypeOption = res.data;
         }
       });
-      await getTypeOfInvoice().then( res => {
-        if (res.code === 0){
+      await getTypeOfInvoice().then(res => {
+        if (res.code === 0) {
           this.invoiceTypeList = res.data;
         }
-      })
+      });
       // await getOptionSalesList("RECEIVABLE_TYPE").then(res => {
       //   if (res.code === 0) {
       //     this.collectionTypeOption = res.data;
@@ -1450,7 +1622,7 @@ export default {
     },
     //分页
     pageNumChange(pageNum) {
-      this.form.page = pageNum
+      this.form.page = pageNum;
       this.getTabList();
     },
     pageSizeChange(pageSize) {
