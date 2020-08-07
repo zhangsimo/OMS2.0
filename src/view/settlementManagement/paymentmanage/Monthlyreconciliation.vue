@@ -9,7 +9,7 @@
                 <span>快速查询：</span>
                 <quickDate class="mr8" ref="quickDate" @quickDate="quickDate"></quickDate>
               </div>
-              <div class="db ml18">
+              <div class="db ml10">
                 <span>转单期间：</span>
                 <Date-picker
                   format="yyyy-MM-dd"
@@ -17,15 +17,15 @@
                   @on-change="changedate"
                   type="daterange"
                   placeholder="选择日期"
-                  class="w160"
+                  class="w200"
                 ></Date-picker>
               </div>
-              <div class="db ml18">
+              <div class="db ml10">
                 <span>对账门店：</span>
                 <Select
                   filterable
                   v-model="model1"
-                  class="w130"
+                  class="w200"
                   @on-change="storeAccount"
                   clearable
                 >
@@ -36,7 +36,7 @@
                   >{{ item.label }}</Option>
                 </Select>
               </div>
-              <div class="db ml18">
+              <div class="db ml10">
                 <span>往来单位：</span>
                 <Select
                   ref="companyGuset"
@@ -55,9 +55,7 @@
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
                 </button>
-              </div>
-              <div class="db ml10">
-                <button class="ivu-btn ivu-btn-default" type="button" @click="moreAccountShow">
+                <button class="ivu-btn ivu-btn-default ml10" type="button" @click="moreAccountShow">
                   <span>更多</span>
                 </button>
               </div>
@@ -222,12 +220,24 @@
                   >{{ item.label }}</Option>
                 </Select>
                 <span class="mr5 ml10">应收返利请示单号</span>
-                <Input type="text" icon="code" v-model="Rebateid" class="w60 tc" @on-click="openSelect(request)"/>
+                <Input type="text" readonly  v-model="Rebateid" class="w200"/>
+                <button
+                  class="mr8 ml10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="openSelect('request')"
+                >选择</button>
                 <span class="mr5 ml10">应收坏账请示单号</span>
-                <Input type="text" icon="code" v-model="BadDebtid" class="w60 tc" @on-click="openSelect(request2)"/>
-                <span class="ml10" style="color:red">*</span>
-                <span class="mr5">备注</span>
-                <Input type="text" v-model="remark" class="w260 tc" />
+                <Input type="text" readonly v-model="BadDebtid" class="w200"/>
+                <button
+                  class="mr8 ml10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="openSelect('request2')"
+                >选择</button>
+                <div class="pt10">
+                  <span style="color:red">*</span>
+                  <span class="mr5">备注</span>
+                  <Input type="text" v-model="remark" class="w260 tc" />
+                </div>
               </div>
             </div>
           </div>
@@ -741,6 +751,7 @@ export default {
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
+    console.log(arr)
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
@@ -752,7 +763,7 @@ export default {
     //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
     //     : ""
     // }
-    this.queryDate(this.value)
+    this.query()
   },
   computed: {
     //实际应付合计
@@ -872,14 +883,16 @@ export default {
     },
     //打开模态框
     openSelect(request) {
-      this.$refs.request.open();
+      this.$refs[request].open();
     },
     //获取选择的信息
     getBackList(row) {
-      this.$set(this.Rebateid, row.applyNo);
+
+      this.Rebateid = row.applyNo;
     },
     getBackList2(row) {
-      this.$set(this.BadDebtid, row.applyNo);
+      console.log(row)
+      this.BadDebtid = row.applyNo;
     },
     // 计算应收业务销售出库/退货对账的总计
     collectSum(sumData){
@@ -953,9 +966,16 @@ export default {
       // let { orgId, startDate, endDate, guestId } = this.parameter;
       let obj = { orgId: this.model1, guestId: this.companyInfo };
       // if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
-        obj.startDate = this.value[0];
-        obj.endDate = this.value[1];
+        obj.startDate = this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        obj.endDate = this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
       // }
+      if (obj.endDate) {
+        obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
+      }
       if(this.moreSearch.businessType){
         obj.serviceType = this.moreSearch.businessType;
       }
@@ -1557,9 +1577,9 @@ export default {
       this.moreSearch={}
     },
     // 选择日期
-    // changedate(daterange) {
-    //   this.moreSearch.accountDate = daterange;
-    // },
+    changedate(daterange) {
+      this.quickDate(daterange)
+    },
     moreOk(){
       this.Initialization();
       this.accountLayer=false;
