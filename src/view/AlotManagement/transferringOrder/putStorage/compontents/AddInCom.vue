@@ -155,12 +155,12 @@ export default {
     };
   },
   watch: {
-    tbdata: {
-      handler(newVal) {
-        this.tabList = newVal;
-      },
-      deep: true
-    },
+    // tbdata: {
+    //   handler(newVal) {
+    //     this.tabList = newVal;
+    //   },
+    //   deep: true
+    // },
     dcList: {
       handler(newVal) {
         this.diaochuList = newVal;
