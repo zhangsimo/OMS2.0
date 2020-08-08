@@ -84,6 +84,7 @@ export default {
       this.$refs.upImg.uploadListModal = []
       this.$refs.upImg.uploadList = []
       this.$refs['formInline'].resetFields();
+      this.$refs.documentTable.recalculate(true);
       this.model = true
       //判断模态框状态
       this.modelType = false
@@ -130,6 +131,9 @@ export default {
       if(res.code === 0){
         this.$nextTick( () => {
           this.formInline = res.data
+          this.formInline.receiver=res.data.receiverId
+          this.remoteMethod(res.data.receiveGuestName)
+          this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
             billStatus: res.data.billStatus

@@ -371,7 +371,7 @@
 
 <script>
 import Newplace from "./Newplace";
-import AddInoice from "./AddInoice";
+import AddInoice from "@/view/system/essentialData/clientManagement/AddInoice";
 import {
   getDigitalDictionary,
   getCustomerInformation,
@@ -1277,10 +1277,19 @@ export default {
     },
     deletBank() {
       this.invoice.map(item => {
-        if (item.id == this.addInoiceOne.id) {
-          item.taxpayerType = !item.taxpayerType;
-        } else {
-          item.taxpayerType;
+        if(this.addInoiceOne.id==undefined){
+          // bankId
+          if (item.bankId == this.addInoiceOne.bankId) {
+            item.taxpayerType = !item.taxpayerType;
+          } else {
+            item.taxpayerType;
+          }
+        }else{
+          if (item.id == this.addInoiceOne.id) {
+            item.taxpayerType = !item.taxpayerType;
+          } else {
+            item.taxpayerType;
+          }
         }
       });
       this.pitchOnBank()

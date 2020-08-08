@@ -146,8 +146,7 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
     }
   },
   async mounted() {
@@ -184,6 +183,10 @@ export default {
     },
     //获取仓库
     async getWares(orgId) {
+      if (orgId == undefined) {
+        this.warehouse = []
+        return
+      }
       let res = JSON.parse(localStorage.getItem('oms2-userList'))
       let tenantId = res.tenantId || 0
       let shopkeeper = res.shopkeeper || 0
