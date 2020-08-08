@@ -362,6 +362,8 @@
                 show-footer
                 @select-all="selectAll"
                 @select-change="selectVxeData"
+                :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                @keydown="keydown"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"

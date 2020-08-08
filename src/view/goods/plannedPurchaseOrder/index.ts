@@ -469,7 +469,6 @@ export default class PlannedPurchaseOrder extends Vue {
       // console.log('isLastColumn', isLastColumn)
       if (isLastColumn) {
         // 插入数据
-
         // 跳转到下一行
         // 判断当前是否为临时数据
         const isInsertByRow = $table.isInsertByRow(row)
@@ -492,6 +491,7 @@ export default class PlannedPurchaseOrder extends Vue {
           await $table.setActiveCell(nextRow, columnsField[0])
         }
       } else {
+        // console.log(isLastColumn,columnsField,nowIndex,"122")
         // 跳转下一个编辑
         await $table.setActiveCell(row, columnsField[nowIndex + 1])
       }

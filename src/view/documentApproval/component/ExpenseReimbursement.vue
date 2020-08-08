@@ -295,7 +295,7 @@
               >
                 <Input
                   type="text"
-                  :value="formInline.receiveBankNo|filterApplyNo"
+                  :value="formInline.receiveBankNo"
                   style="width: 90%;padding-left: 5px"
                   disabled
                 ></Input>
@@ -356,7 +356,7 @@
               <FormItem label="支付账号" style="margin-bottom: 0px">
                 <Input
                   type="text"
-                  :value="formInline.paymentBankNo|filterApplyNo"
+                  :value="formInline.paymentBankNo"
                   style="width: 90%;padding-left: 5px"
                   disabled
                 ></Input>
