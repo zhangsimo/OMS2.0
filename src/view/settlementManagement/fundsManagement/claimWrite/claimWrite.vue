@@ -36,16 +36,16 @@
         <Split v-model="split1">
           <div slot="left">
             <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
-            <span>快速查询：</span>
-            <quickDate class="w100 mr10" v-model="value" ref="quickDate" @quickDate="quickDate"></quickDate>
+<!--            <span>快速查询：</span>-->
+            <quickDate class="w60 mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
             <span>申请日期：</span>
             <Date-picker
               format="yyyy-MM-dd"
-              :value="applyDate"
+              :value="value"
               @on-change="changedate"
-              type="date"
+              type="daterange"
               placeholder="选择日期"
-              class="w100 mr10"
+              class="w200 mr10"
             ></Date-picker>
             <span>分店名称：</span>
             <Select v-model="model1" filterable class="w150 mr10" :disabled="selectShopList">
@@ -107,18 +107,18 @@
           </div>
           <div slot="right" style="height:100%">
             <Split v-model="split2" mode="vertical">
-              <div slot="top">
+              <div slot="top" class="pl10">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
-                <span class="pl10">快速查询：</span>
-                <quickDate class="w100 mr10" v-model="value2" ref="quickDate2" @quickDate="quickDate2"></quickDate>
+<!--                <span class="pl10">快速查询：</span>-->
+                <quickDate class="w80 mr10" ref="quickDate2" @quickDate="quickDate2"></quickDate>
                 <span>申请日期：</span>
                 <Date-picker
                   format="yyyy-MM-dd"
-                  :value="applyDate2"
+                  :value="value2"
                   @on-change="changedate2"
-                  type="date"
+                  type="daterange"
                   placeholder="选择日期"
-                  class="w100 mr10"
+                  class="w200 mr10"
                 ></Date-picker>
                 <span>分店名称：</span>
                 <Select v-model="model2" filterable class="w150 mr10" :disabled="selectShopList">
@@ -159,18 +159,18 @@
                 <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
                 <claim ref="claim"/>
               </div>
-              <div slot="bottom">
+              <div slot="bottom" class="pl10">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">连锁待分配款项</h4>
-                <span class="pl10 mr10">快速查询：</span>
-                <quickDate class="w100 mr10" v-model="value3" ref="quickDate3" @quickDate="quickDate3"></quickDate>
+<!--                <span class="pl10 mr10">快速查询：</span>-->
+                <quickDate class="w60 mr10" ref="quickDate3" @quickDate="quickDate3"></quickDate>
                 <span>发生日期：</span>
                 <Date-picker
                   format="yyyy-MM-dd"
-                  :value="applyDate3"
+                  :value="value3"
                   @on-change="changedate3"
-                  type="date"
+                  type="daterange"
                   placeholder="选择日期"
-                  class="w100 mr10"
+                  class="w200 mr10"
                 ></Date-picker>
                 <span class="ml10">区域：</span>
                 <Select v-model="areaId" class="w100" filterable :disabled="selectShopList">
@@ -291,13 +291,13 @@
       return {
         model1: "",//未核销对账单 查询分店绑定model
         value: [],//未核销对账单 查询快速
-        applyDate:"",//未核销对账单 查询申请日期value
+        // applyDate:"",//未核销对账单 查询申请日期value
         model2: "",//本店待认领款 查询分店绑定model
         value2: [],//本店待认领款 快速查询
-        applyDate2:"",//本店待认领款 查询申请日期value
+        // applyDate2:"",//本店待认领款 查询申请日期value
         // model3:[],//连锁待分配款项 查询分店绑定model
         value3: [],//连锁待分配款项 快速查询
-        applyDate3:"",//连锁待分配款项 查询申请日期
+        // applyDate3:"",//连锁待分配款项 查询申请日期
         remoteloading: false,
         remoteloading2: false,
         title: "预付款认领", //弹框标题
@@ -798,58 +798,31 @@
       // 快速查询 未核销对账单
       quickDate(data) {
         this.value = data ? data : ["", ""];
-        // let obj = {
-        //   orgId: this.model1,
-        //   startDate: this.value[0]
-        //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-        //     : "",
-        //   endDate: this.value[1]
-        //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-        //     : ""
-        // };
-        this.queryNoWrite();
+        // this.queryNoWrite();
       },
       // 快速查询 本店待认领款
       quickDate2(data) {
         this.value2 = data ? data : ["", ""];
-        // let obj = {
-        //   orgId: this.model1,
-        //   startDate: this.value[0]
-        //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-        //     : "",
-        //   endDate: this.value[1]
-        //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-        //     : ""
-        // };
-        this.queryClaimed();
+        // this.queryClaimed();
       },
       // 快速查询 连锁待分配款项
       quickDate3(data) {
         this.value3 = data ? data : ["", ""];
-        // let obj = {
-        //   orgId: this.model1,
-        //   startDate: this.value[0]
-        //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-        //     : "",
-        //   endDate: this.value[1]
-        //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-        //     : ""
-        // };
-        this.queryDistribution();
+        // this.queryDistribution();
       },
       // 选择日期 未核销对账单
       changedate(daterange) {
-        this.applyDate = daterange;
+        this.value = daterange;
         this.queryNoWrite()
       },
       // 选择日期 未核销对账单
       changedate2(daterange) {
-        this.applyDate2 = daterange;
+        this.value2 = daterange;
         this.queryClaimed()
       },
       // 选择日期 连锁待分配款项
       changedate3(daterange) {
-        this.applyDate3 = daterange;
+        this.value3 = daterange;
         this.queryDistribution()
       },
       //获取门店
@@ -1100,7 +1073,7 @@
           endDate: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
             : "",     //结束时间参数
-          createTime:this.applyDate //日期查询时间发生日期
+          // createTime:this.applyDate //日期查询时间发生日期
         };
         accountNoSelete(obj).then(res => {
           if (res.code === 0) {
@@ -1125,7 +1098,7 @@
           endDate: this.value2[1]
             ? moment(this.value2[1]).format("YYYY-MM-DD HH:mm:ss")
             : "",     //结束时间参数
-          createTime:this.applyDate2 //日期查询时间发生日期
+          // createTime:this.applyDate2 //日期查询时间发生日期
         };
         claimedFund(obj).then(res => {
           if (res.code === 0) {
@@ -1144,13 +1117,13 @@
           page: this.distributionPage.page - 1,
           size: this.distributionPage.size,
 
-          startDate: this.value2[0]
-            ? moment(this.value2[0]).format("YYYY-MM-DD HH:mm:ss")
+          startDate: this.value3[0]
+            ? moment(this.value3[0]).format("YYYY-MM-DD HH:mm:ss")
             : "",    //开始时间参数
-          endDate: this.value2[1]
-            ? moment(this.value2[1]).format("YYYY-MM-DD HH:mm:ss")
+          endDate: this.value3[1]
+            ? moment(this.value3[1]).format("YYYY-MM-DD HH:mm:ss")
             : "",     //结束时间参数
-          createTime:this.applyDate3 //日期查询时间发生日期
+          // createTime:this.applyDate3 //日期查询时间发生日期
         };
         distributionSelete(obj).then(res => {
           if (res.code === 0) {
