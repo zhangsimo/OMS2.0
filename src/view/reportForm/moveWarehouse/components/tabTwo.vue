@@ -41,11 +41,11 @@
           title="移入仓库"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
-          field="detailRemark"
-          title="备注"
-          width="120"
-        ></vxe-table-column>
+<!--        <vxe-table-column  show-overflow="tooltip"-->
+<!--          field="detailRemark"-->
+<!--          title="备注"-->
+<!--          width="120"-->
+<!--        ></vxe-table-column>-->
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group2" title="配件信息">
         <vxe-table-column  show-overflow="tooltip"
