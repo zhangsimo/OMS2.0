@@ -51,7 +51,6 @@
         @cell-click="cellClickEvent"
         @radio-change="radioChangeEvent"
         :auto-resize="true"
-        width="1000"
       >
         <vxe-table-column
           type="radio"
@@ -63,12 +62,12 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="serviceId" title="计划单号"></vxe-table-column>
-        <vxe-table-column field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column field="orderDate" title="计划采购日期"></vxe-table-column>
-        <vxe-table-column field="orderMan" title="计划员"></vxe-table-column>
-        <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
-        <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="计划单号" width="138"></vxe-table-column>
+        <vxe-table-column field="guestName" title="供应商" width="138"></vxe-table-column>
+        <vxe-table-column field="orderDate" title="计划采购日期" width="139"></vxe-table-column>
+        <vxe-table-column field="orderMan" title="计划员" width="139"></vxe-table-column>
+        <vxe-table-column field="auditDate" title="提交日期" width="139"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="139"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
         <Page
@@ -99,14 +98,14 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码" width="104"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称" width="104"></vxe-table-column>
           <vxe-table-column width="180" field="fullName" title="配件全称"></vxe-table-column>
-        <vxe-table-column field="canQty" title="计划采购数量"></vxe-table-column>
-        <vxe-table-column field="notEnterQty" title="调整数量"></vxe-table-column>
-        <vxe-table-column field="trueEnterQty" title="已转订单数量"></vxe-table-column>
-        <vxe-table-column field="canQty" title="未转订单数量"></vxe-table-column>
-        <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        <vxe-table-column field="canQty" title="计划采购数量" width="104"></vxe-table-column>
+        <vxe-table-column field="notEnterQty" title="调整数量" width="104"></vxe-table-column>
+        <vxe-table-column field="trueEnterQty" title="已转订单数量" width="104"></vxe-table-column>
+        <vxe-table-column field="canQty" title="未转订单数量" width="104"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="104"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot="footer">
