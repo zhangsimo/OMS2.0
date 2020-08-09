@@ -34,6 +34,13 @@
       @click="deleteRows"
       v-has="'examine'"
     >删除行</button>
+    <button
+      class="ivu-btn ivu-btn-default mr10"
+      type="button"
+      @click="addOpenSup"
+    >新增
+<!--      v-has="'add'"-->
+    </button>
     <vxe-table
       class="mt10"
       height="300"

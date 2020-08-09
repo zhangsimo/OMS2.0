@@ -196,8 +196,7 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
     }
   },
   methods: {

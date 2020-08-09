@@ -332,12 +332,12 @@ export default {
       findForAllot(params).then(res => {
         if (res.code === 0) {
           this.purchaseNameArr.push(...res.data.content);
+          console.log(res.data.content)
         }
       });
     }
   },
   mounted() {
-    console.log("getlist")
     this.getList();
     this.supplier();
   }
