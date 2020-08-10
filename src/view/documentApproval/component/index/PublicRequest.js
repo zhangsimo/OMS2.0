@@ -191,7 +191,7 @@ export default {
         if (valid) {
           if(type==1){
             if(this.formInline.requestInstructionNo!=undefined){
-              if(parseFloat(this.formInline.applyAmt)>=this.QSMoney){
+              if(parseFloat(this.formInline.applyAmt)>this.QSMoney){
                 this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
                 return
               }
