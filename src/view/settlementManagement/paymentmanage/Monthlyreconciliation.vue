@@ -640,6 +640,7 @@ export default {
                 on: {
                   click: () => {
                     this.Reconciliation = true;
+                    this.$refs.xTable.recalculate(true)
                     params.row.detailDtoList.map((item, index) => {
                       item.num = index + 1;
                       item.index = params.index;

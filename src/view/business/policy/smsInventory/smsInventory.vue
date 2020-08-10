@@ -527,10 +527,10 @@ export default {
       } //校验
     };
   },
-  created() {
-    this.getList();
-    this.getAllSales();
-  },
+  // created() {
+  //   this.getList();
+  //   this.getAllSales();
+  // },
   methods: {
 
     //------------------------------------------------------------------------//
@@ -1064,6 +1064,8 @@ export default {
     },
   },
   mounted() {
+    this.getList();
+    this.getAllSales();
     setTimeout(() => {
       this.getDomHeight();
     }, 0);

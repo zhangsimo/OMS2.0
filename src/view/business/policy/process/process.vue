@@ -777,15 +777,15 @@ export default {
       deep: true
     }
   },
-  created() {
-    if (this.tabKey === 0) {
-      // 调接口获取配件组装列表信息
-      this.getListzu();
-    } else {
-      // 调接口获取配件拆分列表信息
-      this.getListchai();
-    }
-  },
+  // created() {
+  //   if (this.tabKey === 0) {
+  //     // 调接口获取配件组装列表信息
+  //     this.getListzu();
+  //   } else {
+  //     // 调接口获取配件拆分列表信息
+  //     this.getListchai();
+  //   }
+  // },
   methods: {
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位
@@ -1494,6 +1494,13 @@ export default {
     }
   },
   mounted() {
+    if (this.tabKey === 0) {
+      // 调接口获取配件组装列表信息
+      this.getListzu();
+    } else {
+      // 调接口获取配件拆分列表信息
+      this.getListchai();
+    }
     this.getWareHouse(); //获取仓库列表
     setTimeout(() => {
       this.getDomHeight();
