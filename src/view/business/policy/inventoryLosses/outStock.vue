@@ -497,11 +497,11 @@
         selectLeftItemId:''
       };
     },
-    created() {
-      this.getList();
-      this.getAllSales();
-      this.getType();
-    },
+    // created() {
+    //   this.getList();
+    //   this.getAllSales();
+    //   this.getType();
+    // },
     methods: {
 
       //获取客户属性
@@ -972,6 +972,9 @@
       },
     },
     mounted() {
+      this.getList();
+      this.getAllSales();
+      this.getType();
       setTimeout(() => {
         this.getDomHeight();
       }, 0);

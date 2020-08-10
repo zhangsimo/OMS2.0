@@ -154,7 +154,7 @@
           <FormItem label="费用承担" prop="costBear">
             <Select v-model="invoice.costBear" class="ml5 w200" :disabled="modelType.type==3">
               <Option
-                v-for="item in invoice.bearingCostList"
+                v-for="item in bearingCostList"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</Option>
@@ -288,6 +288,20 @@ export default {
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开销售单", //选择必开销售单弹框标题
       modal1: false, // 弹框开关
+      bearingCostList: [
+        {
+          value: "0",
+          label: "现付"
+        },
+        {
+          value: "1",
+          label: "到付"
+        },
+        {
+          value: "2",
+          label: "自取"
+        }
+      ], //费用承担列表
       invoice: {
         consignee: "", //快递收件人
         receiptUnit: "", // 发票单位
@@ -304,20 +318,20 @@ export default {
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
         costBear: "", //费用承担
-        bearingCostList: [
-          {
-            value: 0,
-            label: "现付"
-          },
-          {
-            value: 1,
-            label: "到付"
-          },
-          {
-            value: 2,
-            label: "自取"
-          }
-        ], //费用承担列表
+        // bearingCostList: [
+        //   {
+        //     value: 0,
+        //     label: "现付"
+        //   },
+        //   {
+        //     value: 1,
+        //     label: "到付"
+        //   },
+        //   {
+        //     value: 2,
+        //     label: "自取"
+        //   }
+        // ], //费用承担列表
         statementAmountOwed: "", //对账单欠票金额
         applyMoney: "", //申请开票金额
         address: "", //收件地址
@@ -463,7 +477,7 @@ export default {
         },
         {
           title: "数量",
-          key: "orderQty",
+          key: "qty",
           className: "tc"
         },
         {
@@ -489,7 +503,7 @@ export default {
         },
         {
           title: "出库单号",
-          key: "orderNo",
+          key: "outNo",
           className: "tc"
         },
         {
@@ -561,13 +575,23 @@ export default {
           className: "tc"
         },
         {
+          title: "油品换算单位",
+          key: "oilsUnit",
+          className: "tc"
+        },
+        {
+          title: "油品换算数量",
+          key: "oilsQty",
+          className: "tc"
+        },
+        {
           title: "单位",
           key: "unit",
           className: "tc"
         },
         {
           title: "数量",
-          key: "orderQty",
+          key: "qty",
           className: "tc"
         },
         {
@@ -593,7 +617,7 @@ export default {
         },
         {
           title: "出库单号",
-          key: "orderNo",
+          key: "outNo",
           className: "tc"
         },
         {

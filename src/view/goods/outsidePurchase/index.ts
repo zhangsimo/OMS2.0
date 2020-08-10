@@ -339,6 +339,7 @@ export default class OutsidePurchase extends Vue {
     ref.resetFields();
     const currentRowTable: any = this.$refs["currentRowTable"];
     currentRowTable.clearCurrentRow();
+    this.selectLeftItemId=''
     for(let b of this.purchaseOrderTable.tbdata){
       b._highlight = false
     }

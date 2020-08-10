@@ -138,7 +138,7 @@ import {
   getSupplierList,
   allotMainAccept
 } from "../../../../api/AlotManagement/transferringOrder";
-import { findForAllot } from "_api/purchasing/purchasePlan";
+import { findForAllot,transferringFindForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "Acceptances",
   components: {
@@ -329,7 +329,8 @@ export default {
     // 供应商
     supplier() {
       let params = {page: 0, size: 10000};
-      findForAllot(params).then(res => {
+
+      transferringFindForAllot(params).then(res => {
         if (res.code === 0) {
           this.purchaseNameArr.push(...res.data.content);
         }
@@ -337,7 +338,6 @@ export default {
     }
   },
   mounted() {
-    console.log("getlist")
     this.getList();
     this.supplier();
   }

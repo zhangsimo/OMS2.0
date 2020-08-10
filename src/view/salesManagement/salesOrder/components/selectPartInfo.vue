@@ -8,7 +8,10 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="配件名称：">
+          <FormItem label="配件名称：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
+            <Input disabled v-model="formItemData.fullName" class="w200" placeholder="配件名称"></Input>
+          </FormItem>
+          <FormItem label="配件名称：" v-else>
             <Input disabled v-model="formItemData.partStandardName" class="w200" placeholder="配件名称"></Input>
           </FormItem>
         </Col>
@@ -27,12 +30,18 @@
       </Row>
       <Row>
         <Col span="12">
-          <FormItem label="厂牌：">
+          <FormItem label="厂牌：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
+            <Input disabled v-model="formItemData.carBrandName" class="w200" placeholder="厂牌"></Input>
+          </FormItem>
+          <FormItem label="厂牌：" v-else>
             <Input disabled v-model="formItemData.adapterCarBrand" class="w200" placeholder="厂牌"></Input>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="品牌车型：">
+          <FormItem label="品牌车型：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
+            <Input disabled v-model="formItemData.carModelName" class="w200" placeholder="品牌车型"></Input>
+          </FormItem>
+          <FormItem label="品牌车型：" v-else>
             <Input disabled v-model="formItemData.adapterCarModel" class="w200" placeholder="品牌车型"></Input>
           </FormItem>
         </Col>
@@ -45,20 +54,23 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="单位：">
+          <FormItem label="单位：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
+            <Input disabled v-model="formItemData.unit" class="w200" placeholder="单位"></Input>
+          </FormItem>
+          <FormItem label="单位：" v-else>
             <Input disabled v-model="formItemData.minUnit" class="w200" placeholder="单位"></Input>
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="12">
-          <FormItem label="单价：">
+          <FormItem label="单价：" v-if="$route.name!='bookingSheet'">
             <!--<InputNumber :min="0" class="w200" placeholder="单价" v-model="formItemData.orderPrice" @on-focus="changeFocuse" @on-blur="changeblur" ></InputNumber>-->
             <vxe-input type="float" class="w200" size="mini"  v-model="formItemData.orderPrice" :min="0" digits="2"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="金额：">
+          <FormItem label="金额：" v-if="$route.name!='bookingSheet'">
             <Input disabled v-model="total" class="w200" placeholder="金额"></Input>
           </FormItem>
         </Col>
@@ -89,6 +101,7 @@
     },
     methods:{
 		  init(v){
+		    // console.log(v)
 		    if(v){
           this.searchPartLayer = true;
           this.formItemData = {...v};

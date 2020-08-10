@@ -333,6 +333,7 @@ export default {
       }
     },
     async init(){
+      this.$refs.xTable2.recalculate(true)
       if(this.information.owned){
         this.modal1 = true;
         this.getDraftInfo(this.information.accountNo);

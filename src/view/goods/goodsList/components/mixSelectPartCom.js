@@ -297,12 +297,12 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase"){
+      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase" ||this.$route.name=="bookingSheet"){
         this.$refs.selectPartInfo.init(v);
       }
-      if(this.$route.name=="bookingSheet"){
-        this.$refs.selectPartInfo2.init(v);
-      }
+      // if(this.$route.name=="bookingSheet"){
+      //   this.$refs.selectPartInfo2.init(v);
+      // }
     },
 
     throwDataChangeNum(v){
