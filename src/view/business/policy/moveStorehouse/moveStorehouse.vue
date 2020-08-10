@@ -905,6 +905,11 @@ export default {
         this.$Message.error("只有草稿状态才能保存");
         return;
       }
+        if (this.numberValue <=0) {
+            this.$Message.error("数量须大于0");
+            this.saveButClick = false;
+            return;
+        }
       let zero = tools.isZero(this.Right.tbdata, {qty: "orderQty",});
       if(zero) return;
 
