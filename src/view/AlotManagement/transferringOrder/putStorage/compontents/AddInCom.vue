@@ -67,7 +67,7 @@
           :radio-config="{labelField: 'name', trigger: 'row'}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>
+<!--          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>-->
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="申请单" width="150"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="160"></vxe-table-column>
