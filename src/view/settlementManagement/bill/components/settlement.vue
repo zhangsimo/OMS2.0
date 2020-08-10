@@ -148,7 +148,8 @@
 import accountSelette from "./accountWirte";
 import {
   wirteAccount,
-  saveAccount
+  saveAccount,
+  getHedging
 } from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
@@ -180,6 +181,7 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
+      showchange:false,//控制子组件内部往来单位是否可以查询
       obj: {},
       //表格校验
       validRules: {
@@ -264,6 +266,7 @@ export default {
     },
     // 对账单号选择
     accountNoClick() {
+      this.$refs.accountSelette.isCanChange = this.showchange
       this.$refs.accountSelette.modal1 = true;
       if (this.$parent.paymentId == "YSK") {
         this.$refs.accountSelette.paymentId = "YJDZ";
@@ -341,9 +344,25 @@ export default {
         };
         saveAccount(obj).then(res => {
           if (res.code === 0) {
-            this.Settlement = false;
-            this.$emit("updateD")
             this.$message.success("保存成功");
+            this.$Modal.confirm({
+              title: '提示',
+              content: '<p>是否同时发起发票对冲申请</p>',
+              onOk: async () => {
+                let res = await getHedging(obj)
+                if (res.code === 0){
+                  this.Settlement = false;
+                  this.$message.success("发票对冲申请单");
+                  this.$emit('getNewList')
+                }
+              },
+              onCancel: () => {
+                this.Settlement = false;
+                this.$message.success("对账单对冲成功");
+              }
+            });
+
+
           }
         });
       } else {

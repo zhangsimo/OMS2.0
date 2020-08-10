@@ -146,7 +146,19 @@
           type="button"
           @click="Revoke"
           v-has="'revocation'"
-        >撤销</button>
+        >撤回申请</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="Revoke"
+          v-has="'revocation'"
+        >撤回开票</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="Revoke"
+          v-has="'revocation'"
+        >撤回核销</button>
         <div class="hide1">
           <Table
             border
@@ -356,7 +368,7 @@
     <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
-    <settlementMoadl ref="settlementMoadl" />
+    <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>
     <no-tax ref="noTax" :information="reconciliationStatement" :parameter="{}"></no-tax>
   </div>
 </template>
@@ -1153,7 +1165,8 @@ export default {
   },
   computed:{
     selectShopList(){
-      return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
+      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      return canSelect
     }
   },
   filters: {
@@ -1183,6 +1196,11 @@ export default {
     }
   },
   methods: {
+
+    //对冲之后刷新页面接口
+    getNeWlist(){
+      this.getAccountStatement()
+    },
     //获取门店
     async getShop(){
       let data ={}
@@ -1544,10 +1562,13 @@ export default {
           (this.reconciliationStatement.statementStatusName === "审批通过" ||
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
+          this.$refs.settlementMoadl.showchange = false
           if(type == 1){
             this.paymentId = 'YS'
+            this.$refs.settlementMoadl.showchange = true
           }else if(type == 2){
             this.paymentId = 'YF'
+            this.$refs.settlementMoadl.showchange = true
           }
           this.$refs.settlementMoadl.Settlement = true;
           this.type = !type ? 0: type === 1 ? 1:2
