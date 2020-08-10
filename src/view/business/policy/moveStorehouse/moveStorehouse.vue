@@ -849,8 +849,8 @@ export default {
         this.saveButClick = false;
         return;
       }
-      if (this.numberValue < 0) {
-        this.$Message.error("数量不可小于0");
+      if (this.numberValue <=0) {
+        this.$Message.error("数量须大于0");
         this.saveButClick = false;
         return;
       }
