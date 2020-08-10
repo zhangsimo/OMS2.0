@@ -171,6 +171,7 @@ export default {
   methods: {
     //模态框打开111
     async open() {
+      this.$refs.xTable.recalculate(true)
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
       // if(this.$route.name === "documentApproval-myApplication") {

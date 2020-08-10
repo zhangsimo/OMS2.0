@@ -76,6 +76,7 @@ export default {
   methods: {
     //模态框打开111
     open() {
+      this.$refs.documentTable.recalculate(true)
       this.company = []
       this.payUserList = this.list.payList
       this.formInline = {}
