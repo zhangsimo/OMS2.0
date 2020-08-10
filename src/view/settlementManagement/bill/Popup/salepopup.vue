@@ -134,7 +134,7 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="备注">
+          <FormItem label="快递备注">
             <Input v-model="invoice.remark" class="ml5 w200" />
           </FormItem>
           <FormItem>
@@ -157,7 +157,7 @@
           <!--<FormItem label="申请开票金额" >-->
             <!--<Input v-model="invoice.applyAmt" class="ml5 w200" disabled />-->
           <!--</FormItem>-->
-          <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
+          <FormItem label="开票说明" prop="underTicketExplain">
             <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
           </FormItem>
         </div>

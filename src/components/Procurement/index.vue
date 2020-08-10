@@ -105,18 +105,17 @@
         <vxe-table-column
           type="checkbox"
           width="60"
-          fixed="left"
         ></vxe-table-column>
         <vxe-table-column
           type="index"
           title="序号"
           width="60"
-          fixed="left"
+
         ></vxe-table-column>
-        <vxe-table-column  width="160"  field="partCode" title="配件编码" fixed="left"></vxe-table-column>
-        <vxe-table-column  width="160"  field="partName" title="配件名称" fixed="left"></vxe-table-column>
-        <vxe-table-column  width="160" field="oemCode" title="OE码" fixed="left"></vxe-table-column>
-        <vxe-table-column  width="100" field="partBrand" :filters="[]" :filter-method="filterNameMethod" title="品牌" fixed="left"></vxe-table-column>
+        <vxe-table-column  width="160"  field="partCode" title="配件编码" ></vxe-table-column>
+        <vxe-table-column  width="160"  field="partName" title="配件名称" ></vxe-table-column>
+        <vxe-table-column  width="160" field="oemCode" title="OE码" ></vxe-table-column>
+        <vxe-table-column  width="100" field="partBrand" :filters="[]" :filter-method="filterNameMethod" title="品牌" ></vxe-table-column>
         <vxe-table-column  width="100" field="taxSign" title="是否含税">
           <template v-slot="{ row }">
             <span>{{ row.taxSign ? "是" : "否" }}</span>
