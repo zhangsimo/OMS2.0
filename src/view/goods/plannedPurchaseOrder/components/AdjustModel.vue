@@ -61,22 +61,27 @@
           <vxe-table-column
             field="partCode"
             title="配件编码"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="订单数量"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="trueEnterQty"
             title="实际入库数量"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="notEnterQty"
             title="已调整数量"
+            width="122"
           ></vxe-table-column>
           <vxe-table-column
             field="adjustQty"
@@ -95,7 +100,7 @@
               />
             </template>
           </vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注" width="122"></vxe-table-column>
         </vxe-table>
       </div>
     </div>
