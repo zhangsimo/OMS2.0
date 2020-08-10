@@ -1132,7 +1132,7 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      console.log(this.Leftcurrentrow)
+      // console.log(this.Leftcurrentrow)
       this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
