@@ -118,6 +118,7 @@
           auto-resize
           show-footer
           max-height="400"
+          ref="xTable2"
           align="center"
           :footer-method="payCollection"
           :data="tableData"
@@ -281,6 +282,8 @@ export default {
     },
     //弹框打开
     hander(type) {
+      this.$refs.xTable.recalculate(true)
+      this.$refs.xTable2.recalculate(true)
       if (!type) {
         this.check = 0;
         this.remark = "";

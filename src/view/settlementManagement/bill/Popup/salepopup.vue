@@ -660,6 +660,8 @@ export default {
     },
     // 对话框是否显示
     visChange(flag) {
+      this.$refs.xTable1.recalculate(true)
+      this.$refs.xTable2.recalculate(true)
       if (flag) {
         this.$refs.formCustom.resetFields();
         this.invoice.statementAmtOwed = this.information.statementAmtOwed

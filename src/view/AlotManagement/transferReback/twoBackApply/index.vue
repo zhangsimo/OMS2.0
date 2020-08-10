@@ -697,7 +697,7 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList();
+    // this.getList();
     // this.getArrayParams();
   },
   methods: {
@@ -1132,7 +1132,7 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      console.log(this.Leftcurrentrow)
+      // console.log(this.Leftcurrentrow)
       this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
@@ -1439,6 +1439,7 @@ export default {
     }
   },
   mounted() {
+    this.getList();
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
