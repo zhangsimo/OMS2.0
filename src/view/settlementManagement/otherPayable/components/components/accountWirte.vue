@@ -6,7 +6,7 @@
     <Select v-model="companyId" class="w150" filterable>
       <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
-    <span class="ml10">收付款类型：</span>
+    <span class="ml10">对账单类型：</span>
     <Select v-model="paymentId" class="w150" filterable>
       <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
@@ -47,6 +47,7 @@ export default {
       dateQuery: "", //时间
       company: [], //往来单位
       companyId: "", //往来单位id
+      compyName: "",
       modal1: false, //弹窗展示
       account: [
         {
@@ -121,6 +122,9 @@ export default {
     };
   },
   methods: {
+    init() {
+      this.modal1 = true;
+    },
     // 往来单位选择
     async getOne() {
       findGuest({ size: 2000 }).then(res => {
@@ -132,6 +136,11 @@ export default {
               label: item.fullName
             });
           });
+          this.company.forEach(el => {
+            if(el.label == this.compyName) {
+              this.companyId = el.value;
+            }
+          })
         }
       });
     },
@@ -147,6 +156,9 @@ export default {
                 value: item.itemCode,
                 label: item.itemName
               });
+              if(item.itemName == "其他应收款") {
+                this.paymentId = item.itemCode;
+              }
             });
           }
         );
@@ -163,7 +175,8 @@ export default {
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
         receivePaymentType: this.paymentId,
-        guestId: this.companyId
+        guestId: this.companyId,
+        paymentBalance: 0,
       };
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {

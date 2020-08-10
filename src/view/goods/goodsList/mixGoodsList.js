@@ -485,6 +485,10 @@ export const mixGoodsData = {
             this.formPlan.otherPrice = this.tbdata[0].otherAmt || 0;
             this.formPlan.totalPrice = this.tbdata[0].totalAmt || 0;
             this.formPlan.processInstanceId = this.tbdata[0].processInstanceId || "";
+            this.ArrayList = [{
+              label: this.formPlan.supplyName,
+              value: this.formPlan.guestId,
+            }]
           },
           onCancel: () => {
             if (this.newadd && this.selectPlanOrderItem.new) {
@@ -549,6 +553,10 @@ export const mixGoodsData = {
         });
         this.mainId = v.id;
         this.upurl = upxlxs + v.id;
+        this.ArrayList = [{
+          label: this.formPlan.supplyName,
+          value: this.formPlan.guestId,
+        }]
       }
     },
     getArray(data) {
