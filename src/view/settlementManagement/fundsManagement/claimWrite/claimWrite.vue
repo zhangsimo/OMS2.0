@@ -309,7 +309,7 @@
         company: [], //往来单位下拉框
         company2: [], //往来单位下拉框
         orgId: "", //门店  连锁待分配款项
-        orgList: [{id: "", name: "全部"}], //分店名称
+        orgList: [{id: "0", name: "全部"}], //分店名称
         claimedSubjectList: [], //获取到点击到的本店认领数据
         areaId: 0, //区域
         areaList: [{value: 0, label: "全部"}], //区域
@@ -790,7 +790,11 @@
     },
     computed: {
       selectShopList() {
-        return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
+        if(this.$store.state.user.userData.currentCompany!=null){
+          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        }else{
+          return true
+        }
       }
     },
     methods: {
