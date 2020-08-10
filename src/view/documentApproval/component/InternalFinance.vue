@@ -72,6 +72,7 @@
         </div>
         <div class="financeTab">
           <vxe-table
+            ref="xTable"
             auto-resize
             resizable
             border

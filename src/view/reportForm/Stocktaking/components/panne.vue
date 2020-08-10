@@ -10,11 +10,11 @@
             <span v-if="type == 1">入库日期：</span>
             <span v-else>出库日期：</span>
             <DatePicker
-              v-model="search.submitDate"
+              :value="search.submitDate"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
-              class="w140 mr10"
+              class="w200 mr10"
             >
             </DatePicker>
           </div>
@@ -113,8 +113,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   methods: {
@@ -142,7 +145,7 @@ export default {
     },
     // 快速日期查询
     async getDataQuick(v) {
-      this.quickDates = v;
+      this.search.submitDate = v;
       let arr = await creat("", this.$store);
       this.search.orgid = arr[1];
       if(v.length >= 2) {

@@ -9,11 +9,11 @@
           <div class="db mr10">
             <span>提交日期：</span>
             <DatePicker
-              v-model="search.submitDate"
+              :value="search.submitDate"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
-              class="w140 mr10"
+              class="w200 mr10"
             >
             </DatePicker>
           </div>
@@ -103,7 +103,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      return  this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName:'请选择分店':"请选择分店"
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   async mounted() {
@@ -140,7 +144,7 @@ export default {
     },
     // 快速日期查询
     async getDataQuick(v) {
-      this.quickDates = v;
+      this.search.submitDate = v;
       if(v.length >= 2) {
         let arr = await creat("", this.$store);
         this.search.orgid = arr[1];
