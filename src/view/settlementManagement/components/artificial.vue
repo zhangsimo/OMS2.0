@@ -30,7 +30,7 @@
       @checkbox-change="getOneList"
       @checkbox-all ='getAllList'
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'cell',showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'cell'}"
       >
       <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
         <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -91,7 +91,7 @@
             paidMoneyTotal:0,//支出合计
             validRules:{
               claimShopCode:[
-                { required: true, message: '分配店号必填' }
+                { required: true, message: '分配店号必填',trigger:'change' }
               ]
             }
           }

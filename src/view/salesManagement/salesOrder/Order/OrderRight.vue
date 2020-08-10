@@ -21,7 +21,7 @@
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
             <Row>
               <Tooltip :content="formPlan.fullName">
-                <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:130px;"/>
+                <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:134px;"/>
               </Tooltip>
               <Button
                 class="ml5"

@@ -9,3 +9,10 @@ export function goshop(params) {
     params,
   });
 }
+
+export function getAccShopList(){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/getClaimShopName`,
+    method: "get"
+  });
+}

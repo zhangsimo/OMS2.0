@@ -17,7 +17,7 @@
     >
       <vxe-table-column type="checkbox" min-width="80" fixed="left"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" min-width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column field="tmp" title="往来单位" fixed="left" min-width="100">
+      <vxe-table-column field="tmp" title="往来单位" fixed="left" width="200">
         <template v-slot="{ row }">
           <ul class="list">
             <li
@@ -34,7 +34,7 @@
         <vxe-table-column
           field="businessNumbers"
           title="付款单号"
-          min-width="120"
+          width="200"
         ></vxe-table-column>
         <vxe-table-column
           field="businessNumbersList"
@@ -63,6 +63,10 @@
           <template v-slot="{ row }">
             <span>{{ row.verificationType.name }}</span>
           </template>
+        </vxe-table-column>
+        <vxe-table-column width="100" field="createUname" title="操作人">
+        </vxe-table-column>
+        <vxe-table-column width="150" field="createTime" title="操作时间">
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="金额信息">
@@ -223,7 +227,7 @@ export default {
   display: inline-block;
   border: 1px solid #e8eaec;
   flex: 1;
-  padding: 5px;
+  padding:0 5px;
 }
 .vxe-table .vxe-cell {
   padding: 0;

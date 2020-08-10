@@ -33,7 +33,7 @@
           </div>
           <div class="db ml15">
             <span>账户：</span>
-            <input type="text" class="h30" v-model="accountCode">
+            <input type="text" class="h30" v-model="accountName">
           </div>
           <div class="db ml15 mr10">
             <span>开户行：</span>
@@ -51,25 +51,36 @@
           </div>
           <div class="db mr10">
             <span>金额：</span>
-            <vxe-input type="float" class="w100 h30" v-model="accountMoney" digits="2" min="0"></vxe-input>
+            <vxe-input type="float" class="w100 h30" v-model="accountMoney" digits="2"></vxe-input>
           </div>
           <div class="db mr10">
-            <span>账号：</span>
-            <input type="text" class="h30" v-model="accountName">
+            <span>对方账号：</span>
+            <input type="text" class="h30" v-model="accountCode">
           </div>
           <div class="db mr10">
             <span>认领门店：</span>
             <Select  v-model="claimShopName" filterable class="w150">
               <Option
-                v-for="item in shopList"
-                :value="item.id"
-                :key="item.id"
-              >{{ item.name }}</Option>
+                v-for="item in getAccShopList"
+                :value="item.shopName"
+                :key="item.shopCode"
+              >{{ item.shopName }}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span>往来单位：</span>
-            <input type="text" class="h30" v-model="guestId">
+            <input type="text" class="h30" v-model="suppliers">
+            <!--<Select-->
+              <!--v-model="guestId"-->
+              <!--class="w150"-->
+              <!--clearable-->
+              <!--filterable-->
+              <!--remote-->
+              <!--:loading="remoteloading"-->
+              <!--:remote-method="getOne"-->
+            <!--&gt;-->
+              <!--<Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+            <!--</Select>-->
           </div>
           <div class="db ml15">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -132,7 +143,7 @@
     <changeJournal :list='oneList' ref="changeModal" @getAllList="allList"></changeJournal>
 
     <div class="mt15">
-      <Tabs type="card" value="capitalChain1">
+      <Tabs type="card" value="capitalChain5">
         <TabPane label="全部数据" name="capitalChain1">
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
@@ -420,9 +431,10 @@
   import artificial from '../../components/artificial'
   import {are  , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getTableList}from '@/api/accountant/accountant'
-  import { goshop } from "@/api/settlementManagement/shopList";
+  import { goshop,getAccShopList } from "@/api/settlementManagement/shopList";
   import amtData from '../../components/amtData'
   import changeJournal from '../components/changeJournal'
+  import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 
 
   import moment from 'moment'
@@ -437,6 +449,8 @@
     },
     data() {
       return {
+        remoteloading: false,
+        company: [], //往来单位下拉框
         accountName:'',//账号
         bankName:'',//开户银行
         value: [],
@@ -467,11 +481,11 @@
         canQuickDateList: false,//判断是否可以查询
 
         //新增字段
-        accountMoney:0,//金额查询参数
+        accountMoney:'',//金额查询参数
         claimShopName:'',//认领门店查询参数
-        guestId:'',//往来单位
-        accountCode:''//账号
-
+        suppliers:'',//往来单位
+        accountCode:'',//账号
+        getAccShopList:[],
       };
     },
     async mounted () {
@@ -491,10 +505,35 @@
       }
     },
     methods: {
+      // 往来单位选择
+      async getOne(query) {
+        this.company = [];
+        if (query != "") {
+          this.remoteloading = true;
+          findGuest({ fullName: query, size: 20 }).then(res => {
+            if (res.code === 0) {
+              this.company = [];
+              res.data.content.map(item => {
+                this.company.push({
+                  value: item.id,
+                  label: item.fullName
+                });
+              });
+              this.remoteloading = false;
+            }
+          });
+        } else {
+          this.company = [];
+        }
+      },
       //获取全部地址
       async getAllAre(){
         let res = await are()
-        if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
+        if (res.code === 0) {
+          this.Branchstore = [...this.Branchstore ,...res.data]
+          this.setAreaDef();
+          return this.Branchstore;
+        }
       },
       //当前非管理员状态情况下获取门店地址
       async getThisArea(){
@@ -503,11 +542,30 @@
         let data ={}
         data.supplierTypeSecond = this.model1
         this.shopList = [{id:0 , name:'全部'}]
+        let rep = await getAccShopList();
+        if(rep.code==0){
+          this.getAccShopList = rep.data
+        }
+        console.log(rep)
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList , ...res.data]
+          this.setAreaDef();
         }
       },
+
+      setAreaDef(){
+        if(this.Branchstore.length>0){
+          this.Branchstore.map(item=>{
+            this.shopList.map(item2=>{
+              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                this.model1=item.id
+              }
+            })
+          })
+        }
+      },
+
       // //切换地址重新调取门店接口
       changeArea(){
         if (this.$store.state.user.userData.shopkeeper == 0) {
@@ -560,16 +618,23 @@
         data.size = 9999
         data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ''
         data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
-        data.areaId = this.model1
-        data.shopNumber = this.shopCode
-        data.subjectId = this.subjectCode
+
+        if (this.model1 != 0) {
+          data.areaId = this.model1
+        }
+        if(this.selectShopList){
+          data.shopNumber = this.shopCode
+        }
+        if(this.subjectCode&&this.subjectCode!=0){
+          data.subjectId = this.subjectCode
+        }
         data.accountName = this.accountName
         data.bankName = this.bankName
 
-        // data.guestId = this.guestId;
-        // data.claimShopName = this.claimShopName;
-        // data.accountMoney = this.accountMoney;
-        // data.accountCode = this.accountCode;
+        data.suppliers = this.suppliers;
+        data.claimShopName = this.claimShopName;
+        data.accountMoney = this.accountMoney;
+        data.accountCode = this.accountCode;
         this.allMoneyList = {}
         let res = await goList(data)
         if(res.code === 0){
@@ -579,6 +644,8 @@
           this.tableData = res.data.content
           this.tableData1 = []
           this.tableData2 = []
+          this.tableData3 = []
+          this.tableData4 = []
           res.data.content.forEach( item => {
             if (item.collateState) {
               this.tableData1.push(item)
