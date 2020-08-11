@@ -295,7 +295,59 @@ export default class TemporaryPurchase extends Vue {
     const orderDate = this.formPlanmain.orderDate;
     return date && orderDate && date.valueOf() < orderDate;
   }
-
+  // 初始化主数据
+  //---- 判断是否是高级查询
+  private isMore: boolean = false;
+  //---- 初始方法
+  private async getListData() {
+    this.purchaseOrderTable.loading = true;
+    let params: any = {}
+    let data: any = {}
+    data.showSelf = this.showSelf;
+    params.size = this.purchaseOrderTable.page.size;
+    params.page = this.purchaseOrderTable.page.num - 1;
+    if (this.quickDate.length > 0) {
+      data.startTime = this.quickDate[0];
+      data.endTime = this.quickDate[1];
+    }
+    if (this.purchaseType != 999 && this.purchaseType) {
+      data.billStatusId = this.purchaseType;
+    }
+    let res: any;
+    if (!this.isMore) {
+      res = await api.temporaryFindPageByDynamicQuery(params, data)
+    } else {
+      if (this.moreData != null) {
+        data = { ...data, ...this.moreData };
+      }
+      res = await api.temporaryQueryByConditions(params, data);
+    }
+    if (res.code == 0) {
+      this.isAdd = true;
+      this.isInput = true;
+      this.tableData = new Array();
+      const ref: any = this.$refs['formplanref'];
+      ref.resetFields();
+      this.formPlanmain.guestId = '';
+      this.formPlanmain.serviceId = '';
+      this.purchaseOrderTable.loading = false;
+      this.purchaseOrderTable.page.total = res.data.totalElements;
+      this.purchaseOrderTable.tbdata = res.data.content;
+      this.purchaseOrderTable.tbdata.forEach((el: any) => {
+        Array.isArray(el.details) && el.details.forEach((d: any) => {
+          d.isOldFlag = true;
+        })
+      })
+      for(let b of this.purchaseOrderTable.tbdata){
+        b._highlight = false
+        if(b.id==this.selectLeftItemId){
+          b._highlight = true;
+          this.setFormPlanmain(b);
+          break;
+        }
+      }
+    }
+  }
   private salesList: Array<any> = new Array();
   private async getAllSales() {
     let res: any = await getSales();
@@ -911,59 +963,6 @@ export default class TemporaryPurchase extends Vue {
     }
   }
 
-  // 初始化主数据
-  //---- 判断是否是高级查询
-  private isMore: boolean = false;
-  //---- 初始方法
-  private async getListData() {
-    this.purchaseOrderTable.loading = true;
-    let params: any = {}
-    let data: any = {}
-    data.showSelf = this.showSelf;
-    params.size = this.purchaseOrderTable.page.size;
-    params.page = this.purchaseOrderTable.page.num - 1;
-    if (this.quickDate.length > 0) {
-      data.startTime = this.quickDate[0];
-      data.endTime = this.quickDate[1];
-    }
-    if (this.purchaseType != 999 && this.purchaseType) {
-      data.billStatusId = this.purchaseType;
-    }
-    let res: any;
-    if (!this.isMore) {
-      res = await api.temporaryFindPageByDynamicQuery(params, data)
-    } else {
-      if (this.moreData != null) {
-        data = { ...data, ...this.moreData };
-      }
-      res = await api.temporaryQueryByConditions(params, data);
-    }
-    if (res.code == 0) {
-      this.isAdd = true;
-      this.isInput = true;
-      this.tableData = new Array();
-      const ref: any = this.$refs['formplanref'];
-      ref.resetFields();
-      this.formPlanmain.guestId = '';
-      this.formPlanmain.serviceId = '';
-      this.purchaseOrderTable.loading = false;
-      this.purchaseOrderTable.page.total = res.data.totalElements;
-      this.purchaseOrderTable.tbdata = res.data.content;
-      this.purchaseOrderTable.tbdata.forEach((el: any) => {
-        Array.isArray(el.details) && el.details.forEach((d: any) => {
-          d.isOldFlag = true;
-        })
-      })
-      for(let b of this.purchaseOrderTable.tbdata){
-        b._highlight = false
-        if(b.id==this.selectLeftItemId){
-          b._highlight = true;
-          this.setFormPlanmain(b);
-          break;
-        }
-      }
-    }
-  }
 
   throwNameFun(v) {
     this.selectSupplierName(v);
