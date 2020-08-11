@@ -188,7 +188,10 @@ export default class PlannedPurchaseOrder extends Vue {
 
   private async remoteMethod(query:string) {
     if(query == "" || query.trim().length <= 0) {
-      this.guseData.lists = [];
+      this.guseData.lists = [{
+        id: this.selectTableRow.guestId,
+        fullName: this.selectTableRow.guestName,
+      }];
       return;
     }
     this.guseData.loading = true;
@@ -196,12 +199,25 @@ export default class PlannedPurchaseOrder extends Vue {
     this.guseData.loading = false;
     if(res.code == 0) {
       this.guseData.lists = res.data;
+      if(this.guseData.lists.length <= 0) {
+        this.guseData.lists = [{
+          id: this.selectTableRow.guestId,
+          fullName: this.selectTableRow.guestName,
+        }];
+      }
+      let has = this.guseData.lists.filter(el => el.id === this.selectTableRow.guestId);
+      if(has.length <= 0) {
+        this.guseData.lists.push({
+          id: this.selectTableRow.guestId,
+          fullName: this.selectTableRow.guestName,
+        });
+      }
     }
   }
 
-  private geseChange(val:any) {
-    this.formPlanmain.guestId = val.value;
-    this.formPlanmain.guestName = val.label;
+  private geseChange() {
+    let data = this.guseData.lists.find(el => el.id === this.formPlanmain.guestId);
+    this.formPlanmain.guestName = typeof data === "object" ? data.fullName : (this.formPlanmain.guestName == "" ? "" : this.formPlanmain.guestName);
   }
 
   private options1:any = {
@@ -687,6 +703,7 @@ export default class PlannedPurchaseOrder extends Vue {
       this.formPlanmain.processInstanceId = v.processInstanceId;
       this.formPlanmain.orderDate = v.orderDate;
       this.formPlanmain.planArriveDate = v.planArriveDate;
+
       if (['草稿', '退回'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
@@ -700,6 +717,8 @@ export default class PlannedPurchaseOrder extends Vue {
       for (let k in this.formPlanmain) {
         this.formPlanmain[k] = v[k];
       }
+      this.formPlanmain.guestId = v.guestId;
+      this.formPlanmain.guestName = v.guestName;
       if(v.versionNo==='1'){
         this.isDirectCompanyId = true;
       }else{
@@ -876,7 +895,6 @@ export default class PlannedPurchaseOrder extends Vue {
       this.tableData = new Array();
       const ref: any = this.$refs['formplanref'];
       ref.resetFields();
-      this.formPlanmain.guestId = '';
       this.formPlanmain.serviceId = '';
       this.purchaseOrderTable.loading = false;
       this.purchaseOrderTable.page.total = res.data.totalElements;

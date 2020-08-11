@@ -280,7 +280,8 @@ export default {
     },
     // 对账单号选择
     accountNoClick() {
-      this.$refs.accountSelette.modal1 = true;
+      this.$refs.accountSelette.compyName = this.reconciliationStatement.guestName;
+      this.$refs.accountSelette.init();
     },
     //弹框打开
     hander(type) {
@@ -316,6 +317,7 @@ export default {
         }
         if(this.$parent.Types === '其他付款核销'){
           this.showModalOne = 0;
+          sign = 13;
         }else {
           this.showModalOne = 1;
         }
@@ -327,6 +329,7 @@ export default {
           id
         }).then(res => {
           if (res.code === 0) {
+            // console.log(res.data)
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.reconciliationStatement = res.data.one;
