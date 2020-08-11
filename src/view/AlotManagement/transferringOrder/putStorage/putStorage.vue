@@ -582,7 +582,7 @@ export default {
     // this.getList(this.form);
     //调取仓库
     this.getWareHouse();
-    this.getArrayParams();
+    // this.getArrayParams();
   },
   methods: {
     //------------------------------------------------------------------------//
@@ -760,7 +760,7 @@ export default {
         // });
     },
     xinzeng() {
-      this.$refs.tableref.clearCurrentRow();
+      // this.$refs.tableref.clearCurrentRow();
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
