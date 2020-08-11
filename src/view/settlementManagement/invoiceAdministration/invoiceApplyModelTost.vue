@@ -258,10 +258,10 @@ export default {
               props: {
                 precision: 2,
                 controls: false,
-                value: params.row.paymentBalance || 0,
+                value: params.row.paymentBalance  || 0.00,
                 size: "small",
-                min: 0.01,
-                max: params.row.paymentBalance || 0,
+                min: 0.00,
+                max: params.row.paymentBalance || 0.00,
               },
               on: {
                 input: val => {
@@ -368,6 +368,10 @@ export default {
       } else {
         this.hxOjb.salesInvoiceId = this.allSelectList[0].id;
         this.hxOjb.invoiceApplyId = this.data[0].id;
+        if(this.allSelectList[0].rpAmt<0.01){
+          this.$Message.error("本次核销金额最小为0.01")
+          return
+        }
         let d = this.data1.find(el => el.id == this.allSelectList[0].id);
         this.hxOjb.rpAmt = d.rpAmt ;
         subManualList(this.hxOjb).then(res => {
