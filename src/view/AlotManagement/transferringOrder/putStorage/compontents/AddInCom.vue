@@ -212,8 +212,8 @@ export default {
       this.search();
     },
     getDate(v) {
-      penSalesData.startTime = v[0] + " 00:00:00";
-      penSalesData.endTime = v[1] + " 23:59:59";
+      this.penSalesData.startTime = v[0] + " 00:00:00";
+      this.penSalesData.endTime = v[1] + " 23:59:59";
     },
     //分页
     changePage(p) {
@@ -234,8 +234,8 @@ export default {
       this.reset();
     },
     init1() {
-      let self = tools.getSession("self");
-      this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
+      // let self = tools.getSession("self");
+      // this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
       this.searchPartLayer = false;
     },
     reset() {

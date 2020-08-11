@@ -12,6 +12,7 @@
             <span v-if="type == 3">出库日期：</span>
             <span v-if="type == 4">提交日期：</span>
             <DatePicker
+              v-model="search.auditDate"
               :value="search.auditDate"
               type="daterange"
               placement="bottom-start"
