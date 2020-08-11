@@ -97,12 +97,13 @@
       >
 
         <FormItem label="客户：" prop="guestName">
-          <Input
-            v-model="formPlan.guestName"
-            placeholder="客户"
-            class="w200"
-            readonly
-          />
+          <!--<Input-->
+            <!--v-model="formPlan.guestName"-->
+            <!--placeholder="客户"-->
+            <!--class="w200"-->
+            <!--readonly-->
+          <!--/>-->
+          <sales-cus style="width:200px; display: inline-block" :disabled-prop="false" :title="formPlan.guestName" placeholder="请输入客户" :search-value="formPlan.guestName" @throwName="throwNameFun"></sales-cus>
         </FormItem>
         <FormItem label="销售员：" prop="orderManId">
           <Select
@@ -167,9 +168,12 @@
         <FormItem label="调出方：" prop="guestName" class="fs12">
           <Row >
             <Col span="16">
-              <Select class="200" placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan2.guestName" label-in-value filterable>
-                <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select>
+              <!--<Select class="200" placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan2.guestName" label-in-value filterable>-->
+                <!--<Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+              <!--</Select>-->
+              <allocation-cus class="200" :title="formPlan2.guestName" placeholder="请输入调出方" :search-value="formPlan2.guestName" @throwName="throwNameFun2" :disabled-prop="false"></allocation-cus>
+
+
             </Col>
             <Col span="2">
               <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
@@ -235,11 +239,15 @@
   import {findForAllot} from "_api/purchasing/purchasePlan";
   import {save} from "../../../api/AlotManagement/transferringOrder";
   import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier";
+  import SalesCus from "../../../components/allocation/salesCus";
+  import AllocationCus from "../../../components/allocation/allocationCus";
 
 
   export default {
     name: "hsOrder",
     components: {
+      AllocationCus,
+      SalesCus,
       SelectSupplier,
       getDate
     },
@@ -879,14 +887,21 @@
             }
 
             this.showModel1 = true;
-            let firstObj = this.selectTableDataArr[0];
-            this.formPlan.guestName = firstObj.companyName;
-            this.formPlan.guestId = firstObj.companyId;
-            this.getClientInfo(firstObj.companyId);
+            // let firstObj = this.selectTableDataArr[0];
+            // this.formPlan.guestName = firstObj.companyName;
+            // this.formPlan.guestId = firstObj.companyId;
+            // this.getClientInfo(firstObj.companyId);
           }
         }else{
           this.$Message.error("请勾选要处理的数据");
         }
+      },
+
+      throwNameFun(v){
+        this.formPlan.guestName = v.fullName;
+        this.formPlan.guestId = v.id;
+        this.formPlan.billTypeId = v.billTypeId||"010103";
+        this.formPlan.settleTypeId = v.settTypeId||"020502";
       },
 
       //获取当前客户信息
@@ -941,23 +956,33 @@
             }
 
             this.showModel2 = true;
-            let firstObj = this.selectTableDataArr[0];
-            this.formPlan.guestName = firstObj.companyName;
-            this.formPlan.guestId = firstObj.companyId;
-
-            let oneClient = [];
-            oneClient = this.client.filter(item => {
-              return item.id === firstObj.companyId;
-            });
-            this.formPlan.billTypeId = oneClient.length>0?oneClient[0].billTypeId:"010103";
-            this.formPlan.settleTypeId = oneClient.length>0?oneClient[0].settTypeId:"020502";
+            // let firstObj = this.selectTableDataArr[0];
+            // this.formPlan.guestName = firstObj.companyName;
+            // this.formPlan.guestId = firstObj.companyId;
+            //
+            // let oneClient = [];
+            // oneClient = this.client.filter(item => {
+            //   return item.id === firstObj.companyId;
+            // });
+            // this.formPlan.billTypeId = oneClient.length>0?oneClient[0].billTypeId:"010103";
+            // this.formPlan.settleTypeId = oneClient.length>0?oneClient[0].settTypeId:"020502";
             this.applyForType = type;
           }
         }else{
           this.$Message.error("请勾选要处理的数据");
         }
       },
+      throwNameFun2(v){
+        this.formPlan.guestName = v.fullName;
+        this.formPlan.guestId = v.id;
+        this.formPlan.billTypeId = v.billTypeId||"010103";
+        this.formPlan.settleTypeId = v.settTypeId||"020502";
 
+
+        this.guestidId = v.id;
+        this.isInternalId = v.isInternalId;
+        this.formPlan2.guestName = v.fullName;
+      },
 
       addSuppler(){
         this.$refs.selectSupplier.init()

@@ -4,16 +4,16 @@
       <header class="titleHeader">
         <Input
           v-model="fullName"
-          placeholder="简称"
+          placeholder="简称/编码"
           class="mr10"
-          style="width: 150px"
+          style="width: 250px"
         />
-        <Input
-          v-model="clientCode"
-          placeholder="编码"
-          class="mr10"
-          style="width: 150px"
-        />
+        <!--<Input-->
+          <!--v-model="clientCode"-->
+          <!--placeholder="编码"-->
+          <!--class="mr10"-->
+          <!--style="width: 150px"-->
+        <!--/>-->
         <Input
           v-model="pyName"
           placeholder="拼音"

@@ -557,6 +557,7 @@
     },
     methods: {
       throwNameFun(v){
+        console.log(v)
         this.setOneClient(v);
       },
 
