@@ -25,9 +25,7 @@
           <div class="db ml15">
             <span>区域：</span>
             <Select v-model="areaId" class="w150" @on-change="changeArea" :disabled="selectShopList">
-              <Option v-for="item in areas" :value="item.id" :key="item.id">{{
-                item.companyName
-              }}</Option>
+              <Option v-for="item in areas" :value="item.id" :key="item.id">{{item.companyName}}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -283,7 +281,7 @@ export default {
       ],
       tableData: [], // 主表
       dates: [], // 查询日期
-      areaId: "", // 区域id
+      areaId: 0, // 区域id
       areas: [{ id: 0, companyName: "全部" }], // 区域
       BranchstoreId: "", // 门店id
       Branchstore: [{ id: 0, name: "全部" }] // 门店
@@ -323,9 +321,9 @@ export default {
       data.shopNumber = this.$store.state.user.userData.shopId;
       data.tenantId = this.$store.state.user.userData.tenantId;
       let res = await are(data);
-
       if (res.code === 0) {
-        this.areas=res.data
+        this.areas=[...res.data]
+        this.areas.unshift({ id: 0, companyName: "全部" })
       }
     },
 
@@ -351,8 +349,12 @@ export default {
         if(this.areas.length>0){
           this.areas.map(item=>{
             this.Branchstore.map(item2=>{
-              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
-                this.areaId=item.id
+              if(this.selectShopList){
+                if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                  this.areaId=item.id
+                }
+              }else{
+                this.areaId=0
               }
             })
           })

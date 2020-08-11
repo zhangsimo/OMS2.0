@@ -1240,7 +1240,7 @@ export default {
     },
     // 查询进项核销
     queryEntry() {
-      this.$router.push({ name: "invoiceAdministration-invoiceManagement" });
+      this.$router.push({ name: "invoiceAdministrationInvoiceManagement" });
     },
     // 查询发票申请
     queryApplication() {

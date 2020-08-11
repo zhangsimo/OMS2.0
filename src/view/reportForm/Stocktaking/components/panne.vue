@@ -10,6 +10,7 @@
             <span v-if="type == 1">入库日期：</span>
             <span v-else>出库日期：</span>
             <DatePicker
+              v-model="search.submitDate"
               :value="search.submitDate"
               type="daterange"
               placement="bottom-start"
@@ -33,7 +34,7 @@
               placeholder="请选择门店"
               :disabled="selectShopList"
               @on-change="getWares(search.orgid)"
-              filterable clearable
+              filterable
             >
               <Option
                 v-for="item in stores"
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       warehouse: [],
-      stores: [{id:"",name:"全部"}], // 门店
+      stores: [{id:0,name:"全部"}], // 门店
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
@@ -123,10 +124,7 @@ export default {
   methods: {
     //获取仓库
     async getWares(orgId) {
-      if (orgId == undefined) {
-        this.warehouse = []
-        return
-      }
+      orgId==0?orgId="":orgId=orgId
       let res = JSON.parse(localStorage.getItem('oms2-userList'))
       let tenantId = res.tenantId || 0
       let shopkeeper = res.shopkeeper || 0

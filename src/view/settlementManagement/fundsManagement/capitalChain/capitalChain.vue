@@ -349,7 +349,21 @@
         let res = await are()
         if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
       },
-
+      setAreaDef(){
+        if(this.Branchstore.length>0){
+          this.Branchstore.map(item=>{
+            this.shopList.map(item2=>{
+              if(this.selectShopList){
+                if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                  this.model1=item.id
+                }
+              }else{
+                this.model1=0
+              }
+            })
+          })
+        }
+      },
       //当前非管理员状态情况下获取门店地址
       async getThisArea(){
         let data = {}
@@ -358,16 +372,17 @@
         data.tenantId = this.$store.state.user.userData.tenantId
         let res = await are(data)
           if (res.code === 0){
-          this.model1 = 0
+            this.shopList = [...this.shopList , ...res.data]
+            this.setAreaDef();
         }
       },
 
       // //切换地址重新调取门店接口
       changeArea(){
-        if (this.$store.state.user.userData.shopkeeper == 0) {
-          this.shopCode = 0
+        // if (this.$store.state.user.userData.shopkeeper == 0) {
+        //   this.shopCode = 0
           this.getShop()
-        }
+        // }
       },
 
       //获取门店
