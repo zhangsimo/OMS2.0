@@ -17,6 +17,7 @@ import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
 import PrintModel from './components/print.vue';
 import StatusModal from './components/checkApprovalModal.vue';
+import GoodCus from "_c/allocation/GoodCus.vue"
 
 @Component({
   components: {
@@ -30,7 +31,8 @@ import StatusModal from './components/checkApprovalModal.vue';
     AdjustModel,
     TabsModel,
     PrintModel,
-    StatusModal
+    StatusModal,
+    GoodCus
   }
 })
 export default class PlannedPurchaseOrder extends Vue {
@@ -913,6 +915,10 @@ export default class PlannedPurchaseOrder extends Vue {
         }
       }
     }
+  }
+
+  throwNameFun(v) {
+    this.selectSupplierName(v);
   }
 
   // 选择供应商

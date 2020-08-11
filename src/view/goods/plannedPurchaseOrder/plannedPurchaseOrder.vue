@@ -135,18 +135,14 @@
                             :disabled="isInput"
                             readonly
                           /> -->
+                          <GoodCus style="width: 120px" 
+                            :title="formPlanmain.guestName" 
+                            placeholder="请输入供应商" 
+                            :search-value="formPlanmain.guestName" 
+                            @throwName="throwNameFun" 
+                            :disabled-prop="isInput">
+                          </GoodCus>
                         </Tooltip>
-                        <Select
-                            v-model="formPlanmain.guestId"
-                            filterable
-                            remote
-                            :disabled="isInput"
-                            :remote-method="remoteMethod"
-                            :loading="guseData.loading"
-                            @on-change="geseChange"
-                            >
-                            <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
-                        </Select>
                       </Col>
                       <Col span="5"
                         ><Button

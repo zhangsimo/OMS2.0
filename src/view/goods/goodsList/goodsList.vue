@@ -138,7 +138,15 @@
                     <Row class="w160">
                       <Col span="19">
                       <Tooltip :content="formPlan.supplyName">
-                        <Select v-model="formPlan.guestId" 
+                        <GoodCus style="width: 120px" 
+                          :title="formPlan.supplyName" 
+                          placeholder="请输入供应商" 
+                          :search-value="formPlan.supplyName" 
+                          @throwName="throwNameFun" 
+                          :disabled-prop="isinput">
+                        </GoodCus>
+                      </Tooltip>
+                      <!-- <Select v-model="formPlan.guestId" 
                           clearable
                           filterable
                           remote
@@ -151,8 +159,7 @@
                             :value="item.value"
                             :key="item.value"
                           >{{ item.label }}</Option>
-                        </Select>
-                      </Tooltip>
+                        </Select> -->
                         <!-- <Input
                           v-model="formPlan.supplyName"
                           :disabled="isinput"
@@ -508,6 +515,7 @@ import Cookies from "js-cookie";
 import baseUrl from "_conf/url";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import * as fapi from "_api/procurement/plan";
+import GoodCus from "_c/allocation/GoodCus.vue"
 export default {
   name: "goodsList",
   components: {
@@ -516,7 +524,8 @@ export default {
     QuickDate,
     StatusModel,
     adjustModel,
-    MoreSearch
+    MoreSearch,
+    GoodCus,
   },
   inject: ["reload"],
   mixins: [mixGoodsData],

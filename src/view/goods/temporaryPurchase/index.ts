@@ -24,6 +24,8 @@ import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
+import GoodCus from "_c/allocation/GoodCus.vue"
+
 
 @Component({
   components: {
@@ -38,7 +40,8 @@ import { v4 } from "uuid"
     TabsModel,
     PrintModel,
     StatusModel,
-    SelectPartCom
+    SelectPartCom,
+    GoodCus
   }
 })
 export default class TemporaryPurchase extends Vue {
@@ -960,6 +963,10 @@ export default class TemporaryPurchase extends Vue {
         }
       }
     }
+  }
+
+  throwNameFun(v) {
+    this.selectSupplierName(v);
   }
 
   // 选择供应商

@@ -26,9 +26,9 @@
 </template>
 
 <script>
-  import { getTreeClient, getClientType } from "@/api/salesManagment/salesOrder";
+  import * as api from "_api/procurement/plan";
   export default {
-    name: "salesCus",
+    name: "supplierCus",
     props:{
       placeholder:'',
       searchValue:'',
@@ -63,7 +63,7 @@
         }
         let req = {};
         // if(/^[\u4e00-\u9fa5]/.test(v)){
-          req.shortName = v.trim();
+          req.fullName = v.trim();
         // }else{
         //   req.code = v.trim();
         // }
@@ -71,7 +71,7 @@
         req.size = 1000;
         this.options = [];
         this.loading = true;
-        getTreeClient(req).then(res => {
+        api.getSupplier(req).then(res => {
           this.loading = false;
           this.options = res.data.content || [];
         });

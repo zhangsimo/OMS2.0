@@ -438,7 +438,9 @@ export const mixGoodsData = {
       this.formPlan.orderMan = val.label || ""
       this.formPlan.orderManId = val.value || ""
     },
-
+    throwNameFun(v) {
+      this.getSupplierName(v);
+    },
     //获取选中供应商
     getSupplierName(v) {
       if (v) {

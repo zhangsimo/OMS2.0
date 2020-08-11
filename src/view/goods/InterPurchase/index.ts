@@ -17,6 +17,7 @@ import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
 import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
 import PrintModel from '../plannedPurchaseOrder/components/print.vue';
 import ApportionmentExpenses from '../plannedPurchaseOrder/components/ApportionmentExpenses.vue';
+import GoodCus from "_c/allocation/GoodCus.vue"
 
 @Component({
   components: {
@@ -30,7 +31,8 @@ import ApportionmentExpenses from '../plannedPurchaseOrder/components/Apportionm
     AdjustModel,
     TabsModel,
     PrintModel,
-    ApportionmentExpenses
+    ApportionmentExpenses,
+    GoodCus
   }
 })
 export default class InterPurchase extends Vue {
@@ -879,6 +881,10 @@ export default class InterPurchase extends Vue {
         }
       }
     }
+  }
+
+  throwNameFun(v) {
+    this.selectSupplierName(v);
   }
 
   // 选择供应商
