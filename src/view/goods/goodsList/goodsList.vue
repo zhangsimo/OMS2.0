@@ -138,20 +138,34 @@
                     <Row class="w160">
                       <Col span="19">
                       <Tooltip :content="formPlan.supplyName">
-                        <Input
+                        <GoodCus style="width: 120px" 
+                          :title="formPlan.supplyName" 
+                          placeholder="请输入供应商" 
+                          :search-value="formPlan.supplyName" 
+                          @throwName="throwNameFun" 
+                          :disabled-prop="isinput">
+                        </GoodCus>
+                      </Tooltip>
+                      <!-- <Select v-model="formPlan.guestId" 
+                          clearable
+                          filterable
+                          remote
+                          :loading="remoteloading"
+                          :remote-method="getOne"
+                          @on-change="query2"
+                          >
+                          <Option
+                            v-for="item in ArrayList"
+                            :value="item.value"
+                            :key="item.value"
+                          >{{ item.label }}</Option>
+                        </Select> -->
+                        <!-- <Input
                           v-model="formPlan.supplyName"
                           :disabled="isinput"
                           placeholder="请选择供应商"
                           readonly
-                        />
-                      </Tooltip>
-                        <!-- <Select v-model="formPlan.supplyName" label-in-value filterable readonly>
-                          <Option
-                            v-for="item in this.ArrayList"
-                            :value="item"
-                            :key="item"
-                          >{{ item }}</Option>
-                        </Select> -->
+                        /> -->
                       </Col>
                       <Col span="5">
                         <Button
@@ -500,6 +514,8 @@ import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
 import baseUrl from "_conf/url";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+import * as fapi from "_api/procurement/plan";
+import GoodCus from "_c/allocation/GoodCus.vue"
 export default {
   name: "goodsList",
   components: {
@@ -508,7 +524,8 @@ export default {
     QuickDate,
     StatusModel,
     adjustModel,
-    MoreSearch
+    MoreSearch,
+    GoodCus,
   },
   inject: ["reload"],
   mixins: [mixGoodsData],
@@ -554,6 +571,8 @@ export default {
       }
     };
     return {
+      remoteloading: false,
+      ArrayList: [],
       showSelf: true,
       submitloading: false,
       getBrand: [],
@@ -602,6 +621,7 @@ export default {
         ]
       },
       proType: [],
+      valus: null,
       page: {
         num: 1,
         size: 20,
@@ -696,6 +716,34 @@ export default {
     });
   },
   methods: {
+    query2() {
+      console.log(this.formPlan.supplyName);
+      this.ArrayList.forEach(el => {
+        if(el.value === this.formPlan.guestId) {
+          this.formPlan.supplyName = el.label;
+        }
+      })
+    },
+    async getOne(query) {
+        if (query != "") {
+          this.remoteloading = true;
+          fapi.getSupplier({fullName: query, size: 20, num: 0}).then(res => {
+            if (res.code === 0) {
+              this.ArrayList = [{
+                label: this.formPlan.supplyName,
+                value: this.formPlan.guestId,
+              }];
+              res.data.content.map(item => {
+                this.ArrayList.push({
+                  value: item.id,
+                  label: item.shortName
+                });
+              });
+              this.remoteloading = false;
+            }
+          });
+        }
+      },
     //获取表格高度
     getDomHeight() {
       this.$nextTick(() => {

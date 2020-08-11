@@ -269,6 +269,7 @@ export default {
         this.$nextTick(() => {
           this.formInline = res.data;
           this.getOptionsList(res.data.receiver)
+          this.getOptionsList2(res.data.paymentAccountName)
           this.details = res.data.details || [];
           this.Pictures = {
             voucherPictures: res.data.voucherPictures || [],
@@ -350,7 +351,8 @@ export default {
 
     //获取科目返回的数据
     getsubBack(row) {
-      this.$set(this.subjectType, "accountEntry", row.titleCode);
+      // console.log(row)
+      this.$set(this.subjectType, "accountEntry", row.titleName);
       // 刷新列表方法
       this.$refs.xTable.refreshColumn();
     },
@@ -510,7 +512,7 @@ export default {
     //保存审核
     async save(type) {
       if (this.formInline.expenseDetails[0].billTypeId == "010101") {
-        console.log(this.formInline.expenseDetails[0].billTypeId,111)
+        // console.log(this.formInline.expenseDetails[0].billTypeId,111)
         // const roleValid = ({cellValue, row}) => {
         //   if (cellValue && +row.applyAmt < +cellValue) {
         //     return Promise.reject(new Error("核销金额不能大于借支金额"));

@@ -168,8 +168,12 @@ export default {
       if(this.Branchstore.length>0){
         this.Branchstore.map(item=>{
           this.shopListArr.map(item2=>{
-            if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
-              this.model1=item.id
+            if(this.selectShopList){
+              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                this.model1=item.id
+              }
+            }else{
+              this.model1=0
             }
           })
         })

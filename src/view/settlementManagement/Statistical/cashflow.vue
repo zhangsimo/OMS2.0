@@ -206,7 +206,8 @@ export default {
       data.tenantId = this.$store.state.user.userData.tenantId;
       let res = await are(data);
       if (res.code === 0) {
-        this.areas=res.data
+        this.areas=[...res.data]
+        this.areas.unshift({ id: 0, companyName: "全部" })
       }
     },
 
@@ -232,8 +233,12 @@ export default {
         if(this.areas.length>0){
           this.areas.map(item=>{
             this.Branchstore.map(item2=>{
-              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
-                this.areaId=item.id
+              if(this.selectShopList){
+                if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                  this.areaId=item.id
+                }
+              }else{
+                this.areaId=0
               }
             })
           })

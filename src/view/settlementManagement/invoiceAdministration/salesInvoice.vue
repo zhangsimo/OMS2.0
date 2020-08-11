@@ -23,8 +23,19 @@
             ></Date-picker>
           </div>
           <div class="mr10 flexd">
+            <span>开票公司：</span>
+            <Select v-model="form.invoiceUnit" style="width:180px" clearable>
+              <Option
+                v-for="item in invoiceUnitOption"
+                :value="item.itemCode"
+                :key="item.itemCode"
+                >{{ item.itemName }}</Option
+              >
+            </Select>
+          </div>
+          <div class="mr10 flexd">
             <span>分店名称：</span>
-            <Select v-model="form.orgId" style="width:180px">
+            <Select v-model="form.orgId" style="width:180px" clearable>
               <Option
                 v-for="item in proTypeList"
                 :value="item.id"
@@ -307,6 +318,7 @@
 
     <Modal v-model="exportData" title="发票导入" width="400">
       <p class="mt20 mb20">导入前请先下载模板</p>
+      <!-- <p>本店开票公司为：{{}}，请导入本开票公司数据</p> -->
       <div slot="footer" class="exportBtn">
         <Button type="info" v-has="'export'" @click="exportDown"
           >模板下载</Button
@@ -368,7 +380,8 @@ export default {
         orgId: "",
         page: 0,
         size: 10,
-        writeOffStatus: 0
+        writeOffStatus: 0,
+        invoiceUnit: "",
       },
       formValidate: {
         invoiceDate: "",
@@ -1317,7 +1330,7 @@ export default {
       speciesOptionList: [], //开票清单类型
       proTypeList: [], //分店
       invoiceServiceOption: [], //开票业务
-      invoiceUnitOption: [] //开票公司
+      invoiceUnitOption: [], //开票公司
     };
   },
   methods: {

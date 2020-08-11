@@ -61,7 +61,7 @@
           align="center"
           :data="BusinessType"
           :footer-method="offWrite"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
@@ -107,16 +107,18 @@
           </section>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="8" style="overflow: scroll">
         <vxe-table
           class="ml10"
-          style="flex:4"
+          style="width: 500px;"
           border
           resizable
           auto-resize
           show-footer
+          ref="vxeTable"
           max-height="400"
           align="center"
+          :edit-rules="validRules"
           :footer-method="payCollection"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -128,6 +130,11 @@
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+            <vxe-table-column
+              field="thisClaimedAmt"
+              title="本次核销金额"
+              :edit-render="{name: 'input', attrs: {type: 'number'}}"
+            ></vxe-table-column>
             <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
@@ -153,6 +160,18 @@ export default {
     subjexts
   },
   data() {
+    const roleValid = ({ row ,  cellValue }) => {
+      console.log(row , 11)
+      console.log(cellValue , 22)
+      let Money = Math.abs(row.incomeMoney) > Math.abs(row.paidMoney) ? Math.abs(row.incomeMoney) : Math.abs(row.paidMoney)
+      return new Promise((resolve, reject) => {
+        if (cellValue && cellValue > Money) {
+          reject(new Error('本次认领金额录入有误，请重新录入'))
+        } else {
+          resolve()
+        }
+      })
+    }
     return {
       Settlement: false, //弹框显示
       check: 0,
@@ -161,7 +180,13 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
-      obj: {}
+      obj: {},
+      //表格校验
+      validRules:{
+        thisClaimedAmt:[
+          { validator: roleValid }
+        ]
+      }
     };
   },
   mounted() {
@@ -281,8 +306,12 @@ export default {
       }
     },
     //保存
-    conserve() {
+   async conserve() {
       if (!Number(this.check)) {
+        const errMap = await this.$refs.vxeTable.validate().catch(errMap => errMap)
+        if (errMap) {
+         return  this.$Message.error('认领金额录入有误，请重新录入')
+        }
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,

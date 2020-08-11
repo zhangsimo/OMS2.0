@@ -582,7 +582,7 @@ export default {
     // this.getList(this.form);
     //调取仓库
     this.getWareHouse();
-    this.getArrayParams();
+    // this.getArrayParams();
   },
   methods: {
     //------------------------------------------------------------------------//
@@ -760,7 +760,7 @@ export default {
         // });
     },
     xinzeng() {
-      this.$refs.tableref.clearCurrentRow();
+      // this.$refs.tableref.clearCurrentRow();
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -808,6 +808,7 @@ export default {
     // 新增按钮
     addProoo() {
       this.$refs.addInCom.init();
+      this.$refs.addInCom.dcName=""
       let showSelf = this.$refs.addInCom.showSelf;
       let data = { enterSelect: 123, orderTypeId: "ALLOT_APPLY" };
       if(showSelf) {

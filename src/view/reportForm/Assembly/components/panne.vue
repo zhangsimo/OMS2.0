@@ -9,6 +9,7 @@
           <div class="db mr10">
             <span>提交日期：</span>
             <DatePicker
+              v-model="search.submitDate"
               :value="search.submitDate"
               type="daterange"
               placement="bottom-start"
@@ -90,7 +91,7 @@ export default {
   data() {
     return {
       warehouse: [], // 仓库
-      stores: [{id:"",name:"全部"}], // 门店
+      stores: [{id:0,name:"全部"}], // 门店
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
@@ -122,10 +123,7 @@ export default {
   methods: {
     //获取仓库
     async getWares(orgId) {
-      if (orgId == undefined) {
-        this.warehouse = []
-        return
-      }
+      orgId==0?orgId="":orgId=orgId
       let res = JSON.parse(localStorage.getItem('oms2-userList'))
       let tenantId = res.tenantId || 0
       let shopkeeper = res.shopkeeper || 0

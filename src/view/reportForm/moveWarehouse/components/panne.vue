@@ -10,6 +10,7 @@
             <span>提交日期：</span>
             <DatePicker
               type="daterange"
+              v-model="search.submitDate"
               :value="search.submitDate"
               placement="bottom-start"
               placeholder="选择日期"
@@ -32,7 +33,7 @@
               placeholder="请选择门店"
               :disabled="selectShopList"
               @on-change="getWares(search.orgid)"
-              filterable clearable
+              filterable
             >
               <Option
                 v-for="item in stores"
@@ -93,7 +94,7 @@
     data() {
       return {
         warehouse: [],
-        stores: [{id: "", name: "全部"}], // 门店
+        stores: [], // 门店
         quickDates: [], // 快速日期查询
         search: {
           isPanne: true,
@@ -125,6 +126,7 @@
       let resW = await api.getWarehouse();
       if (resE.code == 0) {
         let data = resE.data;
+        this.stores=[{id: 0, name: "全部"}]
         Object.keys(data).forEach(key => {
           this.stores.push({id: key, name: data[key]})
         })
@@ -136,10 +138,7 @@
     methods: {
       //获取仓库
       async getWares(orgId) {
-        if (orgId == undefined) {
-          this.warehouse = []
-          return
-        }
+        orgId==0?orgId="":orgId=orgId
         let res = JSON.parse(localStorage.getItem('oms2-userList'))
         let tenantId = res.tenantId || 0
         let shopkeeper = res.shopkeeper || 0

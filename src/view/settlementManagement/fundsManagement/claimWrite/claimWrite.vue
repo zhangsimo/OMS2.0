@@ -173,7 +173,7 @@
                   class="w200 mr10"
                 ></Date-picker>
                 <span class="ml10">区域：</span>
-                <Select v-model="areaId" class="w100" filterable :disabled="selectShopList">
+                <Select v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable :disabled="selectShopList">
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
@@ -766,6 +766,9 @@
       let arr = await creat([], this.$store);
       this.orgName = arr[3];
       this.$nextTick(() => {
+        this.areaId=arr[0]
+        this.getShop(this.areaId);
+        this.setAreaDef()
         this.orgId = arr[1];
         this.model1 = arr[1];
         this.model2=arr[1];
@@ -774,7 +777,6 @@
         this.distributionList();
       })
       this.getAllAre();
-      this.getShop();
       if (Object.keys(this.$route.params).length !== 0) {
         this.$route.params.data.receivePaymentTypeName = this.$route.params.data.paymentTypeName;
         this.$route.params.data.actualCollectionOrPayment = this.$route.params.data.receiptPayment;
@@ -829,20 +831,27 @@
         this.queryDistribution()
       },
       //获取门店
-      async getShop() {
+      async getShop(areaId) {
         let data = {};
+        data.supplierTypeSecond=areaId
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = [...this.orgList, ...res.data]
-          if (this.areaList.length > 0) {
-            this.areaList.map(item => {
-              this.orgList.map(item2 => {
+        }
+      },
+      setAreaDef(){
+        if (this.areaList.length > 0) {
+          this.areaList.map(item => {
+            this.orgList.map(item2 => {
+              if(this.selectShopList){
                 if (item.parentId == item2.supplierTypeFirst && item.value == item2.supplierTypeSecond) {
                   this.areaId = item.value
                 }
-              })
+              }else{
+                this.areaId =0
+              }
             })
-          }
+          })
         }
       },
       // 往来单位选择
@@ -1093,7 +1102,7 @@
           reciprocalAccountName: this.bankNameOClaim,
           page: this.$refs.claim.claimedPage.page - 1,
           size: this.$refs.claim.claimedPage.size,
-
+          claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '' ,
           orgId: this.model2,//分店
           startDate: this.value2[0]
             ? moment(this.value2[0]).format("YYYY-MM-DD HH:mm:ss")

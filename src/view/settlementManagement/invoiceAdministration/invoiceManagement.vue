@@ -22,6 +22,32 @@
               class="w200"
             ></Date-picker>
           </div>
+          <div class="mr10 flexd">
+            <span>发票销售方名称：</span>
+            <Select v-model="form.invoiceSellerName" style="width:160px" clearable filterable>
+              <Option
+                v-for="item in invoiceUnitOption"
+                :value="item.itemName"
+                :key="item.itemCode"
+                >{{ item.itemName }}</Option
+              >
+            </Select>
+          </div>
+          <div class="mr10 flexd">
+            <span>往来单位：</span>
+            <Select
+              v-model="form.guestId"
+              class="w150"
+              clearable
+              filterable
+              remote
+              :loading="remoteloading"
+              :remote-method="getOne"
+              @on-change="query"
+            >
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </div>
           <button class="ivu-btn ivu-btn-default" @click="query" type="button">
             <i class="iconfont iconchaxunicon"></i>
             <span>查询</span>
@@ -40,6 +66,9 @@
         >
         <Button class="mr10" v-has="'ai'" @click="operation(4)"
           >智能核销</Button
+        >
+        <Button class="mr10" v-has="'ai'" @click="operation(8)"
+          >人工核销</Button
         >
         <Button class="mr10" v-has="'backout'" @click="operation(5)"
           >发票退回</Button
@@ -300,6 +329,7 @@
       </div>
     </Modal>
     <modelToast ref="Toast"></modelToast>
+    <invoiceApplyTost ref="invoiceApplyTost"></invoiceApplyTost>
   </div>
 </template>
 <script>
@@ -318,20 +348,28 @@ import {
   savDetailInfor,
   invoiceWriteoff
 } from "_api/salesManagment/invoiceAdministration";
+import {
+  getOptionSalesList,
+} from "_api/salesManagment/salesInvoice";
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import modelToast from "./modelToast.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
+import invoiceApplyTost from "./components/invoiceApplyTost"
 export default {
   name: "invoiceAdministrationInvoiceManagement",
   components: {
     modelToast,
-    quickDate
+    quickDate,
+    invoiceApplyTost
   },
   data() {
     return {
+      remoteloading: false,
+      company: [],
       value: [],
       options3: {
         disabledDate(date) {
@@ -937,7 +975,9 @@ export default {
       form: {
         page: 0,
         size: 10,
-        canceled: ""
+        canceled: "",
+        guestId: "",
+        invoiceSellerName: "",
       },
       allTablist: [],
       headers: {
@@ -952,10 +992,32 @@ export default {
       taxOptionList: [], //税率
       invoiceOptionList: [], //发票分类
       purchaserOptionList: [], //发票采购方
-      total: 0 //核销数量
+      total: 0, //核销数量
+      invoiceUnitOption: [],
     };
   },
   methods: {
+    // 往来单位选择
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
+    },
     query() {
       this.form.startTime = this.value.length ? this.value[0] : "";
       this.form.endTime = this.value.length ? this.value[1] : "";
@@ -1040,6 +1102,10 @@ export default {
           break;
         case 7:
           this.exportTime = true;
+        case 8:
+          this.deleteTabList("toast");
+          break;
+        default:
           break;
       }
     },
@@ -1075,11 +1141,11 @@ export default {
           } else {
             this.flag = true;
           }
-          if (item.canceled == 0 && type == "writeoff") {
+          if (item.canceled == 0 && (type == "writeoff" || type ==  "toast")) {
             return (this.flags = false);
           }
         });
-        if (this.flags && type == "writeoff") {
+        if (this.flags && (type == "writeoff" || type ==  "toast")) {
           return this.$Message.warning(
             "该数据中存在已核销数据，请选择未核销数据"
           );
@@ -1091,6 +1157,10 @@ export default {
           return this.$Message.warning(
             "该数据中存在已核销数据，请选择未核销数据"
           );
+        }
+        if(type === "toast") {
+          this.$refs.invoiceApplyTost.init(this.allTablist);
+          return;
         }
         this.$Modal.confirm({
           title: "警告",
@@ -1349,9 +1419,14 @@ export default {
       this.authenticationUpurl = authenticationGetup;
     }
   },
-  mounted() {
-    this.getTabList(this.form);
+  async mounted() {
     this.getSelectOptions();
+    await getOptionSalesList("KPDW").then(res => {
+      if (res.code === 0) {
+        this.invoiceUnitOption = res.data;
+      }
+    });
+    this.getTabList(this.form);
   }
 };
 </script>

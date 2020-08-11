@@ -68,7 +68,7 @@
           v-has="'payClaim'"
           class="ml10"
           @click="collectWirte"
-          :disabled="Boolean(currRow.writeOffReceiptNo)"
+          :disabled="Boolean(currRow.paymentBalance<=0)"
         >其他付款核销</Button>
         <Button v-has="'claimrevoke'" class="ml10" @click="revokeCollection(0)">其他收款认领撤回</Button>
         <Button v-has="'payrevoke'" class="ml10" @click="revokeCollection(3)">其他付款申请撤回</Button>

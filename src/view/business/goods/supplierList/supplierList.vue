@@ -131,12 +131,19 @@
                     <Row>
                       <Col span="22">
                         <Tooltip :content="formPlan.guestName">
-                        <Input
+                           <GoodCus style="width: 120px" 
+                            :title="formPlan.guestName" 
+                            placeholder="请输入供应商" 
+                            :search-value="formPlan.guestName" 
+                            @throwName="throwNameFun" 
+                            :disabled-prop="buttonDisable">
+                          </GoodCus>
+                        <!-- <Input
                           placeholder="请选择供应商"
                           v-model="formPlan.guestName"
                           readonly
                           disabled
-                        />
+                        /> -->
                         </Tooltip>
                         <!-- <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" @on-change="SelectGuest">
                             <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
@@ -446,6 +453,8 @@ import {
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 import { v4 } from "uuid"
+import GoodCus from "_c/allocation/GoodCus.vue"
+
 export default {
   name: "supplierList",
   components: {
@@ -453,7 +462,8 @@ export default {
     More,
     Procurement,
     SelectSupplier,
-    PrintShow
+    PrintShow,
+    GoodCus
   },
   data() {
     let changeNumber = ({cellValue, row: { canReQty } }) => {
@@ -1085,6 +1095,9 @@ export default {
     //供应商弹框
     addSuppler() {
       this.$refs.selectSupplier.init();
+    },
+    throwNameFun(v) {
+      this.getSupplierName(v)
     },
     // 供应商子组件内容
     getSupplierName(a) {

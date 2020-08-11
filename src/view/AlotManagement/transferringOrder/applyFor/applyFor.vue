@@ -91,7 +91,8 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />
+                            <!--<Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />-->
+                            <allocation-cus placeholder="请选择调出方" :search-value="formPlan.guestName" @throwName="throwNameFun" :disabledProp="presentrowMsg !== 0 || buttonDisable"></allocation-cus>
                             <!-- <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
                               <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> -->
@@ -260,10 +261,12 @@
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
   import {upxlxsDBo} from "../../../../api/purchasing/purchasePlan";
+  import AllocationCus from "../../../../components/allocation/allocationCus";
 
   export default {
       name: "applyFor",
       components: {
+        AllocationCus,
         QuickDate,
         More,
         supplier,
@@ -443,7 +446,9 @@
         }
       },
       methods: {
-
+        throwNameFun(v){
+          this.getSupplierName(v)
+        },
 
 
         //------------------------------------------------------------------------//

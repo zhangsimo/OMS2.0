@@ -11,6 +11,7 @@
             <span v-if="type == 2">出库日期：</span>
             <span v-if="type == 3">入库日期：</span>
             <DatePicker
+              v-model="search.auditDate"
               :value="search.auditDate"
               type="daterange"
               placement="bottom-start"
@@ -72,7 +73,6 @@
               :disabled="selectShopList"
               @on-change="getWares(search.orgid)"
               filterable
-              clearable
             >
               <Option
                 v-for="item in stores"
@@ -130,7 +130,7 @@ export default {
   data() {
     return {
       bandArr: [], // 品牌
-      stores: [{id:"",name:"全部"}], // 门店
+      stores: [{id:0,name:"全部"}], // 门店
       warehouse: [], // 仓库
       quickDates: [], // 快速日期查询
       search: {
@@ -187,10 +187,7 @@ export default {
     },
     //获取仓库
     async getWares(orgId) {
-      if (orgId == undefined) {
-        this.warehouse = []
-        return
-      }
+      orgId==0?orgId="":orgId=orgId
       let res = JSON.parse(localStorage.getItem('oms2-userList'))
       let tenantId = res.tenantId || 0
       let shopkeeper = res.shopkeeper || 0

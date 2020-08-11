@@ -20,9 +20,10 @@
         <div class="clearfix purchase pb10" ref="planForm">
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
             <Row>
-              <Tooltip :content="formPlan.fullName">
-                <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:134px;"/>
-              </Tooltip>
+              <!--<Tooltip :content="formPlan.fullName">-->
+                <!--<Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:134px;"/>-->
+              <!--</Tooltip>-->
+              <sales-cus style="width:130px; display: inline-block" :disabled-prop="draftShow != 0|| this.$parent.$parent.ispart" :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
               <Button
                 class="ml5"
                 size="small"
@@ -424,11 +425,13 @@
   import {conversionList, conversionListNoNum} from "@/components/changeWbList/changewblist";
   import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
   import AlotModel from "../components/AlotModel"
+  import SalesCus from "../../../../components/allocation/salesCus";
 
   export default {
     name: "OrderRight",
     inject: ["reload"],
     components: {
+      SalesCus,
       ClientData,
       goodsInfo,
       selectPartCom,
@@ -553,6 +556,10 @@
       }
     },
     methods: {
+      throwNameFun(v){
+        console.log(v)
+        this.setOneClient(v);
+      },
 
       //------------------------------------------------------------------------//
       //表格tab切换可编辑部位

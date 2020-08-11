@@ -199,6 +199,12 @@ export default {
           }
         },
         {
+          title: "开票申请单",
+          key: "applyNo",
+          className: "tc",
+          minWidth: 180
+        },
+        {
           title: "往来单位",
           key: "guestName",
           className: "tc",
@@ -604,11 +610,12 @@ export default {
           }
         },
         {
-          title: "油品清单开票申请单号",
-          minWidth: 150,
+          title: "开票申请单号",
+          minWidth: 160,
           key: "oilsListOrder",
           className: "tc",
           render: (h, params) => {
+            let no = params.row.applyNo;// params.row.oilsListOrder || params.row.partsListOrder;
             return h('div', [
               h('span', {
                 style: {
@@ -619,31 +626,9 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.oilsListOrder
+                  title: no
                 }
-              }, params.row.oilsListOrder)
-            ])
-          }
-        },
-        {
-          title: "配件清单开票申请单号",
-          minWidth: 150,
-          key: "partsListOrder",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.partsListOrder
-                }
-              }, params.row.partsListOrder)
+              }, no)
             ])
           }
         },

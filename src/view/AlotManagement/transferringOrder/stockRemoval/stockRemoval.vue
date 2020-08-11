@@ -138,13 +138,14 @@
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
-                          <Tooltip :content="Leftcurrentrow.guestName">
-                            <Input
-                              readonly
-                              v-model="Leftcurrentrow.guestName"
-                              placeholder="请选择调入方"
-                            />
-                          </Tooltip>
+                          <!--<Tooltip :content="Leftcurrentrow.guestName">-->
+                            <!--<Input-->
+                              <!--readonly-->
+                              <!--v-model="Leftcurrentrow.guestName"-->
+                              <!--placeholder="请选择调入方"-->
+                            <!--/>-->
+                          <!--</Tooltip>-->
+                          <allocation-cus style="width: 160px" :title="Leftcurrentrow.guestName" placeholder="请输入调入方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="buttonShow || this.flagValue1 !== 0"></allocation-cus>
                           <!-- <Select
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
@@ -504,10 +505,12 @@
   import * as tools from "_utils/tools";
 
   import {queryByOrgid} from "../../../../api/AlotManagement/transferringOrder";
+  import AllocationCus from "../../../../components/allocation/allocationCus";
 
   export default {
     name: "stockRemoval",
     components: {
+      AllocationCus,
       More,
       QuickDate,
       AddInCom,
@@ -786,6 +789,9 @@
       // 调接口获取配件组装列表信息
     },
     methods: {
+      throwNameFun(name){
+        this.selectSupplierName(name)
+      },
 
       //------------------------------------------------------------------------//
       //表格tab切换可编辑部位
@@ -1060,7 +1066,7 @@
           content: "是否确定提交？",
           onOk: () => {
             if (this.Leftcurrentrow.xinzeng === "1") {
-              this.$Message.info("请先保存新增加工单");
+              this.$Message.info("请先保存新增出库单");
               return;
             }
             let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {

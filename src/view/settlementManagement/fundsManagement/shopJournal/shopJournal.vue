@@ -464,7 +464,7 @@
         subJectList:[
           {id:0 ,titleName:'全部'}
         ],//科目列表
-        company: "", //往来单位
+        // company: "", //往来单位
         companyId: "", //往来单位id
         formInline:{},//统计数据
         tableData:[],//全部数据
@@ -504,6 +504,13 @@
           return this.$store.state.user.userData.currentCompany.isMaster ? true : false
         }else{
           return true
+        }
+      },
+      selectShopCode(){
+        if(this.$store.state.user.userData.currentCompany!=null){
+          return this.$store.state.user.userData.currentCompany.code||""
+        }else{
+          return ""
         }
       }
     },
@@ -549,7 +556,6 @@
         if(rep.code==0){
           this.getAccShopList = rep.data
         }
-        console.log(rep)
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList , ...res.data]
@@ -561,8 +567,12 @@
         if(this.Branchstore.length>0){
           this.Branchstore.map(item=>{
             this.shopList.map(item2=>{
-              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
-                this.model1=item.id
+              if(this.selectShopList){
+                if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                  this.model1=item.id
+                }
+              }else{
+                this.model1=0
               }
             })
           })
@@ -628,6 +638,11 @@
         if(this.selectShopList){
           data.shopNumber = this.shopCode
         }
+
+        if(this.selectShopCode){
+          data.claimShopCode = this.selectShopCode
+        }
+
         if(this.subjectCode&&this.subjectCode!=0){
           data.subjectId = this.subjectCode
         }

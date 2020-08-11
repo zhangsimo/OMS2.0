@@ -231,17 +231,24 @@
       @on-cancel="closedPurchaseOrderDialog"
     >
       <section>
-        <Form :label-width="80" ref="purchaseOrderList">
+        <Form :label-width="80" ref="purchaseOrderList" @submit.native.prevent="">
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select v-model="transitUnit" filterable clearable @on-change="addChange1">
+                <brandCus
+                  :title="guestName" 
+                  placeholder="请输入供应商" 
+                  :search-value="guestName" 
+                  @throwName="throwNameFun" 
+                  :disabled-prop="false"
+                ></brandCus>
+                <!-- <Select v-model="transitUnit" filterable clearable @on-change="addChange1">
                   <Option
                     v-for="(item,index) in transitUnitList"
                     :key="index"
                     :value="item.id"
-                  >{{item.shortName}}</Option>
-                </Select>
+                  >{{item.fullName}}</Option>
+                </Select> -->
               </FormItem>
             </Col>
           </Row>
@@ -381,10 +388,16 @@ import {
   getPartBrandNoWB
 } from "@/api/business/stockSearch";
 import { parse } from "qs";
+import brandCus from "_c/allocation/brandCus.vue"
+
 export default {
   name: "brandList",
+  components: {
+    brandCus
+  },
   data() {
     return {
+      guestName: "",
       // 新增采购订单参数
       guestId: "",
       storeId: "1",
@@ -999,6 +1012,12 @@ export default {
         let flag = Array.isArray(v.childs) && v.childs.length > 0;
         return ret.concat(flag ? this.toList(v.childs) : v);
       }, []);
+    },
+    throwNameFun(v) {
+      this.guestName = v.shortName;
+      this.guestId = v.id;
+      this.billTypeId = v.billTypeId;
+      this.settleTypeId = v.settTypeId;
     },
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
