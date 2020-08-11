@@ -1060,7 +1060,7 @@
           content: "是否确定提交？",
           onOk: () => {
             if (this.Leftcurrentrow.xinzeng === "1") {
-              this.$Message.info("请先保存新增加工单");
+              this.$Message.info("请先保存新增出库单");
               return;
             }
             let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {
