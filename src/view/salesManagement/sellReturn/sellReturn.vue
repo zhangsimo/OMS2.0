@@ -128,15 +128,16 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
-                      <Tooltip :content="formPlan.fullName">
-                      <Input
-                        placeholder="请选择客户"
-                        v-model="formPlan.fullName"
-                        readonly
-                        disabled
-                        style="width:200px;"
-                      />
-                      </Tooltip>
+                      <!--<Tooltip :content="formPlan.fullName">-->
+                      <!--<Input-->
+                        <!--placeholder="请选择客户"-->
+                        <!--v-model="formPlan.fullName"-->
+                        <!--readonly-->
+                        <!--disabled-->
+                        <!--style="width:200px;"-->
+                      <!--/>-->
+                      <!--</Tooltip>-->
+                      <sales-cus style="width:200px; display: inline-block" :disabled-prop="draftShow != 0 || isNew" :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
                       <Button
                         class="ml5"
                         size="small"
@@ -430,11 +431,13 @@ import { save } from "../../../api/AlotManagement/transferringOrder";
 import { checkStore } from "@/api/system/systemApi";
 import Procurement from "@/components/Procurement";
 import { v4 } from "uuid"
+import SalesCus from "../../../components/allocation/salesCus";
 
 export default {
   name: "sellReturn",
   inject: ["reload"],
   components: {
+    SalesCus,
     selectTheCustomer,
     SalesOutbound,
     getDate,
@@ -926,6 +929,11 @@ export default {
       //   }
       // });
     },
+    throwNameFun(v){
+      this.setOneClient(v);
+    },
+
+
     //获取搜索框内的数
     setOneClient(val) {
       this.$set(this.formPlan, "guestId", val.id);

@@ -505,6 +505,13 @@
         }else{
           return true
         }
+      },
+      selectShopCode(){
+        if(this.$store.state.user.userData.currentCompany!=null){
+          return this.$store.state.user.userData.currentCompany.code||""
+        }else{
+          return ""
+        }
       }
     },
     methods: {
@@ -628,6 +635,11 @@
         if(this.selectShopList){
           data.shopNumber = this.shopCode
         }
+
+        if(this.selectShopCode){
+          data.claimShopCode = this.selectShopCode
+        }
+
         if(this.subjectCode&&this.subjectCode!=0){
           data.subjectId = this.subjectCode
         }

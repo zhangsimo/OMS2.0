@@ -147,13 +147,14 @@
                           <!-- <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>-->
-                          <Tooltip :content="Leftcurrentrow.guestName">
-                          <Input
-                            disabled
-                            :value="Leftcurrentrow.guestName"
-                            class="w160"
-                          ></Input>
-                          </Tooltip>
+                          <!--<Tooltip :content="Leftcurrentrow.guestName">-->
+                          <!--<Input-->
+                            <!--disabled-->
+                            <!--:value="Leftcurrentrow.guestName"-->
+                            <!--class="w160"-->
+                          <!--&gt;</Input>-->
+                          <!--</Tooltip>-->
+                          <allocation-cus style="width: 160px" :title="Leftcurrentrow.guestName" placeholder="请输入调出方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="remarkStatus"></allocation-cus>
                         </Col>
                         <Col span="2">
                           <Button
@@ -404,7 +405,7 @@ import PrintShow from "./compontents/PrintShow";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
-import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 
 import {
@@ -422,10 +423,12 @@ import {
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 import AddPart from "./compontents/addPart";
+import AllocationCus from "../../../../components/allocation/allocationCus";
 
 export default {
   name: "twoBackApply",
   components: {
+    AllocationCus,
     AddPart,
     More,
     QuickDate,
@@ -701,7 +704,9 @@ export default {
     // this.getArrayParams();
   },
   methods: {
-
+    throwNameFun(v){
+      this.selectSupplierName(v);
+    },
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位
     async editNextCell($table){
@@ -1309,7 +1314,7 @@ export default {
       if (this.val === "0") {
         this.showit = false;
         this.Leftcurrentrow.guestName = row.shortName;
-        this.Leftcurrentrow.guestId = row.id;
+        this.Leftcurrentrow.guestId = row.guestId;
         this.Leftcurrentrow.guestOrgid = row.isInternalId;
         const tata = this;
         setTimeout(() => {
@@ -1321,6 +1326,9 @@ export default {
         this.diaochuID = row.id;
       }
     },
+
+
+
     getOkList(list, rowValue, codeId, code) {
       this.showit = false;
       this.Leftcurrentrow.detailVOS = [];
