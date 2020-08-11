@@ -240,7 +240,7 @@
                     v-for="(item,index) in transitUnitList"
                     :key="index"
                     :value="item.id"
-                  >{{item.shortName}}</Option>
+                  >{{item.fullName}}</Option>
                 </Select>
               </FormItem>
             </Col>

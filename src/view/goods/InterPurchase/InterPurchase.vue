@@ -130,12 +130,19 @@
                       <Col span="19"
                         >
                         <Tooltip :content="formPlanmain.guestName">
-                        <Input
+                        <!-- <Input
                           v-model="formPlanmain.guestName"
                           placeholder="请选择供应商"
                           :disabled="isInput"
                           readonly
-                        />
+                        /> -->
+                          <GoodCus style="width: 120px" 
+                            :title="formPlanmain.guestName" 
+                            placeholder="请输入供应商" 
+                            :search-value="formPlanmain.guestName" 
+                            @throwName="throwNameFun" 
+                            :disabled-prop="isInput">
+                          </GoodCus>
                         </Tooltip>
                       </Col>
                       <Col span="5"
