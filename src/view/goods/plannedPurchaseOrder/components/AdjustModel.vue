@@ -47,6 +47,7 @@
           border
           stripe
           auto-resize
+          ref="xTable"
           :loading="loading"
           height="420"
           size="mini"
@@ -126,10 +127,12 @@ export default class AdjustModel extends Vue {
   private partCode: string = "";
   private partName: string = "";
   private init(): void {
+    let xtable:any=this.$refs.xTable
     this.show = true;
     this.showModify = false;
     this.reset();
     this.getList();
+    xtable.recalculate(true)
   }
 
   private cancel(): void {
