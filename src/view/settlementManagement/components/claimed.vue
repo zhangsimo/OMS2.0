@@ -222,6 +222,18 @@ export default {
           minWidth: 100
         },
         {
+          title: "已认领金额",
+          key: "claimedAmt",
+          align: "center",
+          minWidth: 100
+        },
+        {
+          title: "未认领金额",
+          key: "unClaimedAmt",
+          align: "center",
+          minWidth: 100
+        },
+        {
           title: "对方户名",
           key: "reciprocalAccountName",
           align: "center",
