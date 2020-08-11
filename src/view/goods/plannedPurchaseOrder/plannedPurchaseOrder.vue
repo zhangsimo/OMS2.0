@@ -129,9 +129,6 @@
                       <Col span="19"
                         >
                         <Tooltip :content="formPlanmain.guestName">
-                          <Select>
-                            <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
-                          </Select>
                           <!-- <Input
                             v-model="formPlanmain.guestName"
                             placeholder="请选择供应商"
@@ -139,18 +136,17 @@
                             readonly
                           /> -->
                         </Tooltip>
-                        <!-- <Select
+                        <Select
                             v-model="formPlanmain.guestId"
                             filterable
                             remote
-                            label-in-value
                             :disabled="isInput"
                             :remote-method="remoteMethod"
                             :loading="guseData.loading"
                             @on-change="geseChange"
                             >
                             <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
-                        </Select> -->
+                        </Select>
                       </Col>
                       <Col span="5"
                         ><Button
