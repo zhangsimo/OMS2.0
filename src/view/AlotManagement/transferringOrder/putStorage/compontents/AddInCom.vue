@@ -234,8 +234,8 @@ export default {
       this.reset();
     },
     init1() {
-      let self = tools.getSession("self");
-      this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
+      // let self = tools.getSession("self");
+      // this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
       this.searchPartLayer = false;
     },
     reset() {
