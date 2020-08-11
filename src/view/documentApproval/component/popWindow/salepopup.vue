@@ -484,17 +484,17 @@ export default {
           title: "商品含税单价",
           key: "taxPrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxPrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxPrice.toFixed(2));
+          // }
         },
         {
           title: "商品含税金额",
           key: "taxAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxAmt.toFixed(2));
+          // }
         },
         {
           title: "开票税率",
@@ -510,41 +510,41 @@ export default {
           title: "销售单价",
           key: "salePrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.salePrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.salePrice.toFixed(2));
+          // }
         },
         {
           title: "销售金额",
           key: "saleAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.saleAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.saleAmt.toFixed(2));
+          // }
         },
         {
           title: "已开票金额",
           key: "invoiceAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceAmt.toFixed(2));
+          // }
         },
         {
           title: "未开票金额",
           key: "invoiceNotAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceNotAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceNotAmt.toFixed(2));
+          // }
         },
         {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.applyAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.applyAmt.toFixed(2));
+          // }
         },
         {
           title: "外加税点",
@@ -598,17 +598,17 @@ export default {
           title: "商品含税单价",
           key: "taxPrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxPrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxPrice.toFixed(2));
+          // }
         },
         {
           title: "商品含税金额",
           key: "taxAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxAmt.toFixed(2));
+          // }
         },
         {
           title: "开票税率",
@@ -624,41 +624,41 @@ export default {
           title: "销售单价",
           key: "salePrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.salePrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.salePrice.toFixed(2));
+          // }
         },
         {
           title: "销售金额",
           key: "saleAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.saleAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.saleAmt.toFixed(2));
+          // }
         },
         {
           title: "已开票金额",
           key: "invoiceAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceAmt.toFixed(2));
+          // }
         },
         {
           title: "未开票金额",
           key: "invoiceNotAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceNotAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceNotAmt.toFixed(2));
+          // }
         },
         {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.applyAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.applyAmt.toFixed(2));
+          // }
         },
         {
           title: "外加税点",
