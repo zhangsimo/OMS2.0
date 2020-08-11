@@ -92,7 +92,6 @@
       show-footer
       :footer-method="footerMethod"
       :data="accessoriesBillingData"
-      :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell'}"
     >
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>

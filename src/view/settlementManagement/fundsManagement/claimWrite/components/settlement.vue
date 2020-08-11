@@ -128,6 +128,7 @@
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+            <vxe-table-column field="thisClaimedAmt    " title="本次认领金额"></vxe-table-column>
             <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>

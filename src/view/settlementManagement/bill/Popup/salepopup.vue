@@ -731,9 +731,6 @@ export default {
               taxSign: 1
             }).then(res => {
               if (res.code === 0) {
-                res.data.map(item => {
-                  item.taxPrice = item.taxAmt / item.orderQty;
-                });
                 this.invoice.invoiceType = "010103";
                 this.invoice.invoiceTax = "010103";
                 this.accessoriesBillingData = res.data;
