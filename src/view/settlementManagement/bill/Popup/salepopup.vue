@@ -685,7 +685,6 @@ export default {
       this.$refs.xTable2.recalculate(true)
       if (flag) {
         this.$refs.formCustom.resetFields();
-        console.log(this.information.statementAmtOwed , 88)
         this.invoice.statementAmtOwed = this.information.statementAmtOwed
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.notTaxAmt = 0
@@ -733,7 +732,6 @@ export default {
             }).then(res => {
               if (res.code === 0) {
                 res.data.map(item => {
-                  item.taxAmt = item.applyAmt + item.additionalTaxPoint;
                   item.taxPrice = item.taxAmt / item.orderQty;
                 });
                 this.invoice.invoiceType = "010103";
@@ -855,6 +853,7 @@ export default {
           );
 
           this.isCanRequest = !this.isCanRequest
+          console.log(obj , 888)
           saveDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
