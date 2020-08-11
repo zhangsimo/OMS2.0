@@ -833,6 +833,7 @@ export default {
             data.id = this.modelType.id || ''
             let res = await getThisAllList(data)
             if (res.code == 0) {
+              this.invoice.receiptUnit = Number(res.data.receiptUnit);
               this.formInline.applyNo = res.data.accountNo;
               this.information.code = res.data.orgCode;
               this.information.orgId = res.data.orgid;
@@ -861,7 +862,6 @@ export default {
               this.invoice.paymentMethodList = [];
               this.invoice.waySendingList = [];
               this.invoice.issuingOfficeList = [];
-              this.invoice.receiptUnit = Number(res.data.receiptUnit);
               await this.getListOne();
               if(res.data.isOilPart==1){
                 this.accessoriesBillingData =[];
