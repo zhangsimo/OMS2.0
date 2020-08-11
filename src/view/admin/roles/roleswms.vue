@@ -131,11 +131,11 @@
                         <span v-else>暂无权限</span>
                       </template>
                     </vxe-table-column>
-                    <!-- <vxe-table-column field="role" title="授权">
+                    <vxe-table-column field="role" title="授权">
                       <template v-slot="{ row,rowIndex }">
                         <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>
                       </template>
-                    </vxe-table-column> -->
+                    </vxe-table-column>
                   </vxe-table>
                   <Page
                     :total="pageR.total"

@@ -808,6 +808,7 @@ export default {
     // 新增按钮
     addProoo() {
       this.$refs.addInCom.init();
+      this.$refs.addInCom.dcName=""
       let showSelf = this.$refs.addInCom.showSelf;
       let data = { enterSelect: 123, orderTypeId: "ALLOT_APPLY" };
       if(showSelf) {

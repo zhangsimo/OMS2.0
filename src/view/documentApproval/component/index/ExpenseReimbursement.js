@@ -171,6 +171,7 @@ export default {
   methods: {
     //模态框打开111
     async open() {
+      this.$refs.xTable.recalculate(true)
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
       // if(this.$route.name === "documentApproval-myApplication") {
@@ -268,6 +269,7 @@ export default {
         this.$nextTick(() => {
           this.formInline = res.data;
           this.getOptionsList(res.data.receiver)
+          this.getOptionsList2(res.data.paymentAccountName)
           this.details = res.data.details || [];
           this.Pictures = {
             voucherPictures: res.data.voucherPictures || [],
@@ -349,7 +351,8 @@ export default {
 
     //获取科目返回的数据
     getsubBack(row) {
-      this.$set(this.subjectType, "accountEntry", row.titleCode);
+      // console.log(row)
+      this.$set(this.subjectType, "accountEntry", row.titleName);
       // 刷新列表方法
       this.$refs.xTable.refreshColumn();
     },
@@ -509,11 +512,16 @@ export default {
     //保存审核
     async save(type) {
       if (this.formInline.expenseDetails[0].billTypeId == "010101") {
-        const roleValid = ({cellValue, row}) => {
-          if (cellValue && +row.applyAmt < +cellValue) {
-            return Promise.reject(new Error("核销金额不能大于借支金额"));
-          }
-        };
+        // console.log(this.formInline.expenseDetails[0].billTypeId,111)
+        // const roleValid = ({cellValue, row}) => {
+        //   if (cellValue && +row.applyAmt < +cellValue) {
+        //     return Promise.reject(new Error("核销金额不能大于借支金额"));
+        //   }
+        // };
+        this.validRules.taxRateCode=[]
+        this.validRules.taxAmt = []
+        this.validRules.noTaxAmt = []
+      }else{
         const taxRateCodeValid = ({cellValue, row}) => {
           if (row.billTypeId && row.billTypeId != "010102") {
             if (cellValue == "TR001") {
@@ -521,26 +529,32 @@ export default {
             }
           }
         };
-        this.validRules = {
-          summary: [{required: true, message: "摘要必填"}],
-          taxRateCode: [{validator: taxRateCodeValid}],
-          accountEntry: [{required: true, message: "入账科目必填"}],
-          totalAmt: [
-            {required: true, message: "价税合计必填"},
-            {
-              pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
-              message: "最多保留2为小数"
-            }
-          ],
-          writeOffAmt: [
-            {required: true, message: "因公借支核销金额必填"},
-            {
-              pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
-              message: "最多保留2为小数"
-            },
-            {validator: roleValid}
-          ]
-        }
+        const notaxValid = rows => {
+          if (
+            rows.cellValue &&
+            rows.row.totalAmt &&
+            rows.row.taxAmt &&
+            rows.cellValue !=this.$utils.subtract(rows.row.totalAmt, rows.row.taxAmt)
+          ) {
+            return Promise.reject(new Error("不含税金额计算错误"));
+          }
+        };
+        this.validRules.taxRateCode=[{validator: taxRateCodeValid}]
+        this.validRules.taxAmt = [
+          {required: true, message: "税额必填"},
+          {
+            pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
+            message: "最多保留2位小数"
+          }
+        ]
+        this.validRules.noTaxAmt = [
+          {required: true, message: "不含税金额必填"},
+          {
+            pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
+            message: "最多保留2为小数"
+          },
+          {validator: notaxValid}
+        ]
       }
       const errMap = await this.$refs.xTable
         .fullValidate()

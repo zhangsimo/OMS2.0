@@ -12,10 +12,11 @@
             <span v-if="type == 3">入库日期：</span>
             <DatePicker
               v-model="search.auditDate"
+              :value="search.auditDate"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
-              class="w140 mr10"
+              class="w200 mr10"
             >
             </DatePicker>
           </div>
@@ -72,7 +73,6 @@
               :disabled="selectShopList"
               @on-change="getWares(search.orgid)"
               filterable
-              clearable
             >
               <Option
                 v-for="item in stores"
@@ -130,7 +130,7 @@ export default {
   data() {
     return {
       bandArr: [], // 品牌
-      stores: [{id:"",name:"全部"}], // 门店
+      stores: [{id:0,name:"全部"}], // 门店
       warehouse: [], // 仓库
       quickDates: [], // 快速日期查询
       search: {
@@ -146,8 +146,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   async mounted() {
@@ -184,6 +187,7 @@ export default {
     },
     //获取仓库
     async getWares(orgId) {
+      orgId==0?orgId="":orgId=orgId
       let res = JSON.parse(localStorage.getItem('oms2-userList'))
       let tenantId = res.tenantId || 0
       let shopkeeper = res.shopkeeper || 0
@@ -202,7 +206,7 @@ export default {
     },
     // 快速日期查询
     async getDataQuick(v) {
-      this.quickDates = v;
+      this.search.auditDate = v;
       let arr = await creat("", this.$store);
       this.search.orgid = arr[1];
       if(v.length >= 2) {

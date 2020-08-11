@@ -675,6 +675,7 @@ export default {
     },
     // 对账单弹框出现加载数据
     hander(type) {
+      this.$refs.xTable.recalculate(true)
       if (type) {
         this.handervis = false;
         this.flag = false;

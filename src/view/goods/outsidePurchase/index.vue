@@ -47,7 +47,7 @@
               @click="submit('formplanref')"
               :disabled="isInput"
               v-has="'submit'"
-            ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
+            ><i class="iconfont mr5 iconziyuan2"></i>提交入库</Button
             >
           </div>
           <div class="db">

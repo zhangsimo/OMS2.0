@@ -136,7 +136,7 @@
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette" />
+    <accountSelette ref="accountSelette" @accountHedNo2="accountHedNo2"/>
     <subjexts ref="subjexts" />
   </Modal>
 </template>
@@ -175,32 +175,33 @@ export default {
       tableData: [],
       collectPayId: "",
       obj: {},
-      showModalOne: 2 //判断是否显示...
+      showModalOne: 2, //判断是否显示...
+      accountCode:"",
     };
   },
   mounted() {
     // 对账单号
-    bus.$on("accountHedNo", val => {
-      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
-      // val.two.map(item => {
-      //   item.businessTypeName = item.businessType.name;
-      // });
-      // this.BusinessType = [...this.BusinessType, ...val.two];
-      let jsonArr = [val]
-      jsonArr.map(item => {
-        item.orgName = this.reconciliationStatement.orgName;
-        item.accountNo = item.serviceId;
-        // item.guestName = item.guestName;
-        item.businessTypeName = item.businessType.name;
-        item.reconciliationAmt = item.paymentClaimAmt;
-        item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
-        item.unAmt = -item.paymentBalance;
-        item.rpAmt = -item.paymentBalance;
-        item.unAmtLeft = +item.rpAmt - +item.unAmt;
-      })
-      this.BusinessType.push(...jsonArr)
-      this.checkComputed()
-    });
+    // bus.$on("accountHedNo", val => {
+    //   this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
+    //   // val.two.map(item => {
+    //   //   item.businessTypeName = item.businessType.name;
+    //   // });
+    //   // this.BusinessType = [...this.BusinessType, ...val.two];
+    //   let jsonArr = [val]
+    //   jsonArr.map(item => {
+    //     item.orgName = this.reconciliationStatement.orgName;
+    //     item.accountNo = item.serviceId;
+    //     // item.guestName = item.guestName;
+    //     item.businessTypeName = item.businessType.name;
+    //     item.reconciliationAmt = item.paymentClaimAmt;
+    //     item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
+    //     item.unAmt = -item.paymentBalance;
+    //     item.rpAmt = -item.paymentBalance;
+    //     item.unAmtLeft = +item.rpAmt - +item.unAmt;
+    //   })
+    //   this.BusinessType.push(...jsonArr)
+    //   this.checkComputed()
+    // });
     //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
@@ -250,6 +251,29 @@ export default {
     });
   },
   methods: {
+    accountHedNo2(val){
+      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
+      // val.two.map(item => {
+      //   item.businessTypeName = item.businessType.name;
+      // });
+      // this.BusinessType = [...this.BusinessType, ...val.two];
+      let jsonArr = [val]
+      jsonArr.map(item => {
+        item.orgName = this.reconciliationStatement.orgName;
+        item.accountNo = item.serviceId;
+        // item.guestName = item.guestName;
+        item.businessTypeName = item.businessType.name;
+        item.reconciliationAmt = item.paymentClaimAmt;
+        item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
+        item.unAmt = -item.paymentBalance;
+        item.rpAmt = -item.paymentBalance;
+        item.unAmtLeft = +item.rpAmt - +item.unAmt;
+      })
+      this.BusinessType.push(...jsonArr)
+      this.checkComputed()
+    },
+
+
     // 选择科目弹框
     subject() {
       this.$refs.subjexts.subjectModelShow = true;

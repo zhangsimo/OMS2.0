@@ -68,7 +68,7 @@
           v-has="'payClaim'"
           class="ml10"
           @click="collectWirte"
-          :disabled="Boolean(currRow.writeOffReceiptNo)"
+          :disabled="Boolean(currRow.paymentBalance<=0)"
         >其他付款核销</Button>
         <Button v-has="'claimrevoke'" class="ml10" @click="revokeCollection(0)">其他收款认领撤回</Button>
         <Button v-has="'payrevoke'" class="ml10" @click="revokeCollection(3)">其他付款申请撤回</Button>
@@ -400,8 +400,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   methods: {
@@ -756,10 +759,10 @@ export default {
     this.value = arr[0];
     this.$nextTick( () => {
       this.BranchstoreId = arr[1]
+      this.getQuery();
     })
     this.getShop()
     // this.getOne();
-    this.getQuery();
     this.modelType.allSalesList = await getAllSalesList();
     this.modelType.salesList = await getComenAndGo();
     this.modelType.payList = await getPayList();

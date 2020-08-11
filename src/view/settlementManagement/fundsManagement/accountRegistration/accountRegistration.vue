@@ -138,8 +138,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   methods: {
@@ -165,8 +168,12 @@ export default {
       if(this.Branchstore.length>0){
         this.Branchstore.map(item=>{
           this.shopListArr.map(item2=>{
-            if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
-              this.model1=item.id
+            if(this.selectShopList){
+              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                this.model1=item.id
+              }
+            }else{
+              this.model1=0
             }
           })
         })

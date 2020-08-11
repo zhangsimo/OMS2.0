@@ -223,8 +223,8 @@ export default {
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
-        this.$refs.OrderLeft.leftTableHeight = wrapH - 130;
-        this.$refs.right.rightTableHeight = wrapH - planFormH - 120;
+        this.$refs.OrderLeft.leftTableHeight = wrapH - 120;
+        this.$refs.right.rightTableHeight = wrapH - planFormH - 110;
       });
     },
 
@@ -431,7 +431,7 @@ export default {
 }
 
 .conter {
-  height: 92%;
+  height: calc(100% - 44px);
   width: 100%;
 }
 </style>
