@@ -41,19 +41,19 @@
             <!--<i class="iconfont iconcaidan input" @click="seleteAccount"></i>-->
           </FormItem>
           <FormItem label="产生税费" >
-            <Input v-model="invoice.taxation" class="ml5 w150" readonly />
+            <Input :value="getTaxesAndDues" class="ml5 w150" disabled />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="不含税对账单未开金额":label-width="160">
             <Input v-model="information.statementAmtOwed" class="ml5 w100" disabled />
           </FormItem>
-          <FormItem label="实际增加开票金额"  :label-width="160">
-            <Input v-model="invoice.invoiceAmt" class="ml5 w100" disabled />
+          <FormItem label="本次实际申请开票金额"  :label-width="160">
+            <Input  :value="showPay" class="ml5 w100" disabled />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="实际增加开票金额" prop="invoiceTaxAmt" :label-width="150">
+          <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt" :label-width="150">
             <InputNumber :max="999999" :min="0" v-model="invoice.invoiceTaxAmt" class="ml5 w100"/>
           </FormItem>
           <FormItem label="申请说明" :label-width="150">
@@ -537,6 +537,18 @@ export default {
     },
     taxPoint() {
       return this.invoice.taxPoint;
+    },
+    //计算税费
+    //本次不含税开票金额 / (1-税率) - 本次不含税开票金额
+    getTaxesAndDues(){
+      this.invoice.taxation =  this.$utils.subtract( this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.invoice.taxPoint)  )  , this.invoice.invoiceTaxAmt )
+      return this.invoice.taxation.toFixed(2)
+    },
+    //本次实际金额
+    //本次不含税开票金额 / (1-税率)
+    showPay(){
+      this.invoice.invoiceAmt = this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.invoice.taxPoint)  )
+      return this.invoice.invoiceAmt.toFixed(2)
     }
   },
   // watch: {

@@ -180,7 +180,6 @@
           ref="xTable1"
           :footer-method="footerMethod"
           :data="accessoriesBillingData1"
-          :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           >
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
@@ -223,7 +222,7 @@
           <!--<vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>-->
           <vxe-table-column field="applyAmt" title="申请开票金额" >
             <template v-slot="{ row }">
-              {{row.invoiceNotAmt | priceFilters}}
+              {{row.applyAmt | priceFilters}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
@@ -239,7 +238,6 @@
           show-footer
           :footer-method="footerMethod"
           :data="accessoriesBillingData2"
-          :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row'}"
         >
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>

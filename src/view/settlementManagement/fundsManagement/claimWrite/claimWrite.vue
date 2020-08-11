@@ -1102,7 +1102,7 @@
           reciprocalAccountName: this.bankNameOClaim,
           page: this.$refs.claim.claimedPage.page - 1,
           size: this.$refs.claim.claimedPage.size,
-
+          claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '' ,
           orgId: this.model2,//分店
           startDate: this.value2[0]
             ? moment(this.value2[0]).format("YYYY-MM-DD HH:mm:ss")
