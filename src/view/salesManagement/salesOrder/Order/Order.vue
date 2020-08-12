@@ -73,7 +73,7 @@
               class="mr5"
               size="small"
               @click="printTable"
-              :disabled="orderlistType.value == 0"
+              :disabled="orderlistType.value == 5"
               v-has="'print'"
             >
               <i class="iconfont mr5 icondayinicon"></i> 打印
