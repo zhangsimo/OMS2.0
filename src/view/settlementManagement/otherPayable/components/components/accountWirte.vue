@@ -195,7 +195,10 @@ export default {
       } else {
         this.seleteData = currentRow;
       }
-    }
+    },
+    init() {
+      this.modal1 = true;
+    },
   }
 };
 </script>

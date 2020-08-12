@@ -35,13 +35,15 @@
     </section>
     <section class="con-box">
       <!--上表格-->
-      <div class="topTableDate">
+<!--      <div class="topTableDate">-->
         <vxe-table
+          ref="xTable"
           border
           resizable
           size="mini"
           :height="200"
           auto-resize
+          align="center"
           :data="tabList"
           highlight-current-row
           highlight-hover-row
@@ -62,22 +64,26 @@
           <vxe-table-column
             field="partCode"
             title="配件编码"
+            width="200"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
+            width="200"
           ></vxe-table-column>
           <vxe-table-column
             field="fullName"
             title="配件全称"
+            width="200"
           ></vxe-table-column>
           <vxe-table-column
             field="carBrandModel"
             title="品牌车型"
+            width="200"
           ></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode"min-width="200" title="OE码"></vxe-table-column>
         </vxe-table>
-      </div>
+<!--      </div>-->
 
       <!--     分页-->
       <Row class="mt10 mb10">
@@ -102,25 +108,28 @@
           resizable
           auto-resize
           height="150"
+          align="center"
           :data="currentData"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column
             field="partCode"
             title="配件编码"
+            width="160"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
-            width="100"
+            width="160"
           ></vxe-table-column>
           <vxe-table-column
             field="fullName"
             title="配件全称"
+            width="160"
           ></vxe-table-column>
-          <vxe-table-column field="qty" title="数量"></vxe-table-column>
-          <vxe-table-column field="ratio" title="成本比例"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="qty"width="160" title="数量"></vxe-table-column>
+          <vxe-table-column field="ratio"width="160" title="成本比例"></vxe-table-column>
+          <vxe-table-column field="remark"width="160" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
     </section>
@@ -172,6 +181,7 @@ export default {
   props: {},
   methods: {
     init() {
+      // this.$refs.xTable.recalculate(true)
       this.getList();
       this.searchPartLayer = true;
     },

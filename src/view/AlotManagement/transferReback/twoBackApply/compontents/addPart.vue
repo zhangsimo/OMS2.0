@@ -148,7 +148,7 @@
 
     private bands: Array<any> =[] //品牌列表
     private filters: Array<any> =[] //品牌列表
-    
+
 
     private tableDataBm: Array<any> = new Array();
 
@@ -236,6 +236,7 @@
 
     //点击全选
     private cellClickEvent( {selection} ) {
+      this.selectRow=selection
       // console.log(selection);
     }
 

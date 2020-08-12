@@ -112,7 +112,7 @@
           width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
-          field="mainRemark"
+          field="detailRemark"
           title="备注"
           width="120"
         ></vxe-table-column>
@@ -185,7 +185,7 @@
 
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
-          field="detailRemark"
+          field="mainRemark"
           title="订单备注"
           width="200"
 

@@ -39,6 +39,25 @@
             </Select>
           </div>
           <div class="db ml10">
+              <span>往来单位:</span>
+            <Select
+              v-model="receiveGuestId"
+              clearable
+              filterable
+              :loading = loading1
+              remote
+              :remote-method="remoteMethod"
+              style="width:200px;padding-left: 5px"
+            >
+              <Option
+                v-for="item in company"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -398,6 +417,8 @@ import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 import bus from './Popup/Bus'
 import NoTax from "./Popup/noTax";
+import { getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
+
 export default {
   name:'accountStatement',
   components: {
@@ -1137,7 +1158,9 @@ export default {
       hedgingfalg:false,//对冲配件发票/对冲油品发票=含税配件/油品金额，不能点击发票对冲;
       receivefalg:false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
       paymentId:'',//判定付款默认类型
-
+      receiveGuestId:'',//获取往来单位id
+      company:[],//查询到往来单位数据
+      loading1:false,//查询时判断
     };
   },
   async mounted() {
@@ -1196,7 +1219,32 @@ export default {
     }
   },
   methods: {
-
+      //往来单位查询
+    async remoteMethod(query) {
+      this.company = [];
+      if (query !== "") {
+        this.loading1 = true
+        let arr=[]
+        let req = {
+          shortName:query,
+          size:50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
+          this.loading1 = false
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.shortName,
+            });
+          });
+        }
+        let arrJson = new Set(arr)
+        this.company = Array.from(arrJson)
+      } else {
+        this.company = [];
+      }
+    },
     //对冲之后刷新页面接口
     getNeWlist(){
       this.getAccountStatement()
@@ -1244,7 +1292,7 @@ export default {
     },
     // 查询发票申请
     queryApplication() {
-      this.$router.push({ name: "invoiceAdministration-invoiceApply" });
+      this.$router.push({ name: "invoiceAdministrationInvoiceApply" });
     },
     // 发票对冲
     hedgingInvoice() {
@@ -1448,7 +1496,8 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         orgId: this.model1,
-        statementStatus: this.Reconciliationtype
+        statementStatus: this.Reconciliationtype,
+        guestId:this.receiveGuestId
       };
       obj.page = this.page.num -1
       obj.size = this.page.size

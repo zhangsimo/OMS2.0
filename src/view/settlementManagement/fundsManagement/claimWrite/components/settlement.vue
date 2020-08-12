@@ -161,13 +161,14 @@ export default {
   },
   data() {
     const roleValid = ({ row ,  cellValue }) => {
-      console.log(row , 11)
-      console.log(cellValue , 22)
       let Money = Math.abs(row.incomeMoney) > Math.abs(row.paidMoney) ? Math.abs(row.incomeMoney) : Math.abs(row.paidMoney)
+      let reg = /^([1-9]\d*(\.\d+)?)$/
       return new Promise((resolve, reject) => {
         if (cellValue && cellValue > Money) {
           reject(new Error('本次认领金额录入有误，请重新录入'))
-        } else {
+        } if(cellValue && !reg.test(cellValue)){
+          reject(new Error('输入数字不能小于0'))
+        }else {
           resolve()
         }
       })
@@ -368,7 +369,8 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (["incomeMoney", "paidMoney"].includes(column.property)) {
+          if (['thisClaimedAmt'].includes(column.property)) {
+            this.checkComputed()
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           return null;
@@ -379,15 +381,13 @@ export default {
     checkComputed() {
       let sum1 = 0;
       let sum2 = 0;
-      let sum3 = 0;
       this.BusinessType.map(item => {
         sum1 += item.rpAmt * 1;
       });
       this.tableData.map(item => {
-        sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
-        sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
+        sum2 += item.thisClaimedAmt ? item.thisClaimedAmt * 1 : 0;
       });
-      this.check = (sum1 - sum2 - sum3).toFixed(2);
+      this.check = (sum1 - sum2).toFixed(2);
     }
   }
 };
