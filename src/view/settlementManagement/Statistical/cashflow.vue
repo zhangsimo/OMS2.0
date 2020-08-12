@@ -158,8 +158,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   methods: {
@@ -202,9 +205,9 @@ export default {
       data.shopNumber = this.$store.state.user.userData.shopId;
       data.tenantId = this.$store.state.user.userData.tenantId;
       let res = await are(data);
-
       if (res.code === 0) {
-        this.areaId = res.data[0].id;
+        this.areas=[...res.data]
+        this.areas.unshift({ id: 0, companyName: "全部" })
       }
     },
 
@@ -227,6 +230,19 @@ export default {
         this.$nextTick(() => {
           this.BranchstoreId = this.$store.state.user.userData.shopId;
         });
+        if(this.areas.length>0){
+          this.areas.map(item=>{
+            this.Branchstore.map(item2=>{
+              if(this.selectShopList){
+                if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
+                  this.areaId=item.id
+                }
+              }else{
+                this.areaId=0
+              }
+            })
+          })
+        }
         if (this.$store.state.user.userData.shopkeeper != 0) {
           this.getThisArea(); //获取当前门店地址
         }
@@ -239,24 +255,19 @@ export default {
         shopNumber: this.BranchstoreId,
         size: 10000
       };
-
       if (this.dates.length === 2 && this.dates[0]) {
         params.startTime =
           moment(this.dates[0]).format("YYYY-MM-DD");
         params.endTime =
           moment(this.dates[1]).format("YYYY-MM-DD");
       }
-
       params.page = 0;
-
       for (let key in params) {
         if (!params[key]) {
           Reflect.deleteProperty(params, key);
         }
       }
-
       let res = await api.findListPageAllCashFlow(params);
-
       if (res.code == 0) {
         this.tableData = res.data.content;
         this.headData = res.data.content[0]["heandMoney"];

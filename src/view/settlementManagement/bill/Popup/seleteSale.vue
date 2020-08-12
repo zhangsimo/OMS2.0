@@ -96,6 +96,7 @@ export default {
         if(this.saleSingleData.length===this.seleteData.length){
           this.$emit('partsData',[])
         }else{
+          this.seleteData.map(item => item.ifNecessary = 1)
           this.$emit('partsData',this.seleteData);
         }
         this.modal1 = false

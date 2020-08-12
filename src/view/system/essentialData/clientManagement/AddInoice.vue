@@ -1,13 +1,19 @@
 <template>
   <Form ref="form" :label-width="100" :model="data" :rules="rules">
-    <FormItem label="开票名称:" prop="taxpayerName">
+    <FormItem label="开票名称:" prop="taxpayerName" v-if="meTit=='新增开票'">
       <Input v-model="data.taxpayerName" style="width: 300px"/>
     </FormItem>
-    <FormItem label="税号:" prop="taxpayerCode">
+    <FormItem label="开票名称:" prop="taxpayerName" v-else>
+      <Input v-model="data.taxpayerName" disabled style="width: 300px"/>
+    </FormItem>
+    <FormItem label="税号:" prop="taxpayerCode" v-if="meTit=='新增开票'">
       <Input v-model="data.taxpayerCode" style="width: 300px"/>
     </FormItem>
+    <FormItem label="税号:" prop="taxpayerCode"  v-else>
+      <Input v-model="data.taxpayerCode" disabled style="width: 300px"/>
+    </FormItem>
     <FormItem label="地址电话:" prop="taxpayerTel">
-      <Input v-model="data.taxpayerTel" type="number"  style="width: 300px"/>
+      <Input v-model="data.taxpayerTel" style="width: 300px"/>
     </FormItem>
     <FormItem label="开户银行:" prop="accountBankNo">
       <Input v-model="data.accountBankNo" style="width: 300px"/>
@@ -23,7 +29,8 @@
 export default {
   name: "AddInoice",
   props: {
-    data: ""
+    data: "",
+      meTit:''
   },
   data() {
     const paragraph = (rule, value, callback) => {
@@ -52,7 +59,7 @@ export default {
       rules: {
         taxpayerName: [{ required: true, message: "开票名称不能为空", trigger: "blur" }],
         taxpayerCode: [{ required: true, validator: paragraph, trigger: "blur" }],
-        taxpayerTel: [{ required: true, validator: taxpayerTel,trigger: "blur" }],
+        taxpayerTel: [{ required: true, message:"地址电话不能为空",trigger: "blur" }],
         accountBankNo: [{ required: true, message: "开户行不能为空", trigger: "blur" }]
       }
     };

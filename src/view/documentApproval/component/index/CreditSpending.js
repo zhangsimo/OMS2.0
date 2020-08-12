@@ -3,10 +3,13 @@ import selectCredit from '../popWindow/SelectCredit'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getCreditSave} from '_api/documentApproval/CreditSpending.js'
-import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+// import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import { getThisAllList,getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
-
+import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
+import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
+import store from "@/store/index.js";
 
 export default {
   name: "OtherPayment",
@@ -23,8 +26,7 @@ export default {
       remoteloading: false,
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
-      formInline:{
-      },//所有数据对象
+      formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
         topic: [
@@ -75,6 +77,7 @@ export default {
   methods:{
     //模态框打开111
     open(){
+      this.$refs.documentTable.recalculate(true)
       this.company = [];
       this.options = this.list.salesList;
       this.payUserList = this.list.payList
@@ -82,6 +85,7 @@ export default {
       this.$refs.upImg.uploadListModal = []
       this.$refs.upImg.uploadList = []
       this.$refs['formInline'].resetFields();
+      this.$refs.documentTable.recalculate(true);
       this.model = true
       //判断模态框状态
       this.modelType = false
@@ -128,6 +132,9 @@ export default {
       if(res.code === 0){
         this.$nextTick( () => {
           this.formInline = res.data
+          this.formInline.receiver=res.data.receiverId
+          this.remoteMethod(res.data.receiveGuestName)
+          this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
             billStatus: res.data.billStatus
@@ -137,40 +144,50 @@ export default {
       }
     },
 
-    remoteMethod(query) {
+    async remoteMethod(query) {
       this.company = [];
       if (query !== "") {
         this.remoteloading = true;
-        this.company = [];
-        const list = this.options.map(item => {
-          return {
-            value: item.value,
-            label: item.label
-          };
-        });
-        this.company = list.filter(
-          item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
-        );
+        let arr=[]
+        let req = {
+          shortName:query,
+          size:50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.fullName,
+              receiver: item.accountReceiveName || "",
+              receiveBank: item.accountBank || "",
+              receiveBankNo: item.accountBankNo || ""
+            });
+          });
+        }
+        let arrJson=new Set(arr)
+        this.company=Array.from(arrJson)
         this.remoteloading = false;
       } else {
         this.company = [];
       }
     },
-
     //获取往来单位
     getCompany(row) {
       // let arr = this.company.filter( item => item.value == row.value)
       this.getAccountNameList(row)
     },
-
-
+    //付款人账号搜索出发
+    remoteMethod2(query){
+      this.getOptionsList2(query)
+    },
     //获取收款户名
     async getAccountNameList(row){
       let rep = await getAccountName({"guestId":row.value});
       if(rep.code==0){
         this.receiverArr = rep.data;
-        if(rep.data.length==1){
-          this.setReceiverInfo(this.receiverArr[0])
+        if(rep.data.length>0){
+          this.setReceiverInfo(rep.data[0])
         }else{
           this.formInline.receiver = ''
           this.formInline.receiveBank = ''
@@ -178,7 +195,26 @@ export default {
         }
       }
     },
-
+    //付款人账号搜索框
+    async getOptionsList2(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        shopNumber: store.state.user.userData;
+        data.page = 0
+        data.size = 100
+        let res = await getPayAccount(data)
+        if(res.code == 0){
+          res.data.content.map(item => {
+            item.value = item.id;
+            item.label = item.accountName;
+          });
+          this.payUserList = res.data.content || []
+        }
+      } else {
+        this.payUserList = [];
+      }
+    },
     setReceiverInfo(row){
       this.formInline.receiver = row.id;
       this.formInline.receiveBank = row.accountBank;
@@ -218,7 +254,7 @@ export default {
     //获取付款信息
     getPayList(value){
       if (!value) return
-      let list = this.payUserList.filter(item => item.id == value)[0]
+      let list = this.payUserList.filter(item => item.id == value.value)[0]
       this.formInline.paymentBank  = list.bankName
       this.formInline.paymentBankNo = list.accountCode
     },
@@ -232,6 +268,11 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
+          let valg = false
+          if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
+            valg = this.formInline.details[0].claimAmt < this.formInline.applyAmt ? true : false
+          }
+          if (valg) return  this.$Message.error('申请金额不能大于其他收款金额')
           this.formInline.step = type
           let res = await getCreditSave(this.formInline)
           if (res.code == 0) {

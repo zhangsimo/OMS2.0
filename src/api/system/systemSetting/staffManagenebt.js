@@ -111,3 +111,31 @@ export function setPhone (params) {
     params
   })
 }
+
+
+//外部员工管理 查询
+export function getOutStaff (params,data){
+  return axios.request({
+    url:`${api.authApi}/authorityOutsideStaff/queryAll`,
+    method:"post",
+    params,
+    data
+  })
+}
+
+//外部员工管理 新增/修改确认、启用禁用
+export function addOutStaffe(data){
+  return axios.request({
+    url:`${api.authApi}/authorityOutsideStaff/saveOrUpdate`,
+    method:"post",
+    data
+  })
+}
+//外部员工管理  启用禁用
+export function changeOutStaffEn(data){
+  return axios.request({
+    url:`${api.authApi}/authorityOutsideStaff/updateSign`,
+    method:"post",
+    data
+  })
+}

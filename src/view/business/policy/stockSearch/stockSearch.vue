@@ -105,6 +105,7 @@
           highlight-row
           ref="table1"
           border
+          align="left"
           :stripe="true"
           height="400"
           resizable
@@ -194,6 +195,7 @@
           highlight-row
           size="small"
           ref="table2"
+          align="left"
           border
           :stripe="true"
           :columns="columns2"
@@ -576,7 +578,6 @@ export default {
           title: "序号",
           type: "index",
           key: "index",
-          align: "center",
           minWidth: 60,
           render: (h, params) => {
             return h(
@@ -590,7 +591,6 @@ export default {
         },
         {
           title: "操作",
-          align: "center",
           minWidth: 60,
           render: (h, params) => {
             return h("div", [
@@ -615,28 +615,24 @@ export default {
         },
         {
           title: "配件编码",
-          align: "center",
           key: "partCode",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "配件名称",
-          align: "center",
           key: "partName",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "OE码",
-          align: "center",
           key: "oemCode",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "品牌",
-          align: "center",
           key: "partBrand",
           minWidth: 90,
           filters: this.bands1,
@@ -647,28 +643,24 @@ export default {
         },
         {
           title: "品牌车型",
-          align: "center",
           key: "carModelName",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "单位",
-          align: "center",
           key: "unit",
           minWidth: 50,
           tooltip: true
         },
         {
           title: "库存数量",
-          align: "center",
           key: "stockQty",
           minWidth: 90,
           tooltip: true
         },
         {
           title: "可售数量",
-          align: "center",
           key: "outableQty",
           minWidth: 80,
           render: (h, params) => {
@@ -679,21 +671,18 @@ export default {
         },
         {
           title: "仓库",
-          align: "center",
           key: "storeName",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "仓位",
-          align: "center",
           key: "shelf",
           minWidth: 120,
           tooltip: true
         },
         {
           title: "库存单价",
-          align: "center",
           key: "costPrice",
           minWidth: 100,
           render: (h, params) => {
@@ -704,7 +693,6 @@ export default {
         },
         {
           title: "库存金额",
-          align: "center",
           key: "stockAmt",
           minWidth: 100,
           render: (h, params) => {
@@ -715,70 +703,60 @@ export default {
         },
         {
           title: "规格",
-          align: "center",
           key: "spec",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "配件内码",
-          align: "center",
           key: "partInnerId",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "最近入库日期",
-          align: "center",
           key: "lastEnterDate",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "最近出库日期",
-          align: "center",
           key: "lastOutDate",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "库存上限",
-          align: "center",
           key: "upLimit",
           minWidth: 80,
           tooltip: true
         },
         {
           title: "库存下限",
-          align: "center",
           key: "downLimit",
           tooltip: true,
           minWidth: 80
         },
         {
           title: "采购在途库存",
-          align: "center",
           key: "pchRoadQty",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "调拨在途库存",
-          align: "center",
           key: "attotRoadQty",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "合计在途库存",
-          align: "center",
           key: "onRoadQty",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "机构名称",
-          align: "center",
           key: "orgName",
           minWidth: 150,
           tooltip: true
@@ -788,34 +766,29 @@ export default {
         {
           title: "序号",
           key: "index",
-          align: "center",
           minWidth: 60,
           tooltip: true
         },
         {
           title: "配件编码",
-          align: "center",
           minWidth: 130,
           key: "partCode",
           tooltip: true
         },
         {
           title: "配件名称",
-          align: "center",
           key: "partName",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "OE码",
-          align: "center",
           key: "oemCode",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "品牌",
-          align: "center",
           key: "partBrand",
           minWidth: 100,
           filters: [],
@@ -826,56 +799,48 @@ export default {
         },
         {
           title: "品牌车型",
-          align: "center",
           key: "carModelName",
           minWidth: 130,
           tooltip: true
         },
         {
           title: "单位",
-          align: "center",
           key: "enterUnitId",
           minWidth: 50,
           tooltip: true
         },
         {
           title: "规格",
-          align: "center",
           key: "spec",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "配件内码",
-          align: "center",
           key: "partInnerId",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "入库数量",
-          align: "center",
           key: "enterQty",
           minWidth: 90,
           tooltip: true
         },
         {
           title: "可售数量",
-          align: "center",
           key: "outableQty",
           minWidth: 80,
           tooltip: true
         },
         {
           title: "仓库",
-          align: "center",
           key: "storeName",
           minWidth: 100,
           tooltip: true
         },
         {
           title: "库存单价",
-          align: "center",
           key: "enterPrice",
           minWidth: 100,
           render: (h, params) => {
@@ -886,7 +851,6 @@ export default {
         },
         {
           title: "库存金额",
-          align: "center",
           key: "enterAmt",
           minWidth: 100,
           render: (h, params) => {
@@ -897,14 +861,12 @@ export default {
         },
         {
           title: "税率",
-          align: "center",
           key: "taxRate",
           minWidth: 60,
           tooltip: true
         },
         {
           title: "含税单价",
-          align: "center",
           key: "taxPrice",
           minWidth: 100,
           render: (h, params) => {
@@ -916,7 +878,6 @@ export default {
         },
         {
           title: "含税金额",
-          align: "center",
           key: "taxAmt",
           minWidth: 100,
           render: (h, params) => {
@@ -928,7 +889,6 @@ export default {
         },
         {
           title: "不含税单价",
-          align: "center",
           key: "noTaxPrice",
           minWidth: 100,
           render: (h, params) => {
@@ -939,7 +899,6 @@ export default {
         },
         {
           title: "不含税金额",
-          align: "center",
           key: "noTaxAmt",
           minWidth: 100,
           render: (h, params) => {
@@ -950,21 +909,18 @@ export default {
         },
         {
           title: "连锁库龄",
-          align: "center",
           key: "chainStockAge",
           minWidth: 90,
           tooltip: true
         },
         {
           title: "本店库龄",
-          align: "center",
           key: "branchStockAge",
           minWidth: 90,
           tooltip: true
         },
         {
           title: "滞销",
-          align: "center",
           key: "isUnsalable",
           render: (h, params) => {
             let tex = params.row.isUnsalable == 0 ? "否" : "是";
@@ -975,35 +931,30 @@ export default {
         },
         {
           title: "入库日期",
-          align: "center",
           key: "enterDate",
           minWidth: 120,
           tooltip: true
         },
         {
           title: "入库单号",
-          align: "center",
           key: "serviceId",
           minWidth: 124,
           tooltip: true
         },
         {
           title: "第一供应商",
-          align: "center",
           key: "originGuestName",
           minWidth: 150,
           tooltip: true
         },
         {
           title: "最近供应商",
-          align: "center",
           key: "guestName",
           minWidth: 150,
           tooltip: true
         },
         {
           title: "机构名称",
-          align: "center",
           key: "orgName",
           minWidth: 150,
           tooltip: true
@@ -1267,7 +1218,7 @@ export default {
       data.page = 0;
       data.size = this.contentTwo.page.total;
       data.noStock = data.noStock ? 1 : 0;
-
+      data.isImport = 1;
       if(this.contentTwo.dataTwo.length<=0){
         this.$Message.error("这个公司暂时没有库存")
         return
@@ -1464,7 +1415,7 @@ export default {
 }
 
 .look-nav {
-  text-align: center;
+  text-align: left;
   height: 40px;
   margin-top: 20px;
 }
@@ -1493,4 +1444,10 @@ export default {
     }
   }
 }
+</style>
+<style scoped>
+  .table-highlight-row >>> td {
+    height: 40px !important;
+  }
+
 </style>

@@ -6,11 +6,12 @@
           <Row>
             <FormItem label="往来单位:">
               <Col span="19">
-                <Input
-                  type="text"
-                  placeholder="请选择往来单位"
-                  v-model="formPlan.supplyName"
-                />
+                <!--<Input-->
+                  <!--type="text"-->
+                  <!--placeholder="请选择往来单位"-->
+                  <!--v-model="formPlan.supplyName"-->
+                <!--/>-->
+                <supplier-cus :search-value="formPlan.supplyName" :title="formPlan.supplyName" placeholder="请输入客户" :disabled-prop="false" @throwName="throwNameFun"></supplier-cus>
               </Col>
               <Col>
                 <Col span="5"
@@ -116,9 +117,11 @@
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
   import {newPurchaseOrder} from "_api/salesManagment/acceptance.js";
+  import SupplierCus from "../../../../components/allocation/supplierCus";
   export default {
     name: 'NewOrder',
     components:{
+      SupplierCus,
       SelectSupplier
     },
     props:{
@@ -214,6 +217,9 @@
           this.formPlan.billTypeId=billTypeId;
           this.formPlan.settleTypeId=settleTypeId;
         // console.log('哈哈哈哈哈',this.$parent)
+      },
+      throwNameFun(v){
+        this.getSupplierName(v);
       },
       getSupplierName(v){
         // console.log('打印出来的选择数据是是是',v);

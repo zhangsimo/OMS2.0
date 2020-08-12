@@ -9,11 +9,11 @@
           <div class="db mr10">
             <span>出库日期：</span>
             <DatePicker
-              v-model="search.submitDate"
+              :value="search.submitDate"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
-              class="w140 mr10"
+              class="w200 mr10"
             >
             </DatePicker>
           </div>
@@ -115,9 +115,9 @@ export default {
   methods: {
     // 快速日期查询
     getDataQuick(v) {
-      this.quickDates = v;
+      this.search.submitDate = v;
       if(v.length >= 2) {
-        this.$emit("search", { createTime: v[0], endTime: v[1] });
+        this.$emit("search", { allotFinishedStartDate: v[0], allotFinishedEndDate: v[1] });
       } else {
         this.$emit("search", {});
       }

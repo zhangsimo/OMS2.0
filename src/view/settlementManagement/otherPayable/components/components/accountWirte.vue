@@ -163,7 +163,8 @@ export default {
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
         receivePaymentType: this.paymentId,
-        guestId: this.companyId
+        guestId: this.companyId,
+        paymentBalance:0
       };
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
@@ -179,6 +180,7 @@ export default {
     determine() {
       if (this.seleteData && Object.keys(this.seleteData).length !== 0) {
         bus.$emit("accountHedNo", this.seleteData);
+        this.$emit("accountHedNo2",this.seleteData);
         this.modal1 = false;
       } else {
         this.$message.error("请选择一条对账单");

@@ -357,7 +357,7 @@
             </div>
           </div>
           <Modal v-model="newInoiceShow" :title="tit">
-            <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
+            <AddInoice :data="addInoiceOne" ref="AddInoice" :me-tit="tit"></AddInoice>
             <div slot="footer">
               <Button type="primary" @click="addNewBank">确定</Button>
               <Button type="default" @click="cancelNewBank">取消</Button>
@@ -371,7 +371,7 @@
 
 <script>
 import Newplace from "./Newplace";
-import AddInoice from "./AddInoice";
+import AddInoice from "@/view/system/essentialData/clientManagement/AddInoice";
 import {
   getDigitalDictionary,
   getCustomerInformation,
@@ -852,7 +852,7 @@ export default {
       pitchOnClientList: [], //选中关联客户
       deleteOneClient: [], //获取删除项
       pitchOneBank: [],
-      tit: "", //开票弹窗
+      tit: "新增开票", //开票弹窗
       financeList:[]
     };
   },
@@ -1277,10 +1277,19 @@ export default {
     },
     deletBank() {
       this.invoice.map(item => {
-        if (item.id == this.addInoiceOne.id) {
-          item.taxpayerType = !item.taxpayerType;
-        } else {
-          item.taxpayerType;
+        if(this.addInoiceOne.id==undefined){
+          // bankId
+          if (item.bankId == this.addInoiceOne.bankId) {
+            item.taxpayerType = !item.taxpayerType;
+          } else {
+            item.taxpayerType;
+          }
+        }else{
+          if (item.id == this.addInoiceOne.id) {
+            item.taxpayerType = !item.taxpayerType;
+          } else {
+            item.taxpayerType;
+          }
         }
       });
       this.pitchOnBank()

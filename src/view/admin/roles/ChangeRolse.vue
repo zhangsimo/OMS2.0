@@ -5,6 +5,11 @@
         <FormItem label="角色名称:" prop="displayName">
           <Input v-model="list.displayName" placeholder="请输入角色名称" />
         </FormItem>
+        <FormItem label="角色标识:">
+          <Select v-model="list.roleCode" style="width:200px">
+            <Option v-for="item in codeList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+          </Select>
+        </FormItem>
         <FormItem label="角色描述:">
           <Input
             v-model="list.name"
@@ -26,6 +31,8 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 // @ts-ignore
 import { addNewStaffe } from "_api/admin/roleApi";
+// @ts-ignore
+import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
 @Component
 export default class ChangeRolse extends Vue {
   //父组件传过来的值
@@ -35,6 +42,8 @@ export default class ChangeRolse extends Vue {
   role: Object;
   //判断模态框状态
   private staffShow: boolean = false;
+  //唯一标识数组
+  private codeList: any =[]
   //校验
   private ruleValidate: Object = {
     displayName: [{ required: true, message: "角色名称必填", trigger: "blur" }]
@@ -44,8 +53,23 @@ export default class ChangeRolse extends Vue {
   private openModal(systemType) {
     this.systemType = systemType
     this.staffShow = true;
+    this.getroleList()
     // this.handleReset ()
   }
+
+  //获取当前唯一标识数组
+  private  getroleList(){
+    let data:any = ['ROLE_TYPE']
+    getDigitalDictionary(data).then(res =>{
+      // @ts-ignore
+      if (res.code  == 0 ){
+        // @ts-ignore
+        this.codeList = res.data['ROLE_TYPE']
+      }
+    })
+
+  }
+
   //清除校验
   private handleReset() {
     let form: any = this.$refs.formValidate;

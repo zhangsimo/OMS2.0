@@ -79,7 +79,7 @@
             </Select>
           </FormItem>
           <FormItem label="开票税率" prop="invoiceTax">
-            <Select v-model="invoice.invoiceTax" class="ml5 w200">
+            <Select v-model="invoice.invoiceTax" class="ml5 w200" disabled="">
               <Option
                 v-for="item in invoice.rateBillingList"
                 :value="item.value"
@@ -88,7 +88,7 @@
             </Select>
           </FormItem>
           <FormItem label="票据类型" prop="invoiceType">
-            <Select v-model="invoice.invoiceType" class="ml5 w200">
+            <Select v-model="invoice.invoiceType" class="ml5 w200" disabled>
               <Option
                 v-for="item in invoice.typeBillingList"
                 :value="item.value"
@@ -134,7 +134,7 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="备注">
+          <FormItem label="快递备注">
             <Input v-model="invoice.remark" class="ml5 w200" />
           </FormItem>
           <FormItem>
@@ -145,8 +145,8 @@
           <FormItem label="对账单欠票金额" prop="statementAmtOwed">
             <Input v-model="invoice.statementAmtOwed" class="ml5 w200" disabled />
           </FormItem>
-          <FormItem label="本次申请开票含税金额" >
-            <Input v-model="invoice.applyTaxAmt" class="ml5 w200"  disabled/>
+          <FormItem label="本次申请开票含税金额" prop="applyTaxAmt" >
+            <Input-number :max="999999" :min="0" v-model="invoice.applyTaxAmt" class="ml5 w200" @on-blur="confirmTheAmount " />
           </FormItem>
           <!--<FormItem label="不含税金额" prop="notTaxAmt">-->
             <!--<Input v-model="invoice.notTaxAmt" class="ml5 w200" disabled />-->
@@ -157,7 +157,7 @@
           <!--<FormItem label="申请开票金额" >-->
             <!--<Input v-model="invoice.applyAmt" class="ml5 w200" disabled />-->
           <!--</FormItem>-->
-          <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
+          <FormItem label="开票说明" >
             <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
           </FormItem>
         </div>
@@ -180,7 +180,6 @@
           ref="xTable1"
           :footer-method="footerMethod"
           :data="accessoriesBillingData1"
-          :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           >
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
@@ -221,9 +220,9 @@
             </template>
           </vxe-table-column>
           <!--<vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>-->
-          <vxe-table-column field="applyAmt" title="申请开票金额" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template v-slot:edit="{ row }">
-              <vxe-input type="float"  v-model="row.applyAmt" :max="row.invoiceNotAmt" digits="2"></vxe-input>
+          <vxe-table-column field="applyAmt" title="申请开票金额" >
+            <template v-slot="{ row }">
+              {{row.applyAmt | priceFilters}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
@@ -239,7 +238,6 @@
           show-footer
           :footer-method="footerMethod"
           :data="accessoriesBillingData2"
-          :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row'}"
         >
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
@@ -281,9 +279,9 @@
             </template>
           </vxe-table-column>
           <!--<vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>-->
-          <vxe-table-column field="applyAmt" title="申请开票金额" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template v-slot:edit="{ row }">
-              <vxe-input type="float"  v-model="row.applyAmt" :max="row.invoiceNotAmt" digits="2"></vxe-input>
+          <vxe-table-column field="applyAmt" title="申请开票金额" >
+            <template v-slot="{ row }">
+              {{row.invoiceNotAmt | priceFilters}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
@@ -342,6 +340,12 @@ export default {
       }
     };
     const applyAmtValid = ({ cellValue, rule, rules, row, }) => {
+      if( cellValue) {
+        return Promise.reject(new Error('申请开票金额不能大于未开票金额'))
+      }
+    }
+
+    const thisOneMoney = ({ cellValue, rule, rules, row, }) => {
       if(row.invoiceNotAmt < cellValue) {
         return Promise.reject(new Error('申请开票金额不能大于未开票金额'))
       }
@@ -481,8 +485,7 @@ export default {
         applyTaxAmt: [
           {
             required: true,
-            message: "",
-            validator: validateTax
+            message:'本次申请开票含税金额不能为空'
           }
         ],
         underTicketExplain: [
@@ -502,7 +505,7 @@ export default {
             message: "寄件方式不能为空",
             trigger: "blur"
           }
-        ]
+        ],
       }, //发票数据表单验证规则
       accessoriesBillingData: [], //开票配件数据
       accessoriesBillingData1:[],
@@ -557,6 +560,8 @@ export default {
         });
       });
     });
+
+
 
     // // 选择销售单
     // bus.$on("partsData", val => {
@@ -634,6 +639,22 @@ export default {
       }
     },
 
+    //本次开票含税金额确认
+    confirmTheAmount(){
+        if (this.invoice.applyTaxAmt > this.invoice.statementAmtOwed){
+          this.$Modal.confirm({
+            title: '提示',
+            content: '<p>申请金额大于欠票金额，是否确认继续开票？</p>',
+            onOk: () => {
+
+            },
+            onCancel: () => {
+              this.invoice.applyTaxAmt = ''
+            }
+          });
+        }
+    },
+
     // 引用上次申请信息
     quote() {
       informationCitation({ guestId: this.information.guestId }).then(res => {
@@ -660,6 +681,8 @@ export default {
     },
     // 对话框是否显示
     visChange(flag) {
+      this.$refs.xTable1.recalculate(true)
+      this.$refs.xTable2.recalculate(true)
       if (flag) {
         this.$refs.formCustom.resetFields();
         this.invoice.statementAmtOwed = this.information.statementAmtOwed
@@ -708,10 +731,6 @@ export default {
               taxSign: 1
             }).then(res => {
               if (res.code === 0) {
-                res.data.map(item => {
-                  item.taxAmt = item.applyAmt + item.additionalTaxPoint;
-                  item.taxPrice = item.taxAmt / item.orderQty;
-                });
                 this.invoice.invoiceType = "010103";
                 this.invoice.invoiceTax = "010103";
                 this.accessoriesBillingData = res.data;
@@ -831,6 +850,7 @@ export default {
           );
 
           this.isCanRequest = !this.isCanRequest
+          console.log(obj , 888)
           saveDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {

@@ -1,7 +1,8 @@
 <template>
-  <Modal v-model="modal1" title="对账单查询" width="860" @on-visible-change="visChange">
+  <Modal v-model="modal1" title="对账单查询" width="1000" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
-    <DatePicker v-model="dateQuery" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
+    <DatePicker v-model="dateQuery" class="mr10" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
+    <Checkbox v-model="checkSingle" @on-change="canShopList">是否跨店搜索</Checkbox>
     <span class="ml10">往来单位：</span>
     <Select
       ref="companyGuset"
@@ -9,6 +10,7 @@
       filterable
       remote
       class="w150"
+      :disabled="isCanChange"
       :remote-method="getOrignCompany"
       @on-change="getAccountNameListFun"
       :loading="searchLoading">
@@ -125,23 +127,16 @@ export default {
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框,
       sort:'', // 判断是预收款还是预付款其他为空
+      isCanChange:false,//往来单位是否可选
+      checkSingle:false,
     };
   },
   methods: {
-    // 往来单位选择
-    // async getOne() {
-    //   findGuest({ size: 2000 }).then(res => {
-    //     if (res.code === 0) {
-    //       this.company = [];
-    //       res.data.content.map(item => {
-    //         this.company.push({
-    //           value: item.id,
-    //           label: item.fullName
-    //         });
-    //       });
-    //     }
-    //   });
-    // },
+    //  是否可以跨店搜索
+    canShopList(e){
+      this.$refs.companyGuset.query = this.$parent.$parent.reconciliationStatement.guestName||""
+      this.isCanChange = e
+    },
 
     //获取往来单位
     async getOrignCompany(query){
@@ -149,7 +144,7 @@ export default {
         this.searchLoading = true;
         let req = {
           fullName:query,
-          size:1000,
+          size:100,
         }
         let rep = await findGuest(req);
         this.searchLoading = false;

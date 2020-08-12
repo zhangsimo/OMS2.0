@@ -127,9 +127,10 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
-                      <Tooltip :content="formPlan.fullName">
-                      <Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />
-                      </Tooltip>
+                      <!--<Tooltip :content="formPlan.fullName">-->
+                      <!--<Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />-->
+                      <!--</Tooltip>-->
+                      <sales-cus style="width:200px; display: inline-block" :disabled-prop="draftShow != 0||isNew" :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
                       <!-- <Select
                         v-model="formPlan.guestId"
                         filterable
@@ -338,6 +339,8 @@
                   @select-change="selectTable"
                   @select-all="selectAllTable"
                   @edit-actived="editActivedEvent"
+                  :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                  @keydown="keydown"
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
@@ -444,9 +447,11 @@ import { getDigitalDictionary } from "@/api/system/essentialData/clientManagemen
 import { conversionList } from "@/components/changeWbList/changewblist";
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
+import SalesCus from "../../../components/allocation/salesCus";
 export default {
   name: "presell",
   components: {
+    SalesCus,
     getDate,
     goodsInfo,
     selectTheCustomer,
@@ -628,6 +633,65 @@ export default {
     this.getDomHeight();
   },
   methods: {
+
+    //------------------------------------------------------------------------//
+    //表格tab切换可编辑部位
+    async editNextCell($table){
+      // @ts-ignore
+      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+      if (row) { // 当前为编辑状态
+        // console.log('row', row)
+        // 当前列属性
+        const nowField = column.property
+        // 获取展示的列
+        const { visibleColumn } = $table.getTableColumn()
+        // 当前列属性（可以编辑的属性）
+        const columnsField = visibleColumn.reduce((a, v, i) => {
+          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
+            a.push(v.property)
+          }
+          return a
+        }, [])
+        const nowIndex = columnsField.findIndex(v => v === nowField)
+        // 判断当前是否是可编辑倒数地二行
+        const isLastColumn = nowIndex === columnsField.length - 2
+        // console.log('isLastColumn', isLastColumn)
+        if (isLastColumn) {
+          // 插入数据
+
+          // 跳转到下一行
+          // 判断当前是否为临时数据
+          const isInsertByRow = $table.isInsertByRow(row)
+          const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
+          const insertRecords = $table.getInsertRecords() // 临时数据
+          let nextRow = {}
+          // 不是最后一条临时数据
+          if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
+            nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+          } else {
+            // 当前是最后一条临时数据
+            if (isInsertByRow) {
+              nextRow = $table.getData()[0]
+            } else {
+              nextRow = $table.getData()[ROW_INDEX + 1]
+            }
+          }
+          if (nextRow) {
+            await $table.scrollTo(0)
+            await $table.setActiveCell(nextRow, columnsField[0])
+          }
+        } else {
+          // 跳转下一个编辑
+          await $table.setActiveCell(row, columnsField[nowIndex + 1])
+        }
+      }
+    },
+
+    keydown($event){
+      if ($event.$event.keyCode == 9){
+        this.editNextCell($event.$table)
+      }
+    },
     getDomHeight() {
       this.$nextTick(() => {
         let wrapH = this.$refs.paneLeft.offsetHeight;
@@ -739,11 +803,14 @@ export default {
 
     //仓库改变右侧表格改变
     getStore(data) {
-      let house = this.WareHouseList.filter(item => item.id == data);
-      this.formPlan.detailVOList = [];
-      this.formPlan.detailVOList.map(val => {
-        val.storeName = house[0].name;
-      });
+      // let house = this.WareHouseList.filter(item => item.id == data);
+      // this.formPlan.detailVOList = [];
+      // this.formPlan.detailVOList.map(val => {
+      //   val.storeName = house[0].name;
+      // });
+    },
+    throwNameFun(v){
+      this.setOneClient(v);
     },
     //获取搜索框内的数据
     setOneClient(val) {

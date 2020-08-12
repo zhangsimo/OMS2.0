@@ -4,10 +4,10 @@
       <div class="oper-top flex">
         <div class="wlf wlf-center">
           <div class="db">
-            <getDate class="mr5" @quickDate="getvalue"></getDate>
+            <getDate class="mr5" sizeString="small" @quickDate="getvalue"></getDate>
           </div>
           <div class="db">
-            <Select v-model="orderType" style="width:100px" class="mr5">
+            <Select size="small" v-model="orderType" style="width:100px" class="mr5">
               <Option
                 v-for="item in typeList"
                 :value="item.value"
@@ -17,7 +17,7 @@
             </Select>
           </div>
           <div class="db">
-            <Button type="default" class="mr5" @click="openQueryModal">
+            <Button type="default" class="mr5" size="small" @click="openQueryModal">
               <Icon type="ios-more" />更多
             </Button>
           </div>
@@ -27,6 +27,7 @@
               @click="addNew"
               class="mr5 w90"
               v-has="'add'"
+              size="small"
             >
               <Icon type="md-add" size="14" />新增
             </Button>
@@ -35,6 +36,7 @@
             <Button
               class="mr5 w90"
               @click="setSave"
+              size="small"
               :disabled="orderlistType.value != 0"
               v-has="'save'"
             >
@@ -46,6 +48,7 @@
           <div class="db">
             <Button
               class="mr5"
+              size="small"
               @click="sumbit"
               :disabled="orderlistType.value != 0"
               v-has="'submit'"
@@ -56,6 +59,7 @@
           <div class="db">
             <Button
               class="mr5"
+              size="small"
               @click="setStockOut"
               :disabled="orderlistType.value != 1 || isWms"
               v-has="'StockOut'"
@@ -67,6 +71,7 @@
           <div class="db">
             <Button
               class="mr5"
+              size="small"
               @click="printTable"
               :disabled="orderlistType.value == 0"
               v-has="'print'"
@@ -77,6 +82,7 @@
           <div class="db">
             <Button
               class="mr5"
+              size="small"
               @click="setBackOrder"
               :loading="backloading"
               :disabled="backShow"
@@ -88,6 +94,7 @@
           <div class="db">
             <Button
               class="mr5"
+              size="small"
               @click="setCancellation"
               :disabled="orderlistType.value != 0"
               v-has="'Cancellation'"
@@ -96,13 +103,13 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr5" @click="setDerive" v-has="'Derive'">
+            <Button class="mr5" size="small" @click="setDerive" v-has="'Derive'">
               <i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button>
           </div>
           <div class="db">
-            <div class="mt5">
-              <Checkbox v-model="showSelf" @on-change="showOwen"
+            <div style="padding-top: 2px">
+              <Checkbox v-model="showSelf" size="small" @on-change="showOwen"
                 >显示个人单据</Checkbox
               >
             </div>
@@ -216,8 +223,8 @@ export default {
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
-        this.$refs.OrderLeft.leftTableHeight = wrapH - 130;
-        this.$refs.right.rightTableHeight = wrapH - planFormH - 120;
+        this.$refs.OrderLeft.leftTableHeight = wrapH - 120;
+        this.$refs.right.rightTableHeight = wrapH - planFormH - 110;
       });
     },
 
@@ -424,7 +431,7 @@ export default {
 }
 
 .conter {
-  height: 92%;
+  height: calc(100% - 44px);
   width: 100%;
 }
 </style>

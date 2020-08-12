@@ -121,3 +121,11 @@ export function getBackList (params) {
     params
   })
 }
+//guest/findByGuestShortName获取往来单位
+export function getGuestShortName(params) {
+  return axios.request({
+    url:`${api.wmsApi}/guest/findByGuestShortName`,
+    method:"get",
+    params
+  })
+}

@@ -5,6 +5,9 @@ import flowbox from '../Flow'
 import {getPublicSave} from '_api/documentApproval/PublicRequest'
 import { getThisAllList ,getBackList} from '@/api/documentApproval/documentApproval/documentApproval'
 import {getPost} from "../utils";
+// import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
+import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
+import store from "@/store/index.js";
 
 export default {
   name: "PublicRequest",
@@ -49,6 +52,7 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       options1: [],
       canSave:false,//节流阀
+      QSMoney:0,
     }
   },
   mounted(){
@@ -58,7 +62,7 @@ export default {
     //模态框打开111
     open(){
       this.payeeList = this.list.allSalesList
-      this.payUserList = this.list.payList
+      this.payUserList = []
       this.formInline = {}
       this.options1 = [];
       this.$refs.upImg.uploadListModal = []
@@ -110,7 +114,10 @@ export default {
       // this.options1 = [];
       this.getOptionsList(query)
     },
-
+    //付款人账号搜索出发
+    remoteMethod2(query){
+      this.getOptionsList2(query)
+    },
     //收款人账号搜索框
     async getOptionsList(query){
       if (query !== "") {
@@ -126,8 +133,26 @@ export default {
         this.options1 = [];
       }
     },
-
-
+    //付款人账号搜索框
+    async getOptionsList2(query){
+      if (query !== "") {
+        let data = {}
+        data.accountName = query
+        shopNumber: store.state.user.userData;
+        data.page = 0
+        data.size = 100
+        let res = await getPayAccount(data)
+        if(res.code == 0){
+          res.data.content.map(item => {
+            item.value = item.id;
+            item.label = item.accountName;
+          });
+          this.payUserList = res.data.content || []
+        }
+      } else {
+        this.payUserList = [];
+      }
+    },
     //获取往来单位
     getCompany(row) {
       let arr = this.payeeList.filter( item => item.value == row.value)
@@ -144,12 +169,13 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
+      this.QSMoney=parseFloat(row.amtTotal)
     },
 
     //获取付款信息
     getPayList(value){
       if (!value) return
-      let list = this.payUserList.filter(item => item.id == value)[0]
+      let list = this.payUserList.filter(item => item.id == value.value)[0]
       this.formInline.paymentBank  = list.bankName
       this.formInline.paymentBankNo = list.accountCode
     },
@@ -163,13 +189,20 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
+          if(type==1){
+            if(this.formInline.requestInstructionNo!=undefined){
+              if(parseFloat(this.formInline.applyAmt)>this.QSMoney){
+                this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
+                return
+              }
+            }
+          }
           if (this.canSave)return this.$Message.warning('处理中...')
           this.canSave = true
           this.formInline.step = type
           let res = await getPublicSave(this.formInline)
           setTimeout(()=>{
             this.canSave = false
-
           },1000)
           if (res.code == 0) {
             this.$Message.success('操作成功')

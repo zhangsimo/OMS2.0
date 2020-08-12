@@ -21,23 +21,27 @@
           <Input placeholder="请选择供应商" v-model="guestname"  @on-focus="showModel('selectSupplier')" />
         </div> -->
         <div class="db mr5">
-          <Input placeholder="订单号" v-model="serviceId" />
+          <Input placeholder="订单号" v-model="serviceId"/>
         </div>
         <div class="db mr5">
           <Button class="w90" type="warning" @click="query">
             <span class="center">
-              <Icon custom="iconfont iconchaxunicon icons" />查询
+              <Icon custom="iconfont iconchaxunicon icons"/>查询
             </span>
           </Button>
         </div>
         <div class="db mr5">
           <Button type="default" @click="ok"
-            ><i class="iconfont iconxuanzetichengchengyuanicon"></i>选择</Button
+          ><i class="iconfont iconxuanzetichengchengyuanicon"></i>选择
+          </Button
           >
         </div>
         <div class="db mr5">
           <Button type="default" @click="cancel"
-            ><Icon type="md-close" />取消</Button
+          >
+            <Icon type="md-close"/>
+            取消
+          </Button
           >
         </div>
       </div>
@@ -50,7 +54,7 @@
         :data="tableData"
         @cell-click="cellClickEvent"
         @radio-change="radioChangeEvent"
-        auto-resize
+        :auto-resize="true"
       >
         <vxe-table-column
           type="radio"
@@ -62,12 +66,12 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="serviceId" title="计划单号"></vxe-table-column>
-        <vxe-table-column field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column field="orderDate" title="计划采购日期"></vxe-table-column>
-        <vxe-table-column field="orderMan" title="计划员"></vxe-table-column>
-        <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
-        <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="计划单号" width="138"></vxe-table-column>
+        <vxe-table-column field="guestName" title="供应商" width="138"></vxe-table-column>
+        <vxe-table-column field="orderDate" title="计划采购日期" width="139"></vxe-table-column>
+        <vxe-table-column field="orderMan" title="计划员" width="139"></vxe-table-column>
+        <vxe-table-column field="auditDate" title="提交日期" width="139"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="139"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
         <Page
@@ -84,7 +88,7 @@
       </div>
     </div>
     <div class="bottom-plan mt10">
-        <vxe-table
+      <vxe-table
         border
         stripe
         ref="xTable1"
@@ -98,167 +102,179 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column width="180" field="fullName" title="配件全称"></vxe-table-column>
-        <vxe-table-column field="canQty" title="计划采购数量"></vxe-table-column>
-        <vxe-table-column field="notEnterQty" title="调整数量"></vxe-table-column>
-        <vxe-table-column field="trueEnterQty" title="已转订单数量"></vxe-table-column>
-        <vxe-table-column field="canQty" title="未转订单数量"></vxe-table-column>
-        <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码" width="104"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称" width="104"></vxe-table-column>
+        <vxe-table-column width="180" field="fullName" title="配件全称"></vxe-table-column>
+        <vxe-table-column field="canQty" title="计划采购数量" width="104"></vxe-table-column>
+        <vxe-table-column field="notEnterQty" title="调整数量" width="104"></vxe-table-column>
+        <vxe-table-column field="trueEnterQty" title="已转订单数量" width="104"></vxe-table-column>
+        <vxe-table-column field="canQty" title="未转订单数量" width="104"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="104"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot="footer">
       <!-- <Button class="mr15" type="primary" @click="ok">确定</Button>
       <Button @click="cancel">取消</Button> -->
     </div>
-     <!-- 供应商资料
-    <select-supplier
-      @selectSearchName="selectSupplierName"
-      ref="selectSupplier"
-      headerTit="供应商资料"
-    ></select-supplier> -->
+    <!-- 供应商资料
+   <select-supplier
+     @selectSearchName="selectSupplierName"
+     ref="selectSupplier"
+     headerTit="供应商资料"
+   ></select-supplier> -->
   </Modal>
 </template>
 
 <script lang="ts">
-import * as tools from "../../../../utils/tools";
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
-// @ts-ignore
-import * as api from "_api/procurement/plan";
-// import SelectSupplier from "./selectSupplier.vue";
+  import * as tools from "../../../../utils/tools";
+  import {Vue, Component, Prop, Emit} from "vue-property-decorator";
+  // @ts-ignore
+  import * as api from "_api/procurement/plan";
+  // import SelectSupplier from "./selectSupplier.vue";
 
-@Component
-export default class ProcurementModal extends Vue {
-  private shows: boolean = false;
-  private selectRow: any = null;
+  @Component
+  export default class ProcurementModal extends Vue {
+    private shows: boolean = false;
+    private selectRow: any = null;
 
-  @Prop(String)
-  private readonly guestId;
+    @Prop(String)
+    private readonly guestId;
 
-  private auditDate:Array<Date> = [];
-  // private guestname:string = "";
-  private serviceId:string = "";
+    private auditDate: Array<Date> = [];
+    // private guestname:string = "";
+    private serviceId: string = "";
 
-  private page: Page = {
-    num: 1,
-    size: 10,
-    total: 0
-  };
-
-  private tableData: Array<any> = new Array();
-
-  private tableDataBm: Array<any> = new Array();
-
-  private init() {
-    this.shows = true;
-    this.reset();
-    this.getPchsPlanList();
-  }
-
-  @Emit('getPlanOrder')
-  private ok() {
-    if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
-    this.shows = false;
-    this.selectRow.details.forEach((el:any) => {
-      el.maxQty = el.orderQty;
-      el.adjustQty=0
-      el.oid = el.id;
-      Reflect.deleteProperty(el, 'id');
-      Reflect.deleteProperty(el, 'trueEnterQty');
-      Reflect.deleteProperty(el, 'trueEnterAmt');
-      Reflect.deleteProperty(el, 'notEnterQty');
-      Reflect.deleteProperty(el, 'notEnterAmt');
-    })
-    return this.selectRow;
-  }
-
-  // 选择供应商
-  // private selectSupplierName(row: any) {
-  //   this.guestId = row.id;
-  //   this.guestname = row.fullName;
-  // }
-
-  private showModel(name) {
-    let ref: any = this.$refs[name];
-    ref.init();
-  }
-
-  private cancel() {
-    this.shows = false;
-  }
-
-  private reset() {
-    this.selectRow = null;
-    this.auditDate = new Array();
-    this.tableDataBm = new Array();
-    // this.guestId = "";
-    // this.guestname = "";
-    this.serviceId = "";
-  }
-
-  private cellClickEvent() {
-    console.log("单元格点击事件");
-  }
-  private radioChangeEvent({ row }) {
-    this.selectRow = row;
-    this.tableDataBm = row.details || [];
-  }
-
-  private query() {
-    this.page.num = 1;
-    this.getPchsPlanList();
-  }
-
-  private async getPchsPlanList() {
-    let params: any = {};
-    let data:any = {
-      guestId: this.guestId,
-      serviceId: this.serviceId,
-      auditStartDate: tools.transTime(this.auditDate[0]),
-      auditEndDate: tools.transTime(this.auditDate[1]),
+    private page: Page = {
+      num: 1,
+      size: 10,
+      total: 0
     };
-    params.size = this.page.size;
-    params.page = this.page.num - 1;
-    let formData:any = {};
-    for(let k in data) {
-      if(data[k] && data[k].trim().length > 0) {
-        formData[k] = data[k];
+
+    private tableData: Array<any> = new Array();
+
+    private tableDataBm: Array<any> = new Array();
+
+    private init() {
+      this.shows = true;
+      let xTable: any = this.$refs.xTable1
+      xTable.recalculate(true)
+      this.reset();
+      this.getPchsPlanList();
+    }
+
+    // @Emit('getPlanOrder')
+    private ok() {
+      if (!this.selectRow) {
+        this.$Message.error('请选择采购计划');
+        return null
+      }
+      ;
+      this.shows = false;
+      this.selectRow.details.forEach((el: any) => {
+        el.maxQty = el.orderQty;
+        el.adjustQty = 0
+        el.oid = el.id;
+        Reflect.deleteProperty(el, 'id');
+        Reflect.deleteProperty(el, 'trueEnterQty');
+        Reflect.deleteProperty(el, 'trueEnterAmt');
+        Reflect.deleteProperty(el, 'notEnterQty');
+        Reflect.deleteProperty(el, 'notEnterAmt');
+      })
+      let parent:any=this.$parent
+      parent.getPlanOrder(this.selectRow)
+      this.shows = false;
+      // return this.selectRow;
+    }
+
+    // 选择供应商
+    // private selectSupplierName(row: any) {
+    //   this.guestId = row.id;
+    //   this.guestname = row.fullName;
+    // }
+
+    private showModel(name) {
+      let ref: any = this.$refs[name];
+      ref.init();
+    }
+
+    private cancel() {
+      this.shows = false;
+    }
+
+    private reset() {
+      this.selectRow = null;
+      this.auditDate = new Array();
+      this.tableDataBm = new Array();
+      // this.guestId = "";
+      // this.guestname = "";
+      this.serviceId = "";
+    }
+
+    private cellClickEvent() {
+      // console.log("单元格点击事件");
+    }
+
+    private radioChangeEvent({row}) {
+      this.selectRow = row;
+      this.tableDataBm = row.details || [];
+    }
+
+    private query() {
+      this.page.num = 1;
+      this.getPchsPlanList();
+    }
+
+    private async getPchsPlanList() {
+      let params: any = {};
+      let data: any = {
+        guestId: this.guestId,
+        serviceId: this.serviceId,
+        auditStartDate: tools.transTime(this.auditDate[0]),
+        auditEndDate: tools.transTime(this.auditDate[1]),
+      };
+      params.size = this.page.size;
+      params.page = this.page.num - 1;
+      let formData: any = {};
+      for (let k in data) {
+        if (data[k] && data[k].trim().length > 0) {
+          formData[k] = data[k];
+        }
+      }
+      if (formData.auditStartDate) {
+        formData.auditStartDate = formData.auditStartDate.split(" ")[0] + " 00:00:00"
+      }
+      if (formData.auditStartDate) {
+        formData.auditEndDate = formData.auditEndDate.split(" ")[0] + " 23:59:59"
+      }
+      let res: any = await api.getPchsPlan(params, formData);
+      if (res.code == 0) {
+        this.page.total = res.data.totalElements;
+        this.tableData = res.data.content;
       }
     }
-    if(formData.auditStartDate) {
-      formData.auditStartDate = formData.auditStartDate.split(" ")[0] + " 00:00:00"
-    }
-    if(formData.auditStartDate) {
-      formData.auditEndDate = formData.auditEndDate.split(" ")[0] + " 23:59:59"
-    }
-    let res:any = await api.getPchsPlan(params, formData);
-    if(res.code == 0) {
-      this.page.total = res.data.totalElements;
-      this.tableData = res.data.content;
-    }
-  }
 
-  private changePageToTable(p: number) {
-    this.page.num = p;
-    this.getPchsPlanList();
-  }
-  private changeSizeToTable(size: number) {
-    this.page.num = 1;
-    this.page.size = size;
-    this.getPchsPlanList();
-  }
+    private changePageToTable(p: number) {
+      this.page.num = p;
+      this.getPchsPlanList();
+    }
 
-}
+    private changeSizeToTable(size: number) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getPchsPlanList();
+    }
+
+  }
 </script>
 
 <style lang="less">
-.tools-bar {
-  display: flex;
-  align-items: center;
-}
-.page-warp {
-  margin-top: 10px;
-  text-align: right;
-}
+  .tools-bar {
+    display: flex;
+    align-items: center;
+  }
+
+  .page-warp {
+    margin-top: 10px;
+    text-align: right;
+  }
 </style>

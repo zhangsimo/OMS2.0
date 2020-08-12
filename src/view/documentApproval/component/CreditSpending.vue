@@ -187,7 +187,7 @@
                   type="text"
                   v-model="formInline.receiveBank"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 ></Input>
               </FormItem>
             </Col>
@@ -202,7 +202,7 @@
                   type="text"
                   v-model="formInline.receiveBankNo"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 ></Input>
               </FormItem>
             </Col>
@@ -231,6 +231,10 @@
                 <Select
                   v-model="formInline.paymentAccount"
                   style="width: 90%;padding-left: 5px"
+                  filterable
+                  remote
+                  :remote-method="remoteMethod2"
+                  label-in-value
                   @on-change="getPayList"
                   :disabled="modelType"
                 >

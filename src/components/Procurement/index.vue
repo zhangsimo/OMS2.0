@@ -74,13 +74,13 @@
           width="60"
         ></vxe-table-column>
         <vxe-table-column  width="160" field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column  width="160" field="partName" title="配件名称"></vxe-table-column>
         <vxe-table-column  width="160" field="oemCode" title="OE码"></vxe-table-column>
-        <vxe-table-column  field="partBrand" :filters="[]" :filter-method="filterNameMethod" title="品牌"></vxe-table-column>
-        <vxe-table-column  field="enterQty" title="库存数量"></vxe-table-column>
-        <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
-        <vxe-table-column  field="enterUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column  field="branchStockAge" title="库龄"></vxe-table-column>
+        <vxe-table-column  width="100" field="partBrand" :filters="[]" :filter-method="filterNameMethod" title="品牌"></vxe-table-column>
+        <vxe-table-column  width="100" field="enterQty" title="库存数量"></vxe-table-column>
+        <vxe-table-column  width="100" field="rtnableQty" title="可退数量"></vxe-table-column>
+        <vxe-table-column  width="100" field="enterUnitId" title="单位"></vxe-table-column>
+        <vxe-table-column  width="100" field="branchStockAge" title="库龄"></vxe-table-column>
         <vxe-table-column  width="200" field="guestName" title="供应商"></vxe-table-column>
         <vxe-table-column  width="200" field="code" title="入库单号"></vxe-table-column>
         <vxe-table-column  width="160" field="enterDate" title="入库日期"></vxe-table-column>
@@ -105,28 +105,27 @@
         <vxe-table-column
           type="checkbox"
           width="60"
-          fixed="left"
         ></vxe-table-column>
         <vxe-table-column
           type="index"
           title="序号"
           width="60"
-          fixed="left"
+
         ></vxe-table-column>
-        <vxe-table-column  width="160"  field="partCode" title="配件编码" fixed="left"></vxe-table-column>
-        <vxe-table-column  field="partName" title="配件名称" fixed="left"></vxe-table-column>
-        <vxe-table-column  width="160" field="oemCode" title="OE码" fixed="left"></vxe-table-column>
-        <vxe-table-column  field="partBrand" :filters="[]" :filter-method="filterNameMethod" title="品牌" fixed="left"></vxe-table-column>
-        <vxe-table-column  field="taxSign" title="是否含税">
+        <vxe-table-column  width="160"  field="partCode" title="配件编码" ></vxe-table-column>
+        <vxe-table-column  width="160"  field="partName" title="配件名称" ></vxe-table-column>
+        <vxe-table-column  width="160" field="oemCode" title="OE码" ></vxe-table-column>
+        <vxe-table-column  width="100" field="partBrand" :filters="[]" :filter-method="filterNameMethod" title="品牌" ></vxe-table-column>
+        <vxe-table-column  width="100" field="taxSign" title="是否含税">
           <template v-slot="{ row }">
             <span>{{ row.taxSign ? "是" : "否" }}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  field="taxRate" title="税率"></vxe-table-column>
-        <vxe-table-column  field="sellQty" title="出库数量"></vxe-table-column>
-        <vxe-table-column  field="sellPrice" title="出库单价"></vxe-table-column>
-        <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
-        <vxe-table-column  field="systemUnitId" title="单位"></vxe-table-column>
+        <vxe-table-column  width="100" field="taxRate" title="税率"></vxe-table-column>
+        <vxe-table-column  width="100" field="sellQty" title="出库数量"></vxe-table-column>
+        <vxe-table-column  width="100" field="sellPrice" title="出库单价"></vxe-table-column>
+        <vxe-table-column  width="100" field="rtnableQty" title="可退数量"></vxe-table-column>
+        <vxe-table-column  width="100" field="systemUnitId" title="单位"></vxe-table-column>
         <vxe-table-column  width="200" field="guestName" title="供应商"></vxe-table-column>
         <vxe-table-column  width="200" field="serviceId" title="出库单号"></vxe-table-column>
         <vxe-table-column  width="160" field="outDate" title="出库日期"></vxe-table-column>
@@ -205,6 +204,9 @@ export default class ProcurementModal extends Vue {
   private tableDataBm: Array<any> = new Array();
 
   private init() {
+    let tableRef:any = this.$refs.xTable1;
+    tableRef.refreshColumn();
+    tableRef.recalculate(true)
     this.reset();
     this.getPchsPlanList();
     this.shows = true;

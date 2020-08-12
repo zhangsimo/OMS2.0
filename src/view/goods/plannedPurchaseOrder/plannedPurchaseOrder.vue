@@ -129,25 +129,20 @@
                       <Col span="19"
                         >
                         <Tooltip :content="formPlanmain.guestName">
-                        <Input
-                          v-model="formPlanmain.guestName"
-                          placeholder="请选择供应商"
-                          :disabled="isInput"
-                          readonly
-                        />
-                        </Tooltip>
-                        <!-- <Select
-                            v-model="formPlanmain.guestId"
-                            filterable
-                            remote
-                            label-in-value
+                          <!-- <Input
+                            v-model="formPlanmain.guestName"
+                            placeholder="请选择供应商"
                             :disabled="isInput"
-                            :remote-method="remoteMethod"
-                            :loading="guseData.loading"
-                            @on-change="geseChange"
-                            >
-                            <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
-                        </Select> -->
+                            readonly
+                          /> -->
+                          <GoodCus style="width: 120px" 
+                            :title="formPlanmain.guestName" 
+                            placeholder="请输入供应商" 
+                            :search-value="formPlanmain.guestName" 
+                            @throwName="throwNameFun" 
+                            :disabled-prop="isInput">
+                          </GoodCus>
+                        </Tooltip>
                       </Col>
                       <Col span="5"
                         ><Button
@@ -361,7 +356,11 @@
                 @edit-closed="editClosedEvent"
                 @select-change="selectChange"
                 @select-all="selectAll"
+                :checkbox-config="{range: true}"
+                :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                @keydown="keydown"
                 size="mini"
+                ref="vxeTable"
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"

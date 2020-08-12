@@ -280,19 +280,21 @@ export default class Roleswms extends Vue {
     if (this.selectHouse.length <= 0) {
       return this.$Message.error("请选择仓库")
     }
-    // if (this.rightTableData.length <= 0) {
-    //   return this.$message.error('员工数量为0,无法保存')
-    // }
+    if (this.rightTableData.length <= 0) {
+      return this.$message.error('员工数量为0,无法保存')
+    }
     let data: Array<any> = new Array()
-    // data.id = this.rightTableData[0].id
-    // data.roleIds = []
-    // this.rightTableData.forEach( item => {
-    //   if(item.allocation ==0){
-    //     data.push({id: item.id , roleIds:this.oneStaff.id , allocation:0})
-    //   }else {
-    //     data.push({id: item.id , roleIds:[] , allocation:1})
-    //   }
-    // })
+    // @ts-ignore
+    data.id = this.rightTableData[0].id
+    // @ts-ignore
+    data.roleIds = []
+    this.rightTableData.forEach( item => {
+      if(item.allocation ==0){
+        data.push({id: item.id , roleIds:this.oneStaff.id , allocation:0})
+      }else {
+        data.push({id: item.id , roleIds:[] , allocation:1})
+      }
+    })
     data = [{ id: this.oneWms.id, roleIds: this.oneStaff.id, allocation: 0, warehouseType: this.selectHouse }]
     let res = await saveStaffJurisdictionWms(data)
     if (res.code === 0) {

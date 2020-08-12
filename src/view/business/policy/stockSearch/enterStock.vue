@@ -612,12 +612,12 @@ export default {
         {
           title: "更新人",
           align: "center",
-          key: "createUname",
+          key: "updateUname",
         },
         {
           title: "更新日期",
           align: "center",
-          key: "createTime",
+          key: "updateTime",
         },
       ],
       //滞销信息

@@ -400,9 +400,14 @@ export default {
           const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
           if (errMap) {
           } else {
-            this.changeAmt();
-            this.paymentId = "YJDZ";
-            this.$refs.settlement2.Settlement = true;
+            if(this.claimTit=="预付款认领"){
+              this.changeAmt();
+              this.$refs.settlement.Settlement = true;
+            }else{
+              this.changeAmt();
+              this.paymentId = "YJDZ";
+              this.$refs.settlement2.Settlement = true;
+            }
           }
         }else{
           this.$Message.error("请选择明细")
@@ -484,8 +489,13 @@ export default {
           Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
           this.oneSubject.applyAmt
         ) {
-          this.$refs.settlement2.Settlement = true;
-          this.paymentId = "YJDZ";
+
+          if(this.claimTit=="预付款认领"){
+            this.$refs.settlement.Settlement = true;
+          }else{
+            this.$refs.settlement2.Settlement = true;
+            this.paymentId = "YJDZ";
+          }
         } else {
           this.$message.error("金额大于其他付款申请金额，无法认领");
         }
@@ -577,6 +587,14 @@ export default {
         }
         data.auxiliaryName=this.MessageValue //辅助核算名称
         data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
+
+        let objItem = this.$refs.voucherInput.voucherItem;
+        if(objItem.hasOwnProperty("id")){
+          data.suppliersBean = {
+            guestTargetName:objItem.fullName||"",
+            guestTargetId:objItem.id||""
+          }
+        }
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
           this.modal = false;

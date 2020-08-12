@@ -25,10 +25,10 @@
         :editRender="{attrs: { disabled: true } }"
         width="60"
       ></vxe-table-column>
-      <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
-      <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
-      <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
-      <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
+      <vxe-table-column field="titleTypeName" min-width="100" title="科目分类"></vxe-table-column>
+      <vxe-table-column field="titleCode" min-width="100" title="科目编码"></vxe-table-column>
+      <vxe-table-column field="titleName" min-width="100" title="科目名称"></vxe-table-column>
+      <vxe-table-column field="titleLevel" min-width="100" title="层级"></vxe-table-column>
     </vxe-table>
     <div class="mt10">
       <span class="mr10">备注:</span>
@@ -114,7 +114,6 @@ export default {
     getRaido({ row }) {
       this.oneSubject = row;
     },
-
     //保存
     async save() {
       if (Object.keys(this.oneSubject).length < 1)

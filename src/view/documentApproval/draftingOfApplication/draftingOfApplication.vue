@@ -63,7 +63,7 @@
     <ExpenseReimbursement ref="ExpenseReimbursement" :list="modelType"></ExpenseReimbursement>
     <!--      其他付款申请-->
     <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
-    <!--      应公借支申请-->
+    <!--      因公借支申请-->
     <PublicRequest ref="PublicRequest" :list="modelType"></PublicRequest>
     <!--      请示单申请-->
     <AskForInstrucions ref="AskForInstrucions" :list="modelType"></AskForInstrucions>
@@ -110,8 +110,8 @@ export default {
   },
   async mounted() {
     this.modelType.allSalesList = await getAllSalesList();
-    this.modelType.salesList = await getComenAndGo();
-    this.modelType.payList = await getPayList();
+    // this.modelType.salesList = await getComenAndGo();
+    // this.modelType.payList = await getPayList();
   },
   methods: {
     open(index) {

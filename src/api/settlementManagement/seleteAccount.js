@@ -25,3 +25,12 @@ export function saveAccount(data) {
     data,
   });
 }
+
+//对账单对冲保存后直接发票对冲
+export function getHedging(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceHedgingMain/hedgeCommit`,
+    method: "post",
+    data,
+  });
+}
