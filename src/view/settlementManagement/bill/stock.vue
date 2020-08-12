@@ -112,7 +112,7 @@ export default {
     return {
       value: [],
       Branchstore: [
-        {id:0 ,name:'全部'}
+        {id:"",name:'全部'}
       ], //分店名称
       model1: "",
       modal1: false,
@@ -469,14 +469,19 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.model1 = arr[1];
     this.getShop()
-    this.getGeneral();
+    this.$nextTick(()=>{
+      this.model1 = arr[1];
+      this.getGeneral();
+    })
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   methods: {

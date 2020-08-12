@@ -94,3 +94,4 @@ export function getPost(){
   let list = store.state.user.userData.currentShopName || ""
   return list
 }
+

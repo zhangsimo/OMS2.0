@@ -74,6 +74,7 @@
             @on-page-size-change="changeSize"
             show-sizer
             show-total
+            :page-size-opts="[50, 100, 300,500]"
           ></Page>
         </div>
       </div>
@@ -135,6 +136,7 @@
                 auto-resize
                 resizable
                 align="center"
+                size="mini"
                 height="200"
                 highlight-hover-row
                 :data="allList.relearnedPart"
@@ -147,21 +149,26 @@
                 <vxe-table-column
                   field="code"
                   title="配件编码"
+                  width="120"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partName"
+                  width="120"
                   title="配件名称"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partBrandName"
+                  width="100"
                   title="品牌"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="quality"
+                  width="100"
                   title="品质"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="outableQty"
+                  min-width="100"
                   title="本店可售"
                 ></vxe-table-column>
               </vxe-table>
@@ -173,6 +180,7 @@
                 border
                 auto-resize
                 resizable
+                size="mini"
                 align="center"
                 height="200"
                 highlight-hover-row
@@ -186,18 +194,22 @@
                 <vxe-table-column
                   field="partCode"
                   title="配件编码"
+                  width="120"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="companyName"
                   title="公司名称"
+                  width="120"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="storeName"
                   title="仓库"
+                  width="120"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="outableQty"
                   title="可售数量"
+                  min-width="120"
                 ></vxe-table-column>
               </vxe-table>
             </div>
@@ -208,6 +220,7 @@
                 border
                 auto-resize
                 resizable
+                size="mini"
                 align="center"
                 height="200"
                 highlight-hover-row
@@ -221,30 +234,37 @@
                 <vxe-table-column
                   field="partCode"
                   title="配件编码"
+                  width="120"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partName"
                   title="配件名称"
+                  width="120"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="companyName"
                   title="公司"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="guestName"
                   title="客户"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="finishDate"
                   title="销售日期"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="sellQty"
                   title="数量"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="sellPrice"
                   title="销价"
+                  width="100"
                 ></vxe-table-column>
               </vxe-table>
             </div>
@@ -259,14 +279,16 @@
                 resizable
                 align="center"
                 height="200"
+                size="mini"
                 highlight-hover-row
                 :data="allList.priceLever"
               >
                 <vxe-table-column
                   field="strategyName"
+                  width="80"
                   title="级别"
                 ></vxe-table-column>
-                <vxe-table-column field="sellPrice" title="销售价">
+                <vxe-table-column field="sellPrice" width="100" title="销售价">
                   <template v-slot="{ row }">
                     <span v-if="row.strategyName == '最低售价'"
                       >{{ row.sellPrice | priceFilters }} -
@@ -278,10 +300,12 @@
                 <vxe-table-column
                   field="updateUname"
                   title="更新人"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="updateTime"
                   title="更新日期"
+                  width="100"
                 ></vxe-table-column>
               </vxe-table>
             </div>

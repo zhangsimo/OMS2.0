@@ -17,6 +17,7 @@ import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
 import PrintModel from './components/print.vue';
 import StatusModal from './components/checkApprovalModal.vue';
+import GoodCus from "_c/allocation/GoodCus.vue"
 
 @Component({
   components: {
@@ -30,7 +31,8 @@ import StatusModal from './components/checkApprovalModal.vue';
     AdjustModel,
     TabsModel,
     PrintModel,
-    StatusModal
+    StatusModal,
+    GoodCus
   }
 })
 export default class PlannedPurchaseOrder extends Vue {
@@ -188,7 +190,10 @@ export default class PlannedPurchaseOrder extends Vue {
 
   private async remoteMethod(query:string) {
     if(query == "" || query.trim().length <= 0) {
-      this.guseData.lists = [];
+      this.guseData.lists = [{
+        id: this.selectTableRow.guestId,
+        fullName: this.selectTableRow.guestName,
+      }];
       return;
     }
     this.guseData.loading = true;
@@ -196,12 +201,25 @@ export default class PlannedPurchaseOrder extends Vue {
     this.guseData.loading = false;
     if(res.code == 0) {
       this.guseData.lists = res.data;
+      if(this.guseData.lists.length <= 0) {
+        this.guseData.lists = [{
+          id: this.selectTableRow.guestId,
+          fullName: this.selectTableRow.guestName,
+        }];
+      }
+      let has = this.guseData.lists.filter(el => el.id === this.selectTableRow.guestId);
+      if(has.length <= 0) {
+        this.guseData.lists.push({
+          id: this.selectTableRow.guestId,
+          fullName: this.selectTableRow.guestName,
+        });
+      }
     }
   }
 
-  private geseChange(val:any) {
-    this.formPlanmain.guestId = val.value;
-    this.formPlanmain.guestName = val.label;
+  private geseChange() {
+    let data = this.guseData.lists.find(el => el.id === this.formPlanmain.guestId);
+    this.formPlanmain.guestName = typeof data === "object" ? data.fullName : (this.formPlanmain.guestName == "" ? "" : this.formPlanmain.guestName);
   }
 
   private options1:any = {
@@ -445,6 +463,67 @@ export default class PlannedPurchaseOrder extends Vue {
   }
 
 
+  //------------------------------------------------------------------------//
+  //表格tab切换可编辑部位
+  async editNextCell($table){
+    // @ts-ignore
+    const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+    if (row) { // 当前为编辑状态
+      // console.log('row', row)
+      // 当前列属性
+      const nowField = column.property
+      // 获取展示的列
+      const { visibleColumn } = $table.getTableColumn()
+      // 当前列属性（可以编辑的属性）
+      const columnsField = visibleColumn.reduce((a, v, i) => {
+        if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
+          a.push(v.property)
+        }
+        return a
+      }, [])
+      const nowIndex = columnsField.findIndex(v => v === nowField)
+      // 判断当前是否是可编辑倒数地二行
+      const isLastColumn = nowIndex === columnsField.length - 2
+      // console.log('isLastColumn', isLastColumn)
+      if (isLastColumn) {
+        // 插入数据
+        // 跳转到下一行
+        // 判断当前是否为临时数据
+        const isInsertByRow = $table.isInsertByRow(row)
+        const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
+        const insertRecords = $table.getInsertRecords() // 临时数据
+        let nextRow = {}
+        // 不是最后一条临时数据
+        if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
+          nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+        } else {
+          // 当前是最后一条临时数据
+          if (isInsertByRow) {
+            nextRow = $table.getData()[0]
+          } else {
+            nextRow = $table.getData()[ROW_INDEX + 1]
+          }
+        }
+        if (nextRow) {
+          await $table.scrollTo(0)
+          await $table.setActiveCell(nextRow, columnsField[0])
+        }
+      } else {
+        // console.log(isLastColumn,columnsField,nowIndex,"122")
+        // 跳转下一个编辑
+        await $table.setActiveCell(row, columnsField[nowIndex + 1])
+      }
+    }
+  }
+
+  keydown($event){
+    if ($event.$event.keyCode == 9){
+      this.editNextCell($event.$table)
+    }
+  }
+
+  //------------------------------------------------------------------------//
+
 
   // 选择要删除配件
   private deletePartArr: Array<any> = new Array();
@@ -626,6 +705,7 @@ export default class PlannedPurchaseOrder extends Vue {
       this.formPlanmain.processInstanceId = v.processInstanceId;
       this.formPlanmain.orderDate = v.orderDate;
       this.formPlanmain.planArriveDate = v.planArriveDate;
+
       if (['草稿', '退回'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
@@ -639,6 +719,8 @@ export default class PlannedPurchaseOrder extends Vue {
       for (let k in this.formPlanmain) {
         this.formPlanmain[k] = v[k];
       }
+      this.formPlanmain.guestId = v.guestId;
+      this.formPlanmain.guestName = v.guestName;
       if(v.versionNo==='1'){
         this.isDirectCompanyId = true;
       }else{
@@ -815,7 +897,6 @@ export default class PlannedPurchaseOrder extends Vue {
       this.tableData = new Array();
       const ref: any = this.$refs['formplanref'];
       ref.resetFields();
-      this.formPlanmain.guestId = '';
       this.formPlanmain.serviceId = '';
       this.purchaseOrderTable.loading = false;
       this.purchaseOrderTable.page.total = res.data.totalElements;
@@ -834,6 +915,10 @@ export default class PlannedPurchaseOrder extends Vue {
         }
       }
     }
+  }
+
+  throwNameFun(v) {
+    this.selectSupplierName(v);
   }
 
   // 选择供应商

@@ -30,7 +30,7 @@
             :closable="item.name !== 'home'"
           >{{ showTitleInside(item) }}</Tag>
         </transition-group>
-      </div> 
+      </div>
     </div>
   </div>
 </template>

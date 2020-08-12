@@ -15,7 +15,7 @@
         :height="leftTableHeight"
         :data="tableData"
       >
-        <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="billStatusId" title="状态" width="60">
           <template v-slot="{ row }">
             <span>{{row.billStatusId?row.billStatusId.name:""}}</span>
@@ -43,7 +43,8 @@
       @on-page-size-change="selectPage"
       :page-size-opts="[20, 50, 100, 200]"
       class="mr10"
-    ></Page>
+    >
+    </Page>
   </div>
 </template>
 
@@ -133,14 +134,19 @@ export default {
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
         //筛选出当前操作的是第几条并选中
-        for(let i in this.tableData){
-            if(this.tableData[i].id==this.selectItemId){
-                this.$refs.currentRowTable.setCurrentRow(this.tableData[i]);
-                this.$emit("getOneOrder", this.tableData[i]);
-                this.$store.commit("setOneOrder", this.tableData[i]);
-                break;
+        if(this.selectItemId){
+          let num = 0
+          this.tableData.forEach( (item,index) =>{
+            if(item.id == this.selectItemId){
+              num = index
             }
+          })
+              this.$refs.currentRowTable.setCurrentRow(this.tableData[num]);
+              this.$emit("getOneOrder", this.tableData[num]);
+              this.$store.commit("setOneOrder", this.tableData[num]);
+          //     break;
         }
+
         //如果没有保存过的数据取第一条选中
         if(!this.selectItemId){
           this.$refs.currentRowTable.setCurrentRow(this.tableData[0]);
@@ -150,13 +156,16 @@ export default {
         }
       }
     },
+
     //切换页面
     selectNum(val) {
+      this.selectItemId = ''
       this.page.num = val;
       this.gitlistValue();
     },
     //切换页数
     selectPage(val) {
+      this.selectItemId = ''
       this.page.num = 1;
       this.page.size = val;
       this.gitlistValue();

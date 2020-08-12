@@ -22,27 +22,41 @@
       show-footer
       resizable
       auto-resize
-      max-height="400px"
+      height="200px"
       size="mini"
       :data="tableData"
       :footer-span-method="footerColspanMethod"
       :footer-method="footerMethod"
       @checkbox-change="getOneList"
       @checkbox-all ='getAllList'
-      @edit-actived="editActivedEvent"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-rules="validRules"
+      :edit-config="{trigger: 'click', mode: 'cell'}"
       >
       <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
         <vxe-table-column type="checkbox" width="50"></vxe-table-column>
-        <vxe-table-column  title="分配店号" >
+        <vxe-table-column field="claimShopCode"  title="分配店号" >
         <template v-slot="{row}">
-          <Select v-model="row.claimShopCode">
-            <Option v-for="item in shopList" :value="item.shopCode" :key="item.shopId">{{ item.shopCode }}</Option>
+          <Select v-model="row.claimShopCode" transfer>
+            <Option v-for="item in shopList" :value="item.shopCode" :key="item.shopId">{{ item.shopCode }}{{ item.shopName }}</Option>
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="incomeMoney" title="收入金额" :edit-render="{name: 'input', attrs: {type: 'number' , disabled: false} , events: {input: updateFooterEvent}}"></vxe-table-column>
-      <vxe-table-column field="paidMoney" title="支出金额" :edit-render="{name: 'input', attrs: {type: 'number' , disabled: false} , events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column field="incomeMoney" title="收入金额" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template v-slot:edit="{ row }">
+          <vxe-input digits="2" min="0" :disabled="!row.claimShopCode||((row.paidMoney&&row.paidMoney!=0)?true:false)" type="float" v-model="row.incomeMoney"></vxe-input>
+        </template>
+        <template v-slot="{ row }">
+          {{row.incomeMoney}}
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="paidMoney" title="支出金额" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <template v-slot:edit="{ row }">
+          <vxe-input digits="2" min="0" :disabled="!row.claimShopCode||((row.incomeMoney&&row.incomeMoney!=0)?true:false)" type="float" v-model="row.paidMoney"></vxe-input>
+        </template>
+        <template v-slot="{ row }">
+          {{row.paidMoney}}
+        </template>
+      </vxe-table-column>
     </vxe-table>
     <div></div>
     </div>
@@ -72,6 +86,14 @@
             oneList:{},//当前行数据
             checkTheSpending:0,//核对支出
             checkTheIncome: 0 ,//核对收入
+
+            incomeMoneyTotal:0,//收入合计
+            paidMoneyTotal:0,//支出合计
+            validRules:{
+              claimShopCode:[
+                { required: true, message: '分配店号必填',trigger:'change' }
+              ]
+            }
           }
       },
       methods:{
@@ -79,7 +101,7 @@
         openModal(){
           this.artificialShow = true
           this.oneList = []
-          this.tableData=[{},{},{},{},{},{},{},{},{},{}]
+          this.tableData=[{"claimShopCode":"","paidMoney":this.list.paidMoney?this.list.paidMoney:0,"incomeMoney":this.list.incomeMoney?this.list.incomeMoney:0,claimShopCode:''}]
           this.getshopList()
         },
 
@@ -95,9 +117,8 @@
           let incomeMoneyColumn = xTable.getColumnByField('incomeMoney'),
               paidMoneyColumn = xTable.getColumnByField('paidMoney'),
               isNameDisabled = row. claimShopCode ? false : true
-              incomeMoneyColumn.editRender.attrs.disabled = isNameDisabled
-              paidMoneyColumn.editRender.attrs.disabled = isNameDisabled
-
+              incomeMoneyColumn.editRender.attrs.disabled = row.paidMoney?true:isNameDisabled
+              paidMoneyColumn.editRender.attrs.disabled = row.incomeMoney?true:isNameDisabled
         },
 
         // 在值发生改变时更新表尾合计
@@ -114,7 +135,14 @@
                 return '分配合计'
               }
               if (['incomeMoney', 'paidMoney'].includes(column.property)) {
-                return this.$utils.sum(data, column.property)
+                if(column.property=='incomeMoney'){
+                  this.incomeMoneyTotal = this.$utils.sum(data, column.property);
+                  return this.incomeMoneyTotal
+                }
+                if(column.property=='paidMoney'){
+                  this.paidMoneyTotal = this.$utils.sum(data, column.property);
+                  return this.paidMoneyTotal
+                }
               }
               return null
             }),
@@ -180,22 +208,30 @@
 
         //确定
        async sure(){
-          if(this.checkTheSpending  !== 0 || this.checkTheIncome !== 0 ) return this.$Message.error('核对金额必须为0')
-          let data = []
-          this.tableData.forEach( item => {
-            if (item.claimShopCode){
-              item.id = this.list.id
-              item.incomeMoney = item.incomeMoney ? item.incomeMoney : 0
-              item.paidMoney = item.paidMoney ? item.paidMoney : 0
-              data.push(item)
-            }
-          })
-          let res = await manpowerChange(data)
-         if(res.code === 0 ) {
-           this.artificialShow = false
-           this.$Message.success('人工分配完成')
-           this.$emit('getNew' ,{})
+          // if(this.checkTheSpending  !== 0 || this.checkTheIncome !== 0 ) return this.$Message.error('核对金额必须为0')
+         const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
+         if(errMap){
+         }else{
+           if(this.list.incomeMoney-this.list.paidMoney!=this.incomeMoneyTotal-this.paidMoneyTotal){
+             return this.$Message.error('需分配金额与分配金额不符')
+           }
+           let data = []
+           this.tableData.forEach( item => {
+             if (item.claimShopCode){
+               item.id = this.list.id
+               item.incomeMoney = item.incomeMoney ? item.incomeMoney : 0
+               item.paidMoney = item.paidMoney ? item.paidMoney : 0
+               data.push(item)
+             }
+           })
+           let res = await manpowerChange(data)
+           if(res.code === 0 ) {
+             this.artificialShow = false
+             this.$Message.success('人工分配完成')
+             this.$emit('getNew' ,{})
+           }
          }
+
         }
       }
     }

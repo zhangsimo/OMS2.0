@@ -13,10 +13,11 @@
             <span v-if="type == 4">入库日期：</span>
             <DatePicker
               v-model="search.auditDate"
+              :value="search.auditDate"
               type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
-              class="w140 mr10"
+              class="w200 mr10"
             >
             </DatePicker>
           </div>
@@ -49,7 +50,7 @@
               class="w120"
               placeholder="请选择门店"
               :disabled="selectShopList"
-              filterable clearable
+              filterable
               @on-change="getWares(search.orgid)"
             >
               <Option
@@ -110,7 +111,7 @@ export default {
     return {
       outArr: [], // 调出方
       warehouse: [], // 仓库
-      stores: [{id:"",name:"全部"}], // 门店
+      stores: [{id:0,name:"全部"}], // 门店
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
@@ -124,8 +125,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     },
     placeHMod(){
       if(this.type==1 || this.type==3){
@@ -150,6 +154,7 @@ export default {
   },
   methods: {
     async getWares(orgId) {
+      orgId==0?orgId="":orgId=orgId
       let res = JSON.parse(localStorage.getItem('oms2-userList'))
       let tenantId = res.tenantId || 0
       let shopkeeper = res.shopkeeper || 0
@@ -168,13 +173,13 @@ export default {
     },
     // 快速日期查询
     async getDataQuick(v) {
-      this.quickDates = v;
+      this.search.auditDate = v;
       let arr = await creat("", this.$store);
       this.search.orgid = arr[1];
       if(v.length >= 2) {
-        this.search.content="";this.search.guestId="";this.search.storeId=""
+        this.search.content="";this.search.guestId="";this.search.storeId="";
         this.getWares(this.search.orgid)
-        this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1], orgid:this.search.orgid });
+        this.$emit("search", { isPanne: true, createTimeStart: v[0], createTimeEnd: v[1] , orgid:this.search.orgid });
       } else {
         this.search.content="";this.search.guestId="";this.search.storeId=""
         this.$emit("search", { isPanne: true, orgid:this.search.orgid});

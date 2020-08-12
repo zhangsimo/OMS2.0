@@ -161,11 +161,11 @@
               <span class="mr5 ml10">应付返利</span>
               <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc" :min="0" />
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
-              <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" :disabled="disabletype" />
+              <Input v-model="Actualtotalcollect" type="text" class="w60 tc" :disabled="disabletype" />
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
-              <Input :value="infoBase.actualPayment" class="w60 tc" :disabled="disabletype" />
+              <Input :value="Actualtotalpayment" class="w60 tc" :disabled="disabletype" />
               <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
-              <Input type="text" v-model="infoBase.settlementTotal" :disabled="disabletype" class="w60 tc" />
+              <Input type="text" v-model="Reconciliationtotal" :disabled="disabletype" class="w60 tc" />
             </div>
             <div class="db">
               <span class="mr5">计划结算类型</span>
@@ -239,12 +239,12 @@ export default {
         accountReceivable: 0, //对账应收
         receivableRebate: 0, //应收返利
         badDebtReceivable: 0, //应收坏账
-        actualCollection: 0, //实际收款
+        actualCollection: this.Actualtotalcollect, //实际收款
         reconciliation: 0, //对账应付
         dealingRebates: 0, //应付返利
         payingBadDebts: 0, //应付坏账
-        actualPayment: 0, //实际付款
-        settlementTotal: 0, //结算对账合计
+        actualPayment: this.Actualtotalpayment, //实际付款
+        settlementTotal: this.Reconciliationtotal, //结算对账合计
         transportExpenses: 0, //运费
         insuranceExpenses: 0, //保险费
         serviceCharge: 0, //手续费
@@ -442,6 +442,30 @@ export default {
       Reconciliationcontent: [], //本次不对账弹窗配件
       disabletype:false,//编辑状态
     };
+  },
+  computed: {
+    //实际应付合计
+    Actualtotalpayment() {
+      //对账应付-应付坏账-应付返利
+      this.infoBase.payingBadDebts = this.infoBase.payingBadDebts ? this.infoBase.payingBadDebts : 0;
+      this.infoBase.dealingRebates = this.infoBase.dealingRebates ? this.infoBase.dealingRebates : 0;
+      return (
+        this.infoBase.reconciliation * 1 - this.infoBase.payingBadDebts * 1 - this.infoBase.dealingRebates * 1
+      );
+    },
+    //实际应收合计
+    Actualtotalcollect() {
+      //对账应收-应收坏账-应收返利  +运费(infoBase.transportExpenses)+保险费(infoBase.insuranceExpenses)+手续费(infoBase.serviceCharge)+配件管理费(infoBase.partsManagementFee)+其他费用(infoBase.otherFees)
+      this.infoBase.badDebtReceivable = this.infoBase.badDebtReceivable ? this.infoBase.badDebtReceivable : 0;
+      this.infoBase.accountReceivable = this.infoBase.accountReceivable ? this.infoBase.accountReceivable : 0;
+      return (
+        this.infoBase.accountReceivable * 1 - this.infoBase.badDebtReceivable * 1 - this.infoBase.receivableRebate * 1 + this.infoBase.transportExpenses * 1 + this.infoBase.insuranceExpenses * 1 + this.infoBase.serviceCharge * 1 + this.infoBase.partsManagementFee * 1 + this.infoBase.otherFees * 1
+      );
+    },
+    //本次对账结算合计
+    Reconciliationtotal() {
+      return this.Actualtotalcollect - this.Actualtotalpayment;
+    },
   },
   methods: {
     // 获取数据

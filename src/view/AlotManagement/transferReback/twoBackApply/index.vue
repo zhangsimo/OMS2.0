@@ -147,13 +147,14 @@
                           <!-- <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>-->
-                          <Tooltip :content="Leftcurrentrow.guestName">
-                          <Input
-                            disabled
-                            :value="Leftcurrentrow.guestName"
-                            class="w160"
-                          ></Input>
-                          </Tooltip>
+                          <!--<Tooltip :content="Leftcurrentrow.guestName">-->
+                          <!--<Input-->
+                            <!--disabled-->
+                            <!--:value="Leftcurrentrow.guestName"-->
+                            <!--class="w160"-->
+                          <!--&gt;</Input>-->
+                          <!--</Tooltip>-->
+                          <allocation-cus style="width: 160px" :title="Leftcurrentrow.guestName" placeholder="请输入调出方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="remarkStatus"></allocation-cus>
                         </Col>
                         <Col span="2">
                           <Button
@@ -268,6 +269,8 @@
                   @current-change="currentChangeEvent"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
+                  :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                  @keydown="keydown"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
                   :stripe="true"
@@ -402,7 +405,7 @@ import PrintShow from "./compontents/PrintShow";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
-import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 
 import {
@@ -420,10 +423,12 @@ import {
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 import AddPart from "./compontents/addPart";
+import AllocationCus from "../../../../components/allocation/allocationCus";
 
 export default {
   name: "twoBackApply",
   components: {
+    AllocationCus,
     AddPart,
     More,
     QuickDate,
@@ -695,10 +700,73 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList();
+    // this.getList();
     // this.getArrayParams();
   },
   methods: {
+    throwNameFun(v){
+      this.selectSupplierName(v);
+    },
+    //------------------------------------------------------------------------//
+    //表格tab切换可编辑部位
+    async editNextCell($table){
+      // @ts-ignore
+      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+      if (row) { // 当前为编辑状态
+        // console.log('row', row)
+        // 当前列属性
+        const nowField = column.property
+        // 获取展示的列
+        const { visibleColumn } = $table.getTableColumn()
+        // 当前列属性（可以编辑的属性）
+        const columnsField = visibleColumn.reduce((a, v, i) => {
+          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
+            a.push(v.property)
+          }
+          return a
+        }, [])
+        const nowIndex = columnsField.findIndex(v => v === nowField)
+        // 判断当前是否是可编辑倒数地二行
+        const isLastColumn = nowIndex === columnsField.length - 2
+        // console.log('isLastColumn', isLastColumn)
+        if (isLastColumn) {
+          // 插入数据
+
+          // 跳转到下一行
+          // 判断当前是否为临时数据
+          const isInsertByRow = $table.isInsertByRow(row)
+          const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
+          const insertRecords = $table.getInsertRecords() // 临时数据
+          let nextRow = {}
+          // 不是最后一条临时数据
+          if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
+            nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+          } else {
+            // 当前是最后一条临时数据
+            if (isInsertByRow) {
+              nextRow = $table.getData()[0]
+            } else {
+              nextRow = $table.getData()[ROW_INDEX + 1]
+            }
+          }
+          if (nextRow) {
+            await $table.scrollTo(0)
+            await $table.setActiveCell(nextRow, columnsField[0])
+          }
+        } else {
+          // 跳转下一个编辑
+          await $table.setActiveCell(row, columnsField[nowIndex + 1])
+        }
+      }
+    },
+
+    keydown($event){
+      if ($event.$event.keyCode == 9){
+        this.editNextCell($event.$table)
+      }
+    },
+
+    //------------------------------------------------------------------------//
     getArrayParams() {
       var req = {};
       req.page = 1;
@@ -1069,7 +1137,7 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      console.log(this.Leftcurrentrow)
+      // console.log(this.Leftcurrentrow)
       this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
@@ -1246,7 +1314,7 @@ export default {
       if (this.val === "0") {
         this.showit = false;
         this.Leftcurrentrow.guestName = row.shortName;
-        this.Leftcurrentrow.guestId = row.id;
+        this.Leftcurrentrow.guestId = row.guestId;
         this.Leftcurrentrow.guestOrgid = row.isInternalId;
         const tata = this;
         setTimeout(() => {
@@ -1258,6 +1326,9 @@ export default {
         this.diaochuID = row.id;
       }
     },
+
+
+
     getOkList(list, rowValue, codeId, code) {
       this.showit = false;
       this.Leftcurrentrow.detailVOS = [];
@@ -1376,6 +1447,7 @@ export default {
     }
   },
   mounted() {
+    this.getList();
     setTimeout(() => {
       this.getDomHeight();
     }, 0);

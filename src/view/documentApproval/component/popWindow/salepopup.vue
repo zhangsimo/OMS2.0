@@ -154,7 +154,7 @@
           <FormItem label="费用承担" prop="costBear">
             <Select v-model="invoice.costBear" class="ml5 w200" :disabled="modelType.type==3">
               <Option
-                v-for="item in invoice.bearingCostList"
+                v-for="item in bearingCostList"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</Option>
@@ -174,12 +174,12 @@
           <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
             <Input v-model="invoice.applyTaxAmt" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
-          <FormItem label="不含税金额" prop="amountExcludingTax">
-            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
-          </FormItem>
-          <FormItem label="外加税点" prop="additionalTaxPoint">
-            <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />
-          </FormItem>
+<!--          <FormItem label="不含税金额" prop="amountExcludingTax">-->
+<!--            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />-->
+<!--          </FormItem>-->
+<!--          <FormItem label="外加税点" prop="additionalTaxPoint">-->
+<!--            <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />-->
+<!--          </FormItem>-->
           <FormItem label="申请开票金额" prop="applyMoney">
             <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
           </FormItem>
@@ -215,7 +215,7 @@
         <Table
           border
           :columns="accessoriesBilling1"
-          :data="accessoriesBillingData"
+          :data="accessoriesBillingData2"
           show-summary
           :summary-method="billSum"
         ></Table>
@@ -288,6 +288,20 @@ export default {
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开销售单", //选择必开销售单弹框标题
       modal1: false, // 弹框开关
+      bearingCostList: [
+        {
+          value: "0",
+          label: "现付"
+        },
+        {
+          value: "1",
+          label: "到付"
+        },
+        {
+          value: "2",
+          label: "自取"
+        }
+      ], //费用承担列表
       invoice: {
         consignee: "", //快递收件人
         receiptUnit: "", // 发票单位
@@ -304,20 +318,20 @@ export default {
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
         costBear: "", //费用承担
-        bearingCostList: [
-          {
-            value: 0,
-            label: "现付"
-          },
-          {
-            value: 1,
-            label: "到付"
-          },
-          {
-            value: 2,
-            label: "自取"
-          }
-        ], //费用承担列表
+        // bearingCostList: [
+        //   {
+        //     value: 0,
+        //     label: "现付"
+        //   },
+        //   {
+        //     value: 1,
+        //     label: "到付"
+        //   },
+        //   {
+        //     value: 2,
+        //     label: "自取"
+        //   }
+        // ], //费用承担列表
         statementAmountOwed: "", //对账单欠票金额
         applyMoney: "", //申请开票金额
         address: "", //收件地址
@@ -463,24 +477,24 @@ export default {
         },
         {
           title: "数量",
-          key: "orderQty",
+          key: "qty",
           className: "tc"
         },
         {
           title: "商品含税单价",
           key: "taxPrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxPrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxPrice.toFixed(2));
+          // }
         },
         {
           title: "商品含税金额",
           key: "taxAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxAmt.toFixed(2));
+          // }
         },
         {
           title: "开票税率",
@@ -489,48 +503,48 @@ export default {
         },
         {
           title: "出库单号",
-          key: "orderNo",
+          key: "outNo",
           className: "tc"
         },
         {
           title: "销售单价",
           key: "salePrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.salePrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.salePrice.toFixed(2));
+          // }
         },
         {
           title: "销售金额",
           key: "saleAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.saleAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.saleAmt.toFixed(2));
+          // }
         },
         {
           title: "已开票金额",
           key: "invoiceAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceAmt.toFixed(2));
+          // }
         },
         {
           title: "未开票金额",
           key: "invoiceNotAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceNotAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceNotAmt.toFixed(2));
+          // }
         },
         {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.applyAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.applyAmt.toFixed(2));
+          // }
         },
         {
           title: "外加税点",
@@ -561,30 +575,40 @@ export default {
           className: "tc"
         },
         {
+          title: "油品换算单位",
+          key: "oilsUnit",
+          className: "tc"
+        },
+        {
+          title: "油品换算数量",
+          key: "oilsQty",
+          className: "tc"
+        },
+        {
           title: "单位",
           key: "unit",
           className: "tc"
         },
         {
           title: "数量",
-          key: "orderQty",
+          key: "qty",
           className: "tc"
         },
         {
           title: "商品含税单价",
           key: "taxPrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxPrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxPrice.toFixed(2));
+          // }
         },
         {
           title: "商品含税金额",
           key: "taxAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.taxAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.taxAmt.toFixed(2));
+          // }
         },
         {
           title: "开票税率",
@@ -593,48 +617,48 @@ export default {
         },
         {
           title: "出库单号",
-          key: "orderNo",
+          key: "outNo",
           className: "tc"
         },
         {
           title: "销售单价",
           key: "salePrice",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.salePrice.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.salePrice.toFixed(2));
+          // }
         },
         {
           title: "销售金额",
           key: "saleAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.saleAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.saleAmt.toFixed(2));
+          // }
         },
         {
           title: "已开票金额",
           key: "invoiceAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceAmt.toFixed(2));
+          // }
         },
         {
           title: "未开票金额",
           key: "invoiceNotAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.invoiceNotAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.invoiceNotAmt.toFixed(2));
+          // }
         },
         {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.applyAmt.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.applyAmt.toFixed(2));
+          // }
         },
         {
           title: "外加税点",
@@ -643,6 +667,7 @@ export default {
         }
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
+      accessoriesBillingData2:[],//开票油品数据
       copyData: [] //开票配件复制数据
     };
   },
@@ -788,7 +813,7 @@ export default {
                 item.taxPrice = item.taxAmt / item.orderQty;
               });
               this.invoice.invoiceType = "010103";
-              this.invoice.taxRate = "010103";
+              this.invoice.taxRate = "010103" ;
               this.accessoriesBillingData = res.data;
               this.copyData = res.data;
             }
@@ -808,6 +833,7 @@ export default {
             data.id = this.modelType.id || ''
             let res = await getThisAllList(data)
             if (res.code == 0) {
+              this.invoice.receiptUnit = Number(res.data.receiptUnit);
               this.formInline.applyNo = res.data.accountNo;
               this.information.code = res.data.orgCode;
               this.information.orgId = res.data.orgid;
@@ -817,6 +843,16 @@ export default {
               this.information.applyNo = res.data.applyNo;
               this.information.applicationDate = res.data.applyDate;
               this.information.guestName = res.data.guestName;
+              ditInvoice({ guestId: this.information.guestId }).then(res2 => {
+                if (res2.code === 0) {
+                  res2.data.map(item => {
+                    item.label = item.taxpayerName;
+                    item.value = item.id;
+                  });
+                  this.invoice.receiptUnitList = res2.data;
+                }
+              });
+              const rate = res.data.invoiceType
               this.invoice = res.data;
               this.invoice.statementAmountOwed = res.data.statementAmtOwed;
               this.invoice.amountExcludingTax = res.data.notTaxAmt;
@@ -826,19 +862,16 @@ export default {
               this.invoice.paymentMethodList = [];
               this.invoice.waySendingList = [];
               this.invoice.issuingOfficeList = [];
-              this.invoice.receiptUnit = Number(res.data.receiptUnit);
               await this.getListOne();
-              this.accessoriesBillingData = res.data.partList;
-              ditInvoice({ guestId: this.information.guestId }).then(res => {
-                if (res.code === 0) {
-                  res.data.map(item => {
-                    item.label = item.taxpayerName;
-                    item.value = item.id;
-                  });
-                  this.invoice.receiptUnitList = res.data;
-                }
-              });
-
+              if(res.data.isOilPart==1){
+                this.accessoriesBillingData =[];
+                this.accessoriesBillingData2 =res.data.partList
+              }else{
+                this.accessoriesBillingData = res.data.partList;
+                this.accessoriesBillingData2 =[]
+              }
+              this.invoice.invoiceType = rate
+              this.invoice.taxRate = rate
           }
         };
         // 发票单位

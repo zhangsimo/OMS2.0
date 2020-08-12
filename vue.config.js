@@ -12,7 +12,9 @@ module.exports = {
       .set("_c", resolve("src/components"))
       .set("_conf", resolve("config"))
       .set("_api", resolve("src/api"))
-      .set("_utils", resolve("src/utils"));
+      .set("_utils", resolve("src/utils"))
+      .set("_mixins", resolve("src/mixins"))
+      ;
   },
   css: {
     loaderOptions: {

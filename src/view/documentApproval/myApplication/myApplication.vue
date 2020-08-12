@@ -580,6 +580,7 @@ export default {
           break;
         case "采购预付款":
           this.$refs.AdvanceApply.open();
+          // this.$refs.AdvanceApply.formInline.receiveGuestId
           break;
         case "因公借支":
           this.$refs.PublicRequest.open();

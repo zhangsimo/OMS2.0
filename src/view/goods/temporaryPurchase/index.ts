@@ -1,4 +1,4 @@
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
@@ -24,6 +24,8 @@ import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
+import GoodCus from "_c/allocation/GoodCus.vue"
+
 
 @Component({
   components: {
@@ -38,7 +40,8 @@ import { v4 } from "uuid"
     TabsModel,
     PrintModel,
     StatusModel,
-    SelectPartCom
+    SelectPartCom,
+    GoodCus
   }
 })
 export default class TemporaryPurchase extends Vue {
@@ -147,6 +150,64 @@ export default class TemporaryPurchase extends Vue {
     }
   }
 
+
+  keydown($event){
+    if ($event.$event.keyCode == 9){
+      this.editNextCell($event.$table)
+    }
+  }
+  //------------------------------------------------------------------------//
+  //表格tab切换可编辑部位
+  async editNextCell($table){
+    // @ts-ignore
+    const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+    if (row) { // 当前为编辑状态
+      // console.log('row', row)
+      // 当前列属性
+      const nowField = column.property
+      // 获取展示的列
+      const { visibleColumn } = $table.getTableColumn()
+      // 当前列属性（可以编辑的属性）
+      const columnsField = visibleColumn.reduce((a, v, i) => {
+        if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
+          a.push(v.property)
+        }
+        return a
+      }, [])
+      const nowIndex = columnsField.findIndex(v => v === nowField)
+      // 判断当前是否是可编辑倒数地二行
+      const isLastColumn = nowIndex === columnsField.length - 2
+      // console.log('isLastColumn', isLastColumn)
+      if (isLastColumn) {
+        // 插入数据
+
+        // 跳转到下一行
+        // 判断当前是否为临时数据
+        const isInsertByRow = $table.isInsertByRow(row)
+        const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
+        const insertRecords = $table.getInsertRecords() // 临时数据
+        let nextRow = {}
+        // 不是最后一条临时数据
+        if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
+          nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+        } else {
+          // 当前是最后一条临时数据
+          if (isInsertByRow) {
+            nextRow = $table.getData()[0]
+          } else {
+            nextRow = $table.getData()[ROW_INDEX + 1]
+          }
+        }
+        if (nextRow) {
+          await $table.scrollTo(0)
+          await $table.setActiveCell(nextRow, columnsField[0])
+        }
+      } else {
+        // 跳转下一个编辑
+        await $table.setActiveCell(row, columnsField[nowIndex + 1])
+      }
+    }
+  }
   //批量上传失败
   onFormatError(file) {
     this.$Message.error('只支持xls xlsx后缀的文件')
@@ -234,7 +295,59 @@ export default class TemporaryPurchase extends Vue {
     const orderDate = this.formPlanmain.orderDate;
     return date && orderDate && date.valueOf() < orderDate;
   }
-
+  // 初始化主数据
+  //---- 判断是否是高级查询
+  private isMore: boolean = false;
+  //---- 初始方法
+  private async getListData() {
+    this.purchaseOrderTable.loading = true;
+    let params: any = {}
+    let data: any = {}
+    data.showSelf = this.showSelf;
+    params.size = this.purchaseOrderTable.page.size;
+    params.page = this.purchaseOrderTable.page.num - 1;
+    if (this.quickDate.length > 0) {
+      data.startTime = this.quickDate[0];
+      data.endTime = this.quickDate[1];
+    }
+    if (this.purchaseType != 999 && this.purchaseType) {
+      data.billStatusId = this.purchaseType;
+    }
+    let res: any;
+    if (!this.isMore) {
+      res = await api.temporaryFindPageByDynamicQuery(params, data)
+    } else {
+      if (this.moreData != null) {
+        data = { ...data, ...this.moreData };
+      }
+      res = await api.temporaryQueryByConditions(params, data);
+    }
+    if (res.code == 0) {
+      this.isAdd = true;
+      this.isInput = true;
+      this.tableData = new Array();
+      const ref: any = this.$refs['formplanref'];
+      ref.resetFields();
+      this.formPlanmain.guestId = '';
+      this.formPlanmain.serviceId = '';
+      this.purchaseOrderTable.loading = false;
+      this.purchaseOrderTable.page.total = res.data.totalElements;
+      this.purchaseOrderTable.tbdata = res.data.content;
+      this.purchaseOrderTable.tbdata.forEach((el: any) => {
+        Array.isArray(el.details) && el.details.forEach((d: any) => {
+          d.isOldFlag = true;
+        })
+      })
+      for(let b of this.purchaseOrderTable.tbdata){
+        b._highlight = false
+        if(b.id==this.selectLeftItemId){
+          b._highlight = true;
+          this.setFormPlanmain(b);
+          break;
+        }
+      }
+    }
+  }
   private salesList: Array<any> = new Array();
   private async getAllSales() {
     let res: any = await getSales();
@@ -377,7 +490,6 @@ export default class TemporaryPurchase extends Vue {
     if (!data) {
       return null;
     }
-    // obj.details = [];
     if(!obj.directCompanyId) {
       obj.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : "0";
     }
@@ -388,7 +500,6 @@ export default class TemporaryPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
-
     let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
     if(zero) return;
 
@@ -591,6 +702,7 @@ export default class TemporaryPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
+    v = JSON.parse(JSON.stringify(v));
     //记录当前点击的id
     this.selectLeftItemId = v.id
 
@@ -647,6 +759,7 @@ export default class TemporaryPurchase extends Vue {
 
   private setFormPlanmain(v:any){
     if (v) {
+      v = JSON.parse(JSON.stringify(v));
       this.selectTableRow = v;
       this.mainId = v.id;
       this.tableData = (v.details || []).map( el => {
@@ -850,58 +963,9 @@ export default class TemporaryPurchase extends Vue {
     }
   }
 
-  // 初始化主数据
-  //---- 判断是否是高级查询
-  private isMore: boolean = false;
-  //---- 初始方法
-  private async getListData() {
-    this.purchaseOrderTable.loading = true;
-    let params: any = {}
-    let data: any = {}
-    data.showSelf = this.showSelf;
-    params.size = this.purchaseOrderTable.page.size;
-    params.page = this.purchaseOrderTable.page.num - 1;
-    if (this.quickDate.length > 0) {
-      data.startTime = this.quickDate[0];
-      data.endTime = this.quickDate[1];
-    }
-    if (this.purchaseType != 999 && this.purchaseType) {
-      data.billStatusId = this.purchaseType;
-    }
-    let res: any;
-    if (!this.isMore) {
-      res = await api.temporaryFindPageByDynamicQuery(params, data)
-    } else {
-      if (this.moreData != null) {
-        data = { ...data, ...this.moreData };
-      }
-      res = await api.temporaryQueryByConditions(params, data);
-    }
-    if (res.code == 0) {
-      this.isAdd = true;
-      this.isInput = true;
-      this.tableData = new Array();
-      const ref: any = this.$refs['formplanref'];
-      ref.resetFields();
-      this.formPlanmain.guestId = '';
-      this.formPlanmain.serviceId = '';
-      this.purchaseOrderTable.loading = false;
-      this.purchaseOrderTable.page.total = res.data.totalElements;
-      this.purchaseOrderTable.tbdata = res.data.content;
-      this.purchaseOrderTable.tbdata.forEach((el: any) => {
-        Array.isArray(el.details) && el.details.forEach((d: any) => {
-          d.isOldFlag = true;
-        })
-      })
-      for(let b of this.purchaseOrderTable.tbdata){
-        b._highlight = false
-        if(b.id==this.selectLeftItemId){
-          b._highlight = true;
-          this.setFormPlanmain(b);
-          break;
-        }
-      }
-    }
+
+  throwNameFun(v) {
+    this.selectSupplierName(v);
   }
 
   // 选择供应商
@@ -977,5 +1041,12 @@ export default class TemporaryPurchase extends Vue {
     this.init();
     this.getListData();
     this.getAllSales();
+  }
+
+  @Watch("formPlanmain.orderDate")
+  private changeDate(newval: any, oldval: any) {
+    if(typeof newval === "string") {
+      this.formPlanmain.orderDate = new Date(newval);
+    }
   }
 }

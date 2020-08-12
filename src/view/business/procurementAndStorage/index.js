@@ -515,7 +515,7 @@ export default {
           this.$refs.formPlan.resetFields();
           this.$Message.success("保存成功");
           // this.reload();
-          // this.setSelected(this.dataChange.row);
+          this.setSelected(this.dataChange.row);
         }
         try {
         } catch (errMap) {

@@ -47,6 +47,7 @@
           border
           stripe
           auto-resize
+          ref="xTable"
           :loading="loading"
           height="420"
           size="mini"
@@ -61,22 +62,27 @@
           <vxe-table-column
             field="partCode"
             title="配件编码"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="orderQty"
             title="订单数量"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="trueEnterQty"
             title="实际入库数量"
+            width="121"
           ></vxe-table-column>
           <vxe-table-column
             field="notEnterQty"
             title="已调整数量"
+            width="122"
           ></vxe-table-column>
           <vxe-table-column
             field="adjustQty"
@@ -95,7 +101,7 @@
               />
             </template>
           </vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注" width="122"></vxe-table-column>
         </vxe-table>
       </div>
     </div>
@@ -121,10 +127,12 @@ export default class AdjustModel extends Vue {
   private partCode: string = "";
   private partName: string = "";
   private init(): void {
+    let xtable:any=this.$refs.xTable
     this.show = true;
     this.showModify = false;
     this.reset();
     this.getList();
+    xtable.recalculate(true)
   }
 
   private cancel(): void {

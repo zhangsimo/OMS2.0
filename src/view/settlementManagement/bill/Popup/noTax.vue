@@ -33,35 +33,35 @@
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
-    <Form ref="formCustom" :model="invoice" :label-width="80">
+    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="80">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="对账单号" prop="accountNo">
+          <FormItem label="对账单号" >
             <Input v-model="information.accountNo" style="width: 204px" class="ml5 " readonly />
             <!--<i class="iconfont iconcaidan input" @click="seleteAccount"></i>-->
           </FormItem>
-          <FormItem label="产生税费" prop="taxation">
-            <Input v-model="invoice.taxation" class="ml5 w150" readonly />
+          <FormItem label="产生税费" >
+            <Input :value="getTaxesAndDues" class="ml5 w150" disabled />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="不含税对账单未开金额" prop="notAmt" :label-width="160">
-            <Input v-model="information.statementAmtOwed" class="ml5 w100" readonly />
+          <FormItem label="不含税对账单未开金额":label-width="160">
+            <Input v-model="information.statementAmtOwed" class="ml5 w100" disabled />
           </FormItem>
-          <FormItem label="实际增加开票金额" prop="invoiceAmt" :label-width="160">
-            <Input v-model="invoice.invoiceAmt" class="ml5 w100" readonly />
+          <FormItem label="本次实际申请开票金额"  :label-width="160">
+            <Input  :value="showPay" class="ml5 w100" disabled />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt" :label-width="150">
-            <Input v-model="invoice.invoiceTaxAmt" class="ml5 w100" disabled/>
+            <InputNumber :max="999999" :min="0" v-model="invoice.invoiceTaxAmt" class="ml5 w100"/>
           </FormItem>
           <FormItem label="申请说明" :label-width="150">
             <Input v-model="invoice.remark" class="ml5 w100" />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="申请税点" prop="taxPoint">
+          <FormItem label="申请税点">
             <Select v-model="invoice.taxPoint" class="ml5 w100" @on-change="taxPointChange">
               <Option
                 v-for="item in invoice.taxApplicationList"
@@ -92,7 +92,6 @@
       show-footer
       :footer-method="footerMethod"
       :data="accessoriesBillingData"
-      :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell'}"
     >
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
@@ -177,14 +176,12 @@ export default {
   props: ["information", "parameter"],
   data() {
     const thisTaxChange = (rule, value, callback) => {
-      if (value && parseFloat(value) >= 0) {
-        if (value <= this.invoice.notAmt) {
-          callback();
-        } else {
+      if (value) {
+        if (value > this.information.statementAmtOwed) {
           callback(new Error("不能大于不含税对账单未开票金额"));
         }
       } else {
-        callback(new Error("只能输入数字"));
+        callback();
       }
     };
     const applyAmtValid = ({ cellValue, rule, rules, row, }) => {
@@ -258,13 +255,12 @@ export default {
             message: "实际增加开票金额不能为空"
           }
         ],
-        // invoiceTaxAmt: [
-        //   {
-        //     required: true,
-        //     // message: "本次含税开票金额不能为空",
-        //     validator: thisTaxChange
-        //   }
-        // ]
+        invoiceTaxAmt: [
+          {
+            required: true,
+            message: '不能为空'
+          }
+        ]
       }, //发票数据表单验证规则
       copyData: [], //深拷贝处理
       // num: 0 //表格数量合计
@@ -333,6 +329,7 @@ export default {
       }
     },
     async init(){
+      this.$refs.xTable2.recalculate(true)
       if(this.information.owned){
         this.modal1 = true;
         this.getDraftInfo(this.information.accountNo);
@@ -442,6 +439,7 @@ export default {
     // 提交申请
      submission(type) { //type 1保存为草稿 2提交申请
       this.$refs.formCustom.validate(async val => {
+        if (this.invoice.invoiceTaxAmt > this.information.statementAmtOwed ) return  this.$Message.error('本次不含税开票金额不能大于不含税对账单未开票金额')
         if (val) {
           let obj = {
             ...this.invoice,
@@ -539,6 +537,18 @@ export default {
     },
     taxPoint() {
       return this.invoice.taxPoint;
+    },
+    //计算税费
+    //本次不含税开票金额 / (1-税率) - 本次不含税开票金额
+    getTaxesAndDues(){
+      this.invoice.taxation =  this.$utils.subtract( this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.invoice.taxPoint)  )  , this.invoice.invoiceTaxAmt )
+      return this.invoice.taxation.toFixed(2)
+    },
+    //本次实际金额
+    //本次不含税开票金额 / (1-税率)
+    showPay(){
+      this.invoice.invoiceAmt = this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.invoice.taxPoint)  )
+      return this.invoice.invoiceAmt.toFixed(2)
     }
   },
   // watch: {

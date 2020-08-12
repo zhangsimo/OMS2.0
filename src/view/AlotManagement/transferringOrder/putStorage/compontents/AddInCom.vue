@@ -14,12 +14,27 @@
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <Input style="width: 120px"  placeholder="简称/编码/全称" v-model="penSalesData.guestName" />
+<!--            <Input style="width: 120px"  placeholder="简称/编码/全称" v-model="penSalesData.guestId" />-->
+            <Select
+              v-model="penSalesData.guestId"
+              filterable
+              remote
+              :remote-method="getGuestList"
+              style="width: 120px"
+              label-in-value
+              placeholder="调出方名称"
+            >
+              <Option
+                v-for="(item,index) in guestList"
+                :value="item.guestId"
+                :key="item.guestId"
+              >{{item.shortName}}</Option>
+            </Select>
             <!-- <Input
               clearable
               @on-focus="getName"
               @on-clear="clearNameId"
-              v-model="penSalesData.guestName"
+              v-model="penSalesData.guestId"
               style="width: 128px"
             /> -->
             <!-- <Button @click="getName" class="ml5" size="small" type="default">
@@ -67,7 +82,7 @@
           :radio-config="{labelField: 'name', trigger: 'row'}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>
+<!--          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>-->
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="申请单" width="150"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="160"></vxe-table-column>
@@ -121,6 +136,7 @@
 import * as tools from "../../../../../utils/tools";
 import moment from "moment";
 import { getParticulars } from "_api/system/partsExamine/partsExamineApi";
+import {transferringFindForAllot} from "_api/purchasing/purchasePlan";
 
 export default {
   data() {
@@ -134,10 +150,10 @@ export default {
       penSalesData: {
         endTime: "", //申请单号
         startTime: "",
-        guestName: "",
         guestId: "",
         serviceId: ""
       },
+      guestList:[],
       customerListOptions: [], //调出方下拉列表
       tableData: [{ name1: "123" }, {}, {}, {}],
       TopTableData: [], //上侧表格list
@@ -155,12 +171,12 @@ export default {
     };
   },
   watch: {
-    tbdata: {
-      handler(newVal) {
-        this.tabList = newVal;
-      },
-      deep: true
-    },
+    // tbdata: {
+    //   handler(newVal) {
+    //     this.tabList = newVal;
+    //   },
+    //   deep: true
+    // },
     dcList: {
       handler(newVal) {
         this.diaochuList = newVal;
@@ -169,7 +185,7 @@ export default {
     },
     dcName: {
       handler(newVal) {
-        this.penSalesData.guestName = newVal;
+        this.penSalesData.guestId = newVal;
       },
       deep: true
     },
@@ -212,8 +228,8 @@ export default {
       this.search();
     },
     getDate(v) {
-      penSalesData.startTime = v[0] + " 00:00:00";
-      penSalesData.endTime = v[1] + " 23:59:59";
+      this.penSalesData.startTime = v[0] + " 00:00:00";
+      this.penSalesData.endTime = v[1] + " 23:59:59";
     },
     //分页
     changePage(p) {
@@ -227,6 +243,17 @@ export default {
     getName() {
       this.$emit("getName", 2);
     },
+    async getGuestList(query){
+      let data={
+        name:query,
+        page:0,
+        size:20
+      }
+      let res=await transferringFindForAllot(data)
+      if(res.code===0){
+        this.guestList=res.data.content || []
+      }
+    },
     init() {
       let self = tools.getSession("self");
       this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
@@ -234,8 +261,8 @@ export default {
       this.reset();
     },
     init1() {
-      let self = tools.getSession("self");
-      this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
+      // let self = tools.getSession("self");
+      // this.showSelf = Reflect.has(self, "addInCom") ? self.addInCom : true;
       this.searchPartLayer = false;
     },
     reset() {

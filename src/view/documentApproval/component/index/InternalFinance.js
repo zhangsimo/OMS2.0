@@ -70,6 +70,7 @@ export default {
   methods:{
     //模态框打开111
     open(){
+      this.xTable.recalculate(true)
       this.payUserList = this.list.payList
       this.getShiftTo()
       this.formInline = {}

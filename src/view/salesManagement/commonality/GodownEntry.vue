@@ -67,6 +67,7 @@
           highlight-current-row
           @radio-change="selectOne"
           @current-change="selectOne"
+          :radio-config="{trigger: 'row'}"
           size="mini"
           :data="tableDataTop"
         >
@@ -127,6 +128,7 @@
           border
           resizable
           auto-resize
+          ref="Xtable"
           align="center"
           size="small"
           highlight-hover-row
@@ -231,6 +233,7 @@ export default {
       this.getList(v);
       this.getClientList();
       this.showInfo = true;
+      this.$refs.Xtable.recalculate(true)
     },
     //获取入库数据
     async getList(v) {

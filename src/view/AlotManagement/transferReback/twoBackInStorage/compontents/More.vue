@@ -33,7 +33,7 @@
         <!--style="width: 450px"-->
         <!--/>-->
         <!-- <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled /> -->
-        <Select
+        <!-- <Select
           placeholder="请选择申请方！"
           v-model="moreData.orderMan"
           filterable
@@ -41,7 +41,8 @@
           @on-change="getSupplierNamea1"
         >
           <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-        </Select>
+        </Select> -->
+        <Input disabled class="w240" v-model="moreData.orderMan" />
         <Button class="ml5" size="small" type="default" @click="addSuppler">
           <i class="iconfont iconxuanzetichengchengyuanicon"></i>
         </Button>
@@ -107,7 +108,7 @@ export default {
     },
     // 子组件的参数
     getSupplierNamea(a) {
-      this.moreData.orderMan = a.id;
+      this.moreData.orderMan = a.shortName;
       this.moreData.guestId = a.id;
     },
     getSupplierNamea1(a) {

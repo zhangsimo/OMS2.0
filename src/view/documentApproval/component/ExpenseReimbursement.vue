@@ -4,10 +4,12 @@
       <div class="clearfix">
         <div class="fr">
           <Button class="mr10" v-if="!modelType" @click="save(0)"
-            >保存草稿</Button
+          >保存草稿
+          </Button
           >
           <Button class="mr10" v-if="!modelType" @click="save(1)"
-            >提交申请</Button
+          >提交申请
+          </Button
           >
           <Button class="mr10" @click="model = false">取消</Button>
         </div>
@@ -42,7 +44,8 @@
           <Col class="inner" span="4">申请类型</Col>
           <Col class="inner" span="4">{{
             formInline.applyTypeName || " "
-          }}</Col>
+            }}
+          </Col>
           <Col class="inner" span="4">申请时间</Col>
           <Col class="inner" span="4">{{ formInline.applyTime }}</Col>
         </Row>
@@ -178,7 +181,8 @@
 
         <h5 class="mt20 mb10" style="font-size: 18px">借支核销</h5>
         <Button class="mb10" @click="SelectTheDocuments" v-if="!modelType"
-          >选择单据</Button
+        >选择单据
+        </Button
         >
         <vxe-table
           class="mt10"
@@ -263,7 +267,8 @@
                     v-for="item in options1"
                     :value="item.id"
                     :key="item.id"
-                    >{{ item.accountName }}</Option
+                  >{{ item.accountName }}
+                  </Option
                   >
                 </Select>
               </FormItem>
@@ -278,7 +283,7 @@
                   type="text"
                   v-model="formInline.receiveBank"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 />
               </FormItem>
             </Col>
@@ -290,9 +295,9 @@
               >
                 <Input
                   type="text"
-                  :value="formInline.receiveBankNo|filterApplyNo"
+                  :value="formInline.receiveBankNo"
                   style="width: 90%;padding-left: 5px"
-                  :disabled="modelType"
+                  disabled
                 ></Input>
               </FormItem>
             </Col>
@@ -323,12 +328,16 @@
                   style="width: 90%;padding-left: 5px"
                   @on-change="getPayList"
                   :disabled="modelType"
+                  filterable remote
+                  :remote-method="remoteMethod2"
+                  label-in-value
                 >
                   <Option
                     v-for="item in payUserList"
                     :value="item.value"
                     :key="item.value"
-                    >{{ item.label }}</Option
+                  >{{ item.label }}
+                  </Option
                   >
                 </Select>
               </FormItem>
@@ -347,7 +356,7 @@
               <FormItem label="支付账号" style="margin-bottom: 0px">
                 <Input
                   type="text"
-                  :value="formInline.paymentBankNo|filterApplyNo"
+                  :value="formInline.paymentBankNo"
                   style="width: 90%;padding-left: 5px"
                   disabled
                 ></Input>
@@ -385,79 +394,94 @@
 </template>
 
 <script>
-import index from "./index/ExpenseReimbursement.js";
-export default index;
+  import index from "./index/ExpenseReimbursement.js";
+
+  export default index;
 </script>
 
 <style scoped lang="less">
-.tableBox {
-  line-height: 38px;
-  text-align: center;
-  border: #cccccc 1px solid;
-  border-right: none;
-  .inner {
+  .tableBox {
+    line-height: 38px;
+    text-align: center;
+    border: #cccccc 1px solid;
+    border-right: none;
+
+    .inner {
+      border-right: #cccccc 1px solid;
+      height: 38px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .inner:nth-child(2n-1) {
+      background: #f9f9f9;
+    }
+  }
+
+  .tableBox2 {
+    line-height: 38px;
+    border: #cccccc 1px solid;
+    border-right: none;
+  }
+
+  .twoTable {
+    border-top: none;
+  }
+
+  .tableline {
+    border-bottom: #cccccc 1px solid;
+    padding-right: 10px;
+  }
+
+  .tableright {
     border-right: #cccccc 1px solid;
-    height: 38px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
-  .inner:nth-child(2n-1) {
-    background: #f9f9f9;
+
+  .applyTitle {
+    width: 100px;
+    border-right: #cccccc 1px solid;
+    text-align: center;
+    background-color: #f9f9f9;
+    display: inline-block;
   }
-}
-.tableBox2 {
-  line-height: 38px;
-  border: #cccccc 1px solid;
-  border-right: none;
-}
-.twoTable {
-  border-top: none;
-}
-.tableline {
-  border-bottom: #cccccc 1px solid;
-  padding-right: 10px;
-}
-.tableright {
-  border-right: #cccccc 1px solid;
-}
-.applyTitle {
-  width: 100px;
-  border-right: #cccccc 1px solid;
-  text-align: center;
-  background-color: #f9f9f9;
-  display: inline-block;
-}
-.proceeds {
-  border: #cccccc 1px solid;
-  line-height: 38px;
-}
-.businessbg {
-  background-color: #f9f9f9;
-  border-bottom: 1px #cccccc solid;
-  border-right: 1px #cccccc solid;
-}
-.moneybd {
-  border-right: 1px #cccccc solid;
-}
+
+  .proceeds {
+    border: #cccccc 1px solid;
+    line-height: 38px;
+  }
+
+  .businessbg {
+    background-color: #f9f9f9;
+    border-bottom: 1px #cccccc solid;
+    border-right: 1px #cccccc solid;
+  }
+
+  .moneybd {
+    border-right: 1px #cccccc solid;
+  }
 </style>
 <style scoped>
-.tableright >>> .ivu-form-item-label {
-  text-align: center;
-  border-right: #cccccc 1px solid;
-  background-color: #f9f9f9;
-}
-.proceeds >>> .ivu-form-item-label {
-  border-right: #cccccc 1px solid;
-}
-.proceeds >>> .ivu-form-item {
-  border-right: #cccccc 1px solid;
-}
-.bigbox {
-  height: 700px;
-  overflow: hidden;
-  overflow-y: auto;
-}
-/*滚动条是否隐藏*/
-/*.bigbox::-webkit-scrollbar {display:none}*/
+  .tableright >>> .ivu-form-item-label {
+    text-align: center;
+    border-right: #cccccc 1px solid;
+    background-color: #f9f9f9;
+  }
+
+  .proceeds >>> .ivu-form-item-label {
+    border-right: #cccccc 1px solid;
+  }
+
+  .proceeds >>> .ivu-form-item {
+    border-right: #cccccc 1px solid;
+  }
+
+  .bigbox {
+    height: 700px;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  /*滚动条是否隐藏*/
+  /*.bigbox::-webkit-scrollbar {display:none}*/
 </style>

@@ -1,4 +1,4 @@
-import {getCarBrandAll,getCarModel,getCarSeries} from "_api/system/systemSetting/Initialization";
+import {getwbCarBrandAll,getCarModel,getCarSeries} from "_api/system/systemSetting/Initialization";
 
 export const mixBrandCar = {
   data(){
@@ -98,7 +98,7 @@ export const mixBrandCar = {
       }
       req.page = 1;
       req.pageSize = 40;
-      getCarBrandAll(req).then(res => {
+      getwbCarBrandAll(req).then(res => {
         this.brandLoading = false
         if(res.code==0){
           this.tbdata = res.data.content||[]

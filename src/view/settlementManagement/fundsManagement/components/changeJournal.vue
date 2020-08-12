@@ -24,7 +24,7 @@
         <Col span="12">
           <FormItem label="账户" prop="accountCode">
             <Select v-model="formCustom.accountCode" style="width:150px" @on-change= 'changeAccount'>
-              <Option v-for="item in accountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
+              <Option v-for="item in accountList" :value="item.accountCode" :key="item.accountCode">{{ item.accountName }}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -134,7 +134,7 @@
             { required: true, message: '所属门店必选', trigger: 'change' }
           ],
           accountCode:[
-            { required: true, type:'number', message: '账户必选', trigger: 'change' }
+            { required: true,  message: '账户必选', trigger: 'change' }
           ],
           accountName:[
             { required: true, message: '账号必填', trigger: 'blur' }
@@ -189,7 +189,8 @@
     open(){
       this.handleReset()
       this.getSubject()
-      this.formCustom = JSON.parse(JSON.stringify(this.list))
+      this.formCustom = JSON.parse(JSON.stringify(this.list));
+      this.formCustom.createTime = new Date(this.formCustom.createTime);
       this.modalShow = true
       this.getShopList()
     },
@@ -220,6 +221,7 @@
       let data ={}
       data.shopNumber = this.$store.state.user.userData.shopId
      let res = await  goAccountList(data)
+      console.log(res)
       if (res.code === 0) return  this.accountList  = res.data
     },
 
@@ -272,8 +274,9 @@
      save(){
       this.$refs.formCustom.validate(async (valid) => {
         if (valid) {
-          this.formCustom.createTime = moment(this.formCustom.createTime).startOf('day').format("YYYY-MM-DD HH:mm:ss")
-          let res = await changeSave(this.formCustom)
+          let req = {...this.formCustom}
+          req.createTime = moment(req.createTime).startOf('day').format("YYYY-MM-DD HH:mm:ss")
+          let res = await changeSave(req)
           if (res.code === 0) {
             this.$Message.success('修改成功')
             this.modalShow = false

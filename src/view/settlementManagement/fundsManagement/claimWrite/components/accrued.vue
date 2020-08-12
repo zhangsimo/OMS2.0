@@ -144,6 +144,13 @@ export default {
         data.auxiliaryName=this.MessageValue //辅助核算名称
         data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
       }
+      let objItem = this.$refs.voucherInput.voucherItem;
+      if(objItem.hasOwnProperty("id")){
+        data.suppliersBean = {
+          guestTargetName:objItem.fullName||"",
+          guestTargetId:objItem.id||""
+        }
+      }
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
         this.modal = false;

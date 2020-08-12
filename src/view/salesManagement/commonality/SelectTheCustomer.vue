@@ -4,16 +4,16 @@
       <header class="titleHeader">
         <Input
           v-model="fullName"
-          placeholder="简称"
+          placeholder="简称/编码"
           class="mr10"
-          style="width: 150px"
+          style="width: 250px"
         />
-        <Input
-          v-model="clientCode"
-          placeholder="编码"
-          class="mr10"
-          style="width: 150px"
-        />
+        <!--<Input-->
+          <!--v-model="clientCode"-->
+          <!--placeholder="编码"-->
+          <!--class="mr10"-->
+          <!--style="width: 150px"-->
+        <!--/>-->
         <Input
           v-model="pyName"
           placeholder="拼音"
@@ -47,7 +47,7 @@
             </div>
           </div> -->
           <div class="demo-split-pane fr" style="width: 100%">
-            <div style="overflow: hidden;overflow-x: scroll">
+            <div>
               <vxe-table
                 border
                 resizable
@@ -61,7 +61,6 @@
                 @current-change="getOneClinet"
                 @cell-dblclick="dblclick"
                 height="500"
-                style="width: 1500px"
                 show-overflow="tooltip"
               >
                 <vxe-table-column
@@ -75,17 +74,18 @@
                   title="名称"
                   show-overflow="tooltip"
                 ></vxe-table-column>
-                <vxe-table-column field="code" title="编码" show-overflow="tooltip"></vxe-table-column>
+                <vxe-table-column field="code" width="200" title="编码" show-overflow="tooltip"></vxe-table-column>
                 <vxe-table-column
                   field="creditLimit"
+                  width="100"
                   title="固定额度"
                 ></vxe-table-column>
-                <vxe-table-column field="tempCreditLimit" title="临时额度">
+                <vxe-table-column width="100" field="tempCreditLimit" title="临时额度">
                   <template v-slot="{ row }">{{
                     s2d(row)
                   }}</template>
                 </vxe-table-column>
-                <vxe-table-column field="" title="可用额度">
+                <vxe-table-column field="" width="100" title="可用额度">
                   <template v-slot="{ row }">
                     <Poptip title="可用额度" transfer>
                       <span slot="content" >{{ content }}</span>
@@ -93,46 +93,54 @@
                     </Poptip>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column title="状态">
+                <vxe-table-column width="100" title="状态">
                   <template v-slot="{ row }">{{
                     row.isDisabled == 1 ? "无效" : "有效"
                   }}</template>
                 </vxe-table-column>
                 <vxe-table-column
                   field="billTypeName"
+                  width="100"
                   title="票据类型"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="settTypeName"
+                  width="100"
                   title="结算方式"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="pyName"
+                  width="100"
                   title="拼音"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="contactor"
+                  width="100"
                   title="联系人"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="contactorTel"
+                  width="100"
                   title="联系人手机号"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="salesman"
+                  width="100"
                   title="业务员"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="salesmanTel"
+                  width="100"
                   title="业务员电话"
                 ></vxe-table-column>
-                <vxe-table-column title="是否内部供应商">
+                <vxe-table-column width="120" title="是否内部供应商">
                   <template v-slot="{ row }">{{
                     row.isSupplier == 1 ? "是" : "否"
                   }}</template>
                 </vxe-table-column>
                 <vxe-table-column
                   field="advantageCarbrandId"
+                  width="100"
                   title="优势品牌/产品"
                 ></vxe-table-column>
               </vxe-table>
@@ -213,8 +221,8 @@ export default {
     s2d(row) {
       let date = row.tempEnd;
       if(date == null) return 0;
-      date = date.substring(0,19);    
-      date = date.replace(/-/g,'/'); 
+      date = date.substring(0,19);
+      date = date.replace(/-/g,'/');
       let timestamp = new Date(date).getTime();
       let now = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
       if(timestamp < now) {

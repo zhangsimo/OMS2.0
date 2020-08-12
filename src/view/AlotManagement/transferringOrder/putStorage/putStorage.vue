@@ -65,6 +65,7 @@
               <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
                 <div class="pane-made-hd">调拨入库列表</div>
                 <Table
+                  ref="tableref"
                   :height="leftTableHeight"
                   @on-current-change="selectTabelData"
                   size="small"
@@ -190,6 +191,8 @@
                   highlight-hover-row
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
+                  :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                  @keydown="keydown"
                   :height="rightTableHeight"
                   :data="ArrayValue"
                   :edit-rules="validRules"
@@ -579,9 +582,70 @@ export default {
     // this.getList(this.form);
     //调取仓库
     this.getWareHouse();
-    this.getArrayParams();
+    // this.getArrayParams();
   },
   methods: {
+    //------------------------------------------------------------------------//
+    //表格tab切换可编辑部位
+    async editNextCell($table){
+      // @ts-ignore
+      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+      if (row) { // 当前为编辑状态
+        // console.log('row', row)
+        // 当前列属性
+        const nowField = column.property
+        // 获取展示的列
+        const { visibleColumn } = $table.getTableColumn()
+        // 当前列属性（可以编辑的属性）
+        const columnsField = visibleColumn.reduce((a, v, i) => {
+          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
+            a.push(v.property)
+          }
+          return a
+        }, [])
+        const nowIndex = columnsField.findIndex(v => v === nowField)
+        // 判断当前是否是可编辑倒数地二行
+        const isLastColumn = nowIndex === columnsField.length - 2
+        // console.log('isLastColumn', isLastColumn)
+        if (isLastColumn) {
+          // 插入数据
+
+          // 跳转到下一行
+          // 判断当前是否为临时数据
+          const isInsertByRow = $table.isInsertByRow(row)
+          const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
+          const insertRecords = $table.getInsertRecords() // 临时数据
+          let nextRow = {}
+          // 不是最后一条临时数据
+          if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
+            nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+          } else {
+            // 当前是最后一条临时数据
+            if (isInsertByRow) {
+              nextRow = $table.getData()[0]
+            } else {
+              nextRow = $table.getData()[ROW_INDEX + 1]
+            }
+          }
+          if (nextRow) {
+            await $table.scrollTo(0)
+            await $table.setActiveCell(nextRow, columnsField[0])
+          }
+        } else {
+          // 跳转下一个编辑
+          await $table.setActiveCell(row, columnsField[nowIndex + 1])
+        }
+      }
+    },
+
+    keydown($event){
+      if ($event.$event.keyCode == 9){
+        this.editNextCell($event.$table)
+      }
+    },
+
+    //------------------------------------------------------------------------//
+
     showOwen() {
       tools.setSession("self", { putStorage: this.showSelf });
       this.getList();
@@ -691,11 +755,12 @@ export default {
             this.$Message.success("保存成功");
           }
         })
-        .catch(e => {
-          this.$Message.info("保存配件组装信息失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("保存配件组装信息失败");
+        // });
     },
     xinzeng() {
+      // this.$refs.tableref.clearCurrentRow();
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -743,6 +808,7 @@ export default {
     // 新增按钮
     addProoo() {
       this.$refs.addInCom.init();
+      this.$refs.addInCom.dcName=""
       let showSelf = this.$refs.addInCom.showSelf;
       let data = { enterSelect: 123, orderTypeId: "ALLOT_APPLY" };
       if(showSelf) {
@@ -757,12 +823,13 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            this.$refs.addInCom.tabList = res.data.content;
             this.propPageObj = res.data||{};
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取成品失败");
+        // });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -807,12 +874,13 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            this.$refs.addInCom.tabList = res.data.content;
             this.propPageObj = res.data||{};
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取成品失败");
+        // });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
@@ -879,9 +947,9 @@ export default {
             this.dcData = res.data;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取仓库列表失败");
+        // });
     },
     //获取仓库
     getWareHouse() {
@@ -896,9 +964,9 @@ export default {
             this.dcData = res.data;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("获取仓库列表失败");
+        // });
     },
 
     //分页
@@ -949,9 +1017,9 @@ export default {
             this.$Message.success("删除成功");
           }
         })
-        .catch(e => {
-          this.$Message.info("删除成品失败");
-        });
+        // .catch(e => {
+        //   this.$Message.info("删除成品失败");
+        // });
     },
     //展示方
     showModel() {
@@ -987,8 +1055,11 @@ export default {
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
+      this.$refs['naform'].form.guestName=row.shortName
     },
     getOkList(list) {
+      this.$refs.tableref.clearCurrentRow();
+      this.Left.tbdata.forEach(el=> el._highlight = false);
       this.codeValue = list.id;
       const item = {
         index: 1,
@@ -1053,25 +1124,32 @@ export default {
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
             }
-            for (let b of this.Left.tbdata) {
-              b._highlight = false;
-              if(b.id == this.Leftcurrentrow.id) {
-                b._highlight = true;
-                this.Leftcurrentrow = b;
-                const params = {
-                  mainId: b.id
-                };
-                const res = await getListDetail(params);
-                this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
-                return;
+            if(this.Leftcurrentrow.id) {
+              for (let b of this.Left.tbdata) {
+                b._highlight = false;
+                if(b.id == this.Leftcurrentrow.id) {
+                  b._highlight = true;
+                  this.Leftcurrentrow = b;
+                  const params = {
+                    mainId: b.id
+                  };
+                  const res = await getListDetail(params);
+                  this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  return;
+                }
               }
-              // this.Leftcurrentrow.detailVOS = [];
+            } else {
+              this.Left.tbdata[0]._highlight = true;
+              this.Leftcurrentrow = this.Left.tbdata[0];
+              const params = {
+                mainId: b.id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+              return;
             }
           }
         })
-        .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
-        });
     },
     getListPro() {
       let showSelf = this.$refs.addInCom.showSelf
@@ -1090,9 +1168,6 @@ export default {
             this.page.total = res.totalElements;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品列表失败");
-        });
     },
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {

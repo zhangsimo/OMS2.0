@@ -21,10 +21,10 @@
       :data="tableData"
     >
       <vxe-table-column type="radio" disabled title="选择"  field="raido" :editRender="{attrs: { disabled: true } }" width="60"></vxe-table-column>
-      <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
-      <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
-      <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
-      <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
+      <vxe-table-column min-width="100" field="titleTypeName" title="科目分类"></vxe-table-column>
+      <vxe-table-column min-width="100" field="titleCode" title="科目编码"></vxe-table-column>
+      <vxe-table-column min-width="100" field="titleName" title="科目名称"></vxe-table-column>
+      <vxe-table-column min-width="100" field="titleLevel" title="层级"></vxe-table-column>
     </vxe-table>
 
     <div slot='footer'>

@@ -251,11 +251,6 @@ export default {
           minWidth: 40,
           className: "tc"
         },
-        // {
-        //   title: "区域",
-        //   key: "area",
-        //   className: "tc"
-        // },
         {
           title: "店号",
           key: "code",
@@ -277,6 +272,18 @@ export default {
               }, params.row.code)
             ])
           }
+        },
+        {
+          title: "区域",
+          key: "area",
+          minWidth: 70,
+          className: "tc"
+        },
+        {
+          title: "门店",
+          key: "orgName",
+          minWidth: 70,
+          className: "tc"
         },
         {
           title: "客户/供应商名称",
@@ -403,11 +410,6 @@ export default {
           width: 40,
           className: "tc"
         },
-        // {
-        //   title: "区域",
-        //   key: "area",
-        //   className: "tc"
-        // },
         {
           title: "店号",
           key: "orgId",
@@ -429,6 +431,18 @@ export default {
               }, params.row.orgId)
             ])
           }
+        },
+        {
+          title: "区域",
+          key: "area",
+          minWidth: 70,
+          className: "tc"
+        },
+        {
+          title: "门店",
+          key: "orgName",
+          minWidth: 70,
+          className: "tc"
         },
         {
           title: "客户/供应商名称",
@@ -744,11 +758,6 @@ export default {
           width: 40,
           className: "tc"
         },
-        // {
-        //   title: "区域",
-        //   key: "area",
-        //   className: "tc"
-        // },
         {
           title: "店号",
           key: "orgId",
@@ -770,6 +779,18 @@ export default {
               }, params.row.code)
             ])
           }
+        },
+        {
+          title: "区域",
+          key: "area",
+          minWidth: 70,
+          className: "tc"
+        },
+        {
+          title: "门店",
+          key: "orgName",
+          minWidth: 70,
+          className: "tc"
         },
         {
           title: "客户/供应商名称",
@@ -1580,8 +1601,11 @@ export default {
   },
   computed:{
     selectShopList(){
-      let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      return canSelect
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
     }
   },
   async mounted() {

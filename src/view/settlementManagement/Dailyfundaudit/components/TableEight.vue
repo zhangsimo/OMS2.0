@@ -40,6 +40,10 @@
             </ul>
           </template>
         </vxe-table-column>
+        <vxe-table-column width="100" field="createUname" title="操作人">
+        </vxe-table-column>
+        <vxe-table-column width="150" field="createTime" title="操作时间">
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="金额信息">
         <vxe-table-column title="账户">
@@ -174,7 +178,7 @@
     display: inline-block;
     border: 1px solid #e8eaec;
     flex: 1;
-    padding: 5px;
+    padding:0 5px;
   }
   .vxe-table .vxe-cell {
     padding: 0;

@@ -47,7 +47,7 @@
               @click="submit('formplanref')"
               :disabled="isInput"
               v-has="'submit'"
-            ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
+            ><i class="iconfont mr5 iconziyuan2"></i>提交入库</Button
             >
           </div>
           <div class="db">
@@ -135,11 +135,18 @@
                       <Col span="19"
                       >
                       <Tooltip :content="formPlanmain.guestName">
-                      <Input
+                        <GoodCus style="width: 120px" 
+                            :title="formPlanmain.guestName" 
+                            placeholder="请输入供应商" 
+                            :search-value="formPlanmain.guestName" 
+                            @throwName="throwNameFun" 
+                            :disabled-prop="isInput">
+                          </GoodCus>
+                      <!-- <Input
                         v-model="formPlanmain.guestName"
                         placeholder="请选择供应商"
                         :disabled="isInput"
-                      />
+                      /> -->
                       </Tooltip>
                       </Col>
                       <Col span="5"
@@ -336,6 +343,8 @@
                 @edit-closed="editClosedEvent"
                 @select-change="selectChange"
                 @select-all="selectAll"
+                :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                @keydown="keydown"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"

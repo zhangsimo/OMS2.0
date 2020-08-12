@@ -53,13 +53,13 @@
         </Select>
       </FormItem>
       <FormItem label="订单单号: ">
-        <Input type="text" class="w300 ml5" size="large" v-model="serviceId" />
+        <Input type="text" class="w300 ml5 normal-size" size="large" v-model="serviceId" />
       </FormItem>
       <FormItem label="配件编码: ">
-        <Input type="text" class="w300 ml5" size="large" v-model="partCode" />
+        <Input type="text" class="w300 ml5 normal-size" size="large" v-model="partCode" />
       </FormItem>
       <FormItem label="配件名称: ">
-        <Input type="text" class="w300 ml5" size="large" v-model="partName" />
+        <Input type="text" class="w300 ml5 normal-size" size="large" v-model="partName" />
       </FormItem>
       <FormItem label="品牌: ">
         <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
@@ -250,3 +250,11 @@ export default class MoreSearch extends Vue {
   }
 }
 </script>
+<style lang="less">
+  .normal-size{
+    .ivu-input-large{
+      font-size:14px;
+    }
+  }
+
+</style>

@@ -43,11 +43,9 @@
     <row class="mt15">
       <span>调 出 方 ：</span>
       <!-- <Input v-model="form.guestName" style="width: 398px" /> -->
-      <Select style="width: 398px" v-model="form.guestName" label-in-value filterable>
+      <Select style="width: 398px" v-model="form.guestName" label-in-value>
         <Option v-for="item in ArrayValue1" :value="item" :key="item">
-          {{
-          item
-          }}
+          {{item }}
         </Option>
       </Select>
       <Button @click="showModel" class="ml5" size="small" type="default">
@@ -94,7 +92,7 @@ export default {
         endDate: "",
         createTimeEnd: "",
         guestId: "",
-        guestName: "",
+        guestName: this.dcName,
         createTimeStart: "",
         code: ""
       }

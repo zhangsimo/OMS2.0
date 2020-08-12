@@ -388,7 +388,6 @@ export const mixPartInfo = {
       // req.pageSize = 500;
       getCarBrandAll(req).then(res => {
         let arrData = res.data || []
-        console.log(arrData);
         this.carObj.carBrandData = arrData.map(item => {
           let obj = {...item};
           obj.id = item.id

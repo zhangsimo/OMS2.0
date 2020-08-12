@@ -91,7 +91,8 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />
+                            <!--<Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />-->
+                            <allocation-cus placeholder="请选择调出方" :search-value="formPlan.guestName" @throwName="throwNameFun" :disabledProp="presentrowMsg !== 0 || buttonDisable"></allocation-cus>
                             <!-- <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
                               <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> -->
@@ -186,6 +187,8 @@
                     :footer-method="addFooter"
                     @select-all="selectAll"
                     @edit-actived="editActivedEvent"
+                    :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                    @keydown="keydown"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
                     <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
@@ -258,10 +261,12 @@
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
   import {upxlxsDBo} from "../../../../api/purchasing/purchasePlan";
+  import AllocationCus from "../../../../components/allocation/allocationCus";
 
   export default {
       name: "applyFor",
       components: {
+        AllocationCus,
         QuickDate,
         More,
         supplier,
@@ -441,6 +446,72 @@
         }
       },
       methods: {
+        throwNameFun(v){
+          this.getSupplierName(v)
+        },
+
+
+        //------------------------------------------------------------------------//
+        //表格tab切换可编辑部位
+        async editNextCell($table){
+          // @ts-ignore
+          const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+          if (row) { // 当前为编辑状态
+            // console.log('row', row)
+            // 当前列属性
+            const nowField = column.property
+            // 获取展示的列
+            const { visibleColumn } = $table.getTableColumn()
+            // 当前列属性（可以编辑的属性）
+            const columnsField = visibleColumn.reduce((a, v, i) => {
+              if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
+                a.push(v.property)
+              }
+              return a
+            }, [])
+            const nowIndex = columnsField.findIndex(v => v === nowField)
+            // 判断当前是否是可编辑倒数地二行
+            const isLastColumn = nowIndex === columnsField.length - 2
+            // console.log('isLastColumn', isLastColumn)
+            if (isLastColumn) {
+              // 插入数据
+
+              // 跳转到下一行
+              // 判断当前是否为临时数据
+              const isInsertByRow = $table.isInsertByRow(row)
+              const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
+              const insertRecords = $table.getInsertRecords() // 临时数据
+              let nextRow = {}
+              // 不是最后一条临时数据
+              if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
+                nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+              } else {
+                // 当前是最后一条临时数据
+                if (isInsertByRow) {
+                  nextRow = $table.getData()[0]
+                } else {
+                  nextRow = $table.getData()[ROW_INDEX + 1]
+                }
+              }
+              if (nextRow) {
+                await $table.scrollTo(0)
+                await $table.setActiveCell(nextRow, columnsField[0])
+              }
+            } else {
+              // 跳转下一个编辑
+              await $table.setActiveCell(row, columnsField[nowIndex + 1])
+            }
+          }
+        },
+
+        keydown($event){
+          if ($event.$event.keyCode == 9){
+            this.editNextCell($event.$table)
+          }
+        },
+
+        //------------------------------------------------------------------------//
+
         showOwen() {
           tools.setSession("self", { applyFor: this.showSelf });
           this.leftgetList();
@@ -512,6 +583,7 @@
           }
           this.$refs.formPlan.resetFields();
           this.Left.tbdata.unshift(this.PTrow)
+          this.currentRow = this.PTrow;
           this.isAdd = false;
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
@@ -852,13 +924,19 @@
             if(res.code === 0){
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
-              this.Left.tbdata.forEach(el => {
-                if (el.id == this.currentRow.id) {
-                  el._highlight = true;
-                  this.isAdd = true;
-                  this.setRow(el)
-                }
-              })
+              if(this.currentRow.id) {
+                this.Left.tbdata.forEach(el => {
+                  if (el.id == this.currentRow.id) {
+                    el._highlight = true;
+                    this.isAdd = true;
+                    this.setRow(el)
+                  }
+                })
+              } else if(Object.keys(this.currentRow).length > 0) {
+                this.Left.tbdata[0]._highlight = true;
+                this.isAdd = true;
+                this.setRow(this.Left.tbdata[0]);
+              }
             }else {
               this.Left.page.total = 0
             }
@@ -1063,7 +1141,6 @@
         },
         // 导入
         handleBeforeUpload() {
-          console.log(this.upurl)
           if (this.datadata.new) {
             return this.$Message.error("请先保存数据!");
           }
@@ -1075,6 +1152,7 @@
           if (res.code == 0) {
             if(res.data.length<=0){
               self.$Message.success("导入成功");
+              this.leftgetList()
             }else{
               this.Left.tbdata.forEach(el => {
                 if (el.id == this.selectRowId) {

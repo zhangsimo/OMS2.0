@@ -55,9 +55,13 @@
             style="position: absolute;top: 67px;left: 0;right: 0;bottom: 0;overflow-y: auto"
           >
               <div class="image_tofile" ref="imageTofile">
-                  <keep-alive :include="cacheList">
+                  <!-- <keep-alive :include="cacheList">
                     <router-view />
+                  </keep-alive> -->
+                  <keep-alive>
+                    <router-view v-if="$route.meta.keepAlive" />
                   </keep-alive>
+                  <router-view v-if="!$route.meta.keepAlive" />
               </div>
             <!--            反馈模态框-->
             <Modal v-model="screenshot" fullscreen title="反馈意见">

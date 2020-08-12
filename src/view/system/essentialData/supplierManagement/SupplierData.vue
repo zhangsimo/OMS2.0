@@ -383,6 +383,7 @@ export default {
       this.clientDataShow = true;
       this.$refs.child.$refs.form.resetFields();
       this.$refs.child.financeList=[]
+      this.$refs.child.invoice=[]
       this.$refs.child.selectFinTab={}
     },
     cancel() {
@@ -429,6 +430,7 @@ export default {
       ).value;
       this.clientList = this.pitchSupplierOne;
       this.$refs.child.financeList=this.clientList.guestAccountVoList
+      this.$refs.child.invoice=this.clientList.guestTaxpayerVOList
     },
     //批量上传失败
     onFormatError(file) {

@@ -258,6 +258,15 @@ export function getCarBrandAll(data) {
   })
 }
 
+//获取所有车品牌
+export function getwbCarBrandAll(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getBrands`,
+    method: 'post',
+    data:data
+  })
+}
+
 //获取车型
 export function getCarModel(data) {
   return axios.request({

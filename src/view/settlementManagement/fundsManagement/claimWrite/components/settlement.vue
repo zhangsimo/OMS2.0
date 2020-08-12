@@ -61,7 +61,7 @@
           align="center"
           :data="BusinessType"
           :footer-method="offWrite"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
@@ -107,16 +107,18 @@
           </section>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="8" style="overflow: scroll">
         <vxe-table
           class="ml10"
-          style="flex:4"
+          style="width: 500px;"
           border
           resizable
           auto-resize
           show-footer
+          ref="vxeTable"
           max-height="400"
           align="center"
+          :edit-rules="validRules"
           :footer-method="payCollection"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -128,6 +130,11 @@
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+            <vxe-table-column
+              field="thisClaimedAmt"
+              title="本次核销金额"
+              :edit-render="{name: 'input', attrs: {type: 'number'}}"
+            ></vxe-table-column>
             <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
@@ -153,6 +160,19 @@ export default {
     subjexts
   },
   data() {
+    const roleValid = ({ row ,  cellValue }) => {
+      let Money = Math.abs(row.incomeMoney) > Math.abs(row.paidMoney) ? Math.abs(row.incomeMoney) : Math.abs(row.paidMoney)
+      let reg = /^([1-9]\d*(\.\d+)?)$/
+      return new Promise((resolve, reject) => {
+        if (cellValue && cellValue > Money) {
+          reject(new Error('本次认领金额录入有误，请重新录入'))
+        } if(cellValue && !reg.test(cellValue)){
+          reject(new Error('输入数字不能小于0'))
+        }else {
+          resolve()
+        }
+      })
+    }
     return {
       Settlement: false, //弹框显示
       check: 0,
@@ -161,7 +181,13 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
-      obj: {}
+      obj: {},
+      //表格校验
+      validRules:{
+        thisClaimedAmt:[
+          { validator: roleValid }
+        ]
+      }
     };
   },
   mounted() {
@@ -281,8 +307,12 @@ export default {
       }
     },
     //保存
-    conserve() {
+   async conserve() {
       if (!Number(this.check)) {
+        const errMap = await this.$refs.vxeTable.validate().catch(errMap => errMap)
+        if (errMap) {
+         return  this.$Message.error('认领金额录入有误，请重新录入')
+        }
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
@@ -339,7 +369,8 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (["incomeMoney", "paidMoney"].includes(column.property)) {
+          if (['thisClaimedAmt'].includes(column.property)) {
+            this.checkComputed()
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           return null;
@@ -350,15 +381,13 @@ export default {
     checkComputed() {
       let sum1 = 0;
       let sum2 = 0;
-      let sum3 = 0;
       this.BusinessType.map(item => {
         sum1 += item.rpAmt * 1;
       });
       this.tableData.map(item => {
-        sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
-        sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
+        sum2 += item.thisClaimedAmt ? item.thisClaimedAmt * 1 : 0;
       });
-      this.check = (sum1 - sum2 - sum3).toFixed(2);
+      this.check = (sum1 - sum2).toFixed(2);
     }
   }
 };
