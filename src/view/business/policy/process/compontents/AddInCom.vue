@@ -35,7 +35,7 @@
     </section>
     <section class="con-box">
       <!--上表格-->
-      <div class="topTableDate">
+<!--      <div class="topTableDate">-->
         <vxe-table
           ref="xTable"
           border
@@ -43,6 +43,7 @@
           size="mini"
           :height="200"
           auto-resize
+          align="center"
           :data="tabList"
           highlight-current-row
           highlight-hover-row
@@ -51,38 +52,38 @@
         >
           <vxe-table-column
             type="index"
-            min-width="60"
+            width="60"
             title="序号"
           ></vxe-table-column>
           <vxe-table-column
             type="radio"
-            min-width="60"
+            width="60"
             title=" "
           ></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column
             field="partCode"
             title="配件编码"
-            min-width="120"
+            width="200"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
-            min-width="120"
+            width="200"
           ></vxe-table-column>
           <vxe-table-column
             field="fullName"
             title="配件全称"
-            min-width="120"
+            width="200"
           ></vxe-table-column>
           <vxe-table-column
             field="carBrandModel"
             title="品牌车型"
-            min-width="120"
+            width="200"
           ></vxe-table-column>
-          <vxe-table-column field="oemCode" min-width="120" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode"min-width="200" title="OE码"></vxe-table-column>
         </vxe-table>
-      </div>
+<!--      </div>-->
 
       <!--     分页-->
       <Row class="mt10 mb10">
@@ -107,25 +108,28 @@
           resizable
           auto-resize
           height="150"
+          align="center"
           :data="currentData"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column
             field="partCode"
             title="配件编码"
+            width="160"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
-            width="100"
+            width="160"
           ></vxe-table-column>
           <vxe-table-column
             field="fullName"
             title="配件全称"
+            width="160"
           ></vxe-table-column>
-          <vxe-table-column field="qty" title="数量"></vxe-table-column>
-          <vxe-table-column field="ratio" title="成本比例"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="qty"width="160" title="数量"></vxe-table-column>
+          <vxe-table-column field="ratio"width="160" title="成本比例"></vxe-table-column>
+          <vxe-table-column field="remark"width="160" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
     </section>
@@ -177,7 +181,7 @@ export default {
   props: {},
   methods: {
     init() {
-      this.$refs.xTable.recalculate(true)
+      // this.$refs.xTable.recalculate(true)
       this.getList();
       this.searchPartLayer = true;
     },

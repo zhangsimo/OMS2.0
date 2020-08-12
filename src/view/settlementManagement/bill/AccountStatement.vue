@@ -1292,7 +1292,7 @@ export default {
     },
     // 查询发票申请
     queryApplication() {
-      this.$router.push({ name: "invoiceAdministration-invoiceApply" });
+      this.$router.push({ name: "invoiceAdministrationInvoiceApply" });
     },
     // 发票对冲
     hedgingInvoice() {

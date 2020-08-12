@@ -261,7 +261,7 @@ export default {
                 value: params.row.paymentBalance  || 0.00,
                 size: "small",
                 min: 0.00,
-                max: params.row.paymentBalance || 0.00,
+                max: params.row.paymentBalance<this.data[0].applyAmt?params.row.paymentBalance:this.data[0].applyAmt,
               },
               on: {
                 input: val => {
