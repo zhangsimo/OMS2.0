@@ -140,7 +140,7 @@
     <amtData :moneyList='allMoneyList'></amtData>
 
     <!--    修改-->
-    <changeJournal :list='oneList' ref="changeModal" @getAllList="allList"></changeJournal>
+    <changeJournal :list='oneList' ref="changeModal" @getNewList="allList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain5">
