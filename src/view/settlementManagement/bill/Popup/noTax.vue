@@ -258,7 +258,7 @@ export default {
         invoiceTaxAmt: [
           {
             required: true,
-            validator: thisTaxChange
+            message: '不能为空'
           }
         ]
       }, //发票数据表单验证规则
@@ -439,6 +439,7 @@ export default {
     // 提交申请
      submission(type) { //type 1保存为草稿 2提交申请
       this.$refs.formCustom.validate(async val => {
+        if (this.invoice.invoiceTaxAmt > this.information.statementAmtOwed ) return  this.$Message.error('本次不含税开票金额不能大于不含税对账单未开票金额')
         if (val) {
           let obj = {
             ...this.invoice,
