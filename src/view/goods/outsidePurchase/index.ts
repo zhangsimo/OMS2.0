@@ -219,7 +219,11 @@ export default class OutsidePurchase extends Vue {
       } else {
         this.$Message.success("导入成功");
       }
-      this.tableData = [...this.tableData, ...response.data.details].map( el => {
+      let arrData = response.data.details.map(item => {
+        item.isOldFlag = true
+        return item
+      })
+      this.tableData = [...this.tableData, ...arrData].map( el => {
         el.uuid = v4();
         return el;
       })

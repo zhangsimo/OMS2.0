@@ -25,7 +25,7 @@
               :key="index"
               class="flex"
             >
-              <span class="listChild">{{ item.guestSourceName }}</span>
+              <span class="listChild">{{ item.guestSourceName  || "该值为null"}}</span>
             </li>
           </ul>
         </template>
