@@ -195,7 +195,7 @@ export const mixSelectPartCom = {
       //分页obj
       page: {
         num: 1,
-        size: 20,
+        size: 50,
         total: 0
       },
       //配件查询分类

@@ -37,6 +37,7 @@
       <!--上表格-->
       <div class="topTableDate">
         <vxe-table
+          ref="xTable"
           border
           resizable
           size="mini"
@@ -50,32 +51,36 @@
         >
           <vxe-table-column
             type="index"
-            width="60"
+            min-width="60"
             title="序号"
           ></vxe-table-column>
           <vxe-table-column
             type="radio"
-            width="60"
+            min-width="60"
             title=" "
           ></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column
             field="partCode"
             title="配件编码"
+            min-width="120"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
+            min-width="120"
           ></vxe-table-column>
           <vxe-table-column
             field="fullName"
             title="配件全称"
+            min-width="120"
           ></vxe-table-column>
           <vxe-table-column
             field="carBrandModel"
             title="品牌车型"
+            min-width="120"
           ></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode" min-width="120" title="OE码"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -172,6 +177,7 @@ export default {
   props: {},
   methods: {
     init() {
+      this.$refs.xTable.recalculate(true)
       this.getList();
       this.searchPartLayer = true;
     },
