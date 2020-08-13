@@ -1403,15 +1403,17 @@ export default {
 
 
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
-        // if (!this.remark) {
-        //   // this.$message.error("请填写备注");
-        //   this.$message({
-        //     message: "请填写备注",
-        //     type: "error",
-        //     customClass: "zZindex"
-        //   });
-        //   return "";
-        // }
+        if(num!=0){
+          if (!this.remark) {
+            // this.$message.error("请填写备注");
+            this.$message({
+              message: "请填写备注",
+              type: "error",
+              customClass: "zZindex"
+            });
+            return "";
+          }
+        }
         let one = [
           {
             number: "3",
