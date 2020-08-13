@@ -208,8 +208,10 @@ export default class InterPurchase extends Vue {
     }
   }
   private selectOrderMan(val:any){
-    this.formPlanmain.orderMan = val.label || "";
-    this.formPlanmain.orderManId = val.value || "";
+    if(val!=undefined){
+      this.formPlanmain.orderMan = val.label || "";
+      this.formPlanmain.orderManId = val.value || "";
+    }
   }
 
   //------------------------------------------------------------------------//
@@ -413,13 +415,12 @@ export default class InterPurchase extends Vue {
     }else{
       data.versionNo = '0';
     }
-
     if(!data.directCompanyId){
       this.selectTableRow.directCompanyId = 0;
     }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
-
+    // console.log(this.selectTableRow,111)
     let res = await api.saveInterDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
@@ -872,13 +873,18 @@ export default class InterPurchase extends Vue {
           d.isOldFlag = true;
         })
       })
-      for(let b of this.purchaseOrderTable.tbdata){
-        b._highlight = false;
-        if(b.id==this.selectLeftItemId){
-          b._highlight = true;
-          this.setFormPlanmain(b);
-          break;
+      if (this.selectLeftItemId) {
+        for (let b of this.purchaseOrderTable.tbdata) {
+          b._highlight = false
+          if (b.id == this.selectLeftItemId) {
+            b._highlight = true;
+            this.setFormPlanmain(b);
+            break;
+          }
         }
+      } else {
+        this.purchaseOrderTable.tbdata[0]._highlight = true
+        this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
       }
     }
   }
