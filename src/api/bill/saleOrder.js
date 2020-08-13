@@ -338,3 +338,31 @@ export function getPaymentName(params) {
     params
   })
 }
+
+
+//对账单撤回按钮判断
+export function setCanwithdraw(params) {
+  return axios.request({
+    url: `${api.omsSettle}/statement/master/judgeRecall`,
+    method: 'get',
+    params
+  })
+}
+
+//撤回申请
+export function setApply(params) {
+  return axios.request({
+    url: `${api.omsSettle}/statement/master/recallApply`,
+    method: 'get',
+    params
+  })
+}
+
+//撤回核销
+export function setCancal(params) {
+  return axios.request({
+    url: `${api.omsSettle}/statement/master/recallWriteOff`,
+    method: 'get',
+    params
+  })
+}
