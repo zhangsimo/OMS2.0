@@ -18,11 +18,12 @@
           <!--&gt;</Input>-->
           <!--</div>-->
           <div class="db mr10">
-            <Input
+            <el-input
               v-model="penSalesData.productName"
               placeholder="配件编码/名称"
               style="width: 160px"
-            ></Input>
+              ref="elinput"
+            ></el-input>
           </div>
           <div class="db mr10">
             <Button @click="search" type>查询</Button>
@@ -183,10 +184,12 @@ export default {
     init() {
       // this.$refs.xTable.recalculate(true)
       this.getList();
+      this.$nextTick(() => this.$refs.elinput.focus());
       this.searchPartLayer = true;
     },
     init1() {
       this.searchPartLayer = false;
+      this.$nextTick(() => this.$refs.elinput.focus());
     },
     getList(productCode = "", productName = "") {
       let params = {

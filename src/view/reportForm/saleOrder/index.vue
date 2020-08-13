@@ -37,6 +37,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:""
         data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartTime = data.atimeStart : "";
@@ -61,6 +62,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
         data.guestFullName ? data2.guestFullName = data.guestFullName : "";
@@ -81,6 +83,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.auditStartDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.auditEndDate = data.ctimeEnd : "";
         data.guestFullName ? data2.guestFullName = data.guestFullName : "";

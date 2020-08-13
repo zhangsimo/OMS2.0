@@ -35,6 +35,7 @@ export default {
         data2.receiveStoreId = data2.storeId;
         delete data2.storeId;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.commitStartDate ? data2.commitStartDate = data.commitStartDate : "";
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
@@ -55,6 +56,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.commitStartDate ? data2.commitStartDate = data.commitStartDate : "";
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
         data.serviceId ? data2.enterServiceId = data.serviceId : "";

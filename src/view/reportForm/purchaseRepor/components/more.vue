@@ -323,7 +323,10 @@
 
     @Emit("getmoreData")
     private ok() {
+      let parent:any=this.$parent
+      let search:any=parent.search
       let data = {
+        orgid:search.orgid,
         ctimeStart: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
         ctimeEnd: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
         atimeStart: this.auditDate[0] ? moment(this.auditDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
@@ -362,6 +365,7 @@
       } else {
         obj = null;
       }
+      // search.auditDate=this.createDate
       this.cancel();
       return obj;
     }

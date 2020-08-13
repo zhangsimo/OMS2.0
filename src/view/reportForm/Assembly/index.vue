@@ -43,6 +43,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
@@ -65,6 +66,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
@@ -87,6 +89,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
@@ -109,6 +112,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";

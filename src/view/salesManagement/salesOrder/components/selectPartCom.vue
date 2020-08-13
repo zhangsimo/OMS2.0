@@ -5,12 +5,14 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        <Input
+        <el-input
           class="w250 mr10"
           v-model="partName"
           placeholder="请输入配件内码/编码/名称/OE码"
-          @on-enter="search"
-        ></Input>
+          @change="search"
+          :autofocus="true"
+          ref="elinput"
+        ></el-input>
 
         <!-- <Select
           placeholder="选择品牌"

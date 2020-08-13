@@ -42,6 +42,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.createTimeStart = data.ctimeStart : "";
         data.ctimeEnd ? data2.createTimeEnd = data.ctimeEnd : "";
         data.timeEnd ? data2.allotEnterTimeEnd = data.timeEnd : "";
@@ -65,6 +66,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.timeEnd ? data2.allotFinishedEndDate = data.timeEnd : "";
         data.timeStart ? data2.allotFinishedStartDate = data.timeStart : "";
         data.guestId ? data2.guestId = data.guestId : "";
@@ -86,6 +88,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.timeEnd ? data2.allotFinishedEndDate = data.timeEnd : "";
         data.timeStart ? data2.allotFinishedStartDate = data.timeStart : "";
         data.guestId ? data2.guestId = data.guestId : "";
@@ -107,6 +110,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.timeEnd ? data2.allotEnterTimeEnd = data.timeEnd : "";
         data.timeStart ? data2.allotEnterTimeStart = data.timeStart : "";
         data.guestId ? data2.guestId = data.guestId : "";

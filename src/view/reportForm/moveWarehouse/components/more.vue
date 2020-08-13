@@ -250,7 +250,10 @@ export default class MoreSearch extends Vue {
 
   @Emit("getmoreData")
   private ok() {
+    let parent:any=this.$parent
+    let search:any=parent.search
     let data = {
+      orgid:search.orgid,
       commitStartDate: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
       commitEndDate: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       serviceId: this.serviceId,
