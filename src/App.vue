@@ -43,7 +43,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" >
 .size {
   width: 100%;
   height: 100%;
@@ -58,4 +58,8 @@ body {
 #app {
   .size;
 }
+.el-input__inner {
+    height: 30px !important;
+    line-height: 30px !important;
+  }
 </style>
