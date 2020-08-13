@@ -129,7 +129,7 @@ export default {
       if (res.code === 0) {
         this.$nextTick(() => {
           this.formInline = res.data
-          this.formInline.receiver=res.data.receiverId
+          this.formInline.receiverId=res.data.receiverId
           this.getOrignCompany(res.data.receiveGuestName)
           this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
@@ -143,7 +143,6 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      // let arr = this.company.filter( item => item.value == row.value)
       this.getAccountNameList(row)
     },
     //付款人账号搜索出发
@@ -204,7 +203,7 @@ export default {
         if (rep.data.length >= 1) {
           this.setReceiverInfo(rep.data[0])
         } else {
-          this.formInline.receiver = ''
+          this.formInline.receiverId = ''
           this.formInline.receiveBank = ''
           this.formInline.receiveBankNo = '';
         }
@@ -212,7 +211,7 @@ export default {
     },
 
     setReceiverInfo(row) {
-      this.formInline.receiver = row.id;
+      this.formInline.receiverId = row.id;
       this.formInline.receiveBank = row.accountBank;
       this.formInline.receiveBankNo = row.accountBankNo;
     },

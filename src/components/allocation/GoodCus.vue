@@ -74,11 +74,11 @@ export default {
         return this.$Message.error("请输入内容");
       }
       let req = {};
-      if (/^[\u4e00-\u9fa5]/.test(v)) {
+      // if (/^[\u4e00-\u9fa5]/.test(v)) {
         req.fullName = v.trim();
-      } else {
-        req.code = v.trim();
-      }
+      // } else {
+      //   req.code = v.trim();
+      // }
       req.num = 0;
       req.size = 1000;
       this.loading = true;

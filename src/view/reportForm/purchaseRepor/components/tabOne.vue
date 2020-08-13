@@ -160,12 +160,11 @@
           width="150"
 
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
-          field="rmbPrice"
-          title="裸价人民币"
-          width="150"
-
-        ></vxe-table-column>
+<!--        <vxe-table-column  show-overflow="tooltip"-->
+<!--          field="rmbPrice"-->
+<!--          title="裸价人民币"-->
+<!--          width="150"-->
+<!--        ></vxe-table-column>-->
         <vxe-table-column  show-overflow="tooltip"
           field="rmbAmt"
           title="裸价金额"
@@ -287,6 +286,7 @@ export default {
           if ([0, "0", "否"].includes(el.taxSign)) {
             el.taxSign = false;
           }
+          el.orderType=el.orderType.name
           return el;
         });
       }
