@@ -572,9 +572,9 @@ export default {
     let arr = await creat("", this.$store);
     this.$nextTick( () => {
       this.store = arr[1]
+      this.query();
     })
     this.getShop()
-    this.query();
   },
   computed:{
     selectShopList(){
@@ -603,8 +603,9 @@ export default {
     },
     // 获取列表
     async getTable() {
-      let userdata = this.$store.state.user.userData;
-      this.store = userdata.shopId;
+      // let userdata = this.$store.state.user.userData;
+      // this.store = userdata.shopId;
+      // console.log(this.store,this.Branchstore,111)
       this.oneList = [];
       let params = {
         shopNumber: this.store,
