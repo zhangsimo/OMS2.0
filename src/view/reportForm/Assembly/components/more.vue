@@ -253,7 +253,10 @@ export default class MoreSearch extends Vue {
 
   @Emit("getmoreData")
   private ok() {
+    let parent:any=this.$parent
+    let search:any=parent.search
     let data = {
+      orgid:search.orgid,
       createTime: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
       endTime: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       startAuditDate: this.auditDate[0] ? moment(this.auditDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",

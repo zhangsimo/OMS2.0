@@ -32,6 +32,7 @@ export default {
         delete data.isPanne;
         data2 = {...data};
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.enterDateStart = data.startTime : "";
         data.endTime ? data2.enterDateEnd = data.endTime : "";
@@ -54,6 +55,7 @@ export default {
         delete data.isPanne;
         data2 = {...data};
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.partCode ? data2.partCode = data.partCode : "";
         data.startTime ? data2.outDateStart = data.startTime : "";
         data.endTime ? data2.outDateEnd = data.endTime : "";

@@ -43,6 +43,7 @@ export default {
         data2 = data;
       } else {
         // 更多查询
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
@@ -68,6 +69,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startEnterDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endEnterDate = data.ctimeEnd : "";
         data.guestFullName ? data2.guestFullName = data.guestFullName : "";
@@ -89,6 +91,7 @@ export default {
         data2 = data;
       } else {
         // 更多查询
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
         data.guestFullName ? data2.guestFullName = data.guestFullName : "";
@@ -110,6 +113,7 @@ export default {
         data2 = data;
       } else {
         // 更多查询
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
