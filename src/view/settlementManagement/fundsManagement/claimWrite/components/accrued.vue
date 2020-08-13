@@ -1,20 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modal" title="转应收应付" width="800" footer-hide>
-      <div class="db dbd">
-        <button
-          class="ivu-btn ivu-btn-default mr10"
-          type="button"
-          @click="openVoucherInput()"
-          :disabled="bool"
-        >转应收款</button>
-        <button
-          class="ivu-btn ivu-btn-default mr10"
-          type="button"
-          @click="openVoucherInput()"
-          :disabled="!bool"
-        >转应付款</button>
-      </div>
+    <Modal v-model="modal" title="转应收应付" width="800">
       <vxe-table
         border
         align="center"
@@ -23,7 +9,7 @@
         highlight-hover-row
         highlight-current-row
         auto-resize
-        height="300"
+        max-height="300"
         @radio-change="getRaido"
         :edit-config="{trigger: 'click', mode: 'cell'}"
         size="mini"
@@ -59,8 +45,14 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
+      <div class="pt20 pb20">
+        <i style="color:red">* </i>
+        <span>选择辅助核算：</span>
+        <Input v-model="MessageValue" class="w150" />
+        <Button type="default" @click="openVoucherInput">辅助核算</Button>
+      </div>
       <div slot="footer">
-        <Button type="primary" @click="ok" class="mr10">保存</Button>
+        <Button type="primary" @click="submitOk" class="mr10">确定</Button>
         <Button type="default" @click="modal = false">取消</Button>
       </div>
     </Modal>
@@ -99,7 +91,8 @@ export default {
       },
       modal: false, //模态框展示
       oneSubject: {}, //单选获取到的数据
-      bool:true
+      bool:true,
+      MessageValue:''
     };
   },
   methods: {
@@ -107,6 +100,9 @@ export default {
     open() {
       this.oneSubject = {};
       this.modal = true;
+      this.$nextTick(()=>{
+        this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"balanceMoney")
+      })
     },
     //判断是否可选择
     checkMethod({ row }) {
@@ -116,14 +112,22 @@ export default {
     getRaido({ row }) {
       this.oneSubject = row;
     },
-    async openVoucherInput() {
+    openVoucherInput() {
+      this.$refs.voucherInput.subjectModelShowassist = true;
+    },
+
+    async submitOk(){
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
       if (errMap) {
       } else {
-        this.$refs.voucherInput.subjectModelShowassist = true;
+        if(this.MessageValue){
+          this.ok();
+        }else{
+          this.$Message.error("请选择辅助核算");
+        }
       }
-
     },
+
     async ok(){
       let data = {};
       data.detailId = this.accrued[0].id;
@@ -134,16 +138,15 @@ export default {
       }else{
         data.subjectCode="1122";
         data.claimType=1
-
-        data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
-        if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
-          data.isAuxiliaryAccounting=0 //是否辅助核算类
-        }else{
-          data.isAuxiliaryAccounting=1
-        }
-        data.auxiliaryName=this.MessageValue //辅助核算名称
-        data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
       }
+      data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+      if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+        data.isAuxiliaryAccounting=0 //是否辅助核算类
+      }else{
+        data.isAuxiliaryAccounting=1
+      }
+      data.auxiliaryName=this.MessageValue //辅助核算名称
+      data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
       let objItem = this.$refs.voucherInput.voucherItem;
       if(objItem.hasOwnProperty("id")){
         data.suppliersBean = {
@@ -159,8 +162,12 @@ export default {
     },
     //选择辅助核算回调
     getCallBack(){
-      this.ok();
-    }
+      this.getMessage();
+    },
+    //子组件的数据
+    getMessage() {
+      this.MessageValue = this.$refs.voucherInput.AssistAccounting;
+    },
   }
 };
 </script>
