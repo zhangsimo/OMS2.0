@@ -163,20 +163,22 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="Revoke"
           v-has="'revocation'"
+          @click="withdrawTheApplication"
+          :disabled="ifRecallApply"
         >撤回申请</button>
+<!--        <button-->
+<!--          class="ivu-btn ivu-btn-default mr10"-->
+<!--          type="button"-->
+<!--          @click="Revoke"-->
+<!--          v-has="'revocation'"-->
+<!--        >撤回开票</button>-->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="Revoke"
           v-has="'revocation'"
-        >撤回开票</button>
-        <button
-          class="ivu-btn ivu-btn-default mr10"
-          type="button"
-          @click="Revoke"
-          v-has="'revocation'"
+          @click="backCancel"
+          :disabled="ifRecallWriteOff"
         >撤回核销</button>
         <div class="hide1">
           <Table
@@ -383,7 +385,21 @@
     </Modal>
     <reconciliation ref="reconciliation"></reconciliation>
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
-    <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
+<!--    <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>-->
+    <Modal v-model="modalShow" :title="reTitle">
+      <Row>
+        <Col span="4">
+          <span>撤回原因：</span>
+        </Col>
+        <Col span="20">
+          <Input v-model="revokeReason" />
+        </Col>
+      </Row>
+      <div slot="footer">
+        <Button type='primary' @click='reClose'>确定</Button>
+        <Button type='default' @click='cancel'>取消</Button>
+      </div>
+    </Modal>
     <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
@@ -407,7 +423,9 @@ import {
   getId,
   settlement,
   settlementPreservation,
-  accountRevoke,
+  setCanwithdraw,
+  setApply,
+  setCancal,
   account
 } from "@/api/bill/saleOrder";
 import { hedgingApplyNo, applyNo } from "@/api/bill/popup";
@@ -439,14 +457,13 @@ export default {
         { name: "提交", status: "已提交" },
         { name: "产品总监审批", status: "已审批" }
       ],
-      revoke: false,
       check: "",
       remark: "",
       Write: "", //核销编码
       collectPayId: "", //收付款单号
       tab: "name1",
       falg: false,
-      reconciliationStatement: {},
+      reconciliationStatement: {}, //点击主表获取当当前一行数据
       tableData: [],
       BusinessType: [],
       Settlement: false,
@@ -1161,6 +1178,11 @@ export default {
       receiveGuestId:'',//获取往来单位id
       company:[],//查询到往来单位数据
       loading1:false,//查询时判断
+      revokeReason:'',//撤销原因
+      modalShow:false,//撤销模态框状态
+      reTitle:'撤回原因',//撤销模态框title
+      ifRecallApply:true,//是否可以撤回申请
+      ifRecallWriteOff:true,//是否可以撤回审核
     };
   },
   async mounted() {
@@ -1219,6 +1241,51 @@ export default {
     }
   },
   methods: {
+  //取消撤回
+    cancel() {
+      this.modalShow = false;
+      this.$message.info("取消撤回");
+    },
+    //撤销确定
+   async reClose(){
+      if(!this.revokeReason) return this.$Message.error('撤回原因必填')
+      if (!this.ifRecallApply){
+        let data = {}
+        data.id = this.reconciliationStatement.id
+        data.revokeReason = this.revokeReason
+       let res = await setApply(data)
+        if (res.code === 0){
+          this.modalShow = false;
+          this.$Message.success('撤回成功')
+          this.getAccountStatement();
+        }
+      }
+      if (!this.ifRecallWriteOff){
+       let data = {}
+       data.id = this.reconciliationStatement.id
+       data.revokeReason = this.revokeReason
+      let res = await setCancal(data)
+       if (res.code === 0){
+         this.modalShow = false;
+         this.$Message.success('撤回成功')
+         this.getAccountStatement();
+       }
+     }
+    },
+    //撤销申请
+    withdrawTheApplication(){
+      this.reTitle = '撤回申请'
+      this.revokeReason = ''
+      this.modalShow = true;
+    },
+
+    //撤回核销
+    backCancel(){
+      this.reTitle = '撤回核销'
+      this.revokeReason = ''
+      this.modalShow = true;
+    },
+
       //往来单位查询
     async remoteMethod(query) {
       this.company = [];
@@ -1547,18 +1614,18 @@ export default {
       this.data2 = []
       this.data3 = []
       this.data4 = []
-      // if (row.processInstance) {
-        // approvalStatus({ instanceId: row.processInstance }).then(res => {
-        //   if (res.code == 0) {
-        //     this.falg = true;
-        //     this.statusData = res.data.operationRecords;
-        //   }
-        // });
-      // }
+      setCanwithdraw({id:row.id}).then(
+        res => {
+          if (res.code === 0){
+            this.ifRecallApply = !res.data.ifRecallApply
+            this.ifRecallWriteOff = !res.data.ifRecallWriteOff
+          }
+        }
+      )
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
-          this.collectPayId = res.data.fno;
-          this.Write = res.data.checkId;
+          this.collectPayId = !res.data.fno;
+          this.Write = !res.data.checkId;
         }
       );
       let date = {
@@ -1970,20 +2037,20 @@ export default {
       }
     },
     // 确认撤销
-    confirmRevocation() {
-      accountRevoke({
-        id: this.reconciliationStatement.id
-      }).then(res => {
-        // console.log(res);
-        if (res.code === 0) {
-          this.$message({
-            message: "撤销成功",
-            type: "success",
-            customClass: "zZindex"
-          });
-        }
-      });
-    }
+  //   confirmRevocation() {
+  //     accountRevoke({
+  //       id: this.reconciliationStatement.id
+  //     }).then(res => {
+  //       // console.log(res);
+  //       if (res.code === 0) {
+  //         this.$message({
+  //           message: "撤销成功",
+  //           type: "success",
+  //           customClass: "zZindex"
+  //         });
+  //       }
+  //     });
+  //   }
   }
 };
 </script>

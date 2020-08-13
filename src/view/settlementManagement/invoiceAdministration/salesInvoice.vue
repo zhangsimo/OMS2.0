@@ -380,7 +380,7 @@ export default {
         orgId: "",
         page: 0,
         size: 10,
-        writeOffStatus: 0,
+        writeOffStatus: "",
         invoiceUnit: "",
       },
       formValidate: {
@@ -1328,7 +1328,6 @@ export default {
       taxOptionList: [], //税率
       collectionTypeOption: [], //收款方式
       speciesOptionList: [], //开票清单类型
-      proTypeList: [], //分店
       invoiceServiceOption: [], //开票业务
       invoiceUnitOption: [], //开票公司
     };
