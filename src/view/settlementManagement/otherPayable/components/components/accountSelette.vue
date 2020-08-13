@@ -226,7 +226,7 @@ export default {
     determine() {
       if (Object.keys(this.seleteData).length !== 0) {
         this.$emit("accountHedNo", this.seleteData);
-        bus.$emit("accountHedNo", this.seleteData);
+        // bus.$emit("accountHedNo", this.seleteData);
         this.modal1 = false;
       } else {
         this.$message.error("请选择一条对账单");
