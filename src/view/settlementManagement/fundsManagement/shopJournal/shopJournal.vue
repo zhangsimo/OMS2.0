@@ -143,24 +143,25 @@
     <changeJournal :list='oneList' ref="changeModal" @getNewList="allList"></changeJournal>
 
     <div class="mt15">
-      <Tabs type="card" value="capitalChain5">
+      <Tabs type="card" value="capitalChain5" @on-click="clearSelectTabelList">
         <TabPane label="全部数据" name="capitalChain1">
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
               show-footer
               show-overflow
-              highlight-current-row
               highlight-hover-row
               stripe
-              ref="xTable"
+              ref="xTable1"
               align="center"
               height="500"
-              @current-change="getOneList"
               size="mini"
               style="width: 3000px"
               :data="tableData"
+              @checkbox-all="selectAllEvent"
+              @checkbox-change="selectChangeEvent"
             >
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
               <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
@@ -205,17 +206,18 @@
               border
               show-footer
               show-overflow
-              highlight-current-row
               highlight-hover-row
               stripe
-              ref="xTable"
+              ref="xTable2"
               align="center"
               height="500"
-              @current-change="getOneList"
               size="mini"
               style="width: 3000px"
               :data="tableData1"
+              @checkbox-all="selectAllEvent"
+              @checkbox-change="selectChangeEvent"
             >
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
               <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
@@ -260,17 +262,18 @@
               border
               show-footer
               show-overflow
-              highlight-current-row
               highlight-hover-row
               stripe
-              ref="xTable"
+              ref="xTable3"
               align="center"
               height="500"
-              @current-change="getOneList"
               size="mini"
               style="width: 3000px"
               :data="tableData2"
+              @checkbox-all="selectAllEvent"
+              @checkbox-change="selectChangeEvent"
             >
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
               <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
@@ -315,17 +318,18 @@
               border
               show-footer
               show-overflow
-              highlight-current-row
               highlight-hover-row
               stripe
-              ref="xTable"
+              ref="xTable4"
               align="center"
               height="500"
-              @current-change="getOneList"
               size="mini"
               style="width: 3000px"
               :data="tableData3"
+              @checkbox-all="selectAllEvent"
+              @checkbox-change="selectChangeEvent"
             >
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
               <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
@@ -370,17 +374,18 @@
               border
               show-footer
               show-overflow
-              highlight-current-row
-              highlight-hover-row
               stripe
-              ref="xTable"
+              ref="xTable5"
               align="center"
               height="500"
-              @current-change="getOneList"
               size="mini"
               style="width: 3000px"
+              highlight-hover-row
               :data="tableData4"
+              @checkbox-all="selectAllEvent"
+              @checkbox-change="selectChangeEvent"
             >
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
               <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
@@ -486,6 +491,7 @@
         suppliers:'',//往来单位
         accountCode:'',//账号
         getAccShopList:[],
+        selectTableList:[],//勾选的表格数据
       };
     },
     async mounted () {
@@ -623,6 +629,17 @@
           this.canQuickDateList = !this.canQuickDateList
         }
       },
+      selectAllEvent({selection}){
+        this.selectTableList = selection;
+      },
+
+      selectChangeEvent({selection}){
+        this.selectTableList = selection;
+      },
+
+      selectChangeTable(v){
+        this.$refs.xTable1.getCheckboxRecords()
+      },
 
       //获取表格信息
       async getList(){
@@ -692,7 +709,11 @@
 
       //修改模态框
       openChangeModal(){
-        if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
+        if(this.selectTableList.length==0||this.selectTableList.length>1){
+          return this.$Message.error('请选择一条数据')
+        }
+        this.oneList = this.selectTableList[0];
+        // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
         if (this.oneList.collateState == 1) return this.$Message.error('只能修改未核销数据')
         this.$refs.changeModal.open()
       },
@@ -719,14 +740,18 @@
 
       //删除导入
       dele(){
-        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if(this.oneList.collateState) return this.$Message.error('已核销数据不能删除')
+        if(this.selectTableList.length==0){
+          return this.$Message.error('请至少选择一条数据');
+        }
+        //if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        let filterCollateState = this.selectTableList.filter(item => item.collateState);
+        if(filterCollateState.length>0) return this.$Message.error('已核销数据不能删除');
         this.$Modal.confirm({
           title: '提示',
           content: '<p>是否删除该条数据</p>',
           onOk: async () => {
             let data ={}
-            data.id = this.oneList.id
+            data.id = this.selectTableList.map(item => item.id).join(',');
             let res = await deleList(data)
             if (res.code === 0){
               this.getList()
@@ -764,14 +789,22 @@
 
       //人工匹配
       artificialChange(){
-        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(this.selectTableList.length==0||this.selectTableList.length>1){
+          return this.$Message.error('请选择一条数据')
+        }
+        this.oneList = this.selectTableList[0];
+        //if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
         if(this.oneList.allocation) return this.$Message.error('数据已分配')
         this.$refs.art.openModal()
       },
 
       //撤销分配
       revocation(){
-        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(this.selectTableList.length==0||this.selectTableList.length>1){
+          return this.$Message.error('请选择一条数据')
+        }
+        this.oneList = this.selectTableList[0];
+        //if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
         if(!this.oneList.allocation) return this.$Message.error('请选择已分配的数据')
         this.$Modal.confirm({
           title: '提示',
@@ -793,6 +826,13 @@
       //资金认领核销
       goMoney(){
         this.$router.push({ name: "claimWrite"})
+      },
+      clearSelectTabelList(){
+        for(let i=1;i<6;i++){
+          this.$refs[`xTable${i}`].clearCheckboxRow()
+        }
+        this.oneList = {};
+        this.selectTableList = [];
       }
 
     }

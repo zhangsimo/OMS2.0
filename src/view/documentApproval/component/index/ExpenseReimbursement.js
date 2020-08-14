@@ -580,6 +580,7 @@ export default {
             if (res.code == 0) {
               this.$Message.success("操作成功");
               this.model = false;
+              this.$emit("updateD")
             }
           }
         } else {

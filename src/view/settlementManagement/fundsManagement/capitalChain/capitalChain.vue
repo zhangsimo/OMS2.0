@@ -482,7 +482,7 @@
           content: '<p>是否删除该条数据</p>',
           onOk: async () => {
             let data ={}
-            data.id = this.oneList.id
+            data.id = this.oneList.id;
             let res = await deleList(data)
             if (res.code === 0){
               this.getList()

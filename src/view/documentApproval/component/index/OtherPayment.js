@@ -272,7 +272,7 @@ export default {
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
-            this.$parent.getQuery()
+            this.$emit("updateD")
           }
         } else {
           this.$Message.error('带*必填');

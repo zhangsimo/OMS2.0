@@ -577,6 +577,7 @@ export default {
         } else {
           data.subjectCode = "1221";
           data.claimType = 6;
+          data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
         }
         data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){

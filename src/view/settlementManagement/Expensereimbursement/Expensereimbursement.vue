@@ -69,10 +69,10 @@
         >导出
         </Button
         >
-        <!--<Button class="ml10" @click="openRegEnter"-->
-        <!--&gt;进项登记及修改-->
-        <!--</Button-->
-        <!--&gt;-->
+        <Button class="ml10" @click="openRegEnter"
+        >进项登记及修改
+        </Button
+        >
       </div>
     </section>
     <section class="con-box">
@@ -552,7 +552,7 @@
       },
       openRegEnter(){
         console.log(this.currRow)
-        if (this.currRow.hasOwnProperty("id")) {
+        if (this.currRow&&this.currRow.hasOwnProperty("id")) {
           this.$refs.registrationEntry.accountData = [];
           this.$refs.registrationEntry.accountData.push(
             this.currRow
@@ -565,7 +565,7 @@
           );
           this.$refs.registrationEntry.modal1 = true;
         } else {
-          this.$message.error("只能勾选计划对账类型为付款的对账单");
+          this.$message.error("请选择数据");
         }
       },
 

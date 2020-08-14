@@ -288,6 +288,7 @@ import {
   saveTreeDetailItem
 } from "@/api/settlementManagement/VoucherInput"
 export default {
+  name:'voucherInput',
   data(){
     return {
       currTab:'client',//当前tab页
