@@ -25,7 +25,7 @@
       <div><span>销售发票导入数据</span></div>
       <div style="display:flex" class="mt20 mb20">
         <div class="db ml20">
-          <span>开票单位：</span>
+          <span>开票公司：</span>
           <Select v-model="form.invoiceUnit" style="width:180px" clearable>
             <Option
               v-for="item in invoice.issuingOfficeList"
@@ -341,7 +341,8 @@ export default {
         invoiceNo: "",
         receiptUnit: "",
         page: 0,
-        size: 9999
+        size: 9999,
+        invoiceUnit: "",
       },
       allSelectList: [],
       proTypeList: [],
@@ -416,6 +417,7 @@ export default {
     }
   },
   mounted() {
+    this.form.invoiceUnit = this.$store.state.user.userData.makeCode;
     this.getShop();
     this.proTypeList.map(itm => {
       this.$refs.registrationEntry.orgName = itm.name;
