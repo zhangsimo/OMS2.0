@@ -150,12 +150,6 @@ export default class TemporaryPurchase extends Vue {
     }
   }
 
-
-  keydown($event){
-    if ($event.$event.keyCode == 9){
-      this.editNextCell($event.$table)
-    }
-  }
   //------------------------------------------------------------------------//
   //表格tab切换可编辑部位
   async editNextCell($table){
@@ -208,6 +202,11 @@ export default class TemporaryPurchase extends Vue {
       }
     }
   }
+  keydown($event){
+    if ($event.$event.keyCode == 9){
+      this.editNextCell($event.$table)
+    }
+  }
   //批量上传失败
   onFormatError(file) {
     this.$Message.error('只支持xls xlsx后缀的文件')
@@ -220,7 +219,11 @@ export default class TemporaryPurchase extends Vue {
       } else {
         this.$Message.success("导入成功");
       }
-      this.tableData = [...this.tableData, ...response.data.details].map( el => {
+      let arrData = response.data.details.map(item => {
+        item.isOldFlag = true
+        return item
+      })
+      this.tableData = [...this.tableData, ...arrData].map( el => {
         el.uuid = v4();
         return el;
       })
@@ -240,9 +243,13 @@ export default class TemporaryPurchase extends Vue {
     let upload: any = this.$refs.upload;
     upload.clearFiles()
   };
+  //下载模板
+  down(){
+    down('1900000000')
+  };
+
   // 合计采购金额
   private totalAmt: number = 0;
-
   // 票据类型
   private pjTypes: Array<Option> = new Array();
   // 结算方式
@@ -281,73 +288,6 @@ export default class TemporaryPurchase extends Vue {
   // 采购订单信息表格数据
   private tableData: Array<any> = new Array();
 
-  private options1: any = {
-    disabledDate(date: any) {
-      return date && date.valueOf() < Date.now() - 86400000;
-    }
-  }
-
-  private options2: any = {
-    disabledDate: this.options2DisabledDate,
-  }
-
-  private options2DisabledDate(date: any) {
-    const orderDate = this.formPlanmain.orderDate;
-    return date && orderDate && date.valueOf() < orderDate;
-  }
-  // 初始化主数据
-  //---- 判断是否是高级查询
-  private isMore: boolean = false;
-  //---- 初始方法
-  private async getListData() {
-    this.purchaseOrderTable.loading = true;
-    let params: any = {}
-    let data: any = {}
-    data.showSelf = this.showSelf;
-    params.size = this.purchaseOrderTable.page.size;
-    params.page = this.purchaseOrderTable.page.num - 1;
-    if (this.quickDate.length > 0) {
-      data.startTime = this.quickDate[0];
-      data.endTime = this.quickDate[1];
-    }
-    if (this.purchaseType != 999 && this.purchaseType) {
-      data.billStatusId = this.purchaseType;
-    }
-    let res: any;
-    if (!this.isMore) {
-      res = await api.temporaryFindPageByDynamicQuery(params, data)
-    } else {
-      if (this.moreData != null) {
-        data = { ...data, ...this.moreData };
-      }
-      res = await api.temporaryQueryByConditions(params, data);
-    }
-    if (res.code == 0) {
-      this.isAdd = true;
-      this.isInput = true;
-      this.tableData = new Array();
-      const ref: any = this.$refs['formplanref'];
-      ref.resetFields();
-      this.formPlanmain.guestId = '';
-      this.formPlanmain.serviceId = '';
-      this.purchaseOrderTable.loading = false;
-      this.purchaseOrderTable.page.total = res.data.totalElements;
-      this.purchaseOrderTable.tbdata = res.data.content;
-      this.purchaseOrderTable.tbdata.forEach((el: any) => {
-        Array.isArray(el.details) && el.details.forEach((d: any) => {
-          d.isOldFlag = true;
-        })
-      })
-      for(let b of this.purchaseOrderTable.tbdata){
-        b._highlight = false
-        if(b.id==this.selectLeftItemId){
-          b._highlight = true;
-          this.setFormPlanmain(b);
-          break;
-        }
-      }
-    }
-  }
   private salesList: Array<any> = new Array();
   private async getAllSales() {
     let res: any = await getSales();
@@ -360,9 +300,10 @@ export default class TemporaryPurchase extends Vue {
     }
   }
   private selectOrderMan(val: any) {
-    this.formPlanmain.orderMan = val.label || "";
-    this.formPlanmain.orderManId = val.value || "";
+      this.formPlanmain.orderMan = "";
+      this.formPlanmain.orderManId = "";
   }
+
 
   // 采购订单列表-翻页
   private purchaseOrderTableChangePage(p: number) {
@@ -403,17 +344,18 @@ export default class TemporaryPurchase extends Vue {
   }
   //---- 新增方法
   private addPro() {
-    const ref: any = this.$refs['formplanref'];
     if (!this.isAdd) {
       return this.$Message.error('请先保存数据');
     }
+    const ref: any = this.$refs['formplanref'];
     ref.resetFields();
     const currentRowTable: any = this.$refs["currentRowTable"];
     currentRowTable.clearCurrentRow();
+    this.selectLeftItemId = "";
     for(let b of this.purchaseOrderTable.tbdata){
       b._highlight = false
     }
-    this.selectLeftItemId = "";
+    this.selectTableRow=null;
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -423,7 +365,6 @@ export default class TemporaryPurchase extends Vue {
       billTypeId: "", // 票据类型
       settleTypeId: "020501",  // 结算方式
       storeId: "", // 入库仓
-      orderDate: "", // 订货日期
       planArriveDate: "", // 预计到货日期
       remark: "", // 备注
       directCompanyId: "", // 直发门店
@@ -475,6 +416,7 @@ export default class TemporaryPurchase extends Vue {
         data.orderDate = tools.transTime(data.orderDate);
         data.planArriveDate = data.planArriveDate ? tools.transTime(data.planArriveDate) : ""
         data.directCompanyId = data.directCompanyId ? data.directCompanyId : "0";
+        // data._highlight=true
       } else {
         this.$Message.error('请添加配件或完善订单信息后再提交!');
         data = null;
@@ -490,6 +432,7 @@ export default class TemporaryPurchase extends Vue {
     if (!data) {
       return null;
     }
+    obj._highlight=true
     if(!obj.directCompanyId) {
       obj.directCompanyId = this.formPlanmain.directCompanyId ? this.formPlanmain.directCompanyId : "0";
     }
@@ -505,6 +448,7 @@ export default class TemporaryPurchase extends Vue {
 
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
+    this.selectTableRow._highlight=true
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
@@ -525,11 +469,6 @@ export default class TemporaryPurchase extends Vue {
       title: '是否提交',
       onOk: async () => {
         let data: any = this.formdata(refname);
-
-        // if(!data.directCompanyId){
-        //   this.selectTableRow.directCompanyId = 0;
-        // }
-
         if (!data) return;
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
@@ -702,10 +641,9 @@ export default class TemporaryPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
-    v = JSON.parse(JSON.stringify(v));
+    // v = JSON.parse(JSON.stringify(v));
     //记录当前点击的id
     this.selectLeftItemId = v.id
-
     this.deletePartArr = new Array();
     this.tmpDeletePartArr = new Array();
     const currentRowTable: any = this.$refs["currentRowTable"];
@@ -759,7 +697,7 @@ export default class TemporaryPurchase extends Vue {
 
   private setFormPlanmain(v:any){
     if (v) {
-      v = JSON.parse(JSON.stringify(v));
+      // v = JSON.parse(JSON.stringify(v));
       this.selectTableRow = v;
       this.mainId = v.id;
       this.tableData = (v.details || []).map( el => {
@@ -832,7 +770,9 @@ export default class TemporaryPurchase extends Vue {
     if (columnIndex === 8) {
       let totals = 0;
       let sumarr = data.map(el => {
-        return el.orderQty * el.orderPrice;
+        let orderQty = isNaN(el.orderQty * 1) ? 0 : el.orderQty * 1;
+        let orderPrice = isNaN(el.orderPrice * 1) ? 0 : el.orderPrice * 1;
+        return orderQty * orderPrice;
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
       this.totalAmt = totals;
@@ -962,7 +902,78 @@ export default class TemporaryPurchase extends Vue {
       this.isMore = false;
     }
   }
+  private options1: any = {
+    disabledDate(date: any) {
+      return date && date.valueOf() < Date.now() - 86400000;
+    }
+  }
 
+  private options2: any = {
+    disabledDate: this.options2DisabledDate,
+  }
+
+  private options2DisabledDate(date: any) {
+    const orderDate = this.formPlanmain.orderDate;
+    return date && orderDate && date.valueOf() < orderDate;
+  }
+  // 初始化主数据
+  //---- 判断是否是高级查询
+  private isMore: boolean = false;
+  //---- 初始方法
+  private async getListData() {
+    this.purchaseOrderTable.loading = true;
+    let params: any = {}
+    let data: any = {}
+    data.showSelf = this.showSelf;
+    params.size = this.purchaseOrderTable.page.size;
+    params.page = this.purchaseOrderTable.page.num - 1;
+    if (this.quickDate.length > 0) {
+      data.startTime = this.quickDate[0];
+      data.endTime = this.quickDate[1];
+    }
+    if (this.purchaseType != 999 && this.purchaseType) {
+      data.billStatusId = this.purchaseType;
+    }
+    let res: any;
+    if (!this.isMore) {
+      res = await api.temporaryFindPageByDynamicQuery(params, data)
+    } else {
+      if (this.moreData != null) {
+        data = { ...data, ...this.moreData };
+      }
+      res = await api.temporaryQueryByConditions(params, data);
+    }
+    if (res.code == 0) {
+      this.isAdd = true;
+      this.isInput = true;
+      this.tableData = new Array();
+      const ref: any = this.$refs['formplanref'];
+      ref.resetFields();
+      this.formPlanmain.guestId = '';
+      this.formPlanmain.serviceId = '';
+      this.purchaseOrderTable.loading = false;
+      this.purchaseOrderTable.page.total = res.data.totalElements;
+      this.purchaseOrderTable.tbdata = res.data.content;
+      this.purchaseOrderTable.tbdata.forEach((el: any) => {
+        Array.isArray(el.details) && el.details.forEach((d: any) => {
+          d.isOldFlag = true;
+        })
+      })
+      if (this.selectLeftItemId) {
+        for (let b of this.purchaseOrderTable.tbdata) {
+          b._highlight = false
+          if (b.id == this.selectLeftItemId) {
+            b._highlight = true;
+            this.setFormPlanmain(b);
+            break;
+          }
+        }
+      } else {
+        this.purchaseOrderTable.tbdata[0]._highlight = true
+        this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
+      }
+    }
+  }
 
   throwNameFun(v) {
     this.selectSupplierName(v);
@@ -1021,10 +1032,6 @@ export default class TemporaryPurchase extends Vue {
     })
   }
 
-  //下载模板
-  down(){
-    down('1900000000')
-  };
 
   private showOwen() {
     tools.setSession("self", { temporaryPurchase: this.showSelf });

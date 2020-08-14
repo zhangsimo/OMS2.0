@@ -673,7 +673,7 @@ export default class PlannedPurchaseOrder extends Vue {
           for(let b of this.purchaseOrderTable.tbdata){
             b._highlight = false
             if(b.id==this.selectLeftItemId){
-              console.log(123)
+              // console.log(123)
               b._highlight = true;
               this.setFormPlanmain(b);
               break;
@@ -906,13 +906,18 @@ export default class PlannedPurchaseOrder extends Vue {
           d.isOldFlag = true;
         })
       })
-      for(let b of this.purchaseOrderTable.tbdata){
-        b._highlight = false
-        if(b.id==this.selectLeftItemId){
-          b._highlight = true;
-          this.setFormPlanmain(b);
-          break;
+      if(this.selectLeftItemId){
+        for(let b of this.purchaseOrderTable.tbdata){
+          b._highlight = false
+          if(b.id==this.selectLeftItemId){
+            b._highlight = true;
+            this.setFormPlanmain(b);
+            break;
+          }
         }
+      }else{
+        this.purchaseOrderTable.tbdata[0]._highlight=true
+        this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
       }
     }
   }

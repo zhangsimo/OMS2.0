@@ -158,8 +158,9 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="queryEntry"
+          :disabled="ownEnterList"
           v-has="'input'"
-        >查询进项核销</button>
+        >进项发票核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -405,6 +406,10 @@
     <registrationEntry ref="registrationEntry" />
     <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>
     <no-tax ref="noTax" :information="reconciliationStatement" :parameter="{}"></no-tax>
+<!--    //人工对账-->
+    <invoiceApplyTost ref="invoiceApplyTost" @getnewList="getNeWlist"></invoiceApplyTost>
+
+
   </div>
 </template>
 <script>
@@ -436,6 +441,8 @@ import Monthlyreconciliation from "./components/Monthlyreconciliation";
 import bus from './Popup/Bus'
 import NoTax from "./Popup/noTax";
 import { getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
+import invoiceApplyTost from "@/view/settlementManagement/invoiceAdministration/components/invoiceApplyTost"
+
 
 export default {
   name:'accountStatement',
@@ -447,7 +454,8 @@ export default {
     Monthlyreconciliation,
     salepopup,
     hedgingInvoice,
-    settlementMoadl
+    settlementMoadl,
+    invoiceApplyTost
   },
   data() {
     return {
@@ -508,6 +516,12 @@ export default {
           width: 40,
           className: "tc",
           fixed:"left"
+        },
+        {
+          title:"申请时间",
+          key:'createTime',
+          className:'tc',
+          minWidth:140,
         },
         {
           title: "公司名称",
@@ -727,18 +741,20 @@ export default {
           }
         },
         {
+          title: "对账单状态",
+          key: "statementStatusName",
+          className: "tc",
+          minWidth:120,
+          fixed:"left"
+        },
+        {
           title: "计算结算类型",
           key: "billingTypeName",
           className: "tc",
           minWidth:120,
           fixed:"left"
         },
-        {
-          title: "对账单状态",
-          key: "statementStatusName",
-          className: "tc",
-          minWidth:120
-        },
+
         {
           title: "对账人",
           key: "createUname",
@@ -1183,6 +1199,7 @@ export default {
       reTitle:'撤回原因',//撤销模态框title
       ifRecallApply:true,//是否可以撤回申请
       ifRecallWriteOff:true,//是否可以撤回审核
+      ownEnterList:false,//判断是否可以进项发票核销
     };
   },
   async mounted() {
@@ -1327,7 +1344,6 @@ export default {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         // bus.$emit('account',this.reconciliationStatement)
         this.$router.push({ name: "claimWrite",params: {data:this.reconciliationStatement} });
-        // console.log(this.$cookies)
       } else {
         this.$message.error("请选择一条对账单");
       }
@@ -1353,9 +1369,11 @@ export default {
         this.$message.error("只能勾选计划对账类型为付款的对账单");
       }
     },
-    // 查询进项核销
+    // 进项发票核销
     queryEntry() {
-      this.$router.push({ name: "invoiceAdministrationInvoiceManagement" });
+      this.$refs.invoiceApplyTost.init(this.reconciliationStatement);
+
+      // this.$router.push({ name: "invoiceAdministrationInvoiceManagement" });
     },
     // 查询发票申请
     queryApplication() {
@@ -1431,7 +1449,6 @@ export default {
     },
     // 单据合计方式
     handleSummary({ columns, data }) {
-      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -1470,7 +1487,6 @@ export default {
     },
     // 收付款单合计方式
     summary({ columns, data }) {
-      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -1520,7 +1536,6 @@ export default {
     // 应收/付单据接口
     getdetailsDocuments(obj) {
       detailsDocuments(obj).then(res => {
-        // console.log(res);
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
             item.index = index + 1;
@@ -1609,6 +1624,7 @@ export default {
       }
       if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil){this.hedgingfalg = true}
       if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
+      this.ownEnterList = row.ownEnterList == 0 ? true : false
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       this.data2 = []

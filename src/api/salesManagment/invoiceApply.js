@@ -42,6 +42,14 @@ export function subManualList(data) {
     data
   });
 }
+//确认核销2
+export function subManualList2(data) {
+  return axios.request({
+    url: `${api.omsSettle}/entryRegistration/manualCancellation`,
+    method: "post",
+    data
+  });
+}
 //更新快运单号
 export function updateNumber(params) {
   return axios.request({

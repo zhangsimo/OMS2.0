@@ -39,10 +39,11 @@
         <Table
           border
           :columns="columns"
-          :data="data"
+          :data="data2"
           ref="summary"
           highlight-row
           max-height="400"
+          @on-selection-change="requireMore"
         ></Table>
         <Page
           :total="pagetotal"
@@ -99,7 +100,7 @@
           :columns="columns1"
           :data="data1"
           highlight-row
-          @on-selection-change="requireMore"
+          @on-selection-change="requireMore2"
           max-height="400"
         ></Table>
       </div>
@@ -108,7 +109,7 @@
   </Modal>
 </template>
 <script>
-import { getManualList, subManualList } from "_api/salesManagment/invoiceApply";
+import { getManualList, subManualList2 } from "_api/salesManagment/invoiceApply";
 import { goshop } from "@/api/settlementManagement/shopList";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
@@ -127,6 +128,12 @@ export default {
         salesInvoiceId: ""
       },
       columns: [
+        {
+          title: "选择",
+          minWidth: 50,
+          type: "selection",
+          fixed: "left"
+        },
         {
           title: "序号",
           className: "tc",
@@ -154,7 +161,7 @@ export default {
         },
         {
           title: "申请日期",
-          key: "applyDate",
+          key: "createTime",
           className: "tc"
         },
         {
@@ -241,7 +248,7 @@ export default {
           className: "tc"
         }
       ],
-      data: [],
+      data2: [],
       columns1: [
         {
           title: "选择",
@@ -434,6 +441,42 @@ export default {
               )
             ]);
           }
+        },
+        {
+          title: "本次核销金额",
+          key: "rpAmt",
+          className: "tc",
+          width: 180,
+          render: (h, params) => {
+            return h("el-input-number", {
+              props: {
+                precision: 2,
+                controls: false,
+                value: params.row.paymentBalance || 0.0,
+                size: "small",
+                min: 0.0,
+                max:
+                  params.row.paymentBalance < this.data[0].applyAmt
+                    ? params.row.paymentBalance
+                    : this.data[0].applyAmt
+              },
+              on: {
+                input: val => {
+                  this.data1[params.index].rpAmt = val;
+                }
+              }
+            });
+          }
+        },
+        {
+          title: "已核销金额",
+          key: "writeOffAmount",
+          className: "tc"
+        },
+        {
+          title: "剩余未核销金额",
+          key: "paymentBalance",
+          className: "tc"
         },
         {
           title: "价税合计金额",
@@ -791,6 +834,7 @@ export default {
         guestId: ""
       },
       allSelectList: [],
+      allSelectListBottom: [],
       proTypeList: [],
       invoice: {
         issuingOfficeList: []
@@ -801,16 +845,20 @@ export default {
         invoiceSellerName: ""
       },
       pagetotal: 0,
-      page:{
-        num:1,
-        size:10
-      },
+      page: {
+        num: 1,
+        size: 10
+      }
     };
   },
   methods: {
     init(data) {
-      this.query();
-      this.data1 = data;
+      if (Array.isArray(data)) {
+        this.query();
+        this.data1 = data;
+      }else{
+        this.data2.push(data)
+      }
       this.modals = true;
     },
     changedate(daterange) {
@@ -853,10 +901,10 @@ export default {
         endDate: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        orgId: this.form.guestId,
+        orgId: this.form.guestId
       };
-      obj.page = this.page.num -1
-      obj.size = this.page.size
+      obj.page = this.page.num - 1;
+      obj.size = this.page.size;
       AccountStatement(obj).then(res => {
         this.pagetotal = res.data.totalElements;
         if (res.data.content.length !== 0) {
@@ -866,23 +914,23 @@ export default {
             item.billingTypeName = item.billingType.name;
             item.statementStatusName = item.statementStatus.name;
           });
-          this.data = res.data.content;
+          this.data2 = res.data.content;
         } else {
-          this.data = [];
+          this.data2 = [];
         }
       });
     },
     submitConfig() {
-      if (!this.allSelectList.length) {
+      if (!(this.allSelectList.length && this.allSelectListBottom.length)) {
         this.$Message.warning("请选择要核销的数据");
-      } else if (this.allSelectList.length >= 2) {
+      } else if (this.allSelectList.length >= 2 || this.allSelectListBottom.length >= 2) {
         this.$Message.warning("请选择一条数据");
       } else {
         this.hxOjb.salesInvoiceId = this.allSelectList[0].id;
-        this.hxOjb.invoiceApplyId = this.data[0].id;
-        let d = this.data1.find(el => el.id == this.allSelectList[0].id);
+        this.hxOjb.invoiceApplyId = this.allSelectListBottom[0].id;
+        let d = this.data1.find(el => el.id == this.allSelectListBottom[0].id);
         this.hxOjb.rpAmt = d.rpAmt;
-        subManualList(this.hxOjb).then(res => {
+        subManualList2(this.hxOjb).then(res => {
           if (res.code === 0) {
             this.$Message.warning("核销成功");
             this.model1 = false;
@@ -890,7 +938,10 @@ export default {
               invoiceApplyId: "",
               salesInvoiceId: ""
             };
-            this.$parent.getDataList();
+            if(this.$parent.getDataList) {
+              this.$parent.getDataList();
+            }
+            this.$emit('getnewList' ,{})
           }
         });
       }
@@ -900,6 +951,9 @@ export default {
     },
     requireMore(val) {
       this.allSelectList = val;
+    },
+    requireMore2(val) {
+      this.allSelectListBottom = val;
     },
     getTabList() {
       let data = this.form1;
@@ -930,6 +984,7 @@ export default {
     }
   },
   mounted() {
+    this.form1.invoiceSellerName = this.$store.state.user.userData.makeCode
     this.getShop();
     this.proTypeList.map(itm => {
       this.$refs.registrationEntry.orgName = itm.name;

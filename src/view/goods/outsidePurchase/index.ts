@@ -972,6 +972,7 @@ export default class OutsidePurchase extends Vue {
     let self:any = tools.getSession("self");
     this.showSelf = Reflect.has(self, "outsidePurchase") ? self.outsidePurchase : true;
 
+
     setTimeout(() => {
       this.getDomHeight();
     }, 0);

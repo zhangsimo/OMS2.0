@@ -38,9 +38,9 @@ export default {
         receiveGuestId: [
           { required: true, message: "往来单位", trigger: "change" }
         ],
-        // receiver: [
-        //   { required: true, message: "收款人账户必填", trigger: "change" }
-        // ],
+        receiverId: [
+          { required: true, message: "收款人账户必填", trigger: "change" }
+        ],
         receiveBank: [
           { required: true, message: "开户行名称必填", trigger: "blur" }
         ],
@@ -129,6 +129,8 @@ export default {
           this.formInline = res.data;
           this.formInline.receiverId=res.data.receiverId
           this.remoteMethod(res.data.receiveGuestName)
+          //获取收款账户
+          this.getAccountNameList({value:res.data.receiveGuestId});
           this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
             voucherPictures: res.data.voucherPictures,
@@ -174,7 +176,9 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      this.getAccountNameList(row);
+      if(row){
+        this.getAccountNameList(row);
+      }
     },
     //付款人账号搜索出发
     remoteMethod2(query){
@@ -188,6 +192,7 @@ export default {
         if (rep.data.length >0) {
           this.setReceiverInfo(rep.data[0]);
         } else {
+          this.formInline.receiver = "";
           this.formInline.receiverId = "";
           this.formInline.receiveBank = "";
           this.formInline.receiveBankNo = "";
@@ -215,9 +220,12 @@ export default {
       }
     },
     setReceiverInfo(row) {
-      this.formInline.receiverId = row.id;
-      this.formInline.receiveBank = row.accountBank;
-      this.formInline.receiveBankNo = row.accountBankNo;
+      if(row){
+        this.formInline.receiver = row.accountName;
+        this.formInline.receiverId = row.id;
+        this.formInline.receiveBank = row.accountBank;
+        this.formInline.receiveBankNo = row.accountBankNo;
+      }
     },
 
     changeCollectionUname(v) {
@@ -289,6 +297,7 @@ export default {
           if (res.code == 0) {
             this.$Message.success("操作成功");
             this.model = false;
+            this.$emit("updateD")
           }
         } else {
           this.$Message.error("带*必填");
