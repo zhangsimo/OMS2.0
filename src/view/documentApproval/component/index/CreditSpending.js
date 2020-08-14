@@ -39,7 +39,7 @@ export default {
         receiveGuestId:[
           {required: true, message: '往来单位', trigger: 'change'}
         ],
-        receiver:[
+        receiverId:[
           {required: true, message: '收款人账户必填', trigger: 'change'}
         ],
         receiveBank:[
