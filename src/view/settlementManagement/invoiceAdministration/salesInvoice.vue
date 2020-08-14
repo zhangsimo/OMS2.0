@@ -318,7 +318,7 @@
 
     <Modal v-model="exportData" title="发票导入" width="400">
       <p class="mt20 mb20">导入前请先下载模板</p>
-      <!-- <p>本店开票公司为：{{}}，请导入本开票公司数据</p> -->
+      <p>本店开票公司为：{{ invoiceUnitName }}，请导入本开票公司数据</p>
       <div slot="footer" class="exportBtn">
         <Button type="info" v-has="'export'" @click="exportDown"
           >模板下载</Button
@@ -369,6 +369,7 @@ export default {
   },
   data() {
     return {
+      invoiceUnitName: "",
       value: [],
       proTypeList: [], //分店
       exportData: false,
@@ -1629,6 +1630,9 @@ export default {
       await getOptionSalesList("KPDW").then(res => {
         if (res.code === 0) {
           this.invoiceUnitOption = res.data;
+          let code = this.form.invoiceUnit
+          let item = this.invoiceUnitOption.find(el => el.itemCode === code);
+          this.invoiceUnitName = item != undefined ? item.itemName : "";
         }
       });
     },
@@ -1659,6 +1663,7 @@ export default {
     }
   },
   mounted() {
+    this.form.invoiceUnit = this.$store.state.user.userData.makeCode;
     this.getShop();
     this.getOption();
   }

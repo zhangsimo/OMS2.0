@@ -768,12 +768,16 @@ export default {
             this.draftShow = v.billStatusId.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
-            for (let b of this.sellOrderTable.tbdata) {
-              b._highlight = false;
-              if (b.id == this.id) {
-                b._highlight = true;
-                break;
+            if (this.id) {
+              for (let b of this.tbdata) {
+                b._highlight = false
+                if (b.id == this.sellOrderTable.tbdata) {
+                  b._highlight = true;
+                  break;
+                }
               }
+            } else {
+              this.sellOrderTable.tbdata[0]._highlight = true
             }
           }
         });
@@ -813,6 +817,7 @@ export default {
         b._highlight = false;
       }
       this.sellOrderTable.tbdata.unshift(this.PTrow);
+      // this.sellOrderTable.tbdata[0]._highlight = true;
       this.isAdd = false;
     },
     //获取客户属性
@@ -960,13 +965,18 @@ export default {
             }
           })
           this.page.total = res.data.totalElements;
-          for (let b of this.sellOrderTable.tbdata) {
-            b._highlight = false;
-            if (b.id == this.currentRow.id) {
-              b._highlight = true;
-              this.selectTabelData(b);
-              break;
+          if (this.id) {
+            for (let b of this.sellOrderTable.tbdata) {
+              b._highlight = false
+              if (b.id == this.id) {
+                b._highlight = true;
+                this.selectTabelData(b);
+                break;
+              }
             }
+          } else {
+            this.sellOrderTable.tbdata[0]._highlight = true
+            this.selectTabelData(this.tbdata[0]);
           }
         }
       });

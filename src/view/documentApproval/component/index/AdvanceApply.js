@@ -38,9 +38,9 @@ export default {
         receiveGuestId: [
           { required: true, message: "往来单位", trigger: "change" }
         ],
-        // receiver: [
-        //   { required: true, message: "收款人账户必填", trigger: "change" }
-        // ],
+        receiverId: [
+          { required: true, message: "收款人账户必填", trigger: "change" }
+        ],
         receiveBank: [
           { required: true, message: "开户行名称必填", trigger: "blur" }
         ],
