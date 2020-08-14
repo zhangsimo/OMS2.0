@@ -126,11 +126,44 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="收款金额" field="incomeMoney" min-width="100">
+        <vxe-table-column title="收款金额" min-width="100">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li
+                v-for="(item, index) of row.payeeWay"
+                :key="index"
+                class="flex"
+              >
+                <span class="listChild">{{ item.incomeMoney }}</span>
+              </li>
+            </ul>
+          </template>
         </vxe-table-column>
-        <vxe-table-column title="付款金额" field="paymentMoney"  min-width="100">
+        <vxe-table-column title="付款金额"  min-width="100">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li
+                v-for="(item, index) of row.payeeWay"
+                :key="index"
+                class="flex"
+              >
+                <span class="listChild">{{ item.paymentMoney }}</span>
+              </li>
+            </ul>
+          </template>
         </vxe-table-column>
-        <vxe-table-column title="账户所属门店"  field="shopName"  min-width="120">
+        <vxe-table-column title="账户所属门店"  min-width="120">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li
+                v-for="(item, index) of row.payeeWay"
+                :key="index"
+                class="flex"
+              >
+                <span class="listChild">{{ item.shopName }}</span>
+              </li>
+            </ul>
+          </template>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="收付款信息">

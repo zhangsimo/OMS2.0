@@ -945,6 +945,13 @@
           this.claimedSubjectList = this.$refs.claim.currentClaimed;
           this.$refs.otherCollectionClaims.claimTit = claimTit;
           if (this.claimedSubjectList[0].incomeMoney > 0) {
+            this.claimedSubjectList.map(item => {
+              if(claimTit = "预收款认领"){
+                item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+              }else{
+                item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
+              }
+            })
             this.$refs.otherCollectionClaims.open();
           } else {
             claimTit = "预收款认领"
@@ -966,6 +973,13 @@
           this.claimedSubjectList = this.$refs.claim.currentClaimed;
           this.$refs.otherPaymentClaim.claimTit = claimTit;
           if (this.claimedSubjectList[0].paidMoney < 0) {
+            this.claimedSubjectList.map(item => {
+              if(claimTit = "预付款认领"){
+                item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+              }else{
+                item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
+              }
+            })
             this.$refs.otherPaymentClaim.open();
           } else {
             claimTit == "预付款认领"

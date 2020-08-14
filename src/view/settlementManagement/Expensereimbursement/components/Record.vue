@@ -152,12 +152,14 @@ export default {
       } else {
         let res = await api.findByAccountNo({ accountNo: this.$parent.serviceId });
         if(res.code == 0) {
-          res.data.map( item => {
-            if (item.sort.name == '付款'){
-              item.checkAmt = -item.checkAmt
-            }
-          })
-          this.recordLists = res.data;
+          if(res.data&&res.data.length>0){
+            res.data.map( item => {
+              if (item.sort.name == '付款'){
+                item.checkAmt = -item.checkAmt
+              }
+            })
+            this.recordLists = res.data;
+          }
         }
       }
     },
