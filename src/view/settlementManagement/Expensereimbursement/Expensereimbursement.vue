@@ -69,10 +69,10 @@
         >导出
         </Button
         >
-        <Button class="ml10" @click="openRegEnter"
-        >进项登记及修改
-        </Button
-        >
+        <!--<Button class="ml10" @click="openRegEnter"-->
+        <!--&gt;进项登记及修改-->
+        <!--</Button-->
+        <!--&gt;-->
       </div>
     </section>
     <section class="con-box">
