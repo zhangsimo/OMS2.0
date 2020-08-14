@@ -39,7 +39,7 @@
         <Table
           border
           :columns="columns"
-          :data="data"
+          :data="data2"
           ref="summary"
           highlight-row
           max-height="400"
@@ -161,7 +161,7 @@ export default {
         },
         {
           title: "申请日期",
-          key: "applyDate",
+          key: "createTime",
           className: "tc"
         },
         {
@@ -248,7 +248,7 @@ export default {
           className: "tc"
         }
       ],
-      data: [],
+      data2: [],
       columns1: [
         {
           title: "选择",
@@ -853,8 +853,12 @@ export default {
   },
   methods: {
     init(data) {
-      this.query();
-      this.data1 = data;
+      if (Array.isArray(data)) {
+        this.query();
+        this.data1 = data;
+      }else{
+        this.data2.push(data)
+      }
       this.modals = true;
     },
     changedate(daterange) {
@@ -881,11 +885,11 @@ export default {
       }
     },
     query() {
-      this.page.num = 1;
+      this.page.num = 1
       this.getAccountStatement();
     },
     pageCode(page) {
-      this.page.num = page;
+      this.page.num = page
       this.getAccountStatement();
     },
     // 对账总表
@@ -910,9 +914,9 @@ export default {
             item.billingTypeName = item.billingType.name;
             item.statementStatusName = item.statementStatus.name;
           });
-          this.data = res.data.content;
+          this.data2 = res.data.content;
         } else {
-          this.data = [];
+          this.data2 = [];
         }
       });
     },
@@ -934,7 +938,10 @@ export default {
               invoiceApplyId: "",
               salesInvoiceId: ""
             };
-            this.$parent.getDataList();
+            if(this.$parent.getDataList) {
+              this.$parent.getDataList();
+            }
+            this.$emit('getnewList' ,{})
           }
         });
       }
