@@ -417,7 +417,10 @@ export default {
           {
             title: "盘点日期",
             key: "checkDate",
-            minWidth: 120
+            minWidth: 120,
+            render(h, params) {
+              return h("span", {}, moment(params.row.checkDate).format("YYYY-MM-DD HH:mm:ss"));
+            }
           },
           {
             title: "盘点员",
