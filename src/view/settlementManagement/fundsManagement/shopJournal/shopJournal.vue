@@ -154,7 +154,7 @@
               stripe
               ref="xTable1"
               align="center"
-              height="500"
+              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData"
@@ -210,7 +210,7 @@
               stripe
               ref="xTable2"
               align="center"
-              height="500"
+              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData1"
@@ -266,7 +266,7 @@
               stripe
               ref="xTable3"
               align="center"
-              height="500"
+              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData2"
@@ -322,7 +322,7 @@
               stripe
               ref="xTable4"
               align="center"
-              height="500"
+              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData3"
@@ -377,7 +377,7 @@
               stripe
               ref="xTable5"
               align="center"
-              height="500"
+              max-height="400"
               size="mini"
               style="width: 3000px"
               highlight-hover-row
@@ -425,6 +425,21 @@
           </div>
         </TabPane>
       </Tabs>
+
+    </div>
+    <div class="clearfix" style="background-color:#fff;">
+      <Page
+        class-name="page-con fr pt10 mr20"
+        show-total
+        show-sizer
+        size="small"
+        :total='page.total'
+        :current="page.num"
+        :page-size="page.size"
+        :page-size-opts="page.opts"
+        @on-page-size-change="changePageSize"
+        @on-change="changePageNum"
+      />
     </div>
   </div>
 </template>
@@ -492,6 +507,12 @@
         accountCode:'',//账号
         getAccShopList:[],
         selectTableList:[],//勾选的表格数据
+        page:{
+          opts:[100,300,500,800,1000],
+          num:1,
+          total:0,
+          size:100
+      }
       };
     },
     async mounted () {
@@ -521,6 +542,20 @@
       }
     },
     methods: {
+
+      //分页切换
+      changePageNum(p){
+        this.page.num = p;
+        this.getList();
+      },
+
+      //分页切换条数
+      changePageSize(size){
+        this.page.num = 1;
+        this.page.size = size;
+        this.getList();
+      },
+
       // 往来单位选择
       async getOne(query) {
         this.company = [];
@@ -644,8 +679,8 @@
       //获取表格信息
       async getList(){
         let data = {}
-        data.page = 0
-        data.size = 9999
+        data.page = this.page.num - 1
+        data.size = this.page.size
         data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ''
         data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
 
@@ -676,6 +711,7 @@
           if(res.data.content.length > 0){
             this.allMoneyList = res.data.content[0].moneyList
           }
+          this.page.total = res.data.totalElements;
           this.tableData = res.data.content
           this.tableData1 = []
           this.tableData2 = []
