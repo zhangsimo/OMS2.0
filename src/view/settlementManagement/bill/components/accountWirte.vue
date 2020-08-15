@@ -8,6 +8,7 @@
       ref="companyGuset"
       v-model="companyName"
       filterable
+      clearable
       remote
       class="w150"
       :disabled="isCanChange"
