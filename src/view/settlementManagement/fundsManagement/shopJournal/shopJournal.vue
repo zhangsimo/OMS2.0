@@ -751,6 +751,7 @@
         this.oneList = this.selectTableList[0];
         // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
         if (this.oneList.collateState == 1) return this.$Message.error('只能修改未核销数据')
+        this.$refs.changeModal.formCustom=this.selectTableList[0]
         this.$refs.changeModal.open()
       },
 
