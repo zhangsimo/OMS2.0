@@ -1030,15 +1030,16 @@ export default {
       if (!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!");
       }
+      let orderT=tools.transTime(this.formPlan.orderDate)
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
           preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate));
+          this.formPlan.orderDate=orderT;
           try {
             await this.$refs.xTable.validate();
             let data = {};
             data = this.formPlan;
-            data.orderDate = tools.transTime(this.formPlan.orderDate);
             data.billStatusId = null;
             let res = await getSave(data);
             if (res.code === 0) {
@@ -1046,6 +1047,7 @@ export default {
               this.isNew = true;
               this.$Message.success("保存成功");
               this.formPlan = {};
+              this.id=null
               this.getLeftList();
               this.$refs.formPlan.resetFields();
             } else {
