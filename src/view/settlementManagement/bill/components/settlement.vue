@@ -200,6 +200,7 @@ export default {
         item.businessTypeName = item.businessType.name;
       });
       this.BusinessType = [...this.BusinessType, ...val.two];
+      this.BusinessType =  this.BusinessType.filter( item => item.reconciliationAmt != 0 )
       this.checkComputed();
     });
     //选择科目
@@ -214,6 +215,7 @@ export default {
         rpAmt: 0,
         unAmtLeft: 0
       });
+
     });
     bus.$on("content", val => {
       this.obj = val;
@@ -329,6 +331,7 @@ export default {
               item.businessTypeName = item.businessType.name;
             });
             this.BusinessType = res.data.two;
+            this.BusinessType =  this.BusinessType.filter( item => item.reconciliationAmt != 0 )
             this.checkComputed();
           }
         });
