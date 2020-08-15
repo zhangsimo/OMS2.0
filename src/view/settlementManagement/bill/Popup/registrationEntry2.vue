@@ -305,7 +305,7 @@
             key: "receiptsAmount",
             className: "tc",
             render: (h, params) => {
-              return h("span", params.row.receiptsAmount.toFixed(2));
+              return h("span", (params.row.receiptsAmount||0).toFixed(2));
             }
           },
           {
@@ -313,7 +313,7 @@
             key: "remainingInputAmount",
             className: "tc",
             render: (h, params) => {
-              return h("span", params.row.remainingInputAmount.toFixed(2));
+              return h("span", (params.row.remainingInputAmount||0).toFixed(2));
             }
           }
         ], //对账单

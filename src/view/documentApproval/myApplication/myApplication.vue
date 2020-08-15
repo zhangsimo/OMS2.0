@@ -192,19 +192,19 @@
     <!--<approval :approvalTit="approvalTit"></approval>-->
     <!--      对应各个模态框-->
     <!--      费用报销报销-->
-    <ExpenseReimbursement ref="ExpenseReimbursement" :list="modelType"></ExpenseReimbursement>
+    <ExpenseReimbursement ref="ExpenseReimbursement" :list="modelType" @updateD="query"></ExpenseReimbursement>
     <!--      其他付款申请-->
-    <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
+    <OtherPayment ref="OtherPayment" :list="modelType" @updateD="query"></OtherPayment>
     <!--      应公借支申请-->
-    <PublicRequest ref="PublicRequest" :list="modelType"></PublicRequest>
+    <PublicRequest ref="PublicRequest" :list="modelType" @updateD="query"></PublicRequest>
     <!--      请示单申请-->
-    <AskForInstrucions ref="AskForInstrucions" :list="modelType"></AskForInstrucions>
+    <AskForInstrucions ref="AskForInstrucions" :list="modelType" @updateD="query"></AskForInstrucions>
     <!--      预收款支出申请-->
-    <CreditSpending ref="CreditSpending" :list="modelType"></CreditSpending>
+    <CreditSpending ref="CreditSpending" :list="modelType" @updateD="query"></CreditSpending>
     <!--      预付款申请-->
-    <AdvanceApply ref="AdvanceApply" :list="modelType"></AdvanceApply>
+    <AdvanceApply ref="AdvanceApply" :list="modelType" @updateD="query"></AdvanceApply>
     <!--      内部资金调拨-->
-    <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
+    <InternalFinance ref="InternalFinance" :list="modelType" @updateD="query"></InternalFinance>
     <!--      发票对冲申请-->
     <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelType"></invoice-offset-request>
     <!--      销售开票-->
@@ -499,12 +499,12 @@ export default {
       params.page = this.page.num - 1;
       params.size = this.page.size;
       if (this.value.length != 0) {
-        params.startTime = moment(this.value[0])
+        params.startTime = this.value[0]? moment(this.value[0])
           .startOf("day")
-          .format("YYYY-MM-DD HH:mm:ss");
-        params.endTime = moment(this.value[1])
+          .format("YYYY-MM-DD HH:mm:ss"):"";
+        params.endTime = this.value[1]?moment(this.value[1])
           .endOf("day")
-          .format("YYYY-MM-DD HH:mm:ss");
+          .format("YYYY-MM-DD HH:mm:ss"):"";
       }
       params.billStatus = this.Reconciliationtype;
       params.applyType = this.ApplicationType;

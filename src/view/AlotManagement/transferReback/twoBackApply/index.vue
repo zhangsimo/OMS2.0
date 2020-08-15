@@ -825,12 +825,12 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          params.guestOrgid = this.getArray[i].isInternalId;
-          params.guestId = this.getArray[i].id;
-        }
-      }
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+      //     params.guestOrgid = this.getArray[i].isInternalId;
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
       // for (var i = 0; i < params.detailVOS.length; i++) {
       //   params.detailVOS[i].id = "";
       // }
@@ -1315,7 +1315,7 @@ export default {
         this.showit = false;
         this.Leftcurrentrow.guestName = row.shortName;
         this.Leftcurrentrow.guestId = row.guestId;
-        this.Leftcurrentrow.guestOrgid = row.isInternalId;
+        this.Leftcurrentrow.guestOrgid = row.id;
         const tata = this;
         setTimeout(() => {
           tata.showit = true;

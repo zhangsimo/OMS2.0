@@ -146,7 +146,7 @@
                 style="margin-bottom: 0px"
               >
                 <Select
-                  @on-change="changeCollectionUname"
+                  @on-change="getCompany"
                   v-model="formInline.receiveGuestId"
                   filterable
                   style="width: 90%;padding-left: 5px"

@@ -171,6 +171,7 @@
                       style="width: 160px"
                       type="date"
                       placeholder="请选择退货日期"
+                      @quickDate="setDataFun"
                       v-model="formPlan.orderDate"
                       :disabled="draftShow != 0 || isNew"
                     ></DatePicker>
@@ -592,7 +593,7 @@ export default {
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
         orderDate: [
-          { required: true, type: "date", message: " ", trigger: "change" }
+          { required: true, type: "date", message: "采购退货日期不能为空", trigger: "change" }
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
@@ -675,6 +676,10 @@ export default {
       if ($event.$event.keyCode == 9){
         this.editNextCell($event.$table)
       }
+    },
+    //选择日期
+    setDataFun(v) {
+      this.formPlan.orderDate = v;
     },
     getDomHeight() {
       this.$nextTick(() => {
@@ -762,37 +767,39 @@ export default {
             this.isAdd = true;
             this.currentRow = v;
             this.id = v.id;
-            this.formPlan.orderDate = tools.transTime(v.orderDate);
+            this.formPlan.orderDate = new Date(v.orderDate);
             this.tableData = v.details;
             this.formPlan = v;
             this.draftShow = v.billStatusId.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
-            for (let b of this.sellOrderTable.tbdata) {
-              b._highlight = false;
-              if (b.id == this.id) {
-                b._highlight = true;
-                break;
+            if (this.id) {
+              for (let b of this.tbdata) {
+                b._highlight = false
+                if (b.id == this.sellOrderTable.tbdata) {
+                  b._highlight = true;
+                  break;
+                }
               }
+            } else {
+              this.sellOrderTable.tbdata[0]._highlight = true
             }
           }
         });
-
-        {
-        }
       } else {
         if (v.id) {
           v.fullName = v.guestName;
           this.isNew = false;
           this.currentRow = v;
           this.id = v.id;
-          this.formPlan.orderDate = tools.transTime(v.orderDate);
+          this.formPlan.orderDate = new Date(v.orderDate);
           this.tableData = v.details;
           this.formPlan = v;
           this.draftShow = v.billStatusId.value;
           this.selectTableList = [];
         }
       }
+      // console.log(v.orderDate,tools.transTime(v.orderDate),new Date(v.orderDate),111111)
     },
     //新增按钮
     addOneList() {
@@ -802,6 +809,7 @@ export default {
       this.formPlan = {
         details: [],
         orderManId: this.PTrow.orderManId,
+        orderDate:tools.transTime(new Date()),
         orderMan: this.PTrow.orderMan,
         storeId: this.StoreId //调入仓库
       };
@@ -813,6 +821,7 @@ export default {
         b._highlight = false;
       }
       this.sellOrderTable.tbdata.unshift(this.PTrow);
+      // this.sellOrderTable.tbdata[0]._highlight = true;
       this.isAdd = false;
     },
     //获取客户属性
@@ -960,13 +969,18 @@ export default {
             }
           })
           this.page.total = res.data.totalElements;
-          for (let b of this.sellOrderTable.tbdata) {
-            b._highlight = false;
-            if (b.id == this.currentRow.id) {
-              b._highlight = true;
-              this.selectTabelData(b);
-              break;
+          if (this.id) {
+            for (let b of this.sellOrderTable.tbdata) {
+              b._highlight = false
+              if (b.id == this.id) {
+                b._highlight = true;
+                this.selectTabelData(b);
+                break;
+              }
             }
+          } else {
+            this.sellOrderTable.tbdata[0]._highlight = true
+            this.selectTabelData(this.sellOrderTable.tbdata[0]);
           }
         }
       });
@@ -1012,18 +1026,20 @@ export default {
     },
     //保存
     isSave() {
+      this.formPlan.orderDate=new Date(this.formPlan.orderDate)
       if (!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!");
       }
+      let orderT=tools.transTime(this.formPlan.orderDate)
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
           preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate));
+          this.formPlan.orderDate=orderT;
           try {
             await this.$refs.xTable.validate();
             let data = {};
             data = this.formPlan;
-            data.orderDate = tools.transTime(this.formPlan.orderDate);
             data.billStatusId = null;
             let res = await getSave(data);
             if (res.code === 0) {
@@ -1031,6 +1047,7 @@ export default {
               this.isNew = true;
               this.$Message.success("保存成功");
               this.formPlan = {};
+              this.id=null
               this.getLeftList();
               this.$refs.formPlan.resetFields();
             } else {
@@ -1099,6 +1116,7 @@ export default {
 
     //提交
     isSubmit() {
+      this.formPlan.orderDate=new Date(this.formPlan.orderDate)
       if (!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!");
       }

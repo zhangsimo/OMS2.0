@@ -39,7 +39,7 @@ export default {
         receiveGuestId: [
           {required: true, message: '往来单位', trigger: 'change'}
         ],
-        receiver: [
+        receiverId: [
           {required: true, message: '收款人账户必填', trigger: 'change'}
         ],
         receiveBank: [
@@ -272,7 +272,7 @@ export default {
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
-            this.$parent.getQuery()
+            this.$emit("updateD")
           }
         } else {
           this.$Message.error('带*必填');

@@ -321,6 +321,7 @@
     <settlement ref="settlement"></settlement>
     <!--其他付款申请-->
     <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
+    <voucher-input ref="voucherInput" @callBackFun="getCallBack"></voucher-input>
   </div>
 </template>
 
@@ -336,6 +337,7 @@ import claimGuest from "./components/claimGuest";
 import OtherPayment from "../../documentApproval/component/OtherPayment";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
 import { goshop } from "@/api/settlementManagement/shopList";
+import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
 import {
   findAdvance,
   revoke,
@@ -352,9 +354,11 @@ import {
 } from "../../documentApproval/component/utils";
 
 import moment from "moment";
+import VoucherInput from "../fundsManagement/claimWrite/components/components/voucherInput";
 export default {
   name: "settlementManagementOtherPayable",
   components: {
+    VoucherInput,
     quickDate,
     claim,
     settlement,
@@ -658,10 +662,30 @@ export default {
     //认领弹框认领
     claimPay() {
       if (this.claimSelection.length !== 0) {
-        this.$refs.claimGuest.modal = true;
-        this.claimModal = false;
+        // this.$refs.claimGuest.modal = true;
+        this.$refs.voucherInput.subjectModelShowassist = true;
+        this.$refs.voucherInput.Classification = true;
       } else {
         this.$message.error("请先选择数据");
+      }
+    },
+    getCallBack(){
+      if(this.$refs.voucherInput.AssistAccounting){
+        let objItem = this.$refs.voucherInput.voucherItem;
+        let data = {};
+        data.guestId = objItem.id||"";
+        data.financeAccountCashList = this.claimSelection;
+        data.claimType = 0;
+        data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
+        addClaim(data).then(res=>{
+          if(res.code===0){
+            this.$Message.success('认领成功');
+            this.claimModal = false;
+            this.getQuery();
+          }
+        })
+      } else {
+        this.$Message.error('请选择一个往来单位');
       }
     },
     //认领弹框传参数据
