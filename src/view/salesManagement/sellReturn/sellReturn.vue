@@ -171,6 +171,7 @@
                       style="width: 160px"
                       type="date"
                       placeholder="请选择退货日期"
+                      @quickDate="setDataFun"
                       v-model="formPlan.orderDate"
                       :disabled="draftShow != 0 || isNew"
                     ></DatePicker>
@@ -592,7 +593,7 @@ export default {
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
         orderDate: [
-          { required: true, type: "date", message: " ", trigger: "change" }
+          { required: true, type: "date", message: "采购退货日期不能为空", trigger: "change" }
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
@@ -675,6 +676,10 @@ export default {
       if ($event.$event.keyCode == 9){
         this.editNextCell($event.$table)
       }
+    },
+    //选择日期
+    setDataFun(v) {
+      this.formPlan.orderDate = v;
     },
     getDomHeight() {
       this.$nextTick(() => {
@@ -762,7 +767,7 @@ export default {
             this.isAdd = true;
             this.currentRow = v;
             this.id = v.id;
-            this.formPlan.orderDate = tools.transTime(v.orderDate);
+            this.formPlan.orderDate = new Date(v.orderDate);
             this.tableData = v.details;
             this.formPlan = v;
             this.draftShow = v.billStatusId.value;
@@ -781,22 +786,20 @@ export default {
             }
           }
         });
-
-        {
-        }
       } else {
         if (v.id) {
           v.fullName = v.guestName;
           this.isNew = false;
           this.currentRow = v;
           this.id = v.id;
-          this.formPlan.orderDate = tools.transTime(v.orderDate);
+          this.formPlan.orderDate = new Date(v.orderDate);
           this.tableData = v.details;
           this.formPlan = v;
           this.draftShow = v.billStatusId.value;
           this.selectTableList = [];
         }
       }
+      // console.log(v.orderDate,tools.transTime(v.orderDate),new Date(v.orderDate),111111)
     },
     //新增按钮
     addOneList() {
@@ -806,6 +809,7 @@ export default {
       this.formPlan = {
         details: [],
         orderManId: this.PTrow.orderManId,
+        orderDate:tools.transTime(new Date()),
         orderMan: this.PTrow.orderMan,
         storeId: this.StoreId //调入仓库
       };
@@ -976,7 +980,7 @@ export default {
             }
           } else {
             this.sellOrderTable.tbdata[0]._highlight = true
-            this.selectTabelData(this.tbdata[0]);
+            this.selectTabelData(this.sellOrderTable.tbdata[0]);
           }
         }
       });
@@ -1022,6 +1026,7 @@ export default {
     },
     //保存
     isSave() {
+      this.formPlan.orderDate=new Date(this.formPlan.orderDate)
       if (!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!");
       }
@@ -1109,6 +1114,7 @@ export default {
 
     //提交
     isSubmit() {
+      this.formPlan.orderDate=new Date(this.formPlan.orderDate)
       if (!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!");
       }
