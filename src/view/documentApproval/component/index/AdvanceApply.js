@@ -229,6 +229,7 @@ export default {
     },
 
     changeCollectionUname(v) {
+      // console.log(v,1111)
       let arr = this.receiverArr.filter(item => item.id == v);
       this.setReceiverInfo(arr[0]);
     },
