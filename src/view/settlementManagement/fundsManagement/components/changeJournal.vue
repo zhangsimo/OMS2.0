@@ -1,6 +1,6 @@
 <template>
   <Modal v-model="modalShow" title="修改现金日记账" width="700">
-    <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="100" label-colon>
+    <Form ref="formCustom" :model="formCustom" :rules="ruleCustomRalus" :label-width="100" label-colon>
       <Row>
         <Col span="12">
           <FormItem label="所属区域" prop="areaId">
@@ -136,7 +136,7 @@
       return {
         modalShow: false, //模态框状态
         formCustom: {},//form表单数据
-        ruleCustom: {
+        ruleCustomRalus: {
           areaId: [
             {required: true, message: '所属区域必选', trigger: 'change'}
           ],
@@ -192,18 +192,17 @@
     mounted() {
       this.getAllArea()
       this.getsubjectType()
-      this.getAccount()
       this.getclaimShop()
+      this.getAccount()
     },
     methods: {
       open() {
         this.handleReset()
         this.getSubject()
-        this.formCustom =this.list;
+        this.getShopList()
         this.formCustom.createTime = new Date(this.formCustom.createTime);
         this.modalShow = true
-        this.getShopList()
-        if(this.accountList.length>=1){
+        if(this.accountList.length>0){
           this.formCustom.accountCode=this.accountList[0].accountCode
         }
         this.formCustom.claimShopCode=this.formCustom.shopCode

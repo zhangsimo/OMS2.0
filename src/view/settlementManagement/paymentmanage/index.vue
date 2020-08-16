@@ -774,9 +774,9 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.code
+                  title: params.row.orgId
                 }
-              }, params.row.code)
+              }, params.row.orgId)
             ])
           }
         },

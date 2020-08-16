@@ -68,11 +68,11 @@
       </div>
     </section>
 
-    <div class="mt15 warp_table">
+    <div class="mt15">
       <Table
         :columns="columns"
         :data="tableData"
-        max-height="600"
+        height="600"
         size="small"
         border
         stripe

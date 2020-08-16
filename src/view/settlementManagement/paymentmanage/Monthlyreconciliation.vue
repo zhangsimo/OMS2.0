@@ -1377,7 +1377,7 @@ export default {
         if (num===1&&!this.paymentUname)
           return this.$message.error("付款账户不能为空");
       }
-      if (this.collectBaddebt - this.paymentBaddebt > 100) {
+      if (this.paymentBaddebt > 100) {
         if (!this.BadDebtid) {
           // this.$message.error("请输入应收坏账请示单号");
           this.$message({
@@ -1388,7 +1388,7 @@ export default {
           return "";
         }
       }
-      if (this.collectRebate - this.paymentRebate > 100) {
+      if (this.paymentRebate > 100) {
         if (!this.Rebateid) {
           // this.$message.error("请输入应收返利请示单号");
           this.$message({
