@@ -221,7 +221,9 @@ export default {
     },
 
     changeCollectionUname(v){
-      let arr = this.receiverArr.filter(item => item.id==v);
+      let arr = this.receiverArr.filter(item => item.id==v.value);
+      this.formInline.receiveGuestName=this.company.filter(item=>item.value==this.formInline.receiveGuestId)[0].label
+      this.remoteMethod(this.formInline.receiveGuestName)
       this.setReceiverInfo(arr[0]);
     },
 

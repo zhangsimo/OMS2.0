@@ -211,13 +211,17 @@ export default {
     },
 
     setReceiverInfo(row) {
-      this.formInline.receiverId = row.id;
-      this.formInline.receiveBank = row.accountBank;
-      this.formInline.receiveBankNo = row.accountBankNo;
+      if(row){
+        this.formInline.receiverId = row.id;
+        this.formInline.receiveBank = row.accountBank;
+        this.formInline.receiveBankNo = row.accountBankNo;
+      }
     },
 
     changeCollectionUname(v) {
-      let arr = this.receiverArr.filter(item => item.id == v);
+      let arr = this.receiverArr.filter(item => item.id == v.value);
+      this.formInline.receiveGuestName=this.company.filter(item=>item.value==this.formInline.receiveGuestId)[0].label
+      this.getOrignCompany(this.formInline.receiveGuestName)
       this.setReceiverInfo(arr[0]);
     },
 

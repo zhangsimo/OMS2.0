@@ -229,8 +229,9 @@ export default {
     },
 
     changeCollectionUname(v) {
-      // console.log(v,1111)
       let arr = this.receiverArr.filter(item => item.id == v);
+      this.formInline.receiveGuestName=this.company.filter(item=>item.value==this.formInline.receiveGuestId)[0].label
+      this.remoteMethod(this.formInline.receiveGuestName)
       this.setReceiverInfo(arr[0]);
     },
 
