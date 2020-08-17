@@ -433,6 +433,8 @@ import { checkStore } from "@/api/system/systemApi";
 import Procurement from "@/components/Procurement";
 import { v4 } from "uuid"
 import SalesCus from "../../../components/allocation/salesCus";
+import moment from 'moment'
+
 
 export default {
   name: "sellReturn",
@@ -525,7 +527,11 @@ export default {
           {
             title: "退货日期",
             key: "orderDate",
-            minWidth: 120
+            minWidth: 120,
+            render:( h , params) => {
+            let date = moment(params.row.orderDate).format("YYYY-MM-DD")
+            return h('span' ,{},date)
+            }
           },
           {
             title: "退货员",
@@ -821,6 +827,8 @@ export default {
         b._highlight = false;
       }
       this.sellOrderTable.tbdata.unshift(this.PTrow);
+      console.log(this.sellOrderTable.tbdata , 7879)
+
       // this.sellOrderTable.tbdata[0]._highlight = true;
       this.isAdd = false;
     },
