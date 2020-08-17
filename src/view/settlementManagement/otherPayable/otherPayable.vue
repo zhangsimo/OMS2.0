@@ -480,6 +480,7 @@ export default {
         size: this.page.size,
         page: this.page.num - 1
       };
+      this.BranchstoreId==0?obj.orgid="":obj.orgid=this.BranchstoreId
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;

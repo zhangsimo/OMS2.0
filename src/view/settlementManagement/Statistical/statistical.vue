@@ -73,7 +73,6 @@
         :columns="columns"
         :data="tableData"
         height="600"
-        size="small"
         border
         stripe
       ></Table>
@@ -100,95 +99,6 @@ export default {
   },
   data() {
     return {
-      columns2: [
-        {
-          title: 'Name',
-          key: 'name',
-          width: 100,
-          fixed: 'left'
-        },
-        {
-          title: 'Age',
-          key: 'age',
-          width: 100
-        },
-        {
-          title: 'Province',
-          key: 'province',
-          width: 100
-        },
-        {
-          title: 'City',
-          key: 'city',
-          width: 100
-        },
-        {
-          title: 'Address',
-          key: 'address',
-          width: 200
-        },
-        {
-          title: 'Postcode',
-          key: 'zip',
-          width: 100
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          fixed: 'right',
-          width: 120,
-          render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'small'
-                }
-              }, 'View'),
-              h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'small'
-                }
-              }, 'Edit')
-            ]);
-          }
-        }
-      ],
-      data3: [
-        {
-          name: 'John Brown',
-          age: 18,
-          address: 'New York No. 1 Lake Park',
-          province: 'America',
-          city: 'New York',
-          zip: 100000
-        },
-        {
-          name: 'Jim Green',
-          age: 24,
-          address: 'Washington, D.C. No. 1 Lake Park',
-          province: 'America',
-          city: 'Washington, D.C.',
-          zip: 100000
-        },
-        {
-          name: 'Joe Black',
-          age: 30,
-          address: 'Sydney No. 1 Lake Park',
-          province: 'Australian',
-          city: 'Sydney',
-          zip: 100000
-        },
-        {
-          name: 'Jon Snow',
-          age: 26,
-          address: 'Ottawa No. 2 Lake Park',
-          province: 'Canada',
-          city: 'Ottawa',
-          zip: 100000
-        }
-      ],
       // 数据类
       columns: [
         {
@@ -288,7 +198,7 @@ export default {
         {
           title: "本日经营活动收入小计",
           key: "businessActivitiesMoney",
-          width: 100
+          width: 150
         },
         {
           title: "内部往来：拨入",
@@ -298,12 +208,12 @@ export default {
         {
           title: "投、融资活动产生的现金收入",
           key: "financingActivitiesMoney",
-          width: 100
+          width: 200
         },
         {
           title: "本日资金收入小计",
           key: "dayMoney",
-          width: 100
+          width: 150
         },
         {
           title: "付出应付",
@@ -313,7 +223,7 @@ export default {
         {
           title: "付出应付（总部代付）",
           key: "headPaycopeMoney",
-          width: 100
+          width: 150
         },
         {
           title: "采购支出合计",
@@ -363,17 +273,12 @@ export default {
         {
           title: "费用报销业务类型",
           key: "expenseReimbursement",
-          width: 100
+          width: 150
         },
         {
           title: "本日资金支出小计",
           key: "deathMoney",
-          width: 100
-        },
-        {
-          title: "本日资金结余-期末余额",
-          key: "endingBalanceMoney",
-          width: 200
+          width: 150
         },
         {
           title: "内部往来：拨出",
@@ -383,13 +288,18 @@ export default {
         {
           title: "投、融资活动产生的现金支",
           key: "outActivitiesMoney",
-          width: 100
+          width: 200
         },
         {
           title: "本日资金支出小计",
           key: "capitalSpendingMoney",
-          width: 100
-        }
+          width: 150
+        },
+        {
+          title: "期末余额",
+          key: "endingBalanceMoney",
+          width: 200
+        },
       ],
       tableData: [], // 主表
       dates: [], // 查询日期

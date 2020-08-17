@@ -83,27 +83,33 @@
           ></vxe-table-column>
           <vxe-table-column
             field="serviceId"
+            width="200"
             title="入库单号"
           ></vxe-table-column>
           <vxe-table-column
             field="guestName"
+            width="150"
             title="供应商名称"
           ></vxe-table-column>
           <vxe-table-column
             field="remark"
+            width="150"
             title="备注"
           ></vxe-table-column>
           <vxe-table-column
             field="enterAmt"
+            width="100"
             title="入库金额"
           ></vxe-table-column>
           <vxe-table-column
             field="enterDate"
+            width="150"
             title="入库日期"
           ></vxe-table-column>
-          <vxe-table-column field="code" title="业务单号"></vxe-table-column>
+          <vxe-table-column field="code" title="业务单号" width="150"></vxe-table-column>
           <vxe-table-column
             field="enterTypeIdName"
+            width="100"
             title="入库类型"
           ></vxe-table-column>
         </vxe-table>
@@ -143,28 +149,34 @@
 
           <vxe-table-column
             field="partCode"
+            width="150"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
+            width="150"
             title="配件名称"
           ></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
           <vxe-table-column
             field="systemUnitId"
             title="单位"
+            width="60"
           ></vxe-table-column>
           <vxe-table-column
             field="enterQty"
             title="入库数量"
+            width="100"
           ></vxe-table-column>
           <vxe-table-column
             field="enterPrice"
+            width="100"
             title="入库单价"
           ></vxe-table-column>
           <vxe-table-column
             field="outableQty"
+            width="100"
             title="可售数量"
           ></vxe-table-column>
         </vxe-table>

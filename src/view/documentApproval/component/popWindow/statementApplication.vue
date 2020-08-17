@@ -87,6 +87,7 @@ export default {
     //保存提交关闭模态框
     colse(){
       this.modelShow = false
+      this.$emit("updateD")
     },
     init() {
       this.hander();

@@ -189,3 +189,13 @@ export function getDraftList (params){
     params
   })
 }
+
+
+//费用报销 进项登记修改
+export function getExpenDetail (params){
+  return axios.request({
+    url: `${api.omsSettle}/entryRegistration/findDetailById`,
+    method: 'get',
+    params
+  })
+}

@@ -12,7 +12,7 @@
             <span v-if="type == 3">出库日期：</span>
             <span v-if="type == 4">提交日期：</span>
             <DatePicker
-              v-model="search.auditDate"
+              @on-change="getDataQuick2"
               :value="search.auditDate"
               type="daterange"
               placement="bottom-start"
@@ -29,13 +29,33 @@
               clearable
             />
           </div>
+<!--          <div class="db mr10">-->
+<!--            <Select-->
+<!--              class="w240"-->
+<!--              multiple-->
+<!--              v-model="search.partBrandList"-->
+<!--              placeholder="请选择品牌"-->
+<!--              @on-change="select1"-->
+<!--            >-->
+<!--              <Option-->
+<!--                v-for="item in bandArr"-->
+<!--                :value="item.label"-->
+<!--                :key="item.id"-->
+<!--              >{{ item.label }}</Option-->
+<!--              >-->
+<!--            </Select>-->
+<!--          </div>-->
           <div class="db mr10">
             <Select
               class="w240"
-              multiple
-              v-model="search.partBrandList"
-              placeholder="请选择品牌"
+              clearable
+              label-in-value
+              filterable
+              remote
+              :remote-method="partBrandRemote"
               @on-change="select1"
+              v-model="search.partBrand"
+              placeholder="请选择品牌"
             >
               <Option
                 v-for="item in bandArr"
@@ -88,6 +108,8 @@ import QuickDate from "_c/getDate/dateget";
 import more from "./more";
 import * as api from "_api/reportForm/index.js";
 import { creat } from "@/view/settlementManagement/components";
+import { getBrandList } from "@/view/reportForm/until.js"
+
 export default {
   components: { QuickDate, more },
   props: {
@@ -105,7 +127,7 @@ export default {
         isPanne: true,
         auditDate: [], // 提交日期
         content: "", // 编码名称
-        partBrandList: [], // 品牌
+        partBrand: "", // 品牌
         guestFullName: "", // 供应商
         orgid: "" // 门店
       }
@@ -121,21 +143,8 @@ export default {
     }
   },
   async mounted() {
-    let resB = await api.getParamsBrandPart();
+    this.bandArr=await getBrandList(this.search.partBrand)
     let resE = await api.getStorelist();
-    if (resB.code == 0) {
-      for (let quality of resB.data.content) {
-        if (quality.children.length <= 0) {
-          break;
-        }
-        quality.children.forEach(el => {
-          el.label = el.name;
-          el.value = el.code;
-          el.id = el.id;
-          this.bandArr.push(el);
-        });
-      }
-    }
     if (resE.code == 0) {
       let data = resE.data;
       Object.keys(data).forEach(key => {
@@ -145,25 +154,26 @@ export default {
   },
   methods: {
     select1(option) {
-      if (option.slice(-1)[0] == 1) {
-        option = [1];
-      } else if (option.includes(1)) {
-        option = option.filter(el => el != 1);
-      }
-      this.search.partBrandList = option;
+      this.search.partBrand = option.label;
+    },
+    async partBrandRemote(query){
+      this.bandArr=await getBrandList(query)
     },
     // 快速日期查询
     async getDataQuick(v) {
       this.search.auditDate = v;
-      let arr = await creat("", this.$store);
-      this.search.orgid = arr[1];
       if (v.length >= 2) {
-        this.search.content="";this.search.partBrandList=[];this.search.guestFullName=""
+        let arr = await creat("", this.$store);
+        this.search.orgid = arr[1];
+        this.search.content="";this.search.partBrand="";this.search.guestFullName=""
         this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1] ,orgid:this.search.orgid});
       } else {
-        this.search.content="";this.search.partBrandList=[];this.search.guestFullName=""
+        this.search.content="";this.search.partBrand="";this.search.guestFullName=""
         this.$emit("search", { isPanne: true, orgid:this.search.orgid });
       }
+    },
+    getDataQuick2(v){
+      this.search.auditDate = v;
     },
     // 查询
     query() {

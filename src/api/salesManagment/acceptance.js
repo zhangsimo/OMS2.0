@@ -35,3 +35,23 @@ export function newPurchaseOrder(data) {
         data
     });
   }
+
+
+//获取华胜代付入库列表
+export function getHsOrderList(params,data) {
+  return axios.request({
+    url: `${api.omsOrder}/omsHarsonOrderEnter/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+}
+
+//获取华胜代付入库处理过账
+export function setPostDetail(data) {
+  return axios.request({
+    url: `${api.omsOrder}/omsHarsonOrderEnter/orderDetail`,
+    method: "post",
+    data
+  });
+}

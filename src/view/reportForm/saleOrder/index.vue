@@ -6,11 +6,11 @@
         <tabOne ref="tabOne" />
       </TabPane>
       <TabPane label="销售出库明细表">
-        <panne :type="2" @search="search2" @export="exportxls('tabOne')" />
+        <panne :type="2" @search="search2" @export="exportxls('tabTwo')" />
         <tabTwo ref="tabTwo" />
       </TabPane>
       <TabPane label="销售退货明细表">
-        <panne :type="3" @search="search3" @export="exportxls('tabOne')" />
+        <panne :type="3" @search="search3" @export="exportxls('tabThree')" />
         <tabThree ref="tabThree" />
       </TabPane>
     </Tabs>
@@ -46,7 +46,7 @@ export default {
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";
@@ -69,7 +69,7 @@ export default {
         data.code? data2.outCode = data.code : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : "";
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
@@ -90,7 +90,7 @@ export default {
         data.code? data2.outCode = data.code : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }

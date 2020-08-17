@@ -52,7 +52,7 @@ export default {
         data.code ? data2.code = data.code : "";  //受理单号
         data.serviceId ? data2.acceptCode=data.serviceId:"" //申请单号
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }
@@ -65,6 +65,8 @@ export default {
         // 基本查询
         delete data.isPanne;
         data2 = data;
+        data.createTimeStart ? data2.allotFinishedStartDate = data.createTimeStart : "";
+        data.createTimeEnd ? data2.allotFinishedEndDate = data.createTimeEnd : "";
       } else {
         data.orgid?data2.orgid=data.orgid:"";
         data.timeEnd ? data2.allotFinishedEndDate = data.timeEnd : "";
@@ -74,7 +76,7 @@ export default {
         data.code ? data2.code = data.code : "";
         data.outCode ? data2.serviceId = data.outCode : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }
@@ -87,6 +89,8 @@ export default {
         // 基本查询
         delete data.isPanne;
         data2 = data;
+        data.createTimeStart ? data2.allotFinishedStartDate = data.createTimeStart : "";
+        data.createTimeEnd ? data2.allotFinishedEndDate = data.createTimeEnd : "";
       } else {
         data.orgid?data2.orgid=data.orgid:"";
         data.timeEnd ? data2.allotFinishedEndDate = data.timeEnd : "";
@@ -96,7 +100,7 @@ export default {
         data.outCode ? data2.code = data.outCode : "";
         data. code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }
@@ -109,6 +113,8 @@ export default {
         // 基本查询
         delete data.isPanne;
         data2 = data;
+        data.createTimeStart ? data2.allotEnterTimeStart = data.createTimeStart : "";
+        data.createTimeEnd ? data2.allotEnterTimeEnd = data.createTimeEnd : "";
       } else {
         data.orgid?data2.orgid=data.orgid:"";
         data.timeEnd ? data2.allotEnterTimeEnd = data.timeEnd : "";
@@ -118,7 +124,7 @@ export default {
         data.code ? data2.code = data.code : "";
         data.outCode ? data2.serviceId = data.outCode : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : [];
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.commitUid = data.orderman : "";
       }

@@ -180,12 +180,13 @@ export default {
         size: 10,
         total: 0
       },
+      data:{},
       tableDataAll: [],
       tableData: []
     };
   },
   mounted() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     // 查询表
@@ -205,6 +206,30 @@ export default {
         this.tableData = this.tableDataAll;
         this.page.total = res.data.totalElements;
       }
+    },
+    //导出
+    async exportFun(){
+      let pageObj = {
+        page:0,
+        size:this.page.total
+      }
+      return new Promise(async (resolve, reject) => {
+        let res = await api.getStockShiftOut(this.data,pageObj);
+        if (res.code == 0) {
+          let arrData = (res.data.content || []).map(el => {
+            if ([1, "1", "是"].includes(el.taxSign)) {
+              el.taxSign = "是";
+            }
+            if ([0, "0", "否"].includes(el.taxSign)) {
+              el.taxSign = "否";
+            }
+            return el;
+          });
+          resolve(arrData);
+        }else{
+          reject()
+        }
+      })
     },
     //分页
     changePage(p) {
