@@ -343,7 +343,7 @@ export default {
         {
           title: "入库日期",
           align: "center",
-          key: "enterDate",
+          key: "createTime",
           minWidth: 80
         },
 

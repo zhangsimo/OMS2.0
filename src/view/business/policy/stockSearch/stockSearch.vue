@@ -931,7 +931,7 @@ export default {
         },
         {
           title: "入库日期",
-          key: "enterDate",
+          key: "createTime",
           minWidth: 120,
           tooltip: true
         },
