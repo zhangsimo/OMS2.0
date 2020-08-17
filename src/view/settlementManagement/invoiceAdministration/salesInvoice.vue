@@ -515,13 +515,13 @@ export default {
         //   className: "tc"
         // },
         {
-          title: "发票名称",
+          title: "开票类型",
           key: "invoiceTypeName",
           className: "tc",
           minWidth: 180
         },
         {
-          title: "发票代码",
+          title: "发票种类",
           key: "invoiceCode",
           className: "tc",
           minWidth: 100,

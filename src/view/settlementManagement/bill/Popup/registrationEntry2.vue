@@ -195,7 +195,8 @@
     submit,
     deleteRows,
     detailedIncrease,
-    deleteIncrease
+    deleteIncrease,
+    getExpenDetail
   } from "@/api/bill/popup";
   import Bus from "./Bus";
 
@@ -413,7 +414,7 @@
       },
       // 明细查询
       detailed() {
-        detailedIncrease({id: this.arrId[2]}).then(res => {
+        getExpenDetail({id: this.arrId[2]}).then(res => {
           if (res.code === 0) {
             this.tableData = res.data;
             if (this.tableData.length < 1) {
@@ -571,7 +572,7 @@
         date = date.getFullYear().toString() + m + d;
         this.purchaserList = this.$parent.Branchstore;
         //获取该对账单是油品还是配件
-        let statementType = this.$parent.reconciliationStatement.statementType && this.$parent.reconciliationStatement.statementType.value || "";
+        let statementType = this.$parent.currRow.statementType && this.$parent.currRow.statementType.value || "";
         if (this.tableData.length > 0) {
           let lastData = this.tableData[this.tableData.length - 1]
           this.tableData.push({

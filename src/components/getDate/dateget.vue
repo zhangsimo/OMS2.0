@@ -43,7 +43,7 @@ export default {
   //     }
   //   }
   // },
-  created() {console.log(this.sizeString)},
+  created() {},
   mounted() {
     this.getval(this.searchQuick)
   },

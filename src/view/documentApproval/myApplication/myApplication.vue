@@ -212,7 +212,7 @@
     <!--      不含税开票-->
     <tax-exclusive-application ref="taxExclusiveApplication" :modelType="modelType"></tax-exclusive-application>
     <!--对账单申请-->
-    <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
+    <statement-application ref="statementApplication" :modelType="modelType" @updateD="query"></statement-application>
     <!--其他查看-->
     <view-other-model ref="viewOtherModel" :main-store="mainStore" :bill-type-arr="settleTypeList"></view-other-model>
     <!--客户信用调查-->
