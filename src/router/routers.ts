@@ -282,19 +282,19 @@ export default [
         component: () =>
           import("@/view/salesManagement/hsOrder/hsIndex.vue")
       },
-      {
-        path: "/hsOrder/hsPayment",
-        name: "hsPayment",
-        mark: "2004",
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "华胜代付入库",
-          keepAlive: false,
-          // hideInMenu:true
-        },
-        component: () =>
-          import("@/view/salesManagement/hsOrder/hsPayment.vue")
-      }
+      // {
+      //   path: "/hsOrder/hsPayment",
+      //   name: "hsPayment",
+      //   mark: "2004",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "华胜代付入库",
+      //     keepAlive: false,
+      //     // hideInMenu:true
+      //   },
+      //   component: () =>
+      //     import("@/view/salesManagement/hsOrder/hsPayment.vue")
+      // }
     ]
   },
   {
