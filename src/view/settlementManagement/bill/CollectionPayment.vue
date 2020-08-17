@@ -788,13 +788,16 @@ export default {
     },
     //导出 收付款单查询/收付款单查询记录
     async reportPayment(type){
-      console.log(type,1111)
-      if(type==1){
-        let arr=this.selectData.map(item=>item.id)
-        this.exportQueryMethod(arr)
-      }else if(type==2){
-        let arr=this.selectData.map(item=>item.accountNo)
-        this.exportLogMethod(arr)
+      if(this.selectData.length>0){
+        if(type==1){
+          let arr=this.selectData.map(item=>item.id)
+          this.exportQueryMethod(arr)
+        }else if(type==2){
+          let arr=this.selectData.map(item=>item.accountNo)
+          this.exportLogMethod(arr)
+        }
+      }else{
+        this.$Message.error("请选择需要导出的数据")
       }
     },
     // 导出
