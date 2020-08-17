@@ -1,5 +1,5 @@
 <template>
-  <div class="warps content-oper content-oper-flex">
+  <div class="warps content-oper content-oper-flex" id="parent2">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
@@ -227,7 +227,9 @@ export default {
         this.$refs.right.rightTableHeight = wrapH - planFormH - 110;
       });
     },
-
+    gitlistValue(){
+      return this.$refs.OrderLeft.gitlistValue()
+    },
     //用于父子组件之间的方法通信
     getDutyInfo() {
       this.setSave();
