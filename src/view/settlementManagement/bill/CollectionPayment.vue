@@ -56,13 +56,27 @@
               <span>更多</span>
             </button>
           </div>
+<!--          <div class="db ml10">-->
+<!--            <button-->
+<!--              class="mr10 ivu-btn ivu-btn-default"-->
+<!--              type="button"-->
+<!--              @click="report"-->
+<!--              v-has="'export'"-->
+<!--            >导出</button>-->
+<!--          </div>-->
           <div class="db ml10">
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
-              @click="report"
-              v-has="'export'"
-            >导出</button>
+              @click="reportPayment(2)"
+            >导出收付款单记录</button>
+          </div>
+          <div class="db ml10">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="reportPayment(1)"
+            >导出收付款单</button>
           </div>
         </div>
       </div>
@@ -77,6 +91,8 @@
           show-summary
           highlight-row
           :summary-method="handleSummary"
+          @on-select="selectTabSummary"
+          @on-select-all="selectAllSummary"
           @on-row-click="election"
           max-height="400"
         >
@@ -139,7 +155,7 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+import { findGuest,importPaymentRecord/**导出收付款单*/,exportMethod } from "_api/settlementManagement/advanceCollection.js";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 // import selectDealings from "./components/selectCompany";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -152,6 +168,11 @@ import { goshop } from '@/api/settlementManagement/shopList';
 import moment from "moment";
 import { set } from "xe-utils/methods";
 import index from "../../admin/roles";
+import api from "_conf/url";
+import {v4} from "uuid";
+import Cookies from "js-cookie";
+import {TOKEN_KEY} from "../../../libs/util";
+import qs from "qs"
 export default {
   name: "billCollectionPayment",
   components: {
@@ -179,6 +200,12 @@ export default {
         }
       ],
       columns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center',
+          className: "tc"
+        },
         {
           title: "序号",
           key: "num",
@@ -245,9 +272,9 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.num
+                  title: params.row.fno
                 }
-              }, params.row.num)
+              }, params.row.fno)
             ])
           }
         },
@@ -548,7 +575,9 @@ export default {
       fno: "", //更多查询收付款单号
       accountNo: "", //更多查询对账单号
       createUname: "", //收付款人
-      startStatusName: "" //审核状态
+      startStatusName: "", //审核状态
+
+      selectData:[]
     };
   },
   async mounted() {
@@ -571,9 +600,9 @@ export default {
     }
   },
   methods: {
-    query() {
-      this.getQuery();
-    },
+    // query() {
+    //   this.getQuery();
+    // },
     async getOne(query) {
       this.company = [];
       if (query != "") {
@@ -716,6 +745,57 @@ export default {
     // tab标签页的name
     tabName(name) {
       this.tab = name;
+    },
+    //checkbox 单个选择
+    selectTabSummary(selection){
+      this.selectData=selection
+    },
+    //checkbox 选择全部
+    selectAllSummary(selection){
+      this.selectData=selection
+    },
+    //导出 收付款单查询 接口
+    exportQueryMethod(data) {
+      let str=""
+      data.map((item,index)=>{
+        if(index!=data.length-1){
+          str+=`&ids=${item}&`
+        }else{
+          str+=`&ids=${item}`
+        }
+      })
+      let PaymentRecordUrl=api.omsSettle +
+        `/payment/record/export/paymentRecord?${str}` +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+      location.href =PaymentRecordUrl
+    },
+    //导出 收付款单查询记录 接口
+    exportLogMethod(data) {
+      let str=""
+      data.map((item,index)=>{
+        if(index!=data.length-1){
+          str+=`&accounNos=${item}&`
+        }else{
+          str+=`&accounNos=${item}`
+        }
+      })
+      let paymentDetailUrl=api.omsSettle +
+        `/payment/record/export/paymentDetail?${str}` +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+      location.href =paymentDetailUrl
+    },
+    //导出 收付款单查询/收付款单查询记录
+    async reportPayment(type){
+      console.log(type,1111)
+      if(type==1){
+        let arr=this.selectData.map(item=>item.id)
+        this.exportQueryMethod(arr)
+      }else if(type==2){
+        let arr=this.selectData.map(item=>item.accountNo)
+        this.exportLogMethod(arr)
+      }
     },
     // 导出
     report() {
