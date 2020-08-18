@@ -6,11 +6,11 @@
         <tabOne ref="tabOne" />
       </TabPane>
       <TabPane label="销售出库明细表">
-        <panne :type="2" @search="search2" @export="exportxls('tabOne')" />
+        <panne :type="2" @search="search2" @export="exportxls('tabTwo')" />
         <tabTwo ref="tabTwo" />
       </TabPane>
       <TabPane label="销售退货明细表">
-        <panne :type="3" @search="search3" @export="exportxls('tabOne')" />
+        <panne :type="3" @search="search3" @export="exportxls('tabThree')" />
         <tabThree ref="tabThree" />
       </TabPane>
     </Tabs>
@@ -37,6 +37,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:""
         data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartTime = data.atimeStart : "";
@@ -45,7 +46,7 @@ export default {
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.auditor ? data2.auditorId = data.auditor : "";
@@ -61,13 +62,14 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
         data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.code? data2.outCode = data.code : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : "";
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
@@ -81,13 +83,14 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.auditStartDate = data.ctimeStart : "";
         data.ctimeEnd ? data2.auditEndDate = data.ctimeEnd : "";
         data.guestFullName ? data2.guestFullName = data.guestFullName : "";
         data.code? data2.outCode = data.code : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }

@@ -2,14 +2,10 @@
   <div>
     <Modal v-model="modal" :title="claimTit" width="800">
       <Row class="dbd" v-if="claimTit=='预收款认领'">
-        <i-col span="8">
-          <button class="ivu-btn ivu-btn-default mr10" type="button" @click="openClimed('预收款认领')">{{claimTit}}</button>
-        </i-col>
-        <i-col span="6">
+        <i-col span="15">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
-           <!-- @change="changeModel" -->
         </i-col>
-        <i-col span="10" v-show="voucherinputModel">
+        <i-col span="9" class="tr">
           <Form :model="formValidate" ref="form" :rules="ruleValidate">
             <FormItem label="选择辅助核算" prop="voucherInput">
               <Row>
@@ -24,29 +20,26 @@
           </Form>
         </i-col>
       </Row>
-      <Row  class="dbd" v-else>
-        <i-col span="8">
-          <button class="ivu-btn ivu-btn-default mr10" type="button" @click="openClimed('其他收款认领')">{{claimTit}}</button>
-        </i-col>
-        <i-col span="6">
-          <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成其他收款单号</Checkbox>
-           <!-- @change="changeModel" -->
-        </i-col>
-        <i-col span="10">
+      <Row class="dbd" v-else>
+        <i-col span="15">
           <Form :model="formValidate" ref="form" :rules="ruleValidate">
             <FormItem label="选择辅助核算" prop="voucherInput">
               <Row>
                 <i-col span="8">
-                    <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
+                  <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
                 <i-col span="2">
-                    <Button type="default" @click="openVoucherInput">辅助核算</Button>
+                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
               </Row>
             </FormItem>
           </Form>
         </i-col>
+        <i-col span="9" class="tr">
+          <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
+        </i-col>
       </Row>
+
       <vxe-table
         border
         align="center"
@@ -94,6 +87,11 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
+      <div slot="footer">
+        <Button type="primary" @click="openClimed('预收款认领')" class="mr10" v-if="claimTit=='预收款认领'">确定</Button>
+        <Button type="primary" @click="openClimed('其他收款认领')" class="mr10" v-else>确定</Button>
+        <Button type="default" @click="modal = false">取消</Button>
+      </div>
     </Modal>
     <!-- 认领弹框 -->
     <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
@@ -132,7 +130,7 @@ import {findGuest} from "@/api/settlementManagement/advanceCollection.js";
 import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
 import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
-
+import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
 export default {
   props: {
     accrued: "", //表格数据
@@ -195,6 +193,12 @@ export default {
     open() {
       this.oneSubject = {};
       this.modal = true;
+      this.$nextTick(()=>{
+        this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
+      })
+
+
+
     },
     //判断是否可选择
     checkMethod({ row }) {
@@ -205,25 +209,24 @@ export default {
       this.oneSubject = row;
     },
     openVoucherInput() {
+      if(this.claimTit=='预收款认领'){
+        this.$refs.voucherInput.Classification = false;
+      }else{
+        this.$refs.voucherInput.Classification = true;
+      }
       this.$refs.voucherInput.subjectModelShowassist = true;
     },
     async openClimed(claimTit){
-        if(this.voucherinputModel==false){
-          const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
-          if (errMap) {
-          } else {
-            this.$refs.claimGuest.modal=true
-          }
-        }else{
-          this.getMessage()
-          if(this.MessageValue==""){
-            this.$Message.error("请选择辅助核算")
-          }else{
-            //this.$message.success(claimTit+"成功")
-            // this.claimedList(2);
-            this.ok()
-          }
+      this.getMessage()
+      if(this.MessageValue==""){
+        this.$Message.error("请选择辅助核算")
+      }else{
+        const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+        if (errMap) {
+        } else {
+          this.ok()
         }
+      }
     },
     //校验表单
     handleSubmit(callback) {
@@ -366,45 +369,33 @@ export default {
       }
     },
     async ok(){
+      let data = {};
+      data.detailId = this.accrued[0].id;
+      data.claimMoney=this.accrued[0].balanceMoney||this.accrued[0].rpAmt;
+      let objItem = this.$refs.voucherInput.voucherItem;
       if(this.voucherinputModel){
-        let data = {};
-        data.detailId = this.accrued[0].id;
-        // if(this.accrued[0].balanceMoney==undefined){
-        //   data.claimMoney=this.accrued[0].rpAmt
-        // }else{
-        //   data.claimMoney=this.accrued[0].balanceMoney
-        // }
-        data.claimMoney=this.accrued[0].balanceMoney||this.accrued[0].rpAmt
-        if(data.claimMoney==null || data.claimMoney<=0){
-          this.$Message.error("本次认领金额不可为零或小于零")
-          return
-        }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
-          this.$Message.error("本次认领金额不可大于收入金额")
-        }
         if(this.claimTit=="预收款认领"){
           data.subjectCode="1123";
           data.claimType=3
         }else{
           data.subjectCode="2241";
-          data.claimType=5
-          data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
-          if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
-            data.isAuxiliaryAccounting=0 //是否辅助核算类
-          }else{
-            data.isAuxiliaryAccounting=1
-          }
-          data.auxiliaryName=this.MessageValue //辅助核算名称
-          data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
+          data.claimType=5;
+          data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
         }
-
-        let objItem = this.$refs.voucherInput.voucherItem;
+        data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+        if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+          data.isAuxiliaryAccounting=0 //是否辅助核算类
+        }else{
+          data.isAuxiliaryAccounting=1
+        }
+        data.auxiliaryName=this.MessageValue //辅助核算名称
+        data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
         if(objItem.hasOwnProperty("id")){
           data.suppliersBean = {
-            guestTargetName:objItem.fullName||"",
-            guestTargetId:objItem.id||""
+            guestSourceName:objItem.fullName||"",
+            guestSourceId:objItem.id||""
           }
         }
-
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
           this.modal = false;
@@ -412,7 +403,20 @@ export default {
 
         }
       }else{
-
+        data.guestId = objItem.id||"";
+        data.financeAccountCashList = this.accrued
+        if(this.claimTit=="预收款认领"){
+          data.claimType = 0
+        }else{
+          data.subjectCode="2241";
+          data.claimType=5
+        }
+        addClaim(data).then(res=>{
+          if(res.code===0){
+            this.$Message.success('认领成功')
+            this.modal = false;
+          }
+        })
       }
     },
     //选择辅助核算回调

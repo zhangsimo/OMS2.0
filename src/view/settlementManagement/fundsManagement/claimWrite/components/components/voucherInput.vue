@@ -288,6 +288,7 @@ import {
   saveTreeDetailItem
 } from "@/api/settlementManagement/VoucherInput"
 export default {
+  name:'voucherInput',
   data(){
     return {
       currTab:'client',//当前tab页
@@ -416,6 +417,7 @@ export default {
               //   this.oneAccountent.auxiliaryCode = this.departmentVal;
               // }
             }
+          this.$emit("callBackFun");
         } else {
             this.$Message.error("请选择款项分类!");
             this.subjectModelShowassist = true;
@@ -429,8 +431,8 @@ export default {
         // if (this.oneAccountent.auxiliaryTypeCode == "3") {
         //   this.oneAccountent.auxiliaryCode = this.departmentVal;
         // }
+        this.$emit("callBackFun");
       }
-      this.$emit("callBackFun");
     },
     //获取公司
     async getListCompany() {
@@ -500,6 +502,7 @@ export default {
     },
     //点击单选框获取辅助核算客户
     radioChangeEventClient({ row }) {
+      console.log(row)
       this.AssistAccounting = row.fullName;
       this.auxiliaryTypeCode = "1";
       this.auxiliaryCode = row.code;

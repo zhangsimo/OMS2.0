@@ -64,19 +64,41 @@
       <!-- <FormItem label="配件名称: ">
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
-      <FormItem label="品牌: ">
+<!--      <FormItem label="品牌: ">-->
+<!--        <Select-->
+<!--          class="w300 ml5"-->
+<!--          multiple-->
+<!--          v-model="partBrandList"-->
+<!--          placeholder="请选择品牌"-->
+<!--          @on-change="select1"-->
+<!--        >-->
+<!--          <Option-->
+<!--            v-for="item in brandLists"-->
+<!--            :value="item.label"-->
+<!--            :key="item.id"-->
+<!--          >{{ item.label }}</Option-->
+<!--          >-->
+<!--        </Select>-->
+<!--      </FormItem>-->
+      <FormItem label="品牌:">
         <Select
           class="w300 ml5"
-          multiple
-          v-model="partBrandList"
+          clearable
+          label-in-value
+          filterable
+          v-model="partBrand"
           placeholder="请选择品牌"
-          @on-change="select1"
         >
+<!--          remote-->
+<!--          :remote-method="partBrandRemote"-->
+<!--          :loading="brandBrandBool"-->
+<!--          @on-change="select1"-->
           <Option
-            v-for="item in brandLists"
+            v-for="(item,index) in brandLists"
             :value="item.label"
-            :key="item.id"
-          >{{ item.label }}</Option
+            :key="index"
+          >{{ item.label }}
+          </Option
           >
         </Select>
       </FormItem>
@@ -115,23 +137,15 @@
 <script lang="ts">
 import moment from "moment";
 // @ts-ignore
-import * as tools from "_utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 // @ts-ignore
 import { getSales } from "@/api/salesManagment/salesOrder";
 // @ts-ignore
-import { getParamsBrand } from "_api/purchasing/purchasePlan";
-import {getParamsBrandPart} from "@/api/reportForm";
-// @ts-ignore
-import { getWarehouse } from "_api/reportForm/index.js";
 import { creat } from "@/view/settlementManagement/components";
-import {v4} from "uuid";
-import Cookies from "js-cookie";
-import {TOKEN_KEY} from "@/libs/util";
 // @ts-ignore
-import Api from "_conf/url";
+import {getBrandList,getWares} from "@/view/reportForm/until";
 
 @Component({
   components: {
@@ -146,9 +160,9 @@ export default class MoreSearch extends Vue {
   private auditDate: Array<any> = new Array();
   private serviceId: string = "";
   private partCode: string = "";
-  private partBrandList: Array<any> = new Array();
+  private partBrand: string = "";
   private auditor: string = "";
-  // private partName: string = "";
+  private brandBrandBool: boolean = false;
   private createUname: string = "";
   private guestId: string = "";
   private guestName: string = "";
@@ -166,23 +180,7 @@ export default class MoreSearch extends Vue {
   private orderTypeList: Array<any> = new Array();
   private warehouse: Array<any> = new Array();
   private async getWares(orgId) {
-    let getitem:any=localStorage.getItem('oms2-userList')
-    let res:any = JSON.parse(getitem)
-
-    let tenantId = res.tenantId || 0
-    let shopkeeper = res.shopkeeper || 0
-    let uuid = v4()
-    let params:any={tenantId:tenantId,shopId:orgId,shopkeeper:shopkeeper,uuid:uuid,scope:"oms"}
-    await this.ajaxAll.get(`${Api.wmsApi}/comStore/stores/findByShopId`,{
-      params:params,
-      headers:{
-        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-      }
-    }).then((res2:any)=>{
-      if(res2.data.code === 0) {
-        this.warehouse = res2.data.data;
-      }
-    })
+    this.warehouse=await getWares(orgId)
   }
 
   private async getStoreId(){
@@ -211,9 +209,11 @@ export default class MoreSearch extends Vue {
   private reset() {
     this.createDate = new Array();
     this.auditDate = new Array();
+    this.brandLists = new Array();
+    this.warehouse = new Array();
     this.serviceId = "";
     this.partCode = "";
-    this.partBrandList = new Array();
+    this.partBrand = "";
     this.auditor = "";
     this.guestId = "";
     this.guestName = "";
@@ -230,29 +230,24 @@ export default class MoreSearch extends Vue {
   }
 
   private brandLists: Array<any> = new Array();
-  private async getBrand() {
-    let res: any = await getParamsBrandPart();
-    if (res.code == 0) {
-      for (let quality of res.data.content) {
-        if (quality.children.length <= 0) {
-          break;
-        }
-        quality.children.forEach(el => {
-          el.label = el.name;
-          el.value = el.code;
-          el.id = el.id;
-          this.brandLists.push(el);
-        });
-      }
-    }
+  private select1(option: any) {
+    this.partBrand = option.value;
+    console.log(this.partBrand.length, option.value, 1111)
+    // if (option.slice(-1)[0] == 1) {
+    //   option = [1];
+    // } else if (option.includes(1)) {
+    //   option = option.filter(el => el != 1);
+    // }
   }
-  private select1(option:any) {
-    if (option.slice(-1)[0] == 1) {
-      option = [1];
-    } else if (option.includes(1)) {
-      option = option.filter(el => el != 1);
-    }
-    this.partBrandList = option;
+
+  private async getBrand(data: string) {
+    this.brandBrandBool=true
+    this.brandLists = await getBrandList(data)
+    this.brandBrandBool=false
+  }
+
+  private async partBrandRemote(query: string) {
+    this.brandLists = await getBrandList(query)
   }
   private guseData = {
     loading: false,
@@ -281,14 +276,11 @@ export default class MoreSearch extends Vue {
     let parent:any=this.$parent
     let search:any=parent.search
     let orgId:any=search.orgid
-    this.warehouse=new Array<any>()
     this.reset();
     if (this.salesList.length <= 0) {
       this.getAllSales();
     }
-    if (this.brandLists.length <= 0) {
-      this.getBrand();
-    }
+    this.getBrand("");
     if(this.warehouse.length <= 0) {
       this.getWares(orgId);
       this.getStoreId()
@@ -307,14 +299,17 @@ export default class MoreSearch extends Vue {
 
   @Emit("getmoreData")
   private ok() {
+    let parent:any=this.$parent
+    let search:any=parent.search
     let data = {
+      orgid:search.orgid,
       ctimeStart: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
       ctimeEnd: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       timeStart: this.auditDate[0] ? moment(this.auditDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
       timeEnd: this.auditDate[1] ? moment(this.auditDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       serviceId: this.serviceId,
       partCode: this.partCode.trim(),
-      partBrandList: this.partBrandList,
+      partBrand: this.partBrand,
       auditor: this.auditor,
       createUname: this.createUname,
       // partName: this.partName.trim(),

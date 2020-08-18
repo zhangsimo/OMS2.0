@@ -35,16 +35,18 @@ export default {
         data2.receiveStoreId = data2.storeId;
         delete data2.storeId;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.commitStartDate ? data2.commitStartDate = data.commitStartDate : "";
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
+      this.$refs.tabOne.data=data2
       this.$refs.tabOne.page.page=0;
       this.$refs.tabOne.getList(data2);
     },
@@ -55,16 +57,18 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.commitStartDate ? data2.commitStartDate = data.commitStartDate : "";
         data.commitEndDate ? data2.commitEndDate = data.commitEndDate : "";
         data.serviceId ? data2.enterServiceId = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
         data.partCode ? data2.partCode = data.partCode : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.warehouseId2 ? data2.receiveStoreId = data.warehouseId2 : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
+      this.$refs.tabTwo.data=data2
       this.$refs.tabTwo.page.page = 0;
       this.$refs.tabTwo.getList(data2);
     },

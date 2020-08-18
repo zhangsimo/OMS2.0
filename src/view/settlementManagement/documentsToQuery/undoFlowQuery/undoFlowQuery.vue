@@ -74,7 +74,7 @@ export default {
       fno: "", //调拨单号
       value: [],
       shopList: [{ id: 0, shortName: "全部" }],
-      shopCode: 0,
+      shopCode:this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.id ? this.$store.state.user.userData.currentCompany.id : '' : '',
       tableData: [] //表格数据
     };
   },
@@ -100,9 +100,9 @@ export default {
       let res = await goshop(data);
       if (res.code === 0){
         this.shopList = [...this.shopList, ...res.data]
-        if (this.$store.state.user.userData.currentCompany.isMaster){
-          this.shopCode = arr[1]
-        }
+        // if (this.$store.state.user.userData.currentCompany.isMaster){
+        //   this.shopCode = arr[1]
+        // }
       }
     },
 
@@ -112,12 +112,12 @@ export default {
       data.page = 0;
       data.size = 9999;
       data.orgId = this.shopCode;
-      data.startDate = this.value
+      data.startDate = this.value[0]
         ? moment(this.value[0])
             .startOf("day")
             .format("YYYY-MM-DD HH:mm:ss")
         : "";
-      data.endDate = this.value
+      data.endDate = this.value[1]
         ? moment(this.value[1])
             .endOf("day")
             .format("YYYY-MM-DD HH:mm:ss")

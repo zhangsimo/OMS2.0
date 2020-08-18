@@ -77,25 +77,25 @@
           field="outOrderNo"
           title="出库单号"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="customerName"
           title="客户名称"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="outStockDate"
           title="出库日期"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="storeName"
           title="仓库"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="税率信息">
@@ -108,7 +108,7 @@
           field="taxRate"
           title="税率"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="成本信息">
@@ -121,7 +121,7 @@
           field="taxAmt"
           title="成本金额"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
@@ -134,19 +134,19 @@
           field="hasAcceptOrderNo"
           title="受理单号"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="guestName"
           title="第一供应商"
           width="200"
-          
+
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="remark"
           title="订单备注"
           width="200"
-          
+
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
@@ -215,10 +215,10 @@ export default {
       if (res.code == 0 && res.data != null) {
         tableDataAll = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
-            el.taxSign = true;
+            el.taxSign = "是";
           }
           if ([0, "0", "否"].includes(el.taxSign)) {
-            el.taxSign = false;
+            el.taxSign = "否";
           }
           return el;
         });

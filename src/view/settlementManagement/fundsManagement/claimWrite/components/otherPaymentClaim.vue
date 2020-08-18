@@ -1,15 +1,8 @@
 <template>
   <div>
-    <Modal v-model="modal" :title="claimTit" width="800" footer-hide>
+    <Modal v-model="modal" :title="claimTit" width="800">
       <Row class="dbd" v-if="claimTit=='预付款认领'">
-        <i-col span="8">
-          <button
-            class="ivu-btn ivu-btn-default mr10"
-            type="button"
-            @click="openClimed()"
-          >{{claimTit}}</button>
-        </i-col>
-        <i-col span="6">
+        <i-col span="14">
           <Checkbox
             v-model="voucherinputModel"
             :checked.sync="voucherinputModel"
@@ -32,19 +25,9 @@
         </i-col>
       </Row>
       <Row class="dbd" v-else>
-        <i-col span="6">
-          <button
-            class="ivu-btn ivu-btn-default mr10"
-            type="button"
-            @click="openClimed()"
-          >{{claimTit}}</button>
-        </i-col>
-        <i-col span="8">
-          <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成其他付款认领单号</Checkbox>
-          <!-- @change="changeModel" -->
-        </i-col>
-        <i-col span="10">
-          <Form :model="formValidate" :rules="ruleValidate">
+        <i-col span="14">
+          <div v-show="!voucherinputModel" style="text-indent:-9999px;overflow: hidden">1</div>
+          <Form :model="formValidate" :rules="ruleValidate" v-show="voucherinputModel">
             <FormItem label="选择辅助核算">
               <Row>
                 <i-col span="8">
@@ -56,6 +39,10 @@
               </Row>
             </FormItem>
           </Form>
+          <!-- @change="changeModel" -->
+        </i-col>
+        <i-col span="10" class="tr">
+          <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成其他付款认领单号</Checkbox>
         </i-col>
       </Row>
       <vxe-table
@@ -160,6 +147,10 @@
             show-total
           ></Page>
         </Row>
+      </div>
+      <div slot="footer">
+        <Button type="primary" @click="openClimed()" class="mr10" >确定</Button>
+        <Button type="default" @click="modal = false">取消</Button>
       </div>
     </Modal>
     <!-- 认领弹框 -->
@@ -290,6 +281,9 @@ export default {
       this.oneSubject = {};
       this.modal = true;
       this.getQuery();
+      this.$nextTick(()=>{
+        this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
+      })
     },
     //付款查询接口
     async getQuery() {
@@ -392,14 +386,20 @@ export default {
       this.getQuery();
     },
     openVoucherInput() {
+      if(this.claimTit=='预付款认领'){
+        this.$refs.voucherInput.Classification = false;
+      }else{
+        this.$refs.voucherInput.Classification = true;
+      }
       this.$refs.voucherInput.subjectModelShowassist = true;
     },
     async openClimed() {
+      const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+      if (errMap) {
+        return
+      }
       if (!this.voucherinputModel) {
         if(this.currentAccount.accountNo){
-          const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
-          if (errMap) {
-          } else {
             if(this.claimTit=="预付款认领"){
               this.changeAmt();
               this.$refs.settlement.Settlement = true;
@@ -408,9 +408,8 @@ export default {
               this.paymentId = "YJDZ";
               this.$refs.settlement2.Settlement = true;
             }
-          }
         }else{
-          this.$Message.error("请选择明细")
+          this.$Message.error("请先选择预付款申请单")
         }
       } else {
         this.getMessage()
@@ -578,6 +577,7 @@ export default {
         } else {
           data.subjectCode = "1221";
           data.claimType = 6;
+          data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
         }
         data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
@@ -591,8 +591,8 @@ export default {
         let objItem = this.$refs.voucherInput.voucherItem;
         if(objItem.hasOwnProperty("id")){
           data.suppliersBean = {
-            guestTargetName:objItem.fullName||"",
-            guestTargetId:objItem.id||""
+            guestSourceName:objItem.fullName||"",
+            guestSourceId:objItem.id||""
           }
         }
         let res = await TurnToTheProfitAndLoss(data);

@@ -24,55 +24,80 @@
     </div>
     <Form :label-width="100" class="ml10 pl25">
       <FormItem label="供 应 商: ">
-        <Input type="text" class="w300 ml5" v-model="guestFullName" />
-<!--        <Select-->
-<!--          class="w300 ml5"-->
-<!--          v-model="guestId"-->
-<!--          filterable-->
-<!--          remote-->
-<!--          label-in-value-->
-<!--          :remote-method="remoteMethod"-->
-<!--          :loading="guseData.loading"-->
-<!--          @on-change="geseChange"-->
-<!--          clearable-->
-<!--        >-->
-<!--          <Option-->
-<!--            v-for="option in guseData.lists"-->
-<!--            :value="option.id"-->
-<!--            :key="option.id"-->
-<!--          >{{ option.fullName }}</Option>-->
-<!--        </Select>-->
+        <Input type="text" class="w300 ml5" v-model="guestFullName"/>
+        <!--        <Select-->
+        <!--          class="w300 ml5"-->
+        <!--          v-model="guestId"-->
+        <!--          filterable-->
+        <!--          remote-->
+        <!--          label-in-value-->
+        <!--          :remote-method="remoteMethod"-->
+        <!--          :loading="guseData.loading"-->
+        <!--          @on-change="geseChange"-->
+        <!--          clearable-->
+        <!--        >-->
+        <!--          <Option-->
+        <!--            v-for="option in guseData.lists"-->
+        <!--            :value="option.id"-->
+        <!--            :key="option.id"-->
+        <!--          >{{ option.fullName }}</Option>-->
+        <!--        </Select>-->
       </FormItem>
       <FormItem :label="type == 1 ? '采购单单号: ' : (type == 2 ? '采购入库单号:' : (type == 3 ? '采退出库单号:' : '采购计划单号'))">
-        <Input type="text" class="w300 ml5" v-model="serviceId" />
+        <Input type="text" class="w300 ml5" v-model="serviceId"/>
       </FormItem>
-      <FormItem v-if="type != 4 && type != 1" :label="type == 1 ? '往来单号: ' : (type == 2 ? '采购订单单号:' : (type == 3 ? '采退订单单号:' : ''))">
-        <Input type="text" class="w300 ml5" v-model="code" />
+      <FormItem v-if="type != 4 && type != 1"
+                :label="type == 1 ? '往来单号: ' : (type == 2 ? '采购订单单号:' : (type == 3 ? '采退订单单号:' : ''))">
+        <Input type="text" class="w300 ml5" v-model="code"/>
       </FormItem>
       <FormItem v-if="type == 4" label="直发门店: ">
-        <Select v-model="directCompanyId" class="w300 ml5" label-in-value filterable clearable>
+        <Select v-model="directCompanyId" class="w300 ml5" label-in-value filterable clearable
+                :disabled="selectShopList">
           <Option v-for="(item) in stores" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem label="配件编码/名称: ">
-        <Input type="text" class="w300 ml5" v-model="partCode" />
+        <Input type="text" class="w300 ml5" v-model="partCode"/>
       </FormItem>
       <!-- <FormItem label="配件名称: ">
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
-      <FormItem label="品牌: ">
+      <!--      <FormItem label="品牌: ">-->
+      <!--        <Select-->
+      <!--          class="w300 ml5"-->
+      <!--          multiple-->
+      <!--          v-model="partBrand"-->
+      <!--          placeholder="请选择品牌"-->
+      <!--          @on-change="select1"-->
+      <!--        >-->
+      <!--          <Option-->
+      <!--            v-for="item in brandLists"-->
+      <!--            :value="item.label"-->
+      <!--            :key="item.id"-->
+      <!--          >{{ item.label }}-->
+      <!--          </Option-->
+      <!--          >-->
+      <!--        </Select>-->
+      <!--      </FormItem>-->
+      <FormItem label="品牌:">
         <Select
           class="w300 ml5"
-          multiple
-          v-model="partBrandList"
+          clearable
+          label-in-value
+          filterable
+          v-model="partBrand"
           placeholder="请选择品牌"
-          @on-change="select1"
         >
+<!--          remote-->
+<!--          :remote-method="partBrandRemote"-->
+<!--          :loading="brandBrandBool"-->
+<!--          @on-change="select1"-->
           <Option
-            v-for="item in brandLists"
+            v-for="(item,index) in brandLists"
             :value="item.label"
-            :key="item.id"
-          >{{ item.label }}</Option
+            :key="index"
+          >{{ item.label }}
+          </Option
           >
         </Select>
       </FormItem>
@@ -109,248 +134,229 @@
   </Modal>
 </template>
 <script lang="ts">
-import moment from "moment";
-// @ts-ignore
-import * as tools from "_utils/tools";
-import { Vue, Component, Emit, Prop } from "vue-property-decorator";
-// @ts-ignore
-import * as api from "_api/procurement/plan";
-// @ts-ignore
-import Api from "_conf/url";
-import Cookies from "js-cookie";
-import { TOKEN_KEY } from "@/libs/util";
-// @ts-ignore
-import baseURL from '_conf/url'
-import {v4} from "uuid";
-import { getSales } from "@/api/salesManagment/salesOrder";
-// @ts-ignore
-import { getParamsBrand } from "_api/purchasing/purchasePlan";
-// @ts-ignore
-import { getWarehouse, getStorelist } from "_api/reportForm/index.js";
-import { creat } from "@/view/settlementManagement/components";
-import {getParamsBrandPart} from "@/api/reportForm";
+  import moment from "moment";
+  // @ts-ignore
+  import {Vue, Component, Emit, Prop} from "vue-property-decorator";
+  // @ts-ignore
+  import {getSales} from "@/api/salesManagment/salesOrder";
+  // @ts-ignore
+  import {getStorelist} from "_api/reportForm/index.js";
+  import {creat} from "@/view/settlementManagement/components";
+  import {getBrandList,getWares} from "@/view/reportForm/until.js"
 
-@Component({
-  components: {
-  }
-})
-export default class MoreSearch extends Vue {
-  @Prop({ default: "" }) private readonly type!: string;
 
-  private serchN: boolean = false;
+  @Component({
+    components: {}
+  })
+  export default class MoreSearch extends Vue {
+    @Prop({default: ""}) private readonly type!: string;
 
-  private createDate: Array<any> = new Array();
-  private auditDate: Array<any> = new Array();
-  private serviceId: string = "";
-  private partCode: string = "";
-  private partBrandList: Array<any> = new Array();
-  private auditor: string = "";
-  // private partName: string = "";
-  private createUname: string = "";
-  private guestFullName: string = "";
-  private guestName: string = "";
-  private aaaa: string = "";
-  // new
-  private code: string = "";
-  private orderman: string = "";
-  private orderType: string = "";
-  private warehouseId: string = "";
-  private directCompanyId: string = "";
+    private serchN: boolean = false;
 
-  private stores: Array<any> = new Array();
-  private async getStore() {
-    let res: any = await getStorelist();
-    this.stores=[{id:0,name:"全部"}]
-    if(res.code == 0) {
-       let data = res.data;
+    private createDate: Array<any> = new Array();
+    private auditDate: Array<any> = new Array();
+    private serviceId: string = "";
+    private partCode: string = "";
+    private partBrand: any = "";
+    private auditor: string = "";
+    // private partName: string = "";
+    private createUname: string = "";
+    private guestFullName: string = "";
+    private guestName: string = "";
+    private aaaa: string = "";
+    // new
+    private code: string = "";
+    private orderman: string = "";
+    private orderType: string = "";
+    private warehouseId: string = "";
+    private directCompanyId: string = "";
+
+    private stores: Array<any> = new Array();
+    private selectShopList: boolean = false
+
+
+    private async getStore() {
+      let res: any = await getStorelist();
+      this.stores = [{id: 0, name: "全部"}]
+      if (res.code == 0) {
+        let data = res.data;
         Object.keys(data).forEach(key => {
           this.stores.push({id: key, name: data[key]})
         })
-    }
-  }
-  // private  async getwareHouseList(v){
-  //   this.ajaxAll.get()
-  // }
-
-  private select1(option:any) {
-    if (option.slice(-1)[0] == 1) {
-      option = [1];
-    } else if (option.includes(1)) {
-      option = option.filter(el => el != 1);
-    }
-    this.partBrandList = option;
-  }
-  private async getStoreId(){
-    let arr:any = await creat("", this.$store);
-    this.$nextTick(() => {
-      this.directCompanyId = arr[1];
-    });
-  }
-  private orderTypeList: Array<any> = [
-    {id: "0", name: "所有"},
-    {id: "1", name: "采购计划"},
-    {id: "2", name: "国际采购"},
-    {id: "3", name: "临时采购"},
-    {id: "4", name: "门店外采"},
-    {id: "5", name: "销售退货"},
-  ];
-  private warehouse: Array<any> = new Array();
-  private async getWares(orgId) {
-    let getitem:any=localStorage.getItem('oms2-userList')
-    let res:any = JSON.parse(getitem)
-
-    let tenantId = res.tenantId || 0
-    let shopkeeper = res.shopkeeper || 0
-    let uuid = v4()
-    let params:any={tenantId:tenantId,shopId:orgId,shopkeeper:shopkeeper,uuid:uuid,scope:"oms"}
-    await this.ajaxAll.get(`${Api.wmsApi}/comStore/stores/findByShopId`,{
-      params:params,
-      headers:{
-        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }
-    }).then((res2:any)=>{
-      if(res2.data.code === 0) {
-        this.warehouse = res2.data.data;
-      }
-    })
-  }
-  private salesList: Array<any> = new Array();
-  private async getAllSales() {
-    let res: any = await getSales();
-    if (res.code === 0) {
-      this.salesList = res.data.content;
-      this.salesList.forEach((item: any) => {
-        item.label = item.userName;
-        item.value = item.id;
+    }
+
+    // private  async getwareHouseList(v){
+    //   this.ajaxAll.get()
+    // }
+
+    private async getStoreId() {
+      let arr: any = await creat("", this.$store);
+      this.$nextTick(() => {
+        this.directCompanyId = arr[1];
       });
     }
-  }
 
-  async mounted() {
-    // alert(this.getBrand)
-    // console.log(this.getBrand);
-  }
-  private reset() {
-    this.createDate = new Array();
-    this.auditDate = new Array();
-    this.serviceId = "";
-    this.partCode = "";
-    this.partBrandList = new Array();
-    this.auditor = "";
-    this.guestFullName = "";
-    this.guestName = "";
-    this.createUname = "";
-    // this.partName = "";
-    // new
-    this.code = "";
-    this.orderman = "";
-    this.orderType = "";
-    this.warehouseId = "";
-    this.directCompanyId = "";
-  }
+    private orderTypeList: Array<any> = [
+      {id: "0", name: "所有"},
+      {id: "1", name: "采购计划"},
+      {id: "2", name: "国际采购"},
+      {id: "3", name: "临时采购"},
+      {id: "4", name: "门店外采"},
+      {id: "5", name: "销售退货"},
+    ];
+    private warehouse: Array<any> = new Array();
 
-  private brandLists: Array<any> = new Array();
-  private async getBrand() {
-    let res: any = await getParamsBrandPart();
-    if (res.code == 0) {
-      for (let quality of res.data.content) {
-        if (quality.children.length <= 0) {
-          break;
-        }
-        quality.children.forEach(el => {
-          el.label = el.name;
-          el.value = el.code;
-          el.id = el.id;
-          this.brandLists.push(el);
+    private async getWares(orgId) {
+      this.warehouse=await getWares(orgId)
+    }
+
+    private salesList: Array<any> = new Array();
+
+    private async getAllSales() {
+      let res: any = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.forEach((item: any) => {
+          item.label = item.userName;
+          item.value = item.id;
         });
       }
     }
-  }
 
-  private guseData = {
-    loading: false,
-    lists: new Array()
-  };
-
-  private geseChange(val: any) {
-    this.guestFullName = val.value;
-    this.guestName = val.label;
-  }
-
-  private init() {
-    let parent:any=this.$parent
-    let search:any=parent.search
-    let orgId:any=search.orgid
-    this.warehouse=new Array<any>()
-    this.reset();
-    if (this.salesList.length <= 0) {
-      this.getAllSales();
+    async mounted() {
+      let parent: any = this.$parent
+      this.selectShopList = parent.selectShopList
     }
-    if (this.brandLists.length <= 0) {
-      this.getBrand();
-    }
-    if(this.warehouse.length <= 0) {
-      this.getWares(orgId);
-    }
-    if(this.stores.length <= 0) {
-      this.getStore();
-      this.getStoreId()
-    }
-    this.serchN = true;
-  }
 
-  private showModel(name) {
-    let ref: any = this.$refs[name];
-    ref.init();
-  }
-
-  private cancel() {
-    this.serchN = false;
-  }
-
-  @Emit("getmoreData")
-  private ok() {
-    let data = {
-      ctimeStart: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
-      ctimeEnd: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
-      atimeStart: this.auditDate[0] ? moment(this.auditDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
-      atimeEnd: this.auditDate[1] ? moment(this.auditDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
-      serviceId: this.serviceId,
-      partCode: this.partCode.trim(),
-      partBrandList: this.partBrandList,
-      auditor: this.auditor,
-      createUname: this.createUname,
-      // partName: this.partName.trim(),
-      guestFullName: this.guestFullName,
+    private reset() {
+      this.createDate = new Array();
+      this.auditDate = new Array();
+      this.brandLists = new Array();
+      this.warehouse = new Array()
+      this.serviceId = "";
+      this.partCode = "";
+      this.partBrand = "";
+      this.auditor = "";
+      this.guestFullName = "";
+      this.guestName = "";
+      this.createUname = "";
+      // this.partName = "";
       // new
-      code: this.code,
-      orderman: this.orderman,
-      orderType: this.orderType,
-      warehouseId: this.warehouseId,
-      directCompanyId: this.directCompanyId,
+      this.code = "";
+      this.orderman = "";
+      this.orderType = "";
+      this.warehouseId = "";
+      this.directCompanyId = "";
+    }
+
+    private brandLists: Array<any> = new Array();
+    private brandBrandBool:boolean=true;
+
+    private select1(option: any) {
+      this.partBrand = option.value;
+      console.log(this.partBrand.length, option.value, 1111)
+      // if (option.slice(-1)[0] == 1) {
+      //   option = [1];
+      // } else if (option.includes(1)) {
+      //   option = option.filter(el => el != 1);
+      // }
+    }
+
+    private async getBrand(data: string) {
+      this.brandBrandBool=true
+      this.brandLists = await getBrandList(data)
+      this.brandBrandBool=false
+    }
+
+    private async partBrandRemote(query: string) {
+      this.brandLists = await getBrandList(query)
+    }
+
+    private guseData = {
+      loading: false,
+      lists: new Array()
     };
-    let subdata: Map<string, string> = new Map();
-    for (let key in data) {
-      if (["showSelf"].includes(key)) {
-        subdata.set(key, data[key]);
-      } else if (typeof(data[key])=="string") {
-        if(data[key] && data[key].trim().length > 0){
+
+    private geseChange(val: any) {
+      this.guestFullName = val.value;
+      this.guestName = val.label;
+    }
+
+    private init() {
+      let parent: any = this.$parent
+      let search: any = parent.search
+      let orgId: any = search.orgid
+      this.reset();
+      if (this.salesList.length <= 0) {
+        this.getAllSales();
+      }
+      this.getBrand("");
+      if (this.warehouse.length <= 0) {
+        this.getWares(orgId);
+      }
+      if (this.stores.length <= 0) {
+        this.getStore();
+        this.getStoreId()
+      }
+      this.serchN = true;
+    }
+    private showModel(name) {
+      let ref: any = this.$refs[name];
+      ref.init();
+    }
+
+    private cancel() {
+      this.serchN = false;
+    }
+
+    @Emit("getmoreData")
+    private ok() {
+      let parent: any = this.$parent
+      let search: any = parent.search
+      let data = {
+        orgid: search.orgid,
+        ctimeStart: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+        ctimeEnd: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
+        atimeStart: this.auditDate[0] ? moment(this.auditDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+        atimeEnd: this.auditDate[1] ? moment(this.auditDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
+        serviceId: this.serviceId,
+        partCode: this.partCode.trim(),
+        partBrand: this.partBrand,
+        auditor: this.auditor,
+        createUname: this.createUname,
+        // partName: this.partName.trim(),
+        guestFullName: this.guestFullName,
+        // new
+        code: this.code,
+        orderman: this.orderman,
+        orderType: this.orderType,
+        warehouseId: this.warehouseId,
+        directCompanyId: this.directCompanyId,
+      };
+      let subdata: Map<string, string> = new Map();
+      for (let key in data) {
+        if (["showSelf"].includes(key)) {
+          subdata.set(key, data[key]);
+        } else if (typeof (data[key]) == "string") {
+          if (data[key] && data[key].trim().length > 0) {
+            subdata.set(key, data[key]);
+          }
+        } else {
           subdata.set(key, data[key]);
         }
-      }else{
-        subdata.set(key, data[key]);
       }
-    }
-    let obj: any = {};
-    if (subdata.size > 0) {
-      for (let [k, v] of subdata) {
-        obj[k] = v;
+      let obj: any = {};
+      if (subdata.size > 0) {
+        for (let [k, v] of subdata) {
+          obj[k] = v;
+        }
+      } else {
+        obj = null;
       }
-    } else {
-      obj = null;
+      // search.auditDate=this.createDate
+      this.cancel();
+      return obj;
     }
-    this.cancel();
-    return obj;
   }
-}
 </script>

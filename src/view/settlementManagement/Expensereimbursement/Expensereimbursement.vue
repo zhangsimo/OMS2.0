@@ -69,6 +69,10 @@
         >导出
         </Button
         >
+        <!--<Button class="ml10" @click="openRegEnter"-->
+        <!--&gt;进项登记及修改-->
+        <!--</Button-->
+        <!--&gt;-->
       </div>
     </section>
     <section class="con-box">
@@ -354,6 +358,7 @@
     <!--<settlement ref="settlement"></settlement>-->
     <!--因公借支核销-->
     <write-off ref="writeOff" :table="currRow"></write-off>
+    <registration-entry ref="registrationEntry"></registration-entry>
   </div>
 </template>
 
@@ -381,11 +386,13 @@
   import * as restful from "_api/settlementManagement/financialStatement.js";
   // otherReceivables
   import moment from "moment";
+  import RegistrationEntry from "../bill/Popup/registrationEntry2";
 
   export default {
     inject: ['reload'],
     name: "settlementManagementExpensereimbursement",
     components: {
+      RegistrationEntry,
       quickDate,
       claim,
       // settlement,
@@ -543,6 +550,27 @@
         //   this.$message.error("请选择数据");
         // }
       },
+      openRegEnter(){
+        console.log(this.currRow)
+        if (this.currRow&&this.currRow.hasOwnProperty("id")) {
+          this.$refs.registrationEntry.accountData = [];
+          this.$refs.registrationEntry.accountData.push(
+            this.currRow
+          );
+          this.$refs.registrationEntry.arrId = [];
+          this.$refs.registrationEntry.arrId.push(
+            this.currRow.orgId,
+            this.currRow.guestId,
+            this.currRow.id
+          );
+          this.$refs.registrationEntry.modal1 = true;
+        } else {
+          this.$message.error("请选择数据");
+        }
+      },
+
+
+
       //认领弹框查询
       queryClaimed() {
         this.$refs.claim.claimedPage.page = 1;

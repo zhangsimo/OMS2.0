@@ -204,7 +204,7 @@ export default {
       this.disabled = true;
       this.page = {
         num: 1,
-        size: 10,
+        size: 20,
         total: 0,
         opts: [20, 50, 100, 200]
       }
@@ -222,10 +222,12 @@ export default {
     //分页
     changePage(p) {
       this.page.num = p;
+      this.query();
     },
     changeSize(size) {
       this.page.num = 1;
       this.page.size = size;
+      this.query();
     },
     async query() {
       this.totalPrice = 0;
@@ -254,6 +256,7 @@ export default {
 
       if(res.code == 0) {
         this.tbdata = res.data.content;
+        this.page.total = res.data.totalElements;
       }
     },
     async submit() {

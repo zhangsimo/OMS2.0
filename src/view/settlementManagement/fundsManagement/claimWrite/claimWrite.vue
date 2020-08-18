@@ -171,9 +171,10 @@
                   type="daterange"
                   placeholder="选择日期"
                   class="w200 mr10"
+                  transfer
                 ></Date-picker>
                 <span class="ml10">区域：</span>
-                <Select v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable :disabled="selectShopList">
+                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable>
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
@@ -182,7 +183,7 @@
                   </Option>
                 </Select>
                 <span class="ml10">门店：</span>
-                <Select v-model="orgId" class="w150" filterable :disabled="selectShopList">
+                <Select transfer v-model="orgId" class="w150" filterable>
                   <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
@@ -837,6 +838,7 @@
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = [...this.orgList, ...res.data]
+          this.setAreaDef();
         }
       },
       setAreaDef(){
@@ -945,6 +947,13 @@
           this.claimedSubjectList = this.$refs.claim.currentClaimed;
           this.$refs.otherCollectionClaims.claimTit = claimTit;
           if (this.claimedSubjectList[0].incomeMoney > 0) {
+            this.claimedSubjectList.map(item => {
+              if(claimTit = "预收款认领"){
+                item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+              }else{
+                item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
+              }
+            })
             this.$refs.otherCollectionClaims.open();
           } else {
             claimTit = "预收款认领"
@@ -966,6 +975,13 @@
           this.claimedSubjectList = this.$refs.claim.currentClaimed;
           this.$refs.otherPaymentClaim.claimTit = claimTit;
           if (this.claimedSubjectList[0].paidMoney < 0) {
+            this.claimedSubjectList.map(item => {
+              if(claimTit = "预付款认领"){
+                item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+              }else{
+                item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
+              }
+            })
             this.$refs.otherPaymentClaim.open();
           } else {
             claimTit == "预付款认领"

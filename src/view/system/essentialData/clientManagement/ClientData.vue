@@ -818,15 +818,15 @@ export default {
             type: "number"
           }
         ],
-        accountName: [
-          { required: true, message: " 不能为空", trigger: "change" }
-        ],
-        accountBankNo: [
-          { required: true, message: "不能为空", trigger: "change" }
-        ],
-        accountBank: [
-          { required: true, message: " 不能为空", trigger: "change" }
-        ],
+        // accountName: [
+        //   { required: true, message: " 不能为空", trigger: "change" }
+        // ],
+        // accountBankNo: [
+        //   { required: true, message: "不能为空", trigger: "change" }
+        // ],
+        // accountBank: [
+        //   { required: true, message: " 不能为空", trigger: "change" }
+        // ],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],

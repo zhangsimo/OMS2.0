@@ -39,6 +39,25 @@
             </Select>
           </div>
           <div class="db ml10">
+              <span>往来单位:</span>
+            <Select
+              v-model="receiveGuestId"
+              clearable
+              filterable
+              :loading = loading1
+              remote
+              :remote-method="remoteMethod"
+              style="width:200px;padding-left: 5px"
+            >
+              <Option
+                v-for="item in company"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -139,25 +158,28 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="queryEntry"
+          :disabled="ownEnterList"
           v-has="'input'"
-        >查询进项核销</button>
+        >进项发票核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="Revoke"
           v-has="'revocation'"
+          @click="withdrawTheApplication"
+          :disabled="ifRecallApply"
         >撤回申请</button>
+<!--        <button-->
+<!--          class="ivu-btn ivu-btn-default mr10"-->
+<!--          type="button"-->
+<!--          @click="Revoke"-->
+<!--          v-has="'revocation'"-->
+<!--        >撤回开票</button>-->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="Revoke"
           v-has="'revocation'"
-        >撤回开票</button>
-        <button
-          class="ivu-btn ivu-btn-default mr10"
-          type="button"
-          @click="Revoke"
-          v-has="'revocation'"
+          @click="backCancel"
+          :disabled="ifRecallWriteOff"
         >撤回核销</button>
         <div class="hide1">
           <Table
@@ -364,12 +386,30 @@
     </Modal>
     <reconciliation ref="reconciliation"></reconciliation>
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
-    <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
+<!--    <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>-->
+    <Modal v-model="modalShow" :title="reTitle">
+      <Row>
+        <Col span="4">
+          <span>撤回原因：</span>
+        </Col>
+        <Col span="20">
+          <Input v-model="revokeReason" />
+        </Col>
+      </Row>
+      <div slot="footer">
+        <Button type='primary' @click='reClose'>确定</Button>
+        <Button type='default' @click='cancel'>取消</Button>
+      </div>
+    </Modal>
     <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
     <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>
     <no-tax ref="noTax" :information="reconciliationStatement" :parameter="{}"></no-tax>
+<!--    //人工对账-->
+    <invoiceApplyTost ref="invoiceApplyTost" @getnewList="getNeWlist"></invoiceApplyTost>
+
+
   </div>
 </template>
 <script>
@@ -388,7 +428,9 @@ import {
   getId,
   settlement,
   settlementPreservation,
-  accountRevoke,
+  setCanwithdraw,
+  setApply,
+  setCancal,
   account
 } from "@/api/bill/saleOrder";
 import { hedgingApplyNo, applyNo } from "@/api/bill/popup";
@@ -398,6 +440,10 @@ import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 import bus from './Popup/Bus'
 import NoTax from "./Popup/noTax";
+import { getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
+import invoiceApplyTost from "@/view/settlementManagement/invoiceAdministration/components/invoiceApplyTost"
+
+
 export default {
   name:'accountStatement',
   components: {
@@ -408,7 +454,8 @@ export default {
     Monthlyreconciliation,
     salepopup,
     hedgingInvoice,
-    settlementMoadl
+    settlementMoadl,
+    invoiceApplyTost
   },
   data() {
     return {
@@ -418,14 +465,13 @@ export default {
         { name: "提交", status: "已提交" },
         { name: "产品总监审批", status: "已审批" }
       ],
-      revoke: false,
       check: "",
       remark: "",
       Write: "", //核销编码
       collectPayId: "", //收付款单号
       tab: "name1",
       falg: false,
-      reconciliationStatement: {},
+      reconciliationStatement: {}, //点击主表获取当当前一行数据
       tableData: [],
       BusinessType: [],
       Settlement: false,
@@ -470,6 +516,12 @@ export default {
           width: 40,
           className: "tc",
           fixed:"left"
+        },
+        {
+          title:"申请时间",
+          key:'createTime',
+          className:'tc',
+          minWidth:140,
         },
         {
           title: "公司名称",
@@ -689,18 +741,20 @@ export default {
           }
         },
         {
+          title: "对账单状态",
+          key: "statementStatusName",
+          className: "tc",
+          minWidth:120,
+          fixed:"left"
+        },
+        {
           title: "计算结算类型",
           key: "billingTypeName",
           className: "tc",
           minWidth:120,
           fixed:"left"
         },
-        {
-          title: "对账单状态",
-          key: "statementStatusName",
-          className: "tc",
-          minWidth:120
-        },
+
         {
           title: "对账人",
           key: "createUname",
@@ -1137,7 +1191,15 @@ export default {
       hedgingfalg:false,//对冲配件发票/对冲油品发票=含税配件/油品金额，不能点击发票对冲;
       receivefalg:false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
       paymentId:'',//判定付款默认类型
-
+      receiveGuestId:'',//获取往来单位id
+      company:[],//查询到往来单位数据
+      loading1:false,//查询时判断
+      revokeReason:'',//撤销原因
+      modalShow:false,//撤销模态框状态
+      reTitle:'撤回原因',//撤销模态框title
+      ifRecallApply:true,//是否可以撤回申请
+      ifRecallWriteOff:true,//是否可以撤回审核
+      ownEnterList:false,//判断是否可以进项发票核销
     };
   },
   async mounted() {
@@ -1196,7 +1258,77 @@ export default {
     }
   },
   methods: {
+  //取消撤回
+    cancel() {
+      this.modalShow = false;
+      this.$message.info("取消撤回");
+    },
+    //撤销确定
+   async reClose(){
+      if(!this.revokeReason) return this.$Message.error('撤回原因必填')
+      if (!this.ifRecallApply){
+        let data = {}
+        data.id = this.reconciliationStatement.id
+        data.revokeReason = this.revokeReason
+       let res = await setApply(data)
+        if (res.code === 0){
+          this.modalShow = false;
+          this.$Message.success('撤回成功')
+          this.getAccountStatement();
+        }
+      }
+      if (!this.ifRecallWriteOff){
+       let data = {}
+       data.id = this.reconciliationStatement.id
+       data.revokeReason = this.revokeReason
+      let res = await setCancal(data)
+       if (res.code === 0){
+         this.modalShow = false;
+         this.$Message.success('撤回成功')
+         this.getAccountStatement();
+       }
+     }
+    },
+    //撤销申请
+    withdrawTheApplication(){
+      this.reTitle = '撤回申请'
+      this.revokeReason = ''
+      this.modalShow = true;
+    },
 
+    //撤回核销
+    backCancel(){
+      this.reTitle = '撤回核销'
+      this.revokeReason = ''
+      this.modalShow = true;
+    },
+
+      //往来单位查询
+    async remoteMethod(query) {
+      this.company = [];
+      if (query !== "") {
+        this.loading1 = true
+        let arr=[]
+        let req = {
+          shortName:query,
+          size:50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
+          this.loading1 = false
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.shortName,
+            });
+          });
+        }
+        let arrJson = new Set(arr)
+        this.company = Array.from(arrJson)
+      } else {
+        this.company = [];
+      }
+    },
     //对冲之后刷新页面接口
     getNeWlist(){
       this.getAccountStatement()
@@ -1212,7 +1344,6 @@ export default {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         // bus.$emit('account',this.reconciliationStatement)
         this.$router.push({ name: "claimWrite",params: {data:this.reconciliationStatement} });
-        // console.log(this.$cookies)
       } else {
         this.$message.error("请选择一条对账单");
       }
@@ -1238,13 +1369,15 @@ export default {
         this.$message.error("只能勾选计划对账类型为付款的对账单");
       }
     },
-    // 查询进项核销
+    // 进项发票核销
     queryEntry() {
-      this.$router.push({ name: "invoiceAdministrationInvoiceManagement" });
+      this.$refs.invoiceApplyTost.init(this.reconciliationStatement);
+
+      // this.$router.push({ name: "invoiceAdministrationInvoiceManagement" });
     },
     // 查询发票申请
     queryApplication() {
-      this.$router.push({ name: "invoiceAdministration-invoiceApply" });
+      this.$router.push({ name: "invoiceAdministrationInvoiceApply" });
     },
     // 发票对冲
     hedgingInvoice() {
@@ -1316,7 +1449,6 @@ export default {
     },
     // 单据合计方式
     handleSummary({ columns, data }) {
-      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -1355,7 +1487,6 @@ export default {
     },
     // 收付款单合计方式
     summary({ columns, data }) {
-      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -1405,7 +1536,6 @@ export default {
     // 应收/付单据接口
     getdetailsDocuments(obj) {
       detailsDocuments(obj).then(res => {
-        // console.log(res);
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
             item.index = index + 1;
@@ -1448,7 +1578,8 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         orgId: this.model1,
-        statementStatus: this.Reconciliationtype
+        statementStatus: this.Reconciliationtype,
+        guestId:this.receiveGuestId
       };
       obj.page = this.page.num -1
       obj.size = this.page.size
@@ -1493,23 +1624,24 @@ export default {
       }
       if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil){this.hedgingfalg = true}
       if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
+      this.ownEnterList = row.ownEnterList == 0 ? true : false
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       this.data2 = []
       this.data3 = []
       this.data4 = []
-      // if (row.processInstance) {
-        // approvalStatus({ instanceId: row.processInstance }).then(res => {
-        //   if (res.code == 0) {
-        //     this.falg = true;
-        //     this.statusData = res.data.operationRecords;
-        //   }
-        // });
-      // }
+      setCanwithdraw({id:row.id}).then(
+        res => {
+          if (res.code === 0){
+            this.ifRecallApply = !res.data.ifRecallApply
+            this.ifRecallWriteOff = !res.data.ifRecallWriteOff
+          }
+        }
+      )
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
-          this.collectPayId = res.data.fno;
-          this.Write = res.data.checkId;
+          this.collectPayId = !res.data.fno;
+          this.Write = !res.data.checkId;
         }
       );
       let date = {
@@ -1921,20 +2053,20 @@ export default {
       }
     },
     // 确认撤销
-    confirmRevocation() {
-      accountRevoke({
-        id: this.reconciliationStatement.id
-      }).then(res => {
-        // console.log(res);
-        if (res.code === 0) {
-          this.$message({
-            message: "撤销成功",
-            type: "success",
-            customClass: "zZindex"
-          });
-        }
-      });
-    }
+  //   confirmRevocation() {
+  //     accountRevoke({
+  //       id: this.reconciliationStatement.id
+  //     }).then(res => {
+  //       // console.log(res);
+  //       if (res.code === 0) {
+  //         this.$message({
+  //           message: "撤销成功",
+  //           type: "success",
+  //           customClass: "zZindex"
+  //         });
+  //       }
+  //     });
+  //   }
   }
 };
 </script>

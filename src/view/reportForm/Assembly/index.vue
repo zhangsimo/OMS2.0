@@ -43,18 +43,20 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
         data.auditor ? data2.auditorId = data.auditor : "";
       }
+      this.$refs.tabOne.searchData=data2
       this.$refs.tabOne.page.page = 0;
       this.$refs.tabOne.getList(data2);
     },
@@ -65,18 +67,20 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
         data.auditor ? data2.auditorId = data.auditor : "";
       }
+      this.$refs.tabTwo.searchData=data2
       this.$refs.tabTwo.page.page = 0;
       this.$refs.tabTwo.getList(data2);
     },
@@ -87,18 +91,20 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
         data.auditor ? data2.auditorId = data.auditor : "";
       }
+      this.$refs.tabThree.searchData=data2
       this.$refs.tabThree.page.page = 0;
       this.$refs.tabThree.getList(data2);
     },
@@ -109,18 +115,20 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
+        data.orgid?data2.orgid=data.orgid:"";
         data.createTime ? data2.startTime = data.createTime : "";
         data.endTime ? data2.endTime = data.endTime : "";
         data.startAuditDate ? data2.startAuditDate = data.startAuditDate : "";
         data.endAuditDate ? data2.endAuditDate = data.endAuditDate : "";
         data.partCode ? data2.partCode = data.partCode : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
-        data.partBrandList ? data2.partBrandList = data.partBrandList : [];
+        data.partBrand ? data2.partBrand = data.partBrand : "";
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
         data.createUname ? data2.createUid = data.createUname : "";
         data.auditor ? data2.auditorId = data.auditor : "";
       }
+      this.$refs.tabFour.searchData=data2
       this.$refs.tabFour.page.page = 0;
       this.$refs.tabFour.getList(data2);
     },

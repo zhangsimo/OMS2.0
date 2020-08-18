@@ -228,14 +228,18 @@ export const mixGoodsData = {
           processInstanceId: "",
         };
         this.page.total = res.data.totalElements;
-
-        for(let b of this.tbdata){
-          b._highlight = false
-          if(b.id==this.selectLeftItemId){
-            b._highlight = true;
-            this.setFormPlanmain(b);
-            break;
+        if (this.selectLeftItemId) {
+          for (let b of this.tbdata) {
+            b._highlight = false
+            if (b.id == this.selectLeftItemId) {
+              b._highlight = true;
+              this.setFormPlanmain(b);
+              break;
+            }
           }
+        } else {
+          this.tbdata[0]._highlight = true
+          this.setFormPlanmain(this.tbdata[0]);
         }
       }
     },
@@ -402,7 +406,7 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
-      console.log(v)
+      // console.log(v)
       v = JSON.parse(JSON.stringify(v));
 
       v.forEach(item => {
