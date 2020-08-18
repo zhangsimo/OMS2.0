@@ -1393,30 +1393,30 @@
           if (num === 1 && !this.paymentUname)
             return this.$message.error("付款账户不能为空");
         }
-        if (this.paymentBaddebt > 100 || this.collectBaddebt>100) {
-          if (!this.BadDebtid) {
-            // this.$message.error("请输入应收坏账请示单号");
-            this.$message({
-              message: "请输入坏账请示单号",
-              type: "error",
-              customClass: "zZindex"
-            });
-            return "";
+        if(num!=0){
+          if (this.paymentBaddebt > 100 || this.collectBaddebt>100) {
+            if (!this.BadDebtid) {
+              // this.$message.error("请输入应收坏账请示单号");
+              this.$message({
+                message: "请输入坏账请示单号",
+                type: "error",
+                customClass: "zZindex"
+              });
+              return "";
+            }
+          }
+          if (this.paymentRebate > 100 || this.collectRebate>100) {
+            if (!this.Rebateid) {
+              // this.$message.error("请输入应收返利请示单号");
+              this.$message({
+                message: "请输入返利请示单号",
+                type: "error",
+                customClass: "zZindex"
+              });
+              return "";
+            }
           }
         }
-        if (this.paymentRebate > 100 || this.collectRebate>100) {
-          if (!this.Rebateid) {
-            // this.$message.error("请输入应收返利请示单号");
-            this.$message({
-              message: "请输入返利请示单号",
-              type: "error",
-              customClass: "zZindex"
-            });
-            return "";
-          }
-        }
-
-
         if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
           if (num != 0) {
             if (!this.remark) {
