@@ -10,43 +10,50 @@
       :footer-method="footerMethod"
       :data="tableData"
     >
-      <vxe-table-column   show-overflow="tooltip" field="group0" title="基本信息">
+      <vxe-table-column   show-overflow="tooltip" field="group0" title="基本信息" fixed="left">
         <vxe-table-column   show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group1" title="订单信息">
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="serviceId"
           title="计划单号"
-          width="180"
+          width="100"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="guestFullName"
           title="供应商"
-          width="120"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+      </vxe-table-column>
+      <vxe-table-column  show-overflow="tooltip" field="group1" title="订单信息">
+        <vxe-table-column
+          show-overflow="tooltip"
           field="orderMan"
           title="计划员"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="billTypeIdName"
           title="票据类型"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="orderDate"
           title="计划采购日期"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="orgName"
           title="直发门店"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="statusName"
           title="状态"
           width="120"
@@ -54,69 +61,82 @@
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group2" title="配件信息">
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="partCode"
           title="配件编码"
           width="300"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="partName"
           title="配件名称"
           width="200"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="oemCode"
           title="OE码"
           width="200"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="partBrand"
           title="品牌"
           width="200"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
           width="200"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="unit"
           title="单位"
           width="200"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="spec"
           title="规格"
           width="200"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="数量/价格">
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="orderQty"
           title="计划采购数量"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="orderPrice"
           title="计划采购单价"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="orderAmt"
           title="计划采购金额"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="detailRemark"
           title="备注"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="enterQty"
           title="转单数量"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="adjustQty"
           title="取消数量"
           width="120"
@@ -128,7 +148,8 @@
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="taxRate"
           title="税率"
           width="200"
@@ -136,29 +157,34 @@
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="createUname"
           title="创建人"
           width="140"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="createTime"
           title="创建日期"
           width="200"
 
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="auditor"
           title="提交人"
           width="140"
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="auditDate"
           title="提交日期"
           width="200"
 
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
+        <vxe-table-column
+          show-overflow="tooltip"
           field="mainRemark"
           title="订单备注"
           width="200"
@@ -190,11 +216,12 @@ export default {
         total: 0
       },
       body: {},
-      tableData: []
+      tableData: [],
+      total: {}
     };
   },
   mounted() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     // 查询表
@@ -215,6 +242,7 @@ export default {
           el.statusName = el.statu == 0 ? "未下订单" : (el.statu == 1 ? "已下部分订单" : (el.statu == 2 ? "完成订单" : ""));
           return el;
         });
+        this.total = res.data.purchaseEnterBean
         this.page.total = res.data.totalElements;
       } else {
         this.page.total = 0;
@@ -229,12 +257,13 @@ export default {
       };
       let res = await api.getPjPchsPlanDetailList(this.body, params);
       if (res.code == 0 && res.data != null) {
+        this.total = res.data.purchaseEnterBean
         tableDataAll = (res.data.content || []).map(el => {
           if ([1, "1", "是"].includes(el.taxSign)) {
-            el.taxSign = true;
+            el.taxSign = "是";
           }
           if ([0, "0", "否"].includes(el.taxSign)) {
-            el.taxSign = false;
+            el.taxSign = "否";
           }
           el.statusName = el.statu == 0 ? "未下订单" : (el.statu == 1 ? "已下部分订单" : (el.statu == 2 ? "完成订单" : ""));
           return el;
@@ -277,6 +306,17 @@ export default {
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
+          }
+          return null;
+        }),
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "总合计";
+          }
+          for(let key in this.total){
+            if(key==column.property){
+              return this.total[key]
+            }
           }
           return null;
         })

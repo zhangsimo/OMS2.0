@@ -118,6 +118,7 @@
           auto-resize
           show-footer
           max-height="400"
+          ref="xTable"
           align="center"
           :footer-method="payCollection"
           :data="tableData"
@@ -258,17 +259,20 @@ export default {
       // });
       // this.BusinessType = [...this.BusinessType, ...val.two];
       let jsonArr = [val]
-      jsonArr.map(item => {
-        item.orgName = this.reconciliationStatement.orgName;
-        item.accountNo = item.serviceId;
-        // item.guestName = item.guestName;
-        item.businessTypeName = item.businessType.name;
-        item.reconciliationAmt = item.paymentClaimAmt;
-        item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
-        item.unAmt = -item.paymentBalance;
-        item.rpAmt = -item.paymentBalance;
-        item.unAmtLeft = +item.rpAmt - +item.unAmt;
-      })
+      if(jsonArr.length>=1){
+        jsonArr.map(item => {
+          item.id=item.id
+          item.orgName = this.reconciliationStatement.orgName;
+          item.accountNo = item.serviceId;
+          // item.guestName = item.guestName;
+          item.businessTypeName = item.businessType.name;
+          item.reconciliationAmt = item.paymentClaimAmt;
+          item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
+          item.unAmt = -item.paymentBalance;
+          item.rpAmt = -item.paymentBalance;
+          item.unAmtLeft = +item.rpAmt - +item.unAmt;
+        })
+      }
       this.BusinessType.push(...jsonArr)
       this.checkComputed()
     },
@@ -374,7 +378,7 @@ export default {
                   this.$parent.getQuery();
                 }
               });
-              // this.$XModal.message({ status: 'success', message: '校验成功！' })
+              this.$XModal.message({ status: 'success', message: '校验成功！' })
             }
           })
         } else {

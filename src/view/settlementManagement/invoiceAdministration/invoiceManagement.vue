@@ -104,12 +104,11 @@
           border
           :columns="columns"
           :data="data"
-          ref="summary"
+          ref="summaryss"
           show-summary
           :summary-method="handleSummary"
           highlight-row
           @on-selection-change="requires"
-          max-height="600"
         ></Table>
         <Page
           :total="pagetotal"
@@ -395,9 +394,9 @@ export default {
           }
         },
         {
-          title: "登记日期",
+          title: "导入勾选数据时间",
           key: "registrationDate",
-          minWidth: 70,
+          minWidth: 120,
           render: (h, params) => {
             return h("div", [
               h(
@@ -636,9 +635,9 @@ export default {
           minWidth: 70
         },
         {
-          title: "导入经办人",
+          title: "导入进项经办人",
           key: "importUname",
-          minWidth: 80,
+          minWidth: 100,
           render: (h, params) => {
             return h("div", [
               h(
@@ -709,6 +708,24 @@ export default {
                 params.row.checkCertificationTime
               )
             ]);
+          }
+        },
+        {
+          title: "认证所属期间",
+          key: "returned",
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h("span", params.row.returned ? "是" : "否");
+          }
+        },
+        {
+          title: "导入勾选经办人",
+          key: "returned",
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h("span", params.row.returned ? "是" : "否");
           }
         },
         {

@@ -11,7 +11,7 @@
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
+          <el-input ref="elinput" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
         </div>
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
@@ -148,7 +148,7 @@
 
     private bands: Array<any> =[] //品牌列表
     private filters: Array<any> =[] //品牌列表
-    
+
 
     private tableDataBm: Array<any> = new Array();
 
@@ -156,6 +156,7 @@
       this.reset();
       this.getPchsPlanList();
       this.shows = true;
+      this.$nextTick(() => (this.$refs.elinput as any).focus());
     }
 
     @Emit('getPlanOrder')
@@ -236,6 +237,7 @@
 
     //点击全选
     private cellClickEvent( {selection} ) {
+      this.selectRow=selection
       // console.log(selection);
     }
 

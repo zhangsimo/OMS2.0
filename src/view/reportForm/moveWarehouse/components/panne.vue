@@ -9,8 +9,8 @@
           <div class="db mr10">
             <span>提交日期：</span>
             <DatePicker
+              @on-change="getDataQuick2"
               type="daterange"
-              v-model="search.submitDate"
               :value="search.submitDate"
               placement="bottom-start"
               placeholder="选择日期"
@@ -78,10 +78,8 @@
   import more from "./more";
   import * as api from "_api/reportForm/index.js";
   import {creat} from "@/view/settlementManagement/components";
-  import {v4} from "uuid";
-  import Cookies from "js-cookie";
-  import {TOKEN_KEY} from "../../../../libs/util";
-  import Api from "_conf/url";
+
+  import {getWares} from "@/view/reportForm/until.js"
 
   export default {
     components: {QuickDate, more},
@@ -123,7 +121,6 @@
     },
     async mounted() {
       let resE = await api.getStorelist();
-      let resW = await api.getWarehouse();
       if (resE.code == 0) {
         let data = resE.data;
         this.stores=[{id: 0, name: "全部"}]
@@ -131,29 +128,11 @@
           this.stores.push({id: key, name: data[key]})
         })
       }
-      if (resW.code == 0) {
-        this.warehouse = resW.data;
-      }
     },
     methods: {
       //获取仓库
       async getWares(orgId) {
-        orgId==0?orgId="":orgId=orgId
-        let res = JSON.parse(localStorage.getItem('oms2-userList'))
-        let tenantId = res.tenantId || 0
-        let shopkeeper = res.shopkeeper || 0
-        let uuid = v4()
-        let params = {tenantId: tenantId, shopId: orgId, shopkeeper: shopkeeper, uuid: uuid, scope: "oms"}
-        await this.ajaxAll.get(`${Api.wmsApi}/comStore/stores/findByShopId`, {
-          params: params,
-          headers: {
-            Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-          }
-        }).then((res2) => {
-          if (res2.data.code === 0) {
-            this.warehouse = res2.data.data;
-          }
-        })
+        this.warehouse = await getWares(orgId)
       },
       // 快速日期查询
       async getDataQuick(v) {
@@ -166,10 +145,15 @@
           this.getWares(this.search.orgid)
           this.$emit("search", {isPanne: true, commitStartDate: v[0], commitEndDate: v[1], orgid: this.search.orgid});
         } else {
+          let arr = await creat("", this.$store);
+          this.search.orgid = arr[1];
           this.search.content = "";
           this.search.storeId = ""
           this.$emit("search", {isPanne: true, orgid: this.search.orgid});
         }
+      },
+      getDataQuick2(v){
+        this.search.submitDate = v;
       },
       // 查询
       query() {

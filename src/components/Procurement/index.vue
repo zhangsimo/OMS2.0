@@ -11,7 +11,7 @@
           <getDate class="mr10" @quickDate="getDataQuick"></getDate>
         </div>
         <div class="db mr5">
-          <Input placeholder="配件内码/编码/名称/OE码" v-model="partId" @on-enter="query"/>
+          <el-input autofocus ref="input" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
         </div>
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
@@ -206,7 +206,8 @@ export default class ProcurementModal extends Vue {
   private init() {
     let tableRef:any = this.$refs.xTable1;
     tableRef.refreshColumn();
-    tableRef.recalculate(true)
+    // tableRef.recalculate(true)
+    this.$nextTick(() => (this.$refs.input as any).focus());
     this.reset();
     this.getPchsPlanList();
     this.shows = true;

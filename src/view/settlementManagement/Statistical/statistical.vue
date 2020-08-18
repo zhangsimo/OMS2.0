@@ -23,6 +23,21 @@
             ></Date-picker>
           </div>
           <div class="db ml15">
+            <span>对应科目：</span>
+            <el-cascader
+              ref="casecader"
+              size="small"
+              :options="options"
+              @change="getKemuList"
+              :props="{ multiple: true, children: 'children',label:'titleName',value:'id' }"
+              collapse-tags
+              clearable></el-cascader>
+          </div>
+          <div class="db ml15">
+            <span>账号：</span>
+            <Input v-model="accountCode" class="w140 mr10" />
+          </div>
+          <div class="db ml15">
             <span>区域：</span>
             <Select v-model="areaId" class="w150" @on-change="changeArea" :disabled="selectShopList">
               <Option v-for="item in areas" :value="item.id" :key="item.id">{{item.companyName}}</Option>
@@ -53,12 +68,11 @@
       </div>
     </section>
 
-    <div class="mt15 warp_table">
+    <div class="mt15">
       <Table
         :columns="columns"
         :data="tableData"
         height="600"
-        size="small"
         border
         stripe
       ></Table>
@@ -75,6 +89,9 @@ import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "_api/settlementManagement/financialStatement.js";
 import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
+import {getTreeList} from "../../../api/accountant/accountant";
+import {getTableList}from '@/api/accountant/accountant'
+
 export default {
   name: "statistical",
   components: {
@@ -156,7 +173,7 @@ export default {
         {
           title: "税费返还等财政补助",
           key: "refundMoney",
-          width: 100
+          width: 130
         },
         {
           title: "行政性收入",
@@ -181,7 +198,7 @@ export default {
         {
           title: "本日经营活动收入小计",
           key: "businessActivitiesMoney",
-          width: 100
+          width: 150
         },
         {
           title: "内部往来：拨入",
@@ -191,12 +208,12 @@ export default {
         {
           title: "投、融资活动产生的现金收入",
           key: "financingActivitiesMoney",
-          width: 100
+          width: 200
         },
         {
           title: "本日资金收入小计",
           key: "dayMoney",
-          width: 100
+          width: 150
         },
         {
           title: "付出应付",
@@ -206,7 +223,7 @@ export default {
         {
           title: "付出应付（总部代付）",
           key: "headPaycopeMoney",
-          width: 100
+          width: 150
         },
         {
           title: "采购支出合计",
@@ -254,14 +271,14 @@ export default {
           width: 100
         },
         {
-          title: "本日资金支出小计",
-          key: "deathMoney",
-          width: 100
-        },
-        {
           title: "费用报销业务类型",
           key: "expenseReimbursement",
-          width: 100
+          width: 150
+        },
+        {
+          title: "本日资金支出小计",
+          key: "deathMoney",
+          width: 150
         },
         {
           title: "内部往来：拨出",
@@ -271,20 +288,29 @@ export default {
         {
           title: "投、融资活动产生的现金支",
           key: "outActivitiesMoney",
-          width: 100
+          width: 200
         },
         {
           title: "本日资金支出小计",
           key: "capitalSpendingMoney",
-          width: 100
-        }
+          width: 150
+        },
+        {
+          title: "期末余额",
+          key: "endingBalanceMoney",
+          width: 200
+        },
       ],
       tableData: [], // 主表
       dates: [], // 查询日期
       areaId: 0, // 区域id
       areas: [{ id: 0, companyName: "全部" }], // 区域
       BranchstoreId: "", // 门店id
-      Branchstore: [{ id: 0, name: "全部" }] // 门店
+      Branchstore: [{ id: 0, name: "全部" }], // 门店
+
+      accountCode:'',//账号
+      mateAccountCode:'',//对应科目
+      options:[]
     };
   },
   async mounted() {
@@ -292,6 +318,7 @@ export default {
     this.getArea();
     this.getShop();
     this.query();
+    this.getTreeListFun();
   },
   computed:{
     selectShopList(){
@@ -303,6 +330,45 @@ export default {
     }
   },
   methods: {
+    async getTreeListFun(){
+      let rep2 = await getTableList({parentCode :101})
+      if(rep2.code ==0){
+        let content = rep2.data||[];
+        this.options = this.treeDataFun(content)
+      }
+    },
+    treeDataFun(content){
+      let level1 = content.filter(item =>item.titleLevel===1&&(item.titleCode=='1001'||item.titleCode=='1002'||item.titleCode=='1012'));
+      return this.treeFilterData(level1,content);
+    },
+
+    treeFilterData(treeData,content){
+      treeData.map(item => {
+        let arrData = content.filter(item1 => item1.parentCode==item.titleCode);
+        if(arrData.length>0){
+          item.children = this.treeFilterData(arrData,content)
+        }else{
+          item.children = null
+        }
+      })
+      return treeData
+    },
+
+
+    getKemuList(v){
+      if(v.length==0){
+        return this.mateAccountCode = ""
+      }
+      let req = []
+      v.map(item => {
+        if(item.length>0){
+          let end = item.slice(-1)
+          req.push(end.join(''))
+        }
+      })
+      this.mateAccountCode = req.join(',')
+    },
+
     // 快速查询
     getDataQuick(v) {
       this.dates = v;
@@ -378,6 +444,9 @@ export default {
         params.endTime = moment(this.dates[1]).format("YYYY-MM-DD");
       }
 
+      params.mateAccountCode = this.mateAccountCode;
+      params.accountCode = this.accountCode;
+
       params.page = 0;
 
       for (let key in params) {
@@ -410,9 +479,6 @@ export default {
   display: inline-block;
   width: 100px;
   text-align: right;
-}
-.inner-box {
-  overflow-x: scroll;
 }
 .warp_table {
   padding: 1px;

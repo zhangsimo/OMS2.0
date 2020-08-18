@@ -186,7 +186,7 @@ export default {
     };
   },
   mounted() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     // 查询表
@@ -253,10 +253,10 @@ export default {
         if (res.code == 0) {
           let arrData = (res.data.content || []).map(el => {
             if ([1, "1", "是"].includes(el.taxSign)) {
-              el.taxSign = true;
+              el.taxSign = "是";
             }
             if ([0, "0", "否"].includes(el.taxSign)) {
-              el.taxSign = false;
+              el.taxSign = "否";
             }
             return el;
           });

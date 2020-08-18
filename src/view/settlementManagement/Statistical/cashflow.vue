@@ -64,6 +64,16 @@
           <span>本日余额</span>
           <span>{{ headData.balanceMoney }}</span>
         </div>
+        <div class="head">
+          <span>本期期初余额</span>
+          <span>{{ headData.startMoney||0  }}</span>
+          <span>本期累计收款</span>
+          <span>{{ headData.incomeMoneyTotal||0  }}</span>
+          <span>本期累计付款</span>
+          <span>{{ headData.paidMoneyTotal||0  }}</span>
+          <span>本期期末余额</span>
+          <span>{{ headData.lanceMoneyEnd||0  }}</span>
+        </div>
       </div>
     </section>
 
@@ -140,7 +150,11 @@ export default {
         balanceMoney: 0,
         incomeMoney: 0,
         paidMoney: 0,
-        yesterDayMoney: 0
+        yesterDayMoney: 0,
+        startMoney:0,
+        lanceMoneyEnd:0,
+        paidMoneyTotal:0,
+        incomeMoneyTotal:0
       },
       tableData: [], // 主表
       dates: [], // 查询日期
@@ -301,11 +315,11 @@ export default {
 .head {
   display: flex;
   align-items: center;
-  padding: 0 15px;
+  padding: 5px 15px;
   text-align: center;
 }
 .head span {
-  flex: auto;
+  flex: 1;
   border: 1px solid #ccc;
   line-height: 1.5rem;
   margin-left: -1px;

@@ -18,6 +18,7 @@
             <Select
               v-model="penSalesData.guestId"
               filterable
+              clearable
               remote
               :remote-method="getGuestList"
               style="width: 120px"
@@ -26,8 +27,8 @@
             >
               <Option
                 v-for="(item,index) in guestList"
-                :value="item.guestId"
-                :key="item.guestId"
+                :value="item.id"
+                :key="item.id"
               >{{item.shortName}}</Option>
             </Select>
             <!-- <Input

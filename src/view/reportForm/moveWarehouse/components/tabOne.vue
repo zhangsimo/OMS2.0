@@ -177,13 +177,14 @@ export default {
         size: 10,
         total: 0
       },
+      data:{},
       tableDataAll: [],
       tableData: [],
       searchData:{}
     };
   },
   mounted() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     // 查询表
@@ -246,14 +247,14 @@ export default {
         size:this.page.total
       }
       return new Promise(async (resolve, reject) => {
-        let res = await api.getStockShiftEnter(this.searchData,pageObj);
+        let res = await api.getStockShiftEnter(this.data,pageObj);
         if (res.code == 0) {
           let arrData = (res.data.content || []).map(el => {
             if ([1, "1", "是"].includes(el.taxSign)) {
-              el.taxSign = true;
+              el.taxSign = "是";
             }
             if ([0, "0", "否"].includes(el.taxSign)) {
-              el.taxSign = false;
+              el.taxSign = "否";
             }
             return el;
           });

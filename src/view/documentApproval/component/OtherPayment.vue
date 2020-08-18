@@ -109,9 +109,9 @@
             </Col>
             <Col span="6">
               <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
-                <Select @on-change="getCompany" v-model="formInline.receiveGuestId" label-in-value filterable
+                <Select @on-change="changeCollectionUname" v-model="formInline.receiverId" label-in-value filterable
                         style="width: 90%;padding-left: 5px" :disabled="modelType">
-                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                  <Option v-for="item in receiverArr" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
                 </Select>
               </FormItem>
             </Col>

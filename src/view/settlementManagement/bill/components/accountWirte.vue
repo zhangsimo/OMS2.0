@@ -8,6 +8,7 @@
       ref="companyGuset"
       v-model="companyName"
       filterable
+      clearable
       remote
       class="w150"
       :disabled="isCanChange"
@@ -135,6 +136,8 @@ export default {
     //  是否可以跨店搜索
     canShopList(e){
       this.$refs.companyGuset.query = this.$parent.$parent.reconciliationStatement.guestName||""
+      this.companyId = this.$parent.$parent.reconciliationStatement.guestId||"";
+      this.seleteQuery();
       this.isCanChange = e
     },
 
@@ -194,6 +197,7 @@ export default {
         receivePaymentType: this.paymentId,
         guestId: this.companyId,
         sort:this.sort,
+        crossStoreSearch: this.checkSingle? 1 : 0
       };
       obj.size = 9999
       obj.page = 0

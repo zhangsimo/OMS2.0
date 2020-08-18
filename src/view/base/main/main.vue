@@ -1,5 +1,5 @@
 <template>
-  <Layout style="height: 100%" class="main">
+  <Layout style="height: 100%" class="main" id="routes">
     <Sider
       hide-trigger
       collapsible

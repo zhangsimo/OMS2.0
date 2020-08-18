@@ -38,9 +38,9 @@ export default {
         receiveGuestId: [
           { required: true, message: "往来单位", trigger: "change" }
         ],
-        // receiver: [
-        //   { required: true, message: "收款人账户必填", trigger: "change" }
-        // ],
+        receiverId: [
+          { required: true, message: "收款人账户必填", trigger: "change" }
+        ],
         receiveBank: [
           { required: true, message: "开户行名称必填", trigger: "blur" }
         ],
@@ -127,8 +127,10 @@ export default {
       if (res.code === 0) {
         this.$nextTick(() => {
           this.formInline = res.data;
-          this.formInline.receiver=res.data.receiverId
+          this.formInline.receiverId=res.data.receiverId
           this.remoteMethod(res.data.receiveGuestName)
+          //获取收款账户
+          this.getAccountNameList({value:res.data.receiveGuestId});
           this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
             voucherPictures: res.data.voucherPictures,
@@ -137,36 +139,6 @@ export default {
         });
       }
     },
-    async remoteMethodShort(query){
-      this.company = [];
-      if (query !== "") {
-        this.remoteloading = true;
-        let arr=[]
-        let req = {
-          shortName:query,
-          size:50,
-        }
-        let res = await getGuestShortName(req);
-        if (res.code == 0) {
-          console.log(res.data.content,111)
-          // res.data.content.map(item => {
-          //   arr.push({
-          //     value: item.id,
-          //     label: item.fullName,
-          //     receiver: item.accountReceiveName || "",
-          //     receiveBank: item.accountBank || "",
-          //     receiveBankNo: item.accountBankNo || ""
-          //   });
-          // });
-        }
-        let arrJson=new Set(arr)
-        this.company=Array.from(arrJson)
-        this.remoteloading = false;
-      } else {
-        this.company = [];
-      }
-    },
-
 
     async remoteMethod(query) {
       this.company = [];
@@ -204,8 +176,9 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      // let arr = this.company.filter( item => item.value == row.value)
-      this.getAccountNameList(row);
+      if(row){
+        this.getAccountNameList(row);
+      }
     },
     //付款人账号搜索出发
     remoteMethod2(query){
@@ -220,6 +193,7 @@ export default {
           this.setReceiverInfo(rep.data[0]);
         } else {
           this.formInline.receiver = "";
+          this.formInline.receiverId = "";
           this.formInline.receiveBank = "";
           this.formInline.receiveBankNo = "";
         }
@@ -246,13 +220,18 @@ export default {
       }
     },
     setReceiverInfo(row) {
-      this.formInline.receiverId = row.id;
-      this.formInline.receiveBank = row.accountBank;
-      this.formInline.receiveBankNo = row.accountBankNo;
+      if(row){
+        this.formInline.receiver = row.accountName;
+        this.formInline.receiverId = row.id;
+        this.formInline.receiveBank = row.accountBank;
+        this.formInline.receiveBankNo = row.accountBankNo;
+      }
     },
 
     changeCollectionUname(v) {
       let arr = this.receiverArr.filter(item => item.id == v);
+      this.formInline.receiveGuestName=this.company.filter(item=>item.value==this.formInline.receiveGuestId)[0].label
+      this.remoteMethod(this.formInline.receiveGuestName)
       this.setReceiverInfo(arr[0]);
     },
 
@@ -320,6 +299,7 @@ export default {
           if (res.code == 0) {
             this.$Message.success("操作成功");
             this.model = false;
+            this.$emit("updateD")
           }
         } else {
           this.$Message.error("带*必填");

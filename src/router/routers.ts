@@ -71,7 +71,7 @@ export default [
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "滚动计划单",
-          // 
+          //
         },
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },
@@ -82,7 +82,7 @@ export default [
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "计划采购订单",
-          // 
+          //
         },
         component: () =>
           import("@/view/goods/plannedPurchaseOrder/plannedPurchaseOrder.vue")
@@ -281,7 +281,20 @@ export default [
         },
         component: () =>
           import("@/view/salesManagement/hsOrder/hsIndex.vue")
-      }
+      },
+      // {
+      //   path: "/hsOrder/hsPayment",
+      //   name: "hsPayment",
+      //   mark: "2004",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "华胜代付入库",
+      //     keepAlive: false,
+      //     // hideInMenu:true
+      //   },
+      //   component: () =>
+      //     import("@/view/salesManagement/hsOrder/hsPayment.vue")
+      // }
     ]
   },
   {
@@ -871,7 +884,7 @@ export default [
         mark: "5200",
         meta: { keepAlive: true,
           // hideInMenu: true,
-          
+
           title: "应收应付"
         },
         component: () =>
@@ -985,7 +998,7 @@ export default [
             name: "shopJournal",
             mark: "51102",
             meta: { keepAlive: true,
-              
+
               title: "门店资金日记账"
             },
             component: () =>
@@ -1028,7 +1041,7 @@ export default [
             name: "accountings",
             mark: "51106",
             meta: { keepAlive: true,
-              
+
               title: "资金日记账审核"
             },
             component: () =>
@@ -1040,7 +1053,7 @@ export default [
             redirect: "",
             mark: "51107",
             meta: { keepAlive: true,
-              
+
               title: "现金日记账"
             },
             component: () =>
@@ -1101,7 +1114,7 @@ export default [
         mark: "11002",
         meta: { keepAlive: true,
           title: "申请单",
-          // 
+          //
         },
         component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
       },
@@ -1772,7 +1785,7 @@ export default [
         name: "allotThree",
         mark: "9301",
         meta: { keepAlive: true,
-          // 
+          //
           title: "基本信息"
         },
         component: parentView,
@@ -1782,7 +1795,7 @@ export default [
             name: "/accountInformation",
             mark: "9301",
             meta: { keepAlive: true,
-              // 
+              //
               title: "基本信息",
 
             },
@@ -1843,7 +1856,7 @@ export default [
         name: "templateIndex",
         mark: "9999",
         meta: { keepAlive: true,
-          // 
+          //
           title: "模板管理",
 
         },

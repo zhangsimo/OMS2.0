@@ -605,7 +605,7 @@ export default {
         }, [])
         const nowIndex = columnsField.findIndex(v => v === nowField)
         // 判断当前是否是可编辑倒数地二行
-        const isLastColumn = nowIndex === columnsField.length - 2
+        const isLastColumn = nowIndex === columnsField.length - 1
         // console.log('isLastColumn', isLastColumn)
         if (isLastColumn) {
           // 插入数据

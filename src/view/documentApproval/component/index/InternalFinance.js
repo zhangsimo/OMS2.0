@@ -70,7 +70,7 @@ export default {
   methods:{
     //模态框打开111
     open(){
-      this.xTable.recalculate(true)
+      this.$refs.xTable.recalculate(true)
       this.payUserList = this.list.payList
       this.getShiftTo()
       this.formInline = {}
@@ -192,6 +192,7 @@ export default {
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
+            this.$emit("updateD")
           }
         } else {
           this.$Message.error('带*必填');

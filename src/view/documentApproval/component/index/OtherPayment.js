@@ -39,7 +39,7 @@ export default {
         receiveGuestId: [
           {required: true, message: '往来单位', trigger: 'change'}
         ],
-        receiver: [
+        receiverId: [
           {required: true, message: '收款人账户必填', trigger: 'change'}
         ],
         receiveBank: [
@@ -129,7 +129,7 @@ export default {
       if (res.code === 0) {
         this.$nextTick(() => {
           this.formInline = res.data
-          this.formInline.receiver=res.data.receiverId
+          this.formInline.receiverId=res.data.receiverId
           this.getOrignCompany(res.data.receiveGuestName)
           this.remoteMethod2(res.data.paymentAccountName)
           this.Pictures = {
@@ -143,7 +143,6 @@ export default {
 
     //获取往来单位
     getCompany(row) {
-      // let arr = this.company.filter( item => item.value == row.value)
       this.getAccountNameList(row)
     },
     //付款人账号搜索出发
@@ -204,7 +203,7 @@ export default {
         if (rep.data.length >= 1) {
           this.setReceiverInfo(rep.data[0])
         } else {
-          this.formInline.receiver = ''
+          this.formInline.receiverId = ''
           this.formInline.receiveBank = ''
           this.formInline.receiveBankNo = '';
         }
@@ -212,13 +211,17 @@ export default {
     },
 
     setReceiverInfo(row) {
-      this.formInline.receiver = row.id;
-      this.formInline.receiveBank = row.accountBank;
-      this.formInline.receiveBankNo = row.accountBankNo;
+      if(row){
+        this.formInline.receiverId = row.id;
+        this.formInline.receiveBank = row.accountBank;
+        this.formInline.receiveBankNo = row.accountBankNo;
+      }
     },
 
     changeCollectionUname(v) {
-      let arr = this.receiverArr.filter(item => item.id == v);
+      let arr = this.receiverArr.filter(item => item.id == v.value);
+      this.formInline.receiveGuestName=this.company.filter(item=>item.value==this.formInline.receiveGuestId)[0].label
+      this.getOrignCompany(this.formInline.receiveGuestName)
       this.setReceiverInfo(arr[0]);
     },
 
@@ -273,7 +276,7 @@ export default {
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
-            this.$parent.getQuery()
+            this.$emit("updateD")
           }
         } else {
           this.$Message.error('带*必填');
