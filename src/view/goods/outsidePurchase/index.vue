@@ -468,7 +468,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="notEnterQty"
+                  field="adjustQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>
