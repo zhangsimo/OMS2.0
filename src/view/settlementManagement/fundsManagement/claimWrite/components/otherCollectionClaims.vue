@@ -406,10 +406,10 @@ export default {
         data.guestId = objItem.id||"";
         data.financeAccountCashList = this.accrued
         if(this.claimTit=="预收款认领"){
-          data.claimType = 0
+          data.claimType = 3
         }else{
           data.subjectCode="2241";
-          data.claimType=5
+          data.claimType=0
         }
         addClaim(data).then(res=>{
           if(res.code===0){

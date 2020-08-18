@@ -547,6 +547,15 @@ export default {
       }
     };
   },
+  computed:{
+    selectShopList(){
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
+    }
+  },
   mounted() {
     this.getCommpany();
     this.getMasterId();
@@ -960,7 +969,8 @@ export default {
           tooltip: true
         }
       ];
-      if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
+
+      if (this.selectShopList) {
         this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
         this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
         // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];

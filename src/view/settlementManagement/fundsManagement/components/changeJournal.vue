@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modalShow" title="修改现金日记账" width="700">
+  <Modal v-model="modalShow" title="修改日记账" width="700">
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustomRalus" :label-width="100" label-colon>
       <Row>
         <Col span="12">
