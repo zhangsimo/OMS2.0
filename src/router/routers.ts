@@ -17,6 +17,7 @@ export default [
     name: "login",
     meta: { keepAlive: true,
       title: "Login - 登录",
+      content:"webkit",
       hideInMenu: true
     },
     component: () => import("@/view/base/login/login.vue")
@@ -27,6 +28,7 @@ export default [
     name: "register",
     meta: { keepAlive: true,
       title: "register - 注册",
+      content:"webkit",
       hideInMenu: true
     },
     component: () => import("@/view/base/register/register.vue")
@@ -35,8 +37,9 @@ export default [
     path: "/",
     redirect: "/home",
     component: Main,
-    meta: { keepAlive: true,
-
+    meta: {
+      keepAlive: true,
+      content:"webkit",
       title: "首页"
     },
     children: [
