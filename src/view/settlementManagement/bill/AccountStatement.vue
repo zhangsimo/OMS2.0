@@ -1572,10 +1572,10 @@ export default {
     getAccountStatement() {
       let obj = {
         startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         orgId: this.model1,
         statementStatus: this.Reconciliationtype,
