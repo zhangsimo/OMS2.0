@@ -83,8 +83,6 @@
               <div class="pane-made-hd">销售退货列表</div>
               <Table
                 ref="currentRowTable"
-                :queryTime="queryTime"
-                :billStatusId="billStatusId"
                 :height="leftTableHeight"
                 size="small"
                 highlight-row
@@ -809,6 +807,7 @@ export default {
     },
     //新增按钮
     addOneList() {
+      let arr = JSON.parse(JSON.stringify(this.sellOrderTable.tbdata))
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
@@ -823,13 +822,12 @@ export default {
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
-      for (let b of this.sellOrderTable.tbdata) {
+      for (let b of arr) {
         b._highlight = false;
       }
-      this.sellOrderTable.tbdata.unshift(this.PTrow);
-      console.log(this.sellOrderTable.tbdata , 7879)
-
-      // this.sellOrderTable.tbdata[0]._highlight = true;
+      arr.unshift(this.PTrow);
+      this.sellOrderTable.tbdata = arr
+      this.sellOrderTable.tbdata[0]._highlight = true;
       this.isAdd = false;
     },
     //获取客户属性
