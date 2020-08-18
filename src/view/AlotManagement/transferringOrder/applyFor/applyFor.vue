@@ -148,12 +148,12 @@
                           :before-upload="handleBeforeUpload"
                           :on-success="handleSuccess"
                           :on-format-error="onFormatError"
-                          :disabled="![0, 4].includes(datadata&&datadata.status.value)"
+                          :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
                         >
                           <Button
                             size="small"
                             class="mr10"
-                            :disabled="![0, 4].includes(datadata&&datadata.status.value)"
+                            :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
                           >导入配件</Button>
                         </Upload>
                       </div>
@@ -1159,7 +1159,7 @@
                   el._highlight = true;
                   this.isAdd = true;
                   this.setRow(el);
-                  self.$Message.error(res.data.join(";"));
+                  this.warning(res.data);
                 }
               })
             }
@@ -1167,10 +1167,21 @@
             self.$Message.error(res.message);
           }
         },
-        warning(nodesc) {
+        warning(nodesc){
+          let str=""
+          if(nodesc.length>0){
+            nodesc.map((item,index)=>{
+              if(index!=nodesc.length-1){
+                str+=`${item}<br/>`;
+              }else{
+                str+=`${item}`;
+              }
+            })
+          }
           this.$Notice.warning({
             title: '上传错误信息',
-            desc: nodesc
+            desc: str,
+            duration: 0
           });
         },
         onFormatError(file) {

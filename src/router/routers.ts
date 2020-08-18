@@ -35,16 +35,16 @@ export default [
     path: "/",
     redirect: "/home",
     component: Main,
-    meta: { keepAlive: true,
-
+    meta: {
+      keepAlive: true,
       title: "首页"
     },
     children: [
       {
         path: "home",
         name: "home",
-        meta: { keepAlive: true,
-
+        meta: {
+          keepAlive: true,
           icon: "md-home",
           title: "首页"
         },
