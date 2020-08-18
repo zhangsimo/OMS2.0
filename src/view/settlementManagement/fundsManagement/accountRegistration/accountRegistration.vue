@@ -27,15 +27,26 @@
             <span>开户行：</span>
             <input type="text" class="h30" v-model="bankName" />
           </div>
+<!--          <div class="db ml15">-->
+<!--            <span>对应科目：</span>-->
+<!--            <Select v-model="subjectCode" filterable class="w150">-->
+<!--              <Option-->
+<!--                v-for="item in subJectList"-->
+<!--                :value="item.id"-->
+<!--                :key="item.id"-->
+<!--              >{{ item.titleName }}</Option>-->
+<!--            </Select>-->
+<!--          </div>-->
           <div class="db ml15">
             <span>对应科目：</span>
-            <Select v-model="subjectCode" filterable class="w150">
-              <Option
-                v-for="item in subJectList"
-                :value="item.id"
-                :key="item.id"
-              >{{ item.titleName }}</Option>
-            </Select>
+            <el-cascader
+              ref="casecader"
+              size="small"
+              :options="options"
+              @change="getKemuList"
+              :props="{ multiple: true, children: 'children',label:'titleName',value:'id' }"
+              collapse-tags
+              clearable></el-cascader>
           </div>
           <div class="db ml15">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -133,7 +144,9 @@ export default {
       subJectList: [{ id: 0, titleName: "全部" }], //对应科目数组
       tableData: [], //表格数据
       oneList: [], //当前表格数据
-      ChangeData: {} //给子组件传的当前行的数据
+      ChangeData: {}, //给子组件传的当前行的数据
+      mateAccountCode:'',//对应科目
+      options:[]
     };
   },
   computed:{
@@ -181,14 +194,49 @@ export default {
     },
 
     //获取科目
-    async getSubject() {
-      let data = {};
-      data.parentCode = 101;
-      let res = await getTableList(data);
-      if (res.code === 0)
-        return (this.subJectList = [...this.subJectList, ...res.data]);
+    // async getSubject() {
+    //   let data = {};
+    //   data.parentCode = 101;
+    //   let res = await getTableList(data);
+    //   if (res.code === 0)
+    //     return (this.subJectList = [...this.subJectList, ...res.data]);
+    // },
+    //获取科目
+    async getTreeListFun() {
+      let rep2 = await getTableList({parentCode: 101})
+      if (rep2.code == 0) {
+        let content = rep2.data || [];
+        this.options = this.treeDataFun(content)
+      }
     },
-
+    treeDataFun(content) {
+      let level1 = content.filter(item => item.titleLevel === 1 && (item.titleCode == '1001' || item.titleCode == '1002' || item.titleCode == '1012'));
+      return this.treeFilterData(level1, content);
+    },
+    treeFilterData(treeData, content) {
+      treeData.map(item => {
+        let arrData = content.filter(item1 => item1.parentCode == item.titleCode);
+        if (arrData.length > 0) {
+          item.children = this.treeFilterData(arrData, content)
+        } else {
+          item.children = null
+        }
+      })
+      return treeData
+    },
+    getKemuList(v) {
+      if (v.length == 0) {
+        return this.mateAccountCode = ""
+      }
+      let req = []
+      v.map(item => {
+        if (item.length > 0) {
+          let end = item.slice(-1)
+          req.push(end.join(''))
+        }
+      })
+      this.mateAccountCode = req.join(',')
+    },
     //切换地址重新调取门店接口
     changeArea() {
       if (this.$store.state.user.userData.shopkeeper == 0) {
@@ -217,8 +265,8 @@ export default {
       if (this.bankName) {
         params.bankName = this.bankName;
       }
-      if (this.subjectCode != 0) {
-        params.mateAccountCode = this.subjectCode;
+      if (this.mateAccountCode != 0) {
+        params.mateAccountCode = this.mateAccountCode;
       }
       findListPageAll(params).then(res => {
         if (res.code == 0) {
@@ -305,7 +353,7 @@ export default {
   mounted() {
     this.getAllAre(); //获取区域
     this.getShop()
-    this.getSubject(); //获取科目
+    this.getTreeListFun(); //获取科目
   }
 };
 </script>

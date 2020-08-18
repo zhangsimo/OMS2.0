@@ -247,9 +247,12 @@ export default {
     },
 
     //获取其他付款单据信息
-    otherPayList(row) {
+    async otherPayList(row) {
       delete row.id;
       this.$set(this.formInline, "details", [row]);
+      await this.remoteMethod(row.guestName.slice(0,row.guestName.length-3))
+      this.formInline.receiveGuestId=this.company[0].value
+      this.getCompany(this.company[0])
     },
 
     //选择单据

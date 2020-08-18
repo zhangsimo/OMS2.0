@@ -43,15 +43,26 @@
         </div>
       </div>
       <div class="oper-top flex">
-        <div class="db">
+<!--        <div class="db">-->
+<!--          <span>对应科目：</span>-->
+<!--          <Select  v-model="subjectCode" filterable class="w150">-->
+<!--            <Option-->
+<!--              v-for="item in subJectList"-->
+<!--              :value="item.id"-->
+<!--              :key="item.id"-->
+<!--            >{{ item.titleName }}</Option>-->
+<!--          </Select>-->
+<!--        </div>-->
+        <div class="db ml15">
           <span>对应科目：</span>
-          <Select  v-model="subjectCode" filterable class="w150">
-            <Option
-              v-for="item in subJectList"
-              :value="item.id"
-              :key="item.id"
-            >{{ item.titleName }}</Option>
-          </Select>
+          <el-cascader
+            ref="casecader"
+            size="small"
+            :options="options"
+            @change="getKemuList"
+            :props="{ multiple: true, children: 'children',label:'titleName',value:'id' }"
+            collapse-tags
+            clearable></el-cascader>
         </div>
         <div class="db ml15">
           <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -304,7 +315,7 @@
         model1: 0, //获取到地址id
         shopCode:0,//获取到门店id
         shopList: [], //门店列表
-        subjectCode:0,//科目id
+        subjectCode:[],//科目id
         subJectList:[
           {id:0 ,titleName:'全部'}
         ],//科目列表
@@ -321,6 +332,8 @@
         oneList:{},//点击获取到的信息
         allMoneyList:{},//获取到所有余额信息
         canQuickDateList: false,//判断是否可以查询
+        mateAccountCode:'',//对应科目
+        options:[]
       };
     },
     async mounted () {
@@ -331,7 +344,7 @@
       })
       this.getAllAre() //获取区域
       this.getShop()  //获取门店
-      this.getSubject()//获取科目
+      this.getTreeListFun()//获取科目
     },
     computed:{
       selectShopList(){
@@ -376,7 +389,42 @@
             this.setAreaDef();
         }
       },
-
+      //获取科目
+      async getTreeListFun(){
+        let rep2 = await getTableList({parentCode :101})
+        if(rep2.code ==0){
+          let content = rep2.data||[];
+          this.options = this.treeDataFun(content)
+        }
+      },
+      treeDataFun(content){
+        let level1 = content.filter(item =>item.titleLevel===1&&(item.titleCode=='1001'||item.titleCode=='1002'||item.titleCode=='1012'));
+        return this.treeFilterData(level1,content);
+      },
+      treeFilterData(treeData,content){
+        treeData.map(item => {
+          let arrData = content.filter(item1 => item1.parentCode==item.titleCode);
+          if(arrData.length>0){
+            item.children = this.treeFilterData(arrData,content)
+          }else{
+            item.children = null
+          }
+        })
+        return treeData
+      },
+      getKemuList(v){
+        if(v.length==0){
+          return this.subjectCode = []
+        }
+        let req = []
+        v.map(item => {
+          if(item.length>0){
+            let end = item.slice(-1)
+            req.push(end.join(''))
+          }
+        })
+        this.subjectCode = req
+      },
       // //切换地址重新调取门店接口
       changeArea(){
         // if (this.$store.state.user.userData.shopkeeper == 0) {
@@ -397,12 +445,12 @@
       },
 
       //获取科目
-      async getSubject(){
-        let data = {}
-        data.parentCode = 101
-        let res = await getTableList(data)
-        if(res.code === 0) return this.subJectList = [...this.subJectList , ...res.data]
-      },
+      // async getSubject(){
+      //   let data = {}
+      //   data.parentCode = 101
+      //   let res = await getTableList(data)
+      //   if(res.code === 0) return this.subJectList = [...this.subJectList , ...res.data]
+      // },
 
       // 日期选择
       dateChange(data){

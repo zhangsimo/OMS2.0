@@ -1245,19 +1245,36 @@ export default {
       if (response.code == 0) {
         let txt = "上传成功";
         if (response.data.length > 0) {
-          txt = response.data.join(",");
+          this.warning(response.data)
+        }else{
+          this.$Notice.warning({
+            title: "导入成功",
+            desc: txt,
+            duration: 0
+          });
         }
-        this.$Notice.warning({
-          title: "导入成功",
-          desc: txt,
-          duration: 0
-        });
       } else {
         this.$Message.error(response.message);
       }
       this.getLeftList();
     },
-
+    warning(nodesc) {
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`
+          }else{
+            str+=`${item}`
+          }
+        })
+      }
+      this.$Notice.warning({
+        title: "上传错误信息",
+        desc: str,
+        duration:0
+      });
+    },
     setRightData(v){
       if (v.id) {
         this.isNew = false;

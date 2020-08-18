@@ -813,7 +813,7 @@ export default {
         if (response.data.length === 0) {
           this.$Message.warning("导入成功！");
         } else {
-          this.$Message.error(response.data.join(";"));
+          this.warning(response.data);
         }
         this.leftgetList();
       } else {
@@ -821,9 +821,20 @@ export default {
       }
     },
     warning(nodesc) {
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`
+          }else{
+            str+=`${item}`
+          }
+        })
+      }
       this.$Notice.warning({
         title: "上传错误信息",
-        desc: nodesc
+        desc: str,
+        duration:0
       });
     },
     //上传之前清空

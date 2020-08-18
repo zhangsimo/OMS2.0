@@ -233,9 +233,20 @@ export default class OutsidePurchase extends Vue {
     }
   }
   warning(nodesc){
+    let str=""
+    if(nodesc.length>0){
+      nodesc.map((item,index)=>{
+        if(index!=nodesc.length-1){
+          str+=`${item}<br/>`;
+        }else{
+          str+=`${item}`;
+        }
+      })
+    }
     this.$Notice.warning({
       title: '上传错误信息',
-      desc: nodesc
+      desc: str,
+      duration: 0
     });
   };
   //上传之前清空
@@ -684,7 +695,7 @@ export default class OutsidePurchase extends Vue {
 
   private editClosedEvent({ row, column }, event) {
     //console.log(row,event,column)
-    //console.log(`关闭 ${column} 列编辑`)
+    // .log(`关闭 ${column} 列编辑`)
   }
 
   // 底部合计

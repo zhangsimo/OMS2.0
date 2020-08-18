@@ -196,7 +196,7 @@
                   size="small"
                   class="mr10"
                   @click="getRUl"
-                  :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd"
+                  :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd || !this.$parent.$parent.selectItemId"
                   v-has="'getBarch'"
                 >
                 <span class="center">
@@ -831,22 +831,34 @@
         if (response.code == 0) {
           let txt = "上传成功";
           if (response.data.length > 0) {
-            txt = response.data.join(",");
+            this.warning(response.data)
+          }else{
+            this.$Notice.warning({
+              title: "导入成功",
+              desc: txt,
+              duration: 0
+            });
           }
-          this.$Notice.warning({
-            title: "导入成功",
-            desc: txt,
-            duration: 0
-          });
           this.getList()
         } else {
           this.$Message.error(response.message);
         }
       },
       warning(nodesc) {
+        let str=""
+        if(nodesc.length>0){
+          nodesc.map((item,index)=>{
+            if(index!=nodesc.length-1){
+              str+=`${item}<br/>`
+            }else{
+              str+=`${item}`
+            }
+          })
+        }
         this.$Notice.warning({
           title: "上传错误信息",
-          desc: nodesc
+          desc: str,
+          duration:0
         });
       },
       //上传之前清空

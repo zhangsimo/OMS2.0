@@ -202,8 +202,9 @@ export default {
         value: 0
       }, //默认状态
       changeLeft: "", //发生改变数据调动左侧list
-      ispart: true,
+      ispart: false,
       isWms: false,
+      selectItemId:"",
       backShow: false //作废判断是否wms仓库
     };
   },

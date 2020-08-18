@@ -591,15 +591,17 @@ export default {
       //     return "";
       //   }
       // }
-      if (!this.infoBase.remark) {
-        // this.$message.error("请填写备注");
-        this.$message({
-          message: "请填写备注",
-          type: "error",
-          customClass: "zZindex"
-        });
-        return "";
-      }
+     if(num==1){
+       if (!this.infoBase.remark) {
+         // this.$message.error("请填写备注");
+         this.$message({
+           message: "请填写备注",
+           type: "error",
+           customClass: "zZindex"
+         });
+         return "";
+       }
+     }
      this.infoBase.buttonStatus = 1
      this.infoBase.commitType = 1
      this.list.four = [this.infoBase]

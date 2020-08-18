@@ -199,3 +199,11 @@ export function getExpenDetail (params){
     params
   })
 }
+// 费用报销 进项登记保存并提交
+export function setExpenDetail(data) {
+  return axios.request({
+    url: `${api.omsSettle}/entryRegistration/saveRegistrationInvoice`,
+    method: 'post',
+    data
+  })
+}

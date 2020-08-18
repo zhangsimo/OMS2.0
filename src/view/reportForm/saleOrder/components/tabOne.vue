@@ -18,7 +18,7 @@
           show-overflow="tooltip"
           field="serviceId"
           title="订单单号"
-          width="180"
+          width="164"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
@@ -29,97 +29,82 @@
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group1" title="订单信息">
         <vxe-table-column show-overflow="tooltip"
-                          field="orderMan"
-                          title="销售员"
-                          width="120"
-        ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="billTypeIdName"
-                          title="票据类型"
-                          width="120"
-        ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="settleTypeIdName"
-                          title="结算方式"
-                          width="120"
-        ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
                           field="storeName"
                           title="仓库"
-                          width="120"
+                          width="90"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="orderType"
                           title="订单来源"
-                          width="120"
+                          width="70"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group2" title="配件信息">
         <vxe-table-column show-overflow="tooltip"
                           field="partCode"
                           title="配件编码"
-                          width="300"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="partName"
                           title="配件名称"
-                          width="200"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="oemCode"
                           title="OE码"
-                          width="200"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="partBrand"
                           title="品牌"
-                          width="200"
+                          width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="carModelName"
                           title="品牌车型"
-                          width="200"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="unit"
                           title="单位"
-                          width="200"
+                          width="50"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="spec"
                           title="规格"
-                          width="200"
+                          width="100"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group3" title="数量/价格">
         <vxe-table-column show-overflow="tooltip"
                           field="orderQty"
                           title="订单数量"
-                          width="120"
+                          width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="orderPrice"
                           title="订单单价"
-                          width="120"
+                          width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="orderAmt"
                           title="订单金额"
-                          width="120"
+                          width="80"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="detailRemark"
                           title="备注"
-                          width="120"
+                          width="70"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip" field="isMakActivity" title="活动" width="120">
+        <vxe-table-column show-overflow="tooltip" field="isMakActivity" title="活动" width="50">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.isMakActivity"></Checkbox>
           </template>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group4" title="税率信息">
-        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
+        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
@@ -127,31 +112,46 @@
         <vxe-table-column show-overflow="tooltip"
                           field="taxRate"
                           title="税率"
-                          width="200"
+                          width="50"
 
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
         <vxe-table-column show-overflow="tooltip"
+                          field="orderMan"
+                          title="销售员"
+                          width="70"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="billTypeIdName"
+                          title="票据类型"
+                          width="80"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="settleTypeIdName"
+                          title="结算方式"
+                          width="80"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
                           field="createUname"
                           title="创建人"
-                          width="140"
+                          width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="createTime"
                           title="创建日期"
-                          width="200"
+                          width="100"
 
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="auditor"
                           title="提交人"
-                          width="140"
+                          width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="auditDate"
                           title="提交日期"
-                          width="200"
+                          width="100"
 
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
@@ -163,7 +163,7 @@
         <vxe-table-column show-overflow="tooltip"
                           field="orderCode"
                           title="往来单号"
-                          width="200"
+                          width="168"
 
         ></vxe-table-column>
       </vxe-table-column>
