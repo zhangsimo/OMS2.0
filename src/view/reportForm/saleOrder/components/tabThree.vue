@@ -18,7 +18,7 @@
           show-overflow="tooltip"
           field="serviceId0"
           title="销售出库单号"
-          width="120"
+          width="164"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
@@ -41,24 +41,6 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderMan"
-          title="退货员"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="rtnReasonName"
-          title="退货原因"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="settleTypeIdName"
-          title="结算方式"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
           field="outDate0"
           title="出库日期"
           width="120"
@@ -67,50 +49,50 @@
           show-overflow="tooltip"
           field="enterDate"
           title="入库日期"
-          width="120"
+          width="100"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="storeName"
           title="仓库"
-          width="120"
+          width="90"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group2" title="配件信息">
         <vxe-table-column show-overflow="tooltip"
                           field="partCode"
                           title="配件编码"
-                          width="300"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="partName"
                           title="配件名称"
-                          width="200"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="oemCode"
                           title="OE码"
-                          width="200"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="partBrand"
                           title="品牌"
-                          width="200"
+                          width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="carModelName"
                           title="品牌车型"
-                          width="200"
+                          width="120"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="unit"
                           title="单位"
-                          width="200"
+                          width="50"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="spec"
                           title="规格"
-                          width="200"
+                          width="100"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group3" title="数量/价格">
@@ -274,6 +256,24 @@
           field="auditDate0"
           title="销售订单提交日期"
           width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="orderMan"
+          title="退货员"
+          width="70"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="rtnReasonName"
+          title="退货原因"
+          width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="settleTypeIdName"
+          title="结算方式"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
