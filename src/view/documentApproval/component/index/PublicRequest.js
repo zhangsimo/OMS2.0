@@ -169,7 +169,7 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
-      this.QSMoney=parseFloat(row.amtTotal)
+      this.QSMoney=parseFloat(item.amtTotal)
     },
 
     //获取付款信息
@@ -191,6 +191,14 @@ export default {
         if (valid) {
           if(type==1){
             if(this.formInline.requestInstructionNo!=undefined){
+              if(this.QSMoney==0){
+                this.$refs.request.query()
+                this.$refs.request.tableData.map(item=>{
+                  if(item.applyNo==this.formInline.requestInstructionNo){
+                    this.QSMoney=parseFloat(item.amtTotal)
+                  }
+                })
+              }
               if(parseFloat(this.formInline.applyAmt)>this.QSMoney){
                 this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
                 return
