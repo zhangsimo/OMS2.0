@@ -10,6 +10,7 @@
             <span class="">入库日期：</span>
             <Date-picker
               type="daterange"
+              v-model="queryTime"
               clearable
               class="w200 mr10"
               @on-change="getvalue"
@@ -220,8 +221,8 @@
         if(this.searchData.partName.trim()){
           data[this.searchData.type] = this.searchData.partName.trim();
         }
-        data.startDate = this.queryTime[0]?this.queryTime[0]+' 00:00:00' : ''
-        data.endDate = this.queryTime[1]?this.queryTime[1]+' 23.59.59' : ''
+        data.startDate = this.queryTime[0]?this.queryTime[0]: ''
+        data.endDate = this.queryTime[1]?this.queryTime[1]: ''
 
         params.page = this.page.num - 1;
         params.size = this.page.size;
@@ -270,6 +271,10 @@
 
       //获取时间
       getvalue(date) {
+        if(date[0]&&date[0].split(' ').length==1){
+          date[0] = date[0]?date[0]+' 00:00:00' : ''
+          date[1] = date[1]?date[1]+' 23.59.59' : ''
+        }
         this.queryTime = date
         this.resetData();
         },

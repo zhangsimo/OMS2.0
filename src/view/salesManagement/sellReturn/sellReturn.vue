@@ -1130,6 +1130,7 @@ export default {
         let preTime = "";
         if (valid) {
           preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate));
+          this.formPlan.orderDate=moment(this.formPlan.orderDate).format("YYYY-MM-DD")+" 00:00:00"
           try {
             await this.$refs.xTable.validate();
             this.$Modal.confirm({
@@ -1138,7 +1139,7 @@ export default {
                 let data = {};
                 data = this.formPlan;
                 data.billStatusId = null;
-                data.orderDate = tools.transTime(this.formPlan.orderDate);
+                // data.orderDate = tools.transTime(this.formPlan.orderDate);
                 let res = await getSubmit(data);
                 if (res.code == 0) {
                   this.$Message.success("提交成功");

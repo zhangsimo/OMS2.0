@@ -1218,7 +1218,7 @@
         });
         this.getSettlementComputed();
 
-        this.tipText(this.paymentlist);
+        // this.tipText(this.paymentlist);
       },
       // 应收选中
       collectCheckout(selection, row) {
@@ -1231,7 +1231,7 @@
         // });
         this.getSettlementComputed();
 
-        this.tipText(this.collectlist);
+        // this.tipText(this.collectlist);
       },
       // 应收全选
       collectCheckoutAll(selection) {
@@ -1242,7 +1242,7 @@
         // });
         this.getSettlementComputed();
 
-        this.tipText(this.collectlist);
+        // this.tipText(this.collectlist);
       },
       //选中提醒
       tipText(row) {
@@ -1277,7 +1277,7 @@
         });
         this.getSettlementComputed();
 
-        this.tipText(this.paymentlist);
+        // this.tipText(this.paymentlist);
       },
       // 应付取消选中
       paymentNoCheckout(selection, row) {
@@ -1384,6 +1384,14 @@
       },
       // 保存接口
       getPreservation(num) {
+        //判断是否存在草稿占用
+        let selectArrData = [...this.collectlist,...this.paymentlist]
+        let dartArr = selectArrData.filter(item => item.existDraft === 1);
+        if (dartArr.length > 0) {
+          this.tipText(selectArrData);
+          return
+        }
+
         if (this.totalvalue === "0") {
           if (num === 1 && !this.collectionUname)
             return this.$message.error("收款户名不能为空");

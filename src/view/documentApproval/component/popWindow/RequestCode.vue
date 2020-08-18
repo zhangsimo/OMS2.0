@@ -48,6 +48,7 @@
             date:[],//时间
             tableData:[],//表格数据
             oneapplet:{},//获取到的信息
+            indexNum:0,
           }
       },
       methods: {
@@ -72,7 +73,10 @@
           let res = await getApplyList(data)
           if(res.code === 0) {
             this.tableData = res.data
-            this.$Message.success('查询成功')
+            if(this.indexNum!==0){
+              this.$Message.success('查询成功')
+            }
+            this.indexNum++;
           }
         },
 

@@ -712,21 +712,15 @@ export default {
         },
         {
           title: "认证所属期间",
-          key: "returned",
+          key: "",
           className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h("span", params.row.returned ? "是" : "否");
-          }
+          minWidth: 100
         },
         {
           title: "导入勾选经办人",
-          key: "returned",
+          key: "importUname",
           className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h("span", params.row.returned ? "是" : "否");
-          }
+          minWidth: 100
         },
         {
           title: "是否退回",
@@ -848,7 +842,7 @@ export default {
         {
           title: "对号账单",
           key: "accountNo",
-          width: 70,
+          width: 200,
           render: (h, params) => {
             let arr = [];
             if (params.row.accountNo != null) {
@@ -867,6 +861,9 @@ export default {
                       },
                       on: {
                         click: () => {
+                          if(params.row.addTypeName=='导入'){
+                            return this.$message.error("本发票信息无进项登记信息");
+                          }
                           this.$refs.Toast.modal6 = true;
                           this.$refs.Toast.accountNo = item;
                           this.$refs.Toast.getToastData();
@@ -1434,7 +1431,7 @@ export default {
     //  导入勾选认证时间
     importCertification() {
       this.authenticationUpurl = authenticationGetup;
-    }
+    },
   },
   async mounted() {
     this.getSelectOptions();

@@ -24,16 +24,27 @@
               >
             </Select>
           </div>
+<!--          <div class="db ml15">-->
+<!--            <span>对应科目：</span>-->
+<!--            <Select v-model="subjectId" class="w150">-->
+<!--              <Option-->
+<!--                v-for="item in subjecties"-->
+<!--                :value="item.id"-->
+<!--                :key="item.id"-->
+<!--                >{{ item.titleName }}</Option-->
+<!--              >-->
+<!--            </Select>-->
+<!--          </div>-->
           <div class="db ml15">
             <span>对应科目：</span>
-            <Select v-model="subjectId" class="w150">
-              <Option
-                v-for="item in subjecties"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.titleName }}</Option
-              >
-            </Select>
+            <el-cascader
+              ref="casecader"
+              size="small"
+              :options="options"
+              @change="getKemuList"
+              :props="{ multiple: true, children: 'children',label:'titleName',value:'id' }"
+              collapse-tags
+              clearable></el-cascader>
           </div>
           <div class="db ml15">
             <span>凭证生成状态：</span>
@@ -64,7 +75,7 @@
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
-              :disabled="status != 0 || oneList.length <= 0"
+              :disabled="date.length<=0"
               @click="SubmitAudit"
               v-has="'aduit'"
             >
@@ -564,11 +575,13 @@ export default {
         {name:'成功' , id: 1},
         {name:'失败' , id: 2},
       ],
-      noclear:true
+      noclear:true,
+      mateAccountCode:'',//对应科目
+      options:[]
     };
   },
   async mounted() {
-    this.getSubjecties();
+    this.getTreeListFun();
     let arr = await creat("", this.$store);
     this.$nextTick( () => {
       this.store = arr[1]
@@ -593,13 +606,54 @@ export default {
       if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
     },
     // 获取科目列表
-    async getSubjecties() {
-      let data = {};
-      data.parentCode = 101;
-      let res = await getTableList(data);
-      if (res.code === 0) {
-        this.subjecties = [...this.subjecties, ...res.data];
+    // async getSubjecties() {
+    //   let data = {};
+    //   data.parentCode = 101;
+    //   let res = await getTableList(data);
+    //   if (res.code === 0) {
+    //     this.subjecties = [...this.subjecties, ...res.data];
+    //   }
+    // },
+    //获取科目
+    async getTreeListFun() {
+      let rep2 = await getTableList({parentCode: 101})
+      if (rep2.code == 0) {
+        let content = rep2.data || [];
+        this.options = this.treeDataFun(content)
       }
+    },
+    treeDataFun(content) {
+      let level1 = content.filter(item => item.titleLevel === 1 && (item.titleCode == '1001' || item.titleCode == '1002' || item.titleCode == '1012'));
+      return this.treeFilterData(level1, content);
+    },
+    treeFilterData(treeData, content) {
+      treeData.map(item => {
+        let arrData = content.filter(item1 => item1.parentCode == item.titleCode);
+        if (arrData.length > 0) {
+          item.children = this.treeFilterData(arrData, content)
+        } else {
+          item.children = null
+        }
+      })
+      return treeData
+    },
+    getKemuList(v) {
+      if (v.length == 0) {
+        return this.mateAccountCode = ""
+      }
+      let req = []
+      v.map(item => {
+        if (item.length > 0) {
+          let end = item.slice(-1)
+          if(end.length>0){
+            end=end.map(item=>{
+              return `'${item}'`
+            })
+          }
+          req.push(end.join(''))
+        }
+      })
+      this.mateAccountCode = req.join(',')
     },
     // 获取列表
     async getTable() {
@@ -609,7 +663,7 @@ export default {
       this.oneList = [];
       let params = {
         shopNumber: this.store,
-        mateAccountCode: this.subjectId,
+        mateAccountCode: this.mateAccountCode?this.mateAccountCode:"",
       };
         params.occurTime = this.date ? moment(this.date).format("YYYY-MM-DD") : ''
       // for (let key in params) {
