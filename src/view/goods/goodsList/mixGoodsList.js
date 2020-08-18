@@ -806,9 +806,20 @@ export const mixGoodsData = {
       }
     },
     warning(nodesc) {
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`
+          }else{
+            str+=`${item}`
+          }
+        })
+      }
       this.$Notice.warning({
         title: '上传错误信息',
-        desc: nodesc
+        desc: str,
+        duration: 0
       });
     },
     onFormatError(file) {

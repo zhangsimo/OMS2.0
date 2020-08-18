@@ -102,6 +102,7 @@ export default {
         return this.$Message.error('请先保存数据');
       }
       this.selectItemId = "";
+      this.$parent.$parent.selectItemId=this.selectItemId
       for(let b of this.tableData){
           b._highlight = false
       }
@@ -152,7 +153,8 @@ export default {
           this.$refs.currentRowTable.setCurrentRow(this.tableData[0]);
           this.$emit("getOneOrder", this.tableData[0]);
           this.$store.commit("setOneOrder", this.tableData[0]);
-          this.selectItemId=this.tableData[0];
+          this.selectItemId=this.tableData[0].id;
+          this.$parent.$parent.selectItemId=this.tableData[0].id;
         }
       }
     },
@@ -160,12 +162,14 @@ export default {
     //切换页面
     selectNum(val) {
       this.selectItemId = ''
+      this.$parent.$parent.selectItemId="";
       this.page.num = val;
       this.gitlistValue();
     },
     //切换页数
     selectPage(val) {
       this.selectItemId = ''
+      this.$parent.$parent.selectItemId="";
       this.page.num = 1;
       this.page.size = val;
       this.gitlistValue();
@@ -174,6 +178,7 @@ export default {
     clickOnesList(data) {
       if(data){
         this.selectItemId=data.row.id;
+        this.$parent.$parent.selectItemId=data.row.id
       }
       this.$parent.$parent.ispart=false;
       if(data.row == null) return;
@@ -205,6 +210,7 @@ export default {
       }else {
           if(data.row.id){
               this.selectItemId=data.row.id;
+            this.$parent.$parent.selectItemId=data.row.id;
           }
         this.$emit("getOneOrder", data.row);
         this.$store.commit("setOneOrder", data.row);

@@ -78,7 +78,7 @@
               </Option>
             </Select>
             <span class="ml10">金额：</span>
-            <InputNumber v-model="amtNo" class="w50"/>
+            <InputNumber v-model="amtNo" class="w80"/>
             <button class="ivu-btn ivu-btn-default ml10 mt10" type="button" @click="queryNoWrite">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -142,7 +142,7 @@
                   <Option v-for="item in company2" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
-                <InputNumber v-model="amtClaim" class="w50"/>
+                <InputNumber v-model="amtClaim" class="w80"/>
                 <span class="ml10">对方户名：</span>
                 <Input v-model="bankNameOClaim" class="w100"/>
                 <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
@@ -187,7 +187,7 @@
                   <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
-                <InputNumber v-model="amtDis" class="w50"/>
+                <InputNumber v-model="amtDis" class="w80"/>
                 <span class="ml10">对方户名：</span>
                 <Input v-model="bankNameODis" class="w100"/>
                 <button
