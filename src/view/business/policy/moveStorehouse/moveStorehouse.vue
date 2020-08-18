@@ -1141,7 +1141,7 @@ export default {
         this.getList();
         // self.$Message.success("导入成功");
         if (res.data.length > 0) {
-          self.$Message.warning(res.data[0]);
+          this.warning(res.data);
         } else  {
           self.$Message.success("导入成功");
         }
@@ -1155,9 +1155,20 @@ export default {
       }
     },
     warning(nodesc) {
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`
+          }else{
+            str+=`${item}`
+          }
+        })
+      }
       this.$Notice.warning({
         title: '上传错误信息',
-        desc: nodesc
+        desc: str,
+        duration: 0
       });
     },
     onFormatError(file) {
