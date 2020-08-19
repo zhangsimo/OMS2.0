@@ -79,14 +79,6 @@
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
-          v-if="claimTit=='预付款认领'"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="rpAmt"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
-          title="本次认领金额"
-          align="center"
-          v-else
         ></vxe-table-column>
         <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
         <vxe-table-column
@@ -185,7 +177,7 @@ import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { findGuest } from "@/api/settlementManagement/advanceCollection.js";
 import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
-import settlement from "@/view/settlementManagement/bill/components/settlement";
+import settlement from "@/view/settlementManagement/advanceCharge/components/settlementadv.vue";
 import settlement2 from "@/view/settlementManagement/otherReceivables/components/settlement";
 import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
@@ -431,11 +423,6 @@ export default {
         this.claimSelection = [];
       }
     },
-    //认领弹框传参数据
-    selection(arr) {
-      this.claimSelection = [];
-      this.claimSelection.push({ id: arr.id });
-    },
     //其他付款认领弹窗查询
     claimedList(type) {
       let obj = {
@@ -611,6 +598,8 @@ export default {
     changeAmt(){
       let thisData = this.accrued.map(item1 => {
         let item = {...item1}
+        item.accountBankNo=item.accountName
+        item.subjectName=item.mateAccountName
         item.paidMoney = item.rpAmt
         item.thisClaimedAmt  = item.rpAmt
         return item
@@ -618,6 +607,7 @@ export default {
       // bus.$emit("paymentInfo", thisData);
       if(this.claimTit=="预付款认领"){
         this.$refs.settlement.setData(thisData)
+        console.log(this.tableData,1111)
       }else{
         this.$refs.settlement2.setData(thisData)
       }

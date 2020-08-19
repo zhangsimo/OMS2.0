@@ -215,6 +215,10 @@ export default {
     });
   },
   methods: {
+    setData(d){
+      // console.log(d)
+      this.gettlementData.list = d;
+    },
     init() {
       this.Settlement = true;
       this.accountDisabeld = this.gettlementData.sign == 9 ? true : false;
