@@ -951,7 +951,7 @@
         ];
         this.formPlan.detailList.forEach(el => {
           if (!el.orderQty) {
-            el.orderQty = undefined;
+            el.orderQty = 1;
           }
           if (!(el.orderPrice * 1)) {
             el.orderPrice = undefined;
@@ -968,7 +968,7 @@
         ];
         this.formPlan.detailList.forEach(el => {
           if (!el.orderQty) {
-            el.orderQty = undefined;
+            el.orderQty = 1;
           }
           if (!(el.orderPrice * 1)) {
             el.orderPrice = undefined;
