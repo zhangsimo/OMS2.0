@@ -67,7 +67,7 @@
         <vxe-table-column field="writeOffAmount" title="因公借支核销金额" :edit-render="{ name: 'input' }">
           <template v-slot:edit="{ row }">
             <el-input-number
-              :min="0"
+              :min="0.01"
               v-model="row.writeOffAmount"
               :controls="false"
               size="mini"
@@ -360,7 +360,12 @@ export default {
       //     );
       //   }
       // }
-
+      this.selectArr.map((row,index)=>{
+        let ygjzwhxye=row.paymentReturnBalance <= 0? row.payAmt: row.paymentReturnBalance
+        if(ygjzwhxye<row.writeOffAmount){
+          return this.$Message.error(`第${index+1}个单据因公借支核销金额大于因公借支未核销金额,不符合条件！`)
+        }
+      })
       const errMap = await this.$refs.vxtable.validate().catch(errMap => errMap)
       if(errMap){}else{
         let data = {
