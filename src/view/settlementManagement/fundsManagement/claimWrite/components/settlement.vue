@@ -387,7 +387,7 @@ export default {
       this.tableData.map(item => {
         sum2 += item.thisClaimedAmt ? item.thisClaimedAmt * 1 : 0;
       });
-      this.check = (sum1 - sum2).toFixed(2);
+      this.check = (Math.abs(sum1) - Math.abs(sum2)).toFixed(2);
     }
   }
 };
