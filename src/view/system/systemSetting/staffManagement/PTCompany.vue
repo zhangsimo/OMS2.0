@@ -108,6 +108,7 @@
 
             //清空数据
             clearList(){
+                this.page.num = 1
                 this.selectedArr = []
                 this.shopCode = ''
                 this.compentName = ''
@@ -116,7 +117,8 @@
             //切换分页条数
             selectPage(size) {
                 this.loading = true
-                this.page.size = size
+              this.page.num = 1
+              this.page.size = size
                 this.getlist()
             },
             selectNum(num) {

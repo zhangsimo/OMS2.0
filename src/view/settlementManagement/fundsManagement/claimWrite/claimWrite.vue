@@ -768,7 +768,7 @@
       this.orgName = arr[3];
       this.$nextTick(() => {
         this.areaId=arr[0]
-        this.getShop(this.areaId);
+        // this.getShop(this.areaId);
         this.setAreaDef()
         this.orgId = arr[1];
         this.model1 = arr[1];
@@ -1036,7 +1036,7 @@
           if (type) {
             this.$refs.chargeAdvance.modal = true;
           } else {
-            this.$refs.advance.modal = true;
+            this.$refs.advance.init()
           }
         } else {
           this.$message.error("至少选择一条数据且是收款数据");
