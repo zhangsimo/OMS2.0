@@ -64,7 +64,7 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.label"
+                :key="item.value"
                 >{{ item.label }}</Option>
             </Select>
             <Select
@@ -153,7 +153,7 @@
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
-                :key="item.label"
+                :key="item.value"
               >{{ item.label }}</Option>
             </Select>
             <Select
@@ -646,7 +646,14 @@ export default {
           minWidth: 90,
           filters: this.bands1,
           filterMethod(value, row) {
-            return row.partBrand.indexOf(value) > -1;
+            if(!value){
+              return !row.partBrand
+            }
+            if(row.partBrand){
+              return row.partBrand.indexOf(value) > -1;
+            }else{
+              return false
+            }
           },
           tooltip: true
         },
@@ -802,7 +809,14 @@ export default {
           minWidth: 100,
           filters: [],
           filterMethod(value, row) {
-            return row.partBrand.indexOf(value) > -1;
+            if(!value){
+              return !row.partBrand
+            }
+            if(row.partBrand){
+              return row.partBrand.indexOf(value) > -1;
+            }else{
+              return false
+            }
           },
           tooltip: true
         },
@@ -970,15 +984,22 @@ export default {
         }
       ];
 
-      if (this.selectShopList) {
-        this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+      if(this.selectShopList){
         this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
-        // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
-        // this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
-      } else {
+        if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
+          this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
+
+          // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
+          // this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
+        } else {
+          this.columns1 = arr;
+        }
+      }else{
         this.columns1 = arr;
         this.columns2 = arr2;
       }
+
+
     },
     changecompanyFun() {
       this.searchForm.storeIds = [];
