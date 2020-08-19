@@ -904,6 +904,16 @@
           return this.$message.error("请选择一条未核销对账单");
         if (this.$refs.claim.currentClaimed.length === 0)
           return this.$message.error("至少选择一条本店待认领款");
+        this.$refs.claim.currentClaimed.map(item=>{
+          if(item.incomeMoney>0 && item.paidMoney==0){
+            item.incomeMoney=item.unClaimedAmt
+            item.paidMoney=""
+          }
+          if(Math.abs(item.paidMoney)>0 && item.incomeMoney<=0){
+            item.paidMoney=item.unClaimedAmt
+            item.incomeMoney=""
+          }
+        })
         this.$refs.settlement.Settlement = true;
       },
 
