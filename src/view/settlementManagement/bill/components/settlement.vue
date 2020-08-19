@@ -332,6 +332,7 @@ export default {
             });
             this.BusinessType = res.data.two;
             this.BusinessType =  this.BusinessType.filter( item => item.reconciliationAmt != 0 )
+            this.BusinessType.map(item=>{item.unAmt=Math.abs(item.unAmt);item.rpAmt=Math.abs(item.rpAmt)})
             this.checkComputed();
           }
         });
