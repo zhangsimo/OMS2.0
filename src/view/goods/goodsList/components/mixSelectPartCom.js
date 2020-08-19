@@ -61,7 +61,14 @@ export const mixSelectPartCom = {
           minWidth: 120,
           filters: [],
           filterMethod(value, row) {
-            return row.partBrand.indexOf(value) > -1;
+            if(!value){
+              return !row.partBrand
+            }
+            if(row.partBrand){
+              return row.partBrand.indexOf(value) > -1;
+            }else{
+              return false
+            }
           }
         },
         {

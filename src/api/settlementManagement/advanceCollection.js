@@ -17,6 +17,16 @@ export function addClaim(data) {
     data,
   });
 }
+
+//资金核销-预收款认领
+export function addClaim2(data) {
+  return axios.request({
+    url: `${api.omsSettle}/advanceCollection/addClaim`,
+    method: "post",
+    data,
+  });
+}
+
 //查询往来单位信息列表分页
 export function findGuest(params) {
   return axios.request({

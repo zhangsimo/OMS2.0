@@ -17,89 +17,87 @@
         <vxe-table-column  show-overflow="tooltip"
           field="partCode"
           title="配件编码"
-          width="300"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="partName"
           title="配件名称"
-          width="200"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="oemCode"
           title="OE码"
-          width="200"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="partBrand"
           title="品牌"
-          width="200"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
-          width="200"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="unit"
           title="单位"
-          width="200"
+          width="50"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="spec"
           title="规格"
-          width="200"
+          width="120"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="在途信息">
         <vxe-table-column  show-overflow="tooltip"
           field="onOrderQty"
           title="在途数量"
-          width="120"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="inStockQty"
           title="已入库数量"
-          width="120"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="noStockQty"
-          title="未入数量"
-          width="120"
+          title="未入库数量"
+          width="80"
         ></vxe-table-column>
       </vxe-table-column>
        <vxe-table-column  show-overflow="tooltip" field="group4" title="基本信息">
         <vxe-table-column  show-overflow="tooltip"
           field="groupName"
           title="公司名称"
-          width="140"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="outOrderNo"
           title="出库单号"
-          width="200"
-
+          width="164"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="customerName"
           title="客户名称"
-          width="200"
-
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="outStockDate"
           title="出库日期"
-          width="200"
+          width="100"
 
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="storeName"
           title="仓库"
-          width="200"
+          width="90"
 
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="税率信息">
-        <vxe-table-column  show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
+        <vxe-table-column  show-overflow="tooltip" field="taxSign" title="是否含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
@@ -107,7 +105,7 @@
         <vxe-table-column  show-overflow="tooltip"
           field="taxRate"
           title="税率"
-          width="200"
+          width="50"
 
         ></vxe-table-column>
       </vxe-table-column>
@@ -115,12 +113,12 @@
         <vxe-table-column  show-overflow="tooltip"
           field="taxPrice"
           title="成本单价"
-          width="140"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="taxAmt"
           title="成本金额"
-          width="200"
+          width="80"
 
         ></vxe-table-column>
       </vxe-table-column>
@@ -128,24 +126,24 @@
         <vxe-table-column  show-overflow="tooltip"
           field="hasAcceptUname"
           title="受理人"
-          width="140"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="hasAcceptOrderNo"
           title="受理单号"
-          width="200"
+          width="164"
 
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="guestName"
           title="第一供应商"
-          width="200"
+          width="130"
 
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="remark"
           title="订单备注"
-          width="200"
+          width="120"
 
         ></vxe-table-column>
       </vxe-table-column>

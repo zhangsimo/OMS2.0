@@ -236,10 +236,10 @@
             <Col span="24">
               <FormItem label="往来单位：">
                 <brandCus
-                  :title="guestName" 
-                  placeholder="请输入供应商" 
-                  :search-value="guestName" 
-                  @throwName="throwNameFun" 
+                  :title="guestName"
+                  placeholder="请输入供应商"
+                  :search-value="guestName"
+                  @throwName="throwNameFun"
                   :disabled-prop="false"
                 ></brandCus>
                 <!-- <Select v-model="transitUnit" filterable clearable @on-change="addChange1">
@@ -689,7 +689,14 @@ export default {
           align: "center", tooltip: true,
           filters: [],
           filterMethod(value, row) {
-            return row.partBrand.indexOf(value) > -1;
+            if(!value){
+              return !row.partBrand
+            }
+            if(row.partBrand){
+              return row.partBrand.indexOf(value) > -1;
+            }else{
+              return false
+            }
           }
         },
         {
