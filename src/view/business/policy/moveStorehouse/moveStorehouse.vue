@@ -797,9 +797,9 @@ export default {
         detailVOList: [],
         //业务员-业务员id
         orderMan:"",
-        orderManId:"",
+        orderManId:this.$store.state.user.userData.id || "",
         //移仓时间
-        auditDate:"",
+        auditDate:new Date(),
 
         _highlight: true
       };
@@ -818,6 +818,7 @@ export default {
     },
     //保存
     baocun() {
+      this.Leftcurrentrow.auditDate=tools.transTime(this.Leftcurrentrow.auditDate)
       if(this.saveButClick){
         return
       }
