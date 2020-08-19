@@ -19,7 +19,7 @@
         <vxe-table-column  show-overflow="tooltip"
           field="serviceId"
           title="调入退出单号"
-          width="180"
+          width="164"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="guestShortName"
@@ -29,54 +29,54 @@
         <vxe-table-column  show-overflow="tooltip"
           field="auditor"
           title="出库人"
-          width="120"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="outDate"
           title="出库日期"
-          width="120"
+          width="100"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="storeName"
           title="仓库"
-          width="120"
+          width="90"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group2" title="配件信息">
         <vxe-table-column  show-overflow="tooltip"
           field="partCode"
           title="配件编码"
-          width="300"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="partName"
           title="配件名称"
-          width="200"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="oemCode"
           title="OE码"
-          width="200"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="partBrand"
           title="品牌"
-          width="200"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
-          width="200"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="unit"
           title="单位"
-          width="200"
+          width="50"
         ></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip"
           field="spec"
           title="规格"
-          width="200"
+          width="100"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="数量/价格">

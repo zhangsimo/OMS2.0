@@ -684,8 +684,8 @@ export default {
         this.$Message.error("请选择一条员工信息");
         return false;
       }
-      this.$refs.addNew.getlist();
       this.$refs.addNew.clearList();
+      this.$refs.addNew.getlist();
       this.PtCompany = true;
     },
     //关闭公司选项
@@ -710,6 +710,7 @@ export default {
       this.getLookCompany();
     },
     selectPage2(size) {
+      this.page2.num = 1;
       this.page2.size = size;
       this.getLookCompany();
     },

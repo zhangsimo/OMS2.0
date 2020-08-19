@@ -612,6 +612,7 @@ export default {
       let thisData = this.accrued.map(item1 => {
         let item = {...item1}
         item.paidMoney = item.rpAmt
+        item.thisClaimedAmt  = item.rpAmt
         return item
       })
       // bus.$emit("paymentInfo", thisData);
