@@ -679,7 +679,7 @@
         isAdd: true, //判断是否能新增
         formPlan: {
           cause: "", //退货原因
-          clearing: "", //结算方式
+          clearing: "020502", //结算方式
           guestName: "", //供应商
           storeId: this.$store.state.user.userData.id, //退货员id
           storeName: "", //退货员名称
@@ -853,16 +853,16 @@
         for (let item of this.Left.tbdata) {
           item._highlight = false;
         }
-        (this.formPlan.cause = ""), //退货原因
-          (this.formPlan.clearing = ""), //结算方式
-          (this.formPlan.guestName = ""), //供应商
-          (this.formPlan.storeId = this.$store.state.user.userData.id), //退货员
-          (this.formPlan.orderDate = tools.transTime(new Date())), //退货日期
-          (this.formPlan.remark = ""), //备注
-          (this.formPlan.warehouse = this.defaultStore), //退货仓库
-          (this.formPlan.serviceId = ""), //采购单号
-          (this.formPlan.numbers = ""), //采退单号
-          (this.Right.tbdata = []);
+        this.formPlan.cause = "", //退货原因
+        this.formPlan.clearing = "020502", //结算方式
+        this.formPlan.guestName = "", //供应商
+        this.formPlan.storeId = this.$store.state.user.userData.id, //退货员
+        this.formPlan.orderDate = tools.transTime(new Date()), //退货日期
+        this.formPlan.remark = "", //备注
+        this.formPlan.warehouse = this.defaultStore, //退货仓库
+        this.formPlan.serviceId = "", //采购单号
+        this.formPlan.numbers = "", //采退单号
+        this.Right.tbdata = [];
         this.isAdd = false;
         this.Left.tbdata.unshift(this.PTrow);
         this.datadata = this.PTrow;
@@ -872,13 +872,13 @@
             item._highlight = false;
             if (item.id == this.selectLeftItemId) {
               item._highlight = true;
-              this.setRightData(item);
+              // this.setRightData(item);
               break;
             }
           }
         } else {
           this.Left.tbdata[0]._highlight = true;
-          this.setRightData(this.Left.tbdata[0]);
+          // this.setRightData(this.Left.tbdata[0]);
           return
         }
         // console.log(this.Left.tbdata)
@@ -1190,7 +1190,7 @@
                 el.orginOrderQty = el.orderQty;
                 el.uuid = v4();
               });
-              if(this.selectLeftItemId){
+              if (this.selectLeftItemId) {
                 for (let item of this.Left.tbdata) {
                   item._highlight = false;
                   if (item.id == this.selectLeftItemId) {
@@ -1199,7 +1199,7 @@
                     break;
                   }
                 }
-              }else{
+              } else {
                 this.Left.tbdata[0]._highlight = true;
                 this.setRightData(this.Left.tbdata[0]);
                 return
