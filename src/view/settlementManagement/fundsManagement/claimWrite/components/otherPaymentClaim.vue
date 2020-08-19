@@ -607,7 +607,6 @@ export default {
       // bus.$emit("paymentInfo", thisData);
       if(this.claimTit=="预付款认领"){
         this.$refs.settlement.setData(thisData)
-        console.log(this.tableData,1111)
       }else{
         this.$refs.settlement2.setData(thisData)
       }
