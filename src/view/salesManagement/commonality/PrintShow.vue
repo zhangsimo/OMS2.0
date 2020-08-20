@@ -243,7 +243,6 @@
         let footer = document.getElementById("footer")
         let printBox=document.getElementById("printBox")
         let printBoxBig=document.getElementById("printBoxBig")
-
         // 1.设置要打印的区域 div的className
         // var newstr = document.getElementById("printBox").innerHTML
         // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
@@ -263,6 +262,7 @@
         printBox.style.width = "100%"
         printBox.style.height = "100%"
         printBox.style.display = "flex"
+        printBox.style.background = "#ffffff"
         if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
           this.remove_ie_header_and_footer();
         }
@@ -276,6 +276,7 @@
         printBox.style.width="900";
         printBox.style.height="600";
         printBox.style.margin="0 auto";
+        this.printShow=false
       },
       //去除页眉页脚
       remove_ie_header_and_footer() {
@@ -346,7 +347,11 @@
   #printBox {
     overflow: -moz-scrollbars-none;
   }
-
+  #printBox.ivu-modal-wrap.ivu-modal-content.ivu-modal-close{
+    display:none !important;
+    width: 0 !important;
+    z-index: -1 !important;
+  }
   //表格样式
   table.gridtable {
     width: 100%;
