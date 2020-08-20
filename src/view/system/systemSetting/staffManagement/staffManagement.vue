@@ -194,7 +194,9 @@ export default {
       isNextAdd: true,
       closeAcc: false,
       shopNum: this.$store.state.user.userData.currentCompany.id, //门店id
-      orgList:[],//门店列表
+      orgList:[
+        {id:'-1', shortName:'全部'}
+      ],//门店列表
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
       list:[],//机构数组
       shopCode: "",
@@ -381,7 +383,7 @@ export default {
     async getShop() {
       let res = await getLessee();
       if (res.code === 0) {
-        this.orgList = res.data
+        this.orgList = [...this.orgList , ...res.data]
       }
     },
       // async getList(){
@@ -424,7 +426,7 @@ export default {
       data.size = this.page.size;
       data.page = this.page.num - 1;
       data.userName = this.staffName;
-      data.shopNum = this.shopNum
+      data.shopNum = this.shopNum == '-1' ? '': this.shopNum,
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
       data.groundIds=this.groundIds[this.groundIds.length-1] || '';
