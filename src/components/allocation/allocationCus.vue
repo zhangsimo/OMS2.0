@@ -13,7 +13,7 @@
           view-class="el-select-dropdown__list"
           ref="scrollbar"
           v-show="options.length>0">
-          <p class="el-select-menu-item" @click="selectItem(item)" v-for="item in options" :key="item.id">{{item.shortName}}</p>
+          <p class="el-select-menu-item" @click="selectItem(item)" v-for="item in options" :key="item.id">{{item.fullName}}</p>
           <p></p>
         </el-scrollbar>
         <template v-show="options.length==0">

@@ -149,7 +149,7 @@ export default {
         }
 
         //如果没有保存过的数据取第一条选中
-        if(!this.selectItemId){
+        if(!this.selectItemId&&this.tableData.length>0){
           this.$refs.currentRowTable.setCurrentRow(this.tableData[0]);
           this.$emit("getOneOrder", this.tableData[0]);
           this.$store.commit("setOneOrder", this.tableData[0]);

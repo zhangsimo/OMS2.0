@@ -1222,7 +1222,7 @@
         });
       },
       //获取选择入库单的信息
-      async getGodown(val) {
+      async getGodown(val,b) {
         let data = JSON.parse(JSON.stringify(this.formPlan));
         if (data.planSendDate) {
           data.planSendDate = tools.transTime(data.planSendDate)
@@ -1235,7 +1235,7 @@
           item.adjustQty = item.outableQty;
         });
         data.detailList = val.details;
-        data.sign = 1;
+        data.sign = b;
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();

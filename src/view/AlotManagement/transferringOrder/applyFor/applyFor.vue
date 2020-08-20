@@ -229,7 +229,7 @@
         <!--更多弹框-->
               <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
-        <supplier ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
+        <supplier :guestId="guestidId" :storeId="formPlan.storeId" ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
         <!--编辑收货信息-->
           <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata" :guestId="guestidId"></goods-info>
       </div>
@@ -250,7 +250,7 @@
   import SelectSupplier from "./compontents/supplier/selectSupplier2";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
-  import supplier from './compontents/supplier'
+  import supplier from './compontents/newSelectPartCompontent/selectPartCom'
   import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   import {findForAllot} from "_api/purchasing/purchasePlan";

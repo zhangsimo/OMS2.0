@@ -8,38 +8,34 @@
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
-          入库日期：
           <FormItem>
-            <DatePicker
-              style="width: 200px"
-              type="daterange"
-              placeholder="请选择日期"
-              @on-change="getTime"
-            ></DatePicker>
+            <span>快速查询：</span>
+            <getDate ref="getDate" class="mr5" style="display: inline-block" @quickDate="getvalue"></getDate>
           </FormItem>
           <FormItem>
-            <Select v-model="Outform.guestId" filterable style="width:200px">
-              <Option
-                v-for="item in clientList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.fullName }}</Option
-              >
-            </Select>
+            <!--<Select v-model="Outform.guestId" filterable style="width:200px">-->
+              <!--<Option-->
+                <!--v-for="item in clientList"-->
+                <!--:value="item.id"-->
+                <!--:key="item.id"-->
+                <!--&gt;{{ item.fullName }}</Option-->
+              <!--&gt;-->
+            <!--</Select>-->
+            <supplier-cus placeholder="输入供应商名称" :disabled-prop="false" @throwName="throwNameFun"></supplier-cus>
           </FormItem>
           <FormItem>
             <Input
               type="text"
-              placeholder="入库单号"
+              placeholder="业务单号"
               style="width: 150px"
-              v-model="Outform.serviceId"
+              v-model="Outform.code"
             />
           </FormItem>
           <FormItem>
             <Select
               v-model="Outform.enterTypeId"
               style="width:100px"
-              placeholder="请选择供应商"
+              placeholder="请选择"
             >
               <Option
                 v-for="item in enterTypeList"
@@ -51,8 +47,19 @@
           </FormItem>
 
           <Button type="warning" class="mr15" @click="query">查询</Button>
-          <Button type="warning" class="mr15" @click="selectInto">选入</Button>
-          <Button @click="showInfo = false">取消</Button>
+          <Poptip placement="bottom" width="150">
+            <Button type="warning" class="mr15">选入</Button>
+            <div class="enter-wrap" slot="content">
+              <p @click="selectInto(2)">按入库成本取值</p>
+              <p @click="selectInto(3)">按客户销价取值</p>
+              <p @click="selectInto(4)">按最近销价取值</p>
+            </div>
+          </Poptip>
+          <!--<Button type="warning" class="mr15" @click="selectInto">选入</Button>-->
+          <Button @click="showInfo = false" class="mr10">取消</Button>
+          <Checkbox v-model="showSelf" size="small" @on-change="showOwen"
+          >显示个人单据</Checkbox
+          >
         </Form>
       </div>
       <div class="main clearfix">
@@ -90,6 +97,7 @@
             field="guestName"
             width="150"
             title="供应商名称"
+            show-overflow="title"
           ></vxe-table-column>
           <vxe-table-column
             field="remark"
@@ -106,7 +114,12 @@
             width="150"
             title="入库日期"
           ></vxe-table-column>
-          <vxe-table-column field="code" title="业务单号" width="150"></vxe-table-column>
+          <vxe-table-column field="code" title="业务单号" width="200"></vxe-table-column>
+          <vxe-table-column
+            field="createUname"
+            width="100"
+            title="创建人"
+          ></vxe-table-column>
           <vxe-table-column
             field="enterTypeIdName"
             width="100"
@@ -149,20 +162,20 @@
 
           <vxe-table-column
             field="partCode"
-            width="150"
+            min-width="150"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
-            width="150"
+            min-width="200"
             title="配件名称"
           ></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="150"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" min-width="150"></vxe-table-column>
           <vxe-table-column
             field="systemUnitId"
             title="单位"
-            width="60"
+            width="100"
           ></vxe-table-column>
           <vxe-table-column
             field="enterQty"
@@ -188,15 +201,18 @@
 
 <script>
 import { getGodown, getSupplier } from "@/api/salesManagment/salesOrder";
-
+import SalesCus from "../../../components/allocation/salesCus";
+import SupplierCus from "../../../components/allocation/supplierCus";
+import getDate from "@/components/getDate/dateget_bill";
 export default {
   name: "SalesOutBound",
+  components: {SupplierCus, SalesCus,getDate},
   data() {
     return {
       showInfo: false, // 销售出库订单信息——表单
       Outform: {
-        enterTypeId: "",
-        serviceId: "",
+        enterTypeId: "12345",
+        code: "",
         guestId: "",
         enterDateStart: "",
         enterDateEnd: ""
@@ -221,45 +237,49 @@ export default {
       },
       Loading: true, //状态
       // storeId: "" //参考id
+      showSelf:true
     };
   },
-  mounted() {},
+  mounted() {
+  },
   props: {
     storeId: {
       type: String
     }
   },
   methods: {
+    showOwen() {
+      this.getList2();
+    },
     reset() {
-      this.Outform = {
-        enterTypeId: "",
-        serviceId: "",
-        guestId: "",
-        enterDateStart: "",
-        enterDateEnd: ""
-      };
+      this.Outform.enterTypeId = '12345';
+      this.Outform.code = ''
+      this.Outform.guestId = ''
     },
     //打开模态框
     openModal(v) {
+      this.showInfo = true;
+      this.$refs.getDate.resetFun();
       this.storeId = v;
       this.getList(v);
-      this.getClientList();
-      this.showInfo = true;
+      //this.getClientList();
       this.$refs.Xtable.recalculate(true)
     },
     //获取入库数据
     async getList(v) {
-      if (this.tableDataTop.length > 0) return;
       let data = {};
       data = this.Outform;
       data.page = this.page.num - 1;
       data.size = this.page.size;
+      data.showPerson = this.showSelf? 1 : 0;
       data.storeId = v || this.storeId;
       this.Loading = true;
       let res = await getGodown(data);
+      this.Loading = false;
       if (res.code === 0) {
-        this.Loading = false;
-        this.tableDataTop = res.data.content;
+        this.tableDataTop = res.data.content.sort((a,b) =>{
+          return a.enterDate<b.enterDate?1:-1;
+        });
         this.page.total = res.data.totalElements;
       }
     },
@@ -269,12 +289,16 @@ export default {
       data.page = this.page.num - 1;
       data.size = this.page.size;
       data.storeId = v || this.storeId;
+      data.showPerson = this.showSelf? 1 : 0;
       this.Loading = true;
       let res = await getGodown(data);
       if (res.code === 0) {
         this.Loading = false;
-        this.tableDataTop = res.data.content;
+        this.tableDataTop = res.data.content.sort((a,b) => {
+          return a.enterDate<b.enterDate?1:-1;
+        });
         this.page.total = res.data.totalElements;
+
       }
     },
     //获取供应商列表
@@ -286,10 +310,10 @@ export default {
       }
     },
     //获取时间
-    getTime(value) {
+    getvalue(value) {
       if (value[0]) {
-        this.Outform.enterDateStart = value[0] + " " + "00:00:00";
-        this.Outform.enterDateEnd = value[1] + " " + "23:59:59";
+        this.Outform.enterDateStart = value[0];
+        this.Outform.enterDateEnd = value[1];
       }
     },
     //查询
@@ -315,13 +339,16 @@ export default {
       this.tableDataBottom = {};
     },
     //选入
-    selectInto() {
+    selectInto(v) {
       if (!this.tableDataBottom.id) {
         this.$Message.error("请选择一条有效数据");
       } else {
-        this.$emit("godownList", this.tableDataBottom);
+        this.$emit("godownList", this.tableDataBottom,v);
         this.showInfo = false;
       }
+    },
+    throwNameFun(v){
+      this.Outform.guestId = v.id ||"";
     }
   }
 };
@@ -336,4 +363,14 @@ export default {
   line-height: 40px;
   padding-left: 5px;
 }
+  .enter-wrap{
+    line-height: 30px;
+    p{
+      cursor: pointer;
+      text-align: center;
+      &:hover{
+        color: #fd5c5c;
+      }
+    }
+  }
 </style>

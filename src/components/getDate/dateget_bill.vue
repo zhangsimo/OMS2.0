@@ -86,6 +86,9 @@ export default {
           break;
       }
       this.$emit("quickDate", this.val);
+    },
+    resetFun(){
+      this.getval(this.searchQuick='1');
     }
   },
   computed: {}
