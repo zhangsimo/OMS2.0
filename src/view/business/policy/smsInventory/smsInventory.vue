@@ -743,6 +743,9 @@ export default {
           return;
         }
       }
+      for (let b of this.Left.tbdata) {
+        b._highlight = false;
+      }
       let item = {
         index: 1,
         xinzeng: "1",

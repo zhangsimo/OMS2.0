@@ -23,7 +23,7 @@
             v-for="item in options"
             :key="item.id"
           >
-            {{ item.shortName }}
+            {{ item.fullName }}
           </p>
           <p></p>
         </el-scrollbar>
