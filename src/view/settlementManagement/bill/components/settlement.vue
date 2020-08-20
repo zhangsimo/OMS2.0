@@ -332,7 +332,6 @@ export default {
             });
             this.BusinessType = res.data.two;
             this.BusinessType =  this.BusinessType.filter( item => item.reconciliationAmt != 0 )
-            this.BusinessType.map(item=>{item.unAmt=Math.abs(item.unAmt);item.rpAmt=Math.abs(item.rpAmt)})
             this.checkComputed();
           }
         });
@@ -353,24 +352,24 @@ export default {
         saveAccount(obj).then(res => {
           if (res.code === 0) {
             this.$message.success("保存成功");
-            this.$Modal.confirm({
-              title: '提示',
-              content: '<p>是否同时发起发票对冲申请</p>',
-              onOk: async () => {
-                let res = await getHedging(obj)
-                if (res.code === 0){
+            if(this.$parent.paymentId=="YJDZ"){
+              this.$Modal.confirm({
+                title: '提示',
+                content: '<p>是否同时发起发票对冲申请</p>',
+                onOk: async () => {
+                  let res = await getHedging(obj)
+                  if (res.code === 0){
+                    this.Settlement = false;
+                    this.$message.success("发票对冲申请单");
+                    this.$emit('getNewList')
+                  }
+                },
+                onCancel: () => {
                   this.Settlement = false;
-                  this.$message.success("发票对冲申请单");
-                  this.$emit('getNewList')
+                  this.$message.success("对账单对冲成功");
                 }
-              },
-              onCancel: () => {
-                this.Settlement = false;
-                this.$message.success("对账单对冲成功");
-              }
-            });
-
-
+              });
+            }
           }
         });
       } else {
