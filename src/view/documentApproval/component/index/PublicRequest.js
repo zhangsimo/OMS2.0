@@ -52,7 +52,7 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       options1: [],
       canSave:false,//节流阀
-      QSMoney:0,
+      QSMoney:0,//中间借比金额
     }
   },
   mounted(){
@@ -169,7 +169,7 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
-      this.QSMoney=parseFloat(item.amtTotal)
+      this.QSMoney=parseFloat(row.amtTotal)
     },
 
     //获取付款信息
