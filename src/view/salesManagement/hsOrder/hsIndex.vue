@@ -9,10 +9,11 @@
           <div class="db mr10">
             <span class="">订单日期：</span>
             <Date-picker
-              type="datetimerange"
+              type="daterange"
+              :value="queryTime"
               clearable
-              class="w320 mr10"
-              @on-change="getvalue"
+              class="w200 mr10"
+              @on-change="getvalue2"
               placeholder="年/月/日-年/月/日"
             >
             </Date-picker>
@@ -706,7 +707,7 @@
 
     },
     mounted() {
-      this.getListData()
+      //this.getListData()
       this.getType();
       this.getAllCompany();
       this.getHsStoreFun();
@@ -1106,6 +1107,14 @@
         this.queryTime = date
         this.resetData();
       },
+      getvalue2(date) {
+        if(date[0]){
+          this.queryTime = [date[0]+' 00:00:00',date[1]+' 23:59:59']
+        }else{
+          this.queryTime = '';
+        }
+        this.resetData();
+      },
       //客户列表
       getAllClient() {
         getClient().then(res => {
@@ -1249,11 +1258,11 @@
     },
     watch: {
       //监听时间
-      queryTime: function (val, old) {
-        this.page.num = 1
-        this.page.size = 10
-        this.getTopList()
-      },
+      // queryTime: function (val, old) {
+      //   this.page.num = 1
+      //   this.page.size = 10
+      //   this.getTopList()
+      // },
       // //监听日期
       // queryDate:function (val,old) {
       //   this.page.num = 1

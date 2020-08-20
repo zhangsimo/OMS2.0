@@ -588,6 +588,7 @@ export default {
           this.claimTit == "预付款认领"
             ? this.$Message.success("预付款认领成功")
             : this.$Message.success("其他付款认领成功");
+          this.formValidate.voucherInput=""
         }
       }
     },

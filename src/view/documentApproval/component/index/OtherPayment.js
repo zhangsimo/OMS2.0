@@ -76,6 +76,7 @@ export default {
   methods: {
     //模态框打开111
     open() {
+      console.log(this.list.type)
       this.$refs.documentTable.recalculate(true)
       this.company = []
       this.payUserList = this.list.payList
@@ -240,10 +241,13 @@ export default {
     //获取其他付款单据信息
     async otherPayList(row) {
       delete row.id
+      row.businessType = row.orderTypeName;
       this.$set(this.formInline, "details", [row]);
-      await this.getOrignCompany(row.guestName)
-      this.formInline.receiveGuestId=this.company[0].value
-      this.getCompany(this.company[0])
+      this.formInline.receiveGuestId = row.guestId;
+      this.getAccountNameList({value:row.guestId})
+      // await this.getOrignCompany(row.guestName)
+      // this.formInline.receiveGuestId=this.company[0].value
+      // this.getCompany(this.company[0])
     },
 
     //选择单据
@@ -273,9 +277,12 @@ export default {
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
             valg = this.formInline.details[0].amountCollected < this.formInline.applyAmt ? true : false
           }
+          this.formInline.paymentTerm=moment(this.formInline.paymentTerm).format("YYYY-MM-DD")+" 23:59:59"
           if (valg) return this.$Message.error('申请金额不能大于单据金额')
           this.formInline.step = type
-          let res = await getOtherSve(this.formInline)
+          let req = {...this.formInline}
+          req.paymentTerm = moment.utc(req.paymentTerm).day(1);
+          let res = await getOtherSve(req)
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
