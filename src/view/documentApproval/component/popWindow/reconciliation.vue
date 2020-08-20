@@ -1018,39 +1018,37 @@
       },
       // 保存接口
       async getPreservation(num) {
-        // console.log(this.infoBase , 7789)
-        // console.log(this.list ,123)
-        // if (this.totalvalue === "0") {
-        //   if (!this.collectionAccountName)
-        //     return this.$message.error("收款户名不能为空");
-        //   if (!this.openingBank) return this.$message.error("开户行不能为空");
-        //   if (!this.collectionAccount)
-        //     return this.$message.error("银行账号不能为空");
-        //   if (!this.thisApplyAccount)
-        //     return this.$message.error("付款账户不能为空");
-        // }
-        // if (this.collectBaddebt - this.paymentBaddebt > 100) {
-        //   if (!this.BadDebtid) {
-        //     // this.$message.error("请输入应收坏账请示单号");
-        //     this.$message({
-        //       message: "请输入应收坏账请示单号",
-        //       type: "error",
-        //       customClass: "zZindex"
-        //     });
-        //     return "";
-        //   }
-        // }
-        // if (this.collectRebate - this.paymentRebate > 100) {
-        //   if (!this.Rebateid) {
-        //     // this.$message.error("请输入应收返利请示单号");
-        //     this.$message({
-        //       message: "请输入应收返利请示单号",
-        //       type: "error",
-        //       customClass: "zZindex"
-        //     });
-        //     return "";
-        //   }
-        // }
+        if (this.infoBase.billingType.value === "0") {
+          if (!this.infoBase.collectionName)
+            return this.$message.error("收款户名不能为空");
+          if (!this.infoBase.bankName) return this.$message.error("开户行不能为空");
+          if (!this.infoBase.collectionAccount)
+            return this.$message.error("银行账号不能为空");
+          if (!this.infoBase.thisPaymentAccount)
+            return this.$message.error("付款账户不能为空");
+        }
+        if (this.infoBase.badDebtReceivable - this.infoBase.payingBadDebts > 100) {
+          if (!this.infoBase.badDebNo) {
+            // this.$message.error("请输入应收坏账请示单号");
+            this.$message({
+              message: "请输入应收坏账请示单号",
+              type: "error",
+              customClass: "zZindex"
+            });
+            return "";
+          }
+        }
+        if (this.infoBase.receivableRebate - this.infoBase.dealingRebates > 100) {
+          if (!this.infoBase.rebateNo) {
+            // this.$message.error("请输入应收返利请示单号");
+            this.$message({
+              message: "请输入应收返利请示单号",
+              type: "error",
+              customClass: "zZindex"
+            });
+            return "";
+          }
+        }
         if (num == 1) {
           if (!this.infoBase.remark) {
             // this.$message.error("请填写备注");

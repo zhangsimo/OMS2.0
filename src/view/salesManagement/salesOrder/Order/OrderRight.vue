@@ -492,6 +492,10 @@
           {
             value: 1,
             label: "电商订单"
+          },
+          {
+            value: 2,
+            label: "代付订单"
           }
         ], //订单类型
         clientList: {}, //新增客户资料
