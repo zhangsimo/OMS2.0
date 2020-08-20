@@ -768,7 +768,6 @@
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      console.log(arr)
       this.value = arr[0];
       this.model1 = arr[1];
       this.Branchstore = arr[2];

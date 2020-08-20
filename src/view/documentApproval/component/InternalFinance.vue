@@ -87,7 +87,7 @@
             <vxe-table-column field="outOrgName" title="转出门店"></vxe-table-column>
             <vxe-table-column title="转出账户" width="160">
               <template v-slot="{row}">
-                <Select v-model="row.outAccount" style="width: 90%;padding-left: 5px;" @on-change="getOutApply(row)" :disabled="modelType">
+                <Select v-model="row.outAccount" style="width: 90%;padding-left: 5px;" filterable @on-change="getOutApply(row)" :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </template>
@@ -95,14 +95,14 @@
             <vxe-table-column field="outAccountNo" title="转出账号"></vxe-table-column>
             <vxe-table-column title="转入门店" width="160">
               <template v-slot="{row}">
-                <Select @on-change="getCompany" v-model="row.enterOrgid" style="width: 90%;padding-left: 5px" :disabled="modelType">
+                <Select @on-change="getCompany" filterable v-model="row.enterOrgid" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in company" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
               </template>
             </vxe-table-column>
             <vxe-table-column title="转入账户" width="160">
               <template v-slot="{row}">
-                <Select  v-model="row.enterAccountMo" @on-change="getinto" style="width: 90%;padding-left: 5px" :disabled="modelType">
+                <Select  v-model="row.enterAccountMo" filterable @on-change="getinto" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in row.enterAccount" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
                 </Select>
               </template>

@@ -5,13 +5,14 @@
       name="el-zoom-in-top">
       <div
         ref="popper"
-        class="el-select-menu-wrap"
+        class="el-select-menu-wrap w200 fs12"
         v-show="isLayer">
         <el-scrollbar
           tag="ul"
           wrap-class="el-select-dropdown__wrap"
           view-class="el-select-dropdown__list"
           ref="scrollbar"
+          class=" w200 fs12"
           v-show="options.length>0">
           <p class="el-select-menu-item" @click="selectItem(item)" v-for="item in options" :key="item.id">{{item.fullName}}</p>
           <p></p>

@@ -128,7 +128,7 @@
             <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
             <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-            <vxe-table-column field="unClaimedAmt" title="收入金额"></vxe-table-column>
+            <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
             <vxe-table-column
               field="thisClaimedAmt"
@@ -387,7 +387,7 @@ export default {
       this.tableData.map(item => {
         sum2 += item.thisClaimedAmt ? item.thisClaimedAmt * 1 : 0;
       });
-      this.check = (sum1 - sum2).toFixed(2);
+      this.check = (Math.abs(sum1) - Math.abs(sum2)).toFixed(2);
     }
   }
 };

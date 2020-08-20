@@ -59,9 +59,13 @@ export default {
     };
   },
   mounted() {
-    this.getOne();
   },
   methods: {
+    //打开页面
+    init(){
+      this.getOne();
+      this.modal = true
+    },
     // 往来单位选择
     async getOne() {
       findGuest({size:2000}).then(res => {

@@ -579,7 +579,7 @@ export default {
     async getThisArea() {
       let data = {};
       data.shopkeeper = 1;
-      data.shopNumber = this.$store.state.user.userData.shopId;
+      data.shopNumber = this.$store.state.user.userData.currentCompany.id || "";
       data.tenantId = this.$store.state.user.userData.tenantId;
       let res = await are(data);
       if (res.code === 0) {
@@ -605,7 +605,7 @@ export default {
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];
         this.$nextTick(() => {
-          this.BranchstoreId = this.$store.state.user.userData.shopId;
+          this.BranchstoreId = this.$store.state.user.userData.currentCompany.id ||"";
         });
         if(this.areas.length>0){
           this.areas.map(item=>{

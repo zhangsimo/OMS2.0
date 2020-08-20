@@ -768,7 +768,7 @@
       this.orgName = arr[3];
       this.$nextTick(() => {
         this.areaId=arr[0]
-        this.getShop(this.areaId);
+        // this.getShop(this.areaId);
         this.setAreaDef()
         this.orgId = arr[1];
         this.model1 = arr[1];
@@ -904,6 +904,16 @@
           return this.$message.error("请选择一条未核销对账单");
         if (this.$refs.claim.currentClaimed.length === 0)
           return this.$message.error("至少选择一条本店待认领款");
+        this.$refs.claim.currentClaimed.map(item=>{
+          if(item.incomeMoney>0 && item.paidMoney==0){
+            item.incomeMoney=item.unClaimedAmt
+            item.paidMoney=""
+          }
+          if(Math.abs(item.paidMoney)>0 && item.incomeMoney<=0){
+            item.paidMoney=item.unClaimedAmt
+            item.incomeMoney=""
+          }
+        })
         this.$refs.settlement.Settlement = true;
       },
 
@@ -1038,7 +1048,7 @@
           if (type) {
             this.$refs.chargeAdvance.modal = true;
           } else {
-            this.$refs.advance.modal = true;
+            this.$refs.advance.init()
           }
         } else {
           this.$message.error("至少选择一条数据且是收款数据");
