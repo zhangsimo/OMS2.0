@@ -61,8 +61,7 @@
                 :value="item.label"
                 :key="item.id"
               >{{ item.label }}
-              </Option
-              >
+              </Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -186,10 +185,11 @@
     },
     methods: {
       select1(option) {
-        this.search.partBrand = option.label;
+        this.search.partBrand = option.value;
       },
       async partBrandRemote(query) {
-        this.bandArr = await getBrandList(query)
+        let queryName=query.slice(0,query.length-1)
+        this.bandArr = await getBrandList(queryName)
       },
       //获取仓库
       async getWares(orgId) {
