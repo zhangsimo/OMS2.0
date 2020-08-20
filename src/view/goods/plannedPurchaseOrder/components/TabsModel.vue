@@ -228,7 +228,7 @@ export default class TabsModel extends Vue {
       minWidth: 120
     },
     {
-      title: "第一个供应商",
+      title: "第一供应商",
       key: "guestName",
       minWidth: 120
     },

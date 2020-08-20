@@ -340,7 +340,7 @@
       this.getInvoiceSellerList()
       this.$refs.xTable.recalculate(true)
       this.getDictionary("PAYMENT_TYPE"); //付款方式
-      this.getDictionary("CS00107"); //税率
+      this.getDictionary("TaxRate"); //税率
       this.getDictionary("BILL_LIST_TYPE"); //开票清单
       this.getDictionary("INVOICE_TYPE"); //发票分类
       Bus.$on("accountOrder", val => {
@@ -429,6 +429,7 @@
       // 数据字典
       getDictionary(dictCode) {
         getDataDictionaryTable({dictCode}).then(res => {
+          console.log(res)
           if (res.data[0].dictCode === "PAYMENT_TYPE") {
             res.data.map(item => {
               this.paymentMethod.push({
@@ -436,7 +437,7 @@
                 label: item.itemName
               });
             });
-          } else if (res.data[0].dictCode === "CS00107") {
+          } else if (dictCode === "TaxRate") {
             res.data.map(item => {
               this.taxRate.push({
                 value: parseFloat(item.itemValueOne),

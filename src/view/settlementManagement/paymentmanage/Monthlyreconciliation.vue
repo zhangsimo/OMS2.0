@@ -1137,8 +1137,8 @@
             }
           ];
           // this.accountData = JSON.parse(JSON.stringify(this.data));
-          this.getAccountNameList();
-          this.getPaymentNameList();
+
+
         });
       },
       //获取收款户名
@@ -1216,7 +1216,8 @@
           this.totalpayment += item.thisAccountAmt;
         });
         this.getSettlementComputed();
-
+        this.getAccountNameList();
+        this.getPaymentNameList();
         // this.tipText(this.paymentlist);
       },
       // 应收选中
@@ -1229,6 +1230,8 @@
         //   this.totalcollect += item.thisAccountAmt;
         // });
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
 
         // this.tipText(this.collectlist);
       },
@@ -1240,6 +1243,8 @@
         //   this.totalcollect += item.thisAccountAmt;
         // });
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
 
         // this.tipText(this.collectlist);
       },
@@ -1275,6 +1280,8 @@
           this.totalpayment += item.thisAccountAmt;
         });
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
 
         // this.tipText(this.paymentlist);
       },
@@ -1283,12 +1290,16 @@
         this.paymentlist = selection;
         this.totalpayment -= row.thisAccountAmt;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
         this.collectlist = selection;
         this.totalcollect -= row.thisAccountAmt;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 应付取消全选
       paymentNoCheckoutAll() {
@@ -1296,6 +1307,8 @@
         this.totalpayment = 0;
         this.Actualtotalpayment = 0;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 应收取消全选
       collectNoCheckoutAll() {
@@ -1303,6 +1316,8 @@
         this.totalcollect = 0;
         this.Actualtotalcollect = 0;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 本次不对帐金额弹窗
       async noReconciliation() {

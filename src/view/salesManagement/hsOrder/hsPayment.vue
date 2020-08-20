@@ -10,7 +10,7 @@
             <span class="">入库日期：</span>
             <Date-picker
               type="daterange"
-              v-model="queryTime"
+              :value="queryTime"
               clearable
               class="w200 mr10"
               @on-change="getvalue"
@@ -131,7 +131,7 @@
     <!--处理过账-->
     <Modal v-model="modal1" title="提示">
       <p class="fs20">
-        此操作字段生成已入库外采订单和草稿销售订单
+        此操作自动生成已入库外采订单和草稿销售订单
       </p>
       <p class="pt10">填写备注</p>
       <p class="pt5"><Input v-model="remarkText" class="mr10" /></p>
@@ -145,7 +145,7 @@
 
 <script>
   import {getHsOrderList,setPostDetail} from "_api/salesManagment/acceptance.js";
-  import getDate from '@/components/getDate/dateget'
+  import getDate from '@/components/getDate/dateget_concise'
   export default {
     name: "hsPayment",
     components: {
@@ -217,7 +217,9 @@
       async getListData(){
         let params = {};
         let data = {};
-        data.status = this.searchData.status;
+        if(this.searchData.status!=999){
+          data.status = this.searchData.status;
+        }
         if(this.searchData.partName.trim()){
           data[this.searchData.type] = this.searchData.partName.trim();
         }
@@ -273,7 +275,7 @@
       getvalue(date) {
         if(date[0]&&date[0].split(' ').length==1){
           date[0] = date[0]?date[0]+' 00:00:00' : ''
-          date[1] = date[1]?date[1]+' 23.59.59' : ''
+          date[1] = date[1]?date[1]+' 23:59:59' : ''
         }
         this.queryTime = date
         this.resetData();
