@@ -907,7 +907,6 @@
         this.Rebateid = row.applyNo;
       },
       getBackList2(row) {
-        console.log(row)
         this.BadDebtid = row.applyNo;
       },
       // 计算应收业务销售出库/退货对账的总计

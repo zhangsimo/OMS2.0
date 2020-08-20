@@ -23,7 +23,9 @@ export default {
     return {
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
-      formInline:{},//所有数据对象
+      formInline:{
+        QSMoney:0,//中间借比金额
+      },//所有数据对象
       //表单校验
       ruleValidate: {
         topic: [
@@ -52,7 +54,6 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       options1: [],
       canSave:false,//节流阀
-      QSMoney:0,
     }
   },
   mounted(){
@@ -169,7 +170,7 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
-      this.QSMoney=parseFloat(item.amtTotal)
+      this.formInline.QSMoney=parseFloat(row.amtTotal)
     },
 
     //获取付款信息
@@ -190,16 +191,8 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           if(type==1){
-            if(this.formInline.requestInstructionNo!=undefined){
-              if(this.QSMoney==0){
-                this.$refs.request.query()
-                this.$refs.request.tableData.map(item=>{
-                  if(item.applyNo==this.formInline.requestInstructionNo){
-                    this.QSMoney=parseFloat(item.amtTotal)
-                  }
-                })
-              }
-              if(parseFloat(this.formInline.applyAmt)>this.QSMoney){
+            if(this.formInline.requestInstructionNo){
+              if(parseFloat(this.formInline.applyAmt)>this.formInline.QSMoney){
                 this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
                 return
               }

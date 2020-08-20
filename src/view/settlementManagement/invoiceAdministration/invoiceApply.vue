@@ -295,6 +295,28 @@ export default {
           }
         },
         {
+          title:"税点",
+          key:"additionalTaxPoint",
+          className: "tc",
+          minWidth: 80,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.additionalTaxPoint
+                }
+              }, params.row.additionalTaxPoint)
+            ])
+          }
+        },
+        {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",
@@ -737,28 +759,6 @@ export default {
                   title: params.row.customAddress
                 }
               }, params.row.customAddress)
-            ])
-          }
-        },
-        {
-          title: "开票申请单号",
-          minWidth: 100,
-          key: "applyNo",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.applyNo
-                }
-              }, params.row.applyNo)
             ])
           }
         },

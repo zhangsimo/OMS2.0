@@ -189,9 +189,10 @@
               <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
               <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
               <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
               <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
               <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
               <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
@@ -245,9 +246,10 @@
               <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
               <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
               <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
               <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
               <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
               <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
@@ -301,9 +303,10 @@
               <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
               <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
               <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
               <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
               <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
               <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
@@ -357,9 +360,10 @@
               <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
               <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
               <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
               <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
               <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
               <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
@@ -413,9 +417,10 @@
               <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
               <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
               <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
               <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
               <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
               <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>

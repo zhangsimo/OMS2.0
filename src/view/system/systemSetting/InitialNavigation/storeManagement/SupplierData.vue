@@ -281,7 +281,7 @@ export default {
   border-bottom: 1px solid #dcdee2;
 }
 .tabeBox {
-  overflow: hidden;
+  overflow-y: scroll;
   overflow-x: initial;
   padding: 10px;
   height: calc(~"100% - 57px");

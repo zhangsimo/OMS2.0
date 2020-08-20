@@ -1004,7 +1004,6 @@ export default {
               this.$Message.success("作废成功");
               this.formPlan = {};
               this.getLeftList();
-              this.id = null;
               this.$refs.formPlan.resetFields();
             }
           },
@@ -1053,7 +1052,6 @@ export default {
               this.isNew = true;
               this.$Message.success("保存成功");
               this.formPlan = {};
-              this.id=null
               this.getLeftList();
               this.$refs.formPlan.resetFields();
             } else {
@@ -1145,7 +1143,6 @@ export default {
                   this.$Message.success("提交成功");
                   this.isNew = true;
                   this.formPlan = {};
-                  this.id = null;
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();
                   // this.reload();

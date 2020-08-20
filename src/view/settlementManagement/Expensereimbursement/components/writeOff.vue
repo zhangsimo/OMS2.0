@@ -361,7 +361,7 @@ export default {
       //   }
       // }
       this.selectArr.map((row,index)=>{
-        let ygjzwhxye=row.paymentReturnBalance <= 0? row.payAmt: row.paymentReturnBalance
+        let ygjzwhxye=row.paymentReturnBalance <= 0.01? row.payAmt: row.paymentReturnBalance
         if(ygjzwhxye<row.writeOffAmount){
           return this.$Message.error(`第${index+1}个单据因公借支核销金额大于因公借支未核销金额,不符合条件！`)
         }

@@ -166,6 +166,10 @@
             <Table
               :columns="columns1"
               :data="data1"
+              @on-select="collectCheckout"
+              @on-select-all="collectCheckoutAll"
+              @on-select-cancel="collectNoCheckout"
+              @on-select-all-cancel="collectNoCheckoutAll"
               border
               max-height="400"
               show-summary
@@ -179,6 +183,10 @@
               :data="data2"
               border
               max-height="400"
+              @on-select="paymentCheckout"
+              @on-select-all="paymentCheckoutAll"
+              @on-select-cancel="paymentNoCheckout"
+              @on-select-all-cancel="paymentNoCheckoutAll"
               show-summary
               ref="payable"
             ></Table>
@@ -356,6 +364,11 @@
         Reconciliation: false, //本次不对账弹窗
         accountModal: false, //对账单弹窗
         columns1: [
+          {
+            type: "selection",
+            width: 40,
+            align: "center"
+          },
           {
             title: "序号",
             key: "index",
@@ -543,7 +556,9 @@
         provinceArr: [],
         clientDataShow2: false,
         treeDiagramList2: [],
-        clientList2: []
+        clientList2: [],
+        collectlist:[],
+        paymentlist:[]
       };
     },
     async mounted() {
@@ -715,6 +730,89 @@
           }
         }
       },
+      getSettlementComputed() {
+        let obj = {
+          one: this.collectlist,
+          two: this.paymentlist,
+          three: [
+            {
+              transportExpenses: this.infoBase.transportExpenses,
+              insuranceExpenses: this.infoBase.insuranceExpenses,
+              serviceCharge: this.infoBase.serviceCharge,
+              partsManagementFee: this.infoBase.partsManagementFee,
+              otherFees: this.infoBase.otherFees,
+              payingBadDebts: this.infoBase.payingBadDebts,
+              dealingRebates: this.infoBase.dealingRebates,
+              badDebtReceivable: this.collectBaddebt,
+              receivableRebate: this.collectRebate
+            }
+          ]
+        };
+        getSettlement(obj).then(res => {
+          this.handervis = true;
+          this.data = [
+            {
+              Detailedstatistics: "对账单号",
+              Statementexcludingtax: res.data.hasOwnProperty("one")
+                ? this.arrId[0]
+                : "",
+              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+                ? this.arrId[1]
+                : "",
+              Statementoilincludingtax: res.data.hasOwnProperty("three")
+                ? this.arrId[2]
+                : ""
+            },
+            {
+              Detailedstatistics: "对账金额",
+              Statementexcludingtax: res.data.hasOwnProperty("one")
+                ? res.data.one
+                : "",
+              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+                ? res.data.two
+                : "",
+              Statementoilincludingtax: res.data.hasOwnProperty("three")
+                ? res.data.three
+                : ""
+            }
+          ];
+          // this.accountData = JSON.parse(JSON.stringify(this.data));
+          this.getAccountNameList();
+          this.getPaymentNameList();
+        });
+      },
+
+      //往来单位切换数据还原
+      changeGuestName() {
+        this.info = false;
+        this.handervis = false;
+        this.paymentlist = [];
+        this.collectlist = [];
+        this.infoBase.actualCollection = 0;
+        this.Actualtotalcollect = 0;
+        this.Actualtotalpayment = 0;
+        this.Reconciliationtotal = 0;
+        this.totalpayment = 0;
+        this.collectBaddebt = 0;
+        this.collectRebate = 0;
+        this.infoBase.transportExpenses = 0;
+        this.infoBase.insuranceExpenses = 0;
+        this.infoBase.serviceCharge = 0;
+        this.infoBase.partsManagementFee = 0;
+        this.infoBase.otherFees = 0;
+        this.infoBase.payingBadDebts = 0;
+        this.infoBase.dealingRebates = 0;
+        this.getAccountNameList();
+        this.Initialization();
+      },
+      // 计算应收业务销售出库/退货对账的总计
+      collectSum(sumData) {
+        let collectSum = 0;
+        sumData.map(item => {
+          collectSum += item.thisAccountAmt
+        })
+        return collectSum
+      },
       //获取付款户名
       async getPaymentNameList() {
         let rep = await getPaymentName({"orgId": this.model1});
@@ -738,6 +836,102 @@
       },
       payMentFun(v) {
         this.paymentObj = v;
+      },
+      // 应付选中
+      paymentCheckout(selection, row) {
+        this.paymentlist = selection;
+        this.totalpayment = 0;
+        selection.map(item => {
+          this.totalpayment += item.thisAccountAmt;
+        });
+        this.getSettlementComputed();
+
+        // this.tipText(this.paymentlist);
+      },
+      // 应收选中
+      collectCheckout(selection, row) {
+        this.collectlist = selection;
+        this.infoBase.actualCollection = 0;
+        this.Actualtotalcollect = 0;
+        this.infoBase.actualCollection = this.collectSum(selection)
+        // selection.map(item => {
+        //   this.totalcollect += item.thisAccountAmt;
+        // });
+        this.getSettlementComputed();
+
+        // this.tipText(this.collectlist);
+      },
+      // 应收全选
+      collectCheckoutAll(selection) {
+        this.collectlist = selection;
+        this.infoBase.actualCollection = this.collectSum(selection)
+        // selection.map(item => {
+        //   this.totalcollect += item.thisAccountAmt;
+        // });
+        this.getSettlementComputed();
+
+        // this.tipText(this.collectlist);
+      },
+      //选中提醒
+      tipText(row) {
+        let dartArr = row.filter(item => item.existDraft === 1);
+        if (dartArr.length == 1) {
+          this.$Modal.warning({
+            title: "提示",
+            content: "该业务单号已存在" + dartArr[0].draftUname + "草稿箱中，请及时提交申请"
+          })
+        }
+        if (dartArr.length > 1) {
+          let isRepeatArr = dartArr.filter(item => item.draftUname == dartArr[0].draftUname)
+          if (isRepeatArr.length == dartArr.length) {
+            this.$Modal.warning({
+              title: "提示",
+              content: "置灰的业务单号已存在" + dartArr[0].draftUname + "草稿箱中，请及时提交申请"
+            })
+          } else {
+            this.$Modal.warning({
+              title: "提示",
+              content: "置灰的业务单号已存在草稿箱中，请及时提交申请"
+            })
+          }
+        }
+      },
+      // 应付全选
+      paymentCheckoutAll(selection) {
+        this.paymentlist = selection;
+        this.totalpayment = 0
+        selection.map(item => {
+          this.totalpayment += item.thisAccountAmt;
+        });
+        this.getSettlementComputed();
+
+        // this.tipText(this.paymentlist);
+      },
+      // 应付取消选中
+      paymentNoCheckout(selection, row) {
+        this.paymentlist = selection;
+        this.totalpayment -= row.thisAccountAmt;
+        this.getSettlementComputed();
+      },
+      // 应收取消选中
+      collectNoCheckout(selection, row) {
+        this.collectlist = selection;
+        this.infoBase.actualCollection -= row.thisAccountAmt;
+        this.getSettlementComputed();
+      },
+      // 应付取消全选
+      paymentNoCheckoutAll() {
+        this.paymentlist = [];
+        this.totalpayment = 0;
+        this.Actualtotalpayment = 0;
+        this.getSettlementComputed();
+      },
+      // 应收取消全选
+      collectNoCheckoutAll() {
+        this.collectlist = [];
+        this.infoBase.actualCollection = 0;
+        this.Actualtotalcollect = 0;
+        this.getSettlementComputed();
       },
       //修改收款账户
       async changeKh() {

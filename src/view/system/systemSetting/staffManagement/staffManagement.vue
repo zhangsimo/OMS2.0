@@ -284,7 +284,7 @@ export default {
         {
           title: "所属机构",
           align: "center",
-          key: "groupName"
+          key: "shopName"
         },
         {
           title: "建档人",
