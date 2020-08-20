@@ -33,6 +33,7 @@ import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import { findByDynamicQuery } from "_api/settlementManagement/otherReceivables/otherReceivables";
+import { getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 
 import bus from "../../../bill/Popup/Bus";
 import moment from "moment";
@@ -122,21 +123,42 @@ export default {
   },
   methods: {
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          this.company = [];
+    async getOne(query) {
+      // findGuest({ size: 2000 }).then(res => {
+      //   if (res.code === 0) {
+      //     this.company = [];
+      //     res.data.content.map(item => {
+      //       this.company.push({
+      //         value: item.id,
+      //         label: item.fullName
+      //       });
+      //     });
+      //   }
+      // });
+      this.company = [];
+      if (query !== "") {
+        let arr=[]
+        let req = {
+          shortName:query,
+          size:50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
           res.data.content.map(item => {
-            this.company.push({
+            arr.push({
               value: item.id,
               label: item.fullName
             });
           });
         }
-      });
+        let arrJson=new Set(arr)
+        this.company=Array.from(arrJson)
+      } else {
+        this.company = [];
+      }
     },
     // 对话框是否显示
-    visChange(flag) {
+    async visChange(flag) {
       if (flag) {
         //收付类型数据字典
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
@@ -150,7 +172,11 @@ export default {
             });
           }
         );
-        this.getOne();
+        this.paymentId="QTYSK"
+        await this.getOne(this.compyName);
+        if(this.company.length>0){
+          this.companyId=this.company[0].value
+        }
         this.seleteQuery();
       }
     },

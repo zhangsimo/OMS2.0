@@ -8,13 +8,14 @@
       @on-search="onSearch"
     />
     <transition name="el-zoom-in-top">
-      <div ref="popper" class="el-select-menu-wrap" v-show="isLayer">
+      <div ref="popper" class="el-select-menu-wrap w200 fs12"  v-show="isLayer">
         <el-scrollbar
           tag="ul"
           wrap-class="el-select-dropdown__wrap"
           view-class="el-select-dropdown__list"
           ref="scrollbar"
           v-show="options.length > 0"
+          class="w200 fs12"
         >
           <p
             class="el-select-menu-item"
