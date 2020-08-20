@@ -195,7 +195,8 @@
     submit,
     deleteRows,
     detailedIncrease,
-    deleteIncrease
+    deleteIncrease,
+    isWG
   } from "@/api/bill/popup";
   import Bus from "./Bus";
 
@@ -357,7 +358,12 @@
     },
     methods: {
       //打开 新增开票信息弹框
-      addOpenSup() {
+      async addOpenSup() {
+        let id = this.accountData[0].guestId;
+        let res = await isWG({ id });
+        if(res.code == 0 && res.data.isSupplier == 1) {
+          return this.$message.error("该往来单位为客户非供应商，如需新增，请联系财务人员");
+        }
         this.newInoiceShow = true;
         this.$refs.AddInoice.data = this.addInoiceOne
       },

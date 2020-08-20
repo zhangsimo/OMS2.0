@@ -741,28 +741,6 @@ export default {
           }
         },
         {
-          title: "开票申请单号",
-          minWidth: 100,
-          key: "applyNo",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.applyNo
-                }
-              }, params.row.applyNo)
-            ])
-          }
-        },
-        {
           title: "开票单位",
           minWidth: 100,
           key: "invoiceUnit",

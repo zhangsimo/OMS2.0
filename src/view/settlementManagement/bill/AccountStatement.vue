@@ -196,18 +196,16 @@
           :disabled="ifRecallWriteOff"
         >撤回核销
         </button>
-        <div class="hide1">
-          <Table
-            border
-            :columns="columns1"
-            :data="data1"
-            class="mt10 accountStateCla"
-            max-height="400"
-            @on-row-click="morevis"
-            highlight-row
-            ref="accountStatement"
-          ></Table>
-        </div>
+        <Table
+          border
+          :columns="columns1"
+          :data="data1"
+          class="mt10 accountStateCla"
+          max-height="400"
+          @on-row-click="morevis"
+          highlight-row
+          ref="accountStatement"
+        ></Table>
         <Page
           :total="pagetotal"
           show-elevator

@@ -207,3 +207,11 @@ export function setExpenDetail(data) {
     data
   })
 }
+
+export function isWG(params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findInfoById`,
+    method: 'get',
+    params
+  })
+}
