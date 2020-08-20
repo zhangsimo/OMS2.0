@@ -557,7 +557,6 @@
     },
     methods: {
       throwNameFun(v){
-        console.log(v)
         this.setOneClient(v);
       },
 
@@ -929,8 +928,6 @@
       //计划发货日期
       getplanSendDate(data) {
         const orderDate = this.formPlan.planSendDate;
-        console.log(this.formPlan, 111)
-        console.log(data, 222)
         this.options2 = {
           disabledDate(date) {
             return date && orderDate && date.valueOf() < new Date(orderDate);
