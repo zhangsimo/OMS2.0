@@ -369,6 +369,9 @@ export default {
                   this.$message.success("对账单对冲成功");
                 }
               });
+            }else{
+              this.Settlement = false;
+              this.$message.success("对账单对冲成功");
             }
           }
         });
