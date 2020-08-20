@@ -10,7 +10,7 @@ export async  function  getBrandList(name){
   let arr=[]
   let res=await getParamsBrandPart(data)
   if(res.code===0){
-    if(res.data.content.length>0){
+    if(res.data.content){
       for (let quality of res.data.content) {
         if (quality.children.length <= 0) {
           break;
