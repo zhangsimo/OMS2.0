@@ -56,7 +56,6 @@ class httpRequest {
               config.params.tenantId = res.tenantId || 0
               config.params.shopId = res.shopId || 0
               config.params.shopkeeper = res.shopkeeper || 0
-              config.params.uuid = v4()
             }
             if(config.params.scope == null) {
               if(localStorage.getItem('userScope') != null){
