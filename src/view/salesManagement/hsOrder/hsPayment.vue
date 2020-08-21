@@ -87,17 +87,17 @@
           <vxe-table-column width="120" field="taxAmt" title="含税金额"></vxe-table-column>
           <vxe-table-column width="120" field="noTaxPrice" title="不含税单价"></vxe-table-column>
           <vxe-table-column width="120" field="noTaxAmt" title="不含税金额"></vxe-table-column>
-          <vxe-table-column width="120" field="remark" title="单价备注"></vxe-table-column>
+          <vxe-table-column width="120" field="remark" title="单据备注"></vxe-table-column>
         </vxe-table>
 
         <div ref="planPage">
         <Page size="small" class-name="page-con tr" :current="page.num" :total="page.total" :page-size="page.size" @on-change="selectNum"
-        @on-page-size-change="selectPage" show-sizer show-total></Page>
+        @on-page-size-change="selectPage" show-sizer show-total :page-size-opts="[500,1000]"></Page>
         </div>
       </div>
     </section>
     <!--复制单号-->
-    <Modal v-model="modal3" title="提示" @on-ok="modal3=false">
+    <Modal v-model="modal3" title="提示" @on-ok="okSub">
       <p style="font-size: 16px">
         操作成功
       </p>
@@ -163,7 +163,7 @@
         //分页
         page: {
           total: 0,
-          size:10,
+          size:500,
           num: 1
         },
         //状态
@@ -244,6 +244,7 @@
         let rep = await setPostDetail(req);
         if(rep.code==0){
           this.modal3 = true;
+          this.modal1 = false;
           this.danhao = rep.data.CGDD||"";
           this.danhao1 = rep.data.XSDD||"";
         }else{
@@ -254,7 +255,6 @@
 
       resetData(){
         this.page.num = 1;
-        this.page.size = 10;
         this.selectTableDataArr = [];
         this.getListData();
       },
@@ -296,6 +296,10 @@
       //获取下侧表格一行选中的数据
       currentChangeEvent({row}) {
         this.selectTableDataArr = row;
+      },
+      okSub(){
+        this.modal3 = false;
+        this.getListData();
       }
     },
     watch: {

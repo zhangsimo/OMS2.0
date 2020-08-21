@@ -80,6 +80,7 @@
                 :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
+                ref="leftTabel"
               ></Table>
               <Page
                 size="small"
@@ -659,7 +660,9 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
           }
-          for (let b of this.Left.tbdata) {
+          console.log(this.currRow.id)
+          if(this.currRow.id){
+            for (let b of this.Left.tbdata) {
               b._highlight = false;
               if(b.id == this.currRow.id) {
                 b._highlight = true;
@@ -670,6 +673,17 @@ export default {
                 return;
               }
             }
+          }else{
+            if(this.Left.tbdata.length>0){
+              let firstData = this.Left.tbdata[0];
+              this.currRow =firstData
+              this.Right.tbdata = firstData.detailVOList;
+              this.formPlan = firstData;
+              this.draftShow = firstData.billStatusId.value;
+              firstData._highlight = true
+            }
+          }
+
         })
         .catch(err => {
           this.$Message.info("获取盘点列表失败");
@@ -743,6 +757,7 @@ export default {
           return;
         }
       }
+      this.currRow = {};
       for (let b of this.Left.tbdata) {
         b._highlight = false;
       }

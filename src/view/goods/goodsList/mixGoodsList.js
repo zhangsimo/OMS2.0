@@ -238,8 +238,10 @@ export const mixGoodsData = {
             }
           }
         } else {
-          this.tbdata[0]._highlight = true
-          this.setFormPlanmain(this.tbdata[0]);
+          if(this.tbdata.length>0){
+            this.tbdata[0]._highlight = true
+            this.setFormPlanmain(this.tbdata[0]);
+          }
         }
       }
     },

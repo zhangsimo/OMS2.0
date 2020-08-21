@@ -36,6 +36,7 @@
               v-model="Outform.enterTypeId"
               style="width:100px"
               placeholder="请选择"
+              @on-change="query"
             >
               <Option
                 v-for="item in enterTypeList"
@@ -237,7 +238,7 @@ export default {
       },
       Loading: true, //状态
       // storeId: "" //参考id
-      showSelf:true
+      showSelf:true,
     };
   },
   mounted() {
@@ -261,6 +262,7 @@ export default {
       this.showInfo = true;
       this.$refs.getDate.resetFun();
       this.storeId = v;
+      this.searchValue = "";
       this.getList(v);
       //this.getClientList();
       this.$refs.Xtable.recalculate(true)
@@ -314,7 +316,11 @@ export default {
       if (value[0]) {
         this.Outform.enterDateStart = value[0];
         this.Outform.enterDateEnd = value[1];
+      }else{
+        this.Outform.enterDateStart = "";
+        this.Outform.enterDateEnd = "";
       }
+      this.query();
     },
     //查询
     query() {

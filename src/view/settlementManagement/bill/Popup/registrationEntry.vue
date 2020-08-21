@@ -118,24 +118,36 @@
         field="totalAmt"
         title="价税合计金额"
         width="140"
-        :edit-render="{name: 'input', attrs: {type: 'number'}}"
-      ></vxe-table-column>
+        :edit-render="{autofocus: '.vxe-input--inner'}"
+      >
+        <template v-slot:edit="{ row,rowIndex }">
+          <vxe-input @change="bba(row,rowIndex)" v-model="row.totalAmt" placeholder="价税合计金额" type="number"></vxe-input>
+        </template>
+      </vxe-table-column>
       <vxe-table-column
         field="invoiceAmt"
         title="不含税金额"
         width="120"
+        :edit-render="{autofocus: '.vxe-input--inner'}"
       >
+        <template v-slot:edit="{ row }">
+          <vxe-input v-model="row.invoiceAmt" placeholder="不含税金额" type="number"></vxe-input>
+        </template>
         <template v-slot="{ row }">
-          {{((row.totalAmt||0)/(1+row.taxRate)).toFixed(2)}}
+          {{row.invoiceAmt}}
         </template>
       </vxe-table-column>
       <vxe-table-column
         field="taxAmt"
         title="税额"
         width="100"
+        :edit-render="{autofocus: '.vxe-input--inner'}"
       >
+        <template v-slot:edit="{ row }">
+          <vxe-input v-model="row.taxAmt" placeholder="税额" type="number"></vxe-input>
+        </template>
         <template v-slot="{ row }">
-          {{((row.totalAmt||0)/(1+row.taxRate)*row.taxRate).toFixed(2)}}
+          {{row.taxAmt}}
         </template>
       </vxe-table-column>
       <vxe-table-column field="taxRate" title="税率" width="100">
@@ -207,6 +219,33 @@
       AddInoice
     },
     data() {
+      const amtValid = ({ cellValue ,row}) => {
+        return new Promise((resolve, reject) => {
+          if (row.totalAmt != (parseFloat(row.invoiceAmt)+parseFloat(row.taxAmt))) {
+            reject(new Error('请满足 价税合计金额=不含税金额+税额'));
+          } else {
+            resolve()
+          }
+        })
+      }
+      const amtValid2 = ({ cellValue ,row}) => {
+        return new Promise((resolve, reject) => {
+         if(Math.abs(parseFloat(row.invoiceAmt)*parseFloat(row.taxRate)-parseFloat(row.taxAmt))>=0.06){
+            reject(new Error('不含税金额误差应小于0.06'));
+          } else {
+            resolve()
+          }
+        })
+      }
+      const amtValid3 = ({ cellValue ,row}) => {
+        return new Promise((resolve, reject) => {
+          if(cellValue==""){
+            reject(new Error('税额必填'));
+          } else {
+            resolve()
+          }
+        })
+      }
       return {
         arrId: [], //选中数据的id，guestId，orgId
         orgName: "", //分店名称
@@ -221,9 +260,11 @@
           invoicePurchaserId: [{required: true, message: "发票采购方名称必填"}],
           invoiceSellerName: [{required: true, message: "发票销售方名称必填"}],
           billingDate: [{required: true, message: "开票日期必填"}],
-          totalAmt: [{required: true, message: "价税合计金额必填"}],
-          // invoiceAmt: [{ required: true, message: "不含税金额必填" }],
-          // taxAmt: [{ required: true, message: "税额必填" }],
+
+          totalAmt: [{required: true, message: "价税合计金额必填"},{validator: amtValid}],
+          invoiceAmt: [{ required: true, message: "不含税金额必填"},{validator: amtValid2}],
+          taxAmt: [{validator: amtValid3}],
+
           taxRate: [{required: true, message: "税率必填"}],
           payType: [{required: true, message: "付款方式必填"}],
           billingType: [{required: true, message: "开票清单类型必填"}]
@@ -417,6 +458,11 @@
           this.detailed();
         }
       },
+      bba(v,i){
+          this.tableData[i]['taxAmt'] = ((v.totalAmt || 0) / (1 + v.taxRate) * v.taxRate).toFixed(2);
+          this.tableData[i]['invoiceAmt'] = ((v.totalAmt || 0) / (1 + v.taxRate)).toFixed(2);
+
+      },
       // 明细查询
       detailed() {
         detailedIncrease({id: this.arrId[2]}).then(res => {
@@ -489,8 +535,8 @@
               item.billingDate = data;
             }
             //计算税额，不含税金额
-            item.taxAmt = ((item.totalAmt || 0) / (1 + item.taxRate) * item.taxRate).toFixed(2);
-            item.invoiceAmt = ((item.totalAmt || 0) / (1 + item.taxRate)).toFixed(2);
+            // item.taxAmt = ((item.totalAmt || 0) / (1 + item.taxRate) * item.taxRate).toFixed(2);
+            // item.invoiceAmt = ((item.totalAmt || 0) / (1 + item.taxRate)).toFixed(2);
             return item
           });
           this.accountData.map(item => {
@@ -592,7 +638,11 @@
             invoiceCode: lastData.invoiceCode || "",
             invoiceNo: lastData.invoiceNo || "",
             invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
-            billingDate: lastData.billingDate || ""
+            billingDate: lastData.billingDate || "",
+            taxAmt:'',
+            totalAmt:'',
+            invoiceAmt:''
+
           });
         } else {
           this.tableData.push({
@@ -603,7 +653,10 @@
             invoiceSort: "CG",
             invoicePurchaserId: this.$store.state.user.userData.currentShopId || "",
             invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
-            billingType: statementType === 1 ? "0" : "YP"
+            billingType: statementType === 1 ? "0" : "YP",
+            taxAmt:'',
+            totalAmt:'',
+            invoiceAmt:''
           });
         }
       },
