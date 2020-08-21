@@ -705,6 +705,12 @@ export default {
                   this.selectTabelData(b);
                 }
               }
+            }else{
+              if(this.Left.tbdata.length>0){
+                let firstData = this.Left.tbdata[0];
+                firstData._highlight = true;
+                this.selectTabelData(firstData);
+              }
             }
           }
         }
@@ -775,6 +781,7 @@ export default {
           return;
         }
       }
+      this.leftClickItemId = "";
       this.Left.tbdata.map((item, index) => {
         item._highlight = false;
       });
@@ -799,7 +806,7 @@ export default {
         orderMan:"",
         orderManId:this.$store.state.user.userData.id || "",
         //移仓时间
-        auditDate:new Date(),
+        auditDate:tools.transTime(new Date()),
 
         _highlight: true
       };

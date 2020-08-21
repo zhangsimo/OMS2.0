@@ -103,6 +103,16 @@ export const mixSelectPartCom = {
           minWidth: 120,
         },
         {
+          title: "门店可售库存",
+          key: "callerStock",
+          minWidth: 120,
+        },
+        {
+          title: "总部可售库存",
+          key: "headquartersStock",
+          minWidth: 120,
+        },
+        {
           title: "内码",
           key: "code",
           minWidth: 120,

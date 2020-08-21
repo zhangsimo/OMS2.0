@@ -577,7 +577,7 @@ export default {
         },
         {
           title: "店号",
-          key: "orgId",
+          key: "orgCode",
           minWidth: 60,
           className: "tc",
           render: (h, params) => {
@@ -591,9 +591,9 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.orgId
+                  title: params.row.orgCode
                 }
-              }, params.row.orgId)
+              }, params.row.orgCode)
             ])
           }
         },

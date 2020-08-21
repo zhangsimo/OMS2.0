@@ -829,6 +829,7 @@ export default {
       this.sellOrderTable.tbdata = arr
       this.sellOrderTable.tbdata[0]._highlight = true;
       this.isAdd = false;
+      this.id=undefined;
     },
     //获取客户属性
     async getType() {

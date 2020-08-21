@@ -281,7 +281,7 @@ export default {
           if (valg) return this.$Message.error('申请金额不能大于单据金额')
           this.formInline.step = type
           let req = {...this.formInline}
-          req.paymentTerm = moment.utc(req.paymentTerm).day(1);
+          // req.paymentTerm = moment.utc(req.paymentTerm).day(1);
           let res = await getOtherSve(req)
           if (res.code == 0) {
             this.$Message.success('操作成功')

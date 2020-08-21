@@ -21,6 +21,7 @@
             @click="selectItem(item)"
             v-for="item in options"
             :key="item.id"
+            :title="item.fullName"
           >
             {{ item.fullName }}
           </p>
@@ -93,7 +94,7 @@ export default {
       });
     },
     selectItem(v) {
-      this.isLayerValue = v.shortName || "";
+      this.isLayerValue = v.fullName || "";
       this.onBlur();
       this.$emit("throwName", v);
     },

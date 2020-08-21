@@ -375,7 +375,7 @@ export default {
       total1: {},
       total2: {},
       shopkeeper: 0, // 1 总部
-      shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopId,
+      shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.currentCompany.id,
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
@@ -983,7 +983,7 @@ export default {
           tooltip: true
         }
       ];
-
+      console.log(this.selectShopList,this.shopkeeper,this.shopId,this.searchForm.old)
       if(this.selectShopList){
         this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
         if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {

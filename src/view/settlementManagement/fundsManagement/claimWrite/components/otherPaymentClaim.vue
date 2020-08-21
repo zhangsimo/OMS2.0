@@ -605,7 +605,7 @@ export default {
         item.thisClaimedAmt  = item.rpAmt
         return item
       })
-      // bus.$emit("paymentInfo", thisData);
+      bus.$emit("paymentInfo", thisData);
       if(this.claimTit=="预付款认领"){
         this.$refs.settlement.gettlementData.accountNo=this.currentAccountItem.serviceId
         this.$refs.settlement.gettlementData.sign="4"

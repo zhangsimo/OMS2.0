@@ -256,7 +256,7 @@ export default {
     getOrder(data) {
       this.isWms = false;
       this.backShow = true;
-      this.orderlistType = data.billStatusId;
+      this.orderlistType = {...data.billStatusId};
       if (
         data.billStatusId.value == 1 ||
         (data.billStatusId.value == 0 && data.id)

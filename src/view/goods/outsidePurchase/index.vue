@@ -230,17 +230,6 @@
                       >
                     </Select>
                   </FormItem>
-                  <FormItem class="form-Item" label="备注：">
-                    <Tooltip :content="formPlanmain.remark">
-                    <Input
-                      placeholder="请输入备注"
-                      class="w160"
-                      v-model="formPlanmain.remark"
-                      :disabled="isInput"
-                      maxlength="100"
-                    />
-                    </Tooltip>
-                  </FormItem>
                   <FormItem class="form-Item" label="订单号：">
                     <Tooltip :content="formPlanmain.serviceId">
                     <Input
@@ -250,6 +239,18 @@
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"
                     />
+                    </Tooltip>
+                  </FormItem>
+                  <FormItem class="form-Item" label="备注：">
+                    <Tooltip>
+                      <Input
+                        placeholder="请输入备注"
+                        class="w160"
+                        v-model="formPlanmain.remark"
+                        :disabled="isInput"
+                        maxlength="100"
+                      />
+                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{formPlanmain.remark}}</div>
                     </Tooltip>
                   </FormItem>
                 </Form>
