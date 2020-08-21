@@ -929,8 +929,6 @@
               item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty
             });
 
-            console.log(reqData)
-            return
             let res = await getSave(reqData);
             if (res.code === 0) {
               this.modal3 = true;
