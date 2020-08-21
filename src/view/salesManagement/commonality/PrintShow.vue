@@ -2,19 +2,19 @@
   <Modal v-model="printShow" closable id="printBoxBig"  width="940">
     <div id="printBox" style="height: 600px;page-break-after:always !important;">
       <div class="titler">
-        <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;">
-          <Col span="16" style="padding:2px;">
+        <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding-bottom: 0px">
+          <Col span="16" style="padding:2px;padding-bottom: 0px">
             <h5
               style="font-size: 18px;line-height: 44px;"
             >{{onelist.userCompany}}</h5>
           </Col>
-          <Col span="8" style="padding:2px;">
+          <Col span="8" style="padding:2px;padding-bottom: 0px">
             <p style="font-weight: 600;font-size: 16px">销售订单:</p>
             <p style="font-size: 12px">No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="16" style="padding:2px;">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;padding-top:0;">
+          <Col span="16" style="padding:2px;padding-top:0;">
             <p>
               <span style="font-size: 12px">地址:</span>
               <span style="font-size: 12px">{{onelist.addr}}</span>
@@ -24,7 +24,7 @@
               <span style="font-size: 12px">{{onelist.tel}}</span>
             </p>
           </Col>
-          <Col span="8" style="padding:2px;">
+          <Col span="8" style="padding:2px;padding-top:0;">
             <p>
               <span style="font-size: 12px">订单日期:</span>
               <span style="font-size: 12px">{{onelist.orderDate}}</span>
@@ -367,7 +367,7 @@
 
   table.gridtable th {
     border-width: 1px;
-    padding: 4px;
+    padding: 2px;
     border-style: solid;
     border-color: #000000;
     background-color: #dedede;
@@ -375,7 +375,7 @@
 
   table.gridtable td {
     border-width: 1px;
-    padding: 2px;
+    padding: 1px;
     border-style: solid;
     border-color: #000000;
     background-color: #ffffff;

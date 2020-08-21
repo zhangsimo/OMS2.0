@@ -36,7 +36,7 @@
         <Split v-model="split1">
           <div slot="left">
             <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
-<!--            <span>快速查询：</span>-->
+            <!--            <span>快速查询：</span>-->
             <quickDate class="w60 mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
             <span>申请日期：</span>
             <Date-picker
@@ -109,7 +109,7 @@
             <Split v-model="split2" mode="vertical">
               <div slot="top" class="pl10">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
-<!--                <span class="pl10">快速查询：</span>-->
+                <!--                <span class="pl10">快速查询：</span>-->
                 <quickDate class="w80 mr10" ref="quickDate2" @quickDate="quickDate2"></quickDate>
                 <span>申请日期：</span>
                 <Date-picker
@@ -144,7 +144,16 @@
                 <span class="ml10">金额：</span>
                 <InputNumber v-model="amtClaim" class="w80"/>
                 <span class="ml10">对方户名：</span>
-                <Input v-model="bankNameOClaim" class="w100"/>
+                <Input v-model="bankNameOClaim" class="w100 mr10"/>
+                <span>业务类别：</span>
+                <Select v-model="businessType" clearable class="w150 mr10">
+                  <Option
+                    v-for="item in businessTypeList"
+                    :value="item.itemName"
+                    :key="item.id"
+                  >{{ item.itemName }}
+                  </Option>
+                </Select>
                 <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
@@ -161,7 +170,7 @@
               </div>
               <div slot="bottom" class="pl10">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">连锁待分配款项</h4>
-<!--                <span class="pl10 mr10">快速查询：</span>-->
+                <!--                <span class="pl10 mr10">快速查询：</span>-->
                 <quickDate class="w60 mr10" ref="quickDate3" @quickDate="quickDate3"></quickDate>
                 <span>发生日期：</span>
                 <Date-picker
@@ -307,6 +316,8 @@
         orgName: "", //门店
         companyIdNo: "", //未核销往来单位
         companyIdClaim: "", //待认领往来单位
+        businessType:"收回应收",//本店待认领款 业务类别 绑定值
+        businessTypeList: [],//本店待认领款 业务类别 下拉框
         company: [], //往来单位下拉框
         company2: [], //往来单位下拉框
         orgId: "", //门店  连锁待分配款项
@@ -764,15 +775,18 @@
           });
         });
       });
+      getDataDictionaryTable({dictCode: "YWLX"}).then(res2 => {
+        this.businessTypeList=res2.data || []
+      })
       let arr = await creat([], this.$store);
       this.orgName = arr[3];
       this.$nextTick(() => {
-        this.areaId=arr[0]
+        this.areaId = arr[0]
         // this.getShop(this.areaId);
         this.setAreaDef()
         this.orgId = arr[1];
         this.model1 = arr[1];
-        this.model2=arr[1];
+        this.model2 = arr[1];
         this.queryNoWrite()
         this.claimedList();
         this.distributionList();
@@ -793,9 +807,9 @@
     },
     computed: {
       selectShopList() {
-        if(this.$store.state.user.userData.currentCompany!=null){
+        if (this.$store.state.user.userData.currentCompany != null) {
           return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-        }else{
+        } else {
           return true
         }
       }
@@ -834,23 +848,23 @@
       //获取门店
       async getShop(areaId) {
         let data = {};
-        data.supplierTypeSecond=areaId
+        data.supplierTypeSecond = areaId
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = [...this.orgList, ...res.data]
           this.setAreaDef();
         }
       },
-      setAreaDef(){
+      setAreaDef() {
         if (this.areaList.length > 0) {
           this.areaList.map(item => {
             this.orgList.map(item2 => {
-              if(this.selectShopList){
+              if (this.selectShopList) {
                 if (item.parentId == item2.supplierTypeFirst && item.value == item2.supplierTypeSecond) {
                   this.areaId = item.value
                 }
-              }else{
-                this.areaId =0
+              } else {
+                this.areaId = 0
               }
             })
           })
@@ -904,14 +918,14 @@
           return this.$message.error("请选择一条未核销对账单");
         if (this.$refs.claim.currentClaimed.length === 0)
           return this.$message.error("至少选择一条本店待认领款");
-        this.$refs.claim.currentClaimed.map(item=>{
-          if(item.incomeMoney>0 && item.paidMoney==0){
-            item.incomeMoney=item.unClaimedAmt
-            item.paidMoney=""
+        this.$refs.claim.currentClaimed.map(item => {
+          if (item.incomeMoney > 0 && item.paidMoney == 0) {
+            item.incomeMoney = item.unClaimedAmt
+            item.paidMoney = ""
           }
-          if(Math.abs(item.paidMoney)>0 && item.incomeMoney<=0){
-            item.paidMoney=item.unClaimedAmt
-            item.incomeMoney=""
+          if (Math.abs(item.paidMoney) > 0 && item.incomeMoney <= 0) {
+            item.paidMoney = item.unClaimedAmt
+            item.incomeMoney = ""
           }
         })
         this.$refs.settlement.Settlement = true;
@@ -959,9 +973,9 @@
           if (this.claimedSubjectList[0].incomeMoney > 0) {
             this.claimedSubjectList.map(item => {
               item.incomeMoney = item.unClaimedAmt;
-              if(claimTit = "预收款认领"){
+              if (claimTit = "预收款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
-              }else{
+              } else {
                 item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
               }
             })
@@ -988,9 +1002,9 @@
           if (this.claimedSubjectList[0].paidMoney < 0) {
             this.claimedSubjectList.map(item => {
               item.paidMoney = item.unClaimedAmt;
-              if(claimTit = "预付款认领"){
+              if (claimTit = "预付款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
-              }else{
+              } else {
                 item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
               }
             })
@@ -1130,7 +1144,7 @@
           reciprocalAccountName: this.bankNameOClaim,
           page: this.$refs.claim.claimedPage.page - 1,
           size: this.$refs.claim.claimedPage.size,
-          claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '' ,
+          claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '',
           orgId: this.model2,//分店
           startDate: this.value2[0]
             ? moment(this.value2[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -1138,6 +1152,7 @@
           endDate: this.value2[1]
             ? moment(this.value2[1]).format("YYYY-MM-DD HH:mm:ss")
             : "",     //结束时间参数
+          businessType:this.businessType || ""
           // createTime:this.applyDate2 //日期查询时间发生日期
         };
         claimedFund(obj).then(res => {
