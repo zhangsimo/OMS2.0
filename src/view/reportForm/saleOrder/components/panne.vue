@@ -164,6 +164,17 @@
         }
       };
     },
+    watch:{
+      search:{
+        handler:async function(val, oldVal){
+          if(val.partBrand==undefined){
+            this.bandArr=await getBrandList("")
+          }
+        },
+        deep:true,
+        immediate:true
+      }
+    },
     computed: {
       selectShopList() {
         if (this.$store.state.user.userData.currentCompany != null) {
