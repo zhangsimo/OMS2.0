@@ -24,7 +24,7 @@ export default {
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
       formInline:{
-        QSMoney:0,//中间借比金额
+        requestInfo:{}//选中单号的数据
       },//所有数据对象
       //表单校验
       ruleValidate: {
@@ -101,6 +101,7 @@ export default {
         this.$nextTick( () => {
           this.formInline = res.data
           this.getOptionsList(res.data.receiver)
+          this.formInline.receiverId=res.data.receiverId
           this.details = res.data.details || []
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
@@ -170,7 +171,7 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
-      this.formInline.QSMoney=parseFloat(row.amtTotal)
+      this.formInline.requestInfo=row //保存获取到的
     },
 
     //获取付款信息
@@ -192,9 +193,8 @@ export default {
         if (valid) {
           if(type==1){
             if(this.formInline.requestInstructionNo){
-              if(parseFloat(this.formInline.applyAmt)>this.formInline.QSMoney){
-                this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
-                return
+              if(parseFloat(this.formInline.applyAmt)>this.formInline.requestInfo.amtTotal){
+                return this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
               }
             }
           }
