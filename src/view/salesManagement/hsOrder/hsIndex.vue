@@ -659,7 +659,7 @@
         },
         rulePlan: {
           guestName: [
-            { required: true, message: "供应商不能为空", trigger: "blur" }
+            { required: true, message: "客户不能为空", trigger: "blur" }
           ],
           orderManId: [
             {
