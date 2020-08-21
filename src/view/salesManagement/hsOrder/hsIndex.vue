@@ -98,13 +98,13 @@
       >
 
         <FormItem label="客户：" prop="guestName">
-          <!--<Input-->
-            <!--v-model="formPlan.guestName"-->
-            <!--placeholder="客户"-->
-            <!--class="w200"-->
-            <!--readonly-->
-          <!--/>-->
-          <sales-cus style="width:200px; display: inline-block" :disabled-prop="false" :title="formPlan.guestName" placeholder="请输入客户" :search-value="formPlan.guestName" @throwName="throwNameFun"></sales-cus>
+          <Input
+            v-model="formPlan.guestName"
+            placeholder="客户"
+            class="w200"
+            readonly
+          />
+          <!--<sales-cus style="width:200px; display: inline-block" :disabled-prop="false" :title="formPlan.guestName" placeholder="请输入客户" :search-value="formPlan.guestName" @throwName="throwNameFun"></sales-cus>-->
         </FormItem>
         <FormItem label="销售员：" prop="orderManId">
           <Select
@@ -172,7 +172,7 @@
               <!--<Select class="200" placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan2.guestName" label-in-value filterable>-->
                 <!--<Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
               <!--</Select>-->
-              <allocation-cus class="200" :title="formPlan2.guestName" placeholder="请输入调出方" :search-value="formPlan2.guestName" @throwName="throwNameFun2" :disabled-prop="false"></allocation-cus>
+              <allocation-cus class="210" :title="formPlan2.guestName" placeholder="请输入调出方" :search-value="formPlan2.guestName" @throwName="throwNameFun2" :disabled-prop="false"></allocation-cus>
 
 
             </Col>
@@ -239,7 +239,7 @@
 
   import {findForAllot} from "_api/purchasing/purchasePlan";
   import {save} from "../../../api/AlotManagement/transferringOrder";
-  import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier";
+  import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier2";
   import SalesCus from "../../../components/allocation/salesCus";
   import AllocationCus from "../../../components/allocation/allocationCus";
 
@@ -888,10 +888,10 @@
             }
 
             this.showModel1 = true;
-            // let firstObj = this.selectTableDataArr[0];
-            // this.formPlan.guestName = firstObj.companyName;
-            // this.formPlan.guestId = firstObj.companyId;
-            // this.getClientInfo(firstObj.companyId);
+            let firstObj = this.selectTableDataArr[0];
+            this.formPlan.guestName = firstObj.companyName;
+            this.formPlan.guestId = firstObj.companyId;
+            this.getClientInfo(firstObj.companyId);
           }
         }else{
           this.$Message.error("请勾选要处理的数据");
@@ -910,8 +910,8 @@
         let rep = await getClientInfo({'isInternalId':id})
         if(rep.code==0){
           let objData = rep.data||{};
-          this.formPlan.billTypeId = objData.billTypeId||"010103";
-          this.formPlan.settleTypeId = objData.settTypeId||"020502";
+          this.formPlan.billTypeId = objData.billTypeId||"";
+          this.formPlan.settleTypeId = objData.settTypeId||"";
         }
       },
 
@@ -928,6 +928,9 @@
             reqData.detailList.map(item => {
               item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty
             });
+
+            console.log(reqData)
+            return
             let res = await getSave(reqData);
             if (res.code === 0) {
               this.modal3 = true;
@@ -950,7 +953,7 @@
             this.$Message.error("选择的数据只能是相同门店");
           }else{
             if(this.ArrayValue.length==0){
-              this.getArrayParams();
+              //this.getArrayParams();
             }
             if(this.WarehouseList.length==0){
               this.getWarehouse();
@@ -958,8 +961,8 @@
 
             this.showModel2 = true;
             // let firstObj = this.selectTableDataArr[0];
-            // this.formPlan.guestName = firstObj.companyName;
-            // this.formPlan.guestId = firstObj.companyId;
+            // this.formPlan2.guestName = firstObj.companyName;
+            // this.formPlan2.guestId = firstObj.companyId;
             //
             // let oneClient = [];
             // oneClient = this.client.filter(item => {
@@ -991,11 +994,12 @@
 
       // 供应商子组件内容
       getSupplierName(a){
+        console.log(a)
         // this.isInternalId = a.isInternalId
         // this.formPlan.guestName = a.id
-        this.formPlan2.guestName = a.id
-        this.guestidId = a.id
-        this.isInternalId = a.isInternalId
+        this.formPlan2.guestName = a.shortName
+        this.guestidId = a.guestId
+        this.isInternalId = a.id
       },
       //生成调拨单
       handleSubmit2 (name) {
@@ -1031,13 +1035,15 @@
                 item.applyQty = item.orderQty
               })
             }
-            for (let i = 0; i < this.getArray.length; i++) {
-              if (this.getArray[i].id == this.formPlan.guestName) {
-                reqData.guestOrgid = this.getArray[i].isInternalId;
-                reqData.guestId = this.getArray[i].id;
-              }
-            }
-            reqData.guestId = this.selectvalue;
+            // for (let i = 0; i < this.getArray.length; i++) {
+            //   if (this.getArray[i].id == this.formPlan.guestName) {
+            //     reqData.guestOrgid = this.getArray[i].isInternalId;
+            //     reqData.guestId = this.getArray[i].id;
+            //   }
+            // }
+            reqData.guestOrgid = this.isInternalId;
+            reqData.guestId = this.guestidId;
+
             let res = await save(reqData);
             if (res.code === 0) {
               this.modal3 = true;

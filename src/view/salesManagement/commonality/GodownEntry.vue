@@ -21,7 +21,7 @@
                 <!--&gt;{{ item.fullName }}</Option-->
               <!--&gt;-->
             <!--</Select>-->
-            <supplier-cus placeholder="输入供应商名称" :disabled-prop="false" @throwName="throwNameFun"></supplier-cus>
+            <supplier-cus placeholder="输入供应商名称" ref="supplier" :disabled-prop="false" @throwName="throwNameFun"></supplier-cus>
           </FormItem>
           <FormItem>
             <Input
@@ -263,6 +263,7 @@ export default {
       this.$refs.getDate.resetFun();
       this.storeId = v;
       this.searchValue = "";
+      this.$refs.supplier.isLayerValue = "";
       this.getList(v);
       //this.getClientList();
       this.$refs.Xtable.recalculate(true)
