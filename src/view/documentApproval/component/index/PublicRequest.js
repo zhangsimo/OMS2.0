@@ -23,7 +23,9 @@ export default {
     return {
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
-      formInline:{},//所有数据对象
+      formInline:{
+        requestInfo:{}//选中单号的数据
+      },//所有数据对象
       //表单校验
       ruleValidate: {
         topic: [
@@ -52,7 +54,6 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       options1: [],
       canSave:false,//节流阀
-      QSMoney:0,
     }
   },
   mounted(){
@@ -120,7 +121,7 @@ export default {
     },
     //收款人账号搜索框
     async getOptionsList(query){
-      if (query !== "") {
+      if (query.trim() !== "") {
         let data = {}
         data.accountName = query
         data.page = 0
@@ -155,10 +156,10 @@ export default {
     },
     //获取往来单位
     getCompany(row) {
-      let arr = this.payeeList.filter( item => item.value == row.value)
+      let arr = this.options1.filter( item => item.id == row.value)
       this.formInline.receiver = arr[0].accountName || ''
-      this.formInline.receiveBank = arr[0].receiveBank || ''
-      this.formInline.receiveBankNo = arr[0].receiveBankNo || ''
+      this.formInline.receiveBank = arr[0].accountBank || "";
+      this.formInline.receiveBankNo = arr[0].accountBankNo || "";
     },
 
     //打开选择模态框
@@ -169,7 +170,7 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
-      this.QSMoney=parseFloat(row.amtTotal)
+      this.formInline.requestInfo=row //保存获取到的
     },
 
     //获取付款信息
@@ -190,10 +191,9 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           if(type==1){
-            if(this.formInline.requestInstructionNo!=undefined){
-              if(parseFloat(this.formInline.applyAmt)>this.QSMoney){
-                this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
-                return
+            if(this.formInline.requestInstructionNo){
+              if(parseFloat(this.formInline.applyAmt)>this.formInline.requestInfo.amtTotal){
+                return this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
               }
             }
           }

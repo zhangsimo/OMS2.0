@@ -69,10 +69,10 @@
         >导出
         </Button
         >
-        <!--<Button class="ml10" @click="openRegEnter"-->
-        <!--&gt;进项登记及修改-->
-        <!--</Button-->
-        <!--&gt;-->
+        <Button class="ml10" @click="openRegEnter"
+        >进项登记及修改
+        </Button
+        >
       </div>
     </section>
     <section class="con-box">
@@ -358,7 +358,7 @@
     <!--<settlement ref="settlement"></settlement>-->
     <!--因公借支核销-->
     <write-off ref="writeOff" :table="currRow"></write-off>
-    <registration-entry ref="registrationEntry"></registration-entry>
+    <registration-entry ref="registrationEntry" @upData="query"></registration-entry>
   </div>
 </template>
 
@@ -554,14 +554,17 @@
         console.log(this.currRow)
         if (this.currRow&&this.currRow.hasOwnProperty("id")) {
           this.$refs.registrationEntry.accountData = [];
+          let objItem = {...this.currRow};
+          objItem.orgId = objItem.orgid
+          objItem.accountNo = objItem.serviceId
           this.$refs.registrationEntry.accountData.push(
-            this.currRow
+            objItem
           );
           this.$refs.registrationEntry.arrId = [];
           this.$refs.registrationEntry.arrId.push(
-            this.currRow.orgId,
-            this.currRow.guestId,
-            this.currRow.id
+            objItem.orgId,
+            objItem.guestId,
+            objItem.id
           );
           this.$refs.registrationEntry.modal1 = true;
         } else {

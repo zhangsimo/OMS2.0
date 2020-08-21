@@ -355,9 +355,10 @@ export default {
       }
     },
     getToastData() {
+      this.data1 = [];
+      this.tableData = [];
       getToastDataList({ accountNo: this.accountNo }).then(res => {
         if (res.code == 0) {
-          this.data1 = [];
           this.orgName = res.data.orgName;
           this.data1.push(res.data);
           this.tableData = res.data.details;

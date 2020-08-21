@@ -385,7 +385,7 @@ export default class GoodsInfo extends Vue {
     remark: "", //备注
     relationNum: "", //光联单号
     deliveryLogistics: "", //发货物流
-    settleType: "", //结算方式
+    settleType: 2, //结算方式
     businessNum: "", //业务单号
 
     //其它要带上的数据
@@ -564,6 +564,7 @@ export default class GoodsInfo extends Vue {
     } else {
       this.SaveId = "";
       this.formDateRight = row;
+      this.formDateRight.settleType = 2;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
       this.formDateRight.receiveComp = row.receiveCompName;

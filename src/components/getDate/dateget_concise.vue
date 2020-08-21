@@ -22,17 +22,12 @@ export default {
   data() {
     return {
       val: [],
-      searchQuick: "1",
+      searchQuick: "3",
       dateQiuck: [
         { value: "0", label: "请选择" },
-        { value: "1", label: "今天" },
-        { value: "2", label: "昨天" },
         { value: "3", label: "本周" },
-        { value: "4", label: "上周" },
         { value: "5", label: "本月" },
-        { value: "6", label: "上月" },
-        { value: "7", label: "本年" },
-        { value: "8", label: "上年" }
+        { value: "6", label: "上月" }
       ]
     };
   },

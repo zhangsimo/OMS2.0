@@ -196,7 +196,7 @@
                   size="small"
                   class="mr10"
                   @click="getRUl"
-                  :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd"
+                  :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd || !this.$parent.$parent.selectItemId"
                   v-has="'getBarch'"
                 >
                 <span class="center">
@@ -492,6 +492,10 @@
           {
             value: 1,
             label: "电商订单"
+          },
+          {
+            value: 2,
+            label: "代付订单"
           }
         ], //订单类型
         clientList: {}, //新增客户资料
@@ -557,7 +561,6 @@
     },
     methods: {
       throwNameFun(v){
-        console.log(v)
         this.setOneClient(v);
       },
 
@@ -724,6 +727,11 @@
         });
         if (res.code === 0) {
           this.WarehouseList = res.data;
+          this.WarehouseList.map(item=>{
+            if(item.isDefault){
+              this.formPlan.storeId=item.id
+            }
+          })
         }
       },
       //打开新增客户
@@ -831,22 +839,34 @@
         if (response.code == 0) {
           let txt = "上传成功";
           if (response.data.length > 0) {
-            txt = response.data.join(",");
+            this.warning(response.data)
+          }else{
+            this.$Notice.warning({
+              title: "导入成功",
+              desc: txt,
+              duration: 0
+            });
           }
-          this.$Notice.warning({
-            title: "导入成功",
-            desc: txt,
-            duration: 0
-          });
           this.getList()
         } else {
           this.$Message.error(response.message);
         }
       },
       warning(nodesc) {
+        let str=""
+        if(nodesc.length>0){
+          nodesc.map((item,index)=>{
+            if(index!=nodesc.length-1){
+              str+=`${item}<br/>`
+            }else{
+              str+=`${item}`
+            }
+          })
+        }
         this.$Notice.warning({
           title: "上传错误信息",
-          desc: nodesc
+          desc: str,
+          duration:0
         });
       },
       //上传之前清空
@@ -917,8 +937,6 @@
       //计划发货日期
       getplanSendDate(data) {
         const orderDate = this.formPlan.planSendDate;
-        console.log(this.formPlan, 111)
-        console.log(data, 222)
         this.options2 = {
           disabledDate(date) {
             return date && orderDate && date.valueOf() < new Date(orderDate);
@@ -939,7 +957,7 @@
         ];
         this.formPlan.detailList.forEach(el => {
           if (!el.orderQty) {
-            el.orderQty = undefined;
+            el.orderQty = 1;
           }
           if (!(el.orderPrice * 1)) {
             el.orderPrice = undefined;
@@ -956,7 +974,7 @@
         ];
         this.formPlan.detailList.forEach(el => {
           if (!el.orderQty) {
-            el.orderQty = undefined;
+            el.orderQty = 1;
           }
           if (!(el.orderPrice * 1)) {
             el.orderPrice = undefined;
@@ -1210,7 +1228,7 @@
         });
       },
       //获取选择入库单的信息
-      async getGodown(val) {
+      async getGodown(val,b) {
         let data = JSON.parse(JSON.stringify(this.formPlan));
         if (data.planSendDate) {
           data.planSendDate = tools.transTime(data.planSendDate)
@@ -1223,7 +1241,7 @@
           item.adjustQty = item.outableQty;
         });
         data.detailList = val.details;
-        data.sign = 1;
+        data.sign = b;
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();

@@ -123,13 +123,13 @@ export default {
                       this.$router.push({ name: 'goodsList'})
                       break
                   case 1001:
-                      this.$router.push({ name: 'plannedPurchaseOrder'})
+                      this.$router.push({ name: 'PlannedPurchaseOrder'})
                       break
                   case 1003:
-                      this.$router.push({ name: 'temporaryPurchase'})
+                      this.$router.push({ name: 'TemporaryPurchase'})
                       break
                   case 1004:
-                      this.$router.push({ name: 'outsidePurchase'})
+                      this.$router.push({ name: 'OutsidePurchase'})
                       break
                   case 2000:
                       this.$router.push({ name: 'salesOrder'})
@@ -138,7 +138,7 @@ export default {
                       this.$router.push({ name: 'applyFor'})
                       break
                   case 5200:
-                      this.$router.push({ name: 'settlementManagement-paymentmanage'})
+                      this.$router.push({ name: 'payMentmanage'})
                       break
                   case 4000:
                       this.$router.push({ name: 'stockSearch'})

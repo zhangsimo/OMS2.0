@@ -1437,7 +1437,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
+          // this.$Message.info("获取配件组装列表失败");
         });
     },
     getListchai() {

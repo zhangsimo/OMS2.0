@@ -140,7 +140,7 @@
       </vxe-table-column>
       <vxe-table-column field="taxRate" title="税率" width="100">
         <template v-slot="{row}">
-          <Select v-model="row.taxRate">
+          <Select v-model="row.taxRate" transfer>
             <Option v-for="item in taxRate" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </template>
@@ -196,7 +196,8 @@
     deleteRows,
     detailedIncrease,
     deleteIncrease,
-    getExpenDetail
+    getExpenDetail,
+    setExpenDetail
   } from "@/api/bill/popup";
   import Bus from "./Bus";
 
@@ -219,7 +220,7 @@
             {required: true, message: "必须是8位数字", min: 8, max: 8}
           ],
           invoicePurchaserId: [{required: true, message: "发票采购方名称必填"}],
-          invoiceSellerName: [{required: true, message: "发票销售方名称必填"}],
+          // invoiceSellerName: [{required: true, message: "发票销售方名称必填"}],
           billingDate: [{required: true, message: "开票日期必填"}],
           totalAmt: [{required: true, message: "价税合计金额必填"}],
           // invoiceAmt: [{ required: true, message: "不含税金额必填" }],
@@ -303,18 +304,18 @@
           },
           {
             title: "已收进项金额",
-            key: "receiptsAmount",
+            key: "amountReceived",
             className: "tc",
             render: (h, params) => {
-              return h("span", (params.row.receiptsAmount||0).toFixed(2));
+              return h("span", (params.row.amountReceived||0).toFixed(2));
             }
           },
           {
             title: "剩余进项未收",
-            key: "remainingInputAmount",
+            key: "amountUncollected",
             className: "tc",
             render: (h, params) => {
-              return h("span", (params.row.remainingInputAmount||0).toFixed(2));
+              return h("span", (params.row.amountUncollected||0).toFixed(2));
             }
           }
         ], //对账单
@@ -341,7 +342,7 @@
       this.getInvoiceSellerList()
       this.$refs.xTable.recalculate(true)
       this.getDictionary("PAYMENT_TYPE"); //付款方式
-      this.getDictionary("CS00107"); //税率
+      this.getDictionary("TaxRate"); //税率
       this.getDictionary("BILL_LIST_TYPE"); //开票清单
       this.getDictionary("INVOICE_TYPE"); //发票分类
       Bus.$on("accountOrder", val => {
@@ -427,9 +428,11 @@
         // let value = v.target.value||0
         // console.log($event)
       },
+
       // 数据字典
       getDictionary(dictCode) {
         getDataDictionaryTable({dictCode}).then(res => {
+          console.log(res)
           if (res.data[0].dictCode === "PAYMENT_TYPE") {
             res.data.map(item => {
               this.paymentMethod.push({
@@ -437,7 +440,7 @@
                 label: item.itemName
               });
             });
-          } else if (res.data[0].dictCode === "CS00107") {
+          } else if (dictCode === "TaxRate") {
             res.data.map(item => {
               this.taxRate.push({
                 value: parseFloat(item.itemValueOne),
@@ -496,10 +499,11 @@
             details: newTableData,
             masterList: this.accountData
           };
-          submit(data).then(res => {
+          setExpenDetail(data).then(res => {
             // console.log(res);
             if (res.code === 0) {
               this.$message.success("保存成功");
+              this.$emit("upData",{})
               this.modal1 = false;
             }
           });
@@ -578,26 +582,26 @@
           this.tableData.push({
             registrationDate: date,
             registrationTypeName: "人工登记",
-            taxRate: 0.13,
+            taxRate: 0,
             payType: "DG",
-            invoiceSort: "CG",
+            invoiceSort: "FY",
             invoicePurchaserId: lastData.invoicePurchaserId || "",
-            billingType: statementType === 1 ? "0" : "YP",
+            billingType: 'FY',
             invoiceCode: lastData.invoiceCode || "",
             invoiceNo: lastData.invoiceNo || "",
-            invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
+            invoiceSellerName: "",
             billingDate: lastData.billingDate || ""
           });
         } else {
           this.tableData.push({
             registrationDate: date,
             registrationTypeName: "人工登记",
-            taxRate: 0.13,
+            taxRate: 0,
             payType: "DG",
-            invoiceSort: "CG",
+            invoiceSort: "FY",
             invoicePurchaserId: this.$store.state.user.userData.currentShopId || "",
             invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
-            billingType: statementType === 1 ? "0" : "YP"
+            billingType: 'FY'
           });
         }
       },

@@ -131,6 +131,7 @@ import settlement from "@/view/settlementManagement/otherReceivables/components/
 import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
+import { addClaim2 } from "_api/settlementManagement/advanceCollection.js";
 export default {
   props: {
     accrued: "", //表格数据
@@ -406,17 +407,22 @@ export default {
         data.guestId = objItem.id||"";
         data.financeAccountCashList = this.accrued
         if(this.claimTit=="预收款认领"){
-          data.claimType = 0
+          addClaim2(data).then(res=>{
+            if(res.code===0){
+              this.$Message.success('认领成功')
+              this.modal = false;
+            }
+          })
         }else{
           data.subjectCode="2241";
-          data.claimType=5
+          data.claimType=0;
+          addClaim(data).then(res=>{
+            if(res.code===0){
+              this.$Message.success('认领成功')
+              this.modal = false;
+            }
+          })
         }
-        addClaim(data).then(res=>{
-          if(res.code===0){
-            this.$Message.success('认领成功')
-            this.modal = false;
-          }
-        })
       }
     },
     //选择辅助核算回调

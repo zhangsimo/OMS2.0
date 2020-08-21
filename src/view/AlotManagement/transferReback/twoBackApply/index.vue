@@ -800,18 +800,6 @@ export default {
         return
       }
 
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   console.log(this.Leftcurrentrow)
-      //   if (this.Leftcurrentrow.xinzeng === "1") {
-      //   } else {
-      //     this.$Message.error("请先选择加工单");
-      //     return;
-      //   }
-      // }
-      // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.error("只有草稿状态才能进行保存操作");
-      //   return;
-      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -825,18 +813,6 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      // for (var i = 0; i < this.getArray.length; i++) {
-      //   if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-      //     params.guestOrgid = this.getArray[i].isInternalId;
-      //     params.guestId = this.getArray[i].id;
-      //   }
-      // }
-      // for (var i = 0; i < params.detailVOS.length; i++) {
-      //   params.detailVOS[i].id = "";
-      // }
-      // if (this.flagValue == []) {
-      //   params.detailVOS[i].id = "";
-      // }
 
       //配件组装保存
       baocun(params)
@@ -846,13 +822,6 @@ export default {
             this.getList();
             this.$Message.success("保存成功");
             this.flag = 0;
-            // this.Leftcurrentrow.guestName = "";
-            // this.Leftcurrentrow.storeId = "";
-            // this.Leftcurrentrow.createTime = "";
-            // this.Leftcurrentrow.remark = "";
-            // this.Leftcurrentrow.serviceId = "";
-            // this.Leftcurrentrow.orderMan = "";
-            // this.Leftcurrentrow.detailVOS = [];
           }
         })
         .catch(e => {
@@ -860,6 +829,9 @@ export default {
         });
     },
     xinzeng() {
+      for (let b of this.Left.tbdata) {
+        b._highlight = false;
+      }
       this.newFlag = true;
       this.serviceId = "";
       this.Leftcurrentrow = {
@@ -1011,34 +983,6 @@ export default {
     },
     // 新增按钮
     addProoo() {
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   if (this.Leftcurrentrow.xinzeng) {
-      //   } else {
-      //     this.$Message.error("请先选择申请单");
-      //     return;
-      //   }
-      // }
-      // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.error("只有草稿状态申请单能进行添加操作");
-      //   return;
-      // }
-      // const params = {
-      //   mainId: this.Leftcurrentrow.id,
-      //   status: "HAS_ENTER"
-      // };
-      // this.$refs.addInCom.init();
-      // chengping(params, 10, 1)
-      //   .then(res => {
-      //     // 导入成品, 并把成品覆盖掉当前配件组装信息list
-      //     if (res.code == 0) {
-      //       this.tableData1 = res.data.content;
-      //     }
-      //   })
-      //   .catch(e => {
-      //     this.$Message.error("数据加载失败");
-      //   });
-      // 获取成品列表把data赋值给子组件中
-      // this.getListPro()
       if (!this.Leftcurrentrow.guestId || !this.Leftcurrentrow.storeId)
         return this.$Message.error("请先选择调出方和调出仓库");
       this.$refs.addPart.init();
@@ -1402,24 +1346,34 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
             // this.Leftcurrentrow
-            for (let b of this.Left.tbdata) {
-              b._highlight = false;
-              if(b.id == this.Leftcurrentrow.id) {
-                b._highlight = true;
-                this.Leftcurrentrow = b;
-                const params = {
-                  mainId: b.id
-                };
-                const res = await getListDetail(params);
-                this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
-                return;
+            if(this.Leftcurrentrow.id) {
+              for (let b of this.Left.tbdata) {
+                b._highlight = false;
+                if(b.id == this.Leftcurrentrow.id) {
+                  b._highlight = true;
+                  this.Leftcurrentrow = b;
+                  const params = {
+                    mainId: b.id
+                  };
+                  const res = await getListDetail(params);
+                  this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  return;
+                }
               }
-              // this.Leftcurrentrow.detailVOS = [];
+            } else {
+              this.Left.tbdata[0]._highlight = true;
+              this.Leftcurrentrow = this.Left.tbdata[0];
+              const params = {
+                mainId: this.Left.tbdata[0].id
+              };
+              const res = await getListDetail(params);
+              this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+              return;
             }
           }
         })
         .catch(e => {
-          this.$Message.error("获取配件组装列表失败");
+          // this.$Message.error("获取配件组装列表失败");
         });
     },
     getListPro() {
