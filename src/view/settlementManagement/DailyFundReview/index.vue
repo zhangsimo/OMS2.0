@@ -580,11 +580,7 @@ export default {
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore , ...res.data]
         this.$nextTick( () => {
-          if (localStorage.getItem('oms2-userList')){
-            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
-          } else {
             this.BranchstoreId = this.$store.state.user.userData.shopId
-          }
         })
         if (this.$store.state.user.userData.shopkeeper != 0){
           this.getThisArea()//获取当前门店地址

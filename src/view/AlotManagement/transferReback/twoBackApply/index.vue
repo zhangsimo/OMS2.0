@@ -1321,7 +1321,7 @@ export default {
       var array = [];
       var allArr = []; //新数组
       getList1(params, this.Left.page.size, this.Left.page.num)
-        .then(async res => {
+        .then(res => {
           if (res.code == 0) {
             for (var i = 0; i < res.data.content.length; i++) {
               array.push(res.data.content[i].status);
@@ -1373,7 +1373,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.error("获取配件组装列表失败");
+          // this.$Message.error("获取配件组装列表失败");
         });
     },
     getListPro() {
