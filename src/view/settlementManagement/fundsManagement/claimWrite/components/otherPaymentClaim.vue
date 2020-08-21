@@ -607,6 +607,8 @@ export default {
       })
       bus.$emit("paymentInfo", thisData);
       if(this.claimTit=="预付款认领"){
+        this.$refs.settlement.gettlementData.sign="9"
+        this.$refs.settlement.gettlementData.accountNo=this.currentAccountItem.serviceId;
         this.$refs.settlement.setData(thisData)
       }else{
         this.$refs.settlement2.setData(thisData)
