@@ -242,10 +242,10 @@
                     moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
                     " 23:59:59";
                 } else if (this.type == 3) {
-                  data.auditStartDate =
+                  data.startTime =
                     moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
                     " 00:00:00";
-                  data.auditEndDate =
+                  data.endTime =
                     moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
                     " 23:59:59";
                 }
