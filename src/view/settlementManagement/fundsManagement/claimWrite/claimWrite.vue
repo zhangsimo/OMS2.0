@@ -146,7 +146,7 @@
                 <span class="ml10">对方户名：</span>
                 <Input v-model="bankNameOClaim" class="w100 mr10"/>
                 <span>业务类别：</span>
-                <Select v-model="businessType" class="w150 mr10">
+                <Select v-model="businessType" clearable class="w150 mr10">
                   <Option
                     v-for="item in businessTypeList"
                     :value="item.itemName"
