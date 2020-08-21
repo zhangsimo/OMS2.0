@@ -795,7 +795,7 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          console.log(ChildMessage)
+          // console.log(ChildMessage)
           let parts = ChildMessage.map( item => {
 
             return {
@@ -804,7 +804,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty :undefined,
+              applyQty :1,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
