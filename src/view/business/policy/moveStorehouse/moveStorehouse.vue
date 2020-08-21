@@ -806,7 +806,7 @@ export default {
         orderMan:"",
         orderManId:this.$store.state.user.userData.id || "",
         //移仓时间
-        auditDate:new Date(),
+        auditDate:tools.transTime(new Date()),
 
         _highlight: true
       };
