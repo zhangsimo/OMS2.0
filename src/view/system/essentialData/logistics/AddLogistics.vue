@@ -98,7 +98,7 @@
         <FormItem label="邮编:">
           <Input placeholder="请输入邮编" v-model="data.postalCode" style="width: 150px"></Input>
         </FormItem>
-        <FormItem label="银行账户:" prop="accountBankNo">
+        <FormItem label="银行账户:" >
           <Input placeholder="请输入银行账户" v-model="data.accountBankNo" style="width: 150px"></Input>
         </FormItem>
         <FormItem label="备注:" prop="remark">
@@ -106,10 +106,10 @@
         </FormItem>
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
-        <FormItem label="开户银行:" prop="accountBank">
+        <FormItem label="开户银行:">
           <Input placeholder="请输入银行" v-model="data.accountBank" style="width: 150px"></Input>
         </FormItem>
-        <FormItem label="开户人名称:" prop="accountName">
+        <FormItem label="开户人名称:">
           <Input placeholder="请输入开户人名称" v-model="data.accountName" style="width: 150px"></Input>
         </FormItem>
       </div>
