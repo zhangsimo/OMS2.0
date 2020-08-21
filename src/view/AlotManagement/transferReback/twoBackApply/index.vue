@@ -1321,7 +1321,7 @@ export default {
       var array = [];
       var allArr = []; //新数组
       getList1(params, this.Left.page.size, this.Left.page.num)
-        .then(res => {
+        .then(async res => {
           if (res.code == 0) {
             for (var i = 0; i < res.data.content.length; i++) {
               array.push(res.data.content[i].status);
