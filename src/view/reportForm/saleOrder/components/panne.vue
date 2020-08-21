@@ -164,6 +164,17 @@
         }
       };
     },
+    watch:{
+      search:{
+        handler:async function(val, oldVal){
+          if(val.partBrand==undefined){
+            this.bandArr=await getBrandList("")
+          }
+        },
+        deep:true,
+        immediate:true
+      }
+    },
     computed: {
       selectShopList() {
         if (this.$store.state.user.userData.currentCompany != null) {
@@ -242,10 +253,10 @@
                     moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
                     " 23:59:59";
                 } else if (this.type == 3) {
-                  data.auditStartDate =
+                  data.startTime =
                     moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
                     " 00:00:00";
-                  data.auditEndDate =
+                  data.endTime =
                     moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
                     " 23:59:59";
                 }

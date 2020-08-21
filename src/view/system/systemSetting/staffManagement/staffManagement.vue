@@ -1,8 +1,12 @@
 <template>
   <div class="staff-box">
     <div class="staff-header">
-      <span class="mr5">机构:</span>
-      <Cascader :data="list" v-model="groundIds" placeholder='选择机构' style="width: 250px" class="mr10"></Cascader>
+<!--      <span class="mr5">机构:</span>-->
+<!--      <Cascader :data="list" v-model="groundIds" placeholder='选择机构' style="width: 250px" class="mr10"></Cascader>-->
+      <span class="mr5">门店：</span>
+      <Select transfer v-model="shopNum" class="w150 mr5" :disabled="canShow" >
+        <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
+      </Select>
       <span class="mr5">姓名:</span>
       <input type="text" class="staff-name mr10" v-model="staffName" />
       <span class="mr5">手机号码:</span>
@@ -167,7 +171,8 @@ import {
   putNewCompany,
   restpasswd,
   setCliemt,
-  setOut
+  setOut,
+  getLessee
 } from "@/api/system/systemSetting/staffManagenebt";
 import { transTime } from "../utils";
 import addStaff from "./addStaff";
@@ -188,6 +193,10 @@ export default {
     return {
       isNextAdd: true,
       closeAcc: false,
+      shopNum: this.$store.state.user.userData.currentCompany.id, //门店id
+      orgList:[
+        {id:'-1', shortName:'全部'}
+      ],//门店列表
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
       list:[],//机构数组
       shopCode: "",
@@ -284,7 +293,7 @@ export default {
         {
           title: "所属机构",
           align: "center",
-          key: "shopName"
+          key: "shopShortName"
         },
         {
           title: "建档人",
@@ -360,43 +369,56 @@ export default {
     };
   },
   mounted() {
+    this.getShop()
     this.getAllStaffList();
-    this.getList();
+    // this.getList();
+  },
+  computed:{
+    canShow(){
+      return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+    }
   },
   methods: {
-      async getList(){
-          let data = {}
-          data.groupId = this.$store.state.user.userData.tenantGroupId
-          let res = await getcompany(data)
-          if(res.code === 0){
-              let list = []
-              res.data.childs.forEach(item => {
-                  if(item.childs.length > 0){
-                      list.push({value: item.id ,label: item.name ,children:item.childs})
-                  }else {
-                      list.push({value: item.id ,label: item.name ,children:[]})
-                  }
-              })
-              list.forEach( item => {
-                  if(item.children.length > 0){
-                      item.children.map( val => {
-                          val.value = val.id
-                          val.label = val.name
-                          if(val.childs.length > 0){
-                              val.children = val.childs
-                              val.children.map( v => {
-                                  v.value = v.id
-                                  v.label = v.name
-                              })
-                          }else{
-                              val.children = []
-                          }
-                      })
-                  }
-              })
-              this.list = list
-          }
-      },
+    //获取全部租户下面的门店
+    async getShop() {
+      let res = await getLessee();
+      if (res.code === 0) {
+        this.orgList = [...this.orgList , ...res.data]
+      }
+    },
+      // async getList(){
+      //     let data = {}
+      //     data.groupId = this.$store.state.user.userData.tenantGroupId
+      //     let res = await getcompany(data)
+      //     if(res.code === 0){
+      //         let list = []
+      //         res.data.childs.forEach(item => {
+      //             if(item.childs.length > 0){
+      //                 list.push({value: item.id ,label: item.name ,children:item.childs})
+      //             }else {
+      //                 list.push({value: item.id ,label: item.name ,children:[]})
+      //             }
+      //         })
+      //         list.forEach( item => {
+      //             if(item.children.length > 0){
+      //                 item.children.map( val => {
+      //                     val.value = val.id
+      //                     val.label = val.name
+      //                     if(val.childs.length > 0){
+      //                         val.children = val.childs
+      //                         val.children.map( v => {
+      //                             v.value = v.id
+      //                             v.label = v.name
+      //                         })
+      //                     }else{
+      //                         val.children = []
+      //                     }
+      //                 })
+      //             }
+      //         })
+      //         this.list = list
+      //     }
+      // },
     getAllStaffList() {
       this.oneStaffChange = {};
       let stop = this.$loading();
@@ -404,6 +426,7 @@ export default {
       data.size = this.page.size;
       data.page = this.page.num - 1;
       data.userName = this.staffName;
+      data.shopNum = this.shopNum == '-1' ? '': this.shopNum,
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
       data.groundIds=this.groundIds[this.groundIds.length-1] || '';

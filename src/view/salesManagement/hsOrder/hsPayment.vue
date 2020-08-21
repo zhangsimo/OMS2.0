@@ -68,7 +68,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column width="120" field="deliveryDue" title="入库日期" fixed="left"></vxe-table-column>
-          <vxe-table-column width="120" field="billSort" title="票据号"></vxe-table-column>
+          <vxe-table-column width="120" field="invoiNo" title="票据号"></vxe-table-column>
           <vxe-table-column width="120" field="buyerName" title="采购员"></vxe-table-column>
           <vxe-table-column width="120" field="auditor" title="点货员"></vxe-table-column>
           <vxe-table-column width="120" field="partId" title="配件内码"></vxe-table-column>

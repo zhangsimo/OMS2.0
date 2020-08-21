@@ -98,7 +98,7 @@
 <script lang="ts">
 import moment from "moment";
 // @ts-ignore
-import { Vue, Component, Emit, Prop } from "vue-property-decorator";
+import { Vue, Component, Emit, Prop,Watch } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
@@ -186,7 +186,7 @@ export default class MoreSearch extends Vue {
 
   private select1(option: any) {
     this.partBrand = option.value;
-    console.log(this.partBrand.length, option.value, 1111)
+    // console.log(this.partBrand.length, option.value, 1111)
     // if (option.slice(-1)[0] == 1) {
     //   option = [1];
     // } else if (option.includes(1)) {
@@ -250,7 +250,12 @@ export default class MoreSearch extends Vue {
   private cancel() {
     this.serchN = false;
   }
-
+  @Watch("partBrand")
+  async handleWatch(val:any){
+    if(val.partBrand==undefined){
+      this.brandLists=await getBrandList("")
+    }
+  }
   @Emit("getmoreData")
   private ok() {
     let parent:any=this.$parent

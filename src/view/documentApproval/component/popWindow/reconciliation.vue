@@ -156,6 +156,7 @@
                 class="ml50 ivu-btn ivu-btn-default"
                 type="button"
                 @click="changeKh"
+                v-show="paymentlist.length>0"
               >新增
               </button>
 
@@ -310,7 +311,7 @@
   } from "@/api/bill/saleOrder";
   import {getReconciliationNo, CheckForSave, CheckForSubmit} from "@/api/bill/saleOrder";
   import {getThisAllList} from '@/api/documentApproval/documentApproval/documentApproval'
-  import {getCustomerDetails} from "../../../../api/system/essentialData/clientManagement";
+  import {getClientTreeList, getCustomerDetails} from "../../../../api/system/essentialData/clientManagement";
   import {getNewSupplier, getSupplierTreeList} from "../../../../api/system/essentialData/supplierManagement";
   import {area} from "../../../../api/lease/registerApi";
   import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
@@ -555,6 +556,7 @@
         paymentUnameList: [],
         provinceArr: [],
         clientDataShow2: false,
+        treeDiagramList:[],
         treeDiagramList2: [],
         clientList2: [],
         collectlist:[],
@@ -647,7 +649,7 @@
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
             if(this.infoBase.guestName!=""){
-              getGuestShortName({shortName:this.infoBase.guestName,size:50}).then(res2 => {
+              getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
                 let arr = []
                 if (res2.code === 0) {
                   res2.data.content.map(item => {
@@ -694,7 +696,7 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-            getGuestShortName({shortName:this.infoBase.guestName,size:50}).then(res2 => {
+            getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
               let arr = []
               if (res2.code === 0) {
                 res2.data.content.map(item => {
@@ -789,8 +791,8 @@
         this.paymentlist = [];
         this.collectlist = [];
         this.infoBase.actualCollection = 0;
-        this.Actualtotalcollect = 0;
-        this.Actualtotalpayment = 0;
+        // this.Actualtotalcollect = 0;
+        // this.Actualtotalpayment = 0;
         this.Reconciliationtotal = 0;
         this.totalpayment = 0;
         this.collectBaddebt = 0;
@@ -852,7 +854,7 @@
       collectCheckout(selection, row) {
         this.collectlist = selection;
         this.infoBase.actualCollection = 0;
-        this.Actualtotalcollect = 0;
+        // this.Actualtotalcollect = 0;
         this.infoBase.actualCollection = this.collectSum(selection)
         // selection.map(item => {
         //   this.totalcollect += item.thisAccountAmt;
@@ -923,14 +925,14 @@
       paymentNoCheckoutAll() {
         this.paymentlist = [];
         this.totalpayment = 0;
-        this.Actualtotalpayment = 0;
+        // this.Actualtotalpayment = 0;
         this.getSettlementComputed();
       },
       // 应收取消全选
       collectNoCheckoutAll() {
         this.collectlist = [];
         this.infoBase.actualCollection = 0;
-        this.Actualtotalcollect = 0;
+        // this.Actualtotalcollect = 0;
         this.getSettlementComputed();
       },
       //修改收款账户
@@ -986,6 +988,18 @@
       },
       getBackList2(row) {
         this.infoBase.badDebNo = row.applyNo;
+      },
+      //获取客户分类
+      getList() {
+        getClientTreeList().then(res => {
+          if (res.code == 0) {
+            res.data.map(item => {
+              item.children = [];
+              item.code = item.id;
+            });
+            this.treeDiagramList = res.data || [];
+          }
+        });
       },
       //获取供应商分类
       getList2() {

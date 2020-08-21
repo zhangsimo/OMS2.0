@@ -88,7 +88,7 @@
 <script lang="ts">
 import moment from "moment";
 // @ts-ignore
-import { Vue, Component, Emit, Prop } from "vue-property-decorator";
+import { Vue, Component, Emit, Prop,Watch } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 // @ts-ignore
@@ -241,7 +241,12 @@ export default class MoreSearch extends Vue {
   private cancel() {
     this.serchN = false;
   }
-
+  @Watch("partBrand")
+  async handleWatch(val:any){
+    if(val.partBrand==undefined){
+      this.brandLists=await getBrandList("")
+    }
+  }
   @Emit("getmoreData")
   private ok() {
     let parent:any=this.$parent
