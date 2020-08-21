@@ -100,10 +100,7 @@ export default {
       if(res.code === 0){
         this.$nextTick( () => {
           this.formInline = res.data
-          this.remoteMethod1(res.data.receiver)
-          this.remoteMethod2(res.data.paymentAccountName)
-          this.formInline.receiverId=res.data.receiverId
-          // this.formInline.receiver=res.data.receiver
+          this.getOptionsList(res.data.receiver)
           this.details = res.data.details || []
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
@@ -124,7 +121,7 @@ export default {
     },
     //收款人账号搜索框
     async getOptionsList(query){
-      if (query !== "") {
+      if (query.trim() !== "") {
         let data = {}
         data.accountName = query
         data.page = 0
@@ -132,7 +129,6 @@ export default {
         let res = await getBackList(data)
         if(res.code == 0){
           this.options1 = res.data.content || []
-          console.log(this.options1)
         }
       } else {
         this.options1 = [];
@@ -161,12 +157,9 @@ export default {
     //获取往来单位
     getCompany(row) {
       let arr = this.options1.filter( item => item.id == row.value)
-      console.log(arr)
-      if(arr.length>0){
-        this.formInline.receiver = arr[0].accountName || ''
-        this.formInline.receiveBank = arr[0].accountBank || ''
-        this.formInline.receiveBankNo = arr[0].accountBankNo || ''
-      }
+      this.formInline.receiver = arr[0].accountName || ''
+      this.formInline.receiveBank = arr[0].accountBank || "";
+      this.formInline.receiveBankNo = arr[0].accountBankNo || "";
     },
 
     //打开选择模态框
