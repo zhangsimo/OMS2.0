@@ -1213,11 +1213,8 @@ export default {
       if (res.code === 0) {
         this.proTypeList = [...this.proTypeList , ...res.data]
         this.$nextTick( () => {
-          if (localStorage.getItem('oms2-userList')){
-            this.form.orgName = JSON.parse(localStorage.getItem("oms2-userList")).shopId
-          } else {
             this.form.orgName = this.$store.state.user.userData.shopId
-          }
+
         })
       }
     }

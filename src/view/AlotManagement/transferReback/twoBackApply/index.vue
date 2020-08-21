@@ -1373,7 +1373,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.error("获取配件组装列表失败");
+          // this.$Message.error("获取配件组装列表失败");
         });
     },
     getListPro() {
