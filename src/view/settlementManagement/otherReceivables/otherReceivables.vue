@@ -305,6 +305,17 @@
       </button>
       <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>
       <Button class="ml10" v-else @click="claimCollection">认领</Button>
+      <div v-if="otherPayCus" style="display: inline-block;" class="ml20">
+        <span><i style="color: red" class="mr5">*</i>款项分类：</span>
+        <Select v-model="fund" class="w150" placeholder="请选择">
+          <Option
+            v-for="item in fundList"
+            :value="item.itemName"
+            :key="item.id"
+          >{{ item.itemName }}</Option>
+        </Select>
+      </div>
+
       <claim ref="claim" @selection="selection" />
       <!--<claimGuest ref="claimGuest" />-->
       <div slot="footer"></div>
@@ -346,6 +357,9 @@ import {
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
 // otherReceivables
 import moment from "moment";
+import {
+  kmType
+} from "@/api/settlementManagement/VoucherInput"
 export default {
   name: "settlementManagementOtherReceivables",
   components: {
@@ -385,7 +399,10 @@ export default {
       MessageValue: "", //收款记录单的数据
       claimSelection: [],
       typeA: "", //是否收回按钮
-      Types: "" //是否点击其他收款核销按钮
+      Types: "", //是否点击其他收款核销按钮
+      fundList:[],//款项分类
+      fund:'',
+      otherPayCus:false
     };
   },
   computed:{
@@ -418,6 +435,7 @@ export default {
       if (Object.keys(this.currRow).length !== 0) {
         if (type === 1) {
           this.claimModal = true;
+          this.otherPayCus = true;
           this.claimTit = "其他付款认领";
           this.claimedList(2);
         } else {
@@ -619,6 +637,11 @@ export default {
           Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
           this.currRow.applyAmt
         ) {
+          if(this.otherPayCus){
+            if(!this.fund){
+              return this.$message.error("款项分类必填");
+            }
+          }
           this.$refs.settlement.Settlement = true;
           this.paymentId = "YJDZ";
         } else {
@@ -727,7 +750,15 @@ export default {
           return null;
         })
       ];
-    }
+    },
+    //其他辅助核算款项分类
+    fundGetList() {
+      let params = {};
+      params.dictCode = "CW00131";
+      kmType(params).then(res => {
+        this.fundList = res.data;
+      });
+    },
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
@@ -738,7 +769,10 @@ export default {
     this.getShop()
     // this.getOne();
     this.getQuery();
-  }
+    this.fundGetList();
+    this.otherPayCus = false;
+  },
+
 };
 </script>
 

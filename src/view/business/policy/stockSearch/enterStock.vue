@@ -61,6 +61,7 @@
                 <span>快速查询：</span>
                 <quick-date
                   class="mr10"
+                  ref="quickDate1"
                   v-on:quickDate="getDataQuick"
                 ></quick-date>
               </div>
@@ -115,6 +116,7 @@
                 <span>快速查询：</span>
                 <quick-date
                   class="mr10"
+                  ref="quickDate2"
                   v-on:quickDate="getDataQuick"
                 ></quick-date>
               </div>
@@ -217,6 +219,7 @@
             class="fr mr10 mt10"
             v-if="tIndex == 1"
             class-name="page-con"
+            :page-size-opts="[100,300,500]"
             :current="contentOne.page.num"
             :total="contentOne.page.total"
             :page-size="contentOne.page.size"
@@ -229,6 +232,7 @@
             class="fr mr10 mt10"
             v-if="tIndex == 2"
             class-name="page-con"
+            :page-size-opts="[100,300,500]"
             :current="contentTwo.page.num"
             :total="contentTwo.page.total"
             :page-size="contentTwo.page.size"
@@ -241,6 +245,7 @@
             class="fr mr10 mt10"
             v-if="tIndex == 3"
             class-name="page-con"
+            :page-size-opts="[100,300,500]"
             :current="contentThree.page.num"
             :total="contentThree.page.total"
             :page-size="contentThree.page.size"
@@ -267,7 +272,7 @@ import {
   getLevel,
   getUnsalable
 } from "@/api/business/stockSearch";
-import QuickDate from "_c/getDate/dateget.vue";
+import QuickDate from "_c/getDate/dateget_bill.vue";
 
 export default {
   name: "enterStock",
@@ -725,7 +730,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 10
+          size: 100
         }
       },
       //出库明细数据
@@ -734,7 +739,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 10
+          size: 100
         },
         //数据
         dataTwo: [
@@ -750,7 +755,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 10
+          size: 100
         },
         //数据
         dataThree: [
@@ -851,7 +856,7 @@ export default {
         this.contentOne.dataOne = res.data.content;
         this.contentOne.page.total = res.data.totalElements;
       }
-
+      this.$refs.quickDate1.searchQuick="7"
       let res1 = await EtotalData(data);
       if (res1.code == 0) {
         this.total1 = res1.data;
@@ -872,7 +877,7 @@ export default {
         this.contentTwo.dataTwo = res.data.content;
         this.contentTwo.page.total = res.data.totalElements;
       }
-
+      this.$refs.quickDate2.searchQuick="7"
       let res1 = await OtotalData(data);
       if (res1.code == 0) {
         this.total2 = res1.data;

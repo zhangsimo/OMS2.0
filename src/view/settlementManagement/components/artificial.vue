@@ -37,7 +37,7 @@
         <vxe-table-column field="claimShopCode"  title="分配店号" >
         <template v-slot="{row}">
           <Select v-model="row.claimShopCode" transfer>
-            <Option v-for="item in shopList" :value="item.shopCode" :key="item.shopId">{{ item.shopCode }}{{ item.shopName }}</Option>
+            <Option v-for="item in shopList" :value="item.shopCode" :key="item.shopId">{{ item.shopCode }}{{ item.shortName }}</Option>
           </Select>
         </template>
       </vxe-table-column>

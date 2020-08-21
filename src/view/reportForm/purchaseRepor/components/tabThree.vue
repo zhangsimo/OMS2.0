@@ -209,12 +209,6 @@
           title="含税金额"
           width="200"
         ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="taxQuota"
-          title="税额"
-          width="200"
-        ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="不含税信息">
         <vxe-table-column  show-overflow="tooltip"
@@ -225,6 +219,12 @@
         <vxe-table-column  show-overflow="tooltip"
           field="noTaxAmt"
           title="不含税金额"
+          width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="taxQuota"
+          title="税额"
           width="200"
         ></vxe-table-column>
       </vxe-table-column>

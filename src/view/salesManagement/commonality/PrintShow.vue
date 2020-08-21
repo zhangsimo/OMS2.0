@@ -1,20 +1,20 @@
 <template>
-  <Modal v-model="printShow" closable id="printBoxBig"  width="1030">
+  <Modal v-model="printShow" closable id="printBoxBig"  width="940">
     <div id="printBox" style="height: 600px;page-break-after:always !important;">
       <div class="titler">
-        <Row style="border: 1px #000000 solid;color:#000;">
-          <Col span="16" class="pl10">
+        <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding-bottom: 0px">
+          <Col span="16" style="padding:2px;padding-bottom: 0px">
             <h5
-              style="font-size: 20px;line-height: 44px;"
+              style="font-size: 18px;line-height: 44px;"
             >{{onelist.userCompany}}</h5>
           </Col>
-          <Col span="8" class="pl10">
-            <p style="font-weight: 600;font-size: 12px">销售订单:</p>
+          <Col span="8" style="padding:2px;padding-bottom: 0px">
+            <p style="font-weight: 600;font-size: 16px">销售订单:</p>
             <p style="font-size: 12px">No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="16" class="pl10">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;padding-top:0;">
+          <Col span="16" style="padding:2px;padding-top:0;">
             <p>
               <span style="font-size: 12px">地址:</span>
               <span style="font-size: 12px">{{onelist.addr}}</span>
@@ -24,7 +24,7 @@
               <span style="font-size: 12px">{{onelist.tel}}</span>
             </p>
           </Col>
-          <Col span="8" class="pl10">
+          <Col span="8" style="padding:2px;padding-top:0;">
             <p>
               <span style="font-size: 12px">订单日期:</span>
               <span style="font-size: 12px">{{onelist.orderDate}}</span>
@@ -36,7 +36,7 @@
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="10" class="pl10" style="border-right: 1px #000000 solid;">
+          <Col span="10" style="padding:2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">客户:</span>
               <span style="font-size: 12px">{{onelist.guestName}}</span>
@@ -46,7 +46,7 @@
               <span style="font-size: 12px">{{onelist.guestAddr}}</span>
             </p>
           </Col>
-          <Col span="4" class="pl10" style="border-right: 1px #000000 solid;">
+          <Col span="4" style="padding:2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">联系人:</span>
               <span style="font-size: 12px">{{onelist.contactor}}</span>
@@ -56,7 +56,7 @@
               <span style="font-size: 12px">{{onelist.billTypeName}}</span>
             </p>
           </Col>
-          <Col span="10" class="pl10">
+          <Col span="10" style="padding:2px;">
             <p>
               <span style="font-size: 12px">联系电话:</span>
               <span style="font-size: 12px">{{onelist.contactorTel}}</span>
@@ -77,80 +77,78 @@
             </Row>
           </Col>
         </Row>
-        <table class="gridtable">
+        <table class="gridtable" border=1 cellSpacing=0 cellPadding=0 >
           <thead>
           <tr>
-            <th style="width:40px">序号</th>
-            <th style="width:90px">配件编码</th>
-            <th style="width:90px">配件名称</th>
-            <th style="max-width:90px;white-space:nowrap;overflow: hidden;">OEM码</th>
-            <th>品牌</th>
-            <th style="max-width: 40px;overflow: hidden;white-space:nowrap;">车型</th>
-            <th style="max-width:90px;white-space:nowrap;overflow: hidden;">规格</th>
-            <th>单位</th>
-            <th>数量</th>
-            <th style="width:50px">单价</th>
-            <th style="width:50px">金额</th>
-            <th style="width:50px">仓位</th>
+            <th style="width:40px !important;">序号</th>
+            <th style="width:100px !important;">配件编码</th>
+            <th style="width:100px !important;">配件名称</th>
+            <th style="width:90px;overflow: hidden;white-space:nowrap;">OEM码</th>
+            <th style="width:70px !important;">品牌</th>
+            <th style="width:60px;overflow: hidden;white-space:nowrap;">车型</th>
+            <th style="width:60px;overflow: hidden;white-space:nowrap;">规格</th>
+            <th style="width:40px !important;">单位</th>
+            <th style="width:70px !important;">数量</th>
+            <th style="width:70px !important;">单价</th>
+            <th style="width:80px !important;">金额</th>
+            <th style="width:100px !important;">仓位</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item ,index) in onelist.detailList" :key="index">
-            <td style="width:40px">{{index + 1}}</td>
-            <td style="width:90px">{{item.partCode}}</td>
-            <td style="width:90px">{{item.partName}}</td>
-            <td style="max-width: 80px;white-space:nowrap;overflow:hidden;">{{item.oemCode}}</td>
-            <td>{{item.partBrand}}</td>
-            <td style="max-width: 40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
-            <td style="max-width:90px;white-space:nowrap;overflow: hidden;">{{item.spec}}</td>
-            <td>{{item.unit}}</td>
-            <td>{{item.orderQty}}</td>
-            <td style="width:50px">{{item.orderPrice}}</td>
-            <td style="width:50px">{{item.orderAmt}}</td>
-            <td style="width:50px">{{item.storeShelf}}</td>
+            <td style="width:40px !important;">{{index + 1}}</td>
+            <td style="width:100px !important;">{{item.partCode}}</td>
+            <td style="width:100px !important;">{{item.partName}}</td>
+            <td style="width:90px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>
+            <td style="width:70px !important;">{{item.partBrand}}</td>
+            <td style="width:60px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
+            <td style="width:60px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
+            <td style="width:40px !important;">{{item.unit}}</td>
+            <td style="width:70px !important;">{{item.orderQty}}</td>
+            <td style="width:70px !important;">{{item.orderPrice}}</td>
+            <td style="width:80px !important;">{{item.orderAmt}}</td>
+            <td style="width:100px !important;">{{item.storeShelf}}</td>
           </tr>
           </tbody>
         </table>
 
-        <Row style="border: 1px #000000 solid;color:#000;">
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;color:#000;font-size: 10px;display: flex;">
+          <Col style="border-right: 1px #000000 solid;padding:2px;width: 640px">
             <span>合计:</span>
             <span>{{ onelist.orderAmt | toChies}}</span>
           </Col>
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
+          <Col style="border-right: 1px #000000 solid;padding:2px;width:160px">
             <span>总数:</span>
             <span>{{onelist.orderQty}}</span>
           </Col>
-          <Col class="pl10" span="8">
+          <Col style="padding:2px;width: 200px;">
             <span>合计:</span>
             <span>{{onelist.orderAmt}}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;">
+          <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>制单人:</span>
             <span>{{onelist.orderMan}}</span>
           </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>提交人:</span>
             <span>{{onelist.auditor}}</span>
           </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>送货人:</span>
             <span>{{onelist.deliverer}}</span>
           </Col>
-          <Col span="6" class="pl10">
+          <Col span="6" style="padding:2px;">
             <span>收货人:</span>
             <span>{{onelist.receiver}}</span>
           </Col>
         </Row>
-        <p style="border: 1px #000000 solid;border-top: none;color:#000;" class="pl10">
+        <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 10px;">
           备 注：
           <span>{{onelist.remark}}</span>
         </p>
-        <p style="color:#000;"
-           class="pl10"
-        >兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！</p>
+        <p style="color:#000;padding:2px;font-size: 10px;">兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！</p>
       </div>
 
       <div></div>
@@ -245,7 +243,6 @@
         let footer = document.getElementById("footer")
         let printBox=document.getElementById("printBox")
         let printBoxBig=document.getElementById("printBoxBig")
-
         // 1.设置要打印的区域 div的className
         // var newstr = document.getElementById("printBox").innerHTML
         // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
@@ -265,6 +262,7 @@
         printBox.style.width = "100%"
         printBox.style.height = "100%"
         printBox.style.display = "flex"
+        printBox.style.background = "#ffffff"
         if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
           this.remove_ie_header_and_footer();
         }
@@ -275,9 +273,10 @@
         route.style.display = "flex"
         footer.style.display = "block"
         printBox.style.position="";
-        printBox.style.width="1000";
+        printBox.style.width="900";
         printBox.style.height="600";
         printBox.style.margin="0 auto";
+        this.printShow=false
       },
       //去除页眉页脚
       remove_ie_header_and_footer() {
@@ -324,13 +323,12 @@
     }
   }
   #printBox {
-    width: 1000px;
+    width: 900px;
     margin: 0 auto;
     overflow: hidden;
     overflow-y: scroll;
-
     .titler {
-      padding-left: 10px;
+      padding-left: 2px;
     }
   }
 
@@ -349,12 +347,17 @@
   #printBox {
     overflow: -moz-scrollbars-none;
   }
-
+  #printBox.ivu-modal-wrap.ivu-modal-content.ivu-modal-close{
+    display:none !important;
+    width: 0 !important;
+    z-index: -1 !important;
+  }
   //表格样式
   table.gridtable {
     width: 100%;
     font-family: verdana, arial, sans-serif;
-    font-size: 12px !important;
+    font-size: 10px !important;
+    table-layout:fixed;/*列宽由表格宽度和列宽度设定。*/
     color: #000000;
     border-width: 1px;
     border-color: #000000;
@@ -364,7 +367,7 @@
 
   table.gridtable th {
     border-width: 1px;
-    padding: 4px;
+    padding: 2px;
     border-style: solid;
     border-color: #000000;
     background-color: #dedede;
@@ -372,7 +375,7 @@
 
   table.gridtable td {
     border-width: 1px;
-    padding: 4px;
+    padding: 1px;
     border-style: solid;
     border-color: #000000;
     background-color: #ffffff;

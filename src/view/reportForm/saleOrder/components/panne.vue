@@ -61,8 +61,7 @@
                 :value="item.label"
                 :key="item.id"
               >{{ item.label }}
-              </Option
-              >
+              </Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -165,6 +164,17 @@
         }
       };
     },
+    watch:{
+      search:{
+        handler:async function(val, oldVal){
+          if(val.partBrand==undefined){
+            this.bandArr=await getBrandList("")
+          }
+        },
+        deep:true,
+        immediate:true
+      }
+    },
     computed: {
       selectShopList() {
         if (this.$store.state.user.userData.currentCompany != null) {
@@ -186,10 +196,11 @@
     },
     methods: {
       select1(option) {
-        this.search.partBrand = option.label;
+        this.search.partBrand = option.value;
       },
       async partBrandRemote(query) {
-        this.bandArr = await getBrandList(query)
+        let queryName=query.slice(0,query.length-1)
+        this.bandArr = await getBrandList(queryName)
       },
       //获取仓库
       async getWares(orgId) {
@@ -242,10 +253,10 @@
                     moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
                     " 23:59:59";
                 } else if (this.type == 3) {
-                  data.auditStartDate =
+                  data.startTime =
                     moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
                     " 00:00:00";
-                  data.auditEndDate =
+                  data.endTime =
                     moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
                     " 23:59:59";
                 }

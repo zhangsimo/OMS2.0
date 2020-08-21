@@ -35,6 +35,7 @@ export default {
   watch: {
       $route:{
           handler(val) {
+            if (val.name == 'login') return
               this.$ButtonShow()
           },
           deep:true

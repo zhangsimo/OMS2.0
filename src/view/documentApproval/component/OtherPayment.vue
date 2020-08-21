@@ -83,7 +83,7 @@
           </vxe-table-column>
           <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-          <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
+          <vxe-table-column field="businessType" title="业务类型"></vxe-table-column>
           <vxe-table-column field="collectionTime" title="收款申请时间"></vxe-table-column>
           <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
           <vxe-table-column field="paymentNo" title="其他付款申请单号"></vxe-table-column>

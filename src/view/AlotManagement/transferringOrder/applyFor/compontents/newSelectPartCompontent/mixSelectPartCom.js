@@ -6,6 +6,7 @@ import {
 import { getwbParts,getAccessList,getWbList } from "_api/system/partManager";
 import { getDetails } from "@/api/salesManagment/salesOrder";
 import { getCarPartClass } from "_api/parts";
+import {getCarPartsTwo} from "../../../../../../api/purchasing/purchasePlan";
 
 export const mixSelectPartCom = {
   inject: ["reload"],
@@ -99,6 +100,16 @@ export const mixSelectPartCom = {
         {
           title: "本店可售",
           key: "outableQty",
+          minWidth: 120,
+        },
+        {
+          title: "门店可售库存",
+          key: "callerStock",
+          minWidth: 120,
+        },
+        {
+          title: "总部可售库存",
+          key: "headquartersStock",
           minWidth: 120,
         },
         {
@@ -236,7 +247,8 @@ export const mixSelectPartCom = {
         }
       ],
       //获取点击的数据
-      allList: {}
+      allList: {},
+      loading2:false
     };
   },
   mounted() {
@@ -246,53 +258,32 @@ export const mixSelectPartCom = {
     getList() {
       this.loading = true;
       let req = {};
-      let params = {};
+      let data = {};
       if (this.selectTreeItem.id) {
-        req.typeId = this.selectTreeItem.typeId;
+        data.typeId = this.selectTreeItem.typeId;
       }
       if (this.selectBrand && this.selectBrand != "9999") {
-        req.partBrandId = this.selectBrand;
+        data.partBrandId = this.selectBrand;
       }
-      params.page = this.page.num - 1;
-      params.size = this.page.size;
-      if(this.keyType!=1){
-        req.guestId=this.guestId;
-        req.storeId=this.storeId;
-        if (this.partName.trim()) {
-          req.partCode = this.partName.trim()
-        }
-        getAccessList(params, req).then(res => {
-          this.loading = false;
-          this.partData = res.data.content || [];
-          this.page.total = res.data.totalElements;
-          this.bands = [];
-          let arr = res.data.content.map(el => el.partBrand);
-          let set = new Set(arr);
-          set.forEach(el => {
-            this.bands.push({label: el, value: el});
-          })
-          this.columnsPart[6].filters = this.bands;
-          });
-      }else if(this.keyType==1){
-        req.storeId=this.storeId;
-        if (this.partName.trim()) {
-          req.partCode = this.partName.trim();
-        }
-        getWbList(params,req).then(res=>{
-          this.loading = false;
-          this.partData = res.data.content|| [];
-          this.page.total = this.partData.length;
-          this.bands = [];
-          let arr = res.data.content.map(el => el.partBrand);
-          let set = new Set(arr);
-          set.forEach(el => {
-            this.bands.push({label: el, value: el});
-          })
-          this.columnsPart[6].filters = this.bands;
+
+      if (this.partName.trim()) {
+        data.partCode = this.partName.trim();
+      }
+      data.orgId = this.$parent.isInternalId||"";
+      req.page = this.page.num - 1;
+      req.size = this.page.size;
+      getCarPartsTwo(req, data).then(res => {
+        this.loading = false;
+        this.partData = res.data.content || [];
+        this.page.total = res.data.totalElements;
+        this.bands = [];
+        let arr = res.data.content.map(el => el.partBrand);
+        let set = new Set(arr);
+        set.forEach(el => {
+          this.bands.push({label: el, value: el});
         })
-      }
-
-
+        this.columnsPart[6].filters = this.bands;
+      });
     },
 
     //获取配件品牌
@@ -336,14 +327,14 @@ export const mixSelectPartCom = {
     },
     //显示层
     init() {
-      if(!this.storeId){
-        return this.$Message.warning("请选择交货仓库")
-      }
+      // if(!this.storeId){
+      //   return this.$Message.warning("请选择交货仓库")
+      // }
       this.searchPartLayer = true;
       this.allList = {};
       this.getList();
       // this.getPartBrandAll();
-      this.getCarClassifysFun();
+      //this.getCarClassifysFun();
       this.$nextTick(() => this.$refs.elinput.focus())
     },
     //配件表格点击的行
@@ -407,7 +398,9 @@ export const mixSelectPartCom = {
       }
       data.guestId = this.guestId
       data.storeId = this.storeId;
+      this.loading2 = true;
       getDetails(data).then(res => {
+        this.loading2 = false;
         if (res.code === 0) {
           this.allList = res.data;
           this.allList.priceLever.forEach(element => {

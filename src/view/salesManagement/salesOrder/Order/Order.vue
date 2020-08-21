@@ -202,8 +202,9 @@ export default {
         value: 0
       }, //默认状态
       changeLeft: "", //发生改变数据调动左侧list
-      ispart: true,
+      ispart: false,
       isWms: false,
+      selectItemId:"",
       backShow: false //作废判断是否wms仓库
     };
   },
@@ -255,7 +256,7 @@ export default {
     getOrder(data) {
       this.isWms = false;
       this.backShow = true;
-      this.orderlistType = data.billStatusId;
+      this.orderlistType = {...data.billStatusId};
       if (
         data.billStatusId.value == 1 ||
         (data.billStatusId.value == 0 && data.id)
@@ -380,6 +381,7 @@ export default {
       this.$refs.right.limitList.tempQuota = "00.00";
       this.$refs.right.limitList.sumAmt = "00.00";
       this.isAdd = true;
+      this.$set(this.formPlan, "billTypeId", "020502");
       this.$refs.right.WarehouseList.map(item => {
         if (item.isDefault) {
           this.$refs.right.formPlan = Object.assign({}, { storeId: item.id });

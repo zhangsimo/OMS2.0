@@ -83,8 +83,6 @@
               <div class="pane-made-hd">销售退货列表</div>
               <Table
                 ref="currentRowTable"
-                :queryTime="queryTime"
-                :billStatusId="billStatusId"
                 :height="leftTableHeight"
                 size="small"
                 highlight-row
@@ -809,6 +807,7 @@ export default {
     },
     //新增按钮
     addOneList() {
+      let arr = JSON.parse(JSON.stringify(this.sellOrderTable.tbdata))
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
@@ -823,14 +822,14 @@ export default {
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
-      for (let b of this.sellOrderTable.tbdata) {
+      for (let b of arr) {
         b._highlight = false;
       }
-      this.sellOrderTable.tbdata.unshift(this.PTrow);
-      console.log(this.sellOrderTable.tbdata , 7879)
-
-      // this.sellOrderTable.tbdata[0]._highlight = true;
+      arr.unshift(this.PTrow);
+      this.sellOrderTable.tbdata = arr
+      this.sellOrderTable.tbdata[0]._highlight = true;
       this.isAdd = false;
+      this.id=undefined;
     },
     //获取客户属性
     async getType() {
@@ -1006,7 +1005,6 @@ export default {
               this.$Message.success("作废成功");
               this.formPlan = {};
               this.getLeftList();
-              this.id = null;
               this.$refs.formPlan.resetFields();
             }
           },
@@ -1055,7 +1053,6 @@ export default {
               this.isNew = true;
               this.$Message.success("保存成功");
               this.formPlan = {};
-              this.id=null
               this.getLeftList();
               this.$refs.formPlan.resetFields();
             } else {
@@ -1132,6 +1129,7 @@ export default {
         let preTime = "";
         if (valid) {
           preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate));
+          this.formPlan.orderDate=moment(this.formPlan.orderDate).format("YYYY-MM-DD")+" 00:00:00"
           try {
             await this.$refs.xTable.validate();
             this.$Modal.confirm({
@@ -1140,13 +1138,12 @@ export default {
                 let data = {};
                 data = this.formPlan;
                 data.billStatusId = null;
-                data.orderDate = tools.transTime(this.formPlan.orderDate);
+                // data.orderDate = tools.transTime(this.formPlan.orderDate);
                 let res = await getSubmit(data);
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.isNew = true;
                   this.formPlan = {};
-                  this.id = null;
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();
                   // this.reload();

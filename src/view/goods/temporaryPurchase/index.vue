@@ -140,11 +140,11 @@
                         placeholder="请选择供应商"
                         :disabled="isInput"
                       /> -->
-                      <GoodCus style="width: 120px" 
-                        :title="formPlanmain.guestName" 
-                        placeholder="请输入供应商" 
-                        :search-value="formPlanmain.guestName" 
-                        @throwName="throwNameFun" 
+                      <GoodCus style="width: 120px"
+                        :title="formPlanmain.guestName"
+                        placeholder="请输入供应商"
+                        :search-value="formPlanmain.guestName"
+                        @throwName="throwNameFun"
                         :disabled-prop="isInput">
                       </GoodCus>
                       </Tooltip>
@@ -332,9 +332,10 @@
                       :on-format-error="onFormatError"
                       :on-success="onSuccess"
                       :before-upload ='beforeUpload'
+                      :disabled="!mainId || selectTableRow.new || isInput"
                       v-has="'import'"
                     >
-                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput">
+                      <Button size="small" class="mr10" @click="getRUl" :disabled="!mainId || selectTableRow.new || isInput">
                         <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
                       </Button>
                     </Upload>

@@ -705,6 +705,12 @@ export default {
                   this.selectTabelData(b);
                 }
               }
+            }else{
+              if(this.Left.tbdata.length>0){
+                let firstData = this.Left.tbdata[0];
+                firstData._highlight = true;
+                this.selectTabelData(firstData);
+              }
             }
           }
         }
@@ -775,6 +781,7 @@ export default {
           return;
         }
       }
+      this.leftClickItemId = "";
       this.Left.tbdata.map((item, index) => {
         item._highlight = false;
       });
@@ -797,9 +804,9 @@ export default {
         detailVOList: [],
         //业务员-业务员id
         orderMan:"",
-        orderManId:"",
+        orderManId:this.$store.state.user.userData.id || "",
         //移仓时间
-        auditDate:"",
+        auditDate:tools.transTime(new Date()),
 
         _highlight: true
       };
@@ -818,6 +825,7 @@ export default {
     },
     //保存
     baocun() {
+      this.Leftcurrentrow.auditDate=tools.transTime(this.Leftcurrentrow.auditDate)
       if(this.saveButClick){
         return
       }
@@ -1141,7 +1149,7 @@ export default {
         this.getList();
         // self.$Message.success("导入成功");
         if (res.data.length > 0) {
-          self.$Message.warning(res.data[0]);
+          this.warning(res.data);
         } else  {
           self.$Message.success("导入成功");
         }
@@ -1155,9 +1163,20 @@ export default {
       }
     },
     warning(nodesc) {
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`
+          }else{
+            str+=`${item}`
+          }
+        })
+      }
       this.$Notice.warning({
         title: '上传错误信息',
-        desc: nodesc
+        desc: str,
+        duration: 0
       });
     },
     onFormatError(file) {

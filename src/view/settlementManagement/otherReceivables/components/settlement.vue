@@ -380,6 +380,9 @@ export default {
             two: this.BusinessType,
             three: this.tableData
           };
+          if(this.$parent.otherPayCus){
+            obj2.one.paymentTypeCode = this.$parent.fund
+          }
           saveAccount(obj2).then(res => {
             if (res.code === 0) {
               this.Settlement = false;

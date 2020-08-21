@@ -233,9 +233,20 @@ export default class TemporaryPurchase extends Vue {
     }
   }
   warning(nodesc) {
+    let str=""
+    if(nodesc.length>0){
+      nodesc.map((item,index)=>{
+        if(index!=nodesc.length-1){
+          str+=`${item}<br/>`
+        }else{
+          str+=`${item}`
+        }
+      })
+    }
     this.$Notice.warning({
       title: '上传错误信息',
-      desc: nodesc
+      desc: str,
+      duration:0
     });
   };
   //上传之前清空

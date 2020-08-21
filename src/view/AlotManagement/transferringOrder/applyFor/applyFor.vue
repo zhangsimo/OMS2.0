@@ -148,12 +148,12 @@
                           :before-upload="handleBeforeUpload"
                           :on-success="handleSuccess"
                           :on-format-error="onFormatError"
-                          :disabled="![0, 4].includes(datadata&&datadata.status.value)"
+                          :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
                         >
                           <Button
                             size="small"
                             class="mr10"
-                            :disabled="![0, 4].includes(datadata&&datadata.status.value)"
+                            :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
                           >导入配件</Button>
                         </Upload>
                       </div>
@@ -229,7 +229,7 @@
         <!--更多弹框-->
               <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
-        <supplier ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
+        <supplier :guestId="guestidId" :storeId="formPlan.storeId" ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
         <!--编辑收货信息-->
           <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata" :guestId="guestidId"></goods-info>
       </div>
@@ -250,7 +250,7 @@
   import SelectSupplier from "./compontents/supplier/selectSupplier2";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
-  import supplier from './compontents/supplier'
+  import supplier from './compontents/newSelectPartCompontent/selectPartCom'
   import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   import {findForAllot} from "_api/purchasing/purchasePlan";
@@ -795,7 +795,7 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          console.log(ChildMessage)
+          // console.log(ChildMessage)
           let parts = ChildMessage.map( item => {
 
             return {
@@ -804,7 +804,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty :undefined,
+              applyQty :1,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
@@ -1159,7 +1159,7 @@
                   el._highlight = true;
                   this.isAdd = true;
                   this.setRow(el);
-                  self.$Message.error(res.data.join(";"));
+                  this.warning(res.data);
                 }
               })
             }
@@ -1167,10 +1167,21 @@
             self.$Message.error(res.message);
           }
         },
-        warning(nodesc) {
+        warning(nodesc){
+          let str=""
+          if(nodesc.length>0){
+            nodesc.map((item,index)=>{
+              if(index!=nodesc.length-1){
+                str+=`${item}<br/>`;
+              }else{
+                str+=`${item}`;
+              }
+            })
+          }
           this.$Notice.warning({
             title: '上传错误信息',
-            desc: nodesc
+            desc: str,
+            duration: 0
           });
         },
         onFormatError(file) {

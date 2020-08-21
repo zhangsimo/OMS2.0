@@ -139,3 +139,12 @@ export function changeOutStaffEn(data){
     data
   })
 }
+
+//获取当前租户下的门店
+export function getLessee(data){
+  return axios.request({
+    url:`${api.wmsApi}/company/findAll`,
+    method:"post",
+    data
+  })
+}

@@ -768,7 +768,6 @@
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      console.log(arr)
       this.value = arr[0];
       this.model1 = arr[1];
       this.Branchstore = arr[2];
@@ -908,7 +907,6 @@
         this.Rebateid = row.applyNo;
       },
       getBackList2(row) {
-        console.log(row)
         this.BadDebtid = row.applyNo;
       },
       // 计算应收业务销售出库/退货对账的总计
@@ -1138,8 +1136,8 @@
             }
           ];
           // this.accountData = JSON.parse(JSON.stringify(this.data));
-          this.getAccountNameList();
-          this.getPaymentNameList();
+
+
         });
       },
       //获取收款户名
@@ -1217,8 +1215,9 @@
           this.totalpayment += item.thisAccountAmt;
         });
         this.getSettlementComputed();
-
-        this.tipText(this.paymentlist);
+        this.getAccountNameList();
+        this.getPaymentNameList();
+        // this.tipText(this.paymentlist);
       },
       // 应收选中
       collectCheckout(selection, row) {
@@ -1230,8 +1229,10 @@
         //   this.totalcollect += item.thisAccountAmt;
         // });
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
 
-        this.tipText(this.collectlist);
+        // this.tipText(this.collectlist);
       },
       // 应收全选
       collectCheckoutAll(selection) {
@@ -1241,8 +1242,10 @@
         //   this.totalcollect += item.thisAccountAmt;
         // });
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
 
-        this.tipText(this.collectlist);
+        // this.tipText(this.collectlist);
       },
       //选中提醒
       tipText(row) {
@@ -1276,20 +1279,26 @@
           this.totalpayment += item.thisAccountAmt;
         });
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
 
-        this.tipText(this.paymentlist);
+        // this.tipText(this.paymentlist);
       },
       // 应付取消选中
       paymentNoCheckout(selection, row) {
         this.paymentlist = selection;
         this.totalpayment -= row.thisAccountAmt;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
         this.collectlist = selection;
         this.totalcollect -= row.thisAccountAmt;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 应付取消全选
       paymentNoCheckoutAll() {
@@ -1297,6 +1306,8 @@
         this.totalpayment = 0;
         this.Actualtotalpayment = 0;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 应收取消全选
       collectNoCheckoutAll() {
@@ -1304,6 +1315,8 @@
         this.totalcollect = 0;
         this.Actualtotalcollect = 0;
         this.getSettlementComputed();
+        this.getAccountNameList();
+        this.getPaymentNameList();
       },
       // 本次不对帐金额弹窗
       async noReconciliation() {
@@ -1384,6 +1397,14 @@
       },
       // 保存接口
       getPreservation(num) {
+        //判断是否存在草稿占用
+        let selectArrData = [...this.collectlist,...this.paymentlist]
+        let dartArr = selectArrData.filter(item => item.existDraft === 1);
+        if (dartArr.length > 0) {
+          this.tipText(selectArrData);
+          return
+        }
+
         if (this.totalvalue === "0") {
           if (num === 1 && !this.collectionUname)
             return this.$message.error("收款户名不能为空");
@@ -1393,30 +1414,30 @@
           if (num === 1 && !this.paymentUname)
             return this.$message.error("付款账户不能为空");
         }
-        if (this.paymentBaddebt > 100 || this.collectBaddebt>100) {
-          if (!this.BadDebtid) {
-            // this.$message.error("请输入应收坏账请示单号");
-            this.$message({
-              message: "请输入坏账请示单号",
-              type: "error",
-              customClass: "zZindex"
-            });
-            return "";
+        if(num!=0){
+          if (this.paymentBaddebt > 100 || this.collectBaddebt>100) {
+            if (!this.BadDebtid) {
+              // this.$message.error("请输入应收坏账请示单号");
+              this.$message({
+                message: "请输入坏账请示单号",
+                type: "error",
+                customClass: "zZindex"
+              });
+              return "";
+            }
+          }
+          if (this.paymentRebate > 100 || this.collectRebate>100) {
+            if (!this.Rebateid) {
+              // this.$message.error("请输入应收返利请示单号");
+              this.$message({
+                message: "请输入返利请示单号",
+                type: "error",
+                customClass: "zZindex"
+              });
+              return "";
+            }
           }
         }
-        if (this.paymentRebate > 100 || this.collectRebate>100) {
-          if (!this.Rebateid) {
-            // this.$message.error("请输入应收返利请示单号");
-            this.$message({
-              message: "请输入返利请示单号",
-              type: "error",
-              customClass: "zZindex"
-            });
-            return "";
-          }
-        }
-
-
         if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
           if (num != 0) {
             if (!this.remark) {

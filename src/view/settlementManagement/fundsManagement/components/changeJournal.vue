@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modalShow" title="修改现金日记账" width="700">
+  <Modal v-model="modalShow" title="修改日记账" width="700">
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustomRalus" :label-width="100" label-colon>
       <Row>
         <Col span="12">
@@ -83,7 +83,7 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="业务类别" prop="businessCode">
+          <FormItem label="业务类别">
             <Select v-model="formCustom.businessCode" style="width:150px">
               <Option v-for="item in businessList" :value="item.ItemCode" :key="item.ItemCode">{{ item.ItemName }}
               </Option>
@@ -176,10 +176,9 @@
           tradingNote: [
             {required: true, message: '备注必填', trigger: 'blur'}
           ],
-          businessCode: [
-            {required: true, type: 'string', message: '业务类别必选', trigger: 'change'}
-
-          ],
+          // businessCode: [
+          //   {required: true, type: 'string', message: '业务类别必选', trigger: 'change'}
+          // ],
         },//表单校验
         areaList: [],//地址列表
         shopList: [],//门店

@@ -80,6 +80,7 @@
                 :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
+                ref="leftTabel"
               ></Table>
               <Page
                 size="small"
@@ -659,7 +660,9 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
           }
-          for (let b of this.Left.tbdata) {
+          console.log(this.currRow.id)
+          if(this.currRow.id){
+            for (let b of this.Left.tbdata) {
               b._highlight = false;
               if(b.id == this.currRow.id) {
                 b._highlight = true;
@@ -670,6 +673,17 @@ export default {
                 return;
               }
             }
+          }else{
+            if(this.Left.tbdata.length>0){
+              let firstData = this.Left.tbdata[0];
+              this.currRow =firstData
+              this.Right.tbdata = firstData.detailVOList;
+              this.formPlan = firstData;
+              this.draftShow = firstData.billStatusId.value;
+              firstData._highlight = true
+            }
+          }
+
         })
         .catch(err => {
           this.$Message.info("获取盘点列表失败");
@@ -742,6 +756,10 @@ export default {
           );
           return;
         }
+      }
+      this.currRow = {};
+      for (let b of this.Left.tbdata) {
+        b._highlight = false;
       }
       let item = {
         index: 1,
@@ -996,17 +1014,35 @@ export default {
       if (response.code == 0) {
         let txt = "上传成功";
         if (response.data.length > 0) {
-          txt = response.data.join(",");
+          this.warning(response.data)
+        }else{
+          this.$Notice.warning({
+            title: "",
+            desc: txt,
+            duration: 0
+          });
         }
-        this.$Notice.warning({
-          title: "",
-          desc: txt,
-          duration: 0
-        });
       } else {
         this.$Message.error(response.message);
       }
       this.getList();
+    },
+    warning(nodesc){
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`;
+          }else{
+            str+=`${item}`;
+          }
+        })
+      }
+      this.$Notice.warning({
+        title: '上传错误信息',
+        desc: str,
+        duration: 0
+      });
     },
     handleBeforeUpload() {
       if (!this.formPlan.billStatusId) {

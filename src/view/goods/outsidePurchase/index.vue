@@ -135,11 +135,11 @@
                       <Col span="19"
                       >
                       <Tooltip :content="formPlanmain.guestName">
-                        <GoodCus style="width: 120px" 
-                            :title="formPlanmain.guestName" 
-                            placeholder="请输入供应商" 
-                            :search-value="formPlanmain.guestName" 
-                            @throwName="throwNameFun" 
+                        <GoodCus style="width: 120px"
+                            :title="formPlanmain.guestName"
+                            placeholder="请输入供应商"
+                            :search-value="formPlanmain.guestName"
+                            @throwName="throwNameFun"
                             :disabled-prop="isInput">
                           </GoodCus>
                       <!-- <Input
@@ -230,17 +230,6 @@
                       >
                     </Select>
                   </FormItem>
-                  <FormItem class="form-Item" label="备注：">
-                    <Tooltip :content="formPlanmain.remark">
-                    <Input
-                      placeholder="请输入备注"
-                      class="w160"
-                      v-model="formPlanmain.remark"
-                      :disabled="isInput"
-                      maxlength="100"
-                    />
-                    </Tooltip>
-                  </FormItem>
                   <FormItem class="form-Item" label="订单号：">
                     <Tooltip :content="formPlanmain.serviceId">
                     <Input
@@ -250,6 +239,18 @@
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"
                     />
+                    </Tooltip>
+                  </FormItem>
+                  <FormItem class="form-Item" label="备注：">
+                    <Tooltip>
+                      <Input
+                        placeholder="请输入备注"
+                        class="w160"
+                        v-model="formPlanmain.remark"
+                        :disabled="isInput"
+                        maxlength="100"
+                      />
+                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{formPlanmain.remark}}</div>
                     </Tooltip>
                   </FormItem>
                 </Form>
@@ -288,9 +289,11 @@
                       :on-format-error="onFormatError"
                       :on-success="onSuccess"
                       :before-upload ='beforeUpload'
+                      :disabled="!mainId || selectTableRow.new || isInput"
                       v-has="'import'"
                     >
-                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput">
+                      <Button size="small" class="mr10" @click="getRUl" :disabled="!mainId || selectTableRow.new || isInput">
+<!--                        selectLeftItemId-->
                         <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
                       </Button>
                     </Upload>
@@ -466,7 +469,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="notEnterQty"
+                  field="adjustQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>
