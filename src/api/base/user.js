@@ -108,3 +108,34 @@ export const getService =() =>{
   })
 }
 
+// 开发环境：
+// https://deves.g-parts.cn
+// 测试环境：
+// https://tses.g-parts.cn
+// 预发布环境：
+// https://bakmapi.g-part.cn
+// 产线环境：
+// https://mapi.g-part.cn
+//
+// 以上对应域名 + /jpManager/a/loginNp?account=登录名&system=1
+
+export const gParts =(env,account)=>{
+  switch (env) {
+    case "1":
+      //开发
+      window.open(`https://deves.g-parts.cn/jpManager/a/loginNp?account=${account}&system=1`)
+      break;
+    case "2":
+      //测试
+      window.open(`https://tses.g-parts.cn/jpManager/a/loginNp?account=${account}&system=1`)
+      break;
+    case "3":
+      //预发布
+      window.open(`https://bakmapi.g-part.cn/jpManager/a/loginNp?account=${account}&system=1`)
+      break;
+    case "4":
+      //产线
+      window.open(`https://mapi.g-part.cn/jpManager/a/loginNp?account=${account}&system=1`)
+  }
+}
+
