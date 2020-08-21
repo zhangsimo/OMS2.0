@@ -412,7 +412,7 @@ export default {
         },
         {
           title: "店号",
-          key: "orgId",
+          key: "shopCode",
           className: "tc",
           minWidth: 60,
           render: (h, params) => {
@@ -426,9 +426,9 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.orgId
+                  title: params.row.shopCode
                 }
-              }, params.row.orgId)
+              }, params.row.shopCode)
             ])
           }
         },
@@ -760,7 +760,7 @@ export default {
         },
         {
           title: "店号",
-          key: "orgId",
+          key: "shopCode",
           className: "tc",
           minWidth: 70,
           render: (h, params) => {
@@ -774,9 +774,9 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.orgId
+                  title: params.row.shopCode
                 }
-              }, params.row.orgId)
+              }, params.row.shopCode)
             ])
           }
         },
