@@ -377,8 +377,8 @@ export default {
               id: el.id,
               mateAccountCode: el.mateAccountCode,
               mateAccountName: el.mateAccountName,
-              incomeMoney: el.incomeMoney,
-              paidMoney: el.paidMoney,
+              incomeMoney: Math.abs(el.incomeMoney),
+              paidMoney: Math.abs(el.paidMoney),
               orgId: el.ownStoreId,
               orgName: el.ownStoreName,
               amt: el.amt
