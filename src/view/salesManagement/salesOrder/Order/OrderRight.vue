@@ -727,6 +727,11 @@
         });
         if (res.code === 0) {
           this.WarehouseList = res.data;
+          this.WarehouseList.map(item=>{
+            if(item.isDefault){
+              this.formPlan.storeId=item.id
+            }
+          })
         }
       },
       //打开新增客户
