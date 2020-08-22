@@ -983,7 +983,7 @@ export default {
           tooltip: true
         }
       ];
-      console.log(this.selectShopList,this.shopkeeper,this.shopId,this.searchForm.old)
+      // console.log(this.selectShopList,this.shopkeeper,this.shopId,this.searchForm.old)
       if(this.selectShopList){
         this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
         if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
