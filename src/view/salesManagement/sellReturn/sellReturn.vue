@@ -1052,6 +1052,7 @@ export default {
             let data = {};
             data = this.formPlan;
             data.billStatusId = null;
+            data.orderDate =  moment(data.orderDate).format("YYYY-MM-DD")+" 00:00:00"
             let res = await getSave(data);
             if (res.code === 0) {
               this.isAdd = true;
