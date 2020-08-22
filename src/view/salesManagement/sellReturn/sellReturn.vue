@@ -786,7 +786,9 @@ export default {
                 }
               }
             } else {
-              this.sellOrderTable.tbdata[0]._highlight = true
+              if(this.sellOrderTable.tbdata.length>0){
+                this.sellOrderTable.tbdata[0]._highlight = true
+              }
             }
           }
         });
@@ -816,7 +818,8 @@ export default {
         orderManId: this.PTrow.orderManId,
         orderDate:tools.transTime(new Date()),
         orderMan: this.PTrow.orderMan,
-        storeId: this.StoreId //调入仓库
+        storeId: this.StoreId, //调入仓库
+        settleTypeId:'020502'
       };
       this.draftShow = 0;
       if (!this.isAdd) {
@@ -869,9 +872,9 @@ export default {
       oneClient = this.client.filter(item => {
         return item.id === value;
       });
-      for (var i in oneClient) {
-        this.formPlan.settleTypeId = oneClient[i].settTypeId;
-      }
+      // for (var i in oneClient) {
+      //   this.formPlan.settleTypeId = oneClient[i].settTypeId;
+      // }
     },
     //选择销售出库单
     SalesOutboundShowModel() {
@@ -955,7 +958,7 @@ export default {
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "fullName", val.fullName);
       this.$set(this.formPlan, "billTypeId", val.billTypeId);
-      this.$set(this.formPlan, "settleTypeId", val.settTypeId);
+      // this.$set(this.formPlan, "settleTypeId", val.settTypeId);
     },
     //获取左侧表格数据
     getLeftList() {
@@ -986,8 +989,10 @@ export default {
               }
             }
           } else {
-            this.sellOrderTable.tbdata[0]._highlight = true
-            this.selectTabelData(this.sellOrderTable.tbdata[0]);
+            if(this.sellOrderTable.tbdata.length){
+              this.sellOrderTable.tbdata[0]._highlight = true
+              this.selectTabelData(this.sellOrderTable.tbdata[0]);
+            }
           }
         }
       });
