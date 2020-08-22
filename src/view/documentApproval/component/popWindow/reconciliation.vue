@@ -716,7 +716,7 @@
         this.infoBase.collectionName = "";
         this.infoBase.bankName = "";
         this.infoBase.collectionAccount = "";
-        let rep = await getAccountName({"guestId": this.companyInfo});
+        let rep = await getAccountName({"guestId": this.infoBase.guestId});
         if (rep.code == 0) {
           this.collectionList = rep.data;
           if (rep.data.length <= 0) {
@@ -938,7 +938,7 @@
       //修改收款账户
       async changeKh() {
         this.getAdress();
-        let rep = await getCustomerDetails({id: this.companyInfo});
+        let rep = await getCustomerDetails({id: this.infoBase.guestId});
         if (rep.code == 0) {
           //修改供应商
           if (this.paymentlist.length > 0 || (this.paymentlist.length > 0 && this.collectlist.length > 0)) {
