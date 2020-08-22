@@ -34,7 +34,8 @@
               v-model="search.guestId"
               class="w120"
               :placeholder="placeHMod"
-              filterable clearable
+              filterable
+              clearable
             >
               <Option
                 v-for="item in outArr"
@@ -50,6 +51,7 @@
               class="w120"
               placeholder="请选择门店"
               :disabled="selectShopList"
+              clearable
               filterable
               @on-change="getWares(search.orgid)"
             >
