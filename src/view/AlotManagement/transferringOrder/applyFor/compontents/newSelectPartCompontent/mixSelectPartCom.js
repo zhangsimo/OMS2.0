@@ -269,7 +269,10 @@ export const mixSelectPartCom = {
       if (this.partName.trim()) {
         data.partCode = this.partName.trim();
       }
+      //传入调入仓库 否则后端 本店可售 查不出值
+      data.stockId=this.$parent.formPlan.storeId;
       data.orgId = this.$parent.isInternalId||"";
+
       req.page = this.page.num - 1;
       req.size = this.page.size;
       getCarPartsTwo(req, data).then(res => {
