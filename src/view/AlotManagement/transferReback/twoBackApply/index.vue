@@ -391,7 +391,9 @@
       ref="addPart"
       :storeId="Leftcurrentrow.storeId"
       :guestId="Leftcurrentrow.guestId"
-      @getPlanOrder="getPlanOrder">
+      @getPlanOrder="getPlanOrder"
+      @dblclickfun="dblclick"
+    >
     </add-part>
   </main>
   <!-- 配件组装 -->
@@ -424,6 +426,7 @@ import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 import AddPart from "./compontents/addPart";
 import AllocationCus from "../../../../components/allocation/allocationCus";
+import {v4} from "uuid";
 
 export default {
   name: "twoBackApply",
@@ -779,7 +782,37 @@ export default {
         });
       });
     },
-
+    //双击添加配件
+    dblclick(val) {
+      var datas = [...val].map(el => {
+        el.orderQty = undefined;
+        el.outUnitId = el.enterUnitId;
+        el.unit = el.enterUnitId;
+        el.systemUnitId = el.enterUnitId;
+        el.canReQty = el.enterQty;
+        el.orginOrderQty = el.orderQty;
+        el.applyQty = el.rtnableQty;
+        el.orderPrice = el.enterPrice;
+        el.partInnerId = el.partId;
+        return el;
+      });
+      var arr = [];
+      datas.forEach(item => {
+        let filterArr = this.Leftcurrentrow.detailVOS.map(({partCode}) => partCode)
+        if (!filterArr.includes(item.partCode)) {
+          arr.push(item)
+        }
+      })
+      arr.forEach(item => {
+        delete item.id;
+        this.Leftcurrentrow.detailVOS.unshift(item);
+      });
+      if (arr.length != datas.length) {
+        this.$Message.success("配件已存在请勿重复添加");
+      } else {
+        this.$Message.success("已添加");
+      }
+    },
     getDataType() {
       this.getList();
     },

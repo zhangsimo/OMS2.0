@@ -198,7 +198,7 @@
                     data.size = this.page.size
                     data.storeId = this.deliveryStoreId
                this.Loading = true
-               console.log(this.Outform)
+               // console.log(this.Outform)
                let res = await getGodown(data)
                if(res.code === 0){
                    this.Loading = false

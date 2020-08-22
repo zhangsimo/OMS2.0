@@ -33,18 +33,20 @@
         <div class="db mr5">
           <Button class="w90" type="warning" @click="query">
             <span class="center">
-              <Icon custom="iconfont iconchaxunicon icons" />查询
+              <Icon custom="iconfont iconchaxunicon icons"/>查询
             </span>
           </Button>
         </div>
         <div class="db mr5">
           <Button type="default" @click="ok"
-          >选择</Button
+          >选择
+          </Button
           >
         </div>
         <div class="db mr5">
           <Button type="default" @click="selectOrder"
-          >整单选择</Button
+          >整单选择
+          </Button
           >
         </div>
       </div>
@@ -58,11 +60,12 @@
         size="small"
         :data="tableData"
         show-overflow
-        :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
+        @cell-dblclick="dblclick"
         auto-resize
       >
+        <!--        :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"-->
         <vxe-table-column
           type="checkbox"
           width="60"
@@ -72,17 +75,18 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column  field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column  field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column  field="oemCode" title="OE码"></vxe-table-column>
-        <vxe-table-column  field="partBrand" title="品牌" :filters="[]" :filter-method="filterNameMethod"></vxe-table-column>
-        <vxe-table-column  field="enterQty" title="库存数量"></vxe-table-column>
-        <vxe-table-column  field="rtnableQty" title="可退数量"></vxe-table-column>
-        <vxe-table-column  field="enterUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column  field="branchStockAge" title="库龄"></vxe-table-column>
-        <vxe-table-column  field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column  field="code" title="入库单号"></vxe-table-column>
-        <vxe-table-column  field="enterDate" title="入库日期"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column field="partBrand" title="品牌" :filters="[]"
+                          :filter-method="filterNameMethod"></vxe-table-column>
+        <vxe-table-column field="enterQty" title="库存数量"></vxe-table-column>
+        <vxe-table-column field="rtnableQty" title="可退数量"></vxe-table-column>
+        <vxe-table-column field="enterUnitId" title="单位"></vxe-table-column>
+        <vxe-table-column field="branchStockAge" title="库龄"></vxe-table-column>
+        <vxe-table-column field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column field="code" title="入库单号"></vxe-table-column>
+        <vxe-table-column field="enterDate" title="入库日期"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
         <Page
@@ -112,16 +116,16 @@
 </template>
 
 <script lang="ts">
-  import  * as tools from "../../../../../utils/tools";
-  import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+  import * as tools from "../../../../../utils/tools";
+  import {Vue, Component, Prop, Emit} from "vue-property-decorator";
   // @ts-ignore
   import * as api from "../../../../../api/procurement/planTwo";
-  import { getPartBrand } from "@/api/business/stockSearch";
+  import {getPartBrand} from "@/api/business/stockSearch";
   import getDate from "@/components/getDate/dateget_bill.vue";
-  import { getParts,getPartsBackApply} from "@/api/salesManagment/salesOrder";
+  import {getParts, getPartsBackApply} from "@/api/salesManagment/salesOrder";
 
   @Component({
-    components:{
+    components: {
       getDate
     }
   })
@@ -132,9 +136,9 @@
     @Prop(String) private readonly guestId;
     @Prop(String) private readonly storeId;
 
-    private auditDate:Array<Date> = [];
+    private auditDate: Array<Date> = [];
     // private guestname:string = "";
-    private partId:string = "";
+    private partId: string = "";
 
     private page: Page = {
       num: 1,
@@ -144,10 +148,10 @@
 
     private tableData: Array<any> = [];
 
-    private partBrand:any = '' //获取当前品牌code
+    private partBrand: any = '' //获取当前品牌code
 
-    private bands: Array<any> =[] //品牌列表
-    private filters: Array<any> =[] //品牌列表
+    private bands: Array<any> = [] //品牌列表
+    private filters: Array<any> = [] //品牌列表
 
 
     private tableDataBm: Array<any> = new Array();
@@ -162,12 +166,15 @@
     @Emit('getPlanOrder')
     private ok() {
       let selectRow = JSON.parse(JSON.stringify(this.selectRow));
-      if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+      if (selectRow.length <= 0) {
+        return this.$Message.error('请勾选要选择的配件!');
+      }
+      ;
       // this.shows = false;
-      selectRow.forEach((el:any) => {
+      selectRow.forEach((el: any) => {
         el.sourceDetailId = el.id;
         el.batchSourceId = el.id;
-        if(el.batchSourceId){
+        if (el.batchSourceId) {
           Reflect.deleteProperty(el, 'id');
         }
         return el;
@@ -177,9 +184,12 @@
 
     @Emit('getPlanOrder')
     private async selectOrder() {
-      if(this.selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
+      if (this.selectRow.length <= 0) {
+        return this.$Message.error('请勾选要选择的配件!');
+      }
+      ;
 
-      let msg:any = this.$Message.loading({
+      let msg: any = this.$Message.loading({
         content: '加载中...',
         duration: 0
       });
@@ -193,13 +203,13 @@
       params.size = 9999;
       params.page = 0;
 
-      let res:any = await getPartsBackApply(params);
-      let data:Array<any> = new Array();
-      if(res.code == 0) {
+      let res: any = await getPartsBackApply(params);
+      let data: Array<any> = new Array();
+      if (res.code == 0) {
         data = (res.data.content || []).map(el => {
           el.sourceDetailId = el.id;
           el.batchSourceId = el.id;
-          if(el.batchSourceId){
+          if (el.batchSourceId) {
             Reflect.deleteProperty(el, 'id');
           }
           return el;
@@ -211,7 +221,7 @@
 
 
 //生命周期
-    created () {
+    created() {
       // this.getBand() //调用品牌接口
     }
 
@@ -231,24 +241,24 @@
       this.partId = "";
     }
 
-    private filterNameMethod({ value, row, column }) {
+    private filterNameMethod({value, row, column}) {
       return row.partBrand.indexOf(value) > -1
     }
 
     //点击全选
-    private cellClickEvent( {selection} ) {
-      this.selectRow=selection
+    private cellClickEvent({selection}) {
+      this.selectRow = selection
       // console.log(selection);
     }
 
     //点击复选框获取当前已选择数据
-    private radioChangeEvent( {selection} ) {
+    private radioChangeEvent({selection}) {
       this.selectRow = selection;
     }
 
     //获取保留复选数据
-    getReserve(v){
-      console.log(v)
+    getReserve(v) {
+      // console.log(v)
     }
 
 
@@ -258,14 +268,14 @@
     }
 
     //快速查询日期
-    private getDataQuick(v){
+    private getDataQuick(v) {
       this.auditDate = v
     }
 
 
     //出库日期获取
-    private getDate(v){
-      if (v[0]){
+    private getDate(v) {
+      if (v[0]) {
         v[0] = v[0] + " 00:00:00"
         v[1] = v[1] + " 23:59:59"
       }
@@ -274,9 +284,9 @@
 
     //获取品牌
     private async getBand() {
-      let res:any = await getPartBrand({ pageSize: 10000 });
+      let res: any = await getPartBrand({pageSize: 10000});
       if (res.code === 0) {
-        let arr:any = [];
+        let arr: any = [];
         res.data.content.forEach(item => {
           arr.push(...item.children);
         });
@@ -288,7 +298,10 @@
         });
       }
     }
-
+    //双击添加配件
+    private dblclick(row){
+      this.$emit("dblclickfun",[row.row])
+    }
 
     private async getPchsPlanList() {
       let params: any = {
@@ -298,23 +311,23 @@
       params.size = this.page.size;
       params.page = this.page.num - 1;
 
-      let data:any = {
+      let data: any = {
         partId: this.partId,
         partBrand: this.partBrand,
-        startEnterDate: this.auditDate[0]?this.auditDate[0]:"",
-        endEnterDate: this.auditDate[1]?this.auditDate[1]:"",
+        startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
+        endEnterDate: this.auditDate[1] ? this.auditDate[1] : "",
       };
       let formData = {};
-      for(let k in data) {
-        if(data[k] && data[k].trim().length > 0) {
+      for (let k in data) {
+        if (data[k] && data[k].trim().length > 0) {
           formData[k] = data[k];
         }
       }
 
       let obj = {...params, ...formData}
 
-      let res:any = await getPartsBackApply(obj);
-      if(res.code == 0) {
+      let res: any = await getPartsBackApply(obj);
+      if (res.code == 0) {
         this.page.total = res.data.totalElements;
         this.tableData = res.data.content;
         this.filters = [];
@@ -323,7 +336,7 @@
         set.forEach(el => {
           this.filters.push({label: el, value: el});
         })
-        const xTable:any = this.$refs.xTable1;
+        const xTable: any = this.$refs.xTable1;
         const column = xTable.getColumnByField('partBrand');
         xTable.setFilter(column, this.filters);
         xTable.updateData();
@@ -334,6 +347,7 @@
       this.page.num = p;
       this.getPchsPlanList();
     }
+
     private changeSizeToTable(size: number) {
       this.page.num = 1;
       this.page.size = size;
@@ -348,6 +362,7 @@
     display: flex;
     align-items: center;
   }
+
   .page-warp {
     margin-top: 10px;
     text-align: right;
