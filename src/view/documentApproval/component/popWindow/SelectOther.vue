@@ -40,7 +40,7 @@
         <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
         <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
         <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
-        <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
+        <vxe-table-column field="paymentBalance" title="其他付款余额"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
