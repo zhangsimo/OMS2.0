@@ -40,7 +40,7 @@
                 v-for="item in outArr"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.fullName }}</Option
+                >{{ item.shortName }}</Option
               >
             </Select>
           </div>
@@ -140,6 +140,7 @@ export default {
     let resS = await api.getSupplier();
     let resE = await api.getStorelist();
     if (resS.code == 0) {
+      console.log(resS , 7879)
       this.outArr = resS.data;
     }
     if(resE.code == 0) {
