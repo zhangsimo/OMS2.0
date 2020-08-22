@@ -240,11 +240,11 @@
           title="因公借支"
           width="100">
         </vxe-table-column>
-        <vxe-table-column
-          field="expenseReimbursement"
-          title="费用报销业务类型"
-          width="150">
-        </vxe-table-column>
+<!--        <vxe-table-column-->
+<!--          field="expenseReimbursement"-->
+<!--          title="费用报销业务类型"-->
+<!--          width="150">-->
+<!--        </vxe-table-column>-->
         <vxe-table-column
           field="deathMoney"
           title="本日资金支出小计"
@@ -465,11 +465,11 @@ export default {
           key: "deathMoney",
           width: 100
         },
-        {
-          title: "费用报销业务类型",
-          key: "expenseReimbursement",
-          width: 150
-        },
+        // {
+        //   title: "费用报销业务类型",
+        //   key: "expenseReimbursement",
+        //   width: 150
+        // },
         {
           title: "本日资金支出小计",
           key: "deathMoney",

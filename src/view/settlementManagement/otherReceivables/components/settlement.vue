@@ -257,7 +257,9 @@ export default {
   },
   methods: {
     setData(d){
-      // console.log(d)
+      d.map(item=>{
+        item.paidMoney=Math.abs(item.paidMoney)
+      })
       this.tableData = d;
     },
     // 选择科目弹框

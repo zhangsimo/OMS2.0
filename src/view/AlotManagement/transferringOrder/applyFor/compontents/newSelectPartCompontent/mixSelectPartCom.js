@@ -411,16 +411,12 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      if(this.$route.name=="salesOrder"){
+      if(this.$route.name=="applyFor"){
         this.$refs.selectPartInfo.init(v);
-      } else {
-        this.selectTableItem = [v];
-        this.$emit("selectPartName", this.selectTableItem);
       }
     },
-    //修改数量价格选中配件
-    throwDataChangeNum(v){
-      this.$emit("throwPartNameList2",v)
+    throwChangeData(v){
+      this.$emit("selectPartName2", v);
     }
   }
 };
