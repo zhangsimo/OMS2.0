@@ -325,7 +325,7 @@
       :is-add-part="true"
       @throwData="addPartFun"
     ></part-info>
-    <select-part-info ref="selectPartInfo" @throwData="throwDataChangeNum"></select-part-info>
+    <select-part-info ref="selectPartInfo" @throwData2="throwChangeData"></select-part-info>
     <link-part
       ref="LinkPart"
       :guestId="guestId"
@@ -338,7 +338,7 @@
 <script>
 import PartInfo from "_c/partInfo/partInfo";
 import { mixSelectPartCom } from "./mixSelectPartCom";
-import SelectPartInfo from "./selectPartInfo";
+import SelectPartInfo from "../selectPartInfo";
 import LinkPart from "./LinkPart";
 
 export default {
