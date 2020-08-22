@@ -190,11 +190,9 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
-          if(type==1){
-            if(this.formInline.requestInstructionNo){
-              if(parseFloat(this.formInline.applyAmt)>this.formInline.requestInfo.amtTotal){
-                return this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
-              }
+          if(this.formInline.requestInstructionNo){
+            if(parseFloat(this.formInline.applyAmt)>parseFloat(this.formInline.requestInfo.amtTotal)){
+              return this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
             }
           }
           if (this.canSave)return this.$Message.warning('处理中...')
