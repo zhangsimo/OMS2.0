@@ -317,7 +317,10 @@
 <!--        max-height="400"-->
 <!--        show-summary-->
 <!--      ></Table>-->
-      <div slot="footer"></div>
+      <div slot="footer">
+        <Button class="mr10" type="primary" @click="noReconciliation">确认</Button>
+        <Button class="mr10" type="default" @click="Reconciliation = false">取消</Button>
+      </div>
     </Modal>
     <!-- 供应商资料-->
     <Modal
@@ -1306,6 +1309,75 @@
           })
         ];
       },
+      //本次不对账确认
+      async noReconciliation() {
+        const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
+        if (!errMap) {
+          let sum = 0;
+          this.Reconciliationcontent.map(item => {
+            sum += item.thisNoAccountAmt * 1;
+          });
+          const index = this.Reconciliationcontent[0].index;
+          if (this.business === "销售退货" || this.business === "销售出库") {
+            //金额为负数是退货
+            // console.log("sum", sum)
+            let sum1 = 0;
+            if (this.data1[index].rpAmt >= 0) {
+              sum1 =
+                this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
+
+              if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            } else {
+              sum1 =
+                this.data1[index].rpAmt - this.data1[index].accountAmt + sum;
+
+              if (
+                sum + (this.data1[index].rpAmt - this.data1[index].accountAmt) >
+                0
+              )
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            }
+            this.$set(this.data1[index], "thisNoAccountAmt", sum);
+            this.$set(this.data1[index], "thisAccountAmt", sum1);
+            this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
+          } else {
+            let sum1 = 0
+            // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
+            if (this.data2[index].rpAmt >= 0) {
+              sum1 =
+                this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
+              if (sum > this.data2[index].rpAmt - this.data2[index].accountAmt)
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            } else {
+              sum1 =
+                this.data2[index].rpAmt - this.data2[index].accountAmt + sum;
+              if (
+                sum + (this.data2[index].rpAmt + this.data2[index].accountAmt) >
+                0
+              )
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            }
+            this.$set(this.data2[index], "thisNoAccountAmt", sum);
+            this.$set(this.data2[index], "thisAccountAmt", sum1);
+            this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
+          }
+          this.Reconciliation = false;
+        } else {
+          this.$message.error("信息填写错误");
+        }
+      },
+
+
+
       // 保存草稿
       preservationDraft() {
         this.getPreservation(0);

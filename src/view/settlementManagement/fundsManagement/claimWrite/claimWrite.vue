@@ -68,15 +68,15 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <span class="ml10">收付类型：</span>
-            <Select v-model="paymentId" class="w100" filterable>
-              <Option
-                v-for="item in paymentList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}
-              </Option>
-            </Select>
+            <!--            <span class="ml10">收付类型：</span>-->
+            <!--            <Select v-model="paymentId" class="w100" filterable>-->
+            <!--              <Option-->
+            <!--                v-for="item in paymentList"-->
+            <!--                :value="item.value"-->
+            <!--                :key="item.value"-->
+            <!--              >{{ item.label }}-->
+            <!--              </Option>-->
+            <!--            </Select>-->
             <span class="ml10">金额：</span>
             <InputNumber v-model="amtNo" class="w80"/>
             <button class="ivu-btn ivu-btn-default ml10 mt10" type="button" @click="queryNoWrite">
@@ -316,7 +316,7 @@
         orgName: "", //门店
         companyIdNo: "", //未核销往来单位
         companyIdClaim: "", //待认领往来单位
-        businessType:"收回应收",//本店待认领款 业务类别 绑定值
+        businessType: "收回应收",//本店待认领款 业务类别 绑定值
         businessTypeList: [],//本店待认领款 业务类别 下拉框
         company: [], //往来单位下拉框
         company2: [], //往来单位下拉框
@@ -328,7 +328,7 @@
         bankNameOClaim: "", //对方户名
         bankNameODis: "", //对方户名
         paymentId: "YJDZ", //收付类型
-        paymentList: [], //收付类型下拉框
+        // paymentList: [], //收付类型下拉框
         amtNo: null, //金额
         amtClaim: null, //金额
         amtDis: null, //金额
@@ -768,22 +768,24 @@
         }, //连锁待分配款项分页
         currentDistribution: [], //本店待认领款选中的数据
         claimedAmt: null, //认领款勾选金额
-        difference: null //差异
+        difference: null, //差异
+
+        writeBool: false,//判断 是否可以打开核销对账单
       };
     },
     async mounted() {
       // this.getOne();
       //收付类型数据字典
-      getDataDictionaryTable({dictCode: "RECEIVE_PAYMENT_TYPE"}).then(res => {
-        res.data.map(item => {
-          this.paymentList.push({
-            value: item.itemCode,
-            label: item.itemName
-          });
-        });
-      });
+      // getDataDictionaryTable({dictCode: "RECEIVE_PAYMENT_TYPE"}).then(res => {
+      //   res.data.map(item => {
+      //     this.paymentList.push({
+      //       value: item.itemCode,
+      //       label: item.itemName
+      //     });
+      //   });
+      // });
       getDataDictionaryTable({dictCode: "YWLX"}).then(res2 => {
-        this.businessTypeList=res2.data || []
+        this.businessTypeList = res2.data || []
       })
       let arr = await creat([], this.$store);
       this.orgName = arr[3];
@@ -935,7 +937,23 @@
             item.incomeMoney = ""
           }
         })
-        this.$refs.settlement.Settlement = true;
+        if (this.currentAccount.actualCollectionOrPayment>0) {
+          this.$refs.claim.currentClaimed.map(item=>{
+            if(item.incomeMoney>0){
+              this.$refs.settlement.Settlement = true;
+            }else{
+              this.$Message.error("收款类型对账单只能核销收款类资金")
+            }
+          })
+        }else{
+          this.$refs.claim.currentClaimed.map(item=>{
+            if(item.paidMoney>0){
+              this.$refs.settlement.Settlement = true;
+            }else{
+              this.$Message.error("付款类型对账单只能核销支出类资金")
+            }
+          })
+        }
       },
 
       //打开选择会计科目
@@ -963,7 +981,9 @@
             this.$refs.accrued.bool = true;
           }
           this.claimedSubjectList.map(item => {
-            item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney)
+            item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+            item.incomeMoney=item.rpAmt
+            item.balanceMoney = Math.abs(item.unClaimedAmt)
           })
           this.$refs.accrued.open();
         }
@@ -982,8 +1002,9 @@
               item.incomeMoney = item.unClaimedAmt;
               if (claimTit = "预收款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+                item.incomeMoney=item.rpAmt
               } else {
-                item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
+                item.balanceMoney = Math.abs(item.unClaimedAmt);
               }
             })
             this.$refs.otherCollectionClaims.open();
@@ -1011,8 +1032,9 @@
               item.paidMoney = item.unClaimedAmt;
               if (claimTit = "预付款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
+                item.incomeMoney=item.rpAmt
               } else {
-                item.balanceMoney = Math.abs(item.paidMoney || item.incomeMoney);
+                item.balanceMoney = Math.abs(item.unClaimedAmt);
               }
             })
             this.$refs.otherPaymentClaim.open();
@@ -1159,7 +1181,7 @@
           endDate: this.value2[1]
             ? moment(this.value2[1]).format("YYYY-MM-DD HH:mm:ss")
             : "",     //结束时间参数
-          businessType:this.businessType || ""
+          businessType: this.businessType || ""
           // createTime:this.applyDate2 //日期查询时间发生日期
         };
         claimedFund(obj).then(res => {
