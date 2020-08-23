@@ -375,7 +375,7 @@ export default {
       total1: {},
       total2: {},
       shopkeeper: 0, // 1 总部
-      shopId: JSON.parse(sessionStorage.getItem("vuex")).user.userData.currentCompany.id,
+      shopId: this.$store.state.user.userData.currentCompany.id,
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
