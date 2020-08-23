@@ -321,7 +321,7 @@ export default {
         this.Outform.enterDateStart = "";
         this.Outform.enterDateEnd = "";
       }
-      // this.query();
+      this.query();
     },
     //查询
     query() {

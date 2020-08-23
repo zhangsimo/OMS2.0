@@ -12,6 +12,7 @@
       type="button"
       @click="submission"
       v-has="'examine'"
+      v-noresub
     >保存并提交
     </button>
     <h4 class="mt10 mb10">分店名称：{{orgName}}</h4>
