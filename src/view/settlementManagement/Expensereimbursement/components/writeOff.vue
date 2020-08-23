@@ -272,7 +272,8 @@ export default {
         page: 0
       };
       let data = {
-        claimed: 1,
+        // claimed: 1,
+        paymentBalance:0,
         writeOffStatus: 0,
         searchType:0,
         startTime: this.dates[0]
