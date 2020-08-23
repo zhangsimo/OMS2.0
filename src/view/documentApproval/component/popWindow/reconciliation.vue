@@ -277,8 +277,8 @@
         :footer-method="handleSummary"
         :data="Reconciliationcontent"
         :edit-rules="validRules"
-        @edit-actived="editActivedEvent"
         :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
+        @edit-actived="editActivedEvent"
       >
         <vxe-table-column type="index" title="序号" align="center"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
@@ -293,7 +293,7 @@
         <vxe-table-column
           field="thisNoAccountAmt"
           title="本次不对账金额"
-          :edit-render="{name: 'input',immediate:true,events: {input: updateFooterEvent}}"
+          :edit-render="{name: 'input', attrs: { type: 'number', disabled: false } ,immediate:true,events: {input: updateFooterEvent}}"
           align="center"
         ></vxe-table-column>
         <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center">
@@ -301,7 +301,10 @@
         <vxe-table-column
           field="diffeReason"
           title="差异原因"
-          :edit-render="{name: 'input'}"
+          :edit-render="{
+          name: 'input',
+           attrs: { type: 'text', disabled: false }
+          }"
           align="center"
         ></vxe-table-column>
       </vxe-table>
@@ -1275,8 +1278,8 @@
         let xTable = this.$refs.xTable;
         let summary = xTable.getColumnByField("thisNoAccountAmt");
         let expenseType = xTable.getColumnByField("diffeReason");
-        summary.editRender.attrs.disabled = this.diffeReason;
-        expenseType.editRender.attrs.disabled = this.diffeReason;
+        summary.editRender.attrs.disabled = this.disabletype;
+        expenseType.editRender.attrs.disabled = this.disabletype;
       },
       // 本次不对账总表格合计方式
       handleSummary({columns, data}) {
