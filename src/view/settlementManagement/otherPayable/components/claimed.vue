@@ -48,6 +48,11 @@ export default {
           width: 40
         },
         {
+          title: "业务类别",
+          key: "businessType",
+          align: "center"
+        },
+        {
           title: "所属区域",
           key: "area",
           align: "center"

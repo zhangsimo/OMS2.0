@@ -50,6 +50,28 @@ export default {
           width: 40
         },
         {
+          title: "业务类别",
+          key: "businessType",
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.businessType
+                }
+              }, params.row.businessType)
+            ])
+          }
+        },
+        {
           title: "所属区域",
           key: "area",
           align: "center",
