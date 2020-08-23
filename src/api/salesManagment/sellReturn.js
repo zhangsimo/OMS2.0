@@ -121,6 +121,17 @@ export function getClientInfo (params) {
   })
 }
 
+
+//获取客户信息
+export function findInfoById (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findInfoById`,
+    method: 'get',
+    params
+  })
+}
+
+
 //获取华胜门店
 export function getHsStore (params) {
   return axios.request({
