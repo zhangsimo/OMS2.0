@@ -352,7 +352,7 @@ export default {
         saveAccount(obj).then(res => {
           if (res.code === 0) {
             this.$message.success("保存成功");
-            if(this.$parent.paymentId=="YJDZ"){
+            if(this.$parent.paymentId=="DYD"){
               this.$Modal.confirm({
                 title: '提示',
                 content: '<p>是否同时发起发票对冲申请</p>',

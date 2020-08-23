@@ -1,6 +1,6 @@
 <template>
   <div class="el-select-menu-layer" style="position: relative">
-    <Input search :disabled="disabledProp" v-model="isLayerValue" :placeholder="placeholder" @on-search="onSearch"/>
+    <Input search :disabled="disabledProp" @on-change="valueChange" v-model="isLayerValue" :placeholder="placeholder" @on-search="onSearch"/>
     <transition
       name="el-zoom-in-top">
       <div
@@ -90,6 +90,10 @@
         if(classN.length==0){
           this.onBlur();
         }
+      },
+      valueChange(v){
+        let vs = v.target.value;
+        this.$emit("throwNameNull",vs);
       }
     },
     watch:{

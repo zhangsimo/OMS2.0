@@ -402,7 +402,7 @@
       async addOpenSup() {
         let id = this.accountData[0].guestId;
         let res = await isWG({ id });
-        if(res.code == 0 && res.data.isSupplier == 1) {
+        if(res.code == 0 && res.data.isClient == 1) {
           return this.$message.error("该往来单位为客户非供应商，如需新增，请联系财务人员");
         }
         this.newInoiceShow = true;

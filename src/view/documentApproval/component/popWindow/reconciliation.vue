@@ -266,13 +266,57 @@
         <span class="mr5">单据日期</span>
         <Input type="text" readonly class="w140 mr15 tc" :value="billDate"/>
       </div>
-      <Table
-        :columns="Reconciliationlist"
-        :data="Reconciliationcontent"
+
+      <vxe-table
         border
-        max-height="400"
-        show-summary
-      ></Table>
+        show-overflow
+        ref="xTable"
+        max-height="500px"
+        show-footer
+        auto-resize
+        :footer-method="handleSummary"
+        :data="Reconciliationcontent"
+        :edit-rules="validRules"
+        :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
+        @edit-actived="editActivedEvent"
+      >
+        <vxe-table-column type="index" title="序号" align="center"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称" align="center"></vxe-table-column>
+        <vxe-table-column field="partSpecification" title="规格型号" align="center"></vxe-table-column>
+        <vxe-table-column field="partModel" title="适用车型" align="center"></vxe-table-column>
+        <vxe-table-column field="price" title="单价" align="center"></vxe-table-column>
+        <vxe-table-column field="quantity" title="数量" align="center"></vxe-table-column>
+        <vxe-table-column field="amount" title="金额" align="center"></vxe-table-column>
+        <vxe-table-column field="accountAmt" title="前期已对账金额" align="center"></vxe-table-column>
+        <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center"></vxe-table-column>
+        <vxe-table-column
+          field="thisNoAccountAmt"
+          title="本次不对账金额"
+          :edit-render="{name: 'input', attrs: { type: 'number', disabled: false } ,immediate:true,events: {input: updateFooterEvent}}"
+          align="center"
+        ></vxe-table-column>
+        <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center">
+        </vxe-table-column>
+        <vxe-table-column
+          field="diffeReason"
+          title="差异原因"
+          :edit-render="{
+          name: 'input',
+           attrs: { type: 'text', disabled: false }
+          }"
+          align="center"
+        ></vxe-table-column>
+      </vxe-table>
+
+
+<!--      <Table-->
+<!--        :columns="Reconciliationlist"-->
+<!--        :data="Reconciliationcontent"-->
+<!--        border-->
+<!--        max-height="400"-->
+<!--        show-summary-->
+<!--      ></Table>-->
       <div slot="footer"></div>
     </Modal>
     <!-- 供应商资料-->
@@ -324,7 +368,46 @@
     // props: ["id"],
     props: ["modelType", 'list'],
     data() {
+      const roleValid = ({cellValue, row}) => {
+        return new Promise((resolve, reject) => {
+          if (cellValue >= 0) {
+            //如果金额是负数，说明是退货活
+            if (row.amount < 0) {
+              if (parseFloat(cellValue) + parseFloat(row.amount + row.accountAmt) > 0) {
+                reject(
+                  new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+                );
+                return;
+              } else {
+                resolve();
+              }
+            } else {
+              if (cellValue > row.amount - row.accountAmt) {
+                reject(
+                  new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+                );
+              } else {
+                resolve();
+              }
+            }
+          } else {
+            reject(new Error("不能小于0"));
+          }
+        })
+
+      };
+
       return {
+        //本次不对账校验
+        validRules: {
+          thisNoAccountAmt: [
+            {required: true, message: '不对账金额必填'},
+            {validator: roleValid}
+          ],
+          diffeReason: [
+            {required: true, message: '原因必填'},
+          ]
+        },
         accountData: [
           {accountNo: "", accountSumAmt: ""},
           {accountNo: "", accountSumAmt: ""},
@@ -716,7 +799,7 @@
         this.infoBase.collectionName = "";
         this.infoBase.bankName = "";
         this.infoBase.collectionAccount = "";
-        let rep = await getAccountName({"guestId": this.companyInfo});
+        let rep = await getAccountName({"guestId": this.infoBase.guestId});
         if (rep.code == 0) {
           this.collectionList = rep.data;
           if (rep.data.length <= 0) {
@@ -938,7 +1021,7 @@
       //修改收款账户
       async changeKh() {
         this.getAdress();
-        let rep = await getCustomerDetails({id: this.companyInfo});
+        let rep = await getCustomerDetails({id: this.infoBase.guestId});
         if (rep.code == 0) {
           //修改供应商
           if (this.paymentlist.length > 0 || (this.paymentlist.length > 0 && this.collectlist.length > 0)) {
@@ -1160,6 +1243,68 @@
         //     customClass: "zZindex"
         //   });
         // }
+      },
+      countAmount(row) {
+        if (row.amount > 0) {
+          return (
+            this.$utils.toNumber(row.amount) -
+            this.$utils.toNumber(row.accountAmt) -
+            this.$utils.toNumber(row.thisNoAccountAmt)
+          );
+        } else {
+          return (
+            this.$utils.toNumber(row.amount) -
+            this.$utils.toNumber(row.accountAmt) +
+            this.$utils.toNumber(row.thisNoAccountAmt)
+          );
+        }
+      },
+      // 在值发生改变时更新表尾合计
+      updateFooterEvent(params) {
+        let xTable = this.$refs.xTable;
+        xTable.updateFooter();
+      },
+      // 计算尾部总和
+      countAllAmount(data) {
+        let count = 0;
+        data.forEach(row => {
+          count += +this.countAmount(row);
+        });
+        count = count.toFixed(2);
+        return count;
+      },
+      //判断表格是否可以编辑
+      editActivedEvent({row}) {
+        let xTable = this.$refs.xTable;
+        let summary = xTable.getColumnByField("thisNoAccountAmt");
+        let expenseType = xTable.getColumnByField("diffeReason");
+        summary.editRender.attrs.disabled = this.disabletype;
+        expenseType.editRender.attrs.disabled = this.disabletype;
+      },
+      // 本次不对账总表格合计方式
+      handleSummary({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (
+              [
+                "quantity",
+                "amount",
+                "accountAmt",
+                "noAccountAmt",
+                "thisNoAccountAmt"
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property);
+            }
+            if (columnIndex === 11) {
+              return ` ${this.countAllAmount(data)} `;
+            }
+            return null;
+          })
+        ];
       },
       // 保存草稿
       preservationDraft() {

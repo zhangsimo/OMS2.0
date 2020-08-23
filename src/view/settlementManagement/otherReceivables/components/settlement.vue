@@ -260,7 +260,6 @@ export default {
       d.map(item=>{
         item.paidMoney=Math.abs(item.paidMoney)
       })
-
       this.tableData = d;
     },
     // 选择科目弹框

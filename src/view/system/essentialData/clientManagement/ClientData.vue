@@ -251,7 +251,12 @@
               :edit-rules="validRulesAddress"
               :data="placeList"
               @on-current-change="selection"
-            ></Table>
+            >
+              <template slot-scope="{ row }" slot="isDefault">
+                <span style="color:#2399ff;cursor:pointer" v-if="!row.isDefault" @click.stop="setDefault(row.id)">否</span>
+                <span v-else>是</span>
+              </template>
+            </Table>
           </div>
           <Modal v-model="newplace" :title="title" width="700">
             <Newplace :data="oneNew" :place="provincearr" ref="child"></Newplace>
@@ -697,13 +702,27 @@ export default {
         },
         {
           title: "默认",
-          key: "id",
-          align: "isDefault",
-          render: (h, params) => {
-            let text = "";
-            params.row.isDefault ? (text = "是") : (text = "否");
-            return h("span", {}, text);
-          }
+          key: "isDefault",
+          slot: 'isDefault',
+          align: "center",
+          // render: (h, params) => {
+          //   let text = "";
+          //   params.row.isDefault ? (text = "是") : (text = "否");
+          //   let style=!params.row.isDefault?{
+          //     color:'#2399ff',
+          //     cursor:'pointer'
+          //   }:"";
+          //   return h("span", {
+          //     style,
+          //     on:{
+          //       'click.stop':()=>{
+          //         if(!params.row.isDefault){
+          //           this.setDefault(params.row.id)
+          //         }
+          //       }
+          //     }
+          //   }, text);
+          // }
         }
       ],
       columns1: [
@@ -871,6 +890,17 @@ export default {
     this.sessionKey = sessionStorage.getItem("key");
   },
   methods: {
+    //设置为默认收货地址
+    setDefault(id){
+      this.placeList.map(item => {
+        if(item.id==id){
+          item.isDefault = 1;
+        }else{
+          item.isDefault = 0;
+        }
+      });
+      this.oneNew = {};
+    },
     //获取关联客户
     async getClienlist() {
       this.loading1 = true;
@@ -1033,7 +1063,7 @@ export default {
     },
     // 获取新增地址
     selection(item) {
-      this.oneNew = item;
+      this.oneNew = {...item};
       this.oneNew.isDefault == 1
         ? (this.oneNew.isDefault = true)
         : (this.oneNew.isDefault = false);
@@ -1047,6 +1077,15 @@ export default {
             ? (this.oneNew.isDefault = 1)
             : (this.oneNew.isDefault = 0);
           let idx = this.placeList.findIndex(item => item.id == this.oneNew.id);
+          if(this.placeList.length>1){
+            this.placeList.map((item,index) => {
+              if(this.oneNew.isDefault){
+                if(index!=idx){
+                  item.isDefault = 0
+                }
+              }
+            })
+          }
           this.$set(this.placeList, idx, this.oneNew);
           this.data.guestLogisticsVOList = this.placeList;
           this.newplace = false;
@@ -1059,6 +1098,13 @@ export default {
           newarr = JSON.parse(JSON.stringify(this.oneNew));
           newarr.id = this.id;
           this.id++;
+          if(this.placeList.length>1){
+            this.placeList.map((item,index) => {
+              if(this.oneNew.isDefault){
+                item.isDefault = 0
+              }
+            })
+          }
           this.placeList.push(newarr);
           this.data.guestLogisticsVOList = this.placeList;
           this.newplace = false;
