@@ -351,9 +351,10 @@ export default {
 
     //获取科目返回的数据
     getsubBack(row) {
-      // console.log(row)
+      // console.log(row.titleCode,this.subjectType,1111)
       this.$set(this.subjectType, "accountEntry", row.titleName);
-      // 刷新列表方法
+      this.$set(this.subjectType,"accountEntryCode",row.titleCode)
+      // 刷新列表方法 accountEntryCode
       this.$refs.xTable.refreshColumn();
     },
 
@@ -511,6 +512,7 @@ export default {
 
     //保存审核
     async save(type) {
+      console.log(this.formInline.expenseDetails,1111)
       if (this.formInline.expenseDetails[0].billTypeId == "010101") {
         // console.log(this.formInline.expenseDetails[0].billTypeId,111)
         // const roleValid = ({cellValue, row}) => {
