@@ -536,6 +536,13 @@
             align: "center",
             width: 40
           },
+          //businessType
+          {
+            title: "业务类别",
+            key: "businessType",
+            align: "center",
+            width: 100
+          },
           {
             title: "所属区域",
             key: "area",
