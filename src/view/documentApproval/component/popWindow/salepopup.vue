@@ -34,6 +34,7 @@
       type="button"
       @click="submission"
       :disabled="modelType.type==3"
+      v-noresub
     >提交申请</button>
 <!--    <button-->
 <!--      class="ivu-btn ivu-btn-default mr10"-->

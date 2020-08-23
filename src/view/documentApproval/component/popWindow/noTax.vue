@@ -28,6 +28,7 @@
       type="button"
       @click="submission"
       v-has="'examine'"
+      v-noresub
       :disabled="modelType.type!==1"
     >提交申请</button>
     <h4 class="mt10 mb10">基本信息</h4>

@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="Settlement" title="对账单收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
-      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+      <button class="ivu-btn ivu-btn-default mr10" type="button" v-noresub @click="conserve">保存</button>
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">

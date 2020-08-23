@@ -11,6 +11,7 @@
       class="ivu-btn ivu-btn-default mr10"
       type="button"
       @click="submission"
+      v-noresub
       v-has="'examine'"
     >保存并提交
     </button>
