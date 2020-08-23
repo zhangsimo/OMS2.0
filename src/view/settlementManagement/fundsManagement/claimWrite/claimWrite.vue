@@ -982,7 +982,7 @@
           }
           this.claimedSubjectList.map(item => {
             item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
-            item.incomeMoney=item.rpAmt
+            // item.incomeMoney=item.rpAmt
             item.balanceMoney = Math.abs(item.unClaimedAmt)
           })
           this.$refs.accrued.open();
@@ -1002,7 +1002,8 @@
               item.incomeMoney = item.unClaimedAmt;
               if (claimTit = "预收款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
-                item.incomeMoney=item.rpAmt
+                item.balanceMoney = Math.abs(item.unClaimedAmt);
+                // item.incomeMoney=item.rpAmt
               } else {
                 item.balanceMoney = Math.abs(item.unClaimedAmt);
               }
@@ -1032,7 +1033,7 @@
               item.paidMoney = item.unClaimedAmt;
               if (claimTit = "预付款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
-                item.incomeMoney=item.rpAmt
+                // item.incomeMoney=item.rpAmt
               } else {
                 item.balanceMoney = Math.abs(item.unClaimedAmt);
               }
