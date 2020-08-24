@@ -115,7 +115,7 @@
             <Input v-model="invoice.address" class="ml5 w200" />
           </FormItem>
           <FormItem label="电话" prop="phone">
-            <Input v-model="invoice.phone" class="ml5 w200" />
+            <Input v-model="invoice.phone" class="ml5 w200" placeholder="固定电话格式为xxx-xxxxxx"/>
           </FormItem>
           <FormItem label="寄件方式" prop="sendingWay">
             <Select v-model="invoice.sendingWay" class="ml5 w200">
@@ -345,7 +345,19 @@ export default {
         return Promise.reject(new Error('申请开票金额不能大于未开票金额'))
       }
     }
-
+    const validPhone = (rule , value ,callback) => {
+        let phone = /^(\d{3,4}-)?\d{7,8}$/
+        let tel = /^1[3456789]\d{9}$/
+      if (value) {
+        if (phone.test(value) || tel.test(value)) {
+          callback();
+        } else {
+          callback(new Error("电话号码格式不对"));
+        }
+      } else {
+        callback(new Error("电话号码不能为空"));
+      }
+    }
     const thisOneMoney = ({ cellValue, rule, rules, row, }) => {
       if(row.invoiceNotAmt < cellValue) {
         return Promise.reject(new Error('申请开票金额不能大于未开票金额'))
@@ -497,7 +509,7 @@ export default {
         phone: [
           {
             required: true,
-            message: "电话不能为空"
+            validator: validPhone,
           }
         ],
         sendingWay: [
