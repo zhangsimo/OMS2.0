@@ -22,7 +22,7 @@
               <!--&gt;-->
             <!--</Select>-->
             <!--<supplier-cus placeholder="输入供应商名称" ref="supplier" :disabled-prop="false" @throwName="throwNameFun" @throwNameNull="throwNameNull"></supplier-cus>-->
-            <Input class="w200" v-model="Outform.guestName"/>
+            <Input class="w200" placeholder="输入供应商名称" v-model="Outform.guestName"/>
           </FormItem>
           <FormItem>
             <Input
