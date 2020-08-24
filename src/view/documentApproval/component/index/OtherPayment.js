@@ -76,7 +76,7 @@ export default {
   methods: {
     //模态框打开111
     open() {
-      console.log(this.list.type)
+      // console.log(this.list.type)
       this.$refs.documentTable.recalculate(true)
       this.company = []
       this.payUserList = this.list.payList
@@ -221,8 +221,7 @@ export default {
 
     changeCollectionUname(v) {
       let arr = this.receiverArr.filter(item => item.id == v.value);
-      this.formInline.receiveGuestName=this.company.filter(item=>item.value==this.formInline.receiveGuestId)[0].label
-      this.getOrignCompany(this.formInline.receiveGuestName)
+      this.getOrignCompany(arr[0].guestId)
       this.setReceiverInfo(arr[0]);
     },
 
@@ -245,7 +244,8 @@ export default {
       this.$set(this.formInline, "details", [row]);
       this.formInline.receiveGuestId = row.guestId;
       this.getAccountNameList({value:row.guestId})
-      // await this.getOrignCompany(row.guestName)
+      await this.getOrignCompany(row.guestName)
+      // console.log(this.company,1111)
       // this.formInline.receiveGuestId=this.company[0].value
       // this.getCompany(this.company[0])
     },

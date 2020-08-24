@@ -8,7 +8,7 @@
       <div class="clearfix">
         <div class="fr">
           <Button class="mr10" v-if="!modelType" @click="save(0)">保存草稿</Button>
-          <Button class="mr10" v-if="!modelType" @click="save(1)">提交申请</Button>
+          <Button class="mr10" v-noresub v-if="!modelType" @click="save(1)">提交申请</Button>
           <Button class="mr10" @click="model =false">取消</Button>
         </div>
       </div>
@@ -91,7 +91,7 @@
           <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
           <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
           <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
-          <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
+          <vxe-table-column field="paymentBalance" title="其他付款余额"></vxe-table-column>
         </vxe-table>
 
 

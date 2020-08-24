@@ -59,11 +59,12 @@
         size="small"
         :data="tableData"
         show-overflow
-        :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
+        @cell-dblclick="dblclick"
         auto-resize
       >
+<!--        :checkbox-config="{trigger: 'row', highlight: true, range: true }"-->
         <vxe-table-column
           type="checkbox"
           width="60"
@@ -97,11 +98,12 @@
         size="small"
         :data="tableData"
         show-overflow
-        :checkbox-config="{trigger: 'row', highlight: true, range: true ,reserve:true}"
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
+        @cell-dblclick="dblclick"
         auto-resize
       >
+<!--        :checkbox-config="{trigger: 'row', highlight: true, range: true }"-->
         <vxe-table-column
           type="checkbox"
           width="60"
@@ -203,6 +205,7 @@ export default class ProcurementModal extends Vue {
 
   private tableDataBm: Array<any> = new Array();
 
+  private selectTableItem:any;
   private init() {
     let tableRef:any = this.$refs.xTable1;
     tableRef.refreshColumn();
@@ -216,7 +219,10 @@ export default class ProcurementModal extends Vue {
   get changeShowFirst(){
     return this.$store.state.user.userData.currentCompany.isMaster == 0 ? true: false
   }
-
+  //双击添加配件
+  private dblclick(row){
+    this.$emit("dblclickfun",[row.row])
+  }
   @Emit('getPlanOrder')
   private ok() {
     let selectRow = JSON.parse(JSON.stringify(this.selectRow));
@@ -307,7 +313,7 @@ export default class ProcurementModal extends Vue {
 
   //获取保留复选数据
   getReserve(v){
-    console.log(v)
+    // console.log(v)
   }
 
 

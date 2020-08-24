@@ -9,6 +9,7 @@
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
+      v-noresub
       @click="submission"
       v-has="'examine'"
     >提交申请</button>

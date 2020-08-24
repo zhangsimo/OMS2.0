@@ -42,6 +42,7 @@
                 type="button"
                 @click="preservationSubmission"
                 v-if="modelType.type!=3"
+                v-noresub
               >保存并提交</button>
               <button
                 class="mr10 ivu-btn ivu-btn-default"

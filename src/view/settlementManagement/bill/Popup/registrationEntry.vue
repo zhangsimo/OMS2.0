@@ -12,6 +12,7 @@
       type="button"
       @click="submission"
       v-has="'examine'"
+      v-noresub
     >保存并提交
     </button>
     <h4 class="mt10 mb10">分店名称：{{orgName}}</h4>
@@ -73,7 +74,7 @@
       <vxe-table-column
         field="invoicePurchaserId"
         width="150" title="发票采购方名称"
-        :edit-render="{name: 'Select', options: purchaserList, optionProps: {value: 'id', label: 'name'}}">
+        :edit-render="{name: 'Select', options: purchaserList, optionProps: {value: 'id', label: 'itemName'}}">
       </vxe-table-column>
       <vxe-table-column
         field="invoiceCode"
@@ -198,10 +199,11 @@
 <script>
   import account from "./accountregistration";
   import idDetailed from "../components/idDetailed";
+  // import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
   //新增 开票信息 弹框
   import AddInoice from "@/view/system/essentialData/clientManagement/AddInoice";
   import {getDataDictionaryTable} from "@/api/system/dataDictionary/dataDictionaryApi";
-  import {getInvoiceSellerList/** 获取发票销售方名称数组*/, postInvoiceSellerList/**弹框新增开票信息*/} from "@/api/bill/popup.js"
+  import {getInvoiceSellerList/** 获取发票销售方名称数组*/, postInvoiceSellerList/**弹框新增开票信息*/} from "@/api/bill/popup.js";
   import moment from 'moment'
   import {
     submit,
@@ -402,7 +404,7 @@
       async addOpenSup() {
         let id = this.accountData[0].guestId;
         let res = await isWG({ id });
-        if(res.code == 0 && res.data.isSupplier == 1) {
+        if(res.code == 0 && res.data.isClient == 1) {
           return this.$message.error("该往来单位为客户非供应商，如需新增，请联系财务人员");
         }
         this.newInoiceShow = true;
@@ -454,11 +456,18 @@
       // 对话框是否显示
       visChange(flag) {
         if (flag) {
-          this.purchaserList = this.$parent.Branchstore;
+          this.getkpList()
           this.detailed();
         }
       },
-      bba(v,i){
+      // 开票单位数据字典
+      getkpList() {
+        getDataDictionaryTable({dictCode: "KPDW"}).then(res => {
+          this.purchaserList =  res.data
+        })
+      },
+
+  bba(v,i){
           this.tableData[i]['taxAmt'] = ((v.totalAmt || 0) / (1 + v.taxRate) * v.taxRate).toFixed(2);
           this.tableData[i]['invoiceAmt'] = ((v.totalAmt || 0) / (1 + v.taxRate)).toFixed(2);
 
@@ -468,6 +477,7 @@
         detailedIncrease({id: this.arrId[2]}).then(res => {
           if (res.code === 0) {
             this.tableData = res.data;
+            console.log(res.data , 78798)
             if (this.tableData.length < 1) {
               this.addRows()
             }
@@ -481,7 +491,6 @@
       // 数据字典
       getDictionary(dictCode) {
         getDataDictionaryTable({dictCode}).then(res => {
-          console.log(res)
           if (res.data[0].dictCode === "PAYMENT_TYPE") {
             res.data.map(item => {
               this.paymentMethod.push({
@@ -622,7 +631,6 @@
             : date.getMonth() + 1;
         let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
         date = date.getFullYear().toString() + m + d;
-        this.purchaserList = this.$parent.Branchstore;
         //获取该对账单是油品还是配件
         let statementType = this.$parent.reconciliationStatement.statementType && this.$parent.reconciliationStatement.statementType.value || "";
         if (this.tableData.length > 0) {

@@ -34,7 +34,8 @@
               v-model="search.guestId"
               class="w120"
               :placeholder="placeHMod"
-              filterable clearable
+              filterable
+              clearable
             >
               <Option
                 v-for="item in outArr"
@@ -50,6 +51,7 @@
               class="w120"
               placeholder="请选择门店"
               :disabled="selectShopList"
+              clearable
               filterable
               @on-change="getWares(search.orgid)"
             >
@@ -95,7 +97,9 @@ import more from "./more";
 import * as api from "_api/reportForm/index.js";
 import { creat } from "@/view/settlementManagement/components";
 import {getWares} from "@/view/reportForm/until.js"
-
+import {
+  transferringFindForAllot
+} from "_api/purchasing/purchasePlan";
 export default {
   components: { QuickDate, more },
   props: {
@@ -137,11 +141,13 @@ export default {
     }
   },
   async mounted() {
-    let resS = await api.getSupplier();
+    let resS = await transferringFindForAllot({page:0,size:1000});
+    // let resS = await api.getSupplier();
     let resE = await api.getStorelist();
     if (resS.code == 0) {
       console.log(resS , 7879)
-      this.outArr = resS.data;
+      this.outArr = resS.data.content||[];
+      // this.outArr = resS.data||[];
     }
     if(resE.code == 0) {
        let data = resE.data;

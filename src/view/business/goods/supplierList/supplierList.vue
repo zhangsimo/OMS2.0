@@ -444,6 +444,7 @@
       :guestId="guestidId"
       :storeId="formPlan.warehouse"
       @getPlanOrder="getPlanOrder"
+      @dblclickfun="dblclick"
     ></procurement>
     <!--供应商资料-->
     <select-supplier
@@ -776,6 +777,38 @@
         orderQtyColumn.editRender.attrs.disabled = isDisabled;
         remarkColumn.editRender.attrs.disabled = isDisabled;
       },
+      //双击添加配件
+      dblclick(val) {
+        var datas = [...val].map(el => {
+          el.orderQty = undefined;
+          el.outUnitId = el.enterUnitId;
+          el.unit = el.enterUnitId;
+          el.systemUnitId = el.enterUnitId;
+          el.canReQty = el.rtnableQty;
+          el.orginOrderQty = el.orderQty;
+          el.orderQty = el.rtnableQty;
+          el.orderPrice = el.enterPrice;
+          el.partInnerId = el.partId;
+          el.uuid = v4();
+          return el;
+        });
+        var arr = [];
+        datas.forEach(item => {
+          let filterArr = this.Right.tbdata.map(({partCode}) => partCode)
+          if (!filterArr.includes(item.partCode)) {
+            arr.push(item)
+          }
+        })
+        arr.forEach(item => {
+          delete item.id;
+          this.Right.tbdata.unshift(item);
+        });
+        if (arr.length != datas.length) {
+          this.$Message.success("配件已存在请勿重复添加");
+        } else {
+          this.$Message.success("已添加");
+        }
+      },
       //删除配件
       async Delete() {
         if (this.checkboxArr.length > 0) {
@@ -854,15 +887,15 @@
           item._highlight = false;
         }
         this.formPlan.cause = "", //退货原因
-        this.formPlan.clearing = "020502", //结算方式
-        this.formPlan.guestName = "", //供应商
-        this.formPlan.storeId = this.$store.state.user.userData.id, //退货员
-        this.formPlan.orderDate = tools.transTime(new Date()), //退货日期
-        this.formPlan.remark = "", //备注
-        this.formPlan.warehouse = this.defaultStore, //退货仓库
-        this.formPlan.serviceId = "", //采购单号
-        this.formPlan.numbers = "", //采退单号
-        this.Right.tbdata = [];
+          this.formPlan.clearing = "020502", //结算方式
+          this.formPlan.guestName = "", //供应商
+          this.formPlan.storeId = this.$store.state.user.userData.id, //退货员
+          this.formPlan.orderDate = tools.transTime(new Date()), //退货日期
+          this.formPlan.remark = "", //备注
+          this.formPlan.warehouse = this.defaultStore, //退货仓库
+          this.formPlan.serviceId = "", //采购单号
+          this.formPlan.numbers = "", //采退单号
+          this.Right.tbdata = [];
         this.isAdd = false;
         this.Left.tbdata.unshift(this.PTrow);
         this.datadata = this.PTrow;

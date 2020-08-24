@@ -601,7 +601,7 @@ export default {
         let item = {...item1}
         item.accountBankNo=item.accountName
         item.subjectName=item.mateAccountName
-        item.paidMoney = item.rpAmt
+        item.paidMoney = Math.abs(item.rpAmt)
         item.thisClaimedAmt  = item.rpAmt
         return item
       })
@@ -609,6 +609,7 @@ export default {
       if(this.claimTit=="预付款认领"){
         this.$refs.settlement.gettlementData.sign="9"
         this.$refs.settlement.gettlementData.accountNo=this.currentAccountItem.serviceId;
+        thisData.map(item=>item.paidMoney=Math.abs(item.paidMoney))
         this.$refs.settlement.setData(thisData)
       }else{
         this.$refs.settlement2.setData(thisData)

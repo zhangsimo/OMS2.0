@@ -224,7 +224,7 @@ export const mixSelectPartCom = {
         let filterData = res.data.content.filter(
           item => item.qualityCode == "000070" || item.qualityCode == "000071"
         );
-        console.log(filterData);
+        // console.log(filterData);
         if (filterData.length > 0) {
           if (filterData[0].children && filterData[0].children.length > 0) {
             filterData[0].children.map(item => {
@@ -283,7 +283,7 @@ export const mixSelectPartCom = {
         this.$emit('selectPartName',this.selectTableItem);
         this.searchPartLayer = false;
       } else {
-        console.log("请选择数据");
+        // console.log("请选择数据");
 
         this.$Message.error("请选择数据");
       }

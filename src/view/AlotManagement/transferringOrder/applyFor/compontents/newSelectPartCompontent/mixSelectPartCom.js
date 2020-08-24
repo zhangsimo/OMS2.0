@@ -103,12 +103,12 @@ export const mixSelectPartCom = {
           minWidth: 120,
         },
         {
-          title: "门店可售库存",
+          title: "对方可售",
           key: "callerStock",
           minWidth: 120,
         },
         {
-          title: "总部可售库存",
+          title: "总部可用",
           key: "headquartersStock",
           minWidth: 120,
         },
@@ -269,7 +269,10 @@ export const mixSelectPartCom = {
       if (this.partName.trim()) {
         data.partCode = this.partName.trim();
       }
+      //传入调入仓库 否则后端 本店可售 查不出值
+      data.stockId=this.$parent.formPlan.storeId;
       data.orgId = this.$parent.isInternalId||"";
+
       req.page = this.page.num - 1;
       req.size = this.page.size;
       getCarPartsTwo(req, data).then(res => {

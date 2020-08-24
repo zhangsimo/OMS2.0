@@ -89,6 +89,7 @@
                 <button
                   class="mr8 ivu-btn ivu-btn-default"
                   type="button"
+                  v-noresub
                   @click="preservationSubmission"
                   :disabled="disabledBtn"
                 >提交
