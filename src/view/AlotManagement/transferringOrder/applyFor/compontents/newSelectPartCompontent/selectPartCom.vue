@@ -61,6 +61,9 @@
             :columns="columnsPart"
             :data="partData"
             @on-row-dblclick="dblclick"
+            size="small"
+            highlight-row
+            @on-current-change="currentItem"
           >
             <template slot-scope="{ row, index }" slot="action">
               <a @click="show(row)">查看</a>
@@ -186,6 +189,7 @@
                 size="mini"
                 align="center"
                 height="200"
+                :loading="loading2"
                 highlight-hover-row
                 :data="allList.chainStock"
               >
@@ -227,6 +231,7 @@
                 align="center"
                 height="200"
                 highlight-hover-row
+                :loading="loading2"
                 :data="allList.sellHistory"
               >
                 <vxe-table-column
@@ -284,6 +289,7 @@
                 height="200"
                 size="mini"
                 highlight-hover-row
+                :loading="loading2"
                 :data="allList.priceLever"
               >
                 <vxe-table-column

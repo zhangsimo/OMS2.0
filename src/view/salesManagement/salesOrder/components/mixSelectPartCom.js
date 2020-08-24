@@ -39,12 +39,12 @@ export const mixSelectPartCom = {
           type: "selection",
           minWidth: 50
         },
-        {
-          title: '详情',
-          slot: 'action',
-          width: 60,
-          align: 'center'
-        },
+        // {
+        //   title: '详情',
+        //   slot: 'action',
+        //   width: 60,
+        //   align: 'center'
+        // },
 
         {
           title: "编码",
@@ -70,7 +70,7 @@ export const mixSelectPartCom = {
         {
           title: "品牌",
           key: "partBrand",
-          minWidth: 120,
+          minWidth: 80,
           filters: [],
           filterMethod(value, row) {
             if(!value){
@@ -86,7 +86,7 @@ export const mixSelectPartCom = {
         {
           title: "品质",
           key: "quality",
-          minWidth: 120
+          minWidth: 80
         },
         {
           title: "OEM码",
@@ -99,7 +99,7 @@ export const mixSelectPartCom = {
         {
           title: "本店可售",
           key: "outableQty",
-          minWidth: 120,
+          minWidth: 80,
         },
         {
           title: "内码",
@@ -112,7 +112,7 @@ export const mixSelectPartCom = {
         {
           title: "单位",
           key: "minUnit",
-          minWidth: 120,
+          minWidth: 80,
           render:(h,p) => {
             return h('span',p.row.minUnit||p.row.unit)
           }
@@ -236,7 +236,8 @@ export const mixSelectPartCom = {
         }
       ],
       //获取点击的数据
-      allList: {}
+      allList: {},
+      loading1:false,
     };
   },
   mounted() {
@@ -271,7 +272,7 @@ export const mixSelectPartCom = {
           set.forEach(el => {
             this.bands.push({label: el, value: el});
           })
-          this.columnsPart[6].filters = this.bands;
+          this.columnsPart[5].filters = this.bands;
           });
       }else if(this.keyType==1){
         req.storeId=this.storeId;
@@ -288,7 +289,7 @@ export const mixSelectPartCom = {
           set.forEach(el => {
             this.bands.push({label: el, value: el});
           })
-          this.columnsPart[6].filters = this.bands;
+          this.columnsPart[5].filters = this.bands;
         })
       }
 
@@ -407,7 +408,9 @@ export const mixSelectPartCom = {
       }
       data.guestId = this.guestId
       data.storeId = this.storeId;
+      this.loading1 = true;
       getDetails(data).then(res => {
+        this.loading1 = false;
         if (res.code === 0) {
           this.allList = res.data;
           this.allList.priceLever.forEach(element => {
@@ -416,6 +419,11 @@ export const mixSelectPartCom = {
         }
       });
     },
+
+    clickItem(v){
+      this.show(v);
+    },
+
     //双击显示
     dblclick(v){
       if(this.$route.name=="salesOrder"){

@@ -13,13 +13,13 @@
               class="w200"
             ></Date-picker>
           </div>
-<!--          type="daterange"-->
+          <!--          type="daterange"-->
           <div class="db ml15">
             <span>门店：</span>
             <Select :disabled="selectShopList" class="w150" v-model="store">
               <Option
                 v-for="(item,index) in Branchstore"
-                :value="item.id"
+                :value="item.code"
                 :key="item.id"
               >{{ item.name }}
               </Option
@@ -571,9 +571,9 @@
         tableData: [], // 未审核
         tableData1: [], // 已审核
         date: '', // 发生日期
-        store: "", // 门店id
+        store: "", // 门店code
         // single:0,//复选框状态
-        Branchstore: [{id: "0", name: "全部"}], //分店名称
+        Branchstore: [{code: "0", name: "全部"}], //分店名称
         subjectId: '0', // 对应科目id
         subjecties: [{id: '0', titleName: "全部"}], // 科目
         content: "", // 撤销原因
@@ -599,17 +599,20 @@
         mateAccountCode: '',//对应科目
         options: [],
         date2: "",
-        shenhe:false
+        shenhe: false
       };
     },
     async mounted() {
-      this.getTreeListFun();
+      await this.getTreeListFun();
       let arr = await creat("", this.$store);
-      this.$nextTick(() => {
-        this.store = arr[1]
-        this.query();
+      await this.getShop()
+      let storeId = arr[1]
+      this.Branchstore.map(item => {
+        if(item.id == storeId){
+          this.store =item.code;
+        }
       })
-      this.getShop()
+      this.query()
     },
     computed: {
       selectShopList() {
@@ -688,12 +691,12 @@
           mateAccountCode: this.mateAccountCode ? this.mateAccountCode : "",
         };
         // console.log(this.date[0]!="",1111)
-        if(this.date[0]!=""){
-          params.startTime=tools.transDate(this.date[0])+" 00:00:00";
-          params.endTime=tools.transDate(this.date[1])+" 23:59:59"
-        }else{
-          params.startTime="";
-          params.endTime=""
+        if (this.date[0] != "") {
+          params.startTime = tools.transDate(this.date[0]) + " 00:00:00";
+          params.endTime = tools.transDate(this.date[1]) + " 23:59:59"
+        } else {
+          params.startTime = "";
+          params.endTime = ""
         }
         // this.date!=""?params.startTime=tools.transDate(this.date[0])+" 00:00:00":""
         // this.date!=""?params.endTime=tools.transDate(this.date[1])+" 23:59:59":""
@@ -781,10 +784,10 @@
       },
       // 审核
       SubmitAudit() {
-        this.shenhe=true
+        this.shenhe = true
       },
       //确认审核
-      async shenheOk(){
+      async shenheOk() {
         let occurTime = "";
         if (this.date2) {
           occurTime = moment(this.date2).format("YYYY-MM-DD");
@@ -803,13 +806,13 @@
         if (res.code == 0) {
           this.$message.success(res.data);
           this.query();
-          this.shenhe=false
+          this.shenhe = false
         }
       },
       // 取消审核
-      shenheCancel(){
-        this.shenhe=false
-        this.date2=""
+      shenheCancel() {
+        this.shenhe = false
+        this.date2 = ""
       },
       // 撤销审核
       reAudit() {

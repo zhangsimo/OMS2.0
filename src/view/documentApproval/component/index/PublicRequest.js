@@ -101,6 +101,9 @@ export default {
         this.$nextTick( () => {
           this.formInline = res.data
           this.getOptionsList(res.data.receiver)
+          this.remoteMethod2(res.data.paymentAccountName)
+          this.formInline.receiverId=res.data.receiverId
+          // this.formInline.receiver=res.data.receiver
           this.details = res.data.details || []
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
@@ -190,9 +193,11 @@ export default {
     save(type){
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
-          if(this.formInline.requestInstructionNo){
-            if(parseFloat(this.formInline.applyAmt)>parseFloat(this.formInline.requestInfo.amtTotal)){
-              return this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
+          if(type==1){
+            if(this.formInline.requestInstructionNo){
+              if(parseFloat(this.formInline.applyAmt)>parseFloat(this.formInline.requestInfo.amtTotal)){
+                return this.$Message.error("借支金额不能大于申请单金额，请重新输入！")
+              }
             }
           }
           if (this.canSave)return this.$Message.warning('处理中...')

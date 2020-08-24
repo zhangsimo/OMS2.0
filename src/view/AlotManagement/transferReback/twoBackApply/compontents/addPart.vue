@@ -300,6 +300,14 @@
     }
     //双击添加配件
     private dblclick(row){
+      if (row.row.length <= 0) {
+        return this.$Message.error('请勾选要选择的配件!');
+      }
+      row.row.sourceDetailId = row.row.id;
+      row.row.batchSourceId = row.row.id;
+      if (row.row.batchSourceId) {
+        Reflect.deleteProperty(row.row, 'id');
+      }
       this.$emit("dblclickfun",[row.row])
     }
 
