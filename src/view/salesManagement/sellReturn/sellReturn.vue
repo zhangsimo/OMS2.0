@@ -415,7 +415,7 @@
       :guestId="formPlan.guestId"
       :storeId="formPlan.storeId"
       @getPlanOrder="getPlanOrder"
-      @dblclickfun="dblclick"
+      @dblclickfun="getPlanOrder"
     ></procurement>
   </div>
 </template>
@@ -706,38 +706,6 @@
           this.leftTableHeight = wrapH - 90;
           this.rightTableHeight = wrapH - planFormH - 120;
         });
-      },
-      //双击添加配件
-      dblclick(val) {
-        var datas = [...val].map(el => {
-          el.partInnerId = el.partId;
-          el.prevDetailId = el.sourceDetailId;
-          el.outUnitId = el.systemUnitId;
-          el.unit = el.systemUnitId;
-          el.enterUnitId = el.systemUnitId;
-          el.orderQty = el.rtnableQty;
-          el.orderPrice = el.sellPrice;
-          el.oid = v4();
-          el.uuid = el.oid;
-          return el;
-        });
-        var arr = [];
-        this.formPlan.details == null ?this.formPlan.details =  [] : this.formPlan.details
-        datas.forEach(item => {
-          let filterArr = this.formPlan.details.map(({partCode}) => partCode)
-          if (!filterArr.includes(item.partCode)) {
-            arr.push(item)
-          }
-        })
-        arr.forEach(item => {
-          delete item.id;
-          this.formPlan.details.unshift(item);
-        });
-        if (arr.length != datas.length) {
-          this.$Message.success("配件已存在请勿重复添加");
-        } else {
-          this.$Message.success("已添加");
-        }
       },
       //检验仓位（参照采购入库）
       checkSelf({row: {storeShelf}}) {
