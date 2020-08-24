@@ -512,7 +512,7 @@ export default {
 
     //保存审核
     async save(type) {
-      console.log(this.formInline.expenseDetails,1111)
+      // console.log(this.formInline.expenseDetails,1111)
       if (this.formInline.expenseDetails[0].billTypeId == "010101") {
         // console.log(this.formInline.expenseDetails[0].billTypeId,111)
         // const roleValid = ({cellValue, row}) => {
