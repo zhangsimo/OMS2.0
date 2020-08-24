@@ -71,7 +71,7 @@ export const mixSelectPartCom = {
         {
           title: "品牌",
           key: "partBrand",
-          minWidth: 120,
+          minWidth: 80,
           filters: [],
           filterMethod(value, row) {
             if(!value){
@@ -87,7 +87,7 @@ export const mixSelectPartCom = {
         {
           title: "品质",
           key: "quality",
-          minWidth: 120
+          minWidth: 80
         },
         {
           title: "OEM码",
@@ -100,17 +100,17 @@ export const mixSelectPartCom = {
         {
           title: "本店可售",
           key: "outableQty",
-          minWidth: 120,
+          minWidth: 80,
         },
         {
           title: "对方可售",
           key: "callerStock",
-          minWidth: 120,
+          minWidth: 80,
         },
         {
           title: "总部可用",
           key: "headquartersStock",
-          minWidth: 120,
+          minWidth: 80,
         },
         {
           title: "内码",
