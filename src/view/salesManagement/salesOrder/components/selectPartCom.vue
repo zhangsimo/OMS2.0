@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1000" class="sales-part-model">
       <div class="partCheck-hd">
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
@@ -53,14 +53,17 @@
         <!--    partCheck-right原来为758px    -->
         <div class="fr partCheck-right" style="width:100%">
           <Table
-            height="389"
+            height="280"
             @on-selection-change="selectTabelData"
+            @on-current-change="clickItem"
             :loading="loading"
             border
             :stripe="true"
             :columns="columnsPart"
             :data="partData"
             @on-row-dblclick="dblclick"
+            highlight-row
+            size="small"
           >
             <template slot-scope="{ row, index }" slot="action">
               <a @click="show(row)">查看</a>
@@ -138,6 +141,7 @@
                 auto-resize
                 resizable
                 align="center"
+                :loading="loading1"
                 size="mini"
                 height="200"
                 highlight-hover-row
@@ -186,6 +190,7 @@
                 align="center"
                 height="200"
                 highlight-hover-row
+                :loading="loading1"
                 :data="allList.chainStock"
               >
                 <vxe-table-column
@@ -226,6 +231,7 @@
                 align="center"
                 height="200"
                 highlight-hover-row
+                :loading="loading1"
                 :data="allList.sellHistory"
               >
                 <vxe-table-column
@@ -282,6 +288,7 @@
                 align="center"
                 height="200"
                 size="mini"
+                :loading="loading1"
                 highlight-hover-row
                 :data="allList.priceLever"
               >
@@ -390,4 +397,9 @@ export default {
     }
   }
 }
+</style>
+<style>
+  .sales-part-model .ivu-modal{
+    top:50px;
+  }
 </style>
