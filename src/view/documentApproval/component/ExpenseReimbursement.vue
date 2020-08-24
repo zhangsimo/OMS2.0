@@ -7,7 +7,7 @@
           >保存草稿
           </Button
           >
-          <Button class="mr10" v-if="!modelType" @click="save(1)"
+          <Button class="mr10" v-noresub v-if="!modelType" @click="save(1)"
           >提交申请
           </Button
           >

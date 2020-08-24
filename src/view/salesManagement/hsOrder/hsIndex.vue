@@ -226,7 +226,7 @@
 
 <script>
   import {getTopList, getClient, selectCompany} from "_api/salesManagment/acceptance.js";
-  import {getHuaShengOrders,setHuaShengOrder,getClientInfo,getHsStore} from "../../../api/salesManagment/sellReturn";
+  import {getHuaShengOrders,setHuaShengOrder,getClientInfo,getHsStore,findInfoById} from "../../../api/salesManagment/sellReturn";
   import getDate from '@/components/getDate/dateget'
   import {getDigitalDictionary} from "../../../api/system/essentialData/clientManagement";
   import {transTime} from "../../../utils/tools";
@@ -854,6 +854,7 @@
           this.WarehouseList.map(item => {
             if(item.isDefault){
               this.formPlan2.storeId = item.id;
+              this.formPlan.storeId = item.id;
             }
           })
         }
@@ -907,7 +908,7 @@
 
       //获取当前客户信息
       async getClientInfo(id){
-        let rep = await getClientInfo({'isInternalId':id})
+        let rep = await findInfoById({'id':id})
         if(rep.code==0){
           let objData = rep.data||{};
           this.formPlan.billTypeId = objData.billTypeId||"";

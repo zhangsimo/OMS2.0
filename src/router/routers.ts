@@ -58,7 +58,7 @@ export default [
     mark: "1",
     redirect: "/multilevel/level_2_1",
     meta: { keepAlive: true,
-      icon: "md-cloud-done",
+      icon: "ios-cart",
       title: "采购管理",
 
     },
@@ -215,7 +215,7 @@ export default [
     redirect: "",
     meta: { keepAlive: true,
       // hideInMenu: true,
-      icon: "ios-paper",
+      icon: "ios-pricetags",
       title: "销售管理",
 
     },
@@ -303,9 +303,9 @@ export default [
     mark: "3",
     redirect: "/allot/one/apply",
     meta: { keepAlive: true,
-      icon: "ios-paper",
+      icon:"md-git-pull-request",
+      // icon: "ios-paper",
       title: "调拨管理",
-
     },
     component: Main,
     children: [
@@ -479,9 +479,8 @@ export default [
     name: "policy",
     mark: "4",
     meta: { keepAlive: true,
-      icon: "ios-paper",
+      icon: "ios-cube",
       title: "库存管理",
-
     },
     component: Main,
     children: [
@@ -588,7 +587,8 @@ export default [
     mark: "5",
     redirect: "/reportForm",
     meta: { keepAlive: true,
-      icon: "ios-paper",
+      icon: "logo-yen",
+      // icon: "ios-paper",
       title: "结算管理"
     },
     component: Main,
@@ -1091,7 +1091,8 @@ export default [
     mark: "11",
     redirect: "/reportForm",
     meta: { keepAlive: true,
-      icon: "ios-paper",
+      icon: "md-brush",
+      // icon: "ios-paper",
       title: "审批管理"
     },
     component: Main,
@@ -1128,9 +1129,12 @@ export default [
     // hideInMenu: true,
     redirect: "/reportForm",
     meta: { keepAlive: true,
-      icon: "ios-paper",
-      title: "报表统计",
-
+      icon: "ios-stats",
+      /**
+       * <Icon type="stats-bars"></Icon>
+       * */
+      // icon: "ios-paper",
+      title: "报表统计"
     },
     component: Main,
     children: [

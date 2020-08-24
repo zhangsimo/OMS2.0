@@ -21,7 +21,7 @@
                 <!--&gt;{{ item.fullName }}</Option-->
               <!--&gt;-->
             <!--</Select>-->
-            <supplier-cus placeholder="输入供应商名称" ref="supplier" :disabled-prop="false" @throwName="throwNameFun"></supplier-cus>
+            <supplier-cus placeholder="输入供应商名称" ref="supplier" :disabled-prop="false" @throwName="throwNameFun" @throwNameNull="throwNameNull"></supplier-cus>
           </FormItem>
           <FormItem>
             <Input
@@ -321,7 +321,7 @@ export default {
         this.Outform.enterDateStart = "";
         this.Outform.enterDateEnd = "";
       }
-      // this.query();
+      this.query();
     },
     //查询
     query() {
@@ -356,6 +356,11 @@ export default {
     },
     throwNameFun(v){
       this.Outform.guestId = v.id ||"";
+    },
+    throwNameNull(v){
+      if(!v){
+        this.Outform.guestId = "";
+      }
     }
   }
 };

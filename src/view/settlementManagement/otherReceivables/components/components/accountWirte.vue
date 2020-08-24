@@ -61,14 +61,14 @@ export default {
         // },
         {
           title: "对账日期",
-          key: "paymentDate",
+          key: "collectionTime",
           className: "tc",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.row.otherInfo[0].paymentDate !== null ? params.row.otherInfo[0].paymentDate : ''
-            );
-          }
+          // render: (h, params) => {
+          //   return h(
+          //     "span",
+          //     params.row.otherInfo[0].collectionTime !== null ? params.row.otherInfo[0].collectionTime : ''
+          //   );
+          // }
         },
         {
           title: "对账单号",
