@@ -40,12 +40,12 @@ export const mixSelectPartCom = {
           type: "selection",
           minWidth: 50
         },
-        {
-          title: '详情',
-          slot: 'action',
-          width: 60,
-          align: 'center'
-        },
+        // {
+        //   title: '详情',
+        //   slot: 'action',
+        //   width: 60,
+        //   align: 'center'
+        // },
 
         {
           title: "编码",
@@ -248,7 +248,7 @@ export const mixSelectPartCom = {
       ],
       //获取点击的数据
       allList: {},
-      loading2:false
+      loading2:false,
     };
   },
   mounted() {
@@ -285,7 +285,8 @@ export const mixSelectPartCom = {
         set.forEach(el => {
           this.bands.push({label: el, value: el});
         })
-        this.columnsPart[6].filters = this.bands;
+
+        this.columnsPart[5].filters = this.bands;
       });
     },
 
@@ -411,6 +412,9 @@ export const mixSelectPartCom = {
           });
         }
       });
+    },
+    currentItem(v){
+      this.show(v)
     },
     //双击显示
     dblclick(v){

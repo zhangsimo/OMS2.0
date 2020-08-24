@@ -272,7 +272,7 @@ export const mixSelectPartCom = {
           set.forEach(el => {
             this.bands.push({label: el, value: el});
           })
-          this.columnsPart[6].filters = this.bands;
+          this.columnsPart[5].filters = this.bands;
           });
       }else if(this.keyType==1){
         req.storeId=this.storeId;
@@ -289,7 +289,7 @@ export const mixSelectPartCom = {
           set.forEach(el => {
             this.bands.push({label: el, value: el});
           })
-          this.columnsPart[6].filters = this.bands;
+          this.columnsPart[5].filters = this.bands;
         })
       }
 
