@@ -39,12 +39,12 @@ export const mixSelectPartCom = {
           type: "selection",
           minWidth: 50
         },
-        {
-          title: '详情',
-          slot: 'action',
-          width: 60,
-          align: 'center'
-        },
+        // {
+        //   title: '详情',
+        //   slot: 'action',
+        //   width: 60,
+        //   align: 'center'
+        // },
 
         {
           title: "编码",
@@ -236,7 +236,8 @@ export const mixSelectPartCom = {
         }
       ],
       //获取点击的数据
-      allList: {}
+      allList: {},
+      loading1:false,
     };
   },
   mounted() {
@@ -407,7 +408,9 @@ export const mixSelectPartCom = {
       }
       data.guestId = this.guestId
       data.storeId = this.storeId;
+      this.loading1 = true;
       getDetails(data).then(res => {
+        this.loading1 = false;
         if (res.code === 0) {
           this.allList = res.data;
           this.allList.priceLever.forEach(element => {
@@ -416,6 +419,11 @@ export const mixSelectPartCom = {
         }
       });
     },
+
+    clickItem(v){
+      this.show(v);
+    },
+
     //双击显示
     dblclick(v){
       if(this.$route.name=="salesOrder"){
