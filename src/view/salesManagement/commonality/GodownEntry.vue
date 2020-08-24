@@ -286,6 +286,7 @@ export default {
         this.page.total = res.data.totalElements;
       }
     },
+
     async getList2(v) {
       let data = {};
       data = this.Outform;
@@ -293,7 +294,9 @@ export default {
       data.size = this.page.size;
       data.storeId = v || this.storeId;
       data.showPerson = this.showSelf? 1 : 0;
+      data.storeId = v || this.storeId;
       this.Loading = true;
+      if (!data.storeId) return
       let res = await getGodown(data);
       if (res.code === 0) {
         this.Loading = false;
