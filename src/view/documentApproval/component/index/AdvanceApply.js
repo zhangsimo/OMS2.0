@@ -293,8 +293,9 @@ export default {
         if (valid) {
           let valg = false
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
-            valg = this.formInline.details[0].payAmt < this.formInline.applyAmt ? true : false
+            valg = parseFloat(this.formInline.details[0].payAmt) < parseFloat(this.formInline.applyAmt) ? true : false
           }
+          // console.log(this.formInline,valg,1111)
           if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
           this.formInline.step = type;
           let res = await getAdvanceSave(this.formInline);

@@ -275,7 +275,7 @@ export default {
         if (valid) {
           let valg = false
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
-            valg = this.formInline.details[0].amountCollected < this.formInline.applyAmt ? true : false
+            valg = parseFloat(this.formInline.details[0].amountCollected) < parseFloat(this.formInline.applyAmt) ? true : false
           }
           this.formInline.paymentTerm=moment(this.formInline.paymentTerm).format("YYYY-MM-DD")+" 23:59:59"
           if (valg) return this.$Message.error('申请金额不能大于单据金额')
