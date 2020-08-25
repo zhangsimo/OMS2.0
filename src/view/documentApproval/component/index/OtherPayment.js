@@ -128,17 +128,15 @@ export default {
       data.id = this.list.id || ''
       let res = await getThisAllList(data)
       if (res.code === 0) {
-        this.$nextTick(() => {
-          this.formInline = res.data
-          this.formInline.receiverId=res.data.receiverId
-          this.getOrignCompany(res.data.receiveGuestName)
-          this.remoteMethod2(res.data.paymentAccountName)
-          this.Pictures = {
-            voucherPictures: res.data.voucherPictures || [],
-            billStatus: res.data.billStatus
-          }
-        })
-
+        this.formInline = res.data
+        this.formInline.receiverId = res.data.receiverId
+        await this.getOrignCompany(res.data.receiveGuestName)
+        this.getCompany(this.company[0])
+        await this.remoteMethod2(res.data.paymentAccountName)
+        this.Pictures = {
+          voucherPictures: res.data.voucherPictures || [],
+          billStatus: res.data.billStatus
+        }
       }
     },
 
@@ -212,7 +210,7 @@ export default {
     },
 
     setReceiverInfo(row) {
-      if(row){
+      if (row) {
         this.formInline.receiverId = row.id;
         this.formInline.receiveBank = row.accountBank;
         this.formInline.receiveBankNo = row.accountBankNo;
@@ -243,7 +241,7 @@ export default {
       row.businessType = row.orderTypeName;
       this.$set(this.formInline, "details", [row]);
       this.formInline.receiveGuestId = row.guestId;
-      this.getAccountNameList({value:row.guestId})
+      this.getAccountNameList({value: row.guestId})
       await this.getOrignCompany(row.guestName)
       // console.log(this.company,1111)
       // this.formInline.receiveGuestId=this.company[0].value
@@ -277,7 +275,7 @@ export default {
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
             valg = parseFloat(this.formInline.details[0].amountCollected) < parseFloat(this.formInline.applyAmt) ? true : false
           }
-          this.formInline.paymentTerm=moment(this.formInline.paymentTerm).format("YYYY-MM-DD")+" 23:59:59"
+          this.formInline.paymentTerm = moment(this.formInline.paymentTerm).format("YYYY-MM-DD") + " 23:59:59"
           if (valg) return this.$Message.error('申请金额不能大于单据金额')
           this.formInline.step = type
           let req = {...this.formInline}
