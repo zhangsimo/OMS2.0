@@ -5,17 +5,11 @@
         <Col span="12">
           <FormItem label="所属门店" >
             <Input  v-model="formCustom.shopName" class="w150" disabled />
-<!--            <Select v-model="formCustom.shopId" style="width:150px" @on-change='getShopCode'>-->
-<!--              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>-->
-<!--            </Select>-->
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="所属区域" >
             <Input  v-model="formCustom.areaName" class="w150" disabled />
-<!--            <Select v-model="formCustom.areaId" style="width:150px" @on-change="changeArea">-->
-<!--              <Option v-for="item in areaList" :value="item.id" :key="item.id">{{ item.companyName }}</Option>-->
-<!--            </Select>-->
           </FormItem>
         </Col>
         <Col span="12">
