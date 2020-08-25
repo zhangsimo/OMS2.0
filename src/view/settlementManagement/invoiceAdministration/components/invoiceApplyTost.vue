@@ -73,7 +73,7 @@
           >
             <Option
               v-for="item in invoice.issuingOfficeList"
-              :value="item.value"
+              :value="item.label"
               :key="item.value"
               >{{ item.label }}</Option
             >
