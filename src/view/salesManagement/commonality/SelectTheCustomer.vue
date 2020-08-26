@@ -2,24 +2,13 @@
   <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
-        <Input
-          v-model="fullName"
-          placeholder="简称/编码"
-          class="mr10"
-          style="width: 250px"
-        />
+        <el-input class="w250 mr10" v-model="fullName" ref="focusInput" placeholder="全称/简称/编码/拼音" @keyup.enter.native="query"></el-input>
         <!--<Input-->
-          <!--v-model="clientCode"-->
-          <!--placeholder="编码"-->
+          <!--v-model="pyName"-->
+          <!--placeholder="拼音"-->
           <!--class="mr10"-->
           <!--style="width: 150px"-->
         <!--/>-->
-        <Input
-          v-model="pyName"
-          placeholder="拼音"
-          class="mr10"
-          style="width: 150px"
-        />
         <Cascader
           :data="clientType"
           @on-change="getType"
@@ -245,6 +234,7 @@ export default {
       // this.getAdress();
       this.getClientTypeList();
       this.addressShow = true;
+      this.$nextTick(()=>this.$refs.focusInput.focus())
     },
     reset() {
       this.fullName = "";

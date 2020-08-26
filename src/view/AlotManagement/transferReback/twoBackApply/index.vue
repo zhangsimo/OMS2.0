@@ -1363,14 +1363,16 @@ export default {
                 }
               }
             } else {
+              if(this.Left.tbdata.length==0){
+                return
+              }
               this.Left.tbdata[0]._highlight = true;
-              this.Leftcurrentrow = this.Left.tbdata[0];
+              this.selectTabelData(this.Left.tbdata[0])
               const params = {
                 mainId: this.Left.tbdata[0].id
               };
               const res = await getListDetail(params);
               this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
-              return;
             }
           }
         })

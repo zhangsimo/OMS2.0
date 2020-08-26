@@ -161,7 +161,7 @@ export const mixSelectSupplier = {
       });
     },
     search() {
-      //this.page.num=1
+      this.page.num=1
       this.getList();
     },
     //系统分类树形节点点击数据
@@ -177,6 +177,7 @@ export const mixSelectSupplier = {
       this.searchPartLayer = true;
       this.getList();
       this.getfindTypeListFun();
+      this.$nextTick(()=>this.$refs.focusInput.focus());
     },
     //配件表格点击的行
     selectTabelData(v) {

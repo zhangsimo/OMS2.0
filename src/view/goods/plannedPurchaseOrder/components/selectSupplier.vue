@@ -2,10 +2,10 @@
   <div>
     <Modal v-model="searchPartLayer" :title="headerTit" width="1000">
       <div class="partCheck-hd">
-        <Input class="w100 mr10" v-model="fullName" placeholder="名称" />
-        <Input class="w100 mr10" v-model="code" placeholder="编码" />
-        <Input class="w100 mr10" v-model="contactorTel" placeholder="电话" />
-        │
+        <!--<Input class="w100 mr10" v-model="fullName" placeholder="名称" />-->
+        <!--<Input class="w100 mr10" v-model="code" placeholder="编码" />-->
+        <!--<Input class="w100 mr10" v-model="contactorTel" placeholder="电话" />-->
+        <el-input class="w250 mr10" v-model="fullName" ref="focusInput" placeholder="全称/简称/编码/拼音" @keyup.enter.native="search"></el-input>
         <!-- <Checkbox class="mr20 ml10" v-model="single" @on-change="search"> 显示禁用</Checkbox> -->
         <Button @click="search" class="mr10" type="primary"
           ><Icon type="ios-search" size="14" /> 查询</Button
@@ -247,6 +247,11 @@ export default class SelectSupplier extends Vue {
     this.searchPartLayer = true;
     this.getCarClassifysFun();
     this.getList();
+
+    let inputFocus:any = this.$refs['focusInput'];
+    this.$nextTick(()=>{
+      inputFocus.focus();
+    })
   }
   //配件表格点击的行
   private selectTabelData(v) {

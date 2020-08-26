@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper" style="height:50vh;">
+  <div class="content-oper" style="height: 100%" ref="operWrap">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="db pl10 tabs-ulwarp">
@@ -29,7 +29,7 @@
         </ul>
       </div>
       <!--      汇总库存表-->
-      <div class="tabs-warp" v-if="tabIndex == 0" >
+      <div class="tabs-warp" v-show="tabIndex == 0" >
         <!--      搜索工具栏-->
         <div class="oper-top flex" >
           <div class="pt10">
@@ -100,25 +100,78 @@
           </div>
         </div>
         <!--    表-->
-        <Table
-          class="table-highlight-row"
-          highlight-row
-          ref="table1"
+        <!--<Table-->
+          <!--class="table-highlight-row"-->
+          <!--highlight-row-->
+          <!--ref="table1"-->
+          <!--border-->
+          <!--size="small"-->
+          <!--:loading="loading1"-->
+          <!--align="left"-->
+          <!--:stripe="true"-->
+          <!--height="400"-->
+          <!--resizable-->
+          <!--:columns="columns1"-->
+          <!--:data="contentOne.dataOne"-->
+          <!--show-summary-->
+          <!--:summary-method="handleSummary"-->
+        <!--&gt;</Table>-->
+        <vxe-table
           border
-          size="small"
-          :loading="loading1"
-          align="left"
-          :stripe="true"
-          height="400"
+          ref="xTable2"
+          :height="tableHeight"
+          highlight-hover-row
+          show-overflow
           resizable
-          :columns="columns1"
-          :data="contentOne.dataOne"
-          show-summary
-          :summary-method="handleSummary"
-        ></Table>
+          :loading="loading1"
+          size="mini"
+          show-footer
+          :footer-method="handleSummary"
+          :data="contentOne.dataOne">
+          <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column field="cz" title="操作" width="50" fixed="left">
+            <template v-slot="{row}">
+              <vxe-button type="text" @click="showList(row);">查看</vxe-button>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
+          <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
+          <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
+          <vxe-table-column field="outableQty" title="可售数量" width="70">
+            <template v-slot="{row}">
+              {{row.sellSign ? 0 : row.outableQty}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
+          <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
+          <vxe-table-column field="costPrice" title="库存单价" width="80">
+            <template v-slot="{row}">
+              {{row.costPrice.toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="stockAmt" title="库存金额" width="90">
+            <template v-slot="{row}">
+              {{row.stockAmt.toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
+          <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
+          <vxe-table-column field="lastEnterDate" title="最近入库日期" width="120"></vxe-table-column>
+          <vxe-table-column field="lastOutDate" title="最近出库日期" width="120"></vxe-table-column>
+          <vxe-table-column field="upLimit" title="库存上限" width="70"></vxe-table-column>
+          <vxe-table-column field="downLimit" title="库存下限" width="70"></vxe-table-column>
+          <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
+          <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
+          <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="150"></vxe-table-column>
+        </vxe-table>
       </div>
       <!--      批次库存表-->
-      <div class="tabs-warp" v-else-if="tabIndex == 1">
+      <div class="tabs-warp" v-show="tabIndex == 1">
         <!--      搜索工具栏-->
         <div class="oper-top flex">
           <div class="pt10">
@@ -192,24 +245,93 @@
           </div>
         </div>
         <!--        表-->
-        <Table
-          class="table-highlight-row"
-          highlight-row
-          size="small"
-          ref="table2"
-          align="left"
+        <!--<Table-->
+          <!--class="table-highlight-row"-->
+          <!--highlight-row-->
+          <!--size="small"-->
+          <!--ref="table2"-->
+          <!--align="left"-->
+          <!--border-->
+          <!--:loading="loading2"-->
+          <!--:stripe="true"-->
+          <!--:columns="columns2"-->
+          <!--:data="contentTwo.dataTwo"-->
+          <!--height="400"-->
+          <!--show-summary-->
+          <!--:summary-method="handleSummary"-->
+        <!--&gt;</Table>-->
+        <vxe-table
           border
+          ref="xTable3"
+          :height="tableHeight"
+          highlight-hover-row
+          show-overflow
+          resizable
           :loading="loading2"
-          :stripe="true"
-          :columns="columns2"
-          :data="contentTwo.dataTwo"
-          height="400"
-          show-summary
-          :summary-method="handleSummary"
-        ></Table>
+          size="mini"
+          show-footer
+          :footer-method="handleSummary"
+          :data="contentTwo.dataTwo">
+          <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column field="guestName" title="供应商" width="140" fixed="left"></vxe-table-column>
+          <vxe-table-column field="createTime" title="入库日期" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" width="110" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" width="110" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
+          <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+          <vxe-table-column field="enterQty" title="入库数量" width="70">
+          </vxe-table-column>
+          <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
+          <vxe-table-column field="enterPrice" title="库存单价" width="80">
+            <template v-slot="{row}">
+              {{row.enterPrice.toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="enterAmt" title="库存金额" width="90">
+            <template v-slot="{row}">
+              {{row.enterAmt.toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="taxRate" title="税率" width="60"></vxe-table-column>
+          <vxe-table-column field="taxPrice" title="含税单价" width="100">
+            <template v-slot="{row}">
+              {{(row.taxPrice || 0).toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="taxAmt" title="含税金额" width="100">
+            <template v-slot="{row}">
+              {{(row.taxAmt || 0).toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="noTaxPrice" title="不含税单价" width="100">
+            <template v-slot="{row}">
+              {{(row.noTaxPrice || 0).toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="noTaxAmt" title="不含税金额" width="100">
+            <template v-slot="{row}">
+              {{(row.noTaxAmt || 0).toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="chainStockAge" title="连锁库龄" width="70"></vxe-table-column>
+          <vxe-table-column field="branchStockAge" title="本店库龄" width="70"></vxe-table-column>
+          <vxe-table-column field="isUnsalable" title="滞销" width="50">
+            <template v-slot="{row}">
+              {{row.isUnsalable == 0 ? "否" : "是"}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="serviceId" title="入库单号" width="124"></vxe-table-column>
+          <vxe-table-column field="originGuestName" title="第一供应商" width="150"></vxe-table-column>
+          <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
+          <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="150"></vxe-table-column>
+        </vxe-table>
       </div>
       <!-- hs -->
-      <div class="tabs-warp" v-else>
+      <div class="tabs-warp" v-show="tabIndex == 2">
         <div class="oper-top flex">
           <div class="wlf wlf-center wlf-center-hs">
             <div class="db mr10">
@@ -258,17 +380,43 @@
             </div>
           </div>
         </div>
-        <Table
-          size="small"
-          height="389"
-          ref="hsOrder"
-          :loading="hsloading"
-          resizable
+        <!--<Table-->
+          <!--size="small"-->
+          <!--height="389"-->
+          <!--ref="hsOrder"-->
+          <!--:loading="hsloading"-->
+          <!--resizable-->
+          <!--border-->
+          <!--:stripe="true"-->
+          <!--:columns="columnsPart"-->
+          <!--:data="templateData"-->
+        <!--&gt;</Table>-->
+        <vxe-table
           border
-          :stripe="true"
-          :columns="columnsPart"
-          :data="templateData"
-        ></Table>
+          ref="hsOrder"
+          :height="tableHeight"
+          highlight-hover-row
+          show-overflow
+          resizable
+          :loading="hsloading"
+          size="mini"
+          :data="templateData">
+          <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column field="partID" title="配件ID" width="150"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" width="200"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" width="300"></vxe-table-column>
+          <vxe-table-column field="brandName" title="品牌名称" width="200"></vxe-table-column>
+          <vxe-table-column field="amount" title="入库数量" width="120"></vxe-table-column>
+          <vxe-table-column field="outAmount" title="可出库数" width="120"></vxe-table-column>
+          <vxe-table-column field="shortname" title="门店名称" width="200">
+          </vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="120"></vxe-table-column>
+          <vxe-table-column field="deliveryDue" title="入库日期" width="200">
+            <template v-slot="{row}">
+              {{refilterData(row.deliveryDue)}}
+            </template>
+          </vxe-table-column>
+        </vxe-table>
       </div>
       <!--      分页-->
       <div class="page-warp fw">
@@ -309,7 +457,7 @@
           size="small"
           show-sizer
           show-total
-          :page-size-opts="[300,500,800,1000]"
+          :page-size-opts="[200,300,400]"
         ></Page>
         <Page
           v-if="tabIndex == 1"
@@ -322,7 +470,7 @@
           size="small"
           show-sizer
           show-total
-          :page-size-opts="[300,500,800,1000]"
+          :page-size-opts="[200,300,400]"
         ></Page>
         <Page
           v-if="tabIndex == 2"
@@ -392,7 +540,7 @@ export default {
         storeIds: [], //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
-        noStock: "", //零库存
+        noStock: false, //零库存
         old: "" //仓库
       },
       //批次库存查询条件表单
@@ -402,7 +550,7 @@ export default {
         storeIds: [], //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
-        noStock: "", //库存
+        noStock: false, //库存
         old: "" //仓库
       },
       curronly: false,
@@ -425,7 +573,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 300
+          size: 200
         }
       },
       //批次库存的数据
@@ -434,7 +582,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 300
+          size: 200
         },
         //数据
         dataTwo: []
@@ -560,7 +708,8 @@ export default {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
       loading1:false,
-      loading2:false
+      loading2:false,
+      tableHeight:0,
     };
   },
   computed:{
@@ -575,8 +724,12 @@ export default {
   mounted() {
     this.getCommpany();
     this.getMasterId();
-    this.getTemplateList();
     this.getHsStoreFun();
+    this.getAllStocks(); //table请求
+
+    this.$nextTick(() => {
+      this.tableHeight = this.$refs.operWrap.offsetHeight - 146;
+    })
   },
   methods: {
     select1(option) {
@@ -598,484 +751,30 @@ export default {
       this.queryBatch();
     },
     getColumns() {
-      let arr = [
-        {
-          title: "序号",
-          type: "index",
-          key: "index",
-          minWidth: 60,
-          fixed:'left',
-          render: (h, params) => {
-            return h(
-              "span",
-              params._index +
-                (this.contentOne.page.num - 1) * this.contentOne.page.size +
-                1
-            );
-          },
-          tooltip: true
-        },
-        {
-          title: "操作",
-          minWidth: 60,
-          fixed:'left',
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "text",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.showList(params.row);
-                    }
-                  }
-                },
-                "查看"
-              )
-            ]);
-          },
-          tooltip: true
-        },
-        {
-          title: "配件编码",
-          key: "partCode",
-          fixed:'left',
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "配件名称",
-          key: "partName",
-          fixed:'left',
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "OE码",
-          key: "oemCode",
-          fixed:'left',
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          fixed:'left',
-          width: 90,
-          resizable:true,
-          filters: this.bands1,
-          filterMethod(value, row) {
-            if(!value){
-              return !row.partBrand
-            }
-            if(row.partBrand){
-              return row.partBrand.indexOf(value) > -1;
-            }else{
-              return false
-            }
-          },
-          tooltip: true
-        },
-        {
-          title: "品牌车型",
-          key: "carModelName",
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "单位",
-          key: "unit",
-          width: 50,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "库存数量",
-          key: "stockQty",
-          width: 90,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "可售数量",
-          key: "outableQty",
-          width: 80,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.sellSign ? 0 : params.row.outableQty;
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "仓库",
-          key: "storeName",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "仓位",
-          key: "shelf",
-          width: 120,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "库存单价",
-          key: "costPrice",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.costPrice.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "库存金额",
-          key: "stockAmt",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.stockAmt.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "规格",
-          key: "spec",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "配件内码",
-          key: "partInnerId",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "最近入库日期",
-          key: "lastEnterDate",
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "最近出库日期",
-          key: "lastOutDate",
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "库存上限",
-          key: "upLimit",
-          width: 80,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "库存下限",
-          key: "downLimit",
-          tooltip: true,
-          resizable:true,
-          width: 80
-        },
-        {
-          title: "采购在途库存",
-          key: "pchRoadQty",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "调拨在途库存",
-          key: "attotRoadQty",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "合计在途库存",
-          key: "onRoadQty",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "机构名称",
-          key: "orgName",
-          width: 150,
-          resizable:true,
-          tooltip: true
-        }
-      ];
-      let arr2 = [
-        {
-          title: "序号",
-          key: "index",
-          minWidth: 60,
-          fixed:'left',
-          tooltip: true
-        },
-        {
-          title: "供应商",
-          key: "guestName",
-          width: 150,
-          resizable:true,
-          fixed:'left',
-          tooltip: true
-        },
-        {
-          title: "入库日期",
-          key: "createTime",
-          width: 120,
-          resizable:true,
-          fixed:'left',
-          tooltip: true
-        },
-        {
-          title: "配件编码",
-          width: 130,
-          fixed:'left',
-          resizable:true,
-          key: "partCode",
-          tooltip: true
-        },
-        {
-          title: "配件名称",
-          key: "partName",
-          fixed:'left',
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          width: 100,
-          fixed:'left',
-          resizable:true,
-          filters: [],
-          filterMethod(value, row) {
-            if(!value){
-              return !row.partBrand
-            }
-            if(row.partBrand){
-              return row.partBrand.indexOf(value) > -1;
-            }else{
-              return false
-            }
-          },
-          tooltip: true
-        },
-        {
-          title: "品牌车型",
-          key: "carModelName",
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "OE码",
-          key: "oemCode",
-          width: 130,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "单位",
-          key: "enterUnitId",
-          width: 50,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "规格",
-          key: "spec",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "配件内码",
-          key: "partInnerId",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "入库数量",
-          key: "enterQty",
-          width: 90,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "可售数量",
-          key: "outableQty",
-          width: 80,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "仓库",
-          key: "storeName",
-          width: 100,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "库存单价",
-          key: "enterPrice",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.enterPrice.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "库存金额",
-          key: "enterAmt",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.enterAmt.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "税率",
-          key: "taxRate",
-          width: 60,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "含税单价",
-          key: "taxPrice",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.taxPrice || 0;
-            tex = tex.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "含税金额",
-          key: "taxAmt",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.taxAmt || 0;
-            tex = tex.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "不含税单价",
-          key: "noTaxPrice",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.noTaxPrice.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "不含税金额",
-          key: "noTaxAmt",
-          width: 100,
-          resizable:true,
-          render: (h, params) => {
-            let tex = params.row.noTaxAmt.toFixed(2);
-            return h("span", {}, tex);
-          },
-          tooltip: true
-        },
-        {
-          title: "连锁库龄",
-          key: "chainStockAge",
-          width: 90,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "本店库龄",
-          key: "branchStockAge",
-          width: 90,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "滞销",
-          key: "isUnsalable",
-          render: (h, params) => {
-            let tex = params.row.isUnsalable == 0 ? "否" : "是";
-            return h("span", {}, tex);
-          },
-          width: 50,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "入库单号",
-          key: "serviceId",
-          width: 124,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "第一供应商",
-          key: "originGuestName",
-          width: 150,
-          resizable:true,
-          tooltip: true
-        },
-        {
-          title: "机构名称",
-          key: "orgName",
-          width: 150,
-          resizable:true,
-          tooltip: true
-        }
-      ];
-      // console.log(this.selectShopList,this.shopkeeper,this.shopId,this.searchForm.old)
       if(this.selectShopList){
-        this.columns2 = [...arr2.slice(0, 24), ...arr2.slice(25)];
+        this.$nextTick(() => {
+          this.$refs.xTable3.hideColumn(this.$refs.xTable3.getColumnByField('originGuestName'))
+        })
         if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
-          this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9)];
-
-          // this.columns1 = [arr[0], ...arr.slice(2, 8), ...arr.slice(9, 11), ...arr.slice(14)];
-          // this.columns2 = [...arr.slice(0, 12), ...arr.slice(19)];
+          this.$nextTick(() => {
+            this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('cz'))
+            this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('stockQty'))
+          })
         } else {
-          this.columns1 = arr;
+          this.$nextTick(() => {
+            this.$refs.xTable2.showColumn(this.$refs.xTable2.getColumnByField('cz'))
+            this.$refs.xTable2.showColumn(this.$refs.xTable2.getColumnByField('stockQty'))
+          })
         }
       }else{
-        this.columns1 = arr;
-        this.columns2 = arr2;
+        this.$nextTick(() => {
+          this.$refs.xTable2.showColumn(this.$refs.xTable2.getColumnByField('cz'))
+          this.$refs.xTable2.showColumn(this.$refs.xTable2.getColumnByField('stockQty'))
+        })
+        this.$nextTick(() => {
+          this.$refs.xTable3.showColumn(this.$refs.xTable3.getColumnByField('originGuestName'))
+        })
       }
-
-
     },
     changecompanyFun() {
       this.searchForm.storeIds = [];
@@ -1111,10 +810,8 @@ export default {
       ];
       this.searchForm.old = arr[1] || "";
       this.searchForm1.old = arr[1] || "";
-      this.getAllStocks(); //table请求
       this.getStoreHoure();
       // this.getBand(); //获取品牌
-      this.getLotStocks(); //获取批次
       this.getColumns();
     },
     //搜索
@@ -1152,6 +849,13 @@ export default {
         set.forEach(el => {
           this.bands1.push({ label: el, value: el });
         });
+        this.$nextTick(()=>{
+          const xtable = this.$refs.xTable2;
+          const column = xtable.getColumnByField('partBrand');
+          this.$refs.xTable2.setFilter(column, this.bands1);
+          xtable.updateData();
+        })
+
         // this.columnsPart[6].filters = this.bands1;
         this.getColumns();
       }
@@ -1211,7 +915,12 @@ export default {
         set.forEach(el => {
           this.bands2.push({ label: el, value: el });
         });
-        this.columns2[4].filters = this.bands2;
+        this.$nextTick(()=>{
+          const xtable = this.$refs.xTable3;
+          const column = xtable.getColumnByField('partBrand');
+          this.$refs.xTable3.setFilter(column, this.bands1);
+          xtable.updateData();
+        })
       }
 
       let res1 = await EtabulatData(data);
@@ -1224,6 +933,17 @@ export default {
     setTab(index) {
       this.tabIndex = index;
       this.showSearch = this.shopkeeper == 1 || index == 0;
+      if (index==1&&this.contentTwo.dataTwo.length==0){
+        this.getLotStocks(); //获取批次
+      }
+      if(index==2&&this.templateData.length==0){
+        this.getTemplateList();
+      }
+      this.$nextTick(()=>{
+        this.$refs.xTable3.recalculate();
+        this.$refs.xTable2.recalculate();
+        this.$refs.hsOrder.recalculate();
+      })
     },
     // 修改每页显示条数-客户信息
     changeSizeCus(val) {
@@ -1249,9 +969,11 @@ export default {
         // this.storeList = res.data;
         // console.log("222", res);
         res.data.forEach(el => {
-          el.name = el.name;
-          el.id = el.id;
-          this.storeList.push(el);
+          if(el.id){
+            el.name = el.name;
+            el.id = el.id;
+            this.storeList.push(el);
+          }
         });
       }
       // this.storeList.unshift({ name: "全部", storeId: '1' })
@@ -1402,8 +1124,7 @@ export default {
     async getHsStoreFun() {
       let rep = await getHsStore();
       if (rep.code == 0) {
-        // console.log(rep);
-        this.hsStore = rep.data || [];
+        this.hsStore = (rep.data || []).filter(item => item.erpCompCode);
       }
     },
     resetData() {
@@ -1423,64 +1144,57 @@ export default {
       this.getTemplateList();
     },
     handleSummary({ columns, data }) {
-      const sums = {};
-      columns.forEach((column, index) => {
-        const key = column.key;
-        if (index === 0) {
-          sums[key] = {
-            key,
-            value: "当前页和值"
-          };
-          return;
-        }
-        const values = data.map(item => Number(item[key]));
-        if (!values.every(value => isNaN(value))) {
-          const v = values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0);
-          if (
-            [
-              "stockQty",
-              "outableQty",
-              "stockAmt",
-              "pchRoadQty",
-              "attotRoadQty",
-              "onRoadQty",
-              "enterAmt",
-              "taxAmt",
-            ].includes(key)
-          ) {
-            if (key == "stockAmt") {
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
-            } else {
-              sums[key] = {
-                key,
-                value: v
-              };
-            }
-          } else {
-            sums[key] = {
-              key,
-              value: ""
-            };
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
           }
-        } else {
-          sums[key] = {
-            key,
-            value: ""
-          };
-        }
-      });
-      // console.log(sums);
-      return sums;
+          if ([
+            "stockQty",
+            "outableQty",
+            "stockAmt",
+            "pchRoadQty",
+            "attotRoadQty",
+            "onRoadQty",
+            "enterAmt",
+            "taxAmt",
+            "costPrice",
+            "upLimit",
+            "downLimit"
+          ].includes(column.property)) {
+            const v = data.reduce((prev, curr) => {
+              const value = Number(curr[column.property]);
+              if (!isNaN(value)) {
+                return prev + curr[column.property];
+              } else {
+                return prev;
+              }
+            }, 0);
+            if(['stockAmt','costPrice','enterAmt'].includes(column.property)){
+              return v.toFixed(2);
+            }
+            return v
+          }
+          return null
+        })
+      ]
+    },
+    filterNameMethod1({ value, row, column }){
+      if(!value){
+        return !row.partBrand
+      }
+      if(row.partBrand){
+        return row.partBrand.indexOf(value) > -1;
+      }else{
+        return false
+      }
+    },
+    refilterData(data){
+      if(!data){
+        return ""
+      }
+
+      return moment(data).format("YYYY-MM-DD HH:mm:ss")
     }
   }
 };
@@ -1577,5 +1291,7 @@ export default {
     max-height: 200px;
     overflow-y: auto;
   }
-
+  .tabs-warp{
+    /*height:calc(100% - 41px);*/
+  }
 </style>
