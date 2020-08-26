@@ -467,13 +467,7 @@ export default {
     };
   },
   async mounted() {
-    let arr = await creat(this.$refs.quickDate.val, this.$store);
-    this.value = arr[0];
     this.getShop()
-    this.$nextTick(()=>{
-      this.model1 = arr[1];
-      this.getGeneral();
-    })
   },
   computed:{
     selectShopList(){
@@ -609,9 +603,16 @@ export default {
       this.getGeneral()
     },
     // 快速查询
-    quickDate(data) {
-      this.value = data;
-      this.getGeneral();
+    async quickDate(data) {
+      if(this.model1==""){
+        let arr = await creat(this.$refs.quickDate.val, this.$store);
+        this.model1 = arr[1];
+        this.value = arr[0];
+        this.getGeneral();
+      }else{
+        this.value = data;
+        this.getGeneral();
+      }
     },
     // 往来单位
     Dealings() {
