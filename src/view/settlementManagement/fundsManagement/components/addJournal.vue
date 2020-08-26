@@ -86,7 +86,7 @@
         <Col span="12">
           <FormItem label="认领店号">
             <Select v-model="formCustom.claimShopCode" style="width:150px">
-              <Option v-for="item in claimShopList" :value="item.id" :key="item.id">{{ item.code }}</Option>
+              <Option v-for="item in claimShopList" :value="item.code" :key="item.id">{{ item.code }}</Option>
             </Select>
           </FormItem>
         </Col>

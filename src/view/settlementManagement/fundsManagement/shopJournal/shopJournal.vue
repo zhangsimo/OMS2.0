@@ -528,7 +528,9 @@
         claimShopName: '',//认领门店查询参数
         suppliers: '',//往来单位
         accountCode: '',//账号
-        getAccShopList: [],
+        getAccShopList: [
+          {shopCode: '-1' ,shopName:'请选择'}
+        ],
         selectTableList: [],//勾选的表格数据
         page: {
           opts: [100, 300, 500, 800, 1000],
@@ -620,6 +622,7 @@
         this.shopList = [{id: 0, name: '全部'}]
         let rep = await getAccShopList();
         if (rep.code == 0) {
+          console.log(rep , 888)
           this.getAccShopList = rep.data
         }
         let res = await goshop(data)
