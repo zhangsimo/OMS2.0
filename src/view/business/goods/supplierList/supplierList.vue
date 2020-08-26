@@ -444,7 +444,7 @@
       :guestId="guestidId"
       :storeId="formPlan.warehouse"
       @getPlanOrder="getPlanOrder"
-      @dblclickfun="dblclick"
+      @dblclickfun="getPlanOrder"
     ></procurement>
     <!--供应商资料-->
     <select-supplier
@@ -776,38 +776,6 @@
         let isDisabled = this.presentrowMsg !== 0;
         orderQtyColumn.editRender.attrs.disabled = isDisabled;
         remarkColumn.editRender.attrs.disabled = isDisabled;
-      },
-      //双击添加配件
-      dblclick(val) {
-        var datas = [...val].map(el => {
-          el.orderQty = undefined;
-          el.outUnitId = el.enterUnitId;
-          el.unit = el.enterUnitId;
-          el.systemUnitId = el.enterUnitId;
-          el.canReQty = el.rtnableQty;
-          el.orginOrderQty = el.orderQty;
-          el.orderQty = el.rtnableQty;
-          el.orderPrice = el.enterPrice;
-          el.partInnerId = el.partId;
-          el.uuid = v4();
-          return el;
-        });
-        var arr = [];
-        datas.forEach(item => {
-          let filterArr = this.Right.tbdata.map(({partCode}) => partCode)
-          if (!filterArr.includes(item.partCode)) {
-            arr.push(item)
-          }
-        })
-        arr.forEach(item => {
-          delete item.id;
-          this.Right.tbdata.unshift(item);
-        });
-        if (arr.length != datas.length) {
-          this.$Message.success("配件已存在请勿重复添加");
-        } else {
-          this.$Message.success("已添加");
-        }
       },
       //删除配件
       async Delete() {

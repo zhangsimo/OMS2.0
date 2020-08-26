@@ -426,6 +426,12 @@
                     {{ (row.orderPrice * row.orderQty) | priceFilters }}
                   </template>
                 </vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip"
+                   field="storeShelf"
+                   title="仓位"
+                   width="100"
+                   :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
+                ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="remark"
                   title="备注"

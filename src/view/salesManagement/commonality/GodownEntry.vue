@@ -21,7 +21,8 @@
                 <!--&gt;{{ item.fullName }}</Option-->
               <!--&gt;-->
             <!--</Select>-->
-            <supplier-cus placeholder="输入供应商名称" ref="supplier" :disabled-prop="false" @throwName="throwNameFun" @throwNameNull="throwNameNull"></supplier-cus>
+            <!--<supplier-cus placeholder="输入供应商名称" ref="supplier" :disabled-prop="false" @throwName="throwNameFun" @throwNameNull="throwNameNull"></supplier-cus>-->
+            <Input class="w200" placeholder="输入供应商名称" v-model="Outform.guestName"/>
           </FormItem>
           <FormItem>
             <Input
@@ -71,7 +72,6 @@
           :loading="Loading"
           resizable
           auto-resize
-          align="center"
           highlight-current-row
           @radio-change="selectOne"
           @current-change="selectOne"
@@ -91,7 +91,7 @@
           ></vxe-table-column>
           <vxe-table-column
             field="serviceId"
-            width="200"
+            width="180"
             title="入库单号"
           ></vxe-table-column>
           <vxe-table-column
@@ -102,23 +102,24 @@
           ></vxe-table-column>
           <vxe-table-column
             field="remark"
-            width="150"
+            width="240"
             title="备注"
           ></vxe-table-column>
           <vxe-table-column
             field="enterAmt"
-            width="100"
+            width="80"
             title="入库金额"
           ></vxe-table-column>
           <vxe-table-column
             field="enterDate"
-            width="150"
+            width="110"
             title="入库日期"
+            show-overflow="title"
           ></vxe-table-column>
-          <vxe-table-column field="code" title="业务单号" width="200"></vxe-table-column>
+          <vxe-table-column field="code" title="业务单号" width="180"></vxe-table-column>
           <vxe-table-column
             field="createUname"
-            width="100"
+            width="80"
             title="创建人"
           ></vxe-table-column>
           <vxe-table-column
@@ -215,6 +216,7 @@ export default {
         enterTypeId: "12345",
         code: "",
         guestId: "",
+        guestName: "",
         enterDateStart: "",
         enterDateEnd: ""
       },
@@ -256,6 +258,7 @@ export default {
       this.Outform.enterTypeId = '12345';
       this.Outform.code = ''
       this.Outform.guestId = ''
+      this.Outform.guestName = '';
     },
     //打开模态框
     openModal(v) {
@@ -286,6 +289,7 @@ export default {
         this.page.total = res.data.totalElements;
       }
     },
+
     async getList2(v) {
       let data = {};
       data = this.Outform;
@@ -293,7 +297,9 @@ export default {
       data.size = this.page.size;
       data.storeId = v || this.storeId;
       data.showPerson = this.showSelf? 1 : 0;
+      data.storeId = v || this.storeId;
       this.Loading = true;
+      if (!data.storeId) return
       let res = await getGodown(data);
       if (res.code === 0) {
         this.Loading = false;

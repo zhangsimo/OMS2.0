@@ -32,7 +32,7 @@
       <div class="tabs-warp" v-if="tabIndex == 0" >
         <!--      搜索工具栏-->
         <div class="oper-top flex" >
-          <div class="wlf" style="line-height: 54px">
+          <div class="pt10">
             <Input
               v-model="searchForm.partName"
               placeholder="配件编码/名称/内码/OEM码"
@@ -105,6 +105,8 @@
           highlight-row
           ref="table1"
           border
+          size="small"
+          :loading="loading1"
           align="left"
           :stripe="true"
           height="400"
@@ -119,7 +121,7 @@
       <div class="tabs-warp" v-else-if="tabIndex == 1">
         <!--      搜索工具栏-->
         <div class="oper-top flex">
-          <div class="wlf" style="line-height: 54px">
+          <div class="pt10">
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input
               v-model="searchForm1.partName"
@@ -197,6 +199,7 @@
           ref="table2"
           align="left"
           border
+          :loading="loading2"
           :stripe="true"
           :columns="columns2"
           :data="contentTwo.dataTwo"
@@ -208,7 +211,7 @@
       <!-- hs -->
       <div class="tabs-warp" v-else>
         <div class="oper-top flex">
-          <div class="wlf wlf-center">
+          <div class="wlf wlf-center wlf-center-hs">
             <div class="db mr10">
               <span>公司编号：</span>
               <Select
@@ -306,6 +309,7 @@
           size="small"
           show-sizer
           show-total
+          :page-size-opts="[300,500,800,1000]"
         ></Page>
         <Page
           v-if="tabIndex == 1"
@@ -318,6 +322,7 @@
           size="small"
           show-sizer
           show-total
+          :page-size-opts="[300,500,800,1000]"
         ></Page>
         <Page
           v-if="tabIndex == 2"
@@ -420,7 +425,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 10
+          size: 300
         }
       },
       //批次库存的数据
@@ -429,7 +434,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 10
+          size: 300
         },
         //数据
         dataTwo: []
@@ -465,62 +470,71 @@ export default {
       columnsPart: [
         {
           title: "序号",
-          width: 50,
+          width: 80,
           type: "index",
           tooltip: true
         },
         {
           title: "配件ID",
           key: "partID",
-          minWidth: 150,
+          width: 150,
+          resizable: true,
           tooltip: true
         },
         {
           title: "配件编码",
           key: "partCode",
-          minWidth: 150,
+          width: 200,
+          resizable: true,
           tooltip: true
         },
         {
           title: "配件名称",
           key: "partName",
-          minWidth: 120,
+          width: 300,
+          resizable: true,
           tooltip: true
         },
         {
           title: "品牌名称",
           key: "brandName",
-          minWidth: 120,
+          width: 200,
+          resizable: true,
           tooltip: true
         },
         {
           title: "入库数量",
           key: "amount",
-          minWidth: 120,
+          width: 120,
+          resizable: true,
           tooltip: true
         },
         {
           title: "可出库数",
           key: "outAmount",
-          minWidth: 120,
+          width: 120,
+          resizable: true,
           tooltip: true
         },
         {
           title: "门店名称",
           key: "shortname",
-          minWidth: 120,
+          width: 200,
+          resizable: true,
           tooltip: true
         },
         {
           title: "单位",
           key: "unit",
-          minWidth: 120,
+          width: 120,
+          resizable: true,
           tooltip: true
         },
         {
           title: "入库日期",
           key: "deliveryDue",
-          minWidth: 60,
+          width: 200,
+          resizable: true,
           render: (h, p) => {
             if (p.row.deliveryDue) {
               let day = moment(p.row.deliveryDue).format("YYYY-MM-DD HH:mm:ss");
@@ -544,7 +558,9 @@ export default {
       selectTableDataArr: [],
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-      }
+      },
+      loading1:false,
+      loading2:false
     };
   },
   computed:{
@@ -588,6 +604,7 @@ export default {
           type: "index",
           key: "index",
           minWidth: 60,
+          fixed:'left',
           render: (h, params) => {
             return h(
               "span",
@@ -601,6 +618,7 @@ export default {
         {
           title: "操作",
           minWidth: 60,
+          fixed:'left',
           render: (h, params) => {
             return h("div", [
               h(
@@ -625,25 +643,33 @@ export default {
         {
           title: "配件编码",
           key: "partCode",
-          minWidth: 130,
+          fixed:'left',
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "配件名称",
           key: "partName",
-          minWidth: 130,
+          fixed:'left',
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "OE码",
           key: "oemCode",
-          minWidth: 130,
+          fixed:'left',
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "品牌",
           key: "partBrand",
-          minWidth: 90,
+          fixed:'left',
+          width: 90,
+          resizable:true,
           filters: this.bands1,
           filterMethod(value, row) {
             if(!value){
@@ -660,25 +686,29 @@ export default {
         {
           title: "品牌车型",
           key: "carModelName",
-          minWidth: 130,
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "单位",
           key: "unit",
-          minWidth: 50,
+          width: 50,
+          resizable:true,
           tooltip: true
         },
         {
           title: "库存数量",
           key: "stockQty",
-          minWidth: 90,
+          width: 90,
+          resizable:true,
           tooltip: true
         },
         {
           title: "可售数量",
           key: "outableQty",
-          minWidth: 80,
+          width: 80,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.sellSign ? 0 : params.row.outableQty;
             return h("span", {}, tex);
@@ -688,19 +718,22 @@ export default {
         {
           title: "仓库",
           key: "storeName",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "仓位",
           key: "shelf",
-          minWidth: 120,
+          width: 120,
+          resizable:true,
           tooltip: true
         },
         {
           title: "库存单价",
           key: "costPrice",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.costPrice.toFixed(2);
             return h("span", {}, tex);
@@ -710,7 +743,8 @@ export default {
         {
           title: "库存金额",
           key: "stockAmt",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.stockAmt.toFixed(2);
             return h("span", {}, tex);
@@ -720,61 +754,71 @@ export default {
         {
           title: "规格",
           key: "spec",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "配件内码",
           key: "partInnerId",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "最近入库日期",
           key: "lastEnterDate",
-          minWidth: 130,
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "最近出库日期",
           key: "lastOutDate",
-          minWidth: 130,
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "库存上限",
           key: "upLimit",
-          minWidth: 80,
+          width: 80,
+          resizable:true,
           tooltip: true
         },
         {
           title: "库存下限",
           key: "downLimit",
           tooltip: true,
-          minWidth: 80
+          resizable:true,
+          width: 80
         },
         {
           title: "采购在途库存",
           key: "pchRoadQty",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "调拨在途库存",
           key: "attotRoadQty",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "合计在途库存",
           key: "onRoadQty",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "机构名称",
           key: "orgName",
-          minWidth: 150,
+          width: 150,
+          resizable:true,
           tooltip: true
         }
       ];
@@ -783,30 +827,47 @@ export default {
           title: "序号",
           key: "index",
           minWidth: 60,
+          fixed:'left',
+          tooltip: true
+        },
+        {
+          title: "供应商",
+          key: "guestName",
+          width: 150,
+          resizable:true,
+          fixed:'left',
+          tooltip: true
+        },
+        {
+          title: "入库日期",
+          key: "createTime",
+          width: 120,
+          resizable:true,
+          fixed:'left',
           tooltip: true
         },
         {
           title: "配件编码",
-          minWidth: 130,
+          width: 130,
+          fixed:'left',
+          resizable:true,
           key: "partCode",
           tooltip: true
         },
         {
           title: "配件名称",
           key: "partName",
-          minWidth: 130,
-          tooltip: true
-        },
-        {
-          title: "OE码",
-          key: "oemCode",
-          minWidth: 130,
+          fixed:'left',
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "品牌",
           key: "partBrand",
-          minWidth: 100,
+          width: 100,
+          fixed:'left',
+          resizable:true,
           filters: [],
           filterMethod(value, row) {
             if(!value){
@@ -823,49 +884,64 @@ export default {
         {
           title: "品牌车型",
           key: "carModelName",
-          minWidth: 130,
+          width: 130,
+          resizable:true,
+          tooltip: true
+        },
+        {
+          title: "OE码",
+          key: "oemCode",
+          width: 130,
+          resizable:true,
           tooltip: true
         },
         {
           title: "单位",
           key: "enterUnitId",
-          minWidth: 50,
+          width: 50,
+          resizable:true,
           tooltip: true
         },
         {
           title: "规格",
           key: "spec",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "配件内码",
           key: "partInnerId",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "入库数量",
           key: "enterQty",
-          minWidth: 90,
+          width: 90,
+          resizable:true,
           tooltip: true
         },
         {
           title: "可售数量",
           key: "outableQty",
-          minWidth: 80,
+          width: 80,
+          resizable:true,
           tooltip: true
         },
         {
           title: "仓库",
           key: "storeName",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           tooltip: true
         },
         {
           title: "库存单价",
           key: "enterPrice",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.enterPrice.toFixed(2);
             return h("span", {}, tex);
@@ -875,7 +951,8 @@ export default {
         {
           title: "库存金额",
           key: "enterAmt",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.enterAmt.toFixed(2);
             return h("span", {}, tex);
@@ -885,13 +962,15 @@ export default {
         {
           title: "税率",
           key: "taxRate",
-          minWidth: 60,
+          width: 60,
+          resizable:true,
           tooltip: true
         },
         {
           title: "含税单价",
           key: "taxPrice",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.taxPrice || 0;
             tex = tex.toFixed(2);
@@ -902,7 +981,8 @@ export default {
         {
           title: "含税金额",
           key: "taxAmt",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.taxAmt || 0;
             tex = tex.toFixed(2);
@@ -913,7 +993,8 @@ export default {
         {
           title: "不含税单价",
           key: "noTaxPrice",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.noTaxPrice.toFixed(2);
             return h("span", {}, tex);
@@ -923,7 +1004,8 @@ export default {
         {
           title: "不含税金额",
           key: "noTaxAmt",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             let tex = params.row.noTaxAmt.toFixed(2);
             return h("span", {}, tex);
@@ -933,13 +1015,15 @@ export default {
         {
           title: "连锁库龄",
           key: "chainStockAge",
-          minWidth: 90,
+          width: 90,
+          resizable:true,
           tooltip: true
         },
         {
           title: "本店库龄",
           key: "branchStockAge",
-          minWidth: 90,
+          width: 90,
+          resizable:true,
           tooltip: true
         },
         {
@@ -949,37 +1033,29 @@ export default {
             let tex = params.row.isUnsalable == 0 ? "否" : "是";
             return h("span", {}, tex);
           },
-          minWidth: 50,
-          tooltip: true
-        },
-        {
-          title: "入库日期",
-          key: "createTime",
-          minWidth: 120,
+          width: 50,
+          resizable:true,
           tooltip: true
         },
         {
           title: "入库单号",
           key: "serviceId",
-          minWidth: 124,
+          width: 124,
+          resizable:true,
           tooltip: true
         },
         {
           title: "第一供应商",
           key: "originGuestName",
-          minWidth: 150,
-          tooltip: true
-        },
-        {
-          title: "最近供应商",
-          key: "guestName",
-          minWidth: 150,
+          width: 150,
+          resizable:true,
           tooltip: true
         },
         {
           title: "机构名称",
           key: "orgName",
-          minWidth: 150,
+          width: 150,
+          resizable:true,
           tooltip: true
         }
       ];
@@ -1060,7 +1136,9 @@ export default {
       data.page = this.contentOne.page.num - 1;
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
+      this.loading1 = true;
       let res = await getAllStock(data);
+      this.loading1 = false;
       if (res.code == 0) {
         this.contentOne.dataOne = res.data.content;
         this.contentOne.page.total = res.data.totalElements;
@@ -1117,7 +1195,9 @@ export default {
       data.size = this.contentTwo.page.size;
       data.noStock = data.noStock ? 1 : 0;
       // console.log('数据',data)
+      this.loading2 = true;
       let res = await getLotStock(data);
+      this.loading2 = false;
       if (res.code == 0) {
         this.contentTwo.dataTwo = res.data.content;
         this.contentTwo.dataTwo.map((item, index) => {
@@ -1408,7 +1488,7 @@ export default {
 
 <style lang="less" scoped>
 .tabs-ulwarp {
-  padding-top: 17px;
+  padding-top: 10px;
   border-bottom: solid 1px #ddd;
 }
 
@@ -1419,8 +1499,9 @@ export default {
   li {
     margin: 0;
     margin-right: 4px;
-    height: 31px;
-    padding: 5px 16px 4px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 16px;
     border: 1px solid #ddd;
     border-bottom: 0;
     border-radius: 2px 2px 0 0;
@@ -1431,8 +1512,7 @@ export default {
   }
 
   li.tab-active {
-    height: 32px;
-    padding-bottom: 5px;
+    height: 30px;
     background: #fff;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
@@ -1476,9 +1556,26 @@ export default {
   }
 }
 </style>
-<style scoped>
+
+<style>
   .table-highlight-row >>> td {
     height: 40px !important;
+  }
+  .tabs-warp .oper-top{
+    padding: 0 10px 10px!important;
+  }
+  .table-highlight-row .ivu-table-overflowX{
+    z-index: 2;
+    position: relative;
+  }
+
+  .wlf-center-hs > div{
+    padding-top: 10px;
+  }
+
+  .ivu-table-filter-list-item{
+    max-height: 200px;
+    overflow-y: auto;
   }
 
 </style>

@@ -21,6 +21,7 @@ export const mixSelectPartCom = {
       searchPartLayer: false, //配件名称查询层
       partName: "", //配件名称查询名字
       treeData: [], //系统分类树形数据
+
       //查询选择
 
       //配件名称查询层表头

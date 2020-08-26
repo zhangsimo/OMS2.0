@@ -1101,6 +1101,62 @@ export default {
           className: "tc"
         },
         {
+          title: "区域",
+          key: "area",
+          className: "tc",
+          minWidth: 80
+        },
+        {
+          title: "店号",
+          key: "shopCode",
+          className: "tc",
+          minWidth: 80
+        },
+        {
+          title: "入库时间",
+          key: "auditDate",
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.auditDate
+                }
+              }, params.row.auditDate)
+            ])
+          }
+        },
+        {
+          title: "客户/供应商名称",
+          key: "guestName",
+          className: "tc",
+          minWidth: 180,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
+            ])
+          }
+        },
+        {
           title: "配件编码",
           key: "partCode",
           className: "tc",
@@ -1285,6 +1341,62 @@ export default {
                   title: params.row.orgName
                 }
               }, params.row.orgName)
+            ])
+          }
+        },
+        {
+          title: "区域",
+          key: "area",
+          className: "tc",
+          minWidth: 80
+        },
+        {
+          title: "店号",
+          key: "shopCode",
+          className: "tc",
+          minWidth: 80
+        },
+        {
+          title: "入库时间",
+          key: "auditDate",
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.auditDate
+                }
+              }, params.row.auditDate)
+            ])
+          }
+        },
+        {
+          title: "客户/供应商名称",
+          key: "guestName",
+          className: "tc",
+          minWidth: 180,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.guestName
+                }
+              }, params.row.guestName)
             ])
           }
         },

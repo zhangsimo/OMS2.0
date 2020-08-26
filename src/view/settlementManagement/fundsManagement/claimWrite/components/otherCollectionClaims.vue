@@ -407,6 +407,7 @@ export default {
         data.guestId = objItem.id||"";
         data.financeAccountCashList = this.accrued
         if(this.claimTit=="预收款认领"){
+          data.claimMoney=this.accrued[0].rpAmt;
           addClaim2(data).then(res=>{
             if(res.code===0){
               this.$Message.success('认领成功')
@@ -416,6 +417,7 @@ export default {
         }else{
           data.subjectCode="2241";
           data.claimType=0;
+          data.claimMoney=this.accrued[0].balanceMoney
           addClaim(data).then(res=>{
             if(res.code===0){
               this.$Message.success('认领成功')

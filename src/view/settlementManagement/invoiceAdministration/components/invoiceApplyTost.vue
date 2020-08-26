@@ -73,7 +73,7 @@
           >
             <Option
               v-for="item in invoice.issuingOfficeList"
-              :value="item.value"
+              :value="item.label"
               :key="item.value"
               >{{ item.label }}</Option
             >
@@ -780,6 +780,33 @@ export default {
           }
         },
         {
+          title: "对账应付",
+          key: "reconciliation",
+          className: "tc",
+          minWidth:120,
+          render: (h, params) => {
+            return h("span", params.row.reconciliation.toFixed(2));
+          }
+        },
+        {
+          title: "应付返利",
+          key: "dealingRebates",
+          className: "tc",
+          minWidth:120,
+          render: (h, params) => {
+            return h("span", params.row.dealingRebates.toFixed(2));
+          }
+        },
+        {
+          title: "应付坏账",
+          key: "payingBadDebts",
+          className: "tc",
+          minWidth:120,
+          render: (h, params) => {
+            return h("span", params.row.payingBadDebts.toFixed(2));
+          }
+        },
+        {
           title: "本次核销金额",
           key: "rpAmt",
           className: "tc",
@@ -1194,6 +1221,7 @@ export default {
         this.query();
         this.data1 = data;
       }else{
+        this.data2 = []
         this.data2.push(data)
       }
       this.modals = true;

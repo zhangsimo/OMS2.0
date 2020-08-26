@@ -392,7 +392,7 @@
       :storeId="Leftcurrentrow.storeId"
       :guestId="Leftcurrentrow.guestId"
       @getPlanOrder="getPlanOrder"
-      @dblclickfun="dblclick"
+      @dblclickfun="getPlanOrder"
     >
     </add-part>
   </main>
@@ -781,37 +781,6 @@ export default {
           this.ArrayValue.push(item.fullName);
         });
       });
-    },
-    //双击添加配件
-    dblclick(val) {
-      var datas = [...val].map(el => {
-        el.orderQty = undefined;
-        el.outUnitId = el.enterUnitId;
-        el.unit = el.enterUnitId;
-        el.systemUnitId = el.enterUnitId;
-        el.canReQty = el.enterQty;
-        el.orginOrderQty = el.orderQty;
-        el.applyQty = el.rtnableQty;
-        el.orderPrice = el.enterPrice;
-        el.partInnerId = el.partId;
-        return el;
-      });
-      var arr = [];
-      datas.forEach(item => {
-        let filterArr = this.Leftcurrentrow.detailVOS.map(({partCode}) => partCode)
-        if (!filterArr.includes(item.partCode)) {
-          arr.push(item)
-        }
-      })
-      arr.forEach(item => {
-        delete item.id;
-        this.Leftcurrentrow.detailVOS.unshift(item);
-      });
-      if (arr.length != datas.length) {
-        this.$Message.success("配件已存在请勿重复添加");
-      } else {
-        this.$Message.success("已添加");
-      }
     },
     getDataType() {
       this.getList();

@@ -374,6 +374,8 @@
           this.subjectCode = res.data[0].id
         }
       },
+
+
       setAreaDef() {
         if (this.Branchstore.length > 0) {
           this.Branchstore.map(item => {
