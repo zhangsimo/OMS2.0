@@ -74,7 +74,7 @@
           </div>
           <div class="db mr10">
             <span>认领门店：</span>
-            <Select v-model="claimShopName" filterable class="w150">
+            <Select v-model="claimShopName" filterable clearable class="w150">
               <Option
                 v-for="item in getAccShopList"
                 :value="item.shopName"
