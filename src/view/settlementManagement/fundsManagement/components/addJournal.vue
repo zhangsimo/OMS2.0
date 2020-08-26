@@ -3,17 +3,13 @@
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="100" label-colon>
       <Row>
         <Col span="12">
-          <FormItem label="所属区域" prop="areaId" >
-            <Select v-model="formCustom.areaId" style="width:150px" @on-change="changeArea">
-              <Option v-for="item in areaList" :value="item.id" :key="item.id">{{ item.companyName }}</Option>
-            </Select>
+          <FormItem label="所属门店" >
+            <Input  v-model="formCustom.shopName" class="w150" disabled />
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="所属门店" prop="shopId">
-            <Select v-model="formCustom.shopId" style="width:150px" @on-change='getShopCode'>
-              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-            </Select>
+          <FormItem label="所属区域" >
+            <Input  v-model="formCustom.areaName" class="w150" disabled />
           </FormItem>
         </Col>
         <Col span="12">
@@ -187,8 +183,12 @@
         this.handleReset()
         this.getSubject()
         this.formCustom = {
-          shopCode:'',
-          mateAccountCode :'1243469693836919001'
+          shopCode: this.$store.state.user.userData.currentCompany.code,
+          mateAccountCode :'1243469693836919001',
+          areaName: this.$store.state.user.userData.currentCompany.companyNameSen,
+          shopName: this.$store.state.user.userData.currentCompany.shortName,
+          areaId: this.$store.state.user.userData.currentCompany.supplierTypeSecond,
+          shopId: this.$store.state.user.userData.currentCompany.id,
         }
         this.modalShow = true
         this.getShopList()

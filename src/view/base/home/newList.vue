@@ -3,14 +3,13 @@
       <h5 style="font-size: 14px;margin-bottom: 30px">新闻公告</h5>
       <ul class="newlist">
         <li>
-          <p><v-clamp :max-lines="1">● 有新订单即使处理23123123123123123123123123112312312313123 </v-clamp></p>
-          <p style="margin-left: 12px;font-size: 12px;margin-top: 10px">2019-12-12 11:11 </p>
+          <h5><v-clamp :max-lines="1">● 2020年9月1日起，佳配新ERP（OMS 2.0）正式上线启用，替换老ERP系统 </v-clamp></h5>
+          <p style="margin-left: 12px;font-size: 12px;margin-top: 10px">
+            老ERP系统将作以下调整：<br/>
+              关闭所有业务单据开单、申请功能
+              将保留2020年9月1日之前的所有业务数据、单据查询、报表查询、财务查询等统计导出功能
+            9月1日之前，敬请大家百忙抽空，熟悉并试用新系统，提出宝贵建议。</p>
         </li>
-        <li>
-          <p><v-clamp :max-lines="1">● 有新订单即使处理23123123123123123123123123112312312313123 </v-clamp></p>
-          <p style="margin-left: 12px;font-size: 12px;margin-top: 10px">2019-12-12 11:11 </p>
-        </li>
-
       </ul>
       <div class="btn">查看更多</div>
     </div>

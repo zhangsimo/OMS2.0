@@ -22,7 +22,7 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
 import GoodCus from "_c/allocation/GoodCus.vue"
-
+import { checkStore } from "@/api/system/systemApi";
 
 @Component({
   components: {
@@ -148,6 +148,8 @@ export default class OutsidePurchase extends Vue {
     }
   }
 
+  private isSelfOk:boolean =  true
+
   //------------------------------------------------------------------------//
   //表格tab切换可编辑部位
   async editNextCell($table){
@@ -232,6 +234,20 @@ export default class OutsidePurchase extends Vue {
       this.$Message.error(response.message)
     }
   }
+
+  async checkSelf({ row: { storeShelf } }) {
+    if (storeShelf == "") {
+      this.isSelfOk = true;
+    } else {
+      let res:any = await checkStore({ storeId: this.formPlanmain.storeId, name: storeShelf });
+      if (res.code == 0 && res.data != null) {
+        this.isSelfOk = true;
+      } else {
+        this.isSelfOk = false;
+      }
+    }
+  }
+
   warning(nodesc){
     let str=""
     if(nodesc.length>0){
@@ -291,6 +307,7 @@ export default class OutsidePurchase extends Vue {
     orderManId: [{ required: true, message: '采购员不能为空', trigger: 'change' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
+    storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
   }
   // 采购订单信息表格数据
   private tableData: Array<any> = new Array();
@@ -434,6 +451,10 @@ export default class OutsidePurchase extends Vue {
 
   // 保存
   private async saveHandle(refname: string) {
+    if (!this.isSelfOk) {
+      return this.$message.error("请填写正确的仓位!");
+    }
+
     let data: any = this.formdata(refname);
     if (!data) return;
 
@@ -454,6 +475,10 @@ export default class OutsidePurchase extends Vue {
   // 提交
   private submit(refname: string) {
     if(!this.selectTableRow.id) return this.$message.error("请先保存再提交");
+
+    if (!this.isSelfOk) {
+      return this.$message.error("请填写正确的仓位!");
+    }
 
     let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
     if(zero) return;
@@ -792,8 +817,12 @@ export default class OutsidePurchase extends Vue {
 
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
   private showModel(name) {
-    let ref: any = this.$refs[name];
-    ref.init();
+    if(this.formPlanmain.storeId){
+      let ref: any = this.$refs[name];
+      ref.init();
+    }else{
+      this.$Message.error("请选择入库仓");
+    }
   }
   //导入
   private getRUl(){

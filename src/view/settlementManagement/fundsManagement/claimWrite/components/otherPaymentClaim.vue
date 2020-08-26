@@ -550,21 +550,22 @@ export default {
         // }else{
         //   data.claimMoney=this.accrued[0].balanceMoney
         // }
-        data.claimMoney=this.accrued[0].rpAmt||this.accrued[0].balanceMoney;
+        if (this.claimTit == "预付款认领") {
+          data.claimMoney=this.accrued[0].rpAmt
+          data.subjectCode = "2203";
+          data.claimType = 4;
+        } else {
+          data.claimMoney=this.accrued[0].balanceMoney;
+          data.subjectCode = "1221";
+          data.claimType = 6;
+          data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
+        }
         if(data.claimMoney==null || data.claimMoney<=0){
           this.$Message.error("本次认领金额不可为零或小于零")
           return
         }else if(data.claimMoney>Math.abs(this.accrued[0].paidMoney)){
           this.$Message.error("本次认领金额不可大于支付金额")
           return
-        }
-        if (this.claimTit == "预付款认领") {
-          data.subjectCode = "2203";
-          data.claimType = 4;
-        } else {
-          data.subjectCode = "1221";
-          data.claimType = 6;
-          data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
         }
         data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
