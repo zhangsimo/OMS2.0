@@ -300,9 +300,10 @@ export default {
     compileEvent(row) {
       row.areaId = row.areaId.toString();
       row.shopNumber = row.shopNumber.toString();
-      row.shopList = row.shopList.map(item => {
+      let shoplist= row.shopList.map(item => {
         return item.id;
       });
+      // row.shopList
       if (JSON.parse(row.shopNameList).length > 0) {
         row.shopListName = JSON.parse(row.shopNameList).map(item => {
           return item.shopName;
@@ -322,10 +323,11 @@ export default {
         accountCode: row.accountCode,
         mateAccountName: row.mateAccountName,
         shopListName: row.shopListName,
-        shopList: row.shopList,
+        shopList: shoplist,
         area: row.area,
         shopName: row.shopName
       };
+      console.log(this.ChangeData,1111)
       this.$refs.informationShow.information = true;
     },
 
