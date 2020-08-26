@@ -37,7 +37,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Button type="warning" class="mr20" @click="search(form)">
+            <Button type="warning" class="mr20" @click="queryFun()">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
           </div>
@@ -181,7 +181,7 @@
         <Col span="12" offset="12" style="text-align:right">
           <div>
             <Page
-              :current="form.pageNumber + 1"
+              :current="pageList.page"
               :total="pageList.total"
               :page-size="pageList.size"
               :page-size-opts="pageList.pageSizeOpts"
@@ -307,7 +307,7 @@ export default {
       BottomTableData: [], //下侧表格list
       // 分页数据
       pageList: {
-        page: 0,
+        page: 1,
         total: 0,
         size: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
@@ -368,10 +368,18 @@ export default {
           this.$Message.info("获取仓库失败");
         });
     },
+
+    queryFun(){
+      this.pageList.page = 1;
+      this.search(this.form)
+    },
+
+
     search(params) {
-      params = {...params, ...this.pageList};
+      let req = {...params, ...this.pageList};
+      req.page = req.page-1;
       // params.storeId = this.idValue;
-      jinqiaopinliebiao(params)
+      jinqiaopinliebiao(req)
         .then(res => {
           if (res.code == 0) {
             this.TopTableData = res.data.content || [];
