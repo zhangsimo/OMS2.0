@@ -19,7 +19,7 @@
         </Col>
         <Col span="12">
           <FormItem label="账户" prop="accountCode">
-            <Select v-model="formCustom.accountCode" style="width:150px" @on-change= 'changeAccount'>
+            <Select v-model="formCustom.accountId" style="width:150px" @on-change= 'changeAccount'>
               <Option v-for="item in accountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
             </Select>
           </FormItem>
