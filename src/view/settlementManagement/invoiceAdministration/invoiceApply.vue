@@ -27,9 +27,26 @@
           </div>
           <div class="db ml20">
             <span>客户：</span>
-              <Select v-model="form.guestId" style="width:180px">
-                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>
-              </Select>
+<!--              <Select v-model="form.guestId" style="width:180px">-->
+<!--                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>-->
+<!--              </Select>-->
+            <Select
+              v-model="form.guestId"
+              clearable
+              filterable
+              :loading=loading1
+              remote
+              :remote-method="remoteMethod"
+              style="width:200px;padding-left: 5px"
+            >
+              <Option
+                v-for="item in company"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}
+              </Option
+              >
+            </Select>
           </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" v-noresub="1000" @click="query" type="button">
@@ -123,6 +140,7 @@ import {
 import { goshop } from '@/api/settlementManagement/shopList';
 import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
+import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import moment from "moment";
 export default {
   name: "invoiceAdministrationInvoiceApply",
@@ -1079,7 +1097,8 @@ export default {
         accountNo: ""
       },
       allTablist: [],
-      flag: true
+      flag: true,
+      loading1: false,//查询时判断
     };
   },
   computed:{
@@ -1217,7 +1236,34 @@ export default {
 
         })
       }
-    }
+    },
+
+    //往来单位查询
+    async remoteMethod(query) {
+      this.company = [];
+      if (query !== "") {
+        this.loading1 = true
+        let arr = []
+        let req = {
+          shortName: query,
+          size: 50,
+        }
+        let res = await getGuestShortName(req);
+        if (res.code == 0) {
+          this.loading1 = false
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.shortName,
+            });
+          });
+        }
+        let arrJson = new Set(arr)
+        this.company = Array.from(arrJson)
+      } else {
+        this.company = [];
+      }
+    },
   },
   async mounted() {
     this.getDataList();
@@ -1228,14 +1274,10 @@ export default {
     // })
     this.getShop()
     this.proTypeList.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
+      this.$refs.registrationEntry.orgName = itm.name;
     });
-    getOptionGuesList().then(res=>{
-      if(res.code===0){
-        this.guestNameList = res.data
-      }
-    })
-  }
+   },
+
 };
 </script>
 <style lang="less" scoped>

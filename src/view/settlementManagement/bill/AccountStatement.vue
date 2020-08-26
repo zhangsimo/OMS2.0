@@ -170,6 +170,7 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="queryEntry"
+          v-noresub
           :disabled="ownEnterList"
           v-has="'input'"
         >进项发票核销

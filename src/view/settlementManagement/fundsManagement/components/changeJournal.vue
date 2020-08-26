@@ -3,17 +3,19 @@
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustomRalus" :label-width="100" label-colon>
       <Row>
         <Col span="12">
-          <FormItem label="所属区域" prop="areaId">
-            <Select v-model="formCustom.areaId" style="width:150px" @on-change="changeArea" disabled>
-              <Option v-for="item in areaList" :value="item.id" :key="item.id" disabled>{{ item.companyName }}</Option>
-            </Select>
+          <FormItem label="所属门店" >
+            <Input  v-model="formCustom.shopName" class="w150" disabled />
+            <!--            <Select v-model="formCustom.shopId" style="width:150px" @on-change='getShopCode'>-->
+            <!--              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>-->
+            <!--            </Select>-->
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="所属门店" prop="shopId">
-            <Select v-model="formCustom.shopId" style="width:150px" @on-change='getShopCode' disabled>
-              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-            </Select>
+          <FormItem label="所属区域" >
+            <Input  v-model="formCustom.areaName" class="w150" disabled />
+            <!--            <Select v-model="formCustom.areaId" style="width:150px" @on-change="changeArea">-->
+            <!--              <Option v-for="item in areaList" :value="item.id" :key="item.id">{{ item.companyName }}</Option>-->
+            <!--            </Select>-->
           </FormItem>
         </Col>
         <Col span="12">
@@ -189,7 +191,6 @@
       };
     },
     mounted() {
-      this.getAllArea()
       this.getsubjectType()
       this.getclaimShop()
       this.getAccount()
@@ -198,13 +199,8 @@
       open() {
         this.handleReset()
         this.getSubject()
-        this.getShopList()
-        this.formCustom.createTime = new Date(this.formCustom.createTime);
+        this.formCustom = this.list
         this.modalShow = true
-        if(this.accountList.length>0){
-          this.formCustom.accountCode=this.accountList[0].accountCode
-        }
-        this.formCustom.claimShopCode=this.formCustom.shopCode
       },
       //获取区域
       async getAllArea() {
