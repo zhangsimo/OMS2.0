@@ -532,7 +532,7 @@ export default {
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size,
         amountType: type,
-        guestId: this.companyId
+        suppliers: this.companyId
       };
       if (this.bankNameO) {
         obj.reciprocalAccountName = this.bankNameO;
