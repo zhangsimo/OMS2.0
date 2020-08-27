@@ -3,8 +3,9 @@
     <div class="orderList">
       <h5>销售订单列表</h5>
     </div>
-    <div class="orderCenter" style="overflow: hidden">
+    <div class="orderCenter">
       <vxe-table
+        class="setPadding"
         ref="currentRowTable"
         border
         align="left"
@@ -14,21 +15,27 @@
         highlight-current-row
         :height="leftTableHeight"
         :data="tableData"
+        resizable
       >
-        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="billStatusId" title="状态" width="60">
+        <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+        <vxe-table-column field="billStatusId" title="状态" width="50">
           <template v-slot="{ row }">
             <span>{{row.billStatusId?row.billStatusId.name:""}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="guestName" title="客户" min-width="180"></vxe-table-column>
-        <vxe-table-column field="printTimes" title="打印次数" min-width="80"></vxe-table-column>
-        <vxe-table-column field="createTime" title="创建日期" min-width="180"></vxe-table-column>
-        <vxe-table-column field="orderMan" title="销售员" min-width="80"></vxe-table-column>
-        <vxe-table-column field="serviceId" title="销售订单单号" width="200"></vxe-table-column>
-        <vxe-table-column field="auditor" title="提交人" min-width="120"></vxe-table-column>
-        <vxe-table-column field="auditDate" title="提交日期" min-width="180"></vxe-table-column>
-        <vxe-table-column field="createUname" title="创建人" min-width="120"></vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo"  field="serviceId" title="订单单号" width="80">
+          <template v-slot="{row}">
+            <div :title="row.serviceId" class="alignRight">{{row.serviceId}}</div>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" show-overflow field="guestName" title="客户" min-width="100"></vxe-table-column>
+        <vxe-table-column field="printTimes" title="打印次数" min-width="70"></vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="remark" title="备注" min-width="120" show-overflow></vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="createUname" title="创建人" min-width="80"></vxe-table-column>
+        <vxe-table-column show-overflow field="createTime" title="创建日期" min-width="120"></vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="auditor" title="提交人" min-width="80"></vxe-table-column>
+        <vxe-table-column show-overflow field="auditDate" title="提交日期" min-width="120"></vxe-table-column>
+        <vxe-table-column field="orderMan" title="销售员" min-width="70"></vxe-table-column>
       </vxe-table>
     </div>
     <Page
@@ -41,7 +48,7 @@
       class-name="page-con"
       @on-change="selectNum"
       @on-page-size-change="selectPage"
-      :page-size-opts="[20, 50, 100, 200]"
+      :page-size-opts="[50, 100, 200]"
       class="mr10"
     >
     </Page>
@@ -74,7 +81,7 @@ export default {
       },
       page: {
         total: 0,
-        size: 20,
+        size: 50,
         num: 1
       },
       tableData: [],
@@ -115,6 +122,15 @@ export default {
     change(){
       this.Flaga = false
     },
+
+    showTooltipMethod({ type, column, row, items, _columnIndex }){
+      const { property } = column;
+      if (property === 'serviceId') {
+        return row[property] ?  row[property] : ''
+      }
+      return null
+    },
+
     //获取表格数据
     async gitlistValue() {
       let self = tools.getSession("self");
@@ -133,6 +149,9 @@ export default {
       let res = await getLeftList(page, size, data);
       if (res.code === 0) {
         this.tableData = res.data.content;
+
+        this.setFilterArr(res.data.content||[])
+
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
         //筛选出当前操作的是第几条并选中
@@ -159,6 +178,31 @@ export default {
         }
       }
     },
+
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos]);
+      let set = new Set(arr);
+      set.forEach(el => {
+        arrData.push({ label: el, value: el });
+      });
+
+      this.$nextTick(()=>{
+        const xtable = this.$refs.currentRowTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'serviceId');
+      this.returnData(rData,'guestName');
+      this.returnData(rData,'remark');
+      this.returnData(rData,'createUname');
+      this.returnData(rData,'auditor');
+    },
+
 
     //切换页面
     selectNum(val) {
@@ -216,7 +260,18 @@ export default {
         this.$emit("getOneOrder", data.row);
         this.$store.commit("setOneOrder", data.row);
       }
-    }
+    },
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property].indexOf(value) > -1;
+      }else{
+        return false
+      }
+    },
   },
   watch: {
     //监听时间
@@ -281,7 +336,19 @@ export default {
   background-color: #f8f8f8;
 }
 .orderCenter {
-  overflow: hidden;
-  overflow-x: scroll;
 }
+
+</style>
+<style lang="less">
+  .setPadding .vxe-cell{
+    padding: 0 4px;
+    .alignRight{
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: right;
+      text-indent: -150px;
+      width: 98%;
+
+    }
+  }
 </style>

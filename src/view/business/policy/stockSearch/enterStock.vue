@@ -301,68 +301,84 @@
             type: "index",
             align: "center",
             key: "index",
-            minWidth: 100
+            minWidth: 40
           },
           {
             title: "配件编码",
             align: "center",
             key: "partCode",
-            minWidth: 170
+            tooltip:true,
+            minWidth: 110
           },
           {
             title: "配件名称",
             align: "center",
+            tooltip:true,
             key: "partName",
-            minWidth: 120
+            minWidth: 110
           },
           {
             title: "单位",
             align: "center",
             key: "enterUnitId",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 40
           },
           {
             title: "品牌",
             align: "center",
             key: "partBrand",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 80
           },
           {
             title: "品牌车型",
             align: "center",
             key: "carModelName",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 90
           },
           {
             title: "仓库",
             align: "center",
             key: "storeName",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "供应商",
             align: "center",
             key: "guestName",
+            tooltip:true,
             minWidth: 120
           },
           {
             title: "入库日期",
             align: "center",
             key: "createTime",
-            minWidth: 80
+            tooltip:true,
+            minWidth: 120
           },
-
+          {
+            title: "入库人",
+            align: "center",
+            key: "enterMan",
+            tooltip:true,
+            minWidth: 70
+          },
           {
             title: "入库数量",
             align: "center",
             key: "enterQty",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "入库单价",
             align: "center",
             key: "enterPrice",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 70,
             render: (h, params) => {
               let tex = parseFloat(params.row.enterPrice).toFixed(2);
               return h("span", {}, tex);
@@ -372,7 +388,8 @@
             title: "金额",
             align: "center",
             key: "enterAmt",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 80,
             render: (h, params) => {
               let tex = parseFloat(params.row.enterAmt).toFixed(2);
               return h("span", {}, tex);
@@ -382,14 +399,15 @@
             title: "税率",
             align: "center",
             key: "taxRate",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 40
           },
           {
             title: "不含税单价",
             align: "center",
             key: "noTaxPrice",
-
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 80,
             render: (h, params) => {
               let tex = parseFloat(params.row.noTaxPrice).toFixed(2);
               return h("span", {}, tex);
@@ -399,7 +417,8 @@
             title: "不含税金额",
             align: "center",
             key: "noTaxAmt",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 80,
             render: (h, params) => {
               let tex = parseFloat(params.row.noTaxAmt).toFixed(2);
               return h("span", {}, tex);
@@ -408,20 +427,30 @@
           {
             title: "入库单号",
             align: "center",
-            key: "serviceId",
-            minWidth: 120
+            key: "code",
+            tooltip:true,
+            minWidth: 160
+          },
+          {
+            title: "创建人",
+            align: "center",
+            key: "createUname",
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "入库类型",
             align: "center",
             key: "enterTypeId",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 80
           },
           {
             title: "备注",
             align: "center",
             key: "remark",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 140
           }
         ],
         // 出库明细表
@@ -431,68 +460,84 @@
             type: "index",
             align: "center",
             key: "index",
-            minWidth: 100
+            minWidth: 40
           },
           {
             title: "配件编码",
             align: "center",
             key: "partCode",
-            minWidth: 170
+            tooltip:true,
+            minWidth: 110
           },
           {
             title: "配件名称",
             align: "center",
             key: "partName",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 110
           },
           {
             title: "单位",
             align: "center",
             key: "systemUnitId",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 40
           },
           {
             title: "品牌",
             align: "center",
             key: "partBrand",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 80
           },
           {
             title: "品牌车型",
             align: "center",
             key: "carModelName",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 90
           },
           {
             title: "仓库",
             align: "center",
             key: "storeName",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "客户",
             align: "center",
             key: "guestName",
+            tooltip:true,
             minWidth: 120
           },
           {
             title: "出库日期",
             align: "center",
             key: "outDate",
-            minWidth: 80
+            tooltip:true,
+            minWidth: 120
           },
-
+          {
+            title: "出库人",
+            align: "center",
+            key: "outMan",
+            tooltip:true,
+            minWidth: 70
+          },
           {
             title: "出库数量",
             align: "center",
             key: "sellQty",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "出库单价",
             align: "center",
             key: "sellPrice",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 70,
             render: (h, params) => {
               let tex = parseFloat(params.row.sellPrice).toFixed(2);
               return h("span", {}, tex);
@@ -502,7 +547,8 @@
             title: "出库金额",
             align: "center",
             key: "sellAmt",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 80,
             render: (h, params) => {
               let tex = parseFloat(params.row.sellAmt).toFixed(2);
               return h("span", {}, tex);
@@ -512,7 +558,8 @@
             title: "含税标记",
             align: "center",
             key: "taxRate",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 70,
             render: (h, params) => {
               let checked = params.row.taxSign == 0 ? false : true;
               return h("Checkbox", {
@@ -527,25 +574,29 @@
             title: "税率",
             align: "center",
             key: "taxRate",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 40
           },
           {
             title: "含税单价",
             align: "center",
             key: "taxPrice",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "含税金额",
             align: "center",
             key: "taxAmt",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 80
           },
           {
             title: "不含税单价",
             align: "center",
             key: "noTaxPrice",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 80,
             render: (h, params) => {
               let tex = parseFloat(params.row.noTaxPrice).toFixed(2);
               return h("span", {}, tex);
@@ -555,7 +606,8 @@
             title: "不含税金额",
             align: "center",
             key: "noTaxAmt",
-            minWidth: 120,
+            tooltip:true,
+            minWidth: 80,
             render: (h, params) => {
               let tex = parseFloat(params.row.noTaxAmt).toFixed(2);
               return h("span", {}, tex);
@@ -565,19 +617,29 @@
             title: "出库单号",
             align: "center",
             key: "serviceId",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 160
+          },
+          {
+            title: "创建人",
+            align: "center",
+            key: "createUname",
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "出库类型",
             align: "center",
             key: "enterTypeId",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 70
           },
           {
             title: "备注",
             align: "center",
             key: "remark",
-            minWidth: 120
+            tooltip:true,
+            minWidth: 140
           }
         ],
         //级别销价

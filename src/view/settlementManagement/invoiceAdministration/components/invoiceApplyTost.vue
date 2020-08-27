@@ -43,7 +43,7 @@
           ref="summary"
           highlight-row
           max-height="400"
-          @on-selection-change="requireMore"
+          @on-current-change="requireMore"
         ></Table>
         <Page
           :total="pagetotal"
@@ -216,7 +216,7 @@ export default {
           }
         }
       ], //对账单
-
+      data:[],
       data2: [],
       columns1: [
         {
@@ -452,9 +452,9 @@ export default {
                 size: "small",
                 min: 0.0,
                 max:
-                  params.row.paymentBalance < this.data[0].applyAmt
+                  params.row.paymentBalance < this.data2[0].applyAmt
                     ? params.row.paymentBalance
-                    : this.data[0].applyAmt
+                    : this.data2[0].applyAmt
               },
               on: {
                 input: val => {
@@ -467,12 +467,14 @@ export default {
         {
           title: "已核销金额",
           key: "writeOffAmount",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "剩余未核销金额",
           key: "paymentBalance",
-          className: "tc"
+          className: "tc",
+          minWidth: 90
         },
         {
           title: "价税合计金额",
@@ -947,7 +949,7 @@ export default {
       this.getTabList();
     },
     requireMore(val) {
-      this.allSelectList = val;
+      this.allSelectList = [val];
     },
     requireMore2(val) {
       this.allSelectListBottom = val;

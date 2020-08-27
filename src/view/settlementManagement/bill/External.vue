@@ -24,7 +24,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -215,13 +215,13 @@ export default {
           title: "单据类型",
           key: "enterTypeIdName",
           className: "tc",
-          minWidth: 120
+          width: 80
         },
         {
           title: "仓库",
           key: "storeName",
           className: "tc",
-          minWidth: 100,
+          width: 70,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -243,7 +243,7 @@ export default {
           title: "制单人",
           key: "createUname",
           className: "tc",
-          minWidth: 100,
+          width: 80,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -309,7 +309,7 @@ export default {
           title: "是否含税",
           key: "taxSign",
           className: "tc",
-          minWidth: 100
+          width: 70
         },
         {
           title: "金额",
@@ -318,13 +318,13 @@ export default {
           render: (h, params) => {
             return h("span", params.row.outAmt.toFixed(2));
           },
-          minWidth: 150
+          width: 90
         },
         {
           title: "单据状态",
           key: "auditSign",
           className: "tc",
-          minWidth: 100
+          width: 80
         },
         {
           title: "备注",
@@ -347,7 +347,13 @@ export default {
               }, params.row.remark)
             ])
           }
-        }
+        },
+        {
+          title: "退货原因",
+          key: "rtnReasonName",
+          className: "tc",
+          width: 100
+        },
       ],
       columns1: [
         {
@@ -630,7 +636,7 @@ export default {
         guestId: this.companyId,
         enterTypeId: this.type
       };
-      console.log(this.value)
+      // console.log(this.value)
       if (this.type === "050101") {
         (obj.enterDateStart = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")

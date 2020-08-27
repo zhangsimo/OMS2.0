@@ -879,7 +879,7 @@
         val.forEach(item => {
           item.partName = item.partStandardName;
           item.hasAcceptQty = undefined;
-          item.carBrandName = item.adapterCarModel;
+          item.carBrandName = item.adapterCarBrand;
           item.orderPrice = item.minUnit;
           item.oemCode = item.oeCode;
           item.spec = item.specifications || item.spec;
