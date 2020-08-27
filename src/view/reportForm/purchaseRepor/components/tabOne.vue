@@ -1,8 +1,9 @@
 <template>
-  <section class="con-box">
+  <section>
+<!--    class="con-box"-->
     <vxe-table
       border
-      align="center"
+      align="left"
       size="mini"
       ref="xTable"
       height="400"
@@ -18,51 +19,27 @@
           show-overflow="tooltip"
           field="serviceId"
           title="订单单号"
-          width="100"
+          width="164"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="guestFullName"
           title="供应商"
-          width="80"
+          width="120"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group1" title="订单信息">
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderMan"
-          title="采购员"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="billTypeIdName"
-          title="票据类型"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="settleTypeIdName"
-          title="结算方式"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="orderDate"
-          title="订货日期"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
           field="storeName"
           title="仓库"
-          width="120"
+          width="90"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="orderType"
           title="订单类型"
-          width="120"
+          width="70"
         >
           <template v-slot="{ row }">
             <span>{{ row.orderType.name }}</span>
@@ -74,37 +51,37 @@
           show-overflow="tooltip"
           field="partCode"
           title="配件编码"
-          width="150"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="partName"
           title="配件名称"
-          width="150"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="oemCode"
           title="OE码"
-          width="150"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="partBrand"
           title="品牌"
-          width="150"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
-          width="150"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="unit"
           title="单位"
-          width="100"
+          width="50"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
@@ -118,41 +95,41 @@
           show-overflow="tooltip"
           field="orderQty"
           title="订单数量"
-          width="120"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="orderPrice"
           title="采购单价"
-          width="120"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="orderAmt"
           title="金额"
-          width="120"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="adjustQty"
           title="调整数量"
-          width="100"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="trueEnterQty"
           title="入库数量"
-          width="100"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="detailRemark"
           title="备注"
-          width="100"
+          width="70"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group4" title="税率信息">
-        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
+        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
@@ -161,7 +138,7 @@
           show-overflow="tooltip"
           field="taxRate"
           title="税率"
-          width="150"
+          width="50"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group4" title="国际采购各项费用">
@@ -169,101 +146,114 @@
           show-overflow="tooltip"
           field="currency"
           title="币种"
-          width="120"
+          width="60"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="exchangeRate"
           title="汇率"
-          width="100"
+          width="50"
 
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="fcPrice"
           title="裸价外币"
-          width="150"
+          width="70"
 
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="rmbPrice"
           title="裸价人民币"
-          width="150"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="rmbAmt"
           title="裸价金额"
-          width="150"
+          width="80"
 
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="tariffAmt"
           title="关税费"
-          width="100"
+          width="70"
 
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="transportAmt"
           title="运杂费"
-          width="100"
+          width="70"
 
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="vatAmt"
           title="增值税费"
-          width="150"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="otherAmt"
           title="其他费用"
-          width="150"
+          width="70"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
         <vxe-table-column
           show-overflow="tooltip"
+          field="settleTypeIdName"
+          title="结算方式"
+          width="80"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="billTypeIdName"
+          title="票据类型"
+          width="80"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="orderDate"
+          title="订货日期"
+          width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="orderMan"
+          title="采购员"
+          width="70"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
           field="auditor"
           title="提交人"
-          width="140"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="auditDate"
           title="提交日期"
-          width="200"
+          width="100"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="mainRemark"
           title="订单备注"
-          width="200"
+          width="240"
         ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <div class="page-warp fw">
-      <!--      <p>-->
-      <!--        <span>查询结果统计</span>-->
-      <!--        <span-->
-      <!--        >总库存：<span>{{ total.enterQty }}</span></span-->
-      <!--        >-->
-      <!--        <span-->
-      <!--        >可售库存：<span>{{ total.outableQty }}</span></span-->
-      <!--        >-->
-      <!--        <span-->
-      <!--        >总金额：<span>{{ total.enterAmt }}</span></span-->
-      <!--        >-->
-      <!--      </p>-->
       <Page
         class-name="page-con"
         :current="page.num"
         :total="page.total"
         :page-size="page.size"
+        :page-size-opts="pageOpts"
         @on-change="changePage"
         @on-page-size-change="changeSize"
         show-sizer
@@ -282,9 +272,10 @@
       return {
         page: {
           num: 1,
-          size: 10,
+          size: 1000,
           total: 0
         },
+        pageOpts: [1000, 2000, 3000, 5000],
         body: {},
         tableData: [],
         total: {}
@@ -394,3 +385,9 @@
     }
   };
 </script>
+<style scoped>
+  /*.vxe-table.border--full */
+  /*.vxe-table>.vxe-cell{*/
+  /*  margin-left: -16px!important;*/
+  /*}*/
+</style>

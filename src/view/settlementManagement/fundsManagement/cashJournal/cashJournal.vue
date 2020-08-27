@@ -313,7 +313,7 @@
         model1: 0, //获取到地址id
         shopCode: 0, //获取到门店id
         shopList: [{id: '0', name: "全部"}], //门店列表
-        subjectCode: "1243469693836918001", //科目id
+        subjectCode: new Array(), //科目id
         subJectList: [], //科目列表
         company: "", //往来单位
         companyId: "", //往来单位id
@@ -371,7 +371,7 @@
         if (res.code === 0) {
           this.subJectList = res.data
           if (res.data.length == 0) return
-          this.subjectCode = res.data[0].id
+          this.subjectCode.push(res.data[0].id)
         }
       },
 
@@ -418,6 +418,7 @@
       //获取表格信息
       async getList() {
         let data = {};
+        data.signs=1;//区别现金日记账
         data.page = 0;
         data.size = 9999;
         data.startTime = this.value[0]
@@ -428,7 +429,7 @@
           : "";
         data.areaId = this.model1;
         data.shopNumber = this.shopCode;
-        data.subjectId = this.subjectCode;
+        data.subjectId = [this.subjectCode];
         this.allMoneyList = {};
         let res = await goList(data);
         if (res.code === 0) {

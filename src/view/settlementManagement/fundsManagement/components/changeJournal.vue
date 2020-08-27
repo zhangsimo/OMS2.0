@@ -25,7 +25,7 @@
         </Col>
         <Col span="12">
           <FormItem label="账户" prop="accountCode">
-            <Select v-model="formCustom.accountCode" style="width:150px" @on-change='changeAccount' disabled>
+            <Select v-model="formCustom.accountId" style="width:150px" @on-change='changeAccount' disabled>
               <Option v-for="item in accountList" :value="item.accountCode" :key="item.accountCode">{{
                 item.accountName }}
               </Option>

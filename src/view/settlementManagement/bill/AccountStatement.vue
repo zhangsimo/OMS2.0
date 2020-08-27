@@ -1308,7 +1308,8 @@
       capitalWrite() {
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           // bus.$emit('account',this.reconciliationStatement)
-          this.$router.push({name: "claimWrite", params: {data: this.reconciliationStatement}});
+          // console.log(this.reconciliationStatement , 123)
+          this.$router.push({name: "claimWrite", params: {id: this.reconciliationStatement.id}});
         } else {
           this.$message.error("请选择一条对账单");
         }

@@ -381,7 +381,7 @@ export default {
     changeSize(size) {
       this.page.num = 1;
       this.page.size = size;
-      this.query();
+      this.initList();
     },
     // 树状图选择
     treeSelect(arr, item) {

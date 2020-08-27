@@ -59,7 +59,7 @@
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
-                <span class="listChild">{{ item.businessTypeName? item.businessTypeName  : '' }}</span>
+                <span class="listChild">{{ item.businessTypeName ? item.businessTypeName  : '' }}</span>
               </li>
             </ul>
           </template>
@@ -194,6 +194,7 @@ export default {
   display: inline-block;
   border: 1px solid #e8eaec;
   flex: 1;
+  line-height: 24px;
   padding:0 5px;
 }
 .vxe-table .vxe-cell {
