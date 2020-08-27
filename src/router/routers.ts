@@ -1064,7 +1064,8 @@ export default [
             name: "claimWrite",
             redirect: "",
             mark: "51108",
-            meta: { keepAlive: true,
+            meta: {
+              keepAlive: true,
               title: "资金认领款核销"
             },
             component: () =>

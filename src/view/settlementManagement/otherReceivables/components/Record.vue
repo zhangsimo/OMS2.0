@@ -112,14 +112,14 @@ export default {
           title: "收付款金额",
           key: "checkAmt",
           align: "center",
-          render: (h, p) => {
-            let Number = p.row.checkAmt;
-            let val = p.row.sort.value;
-           if(val == 0){
-             Number = -Number
-           }
-            return h("span", Number);
-          }
+          // render: (h, p) => {
+          //   let Number = p.row.checkAmt;
+          //   let val = p.row.sort.value;
+          //  if(val == 0){
+          //    Number = -Number
+          //  }
+          //   return h("span", Number);
+          // }
         },
         {
           title: "审核状态",

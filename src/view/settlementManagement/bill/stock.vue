@@ -24,7 +24,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.shortName}}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -120,7 +120,7 @@ export default {
         {
           key: "index",
           title: "序号",
-          minWidth: 60,
+          width: 40,
           className: "tc"
         },
         {
@@ -215,19 +215,19 @@ export default {
           title: "单据类型",
           key: "enterTypeIdName",
           className: "tc",
-          minWidth: 140
+          width: 70
         },
         {
           title: "销售类别",
           key: "orderType",
           className: "tc",
-          minWidth: 140
+          width: 70
         },
         {
           title: "仓库",
           key: "storeName",
           className: "tc",
-          minWidth: 100,
+          width: 70,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -249,7 +249,7 @@ export default {
           title: "制单人",
           key: "createUname",
           className: "tc",
-          minWidth: 100,
+          width: 80,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -315,7 +315,7 @@ export default {
           title: "金额",
           key: "outAmt",
           className: "tc",
-          minWidth: 140,
+          width: 90,
           render: (h, params) => {
             return h("span", params.row.outAmt.toFixed(2));
           }
@@ -324,7 +324,7 @@ export default {
           title: "单据状态",
           key: "accountSign",
           className: "tc",
-          minWidth: 140
+          width: 80
         },
         {
           title: "备注",
@@ -345,6 +345,28 @@ export default {
                   title: params.row.remark
                 }
               }, params.row.remark)
+            ])
+          }
+        },
+        {
+          title: "退货原因",
+          key: "rtnReasonName",
+          className: "tc",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.rtnReasonName
+                }
+              }, params.row.rtnReasonName)
             ])
           }
         }
@@ -370,7 +392,8 @@ export default {
         {
           title: "品牌",
           key: "partBrand",
-          className: "tc"
+          className: "tc",
+          width: 80,
         },
         {
           title: "车型",
@@ -385,12 +408,14 @@ export default {
         {
           title: "是否含税",
           key: "taxSign",
-          className: "tc"
+          className: "tc",
+          width: 70,
         },
         {
           title: "不含税单价",
           key: "noTaxPrice",
           className: "tc",
+          width: 80,
           render: (h, params) => {
             return h("span", params.row.noTaxPrice.toFixed(2));
           }
@@ -399,6 +424,7 @@ export default {
           title: "不含税金额",
           key: "noTaxAmt",
           className: "tc",
+          width: 80,
           render: (h, params) => {
             return h("span", params.row.noTaxAmt.toFixed(2));
           }
@@ -407,6 +433,7 @@ export default {
           title: "含税单价",
           key: "taxPrice",
           className: "tc",
+          width: 70,
           render: (h, params) => {
             return h("span", params.row.taxPrice.toFixed(2));
           }
@@ -415,6 +442,7 @@ export default {
           title: "含税金额",
           key: "taxAmt",
           className: "tc",
+          width: 80,
           render: (h, params) => {
             return h("span", params.row.taxAmt.toFixed(2));
           }
@@ -422,12 +450,14 @@ export default {
         {
           title: "数量",
           key: "sellQty",
-          className: "tc"
+          className: "tc",
+          width: 70,
         },
         {
           title: "单价",
           key: "sellPrice",
           className: "tc",
+          width: 80,
           render: (h, params) => {
             if(this.typeName === "050202") {
               return h("span", params.row.sellPrice.toFixed(2));
@@ -440,6 +470,7 @@ export default {
           title: "金额",
           key: "sellAmt",
           className: "tc",
+          width: 80,
           render: (h, params) => {
             if(this.typeName === "050202") {
               return h("span", params.row.sellAmt.toFixed(2));
@@ -447,6 +478,12 @@ export default {
               return h("span", params.row. rtnAmt.toFixed(2));
             }
           }
+        },
+        {
+          title: "供应商",
+          key: "guestName",
+          className: "tc",
+          width: 80
         }
       ],
       data: [],
@@ -467,13 +504,7 @@ export default {
     };
   },
   async mounted() {
-    let arr = await creat(this.$refs.quickDate.val, this.$store);
-    this.value = arr[0];
     this.getShop()
-    this.$nextTick(()=>{
-      this.model1 = arr[1];
-      this.getGeneral();
-    })
   },
   computed:{
     selectShopList(){
@@ -556,6 +587,13 @@ export default {
           };
           return;
         }
+        if(key=="guestName") {
+          sums[key] = {
+            key,
+            value: " "
+          };
+          return;
+        }
         const values = data.map(item => Number(item[key]));
         if (index > 6 && index !== 11) {
           if (!values.every(value => isNaN(value))) {
@@ -587,7 +625,7 @@ export default {
               value: v
             };
           }
-        } else {
+        }else {
           sums[key] = {
             key,
             value: " "
@@ -609,9 +647,16 @@ export default {
       this.getGeneral()
     },
     // 快速查询
-    quickDate(data) {
-      this.value = data;
-      this.getGeneral();
+    async quickDate(data) {
+      if(this.model1==""){
+        let arr = await creat(this.$refs.quickDate.val, this.$store);
+        this.model1 = arr[1];
+        this.value = arr[0];
+        this.getGeneral();
+      }else{
+        this.value = data;
+        this.getGeneral();
+      }
     },
     // 往来单位
     Dealings() {

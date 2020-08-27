@@ -567,7 +567,6 @@ export default {
     }
   },
   created() {
-    this.getList();
     this.getAllSales();
   },
   methods: {
@@ -1191,7 +1190,7 @@ export default {
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
-
+    this.getList();
     window.onresize = () => {
       this.getDomHeight();
     };

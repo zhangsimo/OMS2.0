@@ -320,6 +320,17 @@
   import requestCode from "@/view/documentApproval/component/popWindow/RequestCode"
   import selectDealings from "../../../settlementManagement/paymentmanage/component/selectCompany";
 
+  // for (let i of res.data.one) {
+  //   if (i.number === 3) {
+  //     this.arrId[0] = i.accountNo;
+  //   } else if (i.number === 1) {
+  //     this.arrId[1] = i.accountNo;
+  //   } else {
+  //     this.arrId[2] = i.accountNo;
+  //   }
+  // }
+
+
   export default {
     // props: ["id"],
     props: ["modelType", 'list'],
@@ -361,6 +372,7 @@
           thisPaymentAccount: "", //本次申请付款账户
           billingType: {value: 0} //计划结算类型
         },
+        arrId:[],
         billDate: "", //单据日期
         Reconciliation: false, //本次不对账弹窗
         accountModal: false, //对账单弹窗
@@ -648,6 +660,22 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
+
+            if(!this.disabletype){
+              /**进入 草稿状态 下面金额 应该没有值*/
+              this.infoBase.reconciliation=0;
+              this.infoBase.payingBadDebts=0;
+              this.infoBase.dealingRebates=0;
+              this.infoBase.accountReceivable=0;
+              this.infoBase.badDebtReceivable=0;
+              this.infoBase.receivableRebate=0;
+              this.infoBase.transportExpenses=0;
+              this.infoBase.insuranceExpenses=0;
+              this.infoBase.serviceCharge =0;
+              this.infoBase.partsManagementFee=0;
+              this.infoBase.otherFees=0;
+            }
+
             if(this.infoBase.guestName!=""){
               getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
                 let arr = []
@@ -696,6 +724,22 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
+
+            if(!this.disabletype){
+              /**进入 草稿状态 下面金额 应该没有值*/
+              this.infoBase.reconciliation=0;
+              this.infoBase.payingBadDebts=0;
+              this.infoBase.dealingRebates=0;
+              this.infoBase.accountReceivable=0;
+              this.infoBase.badDebtReceivable=0;
+              this.infoBase.receivableRebate=0;
+              this.infoBase.transportExpenses=0;
+              this.infoBase.insuranceExpenses=0;
+              this.infoBase.serviceCharge =0;
+              this.infoBase.partsManagementFee=0;
+              this.infoBase.otherFees=0;
+            }
+
             getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
               let arr = []
               if (res2.code === 0) {
@@ -842,9 +886,9 @@
       // 应付选中
       paymentCheckout(selection, row) {
         this.paymentlist = selection;
-        this.totalpayment = 0;
+        this.infoBase.reconciliation = 0;
         selection.map(item => {
-          this.totalpayment += item.thisAccountAmt;
+          this.infoBase.reconciliation += item.thisAccountAmt;
         });
         this.getSettlementComputed();
 
@@ -853,9 +897,9 @@
       // 应收选中
       collectCheckout(selection, row) {
         this.collectlist = selection;
-        this.infoBase.actualCollection = 0;
+        this.infoBase.accountReceivable = 0;
         // this.Actualtotalcollect = 0;
-        this.infoBase.actualCollection = this.collectSum(selection)
+        this.infoBase.accountReceivable = this.collectSum(selection)
         // selection.map(item => {
         //   this.totalcollect += item.thisAccountAmt;
         // });
@@ -866,11 +910,12 @@
       // 应收全选
       collectCheckoutAll(selection) {
         this.collectlist = selection;
-        this.infoBase.actualCollection = this.collectSum(selection)
+        console.log(selection,1111)
+        this.infoBase.accountReceivable = this.collectSum(selection)
         // selection.map(item => {
         //   this.totalcollect += item.thisAccountAmt;
         // });
-        this.getSettlementComputed();
+        // this.getSettlementComputed();
 
         // this.tipText(this.collectlist);
       },
@@ -901,37 +946,36 @@
       // 应付全选
       paymentCheckoutAll(selection) {
         this.paymentlist = selection;
-        this.totalpayment = 0
+        this.infoBase.reconciliation = 0
         selection.map(item => {
-          this.totalpayment += item.thisAccountAmt;
+          this.infoBase.reconciliation += item.thisAccountAmt;
         });
         this.getSettlementComputed();
-
         // this.tipText(this.paymentlist);
       },
       // 应付取消选中
       paymentNoCheckout(selection, row) {
         this.paymentlist = selection;
-        this.totalpayment -= row.thisAccountAmt;
+        this.infoBase.reconciliation -= row.thisAccountAmt;
         this.getSettlementComputed();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
         this.collectlist = selection;
-        this.infoBase.actualCollection -= row.thisAccountAmt;
+        this.infoBase.accountReceivable -= row.thisAccountAmt;
         this.getSettlementComputed();
       },
       // 应付取消全选
       paymentNoCheckoutAll() {
         this.paymentlist = [];
-        this.totalpayment = 0;
+        this.infoBase.reconciliation = 0;
         // this.Actualtotalpayment = 0;
         this.getSettlementComputed();
       },
       // 应收取消全选
       collectNoCheckoutAll() {
         this.collectlist = [];
-        this.infoBase.actualCollection = 0;
+        this.infoBase.accountReceivable = 0;
         // this.Actualtotalcollect = 0;
         this.getSettlementComputed();
       },
@@ -1077,6 +1121,8 @@
         this.infoBase.buttonStatus = 1
         this.infoBase.commitType = 1
         this.list.four = [this.infoBase]
+        // this.infoBase.reconciliation=0;
+        // this.infoBase.reconciliation
         if (num == 0) {
           let res = await CheckForSave(this.list, this.modelType)
           if (res.code === 0) {

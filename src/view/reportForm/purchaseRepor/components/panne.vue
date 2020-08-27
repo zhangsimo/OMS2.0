@@ -1,7 +1,7 @@
 <template>
   <section class="oper-box">
-    <div class="oper-top flex">
-      <div class="oper-top flex">
+    <div class="flex">
+      <div class="con-box flex">
         <div class="wlf">
           <div class="db mr10">
             <quick-date @quickDate="getDataQuick"></quick-date>
@@ -255,3 +255,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .main .ivu-layout .con-box{
+    border: 0;
+    padding-top: 0;
+  }
+  .wlf>div{
+    padding-top:0;
+  }
+</style>

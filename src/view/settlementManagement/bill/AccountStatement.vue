@@ -1192,8 +1192,11 @@
     },
     computed: {
       selectShopList() {
-        let canSelect = this.$store.state.user.userData.currentCompany.isMaster ? true : false
-        return canSelect
+        if(this.$store.state.user.userData.currentCompany!=null){
+          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        }else{
+          return true
+        }
       }
     },
     filters: {
@@ -1308,7 +1311,8 @@
       capitalWrite() {
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           // bus.$emit('account',this.reconciliationStatement)
-          this.$router.push({name: "claimWrite", params: {data: this.reconciliationStatement}});
+          // console.log(this.reconciliationStatement , 123)
+          this.$router.push({name: "claimWrite", params: {id: this.reconciliationStatement.id}});
         } else {
           this.$message.error("请选择一条对账单");
         }

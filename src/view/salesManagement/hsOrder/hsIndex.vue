@@ -927,7 +927,8 @@
             })
             reqData.detailList = detailList;
             reqData.detailList.map(item => {
-              item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty
+              item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty;
+              item.isMarkBatch = 1;
             });
 
             let res = await getSave(reqData);

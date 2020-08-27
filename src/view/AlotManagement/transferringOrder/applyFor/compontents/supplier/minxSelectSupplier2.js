@@ -175,6 +175,7 @@ export const mixSelectSupplier2 = {
       this.searchPartLayer = true;
       this.getList();
       this.getfindTypeListFun();
+      this.$nextTick(()=>this.$refs.focusInput.focus())
     },
     //配件表格点击的行
     selectTabelData(v) {
