@@ -130,7 +130,7 @@ export default {
       if (res.code === 0) {
         this.formInline = res.data
         this.formInline.receiverId = res.data.receiverId
-        await this.remoteMethod(res.data.receiveGuestName)
+        await this.remoteMethod("",res.data.receiveGuestId)
         setTimeout(()=>{
           this.getCompany(this.company[0])
         },1000)
@@ -143,12 +143,13 @@ export default {
       }
     },
 
-    async remoteMethod(query) {
+    async remoteMethod(query,id) {
       this.company = [];
-      if (query !== "") {
+      if (query !== "" || id) {
         this.remoteloading = true;
         let arr = []
         let req = {
+          id:id,
           shortName: query,
           size: 50,
         }
@@ -221,7 +222,7 @@ export default {
 
     changeCollectionUname(v) {
       let arr = this.receiverArr.filter(item => item.id == v.value);
-      this.remoteMethod(arr[0].guestId)
+      this.remoteMethod("",arr[0].guestId)
       this.setReceiverInfo(arr[0]);
     },
 
@@ -243,7 +244,7 @@ export default {
       delete row.id
       row.orderDate = row.createTime
       this.$set(this.formInline, "details", [row]);
-      await this.remoteMethod(row.guestName.slice(0, row.guestName.length - 1))
+      await this.remoteMethod("",row.guestId)
       this.formInline.receiveGuestId = this.company[0].value
       this.getCompany(this.company[0])
     },

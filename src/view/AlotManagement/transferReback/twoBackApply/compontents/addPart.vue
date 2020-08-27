@@ -25,7 +25,7 @@
             type="daterange"
             placement="bottom-end"
             placeholder="请选择日期"
-            style="width: 120px"
+            style="width: 200px"
             :value="auditDate"
             @on-change="getDate"
           ></DatePicker>
@@ -236,7 +236,7 @@
 
     private reset() {
       this.selectRow = new Array();
-      this.auditDate = new Array();
+      // this.auditDate = new Array();
       this.tableDataBm = new Array();
       this.partId = "";
     }

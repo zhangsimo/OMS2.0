@@ -56,7 +56,7 @@ export const mixSelectPartCom = {
           key: "adapterCarModel",
           minWidth: 120,
           render:(h,p) => {
-            return h('span',p.row.adapterCarModel||p.row.carBrandName)
+            return h('span',p.row.adapterCarBrand||p.row.adapterCarModel)
           }
         },
         {

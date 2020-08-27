@@ -8,9 +8,9 @@ import {
   getDictionary,
   getExpSve
 } from "_api/documentApproval/ExpenseReimbursement";
-import {getThisAllList, getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
+import {getThisAllList, getBackList , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
-import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js";
+// import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js";
 import {getPost} from "../utils";
 import store from "@/store/index.js";
 
@@ -171,6 +171,7 @@ export default {
   methods: {
     //模态框打开111
     async open() {
+      this.getpayList()
       this.$refs.xTable.recalculate(true)
       this.payeeList = this.list.allSalesList;
       this.options1 = [];
@@ -218,13 +219,29 @@ export default {
 
     //收款人账号搜索触发
     remoteMethod1(query) {
-      // this.options1 = [];
       this.getOptionsList(query)
     },
-    //付款人账号搜索出发
-    remoteMethod2(query) {
-      this.getOptionsList2(query)
+
+    //获取本点下的付款账号
+   async getpayList(){
+      let data ={
+        check:1
+      }
+      let res = await getPayAccount(data)
+     if (res.code === 0){
+       this.payUserList = res.data
+       if (this.list.type == 1){
+        if( res.data.length  == 0 ) return
+         let arr = res.data.filter(item => item.accountName == '张华')
+         this.formInline.paymentAccount =  arr.length > 0 ? arr[0].id : res.data[0].id
+         this.getPayList(this.formInline.paymentAccount)
+       }
+     }
     },
+    //付款人账号搜索出发
+    // remoteMethod2(query) {
+    //   this.getOptionsList2(query)
+    // },
     //收款人账号搜索框
     async getOptionsList(query) {
       if (query !== "") {
@@ -241,25 +258,25 @@ export default {
       }
     },
     //付款人账号搜索框
-    async getOptionsList2(query) {
-      if (query !== "") {
-        let data = {}
-        data.accountName = query
-        shopNumber: store.state.user.userData;
-        data.page = 0
-        data.size = 100
-        let res = await getPayAccount(data)
-        if (res.code == 0) {
-          res.data.content.map(item => {
-            item.value = item.id;
-            item.label = item.accountName;
-          });
-          this.payUserList = res.data.content || []
-        }
-      } else {
-        this.payUserList = [];
-      }
-    },
+    // async getOptionsList2(query) {
+    //   if (query !== "") {
+    //     let data = {}
+    //     data.accountName = query
+    //     shopNumber: store.state.user.userData;
+    //     data.page = 0
+    //     data.size = 100
+    //     let res = await getPayAccount(data)
+    //     if (res.code == 0) {
+    //       res.data.content.map(item => {
+    //         item.value = item.id;
+    //         item.label = item.accountName;
+    //       });
+    //       this.payUserList = res.data.content || []
+    //     }
+    //   } else {
+    //     this.payUserList = [];
+    //   }
+    // },
     //获取当前信息
     async getList() {
       let data = {};
@@ -269,7 +286,6 @@ export default {
         this.$nextTick(() => {
           this.formInline = res.data;
           this.getOptionsList(res.data.receiver)
-          this.getOptionsList2(res.data.paymentAccountName)
           this.details = res.data.details || [];
           this.Pictures = {
             voucherPictures: res.data.voucherPictures || [],
@@ -500,9 +516,9 @@ export default {
     //获取付款信息
     getPayList(value) {
       if (!value) return;
-      let list = this.payUserList.filter(item => item.id == value.value)[0];
-      this.formInline.paymentBank = list.bankName || "";
-      this.formInline.paymentBankNo = list.accountCode;
+      let list = this.payUserList.filter(item => item.id == value)[0];
+      this.$set(this.formInline , 'paymentBank' , list.bankName)
+      this.$set(this.formInline , 'paymentBankNo' , list.accountCode)
     },
 
     //获取到上传图片地址

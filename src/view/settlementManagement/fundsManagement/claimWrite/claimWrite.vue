@@ -773,17 +773,15 @@
         writeBool: false,//判断 是否可以打开核销对账单
       };
     },
+    //keepalive 数据劫持是调用数据
+    activated(){
+      if(this.$route.params.id){
+        this.value =['' ,'']
+        this.paramsNoWrite()
+      }
+    },
+
     async mounted() {
-      // this.getOne();
-      //收付类型数据字典
-      // getDataDictionaryTable({dictCode: "RECEIVE_PAYMENT_TYPE"}).then(res => {
-      //   res.data.map(item => {
-      //     this.paymentList.push({
-      //       value: item.itemCode,
-      //       label: item.itemName
-      //     });
-      //   });
-      // });
       getDataDictionaryTable({dictCode: "YWLX"}).then(res2 => {
         this.businessTypeList = res2.data || []
       })
@@ -791,28 +789,20 @@
       this.orgName = arr[3];
       this.$nextTick(() => {
         this.areaId = arr[0]
-        // this.getShop(this.areaId);
         this.setAreaDef()
         this.orgId = arr[1];
         this.model1 = arr[1];
-        this.model2 = arr[1];
-        this.queryNoWrite()
+        this.model2 = arr[1]
+        if (this.$route.params.id){
+          this.value =['' ,'']
+          this.paramsNoWrite()
+        }else {
+          this.queryNoWrite()
+        }
         this.claimedList();
         this.distributionList();
       })
       this.getAllAre();
-      if (Object.keys(this.$route.params).length !== 0) {
-        this.$route.params.data.receivePaymentTypeName = this.$route.params.data.paymentTypeName;
-        this.$route.params.data.actualCollectionOrPayment = this.$route.params.data.receiptPayment;
-        if (this.$route.params.data.billingTypeName === "付款") {
-          this.$route.params.data.amountReceivedOrPaid = this.$route.params.data.amountPaid;
-          this.$route.params.data.amountNoCharOffOrUnpaid = this.$route.params.data.unpaidAmount;
-        } else {
-          this.$route.params.data.amountReceivedOrPaid = this.$route.params.data.amountReceived;
-          this.$route.params.data.amountNoCharOffOrUnpaid = this.$route.params.data.noCharOffAmt;
-        }
-        this.accountNoWriteData.push(this.$route.params.data);
-      }
     },
     computed: {
       selectShopList() {
@@ -1141,6 +1131,28 @@
       distributionSelection(selection) {
         this.currentDistribution = selection;
       },
+      //对账单跳转页面后接口
+      //未核销对账单查询接口
+      paramsNoWrite() {
+        let obj = {
+          amount: this.amtNo,
+          guestId: this.companyIdNo,
+          receivePaymentType: this.paymentId,
+          page: this.accountPage.page - 1,
+          size: this.accountPage.size,
+          orgId: this.model1,//分店名称
+          id: this.$route.params.id,
+          startDate: '',
+          endDate: '',     //结束时间参数
+          // createTime:this.applyDate //日期查询时间发生日期
+        };
+        accountNoSelete(obj).then(res => {
+          if (res.code === 0) {
+            this.accountNoWriteData = res.data.content;
+            this.accountPage.total = res.data.totalElements;
+          }
+        });
+      },
       //未核销对账单查询接口
       noWrite() {
         let obj = {
@@ -1149,7 +1161,6 @@
           receivePaymentType: this.paymentId,
           page: this.accountPage.page - 1,
           size: this.accountPage.size,
-
           orgId: this.model1,//分店名称
           startDate: this.value[0]
             ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")

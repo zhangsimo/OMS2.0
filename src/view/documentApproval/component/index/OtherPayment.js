@@ -130,7 +130,7 @@ export default {
       if (res.code === 0) {
         this.formInline = res.data
         this.formInline.receiverId = res.data.receiverId
-        await this.getOrignCompany(res.data.receiveGuestName)
+        await this.getOrignCompany("",res.data.receiveGuestId)
         this.getCompany(this.company[0])
         await this.remoteMethod2(res.data.paymentAccountName)
         this.Pictures = {
@@ -149,10 +149,11 @@ export default {
       this.getOptionsList2(query)
     },
     //获取往来单位
-    async getOrignCompany(query) {
-      if (query !== '') {
+    async getOrignCompany(query,id) {
+      if (query !== '' || id) {
         let arr = []
         let req = {
+          id:id,
           shortName: query,
           size: 50,
         }
@@ -219,7 +220,7 @@ export default {
 
     changeCollectionUname(v) {
       let arr = this.receiverArr.filter(item => item.id == v.value);
-      this.getOrignCompany(arr[0].guestId)
+      this.getOrignCompany("",arr[0].guestId)
       this.setReceiverInfo(arr[0]);
     },
 

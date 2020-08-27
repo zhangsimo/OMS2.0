@@ -129,3 +129,13 @@ export function getGuestShortName(params) {
     params
   })
 }
+
+
+//获取当前门店下的付款账号
+export  function getPayAccount(params) {
+  return axios.request({
+    url:`${api.omsSettle}/omsFinanceAccountRegister/findFinanceAccount`,
+    method:"get",
+    params
+  })
+}

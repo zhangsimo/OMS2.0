@@ -1,8 +1,9 @@
 <template>
-  <section class="con-box">
+  <section>
+<!--    class="con-box"-->
     <vxe-table
       border
-      align="center"
+      align="left"
       size="mini"
       ref="xTable"
       height="400"
@@ -33,6 +34,12 @@
           field="guestFullName"
           title="客户"
           width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="orderMan"
+          title="销售员"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
@@ -282,12 +289,6 @@
       <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderMan"
-          title="销售员"
-          width="70"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
           field="billTypeIdName"
           title="票据类型"
           width="80"
@@ -347,6 +348,7 @@
       :current="page.num"
       :total="page.total"
       :page-size="page.size"
+      :page-size-opts="pageOpts"
       @on-change="changePage"
       @on-page-size-change="changeSize"
       show-sizer
@@ -364,9 +366,10 @@
       return {
         page: {
           num: 1,
-          size: 10,
+          size: 1000,
           total: 0
         },
+        pageOpts: [1000, 2000, 3000, 5000],
         body: {},
         tableData: [],
         total: {}

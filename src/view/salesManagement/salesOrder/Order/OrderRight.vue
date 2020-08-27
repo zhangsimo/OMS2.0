@@ -132,12 +132,13 @@
             </Select>
           </FormItem>
           <FormItem label="备注：">
-            <Tooltip :content="formPlan.remark">
+            <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
               <Input
                 style="width: 200px"
                 v-model="formPlan.remark"
                 :disabled="draftShow != 0|| this.$parent.$parent.ispart"
               />
+              <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlan.remark||"").trim()}}</div>
             </Tooltip>
           </FormItem>
 

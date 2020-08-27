@@ -133,7 +133,7 @@ export default {
     pageChangeAmt(val) {
       this.claimedPage.page = val;
       // console.log(this.$parent.$parent.claimTit)
-      if(this.$parent.claimTit == '其他收款认领'){
+      if(this.$parent.$parent.claimTit == '其他收款认领'){
         this.$parent.$parent.claimedList(1)
       }else {
         this.$parent.$parent.claimedList(2)
@@ -143,7 +143,7 @@ export default {
     sizeChangeAmt(val) {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
-      if(this.$parent.claimTit == '其他收款认领'){
+      if(this.$parent.$parent.claimTit == '其他收款认领'){
         this.$parent.$parent.claimedList(1)
       }else {
         this.$parent.$parent.claimedList(2)

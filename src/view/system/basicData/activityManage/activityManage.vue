@@ -146,7 +146,7 @@
 
     <!-- 内容 -->
     <section class="con-box">
-      <Tabs value="name1" type="card" @on-click="handleClickTab">
+      <Tabs value="name1" :animated="false" type="card" @on-click="handleClickTab">
         <TabPane label="活动申请信息" name="name1">
           <Table
             @on-row-click="onRowClick"

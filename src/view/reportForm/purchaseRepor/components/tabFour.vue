@@ -1,8 +1,9 @@
 <template>
-  <section class="con-box">
+  <section>
+<!--    class="con-box"-->
     <vxe-table
       border
-      align="center"
+      align="left"
       size="mini"
       ref="xTable"
       height="400"
@@ -197,6 +198,7 @@
       :current="page.num"
       :total="page.total"
       :page-size="page.size"
+      :page-size-opts="pageOpts"
       @on-change="changePage"
       @on-page-size-change="changeSize"
       show-sizer
@@ -212,9 +214,10 @@ export default {
     return {
       page: {
         num: 1,
-        size: 10,
+        size: 1000,
         total: 0
       },
+      pageOpts: [1000, 2000, 3000, 5000],
       body: {},
       tableData: [],
       total: {}

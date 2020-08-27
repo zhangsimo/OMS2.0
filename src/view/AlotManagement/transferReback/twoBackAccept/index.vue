@@ -108,7 +108,7 @@
 
           <vxe-table-column  show-overflow="tooltip" title="受理仓库" field="defaultValue">
             <template v-slot="{ row,rowIndex }">
-              <vxe-select v-model="row.defaultValue">
+              <vxe-select transfer v-model="row.defaultValue">
                 <vxe-option v-for="(num,index) in storeArray" :key="index" :value="num.value" :label="`${num.label}`"></vxe-option>
               </vxe-select>
             </template>

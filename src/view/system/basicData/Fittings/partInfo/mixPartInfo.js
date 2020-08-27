@@ -228,6 +228,31 @@ export const mixPartInfo = {
       }
     }
   },
+  mounted(){
+    //拉取适用车型品牌submit
+    if(this.carObj.carBrandData.length==0){
+      this.getCarBrand();
+    }
+    //获取所有品质
+    if(this.qualityArr.length ==0){
+      this.getQuiltyAndBrand();
+    }
+    //拉取自定义分类
+    if(this.customAll.length==0){
+      this.getCustomData();
+    }
+    //获取配件单位
+    if(this.dictCodeAll.length==0){
+      getDataDictionaryTable({ "dictCode": "UNIT_CODE_001" }).then(res => {
+        if (res.code == 0) {
+          this.dictCodeAll = res.data
+        }
+      })
+    }
+    if(this.typepf.length==0){
+      this.treeInit();
+    }
+  },
   methods: {
     async treeInit() {
       let res = await getCarPartClass();
@@ -237,13 +262,19 @@ export const mixPartInfo = {
       }
     },
     changetype(v) {
-      let item = this.typepf.filter(el => el.typeId === v)[0];
-      this.formValidate.carTypefName = item.title || item.name;
-      this.typeps = item.children
+      let item = this.typepf.filter(el => el.typeId === v);
+      if(item.length==0){
+        return
+      }
+      this.formValidate.carTypefName = item[0].title || item[0].name;
+      this.typeps = item[0].children
     },
     changetypeS(v) {
-      let item = this.typeps.filter(el => el.typeId === v)[0];
-      this.formValidate.carTypesName = item.title || item.name;
+      let item = this.typeps.filter(el => el.typeId === v);
+      if(item.length==0){
+        return
+      }
+      this.formValidate.carTypesName = item[0].title || item[0].name;
     },
     // 弹框打开关闭
     visible(type) {
@@ -316,7 +347,6 @@ export const mixPartInfo = {
     },
     //初始化
     init(setData) {
-      this.treeInit();
       //清空数据重新赋值
       this.$refs.proModalForm.resetFields();
       this.carList = [];
@@ -330,24 +360,14 @@ export const mixPartInfo = {
       this.selectLevelFirst="";
       this.selectLevelSecond=""
       this.$refs.tabs.activeKey = 'active1'
-      //拉取适用车型品牌submit
-      this.getCarBrand();
-      //获取所有品质
-      this.getQuiltyAndBrand();
-      //拉取自定义分类
-      this.getCustomData();
-      //获取配件单位
-      getDataDictionaryTable({ "dictCode": "UNIT_CODE_001" }).then(res => {
-        if (res.code == 0) {
-          this.dictCodeAll = res.data
-        }
-      })
+
       this.formValidate.carBrandName = ''
       this.formValidate.carModelName = ''
       this.formValidate.fullName = ''
       this.formValidate.customType = ""
       if (setData) {
         this.formValidate = setData;
+        console.log(this.formValidate)
         //赋值适用车型
         let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
         let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
@@ -376,10 +396,31 @@ export const mixPartInfo = {
       //禁用禁售
       this.prohibit = this.formValidate.disabled == 1 ? true : false
       this.forbidsale = this.formValidate.isStopSell == 1 ? true : false
-      this.getFullName();
+      // this.getFullName();
       //配件资料 关联配件
       this.getAllPartListData()
       this.levelType=this.$parent.treeData
+
+      //修改根据品质获取品牌
+      if (this.formValidate.qualityTypeId) {
+        this.qualityGetBrand()
+      }
+      //修改根据一级分类匹配二级分类
+      if(this.formValidate.partTypeF) {
+        this.changetype(this.formValidate.partTypeF);
+      }
+      //修改匹配自定义分类
+      if (this.formValidate.customType) {
+        let newArrMap = []
+        this.customAll.map(item => {
+          newArrMap.push(...item.itemVOS)
+        })
+        let newArrFilter = newArrMap.filter(item => item.itemCode == this.formValidate.customType)
+        if (newArrFilter.length > 0) {
+          this.customClassName = newArrFilter[0]
+          this.formValidate.customClassName = newArrFilter[0].itemName
+        }
+      }
     },
 
     //获取所有车型品牌
@@ -389,7 +430,6 @@ export const mixPartInfo = {
       // req.pageSize = 500;
       getCarBrandAll(req).then(res => {
         let arrData = res.data || []
-        console.log(arrData);
         this.carObj.carBrandData = arrData.map(item => {
           let obj = {...item};
           obj.id = item.id
@@ -434,10 +474,6 @@ export const mixPartInfo = {
             }
             return el;
           })
-          //根据品质获取品牌
-          if (this.formValidate.qualityTypeId) {
-            this.qualityGetBrand()
-          }
         }
       })
     },
