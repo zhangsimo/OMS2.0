@@ -43,7 +43,7 @@
           ref="summary"
           highlight-row
           max-height="400"
-          @on-selection-change="requireMore"
+          @on-current-change="requireMore"
         ></Table>
         <Page
           :total="pagetotal"
@@ -949,7 +949,7 @@ export default {
       this.getTabList();
     },
     requireMore(val) {
-      this.allSelectList = val;
+      this.allSelectList = [val];
     },
     requireMore2(val) {
       this.allSelectListBottom = val;
