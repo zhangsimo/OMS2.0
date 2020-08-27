@@ -427,7 +427,7 @@
           {
             title: "入库单号",
             align: "center",
-            key: "serviceId",
+            key: "code",
             tooltip:true,
             minWidth: 160
           },
