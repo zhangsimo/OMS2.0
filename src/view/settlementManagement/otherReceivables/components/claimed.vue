@@ -133,9 +133,9 @@ export default {
     pageChangeAmt(val) {
       this.claimedPage.page = val;
       if(this.$parent.$parent.claimTit == '其他付款认领'){
-        this.$parent.$parent.claimedList(1)
-      }else {
         this.$parent.$parent.claimedList(2)
+      }else {
+        this.$parent.$parent.claimedList(1)
       }
     },
     //本店待认领款每页条数
@@ -143,9 +143,9 @@ export default {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
       if(this.$parent.$parent.claimTit == '其他付款认领'){
-        this.$parent.$parent.claimedList(1)
-      }else {
         this.$parent.$parent.claimedList(2)
+      }else {
+        this.$parent.$parent.claimedList(1)
       }
     }
   },
