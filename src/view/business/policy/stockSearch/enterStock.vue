@@ -521,7 +521,7 @@
           {
             title: "出库人",
             align: "center",
-            key: "outDate",
+            key: "outMan",
             tooltip:true,
             minWidth: 70
           },
@@ -623,7 +623,7 @@
           {
             title: "创建人",
             align: "center",
-            key: "serviceId",
+            key: "createUname",
             tooltip:true,
             minWidth: 70
           },
