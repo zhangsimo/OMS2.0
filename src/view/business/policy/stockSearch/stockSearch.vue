@@ -335,7 +335,7 @@
         <div class="oper-top flex">
           <div class="wlf wlf-center wlf-center-hs">
             <div class="db mr10">
-              <span>公司编号：</span>
+              <span>公司名称：</span>
               <Select
                 v-model="company"
                 class="w200 mr10"
@@ -725,7 +725,6 @@ export default {
     this.getCommpany();
     this.getMasterId();
     this.getHsStoreFun();
-    this.getAllStocks(); //table请求
 
     this.$nextTick(() => {
       this.tableHeight = this.$refs.operWrap.offsetHeight - 146;
@@ -802,7 +801,7 @@ export default {
         });
       }
     },
-    //获取风电
+    //获取分店
     async getCommpany() {
       let arr = await creat([], this.$store);
       this.Branchstore = [{ value: "", label: "全连锁" }, ...arr[2]] || [
@@ -812,6 +811,7 @@ export default {
       this.searchForm1.old = arr[1] || "";
       this.getStoreHoure();
       // this.getBand(); //获取品牌
+      this.getAllStocks(); //table请求
       this.getColumns();
     },
     //搜索
@@ -852,7 +852,7 @@ export default {
         this.$nextTick(()=>{
           const xtable = this.$refs.xTable2;
           const column = xtable.getColumnByField('partBrand');
-          this.$refs.xTable2.setFilter(column, this.bands1);
+          xtable.setFilter(column, this.bands1);
           xtable.updateData();
         })
 
@@ -918,7 +918,7 @@ export default {
         this.$nextTick(()=>{
           const xtable = this.$refs.xTable3;
           const column = xtable.getColumnByField('partBrand');
-          this.$refs.xTable3.setFilter(column, this.bands1);
+          xtable.setFilter(column, this.bands1);
           xtable.updateData();
         })
       }
