@@ -442,7 +442,7 @@
         Settlement: false,
         pagetotal: 0,
         value: [],
-        model1: "",
+        model1: this.$store.state.user.userData.currentCompany.id,
         model2: "",
         model3: "",
         Reconciliationtype: "",
@@ -1170,10 +1170,6 @@
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
       this.value = arr[0];
-      this.$nextTick(() => {
-        this.model1 = arr[1]
-        // this.getAccountStatement()
-      })
       this.getShop()
     },
     computed: {
@@ -1337,6 +1333,7 @@
       // 发票对冲
       hedgingInvoice() {
         if (Object.keys(this.reconciliationStatement).length !== 0) {
+          this.reconciliationStatement.statementStatus.value == 4
           this.$refs.hedgingInvoice.modal1 = true;
           this.reconciliationStatement.applyTime = moment(new Date()).format(
             "YYYY-MM-DD HH:mm:ss"
@@ -1482,7 +1479,7 @@
       quickDate(data) {
         this.value = data;
         this.page.num = 1
-        this.getAccountStatement();
+          this.getAccountStatement()
       },
       // 选择日期
       changedate(daterange) {
@@ -1586,6 +1583,10 @@
         }
         if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil) {
           this.receivefalg = true
+        }
+        if (row.statementStatus.value == 3) {
+          this.ownEnterList = true
+          this.ownEnterList = true
         }
         this.ownEnterList = row.ownEnterList == 0 ? true : false
         this.reconciliationStatement = row;

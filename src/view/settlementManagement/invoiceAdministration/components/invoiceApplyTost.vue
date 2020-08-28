@@ -920,6 +920,8 @@ export default {
       });
     },
     submitConfig() {
+      console.log(this.allSelectList , 1)
+      console.log(this.allSelectListBottom , 2)
       if (!(this.allSelectList.length && this.allSelectListBottom.length)) {
         this.$Message.warning("请选择要核销的数据");
       } else if (this.allSelectList.length >= 2 || this.allSelectListBottom.length >= 2) {
