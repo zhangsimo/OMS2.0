@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import quickDate from "@/components/getDate/dateget_bill.vue";
+import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import { goshop } from '@/api/settlementManagement/shopList'
@@ -450,7 +450,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.getTransferWarehousing();
+    this.$refs.quickDate.getval(1);
   },
   computed:{
     selectShopList(){

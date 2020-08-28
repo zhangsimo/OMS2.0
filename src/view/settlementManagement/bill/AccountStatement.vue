@@ -381,7 +381,7 @@
   import settlementMoadl from "./components/settlement";
   import hedgingInvoice from "./Popup/hedgingInvoice";
   import registrationEntry from "./Popup/registrationEntry";
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import salepopup from "./Popup/salepopup";
   import {creat} from "./../components";
   import moment from "moment";
@@ -1184,11 +1184,9 @@
       // obj.size = this.page.size
       // this.getAccountStatement(obj);
       // this.query()
-      this.$nextTick(() => {
-        this.model1 = arr[1]
-        this.getAccountStatement()
-      })
-      this.getShop()
+      this.model1 = arr[1];
+      this.getShop();
+      this.$refs.quickDate.getval(1);
     },
     computed: {
       selectShopList() {

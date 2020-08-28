@@ -148,12 +148,12 @@
           </vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
-          <vxe-table-column field="costPrice" title="库存单价" width="80">
+          <vxe-table-column field="costPrice" title="成本单价" width="80">
             <template v-slot="{row}">
               {{row.costPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="stockAmt" title="库存金额" width="90">
+          <vxe-table-column field="stockAmt" title="成本金额" width="90">
             <template v-slot="{row}">
               {{row.stockAmt.toFixed(2)}}
             </template>
@@ -271,10 +271,12 @@
           size="mini"
           show-footer
           :footer-method="handleSummary"
+          @sort-change="sortEnterDateMethod"
+          :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'desc'}, orders: ['desc', 'asc']}"
           :data="contentTwo.dataTwo">
           <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column field="guestName" title="供应商" width="140" fixed="left"></vxe-table-column>
-          <vxe-table-column field="createTime" title="入库日期" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="createTime" title="入库日期" width="100" fixed="left"  remote-sort></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="110" fixed="left"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="110" fixed="left"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
@@ -710,6 +712,7 @@ export default {
       loading1:false,
       loading2:false,
       tableHeight:0,
+      defaultSort:'desc'
     };
   },
   computed:{
@@ -834,6 +837,7 @@ export default {
       data.size = this.contentOne.page.size;
       data.noStock = data.noStock ? 1 : 0;
       this.loading1 = true;
+      this.contentOne.dataOne = [];
       let res = await getAllStock(data);
       this.loading1 = false;
       if (res.code == 0) {
@@ -898,8 +902,9 @@ export default {
       data.page = this.contentTwo.page.num - 1;
       data.size = this.contentTwo.page.size;
       data.noStock = data.noStock ? 1 : 0;
-      // console.log('数据',data)
+      this.defaultSort=='asc'?data.enterTimeSort = 1:"";
       this.loading2 = true;
+      this.contentTwo.dataTwo = [];
       let res = await getLotStock(data);
       this.loading2 = false;
       if (res.code == 0) {
@@ -1193,8 +1198,11 @@ export default {
       if(!data){
         return ""
       }
-
       return moment(data).format("YYYY-MM-DD HH:mm:ss")
+    },
+    sortEnterDateMethod({ order }){
+      this.defaultSort = order;
+      this.getLotStocks();
     }
   }
 };
