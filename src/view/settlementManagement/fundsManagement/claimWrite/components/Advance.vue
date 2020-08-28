@@ -63,7 +63,10 @@ export default {
   methods: {
     //打开页面
     init(){
-      this.getOne();
+      if(this.company.length==0){
+        this.getOne();
+      }
+
       this.modal = true
     },
     // 往来单位选择

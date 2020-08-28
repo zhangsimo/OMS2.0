@@ -265,11 +265,13 @@ export default {
       this.BranchstoreId = arr[1];
     });
     this.getShop();
-    this.getOne();
   },
   methods: {
     // 打开模态框
     open() {
+      if(this.company.length==0){
+        this.getOne();
+      }
       this.oneSubject = {};
       this.modal = true;
       this.getQuery();
