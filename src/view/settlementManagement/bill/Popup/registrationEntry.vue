@@ -381,7 +381,6 @@
       };
     },
     mounted() {
-      this.getInvoiceSellerList()
       this.$refs.xTable.recalculate(true)
       this.getDictionary("PAYMENT_TYPE"); //付款方式
       this.getDictionary("TaxRate"); //税率
@@ -412,9 +411,11 @@
       },
       //获取 发票销售方名称数组
       async getInvoiceSellerList() {
-        let res = await getInvoiceSellerList()
+        let params={}
+        params.id=this.accountData[0].guestId;
+        let res = await getInvoiceSellerList(params)
         if (res.code == 0) {
-          // console.log(res.data)
+          // console.log(res.data,111111)
           this.invoiceSellerList = res.data
         }
       },
@@ -456,6 +457,7 @@
       // 对话框是否显示
       visChange(flag) {
         if (flag) {
+          this.getInvoiceSellerList()
           this.getkpList()
           this.detailed();
         }
@@ -477,7 +479,7 @@
         detailedIncrease({id: this.arrId[2]}).then(res => {
           if (res.code === 0) {
             this.tableData = res.data;
-            console.log(res.data , 78798)
+            // console.log(res.data , 78798)
             if (this.tableData.length < 1) {
               this.addRows()
             }
