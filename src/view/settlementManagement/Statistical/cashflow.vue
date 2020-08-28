@@ -135,7 +135,7 @@ import {
 } from "@/api/settlementManagement/fundsManagement/capitalChain";
 import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "_api/settlementManagement/financialStatement.js";
-import QuickDate from "@/components/getDate/dateget_bill.vue";
+import QuickDate from "@/components/getDate/dataget2.vue";
 import moment from "moment";
 import XEUtils from "xe-utils";
 export default {
@@ -271,9 +271,9 @@ export default {
       };
       if (this.dates.length === 2 && this.dates[0]) {
         params.startTime =
-          moment(this.dates[0]).format("YYYY-MM-DD")+" 00:00:00";
+          moment(this.dates[0]).format("YYYY-MM-DD");
         params.endTime =
-          moment(this.dates[1]).format("YYYY-MM-DD")+" 23:59:59";
+          moment(this.dates[1]).format("YYYY-MM-DD");
       }
       params.page = 0;
       for (let key in params) {
