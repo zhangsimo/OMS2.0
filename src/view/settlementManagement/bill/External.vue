@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import quickDate from "@/components/getDate/dateget_bill.vue";
+import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import {
@@ -482,7 +482,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.getShop()
-    this.getGeneral();
+    this.$refs.quickDate.getval(1);
   },
   methods: {
     //获取门店

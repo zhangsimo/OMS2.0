@@ -381,7 +381,7 @@
   import settlementMoadl from "./components/settlement";
   import hedgingInvoice from "./Popup/hedgingInvoice";
   import registrationEntry from "./Popup/registrationEntry";
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import salepopup from "./Popup/salepopup";
   import {creat} from "./../components";
   import moment from "moment";
@@ -1333,7 +1333,6 @@
       // 发票对冲
       hedgingInvoice() {
         if (Object.keys(this.reconciliationStatement).length !== 0) {
-          this.reconciliationStatement.statementStatus.value == 4
           this.$refs.hedgingInvoice.modal1 = true;
           this.reconciliationStatement.applyTime = moment(new Date()).format(
             "YYYY-MM-DD HH:mm:ss"
@@ -1479,7 +1478,7 @@
       quickDate(data) {
         this.value = data;
         this.page.num = 1
-          this.getAccountStatement()
+        this.getAccountStatement();
       },
       // 选择日期
       changedate(daterange) {
