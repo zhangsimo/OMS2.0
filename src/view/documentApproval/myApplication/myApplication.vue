@@ -536,7 +536,7 @@ export default {
 
     //编辑
     redact(row) {
-      console.log(row.applyTypeName);
+      // console.log(row.applyTypeName);
     },
 
     //下拉框改变
