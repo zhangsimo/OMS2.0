@@ -223,6 +223,7 @@ export default {
   display: inline-block;
   border: 1px solid #e8eaec;
   flex: 1;
+  line-height: 24px;
   padding:0 5px;
 }
 .vxe-table .vxe-cell {

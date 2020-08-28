@@ -202,7 +202,7 @@
 </template>
 
 <script>
-import quickDate from "@/components/getDate/dateget_bill.vue";
+import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import {getClient} from '@/api/salesManagment/salesOrder'
 // import selectDealings from "./../bill/components/selectCompany";
 import Monthlyreconciliation from "./Monthlyreconciliation.vue";
@@ -1723,21 +1723,20 @@ export default {
   async mounted() {
     this.parameter = [];
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      let obj = {
-        orgId: arr[1],
-        startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-          : ""
-      };
-      this.getGeneral(obj);
+      // let obj = {
+      //   orgId: arr[1],
+      //   startDate: this.value[0]
+      //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+      //     : "",
+      //   endDate: this.value[1]
+      //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+      //     : ""
+      // };
+      // this.getGeneral(obj);
     this.value = arr[0];
-    this.$nextTick( () => {
-      this.model1 = arr[1]
-    })
-    this.getShop()
+    this.model1 = arr[1];
+    this.getShop();
+    this.$refs.quickDate.getval(1);
   },
   methods: {
     //获取门店
@@ -1942,10 +1941,12 @@ export default {
       }
       getreceivable(obj).then(res => {
         if (res.data.length !== 0) {
-          res.data.map((item, index) => {
+          //去除 已对账未收金额和已对账未付金额 同时为0
+          let arrData = (res.data||[]).filter(item => item.receivedAmt!=0||item.paidAmt!=0);
+          arrData.map((item, index) => {
             item.num = index + 1;
           });
-          this.data = res.data;
+          this.data = arrData;
         } else {
           this.data = [];
         }

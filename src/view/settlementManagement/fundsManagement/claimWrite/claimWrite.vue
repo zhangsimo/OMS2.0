@@ -183,7 +183,7 @@
                   transfer
                 ></Date-picker>
                 <span class="ml10">区域：</span>
-                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable>
+                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable  :disabled="selectShopList">
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
@@ -192,7 +192,7 @@
                   </Option>
                 </Select>
                 <span class="ml10">门店：</span>
-                <Select transfer v-model="orgId" class="w150" filterable>
+                <Select transfer v-model="orgId" class="w150" filterable  :disabled="selectShopList">
                   <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
@@ -871,45 +871,45 @@
       },
       // 往来单位选择
       async getOne(query) {
-        this.company = [];
-        if (query != "") {
-          this.remoteloading = true;
-          findGuest({fullName: query, size: 20}).then(res => {
-            if (res.code === 0) {
-              this.company = [];
-              res.data.content.map(item => {
-                this.company.push({
-                  value: item.id,
-                  label: item.fullName
-                });
-              });
-              this.remoteloading = false;
-            }
-          });
-        } else {
-          this.company = [];
-        }
+        // this.company = [];
+        // if (query != "") {
+        //   this.remoteloading = true;
+        //   findGuest({fullName: query, size: 20}).then(res => {
+        //     if (res.code === 0) {
+        //       this.company = [];
+        //       res.data.content.map(item => {
+        //         this.company.push({
+        //           value: item.id,
+        //           label: item.fullName
+        //         });
+        //       });
+        //       this.remoteloading = false;
+        //     }
+        //   });
+        // } else {
+        //   this.company = [];
+        // }
       },
       async getOne2(query) {
-        this.company2 = [];
-        if (query != "") {
-          this.remoteloading2 = true;
-          findGuest({fullName: query, size: 20}).then(res => {
-            if (res.code === 0) {
-              this.company2 = [];
-              res.data.content.map(item => {
-                this.company2.push({
-                  value: item.id,
-                  label: item.fullName
-                });
-              });
-
-              this.remoteloading2 = false;
-            }
-          });
-        } else {
-          this.company2 = [];
-        }
+        // this.company2 = [];
+        // if (query != "") {
+        //   this.remoteloading2 = true;
+        //   findGuest({fullName: query, size: 20}).then(res => {
+        //     if (res.code === 0) {
+        //       this.company2 = [];
+        //       res.data.content.map(item => {
+        //         this.company2.push({
+        //           value: item.id,
+        //           label: item.fullName
+        //         });
+        //       });
+        //
+        //       this.remoteloading2 = false;
+        //     }
+        //   });
+        // } else {
+        //   this.company2 = [];
+        // }
       },
       //核销对账单
       write() {

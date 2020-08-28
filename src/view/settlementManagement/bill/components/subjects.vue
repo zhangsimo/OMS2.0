@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="subjectModelShow" title="选择会计科目" width="750">
+  <Modal v-model="subjectModelShow" title="选择会计科目" width="750" @on-visible-change="showOrhideModel">
     <Form v-model="accountingSubject">
       <Tabs type="card" :animated="false" @on-click="tabCode" v-model="tabModal">
         <div class="partCheck-hd" style="position: absolute;right:0;top:0;">
@@ -377,16 +377,38 @@ export default {
           bus.$emit('hedInfo',this.accountingSubject)
         }
       }
+    },
+    showOrhideModel(v){
+      if(v){
+        if(this.subjectTableDataZiChan.length==0){
+          this.accountingGetListZiChan();
+        }
+        if(this.subjectTableDataFuZhai.length==0){
+          this.accountingGetListFuZhai();
+        }
+        if(this.subjectTableDataGongTong.length==0){
+          this.accountingGetListGongTong();
+        }
+        if(this.subjectTableDataQuanYi.length==0){
+          this.accountingGetListQuanYi();
+        }
+        if(this.subjectTableDataChengBen.length==0){
+          this.accountingGetListChengBen();
+        }
+        if(this.subjectTableDataSunYi.length==0){
+          this.accountingGetListSunYi();
+        }
+      }
     }
   },
   mounted() {
     //会计科目
-    this.accountingGetListZiChan();
-    this.accountingGetListFuZhai();
-    this.accountingGetListGongTong();
-    this.accountingGetListQuanYi();
-    this.accountingGetListChengBen();
-    this.accountingGetListSunYi();
+    // this.accountingGetListZiChan();
+    // this.accountingGetListFuZhai();
+    // this.accountingGetListGongTong();
+    // this.accountingGetListQuanYi();
+    // this.accountingGetListChengBen();
+    // this.accountingGetListSunYi();
   }
 };
 </script>

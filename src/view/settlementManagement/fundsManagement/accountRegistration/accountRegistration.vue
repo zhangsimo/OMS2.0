@@ -175,7 +175,7 @@ export default {
       let res = await goshop(data);
       if (res.code === 0) {
         this.shopListArr = [ ...res.data];
-        this.shopCode = this.shopListArr[0].id
+        this.shopCode = this.$store.state.user.userData.currentShopId ||"";
         this.getList(); //查询
       }
       if(this.Branchstore.length>0){
@@ -268,6 +268,7 @@ export default {
       if (this.mateAccountCode != 0) {
         params.mateAccountCode = this.mateAccountCode;
       }
+      params.sign="账户登记";
       findListPageAll(params).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;

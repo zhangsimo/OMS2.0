@@ -19,7 +19,7 @@
         </div>
         <div class="clearfix purchase pb10" ref="planForm">
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
-            <Row>
+            <div style="width: 200px">
               <!--<Tooltip :content="formPlan.fullName">-->
                 <!--<Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:134px;"/>-->
               <!--</Tooltip>-->
@@ -42,7 +42,7 @@
               >
                 <Icon type="md-add"/>
               </Button>
-            </Row>
+            </div>
           </FormItem>
           <FormItem label="销售员：" prop="orderManId">
             <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
@@ -253,11 +253,12 @@
           </div>
         </div>
         <vxe-table
+          class="setPadding"
           border
           resizable
           show-footer
           ref="xTable"
-          align="center"
+          align="left"
           size="mini"
           :edit-rules="validRules"
           :data="formPlan.detailList"

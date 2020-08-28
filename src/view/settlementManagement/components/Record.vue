@@ -11,7 +11,7 @@
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
 export default {
-  props: ["serviceId"],
+  props: ["serviceId",'currRow'],
   data() {
     return {
       columns1: [
@@ -424,9 +424,9 @@ export default {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
               if (!isNaN(value)) {
-                return prev + curr;
+                return this.currRow.paymentBalance
               } else {
-                return prev;
+                return this.currRow.paymentBalance;
               }
             }, 0);
             sums[key] = {

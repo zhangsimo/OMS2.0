@@ -189,6 +189,20 @@
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="group4" title="成本信息">
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="enterPrice"
+          title="成本单价"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="enterAmt"
+          title="成本金额"
+          width="140"
+        ></vxe-table-column>
+      </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="含税信息">
         <vxe-table-column  show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
           <template v-slot="{ row }">

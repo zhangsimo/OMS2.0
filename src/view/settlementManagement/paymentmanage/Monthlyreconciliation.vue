@@ -780,7 +780,7 @@
       //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
       //     : ""
       // }
-      this.query()
+      this.$refs.quickDate.getval(1);
     },
     computed: {
       //实际应付合计

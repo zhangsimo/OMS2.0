@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import quickDate from "@/components/getDate/dateget_bill.vue";
+import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import selectDealings from "./components/SelectTheCustomer";
 import { creat } from "./../components";
 import { transferStock, stockParts } from "@/api/bill/saleOrder";
@@ -444,11 +444,10 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.$nextTick( () => {
-      this.model1 = arr[1]
-    })
-    this.getShop()
-    const res = await this.getTransferStock();
+    this.model1 = arr[1];
+    this.getShop();
+    this.$refs.quickDate.getval(1);
+    // const res = await this.getTransferStock();
     // let dom = this.$refs.summary.$refs.header.getElementsByTagName("th");
     // dragTable(this,dom);
   },

@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import quickDate from "@/components/getDate/dateget_bill.vue";
+import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import selectDealings from "./components/SelectTheCustomer";
 import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
@@ -393,8 +393,8 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
-    this.getShop()
-    this.getGeneral()
+    this.getShop();
+    this.$refs.quickDate.getval(1);
   },
   computed:{
     selectShopList(){
