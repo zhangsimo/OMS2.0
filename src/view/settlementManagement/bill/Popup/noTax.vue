@@ -69,7 +69,7 @@
               class="ml5 w100"
               :formatter="value => `${value}%`"
               :parser="value => value.replace('%', '')"
-              @on-change="taxPointChange"/>
+             />
           </FormItem>
           <!--<FormItem label="外加税点总计" :label-width="150">-->
             <!--<Input v-model="invoice.additionalTaxPoint" class="ml5 w100"  readonly/>-->
@@ -381,7 +381,7 @@ export default {
           }
           if (['applyAmt'].includes(column.property)) {
             this.$set(this.invoice , 'invoiceTaxAmt' , this.$utils.sum(data, column.property))
-            this.pointComputed(this.$utils.sum(data, column.property))
+            // this.pointComputed(this.$utils.sum(data, column.property))
           }
           if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
@@ -392,18 +392,20 @@ export default {
     },
 
     //税费计算
-    pointComputed(total){
-      this.invoicedAmountTotal = total;
-      //产生税费
-      let taxation = (total/(1-  this.$utils.divide(this.invoice.taxPoint , 100))- this.invoice.invoiceTaxAmt);
-      this.invoice.taxation = taxation.toFixed(2);
-      //实际增加开票金额
-      this.invoice.invoiceAmt = (taxation + this.invoice.invoiceTaxAmt).toFixed(2);
-    },
-
-    taxPointChange(){
-      this.pointComputed(this.invoicedAmountTotal);
-    },
+    // pointComputed(total){
+    //   this.invoicedAmountTotal = total;
+    //   //产生税费
+    //   console.log(total , 12)
+    //   console.log(this.$utils.divide(this.invoice.taxPoint , 100) , 789)
+    //   let taxation = (total/(1 - this.$utils.divide(this.invoice.taxPoint , 100)) - this.invoice.invoiceTaxAmt);
+    //   this.invoice.taxation = taxation.toFixed(2);
+    //   //实际增加开票金额
+    //   this.invoice.invoiceAmt = (taxation + this.invoice.invoiceTaxAmt).toFixed(2);
+    // },
+    //
+    // taxPointChange(){
+    //   this.pointComputed(this.invoicedAmountTotal);
+    // },
 
     // 对话框是否显示
     visChange(flag) {
@@ -540,13 +542,13 @@ export default {
     //计算税费
     //本次不含税开票金额 / (1-税率) - 本次不含税开票金额
     getTaxesAndDues(){
-      this.invoice.taxation =  this.$utils.subtract( this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.invoice.taxPoint)  )  , this.invoice.invoiceTaxAmt )
+      this.invoice.taxation =  this.$utils.subtract( this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.$utils.divide( this.invoice.taxPoint , 100))  )  , this.invoice.invoiceTaxAmt )
       return this.invoice.taxation.toFixed(2)
     },
     //本次实际金额
     //本次不含税开票金额 / (1-税率)
     showPay(){
-      this.invoice.invoiceAmt = this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.invoice.taxPoint)  )
+      this.invoice.invoiceAmt = this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.$utils.divide( this.invoice.taxPoint , 100)  ))
       return this.invoice.invoiceAmt.toFixed(2)
     }
   },
