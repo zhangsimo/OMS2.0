@@ -104,6 +104,20 @@
             </div>
           </template>
         </Table>
+<!--        <div class="clearfix">-->
+<!--          <Page-->
+<!--            class-name="fr mb10 mt10"-->
+<!--            size="small"-->
+<!--            :current="page.num"-->
+<!--            :total="page.total"-->
+<!--            :page-size="page.size"-->
+<!--            :page-size-opts="page.sizeArr"-->
+<!--            @on-change="changePage"-->
+<!--            @on-page-size-change="changeSize"-->
+<!--            show-sizer-->
+<!--            show-total-->
+<!--          ></Page>-->
+<!--        </div>-->
         <Tabs v-model="tab" class="mt10" @click="tabName">
           <Tab-pane label="收款单记录" name="key1">
             <Table
@@ -187,6 +201,12 @@ export default {
       Branchstore:[
         {id:0 ,name:'全部'}
       ], //分店名称
+      // page:{
+      //   total:0,
+      //   sizeArr:[100,200,300,400,500],
+      //   size:100,
+      //   num:1
+      // },
       model1: "",
       modal1: false,
       statelist: [
@@ -586,8 +606,8 @@ export default {
     this.getShop()
     this.$nextTick(()=>{
       this.BranchstoreId = arr[1]
+      this.getGeneral();
     })
-    this.getGeneral();
     // this.getOne();
   },
   computed:{
@@ -714,6 +734,15 @@ export default {
       this.data1 = [];
       this.data2 = [];
       this.getGeneral();
+    },
+    changePage(p) {
+      this.page.num = p;
+      this.query();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.query();
     },
     // 往来单位选择
     // async getOne() {
@@ -848,7 +877,9 @@ export default {
         accountNo: this.accountNo,
         fno: this.fno,
         createUname: this.createUname,
-        documentStatus: this.startStatusName
+        documentStatus: this.startStatusName,
+        size: this.page.size,
+        page: this.page.num - 1
       };
       getReceiptsPaymentsSummary(data).then(res => {
         if (res.data.length !== 0) {
@@ -858,6 +889,7 @@ export default {
             item.startStatusName = item.startStatus.name;
           });
           this.data = res.data;
+          // this.page.total=
         } else {
           this.data = [];
         }

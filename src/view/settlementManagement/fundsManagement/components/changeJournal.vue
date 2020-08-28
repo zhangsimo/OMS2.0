@@ -24,9 +24,9 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="账户" prop="accountCode">
+          <FormItem label="账户" prop="accountId">
             <Select v-model="formCustom.accountId" style="width:150px" @on-change='changeAccount' disabled>
-              <Option v-for="item in accountList" :value="item.accountCode" :key="item.accountCode">{{
+              <Option v-for="item in accountList" :value="item.id" :key="item.id">{{
                 item.accountName }}
               </Option>
             </Select>
@@ -145,8 +145,8 @@
           shopId: [
             {required: true, message: '所属门店必选', trigger: 'change'}
           ],
-          accountCode: [
-            {required: true, message: '账户必选', trigger: 'change'}
+          accountId: [
+            { required: true, type:'string', message: '账户必选', trigger: 'change' }
           ],
           accountName: [
             {required: true, message: '账号必填', trigger: 'blur'}
@@ -199,8 +199,10 @@
       open() {
         this.handleReset()
         this.getSubject()
-        this.formCustom = this.list
-        this.modalShow = true
+        setTimeout(()=>{
+          this.modalShow = true
+          this.formCustom = this.list
+        },0)
       },
       //获取区域
       async getAllArea() {

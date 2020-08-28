@@ -77,7 +77,6 @@ export default {
     };
   },
   mounted() {
-    this.getOne();
     bus.$on("paymentInfo",val=>{
       this.financeAccountCashList= []
       val.map(item=>{
@@ -92,6 +91,10 @@ export default {
         this.guestId = ''
         this.company = ''
         // this.$refs.table.clearCurrentRow()
+      }else{
+        if(this.data1.length==0){
+          this.getOne();
+        }
       }
     },
     // 往来单位选择

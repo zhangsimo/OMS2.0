@@ -928,9 +928,8 @@
             reqData.detailList = detailList;
             reqData.detailList.map(item => {
               item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty;
-              item.isMarkBatch = 1;
             });
-
+            reqData.sign = 999;
             let res = await getSave(reqData);
             if (res.code === 0) {
               this.modal3 = true;

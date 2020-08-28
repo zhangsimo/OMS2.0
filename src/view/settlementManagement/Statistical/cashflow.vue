@@ -135,7 +135,7 @@ import {
 } from "@/api/settlementManagement/fundsManagement/capitalChain";
 import { goshop } from '@/api/settlementManagement/shopList';
 import * as api from "_api/settlementManagement/financialStatement.js";
-import QuickDate from "@/components/getDate/dateget_bill.vue";
+import QuickDate from "@/components/getDate/dataget2.vue";
 import moment from "moment";
 import XEUtils from "xe-utils";
 export default {

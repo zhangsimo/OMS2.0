@@ -25,7 +25,8 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="shopCode" filterable class="w150" :disabled="selectShopList">
+            <Select v-model="shopCode" filterable class="w150" disabled>
+<!--              :disabled="selectShopList"-->
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -622,7 +623,6 @@
         this.shopList = [{id: 0, name: '全部'}]
         let rep = await getAccShopList();
         if (rep.code == 0) {
-          console.log(rep , 888)
           this.getAccShopList = rep.data
         }
         let res = await goshop(data)
@@ -812,9 +812,10 @@
           return this.$Message.error('请选择一条数据')
         }
         this.oneList = this.selectTableList[0];
+        console.log(this.oneList)
         // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
         if (this.oneList.collateState == 1) return this.$Message.error('只能修改未核销数据')
-        this.$refs.changeModal.formCustom = this.selectTableList[0]
+        // this.$refs.changeModal.formCustom = this.selectTableList[0]
         this.$refs.changeModal.open()
       },
 

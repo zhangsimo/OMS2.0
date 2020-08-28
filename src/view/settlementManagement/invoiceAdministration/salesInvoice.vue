@@ -35,7 +35,7 @@
           </div>
           <div class="mr10 flexd">
             <span>分店名称：</span>
-            <Select v-model="form.orgId" style="width:180px" clearable>
+            <Select v-model="form.orgId" style="width:180px" clearable :disabled="selectShopList">
               <Option
                 v-for="item in proTypeList"
                 :value="item.id"
@@ -1333,6 +1333,15 @@ export default {
       invoiceUnitOption: [], //开票公司
     };
   },
+  computed:{
+    selectShopList() {
+      if(this.$store.state.user.userData.currentCompany!=null){
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      }else{
+        return true
+      }
+    }
+  },
   methods: {
     query() {
       this.form.invoiceDate = this.value.length ? this.value[0] : "";
@@ -1360,7 +1369,7 @@ export default {
       if (res.code === 0) {
         this.proTypeList = [...this.proTypeList, ...res.data];
         this.$nextTick(() => {
-          this.form.orgId = this.$store.state.user.userData.shopId;
+          this.form.orgId = this.$store.state.user.userData.currentShopId;
           this.getTabList();
         });
       }

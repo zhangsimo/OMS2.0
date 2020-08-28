@@ -15,9 +15,9 @@
       border="full"
       :data="tableData"
     >
-      <vxe-table-column type="checkbox" min-width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column title="往来单位" fixed="left" min-width="120">
+      <vxe-table-column type="checkbox" min-width="60" fixed="left" class="tableFixed"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" min-width="60" fixed="left" class="tableFixed"></vxe-table-column>
+      <vxe-table-column title="往来单位" fixed="left" min-width="120"  class="tableFixed">
         <template v-slot="{row}">
           <ul class="list">
             <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
@@ -249,6 +249,7 @@
     display: inline-block;
     border: 1px solid #e8eaec;
     flex: 1;
+    line-height: 24px;
     padding:0 5px;
   }
   .vxe-table .vxe-cell {
@@ -257,4 +258,5 @@
   .vxe-table .vxe-body--column:not(.col--ellipsis) {
     padding: 0;
   }
+
 </style>

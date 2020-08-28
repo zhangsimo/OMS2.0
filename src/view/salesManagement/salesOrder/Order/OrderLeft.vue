@@ -29,13 +29,13 @@
           </template>
         </vxe-table-column>
         <vxe-table-column :filters="[]" :filter-method="filterOrderNo" show-overflow field="guestName" title="客户" min-width="100"></vxe-table-column>
-        <vxe-table-column field="printTimes" title="打印次数" min-width="70"></vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="printTimes" title="打印次数" min-width="80"></vxe-table-column>
         <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="remark" title="备注" min-width="120" show-overflow></vxe-table-column>
-        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="createUname" title="创建人" min-width="80"></vxe-table-column>
+        <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="createUname" title="创建人" min-width="80" show-overflow></vxe-table-column>
         <vxe-table-column show-overflow field="createTime" title="创建日期" min-width="120"></vxe-table-column>
         <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="auditor" title="提交人" min-width="80"></vxe-table-column>
         <vxe-table-column show-overflow field="auditDate" title="提交日期" min-width="120"></vxe-table-column>
-        <vxe-table-column field="orderMan" title="销售员" min-width="70"></vxe-table-column>
+        <vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>
       </vxe-table>
     </div>
     <Page
@@ -186,7 +186,6 @@ export default {
       set.forEach(el => {
         arrData.push({ label: el, value: el });
       });
-
       this.$nextTick(()=>{
         const xtable = this.$refs.currentRowTable;
         const column = xtable.getColumnByField(cos);
@@ -201,6 +200,7 @@ export default {
       this.returnData(rData,'remark');
       this.returnData(rData,'createUname');
       this.returnData(rData,'auditor');
+      this.returnData(rData,'printTimes');
     },
 
 

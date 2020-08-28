@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu">
+    <Modal v-model="subjectModelShowassist"  title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card" v-model="currTab">
           <TabPane label="客户" name="client">
@@ -370,16 +370,45 @@ export default {
     }
   },
   mounted() {
-    this.OtherClickTable();
-    this.fundGetList();
-    this.OtherGetlist(); //其他初始化
-    // this.SelectGetlistJi();
-    // this.businessType();
-    this.ClientgetList(); //客户初始化
-    this.SupperliergetList(); //供应商初始化
-    this.getListCompany(); // 公司
+    // this.OtherClickTable();
+    // this.fundGetList();
+    // this.OtherGetlist(); //其他初始化
+    // // this.SelectGetlistJi();
+    // // this.businessType();
+    // this.ClientgetList(); //客户初始化
+    // this.SupperliergetList(); //供应商初始化
+    // this.getListCompany(); // 公司
   },
   methods:{
+
+    showOrhideModel(v){
+      if(v){
+        if(this.AssistTableDataOther.length==0){
+          this.OtherClickTable();
+        }
+        if(this.fundList.length==0){
+          this.fundGetList();
+        }
+
+        if(this.categoryArr.length==0){
+          this.OtherGetlist(); //其他初始化
+        }
+
+
+        // this.SelectGetlistJi();
+        // this.businessType();
+        if(this.AssistTableDataKeHu.length==0){
+          this.ClientgetList(); //客户初始化
+        }
+        if(this.AssistTableDataGongYingShang.length==0){
+          this.SupperliergetList(); //供应商初始化
+        }
+        if(this.list.length==0){
+          this.getListCompany(); // 公司
+        }
+      }
+    },
+
     // 计、收、付、转下拉框
     SelectGetlistJi() {
       let params = {};

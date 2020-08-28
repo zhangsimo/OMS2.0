@@ -18,7 +18,7 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="账户" prop="accountCode">
+          <FormItem label="账户" prop="accountId">
             <Select v-model="formCustom.accountId" style="width:150px" @on-change= 'changeAccount'>
               <Option v-for="item in accountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
             </Select>
@@ -126,8 +126,8 @@
           shopId:[
             { required: true, message: '所属门店必选', trigger: 'change' }
           ],
-          accountCode:[
-            { required: true, type:'number', message: '账户必选', trigger: 'change' }
+          accountId:[
+            { required: true, type:'string', message: '账户必选', trigger: 'change' }
           ],
           accountName:[
             { required: true, message: '账号必填', trigger: 'blur' }
@@ -220,6 +220,7 @@
         let data ={}
         data.shopNumber = this.$store.state.user.userData.shopId
         let res = await  goAccountList(data)
+        console.log(res)
         if (res.code === 0) return  this.accountList  = res.data
       },
 
@@ -278,7 +279,7 @@
             this.formCustom.createTime = moment(this.formCustom.createTime).startOf('day').format("YYYY-MM-DD HH:mm:ss")
             let res = await addSave(this.formCustom)
             if (res.code === 0) {
-              this.$Message.success('修改成功')
+              this.$Message.success('保存成功')
               this.modalShow = false
               this.$emit('getNewList' ,{})
             }
