@@ -16,6 +16,14 @@ export function getDetailsList(params) {
     params
   });
 }
+// 明细列表
+export function getDetailsListApply(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/findinvoiceApplyDetail`,
+    method: "post",
+    data
+  });
+}
 //智能核销
 export function IntelligenceList(data) {
   return axios.request({
