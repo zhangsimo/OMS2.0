@@ -62,13 +62,14 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="申请税点">
-            <Select v-model="invoice.taxPoint" class="ml5 w100" @on-change="taxPointChange">
-              <Option
-                v-for="item in invoice.taxApplicationList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <InputNumber
+              :min="0"
+              :max="100"
+              v-model="invoice.taxPoint"
+              class="ml5 w100"
+              :formatter="value => `${value}%`"
+              :parser="value => value.replace('%', '')"
+              @on-change="taxPointChange"/>
           </FormItem>
           <!--<FormItem label="外加税点总计" :label-width="150">-->
             <!--<Input v-model="invoice.additionalTaxPoint" class="ml5 w100"  readonly/>-->
@@ -206,7 +207,7 @@ export default {
         ],
       },//表格校验
       invoice: {
-        taxPoint: "", //申请税点
+        taxPoint: 0, //申请税点
         taxApplicationList: [
           {
             value: 0.06,
@@ -270,7 +271,7 @@ export default {
   mounted() {
     // 对账单
     bus.$on("accountNo", val => {
-      this.invoice.taxPoint = 0.07;
+      this.invoice.taxPoint = 7;
       val.notAmt = val.noInvoiceAmt
       val.invoiceTaxAmt = 0;
       this.invoice = { ...this.invoice, ...val };
@@ -361,7 +362,6 @@ export default {
         this.information.statementAmtOwed= rep.data.notAmt||"";
         this.information.accountNo = rep.data.accountNo||"";
         this.information.id = rep.data.id;
-
         this.invoice.taxPoint = parseFloat(rep.data.taxPoint)||0;
         this.invoice.taxation = rep.data.taxation||0;
         this.invoice.invoiceAmt = rep.data.invoiceAmt||0;
@@ -395,14 +395,13 @@ export default {
     pointComputed(total){
       this.invoicedAmountTotal = total;
       //产生税费
-      let taxation = (total/(1-this.invoice.taxPoint)- this.invoice.invoiceTaxAmt);
+      let taxation = (total/(1-  this.$utils.divide(this.invoice.taxPoint , 100))- this.invoice.invoiceTaxAmt);
       this.invoice.taxation = taxation.toFixed(2);
       //实际增加开票金额
       this.invoice.invoiceAmt = (taxation + this.invoice.invoiceTaxAmt).toFixed(2);
     },
 
     taxPointChange(){
-      // console.log(this.invoicedAmountTotal)
       this.pointComputed(this.invoicedAmountTotal);
     },
 
@@ -421,7 +420,7 @@ export default {
             //   this.invoice.accountsReceivable -
             //   this.invoice.taxAmountOfPartOpened;
             // this.invoice.invoiceTaxAmt = this.invoice.notAmt;
-            this.invoice.taxPoint = 0.07;
+            this.invoice.taxPoint = 7;
             res.data.map(item => {
               item.invoiceTax = this.tax;
             });
@@ -459,7 +458,7 @@ export default {
           if(this.information.owned){
             obj.id = this.information.id;
           }
-          if (this.invoice.taxPoint > 0.06) {
+          if (this.invoice.taxPoint > 6) {
             bus.$emit("noTaxSaleList", this.accessoriesBillingData);
             bus.$emit("noTaxInfo", this.invoice);
             this.modal1 = false;
