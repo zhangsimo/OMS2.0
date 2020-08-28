@@ -274,7 +274,7 @@
           </div>
         </div>
         <Button>收付款单记录</Button>
-        <Record ref="Record" :serviceId="serviceId" @Message="getMessage" />
+        <Record ref="Record" :serviceId="serviceId" :currRow="currRow" @Message="getMessage" />
       </div>
     </section>
     <!-- 认领弹框 -->
