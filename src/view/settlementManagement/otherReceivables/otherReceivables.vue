@@ -340,8 +340,8 @@ import claim from "./components/claimed";
 import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
 // import settlement from "./components/settlement";
 import { creat } from "./../components";
-// import Record from "./components/Record";
-import Record from "../components/Record";
+import Record from "./components/Record";
+// import Record from "../components/Record";
 import {
 
   findAdvance,
