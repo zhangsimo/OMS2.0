@@ -25,7 +25,8 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="shopCode" filterable class="w150" :disabled="selectShopList">
+            <Select v-model="shopCode" filterable class="w150" disabled>
+<!--              :disabled="selectShopList"-->
               <Option
                 v-for="item in shopList"
                 :value="item.id"

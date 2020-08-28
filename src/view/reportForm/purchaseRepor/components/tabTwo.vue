@@ -349,10 +349,10 @@
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             if ([1, "1", "是"].includes(el.taxSign)) {
-              el.taxSign = "是";
+              el.taxSign = true;
             }
             if ([0, "0", "否"].includes(el.taxSign)) {
-              el.taxSign = "否";
+              el.taxSign = false;
             }
             return el;
           });

@@ -187,11 +187,14 @@ export default {
     };
   },
   mounted(){
-      this.getOne()
+
   },
   methods: {
     // 打开模态框
     open() {
+      if(this.company.length==0){
+        this.getOne();
+      }
       this.oneSubject = {};
       this.modal = true;
       this.$nextTick(()=>{

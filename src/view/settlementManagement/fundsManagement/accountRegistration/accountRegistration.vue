@@ -268,6 +268,7 @@ export default {
       if (this.mateAccountCode != 0) {
         params.mateAccountCode = this.mateAccountCode;
       }
+      params.sign="账户登记";
       findListPageAll(params).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;
