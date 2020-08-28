@@ -586,8 +586,8 @@ export default {
     this.getShop()
     this.$nextTick(()=>{
       this.BranchstoreId = arr[1]
+      this.getGeneral();
     })
-    this.getGeneral();
     // this.getOne();
   },
   computed:{

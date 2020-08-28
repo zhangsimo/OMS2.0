@@ -551,7 +551,7 @@
         // }
       },
       openRegEnter(){
-        console.log(this.currRow)
+        // console.log(this.currRow)
         if (this.currRow&&this.currRow.hasOwnProperty("id")) {
           this.$refs.registrationEntry.accountData = [];
           let objItem = {...this.currRow};

@@ -104,21 +104,21 @@
           field="accountCode"
           title="账号"
           width="100"
-          fixed="left"
           ></vxe-table-column>
+<!--        fixed="left"-->
         <vxe-table-column
           field="bankName"
           title="开户行"
           width="150"
-          fixed="left"
         >
+<!--          fixed="left"-->
         </vxe-table-column>
         <vxe-table-column
           field="mateAccountName"
           title="对应科目"
           width="150"
-          fixed="left"
         >
+<!--          fixed="left"-->
         </vxe-table-column>
         <vxe-table-column
           field="initialBalanceMoney"
@@ -605,7 +605,7 @@ export default {
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];
         this.$nextTick(() => {
-          this.BranchstoreId = this.$store.state.user.userData.currentCompany.id ||"";
+          this.BranchstoreId = this.$store.state.user.userData.currentShopId ||"";
         });
         if(this.areas.length>0){
           this.areas.map(item=>{

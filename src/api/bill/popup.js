@@ -1,10 +1,11 @@
 import api from '_conf/url'
 import axios from '@/libs/api.request'
 //对账单弹框 进项登记与修改 获取发票销售方名称数组
-export function getInvoiceSellerList(){
+export function getInvoiceSellerList(params){
   return axios.request({
     url:`${api.wmsApi}/guest/taxPayerList`,
-    method:"get"
+    method:"get",
+    params
   })
 }
 //对账单弹框 进项登记与修改 弹框新增开票信息
