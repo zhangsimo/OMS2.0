@@ -1033,8 +1033,12 @@ export default {
       }
     },
     query() {
-      this.form.startTime = this.value.length ? this.value[0] : "";
-      this.form.endTime = this.value.length ? this.value[1] : "";
+      this.form.startTime = this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+        : "";
+      (this.form.endTime = this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        : ""),
       this.getTabList(this.form);
     },
     quickDate(data) {
