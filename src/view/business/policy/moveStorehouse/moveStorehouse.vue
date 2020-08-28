@@ -433,19 +433,7 @@ export default {
             minWidth: 170
           }
         ],
-        tbdata: [
-          {
-            left1: 1,
-            left2: "草稿",
-            left3: "公司名称",
-            left4: "2019-10-01",
-            left5: "李四",
-            left6: "GT11121223",
-            left7: "张三",
-            left8: "2019-10-21",
-            left9: "10"
-          }
-        ]
+        tbdata: []
       },
       Right: {
         page: {
@@ -657,16 +645,6 @@ export default {
     },
     //获取左侧列表
     getList() {
-      //获取右边仓库数据
-      getstate()
-        .then(res => {
-          if (res.code === 0) {
-            this.warehouseList = res.data;
-          }
-        })
-        .catch(err => {
-          this.$Message.info("获取仓库信息失败"); //获取仓库数据
-        });
       //获取左边数据
       let data = {};
       if (this.purchaseType == "-1") {
@@ -750,7 +728,7 @@ export default {
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
-      this.Left.page.size = 20;
+      // this.Left.page.size = 20;
       this.getList();
     },
     //改变移仓时间
@@ -856,7 +834,7 @@ export default {
         this.saveButClick = false;
         return;
       }
-      if (this.numberValue <=0) {
+      if (this.numberValue&&this.numberValue <=0) {
         this.$Message.error("数量须大于0");
         this.saveButClick = false;
         return;
@@ -1187,10 +1165,22 @@ export default {
     }
   },
   mounted() {
+
+    //获取右边仓库数据
+    getstate()
+      .then(res => {
+        if (res.code === 0) {
+          this.warehouseList = res.data;
+        }
+      })
+      .catch(err => {
+        this.$Message.info("获取仓库信息失败"); //获取仓库数据
+      });
+
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
-    this.getList();
+    // this.getList();
     window.onresize = () => {
       this.getDomHeight();
     };

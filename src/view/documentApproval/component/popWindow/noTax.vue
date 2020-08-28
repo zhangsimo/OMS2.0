@@ -60,7 +60,7 @@
             <i class="iconfont iconcaidan input" v-if="Boolean(modelType.type != 3)" @click="seleteAccount"></i>
           </FormItem>
           <FormItem label="产生税费" prop="taxation">
-            <Input v-model="invoice.taxation" class="ml5 w100" disabled />
+            <Input :value="getTaxesAndDues" class="ml5 w100" disabled />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -68,7 +68,7 @@
             <Input v-model="invoice.notAmt" class="ml5 w100" disabled />
           </FormItem>
           <FormItem label="实际增加开票金额" prop="invoiceAmt" :label-width="160">
-            <Input v-model="invoice.invoiceAmt" class="ml5 w100" disabled />
+            <Input :value="showPay" class="ml5 w100" disabled />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -89,7 +89,7 @@
               class="ml5 w100"
               :formatter="value => `${value}%`"
               :parser="value => value.replace('%', '')"
-              @on-change="taxPointChange"/>
+              />
           </FormItem>
         </div>
       </div>
@@ -405,11 +405,11 @@ export default {
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
         }
-        if(this.modelType.id){
-          let data ={}
+        if (this.modelType.id) {
+          let data = {}
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data)
-          if(res.code == 0){
+          if (res.code == 0) {
             // console.log(res.data)
             // this.information = res.data;
             this.formInline.applyNo = res.data.accountNo;
@@ -423,7 +423,7 @@ export default {
             this.invoice = res.data;
             this.invoice.taxApplicationList = [{value: "0.06", label: "6%"}, {value: "0.07", label: "7%"}];
             console.log(this.invoice)
-              this.accessoriesBillingData = res.data.partList;
+            this.accessoriesBillingData = res.data.partList;
             // this.remarks = res.data.applyReason
           }
         }
@@ -466,7 +466,7 @@ export default {
       this.$refs.SeleteSale.modal1 = true;
     },
     // 开票配件合计
-    billSum({ columns, data }) {
+    billSum({columns, data}) {
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -505,97 +505,97 @@ export default {
     seleteAccount() {
       this.$refs.saleAccount.modal1 = true;
     },
-    //税费计算
-    pointComputed(total){
-      this.invoicedAmountTotal = total;
-      //产生税费
-      let taxation = (total/(1-  this.$utils.divide(this.invoice.taxPoint , 100))- this.invoice.invoiceTaxAmt);
-      this.invoice.taxation = taxation.toFixed(2);
-      //实际增加开票金额
-      this.invoice.invoiceAmt = (taxation + this.invoice.invoiceTaxAmt).toFixed(2);
-    },
-
-    taxPointChange(){
-      this.pointComputed(this.invoicedAmountTotal);
-    },
   },
+
   computed: {
     invoiceTaxAmt() {
       return this.invoice.invoiceTaxAmt;
     },
     taxPoint() {
       return this.invoice.taxPoint;
+    },
+    //计算税费
+    //本次不含税开票金额 / (1-税率) - 本次不含税开票金额
+    getTaxesAndDues(){
+      this.invoice.taxation =  this.$utils.subtract( this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.$utils.divide( this.invoice.taxPoint , 100))  )  , this.invoice.invoiceTaxAmt )
+      return this.invoice.taxation.toFixed(2)
+    },
+    //本次实际金额
+    //本次不含税开票金额 / (1-税率)
+    showPay(){
+      this.invoice.invoiceAmt = this.$utils.divide(this.invoice.invoiceTaxAmt ,this.$utils.subtract(1 , this.$utils.divide( this.invoice.taxPoint , 100)  ))
+      return this.invoice.invoiceAmt.toFixed(2)
     }
   },
-  watch: {
-    invoiceTaxAmt(val, ov) {
-      if (this.copyData.length !== 0 && val !== ov) {
-        this.invoice.taxation = parseFloat(
-          (val / (1 - this.invoice.taxPoint) - val).toFixed(2)
-        );
-        this.invoice.invoiceAmt = (val * 1 + this.invoice.taxation * 1).toFixed(
-          2
-        );
-        let sum = 0;
-        let accData = JSON.parse(JSON.stringify(this.copyData));
-        this.accessoriesBillingData = [];
-        let num = 0;
-        accData.map(item => {
-          num += item.orderQty;
-        });
-        for (let i of accData) {
-          sum += i.applyAmt * 1;
-          if (sum <= val) {
-            this.accessoriesBillingData.push(i);
-          } else {
-            i.applyAmt -= sum - val;
-            i.additionalTaxPoint = parseFloat(
-              ((i.orderQty / num) * this.invoice.taxation).toFixed(2)
-            );
-            i.taxAmt = i.applyAmt + i.additionalTaxPoint;
-            i.taxPrice = i.taxAmt / i.orderQty;
-            return this.accessoriesBillingData.push(i);
-          }
-        }
-      }
-    },
-    // 申请税点
-    taxPoint(val, ov) {
-      if (val !== ov) {
-        // console.log(val);
-        this.invoice.taxation = parseFloat(
-          (
-            this.invoice.invoiceTaxAmt / (1 - val) -
-            this.invoice.invoiceTaxAmt
-          ).toFixed(2)
-        );
-        this.invoice.invoiceAmt = (
-          this.invoice.invoiceTaxAmt * 1 +
-          this.invoice.taxation * 1
-        ).toFixed(2);
-        let num = 0;
-        this.accessoriesBillingData.map(item => {
-          num += item.orderQty;
-        });
-        // this.accessoriesBillingData.map(item => {
-        //   item.additionalTaxPoint = parseFloat(
-        //     ((item.orderQty / num) * this.invoice.taxation).toFixed(2)
-        //   );
-        //   item.taxAmt = item.applyAmt + item.additionalTaxPoint;
-        //   item.taxPrice = item.taxAmt / item.orderQty;
-        // });
-      }
-    },
-    tax: {
-      handler(val, ov) {
-        if (val !== ov) {
-          this.accessoriesBillingData.map(item => {
-            this.$set(item, "invoiceTax", val);
-          });
-        }
-      }
-    }
-  }
+  // watch: {
+  //   invoiceTaxAmt(val, ov) {
+  //     if (this.copyData.length !== 0 && val !== ov) {
+  //       this.invoice.taxation = parseFloat(
+  //         (val / (1 - this.invoice.taxPoint) - val).toFixed(2)
+  //       );
+  //       this.invoice.invoiceAmt = (val * 1 + this.invoice.taxation * 1).toFixed(
+  //         2
+  //       );
+  //       let sum = 0;
+  //       let accData = JSON.parse(JSON.stringify(this.copyData));
+  //       this.accessoriesBillingData = [];
+  //       let num = 0;
+  //       accData.map(item => {
+  //         num += item.orderQty;
+  //       });
+  //       for (let i of accData) {
+  //         sum += i.applyAmt * 1;
+  //         if (sum <= val) {
+  //           this.accessoriesBillingData.push(i);
+  //         } else {
+  //           i.applyAmt -= sum - val;
+  //           i.additionalTaxPoint = parseFloat(
+  //             ((i.orderQty / num) * this.invoice.taxation).toFixed(2)
+  //           );
+  //           i.taxAmt = i.applyAmt + i.additionalTaxPoint;
+  //           i.taxPrice = i.taxAmt / i.orderQty;
+  //           return this.accessoriesBillingData.push(i);
+  //         }
+  //       }
+  //     }
+  //   },
+  //   // 申请税点
+  //   taxPoint(val, ov) {
+  //     if (val !== ov) {
+  //       // console.log(val);
+  //       this.invoice.taxation = parseFloat(
+  //         (
+  //           this.invoice.invoiceTaxAmt / (1 - val) -
+  //           this.invoice.invoiceTaxAmt
+  //         ).toFixed(2)
+  //       );
+  //       this.invoice.invoiceAmt = (
+  //         this.invoice.invoiceTaxAmt * 1 +
+  //         this.invoice.taxation * 1
+  //       ).toFixed(2);
+  //       let num = 0;
+  //       this.accessoriesBillingData.map(item => {
+  //         num += item.orderQty;
+  //       });
+  //       // this.accessoriesBillingData.map(item => {
+  //       //   item.additionalTaxPoint = parseFloat(
+  //       //     ((item.orderQty / num) * this.invoice.taxation).toFixed(2)
+  //       //   );
+  //       //   item.taxAmt = item.applyAmt + item.additionalTaxPoint;
+  //       //   item.taxPrice = item.taxAmt / item.orderQty;
+  //       // });
+  //     }
+  //   },
+  //   tax: {
+  //     handler(val, ov) {
+  //       if (val !== ov) {
+  //         this.accessoriesBillingData.map(item => {
+  //           this.$set(item, "invoiceTax", val);
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 };
 </script>
 <style lang="less" scoped>

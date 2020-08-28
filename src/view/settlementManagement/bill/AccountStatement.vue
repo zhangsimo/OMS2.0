@@ -381,7 +381,7 @@
   import settlementMoadl from "./components/settlement";
   import hedgingInvoice from "./Popup/hedgingInvoice";
   import registrationEntry from "./Popup/registrationEntry";
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import salepopup from "./Popup/salepopup";
   import {creat} from "./../components";
   import moment from "moment";
@@ -1170,11 +1170,23 @@
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
       this.value = arr[0];
-      this.$nextTick(() => {
-        this.model1 = arr[1]
-        // this.getAccountStatement()
-      })
-      this.getShop()
+      // let obj = {
+      //   startDate: this.value[0]
+      //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+      //     : "",
+      //   endDate: this.value[1]
+      //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+      //     : "",
+      //   orgId: this.model1,
+      //   statementStatus: this.Reconciliationtype
+      // };
+      // obj.page = this.page.num -1
+      // obj.size = this.page.size
+      // this.getAccountStatement(obj);
+      // this.query()
+      this.model1 = arr[1];
+      this.getShop();
+      this.$refs.quickDate.getval(1);
     },
     computed: {
       selectShopList() {

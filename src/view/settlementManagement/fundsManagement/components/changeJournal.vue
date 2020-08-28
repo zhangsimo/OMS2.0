@@ -199,8 +199,10 @@
       open() {
         this.handleReset()
         this.getSubject()
-        this.formCustom = this.list
-        this.modalShow = true
+        setTimeout(()=>{
+          this.modalShow = true
+          this.formCustom = this.list
+        },0)
       },
       //获取区域
       async getAllArea() {
