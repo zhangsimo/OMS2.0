@@ -104,21 +104,21 @@
           field="accountCode"
           title="账号"
           width="100"
-          fixed="left"
           ></vxe-table-column>
+<!--        fixed="left"-->
         <vxe-table-column
           field="bankName"
           title="开户行"
           width="150"
-          fixed="left"
         >
+<!--          fixed="left"-->
         </vxe-table-column>
         <vxe-table-column
           field="mateAccountName"
           title="对应科目"
           width="150"
-          fixed="left"
         >
+<!--          fixed="left"-->
         </vxe-table-column>
         <vxe-table-column
           field="initialBalanceMoney"
