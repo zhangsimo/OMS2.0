@@ -81,13 +81,15 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="申请税点" prop="taxPoint">
-            <Select v-model="invoice.taxPoint" class="ml5 w100" :disabled="modelType.type!==1">
-              <Option
-                v-for="item in invoice.taxApplicationList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <InputNumber
+              :disabled="modelType.type!==1"
+              :min="0"
+              :max="100"
+              v-model="invoice.taxPoint"
+              class="ml5 w100"
+              :formatter="value => `${value}%`"
+              :parser="value => value.replace('%', '')"
+              @on-change="taxPointChange"/>
           </FormItem>
         </div>
       </div>
@@ -267,7 +269,7 @@ export default {
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
       invoice: {
-        taxPoint: "", //申请税点
+        taxPoint: 0, //申请税点
         taxApplicationList: [
           {
             value: 0.06,
@@ -502,7 +504,20 @@ export default {
     },
     seleteAccount() {
       this.$refs.saleAccount.modal1 = true;
-    }
+    },
+    //税费计算
+    pointComputed(total){
+      this.invoicedAmountTotal = total;
+      //产生税费
+      let taxation = (total/(1-  this.$utils.divide(this.invoice.taxPoint , 100))- this.invoice.invoiceTaxAmt);
+      this.invoice.taxation = taxation.toFixed(2);
+      //实际增加开票金额
+      this.invoice.invoiceAmt = (taxation + this.invoice.invoiceTaxAmt).toFixed(2);
+    },
+
+    taxPointChange(){
+      this.pointComputed(this.invoicedAmountTotal);
+    },
   },
   computed: {
     invoiceTaxAmt() {

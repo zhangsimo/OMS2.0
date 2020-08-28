@@ -605,7 +605,7 @@ export default {
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];
         this.$nextTick(() => {
-          this.BranchstoreId = this.$store.state.user.userData.currentCompany.id ||"";
+          this.BranchstoreId = this.$store.state.user.userData.currentShopId ||"";
         });
         if(this.areas.length>0){
           this.areas.map(item=>{

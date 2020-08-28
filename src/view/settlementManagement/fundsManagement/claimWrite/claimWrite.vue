@@ -183,7 +183,7 @@
                   transfer
                 ></Date-picker>
                 <span class="ml10">区域：</span>
-                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable>
+                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable  :disabled="selectShopList">
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
@@ -192,7 +192,7 @@
                   </Option>
                 </Select>
                 <span class="ml10">门店：</span>
-                <Select transfer v-model="orgId" class="w150" filterable>
+                <Select transfer v-model="orgId" class="w150" filterable  :disabled="selectShopList">
                   <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>

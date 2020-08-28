@@ -74,7 +74,7 @@ export default {
       fno: "", //调拨单号
       value: [],
       shopList: [{ id: 0, shortName: "全部" }],
-      shopCode:this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.id ? this.$store.state.user.userData.currentCompany.id : '' : '',
+      shopCode:this.$store.state.user.userData.currentShopId ? this.$store.state.user.userData.currentShopId ? this.$store.state.user.userData.currentShopId : '' : '',
       tableData: [] //表格数据
     };
   },

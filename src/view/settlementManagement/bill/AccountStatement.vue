@@ -1170,23 +1170,9 @@
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
       this.value = arr[0];
-      // let obj = {
-      //   startDate: this.value[0]
-      //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-      //     : "",
-      //   endDate: this.value[1]
-      //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-      //     : "",
-      //   orgId: this.model1,
-      //   statementStatus: this.Reconciliationtype
-      // };
-      // obj.page = this.page.num -1
-      // obj.size = this.page.size
-      // this.getAccountStatement(obj);
-      // this.query()
       this.$nextTick(() => {
         this.model1 = arr[1]
-        this.getAccountStatement()
+        // this.getAccountStatement()
       })
       this.getShop()
     },

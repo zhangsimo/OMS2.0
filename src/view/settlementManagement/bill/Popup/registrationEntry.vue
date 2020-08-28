@@ -415,8 +415,7 @@
         params.id=this.accountData[0].guestId;
         let res = await getInvoiceSellerList(params)
         if (res.code == 0) {
-          // console.log(res.data,111111)
-          this.invoiceSellerList = res.data
+          this.invoiceSellerList = res.data || []
         }
       },
       //新增开票 弹框确定
@@ -662,7 +661,7 @@
             payType: "DG",
             invoiceSort: "CG",
             invoicePurchaserId: this.$store.state.user.userData.currentShopId || "",
-            invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
+            invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1] ? this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName : "",
             billingType: statementType === 1 ? "0" : "YP",
             taxAmt:'',
             totalAmt:'',
