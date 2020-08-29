@@ -84,8 +84,8 @@
 		  init(v){
 		    if(v){
           this.searchPartLayer = true;
+          v.orderQty = undefined;
           this.formItemData = {...v};
-          this.formItemData.orderQty = null
           this.$nextTick(()=>{
             this.$refs.orderQty.focus();
           })
@@ -108,6 +108,9 @@
           this.searchPartLayer = false;
           // this.$parent.$parent.getPartNameList2([this.formItemData]);
           this.$emit("throwData2",[this.formItemData])
+          if(this.$refs['orderQty']){
+            this.$refs['orderQty'].blur();
+          }
         }else{
 		      setTimeout(() => {
             this.$message.error("数量请输入大于0的正整数")

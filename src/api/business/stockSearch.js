@@ -9,6 +9,8 @@ export function getAllStock (data) {
     data
   });
 }
+//汇总库存数据导出
+export const exportAll=api.omsSotck + `/partStoreStock/export/PartStoreStock?`
 //   批次库存查询
 export function getLotStock (data) {
   return axios.request({
@@ -17,6 +19,8 @@ export function getLotStock (data) {
     data
   });
 }
+// 批次库存导出
+export const exportPart=api.omsOrder + `/enterMain/export/BatchStock?`
 // 获取入库明细数据
 export function getEnter (data) {
   return axios.request({

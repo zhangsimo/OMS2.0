@@ -878,8 +878,8 @@ export default {
         fno: this.fno,
         createUname: this.createUname,
         documentStatus: this.startStatusName,
-        size: this.page.size,
-        page: this.page.num - 1
+        // size: this.page.size,
+        // page: this.page.num - 1
       };
       getReceiptsPaymentsSummary(data).then(res => {
         if (res.data.length !== 0) {

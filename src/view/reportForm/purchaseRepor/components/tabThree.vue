@@ -17,7 +17,7 @@
         <vxe-table-column show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="serviceId"
+          field="manualCode"
           title="采购出库单号"
           width="100"
         ></vxe-table-column>
@@ -264,7 +264,7 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="manualCode"
+          field="serviceId"
           title="采退订单单号"
           width="140"
         ></vxe-table-column>

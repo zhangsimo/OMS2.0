@@ -418,15 +418,17 @@ export default {
           };
           return;
         }
-        if (key == "checkAmt") {
-          const values = data.map(item => Number(item[key]));
+        if (key === "checkAmt") {
+          const values = data.map(item => {
+            return item.sort.value === 0 ? -Number(item[key]) : Number(item[key]);
+          });
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return this.currRow.paymentBalance
+              const valuea = Number(curr);
+              if (!isNaN(valuea)) {
+                return prev + curr;
               } else {
-                return this.currRow.paymentBalance;
+                return prev;
               }
             }, 0);
             sums[key] = {
@@ -443,6 +445,7 @@ export default {
       });
       return sums;
     }
+
   }
 };
 </script>

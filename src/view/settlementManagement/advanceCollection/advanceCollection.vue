@@ -256,6 +256,7 @@ import settlement from "../bill/components/settlement";
 import { creat } from "./../components";
 import claim from "./components/claimed";
 import Record from "../components/Record";
+// import Record from "../otherReceivables/components/Record";
 import claimGuest from "./components/claimGuest";
 import payApply from "./components/payApply";
 import CreditSpending from "@/view/documentApproval/component/CreditSpending";
@@ -446,6 +447,7 @@ export default {
     collectWirte() {
       if (Object.keys(this.currRow).length !== 0) {
         this.$refs.settlement.Settlement = true;
+        this.$refs.settlement.showchange = true;
         this.paymentId = "YSK";
       } else {
         this.$message.error("请选择数据");

@@ -1,7 +1,6 @@
 <template>
   <div style="overflow: hidden ;overflow-x: scroll">
     <vxe-table
-      show-overflow
       highlight-current-row
       highlight-hover-row
       stripe
