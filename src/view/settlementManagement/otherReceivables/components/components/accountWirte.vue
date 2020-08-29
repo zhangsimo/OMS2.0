@@ -2,8 +2,16 @@
   <Modal v-model="modal1" title="对账单查询" width="860" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
     <DatePicker v-model="dateQuery" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
-    <span class="ml10">往来单位：</span>
-    <Select v-model="companyId" class="w150" filterable>
+    <span>往来单位：</span>
+    <Select
+      v-model="companyId"
+      class="w150"
+      clearable
+      filterable
+      remote
+      :loading="remoteloading"
+      :remote-method="getOne"
+    >
       <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
     <span class="ml10">收付款类型：</span>
@@ -121,23 +129,31 @@ export default {
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
       paymentId: "QTYFK", //收付类型
-      paymentList: [] //收付类型下拉框
+      paymentList: [], //收付类型下拉框
+      remoteloading: false, //搜索框loading
     };
   },
   methods: {
     // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          this.company = [];
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
+    async getOne(query) {
+      this.company = [];
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-      });
+            this.remoteloading = false;
+          }
+        });
+      } else {
+        this.company = [];
+      }
     },
     // 对话框是否显示
     visChange(flag) {
@@ -154,7 +170,6 @@ export default {
             });
           }
         );
-        this.getOne();
         this.seleteQuery();
       }
     },

@@ -39,7 +39,7 @@
               class="w200 mr10"
               @on-enter="serch"
             />
-            <!-- <Select
+            <Select
               filterable
               clearable
               class="w120 mr10"
@@ -53,7 +53,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select> -->
+            </Select>
             <Select
               class="w200 mr10"
               filterable
@@ -148,12 +148,12 @@
           </vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
-          <vxe-table-column field="costPrice" title="成本单价" width="80">
+          <vxe-table-column field="costPrice" title="库存单价" width="80">
             <template v-slot="{row}">
               {{row.costPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="stockAmt" title="成本金额" width="90">
+          <vxe-table-column field="stockAmt" title="库存金额" width="90">
             <template v-slot="{row}">
               {{row.stockAmt.toFixed(2)}}
             </template>
@@ -286,12 +286,12 @@
           </vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
-          <vxe-table-column field="enterPrice" title="库存单价" width="80">
+          <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
               {{row.enterPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="enterAmt" title="库存金额" width="90">
+          <vxe-table-column field="enterAmt" title="成本金额" width="90">
             <template v-slot="{row}">
               {{row.enterAmt.toFixed(2)}}
             </template>
@@ -501,7 +501,9 @@ import {
   findMasterOrgId,
   getStoreAll,
   PtabulatData,
-  EtabulatData
+  EtabulatData,
+  exportAll,
+  exportPart
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -517,9 +519,8 @@ import api from "_conf/url";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
 import moment from "moment";
-
+import axios from '@/libs/api.request'
 // import * as api from "_api/system/partManager";
-
 export default {
   name: "stockSearch",
   components: { EnterStock },
@@ -813,7 +814,7 @@ export default {
       this.searchForm.old = arr[1] || "";
       this.searchForm1.old = arr[1] || "";
       this.getStoreHoure();
-      // this.getBand(); //获取品牌
+      this.getBand(); //获取品牌
       this.getAllStocks(); //table请求
       this.getColumns();
     },
@@ -923,7 +924,7 @@ export default {
         this.$nextTick(()=>{
           const xtable = this.$refs.xTable3;
           const column = xtable.getColumnByField('partBrand');
-          xtable.setFilter(column, this.bands1);
+          xtable.setFilter(column, this.bands2);
           xtable.updateData();
         })
       }
@@ -1031,22 +1032,39 @@ export default {
           item.oemCode = "\t" + item.oemCode;
           return item;
         });
-        if (newData.length >= 0) {
-          this.$refs.table1.exportCsv({
-            filename: "汇总库存",
-            original: true,
-            columns: this.columns1,
-            data: newData
-          });
-        }else{
-          this.$Message.error("这个公司暂时没有库存")
-        }
+        // if (newData.length >= 0) {
+        //   this.$refs.table1.exportCsv({
+        //     filename: "汇总库存",
+        //     original: true,
+        //     columns: this.columns1,
+        //     data: newData
+        //   });
+        // }else{
+        //   this.$Message.error("这个公司暂时没有库存")
+        // }
       }
     },
 
     //汇总导出
     exportTheSummary() {
-      this.getStockAll();
+      let data = {};
+      data = this.searchForm;
+      data.page = 0;
+      data.size = this.contentOne.page.total;
+      data.noStock = data.noStock ? 1 : 0;
+      data.isImport = 1;
+      if(this.contentOne.dataOne.length<=0){
+        this.$Message.error("这个公司暂时没有库存")
+        return
+      }
+      let str=""
+      for(var key in data){
+        str+=`${key}=${data[key]}&`
+      }
+      let PaymentRecordUrl=`${exportAll}${str.slice(0,str.length-1)}` +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+      location.href =PaymentRecordUrl
     },
 
     //批次库存请求当前全数据
@@ -1103,7 +1121,27 @@ export default {
     },
     //导出批次
     exportBatch() {
-      this.getBatchStockAll();
+      let data = {};
+      data = this.searchForm1;
+      data.page = 0;
+      data.size = this.contentTwo.page.total;
+      data.noStock = data.noStock ? 1 : 0;
+      data.isImport = 1;
+      if(this.contentTwo.dataTwo.length<=0){
+        this.$Message.error("这个公司暂时没有库存")
+        return
+      }
+      if (data.old === "all") {
+        Reflect.deleteProperty(data, "old");
+      }
+      let str=""
+      for(var key in data){
+        str+=`${key}=${data[key]}&`
+      }
+      let PaymentRecordUrl=`${exportPart}/partStoreStock/export/PartStoreStock?${str.slice(0,str.length-1)}` +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+      location.href =PaymentRecordUrl
     },
 
     /////////////////////// hs

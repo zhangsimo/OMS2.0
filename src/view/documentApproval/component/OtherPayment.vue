@@ -141,10 +141,12 @@
             </Col>
             <Col span="6">
               <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
-                <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" filterable remote
-                        :remote-method="remoteMethod2" label-in-value @on-change="getPayList"
-                        :disabled="modelType">
-                  <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Select
+                  v-model="formInline.paymentAccount"
+                  style="width: 90%;padding-left: 5px"
+                  @on-change="getPay"
+                >
+                  <Option v-for="item in payUserList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
                 </Select>
               </FormItem>
             </Col>

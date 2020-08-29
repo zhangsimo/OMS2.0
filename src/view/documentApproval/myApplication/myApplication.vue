@@ -69,9 +69,12 @@
             />
           </div>
           <div class="db ml15">
-            <button class="ivu-btn ivu-btn-default" type="button" @click="query">
+            <button class="ivu-btn ivu-btn-default mr10" type="button" @click="query">
               <i class="iconfont iconchaxunicon mr5"></i>
               <span>查询</span>
+            </button>
+            <button class="ivu-btn ivu-btn-default" type="button" @click="deleteFun">
+              <span>删除</span>
             </button>
           </div>
           <div class="db ml15">
@@ -98,7 +101,11 @@
         show-overflow
         @current-change="currentChangeEvent"
         :data="tableData"
+        :checkbox-config="{strict: true, checkMethod: checCheckboxkMethod}"
+        @checkbox-all="selectDataFun"
+        @checkbox-change="selectDataFun"
       >
+        <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
             <template>
@@ -253,7 +260,7 @@ import {
 } from "@/api/documentApproval/documentApproval/documentApproval";
 import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
 import ViewOtherModel from "../component/viewOtherModel";
-import { getDigitalDictionary } from "../../../api/system/essentialData/clientManagement";
+import { getDigitalDictionary,deleteBatch } from "../../../api/system/essentialData/clientManagement";
 import ApplyModelView from "../component/viewApplyModel";
 import QuotaApplyModel from "../component/quotaApplyModel";
 import PartInfo from "../component/partInfo/partInfo";
@@ -426,10 +433,11 @@ export default {
         id: ""
       },
       headquarters: 2,
-      apply: true,
+      apply: false,
       approve: false,
       mainStore: [], //仓库数据
-      settleTypeList: {} //票据类型
+      settleTypeList: {}, //票据类型
+      selectTableList:[],
     };
   },
   async mounted() {
@@ -522,6 +530,8 @@ export default {
           params.approveUname = this.searchTypeValue;
           break;
       }
+      //清空复选框选中数据
+      this.selectTableList = [];
       let res = await findPageByDynamicQuery(params);
       if (res.code === 0) {
         this.tableData = res.data.content;
@@ -681,6 +691,23 @@ export default {
           this.headquarters = res.data.shopkeeperUser;
         }
       });
+    },
+    checCheckboxkMethod({ row }){
+      return row.billStatusName=="草稿";
+    },
+    selectDataFun({selection}){
+      this.selectTableList = selection;
+    },
+    async deleteFun(){
+      if(this.selectTableList.length==0){
+        return this.$Message.error("请选择要删除的数据");
+      }
+      let reqIds = this.selectTableList.filter(item => item.id).map(item => item.id);
+      let rep = await deleteBatch({ids:reqIds});
+      if(rep.code==0){
+        this.$Message.success("删除成功");
+        this.getList();
+      }
     }
   },
   filters: {

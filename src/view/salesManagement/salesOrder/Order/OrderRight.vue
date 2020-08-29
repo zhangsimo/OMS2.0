@@ -380,7 +380,7 @@
     <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"
                      @selectPartName="getPartNameList" @throwPartNameList2="getPartNameList2"></select-part-com>
     <!--      批次配件-->
-    <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList"></barch>
+    <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList" @throwPartNameList2="throwBatch"></barch>
     <!--      选择客户-->
     <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
     <!--      选择入库单-->
@@ -987,6 +987,11 @@
         this.$Message.success("已添加");
       },
 
+      //批次修改数量单价选入
+      throwBatch(v){
+        this.getBarchList(v);
+      },
+
       // 批次配件
       async getBarchList(val) {
         val.map(item => {
@@ -1004,7 +1009,8 @@
         this.formPlan.detailList = [
           ...this.formPlan.detailList,
           ...val
-        ]
+        ];
+        this.$Message.success("已添加");
       },
       //打开客户选择
       openAddCustomer() {

@@ -557,7 +557,7 @@ export default {
           data.subjectCode = "2203";
           data.claimType = 4;
         } else {
-          data.claimMoney=this.accrued[0].balanceMoney;
+          data.claimMoney=this.accrued[0].rpAmt;
           data.subjectCode = "1221";
           data.claimType = 6;
           data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund

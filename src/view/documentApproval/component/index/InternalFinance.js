@@ -187,7 +187,7 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
-          this.formInline.allotInfo=this.accountList
+          this.formInline.allotInfo=this.accountList[0].enterAccount
           let res = await getIFSave(this.formInline)
           if (res.code == 0) {
             this.$Message.success('操作成功')

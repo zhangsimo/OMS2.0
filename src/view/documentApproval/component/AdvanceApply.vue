@@ -215,20 +215,27 @@
                 <Select
                   v-model="formInline.paymentAccount"
                   style="width: 90%;padding-left: 5px"
-                  filterable
-                  remote
-                  :remote-method="remoteMethod2"
-                  label-in-value
-                  @on-change="getPayList"
-                  :disabled="modelType"
+                  @on-change="getPay"
                 >
-                  <Option
-                    v-for="item in payUserList"
-                    :value="item.value"
-                    :key="item.value"
-                    >{{ item.label }}</Option
-                  >
+                  <Option v-for="item in payUserList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
                 </Select>
+<!--                <Select-->
+<!--                  v-model="formInline.paymentAccount"-->
+<!--                  style="width: 90%;padding-left: 5px"-->
+<!--                  filterable-->
+<!--                  remote-->
+<!--                  :remote-method="remoteMethod2"-->
+<!--                  label-in-value-->
+<!--                  @on-change="getPayList"-->
+<!--                  :disabled="modelType"-->
+<!--                >-->
+<!--                  <Option-->
+<!--                    v-for="item in payUserList"-->
+<!--                    :value="item.value"-->
+<!--                    :key="item.value"-->
+<!--                    >{{ item.label }}</Option-->
+<!--                  >-->
+<!--                </Select>-->
               </FormItem>
             </Col>
             <Col span="6">

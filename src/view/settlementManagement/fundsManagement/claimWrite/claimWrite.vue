@@ -183,7 +183,8 @@
                   transfer
                 ></Date-picker>
                 <span class="ml10">区域：</span>
-                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable  :disabled="selectShopList">
+                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable>
+<!--                  :disabled="selectShopList"-->
                   <Option
                     v-for="item in areaList"
                     :value="item.value"
@@ -192,7 +193,8 @@
                   </Option>
                 </Select>
                 <span class="ml10">门店：</span>
-                <Select transfer v-model="orgId" class="w150" filterable  :disabled="selectShopList">
+                <Select transfer v-model="orgId" class="w150" filterable >
+<!--                  :disabled="selectShopList"-->
                   <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
@@ -321,7 +323,7 @@
         company: [], //往来单位下拉框
         company2: [], //往来单位下拉框
         orgId: "", //门店  连锁待分配款项
-        orgList: [{id: "0", name: "全部"}], //分店名称
+        orgList: [{id: "", name: "全部"}], //分店名称
         claimedSubjectList: [], //获取到点击到的本店认领数据
         areaId: 0, //区域
         areaList: [{value: 0, label: "全部"}], //区域
@@ -848,10 +850,11 @@
       async getShop(areaId) {
         let data = {};
         data.supplierTypeSecond = areaId
+        this.orgList=[{id: "", name: "全部"}]
         let res = await goshop(data);
         if (res.code === 0) {
-          this.orgList = [...this.orgList, ...res.data]
-          this.setAreaDef();
+          this.orgList = Array.from(new Set([...this.orgList, ...res.data]))
+          // this.setAreaDef();
         }
       },
       setAreaDef() {
@@ -1000,7 +1003,7 @@
             })
             this.$refs.otherCollectionClaims.open();
           } else {
-            claimTit = "预收款认领"
+            claimTit =="预收款认领"
               ? this.$message.error("预收款认领不能选择支出类资金")
               : this.$message.error("其他收款认领不能选择支出类资金");
           }
@@ -1018,7 +1021,7 @@
           // })
           this.claimedSubjectList = this.$refs.claim.currentClaimed;
           this.$refs.otherPaymentClaim.claimTit = claimTit;
-          if (this.claimedSubjectList[0].paidMoney < 0) {
+          if (Math.abs(this.claimedSubjectList[0].paidMoney)>0 || this.claimedSubjectList[0].incomeMoney <= 0) {
             this.claimedSubjectList.map(item => {
               item.paidMoney = item.unClaimedAmt;
               if (claimTit = "预付款认领") {

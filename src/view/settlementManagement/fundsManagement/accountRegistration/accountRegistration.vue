@@ -328,7 +328,6 @@ export default {
         area: row.area,
         shopName: row.shopName
       };
-      console.log(this.ChangeData,1111)
       this.$refs.informationShow.information = true;
     },
 
