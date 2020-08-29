@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal" title="预收款支出认领" width=800>
+  <Modal v-model="modal" title="预收款支出认领" width=800 @on-visible-change="showOrhideModel">
     <span>往来单位</span>
     <Select v-model="companyId" class="w100 ml10 mr10" filterable>
       <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -88,7 +88,7 @@ export default {
     };
   },
   mounted() {
-    this.getOne();
+    // this.getOne();
   },
   methods: {
     // 往来单位选择
@@ -116,6 +116,11 @@ export default {
         this.$refs.settlement.Settlement = true;
       } else {
         this.$message.error("请选择一条数据");
+      }
+    },
+    showOrhideModel(v){
+      if(v&&this.company.length==0){
+        this.getOne();
       }
     }
   }

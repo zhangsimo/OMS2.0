@@ -131,6 +131,7 @@
 import {
   getInvoiceList,
   getDetailsList,
+  getDetailsListApply,
   IntelligenceList,
   updateNumber,
   writeData,
@@ -142,6 +143,14 @@ import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import moment from "moment";
+
+/**
+ * 序号	分店名称	店号	往来单位	      申请日期	  对账单号	 开票申请单号	发票种类	  购方税号	      购方邮箱	购方开户行及账号	 购方地址、电话	开票单位	   配件名称	配件编码
+        orgName	orgCode	guestName	applyDate	accountNo	applyNo	invoiceKind	customDuty	customMail	customAccount	tel	       invoiceUnit	partName	partCode
+ 油品包装规格	油品换算单位	油品换算数量	单位	数量	    商品含税单价	商品含税金额	开票税率	出库单号	销售单价	销售金额	已开票金额	未开票金额	       外加税点	          申请开票总金额	收款方式	开票清单类型	备注	       快递方式	发票性质	推送手机	税收分类编码	是否享受优惠政策	优惠政策名称	零税率标识	扣除额	折扣金额	收款人（只有快递收件人和收款方式）	复核人	开票人（只有导入开票单位和申请人）
+ oilsSpec	oilsUnit	oilsQty	unit	qty	         taxPrice	   taxAmt    	taxRate	  outNo  	salePrice	saleAmt	invoiceAmt	invoiceNotAmt	additionalTaxPoint	applyAmt	collectionType	isOilPart	remark	sendingWay
+ *
+ * */
 export default {
   name: "invoiceAdministrationInvoiceApply",
   components: {
@@ -162,15 +171,10 @@ export default {
         },
         {
           title: "序号",
+          key:"seq",
           className: "tc",
           minWidth: 40,
-          fixed: "left",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.index + this.form.page * this.form.size + 1
-            );
-          }
+          fixed: "left"
         },
         {
           title: "分店名称",
@@ -220,7 +224,25 @@ export default {
           title: "开票申请单",
           key: "applyNo",
           className: "tc",
-          minWidth: 180
+          minWidth: 180,
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  color: "red"
+                },
+                on: {
+                  click: () => {
+                    // this.details.accountNo = params.row.accountNo;
+                    this.details.id = params.row.id;
+                    this.getDetails();
+                  }
+                }
+              },
+              params.row.applyNo
+            );
+          }
         },
         {
           title: "往来单位",
@@ -273,21 +295,20 @@ export default {
           className: "tc",
           minWidth: 180,
           render: (h, params) => {
-            return h(
-              "span",
-              {
+            return h('div', [
+              h('span', {
                 style: {
-                  color: "red"
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
                 },
-                on: {
-                  click: () => {
-                    this.details.accountNo = params.row.accountNo;
-                    this.getDetails();
-                  }
+                domProps: {
+                  title: params.row.accountNo
                 }
-              },
-              params.row.accountNo
-            );
+              }, params.row.accountNo)
+            ])
           }
         },
         {
@@ -565,11 +586,9 @@ export default {
       columns1: [
         {
           title: "序号",
+          key:"seq",
           width: 40,
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.index + 1);
-          }
+          className: "tc"
         },
         {
           title: "分店名称",
@@ -625,7 +644,23 @@ export default {
           title: "申请日期",
           minWidth: 100,
           key: "applyDate",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.applyDate
+                }
+              }, params.row.applyDate)
+            ])
+          }
         },
         {
           title: "对账单号",
@@ -703,12 +738,6 @@ export default {
           }
         },
         {
-          title: "购方手机号",
-          minWidth: 100,
-          key: "customPhone",
-          className: "tc"
-        },
-        {
           title: "购方邮箱",
           minWidth: 100,
           key: "customMail",
@@ -761,72 +790,6 @@ export default {
         {
           title: "购方地址、电话",
           minWidth: 100,
-          key: "customAddress",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.customAddress
-                }
-              }, params.row.customAddress)
-            ])
-          }
-        },
-        {
-          title: "开票单位",
-          minWidth: 100,
-          key: "invoiceUnit",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.invoiceUnit
-                }
-              }, params.row.invoiceUnit)
-            ])
-          }
-        },
-        {
-          title: "客户税号",
-          minWidth: 100,
-          key: "taxNo",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.taxNo
-                }
-              }, params.row.taxNo)
-            ])
-          }
-        },
-        {
-          title: "地址电话",
-          minWidth: 100,
           key: "tel",
           className: "tc",
           render: (h, params) => {
@@ -847,9 +810,9 @@ export default {
           }
         },
         {
-          title: "银行账号",
+          title: "开票单位",
           minWidth: 100,
-          key: "bankAccountNumber",
+          key: "invoiceUnitName",
           className: "tc",
           render: (h, params) => {
             return h('div', [
@@ -862,12 +825,78 @@ export default {
                   whiteSpace: 'nowrap'
                 },
                 domProps: {
-                  title: params.row.bankAccountNumber
+                  title: params.row.invoiceUnitName
                 }
-              }, params.row.bankAccountNumber)
+              }, params.row.invoiceUnitName)
             ])
           }
         },
+        // {
+        //   title: "客户税号",
+        //   minWidth: 100,
+        //   key: "taxNo",
+        //   className: "tc",
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('span', {
+        //         style: {
+        //           display: 'inline-block',
+        //           width: '100%',
+        //           overflow: 'hidden',
+        //           textOverflow: 'ellipsis',
+        //           whiteSpace: 'nowrap'
+        //         },
+        //         domProps: {
+        //           title: params.row.taxNo
+        //         }
+        //       }, params.row.taxNo)
+        //     ])
+        //   }
+        // },
+        // {
+        //   title: "地址电话",
+        //   minWidth: 100,
+        //   key: "tel",
+        //   className: "tc",
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('span', {
+        //         style: {
+        //           display: 'inline-block',
+        //           width: '100%',
+        //           overflow: 'hidden',
+        //           textOverflow: 'ellipsis',
+        //           whiteSpace: 'nowrap'
+        //         },
+        //         domProps: {
+        //           title: params.row.tel
+        //         }
+        //       }, params.row.tel)
+        //     ])
+        //   }
+        // },
+        // {
+        //   title: "银行账号",
+        //   minWidth: 100,
+        //   key: "bankAccountNumber",
+        //   className: "tc",
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('span', {
+        //         style: {
+        //           display: 'inline-block',
+        //           width: '100%',
+        //           overflow: 'hidden',
+        //           textOverflow: 'ellipsis',
+        //           whiteSpace: 'nowrap'
+        //         },
+        //         domProps: {
+        //           title: params.row.bankAccountNumber
+        //         }
+        //       }, params.row.bankAccountNumber)
+        //     ])
+        //   }
+        // },
         {
           title: "配件名称",
           minWidth: 100,
@@ -911,6 +940,24 @@ export default {
               }, params.row.partCode)
             ])
           }
+        },
+        {
+          title: "油品包装规格",
+          minWidth: 100,
+          key: "oilsSpec",
+          className: "tc"
+        },
+        {
+          title: "油品换算单位",
+          minWidth: 100,
+          key: "oilsUnit",
+          className: "tc"
+        },
+        {
+          title: "油品换算数量",
+          minWidth: 100,
+          key: "oilsQty",
+          className: "tc"
         },
         {
           title: "单位",
@@ -993,6 +1040,18 @@ export default {
           className: "tc"
         },
         {
+          title: "已开票金额",
+          minWidth: 100,
+          key: "invoiceAmt",
+          className: "tc"
+        },
+        {
+          title: "未开票金额",
+          minWidth: 100,
+          key: "invoiceNotAmt",
+          className: "tc"
+        },
+        {
           title: "外加税点",
           minWidth: 100,
           key: "additionalTaxPoint",
@@ -1000,48 +1059,48 @@ export default {
         },
         {
           title: "申请开票总金额",
-          key: "billstate",
+          key: "applyAmt",
           minWidth: 100,
           className: "tc"
         },
-        {
-          title: "开票公司",
-          minWidth: 100,
-          key: "receiptUnit",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.receiptUnit
-                }
-              }, params.row.receiptUnit)
-            ])
-          }
-        },
+        // {
+        //   title: "开票公司",
+        //   minWidth: 100,
+        //   key: "receiptUnit",
+        //   className: "tc",
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('span', {
+        //         style: {
+        //           display: 'inline-block',
+        //           width: '100%',
+        //           overflow: 'hidden',
+        //           textOverflow: 'ellipsis',
+        //           whiteSpace: 'nowrap'
+        //         },
+        //         domProps: {
+        //           title: params.row.receiptUnit
+        //         }
+        //       }, params.row.receiptUnit)
+        //     ])
+        //   }
+        // },
         {
           title: "收款方式",
           minWidth: 100,
-          key: "collectionType",
+          key: "collectionTypeName",
           className: "tc"
         },
-        {
-          title: "发票类型",
-          minWidth: 100,
-          key: "invoiceType",
-          className: "tc"
-        },
+        // {
+        //   title: "发票类型",
+        //   minWidth: 100,
+        //   key: "invoiceType",
+        //   className: "tc"
+        // },
         {
           title: "开票清单类型",
           minWidth: 100,
-          key: "species",
+          key:"isOilPartText",
           className: "tc"
         },
         {
@@ -1069,7 +1128,7 @@ export default {
         {
           title: "快递方式",
           minWidth: 100,
-          key: "sendingWay",
+          key: "sendingWayName",
           className: "tc"
         }
       ],
@@ -1129,9 +1188,24 @@ export default {
       this.form.endDate = this.value.length ? this.value[1] : "";
       this.getDataList();
     },
+    exportSummary(){
+      this.$refs.summary.exportCsv({
+        filename:"开票申请查询与核销汇总表",
+        data:this.data,
+        columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
+      })
+    },
+    modifyData(){
+      this.$refs.parts.exportCsv({
+        filename:"开票申请配件明细表",
+        data:this.data1,
+        columns:this.columns1
+      })
+    },
     operation(num) {
       switch (num) {
         case 1:
+          this.exportSummary();
           break;
         case 2:
           this.modifyData();
@@ -1211,16 +1285,28 @@ export default {
     },
     pageCode() {},
     getDetails() {
-      getDetailsList(this.details).then(res => {
+      // getDetailsList(this.details).then(res => {
+      //   if (res.code === 0) {
+      //     this.data1 = res.data.content;
+      //   }
+      // });
+      getDetailsListApply(this.details).then(res => {
         if (res.code === 0) {
-          this.data1 = res.data.content;
+          this.data1 = res.data.map((item,index)=>{
+            item.isOilPart==0?item.isOilPartText="不含税":(item.isOilPart==1?item.isOilPartText="含税油品":item.isOilPartText="含税配件")
+            item.seq=index+1
+            return item
+          });
         }
       });
     },
     getDataList() {
       getInvoiceList(this.form).then(res => {
         if (res.code === 0) {
-          this.data = res.data.content;
+          this.data = res.data.content.map((item,index)=>{
+            item.seq=index + this.form.page * this.form.size + 1
+            return item
+          });
           this.pagetotal = res.data.totalElements;
         }
       });
@@ -1232,8 +1318,7 @@ export default {
       if (res.code === 0) {
         this.proTypeList = [...this.proTypeList , ...res.data]
         this.$nextTick( () => {
-            this.form.orgName = this.$store.state.user.userData.shopId
-
+            this.form.orgName = this.$store.state.user.userData.currentShopId
         })
       }
     },

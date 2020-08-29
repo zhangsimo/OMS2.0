@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--选择辅助核算-->
-    <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu">
+    <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card">
           <TabPane label="客户" name="client">
@@ -616,14 +616,34 @@ export default {
     //其他新增
     ShowOtherAdd() {
       this.OtherModalAdd = true;
+    },
+    showOrhideModel(v){
+      if(v){
+        if(this.list.length==0){
+          this.getListCompany();
+        }
+        if(this.AssistTableDataKeHu.length==0){
+          this.ClientgetList();
+        }
+        if(this.AssistTableDataGongYingShang.length==0){
+          this.SupperliergetList();
+        }
+        if(this.categoryArr.length==0){
+          this.OtherGetlist();
+        }
+        if(this.AssistTableDataOther.length==0){
+          this.OtherClickTable();
+        }
+
+      }
     }
   },
   mounted() {
-    this.getListCompany();
-    this.ClientgetList();
-    this.SupperliergetList();
-    this.OtherGetlist();
-    this.OtherClickTable();
+    // this.getListCompany();
+    // this.ClientgetList();
+    // this.SupperliergetList();
+    // this.OtherGetlist();
+    // this.OtherClickTable();
   }
 };
 </script>
