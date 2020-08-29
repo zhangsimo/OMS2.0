@@ -971,8 +971,18 @@
       },
       selectTabelData() {
       },
+      //获取orderMan 值 走流程到 报表那一块
+      getOrderMan(orderManId){
+        this.userMap.map((item)=>{
+          if(item.id==orderManId){
+            this.formPlan.orderMan=item.label
+            return
+          }
+        })
+      },
       //保存按钮
       SaveMsg() {
+        this.getOrderMan(this.formPlan.storeId)
         this.$refs.formPlan.validate(async valid => {
           if (valid) {
             try {
@@ -1425,6 +1435,7 @@
       },
       // 提交按钮
       instance() {
+        this.getOrderMan(this.formPlan.storeId)
         if (this.Right.tbdata.length > 0) {
           this.$Modal.confirm({
             title: "是否提交",
