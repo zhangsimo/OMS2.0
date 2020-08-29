@@ -340,15 +340,5 @@ export default {
 
 </style>
 <style lang="less">
-  .setPadding .vxe-cell{
-    padding: 0 4px;
-    .alignRight{
-      white-space: nowrap;
-      overflow: hidden;
-      text-align: right;
-      text-indent: -150px;
-      width: 98%;
 
-    }
-  }
 </style>
