@@ -161,25 +161,15 @@ export default {
   },
   methods: {
     // 往来单位下拉框
-    async getOne() {
-      findGuest({size:2000 , id:this.companyId}).then(res => {
-        if (res.code === 0) {
-          this.company=[]
-          res.data.content.map(item=>{
-            this.company.push({
-              value:item.id,
-              label:item.fullName
-            })
-          })
-        }
-      });
-    },
+
     // 对话框是否显示
     visChange(flag) {
       this.accountData = [];
       if (flag) {
+        //不掉接口直接拿数据
+        this.company =[]
         this.companyId = this.$parent.$parent.$parent.currRow.guestId || ''
-        this.getOne();
+        this.company.push({value: this.companyId , label: this.$parent.$parent.$parent.currRow.guestName})
         this.seleteQuery();
       }
     },
