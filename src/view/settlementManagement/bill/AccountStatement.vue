@@ -1583,11 +1583,13 @@
         if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil) {
           this.receivefalg = true
         }
-        if (row.statementStatus.value == 3) {
-          this.ownEnterList = true
-          this.ownEnterList = true
+        if (row.statementStatus.value == 1) {
+          this.hedgingfalg = true
         }
-        this.ownEnterList = row.ownEnterList == 0 ? true : false
+        if (row.statementStatus.value == 1 || row.ownEnterList == 0) {
+          this.ownEnterList = true
+
+        }
         this.reconciliationStatement = row;
         this.reconciliationStatement.index = index;
         this.data2 = []
