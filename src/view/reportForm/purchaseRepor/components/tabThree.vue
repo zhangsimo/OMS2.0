@@ -49,7 +49,7 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderMan0"
+          field="orderMan"
           title="采购员"
           width="120"
         ></vxe-table-column>
