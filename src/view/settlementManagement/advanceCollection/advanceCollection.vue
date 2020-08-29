@@ -446,6 +446,7 @@ export default {
     collectWirte() {
       if (Object.keys(this.currRow).length !== 0) {
         this.$refs.settlement.Settlement = true;
+        this.$refs.settlement.showchange = true;
         this.paymentId = "YSK";
       } else {
         this.$message.error("请选择数据");
