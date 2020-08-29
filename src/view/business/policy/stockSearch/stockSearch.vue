@@ -501,7 +501,9 @@ import {
   findMasterOrgId,
   getStoreAll,
   PtabulatData,
-  EtabulatData
+  EtabulatData,
+  exportAll,
+  exportPart
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -517,9 +519,8 @@ import api from "_conf/url";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
 import moment from "moment";
-
+import axios from '@/libs/api.request'
 // import * as api from "_api/system/partManager";
-
 export default {
   name: "stockSearch",
   components: { EnterStock },
@@ -1031,22 +1032,39 @@ export default {
           item.oemCode = "\t" + item.oemCode;
           return item;
         });
-        if (newData.length >= 0) {
-          this.$refs.table1.exportCsv({
-            filename: "汇总库存",
-            original: true,
-            columns: this.columns1,
-            data: newData
-          });
-        }else{
-          this.$Message.error("这个公司暂时没有库存")
-        }
+        // if (newData.length >= 0) {
+        //   this.$refs.table1.exportCsv({
+        //     filename: "汇总库存",
+        //     original: true,
+        //     columns: this.columns1,
+        //     data: newData
+        //   });
+        // }else{
+        //   this.$Message.error("这个公司暂时没有库存")
+        // }
       }
     },
 
     //汇总导出
     exportTheSummary() {
-      this.getStockAll();
+      let data = {};
+      data = this.searchForm;
+      data.page = 0;
+      data.size = this.contentOne.page.total;
+      data.noStock = data.noStock ? 1 : 0;
+      data.isImport = 1;
+      if(this.contentOne.dataOne.length<=0){
+        this.$Message.error("这个公司暂时没有库存")
+        return
+      }
+      let str=""
+      for(var key in data){
+        str+=`${key}=${data[key]}&`
+      }
+      let PaymentRecordUrl=`${exportAll}${str.slice(0,str.length-1)}` +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+      location.href =PaymentRecordUrl
     },
 
     //批次库存请求当前全数据
@@ -1103,7 +1121,27 @@ export default {
     },
     //导出批次
     exportBatch() {
-      this.getBatchStockAll();
+      let data = {};
+      data = this.searchForm1;
+      data.page = 0;
+      data.size = this.contentTwo.page.total;
+      data.noStock = data.noStock ? 1 : 0;
+      data.isImport = 1;
+      if(this.contentTwo.dataTwo.length<=0){
+        this.$Message.error("这个公司暂时没有库存")
+        return
+      }
+      if (data.old === "all") {
+        Reflect.deleteProperty(data, "old");
+      }
+      let str=""
+      for(var key in data){
+        str+=`${key}=${data[key]}&`
+      }
+      let PaymentRecordUrl=`${exportPart}/partStoreStock/export/PartStoreStock?${str.slice(0,str.length-1)}` +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+      location.href =PaymentRecordUrl
     },
 
     /////////////////////// hs
