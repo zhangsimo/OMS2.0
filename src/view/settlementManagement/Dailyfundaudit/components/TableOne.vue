@@ -198,7 +198,8 @@ export default {
   padding:0 5px;
 }
 .vxe-table >>> .vxe-cell {
-  overflow: visible !important;
+  /*overflow: visible !important;*/
+  display: inline-block;
   padding: 0;
 }
 .vxe-table .vxe-body--column:not(.col--ellipsis) {
