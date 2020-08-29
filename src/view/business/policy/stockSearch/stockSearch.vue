@@ -148,12 +148,12 @@
           </vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
-          <vxe-table-column field="costPrice" title="成本单价" width="80">
+          <vxe-table-column field="costPrice" title="库存单价" width="80">
             <template v-slot="{row}">
               {{row.costPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="stockAmt" title="成本金额" width="90">
+          <vxe-table-column field="stockAmt" title="库存金额" width="90">
             <template v-slot="{row}">
               {{row.stockAmt.toFixed(2)}}
             </template>
@@ -286,12 +286,12 @@
           </vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
-          <vxe-table-column field="enterPrice" title="库存单价" width="80">
+          <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
               {{row.enterPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="enterAmt" title="库存金额" width="90">
+          <vxe-table-column field="enterAmt" title="成本金额" width="90">
             <template v-slot="{row}">
               {{row.enterAmt.toFixed(2)}}
             </template>
@@ -923,7 +923,7 @@ export default {
         this.$nextTick(()=>{
           const xtable = this.$refs.xTable3;
           const column = xtable.getColumnByField('partBrand');
-          xtable.setFilter(column, this.bands1);
+          xtable.setFilter(column, this.bands2);
           xtable.updateData();
         })
       }

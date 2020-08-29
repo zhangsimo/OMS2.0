@@ -570,7 +570,7 @@
         clientDataShow2: false,
         treeDiagramList:[],
         treeDiagramList2: [],
-        clientList2: [],
+        clientList2: {},
         collectlist:[],
         paymentlist:[]
       };
