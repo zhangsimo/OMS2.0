@@ -39,7 +39,7 @@
               class="w200 mr10"
               @on-enter="serch"
             />
-            <!-- <Select
+            <Select
               filterable
               clearable
               class="w120 mr10"
@@ -53,7 +53,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select> -->
+            </Select>
             <Select
               class="w200 mr10"
               filterable
@@ -813,7 +813,7 @@ export default {
       this.searchForm.old = arr[1] || "";
       this.searchForm1.old = arr[1] || "";
       this.getStoreHoure();
-      // this.getBand(); //获取品牌
+      this.getBand(); //获取品牌
       this.getAllStocks(); //table请求
       this.getColumns();
     },
