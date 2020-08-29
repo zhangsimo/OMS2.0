@@ -246,6 +246,7 @@ export default {
     //打印表格
     printTable() {
       this.$refs.printBox.openModal();
+      this.$refs.OrderLeft.gitlistValue()
     },
     //打开更多搜索
     openQueryModal() {
