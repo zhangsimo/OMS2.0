@@ -1483,14 +1483,15 @@
       },
       // 退货
       salesReturn() {
+        this.getOrderMan(this.formPlan.storeId)
         this.$Modal.confirm({
           title: "是否退货",
           onOk: async () => {
             let data = {};
             data.id = this.rowId;
             data.guestId = this.guestidId; //调出方
-            data.orderMan = this.formPlan.storeId; //退货员
             data.orderDate = tools.transTime(this.formPlan.orderDate); //退货日期
+            data.orderMan = this.formPlan.orderMan; //退货员
             data.serviceId = this.formPlan.numbers; //采退单号
             data.rtnReasonId = this.formPlan.cause; //退货原因
             data.settleTypeId = this.formPlan.clearing; //结算方式
