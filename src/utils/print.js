@@ -39,7 +39,7 @@ export function needCLodop() {
 
 //====页面引用CLodop云打印必须的JS文件：====
 if (needCLodop()) {
-  var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
+  var head =  document.head || document.getElementsByTagName("head")[0] || document.documentElement;
   var oscript = document.createElement("script");
   oscript.src = "http://localhost:8000/CLodopfuncs.js?priority=1";
   head.insertBefore(oscript, head.firstChild);
@@ -59,8 +59,9 @@ export function getLodop(oOBJECT, oEMBED) {
   var strHtm64_Update = "<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。</font>";
   var strHtmFireFox = "<br><br><font color='#FF00FF'>（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）</font>";
   var strHtmChrome = "<br><br><font color='#FF00FF'>(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）</font>";
-  var strCLodopInstall = "<br><font color='#FF00FF'>CLodop云打印服务(localhost本地)未安装启动!点击这里<a href='http://www.c-lodop.com/download/CLodop_Setup_for_Win32NT_https_3.008Extend.zip' target='_self'>执行安装</a>,安装后请刷新页面。</font>";
+  var strCLodopInstall = "<br><font color='#FF00FF'>CLodop云打印服务(localhost本地)未安装启动!点击这里<a href='http://www.lodop.net/download.html' target='_self'>执行安装</a>,安装后请刷新页面。</font>";
   var strCLodopUpdate = "<br><font color='#FF00FF'>CLodop云打印服务需升级!点击这里<a href='CLodop_Setup_for_Win32NT.exe' target='_self'>执行升级</a>,升级后请刷新页面。</font>";
+  http://www.lodop.net/download.html
   var LODOP;
   try {
     var isIE = (navigator.userAgent.indexOf('MSIE') >= 0) || (navigator.userAgent.indexOf('Trident') >= 0);
@@ -133,7 +134,19 @@ export function getLodop(oOBJECT, oEMBED) {
     //===========================================================
     return LODOP;
   } catch (err) {
-    alert("getLodop出错:" + err);
+    // if(err=="Cannot read property 'VERSION' of undefined"){
+    //=====Lodop插件未安装时提示下载地址:==========
+    if ((LODOP == null) || (typeof (LODOP.VERSION) == "undefined")) {
+      if (navigator.userAgent.indexOf('Chrome') >= 0)
+        document.documentElement.innerHTML = strCLodopInstall + document.documentElement.innerHTML;
+      if (navigator.userAgent.indexOf('Firefox') >= 0)
+        document.documentElement.innerHTML = strCLodopInstall + document.documentElement.innerHTML;
+      if (is64IE) document.write(strHtm64_Install); else if (isIE) document.write(strHtmInstall); else
+        document.documentElement.innerHTML = strCLodopInstall + document.documentElement.innerHTML;
+      return LODOP;
+    }
+    // }
+    // alert("getLodop出错:" + err);
   }
   ;
 };
@@ -153,15 +166,22 @@ export function getLodop(oOBJECT, oEMBED) {
  * 5.需要手动来个表头和表格内容
  * 6.最后一页加上 页尾内容
  * */
-export function print(style/**样式*/, tablePrint/**表格打印部分的html内容*/,pageHead/**页头内容*/,tableHead/**表格头部*/,data/**表格数据*/,tableContent/**表格内容*/,tableHeadArr/**表格头部数组*/,pageFooter/**打印页面带出页尾*/) {
-  let styPrint = `<style>${style}</style>`
-  let htmPrint = styPrint + `<body>${tablePrint.innerHTML}</body>`
+export function print(arguMent) {
+  let argument = {
+    style: arguMent.style/**样式*/,
+    tablePrint: arguMent.tablePrint/**表格打印部分的html内容*/,
+    pageHead: arguMent.pageHead/**页头内容*/,
+    tableHead: arguMent.tableHead/**表格头部*/,
+    data: arguMent.data/**表格数据*/,
+    tableContent: arguMent.tableContent/**表格内容*/,
+    tableHeadArr: arguMent.tableHeadArr/**表格头部数组*/,
+    pageFooter: arguMent.pageFooter/**打印页面带出页尾*/
+  }
+  let styPrint = `<style>${arguMent.style}</style>`
+  let htmPrint = styPrint + `<body>${arguMent.tablePrint.innerHTML}</body>`
   var LODOP = getLodop();//调用getLodop获取LODOP对象
-
   LODOP.PRINT_INIT(printBox); //初始化 LODOP对象
-
   // pageHead?LODOP.ADD_PRINT_HTM(26,"5%","90%","100%",pageHead.innerHTML):"" //LODOP对象 添加打印内容  打印页头
-
   LODOP.SET_PRINT_STYLE("FontSize", 12);  //字体大小 12px
   LODOP.SET_PRINT_STYLE("Bold", 0);
 
@@ -172,8 +192,19 @@ export function print(style/**样式*/, tablePrint/**表格打印部分的html�
 
   // LODOP.ADD_PRINT_HTM(26,"5%","90%","100%", pageHead.innerHTML)
   // LODOP.ADD_PRINT_HTM(26,"5%","90%","100%", htmPrint)
-  tabPageHead(LODOP,pageHead,data,290,tableHead,tableContent,tableHeadArr,pageFooter)
-  LODOP.SET_PRINT_MODE("AUTO_CLOSE_PREWINDOW",1);//打印后自动关闭预览窗口
+
+  let tabArguMent = {
+    LODOP: LODOP,
+    pageHead: pageHead,
+    data: argument.data,
+    pageH: 290,
+    tableHead: arguMent.tableHead,
+    tableContent: arguMent.tableContent,
+    tableHeadArr: arguMent.tableHeadArr,
+    pageFooter:arguMent.pageFooter
+  }
+  tabPageHead(tabArguMent)
+  LODOP.SET_PRINT_MODE("AUTO_CLOSE_PREWINDOW", 1);//打印后自动关闭预览窗口
   LODOP.SET_PRINT_STYLEA(0, "Vorient", 0);
   LODOP.ADD_PRINT_TEXT(580, 660, 165, 22, "第#页/共&页");
   LODOP.SET_PRINT_STYLEA(0, "ItemType", 2);
@@ -186,39 +217,49 @@ export function print(style/**样式*/, tablePrint/**表格打印部分的html�
 }
 
 //===打印分页带出页头 ===打印最后一页带出页尾
-export function tabPageHead(LODOP,pageHead/**页头*/,data/**表格的数据*/,pageH/**打印的纸张高度*/,tableHead/**表格头部*/,tableContent/**表格内容*/,tableHeadArr/**表格头部数组*/,pageFooter/**页尾*/){
-    var totalRows = data.length;//总条数
-    var pageHeight = pageH;     //打印的纸张高度
-    var hasPreviousPage = false;　//是否有下一页　
-    var totalPages = 1;        //总页数
-    var pageRecorders=parseInt((pageHeight-70)/13);      //每页条数
-    if((totalRows % pageRecorders) == 0) {
-      totalPages = parseInt(totalRows / pageRecorders);
-    }else{
-      totalPages = parseInt(totalRows / pageRecorders) + 1;
-    }
-    if(totalPages == 1){
-      hasPreviousPage = false;
-    }else{
-      hasPreviousPage = true;
-    }
-    for(var i=0;i<totalPages;i++){            //总页数
-      var tvalue = 0;
-      //列头--------------------------------------------
-      LODOP.ADD_PRINT_HTM(0,26,"90%","100%", pageHead.innerHTML)
-      tableHead(LODOP,tableHeadArr)
-      for(var j=i*pageRecorders;j<(i+1)*pageRecorders;j++){
-        if(j>=totalRows){
-          LODOP.ADD_PRINT_HTM(100+tvalue*14,26,"90%","100%", pageFooter.innerHTML)
-          break;
-        }
-        tableContent?tableContent(LODOP,data[j],tvalue,j,tableHeadArr):""
-        tvalue++;
+export function tabPageHead(arguMent) {
+  let argument = {
+    Lodop: arguMent.LODOP,
+    pageHead: arguMent.pageHead/**页头*/,
+    data: arguMent.data/**表格的数据*/,
+    pageH: arguMent.pageH/**打印的纸张高度*/,
+    tableHead: arguMent.tableHead/**表格头部*/,
+    tableContent: arguMent.tableContent/**表格内容*/,
+    tableHeadArr: arguMent.tableHeadArr/**表格头部数组*/,
+    pageFooter: arguMent.pageFooter/**页尾*/
+  }
+  var totalRows = argument.data.length;//总条数
+  var pageHeight = argument.pageH;     //打印的纸张高度
+  var hasPreviousPage = false;　//是否有下一页　
+  var totalPages = 1;        //总页数
+  var pageRecorders = parseInt((pageHeight - 70) / 13);      //每页条数
+  if ((totalRows % pageRecorders) == 0) {
+    totalPages = parseInt(totalRows / pageRecorders);
+  } else {
+    totalPages = parseInt(totalRows / pageRecorders) + 1;
+  }
+  if (totalPages == 1) {
+    hasPreviousPage = false;
+  } else {
+    hasPreviousPage = true;
+  }
+  for (var i = 0; i < totalPages; i++) {            //总页数
+    var tvalue = 0;
+    //列头--------------------------------------------
+    argument.Lodop.ADD_PRINT_HTM(0, 26, "90%", "100%", argument.pageHead.innerHTML)
+    argument.tableHead(argument.Lodop, argument.tableHeadArr)
+    for (var j = i * pageRecorders; j < (i + 1) * pageRecorders; j++) {
+      if (j >= totalRows) {
+        argument.Lodop.ADD_PRINT_HTM(100 + tvalue * 14, 26, "90%", "100%", argument.pageFooter.innerHTML)
+        break;
       }
-      // if(i==totalPages-1 && totalPages==1){
-      //   LODOP.ADD_PRINT_HTM(100+tvalue*14,26,"90%","100%", pageFooter.innerHTML)
-      //   break;
-      // }
-      LODOP.NewPage();
+      argument.tableContent ? argument.tableContent(argument.Lodop, argument.data[j], tvalue, j, argument.tableHeadArr) : ""
+      tvalue++;
     }
+    // if(i==totalPages-1 && totalPages==1){
+    //   argument.Lodop.ADD_PRINT_HTM(100+tvalue*14,26,"90%","100%", pageFooter.innerHTML)
+    //   break;
+    // }
+    argument.Lodop.NewPage();
+  }
 }
