@@ -13,7 +13,7 @@
       style="width: 200px"
     ></DatePicker>
     <span class="ml10">往来单位：</span>
-    <Select v-model="companyId" class="w150" filterable>
+    <Select v-model="companyId" class="w150" filterable disabled>
       <Option v-for="item in company" :value="item.value" :key="item.value">{{
         item.label
       }}</Option>
@@ -79,7 +79,7 @@ export default {
       modal1: false, //弹窗展示
       page: {
         num: 1,
-        size: 10,
+        size: 20,
         total: 0,
         opts: [20, 50, 100, 200]
       },
@@ -162,7 +162,7 @@ export default {
   methods: {
     // 往来单位下拉框
     async getOne() {
-      findGuest({size:2000}).then(res => {
+      findGuest({size:2000 , id:this.companyId}).then(res => {
         if (res.code === 0) {
           this.company=[]
           res.data.content.map(item=>{
@@ -176,18 +176,14 @@ export default {
     },
     // 对话框是否显示
     visChange(flag) {
-      if (flag) {
-        this.getOne();
-      }
-      this.page = {
-        num: 1,
-        size: 10,
-        total: 0,
-        opts: [20, 50, 100, 200]
-      }
-      this.seleteQuery();
       this.accountData = [];
+      if (flag) {
+        this.companyId = this.$parent.$parent.$parent.currRow.guestId || ''
+        this.getOne();
+        this.seleteQuery();
+      }
     },
+    //请求参数
     async seleteQuery() {
       const userData = this.$store.state.user.userData;
       let obj = {
