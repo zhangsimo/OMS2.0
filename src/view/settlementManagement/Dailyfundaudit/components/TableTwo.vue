@@ -1,7 +1,6 @@
 <template>
   <div>
     <vxe-table
-      show-overflow
       highlight-current-row
       highlight-hover-row
       stripe
@@ -15,9 +14,9 @@
       border="full"
       :data="tableData"
     >
-      <vxe-table-column type="checkbox" min-width="80"     ></vxe-table-column>
-      <vxe-table-column type="seq" title="序号" min-width="80"     ></vxe-table-column>
-      <vxe-table-column field="tmp" title="往来单位"      width="200">
+      <vxe-table-column type="checkbox" min-width="80" fixed="left"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" min-width="80" fixed="left"></vxe-table-column>
+      <vxe-table-column field="tmp" title="往来单位" fixed="left" width="200">
         <template v-slot="{ row }">
           <ul class="list">
             <li
