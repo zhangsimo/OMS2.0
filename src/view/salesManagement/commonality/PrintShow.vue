@@ -220,9 +220,17 @@
           {name: "金额", key: "orderAmt", width: 65, height: 14},
           {name: "仓位", key: "storeShelf", width: 80, height: 14},
         ]
-        print(tableStyle, gridtable, pageHead, tableHead, this.onelist.detailList, tableContent, tableHeadArr,pageFooter)
-
-
+          let argument = {
+            style: tableStyle/**样式*/,
+            tablePrint: gridtable/**表格打印部分的html内容*/,
+            pageHead: pageHead/**页头内容*/,
+            tableHead: tableHead/**表格头部*/,
+            data: this.onelist.detailList/**表格数据*/,
+            tableContent: tableContent/**表格内容*/,
+            tableHeadArr: tableHeadArr/**表格头部数组*/,
+            pageFooter: pageFooter/**打印页面带出页尾*/
+          }
+        print(argument)
         // const printHtml = document.querySelector('#printBox').innerHTML; // 需要打印的内容
         // const newWin = window.open('', 'newwindow');
         // newWin.document.write('<html><head><title>Print title!</title><style>// 添加样式内容</style></head><body>')
