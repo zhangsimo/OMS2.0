@@ -19,7 +19,7 @@
             <Select :disabled="selectShopList" class="w150" v-model="store">
               <Option
                 v-for="(item,index) in Branchstore"
-                :value="item.code"
+                :value="item.id"
                 :key="item.id"
               >{{ item.name }}
               </Option
@@ -573,7 +573,7 @@
         date: '', // 发生日期
         store: "", // 门店code
         // single:0,//复选框状态
-        Branchstore: [{code: "0", name: "全部"}], //分店名称
+        Branchstore: [{id: "0", name: "全部"}], //分店名称
         subjectId: '0', // 对应科目id
         subjecties: [{id: '0', titleName: "全部"}], // 科目
         content: "", // 撤销原因
@@ -606,12 +606,7 @@
       await this.getTreeListFun();
       let arr = await creat("", this.$store);
       await this.getShop()
-      let storeId = arr[1]
-      this.Branchstore.map(item => {
-        if(item.id == storeId){
-          this.store =item.code;
-        }
-      })
+      this.store = arr[1]
       this.query()
     },
     computed: {
