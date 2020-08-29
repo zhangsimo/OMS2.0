@@ -850,6 +850,7 @@
       async getShop(areaId) {
         let data = {};
         data.supplierTypeSecond = areaId
+        this.orgList=[{id: "", name: "全部"}]
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = Array.from(new Set([...this.orgList, ...res.data]))
