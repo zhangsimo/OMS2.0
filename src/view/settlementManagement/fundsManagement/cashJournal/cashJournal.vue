@@ -131,7 +131,7 @@
     <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
 
     <!--    人工智能分配-->
-    <artificial ref="art" :list="oneList" @getNew="getNewList"></artificial>
+    <artificial ref="art" :list="oneList" @getNew="getNew2"></artificial>
 
     <!--    余额展示-->
     <amtData :moneyList="allMoneyList"></amtData>
@@ -466,10 +466,11 @@
 
       //导入成功后刷新页
       getNew(data) {
+        this.getList();
       },
 
       //人工分配成功后刷新
-      getNewList() {
+      getNew2() {
         this.getList();
       },
 

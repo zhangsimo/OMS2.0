@@ -1942,7 +1942,7 @@ export default {
       getreceivable(obj).then(res => {
         if (res.data.length !== 0) {
           //去除 已对账未收金额和已对账未付金额 同时为0
-          let arrData = (res.data||[]).filter(item => item.receivedAmt!=0||item.paidAmt!=0);
+          let arrData = (res.data||[]);
           arrData.map((item, index) => {
             item.num = index + 1;
           });

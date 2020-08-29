@@ -442,7 +442,7 @@
         Settlement: false,
         pagetotal: 0,
         value: [],
-        model1: "",
+        model1: this.$store.state.user.userData.currentCompany.id,
         model2: "",
         model3: "",
         Reconciliationtype: "",
@@ -1170,23 +1170,7 @@
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
       this.value = arr[0];
-      // let obj = {
-      //   startDate: this.value[0]
-      //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-      //     : "",
-      //   endDate: this.value[1]
-      //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-      //     : "",
-      //   orgId: this.model1,
-      //   statementStatus: this.Reconciliationtype
-      // };
-      // obj.page = this.page.num -1
-      // obj.size = this.page.size
-      // this.getAccountStatement(obj);
-      // this.query()
-      this.model1 = arr[1];
-      this.getShop();
-      this.$refs.quickDate.getval(1);
+      this.getShop()
     },
     computed: {
       selectShopList() {
@@ -1598,6 +1582,10 @@
         }
         if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil) {
           this.receivefalg = true
+        }
+        if (row.statementStatus.value == 3) {
+          this.ownEnterList = true
+          this.ownEnterList = true
         }
         this.ownEnterList = row.ownEnterList == 0 ? true : false
         this.reconciliationStatement = row;
