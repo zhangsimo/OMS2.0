@@ -381,7 +381,7 @@
   import settlementMoadl from "./components/settlement";
   import hedgingInvoice from "./Popup/hedgingInvoice";
   import registrationEntry from "./Popup/registrationEntry";
-  import quickDate from "@/components/getDate/dateget_noEmit.vue";
+  import quickDate from "@/components/getDate/dateget_bill.vue";
   import salepopup from "./Popup/salepopup";
   import {creat} from "./../components";
   import moment from "moment";
@@ -1169,7 +1169,9 @@
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      this.value = arr[0];
+      this.$nextTick( () => {
+        this.value = arr[0];
+      })
       this.getShop()
     },
     computed: {
