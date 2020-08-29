@@ -108,7 +108,7 @@
         </FormItem>
         <FormItem label="销售员：" prop="orderManId">
           <Select
-            :value="formPlan.orderManId"
+            v-model="formPlan.orderManId"
             filterable
             style="width: 200px"
             label-in-value

@@ -58,7 +58,7 @@
         ref="xTable1"
         height="500"
         column-min-width="100px"
-        size="small"
+        size="mini"
         :data="tableData"
         show-overflow
         @checkbox-all="cellClickEvent"
@@ -69,25 +69,25 @@
         <!--        :checkbox-config="{trigger: 'row', highlight: true, range: true }"-->
         <vxe-table-column
           type="checkbox"
-          width="60"
+          width="50"
         ></vxe-table-column>
         <vxe-table-column
           type="index"
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column width="160" field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column width="160" field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column width="160" field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column width="120" field="enterDate" title="入库日期"></vxe-table-column>
+        <vxe-table-column width="110" field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column width="110" field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column width="110" field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column width="100" field="partBrand" :filters="[]" :filter-method="filterNameMethod"
                           title="品牌"></vxe-table-column>
-        <vxe-table-column width="100" field="enterQty" title="库存数量"></vxe-table-column>
-        <vxe-table-column width="100" field="rtnableQty" title="可退数量"></vxe-table-column>
-        <vxe-table-column width="100" field="enterUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column width="100" field="branchStockAge" title="库龄"></vxe-table-column>
-        <vxe-table-column width="200" field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column width="200" field="code" title="入库单号"></vxe-table-column>
-        <vxe-table-column width="160" field="enterDate" title="入库日期"></vxe-table-column>
+        <vxe-table-column width="80" field="enterQty" title="库存数量"></vxe-table-column>
+        <vxe-table-column width="80" field="rtnableQty" title="可退数量"></vxe-table-column>
+        <vxe-table-column width="60" field="enterUnitId" title="单位"></vxe-table-column>
+        <vxe-table-column width="70" field="branchStockAge" title="库龄"></vxe-table-column>
+        <vxe-table-column width="160" field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column width="180" field="code" title="入库单号"></vxe-table-column>
       </vxe-table>
 
       <vxe-table
@@ -98,7 +98,7 @@
         ref="xTable1"
         height="300"
         column-min-width="100px"
-        size="small"
+        size="mini"
         :data="tableData"
         show-overflow
         @checkbox-all="cellClickEvent"
@@ -109,7 +109,7 @@
         <!--        :checkbox-config="{trigger: 'row', highlight: true, range: true }"-->
         <vxe-table-column
           type="checkbox"
-          width="60"
+          width="50"
         ></vxe-table-column>
         <vxe-table-column
           type="index"
@@ -117,25 +117,25 @@
           width="60"
 
         ></vxe-table-column>
-        <vxe-table-column width="160" field="partCode" title="配件编码"></vxe-table-column>
-        <vxe-table-column width="160" field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column width="160" field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column width="120" field="outDate" title="出库日期"></vxe-table-column>
+        <vxe-table-column width="110" field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column width="110" field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column width="110" field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column width="100" field="partBrand" :filters="[]" :filter-method="filterNameMethod"
                           title="品牌"></vxe-table-column>
-        <vxe-table-column width="100" field="taxSign" title="是否含税">
+        <vxe-table-column width="90" field="taxSign" title="是否含税">
           <template v-slot="{ row }">
             <span>{{ row.taxSign ? "是" : "否" }}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column width="100" field="taxRate" title="税率"></vxe-table-column>
-        <vxe-table-column width="100" field="sellQty" title="出库数量"></vxe-table-column>
-        <vxe-table-column width="100" field="sellPrice" title="出库单价"></vxe-table-column>
-        <vxe-table-column width="100" field="rtnableQty" title="可退数量"></vxe-table-column>
-        <vxe-table-column width="100" field="systemUnitId" title="单位"></vxe-table-column>
-        <vxe-table-column width="200" field="guestName" title="供应商"></vxe-table-column>
-        <vxe-table-column width="200" field="serviceId" title="出库单号"></vxe-table-column>
-        <vxe-table-column width="160" field="outDate" title="出库日期"></vxe-table-column>
-        <vxe-table-column width="200" field="code" title="关联销售订单"></vxe-table-column>
+        <vxe-table-column width="70" field="taxRate" title="税率"></vxe-table-column>
+        <vxe-table-column width="80" field="sellQty" title="出库数量"></vxe-table-column>
+        <vxe-table-column width="90" field="sellPrice" title="出库单价"></vxe-table-column>
+        <vxe-table-column width="80" field="rtnableQty" title="可退数量"></vxe-table-column>
+        <vxe-table-column width="50" field="systemUnitId" title="单位"></vxe-table-column>
+        <vxe-table-column width="160" field="guestName" title="供应商"></vxe-table-column>
+        <vxe-table-column width="170" field="serviceId" title="出库单号"></vxe-table-column>
+        <vxe-table-column width="170" field="code" title="关联销售订单"></vxe-table-column>
         <vxe-table-column v-if="changeShowFirst" width="200" field="originGuestName" title="第一供应商"></vxe-table-column>
       </vxe-table>
 

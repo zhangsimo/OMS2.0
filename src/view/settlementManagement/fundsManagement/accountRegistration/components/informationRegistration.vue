@@ -152,6 +152,7 @@
                   this.$Message.success('修改成功！')
                   this.information = false;
                   this.shopList = [];
+                  this.handleReset()
                   this.$parent.getList()
                 } else {
                   this.information = true;
@@ -168,6 +169,7 @@
                   this.$Message.success('新增成功! ');
                   this.information = false;
                   this.shopList = [];
+                  this.handleReset()
                   this.$parent.getList()
                 } else {
                   this.shopList = [];
@@ -188,7 +190,7 @@
 
       //显示门店弹框
       openStoreModal() {
-        this.$refs.StoreModal.StoreAlocatedShow = true;
+        this.$refs.StoreModal.openModal( this.ChangeData)
       },
 
       //获取子组件会计科目的内容
@@ -276,6 +278,11 @@
           this.ChangeData.shopCode = ''
         }
 
+      },
+
+      //清空校验
+      handleReset () {
+        this.$refs.ModelValidate.resetFields();
       },
 
       //返回

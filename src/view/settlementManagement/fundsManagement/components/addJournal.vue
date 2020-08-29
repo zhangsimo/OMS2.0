@@ -220,7 +220,6 @@
         let data ={}
         data.shopNumber = this.$store.state.user.userData.shopId
         let res = await  goAccountList(data)
-        console.log(res)
         if (res.code === 0) return  this.accountList  = res.data
       },
 

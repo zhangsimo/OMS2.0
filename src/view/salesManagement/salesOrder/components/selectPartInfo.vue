@@ -66,7 +66,7 @@
         <Col span="12">
           <FormItem label="单价：" v-if="$route.name!='bookingSheet'">
             <!--<InputNumber :min="0" class="w200" placeholder="单价" v-model="formItemData.orderPrice" @on-focus="changeFocuse" @on-blur="changeblur" ></InputNumber>-->
-            <vxe-input type="float" class="w200" size="mini"  v-model="formItemData.orderPrice" :min="0" digits="2"></vxe-input>
+            <vxe-input ref="price" type="float" class="w200" size="mini"  v-model="formItemData.orderPrice" :min="0" digits="2"></vxe-input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -104,12 +104,11 @@
 		    // console.log(v)
 		    if(v){
           this.searchPartLayer = true;
+          v.orderQty = undefined;
+          v.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
           this.formItemData = {...v};
-          this.formItemData.orderQty = undefined;
-          this.formItemData.orderPrice = v.orderPrice * 1===0?undefined:(v.orderPrice * 1).toFixed(2);
           this.$nextTick(()=>{
             this.$refs['orderQty'].focus();
-            //this.enterKeyup();
           })
         }
 
@@ -138,6 +137,12 @@
 		    this.searchPartLayer = false;
 		    //this.$parent.$parent.getPartNameList2([this.formItemData]);
 		    this.$emit("throwData",[this.formItemData])
+        if(this.$refs['orderQty']){
+          this.$refs['orderQty'].blur();
+        }
+        if(this.$refs['price']){
+          this.$refs['price'].blur();
+        }
       },
     }
 	}

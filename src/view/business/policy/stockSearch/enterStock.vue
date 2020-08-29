@@ -264,8 +264,14 @@
             <vxe-table-column field="taxRate" title="税率" width="50">
             </vxe-table-column>
             <vxe-table-column field="taxPrice" title="含税单价" width="70">
+              <template v-slot="{row}">
+                {{(row.taxPrice||0).toFixed(2)}}
+              </template>
             </vxe-table-column>
             <vxe-table-column field="taxAmt" title="含税金额" width="80">
+              <template v-slot="{row}">
+                {{(row.taxAmt||0).toFixed(2)}}
+              </template>
             </vxe-table-column>
             <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
               <template v-slot="{row}">

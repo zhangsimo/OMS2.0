@@ -25,6 +25,25 @@
           }
       },
       methods: {
+          //打开模态框
+        openModal(val= null){
+          if (val.shopList){
+          this.geCheckBox(this.TreeData , val.shopList)
+          }
+          this.StoreAlocatedShow = true
+        },
+
+        //获取已选数据
+        geCheckBox(treeList , shopList){
+          return  treeList.map(item => {
+             if(shopList.indexOf(item.id) != -1){
+              this.$set(item,'checked' ,true)
+             }
+             if (item.children) {
+               this.geCheckBox( item.children , shopList)
+             }
+           })
+        },
           //保存按钮
         StoreConfirm(){
           if(this.TreeDataValue.length > 0){

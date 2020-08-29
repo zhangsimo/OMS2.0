@@ -980,8 +980,10 @@ export default class TemporaryPurchase extends Vue {
           }
         }
       } else {
-        this.purchaseOrderTable.tbdata[0]._highlight = true
-        this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
+        if(this.purchaseOrderTable.tbdata.length>0){
+          this.purchaseOrderTable.tbdata[0]._highlight = true
+          this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
+        }
       }
     }
   }

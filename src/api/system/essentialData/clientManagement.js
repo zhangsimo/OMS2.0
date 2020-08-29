@@ -74,3 +74,12 @@ export function getAccountType() {
     method: "get",
   });
 }
+
+//删除申请单
+export function deleteBatch(data) {
+  return axios.request({
+    url: `${api.omsSettle}/financeApplyMain/deleteBatch`,
+    method: "post",
+    data
+  });
+}

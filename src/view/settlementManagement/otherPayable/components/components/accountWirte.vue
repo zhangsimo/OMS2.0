@@ -2,10 +2,22 @@
   <Modal v-model="modal1" title="对账单查询" width="860" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
     <DatePicker v-model="dateQuery" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
-    <span class="ml10">往来单位：</span>
-    <Select v-model="companyId" class="w150" filterable>
+    <span>往来单位：</span>
+    <Select
+      v-model="companyId"
+      class="w150"
+      clearable
+      filterable
+      remote
+      :loading="remoteloading"
+      :remote-method="getOne"
+    >
       <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
+<!--    <span class="ml10">往来单位：</span>-->
+<!--    <Select v-model="companyId" class="w150" filterable>-->
+<!--      <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+<!--    </Select>-->
     <span class="ml10">收付款类型：</span>
     <Select v-model="paymentId" class="w150" filterable>
       <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -30,11 +42,9 @@
 <script>
 import idDetailed from "./idDetailed";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
-import { findAccount } from "_api/settlementManagement/seleteAccount.js";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import { findByDynamicQuery } from "_api/settlementManagement/otherReceivables/otherReceivables";
 import { getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
-
 import bus from "../../../bill/Popup/Bus";
 import moment from "moment";
 export default {
@@ -118,45 +128,34 @@ export default {
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
       paymentId: "YJDZ", //收付类型
-      paymentList: [] //收付类型下拉框
+      paymentList: [], //收付类型下拉框
+      remoteloading: false, //搜索框loading
+
     };
   },
   methods: {
     // 往来单位选择
     async getOne(query) {
-      // findGuest({ size: 2000 }).then(res => {
-      //   if (res.code === 0) {
-      //     this.company = [];
-      //     res.data.content.map(item => {
-      //       this.company.push({
-      //         value: item.id,
-      //         label: item.fullName
-      //       });
-      //     });
-      //   }
-      // });
       this.company = [];
-      if (query !== "") {
-        let arr=[]
-        let req = {
-          shortName:query,
-          size:50,
-        }
-        let res = await getGuestShortName(req);
-        if (res.code == 0) {
-          res.data.content.map(item => {
-            arr.push({
-              value: item.id,
-              label: item.fullName
+      if (query != "") {
+        this.remoteloading = true;
+        findGuest({ fullName: query, size: 20 }).then(res => {
+          if (res.code === 0) {
+            this.company = [];
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
             });
-          });
-        }
-        let arrJson=new Set(arr)
-        this.company=Array.from(arrJson)
+            this.remoteloading = false;
+          }
+        });
       } else {
         this.company = [];
       }
     },
+
     // 对话框是否显示
     async visChange(flag) {
       if (flag) {
