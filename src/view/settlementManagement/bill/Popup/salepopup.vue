@@ -865,7 +865,7 @@ export default {
           );
 
           this.isCanRequest = !this.isCanRequest
-          console.log(obj , 888)
+          // console.log(obj , 888)
           saveDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
@@ -911,6 +911,10 @@ export default {
             this.invoice
           );
           this.isCanRequest = !this.isCanRequest
+          // console.log(obj,111111)
+          if(obj.additionalTaxPoint){
+            delete obj.additionalTaxPoint
+          }
           submitDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
