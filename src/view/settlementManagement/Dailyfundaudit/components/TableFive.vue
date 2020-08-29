@@ -15,9 +15,9 @@
       @checkbox-all="selectAllEvent"
       @checkbox-change="selectChangeEvent"
     >
-      <vxe-table-column type="checkbox" min-width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column title="往来单位" fixed="left" min-width="120">
+      <vxe-table-column type="checkbox" min-width="60"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" min-width="60"></vxe-table-column>
+      <vxe-table-column title="往来单位"  min-width="120">
         <template v-slot="{row}">
           <ul class="list">
             <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
