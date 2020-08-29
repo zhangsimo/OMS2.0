@@ -1003,7 +1003,7 @@
             })
             this.$refs.otherCollectionClaims.open();
           } else {
-            claimTit = "预收款认领"
+            claimTit =="预收款认领"
               ? this.$message.error("预收款认领不能选择支出类资金")
               : this.$message.error("其他收款认领不能选择支出类资金");
           }
