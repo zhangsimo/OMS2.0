@@ -853,7 +853,7 @@
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = Array.from(new Set([...this.orgList, ...res.data]))
-          this.setAreaDef();
+          // this.setAreaDef();
         }
       },
       setAreaDef() {
