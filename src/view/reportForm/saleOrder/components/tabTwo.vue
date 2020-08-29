@@ -213,33 +213,33 @@
                           title="成本金额"
                           width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税入库" width="140">
+        <vxe-table-column show-overflow="tooltip" field="cbTaxSign" title="是否含税入库" width="140">
           <template v-slot="{ row }">
-            <Checkbox disabled v-model="row.taxSign"></Checkbox>
+            <Checkbox disabled v-model="row.cbTaxSign"></Checkbox>
           </template>
         </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
-                          field="taxRate"
+                          field="cbTaxRate"
                           title="税点"
                           width="50"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
-                          field="sellTaxPrice"
+                          field="cbTaxPrice"
                           title="含税成本单价"
                           width="100"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
-                          field="sellTaxAmt"
+                          field="cbTaxAmt"
                           title="含税成本金额"
                           width="100"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
-                          field="sellNoTaxPrice"
+                          field="cbNoTaxPrice"
                           title="不含税成本单价"
                           width="110"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
-                          field="sellNoTaxAmt"
+                          field="cbNoTaxAmt"
                           title="不含税成本金额"
                           width="110"
         ></vxe-table-column>
@@ -393,6 +393,12 @@
             }
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = false;
+            }
+            if ([1, "1", "是"].includes(el.cbTaxSign)) {
+              el.cbTaxSign = true;
+            }
+            if ([0, "0", "否"].includes(el.cbTaxSign)) {
+              el.cbTaxSign = false;
             }
             if ([1, "1", "是"].includes(el.isMakActivity)) {
               el.isMakActivity = true;
