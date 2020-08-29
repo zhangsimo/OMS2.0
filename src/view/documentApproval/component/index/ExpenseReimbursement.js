@@ -10,9 +10,7 @@ import {
 } from "_api/documentApproval/ExpenseReimbursement";
 import {getThisAllList, getBackList , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
-// import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js";
 import {getPost} from "../utils";
-import store from "@/store/index.js";
 
 export default {
   name: "ExpenseReimbursement",
@@ -234,7 +232,7 @@ export default {
         if( res.data.length  == 0 ) return
          let arr = res.data.filter(item => item.accountName == '张华')
          this.formInline.paymentAccount =  arr.length > 0 ? arr[0].id : res.data[0].id
-         this.getPayList(this.formInline.paymentAccount)
+         this.getPay(this.formInline.paymentAccount)
        }
      }
     },
@@ -514,7 +512,7 @@ export default {
     },
 
     //获取付款信息
-    getPayList(value) {
+    getPay(value) {
       if (!value) return;
       let list = this.payUserList.filter(item => item.id == value)[0];
       this.$set(this.formInline , 'paymentBank' , list.bankName)

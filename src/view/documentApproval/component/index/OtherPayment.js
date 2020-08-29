@@ -3,14 +3,9 @@ import selectOther from '../popWindow/SelectOther'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
-// import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
-import {getThisAllList, getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
+import {getThisAllList, getGuestShortName , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
-import {findGuest} from "../../../../api/settlementManagement/advanceCollection";
-import {getComenAndGo} from "../utils";
-import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js";
-import store from "@/store/index.js";
 
 export default {
   name: "OtherPayment",
@@ -76,10 +71,11 @@ export default {
   methods: {
     //模态框打开111
     open() {
+      this.getpayList()
       // console.log(this.list.type)
       this.$refs.documentTable.recalculate(true)
       this.company = []
-      this.payUserList = this.list.payList
+      this.payUserList = []
       this.formInline = {}
       this.$refs.upImg.uploadListModal = []
       this.$refs.upImg.uploadList = []
@@ -89,7 +85,6 @@ export default {
       //判断模态框状态
       this.modelType = false
       if (this.list.type == 1) {
-
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
@@ -132,7 +127,6 @@ export default {
         this.formInline.receiverId = res.data.receiverId
         await this.getOrignCompany("",res.data.receiveGuestId)
         this.getCompany(this.company[0])
-        await this.remoteMethod2(res.data.paymentAccountName)
         this.Pictures = {
           voucherPictures: res.data.voucherPictures || [],
           billStatus: res.data.billStatus
@@ -140,14 +134,35 @@ export default {
       }
     },
 
+
+    //获取本点下的付款账号
+    async getpayList(){
+      let res = await getPayAccount({check:0})
+      if (res.code === 0){
+        this.payUserList = res.data
+        if (this.list.type == 1){
+          if( res.data.length  == 0 ) return
+          this.formInline.paymentAccount =  res.data.length > 0 ? res.data[0].id : ''
+          this.getPay(this.formInline.paymentAccount)
+        }
+      }
+    },
+
+
+    //获取付款信息
+    getPay(value) {
+      if (!value) return;
+      let list = this.payUserList.filter(item => item.id == value)[0];
+      this.$set(this.formInline , 'paymentBank' , list.bankName)
+      this.$set(this.formInline , 'paymentBankNo' , list.accountCode)
+    },
+
+
     //获取往来单位
     getCompany(row) {
       this.getAccountNameList(row)
     },
-    //付款人账号搜索出发
-    remoteMethod2(query) {
-      this.getOptionsList2(query)
-    },
+
     //获取往来单位
     async getOrignCompany(query,id) {
       if (query !== '' || id) {
@@ -175,26 +190,7 @@ export default {
         this.company = [];
       }
     },
-    //付款人账号搜索框
-    async getOptionsList2(query) {
-      if (query !== "") {
-        let data = {}
-        data.accountName = query
-        shopNumber: store.state.user.userData;
-        data.page = 0
-        data.size = 100
-        let res = await getPayAccount(data)
-        if (res.code == 0) {
-          res.data.content.map(item => {
-            item.value = item.id;
-            item.label = item.accountName;
-          });
-          this.payUserList = res.data.content || []
-        }
-      } else {
-        this.payUserList = [];
-      }
-    },
+
     //获取收款户名
     async getAccountNameList(row) {
       let rep = await getAccountName({"guestId": row.value});
@@ -252,15 +248,6 @@ export default {
     //选择单据
     SelectTheDocuments() {
       this.$refs.documnets.open()
-    },
-
-
-    //获取付款信息
-    getPayList(value) {
-      if (!value) return
-      let list = this.payUserList.filter(item => item.id == value.value)[0]
-      this.formInline.paymentBank = list.bankName
-      this.formInline.paymentBankNo = list.accountCode
     },
 
     //获取到上传图片地址
