@@ -1,7 +1,6 @@
 <template>
   <div style="overflow: hidden ;overflow-x: scroll">
     <vxe-table
-      show-overflow
       highlight-current-row
       highlight-hover-row
       stripe
@@ -56,7 +55,7 @@
       </vxe-table-column>
       <vxe-table-column title="金额信息">
         <vxe-table-column title="业务类型">
-          <template v-slot="{ row }">
+          <template v-slot="{ row }" class="spanHig">
             <ul class="list">
               <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.businessTypeName ? item.businessTypeName  : '' }}</span>
@@ -199,7 +198,7 @@ export default {
 }
 .vxe-table >>> .vxe-cell {
   /*overflow: visible !important;*/
-  display: inline-block;
+  /*display: inline-block;*/
   padding: 0;
 }
 .vxe-table .vxe-body--column:not(.col--ellipsis) {
