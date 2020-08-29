@@ -466,6 +466,7 @@
 
       //导入成功后刷新页
       getNew(data) {
+        this.getList();
       },
 
       //人工分配成功后刷新
