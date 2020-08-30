@@ -39,7 +39,7 @@ export function needCLodop() {
 
 //====页面引用CLodop云打印必须的JS文件：====
 if (needCLodop()) {
-  var head =  document.head || document.getElementsByTagName("head")[0] || document.documentElement;
+  var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
   var oscript = document.createElement("script");
   oscript.src = "http://localhost:8000/CLodopfuncs.js?priority=1";
   head.insertBefore(oscript, head.firstChild);
@@ -59,10 +59,10 @@ export function getLodop(oOBJECT, oEMBED) {
   var strHtm64_Update = "<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。</font>";
   var strHtmFireFox = "<br><br><font color='#FF00FF'>（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）</font>";
   var strHtmChrome = "<br><br><font color='#FF00FF'>(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）</font>";
-  var strCLodopInstall = "<br><font color='#FF00FF'>CLodop云打印服务(localhost本地)未安装启动!点击这里<a href='http://www.lodop.net/download.html' target='_self'>执行安装</a>,安装后请刷新页面。</font>";
+  var strCLodopInstall = "<br><font color='#FF00FF'>CLodop云打印服务(localhost本地)未安装启动!点击这里<a href='http://www.lodop.net/download.html' target=\"_blank\">执行安装</a>,安装后请刷新页面。</font>";
   var strCLodopUpdate = "<br><font color='#FF00FF'>CLodop云打印服务需升级!点击这里<a href='CLodop_Setup_for_Win32NT.exe' target='_self'>执行升级</a>,升级后请刷新页面。</font>";
   http://www.lodop.net/download.html
-  var LODOP;
+    var LODOP;
   try {
     var isIE = (navigator.userAgent.indexOf('MSIE') >= 0) || (navigator.userAgent.indexOf('Trident') >= 0);
     if (needCLodop()) {
@@ -137,13 +137,24 @@ export function getLodop(oOBJECT, oEMBED) {
     // if(err=="Cannot read property 'VERSION' of undefined"){
     //=====Lodop插件未安装时提示下载地址:==========
     if ((LODOP == null) || (typeof (LODOP.VERSION) == "undefined")) {
-      if (navigator.userAgent.indexOf('Chrome') >= 0)
+      if (navigator.userAgent.indexOf('Chrome') >= 0) {
         document.documentElement.innerHTML = strCLodopInstall + document.documentElement.innerHTML;
-      if (navigator.userAgent.indexOf('Firefox') >= 0)
+        return LODOP;
+      }
+      if (navigator.userAgent.indexOf('Firefox') >= 0) {
         document.documentElement.innerHTML = strCLodopInstall + document.documentElement.innerHTML;
-      if (is64IE) document.write(strHtm64_Install); else if (isIE) document.write(strHtmInstall); else
+        return LODOP;
+      }
+      if (is64IE) {
+        document.write(strHtm64_Install)
+        return LODOP;
+      } else if (isIE) {
+        document.write(strHtmInstall);
+        return LODOP;
+      } else {
         document.documentElement.innerHTML = strCLodopInstall + document.documentElement.innerHTML;
-      return LODOP;
+        return LODOP;
+      }
     }
     // }
     // alert("getLodop出错:" + err);
@@ -171,9 +182,7 @@ export function print(arguMent) {
     style: arguMent.style/**样式*/,
     tablePrint: arguMent.tablePrint/**表格打印部分的html内容*/,
     pageHead: arguMent.pageHead/**页头内容*/,
-    tableHead: arguMent.tableHead/**表格头部*/,
     data: arguMent.data/**表格数据*/,
-    tableContent: arguMent.tableContent/**表格内容*/,
     tableHeadArr: arguMent.tableHeadArr/**表格头部数组*/,
     pageFooter: arguMent.pageFooter/**打印页面带出页尾*/
   }
@@ -198,10 +207,8 @@ export function print(arguMent) {
     pageHead: pageHead,
     data: argument.data,
     pageH: 290,
-    tableHead: arguMent.tableHead,
-    tableContent: arguMent.tableContent,
     tableHeadArr: arguMent.tableHeadArr,
-    pageFooter:arguMent.pageFooter
+    pageFooter: arguMent.pageFooter
   }
   tabPageHead(tabArguMent)
   LODOP.SET_PRINT_MODE("AUTO_CLOSE_PREWINDOW", 1);//打印后自动关闭预览窗口
@@ -223,8 +230,6 @@ export function tabPageHead(arguMent) {
     pageHead: arguMent.pageHead/**页头*/,
     data: arguMent.data/**表格的数据*/,
     pageH: arguMent.pageH/**打印的纸张高度*/,
-    tableHead: arguMent.tableHead/**表格头部*/,
-    tableContent: arguMent.tableContent/**表格内容*/,
     tableHeadArr: arguMent.tableHeadArr/**表格头部数组*/,
     pageFooter: arguMent.pageFooter/**页尾*/
   }
@@ -243,23 +248,73 @@ export function tabPageHead(arguMent) {
   } else {
     hasPreviousPage = true;
   }
-  for (var i = 0; i < totalPages; i++) {            //总页数
+  for (var i = 0; i < totalPages; i++) {//总页数
     var tvalue = 0;
     //列头--------------------------------------------
     argument.Lodop.ADD_PRINT_HTM(0, 26, "90%", "100%", argument.pageHead.innerHTML)
-    argument.tableHead(argument.Lodop, argument.tableHeadArr)
+    tableHead(argument.Lodop, argument.tableHeadArr)
     for (var j = i * pageRecorders; j < (i + 1) * pageRecorders; j++) {
       if (j >= totalRows) {
         argument.Lodop.ADD_PRINT_HTM(100 + tvalue * 14, 26, "90%", "100%", argument.pageFooter.innerHTML)
         break;
       }
-      argument.tableContent ? argument.tableContent(argument.Lodop, argument.data[j], tvalue, j, argument.tableHeadArr) : ""
+      tableContent ? tableContent(argument.Lodop, argument.data[j], tvalue, j, argument.tableHeadArr) : ""
       tvalue++;
     }
-    // if(i==totalPages-1 && totalPages==1){
-    //   argument.Lodop.ADD_PRINT_HTM(100+tvalue*14,26,"90%","100%", pageFooter.innerHTML)
-    //   break;
-    // }
     argument.Lodop.NewPage();
   }
 }
+
+/** 表格头部 */
+
+export function tableHead(LODOP/**LODOP对象*/,tableHeadArr/** 表格头部数组(width宽度,height高度,name名称) */){
+  LODOP.SET_PRINT_STYLE("FontSize",10);
+  //(top1,left1,top2,left2,线条类型,线条宽度)
+  //top1,left1 确定线的起点  top2,left2 确定线的终点
+  LODOP.ADD_PRINT_LINE(88,26,88,708,0,1);//上线
+  LODOP.ADD_PRINT_LINE(100,26,100,708,0,1);//下线
+  LODOP.ADD_PRINT_LINE(88,26,100,26,0,1);//左线
+  LODOP.ADD_PRINT_LINE(88,708,100,708,0,1);//右线
+
+  let startTop=88;
+  let startLeft=26;
+
+  tableHeadArr.map((item,index)=>{
+    startLeft+=parseInt(item.width)
+    if(index!=tableHeadArr.length-1){
+      LODOP.ADD_PRINT_HTM(startTop,startLeft-parseInt(item.width),parseInt(item.width),parseInt(item.height),`<div style="padding-left:2px;padding-top:2px;padding-bottom:2px;font-size:10px;">${item.name}</div>`);
+      LODOP.ADD_PRINT_LINE(startTop,startLeft,startTop+parseInt(item.height),startLeft,0,1);  //右线
+      // LODOP.ADD_PRINT_LINE(startTop+parseInt(item.height),startLeft-parseInt(item.width),startTop+parseInt(item.height),startLeft,0,1); //下线
+    }else{
+      LODOP.ADD_PRINT_HTM(startTop,startLeft-parseInt(item.width),parseInt(item.width),parseInt(item.height),`<div style="padding-left:2px;padding-top:2px;padding-bottom:2px;font-size:10px;">${item.name}</div>`);
+      // LODOP.ADD_PRINT_LINE(startTop,startLeft,startTop+parseInt(item.height),startLeft,0,1);  //右线  最后一项不再需要 右线
+      // LODOP.ADD_PRINT_LINE(startTop+parseInt(item.height),startLeft-parseInt(item.width),startTop+parseInt(item.height),startLeft,0,1); //下线
+    }
+  })
+}
+/**表格内容*/
+export function tableContent(LODOP/**LODOP对象*/,i/**表格内容的每一条数据*/,o/**表格内容的每一条数据的下标*/,j,tableHeadArr/** 表格头部数组(width宽度,height高度,name名称) */){
+  var h=14;
+  var startLeft=26
+  LODOP.ADD_PRINT_LINE(100+(o+1)*h,26,100+(o+1)*h,708,0,1);// 每一项的下线
+  LODOP.ADD_PRINT_LINE(100+o*h,26,100+(o+1)*h,26,0,1);//每一项的左线
+  LODOP.ADD_PRINT_LINE(100+o*h,708,100+(o+1)*h,708,0,1);//每一项的下线右线
+  tableHeadArr.map((item,index)=>{
+    if(index!=tableHeadArr.length-1 && item.name=="序号"){
+      LODOP.ADD_PRINT_HTM(100+o*parseInt(item.height),startLeft,parseInt(item.width),10,`<div style="padding-left:2px;padding-top:2px;padding-bottom:2px;font-size:10px;white-space:nowrap;overflow: hidden;">${j+1}</div>`);  //序号
+      LODOP.ADD_PRINT_LINE(100+o*parseInt(item.height),startLeft,100+(o+1)*(parseInt(item.height)),startLeft,0,1); //每一项的右线
+    }
+    for(let key in i){
+      if(index!=tableHeadArr.length && key==item.key){
+        LODOP.ADD_PRINT_HTM(100+o*parseInt(item.height),startLeft,parseInt(item.width),10,`<div style="padding-left:2px;padding-top:2px;padding-bottom:2px;font-size:10px;white-space:nowrap;overflow: hidden;">${i[key]}</div>`);
+        LODOP.ADD_PRINT_LINE(100+o*parseInt(item.height),startLeft,100+(o+1)*(parseInt(item.height)),startLeft,0,1); //每一项的右线
+      }else if(index==tableHeadArr.length && key===item.key){
+        LODOP.ADD_PRINT_HTM(100+o*parseInt(item.height),startLeft,parseInt(item.width),10,`<div style="padding-left:2px;padding-top:2px;padding-bottom:2px;font-size:10px;white-space:nowrap;overflow: hidden;">${i[key]}</div>`);
+      }
+    }
+    startLeft+=parseInt(item.width)
+  })
+}
+
+
+
