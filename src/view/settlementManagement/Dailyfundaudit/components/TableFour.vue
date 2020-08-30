@@ -88,7 +88,7 @@
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="收付款方式">
-        <vxe-table-column title="账户"  min-width="60">
+        <vxe-table-column title="账户"  min-width="100">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
@@ -115,7 +115,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="账户所属门店" min-width="120">
+        <vxe-table-column title="账户所属门店" min-width="180">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
