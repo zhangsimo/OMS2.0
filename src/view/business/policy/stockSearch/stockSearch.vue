@@ -134,12 +134,12 @@
               <vxe-button type="text" @click="showList(row);">查看</vxe-button>
             </template>
           </vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="130" fixed="left"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
           <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
-          <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70">
             <template v-slot="{row}">
@@ -158,6 +158,7 @@
               {{row.stockAmt.toFixed(2)}}
             </template>
           </vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
           <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
           <vxe-table-column field="lastEnterDate" title="最近入库日期" width="120"></vxe-table-column>
@@ -167,7 +168,6 @@
           <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
           <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
           <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
-          <vxe-table-column field="orgName" title="机构名称" width="150"></vxe-table-column>
         </vxe-table>
       </div>
       <!--      批次库存表-->
