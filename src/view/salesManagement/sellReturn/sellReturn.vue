@@ -1047,7 +1047,14 @@
 
       //打印弹出框
       printTable() {
-        this.$refs.printBox.openModal();
+        // this.$refs.printBox.openModal()
+        let order={};
+        order.name="销售退货"
+        order.id=this.id;
+        order.route=this.$route.name
+        let routeUrl=this.$router.resolve({name:"print",query:order})
+        window.open(routeUrl.href,"_blank");
+        this.getLeftList()
       },
       // 计算尾部总和
       countAllAmount(data) {
