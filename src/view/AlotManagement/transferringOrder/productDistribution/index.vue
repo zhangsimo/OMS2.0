@@ -414,7 +414,7 @@ export default {
         this.$Message.info("请输入分配数");
         return;
       }
-      if(row.hasAcceptQty > row.applyQty) {
+      if(parseInt(row.hasAcceptQty) > parseInt(row.applyQty)) {
         return this.$Message.info("分配数量不能大于申请数量");
       }
       hotProductsSave(row)
@@ -448,7 +448,7 @@ export default {
         this.$Message.info("请输入分配数");
         return;
       }
-      if(row.hasAcceptQty > row.applyQty) {
+      if(parseInt(row.hasAcceptQty) > parseInt(row.applyQty)) {
         return this.$Message.info("分配数量不能大于申请数量");
       }
       baocun(row)

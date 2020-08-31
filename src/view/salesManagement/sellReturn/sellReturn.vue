@@ -305,34 +305,40 @@
                                     type="index"
                                     title="序号"
                                     fixed="left"
+                                    width="50"
                   ></vxe-table-column>
-                  <vxe-table-column show-overflow="tooltip" type="checkbox" fixed="left"></vxe-table-column>
+                  <vxe-table-column show-overflow="tooltip" type="checkbox" fixed="left" width="50"></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="partCode"
                                     title="配件编码"
                                     fixed="left"
+                                    width="110"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="partName"
                                     title="配件名称"
                                     fixed="left"
+                                    width="110"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="partBrand"
                                     title="品牌"
                                     fixed="left"
+                                    width="80"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="orderQty"
                                     title="数量"
+                                    width="80"
                                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="orderPrice"
                                     title="销价"
+                                    width="80"
                                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
-                  <vxe-table-column show-overflow="tooltip" title="金额">
+                  <vxe-table-column show-overflow="tooltip" title="金额" width="100">
                     <template v-slot="{ row }">
                       <span>{{ countAmount(row) | priceFilters }}</span>
                     </template>
@@ -340,45 +346,49 @@
                   <vxe-table-column show-overflow="tooltip"
                                     field="remark"
                                     title="备注"
+                                    width="100"
                                     :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   ></vxe-table-column>
-                  <vxe-table-column show-overflow="tooltip" field="storeName" title="仓库" disabled>
-                    <template v-slot:edit="{ row }">
-                      <Select style="width:100px">
-                        <Option
-                          v-for="item in WareHouseList"
-                          :value="item.id"
-                          :key="item.id"
-                        >{{ item.name }}
-                        </Option
-                        >
-                      </Select>
-                    </template>
-                  </vxe-table-column>
+                  <!--<vxe-table-column show-overflow="tooltip" field="storeName" title="仓库" disabled>-->
+                    <!--<template v-slot:edit="{ row }">-->
+                      <!--<Select style="width:100px">-->
+                        <!--<Option-->
+                          <!--v-for="item in WareHouseList"-->
+                          <!--:value="item.id"-->
+                          <!--:key="item.id"-->
+                        <!--&gt;{{ item.name }}-->
+                        <!--</Option-->
+                        <!--&gt;-->
+                      <!--</Select>-->
+                    <!--</template>-->
+                  <!--</vxe-table-column>-->
                   <vxe-table-column show-overflow="tooltip"
                                     field="storeShelf"
                                     title="仓位"
+                                    width="110"
                                     :edit-render="{
                       name: 'input',
                       immediate: true,
                       events: { blur: checkSelf }
                     }"
                   ></vxe-table-column>
-                  <vxe-table-column show-overflow="tooltip" title="品牌车型">
+                  <vxe-table-column show-overflow="tooltip" title="品牌车型" width="110">
                     <template v-slot="{ row, rowIndex }">
                       <span>{{ row.carBrandName }} {{ row.carModelName }}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column show-overflow="tooltip"
+                  <vxe-table-column width="50" show-overflow="tooltip"
                                     field="unit"
                                     title="单位"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="oemCode"
+                                    width="110"
                                     title="OE码"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="spec"
+                                    width="110"
                                     title="规格"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码"
@@ -1037,7 +1047,14 @@
 
       //打印弹出框
       printTable() {
-        this.$refs.printBox.openModal();
+        // this.$refs.printBox.openModal()
+        let order={};
+        order.name="销售退货"
+        order.id=this.id;
+        order.route=this.$route.name
+        let routeUrl=this.$router.resolve({name:"print",query:order})
+        window.open(routeUrl.href,"_blank");
+        this.getLeftList()
       },
       // 计算尾部总和
       countAllAmount(data) {

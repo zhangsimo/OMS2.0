@@ -121,6 +121,8 @@
           ref="xTable2"
           :height="tableHeight"
           highlight-hover-row
+          highlight-current-row
+          stripe
           show-overflow
           resizable
           :loading="loading1"
@@ -134,12 +136,12 @@
               <vxe-button type="text" @click="showList(row);">查看</vxe-button>
             </template>
           </vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="130" fixed="left"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
           <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
-          <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70">
             <template v-slot="{row}">
@@ -158,6 +160,7 @@
               {{row.stockAmt.toFixed(2)}}
             </template>
           </vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
           <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
           <vxe-table-column field="lastEnterDate" title="最近入库日期" width="120"></vxe-table-column>
@@ -167,7 +170,6 @@
           <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
           <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
           <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
-          <vxe-table-column field="orgName" title="机构名称" width="150"></vxe-table-column>
         </vxe-table>
       </div>
       <!--      批次库存表-->
@@ -182,7 +184,7 @@
               class="w200 mr10"
               @on-enter="queryBatch"
             ></Input>
-            <!-- <Select
+            <Select
               filterable
               clearable
               class="w120 mr10"
@@ -196,7 +198,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select> -->
+            </Select>
             <Select
               v-if="showSearch == true"
               class="w200 mr10"
@@ -265,6 +267,8 @@
           ref="xTable3"
           :height="tableHeight"
           highlight-hover-row
+          highlight-current-row
+          stripe
           show-overflow
           resizable
           :loading="loading2"
@@ -288,33 +292,37 @@
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
-              {{row.enterPrice.toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':row.enterPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="enterAmt" title="成本金额" width="90">
             <template v-slot="{row}">
-              {{row.enterAmt.toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':row.enterAmt.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="taxRate" title="税率" width="60"></vxe-table-column>
+          <vxe-table-column field="taxRate" title="税率" width="60">
+            <template v-slot="{row}">
+              {{selectShopList&&row.enterTypeId!='050101'?'-':row.taxRate}}
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="taxPrice" title="含税单价" width="100">
             <template v-slot="{row}">
-              {{(row.taxPrice || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.taxPrice || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="taxAmt" title="含税金额" width="100">
             <template v-slot="{row}">
-              {{(row.taxAmt || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.taxAmt || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="noTaxPrice" title="不含税单价" width="100">
             <template v-slot="{row}">
-              {{(row.noTaxPrice || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.noTaxPrice || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="noTaxAmt" title="不含税金额" width="100">
             <template v-slot="{row}">
-              {{(row.noTaxAmt || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.noTaxAmt || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="chainStockAge" title="连锁库龄" width="70"></vxe-table-column>
@@ -398,6 +406,8 @@
           ref="hsOrder"
           :height="tableHeight"
           highlight-hover-row
+          highlight-current-row
+          stripe
           show-overflow
           resizable
           :loading="hsloading"
@@ -756,7 +766,9 @@ export default {
     getColumns() {
       if(this.selectShopList){
         this.$nextTick(() => {
-          this.$refs.xTable3.hideColumn(this.$refs.xTable3.getColumnByField('originGuestName'))
+          this.$refs.xTable3.hideColumn(this.$refs.xTable3.getColumnByField('originGuestName'));
+          this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('costPrice'));
+          this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('stockAmt'));
         })
         if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
           this.$nextTick(() => {
@@ -913,6 +925,15 @@ export default {
         this.contentTwo.dataTwo.map((item, index) => {
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
+          if(this.selectShopList&&item.enterTypeId!='050101'){
+            item.enterPrice = '-';
+            item.enterAmt = '-';
+            item.taxRate = '-';
+            item.taxPrice = '-';
+            item.taxAmt = '-';
+            item.noTaxPrice = '-';
+            item.noTaxAmt = '-';
+          }
         });
         this.contentTwo.page.total = res.data.totalElements;
         this.bands2 = [];
@@ -1057,6 +1078,10 @@ export default {
         this.$Message.error("这个公司暂时没有库存")
         return
       }
+      if (data.old === "all" || data.old==undefined) {
+        Reflect.deleteProperty(data, "old");
+      }
+      data.old == "all"?data.old="":"";
       let str=""
       for(var key in data){
         str+=`${key}=${data[key]}&`
@@ -1131,7 +1156,7 @@ export default {
         this.$Message.error("这个公司暂时没有库存")
         return
       }
-      if (data.old === "all") {
+      if (data.old === "all" || data.old==undefined) {
         Reflect.deleteProperty(data, "old");
       }
       let str=""

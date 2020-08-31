@@ -114,7 +114,7 @@
         </span>
         <span class="sp1" style="color: #40a6ff;cursor: pointer" @click="copy(danhao,'.sp1')">复制单号</span>
       </div>
-      <div>
+     <!-- <div>
         <span class="fs14">销售订单：</span>
         <span style="width:300px" class="courier">
           <input
@@ -126,12 +126,12 @@
           />
         </span>
         <span class="sp2" style="color: #40a6ff;cursor: pointer" @click="copy(danhao1,'.sp2')">复制单号</span>
-      </div>
+      </div>-->
     </Modal>
     <!--处理过账-->
     <Modal v-model="modal1" title="提示">
       <p class="fs20">
-        此操作自动生成已入库外采订单和草稿销售订单
+        此操作生成草稿状态的外采订单
       </p>
       <p class="pt10">填写备注</p>
       <p class="pt5"><Input v-model="remarkText" class="mr10" /></p>
