@@ -247,7 +247,7 @@ export default {
     //打印表格
     async printTable() {
       let order = this.$store.state.dataList.oneOrder;
-      order.name="调出退回入库"
+      order.name="销售订单"
       order.route=this.$route.name
       let routeUrl=this.$router.resolve({name:"print",query:order})
       window.open(routeUrl.href,"_blank");
