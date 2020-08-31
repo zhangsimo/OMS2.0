@@ -754,7 +754,13 @@ export default {
     },
     //打印弹出框
     printTable() {
-      this.$refs.printBox.openModal();
+      let order = this.$store.state.dataList.oneOrder;
+      order.name="销售订单"
+      order.route=this.$route.name
+      order.id=this.id
+      let routeUrl=this.$router.resolve({name:"print",query:order})
+      window.open(routeUrl.href,"_blank");
+      this.getLeftList()
     },
 
     //获取客户额度
