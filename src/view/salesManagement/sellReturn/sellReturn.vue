@@ -1044,6 +1044,7 @@
         order.route=this.$route.name
         let routeUrl=this.$router.resolve({name:"print",query:order})
         window.open(routeUrl.href,"_blank");
+        this.getLeftList()
       },
       // 计算尾部总和
       countAllAmount(data) {
