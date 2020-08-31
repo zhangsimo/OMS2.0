@@ -577,7 +577,13 @@ export default {
         this.$Message.info("请选择打印项");
         return;
       }
-      this.$refs.printBox.openModal();
+      let order = this.$store.state.dataList.oneOrder;
+      order.name="调拨入库"
+      order.route=this.$route.name
+      order.id=this.Leftcurrentrow.id
+      let routeUrl=this.$router.resolve({name:"print",query:order})
+      window.open(routeUrl.href,"_blank");
+      this.getList()
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
