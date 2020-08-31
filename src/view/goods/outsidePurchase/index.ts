@@ -640,8 +640,13 @@ export default class OutsidePurchase extends Vue {
 
   // 打印
   private print() {
-    const ref:any = this.$refs.PrintModel;
-    ref.openModal();
+    let order = this.$store.state.dataList.oneOrder;
+    order.name="采购订单"
+    order.route=this.$route.name
+    order.id=this.mainId
+    let routeUrl=this.$router.resolve({name:"print",query:order})
+    window.open(routeUrl.href,"_blank");
+    this.getListData()
   }
 
   //表格单选选中

@@ -1194,11 +1194,13 @@
       },
       //打印表格
       printTable() {
-        // if (!this.dayinCureen.id) {
-        //   this.$Message.info('请选择打印项')
-        //   return
-        // }
-        this.$refs.printBox.openModal();
+        let order = this.$store.state.dataList.oneOrder;
+        order.name="调拨出库"
+        order.route=this.$route.name
+        order.id=this.dayinCureen.id
+        let routeUrl=this.$router.resolve({name:"print",query:order})
+        window.open(routeUrl.href,"_blank");
+        this.getList()
       },
       chuku() {
         this.$Modal.confirm({

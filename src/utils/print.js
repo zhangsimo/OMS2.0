@@ -218,7 +218,6 @@ export function print(arguMent) {
   LODOP.SET_PRINT_STYLEA(0, "Horient", 1);
   LODOP.SET_PRINT_STYLEA(0, "Vorient", 1);
   LODOP.PREVIEW();
-  // LODOP.PRINT();
   // 简单的获取打印次数可以用这个方法。
   // LODOP.On_Return=function(TaskID,Value){alert(Value);}
 }
@@ -256,12 +255,14 @@ export function tabPageHead(arguMent) {
     for (var j = i * pageRecorders; j < (i + 1) * pageRecorders; j++) {
       if (j >= totalRows) {
         argument.Lodop.ADD_PRINT_HTM(100 + tvalue * 14, 26, "90%", "100%", argument.pageFooter.innerHTML)
-        break;
+        return;
       }
       tableContent ? tableContent(argument.Lodop, argument.data[j], tvalue, j, argument.tableHeadArr) : ""
       tvalue++;
     }
     argument.Lodop.NewPage();
+    // argument.Lodop.PRINT();
+    // argument.Lodop.PRINT_SETUP()
   }
 }
 

@@ -955,7 +955,14 @@ export default {
 
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
+      // this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
+      let order = this.$store.state.dataList.oneOrder;
+      order.name="移仓单"
+      order.route=this.$route.name
+      order.id=this.Leftcurrentrow.id
+      let routeUrl=this.$router.resolve({name:"print",query:order})
+      window.open(routeUrl.href,"_blank");
+      this.getList()
     },
     //添加配件
     addPro() {
