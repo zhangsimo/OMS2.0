@@ -270,7 +270,9 @@
       // console.log(this.$route.query.id,111111)
     },
     updated() {
-      this.print()
+      this.$nextTick( () => {
+        this.print()
+      })
     },
     methods: {
       //打印
