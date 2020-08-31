@@ -1072,6 +1072,10 @@ export default {
         this.$Message.error("这个公司暂时没有库存")
         return
       }
+      if (data.old === "all" || data.old==undefined) {
+        Reflect.deleteProperty(data, "old");
+      }
+      data.old == "all"?data.old="":"";
       let str=""
       for(var key in data){
         str+=`${key}=${data[key]}&`
@@ -1146,7 +1150,7 @@ export default {
         this.$Message.error("这个公司暂时没有库存")
         return
       }
-      if (data.old === "all") {
+      if (data.old === "all" || data.old==undefined) {
         Reflect.deleteProperty(data, "old");
       }
       let str=""
