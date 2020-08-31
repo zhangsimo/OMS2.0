@@ -533,6 +533,13 @@
       async submission() {
         const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
         if (!errMap) {
+          let falg = false
+           this.tableData.forEach( item => {
+            if( item.invoiceNo.length != 8 ){
+              falg = true
+            }
+           })
+          if (falg) return  this.$Message.error('发票号为8位数')
           let pay = 0;
           let pei = 0;
           let newTableData = this.tableData.map(item1 => {

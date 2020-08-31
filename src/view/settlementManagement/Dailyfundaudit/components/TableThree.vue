@@ -1,7 +1,6 @@
 <template>
   <div>
     <vxe-table
-      show-overflow
       highlight-current-row
       highlight-hover-row
       stripe
@@ -17,7 +16,7 @@
     >
       <vxe-table-column type="checkbox" min-width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column title="往来单位" fixed="left" min-width="120">
+      <vxe-table-column title="往来单位" min-width="120" fixed="left">
         <template v-slot="{row}">
           <ul class="list">
             <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
@@ -30,40 +29,40 @@
         <vxe-table-column
           field="businessNumbers"
           title="收付款单号"
-          min-width="120"
+          width="120"
         ></vxe-table-column>
         <vxe-table-column
           field="businessNumbersList"
           title="预收款单号"
           min-width="120"
         ></vxe-table-column>
-<!--        <vxe-table-column field="tmp" title="来源往来单位">-->
-<!--          <template v-slot="{ row }">-->
-<!--            <ul class="list">-->
-<!--              <li-->
-<!--                v-for="(item, index) of row.suppliers"-->
-<!--                :key="index"-->
-<!--                class="flex"-->
-<!--              >-->
-<!--                <span class="listChild">{{ item.guestSourceName }}</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </template>-->
-<!--        </vxe-table-column>-->
-<!--        <vxe-table-column field="tmp" title="目标往来单位">-->
-<!--          <template v-slot="{ row }">-->
-<!--            <ul class="list">-->
-<!--              <li-->
-<!--                v-for="(item, index) of row.suppliers"-->
-<!--                :key="index"-->
-<!--                class="flex"-->
-<!--              >-->
-<!--                <span class="listChild">{{ item.guestTargetName }}</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </template>-->
-<!--        </vxe-table-column>-->
-        <vxe-table-column field="tmp" title="收付类型"  min-width="100">
+        <!--        <vxe-table-column field="tmp" title="来源往来单位">-->
+        <!--          <template v-slot="{ row }">-->
+        <!--            <ul class="list">-->
+        <!--              <li-->
+        <!--                v-for="(item, index) of row.suppliers"-->
+        <!--                :key="index"-->
+        <!--                class="flex"-->
+        <!--              >-->
+        <!--                <span class="listChild">{{ item.guestSourceName }}</span>-->
+        <!--              </li>-->
+        <!--            </ul>-->
+        <!--          </template>-->
+        <!--        </vxe-table-column>-->
+        <!--        <vxe-table-column field="tmp" title="目标往来单位">-->
+        <!--          <template v-slot="{ row }">-->
+        <!--            <ul class="list">-->
+        <!--              <li-->
+        <!--                v-for="(item, index) of row.suppliers"-->
+        <!--                :key="index"-->
+        <!--                class="flex"-->
+        <!--              >-->
+        <!--                <span class="listChild">{{ item.guestTargetName }}</span>-->
+        <!--              </li>-->
+        <!--            </ul>-->
+        <!--          </template>-->
+        <!--        </vxe-table-column>-->
+        <vxe-table-column field="tmp" title="收付类型" min-width="100">
           <template v-slot="{ row }">
             <span>{{ row.receiptPaymentType.name }}</span>
           </template>
@@ -79,7 +78,7 @@
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="金额信息">
-        <vxe-table-column title="业务类型"  min-width="100">
+        <vxe-table-column title="业务类型" min-width="100">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -92,7 +91,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="金额"  min-width="60">
+        <vxe-table-column title="金额" min-width="60">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -105,14 +104,14 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="合计"  min-width="60">
+        <vxe-table-column field="tmp" title="合计" min-width="60">
           <template v-slot="{ row }">
             <span>{{ row.moneyInfo[0].auditMoneyTotal }}</span>
           </template>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="收付款方式">
-        <vxe-table-column title="账户" min-width="60">
+        <vxe-table-column title="账户" min-width="100">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -138,7 +137,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="付款金额"  min-width="100">
+        <vxe-table-column title="付款金额" min-width="100">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -151,7 +150,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="账户所属门店"  min-width="120">
+        <vxe-table-column title="账户所属门店" min-width="180">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -166,7 +165,7 @@
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="收付款信息">
-        <vxe-table-column field="tmp" title="付款人"  min-width="90">
+        <vxe-table-column field="tmp" title="付款人" min-width="90">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -179,7 +178,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="付款日期"  min-width="100">
+        <vxe-table-column field="tmp" title="付款日期" min-width="100">
           <template v-slot="{ row }">
             <ul class="list">
               <li
@@ -193,7 +192,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column field="remarks" title="备注"  min-width="60"></vxe-table-column>
+      <vxe-table-column field="remarks" title="备注" min-width="60"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -220,11 +219,11 @@
         this.$refs.xTable.clearCheckboxRow();
         this.$emit("selection", []);
       },
-      selectAllEvent({ checked, records }) {
+      selectAllEvent({checked, records}) {
         // console.log(checked ? "所有勾选事件" : "所有取消事件", records);
         this.$emit("selection", records);
       },
-      selectChangeEvent({ checked, records }) {
+      selectChangeEvent({checked, records}) {
         // console.log(checked ? "勾选事件" : "取消事件", records);
         this.$emit("selection", records);
       }
@@ -236,25 +235,30 @@
   .box {
     overflow: auto;
   }
+
   .boxData {
     width: 2200px;
     /* overflow: auto; */
   }
+
   .list {
     list-style: none;
     padding: 0;
     margin: 0;
   }
+
   .listChild {
     display: inline-block;
     border: 1px solid #e8eaec;
     flex: 1;
     line-height: 24px;
-    padding:0 5px;
+    padding: 0 5px;
   }
+
   .vxe-table .vxe-cell {
     padding: 0;
   }
+
   .vxe-table .vxe-body--column:not(.col--ellipsis) {
     padding: 0;
   }

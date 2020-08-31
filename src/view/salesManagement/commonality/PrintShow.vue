@@ -111,7 +111,6 @@
 <script>
   import {getprintList} from "@/api/salesManagment/salesOrder";
   import {print} from "_utils/print.js"
-  import {tableHead, tableContent} from "./printJavascript.js"
 
   export default {
     name: "PrintShow",
@@ -224,9 +223,7 @@
             style: tableStyle/**样式*/,
             tablePrint: gridtable/**表格打印部分的html内容*/,
             pageHead: pageHead/**页头内容*/,
-            tableHead: tableHead/**表格头部*/,
             data: this.onelist.detailList/**表格数据*/,
-            tableContent: tableContent/**表格内容*/,
             tableHeadArr: tableHeadArr/**表格头部数组*/,
             pageFooter: pageFooter/**打印页面带出页尾*/
           }
