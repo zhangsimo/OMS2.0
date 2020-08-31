@@ -202,7 +202,7 @@
                       <vxe-table-column  show-overflow="tooltip" field="taxAmt" title="含税金额" width="100"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" title="品牌车型">
+                      <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
                         <template v-slot="{row,rowIndex}">
                           <span>{{row.carBrandName}} {{row.carModelName}}</span>
                         </template>
@@ -237,7 +237,7 @@
                         </vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="storeStockQty" title="库存"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" title="品牌车型">
+                        <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>
@@ -460,7 +460,7 @@
                       <vxe-table-column  show-overflow="tooltip" field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="outableQty" title="可用数量" width="100"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" title="品牌车型">
+                      <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
                         <template v-slot="{row,rowIndex}">
                           <span>{{row.carBrandName}} {{row.carModelName}}</span>
                         </template>
@@ -491,7 +491,7 @@
                           </template>
                         </vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="costRatio" title="成本比例" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" title="品牌车型">
+                        <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>

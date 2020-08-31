@@ -121,6 +121,8 @@
           ref="xTable2"
           :height="tableHeight"
           highlight-hover-row
+          highlight-current-row
+          stripe
           show-overflow
           resizable
           :loading="loading1"
@@ -182,7 +184,7 @@
               class="w200 mr10"
               @on-enter="queryBatch"
             ></Input>
-            <!-- <Select
+            <Select
               filterable
               clearable
               class="w120 mr10"
@@ -196,7 +198,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select> -->
+            </Select>
             <Select
               v-if="showSearch == true"
               class="w200 mr10"
@@ -265,6 +267,8 @@
           ref="xTable3"
           :height="tableHeight"
           highlight-hover-row
+          highlight-current-row
+          stripe
           show-overflow
           resizable
           :loading="loading2"
@@ -402,6 +406,8 @@
           ref="hsOrder"
           :height="tableHeight"
           highlight-hover-row
+          highlight-current-row
+          stripe
           show-overflow
           resizable
           :loading="hsloading"
