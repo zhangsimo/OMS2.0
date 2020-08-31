@@ -755,7 +755,7 @@ export default {
     //打印弹出框
     printTable() {
       let order = this.$store.state.dataList.oneOrder;
-      order.name="销售订单"
+      order.name="预售单"
       order.route=this.$route.name
       order.id=this.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
