@@ -728,8 +728,13 @@
         },
         // 打印
         stamp(){
-          const ref =  this.$refs.PrintModel;
-          ref.openModal();
+          let order = this.$store.state.dataList.oneOrder;
+          order.name="调拨申请"
+          order.route=this.$route.name
+          order.id=this.mainId
+          let routeUrl=this.$router.resolve({name:"print",query:order})
+          window.open(routeUrl.href,"_blank");
+          this.leftgetList()
         },
         //右侧表格复选框选中
         selectChange(msg){

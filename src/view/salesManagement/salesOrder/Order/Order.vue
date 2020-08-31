@@ -164,7 +164,8 @@ import PrintShow from "../../commonality/PrintShow";
 import {
   getCancellation,
   getReorder,
-  getLeftList
+  getLeftList,
+  getprintList
 } from "@/api/salesManagment/salesOrder";
 import * as tools from "_utils/tools";
 
@@ -244,8 +245,12 @@ export default {
       this.queryTime = date;
     },
     //打印表格
-    printTable() {
-      this.$refs.printBox.openModal();
+    async printTable() {
+      let order = this.$store.state.dataList.oneOrder;
+      order.name="调出退回入库"
+      order.route=this.$route.name
+      let routeUrl=this.$router.resolve({name:"print",query:order})
+      window.open(routeUrl.href,"_blank");
       this.$refs.OrderLeft.gitlistValue()
     },
     //打开更多搜索

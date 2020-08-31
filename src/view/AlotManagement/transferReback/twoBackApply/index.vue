@@ -995,7 +995,13 @@ export default {
         this.$Message.error("请选择打印项");
         return;
       }
-      this.$refs.printBox.openModal();
+      let order = this.$store.state.dataList.oneOrder;
+      order.name="调入退回申请"
+      order.route=this.$route.name
+      order.id=this.dayinCureen.id
+      let routeUrl=this.$router.resolve({name:"print",query:order})
+      window.open(routeUrl.href,"_blank");
+      this.$refs.OrderLeft.getList()
     },
     chuku() {
       const params = {

@@ -21,7 +21,15 @@ export default [
     },
     component: () => import("@/view/base/login/login.vue")
   },
-
+  {
+    path: "/print",
+    name: "print",
+    meta: { keepAlive: true,
+      title: "Print - 打印",
+      hideInMenu: true
+    },
+    component: () => import("@/view/base/print/print.vue")
+  },
   {
     path: "/register",
     name: "register",
