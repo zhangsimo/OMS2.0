@@ -288,33 +288,37 @@
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
-              {{row.enterPrice.toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':row.enterPrice.toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="enterAmt" title="成本金额" width="90">
             <template v-slot="{row}">
-              {{row.enterAmt.toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':row.enterAmt.toFixed(2)}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="taxRate" title="税率" width="60"></vxe-table-column>
+          <vxe-table-column field="taxRate" title="税率" width="60">
+            <template v-slot="{row}">
+              {{selectShopList&&row.enterTypeId!='050101'?'-':row.taxRate}}
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="taxPrice" title="含税单价" width="100">
             <template v-slot="{row}">
-              {{(row.taxPrice || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.taxPrice || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="taxAmt" title="含税金额" width="100">
             <template v-slot="{row}">
-              {{(row.taxAmt || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.taxAmt || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="noTaxPrice" title="不含税单价" width="100">
             <template v-slot="{row}">
-              {{(row.noTaxPrice || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.noTaxPrice || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="noTaxAmt" title="不含税金额" width="100">
             <template v-slot="{row}">
-              {{(row.noTaxAmt || 0).toFixed(2)}}
+              {{selectShopList&&row.enterTypeId!='050101'?'-':(row.noTaxAmt || 0).toFixed(2)}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="chainStockAge" title="连锁库龄" width="70"></vxe-table-column>
@@ -756,7 +760,9 @@ export default {
     getColumns() {
       if(this.selectShopList){
         this.$nextTick(() => {
-          this.$refs.xTable3.hideColumn(this.$refs.xTable3.getColumnByField('originGuestName'))
+          this.$refs.xTable3.hideColumn(this.$refs.xTable3.getColumnByField('originGuestName'));
+          this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('costPrice'));
+          this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('stockAmt'));
         })
         if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
           this.$nextTick(() => {
@@ -913,6 +919,15 @@ export default {
         this.contentTwo.dataTwo.map((item, index) => {
           item.index = index + 1;
           item.outableQty = item.sellSign ? 0 : item.outableQty;
+          if(this.selectShopList&&item.enterTypeId!='050101'){
+            item.enterPrice = '-';
+            item.enterAmt = '-';
+            item.taxRate = '-';
+            item.taxPrice = '-';
+            item.taxAmt = '-';
+            item.noTaxPrice = '-';
+            item.noTaxAmt = '-';
+          }
         });
         this.contentTwo.page.total = res.data.totalElements;
         this.bands2 = [];
