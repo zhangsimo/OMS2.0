@@ -175,7 +175,7 @@ export const mixSelectPartCom = {
       //分页obj
       page: {
         num: 1,
-        size: 50,
+        size: 10,
         total: 0
       },
       //配件查询分类
@@ -296,7 +296,7 @@ export const mixSelectPartCom = {
     //显示层
     init() {
       this.searchPartLayer = true;
-      this.getList();
+      // this.getList();
       // this.getPartBrandAll();
       this.getCarClassifysFun();
       this.$nextTick(() => this.$refs.elinput.focus());

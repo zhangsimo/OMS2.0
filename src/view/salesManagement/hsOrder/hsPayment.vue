@@ -72,6 +72,7 @@
           <vxe-table-column width="120" field="buyerName" title="采购员"></vxe-table-column>
           <vxe-table-column width="120" field="auditor" title="点货员"></vxe-table-column>
           <vxe-table-column width="120" field="partId" title="配件内码"></vxe-table-column>
+          <vxe-table-column width="120" field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column width="120" field="partName" title="配件名称"></vxe-table-column>
           <vxe-table-column width="120" field="partBrand" title="品牌"></vxe-table-column>
           <!--<vxe-table-column width="120" field="address" title="配件类别"></vxe-table-column>-->

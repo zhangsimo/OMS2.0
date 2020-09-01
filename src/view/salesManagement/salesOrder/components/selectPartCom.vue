@@ -79,7 +79,7 @@
             @on-page-size-change="changeSize"
             show-sizer
             show-total
-            :page-size-opts="[50, 100, 300,500]"
+            :page-size-opts="[10, 20, 30,50]"
           ></Page>
         </div>
       </div>
