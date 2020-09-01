@@ -77,6 +77,7 @@
           ref="xTable"
           show-footer
           show-overflow
+          keep-source
           size="mini"
           align="center"
           height="200"

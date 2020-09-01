@@ -660,7 +660,7 @@ export default {
               this.Left.page.total = res.data.totalElements;
             }
           }
-          console.log(this.currRow.id)
+          // console.log(this.currRow.id)
           if(this.currRow.id){
             for (let b of this.Left.tbdata) {
               b._highlight = false;
@@ -923,7 +923,15 @@ export default {
     },
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.formPlan.id,this.warehouseList);
+      // this.$refs.printBox.openModal(this.formPlan.id,this.warehouseList);
+      let order = {};
+      order.name="盘点单"
+      order.route=this.$route.name
+      // order.warehouseList=this.warehouseList
+      order.id=this.formPlan.id
+      let routeUrl=this.$router.resolve({name:"print",query:order})
+      window.open(routeUrl.href,"_blank");
+      this.getList()
     },
 
     //添加配件
