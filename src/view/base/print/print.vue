@@ -149,7 +149,7 @@
             <p style="width:33%"><span style="font-size: 12px">移仓日期:</span> <span style="font-size: 12px">{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单'">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单' ">
           <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">{{kOrG}}:</span>
@@ -191,13 +191,21 @@
             </Row>
           </Col>
         </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;"  v-if="onelist.name=='盘点单'">
+          <Col span="16" class="pl10" style="border-right: 1px #000000 solid">
+            <p><span style="font-size: 12px">盘点仓库:</span> <span style="font-size: 12px">{{onelist.storeName}}</span></p>
+          </Col>
+          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
+            <p><span style="font-size: 12px">盘点日期:</span> <span style="font-size: 12px">{{onelist.checkDate}}</span></p>
+          </Col>
+        </Row>
         <table class="gridtable">
           <thead>
           <tr>
             <th style="width:30px !important;">序号</th>
-            <th style="width:85px;overflow: hidden;white-space:nowrap;">配件编码</th>
+            <th style="width:105px;overflow: hidden;white-space:nowrap;">配件编码</th>
             <th style="width:85px;overflow: hidden;white-space:nowrap;">配件名称</th>
-            <th style="width:85px;overflow: hidden;white-space:nowrap;">OEM码</th>
+            <th style="width:65px;overflow: hidden;white-space:nowrap;">OEM码</th>
             <th style="width:50px;overflow: hidden;white-space:nowrap;">品牌</th>
             <th style="width:40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>
@@ -211,9 +219,9 @@
           <tbody>
           <tr v-for="(item ,index) in onelist.detailList" :key="index">
             <td style="width:30px !important;">{{index + 1}}</td>
-            <td style="width:85px;overflow: hidden;white-space:nowrap;">{{item.partCode}}</td>
+            <td style="width:105px;overflow: hidden;white-space:nowrap;">{{item.partCode}}</td>
             <td style="width:85px;overflow: hidden;white-space:nowrap;">{{item.partName}}</td>
-            <td style="width:85px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>
+            <td style="width:65px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>
             <td style="width:50px;overflow: hidden;white-space:nowrap;">{{item.partBrand}}</td>
             <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
@@ -226,7 +234,7 @@
           </tbody>
         </table>
 
-        <Row style="border: 1px #000000 solid;color:#000;font-size: 10px;display: flex;">
+        <Row style="border: 1px #000000 solid;color:#000;font-size: 10px;display: flex;" v-if="onelist.name!='盘点单'">
           <Col style="border-right: 1px #000000 solid;padding:2px;width: 640px">
             <span>合计:</span>
             <span>{{ onelist.orderAmt | toChies}}</span>
@@ -240,7 +248,7 @@
             <span>{{onelist.orderAmt}}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;" v-if="onelist.name!='盘点单'">
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>制单人:</span>
             <span>{{onelist.orderMan}}</span>
@@ -289,6 +297,7 @@
   import * as putStorage from "@/api/AlotManagement/putStorage.js";//调拨入库 getprintList
   import * as moveStorehouse from '@/api/business/moveStorehouse'//移仓单 getPrint
   import * as twoBackApply from "@/api/AlotManagement/twoBackApply.js";//调入退回申请 getprintList
+  import * as smsInventory from '@/api/inventory/salesList' //盘点单  getprintList
 
   import * as tools from "../../../utils/tools";
 
@@ -498,7 +507,7 @@
                 this.onelist.printDate = tools.transTime(new Date());
               }
               break;
-            case "applyFor":
+            case "applyFor": //调拨申请
               res = await pointAdd(data);
               if(res.code==0){
                 this.onelist = res.data;
@@ -515,28 +524,36 @@
                 this.onelist.detailList=this.onelist.detailVOS
               }
               break;
-            case "stockRemoval":
+            case "stockRemoval": //调拨出库
               res=await stockRemocal.getprintList(data)
               if(res.code==0){
                 this.onelist = res.data;
                 this.onelist.name = order.name
                 this.onelist.userCompany=this.onelist.applyGuest.shortName|| this.onelist.applyGuest.name
+                this.onelist.serviceId=this.onelist.apply.serviceId
+
+                this.onelist.tel=this.onelist.applyGuest.tel
+
+                this.onelist.guestName=this.onelist.logisticsRecord.guestName
                 this.onelist.addr=this.onelist.applyGuest.addr ||
                   ( (this.onelist.applyGuest.province || "") + (this.onelist.applyGuest.city || "") +
                     (this.onelist.applyGuest.district || "") + (this.onelist.applyGuest.streetAddress || ""))
-
-                this.onelist.tel=this.onelist.applyGuest.tel
                 this.onelist.printDate = tools.transTime(new Date());
                 this.kOrG="调入方"
-
-                this.onelist.guestAddr=this.onelist.guestAdd
+                this.onelist.guestAddr=this.onelist.guest.address
                 this.onelist.orderDate=this.onelist.apply.orderDate
-                this.onelist.contactor=this.onelist.logisticsRecord.guestName
+                this.onelist.contactor=this.onelist.logisticsRecord.contactor
                 this.onelist.contactorTel=this.onelist.logisticsRecord.receiverMobile||""
+                this.onelist.storeName=this.onelist.storeVO.name
                 this.onelist.detailList=this.onelist.apply.detailVOS
+                this.onelist.orderMan=this.onelist.apply.orderMan
+                this.onelist.auditor=this.onelist.apply.auditor
+                this.onelist.deliverer=this.onelist.apply.deliverer
+                this.onelist.receiver=this.onelist.logisticsRecord.receiver
+                this.onelist.remark=this.onelist.logisticsRecord.remark
               }
               break;
-            case "putStorage":
+            case "putStorage": //调拨入库
               res = await putStorage.getprintList(data);
               if(res.code==0){
                 this.onelist = res.data;
@@ -547,15 +564,22 @@
                 this.onelist.tel=this.onelist.guestVO.tel
                 this.onelist.printDate = tools.transTime(new Date());
                 this.kOrG="调出方"
-
+                this.onelist.storeName=this.onelist.store.name
+                this.onelist.guestName=this.onelist.guestVO.shortName
                 this.onelist.guestAddr=this.onelist.applyGuest.addr || this.onelist.applyGuest.streetAddress
                 this.onelist.orderDate=this.onelist.enterOrder.orderDate
                 this.onelist.contactor=this.onelist.applyGuest.contactor
                 this.onelist.contactorTel=this.onelist.applyGuest.tel
                 this.onelist.detailList=this.onelist.enterOrder.voList
+
+                this.onelist.orderMan=this.onelist.enterOrder.orderMan
+                this.onelist.auditor=this.onelist.enterOrder.auditor
+                this.onelist.deliverer=this.onelist.enterOrder.deliverer
+                this.onelist.receiver=this.onelist.guestVO.receiver
+                this.onelist.remark=this.onelist.guestVO.remark
               }
               break;
-            case "moveStorehouse":
+            case "moveStorehouse": //移仓单
               res=await moveStorehouse.getPrint(data);
               if(res.code===0){
                 this.onelist = res.data;
@@ -572,7 +596,7 @@
                 this.onelist.auditor=this.onelist['stockShift'].createUname
               }
               break;
-            case "twoBackApply":
+            case "twoBackApply": //调入退回申请
               res= await twoBackApply.getprintList(data)
               if(res.code==0){
                 this.onelist = res.data;
@@ -586,7 +610,7 @@
                 this.onelist.detailList=this.onelist.apply.detailVOS
               }
               break;
-            case "twoBackInStorage":
+            case "twoBackInStorage": //调拨退回入库
               res = await putStorage.getprintList(data);
               if(res.code==0){
                 this.onelist = res.data;
@@ -604,6 +628,24 @@
                 this.onelist.detailList=this.onelist.enterOrder.voList
               }
               break;
+            // case "smsInventory": //盘点单
+            //   res = await smsInventory.getprintList(data);
+            //   if(res.code==0){
+            //     this.onelist = res.data;
+            //     this.onelist.name = order.name
+            //     this.onelist.userCompany=this.onelist.guestVO.fullName
+            //     this.onelist.serviceId=this.onelist.enterOrder.serviceId
+            //     this.onelist.addr=this.onelist.guestVO.addr || this.onelist.guestVO.streetAddress
+            //     this.onelist.tel=this.onelist.guestVO.tel
+            //     this.onelist.printDate = tools.transTime(new Date());
+            //     this.kOrG="调出方"
+            //     this.onelist.guestAddr=this.onelist.applyGuest.addr || this.onelist.applyGuest.streetAddress
+            //     this.onelist.orderDate=this.onelist.enterOrder.orderDate
+            //     this.onelist.contactor=this.onelist.applyGuest.contactor
+            //     this.onelist.contactorTel=this.onelist.applyGuest.tel
+            //     this.onelist.detailList=this.onelist.enterOrder.voList
+            //   }
+            //   break;
           }
         } else {
           this.$message.error("至少选择一条信息");
