@@ -35,6 +35,43 @@
             </p>
           </Col>
         </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="onelist.name=='采购退货单'">
+          <Col span="10" class="pl10" style="border-right: 1px #000000 solid">
+            <p>
+              <span style="font-size: 12px">供应商:</span> <span style="font-size: 12px">{{ onelist.guestName }}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">地址:</span> <span style="font-size: 12px">{{ onelist.guestAddress }}</span>
+            </p>
+          </Col>
+          <Col span="4" class="pl10" style="border-right: 1px #000000 solid">
+            <p>
+              <span style="font-size: 12px">联系人:</span> <span style="font-size: 12px">{{ onelist.contactor }}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">退货原因:</span><span style="font-size: 12px">{{ onelist.rtnReasonName }}</span>
+            </p>
+          </Col>
+          <Col span="10" class="pl10">
+            <p>
+              <span style="font-size: 12px">联系电话:</span><span style="font-size: 12px">{{ onelist.guestTel }}</span>
+            </p>
+            <Row>
+              <Col span="12">
+                <p>
+                  <span style="font-size: 12px">结算方式:</span>
+                  <span style="font-size: 12px">{{onelist.settleTypeName}}</span>
+                </p>
+              </Col>
+              <Col span="12">
+                <p>
+                  <span style="font-size: 12px">仓库:</span>
+                  <span style="font-size: 12px">{{onelist.storeName}}</span>
+                </p>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="onelist.name=='调出退回入库'">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
@@ -112,7 +149,7 @@
             <p style="width:33%"><span style="font-size: 12px">移仓日期:</span> <span style="font-size: 12px">{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库'">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单'">
           <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">{{kOrG}}:</span>
@@ -245,6 +282,7 @@
   import {getprintList} from "@/api/salesManagment/salesOrder";//销售订单
   import {getPrint} from "_api/salesManagment/sellReturn.js";  //销售退货
   import {print} from "_api/procurement/plan"; //采购订单
+  import * as supplierList from '@/api/business/supplierListApi'; //采购退货 print
   import * as prePrint from "_api/salesManagment/presell.js"; //预售单
   import {pointAdd} from "@/api/AlotManagement/transferringOrder"; //调拨申请
   import * as stockRemocal from "@/api/AlotManagement/stockRemoval.js";//调拨出库  getprintList
@@ -278,6 +316,9 @@
       //打印
       print() {
         document.body.style.overflow = 'visible'
+        if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
+          this.remove_ie_header_and_footer();
+        }
         window.print();
         window.close();
       },
@@ -298,14 +339,14 @@
           data.id = order.id;
           var res;
           switch (order.route) {
-            case "salesOrder":
+            case "salesOrder": //销售订单
               res = await getprintList(data);
               if(res.code==0){
                 this.onelist = res.data;
                 this.onelist.name = order.name
               }
               break;
-            case "sellReturn":
+            case "sellReturn": //销售退货
               res = await getPrint(data.id);
               if(res.code==0){
                 this.onelist = res.data;
@@ -320,7 +361,7 @@
                 this.onelist.detailList=this.onelist.details
               }
               break;
-            case "InterPurchase":
+            case "InterPurchase": //国际采购
               res = await print(data.id);
               if(res.code==0){
                 this.onelist = res.data;
@@ -345,7 +386,7 @@
                 }
               }
               break;
-            case "TemporaryPurchase":
+            case "TemporaryPurchase": //临时采购
               res = await print(data.id);
               if(res.code==0){
                 this.onelist = res.data;
@@ -370,7 +411,7 @@
                 }
               }
               break;
-            case "OutsidePurchase":
+            case "OutsidePurchase": //外采订单
               res = await print(data.id);
               if(res.code==0){
                 this.onelist = res.data;
@@ -395,7 +436,7 @@
                 }
               }
               break;
-            case "PlannedPurchaseOrder":
+            case "PlannedPurchaseOrder": //计划采购
               res = await print(data.id);
               if(res.code==0){
                 this.onelist = res.data;
@@ -420,7 +461,32 @@
                 }
               }
               break;
-            case "presell":
+            case "supplierList": //采购退货
+              res = await supplierList.print(data)
+              if(res.code==0){
+                this.onelist = res.data;
+                this.onelist.name = order.name
+                this.kOrG="供应商"
+
+                this.onelist.userCompany=this.onelist.orgName
+                this.onelist.addr=this.onelist.orgAddress
+                this.onelist.tel=this.onelist.orgTel
+                this.onelist.guestAddr=this.onelist.guestAddress
+                this.onelist.contactorTel=this.onelist.guestTel
+                this.onelist.detailList=this.onelist.details
+                this.onelist.printDate = tools.transTime(new Date());
+                if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
+                  this.onelist.storeName=""
+                }else{
+                  this.onelist.detailList.map((item,index)=>{
+                    if(index==0){
+                      this.onelist.storeName=item.storeName
+                    }
+                  })
+                }
+              }
+              break;
+            case "presell": //预售单
               res = await prePrint.getPrint(data.id);
               if(res.code==0){
                 this.onelist = res.data;
