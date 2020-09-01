@@ -375,7 +375,7 @@ export default {
     async ok(){
       let data = {};
       data.detailId = this.accrued[0].id;
-      data.claimMoney=this.accrued[0].balanceMoney||this.accrued[0].rpAmt;
+      data.claimMoney=this.accrued[0].rpAmt || this.accrued[0].balanceMoney;
       let objItem = this.$refs.voucherInput.voucherItem;
       if(this.voucherinputModel){
         if(this.claimTit=="预收款认领"){
