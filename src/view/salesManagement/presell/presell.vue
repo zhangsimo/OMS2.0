@@ -1316,13 +1316,13 @@ export default {
     //监听时间
     queryTime: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      this.page.size = 20;
       this.getLeftList();
     },
     //监听状态
     orderType: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      this.page.size = 20;
       this.getLeftList();
     },
     formPlan: {
