@@ -149,7 +149,7 @@
             <p style="width:33%"><span style="font-size: 12px">移仓日期:</span> <span style="font-size: 12px">{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="onelist.name=='调拨申请'">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="onelist.name=='调拨申请'||onelist.name=='调拨出库'">
           <Col span="12" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">{{kOrG}}:</span>
@@ -163,11 +163,11 @@
           <Col span="7" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">联系人:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:''}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:onelist.logisticsRecord?onelist.logisticsRecord.receiver:''}}</span>
             </p>
             <p>
               <span style="font-size: 12px">联系电话:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:''}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:onelist.logisticsRecord?onelist.logisticsRecord.receiverMobile:''}}</span>
             </p>
           </Col>
           <Col span="5">
@@ -177,7 +177,7 @@
             </p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单'&& onelist.name!='调拨申请' ">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单'&& onelist.name!='调拨申请'&&onelist.name!='调拨出库'">
           <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">{{kOrG}}:</span>
