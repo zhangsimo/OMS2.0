@@ -365,6 +365,9 @@ export default class OutsidePurchase extends Vue {
     details: [],
     processInstanceId: "",
   }
+
+  //点击保存后禁用保存按钮
+  private isClickSave:boolean = false;
   //---- 新增方法
   private addPro() {
     if (!this.isAdd) {
@@ -464,7 +467,13 @@ export default class OutsidePurchase extends Vue {
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
+
+    if(this.isClickSave){
+      return this.$Message.error("正在保存单据请稍后...");
+    }
+    this.isClickSave = true;
     let res = await api.outsideSaveDraft(data);
+    this.isClickSave = false;
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
@@ -500,7 +509,12 @@ export default class OutsidePurchase extends Vue {
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',
               onOk: async () => {
+                if(this.isClickSave){
+                  return this.$Message.error("正在处理单据请稍后...");
+                }
+                this.isClickSave = true;
                 let res = await api.outsideSaveCommit(data);
+                this.isClickSave = false;
                 if (res.code == 0) {
                   this.$Message.success('保存成功');
                   this.getListData();
@@ -513,7 +527,12 @@ export default class OutsidePurchase extends Vue {
             })
           },500)
         }else{
+          if(this.isClickSave){
+            return this.$Message.error("正在处理单据请稍后...");
+          }
+          this.isClickSave = true;
           let res = await api.outsideSaveCommit(data);
+          this.isClickSave = false;
           if (res.code == 0) {
             this.$Message.success('保存成功');
             this.getListData();
