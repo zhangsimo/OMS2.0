@@ -544,7 +544,8 @@
           outStockDoor: true
         },
         ispart: true, //添加配件状态
-        rightTableHeight: 0
+        rightTableHeight: 0,
+        isClickSave:false,
       };
     },
     mounted() {
@@ -1079,7 +1080,12 @@
               let data = JSON.parse(JSON.stringify(this.formPlan));
               data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
               data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+              if(this.isClickSave){
+                return this.$Message.error("请稍后订单处理中...");
+              }
+              this.isClickSave = true;
               let res = await getSave(data);
+              this.isClickSave = false;
               if (res.code === 0) {
                 this.$Message.success("保存成功");
                 this.$parent.$parent.isAdd = false;
@@ -1204,7 +1210,12 @@
                     title: "提示",
                     content: text,
                     onOk: async () => {
+                      if(this.isClickSave){
+                        return this.$Message.error("请稍后订单处理中...");
+                      }
+                      this.isClickSave = true;
                       let res = await getSubmitList(data);
+                      this.isClickSave = false;
                       if (res.code === 0) {
                         this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
@@ -1219,7 +1230,12 @@
                   });
                 }, 500);
               } else {
+                if(this.isClickSave){
+                  return this.$Message.error("请稍后订单处理中...");
+                }
+                this.isClickSave = true;
                 let res = await getSubmitList(data);
+                this.isClickSave = false;
                 if (res.code === 0) {
                   this.$Message.success("提交成功");
                   this.$parent.$parent.isAdd = false;

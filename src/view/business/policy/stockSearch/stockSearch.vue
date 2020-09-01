@@ -469,7 +469,7 @@
           size="small"
           show-sizer
           show-total
-          :page-size-opts="[200,300,400]"
+          :page-size-opts="[10,20,30,50]"
         ></Page>
         <Page
           v-if="tabIndex == 1"
@@ -482,7 +482,7 @@
           size="small"
           show-sizer
           show-total
-          :page-size-opts="[200,300,400]"
+          :page-size-opts="[10,20,30,50]"
         ></Page>
         <Page
           v-if="tabIndex == 2"
@@ -586,7 +586,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 200
+          size: 10
         }
       },
       //批次库存的数据
@@ -595,7 +595,7 @@ export default {
         page: {
           num: 1,
           total: 0,
-          size: 200
+          size: 10
         },
         //数据
         dataTwo: []
@@ -827,7 +827,7 @@ export default {
       this.searchForm1.old = arr[1] || "";
       this.getStoreHoure();
       this.getBand(); //获取品牌
-      this.getAllStocks(); //table请求
+      //this.getAllStocks(); //table请求
       this.getColumns();
     },
     //搜索
@@ -960,12 +960,12 @@ export default {
     setTab(index) {
       this.tabIndex = index;
       this.showSearch = this.shopkeeper == 1 || index == 0;
-      if (index==1&&this.contentTwo.dataTwo.length==0){
-        this.getLotStocks(); //获取批次
-      }
-      if(index==2&&this.templateData.length==0){
-        this.getTemplateList();
-      }
+      // if (index==1&&this.contentTwo.dataTwo.length==0){
+      //   this.getLotStocks(); //获取批次
+      // }
+      // if(index==2&&this.templateData.length==0){
+      //   this.getTemplateList();
+      // }
       this.$nextTick(()=>{
         this.$refs.xTable3.recalculate();
         this.$refs.xTable2.recalculate();

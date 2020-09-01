@@ -115,7 +115,7 @@
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库'">
           <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
-              <span style="font-size: 12px">kOrG:</span>
+              <span style="font-size: 12px">{{kOrG}}:</span>
               <span style="font-size: 12px">{{onelist.guestName}}</span>
             </p>
             <p>
