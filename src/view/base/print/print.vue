@@ -375,8 +375,8 @@
         if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
           this.remove_ie_header_and_footer();
         }
-        // window.print();
-        // window.close();
+        window.print();
+        window.close();
       },
       //去除页眉页脚
       remove_ie_header_and_footer() {
