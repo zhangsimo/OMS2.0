@@ -149,7 +149,35 @@
             <p style="width:33%"><span style="font-size: 12px">移仓日期:</span> <span style="font-size: 12px">{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单' ">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="onelist.name=='调拨申请'">
+          <Col span="12" style="padding:0 2px;border-right: 1px #000000 solid;">
+            <p>
+              <span style="font-size: 12px">{{kOrG}}:</span>
+              <span style="font-size: 12px">{{onelist.guestName}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">地址:</span>
+              <span style="font-size: 12px">{{onelist.guestAddr}}</span>
+            </p>
+          </Col>
+          <Col span="7" style="padding:0 2px;border-right: 1px #000000 solid;">
+            <p>
+              <span style="font-size: 12px">联系人:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:''}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">联系电话:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:''}}</span>
+            </p>
+          </Col>
+          <Col span="5">
+            <p>
+              <span style="font-size: 12px">仓库:</span>
+              <span style="font-size: 12px">{{onelist.storeName}}</span>
+            </p>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单'&& onelist.name!='调拨申请' ">
           <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">{{kOrG}}:</span>
@@ -226,7 +254,7 @@
             <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
             <td style="width:30px;overflow: hidden;white-space:nowrap;">{{item.unit}}</td>
-            <td style="width:40px !important;">{{item.orderQty || item.acceptQty || item.trueQty}}</td>
+            <td style="width:40px !important;">{{item.orderQty || item.acceptQty || item.trueQty||item.applyQty}}</td>
             <td style="width:60px !important;" v-if="priceShow">{{item.orderPrice}}</td>
             <td style="width:65px !important;" v-if="priceShow">{{item.orderAmt}}</td>
             <td style="width:80px !important;">{{item.storeShelf}}</td>
@@ -241,7 +269,7 @@
           </Col>
           <Col style="border-right: 1px #000000 solid;padding:2px;width:160px">
             <span>总数:</span>
-            <span>{{onelist.orderQty}}</span>
+            <span>{{onelist.orderQty||onelist.totalNum}}</span>
           </Col>
           <Col style="padding:2px;width: 200px;">
             <span>合计:</span>
@@ -347,8 +375,8 @@
         if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
           this.remove_ie_header_and_footer();
         }
-        window.print();
-        window.close();
+        // window.print();
+        // window.close();
       },
       //去除页眉页脚
       remove_ie_header_and_footer() {
@@ -362,6 +390,7 @@
         }
       },
       async openModal(order) {
+        console.log(order)
         if (order.id) {
           let data = {};
           data.id = order.id;
