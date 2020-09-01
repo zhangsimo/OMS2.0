@@ -191,10 +191,10 @@ export default {
     return {
       page: {
         page: 0,
-        size: 1000,
+        size: 10,
         total: 0
       },
-      pageOpts: [1000, 2000, 3000, 5000],
+      pageOpts: [10, 20, 30, 50],
       tableDataAll: [],
       tableData: [],
       searchData:{}
