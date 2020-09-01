@@ -311,11 +311,11 @@ export default {
     return {
       page: {
         num: 1,
-        size: 1000,
+        size: 10,
         total: 0
       },
       body: {},
-      pageOpts: [1000, 2000, 3000, 5000],
+      pageOpts: [10, 20, 30, 50],
       tableData: [],
       total: {}
     };
