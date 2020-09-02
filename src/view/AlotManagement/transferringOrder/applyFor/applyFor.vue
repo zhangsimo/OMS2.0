@@ -626,12 +626,12 @@
                 if (valid) {
                   await this.$refs.xTable.validate();
                     let data = {}
-                    for (var i = 0; i < this.getArray.length; i++) {
-                      if (this.getArray[i].id == this.formPlan.guestName) {
-                        data.guestOrgid = this.getArray[i].isInternalId;
-                        data.guestId = this.getArray[i].id;
-                      }
-                    }
+                    // for (var i = 0; i < this.getArray.length; i++) {
+                    //   if (this.getArray[i].id == this.formPlan.guestName) {
+                    //     data.guestOrgid = this.getArray[i].isInternalId;
+                    //     data.guestId = this.getArray[i].id;
+                    //   }
+                    // }
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
