@@ -772,7 +772,7 @@ export default {
         })
         if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
           this.$nextTick(() => {
-            this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('cz'))
+            //this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('cz'))
             this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('stockQty'))
           })
         } else {
