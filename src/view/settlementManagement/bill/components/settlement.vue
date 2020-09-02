@@ -359,10 +359,10 @@ export default {
                 onOk: async () => {
                   let res = await getHedging(obj)
                   if (res.code === 0){
-                    this.Settlement = false;
                     this.$message.success("发票对冲申请单");
                     this.$emit('getNewList')
                   }
+                  this.Settlement = false;
                 },
                 onCancel: () => {
                   this.Settlement = false;

@@ -6,7 +6,8 @@ import upphoto from "../Upphoto";
 import flowbox from "../Flow";
 import {
   getDictionary,
-  getExpSve
+  getExpSve,
+  getOtherPeople
 } from "_api/documentApproval/ExpenseReimbursement";
 import {getThisAllList, getBackList , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
@@ -240,14 +241,25 @@ export default {
     // },
     //收款人账号搜索框
     async getOptionsList(query) {
-      if (query !== "") {
+      if (query.trim() !== "") {
         let data = {}
         data.accountName = query
         data.page = 0
         data.size = 100
-        let res = await getBackList(data)
+        console.log(this.formInline.accountType , 112)
+        let res = {}
+        if (this.formInline.accountType) {
+           res = await getBackList(data)
+        }else {
+           res = await getOtherPeople(data)
+        }
         if (res.code == 0) {
-          this.options1 = res.data.content || []
+          if (this.formInline.accountType) {
+            this.options1 = res.data.content || []
+          }else {
+            this.options1 = res.data.content || []
+            this.options1.map( item =>  item.accountBankNo = item.accountNumber )
+          }
         }
       } else {
         this.options1 = [];

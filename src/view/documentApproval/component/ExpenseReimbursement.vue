@@ -78,7 +78,7 @@
           keep-source
           show-footer
           size="mini"
-          show-overflow
+          show-overflow="title"
           align="center"
           height="200"
           :footer-method="footerMethod"

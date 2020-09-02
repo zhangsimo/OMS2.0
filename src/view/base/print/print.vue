@@ -390,7 +390,7 @@
         }
       },
       async openModal(order) {
-        console.log(order)
+        // console.log(order)
         if (order.id) {
           let data = {};
           data.id = order.id;
