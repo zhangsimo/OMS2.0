@@ -31,19 +31,17 @@ export default {
         return Promise.reject(new Error("核销金额不能大于借支金额"));
       }
     };
-    const notaxValid = rows => {
-      if (
-        rows.cellValue &&
-        rows.row.totalAmt &&
-        rows.row.taxAmt &&
-        rows.cellValue !=
-        this.$utils.subtract(rows.row.totalAmt, rows.row.taxAmt)
-      ) {
-        return Promise.reject(new Error("不含税金额计算错误"));
-      }
-    };
+    const notaxValid = ({cellValue ,row }) => {
+      return new Promise((resolve, reject) => {
+        if ( !cellValue || cellValue != this.$utils.subtract(row.totalAmt, row.taxAmt)) {
+          reject(new Error('不含税金额计算错误'))
+        } else {
+          resolve()
+        }
+      })
+    }
     const taxRateCodeValid = ({cellValue, row}) => {
-      if (row.billTypeId && row.billTypeId != "010102") {
+      if (row.billTypeId && row.billTypeId == "010103") {
         if (cellValue == "TR001") {
           return Promise.reject(new Error("费率必填"));
         }
@@ -83,7 +81,7 @@ export default {
       taxRate: [], //税率
       //费用支出表格的数据校验
       validRules: {
-        summary: [{required: true, message: "摘要必填"}],
+        summary: [{required: true, message: "摘要必填" ,trigger:'blur'}],
         taxRateCode: [{validator: taxRateCodeValid}],
         accountEntry: [{required: true, message: "入账科目必填"}],
         totalAmt: [
@@ -526,54 +524,8 @@ export default {
 
     //保存审核
     async save(type) {
-      // console.log(this.formInline.expenseDetails,1111)
-      if (this.formInline.expenseDetails[0].billTypeId == "010101") {
-        // console.log(this.formInline.expenseDetails[0].billTypeId,111)
-        // const roleValid = ({cellValue, row}) => {
-        //   if (cellValue && +row.applyAmt < +cellValue) {
-        //     return Promise.reject(new Error("核销金额不能大于借支金额"));
-        //   }
-        // };
-        this.validRules.taxRateCode=[]
-        this.validRules.taxAmt = []
-        this.validRules.noTaxAmt = []
-      }else{
-        const taxRateCodeValid = ({cellValue, row}) => {
-          if (row.billTypeId && row.billTypeId != "010102") {
-            if (cellValue == "TR001") {
-              return Promise.reject(new Error("费率必填"));
-            }
-          }
-        };
-        const notaxValid = rows => {
-          if (
-            rows.cellValue &&
-            rows.row.totalAmt &&
-            rows.row.taxAmt &&
-            rows.cellValue !=this.$utils.subtract(rows.row.totalAmt, rows.row.taxAmt)
-          ) {
-            return Promise.reject(new Error("不含税金额计算错误"));
-          }
-        };
-        this.validRules.taxRateCode=[{validator: taxRateCodeValid}]
-        this.validRules.taxAmt = [
-          {required: true, message: "税额必填"},
-          {
-            pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
-            message: "最多保留2位小数"
-          }
-        ]
-        this.validRules.noTaxAmt = [
-          {required: true, message: "不含税金额必填"},
-          {
-            pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
-            message: "最多保留2为小数"
-          },
-          {validator: notaxValid}
-        ]
-      }
       const errMap = await this.$refs.xTable
-        .fullValidate()
+        .validate()
         .catch(errMap => errMap);
       const errTwo = await this.$refs.documentTable
         .fullValidate()

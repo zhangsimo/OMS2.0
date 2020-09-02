@@ -235,7 +235,7 @@
 
 <script>
 import moment from "moment";
-import quickDate from "@/components/getDate/dateget.vue";
+import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import approval from "@/view/settlementManagement/bill/Popup/approval";
 import { goshop } from "@/api/settlementManagement/fundsManagement/capitalChain";
 import { approvalStatus } from "_api/base/user";
@@ -292,7 +292,7 @@ export default {
   data() {
     return {
       value: [], //日期控件的数组
-      Reconciliationtype: "99", //申请状态
+      Reconciliationtype: "1", //申请状态
       Reconciliationlist: [
         {
           value: "99",
@@ -453,6 +453,11 @@ export default {
     if (this.$route.query.applyNo !== undefined) {
       this.searchTypeValue = this.$route.query.applyNo;
       this.getList();
+    }else{
+      this.$nextTick(()=>{
+        this.$refs.quickDate.searchQuick = "0";
+        this.$refs.quickDate.getval(0);
+      })
     }
     this.getUser();
     this.getStroe();

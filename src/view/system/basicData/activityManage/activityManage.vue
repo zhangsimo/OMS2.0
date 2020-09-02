@@ -155,6 +155,7 @@
             highlight-row
             :columns="columns1"
             border
+            :loading="loading2"
             :data="data1"
             max-height="290"
           ></Table>
@@ -792,6 +793,7 @@ export default {
       ],
       data5: [],
       data6: [],
+      loading2:false,
     };
   },
   mounted() {
@@ -804,7 +806,7 @@ export default {
       getActApplicationTable().then(res => {
         // console.log(res)
         if (res.code === 0) {
-          this.data1 = res.data;
+          this.data1 = (res.data||[]).filter(item => item.state!='已取消');
         }
       });
     },
@@ -818,8 +820,10 @@ export default {
           data[key] = this.getDataObj[key];
         }
       }
+      this.loading2 = true;
       getSelectActApply(data).then(res => {
-        this.data1 = res.data;
+        this.loading2 = false;
+        this.data1 = (res.data||[]).filter(item => item.state!='已取消');
         this.data4 = [];
       });
       this.checkedData.length = 0;

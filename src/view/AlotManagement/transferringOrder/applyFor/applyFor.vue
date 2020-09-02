@@ -1037,6 +1037,7 @@
         setRow(row) {
           // this.leftgetList()
           this.rowOrgId = row.orgid
+          this.selectRowId = row.id;
           this.mainId = row.id
           this.guestidId = row.guestId
           this.datadata = row;
@@ -1204,7 +1205,7 @@
         window.onresize = () => {
           this.getDomHeight();
         };
-          this.leftgetList();
+          // this.leftgetList();
           this.warehouse();
           // this.getArrayParams();
           // this.selecQuery();
