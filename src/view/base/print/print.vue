@@ -149,7 +149,35 @@
             <p style="width:33%"><span style="font-size: 12px">移仓日期:</span> <span style="font-size: 12px">{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单' ">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="onelist.name=='调拨申请'||onelist.name=='调拨出库'">
+          <Col span="12" style="padding:0 2px;border-right: 1px #000000 solid;">
+            <p>
+              <span style="font-size: 12px">{{kOrG}}:</span>
+              <span style="font-size: 12px">{{onelist.guestName}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">地址:</span>
+              <span style="font-size: 12px">{{onelist.guestAddr}}</span>
+            </p>
+          </Col>
+          <Col span="7" style="padding:0 2px;border-right: 1px #000000 solid;">
+            <p>
+              <span style="font-size: 12px">联系人:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:onelist.logisticsRecord?onelist.logisticsRecord.receiver:''}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">联系电话:</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:onelist.logisticsRecord?onelist.logisticsRecord.receiverMobile:''}}</span>
+            </p>
+          </Col>
+          <Col span="5">
+            <p>
+              <span style="font-size: 12px">仓库:</span>
+              <span style="font-size: 12px">{{onelist.storeName}}</span>
+            </p>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;" v-if="kOrG!='' && onelist.name!='调入退回申请' && onelist.name!='调出退回入库' && onelist.name!='采购退货单' && onelist.name!='盘点单'&& onelist.name!='调拨申请'&&onelist.name!='调拨出库'">
           <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">{{kOrG}}:</span>
@@ -211,8 +239,8 @@
             <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>
             <th style="width:30px;overflow: hidden;white-space:nowrap;">单位</th>
             <th style="width:40px !important;">数量</th>
-            <th style="width:60px !important;">单价</th>
-            <th style="width:65px !important;">金额</th>
+            <th style="width:60px !important;" v-if="priceShow">单价</th>
+            <th style="width:65px !important;" v-if="priceShow">金额</th>
             <th style="width:80px !important;">仓位</th>
           </tr>
           </thead>
@@ -226,9 +254,9 @@
             <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
             <td style="width:30px;overflow: hidden;white-space:nowrap;">{{item.unit}}</td>
-            <td style="width:40px !important;">{{item.orderQty}}</td>
-            <td style="width:60px !important;">{{item.orderPrice}}</td>
-            <td style="width:65px !important;">{{item.orderAmt}}</td>
+            <td style="width:40px !important;">{{item.orderQty || item.acceptQty || item.trueQty||item.applyQty}}</td>
+            <td style="width:60px !important;" v-if="priceShow">{{item.orderPrice}}</td>
+            <td style="width:65px !important;" v-if="priceShow">{{item.orderAmt}}</td>
             <td style="width:80px !important;">{{item.storeShelf}}</td>
           </tr>
           </tbody>
@@ -241,7 +269,7 @@
           </Col>
           <Col style="border-right: 1px #000000 solid;padding:2px;width:160px">
             <span>总数:</span>
-            <span>{{onelist.orderQty}}</span>
+            <span>{{onelist.orderQty||onelist.totalNum}}</span>
           </Col>
           <Col style="padding:2px;width: 200px;">
             <span>合计:</span>
@@ -268,6 +296,16 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid" v-else>
             <span style="font-size: 12px">审核人:</span>
             <span style="font-size: 12px">{{onelist['stockShift'].createUname}}</span>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;color:#000;" v-if="onelist.name=='盘点单'">
+          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
+            <span>制单人:</span>
+            <span>{{onelist.createUname}}</span>
+          </Col>
+          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
+            <span>盘点人:</span>
+            <span>{{onelist.orderMan}}</span>
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
@@ -308,13 +346,22 @@
         onelist: {}, //打印数据
         num: "12323.09",
         num2: 78723,
-        kOrG:"客户"
+        kOrG:"客户",
       };
     },
     created() {
       this.openModal(this.$route.query)
       // this.onelist=this.$route.query
       // console.log(this.$route.query.id,111111)
+    },
+    computed:{
+      priceShow(){
+        if(this.onelist.name.endsWith('订单') || this.onelist.name.endsWith('退货单') || this.onelist.name.endsWith('退货') || this.onelist.name.endsWith('预售单')){
+          return true
+        }else{
+          return false
+        }
+      }
     },
     updated() {
       this.$nextTick( () => {
@@ -343,6 +390,7 @@
         }
       },
       async openModal(order) {
+        // console.log(order)
         if (order.id) {
           let data = {};
           data.id = order.id;
@@ -628,24 +676,20 @@
                 this.onelist.detailList=this.onelist.enterOrder.voList
               }
               break;
-            // case "smsInventory": //盘点单
-            //   res = await smsInventory.getprintList(data);
-            //   if(res.code==0){
-            //     this.onelist = res.data;
-            //     this.onelist.name = order.name
-            //     this.onelist.userCompany=this.onelist.guestVO.fullName
-            //     this.onelist.serviceId=this.onelist.enterOrder.serviceId
-            //     this.onelist.addr=this.onelist.guestVO.addr || this.onelist.guestVO.streetAddress
-            //     this.onelist.tel=this.onelist.guestVO.tel
-            //     this.onelist.printDate = tools.transTime(new Date());
-            //     this.kOrG="调出方"
-            //     this.onelist.guestAddr=this.onelist.applyGuest.addr || this.onelist.applyGuest.streetAddress
-            //     this.onelist.orderDate=this.onelist.enterOrder.orderDate
-            //     this.onelist.contactor=this.onelist.applyGuest.contactor
-            //     this.onelist.contactorTel=this.onelist.applyGuest.tel
-            //     this.onelist.detailList=this.onelist.enterOrder.voList
-            //   }
-            //   break;
+            case "smsInventory": //盘点单
+              res = await smsInventory.getprintList(data);
+              if(res.code==0){
+                let repData = res.data || {}
+                this.onelist = repData
+                this.onelist.name = order.name
+                this.onelist.userCompany=this.onelist.orgName
+                this.onelist.addr=this.onelist.orgAddr
+                this.onelist.tel=this.onelist.orgTel
+                this.onelist.printDate = tools.transTime(new Date());
+                this.onelist.orderDate=this.onelist.createTime
+                this.onelist.detailList=this.onelist.detailVOList
+              }
+              break;
           }
         } else {
           this.$message.error("至少选择一条信息");
@@ -722,7 +766,7 @@
 
   table.gridtable th {
     border-width: 1px;
-    padding: 2px;
+    padding:4px 2px;
     border-style: solid;
     border-color: #000000;
     background-color: #dedede;
@@ -730,7 +774,7 @@
 
   table.gridtable td {
     border-width: 1px;
-    padding: 1px;
+    padding:4px 2px;
     border-style: solid;
     border-color: #000000;
     background-color: #ffffff;

@@ -13,7 +13,8 @@
             />
             <Select
               v-model="form.partBrandCode"
-              class="w100 mr10"
+              class="w200 mr10"
+              filterable
               clearable
               placeholder="--品牌--"
             >
@@ -26,7 +27,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Select v-model="form.storeId" class="w100 mr10" clearable>
+            <Select v-model="form.storeId" class="w150 mr10" clearable>
               <Option
                 v-for="item in storeArray"
                 :disabled="item.isDisabled"

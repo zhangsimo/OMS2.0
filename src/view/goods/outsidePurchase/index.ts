@@ -473,12 +473,18 @@ export default class OutsidePurchase extends Vue {
     }
     this.isClickSave = true;
     let res = await api.outsideSaveDraft(data);
-    this.isClickSave = false;
     if (res.code == 0) {
       this.$Message.success('保存成功');
+      this.resetForm();
       this.getListData();
       this.isAdd = true;
     }
+    this.isClickSave = false;
+  }
+
+  private resetForm(){
+    const ref: any = this.$refs['formplanref']
+    ref.resetFields();
   }
 
   // 提交
@@ -503,23 +509,24 @@ export default class OutsidePurchase extends Vue {
         data.details = this.tableData;
 
         let zerolength = data.details.filter(el => el.orderPrice <= 0)
+        if(this.isClickSave){
+          return this.$Message.error("正在处理单据请稍后...");
+        }
         if(zerolength.length > 0) {
           setTimeout(()=>{
             this.$Modal.confirm({
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',
               onOk: async () => {
-                if(this.isClickSave){
-                  return this.$Message.error("正在处理单据请稍后...");
-                }
                 this.isClickSave = true;
                 let res = await api.outsideSaveCommit(data);
-                this.isClickSave = false;
                 if (res.code == 0) {
                   this.$Message.success('保存成功');
+                  this.resetForm();
                   this.getListData();
                   this.isAdd = true;
                 }
+                this.isClickSave = false;
               },
               onCancel:() => {
                 this.isAdd = true;
@@ -527,17 +534,15 @@ export default class OutsidePurchase extends Vue {
             })
           },500)
         }else{
-          if(this.isClickSave){
-            return this.$Message.error("正在处理单据请稍后...");
-          }
           this.isClickSave = true;
           let res = await api.outsideSaveCommit(data);
-          this.isClickSave = false;
           if (res.code == 0) {
             this.$Message.success('保存成功');
+            this.resetForm();
             this.getListData();
             this.isAdd = true;
           }
+          this.isClickSave = false;
         }
       },
       onCancel: () => {
@@ -629,6 +634,7 @@ export default class OutsidePurchase extends Vue {
         let res: any = await api.outsideSaveObsolete(this.selectTableRow.id);
         if (res.code == 0) {
           this.$Message.success('作废成功');
+          this.resetForm();
           this.getListData();
         }
       },
