@@ -88,7 +88,7 @@
                           ref="formPlan"
                           :rules="ruleValidate"
                           :label-width="120">
-                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem w400">
                         <Row >
                           <Col span="22">
                             <!--<Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />-->
@@ -111,7 +111,7 @@
                         <DatePicker
                           type="datetime"
                           format="yyyy-MM-dd HH:mm:ss"
-                          style="width: 160px"
+                          style="width: 200px"
                           placeholder="请选择调拨申请日期"
                           :options="options1"
                           v-model="formPlan.orderDate"
@@ -120,7 +120,7 @@
                       </FormItem>
                       <FormItem class="formItem" label="备注：" prop="remark">
                         <Tooltip :content="formPlan.remark">
-                        <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                        <Input style="width: 280px" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                         </Tooltip>
                       </FormItem>
                       <FormItem label="申请人：" prop="planner">
@@ -128,7 +128,7 @@
                       </FormItem>
                       <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
                         <Tooltip :content="formPlan.serviceId">
-                        <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
+                        <Input class="w200" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
                         </Tooltip>
                       </FormItem>
                     </Form>
