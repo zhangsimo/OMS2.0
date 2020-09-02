@@ -1010,8 +1010,8 @@ export default {
       if (status == "edit") {
         this.applicationDialog = true;
         let item = this.checkedData[0];
-        this.single = item.isBelowCost === 0 ? false : true;
-        this.single2 = item.isVender === 0 ? false : true;
+        this.single = item. isVender=== 0 ? false : true;
+        this.single2 = item. isBelowCost === 0 ? false : true;
         this.formValidate.remark = item.remark;
         editAndSubmit({ applyId: this.tableFormDate.applyId }).then(res => {
           // console.log(res)
