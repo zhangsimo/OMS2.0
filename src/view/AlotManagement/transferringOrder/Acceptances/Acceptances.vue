@@ -23,10 +23,10 @@
           </div>
           <div class="db">
             <!--<Input v-model="productName" placeholder="请输入申请公司" style="width: 120px" class="mr10"></Input>-->
-            <Select v-model="productName" class="w100 mr10" @on-change="search">
+            <Select filterable v-model="productName" class="w200 mr10" @on-change="search">
               <Option
                 v-for="item in purchaseNameArr"
-                :value="item.orgid"
+                :value="item.id"
                 :key="item.id"
               >{{item.shortName}}</Option>
             </Select>
@@ -40,8 +40,7 @@
     <section class="con-box">
       <div class="boxbox">
         <div class="top">
-          <div>
-            <div class="pl10 pr10 Tablebox">
+            <div class="Tablebox Tablebox1">
               <vxe-table
                 class="aaabox"
                 border
@@ -50,9 +49,11 @@
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 @current-change="clickOnesList"
                 highlight-hover-row
+                height="auto"
                 highlight-current-row
                 @edit-actived="editActivedEvent"
                 @edit-closed="editClosedEvent"
+                size="mini"
               >
                 <vxe-table-column  show-overflow="tooltip" title="序号" type="index" width="60"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field title="操作">
@@ -64,7 +65,7 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="orgName" title="申请公司"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="serviceId" title="调拨申请单号"></vxe-table-column>
+                <vxe-table-column width="200"  show-overflow="tooltip" field="serviceId" title="调拨申请单号"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="status" title="状态">
                   <template v-slot="{row,rowIndex}">
                     <span>{{row.status.name}}</span>
@@ -76,32 +77,33 @@
                 <vxe-table-column  show-overflow="tooltip" field="acceptUname" title="受理人"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="acceptTime" title="受理日期"></vxe-table-column>
               </vxe-table>
-              <Page
-                class-name="page-con"
-                :current="topRight.page.num"
-                :total="topRight.page.total"
-                :page-size="topRight.page.size"
-                @on-change="changePageTop"
-                @on-page-size-change="changeSizeTop"
-                show-sizer
-                show-total
-              ></Page>
+
             </div>
-          </div>
+            <Page
+              class-name="page-con"
+              :current="topRight.page.num"
+              :total="topRight.page.total"
+              :page-size="topRight.page.size"
+              @on-change="changePageTop"
+              @on-page-size-change="changeSizeTop"
+              show-sizer
+              show-total
+            ></Page>
         </div>
         <div class="bottom pt10">
-          <div class="pl10 pr10 Tablebox">
+          <div class="Tablebox2">
             <vxe-table
               class="BottomBox"
               border
               resizable
               show-footer
-              :height="335"
+              height="auto"
               :data="Bottom.tbdata"
               :edit-config="{trigger: 'click', mode: 'cell'}"
               :footer-method="footerMethod"
               @edit-actived="editActivedEvent"
               @edit-closed="editClosedEvent"
+              size="mini"
             >
               <vxe-table-column  show-overflow="tooltip" title="序号" type="index" width="60"></vxe-table-column>
               <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码"></vxe-table-column>
@@ -350,7 +352,7 @@ export default {
   align-items: center;
 }
 .boxbox {
-  height: 700px;
+  height: 100%;
   background: #ffffff;
 }
 .top,
@@ -361,8 +363,10 @@ export default {
 .top {
   border-bottom: 1px solid lightgray;
 }
-.Tablebox {
-  height: 320px;
-  overflow-y: auto;
+.Tablebox2 {
+  height: calc(100% - 10px);
 }
+  .Tablebox1{
+    height: calc(100% - 60px);
+  }
 </style>

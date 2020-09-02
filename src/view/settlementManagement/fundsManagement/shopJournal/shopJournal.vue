@@ -10,7 +10,7 @@
           <div class="db ml15">
             <span>期间：</span>
             <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"
-                         @on-change="dateChange"></Date-picker>
+                         @on-change="dateChange" clearable></Date-picker>
           </div>
           <div class="db ml15">
             <span>区域：</span>
@@ -468,7 +468,7 @@
 </template>
 
 <script>
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dataget2.vue";
   import {creat} from '../../components'
   import importXLS from '@/view/settlementManagement/components/importXLS'
   import artificial from '../../components/artificial'
@@ -744,9 +744,11 @@
         let data = {}
         data.page = this.page.num - 1
         data.size = this.page.size
-        data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ''
+        data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ""
         data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
-
+        if(!data.startTime){
+          return this.$Message.error("请选择日期")
+        }
         if (this.model1 != 0) {
           data.areaId = this.model1
         }
@@ -771,16 +773,16 @@
         this.allMoneyList = {}
         let res = await goList(data)
         if (res.code === 0) {
-          if (res.data.content.length > 0) {
-            this.allMoneyList = res.data.content[0].moneyList
+          if (res.data.page.content.length > 0) {
+            this.allMoneyList = res.data.moneyList
           }
-          this.page.total = res.data.totalElements;
-          this.tableData = res.data.content
+          this.page.total = res.data.page.totalElements;
+          this.tableData = res.data.page.content
           this.tableData1 = []
           this.tableData2 = []
           this.tableData3 = []
           this.tableData4 = []
-          res.data.content.forEach(item => {
+          res.data.page.content.forEach(item => {
             if (item.collateState) {
               this.tableData1.push(item)
             } else {
@@ -812,7 +814,7 @@
           return this.$Message.error('请选择一条数据')
         }
         this.oneList = this.selectTableList[0];
-        console.log(this.oneList)
+        // console.log(this.oneList)
         // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
         if (this.oneList.collateState == 1) return this.$Message.error('只能修改未核销数据')
         // this.$refs.changeModal.formCustom = this.selectTableList[0]
