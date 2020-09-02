@@ -75,9 +75,10 @@
           resizable
           auto-resize
           ref="xTable"
+          keep-source
           show-footer
-          show-overflow
           size="mini"
+          show-overflow
           align="center"
           height="200"
           :footer-method="footerMethod"
@@ -192,11 +193,11 @@
           ref="documentTable"
           show-footer
           show-overflow
+          keep-source
           size="mini"
           align="center"
           :footer-method="documentFooterMethod"
           :data="details"
-          :edit-rules="validRules"
           :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
           @edit-actived="editisDisabled"
         >

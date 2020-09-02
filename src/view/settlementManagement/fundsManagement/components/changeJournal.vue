@@ -43,15 +43,13 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="对应科目" prop="mateAccountCode">
-            <Select v-model="formCustom.mateAccountCode" style="width:150px" disabled>
-              <Option v-for="item in subJectList" :value="item.id" :key="item.id">{{ item.titleName }}</Option>
-            </Select>
+          <FormItem label="对应科目" prop="mateAccountName">
+            <Input v-model="formCustom.mateAccountName" class="w150" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="发生日期" prop="createTime">
-            <DatePicker type="date" v-model="formCustom.createTime" style="width: 150px"></DatePicker>
+            <DatePicker type="datetime" v-model="formCustom.createTime" :options="options1" style="width: 150px"></DatePicker>
           </FormItem>
         </Col>
         <Col span="12">
@@ -138,6 +136,11 @@
       return {
         modalShow: false, //模态框状态
         formCustom: {},//form表单数据
+        options1: {
+          disabledDate(date) {
+            return date && date.valueOf() > Date.now();
+          }
+        },
         ruleCustomRalus: {
           areaId: [
             {required: true, message: '所属区域必选', trigger: 'change'}
@@ -158,7 +161,7 @@
             {required: true, message: '对应科目必选', trigger: 'change'}
           ],
           createTime: [
-            {required: true, type: 'date', message: '日期为必选', trigger: 'change'}
+            {required: true,type:"date" ,message: '日期为必选', trigger: 'change'}
           ],
           incomeMoney: [
             {required: true, message: '只能输入数字且不能为空', validator: NumberValue, trigger: 'blur'}
@@ -202,6 +205,7 @@
         setTimeout(()=>{
           this.modalShow = true
           this.formCustom = this.list
+          // console.log(this.formCustom.mateAccountCode,11111)
         },0)
       },
       //获取区域
@@ -209,7 +213,9 @@
         let res = await are()
         if (res.code === 0) return this.areaList = res.data
       },
+      disabledDate(){
 
+      },
       //获取所属门店
       async getShopList() {
         let data = {}
@@ -249,6 +255,7 @@
         let res = await getSubjectType()
         if (res.code === 0) {
           this.subJectList = res.data
+          // console.log(this.subJectList,1111)
           this.formCustom.mateAccountCode = res.data[0].id
         }
       },
@@ -288,7 +295,7 @@
         this.$refs.formCustom.validate(async (valid) => {
           if (valid) {
             let req = {...this.formCustom}
-            req.createTime = moment(req.createTime).startOf('day').format("YYYY-MM-DD HH:mm:ss")
+            req.createTime = moment(req.createTime).format("YYYY-MM-DD HH:mm:ss")
             let res = await changeSave(req)
             if (res.code === 0) {
               this.$Message.success('修改成功')
