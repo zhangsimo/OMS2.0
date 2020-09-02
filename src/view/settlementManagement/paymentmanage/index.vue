@@ -64,15 +64,56 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table
-          max-height="400"
-          highlight-row
+        <!--<Table-->
+          <!--max-height="400"-->
+          <!--highlight-row-->
+          <!--border-->
+          <!--:columns="columns"-->
+          <!--:data="data"-->
+          <!--@on-row-click="selete"-->
+          <!--ref="summary"-->
+        <!--&gt;</Table>-->
+        <vxe-table
           border
-          :columns="columns"
+          show-overflow="title"
+          max-height="400"
+          auto-resize
+          size="mini"
           :data="data"
-          @on-row-click="selete"
           ref="summary"
-        ></Table>
+          :loading="data1Loading"
+          highlight-current-row
+          @current-change="selete"
+        >
+          <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
+          <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
+          <vxe-table-column field="area" title="区域" align="center" width="70"></vxe-table-column>
+          <vxe-table-column field="orgName" title="门店" align="center" width="140"></vxe-table-column>
+          <vxe-table-column field="guestName" title="客户/供应商名称" align="center" width="140"></vxe-table-column>
+          <vxe-table-column field="guestTypeName" title="客户/供应商类别" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="paymentTypeName" title="对账类别" align="center" width="80"></vxe-table-column>
+          <vxe-table-column field="stockAmtIn" title="采购入库" align="center" width="80"></vxe-table-column>
+          <vxe-table-column field="stockAmtOut" title="采购退货" align="center" width="140"></vxe-table-column>
+          <vxe-table-column field="salesAmtOut" title="销售出库" align="center" width="140"></vxe-table-column>
+          <vxe-table-column field="salesAmtReturn" title="销售退货" align="center" width="140"></vxe-table-column>
+          <vxe-table-column field="duePayableAmt" title="应收应付金额" align="center" width="140"></vxe-table-column>
+          <vxe-table-column field="receivedAmt" title="已对账未收金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="paidAmt" title="已对账未付金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column
+            field="reconciledSumAmt"
+            title="已对账合计"
+            align="center"
+            width="100"
+          >
+
+          </vxe-table-column>
+          <vxe-table-column field="uncollectedAmt" title="未对账应收金额" align="center" width="120">
+          </vxe-table-column>
+          <vxe-table-column field="unpaidAmt" title="未对账应付金额" align="center" width="120">
+          </vxe-table-column>
+          <vxe-table-column field="unReconciledSumAmt" title="未对账合计" align="center" width="100">
+          </vxe-table-column>
+        </vxe-table>
         <Tabs v-model="detailedList" class="mt10" @click="tabName">
           <Tab-pane label="销售清单" name="key1">
             <Table
@@ -1998,12 +2039,14 @@ export default {
       // this.$refs.Monthlyreconciliation.modal = true;
       if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
         this.$refs.Monthlyreconciliation.modal = true;
+        this.$refs.Monthlyreconciliation.data1=[];
+        this.$refs.Monthlyreconciliation.data2=[];
       } else {
         this.$Message.warning("请选择要对账的数据");
       }
     },
     // 点击总汇表数据查询销售/采购清单
-    selete(data) {
+    selete({row}) {
       let date = {
         startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -2013,8 +2056,8 @@ export default {
           : ""
       };
 
-      this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
-      this.getDetailed(data, this.value);
+      this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
+      this.getDetailed(row, this.value);
     },
     // 查询出/入库单号明细
     async getList(obj) {
