@@ -41,7 +41,7 @@ export default {
       })
     }
     const taxRateCodeValid = ({cellValue, row}) => {
-      if (row.billTypeId && row.billTypeId != "010102") {
+      if (row.billTypeId && row.billTypeId == "010103") {
         if (cellValue == "TR001") {
           return Promise.reject(new Error("费率必填"));
         }
