@@ -148,6 +148,7 @@
           <div>
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-current-row
@@ -190,6 +191,7 @@
           <div>
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-current-row
@@ -232,6 +234,7 @@
           <div>
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-current-row

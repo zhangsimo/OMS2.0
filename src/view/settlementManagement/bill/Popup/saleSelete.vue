@@ -74,11 +74,11 @@ export default {
                 on: {
                   click: () => {
                     this.$refs.idDetailed.modal1 = true;
-                    this.$refs.idDetailed.modal1 = true;
+                    // this.$refs.idDetailed.modal1 = true;
                   }
                 }
               },
-              params.row.serviceId
+              params.row.accountNo
             );
           }
         },

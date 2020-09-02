@@ -166,6 +166,7 @@
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-hover-row
@@ -223,6 +224,7 @@
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-hover-row
@@ -280,6 +282,7 @@
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-hover-row
@@ -337,6 +340,7 @@
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               highlight-hover-row
@@ -394,6 +398,7 @@
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
+              resizable
               show-footer
               show-overflow
               stripe
