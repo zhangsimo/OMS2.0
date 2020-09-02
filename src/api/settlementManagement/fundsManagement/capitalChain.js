@@ -141,7 +141,7 @@ export function addSave(data){
   });
 }
 
-//获取当前科目
+//获取当前科目 =>只能获取库存现金
 export function getSubjectType (params){
   return axios.request({
     url: `${api.omsSettle}/cashAccountServer/financeAccountTitle`,
@@ -149,3 +149,8 @@ export function getSubjectType (params){
     params
   });
 }
+
+//获取当前科目
+
+
+
