@@ -59,3 +59,11 @@ export function getExpSve (data) {
   })
 }
 
+//模糊匹配外部人员
+export function getOtherPeople (params) {
+  return axios.request({
+    url: `${api.authApi}/authorityOutsideStaff/findOutsideAccount`,
+    method: 'get',
+    params
+  })
+}
