@@ -19,8 +19,9 @@
       <Input v-model="data.accountBankNo" style="width: 300px"/>
     </FormItem>
     <div style="paddingLeft:100px">
-      <input type="checkbox" v-model="data.taxpayerSign" name="taxpayerSign" id="taxpayerSign">
-      <label for="taxpayerSign">是否为一般纳税人</label>
+      <Checkbox v-model="data.taxpayerSign">是否为一般纳税人</Checkbox>
+      <!--<input type="checkbox" v-model="data.taxpayerSign" name="taxpayerSign" id="taxpayerSign">-->
+      <!--<label for="taxpayerSign">是否为一般纳税人</label>-->
     </div>
   </Form>
 </template>
