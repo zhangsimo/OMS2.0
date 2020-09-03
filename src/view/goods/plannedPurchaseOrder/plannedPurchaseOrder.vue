@@ -135,11 +135,11 @@
                             :disabled="isInput"
                             readonly
                           /> -->
-                          <GoodCus style="width: 120px" 
-                            :title="formPlanmain.guestName" 
-                            placeholder="请输入供应商" 
-                            :search-value="formPlanmain.guestName" 
-                            @throwName="throwNameFun" 
+                          <GoodCus style="width: 120px"
+                            :title="formPlanmain.guestName"
+                            placeholder="请输入供应商"
+                            :search-value="formPlanmain.guestName"
+                            @throwName="throwNameFun"
                             :disabled-prop="isInput">
                           </GoodCus>
                         </Tooltip>
@@ -367,7 +367,7 @@
                 :edit-config="{ trigger: 'click', mode: 'cell',activeMethod: activeMethodFun }"
               >
                 <vxe-table-column show-overflow="tooltip"
-                  type="index"
+                  type="seq"
                   width="60"
                   title="序号"
                   fixed="left"

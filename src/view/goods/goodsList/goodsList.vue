@@ -138,15 +138,15 @@
                     <Row class="w160">
                       <Col span="19">
                       <Tooltip :content="formPlan.supplyName">
-                        <GoodCus style="width: 120px" 
-                          :title="formPlan.supplyName" 
-                          placeholder="请输入供应商" 
-                          :search-value="formPlan.supplyName" 
-                          @throwName="throwNameFun" 
+                        <GoodCus style="width: 120px"
+                          :title="formPlan.supplyName"
+                          placeholder="请输入供应商"
+                          :search-value="formPlan.supplyName"
+                          @throwName="throwNameFun"
                           :disabled-prop="isinput">
                         </GoodCus>
                       </Tooltip>
-                      <!-- <Select v-model="formPlan.guestId" 
+                      <!-- <Select v-model="formPlan.guestId"
                           clearable
                           filterable
                           remote
@@ -384,7 +384,7 @@
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column show-overflow="tooltip" fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="60"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>

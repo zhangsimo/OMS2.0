@@ -92,7 +92,7 @@
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" title="操作">
             <template v-slot="{ row, rowIndex }">
               <Button type="text" @click="ruku">到货入库</Button>
@@ -193,7 +193,7 @@
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
 
           <!-- <vxe-table-column  show-overflow="tooltip" title="操作" width="80">
                 <template v-slot="{ row }">

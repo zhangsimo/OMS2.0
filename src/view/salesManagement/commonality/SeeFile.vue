@@ -13,7 +13,7 @@
           highlight-hover-row
           :data="allList.priceLever"
          >
-          <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field="strategyName" title="级别名称"></vxe-table-column>
           <vxe-table-column title="级别销价" >
             <template v-slot="{ row }">
@@ -44,7 +44,7 @@
           highlight-hover-row
           :data="allList.orgStock"
         >
-          <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="unit" title="单位" ></vxe-table-column>
@@ -66,7 +66,7 @@
           highlight-hover-row
           :data="allList.chainStock"
         >
-          <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field='partCode' title="配件编码"></vxe-table-column>
           <vxe-table-column field="companyName" title="公司名称" ></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" ></vxe-table-column>
@@ -85,7 +85,7 @@
           highlight-hover-row
           :data="allList.sellHistory"
         >
-          <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="companyName" title="公司" ></vxe-table-column>

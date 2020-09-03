@@ -37,7 +37,7 @@
             highlight-current-row
             :radio-config="{ trigger: 'row' }"
           >
-            <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+            <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
             <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
             <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
             <vxe-table-column field="receiveCompName" title="收货单位" width="100"></vxe-table-column>

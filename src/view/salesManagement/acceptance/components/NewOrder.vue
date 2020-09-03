@@ -70,7 +70,7 @@
           highlight-current-row
         >
           <vxe-table-column
-            type="index"
+            type="seq"
             title="序号"
           ></vxe-table-column>
           <vxe-table-column

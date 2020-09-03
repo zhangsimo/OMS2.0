@@ -55,7 +55,7 @@
                 @edit-closed="editClosedEvent"
                 size="mini"
               >
-                <vxe-table-column  show-overflow="tooltip" title="序号" type="index" width="60"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" title="序号" type="seq" width="60"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field title="操作">
                   <template v-slot="{row,rowIndex}">
                     <div v-show="row.status.value === 1">
@@ -105,7 +105,7 @@
               @edit-closed="editClosedEvent"
               size="mini"
             >
-              <vxe-table-column  show-overflow="tooltip" title="序号" type="index" width="60"></vxe-table-column>
+              <vxe-table-column  show-overflow="tooltip" title="序号" type="seq" width="60"></vxe-table-column>
               <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码"></vxe-table-column>
               <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称"></vxe-table-column>
               <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>

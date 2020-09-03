@@ -28,7 +28,7 @@
               @current-change="setOneTable"
               height="650px"
             >
-              <vxe-table-column title="序号" type="index" width="50"></vxe-table-column>
+              <vxe-table-column title="序号" type="seq" width="50"></vxe-table-column>
               <vxe-table-column field="displayName" title="租户名称"></vxe-table-column>
               <vxe-table-column field="name" title="租户描述"></vxe-table-column>
             </vxe-table>

@@ -52,7 +52,7 @@
           @radio-change="radioChangeEvent"
         >
           <vxe-table-column
-            type="index"
+            type="seq"
             width="60"
             title="序号"
           ></vxe-table-column>
@@ -112,7 +112,7 @@
           align="center"
           :data="currentData"
         >
-          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
           <vxe-table-column
             field="partCode"
             title="配件编码"

@@ -5,7 +5,7 @@
         <vxe-table
           :data="tableData"
           :tree-config="{children: 'children'}">
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号"></vxe-table-column>
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>

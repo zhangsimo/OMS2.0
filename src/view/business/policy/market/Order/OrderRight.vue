@@ -206,7 +206,7 @@
           @edit-actived="editActivedEvent"
           :edit-config="{trigger: 'click', mode: 'cell',activeMethod: activeRowMethod}"
         >
-          <vxe-table-column type="index" width="50" title="序号" fixed="left"></vxe-table-column>
+          <vxe-table-column type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column title="操作" fixed="left" width="100">
             <template v-slot="{ row,rowIndex }">

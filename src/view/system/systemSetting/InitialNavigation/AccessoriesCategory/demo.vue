@@ -9,7 +9,7 @@
           @cell-click="selection"
           highlight-hover-row
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号"></vxe-table-column>
           <vxe-table-column field="code" title="分类编码"></vxe-table-column>
           <vxe-table-column field="name" title="分类名称" tree-node></vxe-table-column>
           <vxe-table-column field="disabled" title="是否禁用"></vxe-table-column>

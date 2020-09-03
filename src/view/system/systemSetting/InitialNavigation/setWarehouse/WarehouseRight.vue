@@ -40,7 +40,7 @@
         :data="warehouseList"
         :edit-config="{trigger: 'click', mode: 'cell'}"
       >
-        <vxe-table-column type="index" title="序号"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号"></vxe-table-column>
         <vxe-table-column field="name" title="仓位" :edit-render="{name: 'input'}"></vxe-table-column>
         <vxe-table-column field="area" title="区域" :edit-render="{name: 'input'}"></vxe-table-column>
         <vxe-table-column title="是否禁用">
