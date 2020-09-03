@@ -100,7 +100,7 @@
         </section>
         <section class="con-box">
           <div class="inner-box">
-            <!--<Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>-->
+            <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
             <div class="db mt10 info" v-if="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
@@ -358,7 +358,7 @@
         :edit-rules="validRules"
         :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       >
-        <vxe-table-column type="index" title="序号" align="center"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" align="center"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称" align="center"></vxe-table-column>
         <vxe-table-column field="partSpecification" title="规格型号" align="center"></vxe-table-column>
@@ -839,9 +839,6 @@
         clientList2: {},
         provinceArr2: [],
         treeDiagramList2: [],
-
-        //
-        // Actualtotalcollect:0,
       };
     },
     async mounted() {

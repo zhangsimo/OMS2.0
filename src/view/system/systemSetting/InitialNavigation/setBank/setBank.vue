@@ -35,7 +35,7 @@
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}"
         >
-          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="code" title="账户编码"></vxe-table-column>
           <vxe-table-column field="name" title="账户名称"></vxe-table-column>
           <vxe-table-column field="accountTypeId" title="账户类型" :formatter="getType"></vxe-table-column>

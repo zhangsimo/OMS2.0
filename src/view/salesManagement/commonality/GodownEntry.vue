@@ -85,7 +85,7 @@
             width="60"
           ></vxe-table-column>
           <vxe-table-column
-            type="index"
+            type="seq"
             width="50"
             title="序号"
           ></vxe-table-column>
@@ -157,7 +157,7 @@
           :data="tableDataBottom.details"
         >
           <vxe-table-column
-            type="index"
+            type="seq"
             width="50"
             title="序号"
           ></vxe-table-column>
@@ -266,7 +266,7 @@ export default {
       this.$refs.getDate.resetFun();
       this.storeId = v;
       this.searchValue = "";
-      this.$refs.supplier.isLayerValue = "";
+      // this.$refs.supplier.isLayerValue = "";
       this.getList(v);
       //this.getClientList();
       this.$refs.Xtable.recalculate(true)

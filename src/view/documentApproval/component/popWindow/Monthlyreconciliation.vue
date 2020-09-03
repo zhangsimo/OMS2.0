@@ -174,7 +174,7 @@
         :edit-rules="validRules"
         :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       >
-        <vxe-table-column type="index" title="序号" align="center"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" align="center"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称" align="center"></vxe-table-column>
         <vxe-table-column field="partSpecification" title="规格型号" align="center"></vxe-table-column>

@@ -55,7 +55,7 @@
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column
-            type="index"
+            type="seq"
             width="80"
             title="序号"
           ></vxe-table-column>

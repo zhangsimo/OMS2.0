@@ -68,7 +68,7 @@
           width="60"
         ></vxe-table-column>
         <vxe-table-column
-          type="index"
+          type="seq"
           title="序号"
           width="60"
         ></vxe-table-column>
@@ -172,7 +172,7 @@ export default class ProcurementModal extends Vue {
   private async selectOrder() {
     let selectRow = JSON.parse(JSON.stringify(this.selectRow))
     if(selectRow.length <= 0) { return this.$Message.error('请勾选要选择的配件!'); };
-    
+
     let msg:any = this.$Message.loading({
       content: '加载中...',
       duration: 0
@@ -188,14 +188,14 @@ export default class ProcurementModal extends Vue {
     params.size = 9999;
     params.page = 0;
 
-    let res:any = await getParts(params); 
+    let res:any = await getParts(params);
     let data:Array<any> = new Array();
     if(res.code == 0) {
       data = (res.data.content || []).map(el => {
         el.sourceDetailId = el.id;
         Reflect.deleteProperty(el, 'id');
         return el;
-      });  
+      });
     }
     msg();
     return data;

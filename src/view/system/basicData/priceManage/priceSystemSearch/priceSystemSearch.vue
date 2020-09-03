@@ -42,7 +42,7 @@
             highlight-current-row
             :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
-            <vxe-table-column type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+            <vxe-table-column type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
             <vxe-table-column field="partId" title="内码" fixed="left"></vxe-table-column>
             <vxe-table-column field="partCode" title="配件编码" fixed="left"></vxe-table-column>
             <vxe-table-column field="partStandardName" title="名称" fixed="left"></vxe-table-column>

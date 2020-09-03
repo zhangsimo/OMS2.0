@@ -51,7 +51,7 @@
         >
           <vxe-table-column type='radio' title="选择" width="60"></vxe-table-column>
           <vxe-table-column
-            type="index"
+            type="seq"
             width="50"
             title="序号"
           ></vxe-table-column>
@@ -100,7 +100,7 @@
           :data="tableDataBottom.details"
         >
           <vxe-table-column
-            type="index"
+            type="seq"
             width="50"
             title="序号"
           ></vxe-table-column>

@@ -251,7 +251,7 @@
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 @edit-actived="editActivedEvent">
               >
-                <vxe-table-column  show-overflow="tooltip" type="index" title="序号" fixed="left" width="60"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" type="checkbox" fixed="left"  width="60"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>

@@ -82,7 +82,7 @@
           @current-change="selectTabelData"
           :radio-config="{labelField: 'name', trigger: 'row'}"
         >
-          <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" width="50" title="序号"></vxe-table-column>
 <!--          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>-->
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="申请单" width="150"></vxe-table-column>
@@ -115,7 +115,7 @@
       <!--        下表格-->
       <div class="bottomTableDate">
         <vxe-table border resizable auto-resize height="230" :data="currentData" size="mini">
-          <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="140"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="130"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌" width="90"></vxe-table-column>

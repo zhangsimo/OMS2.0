@@ -17,7 +17,7 @@
         :data="tableData"
         resizable
       >
-        <vxe-table-column type="index" title="序号" width="40"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
         <vxe-table-column field="billStatusId" title="状态" width="50">
           <template v-slot="{ row }">
             <span>{{row.billStatusId?row.billStatusId.name:""}}</span>
