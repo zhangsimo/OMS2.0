@@ -99,7 +99,7 @@
                   :data="allList.orgStock"
                 >
                   <vxe-table-column
-                    type="index"
+                    type="seq"
                     title="序号"
                     width="50"
                   ></vxe-table-column>
@@ -194,7 +194,7 @@
                 :data="allList.chainStock"
               >
                 <vxe-table-column
-                  type="index"
+                  type="seq"
                   title="序号"
                   width="50"
                 ></vxe-table-column>
@@ -235,7 +235,7 @@
                 :data="allList.sellHistory"
               >
                 <vxe-table-column
-                  type="index"
+                  type="seq"
                   title="序号"
                   width="50"
                 ></vxe-table-column>

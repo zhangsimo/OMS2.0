@@ -344,7 +344,7 @@
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
-                  <vxe-table-column  show-overflow="tooltip" type="index" title="序号" fixed="left" width="60"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" type="checkbox" fixed="left" width="60"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" title="操作" fixed="left" width="100">
                     <template v-slot="{ row,rowIndex }">

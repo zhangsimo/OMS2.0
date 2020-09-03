@@ -37,7 +37,7 @@
     >
       <!-- 主表每一项 -->
       <vxe-table-column title="基础信息">
-        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
         <vxe-table-column field="storeName" title="默认仓库">
           <template v-slot="{row}">

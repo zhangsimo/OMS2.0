@@ -79,7 +79,7 @@
           @current-change="currentChangeEvent"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" title="操作">
             <template v-slot="{ row,rowIndex }">
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 2)">受理</Button>
@@ -170,7 +170,7 @@
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column  show-overflow="tooltip" type="index" title="序号"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>

@@ -184,7 +184,7 @@
                       :footer-method="addFooter"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
@@ -225,7 +225,7 @@
                         :footer-method="addFooter2"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left"></vxe-table-column>
@@ -439,7 +439,7 @@
                       :data="Leftcurrentrow.processProductVO"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号"></vxe-table-column>
+                      <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
                       <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
@@ -480,7 +480,7 @@
                         :data="currentData"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号"></vxe-table-column>
+                        <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
                         <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -938,9 +938,9 @@ export default {
       }
       this.saveBtnClik = true
       if (this.tabKey === 0) {
-        params.processProductVO.detailVOList.map(item=>{
-          item.qty=item.changeQty
-        })
+        // params.processProductVO.detailVOList.map(item=>{
+        //   item.qty=item.changeQty
+        // })
         //配件组装保存
         baocun(params)
           .then(res => {
@@ -1260,7 +1260,7 @@ export default {
       if (this.Leftcurrentrow.processProductVO.length > 0) {
         this.currentData = row.processProductVO[0].detailVOList;
         this.currentData.map(item=>{
-          item.changeQty=item.qty
+          item.changeQty=this.currentNum*item.qty
         })
       } else {
         this.currentData = [];

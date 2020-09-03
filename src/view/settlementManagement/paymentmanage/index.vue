@@ -81,7 +81,6 @@
           size="mini"
           :data="data"
           ref="summary"
-          :loading="data1Loading"
           highlight-current-row
           @current-change="selete"
         >

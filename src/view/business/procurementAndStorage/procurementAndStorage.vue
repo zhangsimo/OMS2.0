@@ -70,7 +70,7 @@
                   height="593"
                   :data="legtTableData"
                 >
-                  <vxe-table-column  show-overflow="tooltip" type="index" title="序号" width="60"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="billStatusName" title="状态"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="guestName" title="供应商"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="orderMan" title="采购员"></vxe-table-column>
@@ -271,7 +271,7 @@
                     :data="formPlan.details"
                     :edit-config="{trigger: 'click', mode: 'cell'}"
                   >
-                    <vxe-table-column  show-overflow="tooltip" type="index" width="50" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" type="checkbox" width="50" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>

@@ -122,7 +122,7 @@
           :edit-config="{trigger: 'click', mode: 'cell'}"
         >
           <vxe-table-column title="收/付款信息">
-            <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+            <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
             <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
             <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>

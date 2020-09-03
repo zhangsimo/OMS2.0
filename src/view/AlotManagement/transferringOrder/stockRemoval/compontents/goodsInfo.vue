@@ -60,7 +60,7 @@
             :radio-config="{ trigger: 'row' }"
           >
             <vxe-table-column
-              type="index"
+              type="seq"
               width="60"
               title="序号"
             ></vxe-table-column>

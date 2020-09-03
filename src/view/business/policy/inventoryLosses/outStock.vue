@@ -251,7 +251,7 @@
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column  show-overflow="tooltip" type="index" width="80" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="seq" width="80" title="序号" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="120" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="120" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>

@@ -130,7 +130,7 @@
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号"></vxe-table-column>
 
           <vxe-table-column
             field="partCode"
@@ -205,7 +205,7 @@
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号"></vxe-table-column>
 
           <vxe-table-column title="操作" width="180">
             <template v-slot="{ row }">
