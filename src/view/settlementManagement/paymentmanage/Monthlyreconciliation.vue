@@ -1036,7 +1036,7 @@
           this.paymentlist = [];
           // this.storeAccount(this.parameter.orgId);
           // this.Initialization();
-          this.$refs.quickDate.getval(1);
+          this.$refs.quickDate.resetFun();
         }
       },
       getAccountNameListFun(v) {
