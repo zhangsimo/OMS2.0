@@ -923,7 +923,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 100
+            size: 10
           }
         },
         //出库明细数据
@@ -932,7 +932,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 100
+            size: 10
           },
           //数据
           dataTwo: [
@@ -948,7 +948,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 100
+            size: 10
           },
           //数据
           dataThree: [
