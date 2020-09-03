@@ -938,9 +938,9 @@ export default {
       }
       this.saveBtnClik = true
       if (this.tabKey === 0) {
-        params.processProductVO.detailVOList.map(item=>{
-          item.qty=item.changeQty
-        })
+        // params.processProductVO.detailVOList.map(item=>{
+        //   item.qty=item.changeQty
+        // })
         //配件组装保存
         baocun(params)
           .then(res => {
@@ -1260,7 +1260,7 @@ export default {
       if (this.Leftcurrentrow.processProductVO.length > 0) {
         this.currentData = row.processProductVO[0].detailVOList;
         this.currentData.map(item=>{
-          item.changeQty=item.qty
+          item.changeQty=this.currentNum*item.qty
         })
       } else {
         this.currentData = [];

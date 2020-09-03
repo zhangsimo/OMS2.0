@@ -121,8 +121,6 @@
               :data="data1"
               class="mt10"
               max-height="400"
-              show-summary
-              :summary-method="handleSummary"
               ref="sale"
             ></Table>
           </Tab-pane>
@@ -133,8 +131,6 @@
               :data="data2"
               class="mt10"
               max-height="400"
-              show-summary
-              :summary-method="handleSummary"
               ref="purchase"
             ></Table>
           </Tab-pane>
@@ -1748,7 +1744,8 @@ export default {
           value: "XSTH",
           label: "销售退货"
         }
-      ]
+      ],
+      data1Loading:false
     };
   },
   computed:{
@@ -1979,7 +1976,10 @@ export default {
       if (obj.endDate) {
         obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
       }
+      this.data1Loading = true;
+      this.data = [];
       getreceivable(obj).then(res => {
+        this.data1Loading = false;
         if (res.data.length !== 0) {
           //去除 已对账未收金额和已对账未付金额 同时为0
           let arrData = (res.data||[]);
@@ -2035,7 +2035,7 @@ export default {
     // },
     // 月结对账
     Monthlyreconciliation() {
-      // this.$refs.Monthlyreconciliation.modal = true;
+      // this.$refs.MonthlyreconciliatiTableSummaryon.modal = true;
       if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
         this.$refs.Monthlyreconciliation.modal = true;
         this.$refs.Monthlyreconciliation.data1=[];
