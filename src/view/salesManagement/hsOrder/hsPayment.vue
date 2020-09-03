@@ -93,7 +93,7 @@
 
         <div ref="planPage">
         <Page size="small" class-name="page-con tr" :current="page.num" :total="page.total" :page-size="page.size" @on-change="selectNum"
-        @on-page-size-change="selectPage" show-sizer show-total :page-size-opts="[500,1000]"></Page>
+        @on-page-size-change="selectPage" show-sizer show-total :page-size-opts="[10,20,30,40,50]"></Page>
         </div>
       </div>
     </section>
@@ -164,7 +164,7 @@
         //分页
         page: {
           total: 0,
-          size:500,
+          size:10,
           num: 1
         },
         //状态

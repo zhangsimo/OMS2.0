@@ -1,20 +1,20 @@
 <template>
-  <Modal v-model="modalShow" title="新增现金日记账" width="700" >
+  <Modal v-model="modalShow" title="新增现金日记账" width="750" >
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="100" label-colon>
       <Row>
         <Col span="12">
           <FormItem label="所属门店" >
-            <Input  v-model="formCustom.shopName" class="w150" disabled />
+            <Input  v-model="formCustom.shopName" class="w200" disabled />
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="所属区域" >
-            <Input  v-model="formCustom.areaName" class="w150" disabled />
+            <Input  v-model="formCustom.areaName" class="w200" disabled />
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="所属店号" >
-            <Input  v-model="formCustom.shopCode" class="w150" disabled />
+            <Input  v-model="formCustom.shopCode" class="w200" disabled />
           </FormItem>
         </Col>
         <Col span="12">
@@ -26,12 +26,12 @@
         </Col>
         <Col span="12">
           <FormItem label="账号" prop="accountName">
-            <Input  v-model="formCustom.accountName" class="w150" disabled></Input>
+            <Input  v-model="formCustom.accountName" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="开户行" prop="bankName">
-            <Input  v-model="formCustom.bankName" class="w150" disabled></Input>
+            <Input  v-model="formCustom.bankName" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -43,37 +43,37 @@
         </Col>
         <Col span="12">
           <FormItem label="发生日期" prop="createTime" >
-            <DatePicker type="date"  v-model="formCustom.createTime" style="width: 150px"></DatePicker>
+            <DatePicker type="datetime"  v-model="formCustom.createTime" class="w200"></DatePicker>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="收入金额" >
-            <Input  v-model="formCustom.incomeMoney" class="w150"/>
+            <Input  v-model="formCustom.incomeMoney" class="w200"/>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="支出金额">
-            <Input  v-model="formCustom.paidMoney" class="w150"/>
+            <Input  v-model="formCustom.paidMoney" class="w200"/>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对方户名">
-            <Input  v-model="formCustom.reciprocalAccountName" class="w150"></Input>
+            <Input  v-model="formCustom.reciprocalAccountName" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对账账号">
-            <Input  v-model="formCustom.checkAccount" class="w150"></Input>
+            <Input  v-model="formCustom.checkAccount" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对方开户行">
-            <Input v-model="formCustom.reciprocalBankName" class="w150"></Input>
+            <Input v-model="formCustom.reciprocalBankName" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="交易备注">
-            <Input  v-model="formCustom.tradingNote" class="w150"></Input>
+            <Input  v-model="formCustom.tradingNote" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -275,7 +275,7 @@
       save(){
         this.$refs.formCustom.validate(async (valid) => {
           if (valid) {
-            this.formCustom.createTime = moment(this.formCustom.createTime).startOf('day').format("YYYY-MM-DD HH:mm:ss")
+            this.formCustom.createTime = moment(this.formCustom.createTime).format("YYYY-MM-DD HH:mm:ss")
             let res = await addSave(this.formCustom)
             if (res.code === 0) {
               this.$Message.success('保存成功')

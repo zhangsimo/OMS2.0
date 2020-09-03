@@ -638,11 +638,11 @@ export default {
       };
       // console.log(this.value)
       if (this.type === "050101") {
-        (obj.enterDateStart = this.value[0]
+          (obj.enterDateStart = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : ""),
           (obj.enterDateEnd = this.value[1]
-            ? this.value[1]+" 23:59:59"
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
           getWarehousingList(obj).then(res => {
             if (res.data) {
@@ -661,7 +661,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : ""),
           (obj.outDateEnd = this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
           getOutStockList(obj).then(res => {
             if (res.data.length !== 0) {
