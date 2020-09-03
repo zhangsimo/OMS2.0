@@ -565,7 +565,8 @@ export default {
         storeShelf: [
           { validator: posValid,trigger:"blur"}
         ]
-      }
+      },
+      isSaveClick:false,
     };
   },
   // watch: {
@@ -742,8 +743,11 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-
       params["voList"] = this.ArrayValue;
+      if(this.isSaveClick){
+        return this.$message.error('请稍后数据处理中....');
+      }
+      this.isSaveClick = true;
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -787,6 +791,10 @@ export default {
       const params = {
         id: this.Leftcurrentrow.id
       };
+      if(this.isSaveClick){
+        return this.$message.error('请稍后数据处理中....');
+      }
+      this.isSaveClick = true;
       // 配件组装作废
       zuofei(params)
         .then(res => {
@@ -852,6 +860,10 @@ export default {
               storeId:this.Leftcurrentrow.storeId
             };
             // 配件组装作废
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             let res = await outDataList(params);
             // console.log("res", res);
             if (res.code == 0) {
@@ -1136,6 +1148,7 @@ export default {
                   };
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  this.isSaveClick = false;
                   return;
                 }
               }
@@ -1148,8 +1161,10 @@ export default {
                 };
                 const res = await getListDetail(params);
                 this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                this.isSaveClick = false;
                 return;
               }
+              this.isSaveClick = false;
             }
           }
         })

@@ -443,6 +443,8 @@
           ArrayValue: [],
           getArray: [],
           currentRow: {},
+          //临时禁用保存提交作废按钮
+          isSaveClick:false,
         }
       },
       methods: {
@@ -662,6 +664,11 @@
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
+
+                    if(this.isSaveClick){
+                      return this.$message.error('请稍后数据处理中....');
+                    }
+                    this.isSaveClick = true;
                     save(data).then(res => {
                       if(res.code === 0){
                         this.$message.success('保存成功！');
@@ -714,6 +721,10 @@
                 data.createUname  = this.formPlan.createUname
                 data.serviceId = this.formPlan.serviceId
                 data.detailVOS = this.Right.tbdata
+                if(this.isSaveClick){
+                  return this.$message.error('请稍后数据处理中....');
+                }
+                this.isSaveClick = true;
                 let res = await save(data);
                 if (res.code == 0) {
                   this.$Message.success('作废成功');
@@ -1065,6 +1076,7 @@
             if(res.code === 0){
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
+              this.isSaveClick = false;
             }
           })
         },
@@ -1108,11 +1120,17 @@
                     data.createUname  = this.formPlan.createUname
                     data.serviceId = this.formPlan.serviceId
                     data.detailVOS = this.Right.tbdata
+                    if(this.isSaveClick){
+                      return this.$message.error('请稍后数据处理中....');
+                    }
+                    this.isSaveClick = true;
                     let res = await commit(data);
+                    this.isSaveClick = false;
                     if (res.code == 0) {
                       this.$Message.success('提交成功');
                       this.leftgetList();
                       this.isAdd = true;
+                      this.$refs.formPlan.resetFields();
                     }
                   // }else{
                   //   this.$Message.warning('请先编辑收货信息')

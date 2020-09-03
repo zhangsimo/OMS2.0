@@ -135,7 +135,7 @@
                     ref="formPlan"
                     :label-width="120"
                   >
-                    <FormItem label="调入方：" prop="supplyName" class="redIT">
+                    <FormItem label="调入方：" prop="guestName" class="redIT">
                       <Row>
                         <Col span="22">
                           <!--<Tooltip :content="Leftcurrentrow.guestName">-->
@@ -775,6 +775,7 @@
         clickdelivery: false,
         isWms: false, //仓库是否启用wms
         createTime: new Date(),
+        isSaveClick:false,
       };
     },
     // watch: {
@@ -985,8 +986,13 @@
         try {
           await this.$refs.xTable1.validate();
           //配件组装保存
+          if(this.isSaveClick){
+            return this.$message.error('请稍后数据处理中....');
+          }
+          this.isSaveClick = true;
           baocun(params)
             .then(res => {
+              this.isSaveClick = false;
               // 点击列表行==>配件组装信息
               if (res.code == 0) {
                 this.flag = 0;
@@ -994,6 +1000,7 @@
                 this.buttonDisable = null;
                 this.getList();
                 this.$Message.success("保存成功");
+                this.$refs.formPlan.resetFields();
               }
             })
           // .catch(e => {
@@ -1090,14 +1097,20 @@
             //   "YYYY-MM-DD HH:mm:ss"
             // );
             params.createTime = this.createTime;
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             tijiao(params)
               .then(res => {
+                this.isSaveClick = false;
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.flag = 0;
                   this.buttonDisable = null;
                   this.getList();
                   this.$Message.success("提交成功");
+                  this.$refs.formPlan.resetFields();
                 }
               })
             // .catch(e => {
@@ -1129,8 +1142,13 @@
           title: "是否确定作废",
           onOk: () => {
             // 配件组装作废
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             zuofei(paramster)
               .then(res => {
+                this.isSaveClick = true;
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.$Message.success("作废成功");
@@ -1210,6 +1228,10 @@
               id: this.Leftcurrentrow.id
             };
             // 配件组装作废
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             outDataList(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
@@ -1327,8 +1349,10 @@
           };
           const res = await getListDetail(params);
           this.Leftcurrentrow.detailVOS = res.data;
+          this.isSaveClick = false;
         } else {
           this.datadata = null;
+          this.isSaveClick = false;
         }
         if (row.status.value === 0) {
           this.buttonShow = false;
@@ -1542,6 +1566,7 @@
                 };
                 const res = await getListDetail(params);
                 this.Leftcurrentrow.detailVOS = res.data || [];
+                this.isSaveClick = false;
                 return;
               }
               // this.Leftcurrentrow.detailVOS = [];
