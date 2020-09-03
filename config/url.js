@@ -86,7 +86,7 @@ const audit = {
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   omsBatch: "https://uatapi2.g-part.cn/oms-batch-provider",
-  omsSettle: "https://uatapi2.g-parts.cn/oms-settlement-provider",
+  omsSettle: "https://uatapi2.g-part.cn/oms-settlement-provider",
   omsSotck: "https://uatapi2.g-part.cn/oms-stock-provider",
   uploadApi:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",
