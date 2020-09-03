@@ -481,13 +481,13 @@
         this.allMoneyList = {}
         let res = await goList(data)
         if(res.code === 0){
-          if(res.data.content.length > 0){
-            this.allMoneyList = res.data.content[0].moneyList
+          if (res.data.page.content.length > 0) {
+            this.allMoneyList = res.data.moneyList
           }
-          this.tableData = res.data.content
+          this.tableData = res.data.page.content
           this.tableData1 = []
           this.tableData2 = []
-          res.data.content.forEach( item => {
+          res.data.page.content.forEach(item => {
           if (item.collateState) {
             this.tableData1.push(item)
           } else {

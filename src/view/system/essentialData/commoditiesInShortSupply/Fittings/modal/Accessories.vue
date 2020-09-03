@@ -238,7 +238,7 @@
             :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
           >
             <vxe-table-column
-              type="index"
+              type="seq"
               title="序号"
               width="50"
             ></vxe-table-column>

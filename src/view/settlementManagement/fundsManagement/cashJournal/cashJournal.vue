@@ -137,10 +137,10 @@
     <amtData :moneyList="allMoneyList"></amtData>
 
     <!--    新增-->
-    <add ref="addModel" @getAllList="allList"></add>
+    <add ref="addModel" @getAllList="allList" @update="getList"></add>
 
     <!--    修改-->
-    <changeJournal :list="oneList" ref="changeModal" @getAllList="allList"></changeJournal>
+    <changeJournal :list="oneList" ref="changeModal" @getAllList="allList"  @update="getList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
@@ -149,7 +149,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row
@@ -192,7 +191,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row
@@ -235,7 +233,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row
@@ -420,6 +417,7 @@
 
       //获取表格信息
       async getList() {
+        this.oneList = {};
         let data = {};
         data.signs=1;//区别现金日记账
         data.page = 0;

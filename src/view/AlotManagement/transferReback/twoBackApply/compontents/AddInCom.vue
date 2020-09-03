@@ -64,7 +64,7 @@
           :radio-config="{ trigger: 'row' }"
         >
           <vxe-table-column type="radio" title="选择" width="100"></vxe-table-column>
-          <vxe-table-column type="index" width="100" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" width="100" title="序号"></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
@@ -93,7 +93,7 @@
       <!--        下表格-->
       <div class="bottomTableDate">
         <vxe-table auto-resize border resizable height="150" :data="currentData">
-          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>

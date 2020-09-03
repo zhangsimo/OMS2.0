@@ -158,7 +158,7 @@
     <amtData :moneyList='allMoneyList'></amtData>
 
     <!--    修改-->
-    <changeJournal :list='oneList' ref="changeModal" @getNewList="allList"></changeJournal>
+    <changeJournal :list='oneList' ref="changeModal" @getNewList="allList" @update="getList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain5" @on-click="clearSelectTabelList">
@@ -167,7 +167,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -225,7 +224,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -283,7 +281,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -341,7 +338,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -399,7 +395,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               stripe
               ref="xTable5"

@@ -29,7 +29,7 @@
           :data="tableDataBottom"
         >
           <vxe-table-column
-            type="index"
+            type="seq"
             width="50"
             title="序号"
           ></vxe-table-column>

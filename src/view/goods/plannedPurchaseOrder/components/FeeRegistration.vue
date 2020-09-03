@@ -29,7 +29,7 @@
             @current-change="currentChangeEvent"
           >
             <vxe-table-column
-              type="index"
+              type="seq"
               width="100"
               title="序号"
             ></vxe-table-column>
@@ -86,7 +86,7 @@
           >
             >
             <vxe-table-column
-              type="index"
+              type="seq"
               width="60"
               title="序号"
             ></vxe-table-column>
@@ -100,7 +100,7 @@
               title="往来单位"
               width="120"
             ></vxe-table-column>
-            <!-- <vxe-table-column field="serviceType" title="收支项目" width="120" 
+            <!-- <vxe-table-column field="serviceType" title="收支项目" width="120"
             :edit-render="{name: 'Select', options: revenueTypes}"
             ></vxe-table-column> -->
             <vxe-table-column

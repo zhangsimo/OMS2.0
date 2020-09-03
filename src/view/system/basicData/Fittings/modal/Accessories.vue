@@ -37,7 +37,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="配件品牌：" prop="partBrandId" filterable>
-                  <Select 
+                  <Select
                     v-if="brandAll.length > 0"
                     @on-change="selectPartBrand"
                     v-model="formValidate.partBrandId">
@@ -248,7 +248,7 @@
             :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
           >
             <vxe-table-column
-              type="index"
+              type="seq"
               title="序号"
               width="50"
             ></vxe-table-column>
@@ -458,7 +458,7 @@
   </section>
 </template>
 
-<script src="./index.ts"></script>  
+<script src="./index.ts"></script>
 
 <style lang="less" scoped>
 .part-main {

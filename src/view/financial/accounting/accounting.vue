@@ -20,7 +20,7 @@
           highlight-current-row
           show-overflow
         >
-          <vxe-table-column type="index" title="操作">
+          <vxe-table-column type="seq" title="操作">
             <template v-slot="{row}">
               <a @click="addNewChildren(row)" class="mr10">新增子科目</a>
               <a @click="change(row)" class="mr10">修改</a>

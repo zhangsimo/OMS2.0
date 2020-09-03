@@ -39,7 +39,7 @@
             :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
             <!-- :row-style="rowPriceLevelStyle" -->
-            <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
+            <vxe-table-column type="seq" width="80" title="序号"></vxe-table-column>
             <vxe-table-column
               field="name"
               title="级别名称"
@@ -118,7 +118,7 @@
               @select-all="selectAllrightcus"
               @select-change="selectRC"
             >
-              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column field="fullName" title="客户全称"></vxe-table-column>
               <vxe-table-column field="shortName" title="客户简称"></vxe-table-column>
@@ -179,7 +179,7 @@
               highlight-current-row
               :edit-config="{ trigger: 'click', mode: 'cell',showStatus: true}"
             >
-              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
               <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>

@@ -42,7 +42,7 @@
         :data="mainData.detailVOList"
         :footer-method="addFooter"
       >
-        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
         <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -97,7 +97,7 @@
         :data="mainData.detailVOList"
         :footer-method="addFooter"
       >
-        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
         <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -152,7 +152,7 @@
         :data="mainData.details"
         :footer-method="addFooter2"
       >
-        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
         <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -227,7 +227,7 @@
         :data="mainData.details"
         :footer-method="addFooter3"
       >
-        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
         <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -293,7 +293,7 @@
         :data="mainData.details"
         :footer-method="addFooter3"
       >
-        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
         <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -348,7 +348,7 @@
         :data="mainData.details"
         :footer-method="addFooter3"
       >
-        <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column field="activityName" title="活动名称" width="100"></vxe-table-column>
         <vxe-table-column field="partName" title="指定公司" width="150"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>

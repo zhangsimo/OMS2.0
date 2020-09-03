@@ -190,7 +190,7 @@
                     :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
                     @keydown="keydown"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
-                    <vxe-table-column  show-overflow="tooltip" type="index" width="60" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
@@ -1100,7 +1100,7 @@
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     data.guestId = this.guestidId
-                    // data.guestOrgid = this.formPlan.guestOrgid
+                    data.guestOrgid = this.formPlan.guestOrgid
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     data.orderDate = tools.transTime(this.formPlan.orderDate)
