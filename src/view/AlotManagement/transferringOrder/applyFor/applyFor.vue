@@ -1100,7 +1100,7 @@
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     data.guestId = this.guestidId
-                    // data.guestOrgid = this.formPlan.guestOrgid
+                    data.guestOrgid = this.formPlan.guestOrgid
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     data.orderDate = tools.transTime(this.formPlan.orderDate)
