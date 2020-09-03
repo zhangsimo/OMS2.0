@@ -2,15 +2,15 @@
   <div class="content-oper" style="background: #fff">
     <Tabs style="min-height: 500px">
       <TabPane label="销售订单明细表">
-        <panne :type="1" @search="search1" @export="exportxls('tabOne')" />
+        <panne :type="1" ref="panne" @search="search1" @export="exportxls('tabOne')" />
         <tabOne ref="tabOne" />
       </TabPane>
       <TabPane label="销售出库明细表">
-        <panne :type="2" @search="search2" @export="exportxls('tabTwo')" />
+        <panne :type="2" ref="panne1" @search="search2" @export="exportxls('tabTwo')" />
         <tabTwo ref="tabTwo" />
       </TabPane>
       <TabPane label="销售退货明细表">
-        <panne :type="3" @search="search3" @export="exportxls('tabThree')" />
+        <panne :type="3" ref="panne2" @search="search3" @export="exportxls('tabThree')" />
         <tabThree ref="tabThree" />
       </TabPane>
     </Tabs>
@@ -21,6 +21,11 @@ import panne from "./components/panne";
 import tabOne from "./components/tabOne";
 import tabTwo from "./components/tabTwo";
 import tabThree from "./components/tabThree";
+
+import Cookies from "js-cookie";
+import {TOKEN_KEY} from "../../../libs/util";
+import api from "_conf/url";
+import {v4} from "uuid";
 
 export default {
   name: "procurementSaleOrder",
@@ -101,25 +106,64 @@ export default {
       let filename = "";
       switch(refname) {
         case "tabOne":
-          filename = "销售订单明细表";
+          // filename = "销售订单明细表";
+          let str = ""
+          this.$refs.panne.search.orgid==0?this.$refs.panne.search.orgid="":this.$refs.panne.search.orgid;
+          for(var i in this.$refs.panne.search){
+            str+=`${i}=${this.$refs.panne.search[i]}&`
+          }
+          let page={size:this.$refs.tabOne.page.total,num:0}
+          for(var i in page){
+            str+=`${i}=${page[i]}&`
+          }
+          let paymentDetailUrl = api.omsOrder +
+            `/sellOrderMain/export/PjSellOrderMainDetail?${str.slice(0,str.length-1)}&access_token=` +
+            Cookies.get(TOKEN_KEY);
+          location.href = paymentDetailUrl
           break;
         case "tabTwo":
-          filename = "销售出库明细表";
+          // filename = "销售出库明细表";
+          let str2 = ""
+          this.$refs.panne1.search.orgid==0?this.$refs.panne1.search.orgid="":this.$refs.panne1.search.orgid;
+          for(var i in this.$refs.panne1.search){
+            str2+=`${i}=${this.$refs.panne1.search[i]}&`
+          }
+          let page2={size:this.$refs.tabTwo.page.total,num:0}
+          for(var i in page2){
+            str2+=`${i}=${page2[i]}&`
+          }
+          let paymentDetailUrl2 = api.omsOrder +
+            `/sellOutMain/export/PjSellOutMainDetails?${str2.slice(0,str2.length-1)}&access_token=` +
+            Cookies.get(TOKEN_KEY);
+          location.href = paymentDetailUrl2
           break;
         case "tabThree":
-          filename = "销售退货明细表";
+          let str3 = ""
+          this.$refs.panne2.search.orgid==0?this.$refs.panne2.search.orgid="":this.$refs.panne2.search.orgid;
+          for(var i in this.$refs.panne2.search){
+            str3+=`${i}=${this.$refs.panne2.search[i]}&`
+          }
+          let page3={size:this.$refs.tabThree.page.total,num:0}
+          for(var i in page3){
+            str3+=`${i}=${page3[i]}&`
+          }
+          let paymentDetailUrl3 = api.omsOrder +
+            `/pchsOrderMain/export/PjSellEnterMainDetails?${str3.slice(0,str3.length-1)}&access_token=` +
+            Cookies.get(TOKEN_KEY);
+          location.href = paymentDetailUrl3
+          // filename = "销售退货明细表";
           break;
         default:
-          filename = "";
+          // filename = "";
           break;
       }
-      let table = await this.$refs[refname].getAll();
-      this.$refs[refname].$refs.xTable.exportData({
-        filename,
-        isHeader: true,
-        isFooter: true,
-        data: table,
-      })
+      // let table = await this.$refs[refname].getAll();
+      // this.$refs[refname].$refs.xTable.exportData({
+      //   filename,
+      //   isHeader: true,
+      //   isFooter: true,
+      //   data: table,
+      // })
     },
   }
 };
