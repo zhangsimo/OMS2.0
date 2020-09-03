@@ -841,7 +841,7 @@
         treeDiagramList2: [],
 
         //
-        Actualtotalcollect:0,
+        // Actualtotalcollect:0,
       };
     },
     async mounted() {
@@ -972,7 +972,6 @@
         ];
       },
       query() {
-        console.log(111)
         this.moreSearch = {};
         this.Initialization();
       },
