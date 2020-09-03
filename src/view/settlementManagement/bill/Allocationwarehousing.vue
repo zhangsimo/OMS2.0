@@ -57,6 +57,20 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row @on-row-click="election" :summary-method="handleSummary"></Table>
+        <div class="clearfix">
+          <Page
+            class-name="fr mb10 mt10"
+            size="small"
+            :current="page.num"
+            :total="page.total"
+            :page-size="page.size"
+            :page-size-opts="page.sizeArr"
+            @on-change="changePage"
+            @on-page-size-change="changeSize"
+            show-sizer
+            show-total
+          ></Page>
+        </div>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary :summary-method="summary"></Table>
       </div>
@@ -86,6 +100,13 @@ export default {
       ], //分店名称
       model1: "",
       modal1: false,
+      page: {
+        total: 0,
+        sizeArr: [10, 20, 30, 40, 50],
+        size: 10,
+        num: 1
+      },
+      total: {},//总合计对象
       value: [],
       columns: [
         {
@@ -303,9 +324,6 @@ export default {
           key: "orderAmt",
           className: "tc",
           minWidth: 100,
-          render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
-          }
         },
         {
           title: "单据状态",
@@ -423,9 +441,6 @@ export default {
           title: "金额",
           key: "orderAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
-          }
         }
       ],
       data: [],
@@ -488,26 +503,16 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "合计"
+            value: "总合计"
           };
           return;
         }
         const values = data.map(item => Number(item[key]));
         if (index === 11) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          }
+          sums[key] = {
+            key,
+            value: this.total[key] == null ? " " : this.total[key]
+          };
         } else {
           sums[key] = {
             key,
@@ -576,6 +581,15 @@ export default {
       this.data1 = []
       this.getTransferWarehousing()
     },
+    changePage(p) {
+      this.page.num = p;
+      this.query();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.query();
+    },
     // 往来单位选择
     getOne(data) {
       this.company = data.fullName;
@@ -601,15 +615,56 @@ export default {
         guestId: this.companyId,
         orderTypeId:this.type
       };
-      transferWarehousing(obj).then(res => {
-        if (res.data.length !== 0){
-          res.data.map((item, index) => {
+      let params = {
+        size: this.page.size,
+        page: this.page.num - 1
+      }
+      transferWarehousing(params,obj).then(res => {
+        if (res.data.vos.length !== 0){
+          res.data.vos.map((item, index) => {
             item.index = index + 1;
             item.status = item.status.value ? '已入库':'草稿';
             item.orderTypeId = item.orderTypeId.value ? '调入退货' : '调拨入库'
             item.sourceType = item.sourceType === 3 ? '是' : '否'
           });
-          this.data = res.data;
+          this.data = res.data.vos;
+          this.page.total = res.data.TotalElements;
+          this.total = res.data.AllotOutMainVO
+        } else {
+          this.data = []
+        }
+      });
+    },
+    getTransferWarehousingAll(param) {
+      let obj = {
+        createTimeStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+        orgid: this.model1,
+        guestId: this.companyId,
+        orderTypeId:this.type
+      };
+      let params = {
+        size: param.size,
+        page: param.num - 1
+      }
+      transferWarehousing(params,obj).then(res => {
+        if (res.data.vos.length !== 0){
+          res.data.vos.map((item, index) => {
+            item.index = index + 1;
+            item.status = item.status.value ? '已入库':'草稿';
+            item.orderTypeId = item.orderTypeId.value ? '调入退货' : '调拨入库'
+            item.sourceType = item.sourceType === 3 ? '是' : '否'
+          });
+          this.data = res.data.vos;
+          if(this.data.length==params.size){
+            this.data = res.data.vos;
+            this.$refs.summary.exportCsv({
+              types: ["csv"],
+              filename: "调拨入库单汇总",
+              columns:this.columns,
+              data: res.data.vos,
+            });
+          }
         } else {
           this.data = []
         }
@@ -626,10 +681,11 @@ export default {
           this.$message.error("调拨入库单汇总-配件信息暂无数据");
         }
       } else {
+        let page={}
+        page.size=this.page.total;
+        page.num=1
         if (this.data.length !== 0) {
-          this.$refs.summary.exportCsv({
-            filename: "调拨入库单汇总"
-          });
+          this.getTransferWarehousingAll(page)
         } else {
           this.$message.error("调拨入库单汇总暂无数据");
         }

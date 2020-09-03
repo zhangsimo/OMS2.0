@@ -73,6 +73,20 @@
           @on-row-click="election"
           max-height="400"
         ></Table>
+        <div class="clearfix">
+          <Page
+            class-name="fr mb10 mt10"
+            size="small"
+            :current="page.num"
+            :total="page.total"
+            :page-size="page.size"
+            :page-size-opts="page.sizeArr"
+            @on-change="changePage"
+            @on-page-size-change="changeSize"
+            show-sizer
+            show-total
+          ></Page>
+        </div>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table
           border
@@ -114,6 +128,13 @@ export default {
       Branchstore: [
         {id:0 ,name:'全部'}
       ], //分店名称
+      page: {
+        total: 0,
+        sizeArr: [10, 20, 30, 40, 50],
+        size: 10,
+        num: 1
+      },
+      total: {},//总合计对象
       model1: "",
       modal1: false,
       columns: [
@@ -315,9 +336,6 @@ export default {
           title: "金额",
           key: "outAmt",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.outAmt.toFixed(2));
-          },
           width: 90
         },
         {
@@ -511,20 +529,10 @@ export default {
         }
         const values = data.map(item => Number(item[key]));
         if (index === 11) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          }
+          sums[key] = {
+            key,
+            value: this.total[key] == null ? " " : this.total[key]
+          };
         } else {
           sums[key] = {
             key,
@@ -544,7 +552,7 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "合计"
+            value: "总合计"
           };
           return;
         }
@@ -594,6 +602,15 @@ export default {
       this.data1 = [];
       this.getGeneral();
     },
+    changePage(p) {
+      this.page.num = p;
+      this.query();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.query();
+    },
     // 往来单位选择
     getOne(data) {
       this.company = data.fullName;
@@ -620,10 +637,11 @@ export default {
           this.$message.error("采购入库单汇总-配件信息暂无数据");
         }
       } else {
+        let page={}
+        page.size=this.page.total;
+        page.num=1
         if (this.data.length !== 0) {
-          this.$refs.summary.exportCsv({
-            filename: "采购入库单汇总"
-          });
+          this.getGeneralAll(page)
         } else {
           this.$message.error("采购入库单汇总暂无数据");
         }
@@ -632,10 +650,14 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        orgid: this.model1,
+        orgid: this.model1==0?"":this.model1,
         guestId: this.companyId,
         enterTypeId: this.type
       };
+      let params = {
+        size: this.page.size,
+        page: this.page.num - 1
+      }
       // console.log(this.value)
       if (this.type === "050101") {
           (obj.enterDateStart = this.value[0]
@@ -644,14 +666,16 @@ export default {
           (obj.enterDateEnd = this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
-          getWarehousingList(obj).then(res => {
-            if (res.data) {
-              res.data.map((item, index) => {
+          getWarehousingList(params,obj).then(res => {
+            if (res.data.vos) {
+              res.data.vos.map((item, index) => {
                 item.index = index + 1;
                 item.taxSign = item.taxSign ? "是" : "否";
                 item.auditSign = item. billStatusId ?  "已入库" : "草稿";
               });
-              this.data = res.data;
+              this.data = res.data.vos;
+              this.page.total = res.data.TotalElements;
+              this.total = res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
@@ -663,14 +687,86 @@ export default {
           (obj.outDateEnd = this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
-          getOutStockList(obj).then(res => {
-            if (res.data.length !== 0) {
-              res.data.map((item, index) => {
+          getOutStockList(params,obj).then(res => {
+            if (res.data.vos.length !== 0) {
+              res.data.vos.map((item, index) => {
                 item.index = index + 1;
                 item.taxSign = item.taxSign ? "是" : "否";
                 item.auditSign = item. billStatusId ? "已入库" : "草稿";
               });
-              this.data = res.data;
+              this.data = res.data.vos;
+              this.page.total = res.data.TotalElements;
+              this.total = res.data.AllotOutMainVO
+            } else {
+              this.data = [];
+            }
+          });
+      }
+    },
+    // 总表查询
+    getGeneralAll(param) {
+      let obj = {
+        orgid: this.model1==0?"":this.model1,
+        guestId: this.companyId,
+        enterTypeId: this.type
+      };
+      let params = {
+        size: param.size,
+        page: param.num - 1
+      }
+      // console.log(this.value)
+      if (this.type === "050101") {
+        (obj.enterDateStart = this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : ""),
+          (obj.enterDateEnd = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
+            : ""),
+          getWarehousingList(params,obj).then(res => {
+            if (res.data.vos) {
+              res.data.vos.map((item, index) => {
+                item.index = index + 1;
+                item.taxSign = item.taxSign ? "是" : "否";
+                item.auditSign = item. billStatusId ?  "已入库" : "草稿";
+              });
+              this.data = res.data.vos;
+              if(this.data.length==params.size){
+                this.data = res.data.vos;
+                this.$refs.summary.exportCsv({
+                  types: ["csv"],
+                  filename: "采购入库单汇总",
+                  columns:this.columns,
+                  data: res.data.vos,
+                });
+              }
+            } else {
+              this.data = [];
+            }
+          });
+      } else if (this.type === "050201") {
+        (obj.outDateStart = this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : ""),
+          (obj.outDateEnd = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
+            : ""),
+          getOutStockList(params,obj).then(res => {
+            if (res.data.vos.length !== 0) {
+              res.data.vos.map((item, index) => {
+                item.index = index + 1;
+                item.taxSign = item.taxSign ? "是" : "否";
+                item.auditSign = item. billStatusId ? "已入库" : "草稿";
+              });
+              this.data = res.data.vos;
+              if(this.data.length==params.size){
+                this.data = res.data.vos;
+                this.$refs.summary.exportCsv({
+                  types: ["csv"],
+                  filename: "采购退货单汇总",
+                  columns:this.columns,
+                  data: res.data.vos,
+                });
+              }
             } else {
               this.data = [];
             }
