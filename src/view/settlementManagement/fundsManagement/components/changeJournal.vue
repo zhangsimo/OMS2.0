@@ -31,8 +31,8 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="账号" prop="accountName">
-            <Input v-model="formCustom.accountName" class="w200" disabled></Input>
+          <FormItem label="账号" prop="accountCode">
+            <Input v-model="formCustom.accountCode" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -96,12 +96,10 @@
           </FormItem>
         </Col>
       </Row>
-
-
     </Form>
     <div slot="footer">
       <Button type="primary" @click="save">保存</Button>
-      <Button @click="back">返回</Button>
+      <Button @click="modalShow=false">返回</Button>
     </div>
   </Modal>
 </template>
@@ -149,7 +147,7 @@
           accountId: [
             { required: true, type:'string', message: '账户必选', trigger: 'change' }
           ],
-          accountName: [
+          accountCode: [
             {required: true, message: '账号必填', trigger: 'blur'}
           ],
           bankName: [
@@ -202,7 +200,7 @@
         this.getSubject()
         setTimeout(()=>{
           this.modalShow = true
-          this.formCustom = this.list
+          this.formCustom = {...this.list}
           // console.log(this.formCustom.mateAccountCode,11111)
         },0)
       },
@@ -299,6 +297,7 @@
               this.$Message.success('修改成功')
               this.modalShow = false
               this.$emit('getNewList', {})
+              this.$emit("update")
             }
           }
         })

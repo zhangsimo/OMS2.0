@@ -25,8 +25,8 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="账号" prop="accountName">
-            <Input  v-model="formCustom.accountName" class="w200" disabled></Input>
+          <FormItem label="账号" prop="accountCode">
+            <Input  v-model="formCustom.accountCode" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -129,7 +129,7 @@
           accountId:[
             { required: true, type:'string', message: '账户必选', trigger: 'change' }
           ],
-          accountName:[
+          accountCode:[
             { required: true, message: '账号必填', trigger: 'blur' }
           ],
           bankName:[
@@ -262,7 +262,8 @@
       changeAccount(value){
         if (!value) return
         let shopArr = this.accountList.filter(item => item.id == value)
-        this.$set(this.formCustom , 'accountName' ,  shopArr[0].accountCode)
+        this.$set(this.formCustom , 'accountName' ,  shopArr[0].accountName)
+        this.$set(this.formCustom , 'accountCode' ,  shopArr[0].accountCode)
         this.$set(this.formCustom , 'bankName' , shopArr[0].bankName )
       },
 
@@ -281,6 +282,7 @@
               this.$Message.success('保存成功')
               this.modalShow = false
               this.$emit('getNewList' ,{})
+              this.$emit("update")
             }
           }
         })

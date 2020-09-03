@@ -100,7 +100,7 @@
         </section>
         <section class="con-box">
           <div class="inner-box">
-            <!--<Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>-->
+            <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
             <div class="db mt10 info" v-if="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
@@ -839,9 +839,6 @@
         clientList2: {},
         provinceArr2: [],
         treeDiagramList2: [],
-
-        //
-        // Actualtotalcollect:0,
       };
     },
     async mounted() {

@@ -266,7 +266,7 @@ export default {
       this.$refs.getDate.resetFun();
       this.storeId = v;
       this.searchValue = "";
-      this.$refs.supplier.isLayerValue = "";
+      // this.$refs.supplier.isLayerValue = "";
       this.getList(v);
       //this.getClientList();
       this.$refs.Xtable.recalculate(true)
