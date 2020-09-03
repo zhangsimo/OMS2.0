@@ -1,10 +1,10 @@
 <template>
-  <Modal v-model="modalShow" title="修改日记账" width="700">
+  <Modal v-model="modalShow" title="修改日记账" width="750">
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustomRalus" :label-width="100" label-colon>
       <Row>
         <Col span="12">
           <FormItem label="所属门店" >
-            <Input  v-model="formCustom.shopName" class="w150" disabled />
+            <Input  v-model="formCustom.shopName" class="w200" disabled />
             <!--            <Select v-model="formCustom.shopId" style="width:150px" @on-change='getShopCode'>-->
             <!--              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>-->
             <!--            </Select>-->
@@ -12,7 +12,7 @@
         </Col>
         <Col span="12">
           <FormItem label="所属区域" >
-            <Input  v-model="formCustom.areaName" class="w150" disabled />
+            <Input  v-model="formCustom.areaName" class="w200" disabled />
             <!--            <Select v-model="formCustom.areaId" style="width:150px" @on-change="changeArea">-->
             <!--              <Option v-for="item in areaList" :value="item.id" :key="item.id">{{ item.companyName }}</Option>-->
             <!--            </Select>-->
@@ -20,66 +20,64 @@
         </Col>
         <Col span="12">
           <FormItem label="所属店号">
-            <Input v-model="formCustom.shopCode" class="w150" disabled/>
+            <Input v-model="formCustom.shopCode" class="w200" disabled/>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="账户" prop="accountId">
             <Select v-model="formCustom.accountId" style="width:150px" @on-change='changeAccount' disabled>
-              <Option v-for="item in accountList" :value="item.id" :key="item.id">{{
-                item.accountName }}
-              </Option>
+              <Option v-for="item in accountList" :value="item.id" :key="item.id">{{item.accountName }}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="账号" prop="accountName">
-            <Input v-model="formCustom.accountName" class="w150" disabled></Input>
+            <Input v-model="formCustom.accountName" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="开户行" prop="bankName">
-            <Input v-model="formCustom.bankName" class="w150" disabled></Input>
+            <Input v-model="formCustom.bankName" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对应科目" prop="mateAccountName">
-            <Input v-model="formCustom.mateAccountName" class="w150" disabled></Input>
+            <Input v-model="formCustom.mateAccountName" class="w200" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="发生日期" prop="createTime">
-            <DatePicker type="datetime" v-model="formCustom.createTime" :options="options1" style="width: 150px"></DatePicker>
+            <DatePicker type="datetime" v-model="formCustom.createTime" :options="options1" class="w200"></DatePicker>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="收入金额">
-            <Input v-model="formCustom.incomeMoney" class="w150"></Input>
+            <Input v-model="formCustom.incomeMoney" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="支出金额">
-            <Input v-model="formCustom.paidMoney" class="w150"></Input>
+            <Input v-model="formCustom.paidMoney" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对方户名">
-            <Input v-model="formCustom.reciprocalAccountName" class="w150"></Input>
+            <Input v-model="formCustom.reciprocalAccountName" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对账账号">
-            <Input v-model="formCustom.checkAccount" class="w150"></Input>
+            <Input v-model="formCustom.checkAccount" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="对方开户行">
-            <Input v-model="formCustom.reciprocalBankName" class="w150"></Input>
+            <Input v-model="formCustom.reciprocalBankName" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="交易备注">
-            <Input v-model="formCustom.tradingNote" class="w150"></Input>
+            <Input v-model="formCustom.tradingNote" class="w200"></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -103,7 +101,7 @@
     </Form>
     <div slot="footer">
       <Button type="primary" @click="save">保存</Button>
-      <Button @click="modalShow=false">返回</Button>
+      <Button @click="back">返回</Button>
     </div>
   </Modal>
 </template>
@@ -304,6 +302,11 @@
             }
           }
         })
+      },
+      //  返回
+      back(){
+        this.modalShow=false
+        this.$emit("update")
       }
     }
 

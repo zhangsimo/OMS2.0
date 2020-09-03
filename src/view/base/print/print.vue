@@ -231,9 +231,9 @@
           <thead>
           <tr>
             <th style="width:30px !important;">序号</th>
-            <th style="width:105px;overflow: hidden;white-space:nowrap;">配件编码</th>
+            <th style="width:110px;overflow: hidden;white-space:nowrap;">配件编码</th>
             <th style="width:85px;overflow: hidden;white-space:nowrap;">配件名称</th>
-            <th style="width:65px;overflow: hidden;white-space:nowrap;">OEM码</th>
+            <th style="width:90px;overflow: hidden;white-space:nowrap;">OEM码</th>
             <th style="width:50px;overflow: hidden;white-space:nowrap;">品牌</th>
             <th style="width:40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>
@@ -247,9 +247,9 @@
           <tbody>
           <tr v-for="(item ,index) in onelist.detailList" :key="index">
             <td style="width:30px !important;">{{index + 1}}</td>
-            <td style="width:105px;overflow: hidden;white-space:nowrap;">{{item.partCode}}</td>
+            <td style="width:110px;overflow: hidden;white-space:nowrap;">{{item.partCode}}</td>
             <td style="width:85px;overflow: hidden;white-space:nowrap;">{{item.partName}}</td>
-            <td style="width:65px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>
+            <td style="width:90px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>
             <td style="width:50px;overflow: hidden;white-space:nowrap;">{{item.partBrand}}</td>
             <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
@@ -716,7 +716,7 @@
   }
 
   #printBox {
-    width: 700px;
+    width: 730px;
     margin: 0 auto;
     overflow: hidden;
     overflow-y: scroll;

@@ -158,7 +158,7 @@
     <amtData :moneyList='allMoneyList'></amtData>
 
     <!--    修改-->
-    <changeJournal :list='oneList' ref="changeModal" @getNewList="allList"></changeJournal>
+    <changeJournal :list='oneList' ref="changeModal" @getNewList="allList" @update="getList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain5" @on-click="clearSelectTabelList">

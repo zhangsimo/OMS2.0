@@ -212,7 +212,7 @@ export default {
     //选中的日期
     selectDate(date) {
       this.penSalesData.option1 = date;
-      console.log(this.penSalesData.option1);
+      // console.log(this.penSalesData.option1);
     },
     changePage(p) {
       this.pageList.page = p
@@ -241,13 +241,16 @@ export default {
     cancel() {},
     echoDate() {},
     radioChangeEvent({ row }) {
-      console.log(row);
+      // console.log(row);
       this.checkRow = row;
       this.currentData = row.detailList;
     },
     ok() {
       // 将选好的成品传父组件
       if (this.checkRow.id) {
+        this.currentData.map(item=>{
+          item.changeQty=item.qty
+        })
         this.$emit("ok", this.checkRow);
       } else {
         this.$Message.error("请先选择配件");

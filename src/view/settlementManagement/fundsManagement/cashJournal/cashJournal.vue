@@ -140,7 +140,7 @@
     <add ref="addModel" @getAllList="allList"></add>
 
     <!--    修改-->
-    <changeJournal :list="oneList" ref="changeModal" @getAllList="allList"></changeJournal>
+    <changeJournal :list="oneList" ref="changeModal" @getAllList="allList"  @update="getList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">

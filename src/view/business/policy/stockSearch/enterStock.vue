@@ -350,7 +350,7 @@
             class="fr mr10 mt10"
             v-show="tIndex == 1"
             class-name="page-con"
-            :page-size-opts="[100,300,500]"
+            :page-size-opts="[10,20,30,40,50]"
             :current="contentOne.page.num"
             :total="contentOne.page.total"
             :page-size="contentOne.page.size"
@@ -363,7 +363,7 @@
             class="fr mr10 mt10"
             v-show="tIndex == 2"
             class-name="page-con"
-            :page-size-opts="[100,300,500]"
+            :page-size-opts="[10,20,30,40,50]"
             :current="contentTwo.page.num"
             :total="contentTwo.page.total"
             :page-size="contentTwo.page.size"
@@ -376,7 +376,7 @@
             class="fr mr10 mt10"
             v-show="tIndex == 3"
             class-name="page-con"
-            :page-size-opts="[100,300,500]"
+            :page-size-opts="[10,20,30,40,50]"
             :current="contentThree.page.num"
             :total="contentThree.page.total"
             :page-size="contentThree.page.size"
@@ -923,7 +923,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 100
+            size: 10
           }
         },
         //出库明细数据
@@ -932,7 +932,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 100
+            size: 10
           },
           //数据
           dataTwo: [
@@ -948,7 +948,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 100
+            size: 10
           },
           //数据
           dataThree: [

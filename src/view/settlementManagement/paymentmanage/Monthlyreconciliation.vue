@@ -100,7 +100,7 @@
         </section>
         <section class="con-box">
           <div class="inner-box">
-            <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
+            <!--<Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>-->
             <div class="db mt10 info" v-if="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
@@ -155,37 +155,111 @@
             <!-- 应收业务销售出库/退货对账 -->
             <div class="db mt20">
               <h5>应收业务销售出库/退货对账</h5>
-              <Table
-                :columns="columns1"
-                :data="data1"
-                :loading="data1Loading"
+              <!--<Table-->
+                <!--:columns="columns1"-->
+                <!--:data="data1"-->
+                <!--:loading="data1Loading"-->
+                <!--border-->
+                <!--max-height="400"-->
+                <!--@on-select="collectCheckout"-->
+                <!--@on-select-all="collectCheckoutAll"-->
+                <!--@on-select-cancel="collectNoCheckout"-->
+                <!--@on-select-all-cancel="collectNoCheckoutAll"-->
+                <!--show-summary-->
+                <!--:row-class-name="rowClassName"-->
+                <!--ref="receivable"-->
+              <!--&gt;</Table>-->
+              <vxe-table
                 border
-                max-height="400"
-                @on-select="collectCheckout"
-                @on-select-all="collectCheckoutAll"
-                @on-select-cancel="collectNoCheckout"
-                @on-select-all-cancel="collectNoCheckoutAll"
-                show-summary
                 :row-class-name="rowClassName"
                 ref="receivable"
-              ></Table>
+                show-overflow="title"
+                max-height="300"
+                auto-resize
+                size="mini"
+                :data="data1"
+                :loading="data1Loading"
+                @checkbox-all="collectCheckoutAll"
+                @checkbox-change="collectCheckout"
+              >
+                <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
+                <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
+                <vxe-table-column field="guestName" title="客户名称" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="transferDate" title="日期" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceId" title="业务单据号" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceSourceName" title="来源" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceTypeName" title="业务类型" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="taxSignName" title="含税标志" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="rpAmt" title="单据金额" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="140"></vxe-table-column>
+                <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="140"></vxe-table-column>
+                <vxe-table-column
+                  field="thisNoAccountAmt"
+                  title="本次不对账金额"
+                  align="center"
+                  width="140"
+                >
+                  <template v-slot="{row,rowIndex}">
+                    <span style="cursor:pointer;color:#87CEFA" @click="openThisRec(row,rowIndex)">{{row.thisNoAccountAmt}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
+                </vxe-table-column>
+              </vxe-table>
             </div>
             <!-- 应付业务采购入库/退货对账 -->
             <div class="db mt20">
               <h5>应付业务采购入库/退货对账</h5>
-              <Table
-                :columns="columns1"
-                :data="data2"
+              <!--<Table-->
+                <!--:columns="columns1"-->
+                <!--:data="data2"-->
+                <!--border-->
+                <!--max-height="400"-->
+                <!--@on-select="paymentCheckout"-->
+                <!--@on-select-all="paymentCheckoutAll"-->
+                <!--@on-select-cancel="paymentNoCheckout"-->
+                <!--@on-select-all-cancel="paymentNoCheckoutAll"-->
+                <!--:row-class-name="rowClassName"-->
+                <!--show-summary-->
+                <!--ref="payable"-->
+              <!--&gt;</Table>-->
+              <vxe-table
                 border
-                max-height="400"
-                @on-select="paymentCheckout"
-                @on-select-all="paymentCheckoutAll"
-                @on-select-cancel="paymentNoCheckout"
-                @on-select-all-cancel="paymentNoCheckoutAll"
                 :row-class-name="rowClassName"
-                show-summary
+                show-overflow="title"
+                max-height="300"
+                auto-resize
+                size="mini"
+                :data="data2"
                 ref="payable"
-              ></Table>
+                :loading="data1Loading"
+                @checkbox-all="paymentCheckoutAll"
+                @checkbox-change="paymentCheckout"
+              >
+                <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
+                <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
+                <vxe-table-column field="guestName" title="客户名称" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="transferDate" title="日期" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceId" title="业务单据号" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceSourceName" title="来源" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceTypeName" title="业务类型" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="taxSignName" title="含税标志" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="rpAmt" title="单据金额" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="140"></vxe-table-column>
+                <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="140"></vxe-table-column>
+                <vxe-table-column
+                  field="thisNoAccountAmt"
+                  title="本次不对账金额"
+                  align="center"
+                  width="140"
+                >
+                  <template v-slot="{row,rowIndex}">
+                    <span style="cursor:pointer;color:#87CEFA" @click="openThisRec(row,rowIndex)">{{row.thisNoAccountAmt}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
+                </vxe-table-column>
+              </vxe-table>
             </div>
             <div class="totalcollect p10 mt20">
               <div class="db">
@@ -410,7 +484,7 @@
   import index from "../../admin/roles";
   import render from "../../../components/message/base/render";
   import {findGuest} from "../../../api/settlementManagement/advanceCollection";
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import moment from "moment";
 
   export default {
@@ -765,22 +839,25 @@
         clientList2: {},
         provinceArr2: [],
         treeDiagramList2: [],
+
+        //
+        // Actualtotalcollect:0,
       };
     },
     async mounted() {
-      let arr = await creat(this.$refs.quickDate.val, this.$store);
-      this.value = arr[0];
-      this.model1 = arr[1];
-      this.Branchstore = arr[2];
-      // let obj={
-      //   startDate: this.value[0]
-      //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-      //     : "",
-      //   endDate: this.value[1]
-      //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-      //     : ""
-      // }
-      this.$refs.quickDate.getval(1);
+      // let arr = await creat(this.$refs.quickDate.val, this.$store);
+      // this.value = arr[0];
+      // this.model1 = arr[1];
+      // this.Branchstore = arr[2];
+      // // let obj={
+      // //   startDate: this.value[0]
+      // //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+      // //     : "",
+      // //   endDate: this.value[1]
+      // //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+      // //     : ""
+      // // }
+      // this.$refs.quickDate.getval(1);
     },
     computed: {
       //实际应付合计
@@ -919,8 +996,21 @@
         return collectSum
       },
       // 对账单弹框出现加载数据
-      hander(type) {
+      async hander(type) {
         if (type) {
+          let arr = await creat(this.$refs.quickDate.val, this.$store);
+          this.value = arr[0];
+          this.model1 = arr[1];
+          this.Branchstore = arr[2];
+          // let obj={
+          //   startDate: this.value[0]
+          //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          //     : "",
+          //   endDate: this.value[1]
+          //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          //     : ""
+          // }
+
           this.handervis = false;
           this.flag = false;
           this.info = false;
@@ -945,7 +1035,8 @@
           this.collectlist = [];
           this.paymentlist = [];
           // this.storeAccount(this.parameter.orgId);
-          this.Initialization();
+          // this.Initialization();
+          this.$refs.quickDate.resetFun();
         }
       },
       getAccountNameListFun(v) {
@@ -1005,6 +1096,8 @@
           obj.taxSign = this.moreSearch.taxMark;
         }
         this.data1Loading = true;
+        this.data1 = [];
+        this.data2 = [];
         getReconciliation(obj).then(res => {
           this.data1Loading = false;
           // let Statementexcludingtax = 0;
@@ -1209,7 +1302,7 @@
 
 
       // 应付选中
-      paymentCheckout(selection, row) {
+      paymentCheckout({selection, row}) {
         this.paymentlist = selection;
         this.totalpayment = 0;
         selection.map(item => {
@@ -1221,7 +1314,7 @@
         // this.tipText(this.paymentlist);
       },
       // 应收选中
-      collectCheckout(selection, row) {
+      collectCheckout({selection, row}) {
         this.collectlist = selection;
         this.totalcollect = 0;
         this.Actualtotalcollect = 0;
@@ -1236,7 +1329,7 @@
         // this.tipText(this.collectlist);
       },
       // 应收全选
-      collectCheckoutAll(selection) {
+      collectCheckoutAll({selection}) {
         this.collectlist = selection;
         this.totalcollect = this.collectSum(selection)
         // selection.map(item => {
@@ -1273,7 +1366,7 @@
         }
       },
       // 应付全选
-      paymentCheckoutAll(selection) {
+      paymentCheckoutAll({selection}) {
         this.paymentlist = selection;
         this.totalpayment = 0
         selection.map(item => {
@@ -1625,7 +1718,7 @@
         this.accountLayer = false;
         this.moreSearch = {}
       },
-      rowClassName(row, index) {
+      rowClassName({row, rowIndex}) {
         if (row.existDraft === 1) {
           return 'Isdraft';
         }
@@ -1736,6 +1829,25 @@
           }
         })
       },
+
+      //销售出库，本次不对账金额弹窗
+      openThisRec(row,i){
+        this.Reconciliation = true;
+        this.$refs.xTable.recalculate(true)
+        row.detailDtoList.map((item, index) => {
+          item.num = index + 1;
+          item.index = i;
+        });
+        this.Reconciliationcontent = row.detailDtoList;
+        const store = this.Branchstore.filter(
+          item => item.value === this.model1
+        );
+        this.store = store[0].label;
+        this.bill = row.serviceId;
+        this.business = row.serviceTypeName;
+        this.thiscompanyInfo = row.guestName;
+        this.billDate = row.transferDate;
+      }
     },
     watch: {
       //应收坏账
