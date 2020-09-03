@@ -37,7 +37,7 @@
                   height="500"
                   style="width: 1500px"
                  >
-                  <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+                  <vxe-table-column type="seq" width="50" title="序号"></vxe-table-column>
                   <vxe-table-column field="fullName" title="名称"  show-overflow></vxe-table-column>
                   <vxe-table-column field="code" title="编码"></vxe-table-column>
                   <vxe-table-column title="状态">

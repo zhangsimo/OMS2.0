@@ -71,7 +71,7 @@
           width="60"
         ></vxe-table-column>
         <vxe-table-column
-          type="index"
+          type="seq"
           title="序号"
           width="60"
         ></vxe-table-column>

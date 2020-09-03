@@ -327,7 +327,7 @@
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
                 <vxe-table-column show-overflow="tooltip"
-                                  type="index"
+                                  type="seq"
                                   fixed="left"
                                   width="60"
                                   title="序号"

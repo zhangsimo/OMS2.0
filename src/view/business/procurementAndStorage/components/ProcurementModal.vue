@@ -58,7 +58,7 @@
         auto-resize
       >
         <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
-        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
         <vxe-table-column field="orderQty" title="采购总数"></vxe-table-column>
@@ -91,7 +91,7 @@
         :data="tableDataBm"
         auto-resize
       >
-        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
         <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>

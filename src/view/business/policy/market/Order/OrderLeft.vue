@@ -16,7 +16,7 @@
         height="593"
         :data="tableData"
       >
-        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="billTypeName" title="状态"></vxe-table-column>
         <vxe-table-column field="guestName" title="客户"></vxe-table-column>
         <vxe-table-column field="orderMan" title="销售员"></vxe-table-column>

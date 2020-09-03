@@ -307,7 +307,7 @@
                 >
                   <vxe-table-column
                     show-overflow="tooltip"
-                    type="index"
+                    type="seq"
                     width="60"
                     title="序号"
                     fixed="left"

@@ -167,7 +167,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -225,7 +224,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -283,7 +281,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -341,7 +338,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               highlight-hover-row
               stripe
@@ -399,7 +395,6 @@
             <vxe-table
               border
               resizable
-              show-footer
               show-overflow
               stripe
               ref="xTable5"

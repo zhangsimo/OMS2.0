@@ -182,7 +182,7 @@
                   :data="tableData"
                   :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+                  <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                   <vxe-table-column field="name" title="操作" width="100">
                     <template v-slot="{ row }">
@@ -336,7 +336,7 @@
           <div class="pane-made-hd mt15">往来单位列表</div>
           <div class="w420 h600">
             <vxe-table border resizable height="auto" :data="tableData">
-              <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
+              <vxe-table-column type="seq" width="80" title="序号"></vxe-table-column>
               <vxe-table-column field="name" title="操作" width="80"></vxe-table-column>
               <vxe-table-column field="sex" title="往来单位" width="130"></vxe-table-column>
               <vxe-table-column field="age" title="编码" width="130"></vxe-table-column>
@@ -360,7 +360,7 @@
               :edit-config="{trigger: 'click', mode: 'cell'}"
             >
               >
-              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column width="60" title="操作">
                 <template v-slot="{ row }">
                   <a href="javascript:;">删除</a>
@@ -404,7 +404,7 @@
           resizable
           highlight-hover-row
           :data="tableData">
-          <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="配件编码" width="230"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="230"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="230"></vxe-table-column>
@@ -421,7 +421,7 @@
           resizable
           highlight-hover-row
           :data="tableData">
-          <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="公司名称" width="230"></vxe-table-column>
           <vxe-table-column field="sex" title="仓库" width="230"></vxe-table-column>
           <vxe-table-column field="age" title="库存数量" width="230"></vxe-table-column>
@@ -438,7 +438,7 @@
           resizable
           highlight-hover-row
           :data="tableData">
-          <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="配件编码" width="230"></vxe-table-column>
           <vxe-table-column field="sex" title="配件名称" width="230"></vxe-table-column>
           <vxe-table-column field="age" title="仓库" width="230"></vxe-table-column>

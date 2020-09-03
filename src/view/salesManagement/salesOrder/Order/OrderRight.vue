@@ -272,7 +272,7 @@
           @keydown="keydown"
           :footer-method="footerMethod"
         >
-          <vxe-table-column show-overflow="tooltip" fixed="left" type="index" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="50" title="序号"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="60">
             <template v-slot="{ row,rowIndex }">
@@ -1268,6 +1268,7 @@
         });
         data.detailList = val.details;
         data.sign = b;
+        data.orderTypeId = val.orderTypeId||"";
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();
