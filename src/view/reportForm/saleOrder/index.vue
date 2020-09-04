@@ -2,15 +2,15 @@
   <div class="content-oper" style="background: #fff">
     <Tabs style="min-height: 500px">
       <TabPane label="销售订单明细表">
-        <panne :type="1" ref="panne" @search="search1" @export="exportxls('tabOne')" />
+        <panne :type="1" ref="panne1" @search="search1" @export="exportxls('tabOne')" />
         <tabOne ref="tabOne" />
       </TabPane>
       <TabPane label="销售出库明细表">
-        <panne :type="2" ref="panne1" @search="search2" @export="exportxls('tabTwo')" />
+        <panne :type="2" ref="panne2" @search="search2" @export="exportxls('tabTwo')" />
         <tabTwo ref="tabTwo" />
       </TabPane>
       <TabPane label="销售退货明细表">
-        <panne :type="3" ref="panne2" @search="search3" @export="exportxls('tabThree')" />
+        <panne :type="3" ref="panne3" @search="search3" @export="exportxls('tabThree')" />
         <tabThree ref="tabThree" />
       </TabPane>
     </Tabs>
@@ -109,13 +109,13 @@ export default {
         case "tabOne":
           // filename = "销售订单明细表";
           let str = ""
-          let search=this.$refs.panne.search
-          search.orgid==0?search.orgid="":search.orgid;
-          search.auditStartTime=moment(search["auditDate"][0]).format("YYYY-MM-DD")+" 00:00:00"
-          search.auditEndTime=moment(search["auditDate"][1]).format("YYYY-MM-DD")+" 23:59:59"
-          delete search.auditDate
-          for(var i in search){
-            str+=`${i}=${search[i]}&`
+          let search1=this.$refs.panne1.search
+          search1.orgid==0?search1.orgid="":search1.orgid;
+          search1.auditStartTime=search1.auditDate?moment(search1.auditDate[0]).format("YYYY-MM-DD")+" 00:00:00":""
+          search1.auditEndTime=search1.auditDate?moment(search1.auditDate[1]).format("YYYY-MM-DD")+" 23:59:59":""
+          delete search1.auditDate
+          for(var i in search1){
+            str+=`${i}=${search1[i]}&`
           }
           let page={size:this.$refs.tabOne.page.total,page:0}
           for(var i in page){
@@ -129,13 +129,13 @@ export default {
         case "tabTwo":
           // filename = "销售出库明细表";
           let str2 = ""
-          let search1=this.$refs.panne1.search
-          search1.orgid==0?search1.orgid="":search1.orgid;
-          search1.startOutDate=moment(search1["auditDate"][0]).format("YYYY-MM-DD")+" 00:00:00"
-          search1.endOutDate=moment(search1["auditDate"][1]).format("YYYY-MM-DD")+" 23:59:59"
-          delete search1.auditDate
-          for(var i in this.$refs.panne1.search){
-            str2+=`${i}=${this.$refs.panne1.search[i]}&`
+          let search2=this.$refs.panne2.search
+          search2.orgid==0?search2.orgid="":search2.orgid;
+          search2.startOutDate=search2.auditDate?moment(search2.auditDate[0]).format("YYYY-MM-DD")+" 00:00:00":""
+          search2.endOutDate=search2.auditDate?moment(search2.auditDate[1]).format("YYYY-MM-DD")+" 23:59:59":""
+          delete search2.auditDate
+          for(var i in search2){
+            str2+=`${i}=${search2[i]}&`
           }
           let page2={size:this.$refs.tabTwo.page.total,page:0}
           for(var i in page2){
@@ -148,13 +148,13 @@ export default {
           break;
         case "tabThree":
           let str3 = ""
-          let search3=this.$refs.panne2.search
+          let search3=this.$refs.panne3.search
           search3.orgid==0?search3.orgid="":search3.orgid;
-          search3.auditStartDate=moment(search3["auditDate"][0]).format("YYYY-MM-DD")+" 00:00:00"
-          search3.auditEndDate=moment(search3["auditDate"][1]).format("YYYY-MM-DD")+" 23:59:59"
+          search3.auditStartDate=search3.auditDate?moment(search3.auditDate[0]).format("YYYY-MM-DD")+" 00:00:00":""
+          search3.auditEndDate=search3.auditDate?moment(search3.auditDate[1]).format("YYYY-MM-DD")+" 23:59:59":""
           delete search3.auditDate
-          for(var i in this.$refs.panne2.search){
-            str3+=`${i}=${this.$refs.panne2.search[i]}&`
+          for(var i in search3){
+            str3+=`${i}=${search3[i]}&`
           }
           let page3={size:this.$refs.tabThree.page.total,page:0}
           for(var i in page3){

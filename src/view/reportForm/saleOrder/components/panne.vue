@@ -209,6 +209,7 @@
       // 快速日期查询
       async getDataQuick(v) {
         this.search.auditDate = v;
+        console.log(this.search.auditDate,11111)
         if (v.length >= 2) {
           let arr = await creat("", this.$store);
           this.search.orgid = arr[1];
