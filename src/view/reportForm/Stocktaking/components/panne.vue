@@ -165,7 +165,7 @@ export default {
               }
             }
           } else if (key == "content" && this.search.content) {
-            data.partCode = this.search.content;
+            data.partCode = this.search.content.trim();
           } else {
             data[key] = this.search[key];
           }

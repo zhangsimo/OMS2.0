@@ -74,7 +74,7 @@
           <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" title="操作">
             <template v-slot="{ row, rowIndex }">
-              <Button type="text" @click="ruku">到货入库</Button>
+              <Button :loading="isSaveClick" type="text" @click="ruku">到货入库</Button>
             </template>
           </vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="orgName" title="调出方"></vxe-table-column>
@@ -276,7 +276,8 @@ export default {
         size: 50,
         pageSizeOpts: [50, 100, 150, 200]
       },
-      storeArray: []
+      storeArray: [],
+      isSaveClick:false
     };
   },
   created() {
@@ -437,8 +438,10 @@ export default {
       //console.log(this.currentrow, "this.currentrow =>286");
       this.currentrow.settleStatus = this.currentrow.settleStatus.value;
       // this.currentrowthis.enterStoreId = this.storeArray[0].value;
+      this.isSaveClick = true
       daohuoruku(this.currentrow)
         .then(res => {
+          this.isSaveClick = false
           if (res.code == 0) {
             ////console.log(res);
             this.$Message.success("入库成功");

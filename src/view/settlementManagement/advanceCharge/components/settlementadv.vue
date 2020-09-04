@@ -413,9 +413,9 @@ export default {
       if (isNaN(row.uncollectedAmt)) {
         row.uncollectedAmt = 0;
       }
-      row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAmt * 1;
-      row.endAmt = +row.rpAmt * 1;
-      row.uncollectedAmt = row.reconciliationAmt * 1 - row.rpAmt;
+      row.unAmtLeft = this.$utils.subtract ( row.reconciliationAmt , row.rpAmt)
+      row.endAmt = row.rpAmt;
+      row.uncollectedAmt =this.$utils.subtract(row.reconciliationAmt , row.rpAmt)
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -461,6 +461,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
+        console.log()
         item.rpAmt = item.rpAmt == "" ? 0 : item.rpAmt;
         sum1 += parseFloat(item.rpAmt);
       });

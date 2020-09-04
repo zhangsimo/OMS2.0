@@ -206,7 +206,8 @@ export default {
       ispart: false,
       isWms: false,
       selectItemId:"",
-      backShow: false //作废判断是否wms仓库
+      backShow: false, //作废判断是否wms仓库
+      submitloading:false
     };
   },
   mounted() {
@@ -246,9 +247,10 @@ export default {
     },
     //打印表格
     async printTable() {
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="销售订单"
       order.route=this.$route.name
+      order.id=this.$store.state.dataList.oneOrder.id;
       let routeUrl=this.$router.resolve({name:"print",query:order})
       window.open(routeUrl.href,"_blank");
       this.$refs.OrderLeft.gitlistValue()
@@ -294,6 +296,7 @@ export default {
     },
     //提交
     sumbit() {
+      if(this.submitloading){return }
       let list = this.$store.state.dataList.oneOrder;
       this.$refs.right.$refs.formPlan.validate(async valid => {
         if (valid) {
@@ -317,6 +320,7 @@ export default {
     },
     //返单
     async setBackOrder() {
+      if(this.submitloading){return }
       this.backloading = true;
       let list = this.$store.state.dataList.oneOrder;
       if (!list.id) {
@@ -326,16 +330,22 @@ export default {
       }
       let data = {};
       data.id = list.id;
+      this.submitloading=true
       let res = await getReorder(data);
       if (res.code === 0) {
         this.changeLeft = res;
         let data = {};
         this.$store.commit("setOneOrder", data);
         this.backloading = false;
+        this.submitloading=false;
+      }else{
+        this.submitloading=false
+        // this.$Message.error("返单失败")
       }
     },
     //作废
     async setCancellation() {
+      if(this.submitloading){return }
       let list = this.$store.state.dataList.oneOrder;
       if (list.id) {
         this.$Modal.confirm({
@@ -343,11 +353,15 @@ export default {
           onOk: async () => {
             let data = {};
             data.id = list.id;
+            this.submitloading=true;
             let res = await getCancellation(data);
             if (res.code === 0) {
               this.changeLeft = res;
               let data = {};
               this.$store.commit("setOneOrder", data);
+              this.submitloading=false;
+            }else{
+              this.submitloading=false;
             }
           },
           onCancel: () => {

@@ -263,7 +263,7 @@
         </table>
 
         <Row style="border: 1px #000000 solid;color:#000;font-size: 10px;display: flex;" v-if="onelist.name!='盘点单'">
-          <Col style="border-right: 1px #000000 solid;padding:2px;width: 640px">
+          <Col style="border-right: 1px #000000 solid;padding:2px;width: 640px"  v-if="priceShow">
             <span>合计:</span>
             <span>{{ onelist.orderAmt | toChies}}</span>
           </Col>
@@ -271,7 +271,7 @@
             <span>总数:</span>
             <span>{{onelist.orderQty||onelist.totalNum}}</span>
           </Col>
-          <Col style="padding:2px;width: 200px;">
+          <Col style="padding:2px;width: 200px;"  v-if="priceShow">
             <span>合计:</span>
             <span>{{onelist.orderAmt}}</span>
           </Col>
@@ -431,6 +431,7 @@
                 this.onelist.guestAddr=this.onelist.guestAddress
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.details
+                this.onelist.orderAmt=this.onelist.totalAmt
                 this.onelist.printDate = tools.transTime(new Date());
                 if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
                   this.onelist.storeName=""
@@ -457,6 +458,7 @@
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
+                this.onelist.orderAmt=this.onelist.totalAmt
                 if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
                   this.onelist.storeName=""
                 }else{
@@ -482,6 +484,7 @@
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
+                this.onelist.orderAmt=this.onelist.totalAmt
                 if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
                   this.onelist.storeName=""
                 }else{
@@ -507,6 +510,7 @@
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
+                this.onelist.orderAmt=this.onelist.totalAmt
                 if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
                   this.onelist.storeName=""
                 }else{
@@ -532,6 +536,7 @@
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
+                this.onelist.orderAmt=this.onelist.totalAmt
                 if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
                   this.onelist.storeName=""
                 }else{
@@ -570,6 +575,7 @@
                 this.onelist.contactor=this.onelist.receiver
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.detailVOS
+                this.onelist.orderQty=this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
               }
               break;
             case "stockRemoval": //调拨出库
@@ -599,6 +605,7 @@
                 this.onelist.deliverer=this.onelist.apply.deliverer
                 this.onelist.receiver=this.onelist.logisticsRecord.receiver
                 this.onelist.remark=this.onelist.logisticsRecord.remark
+                this.onelist.orderQty=this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
               }
               break;
             case "putStorage": //调拨入库
@@ -625,6 +632,7 @@
                 this.onelist.deliverer=this.onelist.enterOrder.deliverer
                 this.onelist.receiver=this.onelist.guestVO.receiver
                 this.onelist.remark=this.onelist.guestVO.remark
+                this.onelist.orderQty=this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
               }
               break;
             case "moveStorehouse": //移仓单
@@ -674,6 +682,7 @@
                 this.onelist.contactor=this.onelist.applyGuest.contactor
                 this.onelist.contactorTel=this.onelist.applyGuest.tel
                 this.onelist.detailList=this.onelist.enterOrder.voList
+                this.onelist.orderQty=this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
               }
               break;
             case "smsInventory": //盘点单
