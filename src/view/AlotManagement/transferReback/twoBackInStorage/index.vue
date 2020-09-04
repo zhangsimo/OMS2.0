@@ -610,7 +610,7 @@ export default {
         return;
       }
       let order = {};
-      order.name="调拨入库"
+      order.name="调出退回入库"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
