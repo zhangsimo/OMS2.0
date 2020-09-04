@@ -126,6 +126,7 @@
 </template>
 
 <script>
+  import * as api from "_api/settlementManagement/Dailyfundaudit/index.js";
   export default {
     name: "tableone",
     props: {
@@ -155,7 +156,14 @@
       selectChangeEvent({ checked, records }) {
         // console.log(checked ? "勾选事件" : "取消事件", records);
         this.$emit("selection", records);
-      }
+      },
+      async getList(params){
+        let res=await api.table8(params)
+        if(res.code===0){
+          this.$parent.tableData8=res.data.content || [];
+          this.$parent.$parent.$parent.page.total=res.data.totalElements
+        }
+      },
     }
   };
 </script>

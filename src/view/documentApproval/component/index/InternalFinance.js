@@ -85,8 +85,8 @@ export default {
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
         this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
-        this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.orgName = getPost();
+        this.formInline.shopCode = user.currentCompany?user.currentCompany.code : "";
+        this.formInline.orgName = user.currentCompany?user.currentCompany.shortName : "";
         this.formInline.applyTypeName = '内部资金调拨'
         this.formInline.applyTime = date
       }

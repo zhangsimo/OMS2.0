@@ -741,7 +741,7 @@
         },
         // 打印
         stamp(){
-          let order = this.$store.state.dataList.oneOrder;
+          let order = {};
           order.name="调拨申请"
           order.route=this.$route.name
           order.id=this.mainId

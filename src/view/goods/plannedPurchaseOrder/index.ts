@@ -627,7 +627,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 打印
   private print() {
-    let order = this.$store.state.dataList.oneOrder;
+    let order = {};
     order.name="采购订单"
     order.route=this.$route.name
     order.id=this.mainId
@@ -921,10 +921,12 @@ export default class PlannedPurchaseOrder extends Vue {
           }
         }
       }else{
-        this.purchaseOrderTable.tbdata[0]._highlight=true
-        this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
-        if(this.purchaseOrderTable.tbdata[0].id){
-          this.selectLeftItemId = this.purchaseOrderTable.tbdata[0].id
+        if(this.purchaseOrderTable.tbdata.length>0){
+          this.purchaseOrderTable.tbdata[0]._highlight=true
+          this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
+          if(this.purchaseOrderTable.tbdata[0].id){
+            this.selectLeftItemId = this.purchaseOrderTable.tbdata[0].id
+          }
         }
       }
     }
