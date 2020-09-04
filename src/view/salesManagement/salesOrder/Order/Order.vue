@@ -247,9 +247,10 @@ export default {
     },
     //打印表格
     async printTable() {
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="销售订单"
       order.route=this.$route.name
+      order.id=this.$store.state.dataList.oneOrder.id;
       let routeUrl=this.$router.resolve({name:"print",query:order})
       window.open(routeUrl.href,"_blank");
       this.$refs.OrderLeft.gitlistValue()
