@@ -1079,8 +1079,8 @@ export default {
         saveDraft({
           id: this.tableFormDate.id,
           remark: this.formValidate.remark,
-          isBelowCost: this.single === false ? 0 : 1,
-          isVender: this.single2 === false ? 0 : 1,
+          isBelowCost: this.single2 === false ? 0 : 1,
+          isVender: this.single === false ? 0 : 1,
           details: this.data5
         }).then(res => {
           if (res.code === 0) {
