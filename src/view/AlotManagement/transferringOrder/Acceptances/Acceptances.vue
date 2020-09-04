@@ -280,7 +280,7 @@ export default {
       if (this.productName !== "9999") {
         params.orgid = this.productName;
       }
-      params.serviceId=this.serviceId || ""
+      params.serviceId=this.serviceId.trim() || ""
       findAll(params).then(res => {
         this.isSaveClick = false;
         if (res.code === 0) {
