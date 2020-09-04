@@ -627,7 +627,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 打印
   private print() {
-    let order = {};
+    let order:any = {};
     order.name="采购订单"
     order.route=this.$route.name
     order.id=this.mainId
