@@ -5,7 +5,7 @@
       align="left"
       size="mini"
       ref="xTable"
-      height="400"
+      max-height="700"
       show-footer
       :footer-method="footerMethod"
       :data="tableData"
