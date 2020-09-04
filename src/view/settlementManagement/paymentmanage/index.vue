@@ -76,13 +76,14 @@
         <vxe-table
           border
           show-overflow="title"
-          max-height="400"
+          max-height="300"
           auto-resize
           size="mini"
           :data="data"
           ref="summary"
           highlight-current-row
           @current-change="selete"
+          :loading="data1Loading"
         >
           <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
           <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
@@ -113,6 +114,14 @@
           <vxe-table-column field="unReconciledSumAmt" title="未对账合计" align="center" width="100">
           </vxe-table-column>
         </vxe-table>
+        <vxe-pager
+          background
+          :current-page.sync="pageObj.num"
+          :page-size.sync="pageObj.size"
+          :total="pageObj.total"
+          @page-change="pageChange"
+          :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        </vxe-pager>
         <Tabs v-model="detailedList" class="mt10" @click="tabName">
           <Tab-pane label="销售清单" name="key1">
             <Table
@@ -280,6 +289,11 @@ export default {
       clientList:[],//客户下拉数据
       searchLoading:true,
       guestId:"",//客户选中id
+      pageObj:{
+        size:10,
+        total:0,
+        num:1
+      },
       columns: [
         {
           title: "序号",
@@ -1745,7 +1759,8 @@ export default {
           label: "销售退货"
         }
       ],
-      data1Loading:false
+      data1Loading:false,
+      copyData:[]
     };
   },
   computed:{
@@ -1978,6 +1993,8 @@ export default {
       }
       this.data1Loading = true;
       this.data = [];
+      this.copyData = [];
+      this.pageObj.total = 0;
       getreceivable(obj).then(res => {
         this.data1Loading = false;
         if (res.data.length !== 0) {
@@ -1986,11 +2003,29 @@ export default {
           arrData.map((item, index) => {
             item.num = index + 1;
           });
-          this.data = arrData;
-        } else {
-          this.data = [];
+          // this.data = arrData;
+          this.copyData = arrData
+          this.pageObj.total = arrData.length;
+          this.changePageList(this.pageObj.num,this.pageObj.size);
+
         }
       });
+    },
+    pageChange({type, currentPage, pageSize, $event}){
+      this.pageObj.num  = currentPage;
+      this.pageObj.size = pageSize;
+      this.changePageList(currentPage,pageSize);
+    },
+    changePageList(page,num){
+      let firstNum = num*(page-1);
+      let lastNum = firstNum+num;
+      let arrData = (this.copyData||[]).slice(firstNum,lastNum);
+      this.data1Loading = true;
+      this.data = [];
+      setTimeout(()=>{
+        this.data = arrData;
+        this.data1Loading = false;
+      },500);
     },
     // 销售/采购接口
     getDetailed(data, obj) {
