@@ -1084,7 +1084,7 @@
       },
       // 打印
       stamp() {
-        let order = this.$store.state.dataList.oneOrder;
+        let order = {};
         order.name="采购退货单"
         order.route=this.$route.name
         order.id=this.mainId
