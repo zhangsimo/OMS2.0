@@ -279,7 +279,7 @@ export default {
         params.orgid = this.productName;
       }
       findAll(params).then(res => {
-        this.isSaveClick = true;
+        this.isSaveClick = false;
         if (res.code === 0) {
           this.topRight.tbdata = res.data.content;
           this.topRight.page.total = res.data.totalElements;
@@ -305,6 +305,9 @@ export default {
           this.isSaveClick = true;
 
           let res = await allotMainAccept(data);
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.$Message.success("受理成功");
             this.getList();
@@ -330,6 +333,9 @@ export default {
           }
           this.isSaveClick = true;
           let res = await allotMainAccept(data);
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.$Message.success("受理成功");
             this.getList();

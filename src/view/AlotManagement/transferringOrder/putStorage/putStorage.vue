@@ -28,7 +28,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'save'" type="default" class="mr10" @click="baocun1">
+              <Button :loading="isSaveClick" v-has="'save'" type="default" class="mr10" @click="baocun1">
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
@@ -744,9 +744,6 @@ export default {
         params.settleStatus = params.settleStatus.value;
       }
       params["voList"] = this.ArrayValue;
-      if(this.isSaveClick){
-        return this.$message.error('请稍后数据处理中....');
-      }
       this.isSaveClick = true;
       //配件组装保存
       baocun(params)
@@ -756,6 +753,8 @@ export default {
             // this.Leftcurrentrow = {};
             this.getList();
             this.$Message.success("保存成功");
+          }else{
+            this.isSaveClick = false;
           }
         })
         // .catch(e => {
@@ -865,6 +864,9 @@ export default {
             }
             this.isSaveClick = true;
             let res = await outDataList(params);
+            if(!res){
+              this.isSaveClick = false;
+            }
             // console.log("res", res);
             if (res.code == 0) {
               this.getList();
@@ -1163,9 +1165,12 @@ export default {
                 this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
                 this.isSaveClick = false;
                 return;
+              }else{
+                this.isSaveClick = false;
               }
-              this.isSaveClick = false;
             }
+          }else{
+            this.isSaveClick = false;
           }
         })
     },

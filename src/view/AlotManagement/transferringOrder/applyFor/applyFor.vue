@@ -18,7 +18,7 @@
                 <Button class="mr10" @click="addProoo" v-has="'add'"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
-                <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+                <Button :loading="isSaveClick" type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
                 <Button class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
@@ -544,7 +544,7 @@
           let data = {}
            data.id = this.rowId
                     data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestOrgid = this.formPlan.guestOrgid
                     data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
@@ -664,12 +664,11 @@
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
-
-                    if(this.isSaveClick){
-                      return this.$message.error('请稍后数据处理中....');
-                    }
                     this.isSaveClick = true;
                     save(data).then(res => {
+                      if(!res){
+                        this.isSaveClick = false;
+                      }
                       if(res.code === 0){
                         this.$message.success('保存成功！');
                         this.formPlan.guestName = '',
@@ -714,7 +713,7 @@
                 data.id = this.rowId
                 data.orgid = this.rowOrgId
                 data.guestId = this.guestidId
-                data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                data.guestOrgid = this.formPlan.guestOrgid
                 data.storeId = this.formPlan.storeId
                 data.orderDate = tools.transTime(this.formPlan.orderDate)
                 data.remark = this.formPlan.remark
@@ -726,6 +725,9 @@
                 }
                 this.isSaveClick = true;
                 let res = await save(data);
+                if(!res){
+                  this.isSaveClick = false;
+                }
                 if (res.code == 0) {
                   this.$Message.success('作废成功');
                   this.leftgetList();
@@ -952,9 +954,12 @@
                 this.Left.tbdata[0]._highlight = true;
                 this.isAdd = true;
                 this.setRow(this.Left.tbdata[0]);
+              }else {
+                this.isSaveClick = false;
               }
             }else {
-              this.Left.page.total = 0
+              this.Left.page.total = 0;
+              this.isSaveClick = false;
             }
           })
         },
@@ -978,7 +983,7 @@
                     let data = {};
                     data.id = this.rowId;
                     data.orgid = this.rowOrgId;
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
+                    data.guestOrgid = this.formPlan.guestOrgid;
                     data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
@@ -1073,10 +1078,10 @@
           let params = {}
           params.id = this.rowId
           findById(params).then(res => {
+            this.isSaveClick = false;
             if(res.code === 0){
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
-              this.isSaveClick = false;
             }
           })
         },
@@ -1108,7 +1113,7 @@
                 onOk: async () => {
                   // if(this.clickdelivery){
                     let data = {}
-                    data.guestOrgid = this.datadata.guestOrgid || this.isInternalId;
+                    // data.guestOrgid = this.datadata.guestOrgid || this.isInternalId;
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     data.guestId = this.guestidId
@@ -1125,7 +1130,9 @@
                     }
                     this.isSaveClick = true;
                     let res = await commit(data);
-                    this.isSaveClick = false;
+                    if(!res){
+                      this.isSaveClick = false;
+                    }
                     if (res.code == 0) {
                       this.$Message.success('提交成功');
                       this.leftgetList();

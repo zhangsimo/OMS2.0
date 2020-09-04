@@ -30,6 +30,7 @@
               type="default"
               @click="inPro"
               class="mr10"
+              :loading="isSaveClick"
             >
               <i class="iconfont mr5 iconbaocunicon"></i>入库
             </Button>
@@ -456,7 +457,8 @@ export default {
       btnIn: false, //入库按钮禁用
       showMore: false, //更多模块的弹框
       showIn: false, //是否确定入库弹框
-      inStatus: "" //单据状态
+      inStatus: "", //单据状态
+      isSaveClick:false
     };
   },
   created() {
@@ -481,6 +483,9 @@ export default {
       let params = {...this.params, ...this.form}
       getList(params)
         .then(async res => {
+          if(!res){
+            this.isSaveClick = false
+          }
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
@@ -490,8 +495,30 @@ export default {
             this.$Message.info("未查到数据");
             this.Left.tbdata = [];
           }
+
           // this.Leftcurrentrow
-          for (let b of this.Left.tbdata) {
+          if(this.Leftcurrentrow.id){
+            for (let b of this.Left.tbdata) {
+              b._highlight = false;
+              if(b.id == this.Leftcurrentrow.id) {
+                b._highlight = true;
+                this.Leftcurrentrow = b;
+                const params = {
+                  mainId: b.id
+                };
+                const res = await getListDetail(params);
+                this.Leftcurrentrow.detailVOS = this.tableData = res.data;
+                this.isSaveClick = false
+                return;
+              }
+              // this.Leftcurrentrow.detailVOS = [];
+            }
+          }else{
+            if(this.Left.tbdata.length==0){
+              this.isSaveClick = false
+              return
+            }
+            let b = this.Left.tbdata[0];
             b._highlight = false;
             if(b.id == this.Leftcurrentrow.id) {
               b._highlight = true;
@@ -501,10 +528,11 @@ export default {
               };
               const res = await getListDetail(params);
               this.Leftcurrentrow.detailVOS = this.tableData = res.data;
+              this.isSaveClick = false
               return;
             }
-            // this.Leftcurrentrow.detailVOS = [];
           }
+
         })
         .catch(err => {
           this.$Message.info("初始化数据失败");
@@ -551,8 +579,12 @@ export default {
       if(!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!")
       }
+      this.isSaveClick = true;
       inDataList(this.inID)
         .then(res => {
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.showIn = false;
             this.$Message.info("确定入库成功");

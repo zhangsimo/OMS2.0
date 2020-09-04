@@ -41,6 +41,7 @@
                 v-has="'save'"
                 class="mr10"
                 @click="baocun1"
+                :loading="isSaveClick"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -691,6 +692,7 @@ export default {
       val: "0",
       diaochuName: "",
       diaochuID: "",
+      isSaveClick:false,
     };
   },
   watch: {
@@ -815,15 +817,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-
-      if(this.Leftcurrentrow.detailVOS.length==0){
-        return this.$message.error("请稍后,数据处理中");
-      }
-
-      this.$refs.formPlan.resetFields();
-
-      console.log(this.Leftcurrentrow.detailVOS)
-      // this.Leftcurrentrow.detailVOS = [];
+      this.isSaveClick = true
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -832,6 +826,8 @@ export default {
             this.getList();
             this.$Message.success("保存成功");
             this.flag = 0;
+          }else{
+            this.isSaveClick = false;
           }
         })
         .catch(e => {
@@ -1373,11 +1369,13 @@ export default {
                   };
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  this.isSaveClick = false;
                   return;
                 }
               }
             } else {
               if(this.Left.tbdata.length==0){
+                this.isSaveClick = false;
                 return
               }
               this.Left.tbdata[0]._highlight = true;
@@ -1387,7 +1385,10 @@ export default {
               };
               const res = await getListDetail(params);
               this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+              this.isSaveClick = false;
             }
+          }else{
+            this.isSaveClick = false;
           }
         })
         .catch(e => {
