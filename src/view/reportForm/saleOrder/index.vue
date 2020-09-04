@@ -21,6 +21,7 @@ import panne from "./components/panne";
 import tabOne from "./components/tabOne";
 import tabTwo from "./components/tabTwo";
 import tabThree from "./components/tabThree";
+import moment from "moment";
 
 import Cookies from "js-cookie";
 import {TOKEN_KEY} from "../../../libs/util";
@@ -108,11 +109,15 @@ export default {
         case "tabOne":
           // filename = "销售订单明细表";
           let str = ""
-          this.$refs.panne.search.orgid==0?this.$refs.panne.search.orgid="":this.$refs.panne.search.orgid;
-          for(var i in this.$refs.panne.search){
-            str+=`${i}=${this.$refs.panne.search[i]}&`
+          let search=this.$refs.panne.search
+          search.orgid==0?search.orgid="":search.orgid;
+          search.auditStartTime=moment(search["auditDate"][0]).format("YYYY-MM-DD")+" 00:00:00"
+          search.auditEndTime=moment(search["auditDate"][1]).format("YYYY-MM-DD")+" 23:59:59"
+          delete search.auditDate
+          for(var i in search){
+            str+=`${i}=${search[i]}&`
           }
-          let page={size:this.$refs.tabOne.page.total,num:0}
+          let page={size:this.$refs.tabOne.page.total,page:0}
           for(var i in page){
             str+=`${i}=${page[i]}&`
           }
@@ -124,11 +129,15 @@ export default {
         case "tabTwo":
           // filename = "销售出库明细表";
           let str2 = ""
-          this.$refs.panne1.search.orgid==0?this.$refs.panne1.search.orgid="":this.$refs.panne1.search.orgid;
+          let search1=this.$refs.panne1.search
+          search1.orgid==0?search1.orgid="":search1.orgid;
+          search1.startOutDate=moment(search1["auditDate"][0]).format("YYYY-MM-DD")+" 00:00:00"
+          search1.endOutDate=moment(search1["auditDate"][1]).format("YYYY-MM-DD")+" 23:59:59"
+          delete search1.auditDate
           for(var i in this.$refs.panne1.search){
             str2+=`${i}=${this.$refs.panne1.search[i]}&`
           }
-          let page2={size:this.$refs.tabTwo.page.total,num:0}
+          let page2={size:this.$refs.tabTwo.page.total,page:0}
           for(var i in page2){
             str2+=`${i}=${page2[i]}&`
           }
@@ -139,11 +148,15 @@ export default {
           break;
         case "tabThree":
           let str3 = ""
-          this.$refs.panne2.search.orgid==0?this.$refs.panne2.search.orgid="":this.$refs.panne2.search.orgid;
+          let search3=this.$refs.panne2.search
+          search3.orgid==0?search3.orgid="":search3.orgid;
+          search3.auditStartDate=moment(search3["auditDate"][0]).format("YYYY-MM-DD")+" 00:00:00"
+          search3.auditEndDate=moment(search3["auditDate"][1]).format("YYYY-MM-DD")+" 23:59:59"
+          delete search3.auditDate
           for(var i in this.$refs.panne2.search){
             str3+=`${i}=${this.$refs.panne2.search[i]}&`
           }
-          let page3={size:this.$refs.tabThree.page.total,num:0}
+          let page3={size:this.$refs.tabThree.page.total,page:0}
           for(var i in page3){
             str3+=`${i}=${page3[i]}&`
           }
