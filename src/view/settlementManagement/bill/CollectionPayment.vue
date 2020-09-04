@@ -24,7 +24,8 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.name }}
+              </Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -56,27 +57,29 @@
               <span>更多</span>
             </button>
           </div>
-<!--          <div class="db ml10">-->
-<!--            <button-->
-<!--              class="mr10 ivu-btn ivu-btn-default"-->
-<!--              type="button"-->
-<!--              @click="report"-->
-<!--              v-has="'export'"-->
-<!--            >导出</button>-->
-<!--          </div>-->
+          <!--          <div class="db ml10">-->
+          <!--            <button-->
+          <!--              class="mr10 ivu-btn ivu-btn-default"-->
+          <!--              type="button"-->
+          <!--              @click="report"-->
+          <!--              v-has="'export'"-->
+          <!--            >导出</button>-->
+          <!--          </div>-->
           <div class="db ml10">
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="reportPayment(2)"
-            >导出收付款单记录</button>
+            >导出收付款单记录
+            </button>
           </div>
           <div class="db ml10">
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="reportPayment(1)"
-            >导出收付款单</button>
+            >导出收付款单
+            </button>
           </div>
         </div>
       </div>
@@ -104,20 +107,20 @@
             </div>
           </template>
         </Table>
-<!--        <div class="clearfix">-->
-<!--          <Page-->
-<!--            class-name="fr mb10 mt10"-->
-<!--            size="small"-->
-<!--            :current="page.num"-->
-<!--            :total="page.total"-->
-<!--            :page-size="page.size"-->
-<!--            :page-size-opts="page.sizeArr"-->
-<!--            @on-change="changePage"-->
-<!--            @on-page-size-change="changeSize"-->
-<!--            show-sizer-->
-<!--            show-total-->
-<!--          ></Page>-->
-<!--        </div>-->
+        <div class="clearfix">
+          <Page
+            class-name="fr mb10 mt10"
+            size="small"
+            :current="page.num"
+            :total="page.total"
+            :page-size="page.size"
+            :page-size-opts="page.sizeArr"
+            @on-change="changePage"
+            @on-page-size-change="changeSize"
+            show-sizer
+            show-total
+          ></Page>
+        </div>
         <Tabs v-model="tab" class="mt10" @click="tabName">
           <Tab-pane label="收款单记录" name="key1">
             <Table
@@ -149,13 +152,13 @@
     <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="modal1=false">
       <Form :label-width="120">
         <FormItem label="对账单号：">
-          <Input type="text" class="w200" v-model="accountNo" />
+          <Input type="text" class="w200" v-model="accountNo"/>
         </FormItem>
         <FormItem label="收付款单号：">
-          <Input type="text" class="w200" v-model="fno" />
+          <Input type="text" class="w200" v-model="fno"/>
         </FormItem>
         <FormItem label="收付款人：">
-          <Input type="text" class="w200" v-model="createUname" />
+          <Input type="text" class="w200" v-model="createUname"/>
         </FormItem>
         <FormItem label="审核状态：">
           <Select v-model="startStatusName" style="width:200px">
@@ -168,776 +171,779 @@
 </template>
 
 <script>
-import quickDate from "@/components/getDate/dateget_bill.vue";
-import { findGuest,importPaymentRecord/**导出收付款单*/,exportMethod } from "_api/settlementManagement/advanceCollection.js";
-import { getbayer } from "@/api/AlotManagement/threeSupplier";
-// import selectDealings from "./components/selectCompany";
-import { getSupplierList } from "_api/purchasing/purchasePlan";
-import { creat } from "./../components";
-import {
-  getReceiptsPaymentsSummary,
-  getReceiptsPaymentsList
-} from "@/api/bill/saleOrder";
-import { goshop } from '@/api/settlementManagement/shopList';
-import moment from "moment";
-import { set } from "xe-utils/methods";
-import index from "../../admin/roles";
-import api from "_conf/url";
-import {v4} from "uuid";
-import Cookies from "js-cookie";
-import {TOKEN_KEY} from "../../../libs/util";
-import qs from "qs"
-export default {
-  name: "billCollectionPayment",
-  components: {
-    quickDate
-  },
-  data() {
-    return {
-      remoteloading: false,
-      BranchstoreId: "",
-      tab: "key1",
-      value: [],
-      Branchstore:[
-        {id:0 ,name:'全部'}
-      ], //分店名称
-      // page:{
-      //   total:0,
-      //   sizeArr:[100,200,300,400,500],
-      //   size:100,
-      //   num:1
-      // },
-      model1: "",
-      modal1: false,
-      statelist: [
-        {
-          value: "0",
-          label: "未审"
-        },
-        {
-          value: "1",
-          label: "已审"
-        }
-      ],
-      columns: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center',
-          className: "tc"
-        },
-        {
-          title: "序号",
-          key: "num",
-          minWidth: 40,
-          className: "tc",
-        },
-        {
-          title: "公司名称",
-          key: "groupName",
-          minWidth:100,
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.groupName
-                }
-              }, params.row.groupName)
-            ])
-          }
-        },
-        {
-          title: "对账单号",
-          key: "accountNo",
-          minWidth:100,
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.accountNo
-                }
-              }, params.row.accountNo)
-            ])
-          }
-        },
-        {
-          title: "对账单收付款单号",
-          minWidth: 140,
-          slot: "fno",
-          className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.fno
-                }
-              }, params.row.fno)
-            ])
-          }
-        },
-        {
-          title: "往来单位",
-          key: "guestName",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.guestName
-                }
-              }, params.row.guestName)
-            ])
-          }
-        },
-        {
-          title: "收付类型",
-          key: "sortName",
-          className: "tc",
-          minWidth: 120
-        },
-        {
-          title: "收付款金额",
-          key: "cpAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.row.cpAmt ? params.row.cpAmt.toFixed(2) : 0
-            );
-          },
-          minWidth: 150
-        },
-        {
-          title: "已冲减/已审核",
-          key: "endAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.row.endAmt ? params.row.endAmt.toFixed(2) : 0
-            );
-          },
-          minWidth: 100
-        },
-        {
-          title: "未冲减/未审核",
-          key: "unAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.row.unAmt ? params.row.unAmt.toFixed(2) : 0
-            );
-          },
-          minWidth: 100
-        },
-        {
-          title: "收款目的",
-          key: "purpose",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.purpose
-                }
-              }, params.row.purpose)
-            ])
-          }
-        },
-        {
-          title: "收付款人",
-          key: "createUname",
-          className: "tc",
-          minWidth: 100
-        },
-        {
-          title: "收付款时间",
-          key: "rpDate",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-              style: {
-                display: 'inline-block',
-                width: '100%',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
-              },
-              domProps: {
-                title: params.row.rpDate
-              }
-            }, params.row.rpDate)
-          ])
-          }
-        },
-        {
-          title: "备注",
-          key: "remark",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.remark
-                }
-              }, params.row.remark)
-            ])
-          }
-        },
-        {
-          title: "审核状态",
-          key: "startStatusName",
-          className: "tc",
-          minWidth: 100
-        },
-        {
-          title: "审核人",
-          key: "auditor",
-          className: "tc",
-          minWidth: 100
-        },
-        {
-          title: "审核日期",
-          key: "auditorDate",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.auditorDate
-                }
-              }, params.row.auditorDate)
-            ])
-          }
-        }
-      ],
-      columns1: [
-        {
-          title: "序号",
-          key: "num",
-          width: 40,
-          className: "tc"
-        },
-        {
-          title: "收款单号",
-          key: "fno",
-          className: "tc"
-        },
-        {
-          title: "收款时间",
-          key: "checkDate",
-          className: "tc"
-        },
-        {
-          title: "收款方式",
-          width: 120,
-          className: "tc",
-          render:(h , params)=>{
-            return h('span' , params.row.sort.name)
-          }
-        },
-        {
-          title: "收款账户",
-          key: "account",
-          className: "tc",
-        },
-        {
-          title: "收款金额",
-          key: "checkAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.checkAmt.toFixed(2));
-          }
-        },
-        {
-          title: "审核状态",
-          key: "startStatusName",
-          className: "tc"
-        },
-        {
-          title: "审核人",
-          key: "auditor",
-          className: "tc"
-        },
-        {
-          title: "审核日期",
-          key: "auditorDate",
-          className: "tc"
-        },
-        {
-          title: "备注",
-          key: "remark",
-          className: "tc"
-        }
-      ],
-      columns2: [
-        {
-          title: "序号",
-          key: "num",
-          width: 40,
-          className: "tc"
-        },
-        {
-          title: "付款单号",
-          key: "fno",
-          className: "tc"
-        },
-        {
-          title: "付款时间",
-          key: "checkDate",
-          className: "tc"
-        },
-        {
-          title: "付款方式",
-          width: 120,
-          className: "tc",
-          render:(h , params)=>{
-            return h('span' , params.row.sort.name)
-          }
-        },
-        {
-          title: "付款账户",
-          key: "account",
-          className: "tc"
-        },
-        {
-          title: "付款金额",
-          key: "checkAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.checkAmt.toFixed(2));
-          }
-        },
-        {
-          title: "审核状态",
-          key: "startStatusName",
-          className: "tc"
-        },
-        {
-          title: "审核人",
-          key: "auditor",
-          className: "tc"
-        },
-        {
-          title: "审核日期",
-          key: "auditorDate",
-          className: "tc"
-        },
-        {
-          title: "备注",
-          key: "remark",
-          className: "tc"
-        }
-      ],
-      data: [],
-      data1: [],
-      data2: [],
-      company: [], //往来单位
-      companyId: "", //往来单位id
-      fno: "", //更多查询收付款单号
-      accountNo: "", //更多查询对账单号
-      createUname: "", //收付款人
-      startStatusName: "", //审核状态
+  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import {
+    findGuest,
+    importPaymentRecord/**导出收付款单*/,
+    exportMethod
+  } from "_api/settlementManagement/advanceCollection.js";
+  import {getbayer} from "@/api/AlotManagement/threeSupplier";
+  // import selectDealings from "./components/selectCompany";
+  import {getSupplierList} from "_api/purchasing/purchasePlan";
+  import {creat} from "./../components";
+  import {
+    getReceiptsPaymentsSummary,
+    getReceiptsPaymentsList
+  } from "@/api/bill/saleOrder";
+  import {goshop} from '@/api/settlementManagement/shopList';
+  import moment from "moment";
+  import {set} from "xe-utils/methods";
+  import index from "../../admin/roles";
+  import api from "_conf/url";
+  import {v4} from "uuid";
+  import Cookies from "js-cookie";
+  import {TOKEN_KEY} from "../../../libs/util";
+  import qs from "qs"
 
-      selectData:[]
-    };
-  },
-  async mounted() {
-    let arr = await creat(this.$refs.quickDate.val, this.$store);
-    this.value = arr[0];
-    this.getShop()
-    this.$nextTick(()=>{
-      this.BranchstoreId = arr[1]
-      this.getGeneral();
-    })
-    // this.getOne();
-  },
-  computed:{
-    selectShopList(){
-      if(this.$store.state.user.userData.currentCompany!=null){
-        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      }else{
-        return true
-      }
-    }
-  },
-  methods: {
-    // query() {
-    //   this.getQuery();
-    // },
-    async getOne(query) {
-      this.company = [];
-      if (query != "") {
-        this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
-          if (res.code === 0) {
-            this.company = [];
-            res.data.content.map(item => {
-              this.company.push({
-                value: item.id,
-                label: item.fullName
-              });
-            });
-            this.remoteloading = false;
+  export default {
+    name: "billCollectionPayment",
+    components: {
+      quickDate
+    },
+    data() {
+      return {
+        remoteloading: false,
+        BranchstoreId: "",
+        tab: "key1",
+        value: [],
+        Branchstore: [
+          {id: 0, name: '全部'}
+        ], //分店名称
+        page: {
+          total: 0,
+          sizeArr: [10, 20, 30, 40, 50],
+          size: 10,
+          num: 1
+        },
+        model1: "",
+        modal1: false,
+        statelist: [
+          {
+            value: "0",
+            label: "未审"
+          },
+          {
+            value: "1",
+            label: "已审"
           }
-        });
-      } else {
-        this.company = [];
+        ],
+        columns: [
+          {
+            type: 'selection',
+            width: 60,
+            align: 'center',
+            className: "tc"
+          },
+          {
+            title: "序号",
+            key: "num",
+            minWidth: 40,
+            className: "tc",
+          },
+          {
+            title: "公司名称",
+            key: "groupName",
+            minWidth: 100,
+            className: "tc",
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.groupName
+                  }
+                }, params.row.groupName)
+              ])
+            }
+          },
+          {
+            title: "对账单号",
+            key: "accountNo",
+            minWidth: 100,
+            className: "tc",
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.accountNo
+                  }
+                }, params.row.accountNo)
+              ])
+            }
+          },
+          {
+            title: "对账单收付款单号",
+            minWidth: 140,
+            slot: "fno",
+            className: "tc",
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.fno
+                  }
+                }, params.row.fno)
+              ])
+            }
+          },
+          {
+            title: "往来单位",
+            key: "guestName",
+            className: "tc",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.guestName
+                  }
+                }, params.row.guestName)
+              ])
+            }
+          },
+          {
+            title: "收付类型",
+            key: "sortName",
+            className: "tc",
+            minWidth: 120
+          },
+          {
+            title: "收付款金额",
+            key: "cpAmt",
+            className: "tc",
+            render: (h, params) => {
+              return h(
+                "span",
+                params.row.cpAmt ? params.row.cpAmt.toFixed(2) : 0
+              );
+            },
+            minWidth: 150
+          },
+          {
+            title: "已冲减/已审核",
+            key: "endAmt",
+            className: "tc",
+            render: (h, params) => {
+              return h(
+                "span",
+                params.row.endAmt ? params.row.endAmt.toFixed(2) : 0
+              );
+            },
+            minWidth: 100
+          },
+          {
+            title: "未冲减/未审核",
+            key: "unAmt",
+            className: "tc",
+            render: (h, params) => {
+              return h(
+                "span",
+                params.row.unAmt ? params.row.unAmt.toFixed(2) : 0
+              );
+            },
+            minWidth: 100
+          },
+          {
+            title: "收款目的",
+            key: "purpose",
+            className: "tc",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.purpose
+                  }
+                }, params.row.purpose)
+              ])
+            }
+          },
+          {
+            title: "收付款人",
+            key: "createUname",
+            className: "tc",
+            minWidth: 100
+          },
+          {
+            title: "收付款时间",
+            key: "rpDate",
+            className: "tc",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.rpDate
+                  }
+                }, params.row.rpDate)
+              ])
+            }
+          },
+          {
+            title: "备注",
+            key: "remark",
+            className: "tc",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.remark
+                  }
+                }, params.row.remark)
+              ])
+            }
+          },
+          {
+            title: "审核状态",
+            key: "startStatusName",
+            className: "tc",
+            minWidth: 100
+          },
+          {
+            title: "审核人",
+            key: "auditor",
+            className: "tc",
+            minWidth: 100
+          },
+          {
+            title: "审核日期",
+            key: "auditorDate",
+            className: "tc",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.auditorDate
+                  }
+                }, params.row.auditorDate)
+              ])
+            }
+          }
+        ],
+        columns1: [
+          {
+            title: "序号",
+            key: "num",
+            width: 40,
+            className: "tc"
+          },
+          {
+            title: "收款单号",
+            key: "fno",
+            className: "tc"
+          },
+          {
+            title: "收款时间",
+            key: "checkDate",
+            className: "tc"
+          },
+          {
+            title: "收款方式",
+            width: 120,
+            className: "tc",
+            render: (h, params) => {
+              return h('span', params.row.sort.name)
+            }
+          },
+          {
+            title: "收款账户",
+            key: "account",
+            className: "tc",
+          },
+          {
+            title: "收款金额",
+            key: "checkAmt",
+            className: "tc",
+            render: (h, params) => {
+              return h("span", params.row.checkAmt.toFixed(2));
+            }
+          },
+          {
+            title: "审核状态",
+            key: "startStatusName",
+            className: "tc"
+          },
+          {
+            title: "审核人",
+            key: "auditor",
+            className: "tc"
+          },
+          {
+            title: "审核日期",
+            key: "auditorDate",
+            className: "tc"
+          },
+          {
+            title: "备注",
+            key: "remark",
+            className: "tc"
+          }
+        ],
+        columns2: [
+          {
+            title: "序号",
+            key: "num",
+            width: 40,
+            className: "tc"
+          },
+          {
+            title: "付款单号",
+            key: "fno",
+            className: "tc"
+          },
+          {
+            title: "付款时间",
+            key: "checkDate",
+            className: "tc"
+          },
+          {
+            title: "付款方式",
+            width: 120,
+            className: "tc",
+            render: (h, params) => {
+              return h('span', params.row.sort.name)
+            }
+          },
+          {
+            title: "付款账户",
+            key: "account",
+            className: "tc"
+          },
+          {
+            title: "付款金额",
+            key: "checkAmt",
+            className: "tc",
+            render: (h, params) => {
+              return h("span", params.row.checkAmt.toFixed(2));
+            }
+          },
+          {
+            title: "审核状态",
+            key: "startStatusName",
+            className: "tc"
+          },
+          {
+            title: "审核人",
+            key: "auditor",
+            className: "tc"
+          },
+          {
+            title: "审核日期",
+            key: "auditorDate",
+            className: "tc"
+          },
+          {
+            title: "备注",
+            key: "remark",
+            className: "tc"
+          }
+        ],
+        data: [],
+        total: {},//收付款单查询 总合计对象
+        data1: [],
+        data2: [],
+        company: [], //往来单位
+        companyId: "", //往来单位id
+        fno: "", //更多查询收付款单号
+        accountNo: "", //更多查询对账单号
+        createUname: "", //收付款人
+        startStatusName: "", //审核状态
+
+        selectData: []
+      };
+    },
+    async mounted() {
+      let arr = await creat(this.$refs.quickDate.val, this.$store);
+      this.value = arr[0];
+      this.getShop()
+      this.$nextTick(() => {
+        this.BranchstoreId = arr[1]
+        this.getGeneral();
+      })
+      // this.getOne();
+    },
+    computed: {
+      selectShopList() {
+        if (this.$store.state.user.userData.currentCompany != null) {
+          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        } else {
+          return true
+        }
       }
     },
-    //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
-    },
-    // 日期选择
-    dateChange(data) {
-      this.value = data;
-      this.getGeneral()
-    },
-    // 表格合计方式
-    handleSummary({ columns, data }) {
-      //   console.log(columns,data)
-      const sums = {};
-      columns.forEach((column, index) => {
-        const key = column.key;
-        if (index === 0) {
-          sums[key] = {
-            key,
-            value: "合计"
-          };
-          return;
-        }
-        const values = data.map(item => Number(item[key]));
-        if (index > 5 && index < 9) {
-          const v = values.reduce((prev, curr) => {
-            if (!isNaN(curr)) {
-              return prev + curr;
-            } else {
-              return prev;
+    methods: {
+      // query() {
+      //   this.getQuery();
+      // },
+      async getOne(query) {
+        this.company = [];
+        if (query != "") {
+          this.remoteloading = true;
+          findGuest({fullName: query, size: 20}).then(res => {
+            if (res.code === 0) {
+              this.company = [];
+              res.data.content.map(item => {
+                this.company.push({
+                  value: item.id,
+                  label: item.fullName
+                });
+              });
+              this.remoteloading = false;
             }
-          }, 0);
-          sums[key] = {
-            key,
-            value: v.toFixed(2)
-          };
+          });
         } else {
-          sums[key] = {
-            key,
-            value: " "
-          };
+          this.company = [];
         }
-      });
-      return sums;
-      //
-    },
-    // 表格合计方式
-    summary({ columns, data }) {
-      //   console.log(columns,data)
-      const sums = {};
-      columns.forEach((column, index) => {
-        const key = column.key;
-        if (index === 0) {
-          sums[key] = {
-            key,
-            value: "合计"
-          };
-          return;
-        }
-        const values = data.map(item => Number(item[key]));
-        if (index === 5) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
+      },
+      //获取门店
+      async getShop() {
+        let data = {}
+        let res = await goshop(data)
+        if (res.code === 0) return this.Branchstore = [...this.Branchstore, ...res.data]
+      },
+      // 日期选择
+      dateChange(data) {
+        this.value = data;
+        this.getGeneral()
+      },
+      // 表格合计方式
+      handleSummary({columns, data}) {
+        const sums = {};
+        columns.forEach((column, index) => {
+          const key = column.key;
+          if (index === 1) {
             sums[key] = {
               key,
-              value: v.toFixed(2)
+              value: "总合计"
+            };
+            return;
+          }
+          if (index > 5 && index < 10) {
+            sums[key] = {
+              key,
+              value: this.total[key] == null ? " " : this.total[key]
+            };
+          } else {
+            sums[key] = {
+              key,
+              value: " "
             };
           }
-        } else {
-          sums[key] = {
-            key,
-            value: " "
-          };
-        }
-      });
-      return sums;
-      //
-    },
-    //查询
-    query() {
-      this.data1 = [];
-      this.data2 = [];
-      this.getGeneral();
-    },
-    changePage(p) {
-      this.page.num = p;
-      this.query();
-    },
-    changeSize(size) {
-      this.page.num = 1;
-      this.page.size = size;
-      this.query();
-    },
-    // 往来单位选择
-    // async getOne() {
-    //   findGuest({ size: 2000 }).then(res => {
-    //     if (res.code === 0) {
-    //       res.data.content.map(item => {
-    //         this.company.push({
-    //           value: item.id,
-    //           label: item.fullName
-    //         });
-    //       });
-    //     }
-    //   });
-    // },
-    // 分店切换
-    fendian(val) {
-      this.BranchstoreId = val;
-      this.getGeneral()
-    },
-    // 快速查询
-    quickDate(data) {
-      this.value = data;
-      this.getGeneral();
-    },
-    // 往来单位
-    Dealings() {
-      this.$refs.selectDealings.init();
-    },
-    // tab标签页的name
-    tabName(name) {
-      this.tab = name;
-    },
-    //checkbox 单个选择
-    selectTabSummary(selection){
-      this.selectData=selection
-    },
-    //checkbox 选择全部
-    selectAllSummary(selection){
-      this.selectData=selection
-    },
-    //导出 收付款单查询 接口
-    exportQueryMethod(data) {
-      let str=""
-      data.map((item,index)=>{
-        if(index!=data.length-1){
-          str+=`&ids=${item}&`
-        }else{
-          str+=`&ids=${item}`
-        }
-      })
-      let PaymentRecordUrl=api.omsSettle +
-        `/payment/record/export/paymentRecord?${str}` +
-        "&access_token=" +
-        Cookies.get(TOKEN_KEY);
-      location.href =PaymentRecordUrl
-    },
-    //导出 收付款单查询记录 接口
-    exportLogMethod(data) {
-      let str=""
-      data.map((item,index)=>{
-        if(index!=data.length-1){
-          str+=`&accounNos=${item}&`
-        }else{
-          str+=`&accounNos=${item}`
-        }
-      })
-      let paymentDetailUrl=api.omsSettle +
-        `/payment/record/export/paymentDetail?${str}` +
-        "&access_token=" +
-        Cookies.get(TOKEN_KEY);
-      location.href =paymentDetailUrl
-    },
-    //导出 收付款单查询/收付款单查询记录
-    async reportPayment(type){
-      if(this.selectData.length>0){
-        if(type==1){
-          let arr=this.selectData.map(item=>item.id)
-          this.exportQueryMethod(arr)
-        }else if(type==2){
-          let arr=this.selectData.map(item=>item.accountNo)
-          this.exportLogMethod(arr)
-        }
-      }else{
-        this.$Message.error("请选择需要导出的数据")
-      }
-    },
-    // 导出
-    report() {
-      if (this.data.length !== 0) {
-        this.$refs.summary.exportCsv({
-          filename: "收付款查询"
         });
-      } else {
-        this.$message.error("收付款总表暂无数据");
-      }
-      if (this.tab === "key1") {
-        if (this.data1.length !== 0) {
-          this.$refs.receivables.exportCsv({
-            filename: "收款单明细"
+        return sums
+      },
+      // 表格合计方式
+      summary({columns, data}) {
+        //   console.log(columns,data)
+        const sums = {};
+        columns.forEach((column, index) => {
+          const key = column.key;
+          if (index === 0) {
+            sums[key] = {
+              key,
+              value: "合计"
+            };
+            return;
+          }
+          const values = data.map(item => Number(item[key]));
+          if (index === 5) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            }
+          } else {
+            sums[key] = {
+              key,
+              value: " "
+            };
+          }
+        });
+        return sums;
+        //
+      },
+      //查询
+      query() {
+        this.data1 = [];
+        this.data2 = [];
+        this.getGeneral();
+      },
+      changePage(p) {
+        this.page.num = p;
+        this.query();
+      },
+      changeSize(size) {
+        this.page.num = 1;
+        this.page.size = size;
+        this.query();
+      },
+      // 往来单位选择
+      // async getOne() {
+      //   findGuest({ size: 2000 }).then(res => {
+      //     if (res.code === 0) {
+      //       res.data.content.map(item => {
+      //         this.company.push({
+      //           value: item.id,
+      //           label: item.fullName
+      //         });
+      //       });
+      //     }
+      //   });
+      // },
+      // 分店切换
+      fendian(val) {
+        this.BranchstoreId = val;
+        this.getGeneral()
+      },
+      // 快速查询
+      quickDate(data) {
+        this.value = data;
+        this.getGeneral();
+      },
+      // 往来单位
+      Dealings() {
+        this.$refs.selectDealings.init();
+      },
+      // tab标签页的name
+      tabName(name) {
+        this.tab = name;
+      },
+      //checkbox 单个选择
+      selectTabSummary(selection) {
+        this.selectData = selection
+      },
+      //checkbox 选择全部
+      selectAllSummary(selection) {
+        this.selectData = selection
+      },
+      //导出 收付款单查询 接口
+      exportQueryMethod(data) {
+        let str = ""
+        data.map((item, index) => {
+          if (index != data.length - 1) {
+            str += `&ids=${item}&`
+          } else {
+            str += `&ids=${item}`
+          }
+        })
+        let PaymentRecordUrl = api.omsSettle +
+          `/payment/record/export/paymentRecord?${str}&size=${data.length}&page=0&access_token=` +
+          Cookies.get(TOKEN_KEY);
+        location.href = PaymentRecordUrl
+      },
+      //导出 收付款单查询记录 接口
+      exportLogMethod(data) {
+        let str = ""
+        // data.
+        data.map((item, index) => {
+          if (index != data.length - 1) {
+            str += `&accounNos=${item}&`
+          } else {
+            str += `&accounNos=${item}`
+          }
+        })
+        let paymentDetailUrl = api.omsSettle +
+          `/payment/record/export/paymentDetail?${str}&size=${data.length}&page=0&access_token=` +
+          Cookies.get(TOKEN_KEY);
+        location.href = paymentDetailUrl
+      },
+      //导出 收付款单查询/收付款单查询记录
+      async reportPayment(type) {
+        if (this.selectData.length > 0) {
+          if (type == 1) {
+            let arr = this.selectData.map(item => item.id)
+            this.exportQueryMethod(arr)
+          } else if (type == 2) {
+            let arr = this.selectData.map(item => item.accountNo)
+            this.exportLogMethod(arr)
+          }
+        } else {
+          this.$Message.error("请选择需要导出的数据")
+        }
+      },
+      // 导出
+      report() {
+        if (this.data.length !== 0) {
+          this.$refs.summary.exportCsv({
+            filename: "收付款查询"
           });
         } else {
-          this.$message.error("收款单明细暂无数据");
+          this.$message.error("收付款总表暂无数据");
         }
-      } else if (this.tab === "key2") {
-        if (this.data2.length !== 0) {
-          this.$refs.payment.exportCsv({
-            filename: "付款单明细"
-          });
-        } else {
-          this.$message.error("付款单明细暂无数据");
+        if (this.tab === "key1") {
+          if (this.data1.length !== 0) {
+            this.$refs.receivables.exportCsv({
+              filename: "收款单明细"
+            });
+          } else {
+            this.$message.error("收款单明细暂无数据");
+          }
+        } else if (this.tab === "key2") {
+          if (this.data2.length !== 0) {
+            this.$refs.payment.exportCsv({
+              filename: "付款单明细"
+            });
+          } else {
+            this.$message.error("付款单明细暂无数据");
+          }
         }
-      }
-    },
-    // 高级查询确认
-    ok() {
-      this.getGeneral();
-    },
-    cancel(){
+      },
+      // 高级查询确认
+      ok() {
+        this.getGeneral();
+      },
+      cancel() {
 
-    },
-    // 总表查询
-    getGeneral() {
-      let data = {
-        startTime: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        endTime: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        orgId: this.BranchstoreId,
-        guestId: this.companyId,
-        accountNo: this.accountNo,
-        fno: this.fno,
-        createUname: this.createUname,
-        documentStatus: this.startStatusName,
-        // size: this.page.size,
-        // page: this.page.num - 1
-      };
-      getReceiptsPaymentsSummary(data).then(res => {
-        if (res.data.length !== 0) {
-          res.data.map((item, index) => {
-            item.num = index + 1;
-            item.sortName = item.sort.name;
-            item.startStatusName = item.startStatus.name;
-          });
-          this.data = res.data;
-          // this.page.total=
-        } else {
-          this.data = [];
+      },
+      // 总表查询
+      getGeneral() {
+        let data = {
+          startTime: this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : "",
+          endTime: this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+            : "",
+          orgId: this.BranchstoreId,
+          guestId: this.companyId,
+          accountNo: this.accountNo,
+          fno: this.fno,
+          createUname: this.createUname,
+          documentStatus: this.startStatusName,
+        };
+        let params = {
+          size: this.page.size,
+          page: this.page.num - 1
         }
-      });
-    },
-    // 选中总表查询明细
-    election(row) {
-      getReceiptsPaymentsList({ accountNo: row.accountNo }).then(res => {
-        if (res.data.length !== 0) {
-          res.data.map((item, index) => {
-            item.num = index + 1;
-            item.serviceTypeName = item.serviceType.name;
-            item.startStatusName = item.startStatus.name;
-          });
-          this.data1 = res.data.filter( item => item.documentType == 1)
-          this.data2 = res.data.filter( item => item.documentType == -1)
-        } else {
-          this.data1 = [];
-          this.data2 = [];
-        }
-      });
+        getReceiptsPaymentsSummary(params, data).then(res => {
+          if (res.data.paymentRecordVosTemp.length !== 0) {
+            res.data.paymentRecordVosTemp.map((item, index) => {
+              item.num = index + 1;
+              item.sortName = item.sort.name;
+              item.startStatusName = item.startStatus.name;
+            });
+            this.data = res.data.paymentRecordVosTemp;
+            this.page.total = res.data.TotalElements;
+            this.total = res.data.PaymentRecordVo
+          } else {
+            this.data = [];
+          }
+        });
+      },
+      // 选中总表查询明细
+      election(row) {
+        getReceiptsPaymentsList({accountNo: row.accountNo}).then(res => {
+          if (res.data.length !== 0) {
+            res.data.map((item, index) => {
+              item.num = index + 1;
+              item.serviceTypeName = item.serviceType.name;
+              item.startStatusName = item.startStatus.name;
+            });
+            this.data1 = res.data.filter(item => item.documentType == 1)
+            this.data2 = res.data.filter(item => item.documentType == -1)
+          } else {
+            this.data1 = [];
+            this.data2 = [];
+          }
+        });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>
-.oper-top input {
-  border: 1px solid #dddddd;
-  text-indent: 4px;
-}
-.oper-top .input {
-  position: relative;
-  left: -26px;
-  bottom: -5px;
-}
-.pro span {
-  display: inline-block;
-  width: 100px;
-  text-align: right;
-}
-.hoverFno {
-  display: none;
-}
-.boxFno:hover .hoverFno{
-  display: inline-block;
-}
-.boxFno:hover .ellipsis {
-  display: none;
-}
+  .oper-top input {
+    border: 1px solid #dddddd;
+    text-indent: 4px;
+  }
+
+  .oper-top .input {
+    position: relative;
+    left: -26px;
+    bottom: -5px;
+  }
+
+  .pro span {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+  }
+
+  .hoverFno {
+    display: none;
+  }
+
+  .boxFno:hover .hoverFno {
+    display: inline-block;
+  }
+
+  .boxFno:hover .ellipsis {
+    display: none;
+  }
 </style>

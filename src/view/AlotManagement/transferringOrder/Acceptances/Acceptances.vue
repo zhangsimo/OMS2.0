@@ -178,7 +178,8 @@ export default {
         },
         tbdata: []
       },
-      RowMessage: [] //上半部分当前行
+      RowMessage: [], //上半部分当前行
+      isSaveClick : false,
     };
   },
   methods: {
@@ -278,6 +279,7 @@ export default {
         params.orgid = this.productName;
       }
       findAll(params).then(res => {
+        this.isSaveClick = false;
         if (res.code === 0) {
           this.topRight.tbdata = res.data.content;
           this.topRight.page.total = res.data.totalElements;
@@ -296,7 +298,16 @@ export default {
           data.orderTypeId = this.RowMessage.orderTypeId.value;
           data.settleStatus = this.RowMessage.settleStatus.value;
           // console.log(data)
+
+          if(this.isSaveClick){
+            return this.$message.error('请稍后数据处理中....');
+          }
+          this.isSaveClick = true;
+
           let res = await allotMainAccept(data);
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.$Message.success("受理成功");
             this.getList();
@@ -317,7 +328,14 @@ export default {
           data.settleStatus = this.RowMessage.settleStatus.value;
           data.status = "7";
           // console.log(data)
+          if(this.isSaveClick){
+            return this.$message.error('请稍后数据处理中....');
+          }
+          this.isSaveClick = true;
           let res = await allotMainAccept(data);
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.$Message.success("受理成功");
             this.getList();

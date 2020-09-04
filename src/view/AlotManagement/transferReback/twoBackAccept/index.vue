@@ -82,7 +82,7 @@
           <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" title="操作">
             <template v-slot="{ row,rowIndex }">
-              <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 2)">受理</Button>
+              <Button :loading="isSaveClick" v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 2)">受理</Button>
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 7)">拒绝</Button>
             </template>
           </vxe-table-column>
@@ -260,7 +260,8 @@ export default {
       },
 
       storeArray: [],
-      currentrow: {}
+      currentrow: {},
+      isSaveClick:false,
     };
   },
   created() {
@@ -326,6 +327,7 @@ export default {
     search() {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
+          this.isSaveClick = false;
           if (res.code == 0) {
             let arrData = res.data.content || [];
 
@@ -378,8 +380,12 @@ export default {
       // this.currentrow.status = 2;
       // let params = this.currentrow;
       // params['']
+      this.isSaveClick = true
       tuihuishouli(params)
         .then(res => {
+          if(!res){
+            this.isSaveClick = false
+          }
           if (res.code == 0) {
             this.tbdata = res.data || [];
             this.modal3 = true;

@@ -58,6 +58,20 @@
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row :summary-method="handleSummary"
           @on-row-click="election" max-height="400"></Table>
+        <div class="clearfix">
+          <Page
+            class-name="fr mb10 mt10"
+            size="small"
+            :current="page.num"
+            :total="page.total"
+            :page-size="page.size"
+            :page-size-opts="page.sizeArr"
+            @on-change="changePage"
+            @on-page-size-change="changeSize"
+            show-sizer
+            show-total
+          ></Page>
+        </div>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary :summary-method="summary"></Table>
       </div>
@@ -85,6 +99,13 @@ export default {
       Branchstore: [
         {id:0 ,name:'全部'}
       ], //分店名称
+      page: {
+        total: 0,
+        sizeArr: [10, 20, 30, 40, 50],
+        size: 10,
+        num: 1
+      },
+      total: {},//总合计对象
       model1: "",
       columns: [
         {
@@ -280,9 +301,6 @@ export default {
           key: "orderAmt",
           className: "tc",
           minWidth: 120,
-          render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
-          }
         },
         {
           title: "备注",
@@ -480,26 +498,16 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "合计"
+            value: "总合计"
           };
           return;
         }
         const values = data.map(item => Number(item[key]));
         if (index === 10) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          }
+          sums[key] = {
+            key,
+            value: this.total[key] == null ? " " : this.total[key]
+          };
         } else {
           sums[key] = {
             key,
@@ -514,6 +522,15 @@ export default {
     query() {
       this.data1=[]
       this.getGeneral();
+    },
+    changePage(p) {
+      this.page.num = p;
+      this.query();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.query();
     },
     // 往来单位选择
     getOne(data) {
@@ -540,21 +557,60 @@ export default {
           this.$message.error("销售订单汇总-配件信息暂无数据");
         }
       } else {
+        let page={}
+        page.size=this.page.total;
+        page.num=1
         if (this.data.length !== 0) {
-          let arrData = [...this.data]
-          arrData.map(item => {
-            item.guestId = "\t"+item.guestId
-          })
-          this.$refs.summary.exportCsv({
-            filename: "销售订单汇总",
-            original:false,
-            columns:this.columns,
-            data:arrData
-          });
+          this.getGeneralAll(page)
         } else {
           this.$message.error("销售订单汇总暂无数据");
         }
       }
+    },
+    // 总表查询
+    getGeneralAll(param) {
+      let obj ={
+        belongSystem: this.type,
+        startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+        orgid: this.model1,
+        guestId: this.companyId
+      }
+      let params = {
+        size: param.size,
+        page: param.num - 1
+      }
+      getOrderlist(params,obj).then(res => {
+        // console.log(res);
+        if(res.data.vos.length !== 0){
+          res.data.vos.map((item,index)=>{
+            switch(item.sourceType){
+              case '0': item.sourceType = '普通单据'; break;
+              case '1': item.sourceType = '采购订单'; break;
+              case '2': item.sourceType = '销售出库'; break;
+              case '3': item.sourceType = 'WMS'; break;
+              default: item.sourceType = ''
+            }
+            item.belongSystem = item.belongSystem ? item.belongSystem === 1 ? '体系外':'体系内':'华胜连锁'
+            item.orderTypeName = item.orderType ? item.orderType.name : ''
+            item.billstate = item.billStatusId ? item.billStatusId.name: ''
+            item.guestId = "\t"+item.guestId
+            item.index = index + 1
+          })
+          this.data = res.data.vos;
+          if(this.data.length==params.size){
+            this.data = res.data.vos;
+            this.$refs.summary.exportCsv({
+              types: ["csv"],
+              filename: "销售订单汇总",
+              columns:this.columns,
+              data: res.data.vos,
+            });
+          }
+        } else {
+          this.data = []
+        }
+      });
     },
     // 总表查询
     getGeneral() {
@@ -565,10 +621,14 @@ export default {
         orgid: this.model1,
         guestId: this.companyId
       }
-      getOrderlist(obj).then(res => {
+      let params = {
+        size: this.page.size,
+        page: this.page.num - 1
+      }
+      getOrderlist(params,obj).then(res => {
         // console.log(res);
-        if(res.data.length !== 0){
-          res.data.map((item,index)=>{
+        if(res.data.vos.length !== 0){
+          res.data.vos.map((item,index)=>{
             switch(item.sourceType){
               case '0': item.sourceType = '普通单据'; break;
               case '1': item.sourceType = '采购订单'; break;
@@ -581,7 +641,9 @@ export default {
             item.billstate = item.billStatusId ? item.billStatusId.name: ''
             item.index = index + 1
           })
-          this.data = res.data
+          this.data = res.data.vos;
+          this.page.total = res.data.TotalElements;
+          this.total = res.data.AllotOutMainVO
         } else {
           this.data = []
         }

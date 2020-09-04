@@ -41,6 +41,7 @@
                 class="mr10"
                 @click="baocun1"
                 :disabled="![0].includes(buttonDisable)"
+                :loading="isSaveClick"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -135,7 +136,7 @@
                     ref="formPlan"
                     :label-width="120"
                   >
-                    <FormItem label="调入方：" prop="supplyName" class="redIT">
+                    <FormItem label="调入方：" prop="guestName" class="redIT">
                       <Row>
                         <Col span="22">
                           <!--<Tooltip :content="Leftcurrentrow.guestName">-->
@@ -775,6 +776,7 @@
         clickdelivery: false,
         isWms: false, //仓库是否启用wms
         createTime: new Date(),
+        isSaveClick:false,
       };
     },
     // watch: {
@@ -985,8 +987,12 @@
         try {
           await this.$refs.xTable1.validate();
           //配件组装保存
+          this.isSaveClick = true;
           baocun(params)
             .then(res => {
+              if(!res){
+                this.isSaveClick = false;
+              }
               // 点击列表行==>配件组装信息
               if (res.code == 0) {
                 this.flag = 0;
@@ -994,6 +1000,7 @@
                 this.buttonDisable = null;
                 this.getList();
                 this.$Message.success("保存成功");
+                this.$refs.formPlan.resetFields();
               }
             })
           // .catch(e => {
@@ -1090,6 +1097,10 @@
             //   "YYYY-MM-DD HH:mm:ss"
             // );
             params.createTime = this.createTime;
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             tijiao(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
@@ -1098,6 +1109,9 @@
                   this.buttonDisable = null;
                   this.getList();
                   this.$Message.success("提交成功");
+                  this.$refs.formPlan.resetFields();
+                }else{
+                  this.isSaveClick = false;
                 }
               })
             // .catch(e => {
@@ -1129,12 +1143,18 @@
           title: "是否确定作废",
           onOk: () => {
             // 配件组装作废
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             zuofei(paramster)
               .then(res => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.$Message.success("作废成功");
                   this.getList();
+                }else{
+                  this.isSaveClick = true;
                 }
               })
             // .catch(e => {
@@ -1210,12 +1230,18 @@
               id: this.Leftcurrentrow.id
             };
             // 配件组装作废
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             outDataList(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.getList();
                   this.$Message.success("出库成功");
+                }else{
+                  this.isSaveClick = false;
                 }
               })
             // .catch(e => {
@@ -1327,8 +1353,10 @@
           };
           const res = await getListDetail(params);
           this.Leftcurrentrow.detailVOS = res.data;
+          this.isSaveClick = false;
         } else {
           this.datadata = null;
+          this.isSaveClick = false;
         }
         if (row.status.value === 0) {
           this.buttonShow = false;
@@ -1502,6 +1530,9 @@
         delete params.guestName;
         getList1(params, this.Left.page.size, this.Left.page.num)
           .then(async res => {
+            if(!res){
+              this.isSaveClick = false;
+            }
             if (res.code == 0) {
               if (!res.data.content) {
                 this.Left.tbdata = [];
@@ -1516,7 +1547,44 @@
               }
             }
             // Leftcurrentrow
-            for (let b of this.Left.tbdata) {
+            if(this.Leftcurrentrow.id){
+              for (let b of this.Left.tbdata) {
+                b._highlight = false;
+                if (b.id == this.Leftcurrentrow.id) {
+                  b._highlight = true;
+                  this.Leftcurrentrow = b;
+                  this.buttonDisable = 0;
+                  if (b.statuName == "待出库") {
+                    this.buttonDisable = 1;
+                  }
+                  if (b.statuName == "已出库") {
+                    this.buttonDisable = 2;
+                  }
+                  if (b.statuName == "已作废") {
+                    this.buttonDisable = 3;
+                  }
+
+                  //判断仓库是否启用wms
+                  this.isWms = false;
+                  if (this.buttonDisable === 1 && b.isWms === 1) {
+                    this.isWms = true;
+                  }
+                  const params = {
+                    mainId: b.id
+                  };
+                  const res = await getListDetail(params);
+                  this.Leftcurrentrow.detailVOS = res.data || [];
+                  this.isSaveClick = false;
+                  return;
+                }
+                // this.Leftcurrentrow.detailVOS = [];
+              }
+            }else{
+              if(this.Left.tbdata.length==0){
+                this.isSaveClick = false;
+                return
+              }
+              let b = this.Left.tbdata[0];
               b._highlight = false;
               if (b.id == this.Leftcurrentrow.id) {
                 b._highlight = true;
@@ -1542,10 +1610,11 @@
                 };
                 const res = await getListDetail(params);
                 this.Leftcurrentrow.detailVOS = res.data || [];
+                this.isSaveClick = false;
                 return;
               }
-              // this.Leftcurrentrow.detailVOS = [];
             }
+
           })
         // .catch(e => {
         //   this.$Message.info("获取配件组装列表失败");

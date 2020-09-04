@@ -106,6 +106,11 @@ export function getPjSellOrderMainDetailList(data = {}, params) {
   })
 }
 
+//销售订单导出
+// export const sellOrderListExport=`${api.omsBatch}`;
+
+
+
 // 销售报表_销售出库明细
 export function getPjSellOutMainDetails(data = {}, params) {
   return axios.request({
