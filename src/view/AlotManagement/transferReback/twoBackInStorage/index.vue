@@ -609,7 +609,7 @@ export default {
         this.$Message.info("请选择打印项");
         return;
       }
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="调拨入库"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id

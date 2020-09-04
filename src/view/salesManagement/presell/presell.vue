@@ -755,7 +755,7 @@ export default {
     },
     //打印弹出框
     printTable() {
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="预售单"
       order.route=this.$route.name
       order.id=this.id

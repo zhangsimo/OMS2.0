@@ -3,7 +3,7 @@ import axios from "@/libs/api.request";
 import api from "_conf/url";
 
 // 应收审核
-function table1(params) {
+export function table1(params) {
     return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findReceivablesAudit`,
     method: "get",
@@ -11,7 +11,7 @@ function table1(params) {
   });
 }
 // 应付审核
-function table2(params) {
+export function table2(params) {
     return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findDealAudit`,
     method: "get",
@@ -19,7 +19,7 @@ function table2(params) {
   });
 }
 // 预收款审核
-function table3(params) {
+export function table3(params) {
     return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findExpenseAudit`,
     method: "get",
@@ -27,7 +27,7 @@ function table3(params) {
   });
 }
 // 预付款审核
-function table4(params) {
+export function table4(params) {
     return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findExpenseAuditNew`,
     method: "get",
@@ -36,7 +36,7 @@ function table4(params) {
 }
 
 // 其他应收款审核
-function table5(params) {
+export function table5(params) {
     return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findCutSpendingAudit`,
     method: "get",
@@ -45,7 +45,7 @@ function table5(params) {
 }
 
 // 其他应付款审核
-function table6(params) {
+export function table6(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findCutSpendingAuditNew`,
     method: "get",
@@ -54,7 +54,7 @@ function table6(params) {
 }
 
 // 费用报销/因公借支审核
-function table7(params) {
+export function table7(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findOtherAudit`,
     method: "get",
@@ -63,7 +63,7 @@ function table7(params) {
 }
 
 // 转损益审核
-function table8(params) {
+export function table8(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/findOtherAuditNew`,
     method: "get",

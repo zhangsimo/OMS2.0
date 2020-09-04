@@ -956,7 +956,7 @@ export default {
     // 打印
     printTable() {
       // this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="移仓单"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id

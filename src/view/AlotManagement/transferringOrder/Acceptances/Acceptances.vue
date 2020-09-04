@@ -30,6 +30,7 @@
                 :key="item.id"
               >{{item.shortName}}</Option>
             </Select>
+              <Input type="text" placeholder="调拨申请单号" v-model="serviceId" class="mr10 w200"/>
             <Button type="warning" class="mr10 w90" @click="search">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
@@ -148,6 +149,7 @@ export default {
   },
   data() {
     return {
+      serviceId:"",//调拨申请单号
       rightTableHeight: 0,
       purchaseNameArr: [{ shortName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
       selectOne: "", //定义变量赋值日期子组件的数据
@@ -278,6 +280,7 @@ export default {
       if (this.productName !== "9999") {
         params.orgid = this.productName;
       }
+      params.serviceId=this.serviceId.trim() || ""
       findAll(params).then(res => {
         this.isSaveClick = false;
         if (res.code === 0) {

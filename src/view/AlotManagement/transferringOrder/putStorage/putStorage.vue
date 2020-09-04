@@ -841,7 +841,7 @@ export default {
     },
     //打印表格
     printTable() {
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="调拨入库"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
