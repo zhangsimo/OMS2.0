@@ -310,7 +310,7 @@
                     field="applyQty"
                     :edit-render="{autofocus: '.vxe-input--inner'}"
                     title="申请退回数量"
-                    width="100"
+                    width="120"
                   >
                     <template v-slot:edit="{ row }">
                       <vxe-input type="number" v-model="row.applyQty" :min="1" :max="row.rtnableQty"></vxe-input>
@@ -816,6 +816,14 @@ export default {
         params.settleStatus = params.settleStatus.value;
       }
 
+      if(this.Leftcurrentrow.detailVOS.length==0){
+        return this.$message.error("请稍后,数据处理中");
+      }
+
+      this.$refs.formPlan.resetFields();
+
+      console.log(this.Leftcurrentrow.detailVOS)
+      // this.Leftcurrentrow.detailVOS = [];
       //配件组装保存
       baocun(params)
         .then(res => {
