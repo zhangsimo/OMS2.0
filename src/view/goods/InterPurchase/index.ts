@@ -38,6 +38,7 @@ import GoodCus from "_c/allocation/GoodCus.vue"
 export default class InterPurchase extends Vue {
   @State('user') user;
 
+  
   private showSelf: boolean = true;
 
   private split1: number = 0.2;
@@ -67,6 +68,9 @@ export default class InterPurchase extends Vue {
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
   private mainId: string | null = null;
+
+  private commitLoading: boolean = false;
+  private saveLoading: boolean = false;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -421,11 +425,13 @@ export default class InterPurchase extends Vue {
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     // console.log(this.selectTableRow,111)
+    this.saveLoading = true
     let res = await api.saveInterDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
       this.isAdd = true;
+      this.saveLoading = false
     }
   }
 

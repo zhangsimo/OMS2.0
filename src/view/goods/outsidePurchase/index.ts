@@ -80,6 +80,9 @@ export default class OutsidePurchase extends Vue {
   private selectTableRow: any = null;
   private mainId: string|null = null;
 
+  private commitLoading: boolean = false;
+  private saveLoading: boolean = false;
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -472,12 +475,15 @@ export default class OutsidePurchase extends Vue {
       return this.$Message.error("正在保存单据请稍后...");
     }
     this.isClickSave = true;
+    this.saveLoading = true;
     let res = await api.outsideSaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.resetForm();
       this.getListData();
       this.isAdd = true;
+      this.saveLoading = false;
+
     }
     this.isClickSave = false;
   }

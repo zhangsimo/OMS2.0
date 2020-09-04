@@ -699,24 +699,30 @@ export const mixGoodsData = {
             this.$Modal.confirm({
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',
+
               onOk: () => {
                 if (subType === 1) {
+                  this.saveLoading = true
                   saveDraft(objReq).then(res => {
                     this.submitloading = false;
                     this.loading = false;
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
+                      this.saveLoading = false
                       this.$Message.success("保存成功");
+
                       this.getList();
                     }
                   });
                 } else if (subType === 2) {
+
                   if (this.tableData.length <= 0) {
                     this.submitloading = false
                     this.loading = false;
                     return this.$Message.error("请添加配件后再提交");
                   }
+                  this.commitLoading = true
                   saveCommit(objReq).then(res => {
                     this.submitloading = false;
                     this.loading = false;
@@ -724,6 +730,7 @@ export const mixGoodsData = {
                       this.newadd = false;
                       this.proModal = false;
                       this.$Message.success("提交成功");
+                      this.commitLoading = false
                       this.getList();
                     } else {
                       this.submitloading = this.loading = false;
@@ -737,13 +744,15 @@ export const mixGoodsData = {
             })
           } else {
             if (subType === 1) {
+              this.saveLoading = true
               saveDraft(objReq).then(res => {
                 this.submitloading = this.loading = false;
                 if (res.code == 0) {
-                  this.newadd = false;
-                  this.proModal = false;
-                  this.$Message.success("保存成功");
-                  this.getList();
+                    this.newadd = false;
+                    this.proModal = false;
+                    this.saveLoading = false
+                    this.$Message.success("保存成功");
+                    this.getList();
                 }
               });
             } else if (subType === 2) {
@@ -751,11 +760,13 @@ export const mixGoodsData = {
                 this.submitloading = this.loading = false;
                 return this.$Message.error("请添加配件后再提交");
               }
+              this.commitLoading = true
               saveCommit(objReq).then(res => {
                 this.submitloading = this.loading = false;
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
+                  this.commitLoading = false
                   this.$Message.success("提交成功");
                   this.getList();
                 }

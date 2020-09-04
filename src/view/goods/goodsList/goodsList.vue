@@ -30,6 +30,8 @@
               type="default"
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(1)"
+              :loading='saveLoading'
+              v-noresub
               v-has="'save'"
               class="mr10"
             >
@@ -42,7 +44,8 @@
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(2)"
               v-has="'submit'"
-              :loading="loading"
+              :loading='commitLoading'
+              v-noresub
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
@@ -571,6 +574,8 @@ export default {
       }
     };
     return {
+      commitLoading: false,
+      saveLoading: false,
       remoteloading: false,
       ArrayList: [],
       showSelf: true,
@@ -724,6 +729,7 @@ export default {
         }
       })
     },
+
     async getOne(query) {
         if (query != "") {
           this.remoteloading = true;
