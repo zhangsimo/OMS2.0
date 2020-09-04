@@ -166,7 +166,7 @@
                 data.commitEndDate = moment(this.search["submitDate"][1]).format("YYYY-MM-DD") + " 23:59:59";
               }
             } else if (key == "content" && this.search.content) {
-              data.partCode = this.search.content;
+              data.partCode = this.search.content.trim();
             } else {
               data[key] = this.search[key];
             }
