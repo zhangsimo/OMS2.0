@@ -1214,7 +1214,7 @@
       },
       //打印表格
       printTable() {
-        let order = this.$store.state.dataList.oneOrder;
+        let order = {};
         order.name="调拨出库"
         order.route=this.$route.name
         order.id=this.dayinCureen.id
