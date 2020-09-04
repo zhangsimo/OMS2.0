@@ -621,7 +621,8 @@ export default {
           );
         }
       },
-      planArriveDatePicker: {}
+      planArriveDatePicker: {},
+      submitloading:false,
     };
   },
   mounted() {
@@ -1090,11 +1091,13 @@ export default {
     },
     //作废按钮
     isDelete() {
+      if(this.submitloading){ return }
       if (this.id) {
         this.$Modal.confirm({
           title: "是否确定作废",
           onOk: async () => {
             let id = this.id;
+            this.submitloading=true
             let res = await getDelete(id);
             if (res.code == 0) {
               this.$Message.success("作废成功");
@@ -1102,6 +1105,7 @@ export default {
               this.formPlan = {};
               this.getLeftList();
               this.isNew = true;
+              this.submitloading=false;
               this.$refs.formPlan.resetFields();
             }
           },
@@ -1115,6 +1119,7 @@ export default {
     },
     //保存
     isSave() {
+      if(this.submitloading){ return }
       let zero = tools.isZero(this.formPlan.detailVOList, {qty: "orderQty", price: "orderPrice"});
       if(zero) return;
       this.$refs.formPlan.validate(async valid => {
@@ -1124,6 +1129,7 @@ export default {
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
+            this.submitloading=true
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.isAdd = true;
@@ -1132,7 +1138,10 @@ export default {
               this.formPlan = {};
               this.limitList = {};
               this.getLeftList();
+              this.submitloading=false;
               this.$refs.formPlan.resetFields();
+            }else{
+              this.submitloading=false;
             }
           } catch (errMap) {
             this.$XModal.message({
@@ -1148,6 +1157,7 @@ export default {
     },
     //提交
     isSubmit() {
+      if(this.submitloading){ return }
       let zero = tools.isZero(this.formPlan.detailVOList, {qty: "orderQty", price: "orderPrice"});
       if(zero) return;
       this.$refs.formPlan.validate(async valid => {
@@ -1160,6 +1170,7 @@ export default {
             this.$Modal.confirm({
               title: "是否确定提交订单",
               onOk: async () => {
+                this.submitloading=true;
                 let data = {};
                 data = this.formPlan;
                 let res = await getSubmit(data);
@@ -1172,6 +1183,9 @@ export default {
                   this.limitList = [];
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();
+                  this.submitloading=false;
+                }else{
+                  this.submitloading=false;
                 }
               },
               onCancel: () => {
@@ -1189,10 +1203,12 @@ export default {
 
     //完成销售
     finish() {
+      if(this.submitloading){ return }
       if (this.id) {
         this.$Modal.confirm({
           title: "是否确定已完成销售",
           onOk: async () => {
+            this.submitloading=true;
             let id = this.id;
             let res = await finishSales(id);
             if (res.code == 0) {
@@ -1202,6 +1218,9 @@ export default {
               this.$refs.formPlan.resetFields();
               this.formPlan = {};
               this.getLeftList();
+              this.submitloading=false;
+            }else{
+              this.submitloading=false;
             }
           },
           onCancel: () => {
