@@ -450,7 +450,10 @@
                 "sellTaxAmt",
                 "sellNoTaxPrice",
                 "sellNoTaxAmt",
-                "taxDiff"
+                "taxDiff",
+                "orderQty",
+                "orderPrice",
+                "orderAmt"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);
