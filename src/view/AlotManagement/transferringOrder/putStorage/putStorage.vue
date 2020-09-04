@@ -28,7 +28,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'save'" type="default" class="mr10" @click="baocun1">
+              <Button :loading="isSaveClick" v-has="'save'" type="default" class="mr10" @click="baocun1">
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
@@ -565,7 +565,8 @@ export default {
         storeShelf: [
           { validator: posValid,trigger:"blur"}
         ]
-      }
+      },
+      isSaveClick:false,
     };
   },
   // watch: {
@@ -742,8 +743,8 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-
       params["voList"] = this.ArrayValue;
+      this.isSaveClick = true;
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -752,6 +753,8 @@ export default {
             // this.Leftcurrentrow = {};
             this.getList();
             this.$Message.success("保存成功");
+          }else{
+            this.isSaveClick = false;
           }
         })
         // .catch(e => {
@@ -787,6 +790,10 @@ export default {
       const params = {
         id: this.Leftcurrentrow.id
       };
+      if(this.isSaveClick){
+        return this.$message.error('请稍后数据处理中....');
+      }
+      this.isSaveClick = true;
       // 配件组装作废
       zuofei(params)
         .then(res => {
@@ -834,7 +841,7 @@ export default {
     },
     //打印表格
     printTable() {
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="调拨入库"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
@@ -852,7 +859,14 @@ export default {
               storeId:this.Leftcurrentrow.storeId
             };
             // 配件组装作废
+            if(this.isSaveClick){
+              return this.$message.error('请稍后数据处理中....');
+            }
+            this.isSaveClick = true;
             let res = await outDataList(params);
+            if(!res){
+              this.isSaveClick = false;
+            }
             // console.log("res", res);
             if (res.code == 0) {
               this.getList();
@@ -1136,6 +1150,7 @@ export default {
                   };
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  this.isSaveClick = false;
                   return;
                 }
               }
@@ -1148,9 +1163,14 @@ export default {
                 };
                 const res = await getListDetail(params);
                 this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                this.isSaveClick = false;
                 return;
+              }else{
+                this.isSaveClick = false;
               }
             }
+          }else{
+            this.isSaveClick = false;
           }
         })
     },

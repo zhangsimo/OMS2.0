@@ -5,7 +5,7 @@
       align="left"
       size="mini"
       ref="xTable"
-      height="400"
+      max-height="700"
       show-footer
       :footer-method="footerMethod"
       :data="tableData"
@@ -16,41 +16,18 @@
         <vxe-table-column show-overflow="tooltip" field="guestFirm" title="店号" width="60"></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="serviceId0"
-          title="销售出库单号"
+          field="serviceId"
+          title="销退入库单号"
           width="164"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="serviceId"
-          title="销退货单号"
+          field="guestFullName"
+          title="客户"
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group1" title="订单信息">
-        <vxe-table-column show-overflow="tooltip"
-                          field="guestFullName"
-                          title="客户"
-                          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="orderMan"
-          title="退货员"
-          width="70"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="orderMan0"
-          title="销售员"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="outDate0"
-          title="出库日期"
-          width="120"
-        ></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="group1" title="单据信息">
         <vxe-table-column
           show-overflow="tooltip"
           field="enterDate"
@@ -61,213 +38,268 @@
           show-overflow="tooltip"
           field="storeName"
           title="仓库"
-          width="90"
+          width="80"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="orderType0"
+          title="订单类型"
+          width="80"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group2" title="配件信息">
-        <vxe-table-column show-overflow="tooltip"
-                          field="partCode"
-                          title="配件编码"
-                          width="120"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="partName"
+          title="配件名称"
+          width="110"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="partName"
-                          title="配件名称"
-                          width="120"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="partCode"
+          title="配件编码"
+          width="110"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="oemCode"
-                          title="OE码"
-                          width="120"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="partBrand"
+          title="品牌"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="partBrand"
-                          title="品牌"
-                          width="70"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="oemCode"
+          title="OE码"
+          width="110"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="carModelName"
-                          title="品牌车型"
-                          width="120"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="carModelName"
+          title="品牌车型"
+          width="110"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="unit"
-                          title="单位"
-                          width="50"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="spec"
+          title="规格"
+          width="100"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="spec"
-                          title="规格"
-                          width="100"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="partId"
+          title="配件内码"
+          width="70"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="unit"
+          title="单位"
+          width="50"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group3" title="数量/价格">
+      <vxe-table-column show-overflow="tooltip" field="group3" title="数量/单价">
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderQty0"
-          title="销售数量"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="orderPrice0"
-          title="销售单价"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="orderAmt0"
-          title="销售金额"
-          width="120"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="enterQty"
+          field="orderQty"
           title="销退数量"
-          width="120"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="rtnPrice"
+          field="orderPrice"
           title="销退单价"
-          width="120"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="rtnAmt"
-          title="销退金额"
-          width="120"
+          field="orderAmt"
+          title="金额"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="detailRemark"
-          title="备注"
-          width="120"
+          title="明细备注"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip" field="isMakActivity" title="活动" width="120">
+      </vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="group4" title="销售税率信息">
+        <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
-            <Checkbox disabled v-model="row.isMakActivity"></Checkbox>
+            <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
           </template>
         </vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="税率信息">
-        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
-          <template v-slot="{ row }">
-            <Checkbox disabled v-model="row.taxSign"></Checkbox>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="taxRate"
-                          title="税率"
-                          width="200"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="sellTaxRate"
+          title="销售税率"
+          width="70"
         ></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="含税信息">
-        <vxe-table-column show-overflow="tooltip"
-                          field="taxPrice"
-                          title="含税单价"
-                          width="140"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="sellTaxPrice"
+          title="含税销价"
+          width="70"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="taxAmt"
-                          title="含税金额"
-                          width="200"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="sellTaxAmt"
+          title="含税金额"
+          width="80"
         ></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="不含税信息">
-        <vxe-table-column show-overflow="tooltip"
-                          field="noTaxPrice"
-                          title="不含税单价"
-                          width="140"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="sellNoTaxPrice"
+          title="不含税销价"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="noTaxAmt"
-                          title="不含税金额"
-                          width="200"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="sellNoTaxAmt"
+          title="不含税金额"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxQuota"
-          title="税额"
-          width="200"
+          title="销售税额"
+          width="70"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="成本信息">
-        <vxe-table-column show-overflow="tooltip"
-                          field="enterPrice"
-                          title="成本单价"
-                          width="200"
+      <vxe-table-column show-overflow="tooltip" field="group5" title="成本信息">
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="enterPrice"
+          title="成本单价"
+          width="70"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="enterAmt"
-                          title="成本金额"
-                          width="200"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="enterAmt"
+          title="成本金额"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
+        <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="成本含税" width="70">
           <template v-slot="{ row }">
-            <Checkbox disabled v-model="row.taxSign"></Checkbox>
+            <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
           </template>
         </vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="taxRate"
-                          title="税点"
-                          width="200"
-
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="cbTaxRate"
+          title="成本税率"
+          width="70"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="sellTaxPrice"
-                          title="含税成本单价"
-                          width="200"
-
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="cbTaxPrice"
+          title="含税单价"
+          width="70"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="sellTaxAmt"
-                          title="含税成本金额"
-                          width="200"
-
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="cbTaxAmt"
+          title="含税金额"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="sellNoTaxPrice"
-                          title="不含税成本单价"
-                          width="200"
-
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="cbNoTaxPrice"
+          title="不含税单价"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="sellNoTaxAmt"
-                          title="不含税成本金额"
-                          width="200"
-
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="cbNoTaxAmt"
+          title="不含税金额"
+          width="80"
         ></vxe-table-column>
-        <vxe-table-column show-overflow="tooltip"
-                          field="taxDiff"
-                          title="成本税额"
-                          width="140"
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="taxDiff"
+          title="成本税额"
+          width="70"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="entenrGuestName"
+          title="最近供应商"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="firstGuestName"
+          title="第一供应商"
+          width="120"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column show-overflow="tooltip" field="group6" title="利润信息">
+        <vxe-table-column show-overflow="tooltip"
+                          field="profit"
+                          title="损益"
+                          width="60"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="maoLi"
+                          title="毛利"
+                          width="70"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="taxMaoLi"
+                          title="税金毛利"
+                          width="80"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="noTaxMaoLi"
+                          title="非税金毛利"
+                          width="80"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="costRate"
+                          title="成本率"
+                          width="70"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="maoLiRate"
+                          title="毛利率"
+                          width="70"
+        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip"
+                          field="noTaxMaoLiRate"
+                          title="非税金毛利率"
+                          width="100"
+        ></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="group7" title="其他">
         <vxe-table-column
           show-overflow="tooltip"
-          field="manualCode0"
-          title="销售订单单号"
-          width="140"
+          field="code"
+          title="订单单号"
+          width="164"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="auditor0"
-          title="销售订单提交人"
-          width="140"
+          field="orderMan"
+          title="销售员"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="auditDate0"
-          title="销售订单提交日期"
-          width="200"
+          field="auditor"
+          title="提交人"
+          width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="rtnReasonName"
-          title="退货原因"
+          field="auditDate"
+          title="提交日期"
           width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="billTypeIdName"
+          title="票据类型"
+          width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
@@ -277,33 +309,16 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="code"
-          title="销退订单号"
-          width="140"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="auditor"
-          title="提交人"
-          width="140"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="auditDate"
-          title="提交日期"
-          width="200"
-        ></vxe-table-column>
-        <vxe-table-column
-          show-overflow="tooltip"
           field="mainRemark"
           title="订单备注"
-          width="200"
+          width="240"
         ></vxe-table-column>
-        <!--<vxe-table-column  show-overflow="tooltip"
-          field="none"
-          title="销售订单单号"
-          width="200"
-        ></vxe-table-column>-->
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="rtnReasonName"
+          title="原因"
+          width="240"
+        ></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -358,7 +373,18 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = false;
             }
-            el.isMakActivity = false;
+            if ([1, "1", "是"].includes(el.sellTaxSign)) {
+              el.sellTaxSign = true;
+            }
+            if ([0, "0", "否"].includes(el.taxSign)) {
+              el.sellTaxSign = false;
+            }
+            if ([1, "1", "是"].includes(el.sellTaxSign)) {
+              el.isMakActivity = true;
+            }
+            if ([0, "0", "否"].includes(el.taxSign)) {
+              el.isMakActivity = false;
+            }
             return el;
           });
           this.total = res.data.purchaseEnterBean
@@ -424,7 +450,10 @@
                 "sellTaxAmt",
                 "sellNoTaxPrice",
                 "sellNoTaxAmt",
-                "taxDiff"
+                "taxDiff",
+                "orderQty",
+                "orderPrice",
+                "orderAmt"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);

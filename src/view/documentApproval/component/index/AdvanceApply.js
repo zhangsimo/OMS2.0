@@ -101,8 +101,8 @@ export default {
           user.groups.length > 0
             ? user.groups[user.groups.length - 1].name
             : "";
-        this.formInline.shopCode = user.shopCode || " 　　";
-        this.formInline.orgName = getPost();
+        this.formInline.shopCode = user.currentCompany?user.currentCompany.code : "";
+        this.formInline.orgName = user.currentCompany?user.currentCompany.shortName : "";
         this.formInline.applyTypeName = "采购预付款";
         this.formInline.applyTime = date;
         this.formInline.paymentOrgName = getPost();

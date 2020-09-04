@@ -329,13 +329,13 @@
                 <vxe-table-column show-overflow="tooltip"
                                   type="seq"
                                   fixed="left"
-                                  width="60"
+                                  width="50"
                                   title="序号"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                                   type="checkbox"
                                   fixed="left"
-                                  width="60"
+                                  width="50"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                                   field="partCode"
@@ -349,7 +349,9 @@
                                   title="配件名称"
                                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
+                <vxe-table-column show-overflow="tooltip" fixed="left" field="partInnerId" title="配件内码"
+                                  width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" show-overflow="tooltip"
                                   field="partBrand"
                                   title="品牌"
                                   width="100"
@@ -424,8 +426,7 @@
                                   title="规格"
                                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码"
-                                  width="120"></vxe-table-column>
+
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
@@ -1084,7 +1085,7 @@
       },
       // 打印
       stamp() {
-        let order = this.$store.state.dataList.oneOrder;
+        let order = {};
         order.name="采购退货单"
         order.route=this.$route.name
         order.id=this.mainId

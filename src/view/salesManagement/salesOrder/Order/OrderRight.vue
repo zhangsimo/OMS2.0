@@ -1068,6 +1068,7 @@
         // if(!this.formPlan.planSendDate) {
         //   return this.$Message.error("*为必填项");
         // }
+        if(this.$parent.$parent.submitloading){return }
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
@@ -1084,15 +1085,20 @@
                 return this.$Message.error("请稍后订单处理中...");
               }
               this.isClickSave = true;
+              this.$parent.$parent.submitloading=true;
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
                 this.$Message.success("保存成功");
                 this.$parent.$parent.isAdd = false;
+                this.$parent.$parent.submitloading=false;
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
                 // this.reload();
+              }else{
+                this.$parent.$parent.submitloading=false;
+                // this.$message.error("保存失败")
               }
             } catch (errMap) {
               this.$XModal.message({
@@ -1131,6 +1137,7 @@
       },
       //出库
       stockOut() {
+        if(this.$parent.$parent.submitloading){return }
         let str = '是否确定出库';
         if (this.formPlan.orderAmt * 1 == 0) {
           str = '存在配件单价为0，是否确定出库';
@@ -1149,6 +1156,7 @@
                     if (+this.totalMoney > +this.limitList.sumAmt) {
                       return this.$message.error("可用余额不足");
                     }
+                    this.$parent.$parent.submitloading=true
                     data.planSendDate = tools.transTime(data.planSendDate)
                     data.planArriveDate = tools.transTime(data.planArriveDate)
                     let res = await getStockOut(data);
@@ -1156,9 +1164,11 @@
                       this.$Message.success("出库成功");
                       this.$store.commit("setleftList", res);
                       this.door.outStockDoor = true;
+                      this.$parent.$parent.submitloading=false
                       return res;
                     } else {
                       this.door.outStockDoor = true;
+                      this.$parent.$parent.submitloading=false
                     }
                   } catch (errMap) {
                     this.$XModal.message({
@@ -1182,6 +1192,7 @@
         // if(!this.formPlan.planSendDate) {
         //   return this.$Message.error("*为必填项");
         // }
+        if(this.$parent.$parent.submitloading){return }
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
@@ -1213,16 +1224,20 @@
                       if(this.isClickSave){
                         return this.$Message.error("请稍后订单处理中...");
                       }
+                      this.$parent.$parent.submitloading=true;
                       this.isClickSave = true;
                       let res = await getSubmitList(data);
                       this.isClickSave = false;
                       if (res.code === 0) {
                         this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
+                        this.$parent.$parent.submitloading=false;
                         this.$parent.$parent.orderlistType.value = 1;
                         this.limitList = {};
                         this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();
+                      }else{
+                        this.$parent.$parent.submitloading=false;
                       }
                     },
                     onCancel: () => {
@@ -1234,15 +1249,19 @@
                   return this.$Message.error("请稍后订单处理中...");
                 }
                 this.isClickSave = true;
+                this.$parent.$parent.submitloading=true
                 let res = await getSubmitList(data);
                 this.isClickSave = false;
                 if (res.code === 0) {
                   this.$Message.success("提交成功");
                   this.$parent.$parent.isAdd = false;
+                  this.$parent.$parent.submitloading=false;
                   this.limitList = {};
                   this.$store.commit("setleftList", res);
                   this.$refs.formPlan.resetFields();
                   // this.reload();
+                }else{
+                  this.$parent.$parent.submitloading=false;
                 }
               }
             } catch (errMap) {

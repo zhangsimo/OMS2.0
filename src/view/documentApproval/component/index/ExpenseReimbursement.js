@@ -34,10 +34,36 @@ export default {
     };
     const notaxValid = ({cellValue ,row }) => {
       return new Promise((resolve, reject) => {
-        if ( !cellValue || cellValue != this.$utils.subtract(row.totalAmt, row.taxAmt)) {
-          reject(new Error('不含税金额计算错误'))
-        } else {
+        if (row.billTypeId && row.billTypeId != "010103"){
           resolve()
+        }else{
+          if ( !cellValue || cellValue != this.$utils.subtract(row.totalAmt, row.taxAmt)) {
+            reject(new Error('不含税金额计算错误'))
+          } else {
+            if(/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(cellValue)){
+              resolve()
+            }else{
+              reject(new Error('最多保留2为小数'))
+            }
+          }
+        }
+
+      })
+    }
+    const taxAmt = ({cellValue ,row }) => {
+      return new Promise((resolve, reject) => {
+        if (row.billTypeId && row.billTypeId != "010103"){
+          resolve()
+        }else{
+          if(cellValue==''){
+            reject(new Error('税额必填'))
+          }else{
+            if(/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(cellValue)){
+              resolve()
+            }else{
+              reject(new Error('最多保留2为小数'))
+            }
+          }
         }
       })
     }
@@ -93,18 +119,9 @@ export default {
           }
         ],
         taxAmt: [
-          {required: true, message: "税额必填"},
-          {
-            pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
-            message: "最多保留2为小数"
-          }
+          {validator: taxAmt}
         ],
         noTaxAmt: [
-          {required: true, message: "不含税金额必填"},
-          {
-            pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
-            message: "最多保留2为小数"
-          },
           {validator: notaxValid}
         ],
         writeOffAmt: [
@@ -193,14 +210,14 @@ export default {
         //判断模态框状态
         this.modelType = false;
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-          user = this.$store.state.user.userData;
+          user = this.$store.state.user.userData.userData;
         this.formInline.applicant = user.staffName;
         this.formInline.deptName =
           user.groups.length > 0
             ? user.groups[user.groups.length - 1].name
             : "";
-        this.formInline.shopCode = user.shopCode || " 　　";
-        this.formInline.orgName = getPost();
+        this.formInline.shopCode = user.currentCompany?user.currentCompany.code : "";
+        this.formInline.orgName = user.currentCompany?user.currentCompany.shortName : "";
         this.formInline.applyTypeName = "费用报销";
         this.formInline.applyTime = date;
         this.formInline.paymentOrgName = getPost();

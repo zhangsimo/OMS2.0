@@ -30,6 +30,7 @@
                 :key="item.id"
               >{{item.shortName}}</Option>
             </Select>
+              <Input type="text" placeholder="调拨申请单号" v-model="serviceId" class="mr10 w200"/>
             <Button type="warning" class="mr10 w90" @click="search">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
@@ -148,6 +149,7 @@ export default {
   },
   data() {
     return {
+      serviceId:"",//调拨申请单号
       rightTableHeight: 0,
       purchaseNameArr: [{ shortName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
       selectOne: "", //定义变量赋值日期子组件的数据
@@ -178,7 +180,8 @@ export default {
         },
         tbdata: []
       },
-      RowMessage: [] //上半部分当前行
+      RowMessage: [], //上半部分当前行
+      isSaveClick : false,
     };
   },
   methods: {
@@ -277,7 +280,9 @@ export default {
       if (this.productName !== "9999") {
         params.orgid = this.productName;
       }
+      params.serviceId=this.serviceId.trim() || ""
       findAll(params).then(res => {
+        this.isSaveClick = false;
         if (res.code === 0) {
           this.topRight.tbdata = res.data.content;
           this.topRight.page.total = res.data.totalElements;
@@ -296,7 +301,16 @@ export default {
           data.orderTypeId = this.RowMessage.orderTypeId.value;
           data.settleStatus = this.RowMessage.settleStatus.value;
           // console.log(data)
+
+          if(this.isSaveClick){
+            return this.$message.error('请稍后数据处理中....');
+          }
+          this.isSaveClick = true;
+
           let res = await allotMainAccept(data);
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.$Message.success("受理成功");
             this.getList();
@@ -317,7 +331,14 @@ export default {
           data.settleStatus = this.RowMessage.settleStatus.value;
           data.status = "7";
           // console.log(data)
+          if(this.isSaveClick){
+            return this.$message.error('请稍后数据处理中....');
+          }
+          this.isSaveClick = true;
           let res = await allotMainAccept(data);
+          if(!res){
+            this.isSaveClick = false;
+          }
           if (res.code === 0) {
             this.$Message.success("受理成功");
             this.getList();
