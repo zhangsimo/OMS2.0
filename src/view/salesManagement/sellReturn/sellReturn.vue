@@ -633,7 +633,8 @@
 
         id: "", //点击左侧表格拿到的id
         selectTableList: [], //右侧table表格选中的数据
-        Flag: false //判断是否已提交
+        Flag: false ,//判断是否已提交
+        submitloading:false,
       };
     },
     mounted() {
@@ -1023,17 +1024,23 @@
 
       //作废按钮
       cancellation() {
+        if(this.submitloading){return }
         if (this.id) {
           this.$Modal.confirm({
             title: "是否确定作废",
             onOk: async () => {
               let id = this.id;
+              this.submitloading=true
               let res = await getDelete(id);
               if (res.code == 0) {
                 this.$Message.success("作废成功");
                 this.formPlan = {};
                 this.getLeftList();
+                this.submitloading=false;
                 this.$refs.formPlan.resetFields();
+              }else{
+                this.submitloading=false;
+                // this.$Message.error("作废失败")
               }
             },
             onCancel: () => {
@@ -1067,6 +1074,7 @@
       },
       //保存
       isSave() {
+        if(this.submitloading){ return }
         this.formPlan.orderDate = new Date(this.formPlan.orderDate)
         if (!this.isSelfOk) {
           return this.$message.error("请填写正确的仓位!");
@@ -1078,6 +1086,7 @@
             preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate));
             this.formPlan.orderDate = orderT;
             try {
+              this.submitloading=true
               await this.$refs.xTable.validate();
               let data = {};
               data = this.formPlan;
@@ -1090,9 +1099,12 @@
                 this.$Message.success("保存成功");
                 this.formPlan = {};
                 this.getLeftList();
+                this.submitloading=false;
                 this.$refs.formPlan.resetFields();
               } else {
                 this.formPlan.orderDate = preTime;
+                this.submitloading=false;
+                // this.$Message.error("保存失败")
               }
             } catch (errMap) {
               this.$XModal.message({
@@ -1157,6 +1169,7 @@
 
       //提交
       isSubmit() {
+        if(this.submitloading){ return }
         this.formPlan.orderDate = new Date(this.formPlan.orderDate)
         if (!this.isSelfOk) {
           return this.$message.error("请填写正确的仓位!");
@@ -1174,6 +1187,7 @@
                   let data = {};
                   data = this.formPlan;
                   data.billStatusId = null;
+                  this.submitloading=true
                   // data.orderDate = tools.transTime(this.formPlan.orderDate);
                   let res = await getSubmit(data);
                   if (res.code == 0) {
@@ -1182,8 +1196,10 @@
                     this.formPlan = {};
                     this.$refs.formPlan.resetFields();
                     this.getLeftList();
+                    this.submitloading=false;
                     // this.reload();
                   } else {
+                    this.submitloading=false;
                     this.formPlan.orderDate = preTime;
                   }
                 },
