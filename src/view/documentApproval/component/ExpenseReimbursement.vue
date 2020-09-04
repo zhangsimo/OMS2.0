@@ -157,7 +157,7 @@
             title="税额"
             :edit-render="{
               name: 'input',
-              attrs: { type: 'number', disabled: false },
+              attrs: { type: 'number', disabled: false},
               events: { change: taxCanuse }
             }"
           ></vxe-table-column>

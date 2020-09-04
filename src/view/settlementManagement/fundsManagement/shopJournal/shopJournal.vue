@@ -742,8 +742,9 @@
       //获取表格信息
       async getList() {
         let data = {}
-        data.page = this.page.num - 1
-        data.size = this.page.size
+        let params = {}
+        params.page = this.page.num - 1
+        params.size = this.page.size
         data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ""
         data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
         if(!data.startTime){
@@ -771,7 +772,7 @@
         data.accountMoney = this.accountMoney;
         data.accountCode = this.accountCode;
         this.allMoneyList = {}
-        let res = await goList(data)
+        let res = await goList(params,data)
         if (res.code === 0) {
           //if (res.data.page.content.length > 0) {
             this.allMoneyList = res.data.moneyList

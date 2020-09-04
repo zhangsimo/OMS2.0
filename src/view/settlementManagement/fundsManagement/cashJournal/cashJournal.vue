@@ -419,9 +419,10 @@
       async getList() {
         this.oneList = {};
         let data = {};
+        let params = {}
         data.signs=1;//区别现金日记账
-        data.page = 0;
-        data.size = 9999;
+        params.page = 0;
+        params.size = 9999;
         data.startTime = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD")
           : "";
@@ -432,7 +433,7 @@
         data.shopNumber = this.shopCode;
         data.subjectId = [this.subjectCode];
         this.allMoneyList = {};
-        let res = await goList(data);
+        let res = await goList(params,data);
         if (res.code === 0) {
           //if (res.data.page.content.length > 0) {
             this.allMoneyList = res.data.moneyList;
