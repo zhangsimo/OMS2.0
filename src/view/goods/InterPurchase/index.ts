@@ -597,7 +597,7 @@ export default class InterPurchase extends Vue {
   private print() {
     // const ref: any = this.$refs.PrintModel;
     // ref.openModal();
-    let order = this.$store.state.dataList.oneOrder;
+    let order:any = {};
     order.name="采购订单"
     order.route=this.$route.name
     order.id=this.mainId

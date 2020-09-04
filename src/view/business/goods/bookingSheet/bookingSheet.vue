@@ -247,6 +247,11 @@
                   width="150"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
+                                  field="partInnerId"
+                                  title="配件内码"
+                                  width="150"
+                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
                   width="100"
@@ -289,11 +294,6 @@
                   width="100"
                 ></vxe-table-column>
                 <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
-                <vxe-table-column show-overflow="tooltip"
-                  field="partInnerId"
-                  title="配件内码"
-                  width="150"
-                ></vxe-table-column>
               </vxe-table>
               <div ref="planPage"></div>
             </div>

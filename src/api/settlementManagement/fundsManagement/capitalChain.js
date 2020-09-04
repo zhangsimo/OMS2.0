@@ -37,10 +37,11 @@ export const impUrl = `${api.omsSettle}/cashAccountServer/import`
 
 
 //获取门店接口
-export function goList(data) {
+export function goList(params,data) {
   return axios.request({
-    url: `${api.omsSettle}/cashAccountServer/findCashAccount?page=${data.page}&size=${data.size}`,
+    url: `${api.omsSettle}/cashAccountServer/findCashAccount`,
     method: 'post',
+    params,
     data
   });
 }

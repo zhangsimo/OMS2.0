@@ -18,7 +18,7 @@
                 <Button class="mr10" @click="addProoo" v-has="'add'"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
-                <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+                <Button :loading="isSaveClick" type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
                 <Button class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
@@ -443,6 +443,8 @@
           ArrayValue: [],
           getArray: [],
           currentRow: {},
+          //临时禁用保存提交作废按钮
+          isSaveClick:false,
         }
       },
       methods: {
@@ -542,7 +544,7 @@
           let data = {}
            data.id = this.rowId
                     data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestOrgid = this.formPlan.guestOrgid
                     data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
@@ -662,7 +664,11 @@
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
+                    this.isSaveClick = true;
                     save(data).then(res => {
+                      if(!res){
+                        this.isSaveClick = false;
+                      }
                       if(res.code === 0){
                         this.$message.success('保存成功！');
                         this.formPlan.guestName = '',
@@ -707,14 +713,21 @@
                 data.id = this.rowId
                 data.orgid = this.rowOrgId
                 data.guestId = this.guestidId
-                data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                data.guestOrgid = this.formPlan.guestOrgid
                 data.storeId = this.formPlan.storeId
                 data.orderDate = tools.transTime(this.formPlan.orderDate)
                 data.remark = this.formPlan.remark
                 data.createUname  = this.formPlan.createUname
                 data.serviceId = this.formPlan.serviceId
                 data.detailVOS = this.Right.tbdata
+                if(this.isSaveClick){
+                  return this.$message.error('请稍后数据处理中....');
+                }
+                this.isSaveClick = true;
                 let res = await save(data);
+                if(!res){
+                  this.isSaveClick = false;
+                }
                 if (res.code == 0) {
                   this.$Message.success('作废成功');
                   this.leftgetList();
@@ -728,7 +741,7 @@
         },
         // 打印
         stamp(){
-          let order = this.$store.state.dataList.oneOrder;
+          let order = {};
           order.name="调拨申请"
           order.route=this.$route.name
           order.id=this.mainId
@@ -941,9 +954,12 @@
                 this.Left.tbdata[0]._highlight = true;
                 this.isAdd = true;
                 this.setRow(this.Left.tbdata[0]);
+              }else {
+                this.isSaveClick = false;
               }
             }else {
-              this.Left.page.total = 0
+              this.Left.page.total = 0;
+              this.isSaveClick = false;
             }
           })
         },
@@ -967,7 +983,7 @@
                     let data = {};
                     data.id = this.rowId;
                     data.orgid = this.rowOrgId;
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
+                    data.guestOrgid = this.formPlan.guestOrgid;
                     data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
@@ -1062,6 +1078,7 @@
           let params = {}
           params.id = this.rowId
           findById(params).then(res => {
+            this.isSaveClick = false;
             if(res.code === 0){
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
@@ -1096,7 +1113,7 @@
                 onOk: async () => {
                   // if(this.clickdelivery){
                     let data = {}
-                    data.guestOrgid = this.datadata.guestOrgid || this.isInternalId;
+                    // data.guestOrgid = this.datadata.guestOrgid || this.isInternalId;
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     data.guestId = this.guestidId
@@ -1108,11 +1125,19 @@
                     data.createUname  = this.formPlan.createUname
                     data.serviceId = this.formPlan.serviceId
                     data.detailVOS = this.Right.tbdata
+                    if(this.isSaveClick){
+                      return this.$message.error('请稍后数据处理中....');
+                    }
+                    this.isSaveClick = true;
                     let res = await commit(data);
+                    if(!res){
+                      this.isSaveClick = false;
+                    }
                     if (res.code == 0) {
                       this.$Message.success('提交成功');
                       this.leftgetList();
                       this.isAdd = true;
+                      this.$refs.formPlan.resetFields();
                     }
                   // }else{
                   //   this.$Message.warning('请先编辑收货信息')

@@ -372,11 +372,11 @@
               >
                 <vxe-table-column show-overflow="tooltip"
                   type="seq"
-                  width="60"
+                  width="50"
                   title="序号"
                   fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="80">
                   <template v-slot="{ row }">
                     <Button type="text" @click="watch(row.partId)">查看</Button>
@@ -394,6 +394,7 @@
                   width="100"
                   fixed="left"
                 ></vxe-table-column>
+                <vxe-table-column fixed="left" show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
@@ -484,7 +485,6 @@
                   title="规格"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="adjustQty"
                   title="订单取消数量"

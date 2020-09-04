@@ -387,10 +387,11 @@
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="50" title="序号"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" fixed="left" field="partInnerId" title="配件内码" width="80"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="masterStockQty" title="总部库存" width="100"></vxe-table-column>
@@ -463,7 +464,6 @@
                 <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="notEnterQty" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->

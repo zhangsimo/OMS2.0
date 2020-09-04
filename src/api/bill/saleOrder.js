@@ -3,10 +3,11 @@ import axios from '@/libs/api.request'
 
 
 // 销售订单明细
-export function getOrderlist(data) {
+export function getOrderlist(params,data) {
     return axios.request({
         url: `${api.omsOrder}/sellOrderMain/findByQuery`,
         method: 'post',
+        params,
         data
     })
 }
@@ -19,10 +20,11 @@ export function getPartList(data) {
     })
 }
 // 采购入库单查询/销售退货查询
-export function getWarehousingList(data) {
+export function getWarehousingList(params,data) {
     return axios.request({
         url: `${api.omsOrder}/enterMain/findEnterMain`,
         method: 'post',
+        params,
         data
     })
 }
@@ -36,10 +38,11 @@ export function getWarehousingPart(params) {
 }
 
 // 采购退货/销售出库单查询
-export function getOutStockList(data) {
+export function getOutStockList(params,data) {
     return axios.request({
         url: `${api.omsOrder}/outMain/findOutMainAll`,
         method: 'post',
+        params,
         data
     })
 }
@@ -60,10 +63,11 @@ export function getOnWay(data) {
     })
 }
 // 收付款查询
-export function getReceiptsPaymentsSummary(data) {
+export function getReceiptsPaymentsSummary(params,data) {
     return axios.request({
         url: `${api.omsSettle}/payment/record/queryRecordVerification`,
         method: 'post',
+        params,
         data
     })
 }
@@ -76,18 +80,20 @@ export function getReceiptsPaymentsList(params) {
     })
 }
 // 调拨出库明细查询
-export function transferStock(data) {
+export function transferStock(params,data) {
     return axios.request({
         url: `${api.omsOrder}/allotOutMain/queryAllotOutMains`,
         method: 'post',
+        params,
         data
     })
 }
 // 调拨入库明细查询
-export function transferWarehousing(data) {
+export function transferWarehousing(params,data) {
     return axios.request({
         url: `${api.omsOrder}/allotEnterMain/queryAllotEnterMains`,
         method: 'post',
+      params,
         data
     })
 }

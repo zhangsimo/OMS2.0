@@ -41,6 +41,7 @@
                 v-has="'save'"
                 class="mr10"
                 @click="baocun1"
+                :loading="isSaveClick"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -310,7 +311,7 @@
                     field="applyQty"
                     :edit-render="{autofocus: '.vxe-input--inner'}"
                     title="申请退回数量"
-                    width="100"
+                    width="120"
                   >
                     <template v-slot:edit="{ row }">
                       <vxe-input type="number" v-model="row.applyQty" :min="1" :max="row.rtnableQty"></vxe-input>
@@ -691,6 +692,7 @@ export default {
       val: "0",
       diaochuName: "",
       diaochuID: "",
+      isSaveClick:false,
     };
   },
   watch: {
@@ -815,7 +817,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-
+      this.isSaveClick = true
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -824,6 +826,8 @@ export default {
             this.getList();
             this.$Message.success("保存成功");
             this.flag = 0;
+          }else{
+            this.isSaveClick = false;
           }
         })
         .catch(e => {
@@ -995,7 +999,7 @@ export default {
         this.$Message.error("请选择打印项");
         return;
       }
-      let order = this.$store.state.dataList.oneOrder;
+      let order = {};
       order.name="调入退回申请"
       order.route=this.$route.name
       order.id=this.dayinCureen.id
@@ -1365,11 +1369,13 @@ export default {
                   };
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+                  this.isSaveClick = false;
                   return;
                 }
               }
             } else {
               if(this.Left.tbdata.length==0){
+                this.isSaveClick = false;
                 return
               }
               this.Left.tbdata[0]._highlight = true;
@@ -1379,7 +1385,10 @@ export default {
               };
               const res = await getListDetail(params);
               this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
+              this.isSaveClick = false;
             }
+          }else{
+            this.isSaveClick = false;
           }
         })
         .catch(e => {

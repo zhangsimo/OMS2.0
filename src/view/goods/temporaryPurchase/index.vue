@@ -424,6 +424,7 @@
                   width="100"
                   fixed="left"
                 ></vxe-table-column>
+                <vxe-table-column fixed="left" show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
@@ -508,7 +509,6 @@
                   title="规格"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="direction"
                   title="方向"

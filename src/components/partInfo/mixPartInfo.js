@@ -247,7 +247,7 @@ export const mixPartInfo = {
     },
     // 弹框打开关闭
     visible(type) {
-      if (type) {
+      if (!type) {
         this.$refs.proModalForm.resetFields()
       }
     },
