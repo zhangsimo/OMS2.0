@@ -36,6 +36,8 @@
               @click="saveHandle('formplanref')"
               class="mr10"
               :disabled="isInput"
+              :loading='saveLoading'
+              v-noresub
               v-has="'save'"
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
@@ -46,6 +48,8 @@
               @click="submit('formplanref')"
               :disabled="isInput"
               v-has="'submit'"
+              :loading='commitLoading'
+              v-noresub
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
           </div>

@@ -82,6 +82,9 @@ export default class TemporaryPurchase extends Vue {
   private selectTableRow: any = null;
   private mainId: string | null = null;
 
+  private commitLoading: boolean = false;
+  private saveLoading: boolean = false;
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -461,11 +464,14 @@ export default class TemporaryPurchase extends Vue {
     data.details = this.tableData;
     this.selectTableRow._highlight=true
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
+    this.saveLoading = true
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
       this.isAdd = true;
+      this.saveLoading = false
+
     }
   }
 
