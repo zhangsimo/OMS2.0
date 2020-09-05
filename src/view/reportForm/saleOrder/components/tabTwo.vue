@@ -472,7 +472,12 @@
                 "profit",
                 "maori",
                 "taxMaoLi",
-                "noTaxMaoLi"
+                "noTaxMaoLi",
+                "cbTaxPrice",
+                "cbTaxAmt",
+                "cbNoTaxPrice",
+                "cbNoTaxAmt",
+                "maoLi"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);

@@ -74,6 +74,12 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
+          field="carBrandName"
+          title="厂牌"
+          width="110"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
           width="110"
@@ -186,31 +192,31 @@
         </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="cbTaxRate"
+          field="sellTaxRate"
           title="成本税率"
           width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="cbTaxPrice"
+          field="sellTaxPrice"
           title="含税单价"
           width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="cbTaxAmt"
+          field="sellTaxAmt"
           title="含税金额"
           width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="cbNoTaxPrice"
+          field="sellNoTaxPrice"
           title="不含税单价"
           width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="cbNoTaxAmt"
+          field="sellNoTaxAmt"
           title="不含税金额"
           width="80"
         ></vxe-table-column>
@@ -228,7 +234,7 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="firstGuestName"
+          field="firstGuestFullName"
           title="第一供应商"
           width="120"
         ></vxe-table-column>
@@ -453,7 +459,15 @@
                 "taxDiff",
                 "orderQty",
                 "orderPrice",
-                "orderAmt"
+                "orderAmt",
+                "taxMaoLi",
+                "noTaxMaoLi",
+                "cbTaxPrice",
+                "cbTaxAmt",
+                "cbNoTaxPrice",
+                "cbNoTaxAmt",
+                "maoLi",
+                "profit"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);
