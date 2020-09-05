@@ -698,7 +698,7 @@ export default {
     },
     async baocun1() {
       if (this.ArrayValue != []) {
-        for (var i = 0; i < this.ArrayValue.length; i++) {
+        for (let i = 0; i < this.ArrayValue.length; i++) {
           if (parseInt(this.ArrayValue[i].hasInQty) > parseInt(this.ArrayValue[i].hasOutQty)) {
             this.$Message.error("入库数量不能大于出库数量");
             return;
@@ -853,6 +853,14 @@ export default {
       this.$Modal.confirm({
           title: "是否确定入库？",
           onOk: async () => {
+            if (this.ArrayValue != []) {
+              for (let i = 0; i < this.ArrayValue.length; i++) {
+                if (parseInt(this.ArrayValue[i].hasInQty) > parseInt(this.ArrayValue[i].hasOutQty)) {
+                  this.$Message.error("入库数量不能大于出库数量");
+                  return;
+                }
+              }
+            }
             const params = {
               id: this.Leftcurrentrow.id,
               voList: this.ArrayValue,
