@@ -962,24 +962,8 @@ export default {
         {
           title: "单位",
           minWidth: 100,
-          key: "company",
+          key: "unit",
           className: "tc",
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.company
-                }
-              }, params.row.company)
-            ])
-          }
         },
         {
           title: "数量",
