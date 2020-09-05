@@ -131,11 +131,8 @@
               field="thisClaimedAmt"
               title="本次核销金额"
               min-width="60"
-              :edit-render="{autofocus: '.vxe-input--inner'}"
+              :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
             >
-              <template v-slot:edit="{row}">
-                <vxe-input type="number" v-model="row.thisClaimedAmt"></vxe-input>
-              </template>
             </vxe-table-column>
             <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
             <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
@@ -269,6 +266,9 @@ export default {
     },
     //弹框打开
     hander(type) {
+      this.$nextTick(()=>{
+        this.$refs.vxeTable.setActiveCell(this.$refs.vxeTable.getData(0),"thisClaimedAmt")
+      })
       if (!type) {
         this.check = 0;
         this.remark = "";
