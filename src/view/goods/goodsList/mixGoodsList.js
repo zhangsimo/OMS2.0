@@ -346,9 +346,8 @@ export const mixGoodsData = {
               "noTaxAmt",
               "recentPrice",
               "notEnterQty",
-            ].includes(column.property) ||
-            columnIndex === 12 ||
-            columnIndex === 17
+              "orderAmt"
+            ].includes(column.property)
           ) {
             return this.sum(data, column.property, columnIndex);
           }

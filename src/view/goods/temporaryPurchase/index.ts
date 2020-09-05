@@ -769,7 +769,7 @@ export default class TemporaryPurchase extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(column.property) || columnIndex === 8) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt','orderAmt'].includes(column.property)) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -789,7 +789,7 @@ export default class TemporaryPurchase extends Vue {
     if (['orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(type)) {
       return total.toFixed(2);
     }
-    if (columnIndex === 8) {
+    if (type === 'orderAmt') {
       let totals = 0;
       let sumarr = data.map(el => {
         let orderQty = isNaN(el.orderQty * 1) ? 0 : el.orderQty * 1;

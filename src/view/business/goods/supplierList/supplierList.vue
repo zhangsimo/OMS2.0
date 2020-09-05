@@ -1143,10 +1143,10 @@
             // if (columnIndex === 9) {
             //   return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
             // }
-            if (["canReQty", "orderQty"].includes(column.property)) {
+            if (["canReQty", "orderQty",'orderPrice'].includes(column.property)) {
               return this.$utils.sum(data, column.property, columnIndex);
             }
-            if (columnIndex === 9) {
+            if (column.property === 'orderAmt') {
               return ` ${this.countAllAmount(data)} `;
             }
             return null;

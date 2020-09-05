@@ -38,7 +38,7 @@ import GoodCus from "_c/allocation/GoodCus.vue"
 export default class InterPurchase extends Vue {
   @State('user') user;
 
-  
+
   private showSelf: boolean = true;
 
   private split1: number = 0.2;
@@ -713,7 +713,7 @@ export default class InterPurchase extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt', 'notEnterQty', 'trueEnterQty'].includes(column.property) || columnIndex === 14) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt', 'notEnterQty', 'trueEnterQty','orderAmt'].includes(column.property)) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -741,7 +741,7 @@ export default class InterPurchase extends Vue {
       totals = sumarr.reduce((total, el) => total += el, 0);
       return totals.toFixed(2);
     }
-    if (columnIndex === 14) {
+    if (type === 'orderAmt') {
       let totals = 0;
       let sumarr = data.map(el => {
         return el.orderQty * (el.rmbPrice + el.tariffAmt + el.transportAmt + el.vatAmt + el.otherAmt);
@@ -896,6 +896,9 @@ export default class InterPurchase extends Vue {
           }
         }
       } else {
+        if(this.purchaseOrderTable.tbdata.length==0){
+          return
+        }
         this.purchaseOrderTable.tbdata[0]._highlight = true
         this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
       }

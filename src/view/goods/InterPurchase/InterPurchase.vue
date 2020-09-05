@@ -498,7 +498,7 @@
                     {{ (row.rmbPrice + row.tariffAmt + row.transportAmt + row.vatAmt + row.otherAmt) | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" title="采购金额" filed="orderAmt" width="120">
+                <vxe-table-column show-overflow="tooltip" title="采购金额" field="orderAmt" width="120">
                   <template v-slot:default="{ row }">
                     {{ ((row.rmbPrice + row.tariffAmt + row.transportAmt + row.vatAmt + row.otherAmt) * row.orderQty) | priceFilters }}
                   </template>

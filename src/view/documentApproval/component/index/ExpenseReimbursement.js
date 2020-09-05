@@ -210,7 +210,7 @@ export default {
         //判断模态框状态
         this.modelType = false;
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-          user = this.$store.state.user.userData.userData;
+          user = this.$store.state.user.userData;
         this.formInline.applicant = user.staffName;
         this.formInline.deptName =
           user.groups.length > 0

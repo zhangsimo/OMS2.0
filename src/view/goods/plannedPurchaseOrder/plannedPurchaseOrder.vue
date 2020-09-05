@@ -438,7 +438,7 @@
                     {{ row.orderPrice | priceFilters }}
                   </template> -->
                 </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" title="采购金额" filed="orderAmt" width="120">
+                <vxe-table-column show-overflow="tooltip" title="采购金额" field="orderAmt" width="120">
                   <template v-slot="{ row }">
                     {{ (row.orderPrice * row.orderQty) | priceFilters }}
                   </template>
