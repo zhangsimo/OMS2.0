@@ -72,6 +72,9 @@ export default class PlannedPurchaseOrder extends Vue {
   //选中单据的状态
   private activeMethod:number = 0;
 
+  private commitLoading: boolean = false;
+  private saveLoading: boolean = false;
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -398,11 +401,13 @@ export default class PlannedPurchaseOrder extends Vue {
     }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
+    this.saveLoading = true
     let res = await api.saveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
       this.isAdd = true;
+      this.saveLoading = false
     }
   }
 
@@ -750,7 +755,7 @@ export default class PlannedPurchaseOrder extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(column.property) || columnIndex === 8) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt','orderAmt'].includes(column.property)) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -770,7 +775,7 @@ export default class PlannedPurchaseOrder extends Vue {
     if (['orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(type)) {
       return total.toFixed(2);
     }
-    if (columnIndex === 8) {
+    if (['orderAmt'].includes(type)) {
       let totals = 0;
       let sumarr = data.map(el => {
         return el.orderQty * el.orderPrice;

@@ -38,6 +38,7 @@ import GoodCus from "_c/allocation/GoodCus.vue"
 export default class InterPurchase extends Vue {
   @State('user') user;
 
+
   private showSelf: boolean = true;
 
   private split1: number = 0.2;
@@ -67,6 +68,9 @@ export default class InterPurchase extends Vue {
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
   private mainId: string | null = null;
+
+  private commitLoading: boolean = false;
+  private saveLoading: boolean = false;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -421,11 +425,13 @@ export default class InterPurchase extends Vue {
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     // console.log(this.selectTableRow,111)
+    this.saveLoading = true
     let res = await api.saveInterDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
       this.isAdd = true;
+      this.saveLoading = false
     }
   }
 
@@ -707,7 +713,7 @@ export default class InterPurchase extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt', 'notEnterQty', 'trueEnterQty'].includes(column.property) || columnIndex === 14) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt', 'notEnterQty', 'trueEnterQty','orderAmt'].includes(column.property)) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -735,7 +741,7 @@ export default class InterPurchase extends Vue {
       totals = sumarr.reduce((total, el) => total += el, 0);
       return totals.toFixed(2);
     }
-    if (columnIndex === 14) {
+    if (type === 'orderAmt') {
       let totals = 0;
       let sumarr = data.map(el => {
         return el.orderQty * (el.rmbPrice + el.tariffAmt + el.transportAmt + el.vatAmt + el.otherAmt);
@@ -890,6 +896,9 @@ export default class InterPurchase extends Vue {
           }
         }
       } else {
+        if(this.purchaseOrderTable.tbdata.length==0){
+          return
+        }
         this.purchaseOrderTable.tbdata[0]._highlight = true
         this.setFormPlanmain(this.purchaseOrderTable.tbdata[0]);
       }

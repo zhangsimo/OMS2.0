@@ -2,7 +2,7 @@ import moment from 'moment'
 import selectOther from '../popWindow/SelectOther'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
+import {getOtherSve , getOtherAllPay} from '_api/documentApproval/OtherPayment.js'
 import {getThisAllList, getGuestShortName , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getAccountName} from "../../../../api/bill/saleOrder";
 import {getPost} from "../utils";
@@ -165,14 +165,14 @@ export default {
 
     //获取往来单位
     async getOrignCompany(query,id) {
-      if (query !== '' || id) {
+      if (query.trim() !== '' || id) {
         let arr = []
         let req = {
           id:id,
           shortName: query,
           size: 50,
         }
-        let res = await getGuestShortName(req);
+        let res = await getOtherAllPay(req);
         if (res.code == 0) {
           res.data.content.map(item => {
             arr.push({

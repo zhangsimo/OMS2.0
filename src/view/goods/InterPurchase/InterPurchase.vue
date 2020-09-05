@@ -38,6 +38,8 @@
               class="mr10"
               :disabled="isInput"
               v-has="'save'"
+              :loading='saveLoading'
+              v-noresub
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
@@ -47,6 +49,8 @@
               @click="submit('formplanref')"
               :disabled="isInput"
               v-has="'submit'"
+              :loading='commitLoading'
+              v-noresub
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
           </div>
@@ -494,7 +498,7 @@
                     {{ (row.rmbPrice + row.tariffAmt + row.transportAmt + row.vatAmt + row.otherAmt) | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" title="采购金额" filed="orderAmt" width="120">
+                <vxe-table-column show-overflow="tooltip" title="采购金额" field="orderAmt" width="120">
                   <template v-slot:default="{ row }">
                     {{ ((row.rmbPrice + row.tariffAmt + row.transportAmt + row.vatAmt + row.otherAmt) * row.orderQty) | priceFilters }}
                   </template>

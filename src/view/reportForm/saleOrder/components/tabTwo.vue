@@ -75,6 +75,12 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
+          field="carBrandName"
+          title="厂牌"
+          width="110"
+        ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
           field="carModelName"
           title="品牌车型"
           width="110"

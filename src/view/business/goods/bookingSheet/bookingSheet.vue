@@ -35,6 +35,8 @@
               v-has="'save'"
               class="mr10"
               :disabled="buttonDisable || presentrowMsg !== 0"
+              :loading='saveLoading'
+              v-noresub
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
@@ -43,6 +45,8 @@
               class="mr10"
               @click="instance"
               v-has="'submit'"
+              :loading='commitLoading'
+              v-noresub
               :disabled="buttonDisable || presentrowMsg !== 0"
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
@@ -494,7 +498,9 @@ export default {
       Flaga: false,
       successNOid: false,
       successHaveId: false,
-      selectLeftItemId: ""
+      selectLeftItemId: "",
+      saveLoading: false,
+      commitLoading: false
     };
   },
   methods: {
@@ -708,7 +714,7 @@ export default {
     SaveMsg() {
       let zero = tools.isZero(this.tableData, {qty: "preQty"});
       if(zero) return;
-
+      let _this = this
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // console.log(this.rowId)
@@ -722,6 +728,7 @@ export default {
             data.remark = this.formPlan.remark;
             data.detailVOList = this.Right.tbdata;
             console.log(this.Right.tbdata);
+            _this.saveLoading = true
             save(data).then(res => {
               if (res.code === 0) {
                 this.$message.success("保存成功！");
@@ -732,6 +739,8 @@ export default {
                   (this.Right.tbdata = []);
                 this.isAdd = true;
                 this.Flaga = true;
+                _this.saveLoading = false
+
               }
             });
           } catch (errMap) {
