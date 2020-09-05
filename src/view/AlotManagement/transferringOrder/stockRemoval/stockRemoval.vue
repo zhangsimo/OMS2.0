@@ -475,7 +475,6 @@
       ref="addInCom"
       headerTit="配件成品选择"
     ></add-in-com>
-    <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
   </main>
   <!-- 配件组装 -->
 </template>
@@ -484,7 +483,7 @@
   import AddInCom from "./compontents/AddInCom";
   import More from "./compontents/More";
   import "../../../lease/product/lease.less";
-  import PrintShow from "./compontents/PrintShow";
+
   import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom";
   import GoodsInfo from "./compontents/goodsInfo";
   import moment from "moment";
@@ -516,7 +515,6 @@
       QuickDate,
       AddInCom,
       SelectSupplier,
-      PrintShow,
       GoodsInfo,
       selectPartCom
     },

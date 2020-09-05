@@ -18,7 +18,6 @@ import FeeRegistration from '../plannedPurchaseOrder/components/FeeRegistration.
 import ProcurementModal from '../plannedPurchaseOrder/components/ProcurementModal.vue';
 import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
 import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
-import PrintModel from '../plannedPurchaseOrder/components/print.vue';
 import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.vue';
 import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
@@ -38,7 +37,6 @@ import GoodCus from "_c/allocation/GoodCus.vue"
     ProcurementModal,
     AdjustModel,
     TabsModel,
-    PrintModel,
     StatusModel,
     SelectPartCom,
     GoodCus

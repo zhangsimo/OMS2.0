@@ -457,8 +457,6 @@
       header-tit="供应商资料"
       @selectSupplierName="getSupplierName"
     ></select-supplier>
-    <!--打印弹框-->
-    <print-show ref="PrintModel" :orderId="mainId"></print-show>
   </div>
 </template>
 <script>
@@ -468,7 +466,6 @@
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import "../../../lease/product/lease.less";
   import "../../../goods/goodsList/goodsList.less";
-  import PrintShow from "./compontents/PrintShow";
   // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
   import Procurement from "@/components/Procurement";
   import {
@@ -493,7 +490,6 @@
       More,
       Procurement,
       SelectSupplier,
-      PrintShow,
       GoodCus
     },
     data() {
