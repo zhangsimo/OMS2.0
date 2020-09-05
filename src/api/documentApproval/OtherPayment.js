@@ -17,3 +17,12 @@ export function getOtherSve (data) {
     data
   })
 }
+
+
+export function getOtherAllPay (data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByGuestnAndStaff`,
+    method: 'post',
+    data
+  })
+}
