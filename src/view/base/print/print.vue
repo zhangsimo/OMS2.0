@@ -269,14 +269,14 @@
           </Col>
           <Col style="border-right: 1px #000000 solid;padding:2px;width:160px">
             <span>总数:</span>
-            <span>{{onelist.orderQty||onelist.totalNum}}</span>
+            <span>{{onelist.orderQty || onelist.totalNum}}</span>
           </Col>
-          <Col style="padding:2px;width: 200px;"  v-if="priceShow">
+          <Col style="padding:2px;width: 200px;"  v-if="priceShow && onelist.name!='采购退货单'">
             <span>合计:</span>
             <span>{{onelist.orderAmt}}</span>
           </Col>
         </Row>
-        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;" v-if="onelist.name!='盘点单'">
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;" v-if="onelist.name!='盘点单' && onelist.name!='采购订单' && onelist.name!='采购退货单'">
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>制单人:</span>
             <span>{{onelist.orderMan}}</span>
@@ -298,6 +298,20 @@
             <span style="font-size: 12px">{{onelist['stockShift'].createUname}}</span>
           </Col>
         </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;" v-else>
+          <Col span="8" style="border-right: 1px #000000 solid;padding:2px;">
+            <span>制单人:</span>
+            <span>{{onelist.orderMan}}</span>
+          </Col>
+          <Col span="8" style="border-right: 1px #000000 solid;padding:2px;" v-if="kOrG!=''">
+            <span>送货人:</span>
+            <span>{{onelist.deliverer}}</span>
+          </Col>
+          <Col span="8" style="padding:2px;">
+            <span>收货人:</span>
+            <span>{{onelist.receiver}}</span>
+          </Col>
+        </Row>
         <Row style="border: 1px #000000 solid;color:#000;" v-if="onelist.name=='盘点单'">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
@@ -312,14 +326,164 @@
           备 注：
           <span>{{onelist.remark}}</span>
         </p>
-        <p style="color:#000;padding:2px;">
+        <p></p>
+        <p style="color:#000;padding:2px;"  v-if="priceShow && onelist.name!='采购订单' && onelist.name!='采购退货单'  && onelist.name!='销售退货'">
           兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！</p>
       </div>
+<!--      <div v-if="onelist.name.startWith('销售订单')">-->
+<!--        <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding: 0px 2px;">-->
+<!--          <Col span="16" style="padding:0 2px;">-->
+<!--            <h5-->
+<!--              style="font-size: 18px;line-height: 44px;"-->
+<!--            >{{onelist.userCompany}}</h5>-->
+<!--          </Col>-->
+<!--          <Col span="8" style="padding:0 2px;">-->
+<!--            <p style="font-weight: 600;font-size: 16px">{{onelist.name}}:</p>-->
+<!--            <p style="font-size: 12px">No: {{onelist.serviceId}}</p>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--        <Row style="border: 1px #000000 solid;border-top: none;color:#000;padding:0 2px;">-->
+<!--          <Col span="16" style="padding:0 2px">-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">地址:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.addr}}</span>-->
+<!--            </p>-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">电话:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.tel}}</span>-->
+<!--            </p>-->
+<!--          </Col>-->
+<!--          <Col span="8" style="padding:0 2px;">-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">订单日期:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.orderDate}}</span>-->
+<!--            </p>-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">打印日期:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.printDate}}</span>-->
+<!--            </p>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">-->
+<!--          <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">{{kOrG}}:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.guestName}}</span>-->
+<!--            </p>-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">地址:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.guestAddr}}</span>-->
+<!--            </p>-->
+<!--          </Col>-->
+<!--          <Col span="4" style="padding:0 2px;border-right: 1px #000000 solid;">-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">联系人:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.contactor}}</span>-->
+<!--            </p>-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">票据类型:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.billTypeName}}</span>-->
+<!--            </p>-->
+<!--          </Col>-->
+<!--          <Col span="10" style="padding:0 2px;">-->
+<!--            <p>-->
+<!--              <span style="font-size: 12px">联系电话:</span>-->
+<!--              <span style="font-size: 12px">{{onelist.contactorTel}}</span>-->
+<!--            </p>-->
+<!--            <Row>-->
+<!--              <Col span="12">-->
+<!--                <p>-->
+<!--                  <span style="font-size: 12px">结算方式:</span>-->
+<!--                  <span style="font-size: 12px">{{onelist.settleTypeName}}</span>-->
+<!--                </p>-->
+<!--              </Col>-->
+<!--              <Col span="12">-->
+<!--                <p>-->
+<!--                  <span style="font-size: 12px">仓库:</span>-->
+<!--                  <span style="font-size: 12px">{{onelist.storeName}}</span>-->
+<!--                </p>-->
+<!--              </Col>-->
+<!--            </Row>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--        <table class="gridtable">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th style="width:30px !important;">序号</th>-->
+<!--            <th style="width:110px;overflow: hidden;white-space:nowrap;">配件编码</th>-->
+<!--            <th style="width:85px;overflow: hidden;white-space:nowrap;">配件名称</th>-->
+<!--            <th style="width:90px;overflow: hidden;white-space:nowrap;">OEM码</th>-->
+<!--            <th style="width:50px;overflow: hidden;white-space:nowrap;">品牌</th>-->
+<!--            <th style="width:40px;overflow: hidden;white-space:nowrap;">车型</th>-->
+<!--            <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>-->
+<!--            <th style="width:30px;overflow: hidden;white-space:nowrap;">单位</th>-->
+<!--            <th style="width:40px !important;">数量</th>-->
+<!--            <th style="width:60px !important;" v-if="priceShow">单价</th>-->
+<!--            <th style="width:65px !important;" v-if="priceShow">金额</th>-->
+<!--            <th style="width:80px !important;">仓位</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr v-for="(item ,index) in onelist.detailList" :key="index">-->
+<!--            <td style="width:30px !important;">{{index + 1}}</td>-->
+<!--            <td style="width:110px;overflow: hidden;white-space:nowrap;">{{item.partCode}}</td>-->
+<!--            <td style="width:85px;overflow: hidden;white-space:nowrap;">{{item.partName}}</td>-->
+<!--            <td style="width:90px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>-->
+<!--            <td style="width:50px;overflow: hidden;white-space:nowrap;">{{item.partBrand}}</td>-->
+<!--            <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>-->
+<!--            <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>-->
+<!--            <td style="width:30px;overflow: hidden;white-space:nowrap;">{{item.unit}}</td>-->
+<!--            <td style="width:40px !important;">{{item.orderQty}}</td>-->
+<!--            <td style="width:60px !important;" v-if="priceShow">{{item.orderPrice}}</td>-->
+<!--            <td style="width:65px !important;" v-if="priceShow">{{item.orderAmt}}</td>-->
+<!--            <td style="width:80px !important;">{{item.storeShelf}}</td>-->
+<!--          </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
 
-      <div></div>
-    </div>
-    <div id="footer" style="display: none">
-      <Button type="success" @click="print">打印</Button>
+<!--        <Row style="border: 1px #000000 solid;color:#000;font-size: 10px;display: flex;">-->
+<!--          <Col style="border-right: 1px #000000 solid;padding:2px;width: 640px">-->
+<!--            <span>合计:</span>-->
+<!--            <span>{{ onelist.orderAmt | toChies}}</span>-->
+<!--          </Col>-->
+<!--          <Col style="border-right: 1px #000000 solid;padding:2px;width:160px">-->
+<!--            <span>总数:</span>-->
+<!--            <span>{{onelist.orderQty}}</span>-->
+<!--          </Col>-->
+<!--          <Col style="padding:2px;width: 200px;">-->
+<!--            <span>合计:</span>-->
+<!--            <span>{{onelist.orderAmt}}</span>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--        <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 10px;">-->
+<!--          <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">-->
+<!--            <span>制单人:</span>-->
+<!--            <span>{{onelist.orderMan}}</span>-->
+<!--          </Col>-->
+<!--          <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">-->
+<!--            <span>提交人:</span>-->
+<!--            <span>{{onelist.auditor}}</span>-->
+<!--          </Col>-->
+<!--          <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">-->
+<!--            <span>送货人:</span>-->
+<!--            <span>{{onelist.deliverer}}</span>-->
+<!--          </Col>-->
+<!--          <Col span="6" style="padding:2px;">-->
+<!--            <span>收货人:</span>-->
+<!--            <span>{{onelist.receiver}}</span>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--        <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">-->
+<!--          备 注：-->
+<!--          <span>{{onelist.remark}}</span>-->
+<!--        </p>-->
+<!--        <p></p>-->
+<!--        <p style="color:#000;padding:2px;">-->
+<!--          兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！</p>-->
+<!--      </div>-->
+<!--      <div v-if="onelist.name.startWith('销售退货')">-->
+
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -416,6 +580,10 @@
                 this.onelist.contactor=this.onelist.guestContactor
                 this.onelist.contactorTel=this.onelist.guestTel
                 this.onelist.detailList=this.onelist.details
+                this.onelist.detailList.map(item=>{
+                  item.orderAmt=parseFloat(item.orderAmt).toFixed(2)
+                  item.orderPrice=parseFloat(item.orderPrice).toFixed(2)
+                })
               }
               break;
             case "InterPurchase": //国际采购
@@ -539,11 +707,13 @@
                 this.onelist.orderAmt=this.onelist.totalAmt
                 if(this.onelist.detailList==[] || this.onelist.detailList==undefined){
                   this.onelist.storeName=""
+                  this.onelist.orderQty=0
                 }else{
                   this.onelist.detailList.map((item,index)=>{
                     if(index==0){
                       this.onelist.storeName=item.storeName
                     }
+                    this.onelist.orderQty+=item.orderQty
                   })
                 }
               }
