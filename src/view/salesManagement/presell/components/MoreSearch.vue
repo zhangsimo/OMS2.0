@@ -25,13 +25,15 @@
           ></DatePicker>
         </FormItem>
         <FormItem label="客户:">
-          <Select v-model="data.guestId" filterable style="width: 350px">
-            <Option
-              v-for="item in clientList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.fullName }}</Option
-            >
+          <Select
+            v-model="data.guestId"
+            filterable
+            style="width: 350px"
+            placeholder="请输入公司全称"
+            remote
+            :remote-method="getAllClient"
+            :loading="loading">
+            <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.fullName}}</Option>
           </Select>
         </FormItem>
         <FormItem label="预售单号:">
@@ -128,7 +130,8 @@ export default {
         size: 10,
         num: 1
       },
-      salesList: [] //创建人提交人数据
+      salesList: [], //创建人提交人数据
+      loading:false, //模糊查询框
     };
   },
   mounted() {
@@ -153,14 +156,24 @@ export default {
       this.getAllSales();
       this.moreQueryShow = true;
     },
+
     //获取公司
-    async getAllClient() {
-      if(this.clientList.length > 0) {
-        return;
-      }
-      let res = await getTreeClient({page:0, size: 10000});
-      if (res.code === 0) {
-        this.clientList = res.data.content;
+    async getAllClient(query) {
+      if (query && query.trim()) {
+        this.loading = true;
+        let data ={}
+        data.fullName = query
+        data.page = 0
+        data.size = 30
+        let res = await getTreeClient(data)
+        if(res.code === 0 ){
+          this.loading = false;
+          this.clientList = res.data.content;
+        }else{
+          this.loading = false;
+        }
+      }else {
+        this.clientList = []
       }
     },
     //获取创建时间
