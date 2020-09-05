@@ -2005,8 +2005,10 @@ export default {
           });
           // this.data = arrData;
           this.copyData = arrData
-          this.pageObj.total = arrData.length;
-          this.changePageList(this.pageObj.num,this.pageObj.size);
+          setTimeout(()=>{
+            this.pageObj.total = arrData.length;
+          },500)
+          this.changePageList();
 
         }
       });
@@ -2014,11 +2016,11 @@ export default {
     pageChange({type, currentPage, pageSize, $event}){
       this.pageObj.num  = currentPage;
       this.pageObj.size = pageSize;
-      this.changePageList(currentPage,pageSize);
+      this.changePageList();
     },
-    changePageList(page,num){
-      let firstNum = num*(page-1);
-      let lastNum = firstNum+num;
+    changePageList(){
+      let firstNum = this.pageObj.size*(this.pageObj.num-1);
+      let lastNum = firstNum+this.pageObj.size;
       let arrData = (this.copyData||[]).slice(firstNum,lastNum);
       this.data1Loading = true;
       this.data = [];
