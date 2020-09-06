@@ -1978,10 +1978,10 @@ export default {
       let obj = {
         orgId: this.model1,
         startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : ""
       };
       this.getGeneral(obj);
@@ -2035,10 +2035,10 @@ export default {
         tenantId: data.tenantId,
         orgId: data.orgId,
         startDate: obj[0]
-          ? moment(obj[0]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(obj[0]).format("YYYY-MM-DD")+" 00:00:00"
           : "",
         endDate: obj[1]
-          ? moment(obj[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59"
+          ? moment(obj[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         guestId: data.guestId
       }).then(res => {
@@ -2085,10 +2085,10 @@ export default {
     selete({row}) {
       let date = {
         startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : ""
       };
 
@@ -2179,9 +2179,24 @@ export default {
     print(type) {
       type ? (this.tit = "采购入库") : (this.tit = "销售出库");
       setTimeout(() => {
-        this.$refs.PrintShow.openModal();
+        let arr= {};
+        if (this.tit === "销售出库") {
+          arr = this.data3[0];
+        } else if (this.tit === "采购入库") {
+          arr = this.data4[0];
+        }
+        let order = {
+          orderCode: arr.orderCode,
+          orderType: arr.orderType,
+          orgId: arr.orgId,
+          guestId: arr.guestId,
+          name:this.tit,
+          id:"0",
+          route:this.$route.name
+        };
+        let routeUrl=this.$router.resolve({name:"print",query:order})
+        window.open(routeUrl.href,"_blank");
       },0)
-
     },
     //获取公司
     async getAllClient(query){
