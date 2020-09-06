@@ -1662,7 +1662,7 @@
     },
     updated() {
       this.$nextTick(() => {
-        // this.print()
+        this.print()
       })
     },
     methods: {
