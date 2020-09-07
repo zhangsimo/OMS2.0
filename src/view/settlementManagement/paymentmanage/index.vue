@@ -1969,6 +1969,7 @@ export default {
         guestId:this.guestId
       };
       this.getGeneral(obj);
+      let arr = creat(this.$refs.quickDate.val, this.$store);
       this.model1 = arr[1];
       this.getShop();
     },
