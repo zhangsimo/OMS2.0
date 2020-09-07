@@ -262,8 +262,7 @@ export default {
         let data = {}
         data.accountName = query
         data.page = 0
-        data.size = 100
-        console.log(this.formInline.accountType , 112)
+        data.size = 50
         let res = {}
         if (this.formInline.accountType) {
            res = await getBackList(data)
