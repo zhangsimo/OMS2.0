@@ -213,7 +213,7 @@ export default {
       date = date.substring(0,19);
       date = date.replace(/-/g,'/');
       let timestamp = new Date(date).getTime();
-      let now = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1);
+      let now = (new Date()).getTime();
       if(timestamp > now) {
         return row.tempCreditLimit
       }
