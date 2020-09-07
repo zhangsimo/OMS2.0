@@ -12,17 +12,21 @@ import {
   getParamsBrand
 } from "_api/purchasing/purchasePlan";
 import Cookies from "js-cookie";
-import { TOKEN_KEY } from "@/libs/util";
-import { v4 } from "uuid"
+import {
+  TOKEN_KEY
+} from "@/libs/util";
+import {
+  v4
+} from "uuid"
 import * as tools from "_utils/tools";
 
 export const mixGoodsData = {
   data() {
     const validateOrderMan = (rule, value, callback) => {
       if (value === '') {
-          callback(new Error('计划员不能为空'));
+        callback(new Error('计划员不能为空'));
       } else {
-          callback();
+        callback();
       }
     };
     return {
@@ -50,23 +54,27 @@ export const mixGoodsData = {
         processInstanceId: ""
       },
       rulePlan: {
-        supplyName: [
-          { required: true, message: "供应商不能为空", trigger: "blur" }
-        ],
-        planArriveDate: [
-          {
-            required: true,
-            type: "date",
-            message: "计划采购日期不能为空",
-            trigger: "change"
-          }
-        ],
-        orderManId: [
-          { required: true, validator: validateOrderMan, trigger: "change" }
-        ],
-        billType: [
-          { required: true, message: "票据类型不能为空", trigger: "change" }
-        ]
+        supplyName: [{
+          required: true,
+          message: "供应商不能为空",
+          trigger: "blur"
+        }],
+        planArriveDate: [{
+          required: true,
+          type: "date",
+          message: "计划采购日期不能为空",
+          trigger: "change"
+        }],
+        orderManId: [{
+          required: true,
+          validator: validateOrderMan,
+          trigger: "change"
+        }],
+        billType: [{
+          required: true,
+          message: "票据类型不能为空",
+          trigger: "change"
+        }]
       },
       tableData: [],
       //待删除数据
@@ -82,8 +90,8 @@ export const mixGoodsData = {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
-      selectLeftItemId:"",//左侧选中的id
-      saveAndSubmitClik:false,//保存或提交按钮是否点击
+      selectLeftItemId: "", //左侧选中的id
+      saveAndSubmitClik: false, //保存或提交按钮是否点击
     };
   },
   mounted() {
@@ -93,7 +101,10 @@ export const mixGoodsData = {
 
     getPurchaseInit({}).then(res => {
       //票据类型
-      let { invoiceMap, settlementMap } = res.data || {};
+      let {
+        invoiceMap,
+        settlementMap
+      } = res.data || {};
       if (invoiceMap) {
         for (let v in invoiceMap) {
           let objData = {
@@ -103,14 +114,17 @@ export const mixGoodsData = {
           this.invoiceMap.push(objData);
         }
         for (let el in settlementMap) {
-          this.settleMethods.push({ value: settlementMap[el], label: el });
+          this.settleMethods.push({
+            value: settlementMap[el],
+            label: el
+          });
         }
       }
       //直发门店
       let companyMap = res.data.companyMap || {};
       if (companyMap) {
         for (let v in companyMap) {
-          if(companyMap[v]!=this.$store.state.user.userData.shopId){
+          if (companyMap[v] != this.$store.state.user.userData.shopId) {
             let objData = {
               label: v,
               value: companyMap[v]
@@ -123,22 +137,31 @@ export const mixGoodsData = {
   },
 
   methods: {
-    keydown($event){
-      if ($event.$event.keyCode == 9){
+    keydown($event) {
+      if ($event.$event.keyCode == 9) {
         this.editNextCell($event.$table)
       }
     },
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位
-    async editNextCell($table){
+    async editNextCell($table) {
       // @ts-ignore
-      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
+      const {
+        row,
+        column,
+        $rowIndex,
+        $columnIndex,
+        columnIndex,
+        rowIndex
+      } = await $table.getActiveRecord() || {}
       if (row) { // 当前为编辑状态
         // console.log('row', row)
         // 当前列属性
         const nowField = column.property
         // 获取展示的列
-        const { visibleColumn } = $table.getTableColumn()
+        const {
+          visibleColumn
+        } = $table.getTableColumn()
         // 当前列属性（可以编辑的属性）
         const columnsField = visibleColumn.reduce((a, v, i) => {
           if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
@@ -181,7 +204,9 @@ export const mixGoodsData = {
       }
     },
     showOwen() {
-      tools.setSession("self", { goodsList: this.showSelf });
+      tools.setSession("self", {
+        goodsList: this.showSelf
+      });
       this.getList();
     },
     //初始化
@@ -203,7 +228,10 @@ export const mixGoodsData = {
         res = await findPageByDynamicQuery(params, data);
       } else {
         if (this.moreData != null) {
-          data = { ...data, ...this.moreData };
+          data = {
+            ...data,
+            ...this.moreData
+          };
         }
         res = await queryByConditions(params, data);
       }
@@ -238,7 +266,7 @@ export const mixGoodsData = {
             }
           }
         } else {
-          if(this.tbdata.length>0){
+          if (this.tbdata.length > 0) {
             this.tbdata[0]._highlight = true
             this.setFormPlanmain(this.tbdata[0]);
           }
@@ -246,10 +274,16 @@ export const mixGoodsData = {
       }
     },
     //采购计划列表选中数据
-    selectVxeData({ selection, rowIndex, reserves }) {
+    selectVxeData({
+      selection,
+      rowIndex,
+      reserves
+    }) {
       this.delArr = selection;
     },
-    selectAll({ checked }) {
+    selectAll({
+      checked
+    }) {
       if (checked) {
         this.tableData.forEach(el => {
           this.delArr.push(el);
@@ -277,11 +311,13 @@ export const mixGoodsData = {
             let hasIds = this.delArr.filter(el => el.id);
             let notIds = this.delArr.filter(el => !el.id);
 
-            if(hasIds.length > 0) {
+            if (hasIds.length > 0) {
               res = await deleteparts(hasIds);
             }
-            if(notIds.length > 0) {
-              res = { code: 0 };
+            if (notIds.length > 0) {
+              res = {
+                code: 0
+              };
             }
             if (res.code == 0) {
               this.tableData = this.tableData.filter(item => {
@@ -327,7 +363,10 @@ export const mixGoodsData = {
       }
     },
     //计算合计
-    addFooter({ columns, data }) {
+    addFooter({
+      columns,
+      data
+    }) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
@@ -374,13 +413,14 @@ export const mixGoodsData = {
       ) {
         return total.toFixed(2);
       }
-      if(
+      if (
         ["totalStockQty",
           "masterStockQty",
           "branchStockQty",
           "onWayQty",
           "unsalableQty",
-          "orderQty",].includes(type)
+          "orderQty",
+        ].includes(type)
       ) {
         return total
       }
@@ -464,7 +504,7 @@ export const mixGoodsData = {
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
-      if(v){
+      if (v) {
         this.selectLeftItemId = v.id
       }
       if (this.newadd && v) {
@@ -503,9 +543,9 @@ export const mixGoodsData = {
               this.newadd = false;
               this.$refs.planOrderTable.clearCurrentRow();
 
-              for(let b of this.tbdata){
+              for (let b of this.tbdata) {
                 b._highlight = false
-                if(b.id==this.selectLeftItemId){
+                if (b.id == this.selectLeftItemId) {
                   b._highlight = true;
                   this.setFormPlanmain(b)
                   break;
@@ -522,7 +562,7 @@ export const mixGoodsData = {
       }
       this.$refs.selectSupplier.getList();
     },
-    setFormPlanmain(v){
+    setFormPlanmain(v) {
       if (v) {
         if (this.newadd && this.selectPlanOrderItem.new) {
           this.tbdata.splice(0, 1);
@@ -534,12 +574,14 @@ export const mixGoodsData = {
         } else {
           this.isinput = true;
         }
-        if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
+        if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId) {
           this.hideSp = true;
         } else {
           this.hideSp = false;
         }
-        this.selectPlanOrderItem = {...v} || {};
+        this.selectPlanOrderItem = {
+          ...v
+        } || {};
         this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
         this.formPlan.supplyName = v.guestName || "";
         this.formPlan.createUid = v.createUid || "";
@@ -579,7 +621,7 @@ export const mixGoodsData = {
       this.$refs["planOrderTable"].clearCurrentRow();
       this.$refs["formPlan"].resetFields();
 
-      for(let b of this.tbdata){
+      for (let b of this.tbdata) {
         b._highlight = false
       }
       this.formPlan = {
@@ -628,18 +670,22 @@ export const mixGoodsData = {
         title: title,
         onOk: () => {
           if (type === 1) {
+            this.cancelLoading = true
             saveObsolete(this.selectPlanOrderItem.id).then(res => {
               if (res.code == 0) {
                 this.$Message.success("提交成功");
                 this.getList();
               }
+              this.cancelLoading = false
             });
           } else {
+            this.fcanLoading = true
             saveReverse(this.selectPlanOrderItem).then(res => {
               if (res.code == 0) {
                 this.$Message.success("提交成功");
                 this.getList();
               }
+              this.fcanLoading = false
             });
           }
         },
@@ -649,11 +695,14 @@ export const mixGoodsData = {
     //保存采购计划信息
     submit(subType) {
       //保存或提交按钮点击后临时禁用
-      if(this.submitloading){
+      if (this.submitloading) {
         return
       }
-      let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
-      if(zero) return this.submitloading = this.loading = false;
+      let zero = tools.isZero(this.tableData, {
+        qty: "orderQty",
+        price: "orderPrice"
+      });
+      if (zero) return this.submitloading = this.loading = false;
       this.submitloading = true;
       this.loading = true;
       this.$refs["formPlan"].validate(valid => {
@@ -677,7 +726,7 @@ export const mixGoodsData = {
           //票据类型
           objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directCompanyId = this.formPlan.directCompanyId||0;
+          objReq.directCompanyId = this.formPlan.directCompanyId || 0;
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
           objReq.processInstanceId = this.formPlan.processInstanceId;
@@ -694,7 +743,7 @@ export const mixGoodsData = {
           //配件详情
           objReq.details = this.tableData;
           let zerolength = objReq.details.filter(el => el.orderPrice <= 0)
-          if(zerolength.length > 0&&subType==2) {
+          if (zerolength.length > 0 && subType == 2) {
             this.$Modal.confirm({
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',
@@ -708,11 +757,10 @@ export const mixGoodsData = {
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
-                      this.saveLoading = false
                       this.$Message.success("保存成功");
-
                       this.getList();
                     }
+                    this.saveLoading = false
                   });
                 } else if (subType === 2) {
 
@@ -733,11 +781,12 @@ export const mixGoodsData = {
                       this.getList();
                     } else {
                       this.submitloading = this.loading = false;
+                      this.commitLoading = false
                     }
                   });
                 }
               },
-              onCancel:() => {
+              onCancel: () => {
                 this.submitloading = this.loading = false;
               }
             })
@@ -747,12 +796,12 @@ export const mixGoodsData = {
               saveDraft(objReq).then(res => {
                 this.submitloading = this.loading = false;
                 if (res.code == 0) {
-                    this.newadd = false;
-                    this.proModal = false;
-                    this.saveLoading = false
-                    this.$Message.success("保存成功");
-                    this.getList();
+                  this.newadd = false;
+                  this.proModal = false;
+                  this.$Message.success("保存成功");
+                  this.getList();
                 }
+                this.saveLoading = false
               });
             } else if (subType === 2) {
               if (this.tableData.length <= 0) {
@@ -765,10 +814,10 @@ export const mixGoodsData = {
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
-                  this.commitLoading = false
                   this.$Message.success("提交成功");
                   this.getList();
                 }
+                this.commitLoading = false
               });
             }
           }
@@ -805,7 +854,7 @@ export const mixGoodsData = {
       if (res.code == 0) {
         if (res.data.errosMsg.length > 0) {
           this.warning(res.data.errosMsg);
-        } else  {
+        } else {
           self.$Message.success("导入成功");
         }
         this.tableData = [...this.tableData, ...res.data.details].map(item => {
@@ -818,13 +867,13 @@ export const mixGoodsData = {
       }
     },
     warning(nodesc) {
-      let str=""
-      if(nodesc.length>0){
-        nodesc.map((item,index)=>{
-          if(index!=nodesc.length-1){
-            str+=`${item}<br/>`
-          }else{
-            str+=`${item}`
+      let str = ""
+      if (nodesc.length > 0) {
+        nodesc.map((item, index) => {
+          if (index != nodesc.length - 1) {
+            str += `${item}<br/>`
+          } else {
+            str += `${item}`
           }
         })
       }

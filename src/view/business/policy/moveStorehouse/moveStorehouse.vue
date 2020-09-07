@@ -31,6 +31,7 @@
               type="default"
               class="mr10"
               :disabled="this.Leftcurrentrow.status.value !== 0"
+              :loading="saveLoading"
             >
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
@@ -46,6 +47,7 @@
               @click="sureEditPro"
               v-has="'submit'"
               :disabled="this.Leftcurrentrow.status.value !== 0"
+              :loading="commitLoading"
             >
               <Icon type="md-checkmark" size="14" />提交
             </Button>
@@ -56,6 +58,7 @@
               @click="cancellation"
               v-has="'cancellation'"
               :disabled="this.Leftcurrentrow.status.value !== 0"
+              :loading="cancelLoading"
             >
               <Icon type="md-close" size="14" />作废
             </Button>
@@ -339,6 +342,9 @@ export default {
   },
   data() {
     return {
+      saveLoading: false,
+      commitLoading: false,
+      cancelLoading: false,
       salesList: [], //业务员列表
       flag: 0,
       numberValue: "",
@@ -849,6 +855,7 @@ export default {
         if (valid) {
           //成功
           this.flag = 0;
+          this.saveLoading = true
           updata(params)
             .then(res => {
               this.saveButClick = false
@@ -860,13 +867,16 @@ export default {
                 this.Leftcurrentrow.xinzeng = 2;
                 this.$refs.Leftcurrentrow.resetFields();
               }
+              this.saveLoading = false
             })
             .catch(e => {
               this.saveButClick = false;
+              this.saveLoading = false;
               this.$Message.info("保存失败");
             });
         } else {
           this.saveButClick = false;
+          this.saveLoading = false;
           this.$Message.error("*都是必填项");
         }
       });
@@ -901,6 +911,7 @@ export default {
       this.Leftcurrentrow.billStatusId = 1;
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      this.commitLoading = true;
       getSubmitList(params)
         .then(res => {
           if (res.code == 0) {
@@ -908,9 +919,12 @@ export default {
             this.$Message.success("提交成功");
             this.flag = 0;
           }
+          this.commitLoading = false;
+
         })
         .catch(e => {
           this.$Message.info("提交失败");
+          this.commitLoading = false;
         });
     },
     //作废
@@ -937,15 +951,18 @@ export default {
       // if(this.draftShow && this.draftShow !== 0) {
       //   this.$Message.error('只有草稿状态才能作废')
       // }
+      this.cancelLoading = true;
       getCancellation(data)
         .then(res => {
           if (res.code === 0) {
             this.showRemove = false;
             this.getList();
           }
+          this.cancelLoading = false;
         })
         .catch(err => {
           this.showRemove = false;
+          this.cancelLoading = false;
           this.$Message.info("作废草稿失败");
         });
     },

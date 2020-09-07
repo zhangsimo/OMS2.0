@@ -21,10 +21,10 @@
                 <Button :loading="isSaveClick" type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button :loading="isCommitClick" class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
-                <Button @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+                <Button :loading="isCancelClick" @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
                 <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -441,6 +441,8 @@
           currentRow: {},
           //临时禁用保存提交作废按钮
           isSaveClick:false,
+          isCommitClick: false,
+          isCancelClick: false
         }
       },
       methods: {
@@ -716,13 +718,13 @@
                 data.createUname  = this.formPlan.createUname
                 data.serviceId = this.formPlan.serviceId
                 data.detailVOS = this.Right.tbdata
-                if(this.isSaveClick){
+                if(this.isCancelClick){
                   return this.$message.error('请稍后数据处理中....');
                 }
-                this.isSaveClick = true;
+                this.isCancelClick = true;
                 let res = await save(data);
                 if(!res){
-                  this.isSaveClick = false;
+                  this.isCancelClick = false;
                 }
                 if (res.code == 0) {
                   this.$Message.success('作废成功');
@@ -952,10 +954,14 @@
                 this.setRow(this.Left.tbdata[0]);
               }else {
                 this.isSaveClick = false;
+                this.isCommitClick = false;
+                this.isCancelClick = false;
               }
             }else {
               this.Left.page.total = 0;
               this.isSaveClick = false;
+              this.isCommitClick = false;
+              this.isCancelClick = false;
             }
           })
         },
@@ -1075,6 +1081,8 @@
           params.id = this.rowId
           findById(params).then(res => {
             this.isSaveClick = false;
+            this.isCommitClick = false;
+            this.isCancelClick = false;
             if(res.code === 0){
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
@@ -1121,13 +1129,13 @@
                     data.createUname  = this.formPlan.createUname
                     data.serviceId = this.formPlan.serviceId
                     data.detailVOS = this.Right.tbdata
-                    if(this.isSaveClick){
+                    if(this.isCommitClick){
                       return this.$message.error('请稍后数据处理中....');
                     }
-                    this.isSaveClick = true;
+                    this.isCommitClick = true;
                     let res = await commit(data);
                     if(!res){
-                      this.isSaveClick = false;
+                      this.isCommitClick = false;
                     }
                     if (res.code == 0) {
                       this.$Message.success('提交成功');

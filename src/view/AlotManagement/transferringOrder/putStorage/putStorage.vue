@@ -38,12 +38,12 @@
               </Button>
             </div>-->
             <div class="db">
-              <Button v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1 || Status == 2">
+              <Button :loading="isOutClick" v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1 || Status == 2">
                 <Icon type="md-checkmark" size="14" />入库
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="Status == 1 || Status == 2">
+              <Button :loading="isCancelClick" v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="Status == 1 || Status == 2">
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
@@ -567,6 +567,8 @@ export default {
         ]
       },
       isSaveClick:false,
+      isOutClick: false,
+      isCancelClick: false
     };
   },
   // watch: {
@@ -790,10 +792,10 @@ export default {
       const params = {
         id: this.Leftcurrentrow.id
       };
-      if(this.isSaveClick){
+      if(this.isCancelClick){
         return this.$message.error('请稍后数据处理中....');
       }
-      this.isSaveClick = true;
+      this.isCancelClick = true;
       // 配件组装作废
       zuofei(params)
         .then(res => {
@@ -803,6 +805,7 @@ export default {
             this.getList();
             this.$Message.success("作废成功");
           }
+          this.isCancelClick = false;
           // this.reload();
         })
     },
@@ -867,19 +870,20 @@ export default {
               storeId:this.Leftcurrentrow.storeId
             };
             // 配件组装作废
-            if(this.isSaveClick){
+            if(this.isOutClick){
               return this.$message.error('请稍后数据处理中....');
             }
-            this.isSaveClick = true;
+            this.isOutClick = true;
             let res = await outDataList(params);
             if(!res){
-              this.isSaveClick = false;
+              this.isOutClick = false;
             }
             // console.log("res", res);
             if (res.code == 0) {
               this.getList();
               this.$Message.success("入库成功");
               // this.reload();
+              this.isOutClick = false;
               return;
             }
             if(res && res.message && res.message.indexOf("成功") > -1) {

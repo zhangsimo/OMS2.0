@@ -5,28 +5,23 @@
         <div class="wlf">
           <div class="db">
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-            <Select
-              v-model="purchaseType"
-              class="w90 mr10"
-              @on-change="SelectChange"
-            >
+            <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
               <Option
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
                 :key="item.value"
-                >{{ item.label }}</Option
-              >
+              >{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db">
-            <Button type="default" @click="moreaa" class="mr10"
-              ><i class="iconfont mr5 iconchaxunicon"></i>更多</Button
-            >
+            <Button type="default" @click="moreaa" class="mr10">
+              <i class="iconfont mr5 iconchaxunicon"></i>更多
+            </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addProoo" v-has="'add'"
-              ><Icon type="md-add" /> 新增</Button
-            >
+            <Button class="mr10" @click="addProoo" v-has="'add'">
+              <Icon type="md-add" />新增
+            </Button>
           </div>
           <div class="db">
             <Button
@@ -35,35 +30,37 @@
               v-has="'save'"
               class="mr10"
               :disabled="buttonDisable || presentrowMsg !== 0"
-              :loading='saveLoading'
-              v-noresub
-              ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
+              :loading="saveLoading"
             >
+              <i class="iconfont mr5 iconbaocunicon"></i>保存
+            </Button>
           </div>
           <div class="db">
             <Button
               class="mr10"
               @click="instance"
               v-has="'submit'"
-              :loading='commitLoading'
-              v-noresub
+              :loading="commitLoading"
               :disabled="buttonDisable || presentrowMsg !== 0"
-              ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
+              <i class="iconfont mr5 iconziyuan2"></i>提交
+            </Button>
           </div>
           <div class="db">
             <Button
               @click="cancellation"
               v-has="'cancellation'"
               class="mr10"
+              :loading="cancelLoading"
               :disabled="buttonDisable || presentrowMsg !== 0"
-              ><Icon type="md-close" size="14" /> 作废</Button
             >
+              <Icon type="md-close" size="14" />作废
+            </Button>
           </div>
           <div class="db">
-            <Button @click="derive" v-has="'export'" class="mr10"
-              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button
-            >
+            <Button @click="derive" v-has="'export'" class="mr10">
+              <i class="iconfont mr5 icondayinicon"></i> 导出
+            </Button>
           </div>
         </div>
       </div>
@@ -73,9 +70,7 @@
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500">
             <div slot="left" class="con-split-pane-left">
-              <div class="pane-made-hd">
-                预订单列表
-              </div>
+              <div class="pane-made-hd">预订单列表</div>
               <Table
                 ref="currentRowTable"
                 :height="leftTableHeight"
@@ -99,13 +94,10 @@
                 @on-page-size-change="changeSizeLeft"
                 show-sizer
                 show-total
-              >
-              </Page>
+              ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-              <div class="pane-made-hd">
-                预订单信息
-              </div>
+              <div class="pane-made-hd">预订单信息</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
@@ -116,26 +108,14 @@
                   :label-width="100"
                 >
                   <FormItem label="业务员：" prop="salesman">
-                    <Input
-                      class="w160"
-                      :disabled="true"
-                      v-model="formPlan.salesman"
-                    ></Input>
+                    <Input class="w160" :disabled="true" v-model="formPlan.salesman"></Input>
                   </FormItem>
                   <FormItem label="预订单号:" prop="Reservation" class="ml50">
                     <Tooltip :content="formPlan.Reservation">
-                    <Input
-                      class="w160"
-                      :disabled="true"
-                      v-model="formPlan.Reservation"
-                    />
+                      <Input class="w160" :disabled="true" v-model="formPlan.Reservation" />
                     </Tooltip>
                   </FormItem>
-                  <FormItem
-                    label="期望到货日期："
-                    prop="orderDate"
-                    class="fs12 ml50"
-                  >
+                  <FormItem label="期望到货日期：" prop="orderDate" class="fs12 ml50">
                     <DatePicker
                       @on-change="changedate"
                       style="width: 160px"
@@ -147,12 +127,12 @@
                   </FormItem>
                   <FormItem label="备注：" prop="remark">
                     <Tooltip :content="formPlan.remark">
-                    <Input
-                      class="w160"
-                      :disabled="presentrowMsg !== 0 || buttonDisable"
-                      v-model="formPlan.remark"
-                      :maxlength="100"
-                    ></Input>
+                      <Input
+                        class="w160"
+                        :disabled="presentrowMsg !== 0 || buttonDisable"
+                        v-model="formPlan.remark"
+                        :maxlength="100"
+                      ></Input>
                     </Tooltip>
                   </FormItem>
                 </Form>
@@ -166,8 +146,9 @@
                       @click="addPro"
                       v-has="'AddAccessories'"
                       :disabled="presentrowMsg !== 0 || buttonDisable"
-                      ><Icon type="md-add" /> 添加配件</Button
                     >
+                      <Icon type="md-add" />添加配件
+                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -176,9 +157,10 @@
                       :disabled="presentrowMsg !== 0 || buttonDisable"
                       @click="Delete"
                       v-has="'deletePart'"
-                      ><i class="iconfont mr5 iconlajitongicon"></i>
-                      删除配件</Button
                     >
+                      <i class="iconfont mr5 iconlajitongicon"></i>
+                      删除配件
+                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Upload
@@ -198,9 +180,9 @@
                         @click="getRUl"
                         v-has="'import'"
                         :disabled="LeadIn || presentrowMsg !== 0"
-                        ><i class="iconfont mr5 iconbianjixiugaiicon"></i
-                        >导入配件</Button
                       >
+                        <i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件
+                      </Button>
                     </Upload>
                   </div>
                   <div class="fl mb5">
@@ -236,39 +218,25 @@
               >
                 <vxe-table-column show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" type="checkbox"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                  field="partCode"
-                  title="配件编码"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                  field="partName"
-                  title="配件名称"
+                <vxe-table-column show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" field="partName" title="配件名称" width="150"></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="partInnerId"
+                  title="配件内码"
                   width="150"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                                  field="partInnerId"
-                                  title="配件内码"
-                                  width="150"
-                ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                  field="partBrand"
-                  title="品牌"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                  field="unit"
-                  title="单位"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
+                <vxe-table-column show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
                   field="preQty"
                   title="预定数量"
                   :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   width="100"
-                >
-                </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   :edit-render="{
@@ -278,21 +246,14 @@
                   }"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
+                <vxe-table-column
+                  show-overflow="tooltip"
                   field="acceptQty"
                   title="受理数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                  field="oemCode"
-                  title="OE码"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip"
-                  field="spec"
-                  title="规格"
-                  width="100"
-                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
                 <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
               </vxe-table>
               <div ref="planPage"></div>
@@ -314,11 +275,7 @@
     <!--编辑收货信息-->
     <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
     <!--供应商资料-->
-    <select-supplier
-      ref="selectSupplier"
-      header-tit="供应商资料"
-      @selectSupplierName="getSupplierName"
-    ></select-supplier>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
   </div>
 </template>
 
@@ -340,7 +297,7 @@ import {
   save,
   commitOrder,
   invalid,
-  getup
+  getup,
 } from "../../../../api/business/advanceOrder";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
@@ -364,7 +321,7 @@ export default {
     return {
       //校验输入框的值
       validRules: {
-        preQty: [{ required: true, validator: changeNumber }]
+        preQty: [{ required: true, validator: changeNumber }],
       },
       LeadIn: true, //判断导入配件的按钮是否启用
       checkboxArr: [], // checkbox选中
@@ -381,13 +338,13 @@ export default {
         orderDate: "",
         printing: "",
         createTime: tools.transTime(new Date()),
-        detailVOS: []
+        detailVOS: [],
       },
       //表单验证
       ruleValidate: {
         salesman: [
-          { required: true, message: "调出方不能为空", trigger: "blur" }
-        ]
+          { required: true, message: "调出方不能为空", trigger: "blur" },
+        ],
       },
       datadata: null,
       rowId: "", //当前行的id
@@ -400,21 +357,21 @@ export default {
         { label: "草稿", value: "0" },
         { label: "待受理", value: "1" },
         { label: "已受理", value: "3" },
-        { label: "已作废", value: "5" }
+        { label: "已作废", value: "5" },
       ],
       List: [],
       Left: {
         page: {
           num: 1,
           size: 20,
-          total: 0
+          total: 0,
         },
         loading: false,
         columns: [
           {
             title: "序号",
             minWidth: 50,
-            type: "index"
+            type: "index",
           },
           {
             title: "状态",
@@ -423,41 +380,41 @@ export default {
             render: (h, params) => {
               let name = params.row.status.name;
               return h("span", name);
-            }
+            },
           },
           {
             title: "公司",
             key: "company",
-            minWidth: 80
+            minWidth: 80,
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 120
+            minWidth: 120,
           },
           {
             title: "业务员",
             key: "salesman",
-            minWidth: 100
+            minWidth: 100,
           },
           {
             title: "预定单号",
             key: "orderNo",
-            minWidth: 120
+            minWidth: 120,
           },
           {
             title: "提交人",
             key: "commitUname",
-            minWidth: 100
+            minWidth: 100,
           },
           {
             title: "提交日期",
             align: "center",
             key: "commitTime",
-            minWidth: 170
-          }
+            minWidth: 170,
+          },
         ],
-        tbdata: []
+        tbdata: [],
       },
       tableData: [],
       //左侧表格高度
@@ -468,10 +425,10 @@ export default {
         page: {
           num: 1,
           size: 10,
-          total: 0
+          total: 0,
         },
         loading: false,
-        tbdata: []
+        tbdata: [],
       },
       advanced: false, //更多模块的弹框
       GainInformation: false, //编辑收获信息
@@ -485,10 +442,10 @@ export default {
         salesman: "", //业务员
         Reservation: "", //预订单号
         orderDate: tools.transTime(new Date()), //期望到货日期
-        remark: "" //备注
+        remark: "", //备注
       },
       headers: {
-        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY),
       }, //请求头
       upurl: getup, //导入地址
       mainId: null, //选中行的id
@@ -498,67 +455,72 @@ export default {
       successHaveId: false,
       selectLeftItemId: "",
       saveLoading: false,
-      commitLoading: false
+      commitLoading: false,
+      cancelLoading: false,
     };
   },
   methods: {
-
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位
-    async editNextCell($table){
+    async editNextCell($table) {
       // @ts-ignore
-      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
-      if (row) { // 当前为编辑状态
+      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } =
+        (await $table.getActiveRecord()) || {};
+      if (row) {
+        // 当前为编辑状态
         // console.log('row', row)
         // 当前列属性
-        const nowField = column.property
+        const nowField = column.property;
         // 获取展示的列
-        const { visibleColumn } = $table.getTableColumn()
+        const { visibleColumn } = $table.getTableColumn();
         // 当前列属性（可以编辑的属性）
         const columnsField = visibleColumn.reduce((a, v, i) => {
-          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
-            a.push(v.property)
+          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) {
+            // 不是操作和序号且不可以编辑
+            a.push(v.property);
           }
-          return a
-        }, [])
-        const nowIndex = columnsField.findIndex(v => v === nowField)
+          return a;
+        }, []);
+        const nowIndex = columnsField.findIndex((v) => v === nowField);
         // 判断当前是否是可编辑倒数地二行
-        const isLastColumn = nowIndex === columnsField.length - 2
+        const isLastColumn = nowIndex === columnsField.length - 2;
         // console.log('isLastColumn', isLastColumn)
         if (isLastColumn) {
           // 插入数据
 
           // 跳转到下一行
           // 判断当前是否为临时数据
-          const isInsertByRow = $table.isInsertByRow(row)
-          const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
-          const insertRecords = $table.getInsertRecords() // 临时数据
-          let nextRow = {}
+          const isInsertByRow = $table.isInsertByRow(row);
+          const ROW_INDEX = isInsertByRow
+            ? await $table.$getRowIndex(row)
+            : rowIndex;
+          const insertRecords = $table.getInsertRecords(); // 临时数据
+          let nextRow = {};
           // 不是最后一条临时数据
           if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
-            nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+            nextRow = $table.getInsertRecords()[ROW_INDEX + 1];
           } else {
             // 当前是最后一条临时数据
             if (isInsertByRow) {
-              nextRow = $table.getData()[0]
+              nextRow = $table.getData()[0];
             } else {
-              nextRow = $table.getData()[ROW_INDEX + 1]
+              nextRow = $table.getData()[ROW_INDEX + 1];
             }
           }
           if (nextRow) {
-            await $table.scrollTo(0)
-            await $table.setActiveCell(nextRow, columnsField[0])
+            await $table.scrollTo(0);
+            await $table.setActiveCell(nextRow, columnsField[0]);
           }
         } else {
           // 跳转下一个编辑
-          await $table.setActiveCell(row, columnsField[nowIndex + 1])
+          await $table.setActiveCell(row, columnsField[nowIndex + 1]);
         }
       }
     },
 
-    keydown($event){
-      if ($event.$event.keyCode == 9){
-        this.editNextCell($event.$table)
+    keydown($event) {
+      if ($event.$event.keyCode == 9) {
+        this.editNextCell($event.$table);
       }
     },
     //改变日期
@@ -568,32 +530,32 @@ export default {
     //删除配件
     Delete() {
       if (this.checkboxArr.length > 0) {
-        var result = this.checkboxArr.every(item => item.id);
-        var resultTwo = this.checkboxArr.some(item => item.id);
+        var result = this.checkboxArr.every((item) => item.id);
+        var resultTwo = this.checkboxArr.some((item) => item.id);
         if (result) {
-          let dataaa = this.checkboxArr.map(item => {
+          let dataaa = this.checkboxArr.map((item) => {
             return {
-              id: item.id
+              id: item.id,
             };
           });
-          deleteit(dataaa).then(res => {
+          deleteit(dataaa).then((res) => {
             if (res.code === 0) {
               this.$message.warning("删除成功！");
               this.leftgetList();
-              let checkBoxArr = this.checkboxArr.map(item => item.id);
+              let checkBoxArr = this.checkboxArr.map((item) => item.id);
               this.Right.tbdata = this.Right.tbdata.filter(
-                item => !checkBoxArr.includes(item.id)
+                (item) => !checkBoxArr.includes(item.id)
               );
               this.checkboxArr = [];
             }
           });
         } else if (resultTwo) {
-          let haveId = this.checkboxArr.filter(item => item.id);
-          let NoId = this.checkboxArr.filter(item => !item.id);
-          let NoIdPartCode = NoId.map(item => item.partCode);
-          let AddNoId = this.Right.tbdata.filter(item => !item.id);
+          let haveId = this.checkboxArr.filter((item) => item.id);
+          let NoId = this.checkboxArr.filter((item) => !item.id);
+          let NoIdPartCode = NoId.map((item) => item.partCode);
+          let AddNoId = this.Right.tbdata.filter((item) => !item.id);
           let NoRepeat = AddNoId.filter(
-            item => !NoIdPartCode.includes(item.partCode)
+            (item) => !NoIdPartCode.includes(item.partCode)
           );
           //console.log(NoRepeat)
           //  let dataOne = {}
@@ -609,12 +571,12 @@ export default {
           //   }
           // })
 
-          let dataTwo = haveId.map(item => {
+          let dataTwo = haveId.map((item) => {
             return {
-              id: item.id
+              id: item.id,
             };
           });
-          deleteit(dataTwo).then(res => {
+          deleteit(dataTwo).then((res) => {
             if (res.code == 0) {
               this.successHaveId = true;
             }
@@ -624,9 +586,9 @@ export default {
               // if(this.successNOid && this.successHaveId){
               if (this.successHaveId) {
                 this.$message.success("删除成功！");
-                let checkBoxArr = this.checkboxArr.map(item => item.id);
+                let checkBoxArr = this.checkboxArr.map((item) => item.id);
                 this.Right.tbdata = this.Right.tbdata.filter(
-                  item => !checkBoxArr.includes(item.id)
+                  (item) => !checkBoxArr.includes(item.id)
                 );
                 this.checkboxArr = [];
               }
@@ -649,9 +611,9 @@ export default {
           //     this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
           //   }
           // })
-          let checkBoxArr = this.checkboxArr.map(item => item.partCode);
+          let checkBoxArr = this.checkboxArr.map((item) => item.partCode);
           this.Right.tbdata = this.Right.tbdata.filter(
-            item => !checkBoxArr.includes(item.partCode)
+            (item) => !checkBoxArr.includes(item.partCode)
           );
           this.$Message.warning("删除成功！");
         }
@@ -710,10 +672,9 @@ export default {
     selectTabelData() {},
     //保存按钮
     SaveMsg() {
-      let zero = tools.isZero(this.tableData, {qty: "preQty"});
-      if(zero) return;
-      let _this = this
-      this.$refs.formPlan.validate(async valid => {
+      let zero = tools.isZero(this.tableData, { qty: "preQty" });
+      if (zero) return;
+      this.$refs.formPlan.validate(async (valid) => {
         if (valid) {
           // console.log(this.rowId)
           try {
@@ -726,8 +687,8 @@ export default {
             data.remark = this.formPlan.remark;
             data.detailVOList = this.Right.tbdata;
             console.log(this.Right.tbdata);
-            _this.saveLoading = true
-            save(data).then(res => {
+            this.saveLoading = true;
+            save(data).then((res) => {
               if (res.code === 0) {
                 this.$message.success("保存成功！");
                 this.leftgetList();
@@ -737,15 +698,15 @@ export default {
                   (this.Right.tbdata = []);
                 this.isAdd = true;
                 this.Flaga = true;
-                _this.saveLoading = false
-
+                this.saveLoading = false;
               }
             });
           } catch (errMap) {
             this.$XModal.message({
               status: "error",
-              message: "申请数量必须输入大于0的正整数！"
+              message: "申请数量必须输入大于0的正整数！",
             });
+            this.saveLoading = false;
           }
         } else {
           this.$Message.error("*为必填！");
@@ -759,16 +720,17 @@ export default {
     },
     //作废
     cancellation() {
-      this.$refs.formPlan.validate(valid => {
+      this.$refs.formPlan.validate((valid) => {
         if (valid) {
           this.$Modal.confirm({
             title: "是否作废",
             onOk: async () => {
-              this.$refs.formPlan.validate(valid => {
+              this.$refs.formPlan.validate((valid) => {
                 if (valid) {
                   let params = {};
                   params.id = this.rowId;
-                  invalid(params).then(res => {
+                  this.cancelLoading = true;
+                  invalid(params).then((res) => {
                     if (res.code === 0) {
                       this.$message.success("作废成功！");
                       this.leftgetList(),
@@ -777,6 +739,7 @@ export default {
                         (this.formPlan.remark = ""),
                         (this.Right.tbdata = []);
                     }
+                    this.cancelLoading = false;
                   });
                 } else {
                   this.$Message.error("*为必填！");
@@ -785,7 +748,7 @@ export default {
             },
             onCancel: () => {
               this.$Message.info("取消作废");
-            }
+            },
           });
         } else {
           this.$Message.error("*为必填！");
@@ -828,20 +791,20 @@ export default {
       }
     },
     warning(nodesc) {
-      let str=""
-      if(nodesc.length>0){
-        nodesc.map((item,index)=>{
-          if(index!=nodesc.length-1){
-            str+=`${item}<br/>`
-          }else{
-            str+=`${item}`
+      let str = "";
+      if (nodesc.length > 0) {
+        nodesc.map((item, index) => {
+          if (index != nodesc.length - 1) {
+            str += `${item}<br/>`;
+          } else {
+            str += `${item}`;
           }
-        })
+        });
       }
       this.$Notice.warning({
         title: "上传错误信息",
         desc: str,
-        duration:0
+        duration: 0,
       });
     },
     //上传之前清空
@@ -890,7 +853,7 @@ export default {
             return this.$utils.sum(data, column.property);
           }
           return null;
-        })
+        }),
       ];
     },
     //表格编辑状态下被关闭的事件
@@ -906,7 +869,7 @@ export default {
     getPartNameList(ChildMessage) {
       // console.log(ChildMessage)
       let parts = [];
-      ChildMessage.map(item => {
+      ChildMessage.map((item) => {
         parts.push({
           partCode: item.partCode, //编码
           partName: item.partName, //名称
@@ -918,7 +881,7 @@ export default {
           acceptQty: 0, //受理数量
           oemCode: item.oemCode, //oe码
           partInnerId: item.partInnerId, //配件内码
-          partId: item.partId
+          partId: item.partId,
         });
       });
       if (this.Right.tbdata) {
@@ -936,19 +899,19 @@ export default {
     getPartNameList2(ChildMessage) {
       // console.log(ChildMessage)
       let parts = [];
-      ChildMessage.map(item => {
+      ChildMessage.map((item) => {
         parts.push({
           partCode: item.partCode, //编码
           partName: item.partName, //名称
           unit: item.unit, //单位
           partBrand: item.partBrand, //品牌
           spec: item.spec, //规格
-          preQty: item.orderQty||1, //预定数量
+          preQty: item.orderQty || 1, //预定数量
           remark: "", //备注
           acceptQty: 0, //受理数量
           oemCode: item.oemCode, //oe码
           partInnerId: item.partInnerId, //配件内码
-          partId: item.partId
+          partId: item.partId,
         });
       });
       if (this.Right.tbdata) {
@@ -1020,7 +983,7 @@ export default {
       if (this.moreArr.Accessories) {
         data.commitUname = this.moreArr.Accessories;
       }
-      optGroup({ params: params, data: data }).then(res => {
+      optGroup({ params: params, data: data }).then((res) => {
         if (res.code === 0) {
           this.Left.tbdata = res.data.content;
           this.Left.page.total = res.data.totalElements;
@@ -1047,7 +1010,7 @@ export default {
           title: "您正在编辑单据，是否需要保存",
           onOk: () => {
             currentRowTable.clearCurrentRow();
-            this.$refs.formPlan.validate(valid => {
+            this.$refs.formPlan.validate((valid) => {
               if (valid) {
                 let data = {};
                 data.id = this.rowId;
@@ -1059,7 +1022,7 @@ export default {
                 data.remark = this.formPlan.remark;
                 data.detailVOList = this.Right.tbdata;
                 // console.log(this.Right.tbdata)
-                save(data).then(res => {
+                save(data).then((res) => {
                   if (res.code === 0) {
                     this.$message.success("保存成功！");
                     this.leftgetList(),
@@ -1093,7 +1056,7 @@ export default {
                 break;
               }
             }
-          }
+          },
         });
       } else {
         this.setRightData(row);
@@ -1130,14 +1093,14 @@ export default {
     // 提交按钮
     instance() {
       if (this.Right.tbdata !== null) {
-        let zero = tools.isZero(this.tableData, {qty: "preQty"});
-        if(zero) return;
-        this.$refs.formPlan.validate(valid => {
+        let zero = tools.isZero(this.tableData, { qty: "preQty" });
+        if (zero) return;
+        this.$refs.formPlan.validate((valid) => {
           if (valid) {
             this.$Modal.confirm({
               title: "是否提交",
               onOk: async () => {
-                this.$refs.formPlan.validate(valid => {
+                this.$refs.formPlan.validate((valid) => {
                   if (valid) {
                     let data = {};
                     data.id = this.rowId;
@@ -1149,7 +1112,8 @@ export default {
                     // console.log(tools.transDate(this.formPlan.orderDate))
                     data.remark = this.formPlan.remark;
                     data.detailVOList = this.Right.tbdata;
-                    commitOrder(data).then(res => {
+                    this.commitLoading = true;
+                    commitOrder(data).then((res) => {
                       if (res.code === 0) {
                         this.$message.success("提交成功！");
                         this.leftgetList(),
@@ -1158,6 +1122,9 @@ export default {
                           (this.formPlan.remark = ""),
                           (this.Right.tbdata = []);
                         this.Flaga = true;
+                        this.commitLoading = false;
+                      } else {
+                        this.commitLoading = false;
                       }
                     });
                   } else {
@@ -1167,7 +1134,7 @@ export default {
               },
               onCancel: () => {
                 this.$Message.info("取消提交");
-              }
+              },
             });
           } else {
             this.$Message.error("*为必填！");
@@ -1176,7 +1143,7 @@ export default {
       } else {
         this.$Message.warning("请添加配件或完善订单信息后再提交!");
       }
-    }
+    },
     // unique(arr) { // 根据唯一标识Id来对数组进行过滤
     //   const res = new Map();  //定义常量 res,值为一个Map对象实例
     //   //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
@@ -1195,7 +1162,7 @@ export default {
       this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
     });
     this.leftgetList();
-  }
+  },
 };
 </script>
 

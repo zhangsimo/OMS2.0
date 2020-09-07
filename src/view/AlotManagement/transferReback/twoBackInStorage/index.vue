@@ -583,7 +583,7 @@ export default {
           }
           if (res.code === 0) {
             this.showIn = false;
-            this.$Message.info("确定入库成功");
+            this.$Message.success("确定入库成功");
             this.getinfo();
             // this.reload();
           } else if (res.code === 1) {

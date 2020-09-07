@@ -335,9 +335,11 @@ export default {
         this.backloading = false;
         this.submitloading=false;
       }else{
-        this.submitloading=false
+        this.submitloading=false;
+        this.backloading = false;
         // this.$Message.error("返单失败")
       }
+   
     },
     //作废
     async setCancellation() {

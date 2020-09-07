@@ -1,5 +1,5 @@
 <template>
-<!-- 采购计划页面 -->
+  <!-- 采购计划页面 -->
   <div class="content-oper content-oper-flex">
     <section class="oper-box">
       <!-- 对采购计划订单以及采购计划信息的操作 -->
@@ -30,8 +30,7 @@
               type="default"
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(1)"
-              :loading='saveLoading'
-              v-noresub
+              :loading="saveLoading"
               v-has="'save'"
               class="mr10"
             >
@@ -44,8 +43,7 @@
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(2)"
               v-has="'submit'"
-              :loading='commitLoading'
-              v-noresub
+              :loading="commitLoading"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
@@ -56,6 +54,7 @@
               @click="saveObsoleteFun(1)"
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               v-has="'invalidate'"
+              :loading="cancelLoading"
             >
               <Icon type="md-close" size="14" />作废
             </Button>
@@ -66,6 +65,7 @@
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 5"
               v-has="'invalid'"
+              :loading="fcanLoading"
             >
               <i class="iconfont mr5 iconfanhuiicon"></i> 反作废
             </Button>
@@ -76,17 +76,14 @@
             </Button>
           </div>
           <div class="db">
-            <Button
-              class="mr10"
-              :disabled="hideSp"
-              @click="showStatus"
-              v-has="'check'"
-            >
+            <Button class="mr10" :disabled="hideSp" @click="showStatus" v-has="'check'">
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
             </Button>
           </div>
           <div class="db">
-            <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+            <div class="mt5">
+              <Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox>
+            </div>
           </div>
         </div>
       </div>
@@ -140,16 +137,17 @@
                   <FormItem label="供应商：" prop="supplyName">
                     <Row class="w160">
                       <Col span="19">
-                      <Tooltip :content="formPlan.supplyName">
-                        <GoodCus style="width: 120px"
-                          :title="formPlan.supplyName"
-                          placeholder="请输入供应商"
-                          :search-value="formPlan.supplyName"
-                          @throwName="throwNameFun"
-                          :disabled-prop="isinput">
-                        </GoodCus>
-                      </Tooltip>
-                      <!-- <Select v-model="formPlan.guestId"
+                        <Tooltip :content="formPlan.supplyName">
+                          <GoodCus
+                            style="width: 120px"
+                            :title="formPlan.supplyName"
+                            placeholder="请输入供应商"
+                            :search-value="formPlan.supplyName"
+                            @throwName="throwNameFun"
+                            :disabled-prop="isinput"
+                          ></GoodCus>
+                        </Tooltip>
+                        <!-- <Select v-model="formPlan.guestId"
                           clearable
                           filterable
                           remote
@@ -162,13 +160,13 @@
                             :value="item.value"
                             :key="item.value"
                           >{{ item.label }}</Option>
-                        </Select> -->
+                        </Select>-->
                         <!-- <Input
                           v-model="formPlan.supplyName"
                           :disabled="isinput"
                           placeholder="请选择供应商"
                           readonly
-                        /> -->
+                        />-->
                       </Col>
                       <Col span="5">
                         <Button
@@ -194,23 +192,28 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="orderManId">
-                    <Select v-model="formPlan.orderManId"
+                    <Select
+                      v-model="formPlan.orderManId"
                       class="w160"
                       :disabled="isinput"
                       filterable
                     >
-                      <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                      <Option
+                        v-for="item in salesList"
+                        :value="item.value"
+                        :key="item.value"
+                      >{{ item.label }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
                     <Tooltip :content="formPlan.remark">
-                    <Input
-                      class="w160"
-                      :disabled="isinput"
-                      :readonly="![0, 4].includes(selectPlanOrderItem.billStatusId)"
-                      v-model="formPlan.remark"
-                      maxlength="100"
-                    />
+                      <Input
+                        class="w160"
+                        :disabled="isinput"
+                        :readonly="![0, 4].includes(selectPlanOrderItem.billStatusId)"
+                        v-model="formPlan.remark"
+                        maxlength="100"
+                      />
                     </Tooltip>
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
@@ -244,12 +247,12 @@
                   </FormItem>
                   <FormItem label="计划单号：">
                     <Tooltip :content="formPlan.planOrderNum">
-                    <Input
-                      class="w160"
-                      readonly
-                      :disabled="isinput"
-                      v-model="formPlan.planOrderNum"
-                    />
+                      <Input
+                        class="w160"
+                        readonly
+                        :disabled="isinput"
+                        v-model="formPlan.planOrderNum"
+                      />
                     </Tooltip>
                   </FormItem>
                   <FormItem label="其他费用：">
@@ -313,10 +316,7 @@
                     </Upload>
                   </div>
                   <div class="fl mb5 mr10">
-                    <Button
-                      size="small"
-                      @click="down"
-                    >
+                    <Button size="small" @click="down">
                       <Icon custom="iconfont iconxiazaiicon icons" />下载模板
                     </Button>
                   </div>
@@ -387,17 +387,72 @@
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="50" title="序号"></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  fixed="left"
+                  type="seq"
+                  width="50"
+                  title="序号"
+                ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" fixed="left" field="partInnerId" title="配件内码" width="80"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="masterStockQty" title="总部库存" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="branchStockQty" title="门店库存" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="onWayQty" title="采购在途库存" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="unsalableQty" title="滞销库存" width="100"></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  fixed="left"
+                  field="partCode"
+                  title="配件编码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  fixed="left"
+                  field="partName"
+                  title="配件名称"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  fixed="left"
+                  field="partInnerId"
+                  title="配件内码"
+                  width="80"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  fixed="left"
+                  field="partBrand"
+                  title="品牌"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="totalStockQty"
+                  title="连锁库存"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="masterStockQty"
+                  title="总部库存"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="branchStockQty"
+                  title="门店库存"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="onWayQty"
+                  title="采购在途库存"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="unsalableQty"
+                  title="滞销库存"
+                  width="100"
+                ></vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
                   field="orderQty"
@@ -436,7 +491,12 @@
                   </template>
                   <template v-slot="{ row }">{{ row.orderPrice | priceFilters }}</template>
                 </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" title="计划采购金额" width="120" field="orderAmt">
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  title="计划采购金额"
+                  width="120"
+                  field="orderAmt"
+                >
                   <template v-slot="{ row }">{{ (row.orderPrice * row.orderQty) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -459,12 +519,27 @@
                   <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="upLimit" title="库存上限" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="downLimit" title="库存下限" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="downLimit"
+                  title="库存下限"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="carModelName"
+                  title="品牌车型"
+                  width="100"
+                ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="notEnterQty" title="计划取消数量" width="100"></vxe-table-column>
+                <vxe-table-column
+                  show-overflow="tooltip"
+                  field="notEnterQty"
+                  title="计划取消数量"
+                  width="100"
+                ></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
@@ -516,9 +591,9 @@ import { getSales } from "@/api/salesManagment/salesOrder";
 import { TOKEN_KEY } from "@/libs/util";
 import Cookies from "js-cookie";
 import baseUrl from "_conf/url";
-import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+import { down } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import * as fapi from "_api/procurement/plan";
-import GoodCus from "_c/allocation/GoodCus.vue"
+import GoodCus from "_c/allocation/GoodCus.vue";
 export default {
   name: "goodsList",
   components: {
@@ -576,6 +651,8 @@ export default {
     return {
       commitLoading: false,
       saveLoading: false,
+      cancelLoading: false,
+      fcanLoading: false,
       remoteloading: false,
       ArrayList: [],
       showSelf: true,
@@ -608,22 +685,22 @@ export default {
         remark: "",
         disable: "1",
         address: "",
-        coin: 0
+        coin: 0,
       },
       ruleValidate: {
         name: [
-          { required: true, message: "产品名称不能为空", trigger: "blur" }
+          { required: true, message: "产品名称不能为空", trigger: "blur" },
         ],
         salesPrice: [{ required: true, validator: price2, trigger: "blur" }],
         isCycle: [
-          { required: true, message: "有效期不能为空", trigger: "blur" }
+          { required: true, message: "有效期不能为空", trigger: "blur" },
         ],
         address: [
-          { required: true, message: "接口地址不能为空", trigger: "blur" }
+          { required: true, message: "接口地址不能为空", trigger: "blur" },
         ],
         coin: [
-          { required: true, validator: price, trigger: ["blur", "change"] }
-        ]
+          { required: true, validator: price, trigger: ["blur", "change"] },
+        ],
       },
       proType: [],
       valus: null,
@@ -631,7 +708,7 @@ export default {
         num: 1,
         size: 20,
         total: 0,
-        opts: [20, 50, 100, 200]
+        opts: [20, 50, 100, 200],
       },
       loading: false,
       columns: [
@@ -639,7 +716,7 @@ export default {
           title: "序号",
           minWidth: 50,
           type: "index",
-          key: "id"
+          key: "id",
         },
         {
           title: "状态",
@@ -648,43 +725,43 @@ export default {
           render: (h, params) => {
             let val = params.row.billStatusId.name || "";
             return h("span", val);
-          }
+          },
         },
         {
           title: "供应商",
           key: "guestName",
-          minWidth: 170
+          minWidth: 170,
         },
         {
           title: "创建日期",
           key: "createTime",
-          minWidth: 120
+          minWidth: 120,
         },
         {
           title: "创建人",
           key: "createUname",
-          minWidth: 140
+          minWidth: 140,
         },
         {
           title: "计划员",
           key: "orderMan",
-          minWidth: 120
+          minWidth: 120,
         },
         {
           title: "计划单号",
           key: "serviceId",
-          minWidth: 200
+          minWidth: 200,
         },
         {
           title: "提交人",
           key: "auditor",
-          minWidth: 100
+          minWidth: 100,
         },
         {
           title: "提交日期",
           key: "auditDate",
-          minWidth: 170
-        }
+          minWidth: 170,
+        },
       ],
       tbdata: [],
 
@@ -700,22 +777,22 @@ export default {
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
-    getPurchaseInit({}).then(res => {
+    getPurchaseInit({}).then((res) => {
       //票据类型
       if (res.code == 0) {
         const { planBillStatusMap } = res.data;
         for (let el in planBillStatusMap) {
           this.purchaseTypeArr.push({
             value: planBillStatusMap[el],
-            label: el
+            label: el,
           });
         }
       }
     });
-    this.getAllSales()
+    this.getAllSales();
   },
   created() {
-    getParamsBrand().then(res => {
+    getParamsBrand().then((res) => {
       // console.log(res.data, 11111111111);
       this.getBrand = res.data;
     });
@@ -723,33 +800,35 @@ export default {
   methods: {
     query2() {
       console.log(this.formPlan.supplyName);
-      this.ArrayList.forEach(el => {
-        if(el.value === this.formPlan.guestId) {
+      this.ArrayList.forEach((el) => {
+        if (el.value === this.formPlan.guestId) {
           this.formPlan.supplyName = el.label;
         }
-      })
+      });
     },
 
     async getOne(query) {
-        if (query != "") {
-          this.remoteloading = true;
-          fapi.getSupplier({fullName: query, size: 20, num: 0}).then(res => {
-            if (res.code === 0) {
-              this.ArrayList = [{
+      if (query != "") {
+        this.remoteloading = true;
+        fapi.getSupplier({ fullName: query, size: 20, num: 0 }).then((res) => {
+          if (res.code === 0) {
+            this.ArrayList = [
+              {
                 label: this.formPlan.supplyName,
                 value: this.formPlan.guestId,
-              }];
-              res.data.content.map(item => {
-                this.ArrayList.push({
-                  value: item.id,
-                  label: item.shortName
-                });
+              },
+            ];
+            res.data.content.map((item) => {
+              this.ArrayList.push({
+                value: item.id,
+                label: item.shortName,
               });
-              this.remoteloading = false;
-            }
-          });
-        }
-      },
+            });
+            this.remoteloading = false;
+          }
+        });
+      }
+    },
     //获取表格高度
     getDomHeight() {
       this.$nextTick(() => {
@@ -770,10 +849,10 @@ export default {
       let res = await getSales();
       if (res.code === 0) {
         this.salesList = res.data.content;
-        this.salesList.forEach(item => {
+        this.salesList.forEach((item) => {
           item.label = item.userName;
           item.value = item.id;
-        })
+        });
       }
     },
     showStatus() {
@@ -830,9 +909,9 @@ export default {
     },
 
     //下载模板
-    down(){
-      down('1800000000')
-    }
-  }
+    down() {
+      down("1800000000");
+    },
+  },
 };
 </script>

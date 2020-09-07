@@ -31,6 +31,7 @@
               type="default"
               class="mr10"
               :disabled="this.formPlan.statuName!== '草稿'"
+              :loading="saveLoading"
             >保存</Button>
           </div>
           <div class="db">
@@ -40,6 +41,7 @@
               type="default"
               class="mr10"
               :disabled="this.formPlan.statuName!== '草稿'"
+              :loading="commitLoading"
             >提交</Button>
           </div>
           <div class="db">
@@ -48,6 +50,7 @@
               v-has="'cancellation'"
               @click="cancellation"
               :disabled="this.formPlan.statuName!== '草稿'"
+              :loading="cancelLoading"
             >
               <Icon type="md-close" size="14" />作废
             </Button>
@@ -357,6 +360,9 @@ export default {
   },
   data() {
     return {
+      saveLoading: false,
+      commitLoading: false,
+      cancelLoading: false,
       currRow: {},
       salesList: [], //盘点员列表
       dis: false,
@@ -817,11 +823,13 @@ export default {
                 "YYYY-MM-DD HH:mm:ss"
               );
               this.formPlan.billStatusId = 1;
+              this.commitLoading = true;
               getSubmitList(this.formPlan).then(res => {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getList();
                 }
+                this.commitLoading = false;
               });
             } else {
               callback(new Error("带*必填"));
@@ -851,6 +859,7 @@ export default {
             this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
               "YYYY-MM-DD HH:mm:ss"
             );
+            this.saveLoading = true;
             getSubmitList(this.formPlan).then(res => {
               if (res.code == 0) {
                 this.flag = 0;
@@ -860,6 +869,7 @@ export default {
                 this.handleReset();
                 this.getList();
               }
+              this.saveLoading = false;
               // else{
               //   this.formPlan.checkDate = preTime;
               // }
@@ -899,16 +909,21 @@ export default {
         this.$Message.error("只有草稿状态才能作废");
         return;
       }
+      this.cancelLoading = true;
       getCancellation(this.formPlan.id)
         .then(res => {
           if (res.code === 0) {
             this.showRemove = false;
             this.getList();
+            this.$Message.success("作废草稿成功");
+
           }
+          this.cancelLoading = false;
         })
         .catch(err => {
           this.showRemove = false;
           this.$Message.info("作废草稿失败");
+          this.cancelLoading = false;
         });
     },
     removeCancel() {

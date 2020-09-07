@@ -39,6 +39,7 @@
               v-has="'submit'"
               type="default"
               class="mr10"
+              :loading="commitLoading"
               :disabled="this.formPlan.statuName!== '草稿'"
             >提交</Button>
           </div>
@@ -363,6 +364,7 @@
     },
     data() {
       return {
+        commitLoading: false,
         salesList: [], //盘点员列表
         dis: false,
         split1: 0.2,
@@ -728,11 +730,13 @@
         this.$Modal.confirm({
           title: "是否确定提交订单",
           onOk: () => {
+            this.commitLoading = true;
             submitVentory(this.formPlan).then(res => {
               if (res.code == 0) {
                 this.$Message.success("提交成功");
                 this.getList();
               }
+              this.commitLoading = false;
             });
           },
           onCancel: () => {
