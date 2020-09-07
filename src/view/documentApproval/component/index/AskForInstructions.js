@@ -29,7 +29,8 @@ export default {
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
         applyMatters:[
-          {required: true, message: '申请事项为必填', trigger: 'blur'}
+          {required: true, message: '申请事项为必填', trigger: 'blur'},
+          {pattern:/^.{0,500}$/,message: "字符长度最长为500"}
         ],
       },
       Pictures:{},//请求回来的图片地址状态
