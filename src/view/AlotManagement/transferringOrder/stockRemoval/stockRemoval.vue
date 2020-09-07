@@ -1001,7 +1001,6 @@
               if (res.code == 0) {
                 this.flag = 0;
                 this.flag1 = false;
-                this.buttonDisable = null;
                 this.getList();
                 this.$Message.success("保存成功");
                 this.$refs.formPlan.resetFields();
