@@ -2206,9 +2206,9 @@ export default {
         this.searchLoading = true;
         let req = {
           fullName:query,
-          size:1000,
+          size:20,
         }
-        let rep = await getCustomerInformation(req);
+        let rep = await findGuest(req);
         this.searchLoading = false;
         if(rep.code==0){
           this.clientList = rep.data.content;
