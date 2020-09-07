@@ -1166,10 +1166,10 @@
           size: this.accountPage.size,
           orgId: this.model1,//分店名称
           startDate: this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
             : "",    //开始时间参数
           endDate: this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",     //结束时间参数
           // createTime:this.applyDate //日期查询时间发生日期
         };
@@ -1191,10 +1191,10 @@
           claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '',
           orgId: this.model2,//分店
           startDate: this.value2[0]
-            ? moment(this.value2[0]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value2[0]).format("YYYY-MM-DD")+" 00:00:00"
             : "",    //开始时间参数
           endDate: this.value2[1]
-            ? moment(this.value2[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value2[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",     //结束时间参数
           businessType: this.businessType || ""
           // createTime:this.applyDate2 //日期查询时间发生日期
@@ -1217,10 +1217,10 @@
           size: this.distributionPage.size,
 
           startDate: this.value3[0]
-            ? moment(this.value3[0]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value3[0]).format("YYYY-MM-DD")+" 00:00:00"
             : "",    //开始时间参数
           endDate: this.value3[1]
-            ? moment(this.value3[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value3[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",     //结束时间参数
           // createTime:this.applyDate3 //日期查询时间发生日期
         };

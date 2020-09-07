@@ -406,8 +406,6 @@
         </div>
       </div>
     </section>
-    <!--        打印-->
-    <Print-show ref="printBox" :id="id"></Print-show>
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :store-id="formPlan.storeId"></select-part-com>
     <!--    选择客户-->
@@ -441,7 +439,6 @@ import goodsInfo from "../../AlotManagement/transferringOrder/applyFor/componten
 import selectTheCustomer from "../commonality/SelectTheCustomer.vue";
 import selectPartCom from "../salesOrder/components/selectPartCom";
 import MoreSearch from "./components/MoreSearch";
-import PrintShow from "./components/PrintShow";
 import SeeFile from "../commonality/SeeFile";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import { conversionList } from "@/components/changeWbList/changewblist";
@@ -458,7 +455,6 @@ export default {
     selectPartCom,
     MoreSearch,
     SeeFile,
-    PrintShow
   },
   data() {
     let changeNumber = ({cellValue }) => {

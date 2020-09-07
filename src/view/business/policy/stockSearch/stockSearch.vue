@@ -287,6 +287,7 @@
           <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="厂牌" width="80"></vxe-table-column>
           <vxe-table-column field="enterQty" title="入库数量" width="70">
           </vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>

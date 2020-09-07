@@ -235,8 +235,6 @@
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
-      <!--打印弹框-->
-      <print-show ref="PrintModel" :orderId="mainId"></print-show>
     </main>
 </template>
 
@@ -251,7 +249,6 @@
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
   import supplier from './compontents/newSelectPartCompontent/selectPartCom'
-  import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   import {findForAllot} from "_api/purchasing/purchasePlan";
   import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
@@ -272,8 +269,7 @@
         supplier,
         // SelectPartCom,
         GoodsInfo,
-        SelectSupplier,
-        PrintShow
+        SelectSupplier
       },
       data() {
         let changeNumber = ({cellValue }) => {

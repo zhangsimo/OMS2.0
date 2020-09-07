@@ -584,8 +584,6 @@
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
     <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
-    <!-- 打印 -->
-    <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!-- 分摊费用 -->
     <apportionment-expenses ref="apportionmentExpenses" :parentFeeform="selectTableRow" :currencies="currencyMap" @currencyForm="getFeeForm"></apportionment-expenses>
   </div>

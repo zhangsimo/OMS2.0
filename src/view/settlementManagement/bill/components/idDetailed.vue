@@ -648,11 +648,6 @@ export default {
       return sums;
       //
     },
-    // 打印
-    print(type) {
-      type ? (this.tit = "采购入库") : (this.tit = "销售出库");
-      this.$refs.PrintShow.openModal();
-    },
     // 出/入库明细导出
     exportDetail(type) {
       if (type) {
