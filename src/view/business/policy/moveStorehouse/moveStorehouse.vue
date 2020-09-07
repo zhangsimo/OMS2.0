@@ -201,31 +201,64 @@
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Upload
-                      ref="upload"
-                      :show-upload-list="false"
-                      :action="upurl"
-                      :format="['xlsx', 'xls', 'csv']"
-                      :headers="headers"
-                      :before-upload="handleBeforeUpload"
-                      :on-success="handleSuccess"
-                      :on-format-error="onFormatError"
-                      :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
-                    >
-                      <Button
-                        size="small"
-                        class="mr10"
-                        :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
-                      >导入</Button>
-                    </Upload>
+                    <Poptip placement="bottom">
+                      <Button class="mr10" size="small"
+                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'">导入
+                      </Button>
+                      <div slot="content" class="flex" style="justify-content: space-between">
+                        <div class="flex mr10">
+                          <Upload
+                            ref="upload1"
+                            :show-upload-list="false"
+                            :action="upurlInnerId"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :headers="headers"
+                            :before-upload="handleBeforeUploadInnerId"
+                            :on-success="handleSuccess"
+                            :on-format-error="onFormatError"
+                            :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
+                          >
+                            <Button
+                              size="small"
+                              class="mr10"
+                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
+                            >配件内码导入</Button>
+                          </Upload>
+                        </div>
+                        <div class="flex">
+                          <Upload
+                            ref="upload"
+                            :show-upload-list="false"
+                            :action="upurl"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :headers="headers"
+                            :before-upload="handleBeforeUpload"
+                            :on-success="handleSuccess"
+                            :on-format-error="onFormatError"
+                            :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
+                          >
+                            <Button
+                              size="small"
+                              class="mr10"
+                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
+                            >编码品牌导入</Button>
+                          </Upload>
+                        </div>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5 mr10">
-                    <Button
-                      size="small"
-                      @click="down"
-                    >
-                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                    </Button>
+                    <Poptip placement="bottom">
+                      <Button size="small">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                      <div slot="content">
+                        <Button size="small" class="mr10" @click="downInnerId"><Icon custom="iconfont iconxiazaiicon icons" />配件内码模板</Button>
+                        <Button size="small" @click="down">
+                          <Icon custom="iconfont iconxiazaiicon icons" />编码品牌模板
+                        </Button>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -297,7 +330,8 @@
 
 <script>
   import {
-    upxlxsMoveStore
+    upxlxsMoveStore/**编码品牌导入配件*/,
+    upxlxsInnerIdMoveStore/**内码导入配件*/
   } from "_api/purchasing/purchasePlan";
 import {
   getLeftList,
@@ -540,7 +574,8 @@ export default {
 
       saveButClick:false,//点击保存临时屏蔽保存按钮功能
       leftClickItemId:'',
-      upurl:'',
+      upurl:'',//编码品牌导入配件地址
+      upurlInnerId:"",//内码导入配件地址
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
@@ -1036,6 +1071,7 @@ export default {
         this.Leftcurrentrow.createUname = this.salesman;
       }
       this.upurl = upxlxsMoveStore + row.id;
+      this.upurlInnerId=upxlxsInnerIdMoveStore+row.id;
     },
 
     //添加配件
@@ -1136,13 +1172,21 @@ export default {
       }
       return a;
     },
-    // 导入
+    // 导入 编码品牌 导入配件
     handleBeforeUpload() {
       if (this.Leftcurrentrow.xinzeng=='1') {
         return this.$Message.error("请先保存数据!");
       }
       let refs = this.$refs;
       refs.upload.clearFiles();
+    },
+    //内码导入配件
+    handleBeforeUploadInnerId(){
+      if (this.Leftcurrentrow.xinzeng=='1') {
+        return this.$Message.error("请先保存数据!");
+      }
+      let refs = this.$refs;
+      refs.upload1.clearFiles();
     },
     handleSuccess(res, file) {
       let self = this;
@@ -1183,9 +1227,13 @@ export default {
     onFormatError(file) {
       this.$Message.error('只支持xls xlsx后缀的文件')
     },
-    //下载模板
+    //下载模板 编码品牌模板
     down(){
       down('2500000000')
+    },
+    //下载模板 配件内码模板
+    downInnerId(){
+      down('3500000000')
     }
   },
   mounted() {

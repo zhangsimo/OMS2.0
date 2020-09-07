@@ -206,7 +206,7 @@
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Tooltip :content="formPlan.remark">
+                    <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
                       <Input
                         class="w160"
                         :disabled="isinput"
@@ -214,6 +214,7 @@
                         v-model="formPlan.remark"
                         maxlength="100"
                       />
+                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlan.remark||"").trim()}}</div>
                     </Tooltip>
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
@@ -296,29 +297,68 @@
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Upload
-                      ref="upload"
-                      :show-upload-list="false"
-                      :action="upurl"
-                      :format="['xlsx', 'xls', 'csv']"
-                      :headers="headers"
-                      :before-upload="handleBeforeUpload"
-                      :on-success="handleSuccess"
-                      :on-format-error="onFormatError"
-                      :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
-                    >
-                      <Button
-                        size="small"
-                        class="mr10"
-                        v-has="'import'"
-                        :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
-                      >导入</Button>
-                    </Upload>
+                    <Poptip placement="bottom">
+                      <Button class="mr10" size="small" :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new" v-has="'import'">导入</Button>
+                      <div slot="content" class="flex" style="justify-content: space-between">
+                        <div class="flex mr10">
+                          <Upload
+                            ref="upload1"
+                            :show-upload-list="false"
+                            :action="upurlInnerId"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :headers="headers"
+                            :before-upload="handleBeforeUploadInnerId"
+                            :on-success="handleSuccess"
+                            :on-format-error="onFormatError"
+                            :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
+                          >
+                            <Button
+                              size="small"
+                              v-has="'importInnerId'"
+                              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
+                            >配件内码导入</Button>
+                          </Upload>
+                        </div>
+                        <div class="flex">
+                          <Upload
+                            ref="upload"
+                            :show-upload-list="false"
+                            :action="upurl"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :headers="headers"
+                            :before-upload="handleBeforeUpload"
+                            :on-success="handleSuccess"
+                            :on-format-error="onFormatError"
+                            :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
+                          >
+                            <Button
+                              size="small"
+                              v-has="'import'"
+                              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
+                            >编码品牌导入</Button>
+                          </Upload>
+                        </div>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5 mr10">
-                    <Button size="small" @click="down">
-                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                    </Button>
+                    <Poptip placement="bottom">
+                      <Button size="small">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                      <div slot="content">
+                        <Button
+                          size="small"
+                          class="mr10"
+                          @click="downInnerId"
+                        >配件内码模板
+                        </Button>
+                        <Button
+                          size="small"
+                          @click="down"
+                        >编码品牌模板</Button>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -908,10 +948,14 @@ export default {
       this.selectDate(v);
     },
 
-    //下载模板
-    down() {
-      down("1800000000");
+    //下载模板 编码品牌模板
+    down(){
+      down('1800000000')
     },
-  },
+    //下载模板 配件内码模板
+    downInnerId(){
+      down('2800000000')
+    }
+  }
 };
 </script>

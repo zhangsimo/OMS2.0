@@ -188,36 +188,70 @@
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Upload
-                      ref="upload"
-                      :show-upload-list="false"
-                      :headers="headers"
-                      :action="upurl"
-                      :format="['xlsx', 'xls', 'csv']"
-                      :before-upload="handleBeforeUpload"
-                      :on-format-error="onFormatError"
-                      :on-success="handleSuccess"
-                      :disabled="draftShow != 0||!formPlan.serviceId"
-                    >
-                      <Button
-                        @click="importAss"
-                        size="small"
-                        class="mr10"
-                        v-has="'import'"
-                        :disabled="draftShow != 0||!formPlan.storeId"
-                      >导入</Button>
-                    </Upload>
-                    <!-- <Button size="small" @click="importAss" class="mr10" :disabled="draftShow != 0">
-                      <i class="iconfont mr5 iconlajitongicon"></i> 导入
-                    </Button>-->
+                    <Poptip placement="bottom">
+                      <Button class="mr10" size="small" v-has="'import'" :disabled="draftShow != 0||!formPlan.serviceId">导入</Button>
+                      <div slot="content" class="flex" style="justify-content: space-between">
+                        <div class="flex mr10">
+                          <Upload
+                            ref="upload1"
+                            :show-upload-list="false"
+                            :action="upurlInnerId"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :headers="headers"
+                            :before-upload="handleBeforeUploadInnerId"
+                            :on-success="handleSuccess"
+                            :on-format-error="onFormatError"
+                            :disabled="draftShow != 0||!formPlan.serviceId"
+                          >
+                            <Button
+                              @click="importAssInnerId"
+                              size="small"
+                              class="mr10"
+                              v-has="'import'"
+                              :disabled="draftShow != 0||!formPlan.serviceId"
+                            >配件内码导入</Button>
+                          </Upload>
+                        </div>
+                        <div class="flex">
+                          <Upload
+                            ref="upload"
+                            :show-upload-list="false"
+                            :headers="headers"
+                            :action="upurl"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :before-upload="handleBeforeUpload"
+                            :on-format-error="onFormatError"
+                            :on-success="handleSuccess"
+                            :disabled="draftShow != 0||!formPlan.serviceId"
+                          >
+                            <Button
+                              @click="importAss"
+                              size="small"
+                              class="mr10"
+                              v-has="'import'"
+                              :disabled="draftShow != 0||!formPlan.storeId"
+                            >编码品牌导入</Button>
+                          </Upload>
+                        </div>
+                      </div>
+                    </Poptip>
                   </div>
-                  <Button
-                    size="small"
-                    @click="down"
-                    class="mr10"
-                  >
-                    <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                  </Button>
+                  <div class="fl mb5 mr10">
+                    <Poptip placement="bottom">
+                      <Button size="small">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                      <div slot="content">
+                        <Button size="small" class="mr10" @click="downInnerId"><Icon custom="iconfont iconxiazaiicon icons" />配件内码模板</Button>
+                        <Button
+                          size="small"
+                          @click="down"
+                        >
+                          <Icon custom="iconfont iconxiazaiicon icons" />编码品牌模板
+                        </Button>
+                      </div>
+                    </Poptip>
+                  </div>
                 </div>
               </div>
               <vxe-table
@@ -327,7 +361,8 @@ import {
   getSubmitList, //提交
   getCancellation, //作废
   delectTable, //删除
-  importAccessories, //导入
+  importAccessories, //导入 编码品牌导入配件
+  importInnerIdAccessories,//导入 内码导入配件
   //getDataQuickList,
   getDataTypeList,
   //saveDataList,
@@ -336,7 +371,7 @@ import {
   removeDataList,
   stampDataList,
   stampApplyDataList
-} from "../../../../api/inventory/salesList";
+} from "@/api/inventory/salesList";
 import { getSales } from "@/api/salesManagment/salesOrder";
 import "../../../lease/product/lease.less";
 import { conversionList } from "@/components/changeWbList/changewblist";
@@ -491,8 +526,10 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
-      //导入上传接口
+      //导入上传接口 编码品牌导入
       upurl: "",
+      //配件内码 导入配件
+      upurlInnerId:"",
       draftShow: 0, //判断是不是草稿
       showAudit: false, //审核提示
       showRemove: false, //作废提示
@@ -780,7 +817,6 @@ export default {
         createUname: "",
         createTime: "",
         commitUname: "",
-        createTime: "",
         //commitDate:"",
         //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         //createUname: this.$store.state.user.userData.staffName,
@@ -1016,6 +1052,13 @@ export default {
       }
       this.upurl = `${importAccessories}?id=${this.formPlan.id}`;
     },
+    //导入
+    importAssInnerId() {
+      if(!this.formPlan.serviceId){
+        return this.$Message.warning("请先保存信息生成盘点单号才能导入配件");
+      }
+      this.upurlInnerId = `${importInnerIdAccessories}?id=${this.formPlan.id}`;
+    },
     // handleSuccess(res, file) {
     //   let self = this;
     //   if (res.code == 0) {
@@ -1063,6 +1106,7 @@ export default {
         duration: 0
       });
     },
+    //编码品牌导入配件之前
     handleBeforeUpload() {
       if (!this.formPlan.billStatusId) {
         return this.$Message.error("请先保存数据!");
@@ -1070,10 +1114,21 @@ export default {
       let refs = this.$refs;
       refs.upload.clearFiles();
     },
-
-    //下载模板
+    //内码导入配件之前
+    handleBeforeUploadInnerId(){
+      if (!this.formPlan.billStatusId) {
+        return this.$Message.error("请先保存数据!");
+      }
+      let refs = this.$refs;
+      refs.upload1.clearFiles();
+    },
+    //下载模板 编码品牌模板
     down(){
       down('2100000000')
+    },
+    //下载模板 配件内码模板
+    downInnerId(){
+      down('3600000000')
     },
     //配件返回的参数
     getPartNameList(val) {

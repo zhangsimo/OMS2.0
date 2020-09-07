@@ -5,23 +5,28 @@
         <div class="wlf">
           <div class="db">
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-            <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
+            <Select
+              v-model="purchaseType"
+              class="w90 mr10"
+              @on-change="SelectChange"
+            >
               <Option
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</Option>
+                >{{ item.label }}</Option
+              >
             </Select>
           </div>
           <div class="db">
-            <Button type="default" @click="moreaa" class="mr10">
-              <i class="iconfont mr5 iconchaxunicon"></i>更多
-            </Button>
+            <Button type="default" @click="moreaa" class="mr10"
+              ><i class="iconfont mr5 iconchaxunicon"></i>更多</Button
+            >
           </div>
           <div class="db">
-            <Button class="mr10" @click="addProoo" v-has="'add'">
-              <Icon type="md-add" />新增
-            </Button>
+            <Button class="mr10" @click="addProoo" v-has="'add'"
+              ><Icon type="md-add" /> 新增</Button
+            >
           </div>
           <div class="db">
             <Button
@@ -30,37 +35,35 @@
               v-has="'save'"
               class="mr10"
               :disabled="buttonDisable || presentrowMsg !== 0"
-              :loading="saveLoading"
+              :loading='saveLoading'
+              v-noresub
+              ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
-              <i class="iconfont mr5 iconbaocunicon"></i>保存
-            </Button>
           </div>
           <div class="db">
             <Button
               class="mr10"
               @click="instance"
               v-has="'submit'"
-              :loading="commitLoading"
+              :loading='commitLoading'
+              v-noresub
               :disabled="buttonDisable || presentrowMsg !== 0"
+              ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
-              <i class="iconfont mr5 iconziyuan2"></i>提交
-            </Button>
           </div>
           <div class="db">
             <Button
               @click="cancellation"
               v-has="'cancellation'"
               class="mr10"
-              :loading="cancelLoading"
               :disabled="buttonDisable || presentrowMsg !== 0"
+              ><Icon type="md-close" size="14" /> 作废</Button
             >
-              <Icon type="md-close" size="14" />作废
-            </Button>
           </div>
           <div class="db">
-            <Button @click="derive" v-has="'export'" class="mr10">
-              <i class="iconfont mr5 icondayinicon"></i> 导出
-            </Button>
+            <Button @click="derive" v-has="'export'" class="mr10"
+              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button
+            >
           </div>
         </div>
       </div>
@@ -70,7 +73,9 @@
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500">
             <div slot="left" class="con-split-pane-left">
-              <div class="pane-made-hd">预订单列表</div>
+              <div class="pane-made-hd">
+                预订单列表
+              </div>
               <Table
                 ref="currentRowTable"
                 :height="leftTableHeight"
@@ -94,10 +99,13 @@
                 @on-page-size-change="changeSizeLeft"
                 show-sizer
                 show-total
-              ></Page>
+              >
+              </Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-              <div class="pane-made-hd">预订单信息</div>
+              <div class="pane-made-hd">
+                预订单信息
+              </div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
@@ -108,14 +116,26 @@
                   :label-width="100"
                 >
                   <FormItem label="业务员：" prop="salesman">
-                    <Input class="w160" :disabled="true" v-model="formPlan.salesman"></Input>
+                    <Input
+                      class="w160"
+                      :disabled="true"
+                      v-model="formPlan.salesman"
+                    ></Input>
                   </FormItem>
                   <FormItem label="预订单号:" prop="Reservation" class="ml50">
                     <Tooltip :content="formPlan.Reservation">
-                      <Input class="w160" :disabled="true" v-model="formPlan.Reservation" />
+                    <Input
+                      class="w160"
+                      :disabled="true"
+                      v-model="formPlan.Reservation"
+                    />
                     </Tooltip>
                   </FormItem>
-                  <FormItem label="期望到货日期：" prop="orderDate" class="fs12 ml50">
+                  <FormItem
+                    label="期望到货日期："
+                    prop="orderDate"
+                    class="fs12 ml50"
+                  >
                     <DatePicker
                       @on-change="changedate"
                       style="width: 160px"
@@ -127,12 +147,12 @@
                   </FormItem>
                   <FormItem label="备注：" prop="remark">
                     <Tooltip :content="formPlan.remark">
-                      <Input
-                        class="w160"
-                        :disabled="presentrowMsg !== 0 || buttonDisable"
-                        v-model="formPlan.remark"
-                        :maxlength="100"
-                      ></Input>
+                    <Input
+                      class="w160"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                      v-model="formPlan.remark"
+                      :maxlength="100"
+                    ></Input>
                     </Tooltip>
                   </FormItem>
                 </Form>
@@ -146,9 +166,8 @@
                       @click="addPro"
                       v-has="'AddAccessories'"
                       :disabled="presentrowMsg !== 0 || buttonDisable"
+                      ><Icon type="md-add" /> 添加配件</Button
                     >
-                      <Icon type="md-add" />添加配件
-                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -157,10 +176,9 @@
                       :disabled="presentrowMsg !== 0 || buttonDisable"
                       @click="Delete"
                       v-has="'deletePart'"
+                      ><i class="iconfont mr5 iconlajitongicon"></i>
+                      删除配件</Button
                     >
-                      <i class="iconfont mr5 iconlajitongicon"></i>
-                      删除配件
-                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Upload
@@ -180,20 +198,28 @@
                         @click="getRUl"
                         v-has="'import'"
                         :disabled="LeadIn || presentrowMsg !== 0"
+                        ><i class="iconfont mr5 iconbianjixiugaiicon"></i
+                        >导入配件</Button
                       >
-                        <i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件
-                      </Button>
                     </Upload>
                   </div>
                   <div class="fl mb5">
-                    <Button
-                      size="small"
-                      @click="down"
-                      :disabled="presentrowMsg !== 0 || buttonDisable"
-                      v-has="'download'"
-                    >
-                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                    </Button>
+                    <Poptip placement="bottom">
+                      <Button size="small" :disabled="presentrowMsg !== 0 || buttonDisable">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                      <div slot="content">
+                        <Button size="small" class="mr10" @click="downInnerId" :disabled="presentrowMsg !== 0 || buttonDisable"><Icon custom="iconfont iconxiazaiicon icons" />配件内码模板</Button>
+                        <Button
+                          size="small"
+                          @click="down"
+                          v-has="'download'"
+                          :disabled="presentrowMsg !== 0 || buttonDisable"
+                        >
+                          <Icon custom="iconfont iconxiazaiicon icons" />编码品牌模板
+                        </Button>
+                      </div>
+                    </Poptip>
                   </div>
                 </div>
               </div>
@@ -218,25 +244,39 @@
               >
                 <vxe-table-column show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" type="checkbox"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partName" title="配件名称" width="150"></vxe-table-column>
-                <vxe-table-column
-                  show-overflow="tooltip"
-                  field="partInnerId"
-                  title="配件内码"
+                <vxe-table-column show-overflow="tooltip"
+                  field="partCode"
+                  title="配件编码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
+                  field="partName"
+                  title="配件名称"
                   width="150"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column
-                  show-overflow="tooltip"
+                <vxe-table-column show-overflow="tooltip"
+                                  field="partInnerId"
+                                  title="配件内码"
+                                  width="150"
+                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
+                  field="partBrand"
+                  title="品牌"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
+                  field="unit"
+                  title="单位"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
                   field="preQty"
                   title="预定数量"
                   :edit-render="{ name: 'input', attrs: { disabled: false } }"
                   width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  show-overflow="tooltip"
+                >
+                </vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   :edit-render="{
@@ -246,14 +286,21 @@
                   }"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
-                  show-overflow="tooltip"
+                <vxe-table-column show-overflow="tooltip"
                   field="acceptQty"
                   title="受理数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
+                  field="oemCode"
+                  title="OE码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip"
+                  field="spec"
+                  title="规格"
+                  width="100"
+                ></vxe-table-column>
                 <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
               </vxe-table>
               <div ref="planPage"></div>
@@ -275,7 +322,11 @@
     <!--编辑收货信息-->
     <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
     <!--供应商资料-->
-    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+    <select-supplier
+      ref="selectSupplier"
+      header-tit="供应商资料"
+      @selectSupplierName="getSupplierName"
+    ></select-supplier>
   </div>
 </template>
 
@@ -287,6 +338,7 @@ import More from "./compontents/More";
 import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
 import GoodsInfo from "../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo";
 import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 // import supplier from './compontents/supplier'
@@ -297,7 +349,7 @@ import {
   save,
   commitOrder,
   invalid,
-  getup,
+  getup
 } from "../../../../api/business/advanceOrder";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
@@ -321,7 +373,7 @@ export default {
     return {
       //校验输入框的值
       validRules: {
-        preQty: [{ required: true, validator: changeNumber }],
+        preQty: [{ required: true, validator: changeNumber }]
       },
       LeadIn: true, //判断导入配件的按钮是否启用
       checkboxArr: [], // checkbox选中
@@ -338,13 +390,13 @@ export default {
         orderDate: "",
         printing: "",
         createTime: tools.transTime(new Date()),
-        detailVOS: [],
+        detailVOS: []
       },
       //表单验证
       ruleValidate: {
         salesman: [
-          { required: true, message: "调出方不能为空", trigger: "blur" },
-        ],
+          { required: true, message: "调出方不能为空", trigger: "blur" }
+        ]
       },
       datadata: null,
       rowId: "", //当前行的id
@@ -357,21 +409,21 @@ export default {
         { label: "草稿", value: "0" },
         { label: "待受理", value: "1" },
         { label: "已受理", value: "3" },
-        { label: "已作废", value: "5" },
+        { label: "已作废", value: "5" }
       ],
       List: [],
       Left: {
         page: {
           num: 1,
           size: 20,
-          total: 0,
+          total: 0
         },
         loading: false,
         columns: [
           {
             title: "序号",
             minWidth: 50,
-            type: "index",
+            type: "index"
           },
           {
             title: "状态",
@@ -380,41 +432,41 @@ export default {
             render: (h, params) => {
               let name = params.row.status.name;
               return h("span", name);
-            },
+            }
           },
           {
             title: "公司",
             key: "company",
-            minWidth: 80,
+            minWidth: 80
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 120,
+            minWidth: 120
           },
           {
             title: "业务员",
             key: "salesman",
-            minWidth: 100,
+            minWidth: 100
           },
           {
             title: "预定单号",
             key: "orderNo",
-            minWidth: 120,
+            minWidth: 120
           },
           {
             title: "提交人",
             key: "commitUname",
-            minWidth: 100,
+            minWidth: 100
           },
           {
             title: "提交日期",
             align: "center",
             key: "commitTime",
-            minWidth: 170,
-          },
+            minWidth: 170
+          }
         ],
-        tbdata: [],
+        tbdata: []
       },
       tableData: [],
       //左侧表格高度
@@ -425,10 +477,10 @@ export default {
         page: {
           num: 1,
           size: 10,
-          total: 0,
+          total: 0
         },
         loading: false,
-        tbdata: [],
+        tbdata: []
       },
       advanced: false, //更多模块的弹框
       GainInformation: false, //编辑收获信息
@@ -442,10 +494,10 @@ export default {
         salesman: "", //业务员
         Reservation: "", //预订单号
         orderDate: tools.transTime(new Date()), //期望到货日期
-        remark: "", //备注
+        remark: "" //备注
       },
       headers: {
-        Authorization: "Bearer " + Cookies.get(TOKEN_KEY),
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //请求头
       upurl: getup, //导入地址
       mainId: null, //选中行的id
@@ -460,6 +512,7 @@ export default {
     };
   },
   methods: {
+
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位
     async editNextCell($table) {
@@ -658,12 +711,16 @@ export default {
     addPro() {
       this.$refs.SelectPartCom.init();
     },
-    //下载模板
+    //下载模板 编码品牌导入模板
     down() {
       location.href =
         baseUrl.omsOrder +
         "/preOrderMain/template?access_token=" +
         Cookies.get(TOKEN_KEY);
+    },
+    //下载模板 内码导入配件模板
+    downInnerId(){
+      down("3100000000")
     },
     // 下拉框查询
     SelectChange() {
@@ -686,7 +743,6 @@ export default {
             data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate);
             data.remark = this.formPlan.remark;
             data.detailVOList = this.Right.tbdata;
-            console.log(this.Right.tbdata);
             this.saveLoading = true;
             save(data).then((res) => {
               if (res.code === 0) {
@@ -769,9 +825,12 @@ export default {
           Cookies.get(TOKEN_KEY);
       }
     },
-    //导入配件
+    //导入配件 编码品牌导入
     getRUl() {
       this.upurl = getup + "id=" + this.mainId;
+    },
+    getRULInnerId(){
+      this.upurlInnerId=getupInnerId+"id="+this.mainId;
     },
     //批量上传失败
     onFormatError(file) {
@@ -807,9 +866,13 @@ export default {
         duration: 0,
       });
     },
-    //上传之前清空
+    //上传之前清空 编码品牌导入配件
     beforeUpload() {
       this.$refs.upload.clearFiles();
+    },
+    //上传之前清空 内码导入配件
+    beforeUploadInnerId(){
+      this.$refs.upload1.clearFiles();
     },
     //右侧表格复选框选中
     selectChange(msg) {

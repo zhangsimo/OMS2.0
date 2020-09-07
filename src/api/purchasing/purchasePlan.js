@@ -175,14 +175,20 @@ export function deleteparts(data) {
   })
 }
 
-//
+//配件 按照品牌导入
 export const upxlxs = `${api.omsOrder}/pchsPlanMain/importExcel?id=`;
+//配件 按照内码导入
+export const upxlxsInnerId=`${api.omsOrder}/pchsPlanMain/importExcel/partId?id=`;
 
-
-//调拨申请导入
+//调拨申请导入 按照编码品牌导入
 export const upxlxsDBo = `${api.omsOrder}/allotApplyMain/importExcel
 ?id=`;
+//调拨申请导入 按照内码导入配件
+export const upxlxsDBoInnerId=`${api.omsOrder}/allotApplyMain/importExcel/partId?id=`
 
-//移仓单导入
+
+//移仓单导入  按照编码品牌导入
 export const upxlxsMoveStore = `${api.omsOrder}/stockShiftMain/importExcel
 ?id=`;
+//移仓单导入  按照内码导入配件
+export const upxlxsInnerIdMoveStore=`${api.omsOrder}/stockShiftMain/importExcel/partId?id=`

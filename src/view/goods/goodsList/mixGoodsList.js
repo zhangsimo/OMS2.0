@@ -7,7 +7,8 @@ import {
   saveObsolete,
   saveReverse,
   exportXls,
-  upxlxs,
+  upxlxs/**按照编码品牌导入*/,
+  upxlxsInnerId/**按照配件内码导入*/,
   deleteparts,
   getParamsBrand
 } from "_api/purchasing/purchasePlan";
@@ -31,7 +32,8 @@ export const mixGoodsData = {
     };
     return {
       ArrayList: [],
-      upurl: "",
+      upurl: "",//配件品牌 导入 路径头部
+      upurlInnerId:"", //配件 内码导入 路径头部
       hideSp: true,
       loading: false,
       //计划采购信息
@@ -602,6 +604,7 @@ export const mixGoodsData = {
         });
         this.mainId = v.id;
         this.upurl = upxlxs + v.id;
+        this.upurlInnerId = upxlxsInnerId + v.id;
         this.ArrayList = [{
           label: this.formPlan.supplyName,
           value: this.formPlan.guestId,
@@ -841,7 +844,7 @@ export const mixGoodsData = {
       window.open(url, "_balnk");
     },
 
-    // 导入
+    // 导入  按照品牌导入
     handleBeforeUpload() {
       if (this.selectPlanOrderItem.new) {
         return this.$Message.error("请先保存数据!");
@@ -849,6 +852,15 @@ export const mixGoodsData = {
       let refs = this.$refs;
       refs.upload.clearFiles();
     },
+    // 导入  按照内码导入
+    handleBeforeUploadInnerId() {
+      if (this.selectPlanOrderItem.new) {
+        return this.$Message.error("请先保存数据!");
+      }
+      let refs = this.$refs;
+      refs.upload1.clearFiles();
+    },
+    //导入
     handleSuccess(res, file) {
       let self = this;
       if (res.code == 0) {

@@ -228,8 +228,11 @@ export function delFee(id) {
 }
 
 
-//临时采购导入配件地址
+//临时采购按照品牌导入配件地址
 export const getup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
+
+//临时采购按照内码导入配件地址
+export const getupInnerId=`${api.omsOrder}/pchsOrderMain/importExcel/partId?`
 
 //临时采购主数据-分页查询
 export function temporaryFindPageByDynamicQuery(params, data = {}) {
@@ -284,8 +287,12 @@ export function outsideFindPageByDynamicQuery(params, data = {}) {
     data
   });
 };
-//外采--导入配件地址
+//外采--按照品牌导入配件地址
 export const outgetup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
+//外采--按照内码导入配件地址
+export const outgetupInnerId=`${api.omsOrder}/pchsOrderMain/importExcel/partId?`
+
+
 //外采购主数据-高级查询
 export function outsideQueryByConditions(params, data = {}) {
   return axios.request({

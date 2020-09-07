@@ -40,8 +40,11 @@ export function getstate () {
 
   })
 }
-//导入
+//导入 按照编码品牌导入配件
 export const importAccessories = `${api.omsOrder}/StockCheckMain/import`
+
+//导入 按照配件内码导入配件
+export const importInnerIdAccessories=`${api.omsOrder}/StockCheckMain/import/partId`
 
 //获取品牌
 export function getBrandList (data) {
