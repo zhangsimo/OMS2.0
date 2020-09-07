@@ -571,6 +571,16 @@ export default {
           className: "tc"
         },
         {
+          title: "单位",
+          key: "unit",
+          className: "tc"
+        },
+        {
+          title: "数量",
+          key: "qty",
+          className: "tc"
+        },
+        {
           title: "油品包装规格",
           key: "oilsSpec",
           className: "tc"
@@ -585,16 +595,7 @@ export default {
           key: "oilsQty",
           className: "tc"
         },
-        {
-          title: "单位",
-          key: "unit",
-          className: "tc"
-        },
-        {
-          title: "数量",
-          key: "qty",
-          className: "tc"
-        },
+
         {
           title: "商品含税单价",
           key: "taxPrice",

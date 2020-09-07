@@ -12,9 +12,16 @@
           <DatePicker type="daterange" v-model="formData.end" @on-change="submitDate" placement="bottom"  :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="客户:">
-        <Select v-model="formData.guestId" filterable style="width: 350px">
-          <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-        </Select>
+          <Select
+            v-model="formData.guestId"
+            filterable
+            style="width: 350px"
+            placeholder="请输入公司全称"
+            remote
+            :remote-method="getAllClient"
+            :loading="loading">
+            <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.fullName}}</Option>
+          </Select>
         </FormItem>
         <FormItem label="订单号:">
           <Input v-model="formData.serviceId" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
@@ -64,6 +71,7 @@
                 brandList:[],//品牌下拉框,
                 formData:this.data,
                 salesList:[],
+                loading:false, //模糊查询框
             }
         },
         mounted(){
@@ -87,14 +95,24 @@
                 this.formData.auditEndTime = date[1] +' '+ '23:59:59'
             },
             //获取公司
-           async getAllClient(){
-             if(this.clientList.length > 0) {
-               return;
-             }
-              let res = await getTreeClient({page:0, size: 10000})
-              if(res.code === 0 ){
-                this.clientList = res.data.content;
+           async getAllClient(query){
+              if (query && query.trim()) {
+                this.loading = true;
+                let data ={}
+                data.fullName = query
+                data.page = 0
+                data.size = 30
+                let res = await getTreeClient(data)
+                if(res.code === 0 ){
+                  this.loading = false;
+                  this.clientList = res.data.content;
+                }else{
+                  this.loading = false;
+                }
+              }else {
+                this.clientList = []
               }
+
             },
             //获取品牌
             async getAllBrand(){

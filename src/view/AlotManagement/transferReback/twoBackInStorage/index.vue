@@ -256,8 +256,6 @@
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
       <p>是否确定入库</p>
     </Modal>
-    <!-- 打印 -->
-    <PrintShow ref="printBox" :curenrow="Leftcurrentrow"></PrintShow>
   </div>
 </template>
 
@@ -272,7 +270,6 @@ import More from "./compontents/More";
 import QuickDate from "../../../../components/getDate/dateget";
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
-import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { checkStore } from '@/api/system/systemApi'
 
@@ -282,7 +279,6 @@ export default {
   components: {
     More,
     QuickDate,
-    PrintShow
   },
   data() {
     return {

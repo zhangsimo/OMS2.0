@@ -72,6 +72,90 @@ export default {
           }
         },
         {
+          title: "发生日期",
+          key: "createTime",
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.createTime
+                }
+              }, params.row.createTime)
+            ])
+          }
+        },
+        {
+          title: "收入金额",
+          key: "incomeMoney",
+          align: "center",
+          minWidth: 100
+        },
+        {
+          title: "支出金额",
+          key: "paidMoney",
+          align: "center",
+          minWidth: 100
+        },
+        {
+          title: "未认领金额",
+          key: "unClaimedAmt",
+          align: "center",
+          minWidth: 100
+        },
+        {
+          title: "对方户名",
+          key: "reciprocalAccountName",
+          align: "center",
+          minWidth: 100,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.reciprocalAccountName
+                }
+              }, params.row.reciprocalAccountName)
+            ])
+          }
+        },
+        {
+          title: "智能匹配往来单位",
+          key: "suppliers",
+          align: "center",
+          minWidth: 160,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: params.row.suppliers
+                }
+              }, params.row.suppliers)
+            ])
+          }
+        },
+        {
           title: "所属区域",
           key: "area",
           align: "center",
@@ -210,72 +294,10 @@ export default {
           minWidth: 100
         },
         {
-          title: "发生日期",
-          key: "createTime",
-          align: "center",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.createTime
-                }
-              }, params.row.createTime)
-            ])
-          }
-        },
-        {
-          title: "收入金额",
-          key: "incomeMoney",
-          align: "center",
-          minWidth: 100
-        },
-        {
-          title: "支出金额",
-          key: "paidMoney",
-          align: "center",
-          minWidth: 100
-        },
-        {
           title: "已认领金额",
           key: "claimedAmt",
           align: "center",
           minWidth: 100
-        },
-        {
-          title: "未认领金额",
-          key: "unClaimedAmt",
-          align: "center",
-          minWidth: 100
-        },
-        {
-          title: "对方户名",
-          key: "reciprocalAccountName",
-          align: "center",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.reciprocalAccountName
-                }
-              }, params.row.reciprocalAccountName)
-            ])
-          }
         },
         {
           title: "交易备注",
@@ -299,28 +321,6 @@ export default {
             ])
           }
         },
-        {
-          title: "智能匹配往来单位",
-          key: "suppliers",
-          align: "center",
-          minWidth: 160,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.suppliers
-                }
-              }, params.row.suppliers)
-            ])
-          }
-        }
       ], //本店待认领款
       claimedData: [] //本店待认领款
     };

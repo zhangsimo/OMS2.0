@@ -15,7 +15,6 @@ import FeeRegistration from '../plannedPurchaseOrder/components/FeeRegistration.
 import ProcurementModal from '../plannedPurchaseOrder/components/ProcurementModal.vue';
 import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
 import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
-import PrintModel from '../plannedPurchaseOrder/components/print.vue';
 import ApportionmentExpenses from '../plannedPurchaseOrder/components/ApportionmentExpenses.vue';
 import GoodCus from "_c/allocation/GoodCus.vue"
 
@@ -30,7 +29,6 @@ import GoodCus from "_c/allocation/GoodCus.vue"
     ProcurementModal,
     AdjustModel,
     TabsModel,
-    PrintModel,
     ApportionmentExpenses,
     GoodCus
   }

@@ -333,7 +333,6 @@ import SelectSupplier from "../../../goods/goodsList/components/supplier/selectS
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 // import supplier from './compontents/supplier'
-import PrintShow from "./compontents/PrintShow";
 import Cookies from "js-cookie";
 import {
   optGroup,
@@ -354,7 +353,6 @@ export default {
     SelectPartCom,
     GoodsInfo,
     SelectSupplier,
-    PrintShow
   },
   data() {
     let changeNumber = ({ cellValue }) => {

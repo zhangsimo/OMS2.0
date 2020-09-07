@@ -5,7 +5,7 @@ import parentView from "@/components/parent-view";
  * iview-admin中meta除了原生参数外可配置的参数:
  * meta: { keepAlive: true,
  *  hideInMenu: (false) 设为true后在左侧菜单不会显示该页面选项
- *  notCache: (false) 设为true后页面不会缓存
+ *  keepAlive: (false) 设为false后页面不会缓存
  *  access: (null) 可访问该页面的权限数组，当前路由设置的权限会影响子路由
  *  icon: (-) 该页面在左侧菜单、面包屑和标签导航处显示的图标，如果是自定义图标，需要在图标名称前加下划线'_'
  * }
@@ -15,7 +15,8 @@ export default [
   {
     path: "/login",
     name: "login",
-    meta: { keepAlive: true,
+    meta: {
+      keepAlive: false,
       title: "Login - 登录",
       hideInMenu: true
     },
@@ -24,7 +25,8 @@ export default [
   {
     path: "/print",
     name: "print",
-    meta: { keepAlive: true,
+    meta: {
+      keepAlive: false,
       title: "Print - 打印",
       hideInMenu: true
     },
@@ -33,7 +35,8 @@ export default [
   {
     path: "/register",
     name: "register",
-    meta: { keepAlive: true,
+    meta: {
+      keepAlive: false,
       title: "register - 注册",
       hideInMenu: true
     },
@@ -44,7 +47,7 @@ export default [
     redirect: "/home",
     component: Main,
     meta: {
-      keepAlive: true,
+      keepAlive: false,
       title: "首页"
     },
     children: [
@@ -52,7 +55,7 @@ export default [
         path: "home",
         name: "home",
         meta: {
-          keepAlive: true,
+          keepAlive: false,
           icon: "md-home",
           title: "首页"
         },
