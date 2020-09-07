@@ -5,9 +5,9 @@ import { getPayAccount } from "_api/documentApproval/ExpenseReimbursement.js";
 
 //返回当前账号下银行账号名称数组
 export async function getPayList() {
-  let usedata = store.state.user.userData;
+  let usedata = store.state.user.userData.currentCompany;
   let data = {
-    shopNumber: usedata.shopId
+    shopNumber: usedata.id
   };
   let res = await getPayAccount(data);
   if (res.code === 0) {
