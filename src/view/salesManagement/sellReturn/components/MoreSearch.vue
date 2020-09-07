@@ -12,8 +12,15 @@
           <DatePicker type="daterange" v-model="data.end"   :editable=false @on-change="submitDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="客户:">
-          <Select v-model="data.guestId" filterable style="width: 350px">
-            <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+          <Select
+            v-model="data.guestId"
+            filterable
+            style="width: 350px"
+            placeholder="请输入公司全称"
+            remote
+            :remote-method="getAllClient"
+            :loading="loading">
+            <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.fullName}}</Option>
           </Select>
         </FormItem>
         <FormItem label="退货单号:">
@@ -65,6 +72,7 @@
           size: 10,
           num: 1
         },
+        loading:false, //模糊查询框
       }
     },
     mounted(){
@@ -94,15 +102,23 @@
       }
     },
       //获取公司
-      async getAllClient() {
-        if(this.clientList.length > 0) {
-          return;
+      async getAllClient(query) {
+        if (query && query.trim()) {
+          this.loading = true;
+          let data ={}
+          data.fullName = query
+          data.page = 0
+          data.size = 30
+          let res = await getTreeClient(data)
+          if(res.code === 0 ){
+            this.loading = false;
+            this.clientList = res.data.content;
+          }else{
+            this.loading = false;
+          }
+        }else {
+          this.clientList = []
         }
-        let res = await getTreeClient({page:0, size: 10000})
-        if (res.code === 0) {
-          this.clientList = res.data.content
-        }
-        // console.log(res,999)
       },
       //获取创建时间
       getCreatDate(date) {

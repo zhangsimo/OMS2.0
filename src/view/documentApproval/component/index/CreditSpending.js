@@ -3,6 +3,8 @@ import selectCredit from '../popWindow/SelectCredit'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getCreditSave} from '_api/documentApproval/CreditSpending.js'
+import {  getOtherAllPay} from '_api/documentApproval/OtherPayment.js'
+
 // import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import {getThisAllList, getGuestShortName , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getAccountName} from "../../../../api/bill/saleOrder";
@@ -171,7 +173,7 @@ export default {
 
     async remoteMethod(query,id) {
       this.company = [];
-      if (query !== "" || id) {
+      if (query.trim() !== "" || id) {
         this.remoteloading = true;
         let arr = []
         let req = {
@@ -179,7 +181,7 @@ export default {
           shortName: query,
           size: 50,
         }
-        let res = await getGuestShortName(req);
+        let res = await getOtherAllPay(req);
         if (res.code == 0) {
           res.data.content.map(item => {
             arr.push({

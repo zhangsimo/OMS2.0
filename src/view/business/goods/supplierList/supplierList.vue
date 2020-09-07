@@ -38,6 +38,8 @@
               type="default"
               @click="SaveMsg"
               v-has="'save'"
+              :loading='saveLoading'
+              v-noresub
               class="mr10"
               :disabled="buttonDisable || presentrowMsg !== 0"
             ><i class="iconfont mr5 iconbaocunicon"></i>保存
@@ -49,6 +51,8 @@
               class="mr10"
               @click="instance"
               v-has="'submit'"
+              :loading='commitLoading'
+              v-noresub
               :disabled="buttonDisable || presentrowMsg !== 0"
             ><i class="iconfont mr5 iconziyuan2"></i>提交
             </Button
@@ -453,8 +457,6 @@
       header-tit="供应商资料"
       @selectSupplierName="getSupplierName"
     ></select-supplier>
-    <!--打印弹框-->
-    <print-show ref="PrintModel" :orderId="mainId"></print-show>
   </div>
 </template>
 <script>
@@ -464,7 +466,6 @@
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import "../../../lease/product/lease.less";
   import "../../../goods/goodsList/goodsList.less";
-  import PrintShow from "./compontents/PrintShow";
   // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
   import Procurement from "@/components/Procurement";
   import {
@@ -489,7 +490,6 @@
       More,
       Procurement,
       SelectSupplier,
-      PrintShow,
       GoodCus
     },
     data() {
@@ -511,6 +511,8 @@
         }
       };
       return {
+        saveLoading: false,
+        commitLoading: false,
         showSelf: true,
         defaultStore: "",
         ArraySelect: [], //供应商下拉框
@@ -1018,9 +1020,11 @@
                   item.stockOutQty = 0;
                 });
               }
+              this.saveLoading = true
               saveDraft(data).then(res => {
                 if (res.code === 0) {
                   this.$message.success("保存成功！");
+                  this.saveLoading = false
                   this.$refs.formPlan.resetFields();
                   this.leftgetList();
                   this.isAdd = true;
@@ -1135,10 +1139,10 @@
             // if (columnIndex === 9) {
             //   return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
             // }
-            if (["canReQty", "orderQty"].includes(column.property)) {
+            if (["canReQty", "orderQty",'orderPrice'].includes(column.property)) {
               return this.$utils.sum(data, column.property, columnIndex);
             }
-            if (columnIndex === 9) {
+            if (column.property === 'orderAmt') {
               return ` ${this.countAllAmount(data)} `;
             }
             return null;

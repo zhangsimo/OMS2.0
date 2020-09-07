@@ -15,7 +15,6 @@ import FeeRegistration from '../plannedPurchaseOrder/components/FeeRegistration.
 import ProcurementModal from '../plannedPurchaseOrder/components/ProcurementModal.vue';
 import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
 import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
-import PrintModel from '../plannedPurchaseOrder/components/print.vue';
 import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.vue';
 import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
@@ -35,7 +34,6 @@ import { checkStore } from "@/api/system/systemApi";
     ProcurementModal,
     AdjustModel,
     TabsModel,
-    PrintModel,
     StatusModel,
     SelectPartCom,
     GoodCus
@@ -79,6 +77,9 @@ export default class OutsidePurchase extends Vue {
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
   private mainId: string|null = null;
+
+  private commitLoading: boolean = false;
+  private saveLoading: boolean = false;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -472,12 +473,15 @@ export default class OutsidePurchase extends Vue {
       return this.$Message.error("正在保存单据请稍后...");
     }
     this.isClickSave = true;
+    this.saveLoading = true;
     let res = await api.outsideSaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.resetForm();
       this.getListData();
       this.isAdd = true;
+      this.saveLoading = false;
+
     }
     this.isClickSave = false;
   }
@@ -760,7 +764,7 @@ export default class OutsidePurchase extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(column.property) || columnIndex === 8) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt','orderAmt'].includes(column.property)) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -780,7 +784,7 @@ export default class OutsidePurchase extends Vue {
     if (['orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(type)) {
       return total.toFixed(2);
     }
-    if (columnIndex === 8) {
+    if (type === 'orderAmt') {
       let totals = 0;
       let sumarr = data.map(el => {
         let orderQty = isNaN(el.orderQty * 1) ? 0 : el.orderQty * 1;

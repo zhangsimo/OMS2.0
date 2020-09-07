@@ -244,11 +244,11 @@
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" ></vxe-table-column>
+          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="oilsSpec" title="油品包装规格" ></vxe-table-column>
           <vxe-table-column field="oilsUnit" title="油品换算单位" ></vxe-table-column>
           <vxe-table-column field="oilsQty" title="油品换算数量" ></vxe-table-column>
-          <vxe-table-column field="unit" title="单位" ></vxe-table-column>
-          <vxe-table-column field="qty" title="数量" ></vxe-table-column>
           <vxe-table-column field="taxPrice" title="商品含税单价" >
             <template v-slot="{row}">
               {{row.taxPrice | priceFilters}}

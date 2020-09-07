@@ -545,14 +545,16 @@ export default {
           amount: this.amount,
           reciprocalAccountName: this.reciprocalAccountName,
           suppliers: this.suppliers,
-          amountType: 2
+          amountType: 2,
+          claimShopCode:this.$store.state.user.userData.shopCode
         });
       } else {
         this.setClaimedSearch({
           amount: this.amount,
           reciprocalAccountName: this.reciprocalAccountName,
           suppliers: this.suppliers,
-          amountType: 1
+          amountType: 1,
+          claimShopCode:this.$store.state.user.userData.shopCode
         });
       }
       this.claimedSelectData = [];

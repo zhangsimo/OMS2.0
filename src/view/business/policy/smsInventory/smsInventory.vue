@@ -313,8 +313,6 @@
     <!-- <Modal v-model="showAudit" title="提示" @on-ok="auditOK" @on-cancel="auditCancel">
       <p>是否确定审核</p>
     </Modal>-->
-    <!-- 打印 -->
-    <Print-show ref="printBox"></Print-show>
   </div>
 </template>
 
@@ -342,7 +340,6 @@ import { conversionList } from "@/components/changeWbList/changewblist";
 import QuickDate from "../../../../components/getDate/dateget";
 import "../../../lease/product/lease.less";
 import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
-import PrintShow from "./components/PrintShow";
 import More from "./components/More";
 import moment, { months } from "moment";
 import Cookies from "js-cookie";
@@ -355,7 +352,6 @@ export default {
   name: "smsInventory",
   components: {
     QuickDate,
-    PrintShow,
     More,
     SelectPartCom
   },

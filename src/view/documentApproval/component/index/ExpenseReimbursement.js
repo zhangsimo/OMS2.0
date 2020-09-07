@@ -210,7 +210,7 @@ export default {
         //判断模态框状态
         this.modelType = false;
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-          user = this.$store.state.user.userData.userData;
+          user = this.$store.state.user.userData;
         this.formInline.applicant = user.staffName;
         this.formInline.deptName =
           user.groups.length > 0
@@ -262,8 +262,7 @@ export default {
         let data = {}
         data.accountName = query
         data.page = 0
-        data.size = 100
-        console.log(this.formInline.accountType , 112)
+        data.size = 50
         let res = {}
         if (this.formInline.accountType) {
            res = await getBackList(data)

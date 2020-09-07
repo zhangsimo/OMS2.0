@@ -400,8 +400,6 @@
         </div>
       </div>
     </section>
-    <!--        打印-->
-    <Print-show ref="printBox" :id="id"></Print-show>
     <!--    选择客户-->
     <select-the-customer
       ref="selectTheCustomer"
@@ -446,7 +444,6 @@
   import selectTheCustomer from "../commonality/SelectTheCustomer.vue";
   import SalesOutbound from "./components/SalesOutbound.vue";
   import getDate from "@/components/getDate/dateget";
-  import PrintShow from "./components/PrintShow";
   import MoreSearch from "./components/MoreSearch";
   import * as tools from "../../../utils/tools";
   import {save} from "../../../api/AlotManagement/transferringOrder";
@@ -466,7 +463,6 @@
       SalesOutbound,
       getDate,
       MoreSearch,
-      PrintShow,
       Procurement
     },
     data() {
