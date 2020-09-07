@@ -35,6 +35,7 @@ export default new Vuex.Store({
   },
   getters,
   plugins: [createPersistedState({
+    // key: 'OMS2'+ +new Date(),
     storage: window.sessionStorage
   })]
 })

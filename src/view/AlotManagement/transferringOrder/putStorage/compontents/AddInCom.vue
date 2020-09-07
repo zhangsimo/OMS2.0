@@ -342,7 +342,7 @@ export default {
       getParticulars(params).then(res => {
         this.currentData = res.data;
 
-        this.$emit("getArray", this.currentData);
+        // this.$emit("getArray", this.currentData);
       });
     },
     ok() {

@@ -496,7 +496,7 @@ export default {
       if(!row){
         return
       }
-      console.log(row)
+      // console.log(row)
       this.editTopItemId = row.id
       this.rowMessage = row;
       this.state = row.isGuestResearch;
@@ -507,6 +507,9 @@ export default {
       // this.creaditList.tempStart = new Date(row.tempStart)
       this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.creaditList.applyTrustMoney = this.creaditList.applyTrustMoney||1;
+      this.creaditList.operationStart=moment(this.creaditList.operationStart).format("YYYY-MM-DD")
+      this.creaditList.operationEnd=moment(this.creaditList.operationEnd).format("YYYY-MM-DD")
+      this.creaditList.registerDate=moment(this.creaditList.registerDate).format("YYYY-MM-DD")
       this.flag = row.isGuestResearch;
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
@@ -633,9 +636,7 @@ export default {
               data.operationEnd = tools.transTime(this.creaditList.operationEnd);
           }
           if(this.creaditList.operationStart) {
-              data.operationStart = tools.transTime(
-                this.creaditList.operationStart
-              );
+              data.operationStart = tools.transTime(this.creaditList.operationStart);
           }
           if(this.creaditList.tempStart) {
               data.tempStart = tools.transTime(this.creaditList.tempStart);

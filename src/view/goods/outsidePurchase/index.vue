@@ -38,6 +38,8 @@
               class="mr10"
               :disabled="isInput"
               v-has="'save'"
+              :loading='saveLoading'
+              v-noresub
             ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
@@ -47,6 +49,8 @@
               @click="submit('formplanref')"
               :disabled="isInput"
               v-has="'submit'"
+              :loading='commitLoading'
+              v-noresub
             ><i class="iconfont mr5 iconziyuan2"></i>提交入库</Button
             >
           </div>
@@ -422,7 +426,7 @@
                     {{ row.orderPrice | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" title="采购金额" filed="orderAmt" width="120">
+                <vxe-table-column show-overflow="tooltip" title="采购金额" field="orderAmt" width="120">
                   <template v-slot="{ row }">
                     {{ (row.orderPrice * row.orderQty) | priceFilters }}
                   </template>

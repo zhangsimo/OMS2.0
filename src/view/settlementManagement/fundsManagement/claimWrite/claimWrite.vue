@@ -392,6 +392,72 @@
             }
           },
           {
+            title: "实际收款/付款",
+            key: "actualCollectionOrPayment",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.actualCollectionOrPayment
+                  }
+                }, params.row.actualCollectionOrPayment)
+              ])
+            }
+          },
+          {
+            title: "已收/已付金额",
+            key: "amountReceivedOrPaid",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.amountReceivedOrPaid
+                  }
+                }, params.row.amountReceivedOrPaid)
+              ])
+            }
+          },
+          {
+            title: "未收/未付金额",
+            key: "amountNoCharOffOrUnpaid",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.amountNoCharOffOrUnpaid
+                  }
+                }, params.row.amountNoCharOffOrUnpaid)
+              ])
+            }
+          },
+          {
             title: "往来单位",
             key: "guestName",
             align: "center",
@@ -457,72 +523,6 @@
               ])
             }
           },
-          {
-            title: "实际收款/付款",
-            key: "actualCollectionOrPayment",
-            align: "center",
-            minWidth: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.actualCollectionOrPayment
-                  }
-                }, params.row.actualCollectionOrPayment)
-              ])
-            }
-          },
-          {
-            title: "已收/已付金额",
-            key: "amountReceivedOrPaid",
-            align: "center",
-            minWidth: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.amountReceivedOrPaid
-                  }
-                }, params.row.amountReceivedOrPaid)
-              ])
-            }
-          },
-          {
-            title: "未收/未付金额",
-            key: "amountNoCharOffOrUnpaid",
-            align: "center",
-            minWidth: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.amountNoCharOffOrUnpaid
-                  }
-                }, params.row.amountNoCharOffOrUnpaid)
-              ])
-            }
-          }
         ], //未核销对账单表格数据
         accountNoWriteData: [], //未核销对账单表格数据
         distribution: [
@@ -544,6 +544,62 @@
             key: "businessType",
             align: "center",
             width: 100
+          },
+          {
+            title: "发生日期",
+            key: "createTime",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.createTime
+                  }
+                }, params.row.createTime)
+              ])
+            }
+          },
+          {
+            title: "收入金额",
+            key: "incomeMoney",
+            align: "center",
+            minWidth: 100,
+          },
+          {
+            title: "支出金额",
+            key: "paidMoney",
+            align: "center",
+            minWidth: 100,
+          },
+          {
+            title: "对方户名",
+            key: "reciprocalAccountName",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.reciprocalAccountName
+                  }
+                }, params.row.reciprocalAccountName)
+              ])
+            }
           },
           {
             title: "所属区域",
@@ -682,62 +738,6 @@
             key: "mateAccountName",
             align: "center",
             minWidth: 100,
-          },
-          {
-            title: "发生日期",
-            key: "createTime",
-            align: "center",
-            minWidth: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.createTime
-                  }
-                }, params.row.createTime)
-              ])
-            }
-          },
-          {
-            title: "收入金额",
-            key: "incomeMoney",
-            align: "center",
-            minWidth: 100,
-          },
-          {
-            title: "支出金额",
-            key: "paidMoney",
-            align: "center",
-            minWidth: 100,
-          },
-          {
-            title: "对方户名",
-            key: "reciprocalAccountName",
-            align: "center",
-            minWidth: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.reciprocalAccountName
-                  }
-                }, params.row.reciprocalAccountName)
-              ])
-            }
           },
           {
             title: "交易备注",
@@ -1166,10 +1166,10 @@
           size: this.accountPage.size,
           orgId: this.model1,//分店名称
           startDate: this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
             : "",    //开始时间参数
           endDate: this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",     //结束时间参数
           // createTime:this.applyDate //日期查询时间发生日期
         };
@@ -1191,10 +1191,10 @@
           claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '',
           orgId: this.model2,//分店
           startDate: this.value2[0]
-            ? moment(this.value2[0]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value2[0]).format("YYYY-MM-DD")+" 00:00:00"
             : "",    //开始时间参数
           endDate: this.value2[1]
-            ? moment(this.value2[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value2[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",     //结束时间参数
           businessType: this.businessType || ""
           // createTime:this.applyDate2 //日期查询时间发生日期
@@ -1217,10 +1217,10 @@
           size: this.distributionPage.size,
 
           startDate: this.value3[0]
-            ? moment(this.value3[0]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value3[0]).format("YYYY-MM-DD")+" 00:00:00"
             : "",    //开始时间参数
           endDate: this.value3[1]
-            ? moment(this.value3[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value3[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",     //结束时间参数
           // createTime:this.applyDate3 //日期查询时间发生日期
         };

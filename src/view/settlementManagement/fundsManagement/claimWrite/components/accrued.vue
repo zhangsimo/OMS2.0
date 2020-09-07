@@ -158,6 +158,7 @@ export default {
       if (res.code === 0) {
         this.modal = false;
         this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")
+        this.$parent.$parent.queryClaimed()
       }
     },
     //选择辅助核算回调

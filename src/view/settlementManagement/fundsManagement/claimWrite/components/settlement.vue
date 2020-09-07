@@ -125,16 +125,18 @@
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
-            <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
             <vxe-table-column
               field="thisClaimedAmt"
               title="本次核销金额"
-              :edit-render="{name: 'input', attrs: {type: 'number'}}"
-            ></vxe-table-column>
+              min-width="60"
+              :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+            >
+            </vxe-table-column>
+            <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
+            <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
+            <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
@@ -264,6 +266,9 @@ export default {
     },
     //弹框打开
     hander(type) {
+      this.$nextTick(()=>{
+        this.$refs.vxeTable.setActiveCell(this.$refs.vxeTable.getData(0),"thisClaimedAmt")
+      })
       if (!type) {
         this.check = 0;
         this.remark = "";
@@ -398,4 +403,8 @@ export default {
   left: -26px;
   bottom: -5px;
 }
+  #border{
+    border:1px solid #00a0e9 !important;
+  }
+/*:edit-render="{name: 'input', attrs: {type: 'number',id:'border'}}"*/
 </style>

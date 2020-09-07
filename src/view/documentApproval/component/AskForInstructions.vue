@@ -50,7 +50,7 @@
           </div>
           <div class="tablebottom">
             <FormItem label="申请事项" style="margin-bottom: 0px" prop="applyMatters">
-              <Input type="textarea" :rows="5"  v-model="formInline.applyMatters" style="width: 100%" :disabled="modelType">
+              <Input type="textarea" :rows="5"  v-model="formInline.applyMatters" style="width: 100%" :disabled="modelType" placeholder="请输入500字以内的字符">
               </Input>
             </FormItem>
           </div>

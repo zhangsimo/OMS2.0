@@ -453,10 +453,10 @@ export default {
     },
     // 上传成功
     handleSuccess(res, file) {
-      console.log(res);
+      //console.log(res);
       if (res.code == 0) {
         this.data.businessName = api.getfile + res.data.url;
-        console.log(this.data.businessName);
+        //console.log(this.data.businessName);
       }
       // 二
     },
@@ -466,7 +466,7 @@ export default {
     },
     // 上传成功
     handleSuccess2(res, file) {
-      console.log(res);
+      //console.log(res);
       if (res.code == 0) {
         this.data.purchaseName = api.getfile + res.data.url;
       }
