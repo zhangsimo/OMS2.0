@@ -26,7 +26,7 @@
           <div class="db ml15">
             <span>门店：</span>
             <Select v-model="shopCode" filterable class="w150" disabled>
-<!--              :disabled="selectShopList"-->
+              <!--              :disabled="selectShopList"-->
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -43,17 +43,17 @@
             <span>开户行：</span>
             <input type="text" class="h30" v-model="bankName">
           </div>
-<!--          <div class="db mr10">-->
-<!--            <span>对应科目：</span>-->
-<!--            <Select v-model="subjectCode" filterable class="w150">-->
-<!--              <Option-->
-<!--                v-for="item in subJectList"-->
-<!--                :value="item.id"-->
-<!--                :key="item.id"-->
-<!--              >{{ item.titleName }}-->
-<!--              </Option>-->
-<!--            </Select>-->
-<!--          </div>-->
+          <!--          <div class="db mr10">-->
+          <!--            <span>对应科目：</span>-->
+          <!--            <Select v-model="subjectCode" filterable class="w150">-->
+          <!--              <Option-->
+          <!--                v-for="item in subJectList"-->
+          <!--                :value="item.id"-->
+          <!--                :key="item.id"-->
+          <!--              >{{ item.titleName }}-->
+          <!--              </Option>-->
+          <!--            </Select>-->
+          <!--          </div>-->
           <div class="db ml15">
             <span>对应科目：</span>
             <el-cascader
@@ -530,7 +530,7 @@
         suppliers: '',//往来单位
         accountCode: '',//账号
         getAccShopList: [
-          {shopCode: '-1' ,shopName:'请选择'}
+          {shopCode: '-1', shopName: '请选择'}
         ],
         selectTableList: [],//勾选的表格数据
         page: {
@@ -539,8 +539,8 @@
           total: 0,
           size: 100
         },
-        mateAccountCode:'',//对应科目
-        options:[]
+        mateAccountCode: '',//对应科目
+        options: []
       };
     },
     async mounted() {
@@ -747,7 +747,7 @@
         params.size = this.page.size
         data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ""
         data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
-        if(!data.startTime){
+        if (!data.startTime) {
           return this.$Message.error("请选择日期")
         }
         if (this.model1 != 0) {
@@ -772,10 +772,10 @@
         data.accountMoney = this.accountMoney;
         data.accountCode = this.accountCode;
         this.allMoneyList = {}
-        let res = await goList(params,data)
+        let res = await goList(params, data)
         if (res.code === 0) {
           //if (res.data.page.content.length > 0) {
-            this.allMoneyList = res.data.moneyList
+          this.allMoneyList = res.data.moneyList
           //}
           this.page.total = res.data.page.totalElements;
           this.tableData = res.data.page.content
@@ -904,19 +904,30 @@
 
       //撤销分配
       revocation() {
-        if (this.selectTableList.length == 0 || this.selectTableList.length > 1) {
-          return this.$Message.error('请选择一条数据')
+        if (this.selectTableList.length == 0) {
+          return this.$Message.error('请选择数据')
+        }
+        let idsBool=false;
+        let ids = []
+        this.selectTableList.map((item, index) => {
+          ids.push(item.id)
+        })
+        this.selectTableList.map((item)=>{
+          if (!item.allocation) {
+            idsBool=true
+          }
+        })
+        if(idsBool){
+          return this.$Message.error(`数据中存在未分配选项,请重新选择`)
         }
         this.oneList = this.selectTableList[0];
-        //if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if (!this.oneList.allocation) return this.$Message.error('请选择已分配的数据')
         this.$Modal.confirm({
           title: '提示',
           content: '<p>是否撤回分配</p>',
           onOk: async () => {
             let data = {}
-            data.id = this.oneList.id
-            let res = await revocation([this.oneList.id])
+            data.ids = ids
+            let res = await revocation(data.ids)
             if (res.code === 0) {
               this.$Message.success('撤销分配成功')
               this.getList()

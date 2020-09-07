@@ -35,26 +35,8 @@
           <div class="pt10">
             <Input
               v-model="searchForm.partName"
-              placeholder="编码"
-              class="w100 mr10"
-              @on-enter="serch"
-            />
-            <Input
-              v-model="searchForm.partName"
-              placeholder="名称"
-              class="w100 mr10"
-              @on-enter="serch"
-            />
-            <Input
-              v-model="searchForm.partName"
-              placeholder="内码"
-              class="w100 mr10"
-              @on-enter="serch"
-            />
-            <Input
-              v-model="searchForm.partName"
-              placeholder="OEM码"
-              class="w100 mr10"
+              placeholder="配件编码/名称/内码/OEM码"
+              class="w200 mr10"
               @on-enter="serch"
             />
             <Select
@@ -117,80 +99,62 @@
             </Button>
           </div>
         </div>
-        <div class="table-con">
-          <!--    表-->
-          <!--<Table-->
-          <!--class="table-highlight-row"-->
-          <!--highlight-row-->
-          <!--ref="table1"-->
-          <!--border-->
-          <!--size="small"-->
-          <!--:loading="loading1"-->
-          <!--align="left"-->
-          <!--:stripe="true"-->
-          <!--height="400"-->
-          <!--resizable-->
-          <!--:columns="columns1"-->
-          <!--:data="contentOne.dataOne"-->
-          <!--show-summary-->
-          <!--:summary-method="handleSummary"-->
-          <!--&gt;</Table>-->
-          <vxe-table
-            border
-            ref="xTable2"
-            :height="tableHeight"
-            highlight-hover-row
-            highlight-current-row
-            stripe
-            show-overflow
-            resizable
-            :loading="loading1"
-            size="mini"
-            show-footer
-            :footer-method="handleSummary"
-            :data="contentOne.dataOne">
-            <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
-            <vxe-table-column field="cz" title="操作" width="50" fixed="left">
-              <template v-slot="{row}">
-                <vxe-button type="text" @click="showList(row);">查看</vxe-button>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="orgName" title="机构名称" width="130" fixed="left"></vxe-table-column>
-            <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
-            <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-            <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
-            <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
-            <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
-            <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
-            <vxe-table-column field="outableQty" title="可售数量" width="70">
-              <template v-slot="{row}">
-                {{row.sellSign ? 0 : row.outableQty}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
-            <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
-            <vxe-table-column field="costPrice" title="库存单价" width="80">
-              <template v-slot="{row}">
-                {{row.costPrice.toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="stockAmt" title="库存金额" width="90">
-              <template v-slot="{row}">
-                {{row.stockAmt.toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
-            <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
-            <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
-            <vxe-table-column field="lastEnterDate" title="最近入库日期" width="120"></vxe-table-column>
-            <vxe-table-column field="lastOutDate" title="最近出库日期" width="120"></vxe-table-column>
-            <vxe-table-column field="upLimit" title="库存上限" width="70"></vxe-table-column>
-            <vxe-table-column field="downLimit" title="库存下限" width="70"></vxe-table-column>
-            <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
-            <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
-            <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
-          </vxe-table>
-        </div>
+        <vxe-table
+          border
+          ref="xTable2"
+          :height="tableHeight"
+          highlight-hover-row
+          highlight-current-row
+          stripe
+          show-overflow
+          resizable
+          :loading="loading1"
+          size="mini"
+          show-footer
+          :footer-method="handleSummary"
+          :data="contentOne.dataOne">
+          <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column field="cz" title="操作" width="50" fixed="left">
+            <template v-slot="{row}">
+              <vxe-button type="text" @click="showList(row);">查看</vxe-button>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="130" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="厂牌" width="80" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
+          <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
+          <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
+          <vxe-table-column field="outableQty" title="可售数量" width="70">
+            <template v-slot="{row}">
+              {{row.sellSign ? 0 : row.outableQty}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
+          <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
+          <vxe-table-column field="costPrice" title="库存单价" width="80">
+            <template v-slot="{row}">
+              {{row.costPrice.toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="stockAmt" title="库存金额" width="90">
+            <template v-slot="{row}">
+              {{row.stockAmt.toFixed(2)}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
+          <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
+          <vxe-table-column field="lastEnterDate" title="最近入库日期" width="120"></vxe-table-column>
+          <vxe-table-column field="lastOutDate" title="最近出库日期" width="120"></vxe-table-column>
+          <vxe-table-column field="upLimit" title="库存上限" width="70"></vxe-table-column>
+          <vxe-table-column field="downLimit" title="库存下限" width="70"></vxe-table-column>
+          <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
+          <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
+          <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
+        </vxe-table>
       </div>
       <!--      批次库存表-->
       <div class="tabs-warp" v-show="tabIndex == 1">
@@ -200,25 +164,7 @@
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input
               v-model="searchForm1.partName"
-              placeholder="编码"
-              class="w200 mr10"
-              @on-enter="queryBatch"
-            ></Input>
-            <Input
-              v-model="searchForm1.partName"
-              placeholder="名称"
-              class="w200 mr10"
-              @on-enter="queryBatch"
-            ></Input>
-            <Input
-              v-model="searchForm1.partName"
-              placeholder="内码"
-              class="w200 mr10"
-              @on-enter="queryBatch"
-            ></Input>
-            <Input
-              v-model="searchForm1.partName"
-              placeholder="OEM码"
+              placeholder="配件编码/名称/内码/OEM码"
               class="w200 mr10"
               @on-enter="queryBatch"
             ></Input>
@@ -324,6 +270,7 @@
           <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="厂牌" width="80"></vxe-table-column>
           <vxe-table-column field="enterQty" title="入库数量" width="70">
           </vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>

@@ -15,7 +15,6 @@ import FeeRegistration from './components/FeeRegistration.vue';
 import ProcurementModal from './components/ProcurementModal.vue';
 import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
-import PrintModel from './components/print.vue';
 import StatusModal from './components/checkApprovalModal.vue';
 import GoodCus from "_c/allocation/GoodCus.vue"
 
@@ -30,7 +29,6 @@ import GoodCus from "_c/allocation/GoodCus.vue"
     ProcurementModal,
     AdjustModel,
     TabsModel,
-    PrintModel,
     StatusModal,
     GoodCus
   }

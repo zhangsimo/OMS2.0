@@ -146,8 +146,6 @@
         ref="morequeryModal"
         @resetData="reset"
       ></More-query>
-      <!--        打印-->
-      <Print-show ref="printBox"></Print-show>
     </div>
   </div>
 </template>
@@ -160,7 +158,6 @@ import getDate from "@/components/getDate/dateget";
 import OrderLeft from "./OrderLeft";
 import OrderRight from "./OrderRight";
 import MoreQuery from "../../commonality/MoreQuery";
-import PrintShow from "../../commonality/PrintShow";
 import {
   getCancellation,
   getReorder,
@@ -175,8 +172,7 @@ export default {
     getDate,
     OrderLeft,
     OrderRight,
-    MoreQuery,
-    PrintShow
+    MoreQuery
   },
   data() {
     return {

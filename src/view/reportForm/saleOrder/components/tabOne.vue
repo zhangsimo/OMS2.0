@@ -56,6 +56,12 @@
                           title="OE码"
                           width="120"
         ></vxe-table-column>
+        <vxe-table-column
+          show-overflow="tooltip"
+          field="carBrandName"
+          title="厂牌"
+          width="110"
+        ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="partBrand"
                           title="品牌"

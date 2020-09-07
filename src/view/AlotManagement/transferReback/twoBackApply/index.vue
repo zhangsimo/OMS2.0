@@ -387,7 +387,6 @@
       ref="addInCom"
       headerTit="配件成品选择"
     ></add-in-com>
-    <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
     <add-part
       ref="addPart"
       :storeId="Leftcurrentrow.storeId"
@@ -404,7 +403,6 @@
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
-import PrintShow from "./compontents/PrintShow";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
@@ -438,7 +436,6 @@ export default {
     QuickDate,
     AddInCom,
     SelectSupplier,
-    PrintShow
   },
   inject: ["reload"],
   data() {
