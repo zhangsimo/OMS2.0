@@ -183,9 +183,10 @@ export function getDeleteList (data) {
 }
 
 
-//批量导入地址
+//批量导入地址 编码品牌导入
 export const getup = `${api.omsOrder}/sellOrderMain/import?`;
-
+//内码导入配件
+export const getupInnerId=`${api.omsOrder}/sellOrderMain/import/partId?`
 //批次配件
 export function getParnt (params) {
   return axios.request({

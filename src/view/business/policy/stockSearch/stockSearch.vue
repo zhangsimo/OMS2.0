@@ -31,7 +31,7 @@
       <!--      汇总库存表-->
       <div class="tabs-warp" v-show="tabIndex == 0" >
         <!--      搜索工具栏-->
-        <div class="oper-top flex" >
+        <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
             <Input
               v-model="searchForm.partName"
@@ -99,23 +99,6 @@
             </Button>
           </div>
         </div>
-        <!--    表-->
-        <!--<Table-->
-          <!--class="table-highlight-row"-->
-          <!--highlight-row-->
-          <!--ref="table1"-->
-          <!--border-->
-          <!--size="small"-->
-          <!--:loading="loading1"-->
-          <!--align="left"-->
-          <!--:stripe="true"-->
-          <!--height="400"-->
-          <!--resizable-->
-          <!--:columns="columns1"-->
-          <!--:data="contentOne.dataOne"-->
-          <!--show-summary-->
-          <!--:summary-method="handleSummary"-->
-        <!--&gt;</Table>-->
         <vxe-table
           border
           ref="xTable2"
@@ -176,7 +159,7 @@
       <!--      批次库存表-->
       <div class="tabs-warp" v-show="tabIndex == 1">
         <!--      搜索工具栏-->
-        <div class="oper-top flex">
+        <div class="oper-top flex" ref="operTop1">
           <div class="pt10">
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input
@@ -344,7 +327,7 @@
       </div>
       <!-- hs -->
       <div class="tabs-warp" v-show="tabIndex == 2">
-        <div class="oper-top flex">
+        <div class="oper-top flex" ref="operTop2">
           <div class="wlf wlf-center wlf-center-hs">
             <div class="db mr10">
               <span>公司名称：</span>
@@ -743,10 +726,13 @@ export default {
     this.getHsStoreFun();
 
     this.$nextTick(() => {
-      this.tableHeight = this.$refs.operWrap.offsetHeight - 146;
+      this.setDomHeight('operTop0')
     })
   },
   methods: {
+    setDomHeight(refName){
+      this.tableHeight = this.$refs.operWrap.offsetHeight- this.$refs[refName].offsetHeight - 100;
+    },
     select1(option) {
       if (option.slice(-1)[0] == 1) {
         option = [1];
@@ -972,6 +958,7 @@ export default {
         this.$refs.xTable3.recalculate();
         this.$refs.xTable2.recalculate();
         this.$refs.hsOrder.recalculate();
+        this.setDomHeight('operTop'+this.tabIndex);
       })
     },
     // 修改每页显示条数-客户信息

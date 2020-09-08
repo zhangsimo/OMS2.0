@@ -28,6 +28,16 @@
               >{{ item.name }}</Option>
             </Select>
           </div>
+          <div class="db ml20">
+            <span>往来单位：</span>
+            <Select v-model="guestId" filterable class="w150"
+                  :loading="searchLoading"
+                  :remote-method="getAllClient"
+                  @on-change="getAccountNameListFun"
+            >
+              <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
+          </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
@@ -164,16 +174,7 @@
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
-      <div class="db pro mt20">
-        <span>往来单位：</span>
-        <Select v-model="guestId" filterable class="w200"
-              :loading="searchLoading"
-              :remote-method="getAllClient"
-              @on-change="getAccountNameListFun"
-        >
-          <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-        </Select>
-      </div>
+      
       <div class="db pro mt20">
         <span>分店名称：</span>
         <Select v-model="model1" style="width:200px">
@@ -1943,7 +1944,6 @@ export default {
       this.value = []
       this.model2 = ''
       this.nametext = ''
-      this.model1 = ''
       this.model3 = ''
       this.text = ''
       this.clientList=[]
@@ -1952,7 +1952,7 @@ export default {
       this.getShop()
     },
     // 更多条件查询
-    senior() {
+    async senior() {
       this.data1 = [];
       this.data2 = [];
       let obj = {
@@ -1961,15 +1961,19 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         guestType: this.model2,
         tenantName: this.nametext,
         serviceType: this.model3,
         serviceId: this.text,
-        guestId:this.guestId
       };
-      this.getGeneral(obj);
+      await this.getGeneral(obj);
+      if(this.selectShopList){
+        await this.getShop();
+        let arr =await creat(this.$refs.quickDate.val, this.$store);
+        this.model1 = arr[1];
+      }
     },
     // 查询应收/应付总表
     query() {
@@ -1982,7 +1986,8 @@ export default {
           : "",
         endDate: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
-          : ""
+          : "",
+        guestId:this.guestId
       };
       this.getGeneral(obj);
     },
@@ -2204,9 +2209,9 @@ export default {
         this.searchLoading = true;
         let req = {
           fullName:query,
-          size:1000,
+          size:20,
         }
-        let rep = await getCustomerInformation(req);
+        let rep = await findGuest(req);
         this.searchLoading = false;
         if(rep.code==0){
           this.clientList = rep.data.content;

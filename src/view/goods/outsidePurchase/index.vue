@@ -246,7 +246,7 @@
                     </Tooltip>
                   </FormItem>
                   <FormItem class="form-Item" label="备注：">
-                    <Tooltip>
+                    <Tooltip :content="formPlanmain.remark" :disabled="(formPlanmain.remark||'').trim()==''">
                       <Input
                         placeholder="请输入备注"
                         class="w160"
@@ -254,7 +254,7 @@
                         :disabled="isInput"
                         maxlength="100"
                       />
-                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{formPlanmain.remark}}</div>
+                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlanmain.remark||"").trim()}}</div>
                     </Tooltip>
                   </FormItem>
                 </Form>
@@ -283,33 +283,65 @@
                     >
                   </div>
                   <div class="fl mb5">
-                    <Upload
-                      ref="upload"
-                      style="display: inline-block"
-                      :show-upload-list="false"
-                      :action="upurl"
-                      :headers="headers"
-                      :format="['xlsx','xls']"
-                      :on-format-error="onFormatError"
-                      :on-success="onSuccess"
-                      :before-upload ='beforeUpload'
-                      :disabled="!mainId || selectTableRow.new || isInput"
-                      v-has="'import'"
-                    >
-                      <Button size="small" class="mr10" @click="getRUl" :disabled="!mainId || selectTableRow.new || isInput">
-<!--                        selectLeftItemId-->
-                        <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
+                    <Poptip placement="bottom">
+                      <Button class="mr10" size="small" :disabled="!mainId || selectTableRow.new || isInput" v-has="'import'">导入
                       </Button>
-                    </Upload>
+                      <div slot="content" class="flex" style="justify-content: space-between">
+                        <div class="flex mr10">
+                          <Upload
+                            ref="upload1"
+                            :show-upload-list="false"
+                            :action="upurlInnerId"
+                            :headers="headers"
+                            :format="['xlsx','xls']"
+                            :on-format-error="onFormatError"
+                            :on-success="onSuccess"
+                            :before-upload='beforeUploadInnerId'
+                          >
+                            <Button
+                              size="small"
+                              @click="getRUlInnerId"
+                            ><span class="center"><Icon custom="iconfont icondaoruicon icons" />配件内码导入</span>
+                            </Button>
+                          </Upload>
+                        </div>
+                        <div class="flex">
+                          <Upload
+                            ref="upload"
+                            :show-upload-list="false"
+                            :action="upurl"
+                            :headers="headers"
+                            :format="['xlsx','xls']"
+                            :on-format-error="onFormatError"
+                            :on-success="onSuccess"
+                            :before-upload ='beforeUpload'
+                          >
+                            <Button size="small" class="mr10" @click="getRUl">
+                              <span class="center"><Icon custom="iconfont icondaoruicon icons" />编码品牌导入</span>
+                            </Button>
+                          </Upload>
+                        </div>
+                      </div>
+                    </Poptip>
                   </div>
-                  <div class="fl mb5">
-                    <Button
-                      size="small"
-                      @click="down"
-                      class="mr10"
-                    >
-                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                    </Button>
+                  <div class="fl mb5 mr10">
+                    <Poptip placement="bottom">
+                      <Button size="small">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                      <div slot="content">
+                        <Button
+                          size="small"
+                          class="mr10"
+                          @click="downInnerId"
+                        >配件内码模板
+                        </Button>
+                        <Button
+                          size="small"
+                          @click="down"
+                        >编码品牌模板</Button>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5">
                     <Button

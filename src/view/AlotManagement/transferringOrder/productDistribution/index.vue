@@ -385,6 +385,20 @@ export default {
           if (res.code == 0) {
             this.TopTableData = res.data.content || [];
             this.pageList.total = res.data.totalElements;
+            if(this.formItem.hasOwnProperty("id")){
+              for(let b of this.TopTableData){
+                if(b.id == this.formItem.id ){
+                  this.$refs.topTable.setCurrentRow(b);
+                  this.currentChangeEvent({row:b});
+                }
+              }
+            }else{
+              if(this.TopTableData.length==0){
+                return
+              }
+              this.$refs.topTable.setCurrentRow(this.TopTableData[0]);
+              this.currentChangeEvent({row:this.TopTableData[0]});
+            }
           }
         })
         .catch(e => {
@@ -418,13 +432,17 @@ export default {
       if(parseInt(row.hasAcceptQty) > parseInt(row.applyQty)) {
         return this.$Message.info("分配数量不能大于申请数量");
       }
+      if(parseInt(row.hasAcceptQty) > parseInt(this.formItem.lockQty)) {
+        return this.$Message.info("分配数量不能大于锁定数量");
+      }
       hotProductsSave(row)
         .then(res => {
           if (res.code == 0) {
-            this.BottomTableData = res.data || [];
+            // this.BottomTableData = res.data || [];
             this.BottomTableData = [];
-            let item = this.$refs.topTable.getCurrentRecord();
-            this.currentChangeEvent({ row: item });
+            // let item = this.$refs.topTable.getCurrentRecord();
+            // this.currentChangeEvent({ row: item });
+            this.search(this.form)
           }
         })
         .catch(e => {
@@ -452,13 +470,17 @@ export default {
       if(parseInt(row.hasAcceptQty) > parseInt(row.applyQty)) {
         return this.$Message.info("分配数量不能大于申请数量");
       }
+      if(parseInt(row.hasAcceptQty) > parseInt(this.formItem.lockQty)) {
+        return this.$Message.info("分配数量不能大于锁定数量");
+      }
       baocun(row)
         .then(res => {
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
             this.BottomTableData = [];
-            let item = this.$refs.topTable.getCurrentRecord();
-            this.currentChangeEvent({ row: item });
+            // let item = this.$refs.topTable.getCurrentRecord();
+            // this.currentChangeEvent({ row: item });
+            this.search(this.form)
           }
         })
         .catch(e => {

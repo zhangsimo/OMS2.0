@@ -60,6 +60,8 @@ export default {
     };
 
     return {
+      saveLoading: false,
+      goDownLoading: false,
       isSelfOk: true,
       dataChange: {}, //左侧当前数据
       StoreId: "", //默认仓
@@ -540,6 +542,7 @@ export default {
               this.formPlan.orderDate = this.formPlan.orderDate
                 ? moment(this.formPlan.orderDate).format("YYYY-MM-DD HH:mm:ss")
                 : "";
+              this.saveLoading = true;
               let res = await saveList(this.formPlan);
               if (res.code === 0) {
                 this.getLeftLists();
@@ -552,6 +555,7 @@ export default {
                 this.flag = 0;
                 this.setSelected(this.dataChange.row);
               }
+              this.saveLoading = false;
             } catch (errMap) {
               this.$XModal.message({
                 status: "error",
@@ -586,6 +590,7 @@ export default {
                       "YYYY-MM-DD HH:mm:ss"
                     )
                   : "";
+                this.goDownLoading = true
                 let res = await saveList(this.formPlan);
                 if (res.code === 0) {
                   this.getLeftLists();
@@ -596,6 +601,7 @@ export default {
                   this.allMoney = 0;
                   this.$Message.success("保存成功");
                 }
+                this.goDownLoading = false
               } catch (errMap) {
                 this.$XModal.message({
                   status: "error",

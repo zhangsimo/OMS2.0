@@ -21,10 +21,10 @@
                 <Button :loading="isSaveClick" type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button :loading="isCommitClick" class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
-                <Button @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+                <Button :loading="isCancelClick" @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
                 <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -119,8 +119,14 @@
                         ></DatePicker>
                       </FormItem>
                       <FormItem class="formItem" label="备注：" prop="remark">
-                        <Tooltip :content="formPlan.remark">
-                        <Input style="width: 280px" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                        <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
+                          <Input
+                            class="w160"
+                            :disabled="presentrowMsg !== 0 || buttonDisable"
+                            v-model="formPlan.remark"
+                            :maxlength="100"
+                          />
+                          <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlan.remark||"").trim()}}</div>
                         </Tooltip>
                       </FormItem>
                       <FormItem label="申请人：" prop="planner">
@@ -139,31 +145,67 @@
                         <Button size="small" class="mr10" @click="addPro" v-has="'addAccessories'" :disabled="buttonDisable || presentrowMsg !== 0||!formPlan.guestName"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Upload
-                          ref="upload"
-                          :show-upload-list="false"
-                          :action="upurl"
-                          :format="['xlsx', 'xls', 'csv']"
-                          :headers="headers"
-                          :before-upload="handleBeforeUpload"
-                          :on-success="handleSuccess"
-                          :on-format-error="onFormatError"
-                          :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
-                        >
-                          <Button
-                            size="small"
-                            class="mr10"
-                            :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
-                          >导入配件</Button>
-                        </Upload>
+                        <Poptip placement="bottom">
+                          <Button class="mr10" size="small"
+                                  :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
+                                  v-has="'import'"
+                          >导入
+                          </Button>
+                          <div slot="content" class="flex" style="justify-content: space-between">
+                            <div class="flex mr10">
+                              <Upload
+                                ref="upload1"
+                                :show-upload-list="false"
+                                :action="upurlInnerId"
+                                :format="['xlsx', 'xls', 'csv']"
+                                :headers="headers"
+                                :before-upload="handleBeforeUploadInnerId"
+                                :on-success="handleSuccess"
+                                :on-format-error="onFormatError"
+                              >
+                                <Button
+                                  size="small"
+                                  class="mr10"
+                                  v-has="'importInnerId'"
+                                >配件内码导入</Button>
+                              </Upload>
+                            </div>
+                            <div class="flex">
+                              <Upload
+                                ref="upload"
+                                :show-upload-list="false"
+                                :action="upurl"
+                                :format="['xlsx', 'xls', 'csv']"
+                                :headers="headers"
+                                :before-upload="handleBeforeUpload"
+                                :on-success="handleSuccess"
+                                :on-format-error="onFormatError"
+                              >
+                                <Button
+                                  size="small"
+                                  class="mr10"
+                                  v-has="'importBrand'"
+                                >编码品牌导入</Button>
+                              </Upload>
+                            </div>
+                          </div>
+                        </Poptip>
                       </div>
                       <div class="fl mb5 mr10">
-                        <Button
-                          size="small"
-                          @click="down"
-                        >
-                          <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                        </Button>
+                        <Poptip placement="bottom">
+                          <Button size="small">
+                            <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                          </Button>
+                          <div slot="content">
+                            <Button size="small" class="mr10" @click="downInnerId"><Icon custom="iconfont iconxiazaiicon icons" />配件内码模板</Button>
+                            <Button
+                              size="small"
+                              @click="down"
+                            >
+                              <Icon custom="iconfont iconxiazaiicon icons" />编码品牌模板
+                            </Button>
+                          </div>
+                        </Poptip>
                       </div>
                       <div class="fl mb5">
                         <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'deleteAccessories'" @click="Delete"><i class="iconfont mr5 iconlaji调拨申请信息tongicon"></i> 删除配件</Button>
@@ -257,7 +299,7 @@
   } from "_api/purchasing/purchasePlan";
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
-  import {upxlxsDBo} from "../../../../api/purchasing/purchasePlan";
+  import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
 
   export default {
@@ -283,7 +325,8 @@
           headers: {
             Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
           },
-          upurl:"",
+          upurl:"",//编码品牌导入配件地址
+          upurlInnerId:"",//内码导入配件地址
           selectRowId: '',
           selectvalue: '',
           //校验输入框的值
@@ -441,6 +484,10 @@
           currentRow: {},
           //临时禁用保存提交作废按钮
           isSaveClick:false,
+          isCommitClick: false,
+          isCancelClick: false,
+
+          isSaveOk: true
         }
       },
       methods: {
@@ -585,6 +632,7 @@
           this.isAdd = false;
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
+            this.formPlan.guestOrgid = '',
           this.formPlan.shortName = '',
             this.formPlan.storeId =  this.StoreId, //调入仓库
             this.formPlan.orderDate =  dataTime, //申请调拨日期
@@ -716,13 +764,13 @@
                 data.createUname  = this.formPlan.createUname
                 data.serviceId = this.formPlan.serviceId
                 data.detailVOS = this.Right.tbdata
-                if(this.isSaveClick){
+                if(this.isCancelClick){
                   return this.$message.error('请稍后数据处理中....');
                 }
-                this.isSaveClick = true;
+                this.isCancelClick = true;
                 let res = await save(data);
                 if(!res){
-                  this.isSaveClick = false;
+                  this.isCancelClick = false;
                 }
                 if (res.code == 0) {
                   this.$Message.success('作废成功');
@@ -952,10 +1000,14 @@
                 this.setRow(this.Left.tbdata[0]);
               }else {
                 this.isSaveClick = false;
+                this.isCommitClick = false;
+                this.isCancelClick = false;
               }
             }else {
               this.Left.page.total = 0;
               this.isSaveClick = false;
+              this.isCommitClick = false;
+              this.isCancelClick = false;
             }
           })
         },
@@ -1054,6 +1106,7 @@
           this.guestidId = row.guestId
           this.datadata = row;
           this.isInternalId = row.guestOrgid;
+          this.formPlan.guestOrgid = row.guestOrgid;
           this.formPlan.guestName = this.datadata.guestName
           // this.formPlan.guestName = this.datadata.guestId
           this.formPlan.storeId = this.datadata.storeId
@@ -1068,6 +1121,7 @@
           this.getRightlist();
 
           this.upurl = upxlxsDBo + row.id;
+          this.upurlInnerId=upxlxsDBoInnerId + row.id;
         },
         //右部分接口
         getRightlist(){
@@ -1075,6 +1129,8 @@
           params.id = this.rowId
           findById(params).then(res => {
             this.isSaveClick = false;
+            this.isCommitClick = false;
+            this.isCancelClick = false;
             if(res.code === 0){
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
@@ -1121,13 +1177,13 @@
                     data.createUname  = this.formPlan.createUname
                     data.serviceId = this.formPlan.serviceId
                     data.detailVOS = this.Right.tbdata
-                    if(this.isSaveClick){
+                    if(this.isCommitClick){
                       return this.$message.error('请稍后数据处理中....');
                     }
-                    this.isSaveClick = true;
+                    this.isCommitClick = true;
                     let res = await commit(data);
                     if(!res){
-                      this.isSaveClick = false;
+                      this.isCommitClick = false;
                     }
                     if (res.code == 0) {
                       this.$Message.success('提交成功');
@@ -1162,17 +1218,29 @@
           });
         },
 
-        //下载模板
+        //下载模板 编码品牌导入
         down(){
           down('2300000000')
         },
-        // 导入
+        //配件内码模板
+        downInnerId(){
+          down('3400000000')
+        },
+        // 导入 编码品牌导入配件
         handleBeforeUpload() {
           if (this.datadata.new) {
             return this.$Message.error("请先保存数据!");
           }
           let refs = this.$refs;
           refs.upload.clearFiles();
+        },
+        // 导入 内码导入配件
+        handleBeforeUploadInnerId(){
+          if (this.datadata.new) {
+            return this.$Message.error("请先保存数据!");
+          }
+          let refs = this.$refs;
+          refs.upload1.clearFiles();
         },
         handleSuccess(res, file) {
           let self = this;

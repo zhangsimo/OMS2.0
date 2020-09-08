@@ -38,6 +38,7 @@
             <Button
               type="default"
               class="mr10"
+              :loading="saveLoading"
               :disabled="draftShow != 0 || isNew"
               @click="isSave"
               v-has="'save'"
@@ -631,6 +632,7 @@
         selectTableList: [], //右侧table表格选中的数据
         Flag: false ,//判断是否已提交
         submitloading:false,
+        saveLoading: false
       };
     },
     mounted() {
@@ -1088,6 +1090,7 @@
               data = this.formPlan;
               data.billStatusId = null;
               data.orderDate = moment(data.orderDate).format("YYYY-MM-DD") + " 00:00:00"
+              this.saveLoading = true;
               let res = await getSave(data);
               if (res.code === 0) {
                 this.isAdd = true;
@@ -1102,11 +1105,13 @@
                 this.submitloading=false;
                 // this.$Message.error("保存失败")
               }
+              this.saveLoading = false
             } catch (errMap) {
               this.$XModal.message({
                 status: "error",
                 message: "表格校验不通过！"
               });
+              this.saveLoading = false
             }
           } else {
             this.$set(this.sellOrderTable.tbdata, 0, this.PTrow);

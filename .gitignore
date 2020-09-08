@@ -5,6 +5,7 @@ node_modules
 *.json
 /config
 /env.js
+yarn.lock
 # local env files
 .env.local
 .env.*.local
