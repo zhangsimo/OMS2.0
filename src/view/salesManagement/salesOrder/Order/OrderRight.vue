@@ -203,16 +203,16 @@
                       :on-success="onSuccess"
                       :before-upload='beforeUploadInnerId'
                     >
-                      <Button
-                        size="small"
-                        class="mr10"
-                        @click="getRUlInnerId"
-                        v-has="'getBarchInnerId'"
-                      >
-                        <span class="center">
-                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
-                        </span>
-                      </Button>
+<!--                      <Button-->
+<!--                        size="small"-->
+<!--                        class="mr10"-->
+<!--                        @click="getRUlInnerId"-->
+<!--                        v-has="'getBarchInnerId'"-->
+<!--                      >-->
+<!--                        <span class="center">-->
+<!--                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入-->
+<!--                        </span>-->
+<!--                      </Button>-->
                     </Upload>
                   </div>
                   <div class="flex">
