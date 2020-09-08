@@ -252,12 +252,15 @@
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Tooltip :content="formPlan.remark">
-                    <Input
-                      style="width: 370px"
-                      v-model="formPlan.remark"
-                      :disabled="draftShow != 0||isNew"
-                    />
+                    <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
+                      <Input
+                        style="width: 200px"
+                        v-model="formPlan.remark"
+                        :disabled="draftShow != 0|| isNew"
+                      />
+                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">
+                        {{(formPlan.remark||"").trim()}}
+                      </div>
                     </Tooltip>
                   </FormItem>
                 </div>
@@ -286,34 +289,73 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Upload
-                        ref="upload"
-                        style="display: inline-block"
-                        :show-upload-list="false"
-                        :action="upurl"
-                        :headers="headers"
-                        :format="['xlsx','xls']"
-                        :on-format-error="onFormatError"
-                        :on-success="onSuccess"
-                        :before-upload="beforeUpload"
-                      >
-                        <Button
-                          size="small"
-                          class="mr10"
-                          @click="getRUl"
-                          v-has="'getRUl'"
-                          :disabled="draftShow != 0||isNew||!isAdd"
-                        >
-                          <span class="center">
-                            <Icon custom="iconfont icondaoruicon icons" />导入配件
-                          </span>
+                      <Poptip placement="bottom">
+                        <Button class="mr10" size="small"
+                                :disabled="draftShow != 0||isNew||!isAdd"
+                                v-has="'getRUl'">导入
                         </Button>
-                      </Upload>
+                        <div slot="content" class="flex" style="justify-content: space-between">
+                          <div class="flex mr10">
+                            <Upload
+                              ref="upload1"
+                              :show-upload-list="false"
+                              :action="upurlInnerId"
+                              :headers="headers"
+                              :format="['xlsx','xls']"
+                              :on-format-error="onFormatError"
+                              :on-success="onSuccess"
+                              :before-upload='beforeUploadInnerId'
+                            >
+                              <Button
+                                size="small"
+                                class="mr10"
+                                @click="getRUlInnerId"
+                                :disabled="draftShow != 0||isNew||!isAdd"
+                                v-has="'getRUl'"
+                              >
+                                <span class="center">
+                                  <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
+                                </span>
+                              </Button>
+                            </Upload>
+                          </div>
+                          <div class="flex">
+                            <Upload
+                              ref="upload"
+                              :show-upload-list="false"
+                              :action="upurl"
+                              :headers="headers"
+                              :format="['xlsx','xls']"
+                              :on-format-error="onFormatError"
+                              :on-success="onSuccess"
+                              :before-upload="beforeUpload"
+                            >
+                              <Button
+                                size="small"
+                                class="mr10"
+                                @click="getRUl"
+                                v-has="'getRUl'"
+                                :disabled="draftShow != 0||isNew||!isAdd"
+                              >
+                                <span class="center">
+                                  <Icon custom="iconfont icondaoruicon icons" />编码品牌导入
+                                </span>
+                              </Button>
+                            </Upload>
+                          </div>
+                        </div>
+                      </Poptip>
                     </div>
                     <div class="fl mb5 mr10">
-                      <Button size="small" @click="down" v-has="'down'">
-                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                      </Button>
+                      <Poptip placement="bottom">
+                        <Button size="small">
+                          <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                        </Button>
+                        <div slot="content">
+                          <Button size="small" class="mr10" @click="downInnerId">配件内码模板</Button>
+                          <Button size="small" @click="down" v-has="'down'">编码品牌模板</Button>
+                        </div>
+                      </Poptip>
                     </div>
                     <div class="fl mb5">
                       <Button
@@ -432,7 +474,8 @@ import {
   getLimit,
   finishSales,
   getDeleteList,
-  getup
+  getup/**编码品牌导入配件*/,
+  getupInnerId/**内码导入配件*/
 } from "_api/salesManagment/presell.js";
 import getDate from "@/components/getDate/dateget";
 import goodsInfo from "../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
@@ -442,6 +485,7 @@ import MoreSearch from "./components/MoreSearch";
 import SeeFile from "../commonality/SeeFile";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import { conversionList } from "@/components/changeWbList/changewblist";
+import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
 import SalesCus from "../../../components/allocation/salesCus";
@@ -477,7 +521,8 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //请求头
-      upurl: getup, //导入地址
+      upurl: getup, //导入地址 编码品牌导入配件
+      upurlInnerId:getupInnerId,//内码导入配件 地址
       oneRow: {}, //点击详情的数据
       draftShow: "", //判定是不是草稿
       settleTypeList: {}, //结账类型
@@ -1309,15 +1354,23 @@ export default {
       }
     },
 
-    //上传之前清空
+    //上传之前清空 编码品牌导入配件
     beforeUpload() {
       this.$refs.upload.clearFiles();
     },
-
-    //导入配件
+    //内码导入配件
+    beforeUploadInnerId(){
+      this.$refs.upload1.clearFiles();
+    },
+    //导入配件 编码品牌导入配件
     getRUl() {
       let id = this.id;
       this.upurl = getup + "id=" + id;
+    },
+    //导入配件 内码导入配件
+    getRUlInnerId() {
+      let id = this.id;
+      this.upurlInnerId = getupInnerId + "id=" + id;
     },
     //下载模板
     down() {
@@ -1325,6 +1378,9 @@ export default {
         baseUrl.omsOrder +
         "/guestOrderMain/template?access_token=" +
         Cookies.get(TOKEN_KEY);
+    },
+    downInnerId(){
+      down("3300000000")
     }
   },
   watch: {

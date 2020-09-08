@@ -52,6 +52,7 @@
                 :disabled="this.remarkStatus"
                 v-has="'submit'"
                 @click="tijiao1"
+                :loading="isCommitClick"
               >
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
@@ -62,6 +63,7 @@
                 :disabled="Leftcurrentrow.statuName != '已受理' || isWms"
                 class="mr10"
                 @click="chuku"
+                :loading="isOutClick"
               >
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
@@ -72,6 +74,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
+                :loading="isCancelClick"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>
@@ -690,6 +693,9 @@ export default {
       diaochuName: "",
       diaochuID: "",
       isSaveClick:false,
+      isCommitClick: false,
+      isOutClick: false,
+      isCancelClick: false
     };
   },
   watch: {
@@ -931,6 +937,7 @@ export default {
       params.status = params.status.value;
       params.settleStatus = params.settleStatus.value;
       params["orderTypeId"] = "3";
+      this.isCommitClick = true;
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
@@ -938,7 +945,12 @@ export default {
             this.getList();
             // this.reload();
             this.$Message.success("提交成功");
+
           }
+          this.isCommitClick = false;
+        })
+        .catch(e => {
+          this.isCommitClick = false
         })
       // this.getList(this.form);
     },
@@ -962,6 +974,7 @@ export default {
             id: this.Leftcurrentrow.id
           };
           // 配件组装作废
+          this.isCancelClick = true;
           zuofei(params)
             .then(res => {
               // 点击列表行==>配件组装信息
@@ -969,8 +982,10 @@ export default {
                 this.getList();
                 this.$Message.success("作废成功");
               }
+              this.isCancelClick = false;
             })
             .catch(e => {
+              this.isCancelClick = false;
               this.$Message.error("作废失败");
             });
         },
@@ -1009,15 +1024,18 @@ export default {
         id: this.Leftcurrentrow.id
       };
       // 配件组装作废
+      this.isOutClick = true;
       outDataList(params)
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList();
+            this.isOutClick = false;
             this.$Message.success("出库成功");
           }
         })
         .catch(e => {
+          this.isOutClick = false;
           this.$Message.error("出库失败");
         });
     },
@@ -1367,12 +1385,14 @@ export default {
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
                   this.isSaveClick = false;
+                  this.isCommitClick = false; ///////////////////////////////////////////////////////
                   return;
                 }
               }
             } else {
               if(this.Left.tbdata.length==0){
                 this.isSaveClick = false;
+                this.isCommitClick = false;
                 return
               }
               this.Left.tbdata[0]._highlight = true;
@@ -1383,9 +1403,11 @@ export default {
               const res = await getListDetail(params);
               this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
               this.isSaveClick = false;
+              this.isCommitClick = false;
             }
           }else{
             this.isSaveClick = false;
+            this.isCommitClick = false;
           }
         })
         .catch(e => {

@@ -86,8 +86,11 @@ export function getDeleteList (data) {
     data
   })
 }
-//批量导入地址
+//批量导入地址 编码品牌导入配件
 export const getup = `${api.omsOrder}/guestOrderMain/import?`;
+//内码导入配件
+export const getupInnerId=`${api.omsOrder}/guestOrderMain/import/partId?`
+
 //获取业务员
 export function getSales () {
   return axios.request({

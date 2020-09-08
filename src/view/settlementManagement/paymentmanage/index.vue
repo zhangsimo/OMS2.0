@@ -1943,7 +1943,6 @@ export default {
       this.value = []
       this.model2 = ''
       this.nametext = ''
-      this.model1 = ''
       this.model3 = ''
       this.text = ''
       this.clientList=[]
@@ -1961,7 +1960,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         guestType: this.model2,
         tenantName: this.nametext,
@@ -1970,6 +1969,9 @@ export default {
         guestId:this.guestId
       };
       this.getGeneral(obj);
+      let arr = creat(this.$refs.quickDate.val, this.$store);
+      this.model1 = arr[1];
+      this.getShop();
     },
     // 查询应收/应付总表
     query() {
@@ -2204,9 +2206,9 @@ export default {
         this.searchLoading = true;
         let req = {
           fullName:query,
-          size:1000,
+          size:20,
         }
-        let rep = await getCustomerInformation(req);
+        let rep = await findGuest(req);
         this.searchLoading = false;
         if(rep.code==0){
           this.clientList = rep.data.content;
