@@ -310,12 +310,10 @@
                             :before-upload="handleBeforeUploadInnerId"
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
-                            :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
                           >
                             <Button
                               size="small"
                               v-has="'importInnerId'"
-                              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
                             >配件内码导入</Button>
                           </Upload>
                         </div>
@@ -329,12 +327,10 @@
                             :before-upload="handleBeforeUpload"
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
-                            :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
                           >
                             <Button
                               size="small"
-                              v-has="'import'"
-                              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
+                              v-has="'importBrand'"
                             >编码品牌导入</Button>
                           </Upload>
                         </div>
