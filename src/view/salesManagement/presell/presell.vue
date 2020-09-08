@@ -310,8 +310,7 @@
                                 size="small"
                                 class="mr10"
                                 @click="getRUlInnerId"
-                                :disabled="draftShow != 0||isNew||!isAdd"
-                                v-has="'getRUl'"
+                                v-has="'getRUlInnerId'"
                               >
                                 <span class="center">
                                   <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
@@ -334,8 +333,7 @@
                                 size="small"
                                 class="mr10"
                                 @click="getRUl"
-                                v-has="'getRUl'"
-                                :disabled="draftShow != 0||isNew||!isAdd"
+                                v-has="'getRUlBrand'"
                               >
                                 <span class="center">
                                   <Icon custom="iconfont icondaoruicon icons" />编码品牌导入
