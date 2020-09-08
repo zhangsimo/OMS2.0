@@ -372,7 +372,6 @@
                             <Button
                               size="small"
                               @click="getRUlInnerId"
-                              v-has="'importInnerId'"
                             >配件内码导入
                             </Button>
                           </Upload>
@@ -390,8 +389,7 @@
                           >
                             <Button
                               size="small"
-                              @click="getRUl"
-                              v-has="'importBrand'">
+                              @click="getRUl">
                               编码品牌导入
                             </Button>
                           </Upload>

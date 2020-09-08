@@ -220,7 +220,6 @@
                             <Button
                               size="small"
                               class="mr10"
-                              v-has="'importInnerId'"
                             >配件内码导入</Button>
                           </Upload>
                         </div>
@@ -238,7 +237,6 @@
                             <Button
                               size="small"
                               class="mr10"
-                              v-has="'importBrand'"
                             >编码品牌导入</Button>
                           </Upload>
                         </div>

@@ -311,10 +311,7 @@
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
                           >
-                            <Button
-                              size="small"
-                              v-has="'importInnerId'"
-                            >配件内码导入</Button>
+                            <Button size="small">配件内码导入</Button>
                           </Upload>
                         </div>
                         <div class="flex">
@@ -328,10 +325,7 @@
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
                           >
-                            <Button
-                              size="small"
-                              v-has="'importBrand'"
-                            >编码品牌导入</Button>
+                            <Button size="small">编码品牌导入</Button>
                           </Upload>
                         </div>
                       </div>

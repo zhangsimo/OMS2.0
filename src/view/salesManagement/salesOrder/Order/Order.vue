@@ -219,6 +219,9 @@ export default {
     this.getDomHeight();
   },
   methods: {
+    saveLoadingF(a){
+      this.saveLoading = a
+    },
     showOwen() {
       tools.setSession("self", { salesOrder: this.showSelf });
       this.reset();
