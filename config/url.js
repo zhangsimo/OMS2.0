@@ -51,8 +51,8 @@ const test = {
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   // wmsApi: "http://192.168.21.59:9250", // 徐林烽
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
-  omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  // omsOrder: "http://192.168.15.142:9210",
+  // omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  omsOrder: "http://192.168.30.221:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.15.142:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
@@ -62,8 +62,8 @@ const test = {
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.21.162:9270",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
-  omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
-  // omsSotck: "http://192.168.21.59:9280", //9280
+  // omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
+  omsSotck: "http://192.168.30.221:9280", //9280
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:

@@ -630,6 +630,7 @@
           this.isAdd = false;
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
+            this.formPlan.guestOrgid = '',
           this.formPlan.shortName = '',
             this.formPlan.storeId =  this.StoreId, //调入仓库
             this.formPlan.orderDate =  dataTime, //申请调拨日期
@@ -1103,6 +1104,7 @@
           this.guestidId = row.guestId
           this.datadata = row;
           this.isInternalId = row.guestOrgid;
+          this.formPlan.guestOrgid = row.guestOrgid;
           this.formPlan.guestName = this.datadata.guestName
           // this.formPlan.guestName = this.datadata.guestId
           this.formPlan.storeId = this.datadata.storeId
