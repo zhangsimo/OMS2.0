@@ -73,17 +73,17 @@
               <span>审核</span>
             </button>
           </div>
-          <div class="db ml5">
-            <button
-              class="mr10 ivu-btn ivu-btn-default"
-              type="button"
-              @click="reAudit"
-              :disabled="oneList.length <= 0"
-              v-has="'revoke'"
-            >
-              <span>撤销</span>
-            </button>
-          </div>
+<!--          <div class="db ml5">-->
+<!--            <button-->
+<!--              class="mr10 ivu-btn ivu-btn-default"-->
+<!--              type="button"-->
+<!--              @click="reAudit"-->
+<!--              :disabled="oneList.length <= 0"-->
+<!--              v-has="'revoke'"-->
+<!--            >-->
+<!--              <span>撤销</span>-->
+<!--            </button>-->
+<!--          </div>-->
         </div>
       </div>
     </section>
