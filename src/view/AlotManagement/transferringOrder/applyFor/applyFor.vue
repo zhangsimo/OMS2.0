@@ -485,7 +485,9 @@
           //临时禁用保存提交作废按钮
           isSaveClick:false,
           isCommitClick: false,
-          isCancelClick: false
+          isCancelClick: false,
+
+          isSaveOk: true
         }
       },
       methods: {
