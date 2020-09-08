@@ -3,13 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); padding-top: 16px; height:100%"
   >
-    <Tabs
-      type="card"
-      name="orderbox"
-      class="it-box"
-      :active-key="tabKey"
-      @on-click="tabChange"
-    >
+    <Tabs type="card" name="orderbox" class="it-box" :active-key="tabKey" @on-click="tabChange">
       <TabPane label="配件组装" tab="orderbox" key="0">
         <div class="content-oper content-oper-flex" style="box-shadow:none">
           <section class="oper-box">
@@ -41,6 +35,7 @@
                     class="mr10"
                     @click="baocun1"
                     v-has="'save'"
+                    :loading="saveLoading"
                     :disabled="Leftcurrentrow.status.value!==0"
                   >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
@@ -51,6 +46,7 @@
                     class="mr10"
                     @click="tijiao1"
                     v-has="'submit'"
+                    :loading="commitLoading"
                     :disabled="Leftcurrentrow.status.value!==0"
                   >
                     <Icon type="md-checkmark" size="14" />提交
@@ -61,6 +57,7 @@
                     class="mr10"
                     @click="zuofei1"
                     v-has="'zuofei'"
+                    :loading="cancelLoading"
                     :disabled="Leftcurrentrow.status.value!==0"
                   >
                     <Icon type="md-close" size="14" />作废
@@ -139,16 +136,16 @@
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Tooltip :content="Leftcurrentrow.remark">
-                          <Input
-                            :disabled="Leftcurrentrow.status.value !== 0"
-                            v-model="Leftcurrentrow.remark"
-                            class="w160"
-                          ></Input>
+                            <Input
+                              :disabled="Leftcurrentrow.status.value !== 0"
+                              v-model="Leftcurrentrow.remark"
+                              class="w160"
+                            ></Input>
                           </Tooltip>
                         </FormItem>
                         <FormItem label="组装单号：" prop="planOrderNum">
                           <Tooltip :content="Leftcurrentrow.serviceId">
-                          <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
+                            <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
                           </Tooltip>
                         </FormItem>
                       </Form>
@@ -184,13 +181,43 @@
                       :footer-method="addFooter"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip"
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        type="seq"
+                        width="60"
+                        title="序号"
+                        fixed="left"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        type="checkbox"
+                        width="60"
+                        fixed="left"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partCode"
+                        title="配件编码"
+                        width="100"
+                        fixed="left"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partName"
+                        title="配件名称"
+                        width="100"
+                        fixed="left"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partBrand"
+                        title="品牌"
+                        width="100"
+                        fixed="left"
+                      ></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
                         field="orderQty"
                         :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="组装数量"
@@ -198,18 +225,48 @@
                       ></vxe-table-column>
                       <!--                      <vxe-table-column  show-overflow="tooltip" field="orderPrice" title="单价" width="100"></vxe-table-column>-->
                       <!--                      <vxe-table-column  show-overflow="tooltip" field="orderAmt" title="金额" width="100"></vxe-table-column>-->
-                      <vxe-table-column  show-overflow="tooltip" field="taxPrice" title="含税单价" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="taxAmt" title="含税金额" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="taxPrice"
+                        title="含税单价"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="taxAmt"
+                        title="含税金额"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="noTaxPrice"
+                        title="不含税单价"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="noTaxAmt"
+                        title="不含税金额"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" title="品牌车型" width="100">
                         <template v-slot="{row,rowIndex}">
                           <span>{{row.carBrandName}} {{row.carModelName}}</span>
                         </template>
                       </vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="oemCode"
+                        title="OE码"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partInnerId"
+                        title="配件内码"
+                        width="120"
+                      ></vxe-table-column>
                     </vxe-table>
 
                     <div class="wrapper">
@@ -225,25 +282,51 @@
                         :footer-method="addFooter2"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="changeQty" title="需要数量">
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          type="seq"
+                          width="60"
+                          title="序号"
+                          fixed="left"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partCode"
+                          title="配件编码"
+                          fixed="left"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partName"
+                          title="配件名称"
+                          fixed="left"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partBrand"
+                          title="品牌"
+                          fixed="left"
+                        ></vxe-table-column>
+                        <vxe-table-column show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
+                        <vxe-table-column show-overflow="tooltip" field="changeQty" title="需要数量">
                           <template v-slot="{ row, seq }">
                             <span>{{ row.qty*currentNum}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="storeStockQty" title="库存"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
+                        <vxe-table-column show-overflow="tooltip" field="storeStockQty" title="库存"></vxe-table-column>
+                        <vxe-table-column show-overflow="tooltip" field="stockOutQty" title="缺货数量"></vxe-table-column>
+                        <vxe-table-column show-overflow="tooltip" title="品牌车型" width="100">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="spec" title="规格"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                        <vxe-table-column show-overflow="tooltip" field="spec" title="规格"></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partInnerId"
+                          title="配件内码"
+                          width="120"
+                        ></vxe-table-column>
                       </vxe-table>
                     </div>
                   </div>
@@ -294,6 +377,7 @@
                     class="mr10"
                     @click="baocun1"
                     v-has="'save1'"
+                    :loading="saveLoading"
                     :disabled="Leftcurrentrow.status.value!==0"
                   >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
@@ -304,6 +388,7 @@
                     class="mr10"
                     @click="tijiao1"
                     v-has="'submit1'"
+                    :loading="commitLoading"
                     :disabled="Leftcurrentrow.status.value!==0"
                   >
                     <Icon type="md-checkmark" size="14" />提交
@@ -314,6 +399,7 @@
                     class="mr10"
                     @click="zuofei1"
                     v-has="'zuofei1'"
+                    :loading="cancelLoading"
                     :disabled="Leftcurrentrow.status.value!==0"
                   >
                     <Icon type="md-close" size="14" />作废
@@ -393,17 +479,17 @@
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Tooltip :content="Leftcurrentrow.remark">
-                          <Input
-                            :disabled="Leftcurrentrow.status.value !== 0"
-                            :value="Leftcurrentrow.remark"
-                            class="w160"
-                          ></Input>
+                            <Input
+                              :disabled="Leftcurrentrow.status.value !== 0"
+                              :value="Leftcurrentrow.remark"
+                              class="w160"
+                            ></Input>
                           </Tooltip>
                         </FormItem>
                         <FormItem label="拆分单号：" prop="planOrderNum">
                           <!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
                           <Tooltip :content="Leftcurrentrow.serviceId">
-                          <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
+                            <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
                           </Tooltip>
                         </FormItem>
                       </Form>
@@ -439,35 +525,77 @@
                       :data="Leftcurrentrow.processProductVO"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
-                      <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip"
+                      <vxe-table-column show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" type="checkbox" width="60"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partCode"
+                        title="配件编码"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partName"
+                        title="配件名称"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partBrand"
+                        title="品牌"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
                         field="orderQty"
                         :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="数量"
                         width="100"
                       ></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip"
+                      <vxe-table-column
+                        show-overflow="tooltip"
                         field="remark"
                         title="备注"
                         width="100"
                         :edit-render="{name: 'input'}"
                       ></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="outableQty" title="可用数量" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="storeStockQty"
+                        title="库存数量"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="outableQty"
+                        title="可用数量"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="stockOutQty"
+                        title="缺货数量"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" title="品牌车型" width="100">
                         <template v-slot="{row,rowIndex}">
                           <span>{{row.carBrandName}} {{row.carModelName}}</span>
                         </template>
                       </vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                      <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="oemCode"
+                        title="OE码"
+                        width="100"
+                      ></vxe-table-column>
+                      <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                      <vxe-table-column
+                        show-overflow="tooltip"
+                        field="partInnerId"
+                        title="配件内码"
+                        width="120"
+                      ></vxe-table-column>
                     </vxe-table>
 
                     <div class="wrapper">
@@ -480,24 +608,64 @@
                         :data="currentData"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
-                        <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="orderQty" title="拆分数量" width="100">
-<!--                          <template v-slot="{ row, seq }">-->
-<!--                            <span>{{ row.qty * currentNum }}</span>-->
-<!--                          </template>-->
+                        <vxe-table-column show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partCode"
+                          title="配件编码"
+                          width="100"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partName"
+                          title="配件名称"
+                          width="100"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partBrand"
+                          title="品牌"
+                          width="100"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="unit"
+                          title="单位"
+                          width="100"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="orderQty"
+                          title="拆分数量"
+                          width="100"
+                        >
+                          <!--                          <template v-slot="{ row, seq }">-->
+                          <!--                            <span>{{ row.qty * currentNum }}</span>-->
+                          <!--                          </template>-->
                         </vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="costRatio" title="成本比例" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" title="品牌车型" width="100">
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="costRatio"
+                          title="成本比例"
+                          width="100"
+                        ></vxe-table-column>
+                        <vxe-table-column show-overflow="tooltip" title="品牌车型" width="100">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                        <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="spec"
+                          title="规格"
+                          width="100"
+                        ></vxe-table-column>
+                        <vxe-table-column
+                          show-overflow="tooltip"
+                          field="partInnerId"
+                          title="配件内码"
+                          width="120"
+                        ></vxe-table-column>
                       </vxe-table>
                     </div>
                   </div>
@@ -508,7 +676,7 @@
           <!--更多弹框-->
           <Modal v-model="advanced" title="高级查询" width="600px">
             <Form @keydown.native.enter="Determined">
-            <More ref="naform"></More>
+              <More ref="naform"></More>
             </Form>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
@@ -534,7 +702,7 @@ import More from "./compontents/More";
 import "../../../lease/product/lease.less";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
-import xeUtils from 'xe-utils'
+import xeUtils from "xe-utils";
 import {
   tijiao,
   zuofei,
@@ -551,21 +719,24 @@ import {
   chaifenlingjian,
   daoru1,
   shanqu,
-  cangkulist2
+  cangkulist2,
 } from "../../../../api/business/process.js";
 export default {
   name: "process",
   components: {
     More,
     QuickDate,
-    AddInCom
+    AddInCom,
   },
   data() {
     return {
+      saveLoading: false,
+      commitLoading: false,
+      cancelLoading: false,
       showit: true,
       form: {
         status: 99,
-        qucikTime: ""
+        qucikTime: "",
       },
       v1: [],
       v2: [],
@@ -579,21 +750,21 @@ export default {
       purchaseTypeArr: [
         {
           label: "所有",
-          value: 99
+          value: 99,
         },
         {
           label: "草稿",
-          value: 0
+          value: 0,
         },
         {
           label: "已提交",
-          value: 1
+          value: 1,
         },
 
         {
           label: "已作废",
-          value: 2
-        }
+          value: 2,
+        },
       ],
       advanced: false, //更多模块的弹框
       //左侧表格高度
@@ -607,32 +778,32 @@ export default {
           date12: "",
           data: [
             {
-              name: 1
+              name: 1,
             },
-            { name: 2 }
-          ]
+            { name: 2 },
+          ],
         },
         {
           name: "b",
           role: "b",
           sex: "b",
           num6: "",
-          date12: ""
+          date12: "",
         },
         {
           name: "c",
           role: "c",
           sex: "c",
           num6: "",
-          date12: ""
+          date12: "",
         },
         {
           name: "d",
           role: "d",
           sex: "d",
           num6: "",
-          date12: ""
-        }
+          date12: "",
+        },
       ],
       // 所需零件数据
       components: [],
@@ -643,7 +814,7 @@ export default {
         page: {
           num: 1,
           size: 20,
-          total: 0
+          total: 0,
         },
         loading: false,
         flag: 0,
@@ -651,122 +822,122 @@ export default {
           {
             title: "序号",
             minWidth: 50,
-            key: "index"
+            key: "index",
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70
+            minWidth: 70,
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140
+            minWidth: 140,
           },
           {
             title: "操作员",
             key: "orderMan",
-            minWidth: 120
+            minWidth: 120,
           },
           {
             title: "配件组装单号",
             key: "serviceId",
-            minWidth: 160
+            minWidth: 160,
           },
           {
             title: "提交人",
             key: "auditor",
-            minWidth: 120
+            minWidth: 120,
           },
           {
             title: "提交时间",
             key: "auditDate",
-            minWidth: 200
-          }
+            minWidth: 200,
+          },
         ],
-        tbdata: []
+        tbdata: [],
       },
       Right: {
         page: {
           num: 1,
           size: 20,
-          total: 0
+          total: 0,
         },
         loading: false,
         columns: [
           {
             title: "序号",
             minWidth: 50,
-            key: "id"
+            key: "id",
           },
           {
             title: "状态",
             key: "venderSkuNo",
-            minWidth: 70
+            minWidth: 70,
           },
           {
             title: "调出方",
             key: "name",
-            minWidth: 170
+            minWidth: 170,
           },
           {
             title: "创建日期",
             key: "address",
-            minWidth: 120
+            minWidth: 120,
           },
           {
             title: "申请人",
             key: "isCycle",
-            minWidth: 140
+            minWidth: 140,
           },
           {
             title: "申请单号",
             key: "disable",
-            minWidth: 200
+            minWidth: 200,
           },
           {
             title: "提交人",
             key: "remark",
-            minWidth: 100
+            minWidth: 100,
           },
           {
             title: "提交日期",
             align: "center",
             key: "qualitySourceName",
-            minWidth: 170
+            minWidth: 170,
           },
           {
             title: "打印次数",
             key: "categoryName",
-            minWidth: 170
-          }
+            minWidth: 170,
+          },
         ],
-        tbdata: []
+        tbdata: [],
       },
       currentrow: {
         id: "1",
-        name: "2"
+        name: "2",
       },
       duoxuanList: [],
       currentData: [],
       Leftcurrentrow: {
         status: {
-          value: 0
+          value: 0,
         },
         storeName: "",
         createTime: "",
         orderMan: "",
         remark: "",
         serviceId: "",
-        processProductVO: []
+        processProductVO: [],
       },
       currentDataP: [],
       cangkuListall: [],
       currentNum: 1,
-      saveBtnClik:false,
+      saveBtnClik: false,
 
       //记录左侧点击的数据
-      leftClickItemId:'',
+      leftClickItemId: "",
     };
   },
   watch: {
@@ -774,8 +945,8 @@ export default {
       handler(newVal) {
         this.Leftcurrentrow = newVal;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   // created() {
   //   if (this.tabKey === 0) {
@@ -789,60 +960,65 @@ export default {
   methods: {
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位
-    async editNextCell($table){
+    async editNextCell($table) {
       // @ts-ignore
-      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
-      if (row) { // 当前为编辑状态
+      const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } =
+        (await $table.getActiveRecord()) || {};
+      if (row) {
+        // 当前为编辑状态
         // console.log('row', row)
         // 当前列属性
-        const nowField = column.property
+        const nowField = column.property;
         // 获取展示的列
-        const { visibleColumn } = $table.getTableColumn()
+        const { visibleColumn } = $table.getTableColumn();
         // 当前列属性（可以编辑的属性）
         const columnsField = visibleColumn.reduce((a, v, i) => {
-          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) { // 不是操作和序号且不可以编辑
-            a.push(v.property)
+          if (i !== 0 && i !== visibleColumn.length - 1 && v.editRender) {
+            // 不是操作和序号且不可以编辑
+            a.push(v.property);
           }
-          return a
-        }, [])
-        const nowIndex = columnsField.findIndex(v => v === nowField)
+          return a;
+        }, []);
+        const nowIndex = columnsField.findIndex((v) => v === nowField);
         // 判断当前是否是可编辑倒数地二行
-        const isLastColumn = nowIndex === columnsField.length - 2
+        const isLastColumn = nowIndex === columnsField.length - 2;
         // console.log('isLastColumn', isLastColumn)
         if (isLastColumn) {
           // 插入数据
 
           // 跳转到下一行
           // 判断当前是否为临时数据
-          const isInsertByRow = $table.isInsertByRow(row)
-          const ROW_INDEX = isInsertByRow ? await $table.$getRowIndex(row) : rowIndex
-          const insertRecords = $table.getInsertRecords() // 临时数据
-          let nextRow = {}
+          const isInsertByRow = $table.isInsertByRow(row);
+          const ROW_INDEX = isInsertByRow
+            ? await $table.$getRowIndex(row)
+            : rowIndex;
+          const insertRecords = $table.getInsertRecords(); // 临时数据
+          let nextRow = {};
           // 不是最后一条临时数据
           if (isInsertByRow && insertRecords.length - 1 !== ROW_INDEX) {
-            nextRow = $table.getInsertRecords()[ROW_INDEX + 1]
+            nextRow = $table.getInsertRecords()[ROW_INDEX + 1];
           } else {
             // 当前是最后一条临时数据
             if (isInsertByRow) {
-              nextRow = $table.getData()[0]
+              nextRow = $table.getData()[0];
             } else {
-              nextRow = $table.getData()[ROW_INDEX + 1]
+              nextRow = $table.getData()[ROW_INDEX + 1];
             }
           }
           if (nextRow) {
-            await $table.scrollTo(0)
-            await $table.setActiveCell(nextRow, columnsField[0])
+            await $table.scrollTo(0);
+            await $table.setActiveCell(nextRow, columnsField[0]);
           }
         } else {
           // 跳转下一个编辑
-          await $table.setActiveCell(row, columnsField[nowIndex + 1])
+          await $table.setActiveCell(row, columnsField[nowIndex + 1]);
         }
       }
     },
 
-    keydown($event){
-      if ($event.$event.keyCode == 9){
-        this.editNextCell($event.$table)
+    keydown($event) {
+      if ($event.$event.keyCode == 9) {
+        this.editNextCell($event.$table);
       }
     },
 
@@ -858,31 +1034,31 @@ export default {
       // for(var key in this.currentData[0]){
       //   columns.push({property:key})
       // }
-      this.currentNum = parseInt(event.target.value)||1;
-      if(this.tabKey==0){
-        this.currentData.map(item=>{
-          item.changeQty=this.currentNum*item.qty
-        })
-        this.$refs.aatable.updateFooter()
-      }else{
-        this.currentData.map(item=>{
-          item.orderQty=this.currentNum*item.qty
-        })
-        this.$refs.xTable2.updateFooter()
+      this.currentNum = parseInt(event.target.value) || 1;
+      if (this.tabKey == 0) {
+        this.currentData.map((item) => {
+          item.changeQty = this.currentNum * item.qty;
+        });
+        this.$refs.aatable.updateFooter();
+      } else {
+        this.currentData.map((item) => {
+          item.orderQty = this.currentNum * item.qty;
+        });
+        this.$refs.xTable2.updateFooter();
       }
     },
     selectAllEvent({ checked }) {
       if (checked) {
         this.rowId = this.Leftcurrentrow.processProductVO[0].id;
       } else {
-        this.rowId = '';
+        this.rowId = "";
       }
     },
     selectChangeEvent({ checked, row }) {
       if (checked) {
         this.rowId = row.id;
       } else {
-        this.rowId = '';
+        this.rowId = "";
       }
     },
     tabChange(key) {
@@ -891,14 +1067,14 @@ export default {
       this.currentData = [];
       this.Leftcurrentrow = {
         status: {
-          value: 0
+          value: 0,
         },
         storeName: "",
         createTime: "",
         orderMan: "",
         remark: "",
         serviceId: "",
-        processProductVO: []
+        processProductVO: [],
       };
       if (this.tabKey === 0) {
         // console.log(444444)
@@ -910,8 +1086,8 @@ export default {
     baocun1() {
       this.flag = 0;
       //如果点击保存，本次请求屏蔽保存按钮
-      if(this.saveBtnClik){
-        return
+      if (this.saveBtnClik) {
+        return;
       }
       if (!this.Leftcurrentrow.storeId || !this.Leftcurrentrow.orderMan) {
         this.$Message.info("仓库和创建时间为必输项");
@@ -932,18 +1108,22 @@ export default {
       params.processProductVO = params.processProductVO.length
         ? params.processProductVO[0]
         : {};
-      if( !params.processProductVO.orderQty||params.processProductVO.orderQty*1<1){
-          this.$Message.info("组装数量必须大于0");
-          return;
+      if (
+        !params.processProductVO.orderQty ||
+        params.processProductVO.orderQty * 1 < 1
+      ) {
+        this.$Message.info("组装数量必须大于0");
+        return;
       }
-      this.saveBtnClik = true
+      this.saveBtnClik = true;
       if (this.tabKey === 0) {
         // params.processProductVO.detailVOList.map(item=>{
         //   item.qty=item.changeQty
         // })
         //配件组装保存
+        this.saveLoading = true;
         baocun(params)
-          .then(res => {
+          .then((res) => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListzu();
@@ -956,17 +1136,20 @@ export default {
               this.Leftcurrentrow.remark = "";
               this.$Message.success("保存成功");
 
-              this.saveBtnClik = false
+              this.saveBtnClik = false;
             }
+            this.saveLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             this.$Message.info("保存配件组装信息失败");
-            this.saveBtnClik = false
+            this.saveBtnClik = false;
+            this.saveLoading = false;
           });
       } else {
         // 配件拆分保存
+        this.saveLoading = true;
         baocun2(params)
-          .then(res => {
+          .then((res) => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListchai();
@@ -978,13 +1161,14 @@ export default {
               this.Leftcurrentrow.orderMan = "";
               this.Leftcurrentrow.remark = "";
               this.$Message.success("保存成功");
-
-              this.saveBtnClik = false
+              this.saveLoading = false;
+              this.saveBtnClik = false;
             }
           })
-          .catch(e => {
+          .catch((e) => {
             this.$Message.info("保存配件拆分信息失败");
-            this.saveBtnClik = false
+            this.saveBtnClik = false;
+            this.saveLoading = false;
           });
       }
     },
@@ -1005,7 +1189,7 @@ export default {
         status: {
           enum: "DRAFT",
           name: "草稿",
-          value: 0
+          value: 0,
         },
         statuName: "草稿",
         storeName: "",
@@ -1013,7 +1197,7 @@ export default {
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
         serviceId: "",
-        processProductVO: []
+        processProductVO: [],
       };
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
@@ -1021,7 +1205,7 @@ export default {
       });
       this.Leftcurrentrow = item;
       // this.Left.tbdata[0]['processProductVO'] = []
-      this.currentData = []
+      this.currentData = [];
     },
     //提交
     tijiao1() {
@@ -1030,7 +1214,7 @@ export default {
         onOk: () => {
           this.editPro();
         },
-        onCancel: () => {}
+        onCancel: () => {},
       });
     },
     zuofei1() {
@@ -1053,35 +1237,41 @@ export default {
           const id = this.Leftcurrentrow.id;
           if (this.tabKey === 0) {
             // 配件组装作废
+            this.cancelLoading = true;
             zuofei(id)
-              .then(res => {
+              .then((res) => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.getListzu();
                   this.$Message.success("作废成功");
                 }
+                this.cancelLoading = false;
               })
-              .catch(e => {
+              .catch((e) => {
                 this.$Message.info("作废配件组装信息失败");
+                this.cancelLoading = false;
               });
           } else {
             // 配件拆分作废
+            this.cancelLoading = true;
             zuofei2(id)
-              .then(res => {
+              .then((res) => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.getListchai();
                   this.$Message.success("作废成功");
                 }
+                this.cancelLoading = false;
               })
-              .catch(e => {
+              .catch((e) => {
                 this.$Message.info("作废配件拆分信息失败");
+                this.cancelLoading = false;
               });
           }
         },
         onCancel: () => {
           this.$Message.info("取消作废");
-        }
+        },
       });
     },
     //选择单据
@@ -1188,34 +1378,40 @@ export default {
         return;
       }
       const params = {
-        ...this.Leftcurrentrow
+        ...this.Leftcurrentrow,
       };
       params.processProductVO = params.processProductVO[0];
       if (this.tabKey === 0) {
         // 配件组装提交
+        this.commitLoading = true;
         tijiao(params)
-          .then(res => {
+          .then((res) => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListzu();
               this.$Message.success("提交成功");
             }
+            this.commitLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             this.$Message.info("提交配件组装信息失败");
+            this.commitLoading = false;
           });
       } else {
         // 配件拆分提交
+        this.commitLoading = true;
         tijiao2(params)
-          .then(res => {
+          .then((res) => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListchai();
               this.$Message.success("提交成功");
             }
+            this.commitLoading = false;
           })
-          .catch(e => {
+          .catch((e) => {
             this.$Message.info("提交配件拆分信息失败");
+            this.commitLoading = false;
           });
       }
     },
@@ -1225,7 +1421,7 @@ export default {
     stamp() {},
     //左边列表选中当前行
     selectTabelData(row) {
-      if(row.id){
+      if (row.id) {
         this.leftClickItemId = row.id;
       }
       this.Leftcurrentrow = row;
@@ -1244,7 +1440,7 @@ export default {
               this.getListchai();
             }
             this.flag = 0;
-          }
+          },
         });
         return;
       }
@@ -1259,26 +1455,26 @@ export default {
       }
       if (this.Leftcurrentrow.processProductVO.length > 0) {
         this.currentData = row.processProductVO[0].detailVOList;
-        this.currentData.map(item=>{
-          item.changeQty=this.currentNum*item.qty
-        })
+        this.currentData.map((item) => {
+          item.changeQty = this.currentNum * item.qty;
+        });
       } else {
         this.currentData = [];
       }
     },
     getWareHouse() {
       cangkulist2(this.$store.state.user.userData.shopId)
-        .then(res => {
+        .then((res) => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
-            res.data.map(item => {
+            res.data.map((item) => {
               item["label"] = item.name;
               item["value"] = item.id;
             });
             this.cangkuListall = res.data;
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.$Message.info("获取仓库列表失败");
         });
     },
@@ -1306,27 +1502,31 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return '和值'
+            return "和值";
           }
-          if (['orderQty'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+          if (["orderQty"].includes(column.property)) {
+            return this.$utils.sum(data, column.property);
           }
-          return null
+          return null;
         }),
-      ]
+      ];
     },
-    addFooter2({ columns, data }){
+    addFooter2({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return '和值'
+            return "和值";
           }
-          if (['orderQty','storeStockQty','stockOutQty','changeQty'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+          if (
+            ["orderQty", "storeStockQty", "stockOutQty", "changeQty"].includes(
+              column.property
+            )
+          ) {
+            return this.$utils.sum(data, column.property);
           }
-          return null
+          return null;
         }),
-      ]
+      ];
     },
     // 确定
     Determined() {
@@ -1359,21 +1559,21 @@ export default {
         const seleList = this.$refs.xTable1.getSelectRecords();
         const id = seleList[0].id;
         shanqu(id)
-          .then(res => {
+          .then((res) => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
               // this.Leftcurrentrow.processProductVO = this.array_diff(
               //   this.Leftcurrentrow.processProductVO,
               //   seleList
               // );
-              this.Leftcurrentrow.processProductVO = []
+              this.Leftcurrentrow.processProductVO = [];
               this.currentData = [];
               // this.getListzu(this.form);
               this.rowId = "";
               this.$Message.success("删除成功");
             }
           })
-          .catch(e => {
+          .catch((e) => {
             this.rowId = "";
             this.$Message.info("删除成品失败");
           });
@@ -1382,21 +1582,21 @@ export default {
         const seleList = this.$refs.xTable2.getSelectRecords();
         const id = seleList[0].id;
         shanqu(id)
-          .then(res => {
+          .then((res) => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
               // this.Leftcurrentrow.processProductVO = this.array_diff(
               //   this.Leftcurrentrow.processProductVO,
               //   seleList
               // );
-              this.Leftcurrentrow.processProductVO = []
+              this.Leftcurrentrow.processProductVO = [];
               this.currentData = [];
               // this.getListchai(this.form);
               this.rowId = "";
               this.$Message.success("删除成功");
             }
           })
-          .catch(e => {
+          .catch((e) => {
             this.rowId = "";
             this.$Message.info("删除成品失败");
           });
@@ -1412,9 +1612,9 @@ export default {
         this.Leftcurrentrow.processProductVO.push(list);
       }
       this.currentData = this.Leftcurrentrow.processProductVO[0].detailVOList;
-      this.currentData.map(item=>{
-        item.changeQty=item.qty
-      })
+      this.currentData.map((item) => {
+        item.changeQty = item.qty;
+      });
       const tata = this;
       setTimeout(() => {
         tata.showit = true;
@@ -1422,7 +1622,7 @@ export default {
       this.$refs.addInCom.init1();
     },
     getListzu() {
-      let params = {...this.form};
+      let params = { ...this.form };
       params.startTime = this.v1[0];
       params.endTime = this.v1[1];
       if (params.qucikTime) {
@@ -1435,7 +1635,7 @@ export default {
       this.Leftcurrentrow.processProductVO = [];
       this.currentData = [];
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num)
-        .then(res => {
+        .then((res) => {
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -1448,9 +1648,9 @@ export default {
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
 
-              if(this.leftClickItemId){
-                for(let b of this.Left.tbdata){
-                  if(b.id==this.leftClickItemId){
+              if (this.leftClickItemId) {
+                for (let b of this.Left.tbdata) {
+                  if (b.id == this.leftClickItemId) {
                     b._highlight = true;
                     this.selectTabelData(b);
                     break;
@@ -1460,12 +1660,12 @@ export default {
             }
           }
         })
-        .catch(e => {
+        .catch((e) => {
           // this.$Message.info("获取配件组装列表失败");
         });
     },
     getListchai() {
-      let params = {...this.form};
+      let params = { ...this.form };
       params.startTime = this.v2[0];
       params.endTime = this.v2[1];
       // if (params.qucikTime) {
@@ -1482,7 +1682,7 @@ export default {
       this.Leftcurrentrow.processProductVO = [];
       this.currentData = [];
       peijianchaifen(params, this.Left.page.size, this.Left.page.num)
-        .then(res => {
+        .then((res) => {
           if (res.code == 0) {
             res.data.content.map((item, index) => {
               item["index"] = index + 1;
@@ -1490,9 +1690,9 @@ export default {
             });
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
-            if(this.leftClickItemId){
-              for(let b of this.Left.tbdata){
-                if(b.id==this.leftClickItemId){
+            if (this.leftClickItemId) {
+              for (let b of this.Left.tbdata) {
+                if (b.id == this.leftClickItemId) {
                   b._highlight = true;
                   this.selectTabelData(b);
                   break;
@@ -1501,7 +1701,7 @@ export default {
             }
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.$Message.info("获取拆分列表失败");
         });
     },
@@ -1515,7 +1715,7 @@ export default {
         }
       }
       return a;
-    }
+    },
   },
   mounted() {
     if (this.tabKey === 0) {
@@ -1533,7 +1733,7 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
-  }
+  },
 };
 </script>
 

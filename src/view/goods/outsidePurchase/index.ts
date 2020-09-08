@@ -74,6 +74,7 @@ export default class OutsidePurchase extends Vue {
     Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
   };//请求头
   private upurl = api.outgetup;//导入地址
+  private upurlInnerId=api.outgetupInnerId //按照内码 导入配件
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
   private mainId: string|null = null;
@@ -266,16 +267,24 @@ export default class OutsidePurchase extends Vue {
       duration: 0
     });
   };
-  //上传之前清空
+  //上传之前清空 按照编码品牌导入
   beforeUpload(){
     let upload : any=this.$refs.upload;
     upload.clearFiles()
   };
-  //下载模板
+  //上传之前清空 按照配件内码导入
+  beforeUploadInnerId(){
+    let upload: any = this.$refs.upload1;
+    upload.clearFiles()
+  };
+  //下载模板 编码品牌导入
   down(){
     down('2000000000')
   };
-
+  //下载模板 内码导入配件
+  downInnerId(){
+    down('3000000000')
+  };
   // 合计采购金额
   private totalAmt: number = 0;
 
@@ -523,6 +532,7 @@ export default class OutsidePurchase extends Vue {
               content: '<p>存在配件价格为0，是否提交</p>',
               onOk: async () => {
                 this.isClickSave = true;
+                this.commitLoading = true;
                 let res = await api.outsideSaveCommit(data);
                 if (res.code == 0) {
                   this.$Message.success('保存成功');
@@ -531,6 +541,7 @@ export default class OutsidePurchase extends Vue {
                   this.isAdd = true;
                 }
                 this.isClickSave = false;
+                this.commitLoading = false;
               },
               onCancel:() => {
                 this.isAdd = true;
@@ -539,6 +550,7 @@ export default class OutsidePurchase extends Vue {
           },500)
         }else{
           this.isClickSave = true;
+          this.commitLoading = true;
           let res = await api.outsideSaveCommit(data);
           if (res.code == 0) {
             this.$Message.success('保存成功');
@@ -547,6 +559,7 @@ export default class OutsidePurchase extends Vue {
             this.isAdd = true;
           }
           this.isClickSave = false;
+          this.commitLoading = false;
         }
       },
       onCancel: () => {
@@ -858,10 +871,14 @@ export default class OutsidePurchase extends Vue {
       this.$Message.error("请选择入库仓");
     }
   }
-  //导入
+  //按照编码品牌导入
   private getRUl(){
     this.upurl=api.outgetup+'id=' + this.mainId;
   }
+  //按照配件内码导入
+  private getRUlInnerId(){
+    this.upurlInnerId=api.outgetupInnerId+'id='+this.mainId;
+  };
   // 调节大小
   private getDomHeight() {
     this.$nextTick(() => {

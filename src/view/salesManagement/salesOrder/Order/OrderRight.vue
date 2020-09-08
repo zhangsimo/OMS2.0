@@ -21,9 +21,11 @@
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
             <div style="width: 200px">
               <!--<Tooltip :content="formPlan.fullName">-->
-                <!--<Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:134px;"/>-->
+              <!--<Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:134px;"/>-->
               <!--</Tooltip>-->
-              <sales-cus style="width:130px; display: inline-block" :disabled-prop="draftShow != 0|| this.$parent.$parent.ispart" :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
+              <sales-cus style="width:130px; display: inline-block"
+                         :disabled-prop="draftShow != 0|| this.$parent.$parent.ispart" :title="formPlan.fullName"
+                         placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
               <Button
                 class="ml5"
                 size="small"
@@ -138,7 +140,9 @@
                 v-model="formPlan.remark"
                 :disabled="draftShow != 0|| this.$parent.$parent.ispart"
               />
-              <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlan.remark||"").trim()}}</div>
+              <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">
+                {{(formPlan.remark||"").trim()}}
+              </div>
             </Tooltip>
           </FormItem>
 
@@ -182,35 +186,80 @@
               </Button>
             </div>
             <div class="fl mb5">
-              <Upload
-                ref="upload"
-                style="display: inline-block"
-                :show-upload-list="false"
-                :action="upurl"
-                :headers="headers"
-                :format="['xlsx','xls']"
-                :on-format-error="onFormatError"
-                :on-success="onSuccess"
-                :before-upload="beforeUpload"
-              >
-                <Button
-                  size="small"
-                  class="mr10"
-                  @click="getRUl"
-                  :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd || !this.$parent.$parent.selectItemId"
-                  v-has="'getBarch'"
-                >
-                <span class="center">
-                  <Icon custom="iconfont icondaoruicon icons"/>导入配件
-                </span>
+              <Poptip placement="bottom">
+                <Button class="mr10" size="small"
+                        :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd || !this.$parent.$parent.selectItemId"
+                        v-has="'getBarch'">导入
                 </Button>
-              </Upload>
+                <div slot="content" class="flex" style="justify-content: space-between">
+                  <div class="flex mr10">
+                    <Upload
+                      ref="upload1"
+                      :show-upload-list="false"
+                      :action="upurlInnerId"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload='beforeUploadInnerId'
+                    >
+                      <Button
+                        size="small"
+                        class="mr10"
+                        @click="getRUlInnerId"
+                        v-has="'getBarchInnerId'"
+                      >
+                        <span class="center">
+                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
+                        </span>
+                      </Button>
+                    </Upload>
+                  </div>
+                  <div class="flex">
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload="beforeUpload"
+                    >
+                      <Button
+                        size="small"
+                        class="mr10"
+                        @click="getRUl"
+                        v-has="'getBarchBrand'"
+                      >
+                        <span class="center">
+                          <Icon custom="iconfont icondaoruicon icons"/>编码品牌导入
+                        </span>
+                      </Button>
+                    </Upload>
+                  </div>
+                </div>
+              </Poptip>
             </div>
             <div class="fl mr10">
-              <Button size="small" @click="down">
-                <Icon custom="iconfont iconxiazaiicon icons"/>
-                下载模板
-              </Button>
+              <Poptip placement="bottom">
+                <Button size="small">
+                  <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                </Button>
+                <div slot="content">
+                  <Button
+                    size="small"
+                    class="mr10"
+                    @click="downInnerId"
+                  >配件内码模板
+                  </Button>
+                  <Button
+                    size="small"
+                    @click="down"
+                  >编码品牌模板</Button>
+                </div>
+              </Poptip>
             </div>
             <div class="fl mb5">
               <Button
@@ -380,7 +429,8 @@
     <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"
                      @selectPartName="getPartNameList" @throwPartNameList2="getPartNameList2"></select-part-com>
     <!--      批次配件-->
-    <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList" @throwPartNameList2="throwBatch"></barch>
+    <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList"
+           @throwPartNameList2="throwBatch"></barch>
     <!--      选择客户-->
     <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
     <!--      选择入库单-->
@@ -414,7 +464,8 @@
     getSubmitList,
     getAccessories,
     getDeleteList,
-    getup,
+    getup/**按照编码品牌导入配件*/,
+    getupInnerId/**按照内码导入配件*/,
     getAccessList
   } from "@/api/salesManagment/salesOrder";
   import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
@@ -485,7 +536,8 @@
         headers: {
           Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
         }, //请求头
-        upurl: getup, //导入地址
+        upurl: getup, //导入地址 编码品牌导入配件
+        upurlInnerId:getupInnerId,//内码导入配件
         orderType: [
           {
             value: 0,
@@ -545,7 +597,7 @@
         },
         ispart: true, //添加配件状态
         rightTableHeight: 0,
-        isClickSave:false,
+        isClickSave: false,
       };
     },
     mounted() {
@@ -563,7 +615,7 @@
       }
     },
     methods: {
-      throwNameFun(v){
+      throwNameFun(v) {
         this.setOneClient(v);
       },
 
@@ -730,9 +782,9 @@
         });
         if (res.code === 0) {
           this.WarehouseList = res.data;
-          this.WarehouseList.map(item=>{
-            if(item.isDefault){
-              this.formPlan.storeId=item.id
+          this.WarehouseList.map(item => {
+            if (item.isDefault) {
+              this.formPlan.storeId = item.id
             }
           })
         }
@@ -827,13 +879,13 @@
           })
         ];
       },
-      //下载模板
+      //下载模板 编码品牌导入
       down() {
-        // location.href =
-        //   baseUrl.omsOrder +
-        //   "/sellOrderMain/template?access_token=" +
-        //   Cookies.get(TOKEN_KEY);
         down('2200000000');
+      },
+      //下载模板 内码导入配件
+      downInnerId(){
+        down('3200000000');
       },
       //批量上传失败
       onFormatError(file) {
@@ -845,7 +897,7 @@
           let txt = "上传成功";
           if (response.data.length > 0) {
             this.warning(response.data)
-          }else{
+          } else {
             this.$Notice.warning({
               title: "导入成功",
               desc: txt,
@@ -858,25 +910,28 @@
         }
       },
       warning(nodesc) {
-        let str=""
-        if(nodesc.length>0){
-          nodesc.map((item,index)=>{
-            if(index!=nodesc.length-1){
-              str+=`${item}<br/>`
-            }else{
-              str+=`${item}`
+        let str = ""
+        if (nodesc.length > 0) {
+          nodesc.map((item, index) => {
+            if (index != nodesc.length - 1) {
+              str += `${item}<br/>`
+            } else {
+              str += `${item}`
             }
           })
         }
         this.$Notice.warning({
           title: "上传错误信息",
           desc: str,
-          duration:0
+          duration: 0
         });
       },
-      //上传之前清空
+      //上传之前清空 配件编码品牌 导入
       beforeUpload() {
         this.$refs.upload.clearFiles();
+      },
+      beforeUploadInnerId(){
+        this.$refs.upload1.clearFiles();
       },
       //打开收货地址
       openAddressShow() {
@@ -989,7 +1044,7 @@
       },
 
       //批次修改数量单价选入
-      throwBatch(v){
+      throwBatch(v) {
         this.getBarchList(v);
       },
 
@@ -1068,7 +1123,9 @@
         // if(!this.formPlan.planSendDate) {
         //   return this.$Message.error("*为必填项");
         // }
-        if(this.$parent.$parent.submitloading){return }
+        if (this.$parent.$parent.submitloading) {
+          return
+        }
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
@@ -1081,23 +1138,23 @@
               let data = JSON.parse(JSON.stringify(this.formPlan));
               data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
               data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
-              if(this.isClickSave){
+              if (this.isClickSave) {
                 return this.$Message.error("请稍后订单处理中...");
               }
               this.isClickSave = true;
-              this.$parent.$parent.submitloading=true;
+              this.$parent.$parent.submitloading = true;
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
                 this.$Message.success("保存成功");
                 this.$parent.$parent.isAdd = false;
-                this.$parent.$parent.submitloading=false;
+                this.$parent.$parent.submitloading = false;
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
                 // this.reload();
-              }else{
-                this.$parent.$parent.submitloading=false;
+              } else {
+                this.$parent.$parent.submitloading = false;
                 // this.$message.error("保存失败")
               }
             } catch (errMap) {
@@ -1137,7 +1194,9 @@
       },
       //出库
       stockOut() {
-        if(this.$parent.$parent.submitloading){return }
+        if (this.$parent.$parent.submitloading) {
+          return
+        }
         let str = '是否确定出库';
         if (this.formPlan.orderAmt * 1 == 0) {
           str = '存在配件单价为0，是否确定出库';
@@ -1156,7 +1215,7 @@
                     if (+this.totalMoney > +this.limitList.sumAmt) {
                       return this.$message.error("可用余额不足");
                     }
-                    this.$parent.$parent.submitloading=true
+                    this.$parent.$parent.submitloading = true
                     data.planSendDate = tools.transTime(data.planSendDate)
                     data.planArriveDate = tools.transTime(data.planArriveDate)
                     let res = await getStockOut(data);
@@ -1164,11 +1223,11 @@
                       this.$Message.success("出库成功");
                       this.$store.commit("setleftList", res);
                       this.door.outStockDoor = true;
-                      this.$parent.$parent.submitloading=false
+                      this.$parent.$parent.submitloading = false
                       return res;
                     } else {
                       this.door.outStockDoor = true;
-                      this.$parent.$parent.submitloading=false
+                      this.$parent.$parent.submitloading = false
                     }
                   } catch (errMap) {
                     this.$XModal.message({
@@ -1192,7 +1251,9 @@
         // if(!this.formPlan.planSendDate) {
         //   return this.$Message.error("*为必填项");
         // }
-        if(this.$parent.$parent.submitloading){return }
+        if (this.$parent.$parent.submitloading) {
+          return
+        }
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
@@ -1221,23 +1282,23 @@
                     title: "提示",
                     content: text,
                     onOk: async () => {
-                      if(this.isClickSave){
+                      if (this.isClickSave) {
                         return this.$Message.error("请稍后订单处理中...");
                       }
-                      this.$parent.$parent.submitloading=true;
+                      this.$parent.$parent.submitloading = true;
                       this.isClickSave = true;
                       let res = await getSubmitList(data);
                       this.isClickSave = false;
                       if (res.code === 0) {
                         this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
-                        this.$parent.$parent.submitloading=false;
+                        this.$parent.$parent.submitloading = false;
                         this.$parent.$parent.orderlistType.value = 1;
                         this.limitList = {};
                         this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();
-                      }else{
-                        this.$parent.$parent.submitloading=false;
+                      } else {
+                        this.$parent.$parent.submitloading = false;
                       }
                     },
                     onCancel: () => {
@@ -1245,23 +1306,23 @@
                   });
                 }, 500);
               } else {
-                if(this.isClickSave){
+                if (this.isClickSave) {
                   return this.$Message.error("请稍后订单处理中...");
                 }
                 this.isClickSave = true;
-                this.$parent.$parent.submitloading=true
+                this.$parent.$parent.submitloading = true
                 let res = await getSubmitList(data);
                 this.isClickSave = false;
                 if (res.code === 0) {
                   this.$Message.success("提交成功");
                   this.$parent.$parent.isAdd = false;
-                  this.$parent.$parent.submitloading=false;
+                  this.$parent.$parent.submitloading = false;
                   this.limitList = {};
                   this.$store.commit("setleftList", res);
                   this.$refs.formPlan.resetFields();
                   // this.reload();
-                }else{
-                  this.$parent.$parent.submitloading=false;
+                } else {
+                  this.$parent.$parent.submitloading = false;
                 }
               }
             } catch (errMap) {
@@ -1273,7 +1334,7 @@
         });
       },
       //获取选择入库单的信息
-      async getGodown(val,b) {
+      async getGodown(val, b) {
         let data = JSON.parse(JSON.stringify(this.formPlan));
         if (data.planSendDate) {
           data.planSendDate = tools.transTime(data.planSendDate)
@@ -1287,7 +1348,7 @@
         });
         data.detailList = val.details;
         data.sign = b;
-        // data.orderTypeId = val.orderTypeId||"";
+        data.orderTypeId = val.orderTypeId||"";
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();
@@ -1297,6 +1358,9 @@
       },
       getRUl(val) {
         this.upurl = getup + "id=" + this.formPlan.id;
+      },
+      getRUlInnerId(){
+        this.upurlInnerId=getupInnerId+"id=" + this.formPlan.id;
       }
     },
     watch: {

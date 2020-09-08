@@ -16,19 +16,26 @@
                 v-for="(item, index) in purchaseTypeArr"
                 :value="item.value"
                 :key="index"
-              >{{ item.label }}</Option
+              >{{ item.label }}
+              </Option
               >
             </Select>
           </div>
           <div class="db">
             <Button type="default" @click="showModel('moreSearch')" class="mr10"
-            ><Icon type="ios-more" />更多</Button
+            >
+              <Icon type="ios-more"/>
+              更多
+            </Button
             >
           </div>
           <div class="db">
             <Button class="mr10" @click="addPro"
-            v-has="'add'"
-            ><Icon type="md-add" /> 新增</Button
+                    v-has="'add'"
+            >
+              <Icon type="md-add"/>
+              新增
+            </Button
             >
           </div>
           <div class="db">
@@ -40,7 +47,8 @@
               v-has="'save'"
               :loading='saveLoading'
               v-noresub
-            ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
+            ><i class="iconfont mr5 iconbaocunicon"></i>保存
+            </Button
             >
           </div>
           <div class="db">
@@ -51,35 +59,45 @@
               v-has="'submit'"
               :loading='commitLoading'
               v-noresub
-            ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
+            ><i class="iconfont mr5 iconziyuan2"></i>提交
+            </Button
             >
           </div>
           <div class="db">
             <Button @click="print" class="mr10" :disabled="selectTableRow === null"
-            v-has="'print'"
-            ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
+                    v-has="'print'"
+            ><i class="iconfont mr5 icondayinicon"></i> 打印
+            </Button
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
-            v-has="'invalidate'"
-            ><Icon type="md-close" size="14" /> 作废</Button
+            <Button @click="abandoned" class="mr10"
+                    :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
+                    v-has="'invalidate'"
+            >
+              <Icon type="md-close" size="14"/>
+              作废
+            </Button
             >
           </div>
           <div class="db">
             <Button @click="showStatus" class="mr10" :disabled="hideSp"
-            v-has="'approval'"
-            ><i class="iconfont mr5 iconshenheicon"></i>查看审批</Button
+                    v-has="'approval'"
+            ><i class="iconfont mr5 iconshenheicon"></i>查看审批
+            </Button
             >
           </div>
           <div class="db">
             <Button @click="showFee" class="mr10"
-            v-has="'reg'"
-            ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
+                    v-has="'reg'"
+            ><i class="iconfont mr5 iconshenheicon"></i> 费用登记
+            </Button
             >
           </div>
           <div class="db">
-            <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
+            <div class="mt5">
+              <Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox>
+            </div>
           </div>
         </div>
       </div>
@@ -138,32 +156,34 @@
                     <Row class="w160">
                       <Col span="19"
                       >
-                      <Tooltip :content="formPlanmain.guestName">
-                      <!-- <Input
-                        v-model="formPlanmain.guestName"
-                        placeholder="请选择供应商"
-                        :disabled="isInput"
-                      /> -->
-                      <GoodCus style="width: 120px"
-                        :title="formPlanmain.guestName"
-                        placeholder="请输入供应商"
-                        :search-value="formPlanmain.guestName"
-                        @throwName="throwNameFun"
-                        :disabled-prop="isInput">
-                      </GoodCus>
-                      </Tooltip>
+                        <Tooltip :content="formPlanmain.guestName">
+                          <!-- <Input
+                            v-model="formPlanmain.guestName"
+                            placeholder="请选择供应商"
+                            :disabled="isInput"
+                          /> -->
+                          <GoodCus style="width: 120px"
+                                   :title="formPlanmain.guestName"
+                                   placeholder="请输入供应商"
+                                   :search-value="formPlanmain.guestName"
+                                   @throwName="throwNameFun"
+                                   :disabled-prop="isInput">
+                          </GoodCus>
+                        </Tooltip>
                       </Col>
                       <Col span="5"
-                      ><Button
-                        @click="showModel('selectSupplier')"
-                        class="ml5"
-                        size="small"
-                        type="default"
-                        :disabled="isInput"
-                      ><i
-                        class="iconfont iconxuanzetichengchengyuanicon"
-                      ></i></Button
-                      ></Col>
+                      >
+                        <Button
+                          @click="showModel('selectSupplier')"
+                          class="ml5"
+                          size="small"
+                          type="default"
+                          :disabled="isInput"
+                        ><i
+                          class="iconfont iconxuanzetichengchengyuanicon"
+                        ></i></Button
+                        >
+                      </Col>
                     </Row>
                   </FormItem>
                   <FormItem class="form-Item" label="预付款：" prop="advanceAmt">
@@ -179,11 +199,11 @@
                   </FormItem>
                   <FormItem class="form-Item" label="采购员：" prop="orderManId">
                     <Select v-model="formPlanmain.orderManId"
-                      class="w160"
-                      :disabled="isInput"
-                      label-in-value
-                      @on-change="selectOrderMan"
-                      filterable
+                            class="w160"
+                            :disabled="isInput"
+                            label-in-value
+                            @on-change="selectOrderMan"
+                            filterable
                     >
                       <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
@@ -202,7 +222,8 @@
                         v-for="(item, index) in pjTypes"
                         :key="index"
                         :value="item.value"
-                      >{{ item.label }}</Option
+                      >{{ item.label }}
+                      </Option
                       >
                     </Select>
                   </FormItem>
@@ -220,7 +241,8 @@
                         v-for="(item, index) in settleMethods"
                         :key="index"
                         :value="item.value"
-                      >{{ item.label }}</Option
+                      >{{ item.label }}
+                      </Option
                       >
                     </Select>
                   </FormItem>
@@ -234,7 +256,8 @@
                         v-for="(item, index) in inStores"
                         :key="index"
                         :value="item.value"
-                      >{{ item.label }}</Option
+                      >{{ item.label }}
+                      </Option
                       >
                     </Select>
                   </FormItem>
@@ -262,14 +285,15 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="备注：">
-                    <Tooltip :content="formPlanmain.remark">
-                    <Input
-                      placeholder="请输入备注"
-                      class="w160"
-                      v-model="formPlanmain.remark"
-                      :disabled="isInput"
-                      maxlength="100"
-                    />
+                    <Tooltip :content="formPlanmain.remark" :disabled="(formPlanmain.remark||'').trim()==''">
+                      <Input
+                        placeholder="请输入备注"
+                        class="w160"
+                        :disabled="isInput"
+                        v-model="formPlanmain.remark"
+                        maxlength="100"
+                      />
+                      <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlanmain.remark||"").trim()}}</div>
                     </Tooltip>
                   </FormItem>
                   <FormItem class="form-Item" label="直发门店：">
@@ -285,19 +309,20 @@
                         :key="index"
                         :value="item.value"
                         v-show="item.value!=$store.state.user.userData.shopId"
-                      >{{item.label }}</Option
+                      >{{item.label }}
+                      </Option
                       >
                     </Select>
                   </FormItem>
                   <FormItem class="form-Item" label="订单号：">
                     <Tooltip :content="formPlanmain.serviceId">
-                    <Input
-                      readonly
-                      placeholder=""
-                      class="w160"
-                      v-model="formPlanmain.serviceId"
-                      :disabled="isInput"
-                    />
+                      <Input
+                        readonly
+                        placeholder=""
+                        class="w160"
+                        v-model="formPlanmain.serviceId"
+                        :disabled="isInput"
+                      />
                     </Tooltip>
                   </FormItem>
                 </Form>
@@ -311,7 +336,8 @@
                       @click="addAcc"
                       :disabled="isInput||!formPlanmain.guestId"
                       v-has="'addPart'"
-                    >添加配件</Button
+                    >添加配件
+                    </Button
                     >
                   </div>
                   <div class="fl mb5">
@@ -321,37 +347,76 @@
                       @click="delPart"
                       :disabled="isInput"
                       v-has="'delete'"
-                    ><Icon custom="iconfont iconlajitongicon icons" />
-                      删除配件</Button
+                    >
+                      <Icon custom="iconfont iconlajitongicon icons"/>
+                      删除配件
+                    </Button
                     >
                   </div>
                   <div class="fl mb5">
-                    <Upload
-                      ref="upload"
-                      style="display: inline-block"
-                      :show-upload-list="false"
-                      :action="upurl"
-                      :headers="headers"
-                      :format="['xlsx','xls']"
-                      :on-format-error="onFormatError"
-                      :on-success="onSuccess"
-                      :before-upload ='beforeUpload'
-                      :disabled="!mainId || selectTableRow.new || isInput"
-                      v-has="'import'"
-                    >
-                      <Button size="small" class="mr10" @click="getRUl" :disabled="!mainId || selectTableRow.new || isInput">
-                        <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
+                    <Poptip placement="bottom">
+                      <Button class="mr10" size="small" :disabled="!mainId || selectTableRow.new || isInput" v-has="'import'">导入
                       </Button>
-                    </Upload>
+                      <div slot="content" class="flex" style="justify-content: space-between">
+                        <div class="flex mr10">
+                          <Upload
+                            ref="upload1"
+                            :show-upload-list="false"
+                            :action="upurlInnerId"
+                            :headers="headers"
+                            :format="['xlsx','xls']"
+                            :on-format-error="onFormatError"
+                            :on-success="onSuccess"
+                            :before-upload='beforeUploadInnerId'
+                          >
+                            <Button
+                              size="small"
+                              @click="getRUlInnerId"
+                              v-has="'importInnerId'"
+                            >配件内码导入
+                            </Button>
+                          </Upload>
+                        </div>
+                        <div class="flex">
+                          <Upload
+                            ref="upload"
+                            :show-upload-list="false"
+                            :action="upurl"
+                            :headers="headers"
+                            :format="['xlsx','xls']"
+                            :on-format-error="onFormatError"
+                            :on-success="onSuccess"
+                            :before-upload='beforeUpload'
+                          >
+                            <Button
+                              size="small"
+                              @click="getRUl"
+                              v-has="'importBrand'">
+                              编码品牌导入
+                            </Button>
+                          </Upload>
+                        </div>
+                      </div>
+                    </Poptip>
                   </div>
-                  <div class="fl mb5">
-                    <Button
-                      size="small"
-                      @click="down"
-                      class="mr10"
-                    >
-                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                    </Button>
+                  <div class="fl mb5 mr10">
+                    <Poptip placement="bottom">
+                      <Button size="small">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                      <div slot="content">
+                        <Button
+                          size="small"
+                          class="mr10"
+                          @click="downInnerId"
+                        >配件内码模板
+                        </Button>
+                        <Button
+                          size="small"
+                          @click="down"
+                        >编码品牌模板</Button>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -360,7 +425,8 @@
                       :disabled="adjustButtonDisable"
                       @click="showModel('adjustModel')"
                       v-has="'adj'"
-                    >订单调整</Button
+                    >订单调整
+                    </Button
                     >
                   </div>
                   <div class="fl mb5">
@@ -370,7 +436,8 @@
                       :disabled="isInput"
                       @click="showGoodsInfo"
                       v-has="'info'"
-                    >收货信息</Button
+                    >收货信息
+                    </Button
                     >
                   </div>
                   <div class="fl mb5">
@@ -380,7 +447,8 @@
                       @click="showModel('purchaseAmount')"
                       :disabled="isInput"
                       v-has="'amount'"
-                    >采购金额填写</Button
+                    >采购金额填写
+                    </Button
                     >
                   </div>
                 </div>
@@ -401,10 +469,10 @@
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
                 <vxe-table-column show-overflow="tooltip"
-                  type="seq"
-                  width="60"
-                  title="序号"
-                  fixed="left"
+                                  type="seq"
+                                  width="60"
+                                  title="序号"
+                                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="60"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="80">
@@ -413,29 +481,30 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="partCode"
-                  title="配件编码"
-                  width="100"
-                  fixed="left"
+                                  field="partCode"
+                                  title="配件编码"
+                                  width="100"
+                                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="partName"
-                  title="配件名称"
-                  width="100"
-                  fixed="left"
+                                  field="partName"
+                                  title="配件名称"
+                                  width="100"
+                                  fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column fixed="left" show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" show-overflow="tooltip" field="partInnerId" title="配件内码"
+                                  width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="partBrand"
-                  title="品牌"
-                  width="100"
-                  fixed="left"
+                                  field="partBrand"
+                                  title="品牌"
+                                  width="100"
+                                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="orderQty"
-                  title="采购数量"
-                  :edit-render="{ name: 'input' }"
-                  width="160"
+                                  field="orderQty"
+                                  title="采购数量"
+                                  :edit-render="{ name: 'input' }"
+                                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -449,10 +518,10 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="orderPrice"
-                  title="采购单价"
-                  :edit-render="{ name: 'input' }"
-                  width="160"
+                                  field="orderPrice"
+                                  title="采购单价"
+                                  :edit-render="{ name: 'input' }"
+                                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -474,55 +543,55 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="remark"
-                  title="备注"
-                  :edit-render="{ name: 'input' }"
-                  width="100"
+                                  field="remark"
+                                  title="备注"
+                                  :edit-render="{ name: 'input' }"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="noTaxPrice"
-                  title="不含税单价"
-                  width="100"
+                                  field="noTaxPrice"
+                                  title="不含税单价"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="noTaxAmt"
-                  title="不含税金额"
-                  width="100"
+                                  field="noTaxAmt"
+                                  title="不含税金额"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="carModelName"
-                  title="品牌车型"
-                  width="100"
+                                  field="carModelName"
+                                  title="品牌车型"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="unit"
-                  title="单位"
-                  width="100"
+                                  field="unit"
+                                  title="单位"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="oemCode"
-                  title="OE码"
-                  width="100"
+                                  field="oemCode"
+                                  title="OE码"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="spec"
-                  title="规格"
-                  width="100"
+                                  field="spec"
+                                  title="规格"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="direction"
-                  title="方向"
-                  width="100"
+                                  field="direction"
+                                  title="方向"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="adjustQty"
-                  title="订单取消数量"
-                  width="100"
+                                  field="adjustQty"
+                                  title="订单取消数量"
+                                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
-                  field="trueEnterQty"
-                  title="验收数量"
-                  width="100"
+                                  field="trueEnterQty"
+                                  title="验收数量"
+                                  width="100"
                 ></vxe-table-column>
               </vxe-table>
             </div>
@@ -562,9 +631,10 @@
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!--审批状态-->
-    <status-model ref="StatusModel" :orderId="selectTableRow" ></status-model>
+    <status-model ref="StatusModel" :orderId="selectTableRow"></status-model>
     <!--添加配件-->
-    <select-part-com ref="selectPartCom" :formPlanmain="formPlanmain" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2" :is-show-add-part-btn="true"></select-part-com>
+    <select-part-com ref="selectPartCom" :formPlanmain="formPlanmain" @selectPartName="getPartNameList"
+                     @selectPartName2="getPartNameList2" :is-show-add-part-btn="true"></select-part-com>
   </div>
 </template>
 

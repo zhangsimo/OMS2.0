@@ -16,6 +16,7 @@
         @click="save"
         :disabled="formPlan.billStatusValue != 0"
         v-has="'save'"
+        :loading="saveLoading"
       >
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons" />保存
@@ -26,6 +27,7 @@
         @click="godown"
         :disabled="formPlan.billStatusValue != 0"
         v-has="'godown'"
+        :loading="goDownLoading"
       >
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库
       </Button>

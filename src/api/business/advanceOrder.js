@@ -48,8 +48,10 @@ export function invalid (params) {
   })
 }
 
-//批量导入地址
+//批量导入地址 编码品牌导入
 export const getup = `${api.omsOrder}/preOrderMain/import?`;
+//内码导入配件
+export const getupInnerId=`${api.omsOrder}/preOrderMain/import/partId?`;
 
 // 更多弹筐里的下拉框
 // tenantUsers/queryAll?size=10&page=0&userName=&
