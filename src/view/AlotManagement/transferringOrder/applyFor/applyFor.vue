@@ -147,7 +147,9 @@
                       <div class="fl mb5">
                         <Poptip placement="bottom">
                           <Button class="mr10" size="small"
-                                  :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId">导入
+                                  :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
+                                  v-has="'import'"
+                          >导入
                           </Button>
                           <div slot="content" class="flex" style="justify-content: space-between">
                             <div class="flex mr10">
@@ -160,12 +162,11 @@
                                 :before-upload="handleBeforeUploadInnerId"
                                 :on-success="handleSuccess"
                                 :on-format-error="onFormatError"
-                                :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
                               >
                                 <Button
                                   size="small"
                                   class="mr10"
-                                  :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
+                                  v-has="'importInnerId'"
                                 >配件内码导入</Button>
                               </Upload>
                             </div>
@@ -179,12 +180,11 @@
                                 :before-upload="handleBeforeUpload"
                                 :on-success="handleSuccess"
                                 :on-format-error="onFormatError"
-                                :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
                               >
                                 <Button
                                   size="small"
                                   class="mr10"
-                                  :disabled="![0, 4].includes(datadata&&datadata.status.value) || !selectRowId"
+                                  v-has="'importBrand'"
                                 >编码品牌导入</Button>
                               </Upload>
                             </div>
