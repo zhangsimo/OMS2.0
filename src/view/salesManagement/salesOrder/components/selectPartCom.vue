@@ -5,7 +5,8 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        <div class="db mr5 item">
+        
+        <!-- <div class="db mr5 item">
           <span class="mr5">编码:</span>
           <el-input class="w100 mr10" autofocus ref="elinput" placeholder="编码" v-model="partName" @change="query"/>
         </div>
@@ -20,15 +21,15 @@
         <div class="db mr5 item">
           <span class="mr5">OE:</span>
           <el-input class="w100 mr10" placeholder="OE" v-model="partName" @change="query"/>
-        </div>
-        <!-- <el-input
+        </div> -->
+        <el-input
           class="w250 mr10"
           v-model="partName"
-          placeholder="编码"
+          placeholder="配件编码/内码/名称/OE"
           @change="search"
           :autofocus="true"
           ref="elinput"
-        ></el-input> -->
+        ></el-input>
 
 
         <!-- <Select
@@ -418,8 +419,5 @@ export default {
 <style>
   .sales-part-model .ivu-modal{
     top:50px;
-  }
-  .item{
-    float: left;
   }
 </style>

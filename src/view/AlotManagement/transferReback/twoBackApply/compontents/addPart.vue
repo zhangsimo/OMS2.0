@@ -11,7 +11,7 @@
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
 
-        <div class="db mr5">
+        <!-- <div class="db mr5">
           <span class="mr5">编码:</span>
           <el-input class="w70" autofocus ref="elinput" placeholder="编码" v-model="partName" @change="query"/>
         </div>
@@ -26,11 +26,11 @@
         <div class="db mr5">
           <span class="mr5">OE:</span>
           <el-input class="w70" placeholder="OE" v-model="partName" @change="query"/>
-        </div>
-
-        <!-- <div class="db mr5">
-          <el-input ref="elinput" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
         </div> -->
+
+        <div class="db mr5">
+          <el-input ref="elinput" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
+        </div>
 
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
@@ -394,7 +394,5 @@
     margin-top: 10px;
     text-align: right;
   }
-  .item{
-    float: left;
-  }
+
 </style>

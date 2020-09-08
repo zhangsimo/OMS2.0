@@ -201,12 +201,14 @@
                             :before-upload="handleBeforeUploadInnerId"
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
+                            :disabled="draftShow != 0||!formPlan.serviceId"
                           >
                             <Button
                               @click="importAssInnerId"
                               size="small"
                               class="mr10"
-                              v-has="'importInnerId'"
+                              v-has="'import'"
+                              :disabled="draftShow != 0||!formPlan.serviceId"
                             >配件内码导入</Button>
                           </Upload>
                         </div>
@@ -220,12 +222,14 @@
                             :before-upload="handleBeforeUpload"
                             :on-format-error="onFormatError"
                             :on-success="handleSuccess"
+                            :disabled="draftShow != 0||!formPlan.serviceId"
                           >
                             <Button
                               @click="importAss"
                               size="small"
                               class="mr10"
-                              v-has="'importBrand'"
+                              v-has="'import'"
+                              :disabled="draftShow != 0||!formPlan.storeId"
                             >编码品牌导入</Button>
                           </Upload>
                         </div>

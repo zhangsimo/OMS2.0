@@ -53,6 +53,7 @@
     <div slot='footer'>
       <Button type='primary' @click="emit">确定</Button>
       <Button type='default' @click="moreQueryShow=false">取消</Button>
+      <!-- <Button type='default' @click="">清空</Button> -->
     </div>
   </Modal>
 </template>
