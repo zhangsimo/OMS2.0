@@ -52,7 +52,7 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="openMore">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
             </button>
@@ -727,6 +727,13 @@
         });
         return sums;
         //
+      },
+      openMore(){
+        this.accountNo='';
+        this.fno="";
+        this.createUname="";
+        this.startStatusName=""
+        this.modal1 = true
       },
       //查询
       query() {

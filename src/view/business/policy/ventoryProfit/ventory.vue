@@ -30,6 +30,7 @@
               v-has="'save'"
               type="default"
               class="mr10"
+              :loading="saveLoading"
               :disabled="this.formPlan.statuName!== '草稿'"
             >保存</Button>
           </div>
@@ -39,6 +40,7 @@
               v-has="'submit'"
               type="default"
               class="mr10"
+              :loading="commitLoading"
               :disabled="this.formPlan.statuName!== '草稿'"
             >提交</Button>
           </div>
@@ -331,6 +333,8 @@
     },
     data() {
       return {
+        saveLoading: false,
+        commitLoading: false,
         salesList: [], //盘点员列表
         dis: false,
         split1: 0.2,
@@ -696,11 +700,13 @@
         this.$Modal.confirm({
           title: "是否确定提交订单",
           onOk: () => {
+            this.commitLoading = true;
             submitVentory(this.formPlan).then(res => {
               if (res.code == 0) {
                 this.$Message.success("提交成功");
                 this.getList();
               }
+              this.commitLoading = false;
             });
           },
           onCancel: () => {
@@ -710,6 +716,7 @@
       },
       //保存
       baocun() {
+        this.saveLoading = true;
         saveVentory(this.formPlan).then(res => {
           if (res.code == 0) {
             this.flag = 0;
@@ -719,6 +726,7 @@
             this.$Message.success("保存成功");
             this.getList();
           }
+          this.saveLoading = false
           this.handleReset();
           // else{
           //   this.formPlan.checkDate = preTime;

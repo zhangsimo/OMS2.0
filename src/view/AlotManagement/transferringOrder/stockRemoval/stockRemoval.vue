@@ -52,6 +52,7 @@
                 v-has="'submit'"
                 :disabled="![0].includes(buttonDisable)"
                 @click="tijiao1"
+                :loading="isCommitClick"
               >
                 <Icon type="md-checkmark" size="14"/>
                 提交
@@ -63,6 +64,7 @@
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"
+                :loading="isOutClick"
               >
                 <Icon type="md-checkmark" size="14"/>
                 出库
@@ -73,6 +75,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
+                :loading="isCancelClick"
                 :disabled="
                   ![0].includes(buttonDisable) || Leftcurrentrow.code != ''
                 "
@@ -775,6 +778,9 @@
         isWms: false, //仓库是否启用wms
         createTime: new Date(),
         isSaveClick:false,
+        isCommitClick: false,
+        isCancelClick: false,
+        isOutClick: false,
       };
     },
     // watch: {
@@ -995,16 +1001,17 @@
               if (res.code == 0) {
                 this.flag = 0;
                 this.flag1 = false;
-                this.buttonDisable = null;
                 this.getList();
                 this.$Message.success("保存成功");
                 this.$refs.formPlan.resetFields();
               }
+              this.isSaveClick = false;
             })
           // .catch(e => {
           //   this.$Message.info("保存配件组装信息失败");
           // });
         } catch (errMap) {
+          this.isSaveClick = false;
           this.$XModal.message({
             status: "error",
             message: "受理数量输入错误！"
@@ -1095,10 +1102,10 @@
             //   "YYYY-MM-DD HH:mm:ss"
             // );
             params.createTime = this.createTime;
-            if(this.isSaveClick){
+            if(this.isCommitClick){
               return this.$message.error('请稍后数据处理中....');
             }
-            this.isSaveClick = true;
+            this.isCommitClick = true;
             tijiao(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
@@ -1108,8 +1115,9 @@
                   this.getList();
                   this.$Message.success("提交成功");
                   this.$refs.formPlan.resetFields();
+                  this.isCommitClick = false;
                 }else{
-                  this.isSaveClick = false;
+                  this.isCommitClick = false;
                 }
               })
             // .catch(e => {
@@ -1141,19 +1149,18 @@
           title: "是否确定作废",
           onOk: () => {
             // 配件组装作废
-            if(this.isSaveClick){
+            if(this.isCancelClick){
               return this.$message.error('请稍后数据处理中....');
             }
-            this.isSaveClick = true;
+            this.isCancelClick = true;
             zuofei(paramster)
               .then(res => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.$Message.success("作废成功");
                   this.getList();
-                }else{
-                  this.isSaveClick = true;
                 }
+                this.isCancelClick = false;
               })
             // .catch(e => {
             //   this.$Message.info("作废失败");
@@ -1228,19 +1235,18 @@
               id: this.Leftcurrentrow.id
             };
             // 配件组装作废
-            if(this.isSaveClick){
+            if(this.isOutClick){
               return this.$message.error('请稍后数据处理中....');
             }
-            this.isSaveClick = true;
+            this.isOutClick = true;
             outDataList(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
                 if (res.code == 0) {
                   this.getList();
                   this.$Message.success("出库成功");
-                }else{
-                  this.isSaveClick = false;
                 }
+                this.isOutClick = false;
               })
             // .catch(e => {
             //   this.$Message.info("出库失败");

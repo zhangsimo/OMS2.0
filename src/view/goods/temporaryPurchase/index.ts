@@ -75,7 +75,8 @@ export default class TemporaryPurchase extends Vue {
   private headers = {
     Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
   };//请求头
-  private upurl = api.getup;//导入地址
+  private upurl = api.getup;//按照品牌 导入配件 导入地址
+  private upurlInnerId=api.getupInnerId //按照内码 导入配件
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
   private mainId: string | null = null;
@@ -250,16 +251,24 @@ export default class TemporaryPurchase extends Vue {
       duration:0
     });
   };
-  //上传之前清空
+  //上传之前清空 按照编码品牌导入
   beforeUpload() {
     let upload: any = this.$refs.upload;
     upload.clearFiles()
   };
-  //下载模板
+  //上传之前清空 按照配件内码导入
+  beforeUploadInnerId(){
+    let upload: any = this.$refs.upload1;
+    upload.clearFiles()
+  };
+  //下载模板 编码品牌模板
   down(){
     down('1900000000')
   };
-
+  //下载模板 配件内码模板
+  downInnerId(){
+    down('2900000000')
+  };
   // 合计采购金额
   private totalAmt: number = 0;
   // 票据类型
@@ -858,10 +867,14 @@ export default class TemporaryPurchase extends Vue {
     let ref: any = this.$refs[name];
     ref.init();
   }
-  //导入
+  //导入//按照编码品牌导入
   private getRUl() {
     this.upurl = api.getup + 'id=' + this.mainId;
   }
+  //按照配件内码导入
+  private getRUlInnerId(){
+    this.upurlInnerId=api.getupInnerId+'id='+this.mainId;
+  };
   // 调节大小
   private getDomHeight() {
     this.$nextTick(() => {
