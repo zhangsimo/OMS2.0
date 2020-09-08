@@ -64,6 +64,16 @@ export function resubmitNotButton(Vue) {
           });
         }, binding.value || 1000);
       });
+      el.unbindEventListener=()=>{
+        el.removeEventListener('click')
+        el.clearTimeout(0)
+      }
+    },
+    unbind(el){
+      //阻止内存泄漏
+      if(el.unbindEventListener){
+        el.unbindEventListener()
+      }
     }
   })
 }
