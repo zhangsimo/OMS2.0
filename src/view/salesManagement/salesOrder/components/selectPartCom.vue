@@ -5,14 +5,32 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
+        
+        <!-- <div class="db mr5 item">
+          <span class="mr5">编码:</span>
+          <el-input class="w100 mr10" autofocus ref="elinput" placeholder="编码" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5 item">
+          <span class="mr5">内码:</span>
+          <el-input class="w100 mr10" placeholder="内码" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5 item">
+          <span class="mr5">名称:</span>
+          <el-input class="w100 mr10" placeholder="名称" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5 item">
+          <span class="mr5">OE:</span>
+          <el-input class="w100 mr10" placeholder="OE" v-model="partName" @change="query"/>
+        </div> -->
         <el-input
           class="w250 mr10"
           v-model="partName"
-          placeholder="请输入配件内码/编码/名称/OE码"
+          placeholder="配件编码/内码/名称/OE"
           @change="search"
           :autofocus="true"
           ref="elinput"
         ></el-input>
+
 
         <!-- <Select
           placeholder="选择品牌"

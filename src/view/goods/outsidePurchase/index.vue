@@ -297,13 +297,11 @@
                             :on-format-error="onFormatError"
                             :on-success="onSuccess"
                             :before-upload='beforeUploadInnerId'
-                            :disabled="!mainId || selectTableRow.new || isInput"
-                            v-has="'import'"
                           >
                             <Button
                               size="small"
                               @click="getRUlInnerId"
-                              :disabled="!mainId || selectTableRow.new || isInput"
+                              v-has="'importInnerId'"
                             ><span class="center"><Icon custom="iconfont icondaoruicon icons" />配件内码导入</span>
                             </Button>
                           </Upload>
@@ -318,10 +316,8 @@
                             :on-format-error="onFormatError"
                             :on-success="onSuccess"
                             :before-upload ='beforeUpload'
-                            :disabled="!mainId || selectTableRow.new || isInput"
-                            v-has="'import'"
                           >
-                            <Button size="small" class="mr10" @click="getRUl" :disabled="!mainId || selectTableRow.new || isInput">
+                            <Button size="small" class="mr10" @click="getRUl" v-has="'importBrand'">
                               <span class="center"><Icon custom="iconfont icondaoruicon icons" />编码品牌导入</span>
                             </Button>
                           </Upload>

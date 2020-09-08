@@ -37,21 +37,29 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Select
-              style="width:110px"
-              v-model="form.guestId"
-              placeholder="选择供应商"
-              filterable
-              clearable
-              @on-change="selectOption"
-            >
-              <Option
-                v-for="item in customerListOptions"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
-            </Select>
+            <GoodCus
+              style="width: 120px"
+              :title="form.supplyName"
+              placeholder="请输入供应商"
+              :search-value="form.supplyName"
+              @throwName="throwNameFun"
+              :disabled-prop="false"
+            ></GoodCus>
+<!--            <Select-->
+<!--              style="width:110px"-->
+<!--              v-model="form.guestId"-->
+<!--              placeholder="选择供应商"-->
+<!--              filterable-->
+<!--              clearable-->
+<!--              @on-change="selectOption"-->
+<!--            >-->
+<!--              <Option-->
+<!--                v-for="item in customerListOptions"-->
+<!--                :value="item.value"-->
+<!--                :key="item.value"-->
+<!--                >{{ item.label }}</Option-->
+<!--              >-->
+<!--            </Select>-->
           </div>
           <div class="db mr10">
             <Input
@@ -267,11 +275,13 @@ import {
   getPartPos
 } from "../../../../api/AlotManagement/threeSupplier.js";
 import { checkStore } from "@/api/system/systemApi";
+import GoodCus from "_c/allocation/GoodCus.vue";
 
 export default {
   name: "threeSupplier",
   components: {
-    QuickDate
+    QuickDate,
+    GoodCus
   },
   data() {
     return {
@@ -437,7 +447,7 @@ export default {
     //搜索
     search() {
       let page = this.pageList.page;
-      let size = this.pageList.size;
+      let size = this.pageList.pageSize;
       //console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form).then(res => {
         if (res.code === 0) {
@@ -449,6 +459,20 @@ export default {
           //console.log(this.TopTableData, "this.TopTableData ==>257");
         }
       });
+    },
+    throwNameFun(v) {
+      this.getSupplierName(v);
+    },
+    //获取选中供应商
+    getSupplierName(v) {
+      if (v) {
+        //赋值供应商名称
+        this.form.supplyName = v.fullName || "";
+        //赋值供应商id
+        this.form.guestId = v.id || "";
+        //赋值票据类型id
+        // this.form.billType = v.billTypeId || "";
+      }
     },
     changeSize(s) {
       this.pageList.page = 0;

@@ -326,6 +326,7 @@ export const mixSelectPartCom = {
 
     search() {
       this.page.num = 1;
+      console.log(111111)
       this.getList();
     },
     //系统分类树形节点点击数据

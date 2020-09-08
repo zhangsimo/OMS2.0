@@ -207,11 +207,10 @@
                         size="small"
                         class="mr10"
                         @click="getRUlInnerId"
-                        :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd || !this.$parent.$parent.selectItemId"
-                        v-has="'getBarch'"
+                        v-has="'getBarchInnerId'"
                       >
                         <span class="center">
-                          <Icon custom="iconfont icondaoruicon icons"/>编码内码导入
+                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
                         </span>
                       </Button>
                     </Upload>
@@ -232,8 +231,7 @@
                         size="small"
                         class="mr10"
                         @click="getRUl"
-                        :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd || !this.$parent.$parent.selectItemId"
-                        v-has="'getBarch'"
+                        v-has="'getBarchBrand'"
                       >
                         <span class="center">
                           <Icon custom="iconfont icondaoruicon icons"/>编码品牌导入

@@ -181,27 +181,51 @@
                     >
                   </div>
                   <div class="fl mb5">
-                    <Upload
-                      ref="upload"
-                      style="display: inline-block"
-                      :show-upload-list="false"
-                      :action="upurl"
-                      :headers="headers"
-                      :format="['xlsx', 'xls']"
-                      :on-format-error="onFormatError"
-                      :on-success="onSuccess"
-                      :before-upload="beforeUpload"
-                    >
-                      <Button
-                        size="small"
-                        class="mr10"
-                        @click="getRUl"
-                        v-has="'import'"
-                        :disabled="LeadIn || presentrowMsg !== 0"
-                        ><i class="iconfont mr5 iconbianjixiugaiicon"></i
-                        >导入配件</Button
-                      >
-                    </Upload>
+                    <Poptip placement="bottom">
+                      <Button class="mr10" size="small" :disabled="LeadIn || presentrowMsg !== 0" v-has="'import'">导入</Button>
+                      <div slot="content" class="flex" style="justify-content: space-between">
+                        <div class="flex mr10">
+                          <Upload
+                            ref="upload1"
+                            :show-upload-list="false"
+                            :action="upurlInnerId"
+                            :format="['xlsx', 'xls', 'csv']"
+                            :headers="headers"
+                            :before-upload="beforeUploadInnerId"
+                            :on-success="onSuccess"
+                            :on-format-error="onFormatError"
+                          >
+                            <Button
+                              size="small"
+                              @click="getRULInnerId"
+                              v-has="'importInnerId'"
+                            >配件内码导入</Button>
+                          </Upload>
+                        </div>
+                        <div class="flex">
+                          <Upload
+                            ref="upload"
+                            style="display: inline-block"
+                            :show-upload-list="false"
+                            :action="upurl"
+                            :headers="headers"
+                            :format="['xlsx', 'xls']"
+                            :on-format-error="onFormatError"
+                            :on-success="onSuccess"
+                            :before-upload="beforeUpload"
+                          >
+                            <Button
+                              size="small"
+                              class="mr10"
+                              @click="getRUl"
+                              v-has="'importBrand'"
+                            ><i class="iconfont mr5 iconbianjixiugaiicon"></i
+                            >编码品牌导入</Button
+                            >
+                          </Upload>
+                        </div>
+                      </div>
+                    </Poptip>
                   </div>
                   <div class="fl mb5">
                     <Poptip placement="bottom">
@@ -349,7 +373,8 @@ import {
   save,
   commitOrder,
   invalid,
-  getup
+  getup,//编码品牌导入配件
+  getupInnerId//内码导入配件
 } from "../../../../api/business/advanceOrder";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
@@ -499,7 +524,8 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //请求头
-      upurl: getup, //导入地址
+      upurl: getup, //编码品牌导入地址
+      upurlInnerId:getupInnerId,//内码导入配件地址
       mainId: null, //选中行的id
       clickdelivery: false,
       Flaga: false,
