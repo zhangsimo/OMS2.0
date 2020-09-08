@@ -103,7 +103,7 @@
             <vxe-table-column title="转入账户" width="160">
               <template v-slot="{row}">
                 <Select  v-model="row.enterAccountMo" filterable @on-change="getinto" style="width: 90%;padding-left: 5px" :disabled="modelType">
-                  <Option v-for="item in row.enterAccount" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
+                  <Option v-for="item in row.enterAccount" :value="item.accountCode" :key="item.id">{{ item.accountName }}</Option>
                 </Select>
               </template>
             </vxe-table-column>

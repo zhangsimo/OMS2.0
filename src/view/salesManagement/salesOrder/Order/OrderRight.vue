@@ -193,27 +193,28 @@
                 </Button>
                 <div slot="content" class="flex" style="justify-content: space-between">
                   <div class="flex mr10">
-                    <Upload
-                      ref="upload1"
-                      :show-upload-list="false"
-                      :action="upurlInnerId"
-                      :headers="headers"
-                      :format="['xlsx','xls']"
-                      :on-format-error="onFormatError"
-                      :on-success="onSuccess"
-                      :before-upload='beforeUploadInnerId'
-                    >
-                      <Button
-                        size="small"
-                        class="mr10"
-                        @click="getRUlInnerId"
-                        v-has="'getBarchInnerId'"
-                      >
-                        <span class="center">
-                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
-                        </span>
-                      </Button>
-                    </Upload>
+<!--                    <Upload-->
+<!--                      ref="upload1"-->
+<!--                      :show-upload-list="false"-->
+<!--                      :action="upurlInnerId"-->
+<!--                      :headers="headers"-->
+<!--                      :format="['xlsx','xls']"-->
+<!--                      :on-format-error="onFormatError"-->
+<!--                      :on-success="onSuccess"-->
+<!--                      :before-upload='beforeUploadInnerId'-->
+<!--                    >-->
+
+<!--                      <Button-->
+<!--                        size="small"-->
+<!--                        class="mr10"-->
+<!--                        @click="getRUlInnerId"-->
+<!--                        v-has="'getBarchInnerId'"-->
+<!--                      >-->
+<!--                        <span class="center">-->
+<!--                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入-->
+<!--                        </span>-->
+<!--                      </Button>-->
+<!--                    </Upload>-->
                   </div>
                   <div class="flex">
                     <Upload
@@ -231,7 +232,6 @@
                         size="small"
                         class="mr10"
                         @click="getRUl"
-                        v-has="'getBarchBrand'"
                       >
                         <span class="center">
                           <Icon custom="iconfont icondaoruicon icons"/>编码品牌导入
@@ -1143,6 +1143,7 @@
               }
               this.isClickSave = true;
               this.$parent.$parent.submitloading = true;
+              this.$parent.$parent.saveLoading = true;
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
@@ -1152,16 +1153,20 @@
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
+
                 // this.reload();
               } else {
                 this.$parent.$parent.submitloading = false;
                 // this.$message.error("保存失败")
               }
+              this.$parent.$parent.saveLoading = false;
             } catch (errMap) {
               this.$XModal.message({
                 status: "error",
                 message: "表格校验不通过！"
               });
+              this.$parent.$parent.saveLoading = false;
+
             }
           } else {
             this.$Message.error("*为必填项");
@@ -1348,7 +1353,7 @@
         });
         data.detailList = val.details;
         data.sign = b;
-        data.orderTypeId = val.orderTypeId||"";
+        // data.orderTypeId = val.orderTypeId||"";
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();

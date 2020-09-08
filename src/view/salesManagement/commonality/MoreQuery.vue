@@ -6,7 +6,7 @@
     <div class="box">
       <Form ref="formInline" :model="formData" :label-width="100" @keydown.native.enter="emit">
         <FormItem label="创建日期:">
-          <DatePicker type="daterange" v-model="formData.start" @on-change="getCreatDate" placement="bottom":editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="formData.start" @on-change="getCreatDate" placement="bottom" :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
           <DatePicker type="daterange" v-model="formData.end" @on-change="submitDate" placement="bottom"  :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
@@ -53,6 +53,7 @@
     <div slot='footer'>
       <Button type='primary' @click="emit">确定</Button>
       <Button type='default' @click="moreQueryShow=false">取消</Button>
+      <Button type='default' @click="clearCondition">清空条件</Button>
     </div>
   </Modal>
 </template>
@@ -77,6 +78,11 @@
         mounted(){
         },
         methods:{
+            //清空更多弹框的条件
+            clearCondition(){
+              // this.$refs.formInline.resetFields()
+              this.formData = {}
+            },
             //打开模态框框
             openModal(){
               this.getAllClient()
@@ -91,6 +97,11 @@
             },
             //提交日期
             submitDate(date){
+                if(date[0] === ''){
+                  this.$delete(this.formData, 'auditStartTime')
+                  this.$delete(this.formData, 'auditEndTime')
+                  return
+                }
                 this.formData.auditStartTime = date[0] +  " " + "00:00:00"
                 this.formData.auditEndTime = date[1] +' '+ '23:59:59'
             },

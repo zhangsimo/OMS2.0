@@ -203,7 +203,7 @@
                   <div class="fl mb5">
                     <Poptip placement="bottom">
                       <Button class="mr10" size="small"
-                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'">导入
+                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'" v-has="'import'">导入
                       </Button>
                       <div slot="content" class="flex" style="justify-content: space-between">
                         <div class="flex mr10">
@@ -216,12 +216,10 @@
                             :before-upload="handleBeforeUploadInnerId"
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
-                            :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
                           >
                             <Button
                               size="small"
                               class="mr10"
-                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
                             >配件内码导入</Button>
                           </Upload>
                         </div>
@@ -235,12 +233,10 @@
                             :before-upload="handleBeforeUpload"
                             :on-success="handleSuccess"
                             :on-format-error="onFormatError"
-                            :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
                           >
                             <Button
                               size="small"
                               class="mr10"
-                              :disabled="Leftcurrentrow.status.value !== 0||Leftcurrentrow.xinzeng=='1'"
                             >编码品牌导入</Button>
                           </Upload>
                         </div>

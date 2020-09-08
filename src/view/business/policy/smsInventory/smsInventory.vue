@@ -207,7 +207,6 @@
                               @click="importAssInnerId"
                               size="small"
                               class="mr10"
-                              v-has="'import'"
                               :disabled="draftShow != 0||!formPlan.serviceId"
                             >配件内码导入</Button>
                           </Upload>
@@ -228,7 +227,6 @@
                               @click="importAss"
                               size="small"
                               class="mr10"
-                              v-has="'import'"
                               :disabled="draftShow != 0||!formPlan.storeId"
                             >编码品牌导入</Button>
                           </Upload>

@@ -28,6 +28,7 @@
               :disabled="draftShow != 0||isNew"
               @click="isSave"
               v-has="'save'"
+              :loading="saveLoading"
             >
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
@@ -310,7 +311,6 @@
                                 size="small"
                                 class="mr10"
                                 @click="getRUlInnerId"
-                                v-has="'getRUlInnerId'"
                               >
                                 <span class="center">
                                   <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
@@ -333,7 +333,6 @@
                                 size="small"
                                 class="mr10"
                                 @click="getRUl"
-                                v-has="'getRUlBrand'"
                               >
                                 <span class="center">
                                   <Icon custom="iconfont icondaoruicon icons" />编码品牌导入
@@ -513,6 +512,7 @@ export default {
       }
     };
     return {
+      saveLoading: false,
       leftTableHeight:0,
       rightTableHeight:0,
       isNew: true, //判断页面开始是否禁用
@@ -1169,6 +1169,7 @@ export default {
               return this.$message.error("可用余额不足");
             }
             this.submitloading=true
+            this.saveLoading = true
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.isAdd = true;
@@ -1182,11 +1183,13 @@ export default {
             }else{
               this.submitloading=false;
             }
+            this.saveLoading = false
           } catch (errMap) {
             this.$XModal.message({
               status: "error",
               message: "表格校验不通过！"
             });
+            this.saveLoading = false
           }
         } else {
             this.$set(this.preSellOrderTable.tbData,0,this.PTrow);
