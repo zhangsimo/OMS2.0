@@ -38,6 +38,7 @@
               @click="setSave"
               size="small"
               :disabled="orderlistType.value != 0"
+              :loading="saveLoading"
               v-has="'save'"
             >
               <span class="center">
@@ -50,6 +51,7 @@
               class="mr5"
               size="small"
               @click="sumbit"
+              :loading="commitLoading"
               :disabled="orderlistType.value != 0"
               v-has="'submit'"
             >
@@ -61,6 +63,7 @@
               class="mr5"
               size="small"
               @click="setStockOut"
+              :loading="outLoading"
               :disabled="orderlistType.value != 1 || isWms"
               v-has="'StockOut'"
             >
@@ -176,6 +179,9 @@ export default {
   },
   data() {
     return {
+      saveLoading: false,
+      commitLoading: false,
+      outLoading: false,
       showSelf: true,
       backloading: false,
       isNew: true, //页面开始禁用
