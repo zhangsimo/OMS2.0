@@ -198,7 +198,6 @@
                             <Button
                               size="small"
                               @click="getRULInnerId"
-                              v-has="'importInnerId'"
                             >配件内码导入</Button>
                           </Upload>
                         </div>
@@ -218,7 +217,6 @@
                               size="small"
                               class="mr10"
                               @click="getRUl"
-                              v-has="'importBrand'"
                             ><i class="iconfont mr5 iconbianjixiugaiicon"></i
                             >编码品牌导入</Button
                             >

@@ -301,7 +301,6 @@
                             <Button
                               size="small"
                               @click="getRUlInnerId"
-                              v-has="'importInnerId'"
                             ><span class="center"><Icon custom="iconfont icondaoruicon icons" />配件内码导入</span>
                             </Button>
                           </Upload>
@@ -317,7 +316,7 @@
                             :on-success="onSuccess"
                             :before-upload ='beforeUpload'
                           >
-                            <Button size="small" class="mr10" @click="getRUl" v-has="'importBrand'">
+                            <Button size="small" class="mr10" @click="getRUl">
                               <span class="center"><Icon custom="iconfont icondaoruicon icons" />编码品牌导入</span>
                             </Button>
                           </Upload>
