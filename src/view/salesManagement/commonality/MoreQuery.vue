@@ -53,7 +53,7 @@
     <div slot='footer'>
       <Button type='primary' @click="emit">确定</Button>
       <Button type='default' @click="moreQueryShow=false">取消</Button>
-      <!-- <Button type='default' @click="">清空</Button> -->
+      <Button type='default' @click="clearCondition">清空条件</Button>
     </div>
   </Modal>
 </template>
@@ -78,6 +78,11 @@
         mounted(){
         },
         methods:{
+            //清空更多弹框的条件
+            clearCondition(){
+              // this.$refs.formInline.resetFields()
+              this.formData = {}
+            },
             //打开模态框框
             openModal(){
               this.getAllClient()
