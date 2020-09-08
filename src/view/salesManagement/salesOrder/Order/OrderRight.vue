@@ -1143,6 +1143,7 @@
               }
               this.isClickSave = true;
               this.$parent.$parent.submitloading = true;
+              this.$parent.$parent.saveLoading = true;
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
@@ -1152,16 +1153,20 @@
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
+
                 // this.reload();
               } else {
                 this.$parent.$parent.submitloading = false;
                 // this.$message.error("保存失败")
               }
+              this.$parent.$parent.saveLoading = false;
             } catch (errMap) {
               this.$XModal.message({
                 status: "error",
                 message: "表格校验不通过！"
               });
+              this.$parent.$parent.saveLoading = false;
+
             }
           } else {
             this.$Message.error("*为必填项");
@@ -1348,7 +1353,7 @@
         });
         data.detailList = val.details;
         data.sign = b;
-        data.orderTypeId = val.orderTypeId||"";
+        // data.orderTypeId = val.orderTypeId||"";
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();

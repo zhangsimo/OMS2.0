@@ -10,9 +10,28 @@
           <span class="mr5">快速查询:</span>
           <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
         </div>
+
+        <!-- <div class="db mr5">
+          <span class="mr5">编码:</span>
+          <el-input class="w70" autofocus ref="elinput" placeholder="编码" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5">
+          <span class="mr5">内码:</span>
+          <el-input class="w70" placeholder="内码" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5">
+          <span class="mr5">名称:</span>
+          <el-input class="w70" placeholder="名称" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5">
+          <span class="mr5">OE:</span>
+          <el-input class="w70" placeholder="OE" v-model="partName" @change="query"/>
+        </div> -->
+
         <div class="db mr5">
           <el-input ref="elinput" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
         </div>
+
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
           <Select  v-model="partBrand" filterable style="width:140px" class="mr20">
@@ -25,13 +44,13 @@
             type="daterange"
             placement="bottom-end"
             placeholder="请选择日期"
-            style="width: 200px"
+            style="width: 160px"
             :value="auditDate"
             @on-change="getDate"
           ></DatePicker>
         </div>
         <div class="db mr5">
-          <Button class="w90" type="warning" @click="query">
+          <Button class="w80" type="warning" @click="query">
             <span class="center">
               <Icon custom="iconfont iconchaxunicon icons"/>查询
             </span>
@@ -375,4 +394,5 @@
     margin-top: 10px;
     text-align: right;
   }
+
 </style>
