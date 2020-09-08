@@ -193,17 +193,17 @@
                 </Button>
                 <div slot="content" class="flex" style="justify-content: space-between">
                   <div class="flex mr10">
-                    <Upload
-                      ref="upload1"
-                      :show-upload-list="false"
-                      :action="upurlInnerId"
-                      :headers="headers"
-                      :format="['xlsx','xls']"
-                      :on-format-error="onFormatError"
-                      :on-success="onSuccess"
-                      :before-upload='beforeUploadInnerId'
-                    >
-                      
+<!--                    <Upload-->
+<!--                      ref="upload1"-->
+<!--                      :show-upload-list="false"-->
+<!--                      :action="upurlInnerId"-->
+<!--                      :headers="headers"-->
+<!--                      :format="['xlsx','xls']"-->
+<!--                      :on-format-error="onFormatError"-->
+<!--                      :on-success="onSuccess"-->
+<!--                      :before-upload='beforeUploadInnerId'-->
+<!--                    >-->
+
 <!--                      <Button-->
 <!--                        size="small"-->
 <!--                        class="mr10"-->
@@ -214,7 +214,7 @@
 <!--                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入-->
 <!--                        </span>-->
 <!--                      </Button>-->
-                    </Upload>
+<!--                    </Upload>-->
                   </div>
                   <div class="flex">
                     <Upload
@@ -232,7 +232,6 @@
                         size="small"
                         class="mr10"
                         @click="getRUl"
-                        v-has="'getBarchBrand'"
                       >
                         <span class="center">
                           <Icon custom="iconfont icondaoruicon icons"/>编码品牌导入
