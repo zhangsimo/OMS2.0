@@ -373,8 +373,8 @@ import {
   save,
   commitOrder,
   invalid,
-  getup,
-  getupInnerId
+  getup,//编码品牌导入配件
+  getupInnerId//内码导入配件
 } from "../../../../api/business/advanceOrder";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
