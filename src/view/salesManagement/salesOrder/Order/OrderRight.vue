@@ -203,15 +203,17 @@
                       :on-success="onSuccess"
                       :before-upload='beforeUploadInnerId'
                     >
-                      <Button
-                        size="small"
-                        class="mr10"
-                        @click="getRUlInnerId"
-                      >
-                        <span class="center">
-                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
-                        </span>
-                      </Button>
+                      
+<!--                      <Button-->
+<!--                        size="small"-->
+<!--                        class="mr10"-->
+<!--                        @click="getRUlInnerId"-->
+<!--                        v-has="'getBarchInnerId'"-->
+<!--                      >-->
+<!--                        <span class="center">-->
+<!--                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入-->
+<!--                        </span>-->
+<!--                      </Button>-->
                     </Upload>
                   </div>
                   <div class="flex">
@@ -230,6 +232,7 @@
                         size="small"
                         class="mr10"
                         @click="getRUl"
+                        v-has="'getBarchBrand'"
                       >
                         <span class="center">
                           <Icon custom="iconfont icondaoruicon icons"/>编码品牌导入
@@ -1140,10 +1143,10 @@
                 return this.$Message.error("请稍后订单处理中...");
               }
               this.isClickSave = true;
-              this.$parent.$parent.saveLoadingF(true);
-
               this.$parent.$parent.submitloading = true;
+              this.$parent.$parent.saveLoading = true;
               let res = await getSave(data);
+              this.isClickSave = false;
               if (res.code === 0) {
                 this.$Message.success("保存成功");
                 this.$parent.$parent.isAdd = false;
@@ -1151,21 +1154,20 @@
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
+
                 // this.reload();
               } else {
                 this.$parent.$parent.submitloading = false;
                 // this.$message.error("保存失败")
               }
-              this.isClickSave = false;
-              this.$parent.$parent.saveLoadingF(false);
-
+              this.$parent.$parent.saveLoading = false;
             } catch (errMap) {
               this.$XModal.message({
                 status: "error",
                 message: "表格校验不通过！"
               });
-              this.isClickSave = false;
-              this.$parent.$parent.saveLoadingF(false);
+              this.$parent.$parent.saveLoading = false;
+
             }
           } else {
             this.$Message.error("*为必填项");
