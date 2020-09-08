@@ -1951,7 +1951,7 @@ export default {
       this.getShop()
     },
     // 更多条件查询
-    senior() {
+    async senior() {
       this.data1 = [];
       this.data2 = [];
       let obj = {
@@ -1968,10 +1968,12 @@ export default {
         serviceId: this.text,
         guestId:this.guestId
       };
-      this.getGeneral(obj);
-      let arr = creat(this.$refs.quickDate.val, this.$store);
-      this.model1 = arr[1];
-      this.getShop();
+      await this.getGeneral(obj);
+      if(this.selectShopList){
+        await this.getShop();
+        let arr =await creat(this.$refs.quickDate.val, this.$store);
+        this.model1 = arr[1];
+      }
     },
     // 查询应收/应付总表
     query() {
