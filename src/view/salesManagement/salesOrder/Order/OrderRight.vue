@@ -1350,7 +1350,7 @@
         });
         data.detailList = val.details;
         data.sign = b;
-        // data.orderTypeId = val.orderTypeId||"";
+        data.orderTypeId = val.orderTypeId||"";
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();
