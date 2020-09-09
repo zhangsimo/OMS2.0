@@ -163,7 +163,7 @@
     <div class="mt15">
       <Tabs type="card" value="capitalChain5" @on-click="clearSelectTabelList">
         <TabPane label="全部数据" name="capitalChain1">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -172,7 +172,6 @@
               stripe
               ref="xTable1"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData"
@@ -220,7 +219,7 @@
           </div>
         </TabPane>
         <TabPane label="已核销" name="capitalChain2">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -229,7 +228,6 @@
               stripe
               ref="xTable2"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData1"
@@ -277,7 +275,7 @@
           </div>
         </TabPane>
         <TabPane label="未核销" name="capitalChain3">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -286,7 +284,6 @@
               stripe
               ref="xTable3"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData2"
@@ -334,7 +331,7 @@
           </div>
         </TabPane>
         <TabPane label="已认领" name="capitalChain4">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -343,7 +340,6 @@
               stripe
               ref="xTable4"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData3"
@@ -391,7 +387,7 @@
           </div>
         </TabPane>
         <TabPane label="未认领" name="capitalChain5">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -399,7 +395,6 @@
               stripe
               ref="xTable5"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               highlight-hover-row
