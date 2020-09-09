@@ -34,9 +34,27 @@
         <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
             <Input
+              v-model="searchForm.partCode"
+              placeholder="编码"
+              class="w100 mr10"
+              @on-enter="serch"
+            />
+            <Input
               v-model="searchForm.partName"
-              placeholder="配件编码/名称/内码/OEM码"
-              class="w200 mr10"
+              placeholder="名称"
+              class="w100 mr10"
+              @on-enter="serch"
+            />
+            <Input
+              v-model="searchForm.partId"
+              placeholder="内码"
+              class="w100 mr10"
+              @on-enter="serch"
+            />
+            <Input
+              v-model="searchForm.oemCode"
+              placeholder="OEM码"
+              class="w100 mr10"
               @on-enter="serch"
             />
             <Select
@@ -97,6 +115,15 @@
             <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">
               <i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button>
+            <Poptip v-model="visible" placement="bottom">
+              <Button class="mr10 w90">
+                仓库设置
+              </Button>
+              <div slot="content" class="tc setStore">
+                <div @click="setPosition" class="lh30 setStoreItem" style="border-bottom: 1px solid #ddd">修改仓位</div>
+                <!--<div class="lh30 setStoreItem">批量修改仓位</div>-->
+              </div>
+            </Poptip>
           </div>
         </div>
         <vxe-table
@@ -110,6 +137,7 @@
           resizable
           :loading="loading1"
           size="mini"
+          @current-change="currentChangeItem"
           show-footer
           :footer-method="handleSummary"
           :data="contentOne.dataOne">
@@ -151,6 +179,8 @@
           <vxe-table-column field="lastOutDate" title="最近出库日期" width="120"></vxe-table-column>
           <vxe-table-column field="upLimit" title="库存上限" width="70"></vxe-table-column>
           <vxe-table-column field="downLimit" title="库存下限" width="70"></vxe-table-column>
+          <vxe-table-column field="warnStock" title="警戒库存" width="70"></vxe-table-column>
+          <vxe-table-column field="safeStock" title="安全库存" width="70"></vxe-table-column>
           <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
           <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
           <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
@@ -163,9 +193,27 @@
           <div class="pt10">
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input
+              v-model="searchForm1.partCode"
+              placeholder="编码"
+              class="w100 mr10"
+              @on-enter="queryBatch"
+            ></Input>
+            <Input
               v-model="searchForm1.partName"
-              placeholder="配件编码/名称/内码/OEM码"
-              class="w200 mr10"
+              placeholder="名称"
+              class="w100 mr10"
+              @on-enter="queryBatch"
+            ></Input>
+            <Input
+              v-model="searchForm1.partId"
+              placeholder="内码"
+              class="w100 mr10"
+              @on-enter="queryBatch"
+            ></Input>
+            <Input
+              v-model="searchForm1.oemCode"
+              placeholder="OEM码"
+              class="w100 mr10"
               @on-enter="queryBatch"
             ></Input>
             <Select
@@ -485,6 +533,71 @@
       <!--      点击查看显示-->
       <enter-stock ref="look" :mainData="selectTableData"></enter-stock>
     </section>
+    <Modal
+      title="仓位设置"
+      v-model="positionModel"
+      :styles="{ top: '50px', width: '700px' }"
+      :footer-hide="true"
+    >
+      <vxe-form
+        ref="xForm"
+        class="my-form2"
+        title-align="right"
+        title-width="100"
+        :data="formPlan2">
+        <vxe-form-item title="仓库" field="storeName" span="24">
+          <template v-slot="scope">
+            <vxe-input disabled size="mini" v-model="formPlan2.storeName" class="w200"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="配件编码" field="partCode" span="12">
+          <template v-slot="scope">
+            <vxe-input disabled size="mini" v-model="formPlan2.partCode" class="w200"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="品牌" field="partBrand" span="12">
+          <template v-slot="scope">
+            <vxe-input disabled size="mini" v-model="formPlan2.partBrand" class="w200"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="配件内码" field="partInnerId" span="12">
+          <template v-slot="scope">
+            <vxe-input disabled size="mini" v-model="formPlan2.partInnerId" class="w200"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="仓位" field="shelf" span="12">
+          <template v-slot="scope">
+            <vxe-input size="mini" v-model="formPlan2.shelf" class="w200" @blur="checkSelf"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="库存上限" field="upLimit" span="12">
+          <template v-slot="scope">
+            <vxe-input v-model="formPlan2.upLimit" size="mini" class="w200" min="0" type="number"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="库存下限" field="downLimit" span="12">
+          <template v-slot="scope">
+            <vxe-input v-model="formPlan2.downLimit" size="mini" class="w200" min="0" type="number"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="安全库存" field="safeStock" span="12">
+          <template v-slot="scope">
+            <vxe-input v-model="formPlan2.safeStock" size="mini" class="w200" min="0" type="number"></vxe-input>
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="警戒库存" field="warnStock" span="12">
+          <template v-slot="scope">
+            <vxe-input v-model="formPlan2.warnStock" size="mini" class="w200" min="0" type="number"></vxe-input>
+          </template>
+        </vxe-form-item>
+      </vxe-form>
+
+      <div class="tc pb20 pt20">
+        <Button type="primary" class="w80" @click="handleSubmit()">确定</Button>
+        <Button class="w80" @click="positionModel=false" style="margin-left: 8px">取消</Button>
+      </div>
+
+    </Modal>
   </div>
 </template>
 <script>
@@ -498,7 +611,8 @@ import {
   PtabulatData,
   EtabulatData,
   exportAll,
-  exportPart
+  exportPart,
+  setPosition
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -516,11 +630,30 @@ import Cookies from "js-cookie";
 import moment from "moment";
 import axios from '@/libs/api.request'
 // import * as api from "_api/system/partManager";
+
+import { checkStore } from "@/api/system/systemApi";
 export default {
   name: "stockSearch",
   components: { EnterStock },
   data() {
     return {
+      positionModel:false,//仓位设置
+      formPlan2:{
+        storeName:"",
+        storeId:"",
+        partCode: "",
+        partBrand:"",
+        partInnerId:"",
+        shelf:"",
+        upLimit:"",
+        downLimit:"",
+        safeStock:'',
+        warnStock:''
+      },
+      isSelfOk: true,
+      currentItem:{},
+      rulePlan:{},
+
       bands1: [],
       bands2: [],
       total1: {},
@@ -539,7 +672,9 @@ export default {
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: false, //零库存
-        old: "" //仓库
+        old: "", //仓库
+        partId:"",//内码
+        oemCode:""
       },
       //批次库存查询条件表单
       searchForm1: {
@@ -549,7 +684,9 @@ export default {
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: false, //库存
-        old: "" //仓库
+        old: "", //仓库
+        partId:"",//内码
+        oemCode:""
       },
       curronly: false,
       storeName: "999",
@@ -708,7 +845,8 @@ export default {
       loading1:false,
       loading2:false,
       tableHeight:0,
-      defaultSort:'desc'
+      defaultSort:'desc',
+      visible:false
     };
   },
   computed:{
@@ -827,7 +965,18 @@ export default {
     async getAllStocks() {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm));
-      data.partName = data.partName.trim();
+      if(data.partName){
+        data.partName = data.partName.trim();
+      }
+      if(data.oemCode){
+        data.oemCode = data.oemCode.trim();
+      }
+      if(data.partCode){
+        data.partCode = data.partCode.trim();
+      }
+      if(data.partId){
+        data.partId = data.partId.trim();
+      }
       if (data.storeIds[0] == 1) {
         data.storeIds = [];
       }
@@ -893,7 +1042,18 @@ export default {
     async getLotStocks() {
       let data = {};
       data = JSON.parse(JSON.stringify(this.searchForm1));
-      data.partName = data.partName.trim();
+      if(data.partName){
+        data.partName = data.partName.trim();
+      }
+      if(data.oemCode){
+        data.oemCode = data.oemCode.trim();
+      }
+      if(data.partCode){
+        data.partCode = data.partCode.trim();
+      }
+      if(data.partId){
+        data.partId = data.partId.trim();
+      }
       if (data.storeIds[0] == 1) {
         data.storeIds = [];
       }
@@ -961,6 +1121,18 @@ export default {
         this.setDomHeight('operTop'+this.tabIndex);
       })
     },
+    //设置仓位
+    setPosition(){
+      if(!this.currentItem.hasOwnProperty("id")){
+        return this.$message.error("请选择一条需要修改的配件")
+      }
+      this.positionModel = true;
+      this.formPlan2 = {...this.currentItem};
+    },
+    currentChangeItem({row}){
+      this.currentItem = row;
+    },
+
     // 修改每页显示条数-客户信息
     changeSizeCus(val) {
       // console.log('22',val)
@@ -1255,6 +1427,34 @@ export default {
     sortEnterDateMethod({ order }){
       this.defaultSort = order;
       this.getLotStocks();
+    },
+    checkSelf({value}) {
+      console.log(value)
+      if (value == "") {
+        this.isSelfOk = true;
+      } else {
+        checkStore({ storeId: this.formPlan2.storeId, name: value }).then(
+          res => {
+            if (res.code == 0 && res.data != null) {
+              this.isSelfOk = true;
+            } else {
+              this.isSelfOk = false;
+            }
+          }
+        );
+      }
+    },
+    async handleSubmit(){
+      if (!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!");
+      }
+      let rep = await setPosition(this.formPlan2)
+      if(rep.code==0){
+        this.positionModel = true;
+        this.formPlan2 = {};
+        this.getAllStocks();
+
+      }
     }
   }
 };
@@ -1353,5 +1553,8 @@ export default {
   }
   .tabs-warp{
     /*height:calc(100% - 41px);*/
+  }
+  .setStore .setStoreItem{
+    cursor: pointer;
   }
 </style>
