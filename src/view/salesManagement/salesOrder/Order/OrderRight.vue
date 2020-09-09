@@ -193,28 +193,27 @@
                 </Button>
                 <div slot="content" class="flex" style="justify-content: space-between">
                   <div class="flex mr10">
-<!--                    <Upload-->
-<!--                      ref="upload1"-->
-<!--                      :show-upload-list="false"-->
-<!--                      :action="upurlInnerId"-->
-<!--                      :headers="headers"-->
-<!--                      :format="['xlsx','xls']"-->
-<!--                      :on-format-error="onFormatError"-->
-<!--                      :on-success="onSuccess"-->
-<!--                      :before-upload='beforeUploadInnerId'-->
-<!--                    >-->
+                    <Upload
+                      ref="upload1"
+                      :show-upload-list="false"
+                      :action="upurlInnerId"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload='beforeUploadInnerId'
+                    >
 
-<!--                      <Button-->
-<!--                        size="small"-->
-<!--                        class="mr10"-->
-<!--                        @click="getRUlInnerId"-->
-<!--                        v-has="'getBarchInnerId'"-->
-<!--                      >-->
-<!--                        <span class="center">-->
-<!--                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入-->
-<!--                        </span>-->
-<!--                      </Button>-->
-<!--                    </Upload>-->
+                      <Button
+                        size="small"
+                        class="mr10"
+                        @click="getRUlInnerId"
+                      >
+                        <span class="center">
+                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
+                        </span>
+                      </Button>
+                    </Upload>
                   </div>
                   <div class="flex">
                     <Upload
