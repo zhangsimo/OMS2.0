@@ -311,7 +311,6 @@
 
     private reset() {
       this.selectRow = new Array();
-      this.auditDate = new Array();
       this.tableDataBm = new Array();
       this.filters = [];
       this.partId = "";
@@ -344,8 +343,8 @@
 
     //快速查询日期
     private getDataQuick(v) {
-      if (!this.shows) return;
       this.auditDate = v
+      if (!this.shows) return;
       this.getPchsPlanList();
     }
 
@@ -389,7 +388,6 @@
       };
       params.size = this.page.size;
       params.page = this.page.num - 1;
-
       let data: any = {
         partId: this.partId,
         startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
