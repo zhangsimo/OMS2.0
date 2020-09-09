@@ -6,36 +6,13 @@
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
-        
         <div class="db mr5">
-          <span>快速查询:</span>
+          <span class="mr5">快速查询:</span>
+          <getDate class="mr10" @quickDate="getDataQuick"></getDate>
         </div>
-        
         <div class="db mr5">
-          <getDate class="mr5" @quickDate="getDataQuick"></getDate>
-        </div>
-        
-        <!-- <div class="db mr5">
           <el-input autofocus ref="input" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
         </div>
-        <div class="db mr10">
-          <span class="mr5">编码:</span>
-          <el-input autofocus ref="input" style="width: 70px" placeholder="编码" v-model="partId1" @change="query"/>
-        </div>
-        <div class="db mr10">
-          <span class="mr5">内码:</span>
-          <el-input placeholder="内码" style="width: 70px" v-model="partId2" @change="query"/>
-        </div>
-        <div class="db mr10">
-          <span class="mr5">名称:</span>
-          <el-input placeholder="名称" style="width: 70px" v-model="partId3" @change="query"/>
-        </div>
-        <div class="db mr10">
-          <span class="mr5">OE:</span>
-          <el-input placeholder="OE" style="width: 70px" v-model="partId4" @change="query"/>
-        </div> -->
-
-
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
           <Select  v-model="partBrand" filterable style="width:140px" class="mr20" @on-change="SelectChange">
@@ -215,11 +192,6 @@
     private auditDate: Array<Date> = [];
     // private guestname:string = "";
     private partId: string = "";
-    private partId1: string = "";
-    private partId2: string = "";
-    private partId3: string = "";
-    private partId4:string = "";
-
 
     private page: Page = {
       num: 1,
@@ -343,11 +315,6 @@
       this.tableDataBm = new Array();
       this.filters = [];
       this.partId = "";
-      this.partId1 = "";
-      this.partId2 = "";
-      this.partId3 = "";
-      this.partId4 = "";
-
     }
 
     private filterNameMethod({value, row, column}) {
@@ -370,9 +337,7 @@
     }
 
 
-    private query(n) {
-      this.partId = this.partId1 + this.partId2 + this.partId3 + this.partId4
-      console.log(this.partId)
+    private query() {
       this.page.num = 1;
       this.getPchsPlanList();
     }
