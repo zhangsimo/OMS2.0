@@ -6,35 +6,34 @@
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
-        
+
         <div class="db mr5">
           <span>快速查询:</span>
         </div>
-        
+
         <div class="db mr5">
           <getDate class="mr5" @quickDate="getDataQuick"></getDate>
         </div>
-        
-        <!-- <div class="db mr5">
+
+        <div class="db mr5">
           <el-input autofocus ref="input" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
         </div>
-        <div class="db mr10">
-          <span class="mr5">编码:</span>
-          <el-input autofocus ref="input" style="width: 70px" placeholder="编码" v-model="partId1" @change="query"/>
-        </div>
-        <div class="db mr10">
-          <span class="mr5">内码:</span>
-          <el-input placeholder="内码" style="width: 70px" v-model="partId2" @change="query"/>
-        </div>
-        <div class="db mr10">
-          <span class="mr5">名称:</span>
-          <el-input placeholder="名称" style="width: 70px" v-model="partId3" @change="query"/>
-        </div>
-        <div class="db mr10">
-          <span class="mr5">OE:</span>
-          <el-input placeholder="OE" style="width: 70px" v-model="partId4" @change="query"/>
-        </div> -->
-
+<!--        <div class="db mr10">-->
+<!--          <span class="mr5">编码:</span>-->
+<!--          <el-input autofocus ref="input" style="width: 70px" placeholder="编码" v-model="partId1" @change="query"/>-->
+<!--        </div>-->
+<!--        <div class="db mr10">-->
+<!--          <span class="mr5">内码:</span>-->
+<!--          <el-input placeholder="内码" style="width: 70px" v-model="partId2" @change="query"/>-->
+<!--        </div>-->
+<!--        <div class="db mr10">-->
+<!--          <span class="mr5">名称:</span>-->
+<!--          <el-input placeholder="名称" style="width: 70px" v-model="partId3" @change="query"/>-->
+<!--        </div>-->
+<!--        <div class="db mr10">-->
+<!--          <span class="mr5">OE:</span>-->
+<!--          <el-input placeholder="OE" style="width: 70px" v-model="partId4" @change="query"/>-->
+<!--        </div> -->
 
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
