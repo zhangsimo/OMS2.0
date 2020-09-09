@@ -1116,8 +1116,8 @@ export default {
           name: "草稿",
           value: 0
         },
-        codeId: list.id,
-        code: list.serviceId,
+        codeId: list.applyId,
+        code: list.acceptCode,
         statuName: "草稿",
         storeName: "",
         guestName: list.guestOrgName,
