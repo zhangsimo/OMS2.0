@@ -2,7 +2,7 @@
   <Modal
     title="添加配件"
     v-model="shows"
-    :styles="{ top: '50px', width: '1100px' }"
+    :styles="{ top: '50px', width: '1500px' }"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
@@ -16,19 +16,19 @@
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <el-input autofocus ref="input" style="width: 75px" placeholder="编码" v-model="partCode" @change="query"/>
+          <el-input autofocus ref="input" style="width: 160px" placeholder="请输入编码" v-model="partCode" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <el-input placeholder="内码" style="width: 75px" v-model="partId" @change="query"/>
+          <el-input placeholder="请输入内码" style="width: 160px" v-model="partId" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <el-input placeholder="名称" style="width: 75px" v-model="partName" @change="query"/>
+          <el-input placeholder="请输入名称" style="width: 160px" v-model="partName" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <el-input placeholder="OE" style="width: 75px" v-model="oemCode" @change="query"/>
+          <el-input placeholder="请输入OE码" style="width: 160px" v-model="oemCode" @change="query"/>
         </div>
         
         <!-- <div class="db mr5">
