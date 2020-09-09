@@ -206,6 +206,15 @@
                 <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
                 </vxe-table-column>
               </vxe-table>
+              <vxe-pager
+                background
+                size="mini"
+                :current-page.sync="pageObj.num"
+                :page-size.sync="pageObj.size"
+                :total="pageObj.total"
+                @page-change="pageChange"
+                :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+              </vxe-pager>
             </div>
             <!-- 应付业务采购入库/退货对账 -->
             <div class="db mt20">
@@ -260,6 +269,15 @@
                 <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
                 </vxe-table-column>
               </vxe-table>
+              <vxe-pager
+                background
+                size="mini"
+                :current-page.sync="pageObj1.num"
+                :page-size.sync="pageObj1.size"
+                :total="pageObj1.total"
+                @page-change="pageChange2"
+                :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+              </vxe-pager>
             </div>
             <div class="totalcollect p10 mt20">
               <div class="db">
@@ -839,6 +857,18 @@
         clientList2: {},
         provinceArr2: [],
         treeDiagramList2: [],
+        pageObj:{
+          size:10,
+          total:0,
+          num:1
+        },
+        pageObj1:{
+          size:10,
+          total:0,
+          num:1
+        },
+        copyData:[],
+        copyData1:[]
       };
     },
     async mounted() {
@@ -898,6 +928,24 @@
       }
     },
     methods: {
+      pageChange({type, currentPage, pageSize, $event}){
+        this.pageObj.num  = currentPage;
+        this.pageObj.size = pageSize;
+        this.data1 = this.changePageList(currentPage,pageSize,this.copyData);
+      },
+      pageChange2({type, currentPage, pageSize, $event}){
+        this.pageObj1.num  = currentPage;
+        this.pageObj1.size = pageSize;
+        this.data2 = this.changePageList(currentPage,pageSize,this.copyData1);
+      },
+      changePageList(currentPage,pageSize,sourceData){
+        let firstNum = pageSize*(currentPage-1);
+        let lastNum = firstNum+pageSize;
+        let arrData = (sourceData||[]).slice(firstNum,lastNum);
+        return arrData||[];
+      },
+
+
       // 快速查询
       quickDate(data) {
         this.value = data ? data : ["", ""];
@@ -1095,6 +1143,11 @@
         this.data1Loading = true;
         this.data1 = [];
         this.data2 = [];
+
+        this.pageObj.total = 0;
+        this.pageObj.num = 1;
+        this.pageObj1.total = 0;
+        this.pageObj1.num = 1;
         getReconciliation(obj).then(res => {
           this.data1Loading = false;
           // let Statementexcludingtax = 0;
@@ -1138,7 +1191,10 @@
               item.speciesName = item.species.name;
             });
             // console.log(res.data.two.thisAccountAmt)
-            this.data1 = res.data.two;
+            // this.data1 = res.data.two;
+            this.copyData = res.data.two;
+            this.pageObj.total = res.data.two.length;
+            this.data1 = this.changePageList(this.pageObj.num,this.pageObj.size,this.copyData);
           } else {
             this.data1 = [];
           }
@@ -1147,7 +1203,12 @@
               item.serviceTypeName = item.serviceType.name;
               item.speciesName = item.species.name;
             });
-            this.data2 = res.data.three;
+            // this.data2 = res.data.three;
+
+            this.copyData1 = res.data.three;
+            this.pageObj1.total = res.data.three.length;
+            this.data2 = this.changePageList(this.pageObj1.num,this.pageObj1.size,this.copyData1);
+
           } else {
             this.data2 = [];
           }
