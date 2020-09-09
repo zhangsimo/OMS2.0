@@ -30,7 +30,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="guestId" filterable class="w150"
+            <Select v-model="guestId" filterable clearable class="w150"
                   :loading="searchLoading"
                   :remote-method="getAllClient"
                   @on-change="getAccountNameListFun"
@@ -174,7 +174,7 @@
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
-      
+
       <div class="db pro mt20">
         <span>分店名称：</span>
         <Select v-model="model1" style="width:200px">
