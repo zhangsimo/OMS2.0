@@ -68,11 +68,11 @@
           :data="data"
           ref="summary"
           show-summary
-          :summary-method="handleSummary"
           highlight-row
           @on-row-click="election"
           max-height="400"
         ></Table>
+<!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
             class-name="fr mb10 mt10"
@@ -821,7 +821,7 @@ export default {
               });
               this.data = res.data.vos;
               this.page.total=res.data.TotalElements;
-              this.total=res.data.AllotOutMainVO
+              // this.total=res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
@@ -846,7 +846,7 @@ export default {
               });
               this.data = res.data.vos;
               this.page.total=res.data.TotalElements;
-              this.total=res.data.AllotOutMainVO
+              // this.total=res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
