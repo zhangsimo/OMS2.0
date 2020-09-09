@@ -77,6 +77,7 @@
           :height="200"
           auto-resize
           :data="tabList"
+          show-overflow="title"
           highlight-current-row
           highlight-hover-row
           @current-change="selectTabelData"
@@ -85,14 +86,14 @@
           <vxe-table-column type="seq" width="50" title="序号"></vxe-table-column>
 <!--          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>-->
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="serviceId" title="申请单" width="150"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="申请单" width="198"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="160"></vxe-table-column>
           <vxe-table-column field="status.name" title="受理状态" width="70"></vxe-table-column>
           <vxe-table-column field="remark" title="备注" width="130"></vxe-table-column>
           <vxe-table-column field="orderMan" title="申请人" width="80"></vxe-table-column>
-          <vxe-table-column field="createTime" title="申请日期" width="86"></vxe-table-column>
+          <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
           <vxe-table-column field="createUname" title="提交人" width="80"></vxe-table-column>
-          <vxe-table-column field="createTime" title="提交日期" width="86"></vxe-table-column>
+          <vxe-table-column field="createTime" title="提交日期" width="100"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -136,7 +137,7 @@
 // import '@/view/goods/goodsList/goodsList.less'
 import * as tools from "../../../../../utils/tools";
 import moment from "moment";
-import { getParticulars } from "_api/system/partsExamine/partsExamineApi";
+import { getParticulars,getDBRKPartDetail } from "_api/system/partsExamine/partsExamineApi";
 import {transferringFindForAllot} from "_api/purchasing/purchasePlan";
 
 export default {
@@ -289,24 +290,27 @@ export default {
     search() {
       let size = this.pageList.size;
       let num = this.pageList.page;
-      if (this.penSalesData.startTime) {
-        this.penSalesData.startTime = moment(
-          this.penSalesData.startTime
+      let reqData = {...this.penSalesData}
+      if (reqData.startTime) {
+        reqData.startTime = moment(
+          reqData.startTime
         ).format("YYYY-MM-DD HH:mm:ss");
       }
-      if (this.penSalesData.endTime) {
-        this.penSalesData.endTime = moment(this.penSalesData.endTime).format(
+      if (reqData.endTime) {
+        reqData.endTime = moment(reqData.endTime).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }
-      let reqData = {...this.penSalesData}
+
+      reqData.querySelf = this.showSelf?1:0;
+      reqData.acceptCode = reqData.serviceId||"";
+      reqData.orgid = reqData.guestId||"";
+
       for (let k in reqData) {
         if (!reqData[k]) {
           delete reqData[k];
         }
       }
-      reqData.enterSelect = 123;
-      reqData.status = "STOCKING";
       if(this.showSelf) {
         let createUid = this.$store.state.user.userData.id;
         reqData.createUid = createUid;
@@ -337,9 +341,10 @@ export default {
     selectTabelData({ row }) {
       this.checkRow = row;
       var params = {
-        mainId: row.id
+        mainId: row.id,
+        storeId:row.storeId
       };
-      getParticulars(params).then(res => {
+      getDBRKPartDetail(params).then(res => {
         this.currentData = res.data;
 
         // this.$emit("getArray", this.currentData);
