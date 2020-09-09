@@ -135,3 +135,12 @@ export function  getUnsalable(params) {
     params
   });
 }
+
+//设置仓位
+export function setPosition(data) {
+  return axios.request({
+    url: `${api.omsSotck}/partStoreStock/updateStoreLocation`,
+    method: 'post',
+    data
+  });
+}

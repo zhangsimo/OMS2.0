@@ -399,7 +399,7 @@
             }
             return el;
           });
-          this.total = res.data.sellOutBean;
+          // this.total = res.data.sellOutBean;
           this.page.total = res.data.totalElements;
         } else {
           this.page.total = 0;
@@ -410,11 +410,11 @@
         let tableDataAll = [];
         let params = {
           page: 0,
-          size: 10000,
+          size: this.page.total,
         };
         let res = await api.getPjSellOutMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
-          this.total = res.data.sellOutBean
+          // this.total = res.data.sellOutBean
           tableDataAll = (res.data.content || []).map(el => {
             if ([1, "1", "是"].includes(el.taxSign)) {
               el.taxSign = "是";
@@ -484,17 +484,17 @@
             }
             return null;
           }),
-          columns.map((column, columnIndex) => {
-            if (columnIndex === 0) {
-              return "总合计";
-            }
-            for (let key in this.total) {
-              if (key == column.property) {
-                return this.total[key]
-              }
-            }
-            return null;
-          })
+          // columns.map((column, columnIndex) => {
+          //   if (columnIndex === 0) {
+          //     return "总合计";
+          //   }
+          //   for (let key in this.total) {
+          //     if (key == column.property) {
+          //       return this.total[key]
+          //     }
+          //   }
+          //   return null;
+          // })
         ];
       }
     }
