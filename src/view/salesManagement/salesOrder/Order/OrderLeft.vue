@@ -140,8 +140,8 @@ export default {
       }
       this.showPerson = showSelf ? 1 : 0;
       let data = { ...this.v };
-      data.startTime = this.queryTime[0] || "";
-      data.endTime = this.queryTime[1] || "";
+      data.startTime = data.startTime ? data.startTime : this.queryTime[0] || "";
+      data.endTime = data.endTime ? data.endTime : this.queryTime[1] || "";
       data.billStatusId = this.orderType;
       data.showPerson = this.showPerson;
       let page = this.page.num - 1;
