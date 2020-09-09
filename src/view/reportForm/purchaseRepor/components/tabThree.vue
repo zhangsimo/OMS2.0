@@ -366,7 +366,7 @@ export default {
           }
           return el;
         });
-        this.total = res.data.sellOutBean
+        // this.total = res.data.sellOutBean
         this.page.total = res.data.totalElements;
       } else {
         this.page.total = 0;
@@ -377,11 +377,11 @@ export default {
       let tableDataAll = [];
       let params = {
         page: 0,
-        size: 10000,
+        size: this.page.total,
       };
       let res = await api.getPjPchsRtnMainDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
-        this.total = res.data.sellOutBean
+        // this.total = res.data.sellOutBean
         tableDataAll = (res.data.content || []).map(el => {
           // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
           // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
@@ -432,17 +432,17 @@ export default {
           }
           return null;
         }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return "总合计";
-          }
-          for(let key in this.total){
-            if(key==column.property){
-              return this.total[key]
-            }
-          }
-          return null;
-        })
+        // columns.map((column, columnIndex) => {
+        //   if (columnIndex === 0) {
+        //     return "总合计";
+        //   }
+        //   for(let key in this.total){
+        //     if(key==column.property){
+        //       return this.total[key]
+        //     }
+        //   }
+        //   return null;
+        // })
       ];
     }
   }

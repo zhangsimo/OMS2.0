@@ -220,19 +220,23 @@ export default {
       let res = await getClientType();
       if (res.code === 0) {
         let data = res.data;
-        data.map(item => {
-          item.value = item.id;
-          item.label = item.title;
-          if (item.children) {
-            item.children.map(val => {
-              val.value = val.id;
-              val.label = val.title;
-            });
-          } else {
-            delete item.children;
-          }
-        });
-        this.clientType = res.data;
+        if(data.length!=1){
+          data.map(item => {
+            item.value = item.id;
+            item.label = item.title;
+            if (item.children) {
+              item.children.map(val => {
+                val.value = val.id;
+                val.label = val.title;
+              });
+            } else {
+              delete item.children;
+            }
+          });
+          this.clientType = res.data
+        }else{
+          this.clientType =[]
+        }
       }
     },
     //切换页面
@@ -248,7 +252,9 @@ export default {
     },
     //级联选择器
     getType(value, selectedData) {
-      this.queryType = selectedData[selectedData.length - 1];
+      if(selectedData.length){
+        this.queryType = selectedData[selectedData.length - 1];
+      }
     },
     //查询
     query() {
