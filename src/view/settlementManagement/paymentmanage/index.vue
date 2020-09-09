@@ -2007,6 +2007,17 @@ export default {
           let arrData = (res.data||[]);
           arrData.map((item, index) => {
             item.num = index + 1;
+            switch (item.belongSystem) {
+              case 0:
+                item.guestTypeName="华胜连锁";
+                break;
+              case 1:
+                item.guestTypeName="体系外";
+                break;
+              case 2:
+                item.guestTypeName="体系内";
+                break;
+            }
           });
           // this.data = arrData;
           this.copyData = arrData
