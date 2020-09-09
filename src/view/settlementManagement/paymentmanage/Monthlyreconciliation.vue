@@ -1711,20 +1711,35 @@
       // 对账清单导出
       getReportReconciliationt() {
         if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
-          if (this.paymentlist.length !== 0) {
-            this.$refs.payable.exportCsv({
-              filename: "采购清单",
-              data: this.paymentlist,
-              columns: this.columns1.filter((col, index) => index > 0)
-            });
-          }
-          if (this.collectlist.length !== 0) {
-            this.$refs.receivable.exportCsv({
-              filename: "销售清单",
-              data: this.collectlist,
-              columns: this.columns1.filter((col, index) => index > 0)
-            });
-          }
+          // if (this.paymentlist.length !== 0) {
+          //   this.$refs.payable.exportCsv({
+          //     filename: "采购清单",
+          //     data: this.paymentlist,
+          //     columns: this.columns1.filter((col, index) => index > 0)
+          //   });
+          // }
+          // if (this.collectlist.length !== 0) {
+          //   this.$refs.receivable.exportCsv({
+          //     filename: "销售清单",
+          //     data: this.collectlist,
+          //     columns: this.columns1.filter((col, index) => index > 0)
+          //   });
+          // }
+          let str1 = "";
+          let str2 = "";
+          this.paymentlist.map(item => {
+            str1 += `&serviceIdList=${item.serviceId}`;
+          });
+          this.collectlist.map(item => {
+            str2 += `&serviceIdList=${item.serviceId}`;
+          });
+          // for(var i=0;i<this.selectTableDataArr.length;i++){
+          //   str+=`&ids=${this.selectTableDataArr[i].id}`
+          // }
+          // str1 = str1.substring(0, str1.length - 1);
+          // str2 = str2.substring(0, str2.length - 1);
+          console.log(str1,str2)
+          location.href = `${baseUrl.omsSettle}/accounts/receivable/export/in/business?access_token=${Cookies.get(TOKEN_KEY)}${str1}${str2}`;
         } else {
           // this.$message.error("请勾选要导出的对账清单");
           this.$message({
