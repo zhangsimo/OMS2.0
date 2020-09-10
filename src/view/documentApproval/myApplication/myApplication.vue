@@ -187,7 +187,7 @@
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
                 <div class="status-box flex-center" :key="i">
-                  <span class="date">{{item.date | date}}</span>
+                  <span class="date">{{item.date}}</span>
                 </div>
               </template>
             </div>
