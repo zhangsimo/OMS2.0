@@ -425,14 +425,18 @@ export default class PlannedPurchaseOrder extends Vue {
     }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
-    this.saveLoading = true;
-    let res = await api.saveDraft(data);
-    if (res.code == 0) {
-      this.$Message.success("保存成功");
-      this.getListData();
-      this.isAdd = true;
+    try {
+      this.saveLoading = true;
+      let res = await api.saveDraft(data);
+      if (res.code == 0) {
+        this.$Message.success("保存成功");
+        this.getListData();
+        this.isAdd = true;
+      }
+      this.saveLoading = false;
+    } catch (error) {
+      this.saveLoading = false;
     }
-    this.saveLoading = false;
   }
 
   // 提交
@@ -464,14 +468,18 @@ export default class PlannedPurchaseOrder extends Vue {
               title: "",
               content: "<p>存在配件价格为0，是否提交</p>",
               onOk: async () => {
-                this.commitLoading = true;
-                let res = await api.saveCommit(data);
-                if (res.code == 0) {
-                  this.$Message.success("提交成功");
-                  this.getListData();
-                  this.isAdd = true;
+                try {
+                  this.commitLoading = true;
+                  let res = await api.saveCommit(data);
+                  if (res.code == 0) {
+                    this.$Message.success("提交成功");
+                    this.getListData();
+                    this.isAdd = true;
+                  }
+                  this.commitLoading = false;
+                } catch (error) {
+                  this.commitLoading = false;
                 }
-                this.commitLoading = false;
               },
               onCancel: () => {
                 this.isAdd = true;
@@ -479,14 +487,18 @@ export default class PlannedPurchaseOrder extends Vue {
             });
           }, 500);
         } else {
-          this.commitLoading = true;
-          let res = await api.saveCommit(data);
-          if (res.code == 0) {
-            this.$Message.success("提交成功");
-            this.getListData();
-            this.isAdd = true;
+          try {
+            this.commitLoading = true;
+            let res = await api.saveCommit(data);
+            if (res.code == 0) {
+              this.$Message.success("提交成功");
+              this.getListData();
+              this.isAdd = true;
+            }
+            this.commitLoading = false;
+          } catch (error) {
+            this.commitLoading = false;
           }
-          this.commitLoading = false;
         }
       },
       onCancel: () => {
@@ -655,13 +667,17 @@ export default class PlannedPurchaseOrder extends Vue {
     this.$Modal.confirm({
       title: "是否要作废",
       onOk: async () => {
-        this.cancelLoading = true;
-        let res: any = await api.saveObsolete(this.selectTableRow.id);
-        if (res.code == 0) {
-          this.$Message.success("作废成功");
-          this.getListData();
+        try {
+          this.cancelLoading = true;
+          let res: any = await api.saveObsolete(this.selectTableRow.id);
+          if (res.code == 0) {
+            this.$Message.success("作废成功");
+            this.getListData();
+          }
+          this.cancelLoading = false;
+        } catch (error) {
+          this.cancelLoading = false;
         }
-        this.cancelLoading = false;
       },
       onCancel: () => {
         this.$Message.info("取消作废");

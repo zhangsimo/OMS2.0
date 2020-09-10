@@ -81,6 +81,7 @@ export default class OutsidePurchase extends Vue {
 
   private commitLoading: boolean = false;
   private saveLoading: boolean = false;
+  private cancelLoading: boolean = false;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -481,18 +482,22 @@ export default class OutsidePurchase extends Vue {
     if(this.isClickSave){
       return this.$Message.error("正在保存单据请稍后...");
     }
-    this.isClickSave = true;
-    this.saveLoading = true;
-    let res = await api.outsideSaveDraft(data);
-    if (res.code == 0) {
-      this.$Message.success('保存成功');
-      this.resetForm();
-      this.getListData();
-      this.isAdd = true;
+    try {
+      this.isClickSave = true;
+      this.saveLoading = true;
+      let res = await api.outsideSaveDraft(data);
+      if (res.code == 0) {
+        this.$Message.success('保存成功');
+        this.resetForm();
+        this.getListData();
+        this.isAdd = true;
+      }
       this.saveLoading = false;
-
+      this.isClickSave = false;
+    } catch (error) {
+      this.saveLoading = false;
+      this.isClickSave = false;
     }
-    this.isClickSave = false;
   }
 
   private resetForm(){
@@ -531,17 +536,21 @@ export default class OutsidePurchase extends Vue {
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',
               onOk: async () => {
-                this.isClickSave = true;
-                this.commitLoading = true;
-                let res = await api.outsideSaveCommit(data);
-                if (res.code == 0) {
-                  this.$Message.success('保存成功');
-                  this.resetForm();
-                  this.getListData();
-                  this.isAdd = true;
+                try {
+                  this.isClickSave = true;
+                  this.commitLoading = true;
+                  let res = await api.outsideSaveCommit(data);
+                  if (res.code == 0) {
+                    this.$Message.success('保存成功');
+                    this.resetForm();
+                    this.getListData();
+                    this.isAdd = true;
+                  }
+                  this.isClickSave = false;
+                  this.commitLoading = false;
+                } catch (error) {
+                  this.commitLoading = false;
                 }
-                this.isClickSave = false;
-                this.commitLoading = false;
               },
               onCancel:() => {
                 this.isAdd = true;
@@ -549,17 +558,22 @@ export default class OutsidePurchase extends Vue {
             })
           },500)
         }else{
-          this.isClickSave = true;
-          this.commitLoading = true;
-          let res = await api.outsideSaveCommit(data);
-          if (res.code == 0) {
-            this.$Message.success('保存成功');
-            this.resetForm();
-            this.getListData();
-            this.isAdd = true;
+          try {
+            this.isClickSave = true;
+            this.commitLoading = true;
+            let res = await api.outsideSaveCommit(data);
+            if (res.code == 0) {
+              this.$Message.success('保存成功');
+              this.resetForm();
+              this.getListData();
+              this.isAdd = true;
+            }
+            this.isClickSave = false;
+            this.commitLoading = false;
+          } catch (error) {
+            this.commitLoading = false;
+            this.isClickSave = false;
           }
-          this.isClickSave = false;
-          this.commitLoading = false;
         }
       },
       onCancel: () => {
@@ -648,11 +662,17 @@ export default class OutsidePurchase extends Vue {
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
-        let res: any = await api.outsideSaveObsolete(this.selectTableRow.id);
-        if (res.code == 0) {
-          this.$Message.success('作废成功');
-          this.resetForm();
-          this.getListData();
+        try {
+          this.cancelLoading = true;
+          let res: any = await api.outsideSaveObsolete(this.selectTableRow.id);
+          if (res.code == 0) {
+            this.$Message.success('作废成功');
+            this.resetForm();
+            this.getListData();
+          }
+          this.cancelLoading = false;
+        } catch (error) {
+          this.cancelLoading = false;
         }
       },
       onCancel: () => {
