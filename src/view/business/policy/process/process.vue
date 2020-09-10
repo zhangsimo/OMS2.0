@@ -1163,9 +1163,9 @@ export default {
               this.leftClickItemId=null;
               this.getListchai();
               this.$Message.success("保存成功");
-              this.saveLoading = false;
               this.saveBtnClik = false;
             }
+            this.saveLoading = false;
           })
           .catch((e) => {
             this.$Message.info("保存配件拆分信息失败");

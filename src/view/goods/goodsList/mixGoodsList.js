@@ -680,6 +680,8 @@ export const mixGoodsData = {
                 this.getList();
               }
               this.cancelLoading = false
+            }).catch(e => {
+              this.cancelLoading = false
             });
           } else {
             this.fcanLoading = true
@@ -688,6 +690,8 @@ export const mixGoodsData = {
                 this.$Message.success("提交成功");
                 this.getList();
               }
+              this.fcanLoading = false
+            }).catch(e => {
               this.fcanLoading = false
             });
           }
@@ -764,6 +768,8 @@ export const mixGoodsData = {
                       this.getList();
                     }
                     this.saveLoading = false
+                  }).catch(e => {
+                    this.saveLoading = false
                   });
                 } else if (subType === 2) {
 
@@ -786,6 +792,8 @@ export const mixGoodsData = {
                       this.submitloading = this.loading = false;
                       this.commitLoading = false
                     }
+                  }).catch(e => {
+                    this.commitLoading = false;
                   });
                 }
               },
@@ -805,6 +813,8 @@ export const mixGoodsData = {
                   this.getList();
                 }
                 this.saveLoading = false
+              }).catch(e => {
+                this.saveLoading = false
               });
             } else if (subType === 2) {
               if (this.tableData.length <= 0) {
@@ -820,6 +830,8 @@ export const mixGoodsData = {
                   this.$Message.success("提交成功");
                   this.getList();
                 }
+                this.commitLoading = false
+              }).catch(e => {
                 this.commitLoading = false
               });
             }
