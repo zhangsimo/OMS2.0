@@ -975,6 +975,7 @@ export default {
                 this.$refs.formPlan.resetFields();
                 this.leftgetList();
                 this.isAdd = true;
+                this.saveLoading = false;
                 this.rowId = "";
                 this.formPlan.guestName = ""; //调出方
                 this.formPlan.storeId = ""; //退货员
