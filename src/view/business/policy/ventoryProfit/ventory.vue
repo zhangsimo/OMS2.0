@@ -707,6 +707,8 @@
                 this.getList();
               }
               this.commitLoading = false;
+            }).catch(e => {
+              this.commitLoading = false;
             });
           },
           onCancel: () => {
@@ -726,11 +728,13 @@
             this.$Message.success("保存成功");
             this.getList();
           }
-          this.saveLoading = false
+          this.saveLoading = false;
           this.handleReset();
           // else{
           //   this.formPlan.checkDate = preTime;
           // }
+        }).catch(e => {
+          this.saveLoading = false;
         });
       },
       //导出

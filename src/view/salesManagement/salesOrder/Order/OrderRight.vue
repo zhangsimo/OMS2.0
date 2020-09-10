@@ -1152,7 +1152,6 @@
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
-
                 // this.reload();
               } else {
                 this.$parent.$parent.submitloading = false;
@@ -1165,7 +1164,7 @@
                 message: "表格校验不通过！"
               });
               this.$parent.$parent.saveLoading = false;
-
+              this.isClickSave = false;
             }
           } else {
             this.$Message.error("*为必填项");
@@ -1261,6 +1260,9 @@
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
+          this.formPlan.detailList.map(item => {
+            item.orderAmt = this.$utils.toNumber(item.orderQty) * this.$utils.toNumber(item.orderPrice)
+          })
           if (valid) {
             try {
               await this.$refs.xTable.validate();

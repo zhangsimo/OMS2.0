@@ -531,6 +531,7 @@ export default {
 
         })
         .catch(err => {
+          this.isSaveClick = false
           this.$Message.info("初始化数据失败");
         });
     },

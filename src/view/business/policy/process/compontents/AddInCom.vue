@@ -249,7 +249,7 @@ export default {
       // 将选好的成品传父组件
       if (this.checkRow.id) {
         this.currentData.map(item=>{
-          item.changeQty=item.qty
+          item.orderQty=item.qty
         })
         this.$emit("ok", this.checkRow);
       } else {

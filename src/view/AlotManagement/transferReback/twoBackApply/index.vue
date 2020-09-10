@@ -835,6 +835,7 @@ export default {
         })
         .catch(e => {
           this.$Message.error("保存配件组装信息失败");
+          this.isSaveClick = false;
         });
     },
     xinzeng() {
@@ -1030,9 +1031,9 @@ export default {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList();
-            this.isOutClick = false;
             this.$Message.success("出库成功");
           }
+          this.isOutClick = false;
         })
         .catch(e => {
           this.isOutClick = false;
@@ -1385,7 +1386,7 @@ export default {
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = this.ArrayValue = res.data;
                   this.isSaveClick = false;
-                  this.isCommitClick = false; ///////////////////////////////////////////////////////
+                  this.isCommitClick = false;
                   return;
                 }
               }
