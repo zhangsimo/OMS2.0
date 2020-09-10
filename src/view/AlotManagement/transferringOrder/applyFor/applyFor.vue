@@ -733,6 +733,8 @@
                         this.$refs.formPlan.resetFields();
                         this.leftgetList()
                       }
+                    }).catch(e => {
+                      this.isSaveClick = false;
                     })
                   // try {
 
@@ -773,15 +775,21 @@
                 if(this.isCancelClick){
                   return this.$message.error('请稍后数据处理中....');
                 }
-                this.isCancelClick = true;
-                let res = await save(data);
-                if(!res){
+                try {
+                  
+                  this.isCancelClick = true;
+                  let res = await save(data);
+                  if(!res){
+                    this.isCancelClick = false;
+                  }
+                  if (res.code == 0) {
+                    this.$Message.success('作废成功');
+                    this.leftgetList();
+                    this.isAdd = true;
+                  }
+                } catch (error) {
                   this.isCancelClick = false;
-                }
-                if (res.code == 0) {
-                  this.$Message.success('作废成功');
-                  this.leftgetList();
-                  this.isAdd = true;
+                  
                 }
             },
             onCancel: () => {
@@ -1187,16 +1195,20 @@
                     if(this.isCommitClick){
                       return this.$message.error('请稍后数据处理中....');
                     }
-                    this.isCommitClick = true;
-                    let res = await commit(data);
-                    if(!res){
+                    try {
+                      this.isCommitClick = true;
+                      let res = await commit(data);
+                      if(!res){
+                        this.isCommitClick = false;
+                      }
+                      if (res.code == 0) {
+                        this.$Message.success('提交成功');
+                        this.leftgetList();
+                        this.isAdd = true;
+                        this.$refs.formPlan.resetFields();
+                      }
+                    } catch (error) {
                       this.isCommitClick = false;
-                    }
-                    if (res.code == 0) {
-                      this.$Message.success('提交成功');
-                      this.leftgetList();
-                      this.isAdd = true;
-                      this.$refs.formPlan.resetFields();
                     }
                   // }else{
                   //   this.$Message.warning('请先编辑收货信息')

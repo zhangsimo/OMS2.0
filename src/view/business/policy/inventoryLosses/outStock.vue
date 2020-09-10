@@ -737,6 +737,8 @@
                 this.getList();
               }
               this.commitLoading = false;
+            }).catch(e => {
+              this.commitLoading = false;
             });
           },
           onCancel: () => {

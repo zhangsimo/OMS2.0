@@ -773,6 +773,8 @@ export default {
           }else{
             this.isSaveClick = false;
           }
+        }).catch(e => {
+          this.isSaveClick = false;
         })
         // .catch(e => {
         //   this.$Message.info("保存配件组装信息失败");
@@ -822,6 +824,8 @@ export default {
           }
           this.isCancelClick = false;
           // this.reload();
+        }).catch(e => {
+          this.isCancelClick = false;
         })
     },
     //选择单据
@@ -893,18 +897,23 @@ export default {
             if(this.isOutClick){
               return this.$message.error('请稍后数据处理中....');
             }
-            this.isOutClick = true;
-            let res = await outDataList(params);
-            if(!res){
+            try {
+              this.isOutClick = true;
+              let res = await outDataList(params);
+              if(!res){
+                this.isOutClick = false;
+              }
+              // console.log("res", res);
+              if (res.code == 0) {
+                this.getList();
+                this.$Message.success("入库成功");
+                // this.reload();
+                this.isOutClick = false;
+                return;
+              }
               this.isOutClick = false;
-            }
-            // console.log("res", res);
-            if (res.code == 0) {
-              this.getList();
-              this.$Message.success("入库成功");
-              // this.reload();
+            } catch (error) {
               this.isOutClick = false;
-              return;
             }
             if(res && res.message && res.message.indexOf("成功") > -1) {
               this.getList();

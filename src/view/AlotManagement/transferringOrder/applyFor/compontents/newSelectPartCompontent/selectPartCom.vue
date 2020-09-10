@@ -1,18 +1,35 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1300">
       <div class="partCheck-hd">
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        <el-input
+        <!-- <el-input
           class="w250 mr10"
           v-model="partName"
           placeholder="请输入配件内码/编码/名称/OE码"
           @change="search"
           :autofocus="true"
           ref="elinput"
-        ></el-input>
+        ></el-input> -->
+
+      <div class="db mr5 fl">
+          <span class="mr5">编码:</span>
+          <el-input autofocus ref="elinput" style="width: 160px" placeholder="请输入编码" v-model="partCode" @change="search"/>
+        </div>
+        <div class="db mr5 fl">
+          <span class="mr5">内码:</span>
+          <el-input placeholder="请输入内码" style="width: 160px" v-model="partId" @change="search"/>
+        </div>
+        <div class="db mr5 fl">
+          <span class="mr5">名称:</span>
+          <el-input placeholder="请输入名称" style="width: 160px" v-model="partName" @change="search"/>
+        </div>
+        <div class="db mr5 fl">
+          <span class="mr5">OE:</span>
+          <el-input placeholder="请输入OE码" style="width: 160px" v-model="oemCode" @change="search"/>
+        </div>
 
         <!-- <Select
           placeholder="选择品牌"

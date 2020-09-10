@@ -474,7 +474,8 @@ export default {
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size,
         amountType: type,
-        guestId: this.companyId
+        guestId: this.companyId,
+        claimShopCode:this.$store.state.user.userData.shopCode
       };
       claimedFund(obj).then(res => {
         if (res.code === 0) {

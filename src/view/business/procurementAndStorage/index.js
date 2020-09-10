@@ -557,6 +557,7 @@ export default {
               }
               this.saveLoading = false;
             } catch (errMap) {
+              this.saveLoading = false;
               this.$XModal.message({
                 status: "error",
                 message: "表格校验不通过！"
@@ -603,6 +604,7 @@ export default {
                 }
                 this.goDownLoading = false
               } catch (errMap) {
+                this.goDownLoading = false
                 this.$XModal.message({
                   status: "error",
                   message: "表格校验不通过！"
