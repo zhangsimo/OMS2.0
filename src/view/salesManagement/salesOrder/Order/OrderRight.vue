@@ -1216,9 +1216,9 @@
                 if (valid) {
                   try {
                     await this.$refs.xTable.validate();
-                    if (+this.totalMoney > +this.limitList.sumAmt) {
-                      return this.$message.error("可用余额不足");
-                    }
+                    // if (+this.totalMoney > +this.limitList.sumAmt) {
+                    //   return this.$message.error("可用余额不足");
+                    // }
                     this.$parent.$parent.submitloading = true
                     data.planSendDate = tools.transTime(data.planSendDate)
                     data.planArriveDate = tools.transTime(data.planArriveDate)
@@ -1264,12 +1264,13 @@
           if (valid) {
             try {
               await this.$refs.xTable.validate();
-              if (+this.totalMoney > +this.limitList.sumAmt) {
-                return this.$message.error("可用余额不足");
-              }
+              // if (+this.totalMoney > +this.limitList.sumAmt) {
+              //   return this.$message.error("可用余额不足");
+              // }
               let data = JSON.parse(JSON.stringify(this.formPlan));
               data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
               data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+              data.useableAmt = this.limitList.sumAmt;
               let orderList = [];
               orderList = data.detailList.filter(
                 item => item.orderPrice * 1 < item.averagePrice * 1
