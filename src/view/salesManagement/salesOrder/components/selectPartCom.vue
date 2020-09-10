@@ -1,35 +1,36 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000" class="sales-part-model">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1300" class="sales-part-model">
       <div class="partCheck-hd">
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
         
-        <!-- <div class="db mr5 item">
+        <div class="db mr5 item">
           <span class="mr5">编码:</span>
-          <el-input class="w100 mr10" autofocus ref="elinput" placeholder="编码" v-model="partName" @change="query"/>
+          <el-input class="w150 mr10" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="search"/>
         </div>
         <div class="db mr5 item">
           <span class="mr5">内码:</span>
-          <el-input class="w100 mr10" placeholder="内码" v-model="partName" @change="query"/>
+          <el-input class="w150 mr10" placeholder="内码" v-model="partId" @change="search"/>
         </div>
         <div class="db mr5 item">
           <span class="mr5">名称:</span>
-          <el-input class="w100 mr10" placeholder="名称" v-model="partName" @change="query"/>
+          <el-input class="w150 mr10" placeholder="名称" v-model="partName" @change="search"/>
         </div>
         <div class="db mr5 item">
           <span class="mr5">OE:</span>
-          <el-input class="w100 mr10" placeholder="OE" v-model="partName" @change="query"/>
-        </div> -->
-        <el-input
+          <el-input class="w150 mr10" placeholder="OE" v-model="oemCode" @change="search"/>
+        </div>
+
+        <!-- <el-input
           class="w250 mr10"
           v-model="partName"
           placeholder="配件编码/内码/名称/OE"
           @change="search"
           :autofocus="true"
           ref="elinput"
-        ></el-input>
+        ></el-input> -->
 
 
         <!-- <Select
@@ -377,6 +378,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.item{
+  float: left;
+}
 .partCheck-hd {
   //border-bottom: 1px solid #ddd;
   padding-bottom: 10px;

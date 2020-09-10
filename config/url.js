@@ -47,12 +47,13 @@ const test = {
   // omsApi:"http://192.168.21.59:9240",
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "http://192.168.30.226:5600",
-  // wmsApi: "http://192.168.15.142:9250",
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
-  // wmsApi: "http://192.168.21.59:9250", // 徐林烽
+  // wmsApi: "http://192.168.30.179:9250", // 徐林烽
+
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
   // omsOrder: "http://192.168.15.142:9210",
+  // omsOrder: "http://192.168.30.179:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // passportApi: "http://192.168.15.142:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",

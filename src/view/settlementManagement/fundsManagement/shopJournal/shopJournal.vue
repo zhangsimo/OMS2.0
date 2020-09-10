@@ -161,9 +161,9 @@
     <changeJournal :list='oneList' ref="changeModal" @getNewList="allList" @update="getList"></changeJournal>
 
     <div class="mt15">
-      <Tabs type="card" value="capitalChain5" @on-click="clearSelectTabelList">
+      <Tabs type="card" v-model="tabName" @on-click="clearSelectTabelList">
         <TabPane label="全部数据" name="capitalChain1">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -172,7 +172,6 @@
               stripe
               ref="xTable1"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData"
@@ -220,7 +219,7 @@
           </div>
         </TabPane>
         <TabPane label="已核销" name="capitalChain2">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -229,7 +228,6 @@
               stripe
               ref="xTable2"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData1"
@@ -277,7 +275,7 @@
           </div>
         </TabPane>
         <TabPane label="未核销" name="capitalChain3">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -286,7 +284,6 @@
               stripe
               ref="xTable3"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData2"
@@ -334,7 +331,7 @@
           </div>
         </TabPane>
         <TabPane label="已认领" name="capitalChain4">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -343,7 +340,6 @@
               stripe
               ref="xTable4"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               :data="tableData3"
@@ -391,7 +387,7 @@
           </div>
         </TabPane>
         <TabPane label="未认领" name="capitalChain5">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div style="overflow: scroll ;max-height: 500px;">
             <vxe-table
               border
               resizable
@@ -399,7 +395,6 @@
               stripe
               ref="xTable5"
               align="center"
-              max-height="400"
               size="mini"
               style="width: 3000px"
               highlight-hover-row
@@ -516,6 +511,7 @@
         tableData2: [],//未审核数据
         tableData3: [],//已认领数据
         tableData4: [],//未认领数据
+        tabName:"capitalChain5",//tab切换
         impirtUrl: {
           downId: '1600000000',
           upUrl: impUrl
@@ -750,6 +746,22 @@
         if (!data.startTime) {
           return this.$Message.error("请选择日期")
         }
+        //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
+        switch (this.tabName) {
+          case "capitalChain1":break;
+          case "capitalChain2":
+            data.collateState=1;
+            break;
+          case "capitalChain3":
+            data.collateState=0;
+            break;
+          case "capitalChain4":
+            data.claimType=1;
+            break;
+          case "capitalChain5":
+            data.claimType=0;
+            break;
+        }
         if (this.model1 != 0) {
           data.areaId = this.model1
         }
@@ -779,22 +791,22 @@
           //}
           this.page.total = res.data.page.totalElements;
           this.tableData = res.data.page.content
-          this.tableData1 = []
-          this.tableData2 = []
-          this.tableData3 = []
-          this.tableData4 = []
-          res.data.page.content.forEach(item => {
-            if (item.collateState) {
-              this.tableData1.push(item)
-            } else {
-              this.tableData2.push(item)
-            }
-            if (item.claimType) {
-              this.tableData3.push(item)
-            } else {
-              this.tableData4.push(item)
-            }
-          })
+          this.tableData1 = res.data.page.content
+          this.tableData2 = res.data.page.content
+          this.tableData3 = res.data.page.content
+          this.tableData4 = res.data.page.content
+          // res.data.page.content.forEach(item => {
+          //   if (item.collateState==1) {
+          //     this.tableData1.push(item)
+          //   } else {
+          //     this.tableData2.push(item)
+          //   }
+          //   if (item.claimType==1) {
+          //     this.tableData3.push(item)
+          //   } else {
+          //     this.tableData4.push(item)
+          //   }
+          // })
         }
       },
 
@@ -942,12 +954,13 @@
       goMoney() {
         this.$router.push({name: "claimWrite"})
       },
-      clearSelectTabelList() {
+      clearSelectTabelList(v) {
         for (let i = 1; i < 6; i++) {
           this.$refs[`xTable${i}`].clearCheckboxRow()
         }
         this.oneList = {};
         this.selectTableList = [];
+        this.getList()
       }
 
     }
