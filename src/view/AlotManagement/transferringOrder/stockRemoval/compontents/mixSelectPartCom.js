@@ -15,6 +15,9 @@ export const mixSelectPartCom = {
       treeLoading: false,
       searchPartLayer: false, //配件名称查询层
       partName: "", //配件名称查询名字
+      partId: "",
+      partCode: "",
+      oemCode: "",
       treeData: [], //系统分类树形数据
       //查询选择
 
@@ -226,12 +229,31 @@ export const mixSelectPartCom = {
         req.partBrandId = this.selectBrand;
       }
 
-      if (this.partName.trim()) {
-        req.partCode = this.partName.trim();
+      // if (this.partName.trim()) {
+      //   req.partCode = this.partName.trim();
+      // }
+
+      // req.partName = this.partName;
+      // req.partId = this.partId;
+      // req.partCode = this.partCode;
+      // req.oemCode = this.oemCode;
+
+      req.name = this.partName;
+      req.partCode = this.partCode;
+      req.partInnerId = this.partId;
+      req.oeCode = this.oemCode;
+
+
+      let formData = {};
+      for (let k in req) {
+        if (req[k] && req[k].trim()) {
+          formData[k] = req[k];
+        }
       }
+
       params.page = this.page.num - 1;
       params.size = this.page.size;
-      getwbParts(params, req).then(res => {
+      getwbParts(params, formData).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
