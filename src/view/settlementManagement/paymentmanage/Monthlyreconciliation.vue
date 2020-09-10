@@ -1034,9 +1034,9 @@
       },
       // 计算应收业务销售出库/退货对账的总计
       collectSum(sumData) {
-        let collectSum = 0;
+        var collectSum = 0;
         sumData.map(item => {
-          collectSum += item.thisAccountAmt
+          collectSum += parseFloat(item.thisAccountAmt)
         })
         return collectSum
       },
@@ -1364,7 +1364,7 @@
         this.paymentlist = selection;
         this.totalpayment = 0;
         selection.map(item => {
-          this.totalpayment += item.thisAccountAmt;
+          this.totalpayment += parseFloat(item.thisAccountAmt);
         });
         this.getSettlementComputed();
         this.getAccountNameList();
@@ -1428,7 +1428,7 @@
         this.paymentlist = selection;
         this.totalpayment = 0
         selection.map(item => {
-          this.totalpayment += item.thisAccountAmt;
+          this.totalpayment += parseFloat(item.thisAccountAmt);
         });
         this.getSettlementComputed();
         this.getAccountNameList();

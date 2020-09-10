@@ -309,9 +309,9 @@
                         ></vxe-table-column>
                         <vxe-table-column show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
                         <vxe-table-column show-overflow="tooltip" field="changeQty" title="需要数量">
-                          <template v-slot="{ row, seq }">
-                            <span>{{ row.qty*currentNum}}</span>
-                          </template>
+<!--                          <template v-slot="{ row, seq }">-->
+<!--                            <span>{{ row.qty*currentNum}}</span>-->
+<!--                          </template>-->
                         </vxe-table-column>
                         <vxe-table-column show-overflow="tooltip" field="storeStockQty" title="库存"></vxe-table-column>
                         <vxe-table-column show-overflow="tooltip" field="stockOutQty" title="缺货数量"></vxe-table-column>
@@ -1039,11 +1039,13 @@ export default {
         this.currentData.map((item) => {
           item.changeQty = this.currentNum * item.qty;
         });
+        this.$refs.aatable.updateData()
         this.$refs.aatable.updateFooter();
       } else {
         this.currentData.map((item) => {
           item.orderQty = this.currentNum * item.qty;
         });
+        this.$refs.xTable2.updateData()
         this.$refs.xTable2.updateFooter();
       }
     },
@@ -1456,7 +1458,7 @@ export default {
       if (this.Leftcurrentrow.processProductVO.length > 0) {
         this.currentData = row.processProductVO[0].detailVOList;
         this.currentData.map((item) => {
-          item.changeQty = this.currentNum * item.qty;
+          item.changeQty =  item.qty;
         });
       } else {
         this.currentData = [];
