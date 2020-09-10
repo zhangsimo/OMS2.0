@@ -211,6 +211,9 @@
                       <div class="fl mb5">
                         <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'EditAddress'"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
+                      <div class="fl mb5">
+                        <Button size="small" class="mr10" @click="changeOrderFun" v-has="'addAccessories'">订单调整</Button>
+                      </div>
                     </div>
                   </div>
                   <vxe-table
@@ -275,6 +278,7 @@
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+      <change-order ref="changeOrder"></change-order>
     </main>
 </template>
 
@@ -299,10 +303,12 @@
   import Cookies from "js-cookie";
   import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
+  import ChangeOrder from "./compontents/changeOrder";
 
   export default {
       name: "applyFor",
       components: {
+        ChangeOrder,
         AllocationCus,
         QuickDate,
         More,
@@ -1283,6 +1289,9 @@
         onFormatError(file) {
           this.$Message.error('只支持xls xlsx后缀的文件')
         },
+        changeOrderFun(){
+          this.$refs.changeOrder.init();
+        }
       },
       mounted(){
         let self = tools.getSession("self");

@@ -86,14 +86,14 @@
           <vxe-table-column type="seq" width="50" title="序号"></vxe-table-column>
 <!--          <vxe-table-column type="radio" width="50" title=" "></vxe-table-column>-->
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="serviceId" title="申请单" width="198"></vxe-table-column>
-          <vxe-table-column field="guestName" title="调出方" width="160"></vxe-table-column>
-          <vxe-table-column field="status.name" title="受理状态" width="70"></vxe-table-column>
+          <vxe-table-column field="acceptCode" title="申请单" width="198"></vxe-table-column>
+          <vxe-table-column field="guestOrgName" title="调出方" width="160"></vxe-table-column>
+          <!--<vxe-table-column field="status.name" title="受理状态" width="70"></vxe-table-column>-->
           <vxe-table-column field="remark" title="备注" width="130"></vxe-table-column>
           <vxe-table-column field="orderMan" title="申请人" width="80"></vxe-table-column>
           <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
-          <vxe-table-column field="createUname" title="提交人" width="80"></vxe-table-column>
-          <vxe-table-column field="createTime" title="提交日期" width="100"></vxe-table-column>
+          <vxe-table-column field="code" title="受理单号" width="190"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="调拨出库单号" width="190"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -305,7 +305,8 @@ export default {
       reqData.querySelf = this.showSelf?1:0;
       reqData.acceptCode = reqData.serviceId||"";
       reqData.orgid = reqData.guestId||"";
-
+      Reflect.deleteProperty(reqData,'serviceId');
+      Reflect.deleteProperty(reqData,'guestId');
       for (let k in reqData) {
         if (!reqData[k]) {
           delete reqData[k];

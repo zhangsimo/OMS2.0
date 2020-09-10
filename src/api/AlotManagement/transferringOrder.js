@@ -108,3 +108,13 @@ export function allotMainAccept(data){
     data
   })
 }
+
+
+// 获取调拨申请订单修改明细
+export function getAllotApplyDetail(params){
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyDetail/queryParams`,
+    method: 'get',
+    params
+  })
+}
