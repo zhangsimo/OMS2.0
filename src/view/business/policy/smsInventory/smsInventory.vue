@@ -864,6 +864,8 @@ export default {
                   this.getList();
                 }
                 this.commitLoading = false;
+              }).catch(e => {
+                this.commitLoading = false;
               });
             } else {
               callback(new Error("带*必填"));
@@ -907,6 +909,8 @@ export default {
               // else{
               //   this.formPlan.checkDate = preTime;
               // }
+            }).catch(e => {
+              this.saveLoading = false;
             });
           } else {
             this.$message.error("带*必填");

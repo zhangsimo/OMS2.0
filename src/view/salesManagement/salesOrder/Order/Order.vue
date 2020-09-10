@@ -105,6 +105,17 @@
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
+          <!--<div class="db">-->
+            <!--<Button-->
+              <!--class="mr5"-->
+              <!--size="small"-->
+              <!--@click="resetCancellation"-->
+              <!--:disabled="orderlistType.value != 5"-->
+              <!--v-has="'Cancellation'"-->
+            <!--&gt;-->
+              <!--<Icon type="md-close" size="14" />反作废-->
+            <!--</Button>-->
+          <!--</div>-->
           <div class="db">
             <Button class="mr5" size="small" @click="setDerive" v-has="'Derive'">
               <i class="iconfont mr5 icondaochuicon"></i> 导出
@@ -348,7 +359,7 @@ export default {
         this.backloading = false;
         // this.$Message.error("返单失败")
       }
-   
+
     },
     //作废
     async setCancellation() {
@@ -379,6 +390,24 @@ export default {
         this.$Message.warning("请选择一条有效数据");
       }
     },
+    //反作废
+    resetCancellation(){
+      if(this.submitloading){return }
+      let list = this.$store.state.dataList.oneOrder;
+      if (list.id) {
+        this.$Modal.confirm({
+          title: "是否确定反作废",
+          onOk: async () => {
+            let res = this.$refs.right.save("reset");
+          },
+          onCancel: () => {
+          }
+        });
+      } else {
+        this.$Message.warning("请选择一条有效数据");
+      }
+    },
+
     //导出
     async setDerive() {
       let list = this.$store.state.dataList.oneOrder;

@@ -6,7 +6,7 @@
     <div class="box">
       <Form ref="formInline" :model="formData" :label-width="100" @keydown.native.enter="emit">
         <FormItem label="创建日期:">
-          <DatePicker type="daterange" v-model="formData.start" @on-change="getCreatDate" placement="bottom" :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="formData.start"  @on-change="getCreatDate" placement="bottom" :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
           <DatePicker type="daterange" v-model="formData.end" @on-change="submitDate" placement="bottom"  :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
@@ -92,6 +92,7 @@
             },
             //获取创建时间
             getCreatDate(date){
+              console.log(date , 778)
                 this.formData.startTime = date[0] +  " " + "00:00:00"
                 this.formData.endTime = date[1] +' '+ '23:59:59'
             },

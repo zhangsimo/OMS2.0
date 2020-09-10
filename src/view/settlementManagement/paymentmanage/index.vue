@@ -30,7 +30,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="guestId" filterable class="w150"
+            <Select v-model="guestId" filterable clearable class="w150"
                   :loading="searchLoading"
                   :remote-method="getAllClient"
                   @on-change="getAccountNameListFun"
@@ -86,7 +86,7 @@
         <vxe-table
           border
           show-overflow="title"
-          max-height="300"
+          max-height="200"
           auto-resize
           size="mini"
           :data="data"
@@ -138,10 +138,19 @@
               border
               :columns="columns1"
               :data="data1"
+              size="small"
               class="mt10"
               max-height="400"
               ref="sale"
             ></Table>
+            <vxe-pager
+              background
+              :current-page.sync="pageObj1.num"
+              :page-size.sync="pageObj1.size"
+              :total="pageObj1.total"
+              @page-change="pageChange1"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            </vxe-pager>
           </Tab-pane>
           <Tab-pane label="采购清单" name="key2">
             <Table
@@ -149,9 +158,18 @@
               :columns="columns2"
               :data="data2"
               class="mt10"
+              size="small"
               max-height="400"
               ref="purchase"
             ></Table>
+            <vxe-pager
+              background
+              :current-page.sync="pageObj2.num"
+              :page-size.sync="pageObj2.size"
+              :total="pageObj2.total"
+              @page-change="pageChange2"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            </vxe-pager>
           </Tab-pane>
         </Tabs>
       </div>
@@ -174,7 +192,7 @@
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
-      
+
       <div class="db pro mt20">
         <span>分店名称：</span>
         <Select v-model="model1" style="width:200px">
@@ -295,6 +313,16 @@ export default {
         total:0,
         num:1
       },
+      pageObj1:{
+        size:10,
+        total:0,
+        num:1
+      },
+      pageObj2:{
+        size:10,
+        total:0,
+        num:1
+      },
       columns: [
         {
           title: "序号",
@@ -327,13 +355,13 @@ export default {
         {
           title: "区域",
           key: "area",
-          minWidth: 70,
+          minWidth: 80,
           className: "tc"
         },
         {
           title: "门店",
           key: "orgName",
-          minWidth: 70,
+          minWidth: 100,
           className: "tc"
         },
         {
@@ -486,14 +514,15 @@ export default {
         {
           title: "区域",
           key: "area",
-          minWidth: 70,
+          minWidth: 80,
           className: "tc"
         },
         {
           title: "门店",
           key: "orgName",
-          minWidth: 70,
-          className: "tc"
+          minWidth: 100,
+          className: "tc",
+          tooltip:true
         },
         {
           title: "客户/供应商名称",
@@ -724,7 +753,8 @@ export default {
           title: "业务员",
           key: "salesman",
           className: "tc",
-          minWidth: 60
+          minWidth: 100,
+          tooltip:true
         },
         {
           title: "已对账金额",
@@ -792,13 +822,15 @@ export default {
           title: "对账人",
           key: "accountMan",
           className: "tc",
-          minWidth: 80
+          minWidth: 100,
+          tooltip:true
         },
         {
           title: "对账订单",
           key: "accountNo",
           className: "tc",
-          minWidth: 80
+          minWidth: 150,
+          tooltip:true
         }
       ],
       columns2: [
@@ -840,6 +872,7 @@ export default {
         {
           title: "门店",
           key: "orgName",
+          tooltip:true,
           minWidth: 70,
           className: "tc"
         },
@@ -1067,6 +1100,7 @@ export default {
           title: "业务员",
           key: "salesman",
           className: "tc",
+          tooltip:true,
           minWidth: 80
         },
         {
@@ -1134,12 +1168,14 @@ export default {
         {
           title: "对账人",
           key: "accountMan",
+          tooltip:true,
           className: "tc",
           minWidth: 80
         },
         {
           title: "对账订单",
           key: "accountNo",
+          tooltip:true,
           className: "tc",
           minWidth: 80
         }
@@ -1761,7 +1797,9 @@ export default {
         }
       ],
       data1Loading:false,
-      copyData:[]
+      copyData:[],
+      copyData1:[],
+      copyData2:[]
     };
   },
   computed:{
@@ -2000,6 +2038,7 @@ export default {
       this.data = [];
       this.copyData = [];
       this.pageObj.total = 0;
+      this.pageObj.num = 1;
       getreceivable(obj).then(res => {
         this.data1Loading = false;
         if (res.data.length !== 0) {
@@ -2007,13 +2046,22 @@ export default {
           let arrData = (res.data||[]);
           arrData.map((item, index) => {
             item.num = index + 1;
+            switch (item.belongSystem) {
+              case 0:
+                item.guestTypeName="华胜连锁";
+                break;
+              case 1:
+                item.guestTypeName="体系外";
+                break;
+              case 2:
+                item.guestTypeName="体系内";
+                break;
+            }
           });
           // this.data = arrData;
           this.copyData = arrData
-          setTimeout(()=>{
-            this.pageObj.total = arrData.length;
-          },500)
-          this.changePageList();
+          this.pageObj.total = arrData.length;
+          this.data = this.changePageList(this.pageObj.num,this.pageObj.size,this.copyData);
 
         }
       });
@@ -2021,21 +2069,30 @@ export default {
     pageChange({type, currentPage, pageSize, $event}){
       this.pageObj.num  = currentPage;
       this.pageObj.size = pageSize;
-      this.changePageList();
+      this.data = this.changePageList(currentPage,pageSize,this.copyData);
     },
-    changePageList(){
-      let firstNum = this.pageObj.size*(this.pageObj.num-1);
-      let lastNum = firstNum+this.pageObj.size;
-      let arrData = (this.copyData||[]).slice(firstNum,lastNum);
-      this.data1Loading = true;
-      this.data = [];
-      setTimeout(()=>{
-        this.data = arrData;
-        this.data1Loading = false;
-      },500);
+    pageChange1({type, currentPage, pageSize, $event}){
+      this.pageObj1.num  = currentPage;
+      this.pageObj1.size = pageSize;
+      this.data1 = this.changePageList(currentPage,pageSize,this.copyData1);
+    },
+    pageChange2({type, currentPage, pageSize, $event}){
+      this.pageObj2.num  = currentPage;
+      this.pageObj2.size = pageSize;
+      this.data2 = this.changePageList(currentPage,pageSize,this.copyData2);
+    },
+    changePageList(currentPage,pageSize,sourceData){
+      let firstNum = pageSize*(currentPage-1);
+      let lastNum = firstNum+pageSize;
+      let arrData = (sourceData||[]).slice(firstNum,lastNum);
+      return arrData||[];
     },
     // 销售/采购接口
     getDetailed(data, obj) {
+      this.pageObj1.total = 0;
+      this.pageObj1.num = 1;
+      this.pageObj2.total = 0;
+      this.pageObj2.num = 1;
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
@@ -2054,7 +2111,9 @@ export default {
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
-          this.data1 = res.data.one;
+          this.copyData1 = res.data.one;
+          this.pageObj1.total = res.data.one.length;
+          this.data1 = this.changePageList(this.pageObj1.num,this.pageObj1.size,this.copyData1);
         } else {
           this.data1 = [];
         }
@@ -2065,7 +2124,9 @@ export default {
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
-          this.data2 = res.data.two;
+          this.copyData2 = res.data.two;
+          this.pageObj2.total = res.data.two.length;
+          this.data2 = this.changePageList(this.pageObj2.num,this.pageObj2.size,this.copyData2);
         } else {
           this.data2 = [];
         }

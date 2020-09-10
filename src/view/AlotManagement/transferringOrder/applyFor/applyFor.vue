@@ -27,7 +27,7 @@
                 <Button :loading="isCancelClick" @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
-                <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+                <Button @click="stamp" :disabled="(presentrowMsg === 0 && resId)||presentrowMsg === 7||presentrowMsg === 8 " class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
               </div>
               <div class="db">
                 <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
@@ -464,6 +464,7 @@
           selectArr:[], //快速查询的数组 用于赋值,
           moreArr: {},
           presentrowMsg: 0,
+          resId: true,
           guestidId: '' ,//给后台传值保存调出方的id
            isAdd:true, //判断是否能新增
           formPlan: {
@@ -621,6 +622,7 @@
           var dataTime = tools.transTime(date)
           this.buttonDisable = false
           this.presentrowMsg = 0
+          this.resId = true
           if (!this.isAdd) {
             return this.$Message.error('请先保存数据');
           }
@@ -725,6 +727,8 @@
                         this.$refs.formPlan.resetFields();
                         this.leftgetList()
                       }
+                    }).catch(e => {
+                      this.isSaveClick = false;
                     })
                   // try {
 
@@ -765,15 +769,21 @@
                 if(this.isCancelClick){
                   return this.$message.error('请稍后数据处理中....');
                 }
-                this.isCancelClick = true;
-                let res = await save(data);
-                if(!res){
+                try {
+                  
+                  this.isCancelClick = true;
+                  let res = await save(data);
+                  if(!res){
+                    this.isCancelClick = false;
+                  }
+                  if (res.code == 0) {
+                    this.$Message.success('作废成功');
+                    this.leftgetList();
+                    this.isAdd = true;
+                  }
+                } catch (error) {
                   this.isCancelClick = false;
-                }
-                if (res.code == 0) {
-                  this.$Message.success('作废成功');
-                  this.leftgetList();
-                  this.isAdd = true;
+                  
                 }
             },
             onCancel: () => {
@@ -1114,6 +1124,7 @@
           this.formPlan.serviceId = this.datadata.serviceId
           // this.guestidId = this
           this.presentrowMsg = row.status.value
+          this.resId = false
           this.rowId = row.id
           this.buttonDisable = false
           this.getRightlist();
@@ -1178,16 +1189,20 @@
                     if(this.isCommitClick){
                       return this.$message.error('请稍后数据处理中....');
                     }
-                    this.isCommitClick = true;
-                    let res = await commit(data);
-                    if(!res){
+                    try {
+                      this.isCommitClick = true;
+                      let res = await commit(data);
+                      if(!res){
+                        this.isCommitClick = false;
+                      }
+                      if (res.code == 0) {
+                        this.$Message.success('提交成功');
+                        this.leftgetList();
+                        this.isAdd = true;
+                        this.$refs.formPlan.resetFields();
+                      }
+                    } catch (error) {
                       this.isCommitClick = false;
-                    }
-                    if (res.code == 0) {
-                      this.$Message.success('提交成功');
-                      this.leftgetList();
-                      this.isAdd = true;
-                      this.$refs.formPlan.resetFields();
                     }
                   // }else{
                   //   this.$Message.warning('请先编辑收货信息')

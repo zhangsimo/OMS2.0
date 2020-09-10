@@ -206,6 +206,15 @@
                 <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
                 </vxe-table-column>
               </vxe-table>
+              <vxe-pager
+                background
+                size="mini"
+                :current-page.sync="pageObj.num"
+                :page-size.sync="pageObj.size"
+                :total="pageObj.total"
+                @page-change="pageChange"
+                :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+              </vxe-pager>
             </div>
             <!-- 应付业务采购入库/退货对账 -->
             <div class="db mt20">
@@ -260,6 +269,15 @@
                 <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
                 </vxe-table-column>
               </vxe-table>
+              <vxe-pager
+                background
+                size="mini"
+                :current-page.sync="pageObj1.num"
+                :page-size.sync="pageObj1.size"
+                :total="pageObj1.total"
+                @page-change="pageChange2"
+                :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+              </vxe-pager>
             </div>
             <div class="totalcollect p10 mt20">
               <div class="db">
@@ -839,6 +857,18 @@
         clientList2: {},
         provinceArr2: [],
         treeDiagramList2: [],
+        pageObj:{
+          size:10,
+          total:0,
+          num:1
+        },
+        pageObj1:{
+          size:10,
+          total:0,
+          num:1
+        },
+        copyData:[],
+        copyData1:[]
       };
     },
     async mounted() {
@@ -898,6 +928,24 @@
       }
     },
     methods: {
+      pageChange({type, currentPage, pageSize, $event}){
+        this.pageObj.num  = currentPage;
+        this.pageObj.size = pageSize;
+        this.data1 = this.changePageList(currentPage,pageSize,this.copyData);
+      },
+      pageChange2({type, currentPage, pageSize, $event}){
+        this.pageObj1.num  = currentPage;
+        this.pageObj1.size = pageSize;
+        this.data2 = this.changePageList(currentPage,pageSize,this.copyData1);
+      },
+      changePageList(currentPage,pageSize,sourceData){
+        let firstNum = pageSize*(currentPage-1);
+        let lastNum = firstNum+pageSize;
+        let arrData = (sourceData||[]).slice(firstNum,lastNum);
+        return arrData||[];
+      },
+
+
       // 快速查询
       quickDate(data) {
         this.value = data ? data : ["", ""];
@@ -986,9 +1034,9 @@
       },
       // 计算应收业务销售出库/退货对账的总计
       collectSum(sumData) {
-        let collectSum = 0;
+        var collectSum = 0;
         sumData.map(item => {
-          collectSum += item.thisAccountAmt
+          collectSum += parseFloat(item.thisAccountAmt)
         })
         return collectSum
       },
@@ -1095,6 +1143,11 @@
         this.data1Loading = true;
         this.data1 = [];
         this.data2 = [];
+
+        this.pageObj.total = 0;
+        this.pageObj.num = 1;
+        this.pageObj1.total = 0;
+        this.pageObj1.num = 1;
         getReconciliation(obj).then(res => {
           this.data1Loading = false;
           // let Statementexcludingtax = 0;
@@ -1138,7 +1191,10 @@
               item.speciesName = item.species.name;
             });
             // console.log(res.data.two.thisAccountAmt)
-            this.data1 = res.data.two;
+            // this.data1 = res.data.two;
+            this.copyData = res.data.two;
+            this.pageObj.total = res.data.two.length;
+            this.data1 = this.changePageList(this.pageObj.num,this.pageObj.size,this.copyData);
           } else {
             this.data1 = [];
           }
@@ -1147,7 +1203,12 @@
               item.serviceTypeName = item.serviceType.name;
               item.speciesName = item.species.name;
             });
-            this.data2 = res.data.three;
+            // this.data2 = res.data.three;
+
+            this.copyData1 = res.data.three;
+            this.pageObj1.total = res.data.three.length;
+            this.data2 = this.changePageList(this.pageObj1.num,this.pageObj1.size,this.copyData1);
+
           } else {
             this.data2 = [];
           }
@@ -1303,7 +1364,7 @@
         this.paymentlist = selection;
         this.totalpayment = 0;
         selection.map(item => {
-          this.totalpayment += item.thisAccountAmt;
+          this.totalpayment += parseFloat(item.thisAccountAmt);
         });
         this.getSettlementComputed();
         this.getAccountNameList();
@@ -1367,7 +1428,7 @@
         this.paymentlist = selection;
         this.totalpayment = 0
         selection.map(item => {
-          this.totalpayment += item.thisAccountAmt;
+          this.totalpayment += parseFloat(item.thisAccountAmt);
         });
         this.getSettlementComputed();
         this.getAccountNameList();
@@ -1650,20 +1711,35 @@
       // 对账清单导出
       getReportReconciliationt() {
         if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
-          if (this.paymentlist.length !== 0) {
-            this.$refs.payable.exportCsv({
-              filename: "采购清单",
-              data: this.paymentlist,
-              columns: this.columns1.filter((col, index) => index > 0)
-            });
-          }
-          if (this.collectlist.length !== 0) {
-            this.$refs.receivable.exportCsv({
-              filename: "销售清单",
-              data: this.collectlist,
-              columns: this.columns1.filter((col, index) => index > 0)
-            });
-          }
+          // if (this.paymentlist.length !== 0) {
+          //   this.$refs.payable.exportCsv({
+          //     filename: "采购清单",
+          //     data: this.paymentlist,
+          //     columns: this.columns1.filter((col, index) => index > 0)
+          //   });
+          // }
+          // if (this.collectlist.length !== 0) {
+          //   this.$refs.receivable.exportCsv({
+          //     filename: "销售清单",
+          //     data: this.collectlist,
+          //     columns: this.columns1.filter((col, index) => index > 0)
+          //   });
+          // }
+          let str1 = "";
+          let str2 = "";
+          this.paymentlist.map(item => {
+            str1 += `&serviceIdList=${item.serviceId}`;
+          });
+          this.collectlist.map(item => {
+            str2 += `&serviceIdList=${item.serviceId}`;
+          });
+          // for(var i=0;i<this.selectTableDataArr.length;i++){
+          //   str+=`&ids=${this.selectTableDataArr[i].id}`
+          // }
+          // str1 = str1.substring(0, str1.length - 1);
+          // str2 = str2.substring(0, str2.length - 1);
+          console.log(str1,str2)
+          location.href = `${baseUrl.omsSettle}/accounts/receivable/export/in/business?access_token=${Cookies.get(TOKEN_KEY)}${str1}${str2}`;
         } else {
           // this.$message.error("请勾选要导出的对账清单");
           this.$message({

@@ -36,7 +36,6 @@
               class="mr10"
               :disabled="buttonDisable || presentrowMsg !== 0"
               :loading='saveLoading'
-              v-noresub
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
@@ -46,7 +45,6 @@
               @click="instance"
               v-has="'submit'"
               :loading='commitLoading'
-              v-noresub
               :disabled="buttonDisable || presentrowMsg !== 0"
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
@@ -57,6 +55,7 @@
               v-has="'cancellation'"
               class="mr10"
               :disabled="buttonDisable || presentrowMsg !== 0"
+              :loading="cancelLoading"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
@@ -778,8 +777,10 @@ export default {
                   (this.Right.tbdata = []);
                 this.isAdd = true;
                 this.Flaga = true;
-                this.saveLoading = false;
               }
+              this.saveLoading = false;
+            }).catch(e => {
+              this.saveLoading = false;
             });
           } catch (errMap) {
             this.$XModal.message({
@@ -819,6 +820,8 @@ export default {
                         (this.formPlan.remark = ""),
                         (this.Right.tbdata = []);
                     }
+                    this.cancelLoading = false;
+                  }).catch(e => {
                     this.cancelLoading = false;
                   });
                 } else {
@@ -1213,6 +1216,8 @@ export default {
                       } else {
                         this.commitLoading = false;
                       }
+                    }).catch(e => {
+                      this.commitLoading = false;
                     });
                   } else {
                     this.$Message.error("*为必填！");

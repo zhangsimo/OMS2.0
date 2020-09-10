@@ -47,9 +47,6 @@
           title="采购类型"
           width="80"
         >
-          <template v-slot="{ row }">
-            <span>{{ row.orderType.name }}</span>
-          </template>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group2" title="配件信息">
@@ -347,6 +344,7 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = false;
             }
+            el.orderType=el.orderType.name
             return el;
           });
           // this.total = res.data.purchaseEnterBean
@@ -371,6 +369,7 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = "否";
             }
+            el.orderType=el.orderType.name
             return el;
           });
           // this.total = res.data.purchaseEnterBean

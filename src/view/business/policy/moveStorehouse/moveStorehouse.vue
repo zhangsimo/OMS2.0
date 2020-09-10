@@ -280,7 +280,8 @@
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
-                :edit-config="{trigger: 'click', mode: 'cell'}"
+                :edit-config="{trigger: 'click', mode: 'cell',showStatus: true}"
+                :edit-rules="validRules"
                 @edit-actived="editActivedEvent">
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
@@ -371,6 +372,15 @@ export default {
     SelectPartCom
   },
   data() {
+    const orderQtyVali = ({cellValue,row}) =>{
+      return new Promise((resolve, reject) => {
+        if(cellValue<=0||cellValue==""){
+          reject(new Error('请填写数量'))
+        }else{
+          resolve()
+        }
+      })
+    }
     return {
       saveLoading: false,
       commitLoading: false,
@@ -560,6 +570,11 @@ export default {
         ],
         auditDate: [
           { required: true, message: "移仓时间不为空", trigger: "change" }
+        ]
+      },
+      validRules: {
+        orderQty: [
+          { validator: orderQtyVali }
         ]
       },
       showAudit: false, //审核提示
@@ -838,7 +853,11 @@ export default {
       // this.Left.tbdata.unshift(TrowLeft)
     },
     //保存
-    baocun() {
+    async baocun() {
+      const errMap = await this.$refs.xTable1.validate(true).catch(errMap => errMap)
+      if(errMap){
+        return
+      }
       this.Leftcurrentrow.auditDate=tools.transTime(this.Leftcurrentrow.auditDate)
       if(this.saveButClick){
         return
@@ -871,11 +890,11 @@ export default {
         this.saveButClick = false;
         return;
       }
-      if (this.numberValue&&this.numberValue <=0) {
-        this.$Message.error("数量须大于0");
-        this.saveButClick = false;
-        return;
-      }
+      // if (this.numberValue&&this.numberValue <=0) {
+      //   this.$Message.error("数量须大于0");
+      //   this.saveButClick = false;
+      //   return;
+      // }
       // this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -923,7 +942,11 @@ export default {
           });
       },
     // 提交
-    editPro() {
+    async editPro() {
+      const errMap = await this.$refs.xTable1.validate(true).catch(errMap => errMap)
+      if(errMap){
+        return
+      }
       if (
         this.Leftcurrentrow.status.value &&
         this.this.Leftcurrentrow.status.value !== 0
@@ -931,11 +954,11 @@ export default {
         this.$Message.error("只有草稿状态才能保存");
         return;
       }
-        if (this.numberValue <=0) {
-            this.$Message.error("数量须大于0");
-            this.saveButClick = false;
-            return;
-        }
+        // if (this.numberValue <=0) {
+        //     this.$Message.error("数量须大于0");
+        //     this.saveButClick = false;
+        //     return;
+        // }
       let zero = tools.isZero(this.Right.tbdata, {qty: "orderQty",});
       if(zero) return;
 

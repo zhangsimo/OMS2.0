@@ -193,28 +193,27 @@
                 </Button>
                 <div slot="content" class="flex" style="justify-content: space-between">
                   <div class="flex mr10">
-<!--                    <Upload-->
-<!--                      ref="upload1"-->
-<!--                      :show-upload-list="false"-->
-<!--                      :action="upurlInnerId"-->
-<!--                      :headers="headers"-->
-<!--                      :format="['xlsx','xls']"-->
-<!--                      :on-format-error="onFormatError"-->
-<!--                      :on-success="onSuccess"-->
-<!--                      :before-upload='beforeUploadInnerId'-->
-<!--                    >-->
+                    <Upload
+                      ref="upload1"
+                      :show-upload-list="false"
+                      :action="upurlInnerId"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload='beforeUploadInnerId'
+                    >
 
-<!--                      <Button-->
-<!--                        size="small"-->
-<!--                        class="mr10"-->
-<!--                        @click="getRUlInnerId"-->
-<!--                        v-has="'getBarchInnerId'"-->
-<!--                      >-->
-<!--                        <span class="center">-->
-<!--                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入-->
-<!--                        </span>-->
-<!--                      </Button>-->
-<!--                    </Upload>-->
+                      <Button
+                        size="small"
+                        class="mr10"
+                        @click="getRUlInnerId"
+                      >
+                        <span class="center">
+                          <Icon custom="iconfont icondaoruicon icons"/>配件内码导入
+                        </span>
+                      </Button>
+                    </Upload>
                   </div>
                   <div class="flex">
                     <Upload
@@ -1153,7 +1152,6 @@
                 this.$store.commit("setleftList", res);
                 this.$refs.formPlan.resetFields();
                 this.limitList = {};
-
                 // this.reload();
               } else {
                 this.$parent.$parent.submitloading = false;
@@ -1166,7 +1164,7 @@
                 message: "表格校验不通过！"
               });
               this.$parent.$parent.saveLoading = false;
-
+              this.isClickSave = false;
             }
           } else {
             this.$Message.error("*为必填项");
@@ -1217,9 +1215,9 @@
                 if (valid) {
                   try {
                     await this.$refs.xTable.validate();
-                    if (+this.totalMoney > +this.limitList.sumAmt) {
-                      return this.$message.error("可用余额不足");
-                    }
+                    // if (+this.totalMoney > +this.limitList.sumAmt) {
+                    //   return this.$message.error("可用余额不足");
+                    // }
                     this.$parent.$parent.submitloading = true
                     data.planSendDate = tools.transTime(data.planSendDate)
                     data.planArriveDate = tools.transTime(data.planArriveDate)
@@ -1262,15 +1260,19 @@
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
+          this.formPlan.detailList.map(item => {
+            item.orderAmt = this.$utils.toNumber(item.orderQty) * this.$utils.toNumber(item.orderPrice)
+          })
           if (valid) {
             try {
               await this.$refs.xTable.validate();
-              if (+this.totalMoney > +this.limitList.sumAmt) {
-                return this.$message.error("可用余额不足");
-              }
+              // if (+this.totalMoney > +this.limitList.sumAmt) {
+              //   return this.$message.error("可用余额不足");
+              // }
               let data = JSON.parse(JSON.stringify(this.formPlan));
               data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
               data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
+              data.useableAmt = this.limitList.sumAmt;
               let orderList = [];
               orderList = data.detailList.filter(
                 item => item.orderPrice * 1 < item.averagePrice * 1
@@ -1353,7 +1355,7 @@
         });
         data.detailList = val.details;
         data.sign = b;
-        // data.orderTypeId = val.orderTypeId||"";
+        data.orderTypeId = val.orderTypeId||"";
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();

@@ -39,7 +39,6 @@
               :disabled="isInput"
               v-has="'save'"
               :loading='saveLoading'
-              v-noresub
             ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
@@ -50,7 +49,6 @@
               :disabled="isInput"
               v-has="'submit'"
               :loading='commitLoading'
-              v-noresub
             ><i class="iconfont mr5 iconziyuan2"></i>提交入库</Button
             >
           </div>
@@ -63,6 +61,7 @@
           <div class="db">
             <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
             v-has="'invalidate'"
+            :loading="cancelLoading"
             ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
