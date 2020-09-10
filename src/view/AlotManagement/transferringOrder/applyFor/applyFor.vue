@@ -1290,7 +1290,7 @@
           this.$Message.error('只支持xls xlsx后缀的文件')
         },
         changeOrderFun(){
-          this.$refs.changeOrder.init();
+          this.$refs.changeOrder.init(this.selectRowId);
         }
       },
       mounted(){

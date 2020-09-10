@@ -29,65 +29,27 @@
         ref="xTable"
         border
         resizable
+        :loading="loading"
         size="mini"
         :data="tbdata"
         :edit-config="{trigger: 'click', mode: 'cell'}">
         <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件内码" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="156"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="OEM码" width="100"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="申请数量" width="100"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="受理数量" width="100"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="已取消数量" width="100"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="本次取消数量" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OEM码" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量" width="80"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="80"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="hasCancelQty" title="已取消数量" width="80"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="cancelQty" title="本次取消数量" width="120" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <template v-slot:edit="{row}">
+            <vxe-input type="number" v-model="row.cancelQty"></vxe-input>
+          </template>
+        </vxe-table-column>
       </vxe-table>
     </template>
   </vxe-modal>
-  <!--<Modal v-model="changeOrderModel" title="订单调整" width="1000" footer-hide>-->
-    <!--<div>-->
-      <!--<Button type='primary' size="small" class="mr10">保存</Button>-->
-      <!--<span>配件查询：</span>-->
-      <!--<vxe-input v-model="partName" class="w250 mr10" size="mini" placeholder="请输入配件内码/编码/名称/OE码"></vxe-input>-->
-      <!--<span>配件查询：</span>-->
-      <!--<Select-->
-        <!--filterable-->
-        <!--clearable-->
-        <!--class="w120 mr10"-->
-        <!--v-model="partBrand"-->
-        <!--placeholder="品牌"-->
-        <!--size="small"-->
-      <!--&gt;-->
-        <!--<Option-->
-          <!--v-for="item in partBrandList"-->
-          <!--:value="item.name"-->
-          <!--:key="item.id"-->
-        <!--&gt;{{ item.name }}</Option-->
-        <!--&gt;-->
-      <!--</Select>-->
-      <!--<Button size="small" class="mr20" type='default'>查询</Button>-->
-      <!--<Checkbox v-model="Adjusted">显示已调整</Checkbox>-->
-    <!--</div>-->
-    <!--<vxe-table-->
-      <!--ref="xTable"-->
-      <!--border-->
-      <!--resizable-->
-      <!--size="mini"-->
-      <!--:data="tbdata"-->
-      <!--:edit-config="{trigger: 'click', mode: 'cell'}">-->
-      <!--<vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="partCode" title="配件内码" fixed="left" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="hasInQty" title="OEM码" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="hasInQty" title="申请数量" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="hasInQty" title="受理数量" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="hasInQty" title="已取消数量" width="100"></vxe-table-column>-->
-      <!--<vxe-table-column  show-overflow="tooltip" field="hasInQty" title="本次取消数量" width="100"></vxe-table-column>-->
-    <!--</vxe-table>-->
-  <!--</Modal>-->
 </template>
 
 <script>
@@ -104,15 +66,20 @@
         partName:'',
         partBrand:'',
         Adjusted:false,
-        tbdata:[]
+        tbdata:[],
+        loading:false
       }
     },
     methods:{
-		  init(){
-		    this.changeOrderModel = true;
+		  init(id){
+		    setTimeout(() => {
+          this.changeOrderModel = true;
+        },500)
+
 		    if(this.partBrandList.length==0){
 		      this.getBand();
         }
+		    this.getDetail(id)
       },
       async getBand() {
         let res = await getPartBrand({ pageSize: 10000 });
@@ -126,7 +93,12 @@
         }
       },
       async getDetail(id){
-		    let rep = await getAllotApplyDetail({mainId:id})
+		    this.loading = true;
+		    let rep = await getAllotApplyDetail({mainId:id});
+		    this.loading = false;
+		    if(rep.code==0){
+		      this.tbdata = rep.data||[];
+        }
       }
     }
 	}
@@ -135,7 +107,7 @@
 <style lang="less">
 .vxeModel{
   .vxe-modal--header{
-    background: #f00;
+    background: #fd5c5c;
     color: #fff;
     text-align: center;
     padding: 15px 0px;
