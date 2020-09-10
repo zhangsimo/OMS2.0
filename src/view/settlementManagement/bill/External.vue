@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" v-model="company" readonly/>
+            <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -69,10 +69,10 @@
           ref="summary"
           show-summary
           highlight-row
-          :summary-method="handleSummary"
           @on-row-click="election"
           max-height="400"
         ></Table>
+<!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
             class-name="fr mb10 mt10"
@@ -651,7 +651,7 @@ export default {
     getGeneral() {
       let obj = {
         orgid: this.model1==0?"":this.model1,
-        guestId: this.companyId,
+        guestId: this.company?this.companyId:"",
         enterTypeId: this.type
       };
       let params = {
@@ -675,7 +675,7 @@ export default {
               });
               this.data = res.data.vos;
               this.page.total = res.data.TotalElements;
-              this.total = res.data.AllotOutMainVO
+              // this.total = res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
@@ -696,7 +696,7 @@ export default {
               });
               this.data = res.data.vos;
               this.page.total = res.data.TotalElements;
-              this.total = res.data.AllotOutMainVO
+              // this.total = res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
@@ -707,7 +707,7 @@ export default {
     getGeneralAll(param) {
       let obj = {
         orgid: this.model1==0?"":this.model1,
-        guestId: this.companyId,
+        guestId:this.company?this.companyId:"",
         enterTypeId: this.type
       };
       let params = {

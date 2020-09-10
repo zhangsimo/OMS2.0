@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" v-model="company" readonly/>
+            <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -595,7 +595,7 @@ export default {
         endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59" : '',
         orgid:this.model1,
         code:this.fno,
-        guestId:this.companyId
+        guestId:this.company?this.companyId:""
       }
       getOnWay(data).then(res => {
         if(res.data.length !==0){

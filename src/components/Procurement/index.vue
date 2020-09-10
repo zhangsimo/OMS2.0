@@ -2,7 +2,7 @@
   <Modal
     title="添加配件"
     v-model="shows"
-    :styles="{ top: '50px', width: '1100px' }"
+    :styles="{ top: '50px', width: '1500px' }"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
@@ -10,9 +10,27 @@
           <span class="mr5">快速查询:</span>
           <getDate class="mr10" @quickDate="getDataQuick"></getDate>
         </div>
-        <div class="db mr5">
+        <!-- <div class="db mr5">
           <el-input autofocus ref="input" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
+        </div> -->
+
+        <div class="db mr5">
+          <span class="mr5">编码:</span>
+          <el-input autofocus ref="input" style="width: 160px" placeholder="请输入编码" v-model="partCode" @change="query"/>
         </div>
+        <div class="db mr5">
+          <span class="mr5">内码:</span>
+          <el-input placeholder="请输入内码" style="width: 160px" v-model="partId" @change="query"/>
+        </div>
+        <div class="db mr5">
+          <span class="mr5">名称:</span>
+          <el-input placeholder="请输入名称" style="width: 160px" v-model="partName" @change="query"/>
+        </div>
+        <div class="db mr5">
+          <span class="mr5">OE:</span>
+          <el-input placeholder="请输入OE码" style="width: 160px" v-model="oemCode" @change="query"/>
+        </div>
+        
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
           <Select  v-model="partBrand" filterable style="width:140px" class="mr20" @on-change="SelectChange">
@@ -192,6 +210,10 @@
     private auditDate: Array<Date> = [];
     // private guestname:string = "";
     private partId: string = "";
+    private partName: string = "";
+    private partCode: string = "";
+    private oemCode: string = "";
+
 
     private page: Page = {
       num: 1,
@@ -311,10 +333,12 @@
 
     private reset() {
       this.selectRow = new Array();
-      this.auditDate = new Array();
       this.tableDataBm = new Array();
       this.filters = [];
       this.partId = "";
+      this.partName = "";
+      this.partCode = "";
+      this.oemCode = "";
     }
 
     private filterNameMethod({value, row, column}) {
@@ -344,8 +368,8 @@
 
     //快速查询日期
     private getDataQuick(v) {
-      if (!this.shows) return;
       this.auditDate = v
+      if (!this.shows) return;
       this.getPchsPlanList();
     }
 
@@ -389,9 +413,11 @@
       };
       params.size = this.page.size;
       params.page = this.page.num - 1;
-
       let data: any = {
         partId: this.partId,
+        partName: this.partName,
+        partCode: this.partCode,
+        oemCode: this.oemCode,
         startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
         endEnterDate: this.auditDate[1] ? this.auditDate[1] : "",
       };

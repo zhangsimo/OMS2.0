@@ -161,9 +161,9 @@
     <changeJournal :list='oneList' ref="changeModal" @getNewList="allList" @update="getList"></changeJournal>
 
     <div class="mt15">
-      <Tabs type="card" value="capitalChain5" @on-click="clearSelectTabelList">
+      <Tabs type="card" v-model="tabName" @on-click="clearSelectTabelList">
         <TabPane label="全部数据" name="capitalChain1">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div>
             <vxe-table
               border
               resizable
@@ -172,55 +172,54 @@
               stripe
               ref="xTable1"
               align="center"
-              max-height="400"
               size="mini"
-              style="width: 3000px"
+              max-height="500"
               :data="tableData"
               @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent"
             >
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领">
+              <vxe-table-column field="importTime" title="导入时间" width="100"></vxe-table-column>
+              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
+              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
+              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
+              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
+              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="100"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">
                   {{row.claimType ? '是':'否'}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
         <TabPane label="已核销" name="capitalChain2">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div>
             <vxe-table
               border
               resizable
@@ -229,55 +228,54 @@
               stripe
               ref="xTable2"
               align="center"
-              max-height="400"
               size="mini"
-              style="width: 3000px"
+              max-height="500"
               :data="tableData1"
               @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent"
             >
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领">
+              <vxe-table-column field="importTime" title="导入时间" width="100"></vxe-table-column>
+              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
+              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
+              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
+              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
+              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="100"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">
                   {{row.claimType ? '是':'否'}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
         <TabPane label="未核销" name="capitalChain3">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div>
             <vxe-table
               border
               resizable
@@ -286,55 +284,54 @@
               stripe
               ref="xTable3"
               align="center"
-              max-height="400"
               size="mini"
-              style="width: 3000px"
+              max-height="500"
               :data="tableData2"
               @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent"
             >
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领">
+              <vxe-table-column field="importTime" title="导入时间" width="100"></vxe-table-column>
+              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
+              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
+              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
+              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
+              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="100"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">
                   {{row.claimType ? '是':'否'}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
         <TabPane label="已认领" name="capitalChain4">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div>
             <vxe-table
               border
               resizable
@@ -343,55 +340,54 @@
               stripe
               ref="xTable4"
               align="center"
-              max-height="400"
               size="mini"
-              style="width: 3000px"
+              max-height="500"
               :data="tableData3"
               @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent"
             >
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领">
+              <vxe-table-column field="importTime" title="导入时间" width="100"></vxe-table-column>
+              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
+              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
+              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
+              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
+              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="100"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">
                   {{row.claimType ? '是':'否'}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
         <TabPane label="未认领" name="capitalChain5">
-          <div style="overflow: hidden ;overflow-x: scroll">
+          <div>
             <vxe-table
               border
               resizable
@@ -399,9 +395,8 @@
               stripe
               ref="xTable5"
               align="center"
-              max-height="400"
               size="mini"
-              style="width: 3000px"
+              max-height="500"
               highlight-hover-row
               :data="tableData4"
               @checkbox-all="selectAllEvent"
@@ -409,41 +404,41 @@
             >
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领">
+              <vxe-table-column field="importTime" title="导入时间" width="100"></vxe-table-column>
+              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
+              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
+              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
+              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
+              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
+              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="100"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">
                   {{row.claimType ? '是':'否'}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -516,6 +511,7 @@
         tableData2: [],//未审核数据
         tableData3: [],//已认领数据
         tableData4: [],//未认领数据
+        tabName:"capitalChain5",//tab切换
         impirtUrl: {
           downId: '1600000000',
           upUrl: impUrl
@@ -750,6 +746,22 @@
         if (!data.startTime) {
           return this.$Message.error("请选择日期")
         }
+        //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
+        switch (this.tabName) {
+          case "capitalChain1":break;
+          case "capitalChain2":
+            data.collateState=1;
+            break;
+          case "capitalChain3":
+            data.collateState=0;
+            break;
+          case "capitalChain4":
+            data.claimType=1;
+            break;
+          case "capitalChain5":
+            data.claimType=0;
+            break;
+        }
         if (this.model1 != 0) {
           data.areaId = this.model1
         }
@@ -779,22 +791,22 @@
           //}
           this.page.total = res.data.page.totalElements;
           this.tableData = res.data.page.content
-          this.tableData1 = []
-          this.tableData2 = []
-          this.tableData3 = []
-          this.tableData4 = []
-          res.data.page.content.forEach(item => {
-            if (item.collateState) {
-              this.tableData1.push(item)
-            } else {
-              this.tableData2.push(item)
-            }
-            if (item.claimType) {
-              this.tableData3.push(item)
-            } else {
-              this.tableData4.push(item)
-            }
-          })
+          this.tableData1 = res.data.page.content
+          this.tableData2 = res.data.page.content
+          this.tableData3 = res.data.page.content
+          this.tableData4 = res.data.page.content
+          // res.data.page.content.forEach(item => {
+          //   if (item.collateState==1) {
+          //     this.tableData1.push(item)
+          //   } else {
+          //     this.tableData2.push(item)
+          //   }
+          //   if (item.claimType==1) {
+          //     this.tableData3.push(item)
+          //   } else {
+          //     this.tableData4.push(item)
+          //   }
+          // })
         }
       },
 
@@ -942,12 +954,13 @@
       goMoney() {
         this.$router.push({name: "claimWrite"})
       },
-      clearSelectTabelList() {
+      async clearSelectTabelList(v) {
         for (let i = 1; i < 6; i++) {
           this.$refs[`xTable${i}`].clearCheckboxRow()
         }
         this.oneList = {};
         this.selectTableList = [];
+        await this.getList()
       }
 
     }

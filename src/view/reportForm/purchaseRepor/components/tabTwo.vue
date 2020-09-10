@@ -47,9 +47,6 @@
           title="采购类型"
           width="80"
         >
-          <template v-slot="{ row }">
-            <span>{{ row.orderType.name }}</span>
-          </template>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group2" title="配件信息">
@@ -347,9 +344,10 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = false;
             }
+            el.orderType=el.orderType.name
             return el;
           });
-          this.total = res.data.purchaseEnterBean
+          // this.total = res.data.purchaseEnterBean
           this.page.total = res.data.totalElements;
         } else {
           this.page.total = 0;
@@ -360,7 +358,7 @@
         let tableDataAll = [];
         let params = {
           page: 0,
-          size: 10000
+          size: this.page.total
         };
         let res = await api.getPjPchsEnterMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
@@ -371,9 +369,10 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = "否";
             }
+            el.orderType=el.orderType.name
             return el;
           });
-          this.total = res.data.purchaseEnterBean
+          // this.total = res.data.purchaseEnterBean
         }
         return tableDataAll;
       },
@@ -412,17 +411,17 @@
             }
             return null;
           }),
-          columns.map((column, columnIndex) => {
-            if (columnIndex === 0) {
-              return "总合计";
-            }
-            for (let key in this.total) {
-              if (key == column.property) {
-                return this.total[key]
-              }
-            }
-            return null;
-          })
+          // columns.map((column, columnIndex) => {
+          //   if (columnIndex === 0) {
+          //     return "总合计";
+          //   }
+          //   for (let key in this.total) {
+          //     if (key == column.property) {
+          //       return this.total[key]
+          //     }
+          //   }
+          //   return null;
+          // })
         ];
       }
     }

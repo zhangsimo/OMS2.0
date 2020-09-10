@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
-            <input type="text" class="h30" v-model="company" readonly/>
+            <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -68,11 +68,11 @@
           :data="data"
           ref="summary"
           show-summary
-          :summary-method="handleSummary"
           highlight-row
           @on-row-click="election"
           max-height="400"
         ></Table>
+<!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
             class-name="fr mb10 mt10"
@@ -710,7 +710,7 @@ export default {
       this.data1 = [];
       let obj = {
         orgid: this.model1,
-        guestId: this.companyId,
+        guestId: this.company?this.companyId:"",
         enterTypeId: this.typeName
       };
       let params={
@@ -791,7 +791,7 @@ export default {
       this.data1 = [];
       let obj = {
         orgid: this.model1,
-        guestId: this.companyId,
+        guestId: this.company?this.companyId:"",
         enterTypeId: this.typeName
       };
       let params={
@@ -821,7 +821,7 @@ export default {
               });
               this.data = res.data.vos;
               this.page.total=res.data.TotalElements;
-              this.total=res.data.AllotOutMainVO
+              // this.total=res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
@@ -846,7 +846,7 @@ export default {
               });
               this.data = res.data.vos;
               this.page.total=res.data.TotalElements;
-              this.total=res.data.AllotOutMainVO
+              // this.total=res.data.AllotOutMainVO
             } else {
               this.data = [];
             }
