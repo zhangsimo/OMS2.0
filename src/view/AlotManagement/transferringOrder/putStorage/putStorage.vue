@@ -1126,7 +1126,7 @@ export default {
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
         remark: list.remark,
-        serviceId: "",
+        serviceId: list.serviceId,
         storeId: list.storeId,
         detailVOS: list.detailVOS,
         new: true,
