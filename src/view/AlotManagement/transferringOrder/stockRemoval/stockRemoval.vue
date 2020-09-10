@@ -1006,6 +1006,8 @@
                 this.$refs.formPlan.resetFields();
               }
               this.isSaveClick = false;
+            }).catch(e => {
+              this.isSaveClick = false;
             })
           // .catch(e => {
           //   this.$Message.info("保存配件组装信息失败");
@@ -1119,6 +1121,8 @@
                 }else{
                   this.isCommitClick = false;
                 }
+              }).catch(e => {
+                this.isCommitClick = false;
               })
             // .catch(e => {
             //   this.$Message.info("提交失败");
@@ -1160,6 +1164,8 @@
                   this.$Message.success("作废成功");
                   this.getList();
                 }
+                this.isCancelClick = false;
+              }).catch(e => {
                 this.isCancelClick = false;
               })
             // .catch(e => {
@@ -1246,6 +1252,8 @@
                   this.getList();
                   this.$Message.success("出库成功");
                 }
+                this.isOutClick = false;
+              }).catch(e => {
                 this.isOutClick = false;
               })
             // .catch(e => {

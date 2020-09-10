@@ -972,8 +972,6 @@ export default {
             saveDraft(data).then((res) => {
               if (res.code === 0) {
                 this.$message.success("保存成功！");
-                this.saveLoading = false;
-
                 this.$refs.formPlan.resetFields();
                 this.leftgetList();
                 this.isAdd = true;
@@ -1005,6 +1003,8 @@ export default {
                 this.$refs.formPlan.resetFields();
               }
               this.saveLoading = false;
+            }).catch(e => {
+              this.saveLoading = false;
             });
           } catch (errMap) {
             // this.$XModal.message({
@@ -1025,14 +1025,18 @@ export default {
         onOk: async () => {
           let params = {};
           params.id = this.rowId;
-          this.cancelLoading = true;
-          let res = await saveObsolete({ params: params });
-          if (res.code == 0) {
-            this.$Message.success("作废成功");
-            this.leftgetList();
-            this.isAdd = true;
+          try {
+            this.cancelLoading = true;
+            let res = await saveObsolete({ params: params });
+            if (res.code == 0) {
+              this.$Message.success("作废成功");
+              this.leftgetList();
+              this.isAdd = true;
+            }
+            this.cancelLoading = false;
+          } catch (error) {
+            this.cancelLoading = false;
           }
-          this.cancelLoading = false;
         },
         onCancel: () => {
           this.$Message.info("取消作废");
@@ -1427,14 +1431,18 @@ export default {
             data.details.map((item) => {
               item.stockOutQty = 0;
             });
-            this.commitLoading = true;
-            let res = await saveCommit(data);
-            if (res.code == 0) {
-              this.$Message.success("提交成功");
-              this.leftgetList();
-              this.isAdd = true;
+            try {
+              this.commitLoading = true;
+              let res = await saveCommit(data);
+              if (res.code == 0) {
+                this.$Message.success("提交成功");
+                this.leftgetList();
+                this.isAdd = true;
+              }
+              this.commitLoading = false;
+            } catch (error) {
+              this.commitLoading = false;
             }
-            this.commitLoading = false;
           },
           onCancel: () => {
             this.$Message.info("取消提交");
@@ -1462,17 +1470,21 @@ export default {
           data.storeId = this.formPlan.warehouse; //退货仓库
           data.code = this.formPlan.serviceId; //采购订单
           data.details = this.Right.tbdata;
-          this.returnLoading = true;
-          let res = await returnPchs(data);
-          if (res.code == 0) {
-            this.$Message.success("退货成功");
-            this.leftgetList();
-            this.isAdd = true;
-          } else {
-            this.leftgetList();
-            this.isAdd = true;
+          try {
+            this.returnLoading = true;
+            let res = await returnPchs(data);
+            if (res.code == 0) {
+              this.$Message.success("退货成功");
+              this.leftgetList();
+              this.isAdd = true;
+            } else {
+              this.leftgetList();
+              this.isAdd = true;
+            }
+            this.returnLoading = false;
+          } catch (error) {
+            this.returnLoading = false;
           }
-          this.returnLoading = false;
         },
         onCancel: () => {
           this.$Message.info("取消退货");
