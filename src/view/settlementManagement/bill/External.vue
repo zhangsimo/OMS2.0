@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" v-model="company" readonly/>
+            <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -651,7 +651,7 @@ export default {
     getGeneral() {
       let obj = {
         orgid: this.model1==0?"":this.model1,
-        guestId: this.companyId,
+        guestId: this.company?this.companyId:"",
         enterTypeId: this.type
       };
       let params = {
@@ -707,7 +707,7 @@ export default {
     getGeneralAll(param) {
       let obj = {
         orgid: this.model1==0?"":this.model1,
-        guestId: this.companyId,
+        guestId:this.company?this.companyId:"",
         enterTypeId: this.type
       };
       let params = {
