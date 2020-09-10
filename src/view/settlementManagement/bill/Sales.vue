@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
-            <input type="text" class="h30" v-model="company"/>
+            <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
