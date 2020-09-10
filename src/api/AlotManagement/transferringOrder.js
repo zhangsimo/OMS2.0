@@ -118,3 +118,11 @@ export function getAllotApplyDetail(params){
     params
   })
 }
+// 提交调拨申请订单修改明细
+export function setAllotApplyDetail(data){
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyDetail/updateOrdersDetails`,
+    method: 'post',
+    data
+  })
+}

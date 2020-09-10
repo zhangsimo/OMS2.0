@@ -2,7 +2,7 @@
   <vxe-modal title="订单调整" class="vxeModel" v-model="changeOrderModel" width="1000" hide-footer mask-closable :position="{top: 50}">
     <template v-slot>
       <div class="pb10">
-        <Button type='primary' size="small" class="mr20">保存</Button>
+        <Button type='primary' size="small" class="mr20" @click="saveCancelQty">保存</Button>
         <span>配件查询：</span>
         <vxe-input v-model="partName" class="w250 mr10" size="mini" placeholder="请输入配件内码/编码/名称/OE码"></vxe-input>
         <span>配件查询：</span>
@@ -29,10 +29,14 @@
         ref="xTable"
         border
         resizable
+        class="cancelTable"
+        height="300"
         :loading="loading"
+        keep-source
         size="mini"
         :data="tbdata"
-        :edit-config="{trigger: 'click', mode: 'cell'}">
+        :edit-rules="validRules"
+        :edit-config="{trigger: 'click', mode: 'cell',showStatus: true}">
         <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100"></vxe-table-column>
@@ -42,10 +46,7 @@
         <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量" width="80"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="80"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="hasCancelQty" title="已取消数量" width="80"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="cancelQty" title="本次取消数量" width="120" :edit-render="{autofocus: '.vxe-input--inner'}">
-          <template v-slot:edit="{row}">
-            <vxe-input type="number" v-model="row.cancelQty"></vxe-input>
-          </template>
+        <vxe-table-column  show-overflow="tooltip" field="cancelQty" title="本次取消数量" width="120" :edit-render="{name: 'input', props: {type: 'integer'}}">
         </vxe-table-column>
       </vxe-table>
     </template>
@@ -56,10 +57,21 @@
   import {
     getPartBrand
   } from "@/api/business/stockSearch";
-  import { getAllotApplyDetail} from '../../../../../api/AlotManagement/transferringOrder';
+  import { getAllotApplyDetail,setAllotApplyDetail} from '../../../../../api/AlotManagement/transferringOrder';
 	export default {
 		name: "changeOrder",
     data(){
+		  const cancelQtyValid = ({ cellValue,row }) =>{
+        return new Promise((resolve, reject) => {
+          let num = parseInt(row.applyQty)-parseInt(row.hasAcceptQty)-parseInt(row.hasCancelQty);
+          console.log(num)
+          if (cellValue && (parseInt(cellValue)>num)) {
+            reject(new Error(`只能输入小于${num}`))
+          } else {
+            resolve()
+          }
+        })
+      }
 		  return {
         changeOrderModel:false,
         partBrandList:[],
@@ -67,7 +79,12 @@
         partBrand:'',
         Adjusted:false,
         tbdata:[],
-        loading:false
+        loading:false,
+        validRules: {
+          cancelQty: [
+            { validator: cancelQtyValid}
+          ]
+        }
       }
     },
     methods:{
@@ -99,6 +116,16 @@
 		    if(rep.code==0){
 		      this.tbdata = rep.data||[];
         }
+      },
+      async saveCancelQty(){
+        const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
+        if (errMap) {
+          return
+        }
+        let rep = await setAllotApplyDetail(this.tbdata);
+        if(rep.code==0){
+          this.$message.success("调整成功");
+        }
       }
     }
 	}
@@ -118,6 +145,14 @@
   }
   .vxe-modal--box{
     border: none!important;
+  }
+  .cancelTable{
+    .vxe-body--column.col--valid-error .vxe-cell--valid{
+      width: 120px;
+      .vxe-cell--valid-msg{
+        padding: 4px;
+      }
+    }
   }
 }
 </style>
