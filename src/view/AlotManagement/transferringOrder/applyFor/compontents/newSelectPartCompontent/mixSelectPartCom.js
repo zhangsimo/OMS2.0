@@ -25,6 +25,9 @@ export const mixSelectPartCom = {
 
       searchPartLayer: false, //配件名称查询层
       partName: "", //配件名称查询名字
+      partId: "",
+      partCode: "",
+      oemCode: "",
       treeData: [], //系统分类树形数据
       //查询选择
 
@@ -266,16 +269,30 @@ export const mixSelectPartCom = {
         data.partBrandId = this.selectBrand;
       }
 
-      if (this.partName.trim()) {
-        data.partCode = this.partName.trim();
-      }
+      // if (this.partName.trim()) {
+      //   data.partCode = this.partName.trim();
+      // }
+
       //传入调入仓库 否则后端 本店可售 查不出值
       data.stockId=this.$parent.formPlan.storeId;
       data.orgId = this.$parent.isInternalId||"";
 
+      data.name = this.partName
+      data.partInnerId = this.partId
+      data.partCode = this.partCode
+      data.oeCode = this.oemCode
+      let formData = {};
+      for (let k in data) {
+        if (data[k] && data[k].trim()) {
+          formData[k] = data[k];
+        }
+      }
+
+
+
       req.page = this.page.num - 1;
       req.size = this.page.size;
-      getCarPartsTwo(req, data).then(res => {
+      getCarPartsTwo(req, formData).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
