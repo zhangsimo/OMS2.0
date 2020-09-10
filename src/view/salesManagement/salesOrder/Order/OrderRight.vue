@@ -1261,6 +1261,9 @@
         this.$refs.formPlan.validate(async valid => {
           let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
+          this.formPlan.detailList.map(item => {
+            item.orderAmt = this.$utils.toNumber(item.orderQty) * this.$utils.toNumber(item.orderPrice)
+          })
           if (valid) {
             try {
               await this.$refs.xTable.validate();
