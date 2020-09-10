@@ -308,7 +308,7 @@
                           fixed="left"
                         ></vxe-table-column>
                         <vxe-table-column show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
-                        <vxe-table-column show-overflow="tooltip" field="changeQty" title="需要数量">
+                        <vxe-table-column show-overflow="tooltip" field="orderQty" title="需要数量">
 <!--                          <template v-slot="{ row, seq }">-->
 <!--                            <span>{{ row.qty*currentNum}}</span>-->
 <!--                          </template>-->
@@ -937,7 +937,7 @@ export default {
       saveBtnClik: false,
 
       //记录左侧点击的数据
-      leftClickItemId: "",
+      leftClickItemId: null,
     };
   },
   watch: {
@@ -1037,7 +1037,7 @@ export default {
       this.currentNum = parseInt(event.target.value) || 1;
       if (this.tabKey == 0) {
         this.currentData.map((item) => {
-          item.changeQty = this.currentNum * item.qty;
+          item.orderQty = this.currentNum * item.qty;
         });
         this.$refs.aatable.updateData()
         this.$refs.aatable.updateFooter();
@@ -1128,7 +1128,6 @@ export default {
           .then((res) => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getListzu();
               this.Leftcurrentrow.processProductVO = [];
               this.currentData = [];
               this.Leftcurrentrow.createTime = "";
@@ -1136,8 +1135,8 @@ export default {
               this.Leftcurrentrow.storeId = "";
               this.Leftcurrentrow.orderMan = "";
               this.Leftcurrentrow.remark = "";
+              this.getListzu();
               this.$Message.success("保存成功");
-
               this.saveBtnClik = false;
             }
             this.saveLoading = false;
@@ -1154,7 +1153,6 @@ export default {
           .then((res) => {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
-              this.getListchai();
               this.Leftcurrentrow.processProductVO = [];
               this.currentData = [];
               this.Leftcurrentrow.createTime = "";
@@ -1162,6 +1160,8 @@ export default {
               this.Leftcurrentrow.storeId = "";
               this.Leftcurrentrow.orderMan = "";
               this.Leftcurrentrow.remark = "";
+              this.leftClickItemId=null;
+              this.getListchai();
               this.$Message.success("保存成功");
               this.saveLoading = false;
               this.saveBtnClik = false;
@@ -1204,8 +1204,11 @@ export default {
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
+        item._highlight=false;
       });
       this.Leftcurrentrow = item;
+      this.leftClickItemId=null;
+      this.Leftcurrentrow._highlight=true
       // this.Left.tbdata[0]['processProductVO'] = []
       this.currentData = [];
     },
@@ -1425,6 +1428,17 @@ export default {
     selectTabelData(row) {
       if (row.id) {
         this.leftClickItemId = row.id;
+        for (let b of this.Left.tbdata) {
+          if (b.id == this.leftClickItemId) {
+            b._highlight = true;
+            break;
+          }else{
+            b._highlight = false;
+          }
+        }
+      }else{
+        this.Left.tbdata[0]._highlight=true;
+        this.leftClickItemId=this.Left.tbdata[0].id
       }
       this.Leftcurrentrow = row;
       if (this.flag === 1) {
@@ -1457,9 +1471,6 @@ export default {
       }
       if (this.Leftcurrentrow.processProductVO.length > 0) {
         this.currentData = row.processProductVO[0].detailVOList;
-        this.currentData.map((item) => {
-          item.changeQty =  item.qty;
-        });
       } else {
         this.currentData = [];
       }
@@ -1520,7 +1531,7 @@ export default {
             return "和值";
           }
           if (
-            ["orderQty", "storeStockQty", "stockOutQty", "changeQty"].includes(
+            ["orderQty", "storeStockQty", "stockOutQty"].includes(
               column.property
             )
           ) {
@@ -1614,9 +1625,6 @@ export default {
         this.Leftcurrentrow.processProductVO.push(list);
       }
       this.currentData = this.Leftcurrentrow.processProductVO[0].detailVOList;
-      this.currentData.map((item) => {
-        item.changeQty = item.qty;
-      });
       const tata = this;
       setTimeout(() => {
         tata.showit = true;
@@ -1649,15 +1657,22 @@ export default {
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
-
               if (this.leftClickItemId) {
+                let bool=false;
                 for (let b of this.Left.tbdata) {
                   if (b.id == this.leftClickItemId) {
-                    b._highlight = true;
+                    bool=true
                     this.selectTabelData(b);
                     break;
+                  }else{
+                    bool=false;
                   }
                 }
+                if(!bool){
+                  this.selectTabelData(this.Left.tbdata[0]);
+                }
+              }else{
+                this.selectTabelData(this.Left.tbdata[0]);
               }
             }
           }
@@ -1693,13 +1708,21 @@ export default {
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
             if (this.leftClickItemId) {
+              let bool=false;
               for (let b of this.Left.tbdata) {
                 if (b.id == this.leftClickItemId) {
-                  b._highlight = true;
+                  bool=true
                   this.selectTabelData(b);
                   break;
+                }else{
+                  bool=false;
                 }
               }
+              if(!bool){
+                this.selectTabelData(this.Left.tbdata[0]);
+              }
+            }else{
+              this.selectTabelData(this.Left.tbdata[0]);
             }
           }
         })
