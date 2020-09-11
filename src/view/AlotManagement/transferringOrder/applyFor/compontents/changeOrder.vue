@@ -22,8 +22,8 @@
           >{{ item.name }}</Option
           >
         </Select>
-        <Button size="small" class="mr20" type='default'>查询</Button>
-        <Checkbox v-model="Adjusted">显示已调整</Checkbox>
+        <Button size="small" class="mr20" type='default' @click="getDetail">查询</Button>
+        <Checkbox v-model="Adjusted" @on-change="getDetail">显示已调整</Checkbox>
       </div>
       <vxe-table
         ref="xTable"
@@ -73,12 +73,19 @@
         })
       }
 		  return {
+		    //调整弹窗
         changeOrderModel:false,
+        //所有品牌
         partBrandList:[],
-        partName:'',
         partBrand:'',
+        //配件查询
+        partName:'',
+        //显示已调整
         Adjusted:false,
+        //调整数据列表
         tbdata:[],
+        //主列表Id
+        mainId:'',
         loading:false,
         validRules: {
           cancelQty: [
@@ -96,8 +103,10 @@
 		    if(this.partBrandList.length==0){
 		      this.getBand();
         }
-		    this.getDetail(id)
+        this.mainId = id||"";
+		    this.getDetail()
       },
+      //获取所有品牌
       async getBand() {
         let res = await getPartBrand({ pageSize: 10000 });
         if (res.code === 0) {
@@ -109,22 +118,43 @@
           this.partBrandList = arr;
         }
       },
-      async getDetail(id){
+      //获取修改订单详情
+      async getDetail(){
 		    this.loading = true;
-		    let rep = await getAllotApplyDetail({mainId:id});
+		    let req = {
+          mainId:this.mainId
+        }
+        if(this.partName&&this.partName.trim()){
+          req.queryParms = this.partName.trim();
+        }
+        if(this.partBrand){
+          req.partBrand = this.partBrand;
+        }
+
+        req.doUpdate = this.Adjusted?0:1;
+
+		    let rep = await getAllotApplyDetail(req);
 		    this.loading = false;
 		    if(rep.code==0){
 		      this.tbdata = rep.data||[];
         }
       },
+      //保存修改
       async saveCancelQty(){
         const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
         if (errMap) {
           return
         }
-        let rep = await setAllotApplyDetail(this.tbdata);
+        let req = this.tbdata.map(item => {
+          let item1 = {...item}
+          Reflect.deleteProperty(item1,'updateTime');
+          return item1
+        })
+        let rep = await setAllotApplyDetail(req);
         if(rep.code==0){
           this.$message.success("调整成功");
+          this.changeOrderModel = false;
+          this.$emit("updata");
         }
       }
     }
