@@ -1727,7 +1727,6 @@ export default {
           }
         })
         .catch((e) => {
-          this.$Message.info("获取拆分列表失败");
         });
     },
     array_diff(a, b) {
