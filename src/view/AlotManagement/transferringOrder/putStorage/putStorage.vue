@@ -216,10 +216,10 @@
                     title="入库仓位"
                     width="100"
                   >
-                    <!--<template v-slot:edit="{ row,rowIndex }">-->
-                      <!--<vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>-->
-                    <!--</template>-->
-                    <!--<template v-slot="{ row }">{{ row.storeShelf }}</template>-->
+                    <template v-slot:edit="{ row,rowIndex }">
+                      <vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>
+                    </template>
+                    <template v-slot="{ row }">{{ row.storeShelf }}</template>
                   </vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
@@ -298,10 +298,12 @@ import {
   chengping,
   cangkulist2,
   outDataList,
-  getListDetail
+  getListDetail,
+  getDBSQlist
 } from "@/api/AlotManagement/putStorage.js";
 
 import { queryByOrgid,validityPosition } from "../../../../api/AlotManagement/transferringOrder";
+import { checkStore } from "@/api/system/systemApi";
 export default {
   name: "putStorage",
   inject: ["reload"],
@@ -335,6 +337,7 @@ export default {
     }
 
     return {
+      isSelfOk: true,//效验仓位
       showSelf: true,
       propPageObj:{},
       Status: 0,
@@ -653,13 +656,19 @@ export default {
       this.getList();
     },
     blurFun(pos,index){
-      let req = {
-        "storeId":this.Leftcurrentrow.storeId,
-        "name":pos
+      if (pos == "") {
+        this.isSelfOk = true;
+      } else {
+        checkStore({ storeId: this.Leftcurrentrow.storeId, name: pos }).then(
+          res => {
+            if (res.code == 0 && res.data != null) {
+              this.isSelfOk = true;
+            } else {
+              this.isSelfOk = false;
+            }
+          }
+        );
       }
-      validityPosition(req).then(res => {
-
-      })
     },
     getArrayFun(data) {
       this.ArrayValue = data;
@@ -720,6 +729,10 @@ export default {
         return;
       }
 
+      if (!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!");
+      }
+
       const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
       if (errMap) {
         return
@@ -729,12 +742,12 @@ export default {
       if (params.xinzeng) {
         delete params.status;
       }
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
-          params.guestOrgid = this.getArray[i].isInternalId;
-          params.guestId = this.getArray[i].id;
-        }
-      }
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
+      //     params.guestOrgid = this.getArray[i].isInternalId;
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
 
       if (params.status && params.status.name) {
         params.status = params.status.value;
@@ -746,6 +759,8 @@ export default {
         params.settleStatus = params.settleStatus.value;
       }
       params["voList"] = this.ArrayValue;
+
+
       this.isSaveClick = true;
       //配件组装保存
       baocun(params)
@@ -823,15 +838,15 @@ export default {
       this.$refs.addInCom.init();
       this.$refs.addInCom.dcName=""
       let showSelf = this.$refs.addInCom.showSelf;
-      let data = { enterSelect: 123, orderTypeId: "ALLOT_APPLY" };
+      let data = { };//enterSelect: 123, orderTypeId: "ALLOT_APPLY"
       if(showSelf) {
         let createUid = this.$store.state.user.userData.id;
         data.createUid = createUid;
       } else {
         Reflect.deleteProperty(data, "createUid")
       }
-      data.status = "STOCKING";
-      chengping(data, 10, 1)
+      // data.status = "STOCKING";
+      getDBSQlist(data, 10, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -868,6 +883,11 @@ export default {
                 }
               }
             }
+
+            if (!this.isSelfOk) {
+              return this.$message.error("请填写正确的仓位!");
+            }
+
             const params = {
               id: this.Leftcurrentrow.id,
               voList: this.ArrayValue,
@@ -905,7 +925,7 @@ export default {
         });
     },
     searchPro(params, size, page) {
-      chengping({ ...params }, size, page)
+      getDBSQlist({ ...params }, size, page)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -1105,15 +1125,17 @@ export default {
           name: "草稿",
           value: 0
         },
-        codeId: list.id,
-        code: list.serviceId,
+        codeId: list.applyId,
+        code: list.acceptCode,
         statuName: "草稿",
         storeName: "",
-        guestName: list.guestName,
+        guestName: list.guestOrgName,
+        guestOrgid : list.orgid,
+        guestId : list.orgid,
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
         remark: list.remark,
-        serviceId: "",
+        serviceId: list.serviceId,
         storeId: list.storeId,
         detailVOS: list.detailVOS,
         new: true,

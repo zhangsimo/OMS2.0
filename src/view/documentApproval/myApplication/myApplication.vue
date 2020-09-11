@@ -455,8 +455,8 @@ export default {
       this.getList();
     }else{
       this.$nextTick(()=>{
-        this.$refs.quickDate.searchQuick = "0";
-        this.$refs.quickDate.getval(0);
+        this.$refs.quickDate.searchQuick = "5";
+        this.$refs.quickDate.getval(5);
       })
     }
     this.getUser();

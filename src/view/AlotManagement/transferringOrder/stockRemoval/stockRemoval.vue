@@ -578,7 +578,7 @@
             value: 1
           },
           {
-            label: "已出库",
+            label: "已完成",
             value: 2
           },
           {

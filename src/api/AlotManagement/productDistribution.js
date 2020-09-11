@@ -51,7 +51,7 @@ export function baocun(data) {
   });
 }
 
-// 
+//
 export function hotProductsSave(data) {
   return axios.request({
     url: `${api.omsOrder}/allotApplyMain/hotProductsSave`,
@@ -64,6 +64,15 @@ export function hotProductsSave(data) {
 export function daochu(data) {
   return axios.request({
     url: `${api.omsOrder}/pchsPlanMain/guestClassify`,
+    method: 'post',
+    data
+  });
+}
+
+// 紧俏品一件分配
+export function oneDis(data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/saveHotProductsBatch`,
     method: 'post',
     data
   });

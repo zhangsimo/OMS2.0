@@ -109,3 +109,15 @@ export function chengping(data, size, num) {
     }
   });
 }
+
+
+// 选择调拨申请单
+export function getDBSQlist(data, size, num) {
+  return axios.request({
+    url: `${api.omsOrder}/allotOutMain/queryByParams?page=${num -1}&size=${size}`,
+    method: 'get',
+    params: {
+      ...data
+    }
+  });
+}
