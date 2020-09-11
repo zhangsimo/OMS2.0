@@ -211,6 +211,9 @@
                       <div class="fl mb5">
                         <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'EditAddress'"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
+                      <div class="fl mb5">
+                        <Button size="small" :disabled="changeOrderBtn" class="mr10" @click="changeOrderFun" v-has="'addAccessories'">订单调整</Button>
+                      </div>
                     </div>
                   </div>
                   <vxe-table
@@ -275,6 +278,8 @@
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+      <!--订单调整-->
+      <change-order ref="changeOrder" :updata="leftgetList"></change-order>
     </main>
 </template>
 
@@ -299,10 +304,12 @@
   import Cookies from "js-cookie";
   import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
+  import ChangeOrder from "./compontents/changeOrder";
 
   export default {
       name: "applyFor",
       components: {
+        ChangeOrder,
         AllocationCus,
         QuickDate,
         More,
@@ -319,6 +326,8 @@
           }
         };
         return {
+          //订单调整按钮
+          changeOrderBtn:true,
           showSelf: true,
           headers: {
             Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -373,10 +382,11 @@
             { label:'草稿',value:'DRAFT' },
             { label:'待受理',value:'UNACCEPTED' },
             { label:'已受理',value:'ACCEPTED' },
-            { label:'待分拣',value:'SORTING' },
-            { label:'待发货',value:'SHIPPED' },
-            { label:'已出库',value:'STOCKING' },
-            { label:'已入库',value:'WAREHOUSING' },
+            // { label:'待分拣',value:'SORTING' },
+            // { label:'待发货',value:'SHIPPED' },
+            { label:'已完成',value:'STOCKING' },
+            // { label:'已入库',value:'WAREHOUSING' },
+            { label:'部分受理',value:'SECTION_ACCEPT' },
             { label:'已拒绝',value:'REJECTED' },
             { label:'已作废',value:'INVALID' },
           ],
@@ -770,7 +780,7 @@
                   return this.$message.error('请稍后数据处理中....');
                 }
                 try {
-                  
+
                   this.isCancelClick = true;
                   let res = await save(data);
                   if(!res){
@@ -783,7 +793,7 @@
                   }
                 } catch (error) {
                   this.isCancelClick = false;
-                  
+
                 }
             },
             onCancel: () => {
@@ -1127,6 +1137,11 @@
           this.resId = false
           this.rowId = row.id
           this.buttonDisable = false
+          if(row.status&&(row.status.value==9||row.status.value==1)){
+            this.changeOrderBtn = false;
+          }else{
+            this.changeOrderBtn = true;
+          }
           this.getRightlist();
 
           this.upurl = upxlxsDBo + row.id;
@@ -1295,6 +1310,9 @@
         onFormatError(file) {
           this.$Message.error('只支持xls xlsx后缀的文件')
         },
+        changeOrderFun(){
+          this.$refs.changeOrder.init(this.selectRowId);
+        }
       },
       mounted(){
         let self = tools.getSession("self");

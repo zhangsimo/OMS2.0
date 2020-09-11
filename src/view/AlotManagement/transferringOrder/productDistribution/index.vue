@@ -179,7 +179,12 @@
 
       <!--     分页-->
       <Row class="mt10 mb10">
-        <Col span="12" offset="12" style="text-align:right">
+        <Col span="12">
+          <div>
+            <Button :loading="oneLoading" :disabled="BottomTableData.length==0" type="warning" class="mr20" @click="oneClickDis">一键分配</Button>
+          </div>
+        </Col>
+        <Col span="12"  style="text-align:right">
           <div>
             <Page
               :current="pageList.page"
@@ -196,13 +201,17 @@
       <!--        下表格-->
       <div class="bottomTableDate" style="height:45%">
         <vxe-table
+          ref="hasTable"
           border
           resizable
+          :loading="oneLoading"
           size="mini"
           height="auto"
           highlight-current-row
           highlight-hover-row
           :data="BottomTableData"
+          keep-source
+          :edit-rules="validRules"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="seq" title="序号"></vxe-table-column>
@@ -264,11 +273,23 @@ import {
   baocun,
   shenqingdanliebiao,
   daochu,
-  hotProductsSave
+  hotProductsSave,
+  oneDis
 } from "../../../../api/AlotManagement/productDistribution.js";
 export default {
   name: "productDistribution",
   data() {
+    const hasAcceptQtyValid = ({ cellValue,row }) =>{
+      return new Promise((resolve, reject) => {
+        if(cellValue==""){
+          reject(new Error(`分配数量不能为空`));
+        }else if((parseInt(cellValue) > parseInt(row.applyQty))) {
+          reject(new Error(`分配数量不能大于申请数量`))
+        } else {
+          resolve()
+        }
+      })
+    }
     return {
       rowStatus: "",
       idValue: "",
@@ -314,7 +335,14 @@ export default {
         pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
-      fenpeiCurrent: {}
+      fenpeiCurrent: {},
+      validRules: {
+        hasAcceptQty: [
+          { validator: hasAcceptQtyValid}
+        ]
+      },
+      //一键分配loading
+      oneLoading:false
     };
   },
   created() {
@@ -541,6 +569,29 @@ export default {
         .catch(e => {
           this.$Message.info("请求紧悄品待分配列表失败");
         });
+    },
+    async oneClickDis(){
+      const errMap = await this.$refs.hasTable.validate().catch(errMap => errMap)
+      if (errMap) {
+        return
+      }
+      let totalHasQty = this.BottomTableData.reduce((total,curr)=>{
+        if(!isNaN(Number(curr.hasAcceptQty))){
+          return total + Number(curr.hasAcceptQty)
+        }
+      },0);
+
+      if(totalHasQty>parseInt(this.formItem.lockQty)) {
+        return this.$Message.error("分配数量不能大于锁定数量");
+      }
+      this.oneLoading = true;
+      const rep = await oneDis(this.BottomTableData);
+      this.oneLoading = false;
+      if(rep.code==0){
+        this.$Message.success("分配成功");
+        this.search(this.form);
+      }
+
     }
   }
 };
