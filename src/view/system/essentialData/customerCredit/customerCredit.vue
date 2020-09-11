@@ -507,9 +507,9 @@ export default {
       // this.creaditList.tempStart = new Date(row.tempStart)
       this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.creaditList.applyTrustMoney = this.creaditList.applyTrustMoney||1;
-      this.creaditList.operationStart=moment(this.creaditList.operationStart).format("YYYY-MM-DD")
-      this.creaditList.operationEnd=moment(this.creaditList.operationEnd).format("YYYY-MM-DD")
-      this.creaditList.registerDate=moment(this.creaditList.registerDate).format("YYYY-MM-DD")
+      this.creaditList.operationStart=new Date(this.creaditList.operationStart)
+      this.creaditList.operationEnd=new Date(this.creaditList.operationEnd)
+      this.creaditList.registerDate=new Date(this.creaditList.registerDate)
       this.flag = row.isGuestResearch;
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
@@ -685,6 +685,9 @@ export default {
     adjustmentconfirm() {
       this.$refs["formRule"].$refs["formRule"].validate(valid => {
         if (valid) {
+          this.creaditList.operationStart=moment(this.creaditList.operationStart).format("YYYY-MM-DD")
+          this.creaditList.operationEnd=moment(this.creaditList.operationEnd).format("YYYY-MM-DD")
+          this.creaditList.registerDate=moment(this.creaditList.registerDate).format("YYYY-MM-DD")
           let data = {};
           data.guestId = this.creaditList.guestId;
           // data.applyDate = this.today

@@ -311,8 +311,8 @@
       },
       getPageList(data) {
         let params = {
-          startTime: moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00",
-          endTime: moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59",
+          startTime: this.dates[0]?moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00":"",
+          endTime: this.dates[1]?moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59":"",
           guestSourceId: this.companyId,
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,

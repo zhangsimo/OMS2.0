@@ -501,17 +501,7 @@
       },
       // 切换tabs
       clickTabs(data) {
-        switch (data) {
-          case "capitalChain1":
-            this.page.total = this.tableData.length
-            break;
-          case "capitalChain2":
-            this.page.total = this.tableData1.length
-            break;
-          case "capitalChain3":
-            this.page.total = this.tableData2.length
-            break;
-        }
+        this.getList()
       },
       //获取表格信息
       async getList() {
@@ -523,6 +513,16 @@
         data.subjectId = this.subjectCode
         data.accountName = this.accountName
         data.bankName = this.bankName
+        //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
+        switch (this.tabName) {
+          case "capitalChain1":break;
+          case "capitalChain2":
+            data.collateState=1;
+            break;
+          case "capitalChain3":
+            data.collateState=0;
+            break;
+        }
         this.allMoneyList = {}
         let params = {}
         params.page = this.page.num - 1
@@ -533,16 +533,9 @@
             this.allMoneyList = res.data.moneyList
           }
           this.tableData = res.data.page.content
-          this.tableData1 = []
-          this.tableData2 = []
-          res.data.page.content.forEach(item => {
-            if (item.collateState) {
-              this.tableData1.push(item)
-            } else {
-              this.tableData2.push(item)
-            }
-          })
-          this.clickTabs(this.tabName)
+          this.tableData1 = res.data.page.content
+          this.tableData2 = res.data.page.content
+          this.page.total=res.data.page.totalElements
         }
       },
 
