@@ -546,7 +546,7 @@ export default {
           reciprocalAccountName: this.reciprocalAccountName,
           suppliers: this.suppliers,
           amountType: 2,
-          claimShopCode:this.$store.state.user.userData.shopCode
+          claimShopCode:this.$store.state.user.userData.currentCompany.code
         });
       } else {
         this.setClaimedSearch({
@@ -554,7 +554,7 @@ export default {
           reciprocalAccountName: this.reciprocalAccountName,
           suppliers: this.suppliers,
           amountType: 1,
-          claimShopCode:this.$store.state.user.userData.shopCode
+          claimShopCode:this.$store.state.user.userData.currentCompany.code
         });
       }
       this.claimedSelectData = [];
