@@ -146,13 +146,13 @@
       //本店待认领款页码
       pageChangeAmt(val) {
         this.claimedPage.page = val;
-        this.$parent.$parent.$parent.claimedList()
+        this.$parent.$parent.claimedList(1)
       },
       //本店待认领款每页条数
       sizeChangeAmt(val) {
         this.claimedPage.page = 1;
         this.claimedPage.size = val;
-        this.$parent.$parent.$parent.claimedList()
+        this.$parent.$parent.claimedList(1)
       }
     },
     watch: {

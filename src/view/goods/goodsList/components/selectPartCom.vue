@@ -13,7 +13,7 @@
         <el-input
           class="w250 mr10 inputs"
           v-model="partName"
-          placeholder="请输入配件内码/编码/名称/OE码"
+          placeholder="请输入编码"
           @change="search"
           ref="Input"
         ></el-input>
