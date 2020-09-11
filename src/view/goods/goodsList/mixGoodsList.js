@@ -449,7 +449,6 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
-      // console.log(v)
       v = JSON.parse(JSON.stringify(v));
 
       v.forEach(item => {
@@ -715,6 +714,7 @@ export const mixGoodsData = {
       this.$refs["formPlan"].validate(valid => {
         if (valid) {
           let objReq = {};
+          this.changeTotals()
           if (this.selectPlanOrderItem.id) {
             objReq.id = this.selectPlanOrderItem.id;
           }
@@ -916,6 +916,7 @@ export const mixGoodsData = {
       this.tableData.forEach(el => {
         totals += el.orderPrice * el.orderQty;
       });
+      console.log(totals)
       this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
     },
 
