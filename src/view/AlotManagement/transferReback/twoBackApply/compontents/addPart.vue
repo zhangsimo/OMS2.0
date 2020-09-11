@@ -2,30 +2,30 @@
   <Modal
     title="添加配件"
     v-model="shows"
-    :styles="{ top: '50px', width: '1500px' }"
+    :styles="{ top: '50px', width: '1200px' }"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
         <div class="db mr5">
           <span class="mr5">快速查询:</span>
-          <getDate class="mr10" v-on:quickDate="getDataQuick"></getDate>
+          <getDate class="mr5" v-on:quickDate="getDataQuick"></getDate>
         </div>
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <el-input class="w160" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="query"/>
+          <el-input class="w100" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <el-input class="w160" placeholder="内码" v-model="partId" @change="query"/>
+          <el-input class="w100" placeholder="内码" v-model="partId" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <el-input class="w160" placeholder="名称" v-model="partName" @change="query"/>
+          <el-input class="w100" placeholder="名称" v-model="partName" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <el-input class="w160" placeholder="OE" v-model="oemCode" @change="query"/>
+          <el-input class="w100" placeholder="OE" v-model="oemCode" @change="query"/>
         </div>
 
         <!-- <div class="db mr5">
@@ -44,7 +44,7 @@
             type="daterange"
             placement="bottom-end"
             placeholder="请选择日期"
-            style="width: 160px"
+            style="width: 120px"
             :value="auditDate"
             @on-change="getDate"
           ></DatePicker>
