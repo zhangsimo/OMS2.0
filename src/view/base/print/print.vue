@@ -1,5 +1,6 @@
 <template>
   <div id="printBoxBig">
+    <div v-if="onelist.name==null" style="font-size:30px;color:#000c17;text-align:center;width:100%;">请稍等一会...</div>
     <div id="printBox">
       <div class="titler" v-if="onelist.name.startsWith('销售订单')">
         <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding: 0px 2px;">
@@ -1655,23 +1656,23 @@
         num2: 78723,
       };
     },
-    created() {
-      this.openModal(this.$route.query)
-      // this.onelist=this.$route.query
-      // console.log(this.$route.query.id,111111)
+    beforeCreate() {
+      this.onelist.name=null;
     },
-    updated() {
-      this.$nextTick(() => {
+    mounted() {
+      this.openModal(this.$route.query).then(() => {
         this.print()
       })
     },
     methods: {
       //打印
       print() {
+        let oldHtml=document.getElementById("printBox").innerHTML
         document.body.style.overflow = 'visible'
         if (!!window.ActiveXObject || "ActiveXObject" in window) { //是否ie
           this.remove_ie_header_and_footer();
         }
+        document.body.innerHTML=oldHtml
         window.print();
         window.close();
       },
