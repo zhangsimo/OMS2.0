@@ -1697,23 +1697,23 @@
             case "salesOrder": //销售订单
               res = await getprintList(data);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
               }
               break;
             case "sellReturn": //销售退货
               res = await getPrint(data.id);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = this.onelist.details
               }
               break;
             case "InterPurchase": //国际采购
               res = await print(data.id);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
                 if (this.onelist.detailList == [] || this.onelist.detailList == undefined) {
@@ -1730,8 +1730,8 @@
             case "TemporaryPurchase": //临时采购
               res = await print(data.id);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
                 if (this.onelist.detailList == [] || this.onelist.detailList == undefined) {
@@ -1748,8 +1748,8 @@
             case "OutsidePurchase": //外采订单
               res = await print(data.id);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
                 if (this.onelist.detailList == [] || this.onelist.detailList == undefined) {
@@ -1766,8 +1766,8 @@
             case "PlannedPurchaseOrder": //计划采购
               res = await print(data.id);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
                 if (this.onelist.detailList == [] || this.onelist.detailList == undefined) {
@@ -1784,8 +1784,8 @@
             case "supplierList": //采购退货
               res = await supplierList.print(data)
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = this.onelist.details
                 this.onelist.printDate = tools.transTime(new Date());
                 if (this.onelist.detailList == [] || this.onelist.detailList == undefined) {
@@ -1803,8 +1803,8 @@
             case "presell": //预售单
               res = await prePrint.getPrint(data.id);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
 
                 this.onelist.detailList = this.onelist.detailVOList
                 this.onelist.printDate = tools.transTime(new Date());
@@ -1813,8 +1813,8 @@
             case "applyFor": //调拨申请
               res = await pointAdd(data);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist.detailVOS
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
@@ -1823,8 +1823,8 @@
             case "stockRemoval": //调拨出库
               res = await stockRemocal.getprintList(data)
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist.apply.detailVOS
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
@@ -1833,8 +1833,8 @@
             case "putStorage": //调拨入库
               res = await putStorage.getprintList(data);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist.enterOrder.voList
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
@@ -1843,8 +1843,8 @@
             case "moveStorehouse": //移仓单
               res = await moveStorehouse.getPrint(data);
               if (res.code === 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist['stockShift'].detailVOList
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.orderQty), 0);
@@ -1853,8 +1853,8 @@
             case "twoBackApply": //调入退回申请
               res = await twoBackApply.getprintList(data)
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist.apply.detailVOS
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
@@ -1863,8 +1863,8 @@
             case "twoBackInStorage": //调出退回入库
               res = await putStorage.getprintList(data);
               if (res.code == 0) {
-                this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist.enterOrder.voList
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
@@ -1875,7 +1875,7 @@
               if (res.code == 0) {
                 let repData = res.data || {}
                 this.onelist = repData
-                this.onelist.name = order.name
+                this.onelist.name = order.name || "" || ""
                 this.onelist.printDate = tools.transTime(new Date());
                 this.onelist.detailList = this.onelist.detailVOList
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.trueQty), 0);
@@ -1892,7 +1892,7 @@
               });
               if (res.code == 0) {
                 this.onelist = res.data;
-                this.onelist.name = order.name
+                this.onelist.name = order.name || ""
                 this.onelist.detailList = res.data.orderDetailList
               }
           }
