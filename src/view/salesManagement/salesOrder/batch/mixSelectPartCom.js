@@ -197,7 +197,7 @@ export const mixSelectPartCom  = {
         req.typeId = this.selectTreeItem.id
       }
       if(this.selectBrand&&this.selectBrand!='9999'){
-        req.partBrandCode = this.selectBrand
+        req.partBrand = this.selectBrand
       }
 
       if(this.partName.trim()){
@@ -232,6 +232,7 @@ export const mixSelectPartCom  = {
     //获取配件品牌
     getPartBrandAll(){
       getAllBrand({page: 1,pageSize: 1000}).then(res => {
+        console.log(res)
         let filterData = res.data.content.filter(item => item.qualityCode=='000071')
         if(filterData.length>0){
           if(filterData[0].children&&filterData[0].children.length>0){
@@ -279,7 +280,10 @@ export const mixSelectPartCom  = {
     init(){
       this.searchPartLayer = true;
       this.getList();
-      // this.getPartBrandAll();
+      if(this.partBrandData.length==1){
+        this.getPartBrandAll();
+      }
+
       // this.getCarClassifysFun();
     },
     //配件表格点击的行
