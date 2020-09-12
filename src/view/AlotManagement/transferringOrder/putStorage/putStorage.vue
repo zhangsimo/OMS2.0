@@ -1168,6 +1168,7 @@ export default {
       } else {
         Reflect.deleteProperty(params, "createUid")
       }
+      params.canQuery=this.showSelf?0:1
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(async res => {
           if (res.code == 0) {

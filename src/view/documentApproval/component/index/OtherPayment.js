@@ -125,7 +125,7 @@ export default {
       if (res.code === 0) {
         this.formInline = res.data
         this.formInline.receiverId = res.data.receiverId
-        await this.getOrignCompany("",res.data.receiveGuestId)
+        await this.getOrignCompany(res.data.receiveGuestName,res.data.receiveGuestId)
         this.getCompany(this.company[0])
         this.Pictures = {
           voucherPictures: res.data.voucherPictures || [],

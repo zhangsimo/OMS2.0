@@ -314,12 +314,11 @@
   import {getClientTreeList, getCustomerDetails} from "../../../../api/system/essentialData/clientManagement";
   import {getNewSupplier, getSupplierTreeList} from "../../../../api/system/essentialData/supplierManagement";
   import {area} from "../../../../api/lease/registerApi";
-  import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
+  import {getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
   import ClientData from "@/view/system/essentialData/clientManagement/ClientData"
   import ClientData2 from "@/view/system/essentialData/supplierManagement/ClientData"
   import requestCode from "@/view/documentApproval/component/popWindow/RequestCode"
   import selectDealings from "../../../settlementManagement/paymentmanage/component/selectCompany";
-
   // for (let i of res.data.one) {
   //   if (i.number === 3) {
   //     this.arrId[0] = i.accountNo;
@@ -660,7 +659,7 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-
+            this.companyInfo=res.data.four[0].guestId
             if(!this.disabletype){
               /**进入 草稿状态 下面金额 应该没有值*/
               this.infoBase.reconciliation=0;
@@ -675,22 +674,8 @@
               this.infoBase.partsManagementFee=0;
               this.infoBase.otherFees=0;
             }
-
-            if(this.infoBase.guestName!=""){
-              getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
-                let arr = []
-                if (res2.code === 0) {
-                  res2.data.content.map(item => {
-                    arr.push({
-                      value: item.id,
-                    });
-                  });
-                  this.companyInfo = arr[0].value
-                  this.getAccountNameList();
-                }
-              })
-            }
           }
+          this.getAccountNameList();
         } else {
           getReconciliationNo({id: this.id}).then(res => {
             res.data.one.map(item => {
@@ -724,7 +709,7 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-
+            this.companyInfo=res.data.four[0].guestId
             if(!this.disabletype){
               /**进入 草稿状态 下面金额 应该没有值*/
               this.infoBase.reconciliation=0;
@@ -739,22 +724,9 @@
               this.infoBase.partsManagementFee=0;
               this.infoBase.otherFees=0;
             }
-
-            getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
-              let arr = []
-              if (res2.code === 0) {
-                res2.data.content.map(item => {
-                  arr.push({
-                    value: item.id,
-                  });
-                });
-                this.companyInfo = arr[0].value
-                this.getAccountNameList();
-              }
-            })
           });
+          this.getAccountNameList()
         }
-
       },
       async getAccountNameList(type) {
         this.infoBase.collectionName = "";
