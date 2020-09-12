@@ -855,7 +855,7 @@
       collectSum(sumData) {
         let collectSum = 0;
         sumData.map(item => {
-          collectSum += item.thisAccountAmt
+          collectSum += parseFloat(item.thisAccountAmt)
         })
         return collectSum
       },
@@ -888,7 +888,7 @@
         this.paymentlist = selection;
         this.infoBase.reconciliation = 0;
         selection.map(item => {
-          this.infoBase.reconciliation += item.thisAccountAmt;
+          this.infoBase.reconciliation += parseFloat(item.thisAccountAmt);
         });
         this.getSettlementComputed();
 
@@ -901,7 +901,7 @@
         // this.Actualtotalcollect = 0;
         this.infoBase.accountReceivable = this.collectSum(selection)
         // selection.map(item => {
-        //   this.totalcollect += item.thisAccountAmt;
+        //   this.totalcollect += parseFloat(item.thisAccountAmt);
         // });
         this.getSettlementComputed();
 
@@ -910,10 +910,10 @@
       // 应收全选
       collectCheckoutAll(selection) {
         this.collectlist = selection;
-        console.log(selection,1111)
+        // console.log(selection,1111)
         this.infoBase.accountReceivable = this.collectSum(selection)
         // selection.map(item => {
-        //   this.totalcollect += item.thisAccountAmt;
+        //   this.totalcollect += parseFloat(item.thisAccountAmt);
         // });
         // this.getSettlementComputed();
 
@@ -948,7 +948,7 @@
         this.paymentlist = selection;
         this.infoBase.reconciliation = 0
         selection.map(item => {
-          this.infoBase.reconciliation += item.thisAccountAmt;
+          this.infoBase.reconciliation += parseFloat(item.thisAccountAmt);
         });
         this.getSettlementComputed();
         // this.tipText(this.paymentlist);
@@ -956,13 +956,13 @@
       // 应付取消选中
       paymentNoCheckout(selection, row) {
         this.paymentlist = selection;
-        this.infoBase.reconciliation -= row.thisAccountAmt;
+        this.infoBase.reconciliation -= parseFloat(row.thisAccountAmt);
         this.getSettlementComputed();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
         this.collectlist = selection;
-        this.infoBase.accountReceivable -= row.thisAccountAmt;
+        this.infoBase.accountReceivable -= parseFloat(row.thisAccountAmt);
         this.getSettlementComputed();
       },
       // 应付取消全选
