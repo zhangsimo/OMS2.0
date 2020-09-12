@@ -341,7 +341,7 @@
             render: (h, params) => {
               return h(
                 "span",
-                params.row.cpAmt ? params.row.cpAmt.toFixed(2) : 0
+                params.row.cpAmt ? parseFloat(params.row.cpAmt).toFixed(2) : 0
               );
             },
             minWidth: 150
@@ -353,7 +353,7 @@
             render: (h, params) => {
               return h(
                 "span",
-                params.row.endAmt ? params.row.endAmt.toFixed(2) : 0
+                params.row.endAmt ? parseFloat(params.row.endAmt).toFixed(2) : 0
               );
             },
             minWidth: 100
@@ -365,7 +365,7 @@
             render: (h, params) => {
               return h(
                 "span",
-                params.row.unAmt ? params.row.unAmt.toFixed(2) : 0
+                params.row.unAmt ? parseFloat(params.row.unAmt).toFixed(2) : 0
               );
             },
             minWidth: 100
