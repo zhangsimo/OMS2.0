@@ -17,6 +17,7 @@ export default {
     return {
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
+      saveDis:false,//保存接口返回之前按钮不可点击
       formInline:{
       },//所有数据对象
       //表单校验
@@ -97,11 +98,15 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
+          this.saveDis=true;
           let res = await getAskSave(this.formInline)
           if (res.code == 0) {
+            this.saveDis=false;
             this.$Message.success('操作成功')
             this.model = false
             this.$emit("updateD")
+          }else{
+            this.saveDis=false;
           }
         } else {
           this.$Message.error('带*必填');

@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="Settlement" title="对账单收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
-      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+      <Button class="ivu-btn ivu-btn-default mr10" @click="conserve" :loading="conserveDis">保存</Button>
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
@@ -121,7 +121,7 @@
           :edit-rules="validRules"
           :footer-method="payCollection"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'click', mode: 'cell',showStatus: true}"
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
@@ -129,9 +129,9 @@
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
             <vxe-table-column
               field="thisClaimedAmt"
-              title="本次核销金额"
+              title="本次认领金额"
               min-width="60"
-              :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+              :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
             >
             </vxe-table-column>
             <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
@@ -162,15 +162,15 @@ export default {
     subjexts
   },
   data() {
-    const roleValid = ({ row ,  cellValue }) => {
-      let Money = Math.abs(row.unClaimedAmt) > Math.abs(row.paidMoney) ? Math.abs(row.unClaimedAmt) : Math.abs(row.paidMoney)
-      let reg = /^([1-9]\d*(\.\d+)?)$/
+    const roleValid = ({cellValue,row }) => {
       return new Promise((resolve, reject) => {
+        let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
+        let reg = /^([1-9]\d*(\.\d+)?)$/
         if (cellValue && cellValue > Money) {
           reject(new Error('本次认领金额录入有误，请重新录入'))
-        } if(cellValue && !reg.test(cellValue)){
+        }else if (cellValue && !reg.test(cellValue)) {
           reject(new Error('输入数字不能小于0'))
-        }else {
+        } else {
           resolve()
         }
       })
@@ -179,6 +179,7 @@ export default {
       Settlement: false, //弹框显示
       check: 0,
       remark: "",
+      conserveDis:false,//保存 接口返回前不可点击
       reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
       BusinessType: [],
       tableData: [],
@@ -213,7 +214,8 @@ export default {
         hasAmt: 0,
         unAmt: 0,
         rpAmt: 0,
-        unAmtLeft: 0
+        unAmtLeft: 0,
+        thisClaimedAmt:0
       });
     });
     bus.$on("content", val => {
@@ -311,30 +313,53 @@ export default {
         });
       }
     },
+    //校验表单
+    handleSubmit(callback) {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          callback && callback();
+        } else {
+          this.$Message.error("带*为必填");
+        }
+      });
+    },
     //保存
    async conserve() {
       if (!Number(this.check)) {
-        const errMap = await this.$refs.vxeTable.validate().catch(errMap => errMap)
-        if (errMap) {
-         return  this.$Message.error('认领金额录入有误，请重新录入')
-        }
-        let obj = {
-          one: this.reconciliationStatement,
-          two: this.BusinessType,
-          three: this.tableData
-        };
-        saveAccount(obj).then(res => {
-          if (res.code === 0) {
-            this.$parent.claimedList();
-            this.$parent.distributionList();
-            this.Settlement = false;
-            this.$parent.accountNoWriteData = [];
-            this.$parent.claimedAmt = null;
-            this.$parent.difference = null;
-            this.$parent.currentAccount = {};
-            this.$message.success("保存成功");
+        this.$refs.vxeTable.validate((errMap)=>{
+          if(errMap){
+            errMap && errMap()
+          }else{
+            this.tableData.map(row=>{
+              let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
+              let reg = /^([1-9]\d*(\.\d+)?)$/
+              if(row.thisClaimedAmt && row.thisClaimedAmt>Money){
+                return this.$message.error("本次认领金额录入有误，请重新录入")
+              }else if(row.thisClaimedAmt && !reg.test(row.thisClaimedAmt)){
+                return this.$message.error("本次认领金额不可小于0")
+              }
+            })
+            let obj = {
+              one: this.reconciliationStatement,
+              two: this.BusinessType,
+              three: this.tableData
+            };
+            this.conserveDis=true;
+            saveAccount(obj).then(res => {
+              if (res.code === 0) {
+                this.$parent.queryNoWrite()
+                this.$parent.claimedList();
+                this.conserveDis=false;
+                this.Settlement = false;
+                this.$parent.accountNoWriteData = [];
+                this.$parent.claimedAmt = null;
+                this.$parent.difference = null;
+                this.$parent.currentAccount = {};
+                this.$message.success("保存成功");
+              }
+            });
           }
-        });
+        })
       } else {
         this.$message.error("核对金额为0才能保存");
       }

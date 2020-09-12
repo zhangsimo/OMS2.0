@@ -2,20 +2,20 @@
   <div class="db mt10 clearfix">
     <div class="clearfix">
       <div class="db ml10 fr">
-        <button
+        <Button
           class="mr10 ivu-btn ivu-btn-default"
-          type="button"
           @click="preservationDraft"
           v-if="!disabletype"
+          :loading="preDis"
         >保存草稿
-        </button>
-        <button
+        </Button>
+        <Button
           class="mr10 ivu-btn ivu-btn-default"
-          type="button"
+          :loading="preDis"
           @click="preservationSubmission"
           v-if="!disabletype"
         >提交
-        </button>
+        </Button>
       </div>
     </div>
     <div class="content-oper content-oper-flex">
@@ -343,6 +343,7 @@
         store: "", //弹框门店
         bill: "", //单据编号
         business: "", //业务类型
+        preDis:false,//保存草稿按钮接口没有返回不可点击
         companyInfo: "",
         thiscompanyInfo: "", //弹框往来单位
         infoBase: {
@@ -1095,16 +1096,23 @@
         this.list.four = [this.infoBase]
         // this.infoBase.reconciliation=0;
         // this.infoBase.reconciliation
+        this.preDis=true;
         if (num == 0) {
           let res = await CheckForSave(this.list, this.modelType)
           if (res.code === 0) {
+            this.preDis=false;
             this.$emit('closeModal', {})
+          }else{
+            this.preDis=false;
           }
         }
         if (num == 1) {
           let res = await CheckForSubmit(this.list, this.modelType)
           if (res.code === 0) {
+            this.preDis=false;
             this.$emit('closeModal', {})
+          }else{
+            this.preDis=false;
           }
         }
         // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {

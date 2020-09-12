@@ -79,21 +79,19 @@
                     </button>
                   </div>
                 </Poptip>
-                <button
+                <Button
                   class="mr8 ivu-btn ivu-btn-default"
-                  type="button"
                   @click="preservationDraft"
-                  :disabled="disabledBtn"
+                  :loading="disabledBtn"
                 >保存
-                </button>
-                <button
+                </Button>
+                <Button
                   class="mr8 ivu-btn ivu-btn-default"
-                  type="button"
                   v-noresub
                   @click="preservationSubmission"
-                  :disabled="disabledBtn"
+                  :loading="disabledBtn"
                 >提交
-                </button>
+                </Button>
               </div>
             </div>
           </div>

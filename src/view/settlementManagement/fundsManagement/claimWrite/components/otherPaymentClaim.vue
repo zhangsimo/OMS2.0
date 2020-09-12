@@ -166,8 +166,8 @@
     </Modal>
     <!-- 辅助核销计算 -->
     <voucherInput ref="voucherInput" @callBackFun="getCallBack"></voucherInput>
-    <settlement ref="settlement"></settlement>
-    <settlement2 ref="settlement2"></settlement2>
+    <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
+    <settlement2 ref="settlement2" @reloadParList="reloadParentList"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
 </template>
@@ -267,6 +267,12 @@ export default {
     this.getShop();
   },
   methods: {
+    reloadParentList(){
+      //刷新 列表
+      this.$parent.$parent.queryClaimed()
+      //清空选中
+      this.$parent.$parent.$refs.claim.currentClaimed=[]
+    },
     // 打开模态框
     open() {
       if(this.company.length==0){
@@ -445,9 +451,9 @@ export default {
     //认领弹框查询
     queryClaimed() {
       if (this.claimTit === "其他付款认领") {
-        this.claimedList(2);
+        this.claimedList(0);
       } else {
-        this.claimedList(2);
+        this.claimedList(0);
       }
     },
     //收回认领
@@ -587,6 +593,7 @@ export default {
         }
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
+          this.reloadParentList()
           this.modal = false;
           this.claimTit == "预付款认领"
             ? this.$Message.success("预付款认领成功")

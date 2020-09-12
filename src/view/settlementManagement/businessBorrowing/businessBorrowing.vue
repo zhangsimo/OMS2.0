@@ -355,7 +355,7 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimPay">认领</Button>
+      <Button class="ml10" @click="claimPay" :loading="claimPayDis">认领</Button>
       <!--<Button class="ml10" v-else @click="claimCollection">预收款认领</Button>-->
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
@@ -427,6 +427,7 @@ export default {
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
       claimTit: "", //认领弹框标题
+      claimPayDis:false,//认领接口返回之前按钮不可点击
       revokeTit: "", //撤回弹框标题
       amt: null, //认领弹框金额
       bankNameO: "", //认领弹框对方户名
@@ -637,12 +638,16 @@ export default {
           loanId: this.$store.state.businessBorrowing.loanId,
           claimType: this.$store.state.businessBorrowing.claimType,
         }
+        this.claimPayDis=true;
         api.addClaim(obj).then(res => {
           if (res.code === 0) {
+            this.claimPayDis=false;
             this.$message.success('认领成功')
             this.modal = false
             this.getQuery()
             // this.$parent.reload();
+          }else{
+            this.claimPayDis=false;
           }
         })
         this.claimModal = false;

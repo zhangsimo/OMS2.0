@@ -7,6 +7,7 @@ import {getOtherAllPay} from '_api/documentApproval/OtherPayment.js'
 import { getThisAllList,getGuestShortName ,getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import { getAccountName } from "../../../../api/bill/saleOrder";
 import { getPost } from "../utils";
+import fa from "element-ui/src/locale/lang/fa";
 export default {
   name: "AdvanceApply",
   components: {
@@ -22,6 +23,7 @@ export default {
       remoteloading: false,
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
+      saveDis:false,//保存草稿按钮接口没有返回不可点击
       formInline: {}, //所有数据对象
       //表单校验
       ruleValidate: {
@@ -283,11 +285,15 @@ export default {
           // console.log(this.formInline,valg,1111)
           if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
           this.formInline.step = type;
+          this.saveDis=true;
           let res = await getAdvanceSave(this.formInline);
           if (res.code == 0) {
+            this.saveDis=false;
             this.$Message.success("操作成功");
             this.model = false;
             this.$emit("updateD")
+          }else{
+            this.saveDis=false;
           }
         } else {
           this.$Message.error("带*必填");

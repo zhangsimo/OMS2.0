@@ -76,6 +76,7 @@ export default {
     };
     return {
       loading1: false,
+      saveDis:false,//保存草稿/提交申请按钮接口没有返回不可点击
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增false 1-编辑false 2-查看true 3-审核true
       formInline: {}, //所有数据对象
@@ -571,12 +572,16 @@ export default {
               duration: 0
             });
             this.formInline.accountType = this.formInline.accountType ? 1 : 0
+            this.saveDis=true
             let res = await getExpSve(this.formInline);
             msg();
             if (res.code == 0) {
+              this.saveDis=false;
               this.$Message.success("操作成功");
               this.model = false;
               this.$emit("updateD")
+            }else{
+              this.saveDis=false;
             }
           }
         } else {
