@@ -75,3 +75,12 @@ export function findListPageAllCashFlow(params) {
     params,
   });
 }
+
+// 现金流量表 查询
+export function findListPageAllCashFlowChange(params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountCashFlow/findCashFlowReportStatements`,
+    method: "get",
+    params,
+  });
+}
