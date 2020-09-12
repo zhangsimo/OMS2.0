@@ -877,7 +877,7 @@
           endTime: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          orgId: this.BranchstoreId,
+          orgId: this.BranchstoreId==0?"":this.BranchstoreId,
           guestId: this.companyId,
           accountNo: this.accountNo,
           fno: this.fno,
