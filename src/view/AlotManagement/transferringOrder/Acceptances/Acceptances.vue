@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -142,6 +142,7 @@ import {
   allotMainAccept
 } from "../../../../api/AlotManagement/transferringOrder";
 import { findForAllot,transferringFindForAllot } from "_api/purchasing/purchasePlan";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "Acceptances",
   components: {
@@ -281,6 +282,7 @@ export default {
         params.orgid = this.productName;
       }
       params.serviceId=this.serviceId.trim() || ""
+      showLoading(".loadingClass")
       findAll(params).then(res => {
         this.isSaveClick = false;
         if (res.code === 0) {
@@ -288,6 +290,9 @@ export default {
           this.topRight.page.total = res.data.totalElements;
           // console.log(this.topRight.tbdata, "this.topRight.tbdata");
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     //受理

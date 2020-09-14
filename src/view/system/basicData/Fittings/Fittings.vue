@@ -4,16 +4,33 @@
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
-          <div class="db mr10">
+          <!-- <div class="db mr10">
             <Input
               v-model="query"
               placeholder="请输入配件内码/编码/名称/OE码"
               style="width: 200px;"
               class="mr10"
             />
+          </div> -->
+          <div class="db mr5">
+            <span class="mr5">编码:</span>
+            <el-input ref="input" style="width: 100px" placeholder="编码" v-model="partCode" @change="queryHandle"/>
           </div>
+          <div class="db mr5">
+            <span class="mr5">内码:</span>
+            <el-input placeholder="内码" style="width: 100px" v-model="partId" @change="queryHandle"/>
+          </div>
+          <div class="db mr5">
+            <span class="mr5">名称:</span>
+            <el-input placeholder="名称" style="width: 100px" v-model="partName" @change="queryHandle"/>
+          </div>
+          <div class="db mr5">
+            <span class="mr5">OE:</span>
+            <el-input placeholder="OE码" style="width: 100px" v-model="oemCode" @change="queryHandle"/>
+          </div>
+
           <div class="db mr10">
-            <span>品牌:</span>
+            <span class="mr5">品牌:</span>
             <Select v-model="band" style="width:140px" filterable>
               <Option
                 v-for="item in bands"

@@ -343,6 +343,10 @@ export default class Fittings extends Vue {
   private split: number = 0.33;
   private queryValue: string = "0"; // 选中的查询条件
   private query: string = ""; // 查询条件文字
+  private partName: string = "";
+  private partCode: string = "";
+  private partId: string = "";
+  private oemCode: string = "";
   private band: string = ""; // 选中的品牌
   private selectTreeId: string = ""; // 选中的树形菜单
   // 禁售和可售 true可售
@@ -350,7 +354,7 @@ export default class Fittings extends Vue {
   // 启用禁用 true启用
   private isDisable: boolean = true;
   // tab索引
-  private tabIndex: number = 0;
+  private tabIndex: number = 1;
   // 选中的行
   private currRow: any = null;
   // 按钮可用
@@ -446,10 +450,15 @@ export default class Fittings extends Vue {
     params.tenantId = 0;
     params.page = this.cloud.page.num - 1;
     params.size = this.cloud.page.size;
-    const qurry = this.query.trim();
-    if (qurry.length > 0) {
-      data.partCode = qurry;
-    }
+    // const qurry = this.query.trim();
+    // if (qurry.length > 0) {
+    //   data.partCode = qurry;
+    // }
+    data.name = this.partName;
+    data.partInnerId = this.partId;
+    data.oeCode = this.oemCode;
+    data.partCode = this.partCode;
+
     if (this.band.length > 1) {
       // data.partBrandId = this.band;
       // data.partCodes = [];
@@ -460,7 +469,13 @@ export default class Fittings extends Vue {
       // data.carTypeIdThr = this.selectTreeId;
       data.typeId = this.selectTreeId;
     }
-    let res: any = await api.getwbParts(params, data);
+    let formData: any = {};
+      for (let k in data) {
+        if (data[k] && data[k].trim()) {
+          formData[k] = data[k];
+        }
+      }
+    let res: any = await api.getwbParts(params, formData);
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;
       this.cloud.page.total = res.data.totalElements;

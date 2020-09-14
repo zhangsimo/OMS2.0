@@ -1,5 +1,5 @@
 <template>
-  <div class="brandComponent">
+  <div class="brandComponent loadingClass">
     <!-- 预订单列表头部 -->
     <section class="oper-box">
       <div class="oper-top flex" v-if="tabValue === 'name1'">
@@ -389,6 +389,8 @@ import {
 } from "@/api/business/stockSearch";
 import { parse } from "qs";
 import brandCus from "_c/allocation/brandCus.vue"
+
+import {showLoading, hideLoading} from '@/utils/loading'
 
 export default {
   name: "brandList",
@@ -904,7 +906,7 @@ export default {
     // 往来单位
     getActiveCompany() {
       activeCompany().then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.guestId = res.data[0].id;
           this.transitUnitList = res.data;
@@ -1097,6 +1099,7 @@ export default {
     },
     // 查询
     searchData() {
+      showLoading(".loadingClass")
       searchBrandList(this.conditionData).then(res => {
         if (res.code === 0) {
           this.data = res.data.content;
@@ -1105,15 +1108,22 @@ export default {
           });
           this.List.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     // 待采购查询
     penPurchaseSearch() {
+      showLoading(".loadingClass")
       pendingPurchaseSearch(this.penPurchaseData).then(res => {
         if (res.code === 0) {
           this.data3 = res.data.content;
           this.pageList.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     // 点击tabs切换头部
