@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
@@ -52,7 +52,6 @@
           border
           size="mini"
           show-overflow
-          :loading="loading"
           highlight-current-row
           @current-change="currentChangeEvent"
           :data="hsOrderList1">
@@ -147,6 +146,7 @@
 <script>
   import {getHsOrderList,setPostDetail} from "_api/salesManagment/acceptance.js";
   import getDate from '@/components/getDate/dateget_concise'
+  import {showLoading, hideLoading} from "@/utils/loading"
   export default {
     name: "hsPayment",
     components: {
@@ -230,11 +230,18 @@
         params.page = this.page.num - 1;
         params.size = this.page.size;
         this.loading = true;
-        let repData = await getHsOrderList(params,data);
-        this.loading = false;
-        if(repData.code===0){
-          this.hsOrderList1 = repData.data.content||[];
-          this.page.total = repData.data.totalElements
+        try {
+          
+          showLoading(".loadingClass")
+          let repData = await getHsOrderList(params,data);
+          if(repData.code===0){
+            this.hsOrderList1 = repData.data.content||[];
+            this.page.total = repData.data.totalElements
+          }
+          this.loading = false;
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
 
