@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -277,6 +277,8 @@ import {
 import { checkStore } from "@/api/system/systemApi";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
+import {showLoading, hideLoading} from "@/utils/loading"
+
 export default {
   name: "threeSupplier",
   components: {
@@ -449,6 +451,7 @@ export default {
       let page = this.pageList.page;
       let size = this.pageList.pageSize;
       //console.log(this.form, "this.form");
+      showLoading(".loadingClass")
       zongbuzhidiaoList(page, size, this.form).then(res => {
         if (res.code === 0) {
           this.TopTableData = res.data.content || [];
@@ -458,6 +461,9 @@ export default {
           }
           //console.log(this.TopTableData, "this.TopTableData ==>257");
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     throwNameFun(v) {

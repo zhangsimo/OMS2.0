@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
@@ -65,16 +65,16 @@
       <div class="inner-box">
         <Tabs v-model="tabsName" :animated="false" @on-click="changeTab">
           <TabPane label="可处理信息" name="name1">
-            <Table size="small" height="389" ref="hsOrder" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
+            <Table size="small" height="389" ref="hsOrder" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="待处理" name="name2">
-            <Table size="small" ref="hsOrder" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
+            <Table size="small" ref="hsOrder" height="389" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="已处理配件查询" name="name3">
-            <Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
+            <Table size="small" height="389" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="历史订单" name="name4">
-            <Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
+            <Table size="small" height="389" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
           </TabPane>
         </Tabs>
         <div ref="planPage">
@@ -242,6 +242,8 @@
   import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier2";
   import SalesCus from "../../../components/allocation/salesCus";
   import AllocationCus from "../../../components/allocation/allocationCus";
+
+  import {showLoading, hideLoading} from "@/utils/loading"
 
 
   export default {
@@ -737,11 +739,17 @@
         params.page = this.page.num - 1;
         params.size = this.page.size;
         this.loading = true;
-        let repData = await getHuaShengOrders(params,data);
-        this.loading = false;
-        if(repData.code===0){
-          this.hsOrderList1 = repData.data.content||[];
-          this.page.total = repData.data.totalElements
+        try {
+          showLoading(".loadingClass")
+          let repData = await getHuaShengOrders(params,data);
+          this.loading = false;
+          if(repData.code===0){
+            this.hsOrderList1 = repData.data.content||[];
+            this.page.total = repData.data.totalElements
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()          
         }
       },
 
