@@ -73,17 +73,17 @@
               <span>审核</span>
             </button>
           </div>
-<!--          <div class="db ml5">-->
-<!--            <button-->
-<!--              class="mr10 ivu-btn ivu-btn-default"-->
-<!--              type="button"-->
-<!--              @click="reAudit"-->
-<!--              :disabled="oneList.length <= 0"-->
-<!--              v-has="'revoke'"-->
-<!--            >-->
-<!--              <span>撤销</span>-->
-<!--            </button>-->
-<!--          </div>-->
+          <div class="db ml5">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="reAudit"
+              :disabled="oneList.length <= 0"
+              v-has="'revoke'"
+            >
+              <span>撤销</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -386,13 +386,16 @@
       },
       // 撤销审核 ok
       async reAuditOk() {
-        let remarks = this.content.trim();
-        if (remarks.length <= 0) {
+        let remark = this.content.trim();
+        if (remark.length <= 0) {
           return this.$message.error("请输入撤销原因")
         }
-        let ids = this.oneList.map(el => el.id)
-        let res = await api.dailyFundAuditRevocation({
-          ids, remarks
+        if(this.oneList.length>1){
+          return this.$message.error("只能操作一笔订单");
+        }
+        let id = this.oneList.map(el => el.id).join('');
+        let res = await api.withdraw({
+          id, remark
         })
         if (res.code == 0) {
           this.$message.success(res.data)
