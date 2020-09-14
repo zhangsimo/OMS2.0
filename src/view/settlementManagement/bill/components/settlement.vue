@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="Settlement" title="对账单收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
-      <button class="ivu-btn ivu-btn-default mr10" type="button" v-noresub @click="conserve">保存</button>
+      <Button class="ivu-btn ivu-btn-default mr10" :loading="conserveDis" v-noresub @click="conserve">保存</Button>
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
@@ -176,6 +176,7 @@ export default {
       });
     };
     return {
+      conserveDis:false,//保存点击后等待接口返回后再次点击
       Settlement: false, //弹框显示
       check: 0,
       remark: "",
@@ -349,6 +350,7 @@ export default {
           two: this.BusinessType,
           three: this.tableData
         };
+        this.conserveDis=true;
         saveAccount(obj).then(res => {
           if (res.code === 0) {
             this.$message.success("保存成功");
@@ -362,19 +364,25 @@ export default {
                     this.$message.success("发票对冲申请单");
                     this.$emit('getNewList')
                   }
+                  this.conserveDis=false;
                   this.Settlement = false;
                 },
                 onCancel: () => {
+                  this.conserveDis=false;
                   this.Settlement = false;
                   this.$message.success("对账单对冲成功");
                 }
               });
             }else{
+              this.conserveDis=false;
               this.Settlement = false;
               this.$message.success("对账单对冲成功");
             }
+          }else{
+            this.conserveDis=false;
+            this.Settlement = false;
           }
-        });
+        })
       } else {
         this.$message.error("核对金额为0才能保存");
       }

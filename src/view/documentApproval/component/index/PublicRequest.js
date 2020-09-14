@@ -18,6 +18,7 @@ export default {
   },
   data(){
     return {
+      saveDis:false,//保存/提交接口返回之前按钮不可点击
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
       formInline:{
@@ -201,15 +202,19 @@ export default {
           }
           if (this.canSave)return this.$Message.warning('处理中...')
           this.canSave = true
+          this.saveDis=true;
           this.formInline.step = type
           let res = await getPublicSave(this.formInline)
           setTimeout(()=>{
             this.canSave = false
           },1000)
           if (res.code == 0) {
+            this.saveDis=false;
             this.$Message.success('操作成功')
             this.model = false
             this.$emit("updateD")
+          }else{
+            this.saveDis=false;
           }
         } else {
           this.$Message.error('带*必填');

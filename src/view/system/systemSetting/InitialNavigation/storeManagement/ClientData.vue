@@ -101,7 +101,7 @@
           <Input v-model="data.streetAddress" style="width: 580px" @on-blur="getAddress" />
         </FormItem>
         <FormItem label="组合地址:">
-          <Input v-model="data.address" style="width: 580px" disabled />
+          <Input v-model="getZuheAddress" style="width: 580px" disabled />
         </FormItem>
         <Row>
           <Col span="12">
@@ -273,6 +273,16 @@ export default {
       address: "" //详细地址
     };
   },
+  computed:{
+    //组合地址 = 省份 + 城市 + 地区 + 详细地址
+    getZuheAddress(){
+      let pro=this.data.province?this.data.province:this.province;
+      let city=this.data.city?this.data.city:this.city;
+      let county=this.data.district?this.data.district:this.county;
+      let address=this.data.streetAddress?this.data.streetAddress:this.address
+      return (this.data.address=pro+city+county+address)
+    }
+  },
   methods: {
     valuePic() {
       this.$nextTick(() => {
@@ -319,22 +329,26 @@ export default {
     //获取选择的省份
     selectProvinceId(item) {
       this.province = item.label;
+      this.data.province=this.province
       this.getAllAddress();
     },
     //获取选择的城市
     selectCityId(item) {
       this.city = item.label;
+      this.data.city=this.city
       this.getAllAddress();
     },
     //获取地区
     selectCountyId(item) {
       this.county = item.label;
+      this.data.district=this.county
       this.getAllAddress();
     },
     //获取详细地址
     getAddress() {
       if (this.data.streetAddress) {
         this.address = this.data.streetAddress.trim();
+        this.data.streetAddress=this.address
         this.getAllAddress();
       }
     },

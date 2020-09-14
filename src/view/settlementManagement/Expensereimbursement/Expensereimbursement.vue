@@ -338,7 +338,7 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimPay">认领</Button>
+      <Button class="ml10" @click="claimPay" :loading="claimPayDis">认领</Button>
       <!--<Button class="ml10" v-else @click="claimCollection">预收款认领</Button>-->
       <claim ref="claim" @selection="selection"/>
       <div slot="footer"></div>
@@ -412,6 +412,7 @@
         requestCode: "", //费用报销申请单号
         currRow: null, //选中行
         claimModal: false, //认领弹框
+        claimPayDis:false,//认领接口返回之前不可再次点击按钮
         revoke: false, //撤回弹框
         claimTit: "", //认领弹框标题
         revokeTit: "", //撤回弹框标题
@@ -633,12 +634,16 @@
             loanId:this.$store.state.businessBorrowing.loanId,
             claimType: 4,
           }
+          this.claimPayDis=true;
           restful.addClaim(obj).then(res => {
             if(res.code===0){
               this.$message.success('认领成功')
-              this.modal = false
+              this.claimPayDis=false;
+              this.claimModal = false
               this.$parent.getQuery()
               // this.$parent.reload();
+            }else{
+              this.claimPayDis=false;
             }
           })
           this.claimModal = false;

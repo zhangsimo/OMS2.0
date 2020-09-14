@@ -30,7 +30,7 @@
       @on-page-size-change="changeSize"
     ></Page>
     <div slot="footer">
-      <Button type="primary" @click="detaim">确认</Button>
+      <Button type="primary" :loading="detaimDis" @click="detaim">确认</Button>
       <Button @click="modal=false">取消</Button>
     </div>
   </Modal>
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       modal: false,
+      detaimDis:false,//确认接口返回之前不可点击
       company: "", //往来单位
       columns1: [
         {
@@ -118,12 +119,16 @@ export default {
           guestId:this.guestId,
           financeAccountCashList:this.financeAccountCashList
         }
+        this.detaimDis=true;
         addClaim(obj).then(res=>{
           if(res.code===0){
+            this.detaimDis=false;
             this.$message.success('认领成功')
             this.modal = false
             this.$parent.$parent.getQuery()
             this.$parent.$parent.$refs.settlement.tableData=[]
+          }else{
+            this.detaimDis=false;
           }
         })
       } else {
