@@ -829,7 +829,7 @@
             </p>
             <p>
               <span style="font-size: 12px">打印日期:</span>
-              <span style="font-size: 12px">{{printDate}}</span>
+              <span style="font-size: 12px">{{onelist.printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -921,7 +921,7 @@
         </Row>
         <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
           备 注：
-          <span>{{onelist.logisticsRecord.remark}}</span>
+          <span>{{onelist.apply.remark}}</span>
         </p>
       </div>
       <div class="titler" v-if="onelist.name.startsWith('调拨入库')">
