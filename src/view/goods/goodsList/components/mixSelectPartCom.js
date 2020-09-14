@@ -270,7 +270,7 @@ export const mixSelectPartCom = {
       this.partCode = "";
       // this.getPartBrandAll();
       this.getCarClassifysFun();
-      // this.getList();
+      this.getList();
       this.$nextTick(() => this.$refs.Input.focus());
     },
     //配件表格点击的行
