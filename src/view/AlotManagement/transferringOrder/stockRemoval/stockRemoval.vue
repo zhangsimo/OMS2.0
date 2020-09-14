@@ -270,7 +270,7 @@
                       <Button
                         v-has="'delete'"
                         :disabled="
-                          !(!Leftcurrentrow.code && buttonDisable == 0)
+                          buttonDisable != 0
                         "
                         size="small"
                         class="mr10"
@@ -1029,6 +1029,9 @@
         this.buttonDisable = 0;
         let createTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
         this.createTime = createTime;
+        for (let b of this.Left.tbdata) {
+          b._highlight = false;
+        }
         const item = {
           new: true,
           _highlight: true,
