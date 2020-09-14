@@ -197,9 +197,9 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc"/>
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber :min="0" v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">运费</span>
               <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">保险费</span>
@@ -220,10 +220,9 @@
                 :disabled="disabletype"
                 type="text"
                 class="w60 tc"
-                :min="0"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc" :min="0"/>
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
               <Input v-model="Actualtotalcollect" type="text" class="w60 tc" :disabled="disabletype"/>
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
@@ -231,7 +230,7 @@
               <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
               <Input type="text" v-model="Reconciliationtotal" :disabled="disabletype" class="w60 tc"/>
             </div>
-            <div class="db">
+            <div class="db pt10">
               <span class="mr5">计划结算类型</span>
               <Select class="w100" v-model="infoBase.billingType.value" disabled>
                 <Option
@@ -242,12 +241,46 @@
                 </Option>
               </Select>
               <span class="mr5 ml10">应收返利请示单号</span>
-              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" :disabled="disabletype"/>
+              <Input type="text" v-model="infoBase.rebateNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('request')"
+              >选择
+              </button>
               <span class="mr5 ml10">应收坏账请示单号</span>
-              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" :disabled="disabletype"/>
+              <Input type="text" v-model="infoBase.badDebNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('request2')"
+              >选择
+              </button>
+            </div>
+            <div class="db mt10">
               <span class="ml10" style="color:red">*</span>
               <span class="mr5">备注</span>
-              <Input type="text" v-model="infoBase.remark" class="w260 tc" :disabled="disabletype"/>
+              <Input type="text" v-model="infoBase.remark" class="w150 tc" :disabled="disabletype"/>
+              <span class="mr5 ml10">应付返利请示单号</span>
+              <Input type="text" v-model="infoBase.payingRebateNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('requestPay')"
+              >选择
+              </button>
+              <span class="mr5 ml10">应付坏账请示单号</span>
+              <Input type="text" v-model="infoBase.payingBadDebtNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('requestPay2')"
+              >选择
+              </button>
             </div>
           </div>
         </div>
@@ -293,8 +326,14 @@
         <Button type="default" @click="clientDataShow2=false">取消</Button>
       </div>
       <!--    选择的模态框-->
+      <!--      应收返利-->
       <requestCode ref="request" @backList="getBackList"></requestCode>
+      <!--      应收坏账-->
       <requestCode ref="request2" @backList="getBackList2"></requestCode>
+      <!--      应付返利-->
+      <requestCode ref="requestPay" @backList="getBackListPay"></requestCode>
+      <!--      应付坏账-->
+      <requestCode ref="requestPay2" @backList="getBackListPay2"></requestCode>
     </Modal>
   </div>
 </template>
@@ -999,12 +1038,24 @@
           }
         });
       },
+      //打开模态框
+      openSelect(request) {
+        this.$refs[request].open();
+      },
       //获取选择的信息
       getBackList(row) {
         this.infoBase.rebateNo = row.applyNo;
       },
       getBackList2(row) {
         this.infoBase.badDebNo = row.applyNo;
+      },
+      //应付返利
+      getBackListPay(row) {
+        this.infoBase.payingRebateNo = row.applyNo;
+      },
+      //应付坏账
+      getBackListPay2(row) {
+        this.infoBase.payingBadDebtNo = row.applyNo;
       },
       //获取客户分类
       getList() {
