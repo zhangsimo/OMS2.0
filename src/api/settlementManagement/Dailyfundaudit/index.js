@@ -159,3 +159,13 @@ export function dailyFundAuditRevocation(data) {
   data,
 });
 }
+
+
+// 每日资金审核撤销
+export function withdraw(params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/withdraw`,
+    method: "get",
+    params,
+  });
+}
