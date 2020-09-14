@@ -197,9 +197,9 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc"/>
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber :min="0" v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">运费</span>
               <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">保险费</span>
@@ -220,10 +220,9 @@
                 :disabled="disabletype"
                 type="text"
                 class="w60 tc"
-                :min="0"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc" :min="0"/>
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
               <Input v-model="Actualtotalcollect" type="text" class="w60 tc" :disabled="disabletype"/>
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
