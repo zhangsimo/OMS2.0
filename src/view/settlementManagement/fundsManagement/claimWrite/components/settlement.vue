@@ -326,43 +326,48 @@
       },
       //保存
       async conserve() {
-        this.tableData.map(row => {
-          let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
-          let reg = /^([1-9]\d*(\.\d+)?)$/
-          if (row.thisClaimedAmt && row.thisClaimedAmt > Money) {
-            this.$message.error("本次认领金额录入有误，请重新录入")
-            return
-          } else if (row.thisClaimedAmt && !reg.test(row.thisClaimedAmt)) {
-            this.$message.error("本次认领金额不可小于0")
-            return
-          }
-        })
         if (!Number(this.check)) {
-          this.$refs.vxeTable.validate((errMap) => {
-            if (errMap) {
-              errMap && errMap()
-            } else {
-              let obj = {
-                one: this.reconciliationStatement,
-                two: this.BusinessType,
-                three: this.tableData
-              };
-              this.conserveDis = true;
-              saveAccount(obj).then(res => {
-                if (res.code === 0) {
-                  this.$parent.queryNoWrite()
-                  this.$parent.claimedList();
-                  this.conserveDis = false;
-                  this.Settlement = false;
-                  this.$parent.accountNoWriteData = [];
-                  this.$parent.claimedAmt = null;
-                  this.$parent.difference = null;
-                  this.$parent.currentAccount = {};
-                  this.$message.success("保存成功");
-                }
-              });
+          var bool=true;
+          this.tableData.map(row => {
+            let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
+            let reg = /^([1-9]\d*(\.\d+)?)$/
+            if (row.thisClaimedAmt && row.thisClaimedAmt > Money) {
+              this.$message.error("本次认领金额录入有误，请重新录入")
+              bool=false
+              return
+            } else if (row.thisClaimedAmt && !reg.test(row.thisClaimedAmt)) {
+              this.$message.error("本次认领金额不可小于0")
+              bool=false;
+              return
             }
           })
+          if(bool){
+            this.$refs.vxeTable.validate((errMap) => {
+              if (errMap) {
+                errMap && errMap()
+              } else {
+                let obj = {
+                  one: this.reconciliationStatement,
+                  two: this.BusinessType,
+                  three: this.tableData
+                };
+                this.conserveDis = true;
+                saveAccount(obj).then(res => {
+                  if (res.code === 0) {
+                    this.$parent.queryNoWrite()
+                    this.$parent.claimedList();
+                    this.conserveDis = false;
+                    this.Settlement = false;
+                    this.$parent.accountNoWriteData = [];
+                    this.$parent.claimedAmt = null;
+                    this.$parent.difference = null;
+                    this.$parent.currentAccount = {};
+                    this.$message.success("保存成功");
+                  }
+                });
+              }
+            })
+          }
         } else {
           this.$message.error("核对金额为0才能保存");
         }
