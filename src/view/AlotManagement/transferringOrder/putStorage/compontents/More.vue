@@ -43,9 +43,9 @@
     <row class="mt15">
       <span>调 出 方 ：</span>
       <!-- <Input v-model="form.guestName" style="width: 398px" /> -->
-      <Select style="width: 398px" v-model="form.guestName" label-in-value>
-        <Option v-for="item in ArrayValue1" :value="item" :key="item">
-          {{item }}
+      <Select style="width: 398px" v-model="form.guestId" @on-change="subChange" label-in-value >
+        <Option v-for="item in ArrayValue1" :value="item.id" :key="item.id">
+          {{item.shortName }}
         </Option>
       </Select>
       <Button @click="showModel" class="ml5" size="small" type="default">
@@ -77,7 +77,7 @@
 
 <script>
 import moment from "moment";
-import { findForAllot } from "_api/purchasing/purchasePlan";
+import { findForAllot,transferringFindForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "More",
   data() {
@@ -95,7 +95,7 @@ export default {
         guestName: this.dcName,
         createTimeStart: "",
         code: ""
-      }
+      },
     };
   },
   // watch: {
@@ -124,19 +124,26 @@ export default {
   },
 
   methods: {
+    subChange(v){
+      if(v){
+        this.form.guestId = v.value;
+        this.form.guestName = v.label;
+      }
+    },
     getArrayParams() {
       if(this.ArrayValue1.length > 0) {
         return;
       }
       var req = {};
-      req.page = 1;
-      req.size = 20;
-      findForAllot(req).then(res => {
+      req.page = 0;
+      req.size = 100;
+      transferringFindForAllot(req).then(res => {
         const { content } = res.data;
         this.getArray = content;
-        content.forEach(item => {
-          this.ArrayValue1.push(item.fullName);
-        });
+        // content.forEach(item => {
+        //   this.ArrayValue1.push(item.shortName);
+        // });
+        this.ArrayValue1 = content
       });
     },
     //展示方
@@ -189,17 +196,18 @@ export default {
     },
     reset() {
       this.getArrayParams();
-      // this.form = {
-      //   partCode: "", //申请单号
-      //   partName: "", //申请单号
-      //   productPartCode: "", //编码
-      //   startData: "", //配件人
-      //   endDate: "",
-      //   createTimeEnd: "",
-      //   guestId: "",
-      //   guestName: "",
-      //   createTimeStart: ""
-      // };
+      this.form = {
+        partCode: "", //申请单号
+        partName: "", //申请单号
+        productPartCode: "", //编码
+        startData: "", //配件人
+        endDate: "",
+        createTimeEnd: "",
+        guestId: "",
+        guestName: "",
+        createTimeStart: "",
+        code: ""
+      };
     }
   }
 };

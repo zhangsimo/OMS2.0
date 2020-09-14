@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -196,6 +196,7 @@ import {
   tuihuishouliliebiao,
   tuihuishouliliebiaomingxi
 } from "../../../../api/AlotManagement/twoBackAccept.js";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "twoBackAccept",
   components: {
@@ -325,6 +326,7 @@ export default {
     },
     //搜索
     search() {
+      showLoading(".loadingClass")
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           this.isSaveClick = false;
@@ -346,9 +348,11 @@ export default {
             //   this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
             // }
           }
+          hideLoading()
         })
         .catch(e => {
           this.$Message.info("获取受理列表失败");
+          hideLoading()
         });
     },
     //current

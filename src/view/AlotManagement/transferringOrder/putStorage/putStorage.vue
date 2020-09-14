@@ -1041,15 +1041,15 @@ export default {
     // 确定
     Determined() {
       // this.$refs.naform.getSupplierNamea();
-      const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].shortName == params.guestName) {
-          params.guestId = this.getArray[i].id;
-        }
-      }
-      this.form = params;
-      delete this.form.gustName;
-      this.getList();
+      const params = { ...this.$refs.naform.getITPWE() };
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == params.guestName) {
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
+      // this.form = params;
+      // delete this.form.gustName;
+      this.getList(params);
       this.advanced = false;
     },
     ok() {},
@@ -1103,15 +1103,16 @@ export default {
         }, 200);
       } else {
         let more = this.$refs.naform;
-        if(!more.ArrayValue1.includes(row.shortName)) {
-          more.ArrayValue1.push(row.shortName);
-        }
+        // if(!more.ArrayValue1.includes(row.shortName)) {
+        //   more.ArrayValue1.push(row.shortName);
+        // }
         more.form.guestId = row.id;
         this.Leftcurrentrow.guestId = row.id;
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
-      this.$refs['naform'].form.guestName=row.shortName
+      // this.$refs['naform'].form.guestName=row.shortName;
+      // this.$refs['naform'].form.guestId = row.id;
     },
     getOkList(list) {
       this.$refs.tableref.clearCurrentRow();
@@ -1153,8 +1154,11 @@ export default {
       this.Status = 0;
       this.$refs.addInCom.init1();
     },
-    getList() {
+    getList(moreData) {
       let params = this.form;
+      if(moreData){
+        params = {...params,...moreData}
+      }
       if (params.qucikTime) {
         params.createTime = params.qucikTime[0]
         params.endTime = params.qucikTime[1]

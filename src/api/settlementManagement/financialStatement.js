@@ -33,7 +33,7 @@ export function certificationAuditRevocation(data) {
 // 资金统计表
 export function findListPageAllReport(params) {
   return axios.request({
-    url: `${api.omsSettle}/omsFinanceAccountStatistical/findListPageAllReport`,
+    url: `${api.omsSettle}/omsFinanceAccountStatistical/findCashStatisticalReportStatements`,
     method: "get",
     params
   });
