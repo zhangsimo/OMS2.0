@@ -11,19 +11,19 @@
           <span>门店：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.orgName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.orgName" readonly/>
         </Col>
         <Col span="2" class="tr">
           <span>往来单位：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.guestName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.guestName" readonly/>
         </Col>
         <Col span="2" class="tr">
           <span>收付类型：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.sortName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.sortName" readonly/>
         </Col>
       </Row>
       <Row class="mt10">
@@ -31,20 +31,20 @@
           <span>对账单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
+          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly/>
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly />
+          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly/>
         </Col>
         <Col span="2" class="tr">
           <span>核销方式：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly/>
         </Col>
       </Row>
     </div>
@@ -143,293 +143,298 @@
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette" />
-    <subjexts ref="subjexts" />
+    <accountSelette ref="accountSelette"/>
+    <subjexts ref="subjexts"/>
   </Modal>
 </template>
 <script>
-import accountSelette from "../../../bill/components/accountWirte";
-import {
-  wirteAccount,
-  saveAccount
-} from "_api/settlementManagement/seleteAccount.js";
-import subjexts from "../../../bill/components/subjects";
-import bus from "../../../bill/Popup/Bus";
-import moment from "moment";
-export default {
-  components: {
-    accountSelette,
-    subjexts
-  },
-  data() {
-    const roleValid = ({cellValue,row }) => {
-      return new Promise((resolve, reject) => {
-        let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
-        let reg = /^([1-9]\d*(\.\d+)?)$/
-        if (cellValue && cellValue > Money) {
-          reject(new Error('本次认领金额录入有误，请重新录入'))
-        }else if (cellValue && !reg.test(cellValue)) {
-          reject(new Error('输入数字不能小于0'))
-        } else {
-          resolve()
-        }
-      })
-    }
-    return {
-      Settlement: false, //弹框显示
-      check: 0,
-      remark: "",
-      conserveDis:false,//保存 接口返回前不可点击
-      reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
-      BusinessType: [],
-      tableData: [],
-      collectPayId: "",
-      obj: {},
-      //表格校验
-      validRules:{
-        thisClaimedAmt:[
-          { validator: roleValid }
-        ]
+  import accountSelette from "../../../bill/components/accountWirte";
+  import {
+    wirteAccount,
+    saveAccount
+  } from "_api/settlementManagement/seleteAccount.js";
+  import subjexts from "../../../bill/components/subjects";
+  import bus from "../../../bill/Popup/Bus";
+  import moment from "moment";
+
+  export default {
+    components: {
+      accountSelette,
+      subjexts
+    },
+    data() {
+      const roleValid = ({cellValue, row}) => {
+        return new Promise((resolve, reject) => {
+          let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
+          let reg = /^([1-9]\d*(\.\d+)?)$/
+          if (cellValue && cellValue > Money) {
+            reject(new Error('本次认领金额录入有误，请重新录入'))
+          } else if (cellValue && !reg.test(cellValue)) {
+            reject(new Error('输入数字不能小于0'))
+          } else {
+            resolve()
+          }
+        })
       }
-    };
-  },
-  mounted() {
-    // 对账单号
-    bus.$on("accountHedNo", (val ,val1)=> {
-      this.reconciliationStatement.accountNo =
-        this.reconciliationStatement.accountNo + "," + val1;
-      val.two.map(item => {
-        item.businessTypeName = item.businessType.name;
+      return {
+        Settlement: false, //弹框显示
+        check: 0,
+        remark: "",
+        conserveDis: false,//保存 接口返回前不可点击
+        reconciliationStatement: {accountNo: 123, receiptPayment: 456},
+        BusinessType: [],
+        tableData: [],
+        collectPayId: "",
+        obj: {},
+        //表格校验
+        validRules: {
+          thisClaimedAmt: [
+            {validator: roleValid}
+          ]
+        }
+      };
+    },
+    mounted() {
+      // 对账单号
+      bus.$on("accountHedNo", (val, val1) => {
+        this.reconciliationStatement.accountNo =
+          this.reconciliationStatement.accountNo + "," + val1;
+        val.two.map(item => {
+          item.businessTypeName = item.businessType.name;
+        });
+        this.BusinessType = [...this.BusinessType, ...val.two];
+        this.checkComputed()
       });
-      this.BusinessType = [...this.BusinessType, ...val.two];
-      this.checkComputed()
-    });
-    //选择科目
-    bus.$on("hedInfo", val => {
-      this.BusinessType.push({
-        mateAccountCode: val.titleCode,
-        mateAccountName: val.titleName,
-        businessTypeName: val.titleName,
-        reconciliationAmt: 0,
-        hasAmt: 0,
-        unAmt: 0,
-        rpAmt: 0,
-        unAmtLeft: 0,
-        thisClaimedAmt:0
-      });
-    });
-    bus.$on("content", val => {
-      this.obj = val;
-    });
-    bus.$on("ChildContent", value => {
-      if (value.fullName) {
+      //选择科目
+      bus.$on("hedInfo", val => {
         this.BusinessType.push({
-          businessTypeName: this.obj.fullName + "-" + value.fullName,
+          mateAccountCode: val.titleCode,
+          mateAccountName: val.titleName,
+          businessTypeName: val.titleName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
           rpAmt: 0,
-          unAmtLeft: 0
+          unAmtLeft: 0,
+          thisClaimedAmt: 0
         });
-      } else if (value.userName) {
-        this.BusinessType.push({
-          businessTypeName: this.obj.fullName + "-" + value.userName,
-          reconciliationAmt: 0,
-          hasAmt: 0,
-          unAmt: 0,
-          rpAmt: 0,
-          unAmtLeft: 0
-        });
-      }
-    });
-    //收付款信息
-    bus.$on("paymentInfo", val => {
-      val.map(item => {
-        item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
-        item.orgName = item.shopName;
-        item.paidMoney = !item.paidMoney
-          ? 0
-          : item.paidMoney < 0
-          ? item.paidMoney
-          : -item.paidMoney;
-        delete item.businessType;
       });
-      this.tableData = val;
-    });
-  },
-  methods: {
-    // 选择科目弹框
-    subject() {
-      this.$refs.subjexts.subjectModelShow = true;
-    },
-    // 对账单号选择
-    accountNoClick() {
-      this.$refs.accountSelette.modal1 = true;
-    },
-    //弹框打开
-    hander(type) {
-      this.$nextTick(()=>{
-        this.$refs.vxeTable.setActiveCell(this.$refs.vxeTable.getData(0),"thisClaimedAmt")
-      })
-      if (!type) {
-        this.check = 0;
-        this.remark = "";
-        this.reconciliationStatement = {};
-        this.BusinessType = [];
-        // this.tableData = [];
-        this.collectPayId = "";
-      } else {
-        let sign = 0;
-        if (this.$parent.paymentId === "YSK") {
-          sign = 2;
-        } else if (this.$parent.paymentId === "YFK") {
-          sign = 4;
-        } else if (this.$parent.paymentId === "YJDZ") {
-          sign = 1;
-        } else if (this.$parent.type === 0) {
-          sign = 6;
-        } else if (this.$parent.type === 1) {
-          sign = 7;
-        } else if (this.$parent.type === 2) {
-          sign = 8;
+      bus.$on("content", val => {
+        this.obj = val;
+      });
+      bus.$on("ChildContent", value => {
+        if (value.fullName) {
+          this.BusinessType.push({
+            businessTypeName: this.obj.fullName + "-" + value.fullName,
+            reconciliationAmt: 0,
+            hasAmt: 0,
+            unAmt: 0,
+            rpAmt: 0,
+            unAmtLeft: 0
+          });
+        } else if (value.userName) {
+          this.BusinessType.push({
+            businessTypeName: this.obj.fullName + "-" + value.userName,
+            reconciliationAmt: 0,
+            hasAmt: 0,
+            unAmt: 0,
+            rpAmt: 0,
+            unAmtLeft: 0
+          });
         }
-        let accountNo = this.$parent.reconciliationStatement
-          ? this.$parent.reconciliationStatement.accountNo
-          : this.$parent.currentAccount.accountNo;
-        wirteAccount({
-          accountNo,
-          sign
-        }).then(res => {
-          if (res.code === 0) {
-            res.data.one.furposeName = res.data.one.furpose.name;
-            res.data.one.sortName = res.data.one.sort.name;
-            this.reconciliationStatement = res.data.one;
-            res.data.two.map(item => {
-              item.businessTypeName = item.businessType.name;
-            });
-            this.BusinessType = res.data.two;
-            this.checkComputed();
-          }
+      });
+      //收付款信息
+      bus.$on("paymentInfo", val => {
+        val.map(item => {
+          item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+          item.orgName = item.shopName;
+          item.paidMoney = !item.paidMoney
+            ? 0
+            : item.paidMoney < 0
+              ? item.paidMoney
+              : -item.paidMoney;
+          delete item.businessType;
         });
-      }
+        this.tableData = val;
+      });
     },
-    //校验表单
-    handleSubmit(callback) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          callback && callback();
+    methods: {
+      // 选择科目弹框
+      subject() {
+        this.$refs.subjexts.subjectModelShow = true;
+      },
+      // 对账单号选择
+      accountNoClick() {
+        this.$refs.accountSelette.modal1 = true;
+      },
+      //弹框打开
+      hander(type) {
+        this.$nextTick(() => {
+          this.$refs.vxeTable.setActiveCell(this.$refs.vxeTable.getData(0), "thisClaimedAmt")
+        })
+        if (!type) {
+          this.check = 0;
+          this.remark = "";
+          this.reconciliationStatement = {};
+          this.BusinessType = [];
+          // this.tableData = [];
+          this.collectPayId = "";
         } else {
-          this.$Message.error("带*为必填");
+          let sign = 0;
+          if (this.$parent.paymentId === "YSK") {
+            sign = 2;
+          } else if (this.$parent.paymentId === "YFK") {
+            sign = 4;
+          } else if (this.$parent.paymentId === "YJDZ") {
+            sign = 1;
+          } else if (this.$parent.type === 0) {
+            sign = 6;
+          } else if (this.$parent.type === 1) {
+            sign = 7;
+          } else if (this.$parent.type === 2) {
+            sign = 8;
+          }
+          let accountNo = this.$parent.reconciliationStatement
+            ? this.$parent.reconciliationStatement.accountNo
+            : this.$parent.currentAccount.accountNo;
+          wirteAccount({
+            accountNo,
+            sign
+          }).then(res => {
+            if (res.code === 0) {
+              res.data.one.furposeName = res.data.one.furpose.name;
+              res.data.one.sortName = res.data.one.sort.name;
+              this.reconciliationStatement = res.data.one;
+              res.data.two.map(item => {
+                item.businessTypeName = item.businessType.name;
+              });
+              this.BusinessType = res.data.two;
+              this.checkComputed();
+            }
+          });
         }
-      });
-    },
-    //保存
-   async conserve() {
-      if (!Number(this.check)) {
-        this.$refs.vxeTable.validate((errMap)=>{
-          if(errMap){
-            errMap && errMap()
-          }else{
-            this.tableData.map(row=>{
-              let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
-              let reg = /^([1-9]\d*(\.\d+)?)$/
-              if(row.thisClaimedAmt && row.thisClaimedAmt>Money){
-                return this.$message.error("本次认领金额录入有误，请重新录入")
-              }else if(row.thisClaimedAmt && !reg.test(row.thisClaimedAmt)){
-                return this.$message.error("本次认领金额不可小于0")
-              }
-            })
-            let obj = {
-              one: this.reconciliationStatement,
-              two: this.BusinessType,
-              three: this.tableData
-            };
-            this.conserveDis=true;
-            saveAccount(obj).then(res => {
-              if (res.code === 0) {
-                this.$parent.queryNoWrite()
-                this.$parent.claimedList();
-                this.conserveDis=false;
-                this.Settlement = false;
-                this.$parent.accountNoWriteData = [];
-                this.$parent.claimedAmt = null;
-                this.$parent.difference = null;
-                this.$parent.currentAccount = {};
-                this.$message.success("保存成功");
-              }
-            });
+      },
+      //校验表单
+      handleSubmit(callback) {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            callback && callback();
+          } else {
+            this.$Message.error("带*为必填");
+          }
+        });
+      },
+      //保存
+      async conserve() {
+        this.tableData.map(row => {
+          let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
+          let reg = /^([1-9]\d*(\.\d+)?)$/
+          if (row.thisClaimedAmt && row.thisClaimedAmt > Money) {
+            this.$message.error("本次认领金额录入有误，请重新录入")
+            return
+          } else if (row.thisClaimedAmt && !reg.test(row.thisClaimedAmt)) {
+            this.$message.error("本次认领金额不可小于0")
+            return
           }
         })
-      } else {
-        this.$message.error("核对金额为0才能保存");
+        if (!Number(this.check)) {
+          this.$refs.vxeTable.validate((errMap) => {
+            if (errMap) {
+              errMap && errMap()
+            } else {
+              let obj = {
+                one: this.reconciliationStatement,
+                two: this.BusinessType,
+                three: this.tableData
+              };
+              this.conserveDis = true;
+              saveAccount(obj).then(res => {
+                if (res.code === 0) {
+                  this.$parent.queryNoWrite()
+                  this.$parent.claimedList();
+                  this.conserveDis = false;
+                  this.Settlement = false;
+                  this.$parent.accountNoWriteData = [];
+                  this.$parent.claimedAmt = null;
+                  this.$parent.difference = null;
+                  this.$parent.currentAccount = {};
+                  this.$message.success("保存成功");
+                }
+              });
+            }
+          })
+        } else {
+          this.$message.error("核对金额为0才能保存");
+        }
+      },
+      // 核销单元格编辑状态下被关闭时
+      editClosedEvent({row, rowIndex}) {
+        row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
+        this.$set(this.BusinessType, rowIndex, row);
+        this.checkComputed();
+      },
+      // 核销信息合计
+      offWrite({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 3) {
+              return "合计";
+            }
+            if (
+              [
+                "reconciliationAmt",
+                "hasAmt",
+                "unAmt",
+                "rpAmt",
+                "unAmtLeft"
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            return null;
+          })
+        ];
+      },
+      // 收款信息合计
+      payCollection({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (['thisClaimedAmt'].includes(column.property)) {
+              this.checkComputed()
+              return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            return null;
+          })
+        ];
+      },
+      // 核对计算
+      checkComputed() {
+        let sum1 = 0;
+        let sum2 = 0;
+        this.BusinessType.map(item => {
+          sum1 += item.rpAmt * 1;
+        });
+        this.tableData.map(item => {
+          sum2 += item.thisClaimedAmt ? item.thisClaimedAmt * 1 : 0;
+        });
+        this.check = (Math.abs(sum1) - Math.abs(sum2)).toFixed(2);
       }
-    },
-    // 核销单元格编辑状态下被关闭时
-    editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
-      this.$set(this.BusinessType, rowIndex, row);
-      this.checkComputed();
-    },
-    // 核销信息合计
-    offWrite({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 3) {
-            return "合计";
-          }
-          if (
-            [
-              "reconciliationAmt",
-              "hasAmt",
-              "unAmt",
-              "rpAmt",
-              "unAmtLeft"
-            ].includes(column.property)
-          ) {
-            return this.$utils.sum(data, column.property).toFixed(2);
-          }
-          return null;
-        })
-      ];
-    },
-    // 收款信息合计
-    payCollection({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return "合计";
-          }
-          if (['thisClaimedAmt'].includes(column.property)) {
-            this.checkComputed()
-            return this.$utils.sum(data, column.property).toFixed(2);
-          }
-          return null;
-        })
-      ];
-    },
-    // 核对计算
-    checkComputed() {
-      let sum1 = 0;
-      let sum2 = 0;
-      this.BusinessType.map(item => {
-        sum1 += item.rpAmt * 1;
-      });
-      this.tableData.map(item => {
-        sum2 += item.thisClaimedAmt ? item.thisClaimedAmt * 1 : 0;
-      });
-      this.check = (Math.abs(sum1) - Math.abs(sum2)).toFixed(2);
     }
-  }
-};
+  };
 </script>
 <style lang="less" scoped>
-.input {
-  position: relative;
-  left: -26px;
-  bottom: -5px;
-}
-  #border{
-    border:1px solid #00a0e9 !important;
+  .input {
+    position: relative;
+    left: -26px;
+    bottom: -5px;
   }
-/*:edit-render="{name: 'input', attrs: {type: 'number',id:'border'}}"*/
+
+  #border {
+    border: 1px solid #00a0e9 !important;
+  }
+
+  /*:edit-render="{name: 'input', attrs: {type: 'number',id:'border'}}"*/
 </style>
