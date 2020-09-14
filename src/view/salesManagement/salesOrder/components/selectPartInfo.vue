@@ -11,6 +11,9 @@
           <FormItem label="配件名称：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
             <Input disabled v-model="formItemData.fullName" class="w200" placeholder="配件名称"></Input>
           </FormItem>
+          <FormItem label="配件名称：" v-else-if="$route.name == 'bookingSheet'">
+            <Input disabled v-model="formItemData.partName" class="w200" placeholder="配件名称"></Input>
+          </FormItem>
           <FormItem label="配件名称：" v-else>
             <Input disabled v-model="formItemData.partStandardName" class="w200" placeholder="配件名称"></Input>
           </FormItem>
@@ -131,8 +134,10 @@
         if(!this.formItemData.orderQty || this.formItemData.orderQty <= 0) {
           return this.$Message.error("数量不能为空");
         }
-        if(!this.formItemData.orderPrice || this.formItemData.orderPrice < 0) {
-          return this.$Message.error("单价不可为空");
+        if(this.$route.name != 'bookingSheet'){
+          if(!this.formItemData.orderPrice || this.formItemData.orderPrice < 0) {
+            return this.$Message.error("单价不可为空");
+          }
         }
 		    this.searchPartLayer = false;
 		    //this.$parent.$parent.getPartNameList2([this.formItemData]);
