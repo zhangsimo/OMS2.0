@@ -653,7 +653,7 @@ export default {
       let res = await api.findListPageAllReport(params);
 
       if (res.code == 0) {
-        this.tableData = res.data.content;
+        this.tableData = res.data||[];
       }
     }
   }
