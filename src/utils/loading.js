@@ -4,11 +4,10 @@ let loadingCount = 0
 let loading
 
 // 开始loading并且初始化选项
-const startLoading = (select) => {
-  console.log(select)
+const startLoading = (select,title) => {
   loading = Loading.service({
     lock: true,
-    text: '拼命加载中...',
+    text: title,
     background: 'rgba(255, 255, 255, .7)',
     target: document.querySelector(select)
   })
@@ -19,9 +18,9 @@ const endLoading = () => {
   loading.close()
 }
 
-export const showLoading = (select) => {
+export const showLoading = (select, title="拼命加载中...") => {
   if (loadingCount === 0){
-    startLoading(select)
+    startLoading(select,title)
   }
   loadingCount += 1
 }

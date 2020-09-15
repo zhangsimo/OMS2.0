@@ -16,6 +16,7 @@ import ProcurementModal from "../plannedPurchaseOrder/components/ProcurementModa
 import AdjustModel from "../plannedPurchaseOrder/components/AdjustModel.vue";
 import TabsModel from "../plannedPurchaseOrder/components/TabsModel.vue";
 import ApportionmentExpenses from "../plannedPurchaseOrder/components/ApportionmentExpenses.vue";
+import { hideLoading, showLoading } from "../../../utils/loading";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
 @Component({
@@ -488,14 +489,17 @@ export default class InterPurchase extends Vue {
               onOk: async () => {
                 try {
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.saveInterCommit(data);
                   if (res.code == 0) {
                     this.$Message.success("保存成功");
                     this.getListData();
                     this.isAdd = true;
                   }
+                  hideLoading()
                   this.commitLoading = false;
                 } catch (error) {
+                  hideLoading()
                   this.commitLoading = false;
                 }
               },
@@ -507,6 +511,7 @@ export default class InterPurchase extends Vue {
         } else {
           try {
             this.commitLoading = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             let res = await api.saveInterCommit(data);
             if (res.code == 0) {
               this.$Message.success("保存成功");
@@ -514,8 +519,10 @@ export default class InterPurchase extends Vue {
               this.isAdd = true;
             }
             this.commitLoading = false;
+            hideLoading()
           } catch (error) {
             this.commitLoading = false;
+            hideLoading()
           }
         }
       },

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="oper-top flex">
@@ -323,6 +323,8 @@
   import Cookies from "js-cookie";
   import { TOKEN_KEY } from "@/libs/util";
   import * as tools from "../../../../utils/tools";
+  import { hideLoading, showLoading } from "@/utils/loading";
+
   export default {
     name: "ventoryProfit",
     components: {
@@ -701,14 +703,17 @@
           title: "是否确定提交订单",
           onOk: () => {
             this.commitLoading = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             submitVentory(this.formPlan).then(res => {
               if (res.code == 0) {
                 this.$Message.success("提交成功");
                 this.getList();
               }
+              hideLoading()
               this.commitLoading = false;
             }).catch(e => {
               this.commitLoading = false;
+              hideLoading()
             });
           },
           onCancel: () => {

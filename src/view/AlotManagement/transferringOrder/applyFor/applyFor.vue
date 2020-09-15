@@ -1,7 +1,7 @@
 <template>
     <main class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%">
-      <div class="content-oper content-oper-flex">
+      <div class="content-oper content-oper-flex loadingClass">
         <section class="oper-box">
           <div class="oper-top flex">
             <div class="wlf">
@@ -305,6 +305,8 @@
   import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
   import ChangeOrder from "./compontents/changeOrder";
+  import { hideLoading, showLoading } from "@/utils/loading";
+
 
   export default {
       name: "applyFor",
@@ -1206,6 +1208,7 @@
                     }
                     try {
                       this.isCommitClick = true;
+                      showLoading(".loadingClass", "数据加载中，请勿操作")
                       let res = await commit(data);
                       if(!res){
                         this.isCommitClick = false;
@@ -1216,8 +1219,10 @@
                         this.isAdd = true;
                         this.$refs.formPlan.resetFields();
                       }
+                      hideLoading()
                     } catch (error) {
                       this.isCommitClick = false;
+                      hideLoading()
                     }
                   // }else{
                   //   this.$Message.warning('请先编辑收货信息')

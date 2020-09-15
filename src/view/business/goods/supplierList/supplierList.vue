@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
@@ -412,6 +412,9 @@ import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
 import Procurement from "@/components/Procurement";
+import { hideLoading, showLoading } from "@/utils/loading";
+
+
 import {
   optGroup,
   findPageByDynamicQuery,
@@ -1434,14 +1437,17 @@ export default {
             });
             try {
               this.commitLoading = true;
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success("提交成功");
                 this.leftgetList();
                 this.isAdd = true;
               }
+              hideLoading()
               this.commitLoading = false;
             } catch (error) {
+              hideLoading()
               this.commitLoading = false;
             }
           },

@@ -19,6 +19,8 @@ import PrintModel from "./components/print.vue";
 import StatusModal from "./components/checkApprovalModal.vue";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
+import {showLoading, hideLoading} from "@/utils/loading"
+
 @Component({
   components: {
     QuickDate,
@@ -470,6 +472,7 @@ export default class PlannedPurchaseOrder extends Vue {
               onOk: async () => {
                 try {
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.saveCommit(data);
                   if (res.code == 0) {
                     this.$Message.success("提交成功");
@@ -477,8 +480,10 @@ export default class PlannedPurchaseOrder extends Vue {
                     this.isAdd = true;
                   }
                   this.commitLoading = false;
+                  hideLoading()
                 } catch (error) {
                   this.commitLoading = false;
+                  hideLoading()
                 }
               },
               onCancel: () => {
@@ -488,6 +493,7 @@ export default class PlannedPurchaseOrder extends Vue {
           }, 500);
         } else {
           try {
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             this.commitLoading = true;
             let res = await api.saveCommit(data);
             if (res.code == 0) {
@@ -495,8 +501,10 @@ export default class PlannedPurchaseOrder extends Vue {
               this.getListData();
               this.isAdd = true;
             }
+            hideLoading()
             this.commitLoading = false;
           } catch (error) {
+            hideLoading()
             this.commitLoading = false;
           }
         }
