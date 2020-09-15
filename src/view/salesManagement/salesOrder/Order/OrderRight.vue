@@ -481,6 +481,7 @@
   import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
   import AlotModel from "../components/AlotModel"
   import SalesCus from "../../../../components/allocation/salesCus";
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: "OrderRight",
@@ -1303,18 +1304,28 @@
                       }
                       this.$parent.$parent.submitloading = true;
                       this.isClickSave = true;
-                      let res = await getSubmitList(data);
-                      this.isClickSave = false;
-                      if (res.code === 0) {
-                        this.$Message.success("提交成功");
-                        this.$parent.$parent.isAdd = false;
-                        this.$parent.$parent.submitloading = false;
-                        this.$parent.$parent.orderlistType.value = 1;
-                        this.limitList = {};
-                        this.$store.commit("setleftList", res);
-                        this.$refs.formPlan.resetFields();
-                      } else {
-                        this.$parent.$parent.submitloading = false;
+                      try {
+                        this.$parent.$parent.commitLoading = true;
+                        showLoading(".loadingClass", "数据加载中，请勿操作")
+                        let res = await getSubmitList(data);
+                        this.isClickSave = false;
+                        if (res.code === 0) {
+                          this.$Message.success("提交成功");
+                          this.$parent.$parent.isAdd = false;
+                          this.$parent.$parent.submitloading = false;
+                          this.$parent.$parent.orderlistType.value = 1;
+                          this.limitList = {};
+                          this.$store.commit("setleftList", res);
+                          this.$refs.formPlan.resetFields();
+                          hideLoading()
+                          this.$parent.$parent.commitLoading = false;
+                        } else {
+                          this.$parent.$parent.commitLoading = false;
+                          this.$parent.$parent.submitloading = false;
+                          hideLoading()
+                        }
+                      } catch (error) {
+                        
                       }
                     },
                     onCancel: () => {
@@ -1325,20 +1336,32 @@
                 if (this.isClickSave) {
                   return this.$Message.error("请稍后订单处理中...");
                 }
-                this.isClickSave = true;
-                this.$parent.$parent.submitloading = true
-                let res = await getSubmitList(data);
-                this.isClickSave = false;
-                if (res.code === 0) {
-                  this.$Message.success("提交成功");
-                  this.$parent.$parent.isAdd = false;
-                  this.$parent.$parent.submitloading = false;
-                  this.limitList = {};
-                  this.$store.commit("setleftList", res);
-                  this.$refs.formPlan.resetFields();
-                  // this.reload();
-                } else {
-                  this.$parent.$parent.submitloading = false;
+                try {
+                  
+                  this.isClickSave = true;
+                  this.$parent.$parent.submitloading = true
+                  this.$parent.$parent.commitLoading = true
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
+                  let res = await getSubmitList(data);
+                  this.isClickSave = false;
+                  if (res.code === 0) {
+                    this.$Message.success("提交成功");
+                    this.$parent.$parent.isAdd = false;
+                    this.$parent.$parent.submitloading = false;
+                    this.limitList = {};
+                    this.$store.commit("setleftList", res);
+                    this.$refs.formPlan.resetFields();
+                    hideLoading()
+                    this.$parent.$parent.commitLoading = false;
+                    // this.reload();
+                  } else {
+                    this.$parent.$parent.submitloading = false;
+                    hideLoading()
+                    this.$parent.$parent.commitLoading = false;
+                  }
+                } catch (error) {
+                  hideLoading()
+                  this.$parent.$parent.commitLoading = false;
                 }
               }
             } catch (errMap) {

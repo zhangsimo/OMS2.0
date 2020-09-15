@@ -3,7 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%"
   >
-    <div class="content-oper content-oper-flex" style="box-shadow:none">
+    <div class="content-oper content-oper-flex loadingClass" style="box-shadow:none">
       <section class="oper-box">
         <div class="oper-top flex">
           <div class="wlf">
@@ -287,6 +287,8 @@ import PrintShow from "./compontents/PrintShow";
 import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 // import SelectSupplier from './compontents/selectSupplier'
 
 import {
@@ -899,6 +901,7 @@ export default {
             }
             try {
               this.isOutClick = true;
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               let res = await outDataList(params);
               if(!res){
                 this.isOutClick = false;
@@ -909,10 +912,13 @@ export default {
                 this.$Message.success("入库成功");
                 // this.reload();
                 this.isOutClick = false;
+                hideLoading()
                 return;
               }
+              hideLoading()
               this.isOutClick = false;
             } catch (error) {
+              hideLoading()
               this.isOutClick = false;
             }
             if(res && res.message && res.message.indexOf("成功") > -1) {

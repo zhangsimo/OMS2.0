@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="oper-top flex">
@@ -383,6 +383,8 @@ import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import * as tools from "_utils/tools";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 
 export default {
   name: "smsInventory",
@@ -858,13 +860,16 @@ export default {
               );
               this.formPlan.billStatusId = 1;
               this.commitLoading = true;
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               getSubmitList(this.formPlan).then(res => {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getList();
                 }
                 this.commitLoading = false;
+                hideLoading()
               }).catch(e => {
+                hideLoading()
                 this.commitLoading = false;
               });
             } else {

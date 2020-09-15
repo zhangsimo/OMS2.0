@@ -3,7 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%"
   >
-    <div class="content-oper content-oper-flex" style="box-shadow:none">
+    <div class="content-oper content-oper-flex loadingClass" style="box-shadow:none">
       <section class="oper-box">
         <div class="oper-top flex">
           <div class="wlf">
@@ -506,6 +506,8 @@
     getListDetail
   } from "@/api/AlotManagement/stockRemoval.js";
   import * as tools from "_utils/tools";
+  import { hideLoading, showLoading } from "@/utils/loading";
+
 
   import {queryByOrgid} from "../../../../api/AlotManagement/transferringOrder";
   import AllocationCus from "../../../../components/allocation/allocationCus";
@@ -1111,6 +1113,7 @@
               return this.$message.error('请稍后数据处理中....');
             }
             this.isCommitClick = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             tijiao(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
@@ -1121,11 +1124,14 @@
                   this.$Message.success("提交成功");
                   this.$refs.formPlan.resetFields();
                   this.isCommitClick = false;
+                  hideLoading()
                 }else{
                   this.isCommitClick = false;
+                  hideLoading()
                 }
               }).catch(e => {
                 this.isCommitClick = false;
+                hideLoading()
               })
             // .catch(e => {
             //   this.$Message.info("提交失败");

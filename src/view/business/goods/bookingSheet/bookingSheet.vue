@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -364,6 +364,8 @@ import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 // import supplier from './compontents/supplier'
 import Cookies from "js-cookie";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 import {
   optGroup,
   deleteit,
@@ -1203,6 +1205,7 @@ export default {
                     data.remark = this.formPlan.remark;
                     data.detailVOList = this.Right.tbdata;
                     this.commitLoading = true;
+                    showLoading(".loadingClass", "数据加载中，请勿操作")
                     commitOrder(data).then((res) => {
                       if (res.code === 0) {
                         this.$message.success("提交成功！");
@@ -1213,10 +1216,13 @@ export default {
                           (this.Right.tbdata = []);
                         this.Flaga = true;
                         this.commitLoading = false;
+                        hideLoading()
                       } else {
                         this.commitLoading = false;
+                        hideLoading()
                       }
                     }).catch(e => {
+                      hideLoading()
                       this.commitLoading = false;
                     });
                   } else {
