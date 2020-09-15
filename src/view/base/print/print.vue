@@ -904,7 +904,7 @@
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 12px;">
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>制单人:</span>
-            <span>{{onelist.apply.orderMan}}</span>
+            <span>{{onelist.apply.createUname}}</span>
           </Col>
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>提交人:</span>
@@ -1887,11 +1887,11 @@
               data.orgId = order.orgId
               data.guestId = order.guestId
               res = await Printing(data);
-              res.data.orderDetailList.map((item, index) => {
-                item.num = index + 1;
-              });
               if (res.code == 0) {
                 this.onelist = res.data;
+                res.data.orderDetailList.map((item, index) => {
+                  item.num = index + 1;
+                });
                 this.onelist.name = order.name || ""
                 this.onelist.detailList = res.data.orderDetailList
               }
