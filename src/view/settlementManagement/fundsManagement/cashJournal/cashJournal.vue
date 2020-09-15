@@ -446,6 +446,8 @@
       },
       // 切换tabs
       clickTabs(data) {
+        this.page.num = 1;
+        this.page.size = 10;
         this.getList()
       },
       //获取表格信息
