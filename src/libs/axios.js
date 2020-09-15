@@ -129,7 +129,7 @@ class httpRequest {
           setTimeout(function () {
             Cookies.remove(TOKEN_KEY)
             window.location.href = '/login'
-          },150000)
+          },1500)
           return false
         }
       }
