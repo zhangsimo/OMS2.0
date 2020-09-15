@@ -935,20 +935,21 @@
     },
     methods: {
       //计划结算类型
-      totalvalue() {
+      totalvalueFun() {
         if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
           if (this.Reconciliationtotal > 0) {
             this.info = false;
-            return this.totalvalue="1";
+            this.totalvalue="1";
           } else if (this.Reconciliationtotal < 0) {
             this.info = true;
-            return  this.totalvalue="0";
+            this.totalvalue="0";
           } else {
             this.info = false;
-            return  this.totalvalue="2";
+            this.totalvalue="2";
           }
         } else {
-          return  this.totalvalue="1";
+          this.info = false;
+          this.totalvalue="1";
         }
       },
       pageChange({type, currentPage, pageSize, $event}) {
@@ -1403,7 +1404,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
         // this.tipText(this.paymentlist);
       },
       // 应收选中
@@ -1418,7 +1419,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
         // this.tipText(this.collectlist);
       },
       // 应收全选
@@ -1431,7 +1432,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
         // this.tipText(this.collectlist);
       },
       //选中提醒
@@ -1468,7 +1469,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
         // this.tipText(this.paymentlist);
       },
       // 应付取消选中
@@ -1478,7 +1479,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
@@ -1487,7 +1488,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
       },
       // 应付取消全选
       paymentNoCheckoutAll() {
@@ -1497,7 +1498,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
       },
       // 应收取消全选
       collectNoCheckoutAll() {
@@ -1507,7 +1508,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-        this.totalvalue();
+        this.totalvalueFun();
       },
       // 本次不对帐金额弹窗
       async noReconciliation() {
@@ -1556,6 +1557,8 @@
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
             this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
+            this.totalcollect = sum1
+            this.Actualtotalcollect = sum1
           } else {
             let sum1 = 0
             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1580,6 +1583,8 @@
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
             this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
+            this.totalpayment = sum1
+            this.Actualtotalpayment = sum1
           }
           this.Reconciliation = false;
         } else {
