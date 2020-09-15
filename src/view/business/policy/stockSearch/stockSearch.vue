@@ -988,7 +988,7 @@ export default {
       this.loading1 = true;
       this.contentOne.dataOne = [];
       try {
-        
+
         showLoading('.loadingClass');
         let res = await getAllStock(data);
         this.loading1 = false;
@@ -1011,7 +1011,7 @@ export default {
             xtable.setFilter(column, this.bands1);
             xtable.updateData();
           })
-  
+
           // this.columnsPart[6].filters = this.bands1;
           this.getColumns();
         }
@@ -1072,7 +1072,7 @@ export default {
       this.loading2 = true;
       this.contentTwo.dataTwo = [];
       try {
-        
+
         showLoading('.loadingClass');
         let res = await getLotStock(data);
         this.loading2 = false;
@@ -1364,7 +1364,7 @@ export default {
           this.hspage.total = rep.data.data.total;
         }
         hideLoading()
-        
+
       } catch (error) {
         hideLoading()
       }
@@ -1469,7 +1469,8 @@ export default {
       }
       let rep = await setPosition(this.formPlan2)
       if(rep.code==0){
-        this.positionModel = true;
+        this.positionModel = false;
+        this.$message.success("仓位设置成功!");
         this.formPlan2 = {};
         this.getAllStocks();
 

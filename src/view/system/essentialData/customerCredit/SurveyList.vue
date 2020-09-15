@@ -98,6 +98,8 @@
             :headers="headers"
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
+            :max-size="1 * 1024"
+            :on-exceeded-size="handleMaxSize"
           >
             <Button class="uploadbtn">上传</Button>
           </Upload>
@@ -459,6 +461,13 @@ export default {
         //console.log(this.data.businessName);
       }
       // 二
+    },
+    // 执行方法
+    handleMaxSize (file) {
+      this.$Notice.warning({
+        title: '文件大小超限',
+        desc: '文件  ' + file.name + ' 太大，上传文件大小不能超过1M.'
+      });
     },
     // 上传前
     handleBeforeUpload2() {
