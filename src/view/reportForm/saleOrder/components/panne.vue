@@ -133,12 +133,12 @@
 <!--getWares-->
 <script>
   import moment from "moment";
-  import QuickDate from "_c/getDate/dateget";
+  import QuickDate from "_c/getDate/dateget_noEmit";
   import more from "./more";
   import * as api from "_api/reportForm/index.js";
   import {creat} from "@/view/settlementManagement/components";
   import {getBrandList, getWares} from "@/view/reportForm/until.js"
-
+  import {ToDayStr} from "_c/getDate/index_bill.js"
   export default {
     components: {QuickDate, more},
     props: {
@@ -155,7 +155,7 @@
         quickDates: [], // 快速日期查询
         search: {
           isPanne: true,
-          auditDate: [], // 提交日期
+          auditDate: ToDayStr(), // 提交日期
           content: "", // 编码名称
           partBrand: "", // 品牌
           guestFullName: "", // 客户
@@ -193,13 +193,22 @@
           this.stores.push({id: key, name: data[key]})
         })
       }
+      var arr = await creat("", this.$store);
+      this.search.orgid = arr[1];
+      this.getWares(this.search.orgid)
+      this.query()
     },
     methods: {
       select1(option) {
         this.search.partBrand = option.value;
       },
       async partBrandRemote(query) {
-        let queryName=query.slice(0,query.length-1)
+        var queryName=query
+        if(query==""){
+          queryName=""
+        }else{
+          queryName=query.trim()
+        }
         this.bandArr = await getBrandList(queryName)
       },
       //获取仓库
@@ -209,25 +218,11 @@
       // 快速日期查询
       async getDataQuick(v) {
         this.search.auditDate = v;
-        console.log(this.search.auditDate,11111)
-        if (v.length >= 2) {
-          let arr = await creat("", this.$store);
+        if(this.selectShopList){
+          var arr = await creat("", this.$store);
           this.search.orgid = arr[1];
-          this.search.content = "";
-          this.search.guestFullName = "";
-          this.search.storeId = "";
-          this.search.partBrand = ""
-          this.getWares(this.search.orgid)
-          this.$emit("search", {isPanne: true, startTime: v[0], endTime: v[1], orgid: this.search.orgid});
-        } else {
-          let arr = await creat("", this.$store);
-          this.search.orgid = arr[1];
-          this.search.content = "";
-          this.search.guestFullName = "";
-          this.search.storeId = "";
-          this.search.partBrand = ""
-          this.$emit("search", {isPanne: true, orgid: this.search.orgid});
         }
+        this.query();
       },
       getDataQuick2(v){
         this.search.auditDate = v;

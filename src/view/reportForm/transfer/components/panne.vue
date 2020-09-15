@@ -92,7 +92,8 @@
 
 <script>
 import moment from "moment";
-import QuickDate from "_c/getDate/dateget";
+import QuickDate from "_c/getDate/dateget_noEmit";
+import {ToDayStr} from "_c/getDate/index_bill.js"
 import more from "./more";
 import * as api from "_api/reportForm/index.js";
 import { creat } from "@/view/settlementManagement/components";
@@ -116,7 +117,7 @@ export default {
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
-        auditDate: [], // 提交日期
+        auditDate: ToDayStr(), // 提交日期
         content: "", // 编码名称
         guestId: "", // 调出方
         orgid:"",
@@ -145,7 +146,6 @@ export default {
     // let resS = await api.getSupplier();
     let resE = await api.getStorelist();
     if (resS.code == 0) {
-      console.log(resS , 7879)
       this.outArr = resS.data.content||[];
       // this.outArr = resS.data||[];
     }
@@ -155,6 +155,10 @@ export default {
           this.stores.push({id: key, name: data[key]})
         })
     }
+    var arr = await creat("", this.$store);
+    this.search.orgid = arr[1];
+    this.getWares(this.search.orgid)
+    this.query()
   },
   methods: {
     async getWares(orgId) {
@@ -163,18 +167,11 @@ export default {
     // 快速日期查询
     async getDataQuick(v) {
       this.search.auditDate = v;
-      if(v.length >= 2) {
-        let arr = await creat("", this.$store);
+      if(this.selectShopList){
+        var arr = await creat("", this.$store);
         this.search.orgid = arr[1];
-        this.search.content="";this.search.guestId="";this.search.storeId="";
-        this.getWares(this.search.orgid)
-        this.$emit("search", { isPanne: true, createTimeStart: v[0], createTimeEnd: v[1] , orgid:this.search.orgid });
-      } else {
-        let arr = await creat("", this.$store);
-        this.search.orgid = arr[1];
-        this.search.content="";this.search.guestId="";this.search.storeId=""
-        this.$emit("search", { isPanne: true, orgid:this.search.orgid});
       }
+      this.query();
     },
     getDataQuick2(v){
       this.search.auditDate = v;
