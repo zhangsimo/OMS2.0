@@ -1557,6 +1557,8 @@
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
             this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
+            this.totalcollect = sum1
+            this.Actualtotalcollect = sum1
           } else {
             let sum1 = 0
             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1581,6 +1583,8 @@
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
             this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
+            this.totalpayment = sum1
+            this.Actualtotalpayment = sum1
           }
           this.Reconciliation = false;
         } else {
