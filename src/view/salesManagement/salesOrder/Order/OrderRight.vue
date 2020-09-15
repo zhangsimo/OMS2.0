@@ -1231,18 +1231,22 @@
                     this.$parent.$parent.submitloading = true
                     data.planSendDate = tools.transTime(data.planSendDate)
                     data.planArriveDate = tools.transTime(data.planArriveDate)
+                    showLoading(".loadingClass", "数据加载中，请勿操作")
                     let res = await getStockOut(data);
                     if (res.code === 0) {
                       this.$Message.success("出库成功");
                       this.$store.commit("setleftList", res);
                       this.door.outStockDoor = true;
                       this.$parent.$parent.submitloading = false
+                      hideLoading()
                       return res;
                     } else {
                       this.door.outStockDoor = true;
                       this.$parent.$parent.submitloading = false
                     }
+                    hideLoading()
                   } catch (errMap) {
+                    hideLoading()
                     this.$XModal.message({
                       status: "error",
                       message: "表格校验不通过！"
