@@ -414,16 +414,7 @@
       let boolParams=false;//四个判断条件最少有一个
       params.size = this.page.size;
       params.page = this.page.num - 1;
-      if(!this.partName || this.partName.trim()==""){
-        boolParams=true
-      }
-      if(!this.partId || this.partId.trim()==""){
-        boolParams=true
-      }
-      if(!this.partCode || this.partCode.trim()==""){
-        boolParams=true
-      }
-      if(!this.oemCode || this.oemCode.trim()==""){
+      if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
         boolParams=true
       }
       if(boolParams){
