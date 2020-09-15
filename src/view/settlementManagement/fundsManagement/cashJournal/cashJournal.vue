@@ -454,8 +454,8 @@
         let data = {};
         let params = {}
         data.signs=1;//区别现金日记账
-        params.page = 0;
-        params.size = 9999;
+        params.page = this.page.num - 1
+        params.size = this.page.size
         data.startTime = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD")
           : "";
