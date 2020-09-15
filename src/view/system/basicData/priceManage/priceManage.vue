@@ -449,6 +449,12 @@ export default {
       if (this.part.oemCode.trim()) {
         data.oemCode = this.part.oemCode.trim()
       }
+      if (this.part.partInner.trim()) {
+        data.partId = this.part.partInner
+      }
+      if (this.part.oemCode.trim()) {
+        data.oemCode = this.part.oemCode
+      }
       params.strategyId = this.currRow.id;
       params.page = this.part.page.num - 1;
       params.size = this.part.page.size;
