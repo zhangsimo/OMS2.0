@@ -208,7 +208,7 @@ export default {
                 let state = params.row.isGuestResearch;
                 let zi = "";
                 if (state === 0) {
-                  zi = "否";
+                  JSON.parse(params.row.researchStatus).value==4?zi=JSON.parse(params.row.researchStatus).name:zi = "否";
                 }
                 if (state === 1) {
                   zi = "是";

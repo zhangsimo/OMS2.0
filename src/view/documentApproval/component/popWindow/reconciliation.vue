@@ -715,7 +715,7 @@
               this.infoBase.otherFees=0;
             }
           }
-          this.getAccountNameList();
+          this.getAccountNameList("0");
         } else {
           getReconciliationNo({id: this.id}).then(res => {
             res.data.one.map(item => {
