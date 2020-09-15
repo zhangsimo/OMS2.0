@@ -1228,6 +1228,10 @@
       },
       //打印表格
       printTable() {
+        if(this.$refs.goodsInfo.formDateRight.streetAddress==""){
+          this.$Message.error("请先编辑地址信息")
+          return
+        }
         let order = {};
         order.name="调拨出库"
         order.route=this.$route.name
