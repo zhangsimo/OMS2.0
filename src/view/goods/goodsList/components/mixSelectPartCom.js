@@ -193,16 +193,7 @@ export const mixSelectPartCom = {
       data.partInnerId = this.partId
       data.partCode = this.partCode
       data.oeCode = this.oemCode
-      if(!this.partName || this.partName.trim()==""){
-        boolParams=true
-      }
-      if(!this.partId || this.partId.trim()==""){
-        boolParams=true
-      }
-      if(!this.partCode || this.partCode.trim()==""){
-        boolParams=true
-      }
-      if(!this.oemCode || this.oemCode.trim()==""){
+      if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
         boolParams=true
       }
       if(boolParams){

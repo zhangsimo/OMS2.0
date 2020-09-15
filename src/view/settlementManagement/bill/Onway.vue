@@ -46,6 +46,20 @@
       <div class="inner-box">
         <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary :summary-method="handleSummary" max-height="500"></Table>
       </div>
+      <div class="clearfix">
+        <Page
+          class-name="fr mb10 mt10"
+          size="small"
+          :current="page.num"
+          :total="page.total"
+          :page-size="page.size"
+          :page-size-opts="page.sizeArr"
+          @on-change="changePage"
+          @on-page-size-change="changeSize"
+          show-sizer
+          show-total
+        ></Page>
+      </div>
     </section>
     <selectDealings ref="selectDealings" @selectSearchName="getOne" />
   </div>
@@ -482,6 +496,12 @@ export default {
           }
         }
       ],
+      page: {
+        total: 0,
+        sizeArr: [10, 20, 30, 40, 50],
+        size: 10,
+        num: 1
+      },
       data: [],
        company: "", //往来单位
       companyId: "", //往来单位id
@@ -504,6 +524,15 @@ export default {
     }
   },
   methods: {
+    changePage(p) {
+      this.page.num = p;
+      this.getGeneral();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getGeneral();
+    },
     //获取门店
     async getShop(){
       let data ={}
@@ -590,20 +619,23 @@ export default {
     },
     // 总表查询
     getGeneral() {
-      let data={
+      let params = {
+        size: this.page.size,
+        page: this.page.num - 1,
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
         endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59" : '',
         orgid:this.model1,
         code:this.fno,
         guestId:this.company?this.companyId:""
       }
-      getOnWay(data).then(res => {
-        if(res.data.length !==0){
-          res.data.map((item,index)=>{
+      getOnWay(params).then(res => {
+        if(res.data.content.length !==0){
+          res.data.content.map((item,index)=>{
             item.index = index +1
             item.taxSign = item.taxSign ? '是' : '否'
           })
-          this.data = res.data
+          this.data = res.data.content
+          this.page.total=res.data.totalElements
         } else {
           this.data = []
         }
