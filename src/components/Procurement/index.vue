@@ -30,7 +30,7 @@
           <span class="mr5">OE:</span>
           <el-input placeholder="OE码" style="width: 100px" v-model="oemCode" @change="query"/>
         </div>
-        
+
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
           <Select  v-model="partBrand" filterable style="width:140px" class="mr20" @on-change="SelectChange">
@@ -239,7 +239,7 @@
       // tableRef.recalculate(true)
       this.$nextTick(() => (this.$refs.input as any).focus());
       this.reset();
-      this.getPchsPlanList();
+      // this.getPchsPlanList();
       this.shows = true;
     }
 
@@ -411,8 +411,25 @@
         guestId: this.guestId,
         storeId: this.storeId,
       };
+      let boolParams=false;//四个判断条件最少有一个
       params.size = this.page.size;
       params.page = this.page.num - 1;
+      if(!this.partName || this.partName.trim()==""){
+        boolParams=true
+      }
+      if(!this.partId || this.partId.trim()==""){
+        boolParams=true
+      }
+      if(!this.partCode || this.partCode.trim()==""){
+        boolParams=true
+      }
+      if(!this.oemCode || this.oemCode.trim()==""){
+        boolParams=true
+      }
+      if(boolParams){
+        this.$Message.error("最少有一个筛选条件")
+        return false
+      }
       let data: any = {
         partId: this.partId,
         partName: this.partName,
