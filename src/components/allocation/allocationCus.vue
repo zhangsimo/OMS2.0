@@ -14,7 +14,7 @@
           ref="scrollbar"
           class=" w200 fs12"
           v-show="options.length>0">
-          <p class="el-select-menu-item" @click="selectItem(item)" v-for="item in options" :key="item.id" :title="item.name">{{item.name}}</p>
+          <p class="el-select-menu-item" @click="selectItem(item)" v-for="item in options" :key="item.id" :title="item.name">{{item.shortName}}</p>
           <p></p>
         </el-scrollbar>
         <template v-show="options.length==0">
@@ -81,7 +81,7 @@
         });
       },
       selectItem(v){
-        this.isLayerValue = v.fullName||"";
+        this.isLayerValue = v.shortName||"";
         this.onBlur();
         this.$emit("throwName",v);
       },

@@ -48,7 +48,7 @@ export function conversionListNoNum(val){
         partBrand : data.partBrand || '',
         carBrandName : data.adapterCarBrand || '',
         carModelName : data.adapterCarModel|| '',
-        spec : data.specifications || '',
+        spec : data.specifications || data.spec || '',
         unit : data.minUnit || '',
         carTypef : data.baseType ? data.baseType.firstType ? data.baseType.firstType.typeName ? data.baseType.firstType.typeName : '' : '' :'',
         carTypes : data.baseType ? data.baseType.secondType ?data.baseType.secondType.typeName ? data.baseType.secondType.typeName : '':'':'',

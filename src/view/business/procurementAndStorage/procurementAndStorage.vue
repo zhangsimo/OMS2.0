@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%" class="bigBox">
+  <div style="height:100%" class="bigBox loadingClass">
     <div class="headerBox">
       <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
       <Select v-model="orderType" style="width:100px" class="mr10" @on-change="selectTypetList">

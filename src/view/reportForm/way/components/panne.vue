@@ -54,6 +54,7 @@
               class="w120"
               placeholder="请选择分店"
               filterable clearable
+              :disabled="selectShopList"
             >
               <Option
                 v-for="item in stores"
@@ -75,8 +76,11 @@
 
 <script>
 import moment from "moment";
-import QuickDate from "_c/getDate/dateget";
+import QuickDate from "_c/getDate/dateget_noEmit";
+import {ToDayStr} from "_c/getDate/index_bill.js"
 import * as api from "_api/reportForm/index.js";
+import {creat} from "@/view/settlementManagement/components";
+
 export default {
   components: { QuickDate },
   props: {
@@ -92,7 +96,7 @@ export default {
       quickDates: [], // 快速日期查询
       search: {
         serviceId: "", // 出库单号
-        submitDate: [], // 提交日期
+        submitDate: ToDayStr(), // 提交日期
         content: "", // 编码名称
         guestId: "", // 供应商
         storeId: "" // 门店
@@ -111,16 +115,28 @@ export default {
           this.stores.push({value: key, name: data[key]})
         })
     }
+    var arr = await creat("", this.$store);
+    this.search.storeId = arr[1];
+  },
+  computed: {
+    selectShopList() {
+      if (this.$store.state.user.userData.currentCompany != null) {
+        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+      } else {
+        return true
+      }
+    }
   },
   methods: {
     // 快速日期查询
-    getDataQuick(v) {
+    async getDataQuick(v) {
       this.search.submitDate = v;
-      if(v.length >= 2) {
-        this.$emit("search", { allotFinishedStartDate: v[0], allotFinishedEndDate: v[1] });
-      } else {
-        this.$emit("search", {});
+      this.search.auditDate = v;
+      if(this.selectShopList){
+        var arr = await creat("", this.$store);
+        this.search.orgid = arr[1];
       }
+      this.query();
     },
     // 查询
     query() {

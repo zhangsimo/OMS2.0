@@ -1,5 +1,5 @@
 <template>
-  <div class="warps content-oper content-oper-flex" id="parent2">
+  <div class="warps content-oper content-oper-flex loadingClass" id="parent2">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
@@ -178,6 +178,7 @@ import {
   getLeftList,
   getprintList
 } from "@/api/salesManagment/salesOrder";
+import {showLoading, hideLoading} from "@/utils/loading"
 import * as tools from "_utils/tools";
 
 export default {

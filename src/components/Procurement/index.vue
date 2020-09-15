@@ -2,7 +2,7 @@
   <Modal
     title="添加配件"
     v-model="shows"
-    :styles="{ top: '50px', width: '1500px' }"
+    :styles="{ top: '50px', width: '1200px' }"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
@@ -16,21 +16,21 @@
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <el-input autofocus ref="input" style="width: 160px" placeholder="请输入编码" v-model="partCode" @change="query"/>
+          <el-input autofocus ref="input" style="width: 100px" placeholder="编码" v-model="partCode" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <el-input placeholder="请输入内码" style="width: 160px" v-model="partId" @change="query"/>
+          <el-input placeholder="内码" style="width: 100px" v-model="partId" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <el-input placeholder="请输入名称" style="width: 160px" v-model="partName" @change="query"/>
+          <el-input placeholder="名称" style="width: 100px" v-model="partName" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <el-input placeholder="请输入OE码" style="width: 160px" v-model="oemCode" @change="query"/>
+          <el-input placeholder="OE码" style="width: 100px" v-model="oemCode" @change="query"/>
         </div>
-        
+
         <!-- <div class="db mr5">
           <span class=" mr5">品牌:</span>
           <Select  v-model="partBrand" filterable style="width:140px" class="mr20" @on-change="SelectChange">
@@ -239,7 +239,7 @@
       // tableRef.recalculate(true)
       this.$nextTick(() => (this.$refs.input as any).focus());
       this.reset();
-      this.getPchsPlanList();
+      // this.getPchsPlanList();
       this.shows = true;
     }
 
@@ -411,8 +411,16 @@
         guestId: this.guestId,
         storeId: this.storeId,
       };
+      let boolParams=false;//四个判断条件最少有一个
       params.size = this.page.size;
       params.page = this.page.num - 1;
+      if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
+        boolParams=true
+      }
+      if(boolParams){
+        this.$Message.error("最少有一个筛选条件")
+        return false
+      }
       let data: any = {
         partId: this.partId,
         partName: this.partName,

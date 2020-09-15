@@ -7,8 +7,8 @@
     <div class="bigbox">
       <div class="clearfix">
         <div class="fr">
-          <Button class="mr10" v-if="!modelType" @click="save(0)">保存草稿</Button>
-          <Button class="mr10" v-noresub v-if="!modelType" @click="save(1)">提交申请</Button>
+          <Button class="mr10" v-if="!modelType" :loading="saveDis" @click="save(0)">保存草稿</Button>
+          <Button class="mr10" v-noresub v-if="!modelType" :loading="saveDis"  @click="save(1)">提交申请</Button>
           <Button class="mr10" @click="model =false">取消</Button>
         </div>
       </div>

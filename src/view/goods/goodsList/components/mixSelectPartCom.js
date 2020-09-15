@@ -178,6 +178,7 @@ export const mixSelectPartCom = {
       this.loading = true;
       let data = {};
       let params = {}
+      let boolParams=false;
       params.page = this.page.num - 1;
       params.size = this.page.size;
       data.typeId = this.selectTreeItem.typeId;
@@ -192,6 +193,14 @@ export const mixSelectPartCom = {
       data.partInnerId = this.partId
       data.partCode = this.partCode
       data.oeCode = this.oemCode
+      if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
+        boolParams=true
+      }
+      if(boolParams){
+        this.$Message.error("最少有一个筛选条件")
+        this.loading = false;
+        return false
+      }
       let formData = {};
       for (let k in data) {
         if (data[k] && data[k].trim()) {

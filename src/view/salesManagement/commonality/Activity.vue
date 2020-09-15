@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showInfo" title="选择活动" width="1300">
+  <Modal v-model="showInfo" class="activity-model" title="选择活动" width="1300">
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
@@ -17,7 +17,7 @@
       </div>
       <div class="main clearfix">
         <vxe-table
-          height='200'
+          height='350'
           border
           resizable
           auto-resize
@@ -126,7 +126,6 @@
                 data.partName = this.Outform.partCode
                let res = await getActivity(data)
                   if(res.code === 0){
-                      console.log(res)
                       this.tableDataBottom = res.data
                   }
            },

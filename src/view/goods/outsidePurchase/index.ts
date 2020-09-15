@@ -22,6 +22,7 @@ import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
 import GoodCus from "_c/allocation/GoodCus.vue"
 import { checkStore } from "@/api/system/systemApi";
+import { hideLoading, showLoading } from "@/utils/loading";
 
 @Component({
   components: {
@@ -539,6 +540,7 @@ export default class OutsidePurchase extends Vue {
                 try {
                   this.isClickSave = true;
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.outsideSaveCommit(data);
                   if (res.code == 0) {
                     this.$Message.success('保存成功');
@@ -546,10 +548,12 @@ export default class OutsidePurchase extends Vue {
                     this.getListData();
                     this.isAdd = true;
                   }
+                  hideLoading()
                   this.isClickSave = false;
                   this.commitLoading = false;
                 } catch (error) {
                   this.commitLoading = false;
+                  hideLoading()
                 }
               },
               onCancel:() => {
@@ -561,6 +565,7 @@ export default class OutsidePurchase extends Vue {
           try {
             this.isClickSave = true;
             this.commitLoading = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             let res = await api.outsideSaveCommit(data);
             if (res.code == 0) {
               this.$Message.success('保存成功');
@@ -568,10 +573,12 @@ export default class OutsidePurchase extends Vue {
               this.getListData();
               this.isAdd = true;
             }
+            hideLoading()
             this.isClickSave = false;
             this.commitLoading = false;
           } catch (error) {
             this.commitLoading = false;
+            hideLoading()
             this.isClickSave = false;
           }
         }

@@ -23,19 +23,19 @@
       </Row>
       <h4 class="mb10 mt10">对账单明细</h4>
     </div>
-    <button
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       @click="preservation"
       :disabled="modelType.type==3"
-    >保存草稿</button>
-    <button
+      :loading="preDis"
+    >保存草稿</Button>
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       @click="submission"
       :disabled="modelType.type==3"
+      :loading="preDis"
       v-noresub
-    >提交申请</button>
+    >提交申请</Button>
 <!--    <button-->
 <!--      class="ivu-btn ivu-btn-default mr10"-->
 <!--      type="button"-->
@@ -284,6 +284,7 @@ export default {
         applyTime: "",
         paymentOrgName: ""
       }, //所有数据对象
+      preDis:false,//保存草稿按钮接口没有返回不可点击
       parameter: {}, //销售单参数
       information: {}, //基本信息数据
       approvalTit: "开票申请流程", //审批流程
@@ -911,10 +912,14 @@ export default {
             info,
             this.invoice
           );
+          this.preDis=true;
           saveDraft(obj).then(res => {
             if (res.code === 0) {
               this.$message.success("保存成功");
               this.modal1 = false;
+              this.preDis=false;
+            }else{
+              this.preDis=false;
             }
           });
         }
@@ -940,10 +945,14 @@ export default {
             info,
             this.invoice
           );
+          this.preDis=true;
           submitDraft(obj).then(res => {
             if (res.code === 0) {
+              this.preDis=false;
               this.$message.success("提交成功");
               this.modal1 = false;
+            }else{
+              this.preDis=false;
             }
           });
         }

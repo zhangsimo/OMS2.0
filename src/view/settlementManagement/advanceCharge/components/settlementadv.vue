@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="Settlement" title="对账单收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
-      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+      <Button class="ivu-btn ivu-btn-default mr10" @click="conserve" :loading="conserveDis">保存</Button>
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
@@ -139,6 +139,7 @@ export default {
   data() {
     return {
       Settlement: false, //弹框显示
+      conserveDis:false,//保存接口返回之前按钮不可点击
       check: 0,
       remark: "",
       reconciliationStatement: {
@@ -337,11 +338,15 @@ export default {
         });
         if (this.gettlementData.sign == 4) {
           // 预付款核销
+          this.conserveDis=true;
           let res = await api.addAll(data);
           if (res.code == 0) {
+            this.conserveDis=false;
             this.Settlement = false;
             this.$emit("getNewList", {});
             return this.$message.success("核销成功");
+          }else{
+            this.conserveDis=false;
           }
         }
         if (this.gettlementData.sign == 5) {
@@ -361,11 +366,15 @@ export default {
             };
             data.three.push(item);
           });
+          this.conserveDis=true;
           let res = await api.addAll(data);
           if (res.code == 0) {
+            this.conserveDis=false
             this.Settlement = false;
             this.$emit("getNewList", {});
             return this.$message.success("收回认领成功");
+          }else{
+            this.conserveDis=false
           }
         }
         if (this.gettlementData.sign == 9) {
@@ -385,11 +394,16 @@ export default {
             };
             data.three.push(item);
           });
+          this.conserveDis=true;
           let res = await api.addAll(data);
           if (res.code == 0) {
+            this.conserveDis=false;
             this.Settlement = false;
             this.$emit("getNewList", {});
+            this.$emit("reloadParList")
             return this.$message.success("预付款认领成功");
+          }else{
+            this.conserveDis=false;
           }
         }
       } else {

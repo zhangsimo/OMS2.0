@@ -3,7 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%"
   >
-    <div class="content-oper content-oper-flex" style="box-shadow:none">
+    <div class="content-oper content-oper-flex loadingClass" style="box-shadow:none">
       <section class="oper-box">
         <div class="oper-top flex">
           <div class="wlf">
@@ -216,10 +216,10 @@
                     title="入库仓位"
                     width="100"
                   >
-                    <!--<template v-slot:edit="{ row,rowIndex }">-->
-                      <!--<vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>-->
-                    <!--</template>-->
-                    <!--<template v-slot="{ row }">{{ row.storeShelf }}</template>-->
+                    <template v-slot:edit="{ row,rowIndex }">
+                      <vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>
+                    </template>
+                    <template v-slot="{ row }">{{ row.storeShelf }}</template>
                   </vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
@@ -287,6 +287,8 @@ import PrintShow from "./compontents/PrintShow";
 import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 // import SelectSupplier from './compontents/selectSupplier'
 
 import {
@@ -298,10 +300,12 @@ import {
   chengping,
   cangkulist2,
   outDataList,
-  getListDetail
+  getListDetail,
+  getDBSQlist
 } from "@/api/AlotManagement/putStorage.js";
 
 import { queryByOrgid,validityPosition } from "../../../../api/AlotManagement/transferringOrder";
+import { checkStore } from "@/api/system/systemApi";
 export default {
   name: "putStorage",
   inject: ["reload"],
@@ -335,6 +339,7 @@ export default {
     }
 
     return {
+      isSelfOk: true,//效验仓位
       showSelf: true,
       propPageObj:{},
       Status: 0,
@@ -653,13 +658,19 @@ export default {
       this.getList();
     },
     blurFun(pos,index){
-      let req = {
-        "storeId":this.Leftcurrentrow.storeId,
-        "name":pos
+      if (pos == "") {
+        this.isSelfOk = true;
+      } else {
+        checkStore({ storeId: this.Leftcurrentrow.storeId, name: pos }).then(
+          res => {
+            if (res.code == 0 && res.data != null) {
+              this.isSelfOk = true;
+            } else {
+              this.isSelfOk = false;
+            }
+          }
+        );
       }
-      validityPosition(req).then(res => {
-
-      })
     },
     getArrayFun(data) {
       this.ArrayValue = data;
@@ -720,6 +731,10 @@ export default {
         return;
       }
 
+      if (!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!");
+      }
+
       const errMap = await this.$refs.xTable1.validate().catch(errMap => errMap)
       if (errMap) {
         return
@@ -729,12 +744,12 @@ export default {
       if (params.xinzeng) {
         delete params.status;
       }
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
-          params.guestOrgid = this.getArray[i].isInternalId;
-          params.guestId = this.getArray[i].id;
-        }
-      }
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == this.Leftcurrentrow.guestName) {
+      //     params.guestOrgid = this.getArray[i].isInternalId;
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
 
       if (params.status && params.status.name) {
         params.status = params.status.value;
@@ -746,6 +761,8 @@ export default {
         params.settleStatus = params.settleStatus.value;
       }
       params["voList"] = this.ArrayValue;
+
+
       this.isSaveClick = true;
       //配件组装保存
       baocun(params)
@@ -823,15 +840,15 @@ export default {
       this.$refs.addInCom.init();
       this.$refs.addInCom.dcName=""
       let showSelf = this.$refs.addInCom.showSelf;
-      let data = { enterSelect: 123, orderTypeId: "ALLOT_APPLY" };
+      let data = { };//enterSelect: 123, orderTypeId: "ALLOT_APPLY"
       if(showSelf) {
         let createUid = this.$store.state.user.userData.id;
         data.createUid = createUid;
       } else {
         Reflect.deleteProperty(data, "createUid")
       }
-      data.status = "STOCKING";
-      chengping(data, 10, 1)
+      // data.status = "STOCKING";
+      getDBSQlist(data, 10, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -868,6 +885,11 @@ export default {
                 }
               }
             }
+
+            if (!this.isSelfOk) {
+              return this.$message.error("请填写正确的仓位!");
+            }
+
             const params = {
               id: this.Leftcurrentrow.id,
               voList: this.ArrayValue,
@@ -879,6 +901,7 @@ export default {
             }
             try {
               this.isOutClick = true;
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               let res = await outDataList(params);
               if(!res){
                 this.isOutClick = false;
@@ -889,10 +912,13 @@ export default {
                 this.$Message.success("入库成功");
                 // this.reload();
                 this.isOutClick = false;
+                hideLoading()
                 return;
               }
+              hideLoading()
               this.isOutClick = false;
             } catch (error) {
+              hideLoading()
               this.isOutClick = false;
             }
             if(res && res.message && res.message.indexOf("成功") > -1) {
@@ -905,7 +931,7 @@ export default {
         });
     },
     searchPro(params, size, page) {
-      chengping({ ...params }, size, page)
+      getDBSQlist({ ...params }, size, page)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -1021,15 +1047,15 @@ export default {
     // 确定
     Determined() {
       // this.$refs.naform.getSupplierNamea();
-      const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].shortName == params.guestName) {
-          params.guestId = this.getArray[i].id;
-        }
-      }
-      this.form = params;
-      delete this.form.gustName;
-      this.getList();
+      const params = { ...this.$refs.naform.getITPWE() };
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == params.guestName) {
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
+      // this.form = params;
+      // delete this.form.gustName;
+      this.getList(params);
       this.advanced = false;
     },
     ok() {},
@@ -1083,15 +1109,16 @@ export default {
         }, 200);
       } else {
         let more = this.$refs.naform;
-        if(!more.ArrayValue1.includes(row.shortName)) {
-          more.ArrayValue1.push(row.shortName);
-        }
+        // if(!more.ArrayValue1.includes(row.shortName)) {
+        //   more.ArrayValue1.push(row.shortName);
+        // }
         more.form.guestId = row.id;
         this.Leftcurrentrow.guestId = row.id;
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
-      this.$refs['naform'].form.guestName=row.shortName
+      // this.$refs['naform'].form.guestName=row.shortName;
+      // this.$refs['naform'].form.guestId = row.id;
     },
     getOkList(list) {
       this.$refs.tableref.clearCurrentRow();
@@ -1105,15 +1132,17 @@ export default {
           name: "草稿",
           value: 0
         },
-        codeId: list.id,
-        code: list.serviceId,
+        codeId: list.applyId,
+        code: list.acceptCode,
         statuName: "草稿",
         storeName: "",
-        guestName: list.guestName,
+        guestName: list.guestOrgName,
+        guestOrgid : list.orgid,
+        guestId : list.orgid,
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
         remark: list.remark,
-        serviceId: "",
+        serviceId: list.serviceId,
         storeId: list.storeId,
         detailVOS: list.detailVOS,
         new: true,
@@ -1131,8 +1160,11 @@ export default {
       this.Status = 0;
       this.$refs.addInCom.init1();
     },
-    getList() {
+    getList(moreData) {
       let params = this.form;
+      if(moreData){
+        params = {...params,...moreData}
+      }
       if (params.qucikTime) {
         params.createTime = params.qucikTime[0]
         params.endTime = params.qucikTime[1]
@@ -1146,6 +1178,7 @@ export default {
       } else {
         Reflect.deleteProperty(params, "createUid")
       }
+      params.canQuery=this.showSelf?0:1
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(async res => {
           if (res.code == 0) {

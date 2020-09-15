@@ -102,4 +102,13 @@ export function getParticulars(params) {
   })
 }
 
+//  调拨入库新增配件详情
+export function getDBRKPartDetail(params) {
+  return axios.request({
+    url: `${api.omsOrder}/allotOutDetail/queryAll`,
+    method: 'get',
+    params
+  })
+}
+
 
