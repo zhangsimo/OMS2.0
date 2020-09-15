@@ -455,8 +455,8 @@ export default {
       this.getList();
     }else{
       this.$nextTick(()=>{
-        this.$refs.quickDate.searchQuick = "0";
-        this.$refs.quickDate.getval(0);
+        this.$refs.quickDate.searchQuick = "5";
+        this.$refs.quickDate.getval(5);
       })
     }
     this.getUser();
@@ -698,7 +698,7 @@ export default {
       });
     },
     checCheckboxkMethod({ row }){
-      return row.billStatusName=="草稿";
+      return row.billStatusName=="草稿" || row.billStatusName=="审批不通过";
     },
     selectDataFun({selection}){
       this.selectTableList = selection;

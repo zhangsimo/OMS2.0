@@ -23,6 +23,8 @@ import SelectSupplier from "./../../goods/goodsList/components/supplier/selectSu
 import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
 import { Object } from "core-js";
 import { checkStore } from "@/api/system/systemApi";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 
 export default {
   name: "procurementAndStorage",
@@ -592,6 +594,7 @@ export default {
                     )
                   : "";
                 this.goDownLoading = true
+                showLoading(".loadingClass", "数据加载中，请勿操作")
                 let res = await saveList(this.formPlan);
                 if (res.code === 0) {
                   this.getLeftLists();
@@ -602,8 +605,10 @@ export default {
                   this.allMoney = 0;
                   this.$Message.success("保存成功");
                 }
+                hideLoading()
                 this.goDownLoading = false
               } catch (errMap) {
+                hideLoading()
                 this.goDownLoading = false
                 this.$XModal.message({
                   status: "error",

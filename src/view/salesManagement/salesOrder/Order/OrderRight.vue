@@ -343,7 +343,7 @@
             <template v-slot:edit="{ row }">
               <el-input-number
                 style="width:80px;"
-                :min="0"
+                :min="row.isMarkActivity==1?row.showQty:0"
                 :max="row.isMarkBatch == 1 ? row.adjustQty : 999999"
                 v-model="row.orderQty"
                 :controls="false"
@@ -359,6 +359,9 @@
             width="100"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
+            <template v-slot:edit="{ row }">
+              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>
+            </template>
           </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" title="金额" width="110">
             <template v-slot="{ row }">
@@ -478,6 +481,7 @@
   import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
   import AlotModel from "../components/AlotModel"
   import SalesCus from "../../../../components/allocation/salesCus";
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: "OrderRight",
@@ -698,9 +702,15 @@
           stop();
           this.draftShow = res.data.billStatusId;
           res.data.orderTypeValue = res.data.orderType.value;
+          res.data.detailList.map(item => {
+            if(!isNaN(Number(item.showPrice))){
+              item.showPrice = parseFloat(item.showPrice).toFixed(2);
+            }
+          })
           this.formPlan = res.data;
           this.formPlan.fullName = this.formPlan.guestName;
           this.draftShow = this.draftShow.value;
+
         }
         if (res.code !== 0) {
           stop();
@@ -1191,7 +1201,7 @@
         orderPriceColumn.editRender.attrs.disabled = isDisabled;
         if (row.isMarkActivity == 1) {
           orderQtyColumn.editRender.attrs.disabled = false;
-          orderPriceColumn.editRender.attrs.disabled = true;
+          orderPriceColumn.editRender.attrs.disabled = false;
         }
         remarkColumn.editRender.attrs.disabled = isDisabled;
       },
@@ -1221,18 +1231,22 @@
                     this.$parent.$parent.submitloading = true
                     data.planSendDate = tools.transTime(data.planSendDate)
                     data.planArriveDate = tools.transTime(data.planArriveDate)
+                    showLoading(".loadingClass", "数据加载中，请勿操作")
                     let res = await getStockOut(data);
                     if (res.code === 0) {
                       this.$Message.success("出库成功");
                       this.$store.commit("setleftList", res);
                       this.door.outStockDoor = true;
                       this.$parent.$parent.submitloading = false
+                      hideLoading()
                       return res;
                     } else {
                       this.door.outStockDoor = true;
                       this.$parent.$parent.submitloading = false
                     }
+                    hideLoading()
                   } catch (errMap) {
+                    hideLoading()
                     this.$XModal.message({
                       status: "error",
                       message: "表格校验不通过！"
@@ -1275,7 +1289,7 @@
               data.useableAmt = this.limitList.sumAmt;
               let orderList = [];
               orderList = data.detailList.filter(
-                item => item.orderPrice * 1 < item.averagePrice * 1
+                item => (item.orderPrice * 1 < item.averagePrice * 1&&item.isMarkActivity!=1)
               );
               if (orderList.length > 0) {
                 let text = "";
@@ -1294,18 +1308,28 @@
                       }
                       this.$parent.$parent.submitloading = true;
                       this.isClickSave = true;
-                      let res = await getSubmitList(data);
-                      this.isClickSave = false;
-                      if (res.code === 0) {
-                        this.$Message.success("提交成功");
-                        this.$parent.$parent.isAdd = false;
-                        this.$parent.$parent.submitloading = false;
-                        this.$parent.$parent.orderlistType.value = 1;
-                        this.limitList = {};
-                        this.$store.commit("setleftList", res);
-                        this.$refs.formPlan.resetFields();
-                      } else {
-                        this.$parent.$parent.submitloading = false;
+                      try {
+                        this.$parent.$parent.commitLoading = true;
+                        showLoading(".loadingClass", "数据加载中，请勿操作")
+                        let res = await getSubmitList(data);
+                        this.isClickSave = false;
+                        if (res.code === 0) {
+                          this.$Message.success("提交成功");
+                          this.$parent.$parent.isAdd = false;
+                          this.$parent.$parent.submitloading = false;
+                          this.$parent.$parent.orderlistType.value = 1;
+                          this.limitList = {};
+                          this.$store.commit("setleftList", res);
+                          this.$refs.formPlan.resetFields();
+                          hideLoading()
+                          this.$parent.$parent.commitLoading = false;
+                        } else {
+                          this.$parent.$parent.commitLoading = false;
+                          this.$parent.$parent.submitloading = false;
+                          hideLoading()
+                        }
+                      } catch (error) {
+                        
                       }
                     },
                     onCancel: () => {
@@ -1316,20 +1340,32 @@
                 if (this.isClickSave) {
                   return this.$Message.error("请稍后订单处理中...");
                 }
-                this.isClickSave = true;
-                this.$parent.$parent.submitloading = true
-                let res = await getSubmitList(data);
-                this.isClickSave = false;
-                if (res.code === 0) {
-                  this.$Message.success("提交成功");
-                  this.$parent.$parent.isAdd = false;
-                  this.$parent.$parent.submitloading = false;
-                  this.limitList = {};
-                  this.$store.commit("setleftList", res);
-                  this.$refs.formPlan.resetFields();
-                  // this.reload();
-                } else {
-                  this.$parent.$parent.submitloading = false;
+                try {
+                  
+                  this.isClickSave = true;
+                  this.$parent.$parent.submitloading = true
+                  this.$parent.$parent.commitLoading = true
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
+                  let res = await getSubmitList(data);
+                  this.isClickSave = false;
+                  if (res.code === 0) {
+                    this.$Message.success("提交成功");
+                    this.$parent.$parent.isAdd = false;
+                    this.$parent.$parent.submitloading = false;
+                    this.limitList = {};
+                    this.$store.commit("setleftList", res);
+                    this.$refs.formPlan.resetFields();
+                    hideLoading()
+                    this.$parent.$parent.commitLoading = false;
+                    // this.reload();
+                  } else {
+                    this.$parent.$parent.submitloading = false;
+                    hideLoading()
+                    this.$parent.$parent.commitLoading = false;
+                  }
+                } catch (error) {
+                  hideLoading()
+                  this.$parent.$parent.commitLoading = false;
                 }
               }
             } catch (errMap) {

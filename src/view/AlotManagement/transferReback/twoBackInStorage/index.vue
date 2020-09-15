@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -272,6 +272,8 @@ import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { checkStore } from '@/api/system/systemApi'
+import { hideLoading, showLoading } from "@/utils/loading";
+
 
 export default {
   name: "twoBackInStorage",
@@ -577,6 +579,7 @@ export default {
         return this.$message.error("请填写正确的仓位!")
       }
       this.isSaveClick = true;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       inDataList(this.inID)
         .then(res => {
           if(!res){
@@ -590,9 +593,11 @@ export default {
           } else if (res.code === 1) {
             this.$Message.info("提示入库失败");
           }
+          hideLoading()
         })
         .catch(err => {
           this.$Message.info("确定入库失败");
+          hideLoading()
         });
     },
     //取消入库

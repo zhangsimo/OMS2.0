@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="oper-top flex">
@@ -360,6 +360,8 @@ import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
 import {getSales} from "@/api/salesManagment/salesOrder";
 import * as tools from "_utils/tools";
+import { hideLoading, showLoading } from "@/utils/loading";
+
   import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
@@ -966,6 +968,7 @@ export default {
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.commitLoading = true;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getSubmitList(params)
         .then(res => {
           if (res.code == 0) {
@@ -974,11 +977,12 @@ export default {
             this.flag = 0;
           }
           this.commitLoading = false;
-
+          hideLoading()
         })
         .catch(e => {
           this.$Message.info("提交失败");
           this.commitLoading = false;
+          hideLoading()
         });
     },
     //作废

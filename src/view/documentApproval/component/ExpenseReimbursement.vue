@@ -3,11 +3,11 @@
     <div class="bigbox">
       <div class="clearfix">
         <div class="fr">
-          <Button class="mr10" v-if="!modelType" @click="save(0)"
+          <Button class="mr10" :loading="saveDis" v-if="!modelType" @click="save(0)"
           >保存草稿
           </Button
           >
-          <Button class="mr10" v-noresub v-if="!modelType" @click="save(1)"
+          <Button class="mr10" :loading="saveDis" v-noresub v-if="!modelType" @click="save(1)"
           >提交申请
           </Button
           >

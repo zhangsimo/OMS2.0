@@ -264,7 +264,13 @@
 
     private async getBrand(data: string) {
       this.brandBrandBool=true
-      this.brandLists = await getBrandList(data)
+      var queryName:string=data
+      if(data==""){
+        queryName=""
+      }else{
+        queryName=data.trim()
+      }
+      this.brandLists = await getBrandList(queryName)
       this.brandBrandBool=false
     }
 

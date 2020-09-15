@@ -56,11 +56,11 @@
 
 
   .main .ivu-layout-wrap{
-    padding: 16px;
+    padding: 10px;
   }
   .main .content-wrapper{
-    padding: 0 16px;
-    top: 60px!important;
+    padding: 0 10px;
+    top: 50px!important;
   }
   .ivu-btn-default.ivu-btn:not([disabled]):hover{
     color: #1890ff;
@@ -75,6 +75,9 @@
   }
   .tags-nav .tag-item.tag-item-selected{
     background: #1890ff;
+  }
+  .tags-nav .tag-item.tag-item-selected:hover .ivu-tag-text,.tags-nav .tag-item.tag-item-selected:hover i{
+    color: #fff;
   }
   .ivu-avatar{
     margin-right: 5px;

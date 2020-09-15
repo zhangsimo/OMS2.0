@@ -74,10 +74,11 @@
 
 <script>
   import moment from "moment";
-  import QuickDate from "_c/getDate/dateget";
+  import QuickDate from "_c/getDate/dateget_noEmit";
   import more from "./more";
   import * as api from "_api/reportForm/index.js";
   import {creat} from "@/view/settlementManagement/components";
+  import {ToDayStr} from "_c/getDate/index_bill.js"
 
   import {getWares} from "@/view/reportForm/until.js"
 
@@ -96,7 +97,7 @@
         quickDates: [], // 快速日期查询
         search: {
           isPanne: true,
-          submitDate: [], // 提交日期
+          submitDate: ToDayStr(), // 提交日期
           content: "", // 编码名称
           storeId: "",
           orgid: "" // 门店
@@ -128,6 +129,10 @@
           this.stores.push({id: key, name: data[key]})
         })
       }
+      var arr = await creat("", this.$store);
+      this.search.orgid = arr[1];
+      this.getWares(this.search.orgid)
+      this.query()
     },
     methods: {
       //获取仓库
@@ -137,20 +142,11 @@
       // 快速日期查询
       async getDataQuick(v) {
         this.search.submitDate = v;
-        if (v.length >= 2) {
-          let arr = await creat("", this.$store);
+        if(this.selectShopList){
+          var arr = await creat("", this.$store);
           this.search.orgid = arr[1];
-          this.search.content = "";
-          this.search.storeId = ""
-          this.getWares(this.search.orgid)
-          this.$emit("search", {isPanne: true, commitStartDate: v[0], commitEndDate: v[1], orgid: this.search.orgid});
-        } else {
-          let arr = await creat("", this.$store);
-          this.search.orgid = arr[1];
-          this.search.content = "";
-          this.search.storeId = ""
-          this.$emit("search", {isPanne: true, orgid: this.search.orgid});
         }
+        this.query();
       },
       getDataQuick2(v){
         this.search.submitDate = v;

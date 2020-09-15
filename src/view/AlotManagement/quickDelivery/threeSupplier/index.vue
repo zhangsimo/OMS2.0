@@ -97,6 +97,7 @@
           @current-change="currentChangeEvent"
           size="mini"
           height="auto"
+          :loading="loadingEnter"
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
@@ -196,6 +197,7 @@
           highlight-hover-row
           size="mini"
           height="auto"
+          :loading="loadingEnter"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           @keydown="keydown"
           :data="BottomTableData"
@@ -313,7 +315,8 @@ export default {
       dateTime: "",
       currentrow: {},
       storeArray: [],
-      customerListOptions: []
+      customerListOptions: [],
+      loadingEnter:false
     };
   },
   created() {
@@ -523,14 +526,23 @@ export default {
       if(!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!")
        }
+      this.loadingEnter = true;
+      const msg = this.$Message.loading({
+        content: '数据处理中...',
+        duration: 0
+      });
       daohuoruku(this.currentrow)
         .then(res => {
+          this.loadingEnter = false;
+          msg();
           if (res.code === 0) {
             //console.log(res);
             this.$Message.info("入库成功");
           }
         })
         .catch(e => {
+          this.loadingEnter = false;
+          msg();
           this.$Message.info("入库失败");
         });
     },

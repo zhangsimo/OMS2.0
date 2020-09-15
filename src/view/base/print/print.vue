@@ -829,7 +829,7 @@
             </p>
             <p>
               <span style="font-size: 12px">打印日期:</span>
-              <span style="font-size: 12px">{{printDate}}</span>
+              <span style="font-size: 12px">{{onelist.printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -904,7 +904,7 @@
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 12px;">
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>制单人:</span>
-            <span>{{onelist.apply.orderMan}}</span>
+            <span>{{onelist.apply.createUname}}</span>
           </Col>
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>提交人:</span>
@@ -921,7 +921,7 @@
         </Row>
         <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
           备 注：
-          <span>{{onelist.logisticsRecord.remark}}</span>
+          <span>{{onelist.apply.remark}}</span>
         </p>
       </div>
       <div class="titler" v-if="onelist.name.startsWith('调拨入库')">
@@ -1887,11 +1887,11 @@
               data.orgId = order.orgId
               data.guestId = order.guestId
               res = await Printing(data);
-              res.data.orderDetailList.map((item, index) => {
-                item.num = index + 1;
-              });
               if (res.code == 0) {
                 this.onelist = res.data;
+                res.data.orderDetailList.map((item, index) => {
+                  item.num = index + 1;
+                });
                 this.onelist.name = order.name || ""
                 this.onelist.detailList = res.data.orderDetailList
               }

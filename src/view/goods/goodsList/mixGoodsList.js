@@ -20,6 +20,7 @@ import {
   v4
 } from "uuid"
 import * as tools from "_utils/tools";
+import { hideLoading, showLoading } from "@/utils/loading";
 
 export const mixGoodsData = {
   data() {
@@ -779,6 +780,7 @@ export const mixGoodsData = {
                     return this.$Message.error("请添加配件后再提交");
                   }
                   this.commitLoading = true
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   saveCommit(objReq).then(res => {
                     this.submitloading = false;
                     this.loading = false;
@@ -788,12 +790,15 @@ export const mixGoodsData = {
                       this.$Message.success("提交成功");
                       this.commitLoading = false
                       this.getList();
+                      hideLoading()
                     } else {
                       this.submitloading = this.loading = false;
                       this.commitLoading = false
+                      hideLoading()
                     }
                   }).catch(e => {
                     this.commitLoading = false;
+                    hideLoading()
                   });
                 }
               },
@@ -822,6 +827,7 @@ export const mixGoodsData = {
                 return this.$Message.error("请添加配件后再提交");
               }
               this.commitLoading = true
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               saveCommit(objReq).then(res => {
                 this.submitloading = this.loading = false;
                 if (res.code == 0) {
@@ -830,8 +836,10 @@ export const mixGoodsData = {
                   this.$Message.success("提交成功");
                   this.getList();
                 }
+                hideLoading()
                 this.commitLoading = false
               }).catch(e => {
+                hideLoading()
                 this.commitLoading = false
               });
             }

@@ -3,7 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%"
   >
-    <div class="content-oper content-oper-flex" style="box-shadow:none">
+    <div class="content-oper content-oper-flex loadingClass" style="box-shadow:none">
       <section class="oper-box">
         <div class="oper-top flex">
           <div class="wlf">
@@ -270,7 +270,7 @@
                       <Button
                         v-has="'delete'"
                         :disabled="
-                          !(!Leftcurrentrow.code && buttonDisable == 0)
+                          buttonDisable != 0
                         "
                         size="small"
                         class="mr10"
@@ -506,6 +506,8 @@
     getListDetail
   } from "@/api/AlotManagement/stockRemoval.js";
   import * as tools from "_utils/tools";
+  import { hideLoading, showLoading } from "@/utils/loading";
+
 
   import {queryByOrgid} from "../../../../api/AlotManagement/transferringOrder";
   import AllocationCus from "../../../../components/allocation/allocationCus";
@@ -578,7 +580,7 @@
             value: 1
           },
           {
-            label: "已出库",
+            label: "已完成",
             value: 2
           },
           {
@@ -1029,6 +1031,9 @@
         this.buttonDisable = 0;
         let createTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
         this.createTime = createTime;
+        for (let b of this.Left.tbdata) {
+          b._highlight = false;
+        }
         const item = {
           new: true,
           _highlight: true,
@@ -1108,6 +1113,7 @@
               return this.$message.error('请稍后数据处理中....');
             }
             this.isCommitClick = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             tijiao(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
@@ -1118,11 +1124,14 @@
                   this.$Message.success("提交成功");
                   this.$refs.formPlan.resetFields();
                   this.isCommitClick = false;
+                  hideLoading()
                 }else{
                   this.isCommitClick = false;
+                  hideLoading()
                 }
               }).catch(e => {
                 this.isCommitClick = false;
+                hideLoading()
               })
             // .catch(e => {
             //   this.$Message.info("提交失败");
@@ -1225,6 +1234,10 @@
       },
       //打印表格
       printTable() {
+        if(this.$refs.goodsInfo.formDateRight.streetAddress==""){
+          this.$Message.error("请先编辑地址信息")
+          return
+        }
         let order = {};
         order.name="调拨出库"
         order.route=this.$route.name
