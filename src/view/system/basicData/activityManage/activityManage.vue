@@ -99,11 +99,15 @@
             ></Date-picker>
           </div>
           <div class="db mr10">
-            <span>活动配件：</span>
-            <Input ref="getDataObj" style="width:200px" class="mr20" v-model="getDataObj.partName" />
+            <span>创建人：</span>
+            <Input ref="getDataObj" style="width:200px" class="mr10" placeholder="请输入创建人" v-model="getDataObj.createUname" />
+          </div>
+          <div class="db mr10">
+            <span>内码/编码/名称/OE码：</span>
+            <Input ref="getDataObj" style="width:200px" class="mr20" placeholder="请输入内码/编码/名称/OE码" v-model="getDataObj.partName" />
           </div>
           <div class="db">
-            <Button @click="getActivity" type="warning" class="mr20">
+            <Button @click="getWrap" type="warning" class="mr20">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
             <Button @click="cancelActivity" type="warning" class="mr20" v-has="'cancel'">取消活动</Button>
@@ -179,6 +183,29 @@
             :columns="columns2"
             border
           ></Table>
+          <Row>
+              <Col id="row">
+                <Page
+                  id="page"
+                  style="flex:right"
+                  show-sizer
+                  size="small"
+                  show-total
+                  :page-size-opts="pageSizeOpts"
+                  :current="page"
+                  :total="total"
+                  placement="top"
+                  :page-size="pageSize"
+                  @on-change="pageChange"
+                  @on-page-size-change="pageSizeChange"
+                ></Page>
+                  <!-- :current="List.page"
+                  :total="List.total"
+                  :page-size="List.pageSize"
+                  @on-page-size-change="onPurchasePageSizeChange1"
+                  @on-change="onPurchaseChange1" -->
+              </Col>
+            </Row>
         </TabPane>
         <TabPane label="过期活动" name="name3">
           <Table
@@ -415,6 +442,7 @@ export default {
         endDate: "",
         orgname: "",
         partName: "",
+        createUname: "",
         state: "",
         id: ""
       },
@@ -507,6 +535,11 @@ export default {
           title: "活动ID",
           align: "center",
           key: "activityId"
+        },
+        {
+          title: "创建人",
+          align: "center",
+          key: "createUname"
         },
         {
           title: "备注",
@@ -794,6 +827,12 @@ export default {
       data5: [],
       data6: [],
       loading2:false,
+      
+      page: 1,
+      total: 0,
+      size: 20,
+      pageSize: 20,
+      pageSizeOpts: [20, 40, 60, 80, 100] 
     };
   },
   mounted() {
@@ -801,6 +840,17 @@ export default {
     this.getActApplicationForm();
   },
   methods: {
+    pageChange(val){
+      this.page = val;
+      this.getActivity()
+      // this.data2 = []
+    },
+    pageSizeChange(val){
+      this.pageSize = val
+      this.getActivity()
+      // this.data2 = []
+    },
+
     // 活动申请页面
     getActApplicationForm() {
       getActApplicationTable().then(res => {
@@ -813,8 +863,8 @@ export default {
     // 根据条件查询活动申请
     selectActApply() {
       let data = {}
-      this.getDataObj.beginDate = this.getDataObj.beginDate ? this.getDataObj.beginDate + " 00:00:00" : "";
-      this.getDataObj.endDate = this.getDataObj.endDate ? this.getDataObj.endDate + " 23:59:59" : "";
+      // this.getDataObj.beginDate = this.getDataObj.beginDate ? this.getDataObj.beginDate + " 00:00:00" : "";
+      // this.getDataObj.endDate = this.getDataObj.endDate ? this.getDataObj.endDate + " 23:59:59" : "";
       for (let key in this.getDataObj) {
         if(this.getDataObj[key]) {
           data[key] = this.getDataObj[key];
@@ -829,14 +879,17 @@ export default {
       this.checkedData.length = 0;
     },
     // 活动信息页面
-    getActTable() {
-      getActivityIfo().then(res => {
-        // console.log(res)
-        if (res.code === 0) {
-          this.data2 = res.data;
-        }
-      });
-    },
+    // getActTable() {
+    //   let params = {}
+    //   params.page = this.page
+    //   params.size = this.pageSize
+    //   getActivityIfo(params).then(res => {
+    //     console.log(res)
+    //     if (res.code === 0) {
+    //       this.data2 = res.data.content;
+    //     }
+    //   });
+    // },
     // newArr (arr) {
     //   console.log(arr)
     //   return arr.reduce((pre,cur) => {
@@ -869,6 +922,7 @@ export default {
       selectCompany({ pId: user.tenantId }).then(res => {
         // console.log(res)
         if (res.code === 0) {
+          console.log("sadfhkjas：" + res.data)
           let data = res.data;
           Object.keys(data).forEach(key=> {
            this.companyListOptions.push({
@@ -904,32 +958,52 @@ export default {
         "&access_token=" +
         Cookies.get(TOKEN_KEY);
     },
+    getWrap(){
+      this.page = 1
+      let data = {}
+      // console.log(this.getDataObj.beginDate, this.getDataObj.endDate)
+      // this.getDataObj.beginDate = this.getDataObj.beginDate ? this.getDataObj.beginDate + " 00:00:00" : "";
+      // this.getDataObj.endDate = this.getDataObj.endDate ? this.getDataObj.endDate + " 23:59:59" : "";
+      // console.log(this.getDataObj.beginDate, this.getDataObj.endDate)
+      for (let key in this.getDataObj) {
+        if(this.getDataObj[key]) {
+          data[key] = this.getDataObj[key];
+        }
+      }
+      this.getDataObj = data
+      this.getActivity()
+    },
     // 根据条件查询活动信息
     getActivity() {
+      // this.
+      this.getDataObj.size = this.pageSize
+      this.getDataObj.page = this.page - 1
       getActivityList(this.getDataObj).then(res => {
-        // console.log(res);
-        this.data2 = res.data;
+        this.data2 = res.data.content;
+        this.total = res.data.totalElements;
       });
     },
     // 获取活动信息开始日期
     getBeginDate(startTime) {
       // console.log(startTime);
+      this.getDataObj.beginDate = ""
       this.endTimeOption = {
         disabledDate(endTime) {
           return endTime < new Date(startTime);
         }
       };
-      this.getDataObj.beginDate = startTime;
+      this.getDataObj.beginDate = startTime ? startTime + " 00:00:00" : "";
     },
     // 获取活动信息结束日期
     getEndDate(endTime) {
       // console.log(endTime);
+      this.getDataObj.endDate = ""
       this.startTimeOption = {
         disabledDate(startTime) {
           return startTime > new Date(endTime) || startTime > Date.now();
         }
       };
-      this.getDataObj.endDate = endTime;
+      this.getDataObj.endDate = endTime ? endTime + " 23:59:59" : "";
     },
     // 过期活动查询
     getExpiredActivityIfo() {
@@ -992,7 +1066,7 @@ export default {
         // console.log(res)
         if (res.code === 0) {
           this.$Message.success("操作成功");
-          this.getActTable();
+          this.getActivity();
         }
       });
     },
@@ -1158,13 +1232,12 @@ export default {
       this.tabValue = item;
       switch (item) {
         case "name1":
-          this.getActApplicationForm();
+          // this.getActApplicationForm();
           this.checkedData = [];
           this.data4 = [];
           this.resetFiles();
         case "name2":
-          this.getActApplicationForm();
-          this.getActTable();
+          this.getActivity();
           this.resetFiles();
         case "name3":
           this.getExpiredTable();
@@ -1205,6 +1278,7 @@ export default {
       this.getDataObj.state = "";
       this.getDataObj.partName = "";
       this.getDataObj.orgname = "";
+      this.getDataObj.createUname = ""
     }
   }
 };
@@ -1212,4 +1286,9 @@ export default {
 
 <style lang="less">
 @import url("./index.less");
+#row {
+  // height: 80px;
+  margin-top: 10px;
+  z-index: 999;
+}
 </style>
