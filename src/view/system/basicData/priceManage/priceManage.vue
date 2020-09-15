@@ -135,6 +135,8 @@
                 style="width: 140px;"
                 class="mr10"
               />
+              <Input v-model="part.partInner" placeholder="请输入内码" style="width: 140px;" class="mr10" />
+              <Input v-model="part.oemCode" placeholder="请输入OE码" style="width: 140px;" class="mr10" />
               <Button :disabled="disabled" class="mr10 w90" @click="queryPart" type="warning">
                 <span class="center">
                   <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -182,6 +184,8 @@
               <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+              <vxe-table-column field="partId" title="配件内码"></vxe-table-column>
+              <vxe-table-column field="oemCode" title="配件OE码"></vxe-table-column>
               <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
               <!-- <vxe-table-column field="costPrice" title="成本单价" v-if="rowPriceManege.name=='统一售价'"></vxe-table-column> -->
               <vxe-table-column
@@ -354,6 +358,8 @@ export default {
         pinyin: "", // 拼音
         code: "", // 编码
         fullname: "", // 名称
+        partInner: "",
+        oemCode: "",
         // 表身
         tbdata: new Array(),
         // 表格加载
@@ -431,18 +437,24 @@ export default {
       this.part.loading = true;
       let data = {};
       let params = {};
-      if (this.part.fullname) {
+      if (this.part.fullname.trim()) {
         data.fullName = this.part.fullname;
       }
-
-      if (this.part.code) {
+      if (this.part.code.trim()) {
         data.partCode = this.part.code;
+      }
+      if (this.part.partInner.trim()) {
+        data.partId = this.part.partInner
+      }
+      if (this.part.oemCode.trim()) {
+        data.oemCode = this.part.oemCode
       }
       params.strategyId = this.currRow.id;
       params.page = this.part.page.num - 1;
       params.size = this.part.page.size;
       let res = await api.queryPart(params, data);
       if (res.code == 0) {
+        console.log(res)
         this.part.loading = false;
         this.part.tbdata = res.data.content.map(el => {
           let data = {};
@@ -596,6 +608,8 @@ export default {
       this.part.pinyin = "";
       this.part.code = "";
       this.part.fullname = "";
+      this.part.partInner = "";
+      this.part.oemCode = "";
       if (row.readonly) {
         this.curronly = true;
         this.tabIndex = 1;
