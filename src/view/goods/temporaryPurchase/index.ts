@@ -24,6 +24,8 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
 import GoodCus from "_c/allocation/GoodCus.vue"
+import { hideLoading, showLoading } from "../../../utils/loading";
+
 
 
 @Component({
@@ -511,14 +513,17 @@ export default class TemporaryPurchase extends Vue {
               onOk: async () => {
                 try {
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.temporarySaveCommit(data);
                   if (res.code == 0) {
                     this.$Message.success('提交成功');
                     this.getListData();
                     this.isAdd = true;
                   }
+                  hideLoading()
                   this.commitLoading = false;
                 } catch (error) {
+                  hideLoading()
                   this.commitLoading = false;
                 }
               },
@@ -529,6 +534,7 @@ export default class TemporaryPurchase extends Vue {
           },500)
         }else{
           try {
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             this.commitLoading = true;
             let res = await api.temporarySaveCommit(data);
             if (res.code == 0) {
@@ -536,8 +542,10 @@ export default class TemporaryPurchase extends Vue {
               this.getListData();
               this.isAdd = true;
             }
+            hideLoading()
             this.commitLoading = false;
           } catch (error) {
+            hideLoading()
             this.commitLoading = false;
           }
         }
