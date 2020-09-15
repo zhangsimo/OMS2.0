@@ -22,7 +22,7 @@ import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
 import GoodCus from "_c/allocation/GoodCus.vue"
 import { checkStore } from "@/api/system/systemApi";
-import { hideLoading, showLoading } from "../../../utils/loading";
+import { hideLoading, showLoading } from "@/utils/loading";
 
 @Component({
   components: {
