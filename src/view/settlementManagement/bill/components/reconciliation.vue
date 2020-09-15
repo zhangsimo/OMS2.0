@@ -451,6 +451,14 @@ export default {
     Initialization() {
       let obj = { id: this.$parent.reconciliationStatement.id };
       getReconciliationNo(obj).then(res => {
+        console.log(res , 1123)
+        if (res.code === 0 ) {
+          this.accountData = [
+            {accountNo: "", accountSumAmt: ""},
+            {accountNo: "", accountSumAmt: ""},
+            {accountNo: "", accountSumAmt: ""}
+          ]
+        }
         res.data.one.map(item => {
           if (item.number === 1) {
             this.accountData[0] = {
