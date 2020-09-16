@@ -1144,6 +1144,7 @@ export default {
         remark: list.remark,
         serviceId: list.serviceId,
         storeId: list.storeId,
+        outMainId: list.id,
         detailVOS: list.detailVOS,
         new: true,
         _highlight: true
