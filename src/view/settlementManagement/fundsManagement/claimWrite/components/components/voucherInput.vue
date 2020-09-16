@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="subjectModelShowassist"  title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
+    <Modal v-model="subjectModelShowassist"  title="选择辅助核算" class="funtPa" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card" v-model="currTab">
           <TabPane label="客户" name="client">
@@ -766,16 +766,19 @@ export default {
   background: #e8eaec;
   font-size: 15px;
 }
-</style>
-<style scoped>
 .formBox .ivu-form-item {
   margin-bottom: 5px;
   margin-right: 5px;
 }
-.fund {
+.funtPa{
   position: relative;
-  top: -625px;
-  left: 400px;
+}
+.fund {
+  position: absolute;
+  top: 4pc;
+  right: 1pc;
+  z-index: 9999;
+  //1pc=12pt=16px;
 }
 .LiClass:hover {
   cursor: pointer;
