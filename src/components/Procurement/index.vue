@@ -16,19 +16,19 @@
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <el-input autofocus ref="input" style="width: 100px" placeholder="编码" v-model="partCode" @change="query"/>
+          <Input ref="input" style="width: 100px" placeholder="编码" v-model="partCode" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <el-input placeholder="内码" style="width: 100px" v-model="partId" @change="query"/>
+          <Input placeholder="内码" style="width: 100px" v-model="partId" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <el-input placeholder="名称" style="width: 100px" v-model="partName" @change="query"/>
+          <Input placeholder="名称" style="width: 100px" v-model="partName" @on-enter="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <el-input placeholder="OE码" style="width: 100px" v-model="oemCode" @change="query"/>
+          <Input placeholder="OE码" style="width: 100px" v-model="oemCode" @on-enter="query"/>
         </div>
 
         <!-- <div class="db mr5">
@@ -78,6 +78,7 @@
         column-min-width="100px"
         size="mini"
         :data="tableData"
+        :loading="loading"
         show-overflow
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
@@ -118,6 +119,7 @@
         column-min-width="100px"
         size="mini"
         :data="tableData"
+        :loading="loading"
         show-overflow
         @checkbox-all="cellClickEvent"
         @checkbox-change="radioChangeEvent"
@@ -213,7 +215,7 @@
     private partName: string = "";
     private partCode: string = "";
     private oemCode: string = "";
-
+    private loading:boolean=false;
 
     private page: Page = {
       num: 1,
@@ -440,6 +442,7 @@
       let obj = {...params, ...formData}
 
       let res: any;
+      this.loading=true;
       if (this.type === "good") {
         res = await getParts(obj);
       }
@@ -459,6 +462,7 @@
         const column = xTable.getColumnByField('partBrand');
         xTable.setFilter(column, this.filters);
         xTable.updateData();
+        this.loading=false
       }
     }
 
