@@ -20,19 +20,19 @@
 
         <div class="db mr5 fl">
           <span class="mr5">编码:</span>
-          <el-input autofocus ref="Input" style="width: 120px" placeholder="编码" v-model="partCode" @change="search"/>
+          <Input ref="Input" style="width: 120px" placeholder="编码" v-model="partCode" @on-enter="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">内码:</span>
-          <el-input placeholder="内码" style="width: 120px" v-model="partId" @change="search"/>
+          <Input placeholder="内码" style="width: 120px" v-model="partId" @on-enter="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">名称:</span>
-          <el-input placeholder="名称" style="width: 120px" v-model="partName" @change="search"/>
+          <Input placeholder="名称" style="width: 120px" v-model="partName" @on-enter="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">OE:</span>
-          <el-input placeholder="OE码" style="width: 120px" v-model="oemCode" @change="search"/>
+          <Input placeholder="OE码" style="width: 120px" v-model="oemCode" @on-enter="search"/>
         </div>
 
         <!-- <Select
