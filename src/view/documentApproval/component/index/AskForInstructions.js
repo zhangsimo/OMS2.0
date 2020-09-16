@@ -101,6 +101,7 @@ export default {
 
       this.$refs.formInline.validate(async (valid) => {
         if (valid) {
+          //去除回车空格为空报必填
           if (this.ClearBr(this.formInline.applyMatters).trim().length < 0 || this.ClearBr(this.formInline.applyMatters).trim()=="") {
             this.$Message.error("申请事项必填")
             return
