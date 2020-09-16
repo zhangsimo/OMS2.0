@@ -274,9 +274,9 @@
 
       //保存
       save(){
-        console.log(this.formCustom.createTime,1111)
+        // console.log(this.formCustom.createTime,1111)
         this.$refs.formCustom.validate(async (valid) => {
-          console.log(valid,1111)
+          // console.log(valid,1111)
           if (valid) {
             this.formCustom.createTime = moment(this.formCustom.createTime).format("YYYY-MM-DD HH:mm:ss")
             let res = await addSave(this.formCustom)
