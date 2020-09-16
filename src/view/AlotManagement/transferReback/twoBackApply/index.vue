@@ -1041,6 +1041,7 @@ export default {
       };
       // 配件组装作废
       this.isOutClick = true;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       outDataList(params)
         .then(res => {
           // 点击列表行==>配件组装信息
@@ -1049,8 +1050,10 @@ export default {
             this.$Message.success("出库成功");
           }
           this.isOutClick = false;
+          hideLoading()
         })
         .catch(e => {
+          hideLoading()
           this.isOutClick = false;
           this.$Message.error("出库失败");
         });
