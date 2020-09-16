@@ -99,7 +99,7 @@
         <section class="con-box">
           <div class="inner-box">
             <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
-            <div class="db mt10 info" v-if="info">
+            <div class="db mt10 info" v-show="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
@@ -312,7 +312,7 @@
               </div>
               <div class="db mt10">
                 <span class="mr5">计划结算类型</span>
-                <Select class="w100" v-model="totalvalue" readonly>
+                <Select class="w100" v-model="totalvalue" label-in-value @on-change="changeTotal">
                   <Option
                     v-for="item in SettlementType"
                     :value="item.value"
@@ -950,6 +950,13 @@
         } else {
           this.info = false;
           this.totalvalue="1";
+        }
+      },
+      changeTotal(){
+        if(this.totalvalue=="1" || this.totalvalue=="2"){
+          this.info = false;
+        }else if(this.totalvalue=="0"){
+          this.info = true;
         }
       },
       pageChange({type, currentPage, pageSize, $event}) {
