@@ -139,7 +139,7 @@
               <!--<Input v-model="thisApplyAccount" class="w140 mr10" />-->
               <Select
                 filterable
-                v-model="infoBase.thisPaymentAccount"
+                v-model="infoBase.thisPaymentAccountId"
                 @on-change="payMentFun"
                 label-in-value
                 style="width:150px"
