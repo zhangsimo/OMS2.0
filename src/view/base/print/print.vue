@@ -837,7 +837,7 @@
           <Col span="12" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">调入方:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecord.guestName}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord!=null?onelist.logisticsRecord.guestName : ""}}</span>
             </p>
             <p>
               <span style="font-size: 12px">地址:</span>
@@ -847,11 +847,11 @@
           <Col span="7" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">联系人:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:onelist.logisticsRecord?onelist.logisticsRecord.receiver:''}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:onelist.logisticsRecord!=null?onelist.logisticsRecord.receiver:''}}</span>
             </p>
             <p>
               <span style="font-size: 12px">联系电话:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:onelist.logisticsRecord?onelist.logisticsRecord.receiverMobile:''}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:onelist.logisticsRecord!=null?onelist.logisticsRecord.receiverMobile:''}}</span>
             </p>
           </Col>
           <Col span="5">
@@ -916,7 +916,7 @@
           </Col>
           <Col span="6" style="padding:2px;">
             <span>收货人:</span>
-            <span>{{onelist.logisticsRecord.receiver}}</span>
+            <span>{{onelist.logisticsRecord!=null?onelist.logisticsRecord.receiver:""}}</span>
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
@@ -1896,6 +1896,7 @@
                 this.onelist.detailList = res.data.orderDetailList
               }
           }
+          // this.print()
         } else {
           this.$message.error("至少选择一条信息");
           window.close()
