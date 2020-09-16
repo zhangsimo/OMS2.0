@@ -31,7 +31,7 @@ export default {
         ],
         applyMatters:[
           {required: true, message: '申请事项为必填', trigger: 'blur'},
-          {pattern:/^.{0,500}$/,message: "字符长度最长为500"}
+          // {pattern:/^.{0,500}$/,message: "字符长度最长为500"}
         ],
       },
       Pictures:{},//请求回来的图片地址状态
@@ -97,6 +97,10 @@ export default {
 
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
+          if(this.formInline.applyMatters.trim().length>501){
+            this.$Message.error("申请事项不可超过500字符")
+            return
+          }
           this.formInline.step = type
           this.saveDis=true;
           let res = await getAskSave(this.formInline)
