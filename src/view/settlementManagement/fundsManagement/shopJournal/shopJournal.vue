@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -473,6 +473,7 @@
   import amtData from '../../components/amtData'
   import changeJournal from '../components/changeJournal'
   import {findGuest} from "_api/settlementManagement/advanceCollection.js";
+  import {showLoading, hideLoading} from "@/utils/loading"
 
 
   import moment from 'moment'
@@ -784,29 +785,35 @@
         data.accountMoney = this.accountMoney;
         data.accountCode = this.accountCode;
         this.allMoneyList = {}
-        let res = await goList(params, data)
-        if (res.code === 0) {
-          //if (res.data.page.content.length > 0) {
-          this.allMoneyList = res.data.moneyList
-          //}
-          this.page.total = res.data.page.totalElements;
-          this.tableData = res.data.page.content
-          this.tableData1 = res.data.page.content
-          this.tableData2 = res.data.page.content
-          this.tableData3 = res.data.page.content
-          this.tableData4 = res.data.page.content
-          // res.data.page.content.forEach(item => {
-          //   if (item.collateState==1) {
-          //     this.tableData1.push(item)
-          //   } else {
-          //     this.tableData2.push(item)
-          //   }
-          //   if (item.claimType==1) {
-          //     this.tableData3.push(item)
-          //   } else {
-          //     this.tableData4.push(item)
-          //   }
-          // })
+        try {
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          let res = await goList(params, data)
+          if (res.code === 0) {
+            //if (res.data.page.content.length > 0) {
+            this.allMoneyList = res.data.moneyList
+            //}
+            this.page.total = res.data.page.totalElements;
+            this.tableData = res.data.page.content
+            this.tableData1 = res.data.page.content
+            this.tableData2 = res.data.page.content
+            this.tableData3 = res.data.page.content
+            this.tableData4 = res.data.page.content
+            // res.data.page.content.forEach(item => {
+            //   if (item.collateState==1) {
+            //     this.tableData1.push(item)
+            //   } else {
+            //     this.tableData2.push(item)
+            //   }
+            //   if (item.claimType==1) {
+            //     this.tableData3.push(item)
+            //   } else {
+            //     this.tableData4.push(item)
+            //   }
+            // })
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
 

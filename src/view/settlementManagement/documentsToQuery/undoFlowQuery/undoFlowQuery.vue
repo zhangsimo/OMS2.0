@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <div class="oper-top pl10">
       <span class="mr5">快速查询：</span>
       <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
@@ -78,6 +78,7 @@
   import {goshop} from "@/api/settlementManagement/shopList";
 
   import moment from "moment";
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: "UndoFlowQuery",
@@ -143,10 +144,17 @@
             .endOf("day")
             .format("YYYY-MM-DD HH:mm:ss")
           : "";
-        let res = await runningWater(data);
-        if (res.code === 0) {
-          this.tableData = res.data.content;
-          this.page.total=res.data.totalElements
+        try {
+          
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          let res = await runningWater(data);
+          if (res.code === 0) {
+            this.tableData = res.data.content;
+            this.page.total=res.data.totalElements
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
       //分页

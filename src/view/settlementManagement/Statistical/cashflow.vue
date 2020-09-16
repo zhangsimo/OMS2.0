@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -138,6 +138,7 @@ import * as api from "_api/settlementManagement/financialStatement.js";
 import QuickDate from "@/components/getDate/dataget2.vue";
 import moment from "moment";
 import XEUtils from "xe-utils";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "cashflow",
   components: {
@@ -281,10 +282,16 @@ export default {
           Reflect.deleteProperty(params, key);
         }
       }
-      let res = await api.findListPageAllCashFlowChange(params);
-      if (res.code == 0) {
-        this.tableData = res.data.flowList;
-        this.headData = res.data.moneyList
+      try {
+        showLoading(".loadingClass", "数据加载中，请勿操作")
+        let res = await api.findListPageAllCashFlowChange(params);
+        if (res.code == 0) {
+          this.tableData = res.data.flowList;
+          this.headData = res.data.moneyList
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
     }
   }

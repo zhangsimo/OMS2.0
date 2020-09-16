@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -269,6 +269,7 @@ import { goshop } from "@/api/settlementManagement/shopList";
 import _ from "lodash";
 
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "settlementManagementAdvanceCollection",
   components: {
@@ -499,11 +500,15 @@ export default {
         size: this.page.size,
         page: this.page.num - 1
       };
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       findAdvance(obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
       this.serviceId = "";
       this.$refs.Record.init();

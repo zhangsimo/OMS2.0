@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -310,7 +310,7 @@
   import changeJournal from "../components/changeJournal";
   import add from "../components/addJournal";
   import amtData from "../../components/amtData";
-
+  import {showLoading, hideLoading} from "@/utils/loading"
   import moment from "moment";
 
   export default {
@@ -482,14 +482,29 @@
         }
         this.allMoneyList = {};
         let res = await goList(params,data);
-        if (res.code === 0) {
-          //if (res.data.page.content.length > 0) {
+        // if (res.code === 0) {
+        //   //if (res.data.page.content.length > 0) {
+        //     this.allMoneyList = res.data.moneyList;
+        //   //}
+        //   this.tableData = res.data.page.content;
+        //   this.tableData1 = res.data.page.content;
+        //   this.tableData2 = res.data.page.content;
+        //   this.page.total=res.data.page.totalElements
+        try {
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          let res = await goList(params,data);
+          if (res.code === 0) {
+            //if (res.data.page.content.length > 0) {
             this.allMoneyList = res.data.moneyList;
           //}
           this.tableData = res.data.page.content;
           this.tableData1 = res.data.page.content;
           this.tableData2 = res.data.page.content;
           this.page.total=res.data.page.totalElements
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
 

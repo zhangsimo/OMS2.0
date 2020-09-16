@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -93,7 +93,6 @@
           ref="summary"
           highlight-current-row
           @current-change="selete"
-          :loading="data1Loading"
         >
           <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
           <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
@@ -282,6 +281,7 @@ import {getCustomerInformation} from "@/api/system/essentialData/clientManagemen
 import { creat } from "./../components";
 import moment from "moment";
 import {findGuest} from "../../../api/settlementManagement/advanceCollection";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name:'payMentmanage',
   components: {
@@ -2039,6 +2039,7 @@ export default {
       this.copyData = [];
       this.pageObj.total = 0;
       this.pageObj.num = 1;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getreceivable(obj).then(res => {
         this.data1Loading = false;
         if (res.data.length !== 0) {
@@ -2064,6 +2065,9 @@ export default {
           this.data = this.changePageList(this.pageObj.num,this.pageObj.size,this.copyData);
 
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     pageChange({type, currentPage, pageSize, $event}){
