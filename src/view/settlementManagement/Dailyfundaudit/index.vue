@@ -273,7 +273,7 @@
           guestSourceId: this.companyId,
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,
-          shopNumber: this.BranchstoreId,
+          shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
           size: this.page.size,
         }
 
@@ -316,7 +316,7 @@
           guestSourceId: this.companyId,
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,
-          shopNumber: this.BranchstoreId,
+          shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
           size: this.page.size,
           page: this.page.num - 1
         }
