@@ -399,7 +399,7 @@ export default {
       };
       obj = {
         ...obj,
-        orgId: this.BranchstoreId,
+        orgid: this.BranchstoreId,
         guestId: this.companyId,
         size: this.page.size,
         page: this.page.num - 1
