@@ -438,16 +438,16 @@ export default {
       let data = {};
       let params = {};
       if (this.part.fullname.trim()) {
-        data.fullName = this.part.fullname;
+        data.fullName = this.part.fullname.trim();
       }
       if (this.part.code.trim()) {
-        data.partCode = this.part.code;
+        data.partCode = this.part.code.trim();
       }
       if (this.part.partInner.trim()) {
-        data.partId = this.part.partInner
+        data.partId = this.part.partInner.trim()
       }
       if (this.part.oemCode.trim()) {
-        data.oemCode = this.part.oemCode
+        data.oemCode = this.part.oemCode.trim()
       }
       params.strategyId = this.currRow.id;
       params.page = this.part.page.num - 1;

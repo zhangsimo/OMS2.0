@@ -831,8 +831,8 @@ export default {
       page: 1,
       total: 0,
       size: 20,
-      pageSize: 20,
-      pageSizeOpts: [20, 40, 60, 80, 100] 
+      pageSize: 10,
+      pageSizeOpts: [10, 20, 30, 40, 50] 
     };
   },
   mounted() {
@@ -924,6 +924,9 @@ export default {
         if (res.code === 0) {
           console.log("sadfhkjas：" + res.data)
           let data = res.data;
+          this.companyListOptions.push({
+            name: '全部'
+          })
           Object.keys(data).forEach(key=> {
            this.companyListOptions.push({
              id:key,
@@ -978,6 +981,9 @@ export default {
       // this.
       this.getDataObj.size = this.pageSize
       this.getDataObj.page = this.page - 1
+      if (this.getDataObj.createUname.trim()){
+        this.getDataObj.createUname = this.getDataObj.createUname.trim()
+      }
       getActivityList(this.getDataObj).then(res => {
         this.data2 = res.data.content;
         this.total = res.data.totalElements;
