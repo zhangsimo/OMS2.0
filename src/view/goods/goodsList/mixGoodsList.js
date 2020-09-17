@@ -454,8 +454,9 @@ export const mixGoodsData = {
 
       v.forEach(item => {
         item.id = undefined;
-        item.orderPrice = item.recentPrice || undefined;
-        item.orderQty = undefined;
+        item.orderPrice = item.recentPrice || 0.00;
+        item.orderQty = 0;
+        item.orderAmt = 0.00
       })
 
       let oldArr = [...this.tableData, ...v]
