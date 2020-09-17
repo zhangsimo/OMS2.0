@@ -39,6 +39,7 @@
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
+          <Button @click="handle">点击</Button>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
@@ -228,6 +229,8 @@
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
+    <!-- 认领支付弹框11 -->
+    <ClaimModal ref="claimModal"></ClaimModal>
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -243,6 +246,7 @@
   </div>
 </template>
 <script>
+import ClaimModal from "../components/ClaimModal"
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -279,7 +283,8 @@ export default {
     claimGuest,
     settlement,
     payApply,
-    CreditSpending
+    CreditSpending,
+    ClaimModal
   },
   data() {
     return {
@@ -338,6 +343,9 @@ export default {
     }
   },
   methods: {
+    handle(){
+      this.$refs.claimModal.open()
+    },
     //获取门店
     async getShop() {
       let data = {};
@@ -602,5 +610,8 @@ export default {
 }
 .vxe-table .vxe-body--column:not(.col--ellipsis) {
   padding: 0px 10px !important;
+}
+.el-input-number{
+  width: 100px;
 }
 </style>
