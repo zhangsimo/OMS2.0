@@ -209,7 +209,7 @@
     async getList(params){
       let res=await api.table2(params)
       if(res.code===0){
-        this.$parent.tableData2=res.data.content || [];
+        this.$parent.$parent.$parent.tableData2=res.data.content || [];
         this.$parent.$parent.$parent.page.total=res.data.totalElements
       }
     },

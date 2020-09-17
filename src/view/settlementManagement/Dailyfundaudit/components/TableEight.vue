@@ -160,7 +160,7 @@
       async getList(params){
         let res=await api.table8(params)
         if(res.code===0){
-          this.$parent.tableData8=res.data.content || [];
+          this.$parent.$parent.$parent.tableData8=res.data.content || [];
           this.$parent.$parent.$parent.page.total=res.data.totalElements
         }
       },
