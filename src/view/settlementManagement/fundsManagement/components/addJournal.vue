@@ -274,7 +274,9 @@
 
       //保存
       save(){
+        // console.log(this.formCustom.createTime,1111)
         this.$refs.formCustom.validate(async (valid) => {
+          // console.log(valid,1111)
           if (valid) {
             this.formCustom.createTime = moment(this.formCustom.createTime).format("YYYY-MM-DD HH:mm:ss")
             let res = await addSave(this.formCustom)
@@ -283,6 +285,8 @@
               this.modalShow = false
               this.$emit('getNewList' ,{})
               this.$emit("update")
+            }else{
+              this.formCustom.createTime=new Date(this.formCustom.createTime)
             }
           }
         })

@@ -602,6 +602,8 @@ export default {
     queryClaimed() {
       if (this.claimTit === "其他付款认领") {
         this.claimedList(2);
+      }else if(this.claimTit === "其他收款收回"){
+        this.claimedList(1);
       } else {
         this.claimedList(2);
       }
