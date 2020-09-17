@@ -427,7 +427,7 @@ export const mixGoodsData = {
       ) {
         return total
       }
-      if (columnIndex === 12) {
+      if (['orderAmt'].includes(type)) {
         let totals = 0;
         let sumarr = data.map(el => {
           return el.orderPrice * el.orderQty;
@@ -437,7 +437,7 @@ export const mixGoodsData = {
         this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
         return totals.toFixed(2);
       }
-      if (columnIndex === 17) {
+      if (columnIndex == 17) {
         let totals = 0;
         let sumarr = data.map(el => {
           return el.orderPrice - el.recentPrice;
