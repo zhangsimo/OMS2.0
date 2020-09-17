@@ -443,7 +443,7 @@ export default class InterPurchase extends Vue {
     data.details = this.tableData;
     // console.log(this.selectTableRow,111)
     try {
-      
+
       this.saveLoading = true;
       let res = await api.saveInterDraft(data);
       if (res.code == 0) {
@@ -454,7 +454,7 @@ export default class InterPurchase extends Vue {
       this.saveLoading = false;
     } catch (error) {
       this.saveLoading = false;
-      
+
     }
   }
 
@@ -643,7 +643,16 @@ export default class InterPurchase extends Vue {
       }
     });
   }
-
+  //创建a标签
+  private openwin(url:any) {
+    var a = document.createElement("a"); //创建a对象
+    a.setAttribute("href", url);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("id", "camnpr");
+    document.body.appendChild(a);
+    a.click(); //执行当前对象
+    document.body.removeChild(a)
+  }
   // 打印
   private print() {
     // const ref: any = this.$refs.PrintModel;
@@ -653,7 +662,8 @@ export default class InterPurchase extends Vue {
     order.route = this.$route.name;
     order.id = this.mainId;
     let routeUrl = this.$router.resolve({ name: "print", query: order });
-    window.open(routeUrl.href, "_blank");
+    // window.open(routeUrl.href, "_blank");
+    this.openwin(routeUrl.href)
     this.getListData();
   }
 

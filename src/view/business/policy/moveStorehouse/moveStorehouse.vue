@@ -1027,7 +1027,16 @@ export default {
     removeCancel() {
       this.showRemove = false;
     },
-
+    //创建a标签
+    openwin(url) {
+      var a = document.createElement("a"); //创建a对象
+      a.setAttribute("href", url);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("id", "camnpr");
+      document.body.appendChild(a);
+      a.click(); //执行当前对象
+      document.body.removeChild(a)
+    },
     // 打印
     printTable() {
       // this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
@@ -1036,7 +1045,8 @@ export default {
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
-      window.open(routeUrl.href,"_blank");
+      // window.open(routeUrl.href,"_blank");
+      this.openwin(routeUrl.href)
       this.getList()
     },
     //添加配件
