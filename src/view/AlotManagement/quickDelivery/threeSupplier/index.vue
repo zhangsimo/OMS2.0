@@ -90,6 +90,7 @@
       <!--         上表格-->
       <div class="topTableDate" style="height:45%">
         <vxe-table
+          ref="topTable"
           border
           resizable
           highlight-current-row
@@ -454,6 +455,7 @@ export default {
       let page = this.pageList.page;
       let size = this.pageList.pageSize;
       //console.log(this.form, "this.form");
+      this.BottomTableData = [];
       showLoading(".loadingClass")
       zongbuzhidiaoList(page, size, this.form).then(res => {
         if (res.code === 0) {
@@ -463,6 +465,14 @@ export default {
             this.TopTableData[i].enterStoreId = this.storeArray[0].value;
           }
           //console.log(this.TopTableData, "this.TopTableData ==>257");
+
+          let filterSelected = this.TopTableData.filter(item => item.id==this.currentrow.id);
+          if(filterSelected.length>0){
+            this.$refs.topTable.setCurrentRow(filterSelected[0])
+            this.currentChangeEvent({row:filterSelected[0]});
+          }
+
+
         }
         hideLoading()
       }).catch(e => {
@@ -537,6 +547,7 @@ export default {
           msg();
           if (res.code === 0) {
             //console.log(res);
+            this.search();
             this.$Message.info("入库成功");
           }
         })
