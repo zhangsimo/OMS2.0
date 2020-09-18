@@ -84,6 +84,7 @@
             border
             highlight-hover-row
             highlight-current-row
+            show-overflow="tooltip"
             ref="xTable"
             @current-change="currentChangeEvent"
             :data="tableData"

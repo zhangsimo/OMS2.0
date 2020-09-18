@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="Settlement" title="收付款结算" width="1300" @on-visible-change="hander">
+  <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
       <Button class="ivu-btn ivu-btn-default mr10" @click="conserve" :loading="conserveDis">保存</Button>
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
@@ -59,6 +59,8 @@
           :edit-rules="validRules"
           auto-resize
           show-footer
+          size="mini"
+          show-overflow="title"
           max-height="400"
           align="center"
           :data="BusinessType"
@@ -115,6 +117,8 @@
           style="flex:4"
           border
           resizable
+          size="mini"
+          show-overflow="title"
           auto-resize
           show-footer
           max-height="400"

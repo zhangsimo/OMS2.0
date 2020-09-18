@@ -45,6 +45,7 @@
           resizable
           align="center"
           size="mini"
+          show-overflow="title"
           auto-resize
           show-footer
           :data="BusinessType"
@@ -103,6 +104,7 @@
           resizable
           auto-resize
           size="mini"
+          show-overflow="title"
           align="center"
           show-footer
           :footer-method="payCollection"

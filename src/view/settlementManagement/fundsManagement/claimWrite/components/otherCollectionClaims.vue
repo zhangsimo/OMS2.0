@@ -1,18 +1,18 @@
 <template>
   <div>
-    <Modal v-model="modal" :title="claimTit" width="800">
+    <Modal v-model="modal" :title="claimTit" width="1000">
       <Row class="dbd" v-if="claimTit=='预收款认领'">
         <i-col span="15">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
         </i-col>
         <i-col span="9" class="tr">
           <Form :model="formValidate" ref="form" :rules="ruleValidate">
-            <FormItem label="选择辅助核算" prop="voucherInput">
+            <FormItem label="选择辅助核算：" prop="voucherInput">
               <Row>
                 <i-col span="8">
                   <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
-                <i-col span="2">
+                <i-col span="2" class="ml10">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
               </Row>
@@ -23,12 +23,12 @@
       <Row class="dbd" v-else>
         <i-col span="15">
           <Form :model="formValidate" ref="form" :rules="ruleValidate">
-            <FormItem label="选择辅助核算" prop="voucherInput">
+            <FormItem label="选择辅助核算：" prop="voucherInput">
               <Row>
                 <i-col span="8">
                   <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
-                <i-col span="2">
+                <i-col span="2" class="ml10">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
               </Row>
@@ -47,43 +47,46 @@
         :edit-rules="validRules"
         highlight-hover-row
         highlight-current-row
+        show-overflow="title"
         auto-resize
-        height="300"
         @current-change="currentChangeEvent"
         :edit-config="{trigger: 'click', mode: 'cell'}"
         size="mini"
         :data="accrued"
       >
-        <vxe-table-column type="seq" title="序号"></vxe-table-column>
-        <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-        <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-        <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-        <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-        <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-        <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-        <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-        <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-        <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-        <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+        <vxe-table-column field="area" width="80" title="所属区域"></vxe-table-column>
+        <vxe-table-column field="shopName" width="120" title="所属门店"></vxe-table-column>
+        <vxe-table-column field="shopCode" width="100" title="所属店号"></vxe-table-column>
+        <vxe-table-column field="accountName" width="100" title="账户"></vxe-table-column>
+        <vxe-table-column field="accountCode" width="100" title="账号"></vxe-table-column>
+        <vxe-table-column field="bankName" width="120" title="开户行"></vxe-table-column>
+        <vxe-table-column field="mateAccountName" width="80" title="对应科目"></vxe-table-column>
+        <vxe-table-column field="createTime" width="140" title="发生日期"></vxe-table-column>
+        <vxe-table-column field="incomeMoney" width="80" title="收入金额"></vxe-table-column>
+        <vxe-table-column field="paidMoney" width="80" title="支出金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           align="center"
+          width="120"
           v-if="claimTit=='预收款认领'"
         ></vxe-table-column>
         <vxe-table-column
           field="balanceMoney"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
+          width="120"
           align="center"
           v-else
         ></vxe-table-column>
-        <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
+        <vxe-table-column field="reciprocalAccountName" width="80" title="对方户名"></vxe-table-column>
         <vxe-table-column
           field="tradingNote"
           :edit-render="{name: 'input',immediate:true, attrs: {type: 'text'}}"
           title="交易备注"
+          width="200"
           align="center"
         ></vxe-table-column>
       </vxe-table>
