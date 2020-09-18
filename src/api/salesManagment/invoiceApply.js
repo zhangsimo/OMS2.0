@@ -3,10 +3,11 @@ import api from "_conf/url";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 //列表
-export function getInvoiceList(data) {
+export function getInvoiceList(params,data) {
   return axios.request({
     url: `${api.omsSettle}/invoiceApply/queryPageByStatus`,
     method: "post",
+    params,
     data
   });
 }
