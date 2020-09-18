@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -407,7 +407,7 @@
   import NoTax from "./Popup/noTax";
   import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
   import invoiceApplyTost from "@/view/settlementManagement/invoiceAdministration/components/invoiceApplyTost"
-
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: 'accountStatement',
@@ -1536,6 +1536,7 @@
         };
         obj.page = this.page.num - 1
         obj.size = this.page.size
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         AccountStatement(obj).then(res => {
           this.pagetotal = res.data.totalElements;
           if (res.data.content.length !== 0) {
@@ -1546,9 +1547,13 @@
               item.statementStatusName = item.statementStatus.name;
             });
             this.data1 = res.data.content;
+            hideLoading()
           } else {
             this.data1 = [];
+            hideLoading()
           }
+        }).catch(e => {
+          hideLoading()
         });
       },
       // 页码

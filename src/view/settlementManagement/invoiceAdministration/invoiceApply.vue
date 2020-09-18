@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box paddinSize">
       <div class="oper-top flex">
         <div class="wlf">
@@ -144,6 +144,7 @@ import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 
 export default {
   name: "invoiceAdministrationInvoiceApply",
@@ -1281,14 +1282,19 @@ export default {
       });
     },
     getDataList() {
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getInvoiceList(this.form).then(res => {
         if (res.code === 0) {
           this.data = res.data.content.map((item,index)=>{
             item.seq=index + this.form.page * this.form.size + 1
             return item
           });
+          hideLoading()
           this.pagetotal = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     async getShop(){

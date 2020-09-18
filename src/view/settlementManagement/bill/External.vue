@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -116,6 +116,7 @@ import {
 } from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "billExternal",
   components: {
@@ -666,6 +667,7 @@ export default {
           (obj.enterDateEnd = this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
+          showLoading(".loadingClass", "数据加载中，请勿操作")
           getWarehousingList(params,obj).then(res => {
             if (res.data.vos) {
               res.data.vos.map((item, index) => {
@@ -676,9 +678,13 @@ export default {
               this.data = res.data.vos;
               this.page.total = res.data.TotalElements;
               // this.total = res.data.AllotOutMainVO
+              hideLoading()
             } else {
+              hideLoading()
               this.data = [];
             }
+          }).catch(e => {
+            hideLoading()
           });
       } else if (this.type === "050201") {
         (obj.outDateStart = this.value[0]

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -194,6 +194,7 @@
   import Cookies from "js-cookie";
   import {TOKEN_KEY} from "../../../libs/util";
   import qs from "qs"
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: "billCollectionPayment",
@@ -888,6 +889,7 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         getReceiptsPaymentsSummary(params, data).then(res => {
           if (res.data.paymentRecordVosTemp.length !== 0) {
             res.data.paymentRecordVosTemp.map((item, index) => {
@@ -898,9 +900,13 @@
             this.data = res.data.paymentRecordVosTemp;
             this.page.total = res.data.TotalElements;
             this.total = res.data.PaymentRecordVo
+            hideLoading()
           } else {
+            hideLoading()
             this.data = [];
           }
+        }).catch(e => {
+          hideLoading()
         });
       },
       // 选中总表查询明细
