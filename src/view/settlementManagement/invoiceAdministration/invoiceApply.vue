@@ -135,6 +135,7 @@ import {
   IntelligenceList,
   updateNumber,
   writeData,
+  exportModifyData/**导出配件明细*/,
   getOptionFdList,
   getOptionGuesList
 } from "_api/salesManagment/invoiceApply";
@@ -144,13 +145,6 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
 import moment from "moment";
 
-/**
- * 序号	分店名称	店号	往来单位	      申请日期	  对账单号	 开票申请单号	发票种类	  购方税号	      购方邮箱	购方开户行及账号	 购方地址、电话	开票单位	   配件名称	配件编码
-        orgName	orgCode	guestName	applyDate	accountNo	applyNo	invoiceKind	customDuty	customMail	customAccount	tel	       invoiceUnit	partName	partCode
- 油品包装规格	油品换算单位	油品换算数量	单位	数量	    商品含税单价	商品含税金额	开票税率	出库单号	销售单价	销售金额	已开票金额	未开票金额	       外加税点	          申请开票总金额	收款方式	开票清单类型	备注	       快递方式	发票性质	推送手机	税收分类编码	是否享受优惠政策	优惠政策名称	零税率标识	扣除额	折扣金额	收款人（只有快递收件人和收款方式）	复核人	开票人（只有导入开票单位和申请人）
- oilsSpec	oilsUnit	oilsQty	unit	qty	         taxPrice	   taxAmt    	taxRate	  outNo  	salePrice	saleAmt	invoiceAmt	invoiceNotAmt	additionalTaxPoint	applyAmt	collectionType	isOilPart	remark	sendingWay
- *
- * */
 export default {
   name: "invoiceAdministrationInvoiceApply",
   components: {
@@ -1142,6 +1136,7 @@ export default {
       allTablist: [],
       flag: true,
       loading1: false,//查询时判断
+      company:[]
     };
   },
   computed:{
@@ -1180,11 +1175,12 @@ export default {
       })
     },
     modifyData(){
-      this.$refs.parts.exportCsv({
-        filename:"开票申请配件明细表",
-        data:this.data1,
-        columns:this.columns1
-      })
+      // this.$refs.parts.exportCsv({
+      //   filename:"开票申请配件明细表",
+      //   data:this.data1,
+      //   columns:this.columns1
+      // })
+      location.href=exportModifyData(this.allTablist)
     },
     operation(num) {
       switch (num) {
