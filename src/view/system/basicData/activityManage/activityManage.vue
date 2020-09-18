@@ -1295,6 +1295,7 @@ export default {
 #row {
   // height: 80px;
   margin-top: 10px;
-  z-index: 999;
+  float: right;
+  z-index: 99;
 }
 </style>
