@@ -1,5 +1,7 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 //列表
 export function getInvoiceList(data) {
   return axios.request({
@@ -90,4 +92,11 @@ export function getOptionGuesList(params) {
     params
   });
 }
-
+//开票申请查询与核销 导出配件明细
+export function exportModifyData(params){
+  let str=""
+  for(var i=0;i<params.length;i++){
+    str+=`ids=${params[i].id}&`
+  }
+  return `${api.omsSettle}/invoiceApply/export/findinvoiceApplyDetail?${str}access_token=${Cookies.get(TOKEN_KEY)}`
+}
