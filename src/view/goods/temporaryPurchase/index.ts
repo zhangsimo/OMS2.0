@@ -24,6 +24,8 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import { v4 } from "uuid"
 import GoodCus from "_c/allocation/GoodCus.vue"
+import { hideLoading, showLoading } from "../../../utils/loading";
+
 
 
 @Component({
@@ -511,14 +513,17 @@ export default class TemporaryPurchase extends Vue {
               onOk: async () => {
                 try {
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.temporarySaveCommit(data);
                   if (res.code == 0) {
                     this.$Message.success('提交成功');
                     this.getListData();
                     this.isAdd = true;
                   }
+                  hideLoading()
                   this.commitLoading = false;
                 } catch (error) {
+                  hideLoading()
                   this.commitLoading = false;
                 }
               },
@@ -529,6 +534,7 @@ export default class TemporaryPurchase extends Vue {
           },500)
         }else{
           try {
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             this.commitLoading = true;
             let res = await api.temporarySaveCommit(data);
             if (res.code == 0) {
@@ -536,8 +542,10 @@ export default class TemporaryPurchase extends Vue {
               this.getListData();
               this.isAdd = true;
             }
+            hideLoading()
             this.commitLoading = false;
           } catch (error) {
+            hideLoading()
             this.commitLoading = false;
           }
         }
@@ -677,7 +685,16 @@ export default class TemporaryPurchase extends Vue {
       },
     })
   }
-
+  //创建a标签
+  private openwin(url:any) {
+    var a = document.createElement("a"); //创建a对象
+    a.setAttribute("href", url);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("id", "camnpr");
+    document.body.appendChild(a);
+    a.click(); //执行当前对象
+    document.body.removeChild(a)
+  }
   // 打印
   private print() {
     let order:any = {};
@@ -685,7 +702,8 @@ export default class TemporaryPurchase extends Vue {
     order.route=this.$route.name
     order.id=this.mainId
     let routeUrl=this.$router.resolve({name:"print",query:order})
-    window.open(routeUrl.href,"_blank");
+    // window.open(routeUrl.href,"_blank");
+    this.openwin(routeUrl.href)
     this.getListData()
   }
 

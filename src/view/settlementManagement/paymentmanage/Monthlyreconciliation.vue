@@ -79,21 +79,19 @@
                     </button>
                   </div>
                 </Poptip>
-                <button
+                <Button
                   class="mr8 ivu-btn ivu-btn-default"
-                  type="button"
                   @click="preservationDraft"
-                  :disabled="disabledBtn"
+                  :loading="disabledBtn"
                 >保存
-                </button>
-                <button
+                </Button>
+                <Button
                   class="mr8 ivu-btn ivu-btn-default"
-                  type="button"
                   v-noresub
                   @click="preservationSubmission"
-                  :disabled="disabledBtn"
+                  :loading="disabledBtn"
                 >提交
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -101,7 +99,7 @@
         <section class="con-box">
           <div class="inner-box">
             <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
-            <div class="db mt10 info" v-if="info">
+            <div class="db mt10 info" v-show="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
@@ -312,9 +310,9 @@
                 <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
                 <Input type="text" v-model="Reconciliationtotal" readonly class="w80 tc"/>
               </div>
-              <div class="db">
+              <div class="db mt10">
                 <span class="mr5">计划结算类型</span>
-                <Select class="w100" v-model="totalvalue" readonly>
+                <Select class="w100" v-model="totalvalue" label-in-value @on-change="changeTotal">
                   <Option
                     v-for="item in SettlementType"
                     :value="item.value"
@@ -322,27 +320,43 @@
                   >{{ item.label }}
                   </Option>
                 </Select>
-                <span class="mr5 ml10">返利请示单号</span>
-                <Input type="text" readonly v-model="Rebateid" class="w200"/>
+                <span class="mr5 ml10">应收返利请示单号</span>
+                <Input type="text" readonly v-model="RebateidCollect" class="w200"/>
                 <button
                   class="mr8 ml10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="openSelect('request')"
                 >选择
                 </button>
-                <span class="mr5 ml10">坏账请示单号</span>
-                <Input type="text" readonly v-model="BadDebtid" class="w200"/>
+                <span class="mr5 ml10 mt10">应收坏账请示单号</span>
+                <Input type="text" readonly v-model="BadDebtidCollect" class="w200"/>
                 <button
                   class="mr8 ml10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="openSelect('request2')"
                 >选择
                 </button>
-                <div class="pt10">
-                  <span style="color:red">*</span>
-                  <span class="mr5">备注</span>
-                  <Input type="text" v-model="remark" class="w260 tc"/>
-                </div>
+              </div>
+              <div class="db mt10">
+                <span style="color:red">*</span>
+                <span class="mr5">备注</span>
+                <Input type="text" v-model="remark" class="w150 tc"/>
+                <span class="mr5 ml10">应付返利请示单号</span>
+                <Input type="text" readonly v-model="RebateidPayment" class="w200"/>
+                <button
+                  class="mr8 ml10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="openSelect('requestPay')"
+                >选择
+                </button>
+                <span class="mr5 ml10">应付坏账请示单号</span>
+                <Input type="text" readonly v-model="BadDebtidPayment" class="w200"/>
+                <button
+                  class="mr8 ml10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="openSelect('requestPay2')"
+                >选择
+                </button>
               </div>
             </div>
           </div>
@@ -467,8 +481,14 @@
         <Button type="default" @click="clientDataShow2=false">取消</Button>
       </div>
       <!--    选择的模态框-->
+      <!--      应收返利-->
       <requestCode ref="request" @backList="getBackList"></requestCode>
+      <!--      应收坏账-->
       <requestCode ref="request2" @backList="getBackList2"></requestCode>
+      <!--      应付返利-->
+      <requestCode ref="requestPay" @backList="getBackListPay"></requestCode>
+      <!--      应付坏账-->
+      <requestCode ref="requestPay2" @backList="getBackListPay2"></requestCode>
     </Modal>
   </div>
 </template>
@@ -571,8 +591,10 @@
         companyInfo: "",
         thiscompanyInfo: "", //弹框往来单位
         billDate: "",
-        Rebateid: "", //返利单号
-        BadDebtid: "", //坏帐单号
+        RebateidCollect: "", //返利单号 应收
+        BadDebtidCollect: "", //坏帐单号 应收
+        RebateidPayment: "", //返利单号 应付
+        BadDebtidPayment: "", //坏帐单号 应付
         remark: "", //备注
         totalpayment: 0, //应付合计
         paymentBaddebt: 0, //应付坏账
@@ -585,6 +607,7 @@
         serviceCharge: 0, //手续费
         partsManagementFee: 0, //配件管理费
         otherFees: 0, //其他费用
+        totalvalue:"1",
         Reconciliation: false,
         modifyAccountAmt: 0,
         modal: false,
@@ -857,18 +880,18 @@
         clientList2: {},
         provinceArr2: [],
         treeDiagramList2: [],
-        pageObj:{
-          size:10,
-          total:0,
-          num:1
+        pageObj: {
+          size: 10,
+          total: 0,
+          num: 1
         },
-        pageObj1:{
-          size:10,
-          total:0,
-          num:1
+        pageObj1: {
+          size: 10,
+          total: 0,
+          num: 1
         },
-        copyData:[],
-        copyData1:[]
+        copyData: [],
+        copyData1: []
       };
     },
     async mounted() {
@@ -908,41 +931,49 @@
       //本次对账结算合计
       Reconciliationtotal() {
         return this.Actualtotalcollect - this.Actualtotalpayment;
-      },
-      //计划结算类型
-      totalvalue() {
-        if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
-          if (this.Reconciliationtotal > 0) {
-            this.info = false;
-            return "1";
-          } else if (this.Reconciliationtotal < 0) {
-            this.info = true;
-            return "0";
-          } else {
-            this.info = false;
-            return "2";
-          }
-        } else {
-          return "1";
-        }
       }
     },
     methods: {
-      pageChange({type, currentPage, pageSize, $event}){
-        this.pageObj.num  = currentPage;
+      //计划结算类型
+      totalvalueFun() {
+        if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
+          if (this.Reconciliationtotal > 0) {
+            this.info = false;
+            this.totalvalue="1";
+          } else if (this.Reconciliationtotal < 0) {
+            this.info = true;
+            this.totalvalue="0";
+          } else {
+            this.info = false;
+            this.totalvalue="2";
+          }
+        } else {
+          this.info = false;
+          this.totalvalue="1";
+        }
+      },
+      changeTotal(){
+        if(this.totalvalue=="1" || this.totalvalue=="2"){
+          this.info = false;
+        }else if(this.totalvalue=="0"){
+          this.info = true;
+        }
+      },
+      pageChange({type, currentPage, pageSize, $event}) {
+        this.pageObj.num = currentPage;
         this.pageObj.size = pageSize;
-        this.data1 = this.changePageList(currentPage,pageSize,this.copyData);
+        this.data1 = this.changePageList(currentPage, pageSize, this.copyData);
       },
-      pageChange2({type, currentPage, pageSize, $event}){
-        this.pageObj1.num  = currentPage;
+      pageChange2({type, currentPage, pageSize, $event}) {
+        this.pageObj1.num = currentPage;
         this.pageObj1.size = pageSize;
-        this.data2 = this.changePageList(currentPage,pageSize,this.copyData1);
+        this.data2 = this.changePageList(currentPage, pageSize, this.copyData1);
       },
-      changePageList(currentPage,pageSize,sourceData){
-        let firstNum = pageSize*(currentPage-1);
-        let lastNum = firstNum+pageSize;
-        let arrData = (sourceData||[]).slice(firstNum,lastNum);
-        return arrData||[];
+      changePageList(currentPage, pageSize, sourceData) {
+        let firstNum = pageSize * (currentPage - 1);
+        let lastNum = firstNum + pageSize;
+        let arrData = (sourceData || []).slice(firstNum, lastNum);
+        return arrData || [];
       },
 
 
@@ -957,7 +988,7 @@
             ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
             : "",
           endDate: this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : ""
         };
         this.query(obj);
@@ -1025,12 +1056,21 @@
         this.$refs[request].open();
       },
       //获取选择的信息
+      //应收返利
       getBackList(row) {
-
-        this.Rebateid = row.applyNo;
+        this.RebateidCollect = row.applyNo;
       },
+      //应收坏账
       getBackList2(row) {
-        this.BadDebtid = row.applyNo;
+        this.BadDebtidCollect = row.applyNo;
+      },
+      //应付返利
+      getBackListPay(row) {
+        this.RebateidPayment = row.applyNo;
+      },
+      //应付坏账
+      getBackListPay2(row) {
+        this.BadDebtidPayment = row.applyNo;
       },
       // 计算应收业务销售出库/退货对账的总计
       collectSum(sumData) {
@@ -1063,8 +1103,10 @@
           this.model1 = this.parameter.orgId;
           this.companyInfo = this.parameter.guestId;
           this.$refs.companyGuset.query = this.parameter.guestName;
-          this.Rebateid = "";
-          this.BadDebtid = "";
+          this.RebateidCollect = ""; //应收返利请示单号清空
+          this.BadDebtidCollect = "";//应收坏账请示单号清空
+          this.RebateidPayment = "";//应付返利请示单号清空
+          this.BadDebtidPayment = "";//应付坏账请示单号清空
           this.remark = "";
           this.totalpayment = 0;
           this.paymentBaddebt = 0;
@@ -1194,7 +1236,7 @@
             // this.data1 = res.data.two;
             this.copyData = res.data.two;
             this.pageObj.total = res.data.two.length;
-            this.data1 = this.changePageList(this.pageObj.num,this.pageObj.size,this.copyData);
+            this.data1 = this.changePageList(this.pageObj.num, this.pageObj.size, this.copyData);
           } else {
             this.data1 = [];
           }
@@ -1207,7 +1249,7 @@
 
             this.copyData1 = res.data.three;
             this.pageObj1.total = res.data.three.length;
-            this.data2 = this.changePageList(this.pageObj1.num,this.pageObj1.size,this.copyData1);
+            this.data2 = this.changePageList(this.pageObj1.num, this.pageObj1.size, this.copyData1);
 
           } else {
             this.data2 = [];
@@ -1369,6 +1411,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
+        this.totalvalueFun();
         // this.tipText(this.paymentlist);
       },
       // 应收选中
@@ -1383,7 +1426,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-
+        this.totalvalueFun();
         // this.tipText(this.collectlist);
       },
       // 应收全选
@@ -1396,7 +1439,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-
+        this.totalvalueFun();
         // this.tipText(this.collectlist);
       },
       //选中提醒
@@ -1433,7 +1476,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
-
+        this.totalvalueFun();
         // this.tipText(this.paymentlist);
       },
       // 应付取消选中
@@ -1443,6 +1486,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
+        this.totalvalueFun();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
@@ -1451,6 +1495,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
+        this.totalvalueFun();
       },
       // 应付取消全选
       paymentNoCheckoutAll() {
@@ -1460,6 +1505,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
+        this.totalvalueFun();
       },
       // 应收取消全选
       collectNoCheckoutAll() {
@@ -1469,6 +1515,7 @@
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
+        this.totalvalueFun();
       },
       // 本次不对帐金额弹窗
       async noReconciliation() {
@@ -1517,6 +1564,8 @@
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
             this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
+            this.totalcollect = sum1
+            this.Actualtotalcollect = sum1
           } else {
             let sum1 = 0
             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1541,6 +1590,8 @@
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
             this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
+            this.totalpayment = sum1
+            this.Actualtotalpayment = sum1
           }
           this.Reconciliation = false;
         } else {
@@ -1550,7 +1601,7 @@
       // 保存接口
       getPreservation(num) {
         //判断是否存在草稿占用
-        let selectArrData = [...this.collectlist,...this.paymentlist]
+        let selectArrData = [...this.collectlist, ...this.paymentlist]
         let dartArr = selectArrData.filter(item => item.existDraft === 1);
         if (dartArr.length > 0) {
           this.tipText(selectArrData);
@@ -1566,23 +1617,43 @@
           if (num === 1 && !this.paymentUname)
             return this.$message.error("付款账户不能为空");
         }
-        if(num!=0){
-          if (this.paymentBaddebt > 100 || this.collectBaddebt>100) {
-            if (!this.BadDebtid) {
+        if (num != 0) {
+          if (this.collectBaddebt > 100) {
+            if (!this.BadDebtidCollect) {
               // this.$message.error("请输入应收坏账请示单号");
               this.$message({
-                message: "请输入坏账请示单号",
+                message: "请输入应收坏账请示单号",
                 type: "error",
                 customClass: "zZindex"
               });
               return "";
             }
           }
-          if (this.paymentRebate > 100 || this.collectRebate>100) {
-            if (!this.Rebateid) {
+          if (this.paymentBaddebt < -100) {
+            if (!this.BadDebtidPayment) {
+              this.$message({
+                message: "请输入应付坏账请示单号",
+                type: "error",
+                customClass: "zZindex"
+              });
+              return "";
+            }
+          }
+          if (this.collectRebate > 100) {
+            if (!this.RebateidCollect) {
               // this.$message.error("请输入应收返利请示单号");
               this.$message({
-                message: "请输入返利请示单号",
+                message: "请输入应收返利请示单号",
+                type: "error",
+                customClass: "zZindex"
+              });
+              return "";
+            }
+          }
+          if (this.paymentRebate < -100) {
+            if (!this.RebateidPayment) {
+              this.$message({
+                message: "请输入应付返利请示单号",
                 type: "error",
                 customClass: "zZindex"
               });
@@ -1636,8 +1707,10 @@
               actualPayment: this.Actualtotalpayment,
               settlementTotal: this.Reconciliationtotal,
               billingType: this.totalvalue,
-              rebateNo: this.Rebateid,
-              badDebNo: this.BadDebtid,
+              rebateNo: this.RebateidCollect, //应收返利请示单号
+              badDebNo: this.BadDebtidCollect,//应收坏账请示单号
+              payingRebateNo: this.RebateidPayment, //应付返利请示单号
+              payingBadDebtNo: this.BadDebtidPayment,//应付坏账请示单号
               buttonStatus: num,
               incomeType: this.totalvalue,
               remark: this.remark,
@@ -1738,7 +1811,7 @@
           // }
           // str1 = str1.substring(0, str1.length - 1);
           // str2 = str2.substring(0, str2.length - 1);
-          console.log(str1,str2)
+          console.log(str1, str2)
           location.href = `${baseUrl.omsSettle}/accounts/receivable/export/in/business?access_token=${Cookies.get(TOKEN_KEY)}${str1}${str2}`;
         } else {
           // this.$message.error("请勾选要导出的对账清单");
@@ -1904,7 +1977,7 @@
       },
 
       //销售出库，本次不对账金额弹窗
-      openThisRec(row,i){
+      openThisRec(row, i) {
         this.Reconciliation = true;
         this.$refs.xTable.recalculate(true)
         row.detailDtoList.map((item, index) => {

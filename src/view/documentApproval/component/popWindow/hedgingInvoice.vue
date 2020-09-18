@@ -23,21 +23,23 @@
       </Row>
       <h4 class="mb10 mt10">对账单明细</h4>
     </div>
-    <button
+    <Button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
       @click="preservation"
       v-has="'examine'"
       :disabled="modelType.type!==1"
-    >保存草稿</button>
-    <button
+      :loading="preDis"
+    >保存草稿</Button>
+    <Button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
       @click="submission"
+      :loading="preDis"
       v-has="'examine'"
       v-noresub
       :disabled="modelType.type!==1"
-    >提交申请</button>
+    >提交申请</Button>
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="5">
@@ -134,6 +136,7 @@ export default {
   },
   data() {
     return {
+      preDis:false,//保存接口返回之前按钮不可点击
       formInline: {
         applicant: "",
         deptName: "",
@@ -249,10 +252,14 @@ export default {
         details: this.accessoriesBillingData
       };
       // console.log(this.accessoriesBillingData)
+      this.preDis=true;
       hedPreservation(obj).then(res => {
         if (res.code === 0) {
+          this.preDis=false;
           this.$message.success("保存成功");
           this.modal1 = false;
+        }else{
+          this.preDis=false;
         }
       });
     },
@@ -280,10 +287,14 @@ export default {
         applyReason: this.remarks,
         details: this.accessoriesBillingData
       };
+      this.preDis=true;
       hedSubmit(obj).then(res => {
         if (res.code === 0) {
           this.$message.success("提交成功");
           this.modal1 = false;
+          this.preDis=false;
+        }else{
+          this.preDis=false
         }
       });
     },

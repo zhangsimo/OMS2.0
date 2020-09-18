@@ -3,7 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%"
   >
-    <div class="content-oper content-oper-flex" style="box-shadow:none">
+    <div class="content-oper content-oper-flex loadingClass" style="box-shadow:none">
       <section class="oper-box">
         <div class="oper-top flex">
           <div class="wlf">
@@ -411,6 +411,8 @@ import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
 import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import { findForAllot } from "_api/purchasing/purchasePlan";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 
 import {
   getList1,
@@ -939,6 +941,7 @@ export default {
       params.settleStatus = params.settleStatus.value;
       params["orderTypeId"] = "3";
       this.isCommitClick = true;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
@@ -946,12 +949,13 @@ export default {
             this.getList();
             // this.reload();
             this.$Message.success("提交成功");
-
           }
+          hideLoading()
           this.isCommitClick = false;
         })
         .catch(e => {
           this.isCommitClick = false
+          hideLoading()
         })
       // this.getList(this.form);
     },
@@ -1006,6 +1010,16 @@ export default {
         return this.$Message.error("请先选择调出方和调出仓库");
       this.$refs.addPart.init();
     },
+    //创建a标签
+    openwin(url) {
+      var a = document.createElement("a"); //创建a对象
+      a.setAttribute("href", url);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("id", "camnpr");
+      document.body.appendChild(a);
+      a.click(); //执行当前对象
+      document.body.removeChild(a)
+    },
     //打印表格
     printTable() {
       if (!this.dayinCureen.id) {
@@ -1017,7 +1031,8 @@ export default {
       order.route=this.$route.name
       order.id=this.dayinCureen.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
-      window.open(routeUrl.href,"_blank");
+      // window.open(routeUrl.href,"_blank");
+      this.openwin(routeUrl.href)
       this.$refs.OrderLeft.getList()
     },
     chuku() {
@@ -1026,6 +1041,7 @@ export default {
       };
       // 配件组装作废
       this.isOutClick = true;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       outDataList(params)
         .then(res => {
           // 点击列表行==>配件组装信息
@@ -1034,8 +1050,10 @@ export default {
             this.$Message.success("出库成功");
           }
           this.isOutClick = false;
+          hideLoading()
         })
         .catch(e => {
+          hideLoading()
           this.isOutClick = false;
           this.$Message.error("出库失败");
         });

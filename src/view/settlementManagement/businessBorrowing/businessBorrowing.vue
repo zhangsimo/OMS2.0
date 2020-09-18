@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -355,7 +355,7 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimPay">认领</Button>
+      <Button class="ml10" @click="claimPay" :loading="claimPayDis">认领</Button>
       <!--<Button class="ml10" v-else @click="claimCollection">预收款认领</Button>-->
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
@@ -399,6 +399,7 @@ import { goshop } from "@/api/settlementManagement/shopList";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
 import writeOff from "./components/writeOff";
+import {showLoading, hideLoading} from "@/utils/loading"
 // otherReceivables
 import moment from "moment";
 
@@ -427,6 +428,7 @@ export default {
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
       claimTit: "", //认领弹框标题
+      claimPayDis:false,//认领接口返回之前按钮不可点击
       revokeTit: "", //撤回弹框标题
       amt: null, //认领弹框金额
       bankNameO: "", //认领弹框对方户名
@@ -606,11 +608,15 @@ export default {
           delete data[d];
         }
       }
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       api.findListPageAll(params, data).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
       this.serviceId = "";
       this.$refs.Record.init();
@@ -637,12 +643,16 @@ export default {
           loanId: this.$store.state.businessBorrowing.loanId,
           claimType: this.$store.state.businessBorrowing.claimType,
         }
+        this.claimPayDis=true;
         api.addClaim(obj).then(res => {
           if (res.code === 0) {
+            this.claimPayDis=false;
             this.$message.success('认领成功')
             this.modal = false
             this.getQuery()
             // this.$parent.reload();
+          }else{
+            this.claimPayDis=false;
           }
         })
         this.claimModal = false;

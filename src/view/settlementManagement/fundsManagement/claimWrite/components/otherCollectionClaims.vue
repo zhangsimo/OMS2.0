@@ -251,11 +251,6 @@ export default {
         this.claimSelection = [];
       }
     },
-    //认领弹框传参数据
-    selection(arr) {
-      this.claimSelection = [];
-      this.claimSelection.push({ id: arr.id });
-    },
     //其他付款认领弹窗查询
     claimedList(type) {
       let obj = {
@@ -402,9 +397,12 @@ export default {
         }
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
+          //刷新 列表
+          this.$parent.$parent.queryClaimed()
+          //清空选中
+          this.$parent.$parent.$refs.claim.currentClaimed=[]
           this.modal = false;
           this.claimTit=="预收款认领"?this.$Message.success("预收款认领成功"):this.$Message.success("其他收款认领成功")
-
         }
       }else{
         data.guestId = objItem.id||"";
@@ -413,6 +411,8 @@ export default {
           data.claimMoney=this.accrued[0].rpAmt;
           addClaim2(data).then(res=>{
             if(res.code===0){
+              this.$parent.$parent.queryClaimed()
+              this.$parent.$parent.$refs.claim.currentClaimed=[]
               this.$Message.success('认领成功')
               this.modal = false;
             }
@@ -423,6 +423,8 @@ export default {
           data.claimMoney=this.accrued[0].balanceMoney
           addClaim(data).then(res=>{
             if(res.code===0){
+              this.$parent.$parent.queryClaimed()
+              this.$parent.$parent.$refs.claim.currentClaimed=[]
               this.$Message.success('认领成功')
               this.modal = false;
             }

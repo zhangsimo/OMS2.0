@@ -19,6 +19,8 @@ import PrintModel from "./components/print.vue";
 import StatusModal from "./components/checkApprovalModal.vue";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
+import {showLoading, hideLoading} from "@/utils/loading"
+
 @Component({
   components: {
     QuickDate,
@@ -470,6 +472,7 @@ export default class PlannedPurchaseOrder extends Vue {
               onOk: async () => {
                 try {
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.saveCommit(data);
                   if (res.code == 0) {
                     this.$Message.success("提交成功");
@@ -477,8 +480,10 @@ export default class PlannedPurchaseOrder extends Vue {
                     this.isAdd = true;
                   }
                   this.commitLoading = false;
+                  hideLoading()
                 } catch (error) {
                   this.commitLoading = false;
+                  hideLoading()
                 }
               },
               onCancel: () => {
@@ -488,6 +493,7 @@ export default class PlannedPurchaseOrder extends Vue {
           }, 500);
         } else {
           try {
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             this.commitLoading = true;
             let res = await api.saveCommit(data);
             if (res.code == 0) {
@@ -495,8 +501,10 @@ export default class PlannedPurchaseOrder extends Vue {
               this.getListData();
               this.isAdd = true;
             }
+            hideLoading()
             this.commitLoading = false;
           } catch (error) {
+            hideLoading()
             this.commitLoading = false;
           }
         }
@@ -692,10 +700,20 @@ export default class PlannedPurchaseOrder extends Vue {
     order.route = this.$route.name;
     order.id = this.mainId;
     let routeUrl = this.$router.resolve({ name: "print", query: order });
-    window.open(routeUrl.href, "_blank");
+    // window.open(routeUrl.href, "_blank");
+    this.openwin(routeUrl.href)
     this.getListData();
   }
-
+  //创建a标签
+  private openwin(url:any) {
+    var a = document.createElement("a"); //创建a对象
+    a.setAttribute("href", url);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("id", "camnpr");
+    document.body.appendChild(a);
+    a.click(); //执行当前对象
+    document.body.removeChild(a)
+  }
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;

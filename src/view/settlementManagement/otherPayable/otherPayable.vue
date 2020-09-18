@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -338,6 +338,7 @@ import OtherPayment from "../../documentApproval/component/OtherPayment";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
 import { goshop } from "@/api/settlementManagement/shopList";
 import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
+import {showLoading, hideLoading} from "@/utils/loading"
 import {
   findAdvance,
   revoke,
@@ -481,12 +482,16 @@ export default {
         page: this.page.num - 1
       };
       this.BranchstoreId==0?obj.orgid="":obj.orgid=this.BranchstoreId
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           // console.log(res.data.content)
           this.page.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
       this.serviceId = "";
       this.$refs.Record.init();

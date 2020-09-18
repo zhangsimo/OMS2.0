@@ -1,20 +1,20 @@
 <template>
   <Modal v-model="modal1" title="发票对冲申请" width="1200" @on-visible-change="visChange">
-    <button
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       @click="preservation"
+      :loading="preservationDis"
       v-has="'examine'"
     >保存草稿
-    </button>
-    <button
+    </Button>
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       v-noresub
       @click="submission"
+      :loading="preservationDis"
       v-has="'examine'"
     >提交申请
-    </button>
+    </Button>
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="5">
@@ -113,6 +113,7 @@
     data() {
       return {
         information: {}, //传参
+        preservationDis:false,//保存草稿按钮接口没有返回不可点击
         approvalTit: "对冲申请流程", //审批流程
         modal1: false, //弹框显示
         invoiceHedging: "", //对冲发票
@@ -191,11 +192,15 @@
           serviceId: this.information.serviceId,
           details: this.accessoriesBillingData
         };
+        this.preservationDis=true;
         // console.log(this.accessoriesBillingData)
         hedPreservation(obj).then(res => {
           if (res.code === 0) {
+            this.preservationDis=false
             this.$message.success("保存成功");
             this.modal1 = false;
+          }else{
+            this.preservationDis=false;
           }
         });
       },
@@ -223,10 +228,14 @@
           applyReason: this.remarks,
           details: this.accessoriesBillingData
         };
+        this.preservationDis=true;
         hedSubmit(obj).then(res => {
           if (res.code === 0) {
+            this.preservationDis=false
             this.$message.success("提交成功");
             this.modal1 = false;
+          }else{
+            this.preservationDis=false
           }
         });
       },

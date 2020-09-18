@@ -98,6 +98,8 @@
             :headers="headers"
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
+            :max-size="20 * 1024"
+            :on-exceeded-size="handleMaxSize"
           >
             <Button class="uploadbtn">上传</Button>
           </Upload>
@@ -221,7 +223,7 @@ export default {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("手机号不能为空!"));
-      } else if (!/^1[34578]\d{9}$/.test(value)) {
+      } else if (!/^1[3456789]\d{9}$/.test(value)) {
         callback(new Error("手机号格式不正确"));
       } else {
         callback();
@@ -459,6 +461,13 @@ export default {
         //console.log(this.data.businessName);
       }
       // 二
+    },
+    // 执行方法
+    handleMaxSize (file) {
+      this.$Notice.warning({
+        title: '文件大小超限',
+        desc: '文件  ' + file.name + ' 太大，上传文件大小不能超过20M.'
+      });
     },
     // 上传前
     handleBeforeUpload2() {

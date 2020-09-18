@@ -829,7 +829,7 @@
             </p>
             <p>
               <span style="font-size: 12px">打印日期:</span>
-              <span style="font-size: 12px">{{printDate}}</span>
+              <span style="font-size: 12px">{{onelist.printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -837,7 +837,7 @@
           <Col span="12" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">调入方:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecord.guestName}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecord!=null?onelist.logisticsRecord.guestName : ""}}</span>
             </p>
             <p>
               <span style="font-size: 12px">地址:</span>
@@ -847,11 +847,11 @@
           <Col span="7" style="padding:0 2px;border-right: 1px #000000 solid;">
             <p>
               <span style="font-size: 12px">联系人:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:onelist.logisticsRecord?onelist.logisticsRecord.receiver:''}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiver:onelist.logisticsRecord!=null?onelist.logisticsRecord.receiver:''}}</span>
             </p>
             <p>
               <span style="font-size: 12px">联系电话:</span>
-              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:onelist.logisticsRecord?onelist.logisticsRecord.receiverMobile:''}}</span>
+              <span style="font-size: 12px">{{onelist.logisticsRecordVO?onelist.logisticsRecordVO.receiverMobile:onelist.logisticsRecord!=null?onelist.logisticsRecord.receiverMobile:''}}</span>
             </p>
           </Col>
           <Col span="5">
@@ -904,7 +904,7 @@
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;font-size: 12px;">
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>制单人:</span>
-            <span>{{onelist.apply.orderMan}}</span>
+            <span>{{onelist.apply.createUname}}</span>
           </Col>
           <Col span="6" style="border-right: 1px #000000 solid;padding:2px;">
             <span>提交人:</span>
@@ -916,12 +916,12 @@
           </Col>
           <Col span="6" style="padding:2px;">
             <span>收货人:</span>
-            <span>{{onelist.logisticsRecord.receiver}}</span>
+            <span>{{onelist.logisticsRecord!=null?onelist.logisticsRecord.receiver:""}}</span>
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
           备 注：
-          <span>{{onelist.logisticsRecord.remark}}</span>
+          <span>{{onelist.apply.remark}}</span>
         </p>
       </div>
       <div class="titler" v-if="onelist.name.startsWith('调拨入库')">
@@ -1404,6 +1404,150 @@
           <span>{{onelist.enterOrder.remark}}</span>
         </p>
       </div>
+      <div class="titler" v-if="routeN.startsWith('procurementAndStorage')">
+        <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding: 0px 2px;">
+          <Col span="16" style="padding:0 2px;">
+            <h5
+              style="font-size: 18px;line-height: 44px;"
+            >{{onelist.orgName || ' '}}</h5>
+          </Col>
+          <Col span="8" style="padding:0 2px;">
+            <p style="font-weight: 600;font-size: 16px">{{onelist.name}}:</p>
+            <p style="font-size: 12px">No: {{onelist.serviceId}}</p>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;padding:0 2px;">
+          <Col span="16" style="padding:0 2px">
+            <p>
+              <span style="font-size: 12px">地址:</span>
+              <span style="font-size: 12px">{{onelist.orgAddr || ' '}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">电话:</span>
+              <span style="font-size: 12px">{{onelist.orgTel || ' '}}</span>
+            </p>
+          </Col>
+          <Col span="8" style="padding:0 2px;">
+            <p>
+              <span style="font-size: 12px">创建日期:</span>
+              <span style="font-size: 12px">{{onelist.createTime || ' '}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">打印日期:</span>
+              <span style="font-size: 12px">{{onelist.printDate}}</span>
+            </p>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none;color:#000;">
+          <Col span="10" style="padding:0 2px;border-right: 1px #000000 solid;">
+            <p>
+              <span style="font-size: 12px">供应商:</span>
+              <span style="font-size: 12px">{{onelist.guestName}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">地址:</span>
+              <span style="font-size: 12px">{{onelist.streetAddress}}</span>
+            </p>
+          </Col>
+          <Col span="4" style="padding:0 2px;border-right: 1px #000000 solid;">
+            <p>
+              <span style="font-size: 12px">联系人:</span>
+              <span style="font-size: 12px">{{onelist.contactor}}</span>
+            </p>
+            <p>
+              <span style="font-size: 12px">票据类型:</span>
+              <span style="font-size: 12px">{{onelist.billTypeName}}</span>
+            </p>
+          </Col>
+          <Col span="10" style="padding:0 2px;">
+            <p>
+              <span style="font-size: 12px">联系电话:</span>
+              <span style="font-size: 12px">{{onelist.contactorTel}}</span>
+            </p>
+            <Row>
+              <Col span="12">
+                <p>
+                  <span style="font-size: 12px">结算方式:</span>
+                  <span style="font-size: 12px">{{onelist.settleTypeName}}</span>
+                </p>
+              </Col>
+              <Col span="12">
+                <p>
+                  <span style="font-size: 12px">仓库:</span>
+                  <span style="font-size: 12px">{{onelist.storeName}}</span>
+                </p>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        <table class="gridtable">
+          <thead>
+          <tr>
+            <th style="width:30px !important;">序号</th>
+            <th style="width:110px;overflow: hidden;white-space:nowrap;">配件编码</th>
+            <th style="width:85px;overflow: hidden;white-space:nowrap;">配件名称</th>
+            <th style="width:90px;overflow: hidden;white-space:nowrap;">OEM码</th>
+            <th style="width:50px;overflow: hidden;white-space:nowrap;">品牌</th>
+            <th style="width:40px;overflow: hidden;white-space:nowrap;">车型</th>
+            <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>
+            <th style="width:30px;overflow: hidden;white-space:nowrap;">单位</th>
+            <th style="width:40px !important;">数量</th>
+            <th style="width:60px !important;">单价</th>
+            <th style="width:65px !important;">金额</th>
+            <th style="width:80px !important;">仓位</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item ,index) in onelist.details" :key="index">
+            <td style="width:30px !important;">{{index + 1}}</td>
+            <td style="width:110px;overflow: hidden;white-space:nowrap;">{{item.partCode}}</td>
+            <td style="width:85px;overflow: hidden;white-space:nowrap;">{{item.partName}}</td>
+            <td style="width:90px;overflow:hidden;white-space:nowrap;">{{item.oemCode}}</td>
+            <td style="width:50px;overflow: hidden;white-space:nowrap;">{{item.partBrand}}</td>
+            <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
+            <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
+            <td style="width:30px;overflow: hidden;white-space:nowrap;">{{item.unit}}</td>
+            <td style="width:40px !important;">{{item.orderQty}}</td>
+            <td style="width:60px !important;">{{parseFloat(item.orderPrice).toFixed(2)}}</td>
+            <td style="width:65px !important;">{{parseFloat(item.orderAmt).toFixed(2)}}</td>
+            <td style="width:80px !important;">{{item.storeShelf}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <Row style="border: 1px #000000 solid;color:#000;font-size: 10px;display: flex;">
+          <Col style="border-right: 1px #000000 solid;padding:2px;width: 640px">
+            <span>合计:</span>
+            <span>{{ onelist.orderAmt | toChies}}</span>
+          </Col>
+          <Col style="border-right: 1px #000000 solid;padding:2px;width:160px">
+            <span>总数:</span>
+            <span>{{onelist.orderQty}}</span>
+          </Col>
+          <Col style="padding:2px;width: 200px;">
+            <span>合计:</span>
+            <span>{{onelist.orderAmt}}</span>
+          </Col>
+        </Row>
+        <Row style="border: 1px #000000 solid;border-top: none">
+          <Col span="8" style="border-right: 1px #000000 solid;padding: 2px;font-size: 12px;">
+            <span>制单人:</span>
+            <span>{{onelist.orderMan}}</span>
+          </Col>
+
+          <Col span="8" style="border-right: 1px #000000 solid;padding: 2px;font-size: 12px;">
+            <span>送货人:</span>
+            <span>{{onelist.deliverer}}</span>
+          </Col>
+          <Col span="8" style="padding: 2px;font-size: 12px;">
+            <span>收货人:</span>
+            <span>{{onelist.receiver}}</span>
+          </Col>
+        </Row>
+        <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
+          备 注：
+          <span>{{onelist.remark}}</span>
+        </p>
+      </div>
       <div class="titler" v-if="onelist.name.startsWith('盘点单')">
         <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding: 0px 2px;">
           <Col span="16" style="padding:0 2px;">
@@ -1498,7 +1642,7 @@
           <span>{{onelist.remark}}</span>
         </p>
       </div>
-      <div class="titler" v-if="onelist.name.startsWith('销售出库') || onelist.name.startsWith('采购入库')">
+      <div class="titler" v-if="(onelist.name.startsWith('销售出库') || onelist.name.startsWith('采购入库')) && !routeN.startsWith('procurementAndStorage')">
         <Row style="border: 1px #000000 solid">
           <Col span="24" style="padding: 2px;font-size: 12px;">
             <p>{{onelist.name}}:</p>
@@ -1641,6 +1785,7 @@
   import {pointAdd} from "@/api/AlotManagement/transferringOrder"; //调拨申请
   import * as stockRemocal from "@/api/AlotManagement/stockRemoval.js";//调拨出库  getprintList
   import * as putStorage from "@/api/AlotManagement/putStorage.js";//调拨入库 getprintList
+  import * as procurementAndStorage from '@/api/business/procurementAndStorage' //采购入库  getPrintShow
   import * as moveStorehouse from '@/api/business/moveStorehouse'//移仓单 getPrint
   import * as twoBackApply from "@/api/AlotManagement/twoBackApply.js";//调入退回申请 getprintList
   import * as smsInventory from '@/api/inventory/salesList' //盘点单  getprintList
@@ -1654,6 +1799,7 @@
         onelist: {}, //打印数据
         num: "12323.09",
         num2: 78723,
+        routeN:""
       };
     },
     beforeCreate() {
@@ -1675,6 +1821,7 @@
         document.body.innerHTML=oldHtml
         window.print();
         window.close();
+        this.routeN=""
       },
       //去除页眉页脚
       remove_ie_header_and_footer() {
@@ -1870,6 +2017,16 @@
                 this.onelist.orderQty = this.onelist.detailList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
               }
               break;
+            case "procurementAndStorage"://采购入库
+              this.routeN="procurementAndStorage"
+              res = await procurementAndStorage.getPrintShow(data);
+              if (res.code == 0) {
+                this.onelist = res.data || {};
+                this.onelist.name = order.name || ""
+                this.onelist.printDate = tools.transTime(new Date());
+                this.onelist.orderQty = this.onelist.details.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
+              }
+              break;
             case "smsInventory": //盘点单
               res = await smsInventory.getprintList(data);
               if (res.code == 0) {
@@ -1887,15 +2044,16 @@
               data.orgId = order.orgId
               data.guestId = order.guestId
               res = await Printing(data);
-              res.data.orderDetailList.map((item, index) => {
-                item.num = index + 1;
-              });
               if (res.code == 0) {
                 this.onelist = res.data;
+                res.data.orderDetailList.map((item, index) => {
+                  item.num = index + 1;
+                });
                 this.onelist.name = order.name || ""
                 this.onelist.detailList = res.data.orderDetailList
               }
           }
+          // this.print()
         } else {
           this.$message.error("至少选择一条信息");
           window.close()

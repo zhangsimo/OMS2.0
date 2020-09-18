@@ -3,7 +3,7 @@
     class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%"
   >
-    <div class="content-oper content-oper-flex" style="box-shadow:none">
+    <div class="content-oper content-oper-flex loadingClass" style="box-shadow:none">
       <section class="oper-box">
         <div class="oper-top flex">
           <div class="wlf">
@@ -287,6 +287,8 @@ import PrintShow from "./compontents/PrintShow";
 import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 // import SelectSupplier from './compontents/selectSupplier'
 
 import {
@@ -861,6 +863,16 @@ export default {
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
+    //创建a标签
+    openwin(url) {
+      var a = document.createElement("a"); //创建a对象
+      a.setAttribute("href", url);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("id", "camnpr");
+      document.body.appendChild(a);
+      a.click(); //执行当前对象
+      document.body.removeChild(a)
+    },
     //打印表格
     printTable() {
       let order = {};
@@ -868,7 +880,8 @@ export default {
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
-      window.open(routeUrl.href,"_blank");
+      // window.open(routeUrl.href,"_blank");
+      this.openwin(routeUrl.href)
       this.getList()
     },
     async chuku() {
@@ -899,6 +912,7 @@ export default {
             }
             try {
               this.isOutClick = true;
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               let res = await outDataList(params);
               if(!res){
                 this.isOutClick = false;
@@ -909,10 +923,13 @@ export default {
                 this.$Message.success("入库成功");
                 // this.reload();
                 this.isOutClick = false;
+                hideLoading()
                 return;
               }
+              hideLoading()
               this.isOutClick = false;
             } catch (error) {
+              hideLoading()
               this.isOutClick = false;
             }
             if(res && res.message && res.message.indexOf("成功") > -1) {
@@ -1041,15 +1058,15 @@ export default {
     // 确定
     Determined() {
       // this.$refs.naform.getSupplierNamea();
-      const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      for (var i = 0; i < this.getArray.length; i++) {
-        if (this.getArray[i].shortName == params.guestName) {
-          params.guestId = this.getArray[i].id;
-        }
-      }
-      this.form = params;
-      delete this.form.gustName;
-      this.getList();
+      const params = { ...this.$refs.naform.getITPWE() };
+      // for (var i = 0; i < this.getArray.length; i++) {
+      //   if (this.getArray[i].shortName == params.guestName) {
+      //     params.guestId = this.getArray[i].id;
+      //   }
+      // }
+      // this.form = params;
+      // delete this.form.gustName;
+      this.getList(params);
       this.advanced = false;
     },
     ok() {},
@@ -1103,15 +1120,16 @@ export default {
         }, 200);
       } else {
         let more = this.$refs.naform;
-        if(!more.ArrayValue1.includes(row.shortName)) {
-          more.ArrayValue1.push(row.shortName);
-        }
+        // if(!more.ArrayValue1.includes(row.shortName)) {
+        //   more.ArrayValue1.push(row.shortName);
+        // }
         more.form.guestId = row.id;
         this.Leftcurrentrow.guestId = row.id;
         this.diaochuName = row.shortName;
         this.diaochuID = row.id;
       }
-      this.$refs['naform'].form.guestName=row.shortName
+      // this.$refs['naform'].form.guestName=row.shortName;
+      // this.$refs['naform'].form.guestId = row.id;
     },
     getOkList(list) {
       this.$refs.tableref.clearCurrentRow();
@@ -1137,6 +1155,7 @@ export default {
         remark: list.remark,
         serviceId: list.serviceId,
         storeId: list.storeId,
+        outMainId: list.id,
         detailVOS: list.detailVOS,
         new: true,
         _highlight: true
@@ -1153,8 +1172,11 @@ export default {
       this.Status = 0;
       this.$refs.addInCom.init1();
     },
-    getList() {
+    getList(moreData) {
       let params = this.form;
+      if(moreData){
+        params = {...params,...moreData}
+      }
       if (params.qucikTime) {
         params.createTime = params.qucikTime[0]
         params.endTime = params.qucikTime[1]
@@ -1168,6 +1190,7 @@ export default {
       } else {
         Reflect.deleteProperty(params, "createUid")
       }
+      params.canQuery=this.showSelf?0:1
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(async res => {
           if (res.code == 0) {

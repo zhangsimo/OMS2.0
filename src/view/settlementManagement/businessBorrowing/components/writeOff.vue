@@ -1,7 +1,7 @@
 <template>
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
-      <Button :disabled="disabled" @click="submit">因公借支核销</Button>
+      <Button :loading="disabled" @click="submit">因公借支核销</Button>
     </Row>
     <Row class="mt20">
       <vxe-table
@@ -273,13 +273,16 @@ export default {
             id: this.currRow.id,
           },
         }
-
+        this.disabled=true;
         let res = await api.orderWriteOff(data)
         if (res.code == 0) {
+          this.disabled=false;
           this.$message.success(res.data);
           this.$parent.getQuery();
           this.query();
           this.cancel();
+        }else{
+          this.disabled=false;
         }
       }
     },

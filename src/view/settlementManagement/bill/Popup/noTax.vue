@@ -1,17 +1,17 @@
 <template>
   <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200">
-    <button
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       @click="submission(1)"
+      :loading="subDis"
       v-has="'examine'"
-    >保存草稿</button>
-    <button
+    >保存草稿</Button>
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       @click="submission(2)"
+      :disabled="subDis"
       v-has="'examine'"
-    >提交申请</button>
+    >提交申请</Button>
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="8">
@@ -201,6 +201,7 @@ export default {
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开不含税单据", //选择销售单据标题
       accessoriesBillingData: [], //开票配件数据
+      subDis:false,//保存草稿按钮接口没有返回不可点击
       validRules: {
         applyAmt: [
           { validator:applyAmtValid }
@@ -466,21 +467,29 @@ export default {
             this.modal1 = false;
           }
           if(type==2){
+            this.subDis=true;
             submitNoTax(obj).then(res => {
               if(res.code===0){
                 this.$emit('taxList' , res.data)
                 this.$message.success('提交成功')
+                this.subDis=false;
                 this.modal1 = false;
                 this.$parent.query();
+              }else{
+                this.subDis=false;
               }
             });
           }else{
+            this.subDis=true;
             let rep = await saveNoTaxDraft(obj);
             if(rep.code===0){
               this.$emit('taxList' , rep.data)
               this.$message.success('保存成功')
               this.modal1 = false;
+              this.subDis=false;
               this.$parent.query();
+            }else{
+              this.subDis=false;
             }
           }
 

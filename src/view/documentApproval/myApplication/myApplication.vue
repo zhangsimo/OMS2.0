@@ -698,7 +698,7 @@ export default {
       });
     },
     checCheckboxkMethod({ row }){
-      return row.billStatusName=="草稿";
+      return row.billStatusName=="草稿" || row.billStatusName=="审批不通过";
     },
     selectDataFun({selection}){
       this.selectTableList = selection;

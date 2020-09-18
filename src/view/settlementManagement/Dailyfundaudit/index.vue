@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -73,17 +73,17 @@
               <span>审核</span>
             </button>
           </div>
-<!--          <div class="db ml5">-->
-<!--            <button-->
-<!--              class="mr10 ivu-btn ivu-btn-default"-->
-<!--              type="button"-->
-<!--              @click="reAudit"-->
-<!--              :disabled="oneList.length <= 0"-->
-<!--              v-has="'revoke'"-->
-<!--            >-->
-<!--              <span>撤销</span>-->
-<!--            </button>-->
-<!--          </div>-->
+          <div class="db ml5">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="reAudit"
+              :disabled="oneList.length <= 0"
+              v-has="'revoke'"
+            >
+              <span>撤销</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -159,6 +159,7 @@
   import {goshop} from '@/api/settlementManagement/shopList';
   import {creat} from "./../components";
   import moment from "moment";
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: 'settlementManagementDailyfundaudit',
@@ -273,7 +274,7 @@
           guestSourceId: this.companyId,
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,
-          shopNumber: this.BranchstoreId,
+          shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
           size: this.page.size,
         }
 
@@ -289,18 +290,20 @@
         }
 
         params.page = this.page.num - 1;
-
-        [
-          this.tableData1,
-          this.tableData2,
-          this.tableData3,
-          this.tableData4,
-          this.tableData5,
-          this.tableData6,
-          this.tableData7,
-          this.tableData8,
-        ] = await api.getTableData(params);
-        this.getPageList(this.tabName)
+        try {
+          [
+            this.tableData1,
+            this.tableData2,
+            this.tableData3,
+            this.tableData4,
+            this.tableData5,
+            this.tableData6,
+            this.tableData7,
+            this.tableData8
+          ] = await api.getTableData(params);
+          this.getPageList(this.tabName)
+        } catch (error) {
+        }
       },
       // 切换tabs
       clickTabs(data) {
@@ -316,7 +319,7 @@
           guestSourceId: this.companyId,
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,
-          shopNumber: this.BranchstoreId,
+          shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
           size: this.page.size,
           page: this.page.num - 1
         }
@@ -386,13 +389,16 @@
       },
       // 撤销审核 ok
       async reAuditOk() {
-        let remarks = this.content.trim();
-        if (remarks.length <= 0) {
+        let remark = this.content.trim();
+        if (remark.length <= 0) {
           return this.$message.error("请输入撤销原因")
         }
-        let ids = this.oneList.map(el => el.id)
-        let res = await api.dailyFundAuditRevocation({
-          ids, remarks
+        if(this.oneList.length>1){
+          return this.$message.error("只能操作一笔订单");
+        }
+        let id = this.oneList.map(el => el.id).join('');
+        let res = await api.withdraw({
+          id, remark
         })
         if (res.code == 0) {
           this.$message.success(res.data)

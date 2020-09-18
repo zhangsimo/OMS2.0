@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper" style="height: 100%" ref="operWrap">
+  <div class="content-oper loadingClass" style="height: 100%" ref="operWrap">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="db pl10 tabs-ulwarp">
@@ -135,7 +135,6 @@
           stripe
           show-overflow
           resizable
-          :loading="loading1"
           size="mini"
           @current-change="currentChangeItem"
           show-footer
@@ -303,7 +302,6 @@
           stripe
           show-overflow
           resizable
-          :loading="loading2"
           size="mini"
           show-footer
           :footer-method="handleSummary"
@@ -443,7 +441,6 @@
           stripe
           show-overflow
           resizable
-          :loading="hsloading"
           size="mini"
           :data="templateData">
           <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
@@ -632,6 +629,8 @@ import axios from '@/libs/api.request'
 // import * as api from "_api/system/partManager";
 
 import { checkStore } from "@/api/system/systemApi";
+
+import {showLoading, hideLoading} from "@/utils/loading" // 开启关闭loading加载
 export default {
   name: "stockSearch",
   components: { EnterStock },
@@ -988,32 +987,38 @@ export default {
       data.noStock = data.noStock ? 1 : 0;
       this.loading1 = true;
       this.contentOne.dataOne = [];
-      let res = await getAllStock(data);
-      this.loading1 = false;
-      if (res.code == 0) {
-        this.contentOne.dataOne = res.data.content;
-        this.contentOne.page.total = res.data.totalElements;
-        let row = res.data.content[0];
-        if (row != undefined) {
-          this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+      try {
+
+        showLoading('.loadingClass');
+        let res = await getAllStock(data);
+        this.loading1 = false;
+        if (res.code == 0) {
+          this.contentOne.dataOne = res.data.content;
+          this.contentOne.page.total = res.data.totalElements;
+          let row = res.data.content[0];
+          if (row != undefined) {
+            this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+          }
+          this.bands1 = [];
+          let arr = res.data.content.map(el => el.partBrand);
+          let set = new Set(arr);
+          set.forEach(el => {
+            this.bands1.push({ label: el, value: el });
+          });
+          this.$nextTick(()=>{
+            const xtable = this.$refs.xTable2;
+            const column = xtable.getColumnByField('partBrand');
+            xtable.setFilter(column, this.bands1);
+            xtable.updateData();
+          })
+
+          // this.columnsPart[6].filters = this.bands1;
+          this.getColumns();
         }
-        this.bands1 = [];
-        let arr = res.data.content.map(el => el.partBrand);
-        let set = new Set(arr);
-        set.forEach(el => {
-          this.bands1.push({ label: el, value: el });
-        });
-        this.$nextTick(()=>{
-          const xtable = this.$refs.xTable2;
-          const column = xtable.getColumnByField('partBrand');
-          xtable.setFilter(column, this.bands1);
-          xtable.updateData();
-        })
-
-        // this.columnsPart[6].filters = this.bands1;
-        this.getColumns();
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
-
       let res1 = await PtabulatData(data);
       if (res1.code == 0) {
         this.total1 = res1.data;
@@ -1066,36 +1071,43 @@ export default {
       this.defaultSort=='asc'?data.enterTimeSort = 1:"";
       this.loading2 = true;
       this.contentTwo.dataTwo = [];
-      let res = await getLotStock(data);
-      this.loading2 = false;
-      if (res.code == 0) {
-        this.contentTwo.dataTwo = res.data.content;
-        this.contentTwo.dataTwo.map((item, index) => {
-          item.index = index + 1;
-          item.outableQty = item.sellSign ? 0 : item.outableQty;
-          if(this.selectShopList&&item.enterTypeId!='050101'){
-            item.enterPrice = '-';
-            item.enterAmt = '-';
-            item.taxRate = '-';
-            item.taxPrice = '-';
-            item.taxAmt = '-';
-            item.noTaxPrice = '-';
-            item.noTaxAmt = '-';
-          }
-        });
-        this.contentTwo.page.total = res.data.totalElements;
-        this.bands2 = [];
-        let arr = res.data.content.map(el => el.partBrand);
-        let set = new Set(arr);
-        set.forEach(el => {
-          this.bands2.push({ label: el, value: el });
-        });
-        this.$nextTick(()=>{
-          const xtable = this.$refs.xTable3;
-          const column = xtable.getColumnByField('partBrand');
-          xtable.setFilter(column, this.bands2);
-          xtable.updateData();
-        })
+      try {
+
+        showLoading('.loadingClass');
+        let res = await getLotStock(data);
+        this.loading2 = false;
+        if (res.code == 0) {
+          this.contentTwo.dataTwo = res.data.content;
+          this.contentTwo.dataTwo.map((item, index) => {
+            item.index = index + 1;
+            item.outableQty = item.sellSign ? 0 : item.outableQty;
+            if(this.selectShopList&&item.enterTypeId!='050101'){
+              item.enterPrice = '-';
+              item.enterAmt = '-';
+              item.taxRate = '-';
+              item.taxPrice = '-';
+              item.taxAmt = '-';
+              item.noTaxPrice = '-';
+              item.noTaxAmt = '-';
+            }
+          });
+          this.contentTwo.page.total = res.data.totalElements;
+          this.bands2 = [];
+          let arr = res.data.content.map(el => el.partBrand);
+          let set = new Set(arr);
+          set.forEach(el => {
+            this.bands2.push({ label: el, value: el });
+          });
+          this.$nextTick(()=>{
+            const xtable = this.$refs.xTable3;
+            const column = xtable.getColumnByField('partBrand');
+            xtable.setFilter(column, this.bands2);
+            xtable.updateData();
+          })
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
 
       let res1 = await EtabulatData(data);
@@ -1343,11 +1355,18 @@ export default {
       req.page = this.hspage.num;
       req.pageSize = this.hspage.size;
       this.hsloading = true;
-      let rep = await getStock(req, params);
-      this.hsloading = false;
-      if (rep.code === 0) {
-        this.templateData = rep.data.data.items || [];
-        this.hspage.total = rep.data.data.total;
+      try {
+        showLoading('.loadingClass')
+        let rep = await getStock(req, params);
+        this.hsloading = false;
+        if (rep.code === 0) {
+          this.templateData = rep.data.data.items || [];
+          this.hspage.total = rep.data.data.total;
+        }
+        hideLoading()
+
+      } catch (error) {
+        hideLoading()
       }
     },
     async getHsStoreFun() {
@@ -1450,7 +1469,8 @@ export default {
       }
       let rep = await setPosition(this.formPlan2)
       if(rep.code==0){
-        this.positionModel = true;
+        this.positionModel = false;
+        this.$message.success("仓位设置成功!");
         this.formPlan2 = {};
         this.getAllStocks();
 

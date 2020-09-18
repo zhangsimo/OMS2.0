@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="oper-top flex">
@@ -383,6 +383,8 @@ import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import * as tools from "_utils/tools";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 
 export default {
   name: "smsInventory",
@@ -858,13 +860,16 @@ export default {
               );
               this.formPlan.billStatusId = 1;
               this.commitLoading = true;
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               getSubmitList(this.formPlan).then(res => {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getList();
                 }
                 this.commitLoading = false;
+                hideLoading()
               }).catch(e => {
+                hideLoading()
                 this.commitLoading = false;
               });
             } else {
@@ -970,6 +975,16 @@ export default {
     auditCancel() {
       this.showRemove = false;
     },
+    //创建a标签
+    openwin(url) {
+      var a = document.createElement("a"); //创建a对象
+      a.setAttribute("href", url);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("id", "camnpr");
+      document.body.appendChild(a);
+      a.click(); //执行当前对象
+      document.body.removeChild(a)
+    },
     // 打印
     printTable() {
       // this.$refs.printBox.openModal(this.formPlan.id,this.warehouseList);
@@ -979,7 +994,8 @@ export default {
       // order.warehouseList=this.warehouseList
       order.id=this.formPlan.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
-      window.open(routeUrl.href,"_blank");
+      // window.open(routeUrl.href,"_blank");
+      this.openwin(routeUrl.href)
       this.getList()
     },
 

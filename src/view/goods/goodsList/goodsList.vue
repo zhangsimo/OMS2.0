@@ -1,6 +1,6 @@
 <template>
   <!-- 采购计划页面 -->
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <!-- 对采购计划订单以及采购计划信息的操作 -->
       <div class="oper-top flex">
@@ -624,6 +624,7 @@ import baseUrl from "_conf/url";
 import { down } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import * as fapi from "_api/procurement/plan";
 import GoodCus from "_c/allocation/GoodCus.vue";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "goodsList",
   components: {

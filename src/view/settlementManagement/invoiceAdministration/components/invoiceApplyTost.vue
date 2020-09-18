@@ -33,7 +33,7 @@
           </Select>
         </div>
         <Button class="ml10" type="info" @click="query">查询</Button>
-        <Button class="ml10" type="info" @click="submitConfig">确认核销</Button>
+        <Button class="ml10" type="info" @click="submitConfig" :loading="submitConfigDis">确认核销</Button>
       </div>
       <div>
         <Table
@@ -123,6 +123,7 @@ export default {
       value: [],
       model1: "",
       modals: false,
+      submitConfigDis:false,//核销接口没有返回之前按钮不可点击
       hxOjb: {
         invoiceApplyId: "",
         salesInvoiceId: ""
@@ -920,8 +921,6 @@ export default {
       });
     },
     submitConfig() {
-      console.log(this.allSelectList , 1)
-      console.log(this.allSelectListBottom , 2)
       if (!(this.allSelectList.length && this.allSelectListBottom.length)) {
         this.$Message.warning("请选择要核销的数据");
       } else if (this.allSelectList.length >= 2 || this.allSelectListBottom.length >= 2) {
@@ -931,8 +930,10 @@ export default {
         this.hxOjb.invoiceApplyId = this.allSelectListBottom[0].id;
         let d = this.data1.find(el => el.id == this.allSelectListBottom[0].id);
         this.hxOjb.rpAmt = d.rpAmt;
+        this.submitConfigDis=true;
         subManualList2(this.hxOjb).then(res => {
           if (res.code === 0) {
+            this.submitConfigDis=false;
             this.$Message.warning("核销成功");
             this.model1 = false;
             this.hxOjb = {
@@ -943,6 +944,8 @@ export default {
               this.$parent.getDataList();
             }
             this.$emit('getnewList' ,{})
+          }else{
+            this.submitConfigDis=false
           }
         });
       }

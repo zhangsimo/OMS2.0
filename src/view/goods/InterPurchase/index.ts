@@ -16,6 +16,7 @@ import ProcurementModal from "../plannedPurchaseOrder/components/ProcurementModa
 import AdjustModel from "../plannedPurchaseOrder/components/AdjustModel.vue";
 import TabsModel from "../plannedPurchaseOrder/components/TabsModel.vue";
 import ApportionmentExpenses from "../plannedPurchaseOrder/components/ApportionmentExpenses.vue";
+import { hideLoading, showLoading } from "../../../utils/loading";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
 @Component({
@@ -442,7 +443,7 @@ export default class InterPurchase extends Vue {
     data.details = this.tableData;
     // console.log(this.selectTableRow,111)
     try {
-      
+
       this.saveLoading = true;
       let res = await api.saveInterDraft(data);
       if (res.code == 0) {
@@ -453,7 +454,7 @@ export default class InterPurchase extends Vue {
       this.saveLoading = false;
     } catch (error) {
       this.saveLoading = false;
-      
+
     }
   }
 
@@ -488,14 +489,17 @@ export default class InterPurchase extends Vue {
               onOk: async () => {
                 try {
                   this.commitLoading = true;
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   let res = await api.saveInterCommit(data);
                   if (res.code == 0) {
                     this.$Message.success("保存成功");
                     this.getListData();
                     this.isAdd = true;
                   }
+                  hideLoading()
                   this.commitLoading = false;
                 } catch (error) {
+                  hideLoading()
                   this.commitLoading = false;
                 }
               },
@@ -507,6 +511,7 @@ export default class InterPurchase extends Vue {
         } else {
           try {
             this.commitLoading = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             let res = await api.saveInterCommit(data);
             if (res.code == 0) {
               this.$Message.success("保存成功");
@@ -514,8 +519,10 @@ export default class InterPurchase extends Vue {
               this.isAdd = true;
             }
             this.commitLoading = false;
+            hideLoading()
           } catch (error) {
             this.commitLoading = false;
+            hideLoading()
           }
         }
       },
@@ -636,7 +643,16 @@ export default class InterPurchase extends Vue {
       }
     });
   }
-
+  //创建a标签
+  private openwin(url:any) {
+    var a = document.createElement("a"); //创建a对象
+    a.setAttribute("href", url);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("id", "camnpr");
+    document.body.appendChild(a);
+    a.click(); //执行当前对象
+    document.body.removeChild(a)
+  }
   // 打印
   private print() {
     // const ref: any = this.$refs.PrintModel;
@@ -646,7 +662,8 @@ export default class InterPurchase extends Vue {
     order.route = this.$route.name;
     order.id = this.mainId;
     let routeUrl = this.$router.resolve({ name: "print", query: order });
-    window.open(routeUrl.href, "_blank");
+    // window.open(routeUrl.href, "_blank");
+    this.openwin(routeUrl.href)
     this.getListData();
   }
 

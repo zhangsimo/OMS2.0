@@ -104,11 +104,12 @@
 
 <script>
 import moment from "moment";
-import QuickDate from "_c/getDate/dateget";
+import QuickDate from "_c/getDate/dateget_noEmit";
 import more from "./more";
 import * as api from "_api/reportForm/index.js";
 import { creat } from "@/view/settlementManagement/components";
 import { getBrandList } from "@/view/reportForm/until.js"
+import {ToDayStr} from "_c/getDate/index_bill.js"
 
 export default {
   components: { QuickDate, more },
@@ -125,7 +126,7 @@ export default {
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
-        auditDate: [], // 提交日期
+        auditDate: ToDayStr(), // 提交日期
         content: "", // 编码名称
         partBrand: "", // 品牌
         guestFullName: "", // 供应商
@@ -162,26 +163,31 @@ export default {
         this.stores.push({ id: key, name: data[key] });
       });
     }
+    var arr = await creat("", this.$store);
+    this.search.orgid = arr[1];
+    this.query()
   },
   methods: {
     select1(option) {
       this.search.partBrand = option.label;
     },
     async partBrandRemote(query){
-      this.bandArr=await getBrandList(query)
+      var queryName=query
+      if(query==""){
+        queryName=""
+      }else{
+        queryName=query.trim()
+      }
+      this.bandArr=await getBrandList(queryName)
     },
     // 快速日期查询
     async getDataQuick(v) {
       this.search.auditDate = v;
-      if (v.length >= 2) {
-        let arr = await creat("", this.$store);
+      if(this.selectShopList){
+        var arr = await creat("", this.$store);
         this.search.orgid = arr[1];
-        this.search.content="";this.search.partBrand="";this.search.guestFullName=""
-        this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1] ,orgid:this.search.orgid});
-      } else {
-        this.search.content="";this.search.partBrand="";this.search.guestFullName=""
-        this.$emit("search", { isPanne: true, orgid:this.search.orgid });
       }
+      this.query()
     },
     getDataQuick2(v){
       this.search.auditDate = v;

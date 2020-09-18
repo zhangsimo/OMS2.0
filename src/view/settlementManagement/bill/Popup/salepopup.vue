@@ -1,18 +1,18 @@
 <template>
   <Modal v-model="modal1" title="销售开票申请" width="1300" @on-visible-change="visChange">
-    <button
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       @click="preservation"
+      :loading="proserDis"
       v-has="'examine'"
-    >保存草稿</button>
-    <button
+    >保存草稿</Button>
+    <Button
       class="ivu-btn ivu-btn-default mr10"
-      type="button"
       v-noresub
       @click="submission"
+      :loading="proserDis"
       v-has="'examine'"
-    >提交申请</button>
+    >提交申请</Button>
     <!--<button-->
       <!--class="ivu-btn ivu-btn-default mr10"-->
       <!--type="button"-->
@@ -372,6 +372,7 @@ export default {
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开销售单", //选择必开销售单弹框标题
       modal1: false, // 弹框开关
+      proserDis:false,//保存草稿 按钮接口返回前不可再次点击
       invoice: {
         consignee: "", //快递收件人
         receiptUnit: "", // 发票单位
@@ -866,12 +867,16 @@ export default {
 
           this.isCanRequest = !this.isCanRequest
           // console.log(obj , 888)
+          this.proserDis=true;
           saveDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
               this.$message.success("保存成功");
+              this.proserDis=false;
               this.modal1 = false;
               this.$parent.query();
+            }else{
+              this.proserDis=false;
             }
           });
         }
@@ -915,11 +920,15 @@ export default {
           if(obj.additionalTaxPoint){
             delete obj.additionalTaxPoint
           }
+          this.proserDis=true;
           submitDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
               this.$message.success("提交成功");
               this.modal1 = false;
+              this.proserDis=false;
+            }else{
+              this.proserDis=false;
             }
           });
         }

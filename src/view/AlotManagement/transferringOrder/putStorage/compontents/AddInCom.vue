@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择调拨申请单" width="1000" @on-ok="ok">
+  <Modal v-model="searchPartLayer" title="选择调拨出库单" width="1000" @on-ok="ok">
     <section class="oper-box">
       <div class="oper-top flex mb10">
         <Form @keydown.native.enter="search2">
@@ -9,11 +9,11 @@
             <DatePicker
               @on-change="getDate"
               type="daterange"
-              style="width:140px"
+              style="width:200px"
             ></DatePicker>
           </div>
           <div class="db mr10">
-            <span>调 出 方 ：</span>
+            <span>调出方 ：</span>
 <!--            <Input style="width: 120px"  placeholder="简称/编码/全称" v-model="penSalesData.guestId" />-->
             <Select
               v-model="penSalesData.guestId"
@@ -21,7 +21,7 @@
               clearable
               remote
               :remote-method="getGuestList"
-              style="width: 120px"
+              style="width: 130px"
               label-in-value
               placeholder="调出方名称"
             >
@@ -46,18 +46,17 @@
             <Input
               v-model="penSalesData.serviceId"
               placeholder="申请单号"
-              style="width: 160px"
-              class="mr10"
+              style="width: 170px"
             ></Input>
           </div>
           <div class="db mr10">
-            <Button @click="search2" type="primary" class="mr20">查询</Button>
+            <Button @click="search2" type="primary">查询</Button>
           </div>
-          <div class="db mr10 btn">
-            <Button @click="ok" type="warning" class="mr20">选入</Button>
+          <div class="db mr10">
+            <Button @click="ok" type="warning">选入</Button>
           </div>
-          <div class="db mr10 btn">
-            <Button @click="init1" type="warning" class="mr20">取消</Button>
+          <div class="db mr10">
+            <Button @click="init1" type="warning">取消</Button>
           </div>
           <div class="db">
             <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
@@ -90,7 +89,7 @@
           <vxe-table-column field="guestOrgName" title="调出方" width="160"></vxe-table-column>
           <!--<vxe-table-column field="status.name" title="受理状态" width="70"></vxe-table-column>-->
           <vxe-table-column field="remark" title="备注" width="130"></vxe-table-column>
-          <vxe-table-column field="orderMan" title="申请人" width="80"></vxe-table-column>
+          <vxe-table-column field="createUname" title="申请人" width="80"></vxe-table-column>
           <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
           <vxe-table-column field="code" title="受理单号" width="190"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调拨出库单号" width="190"></vxe-table-column>
@@ -230,9 +229,10 @@ export default {
       this.search();
     },
     getDate(v) {
-      this.penSalesData.startTime = v[0] + " 00:00:00";
-      this.penSalesData.endTime = v[1] + " 23:59:59";
+      this.penSalesData.startTime = v[0]?v[0] + " 00:00:00":"";
+      this.penSalesData.endTime = v[1]?v[1] + " 23:59:59":"";
     },
+
     //分页
     changePage(p) {
       this.pageList.page = p;

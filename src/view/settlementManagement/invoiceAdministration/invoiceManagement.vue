@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box paddinSize">
       <div class="flex">
         <div class="wlf">
@@ -358,6 +358,7 @@ import modelToast from "./modelToast.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 import invoiceApplyTost from "./components/invoiceApplyTost"
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "invoiceAdministrationInvoiceManagement",
   components: {
@@ -1380,14 +1381,18 @@ export default {
     },
     //获取列表
     getTabList(data) {
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getManageList(data)
         .then(res => {
           if (res.code === 0) {
             this.data = res.data.content;
             this.pagetotal = res.data.totalElements;
           }
+          hideLoading()
         })
-        .catch(err => {});
+        .catch(err => {
+          hideLoading()
+        });
     },
     pageNumChange(pageNum) {
       this.form.page = pageNum;

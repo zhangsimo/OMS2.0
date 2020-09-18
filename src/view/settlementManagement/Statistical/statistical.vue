@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -286,6 +286,7 @@ import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 import {getTreeList} from "../../../api/accountant/accountant";
 import {getTableList}from '@/api/accountant/accountant'
+import {showLoading, hideLoading} from "@/utils/loading"
 
 export default {
   name: "statistical",
@@ -649,11 +650,15 @@ export default {
           Reflect.deleteProperty(params, key)
         }
       }
-
-      let res = await api.findListPageAllReport(params);
-
-      if (res.code == 0) {
-        this.tableData = res.data.content;
+      try {
+        showLoading(".loadingClass", "数据加载中，请勿操作")
+        let res = await api.findListPageAllReport(params);
+        if (res.code == 0) {
+          this.tableData = res.data||[];
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
     }
   }

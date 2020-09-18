@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -143,7 +143,7 @@
     <changeJournal :list="oneList" ref="changeModal" @getAllList="allList"  @update="getList"></changeJournal>
 
     <div class="mt15">
-      <Tabs type="card" value="capitalChain1">
+      <Tabs type="card" v-model="tabName"  value="capitalChain1" @on-click="clickTabs">
         <TabPane label="全部数据" name="capitalChain1">
           <div>
             <vxe-table
@@ -160,29 +160,30 @@
               size="mini"
               :data="tableData"
             >
-              <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店" min-width="100"></vxe-table-column>
-              <vxe-table-column field="createTime" title="日期" min-width="100"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注" min-width="100"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额" min-width="100"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额" min-width="100"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额" min-width="60"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别" fixed="left" min-width="100"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号" min-width="100"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要" min-width="100"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号" min-width="120"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领" min-width="100">
+              <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="日期" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" fixed="left" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="120"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="120"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="120"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">{{row.claimType ? '是':'否'}}</template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间" min-width="100"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字" min-width="100"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号" min-width="100"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="120"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -202,29 +203,30 @@
               size="mini"
               :data="tableData1"
             >
-              <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店" min-width="100"></vxe-table-column>
-              <vxe-table-column field="createTime" title="日期" min-width="100"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注" min-width="100"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额" min-width="100"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额" min-width="100"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额" min-width="60"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别" fixed="left" min-width="100"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号" min-width="100"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要" min-width="100"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号" min-width="120"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领" min-width="100">
+              <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="日期" width="100"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" fixed="left" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="120"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="120"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="120"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">{{row.claimType ? '是':'否'}}</template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间" min-width="100"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字" min-width="100"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号" min-width="100"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="120"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -244,33 +246,48 @@
               size="mini"
               :data="tableData2"
             >
-              <vxe-table-column type="seq" title="序号" min-width="60" fixed="left"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店" min-width="100"></vxe-table-column>
-              <vxe-table-column field="createTime" title="日期" min-width="60"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注" min-width="100"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额" min-width="100"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额" min-width="100"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="余额" min-width="60"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别" fixed="left" min-width="100"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号" min-width="100"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要" min-width="100"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号" min-width="120"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注" min-width="100"></vxe-table-column>
-              <vxe-table-column field="claimType" title="是否认领" min-width="100">
+              <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
+              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+              <vxe-table-column field="createTime" title="日期" width="60"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+              <vxe-table-column field="openingBalance" title="期初余额" width="100"></vxe-table-column>
+              <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+              <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+              <vxe-table-column field="balanceMoney" title="期末余额" width="100"></vxe-table-column>
+              <vxe-table-column field="businessType" title="业务类别" fixed="left" width="100"></vxe-table-column>
+              <vxe-table-column field="leadHandler" title="导入经办人" width="120"></vxe-table-column>
+              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
+              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
+              <vxe-table-column field="cancelPerson" title="认领核销人" width="120"></vxe-table-column>
+              <vxe-table-column field="statementNumber" title="核销对账单号" width="120"></vxe-table-column>
+              <vxe-table-column field="suppliers" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column field="claimType" title="是否认领" width="100">
                 <template v-slot="{row}">{{row.claimType ? '是':'否'}}</template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人" min-width="120"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间" min-width="100"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字" min-width="100"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号" min-width="100"></vxe-table-column>
+              <vxe-table-column field="accountingExaminer" title="会计审核人" width="120"></vxe-table-column>
+              <vxe-table-column field="checkTime" title="审核时间" width="100"></vxe-table-column>
+              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column field="proofCode" title="凭证号" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
       </Tabs>
+      <div class="clearfix">
+        <Page
+          class-name="fr mb10 mt10"
+          size="small"
+          :current="page.num"
+          :total="page.total"
+          :page-size="page.size"
+          :page-size-opts="page.sizeArr"
+          @on-change="changePage"
+          @on-page-size-change="changeSize"
+          show-sizer
+          show-total
+        ></Page>
+      </div>
     </div>
   </div>
 </template>
@@ -293,7 +310,7 @@
   import changeJournal from "../components/changeJournal";
   import add from "../components/addJournal";
   import amtData from "../../components/amtData";
-
+  import {showLoading, hideLoading} from "@/utils/loading"
   import moment from "moment";
 
   export default {
@@ -314,6 +331,7 @@
         shopCode: 0, //获取到门店id
         shopList: [{id: '0', name: "全部"}], //门店列表
         subjectCode: new Array(), //科目id
+        tabName: "capitalChain1",
         subJectList: [], //科目列表
         company: "", //往来单位
         companyId: "", //往来单位id
@@ -321,6 +339,12 @@
         tableData: [], //全部数据
         tableData1: [], //已审核数据
         tableData2: [], //未审核数据
+        page: {
+          total: 0,
+          sizeArr: [10, 20, 30, 40, 50],
+          size: 10,
+          num: 1
+        },
         impirtUrl: {
           downId: "1200000000",
           upUrl: impUrl
@@ -414,15 +438,29 @@
           this.canQuickDateList = !this.canQuickDateList;
         }
       },
-
+      changePage(p) {
+        this.page.num = p;
+        this.getList();
+      },
+      changeSize(size) {
+        this.page.num = 1;
+        this.page.size = size;
+        this.getList();
+      },
+      // 切换tabs
+      clickTabs(data) {
+        this.page.num = 1;
+        this.page.size = 10;
+        this.getList()
+      },
       //获取表格信息
       async getList() {
         this.oneList = {};
         let data = {};
         let params = {}
         data.signs=1;//区别现金日记账
-        params.page = 0;
-        params.size = 9999;
+        params.page = this.page.num - 1
+        params.size = this.page.size
         data.startTime = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD")
           : "";
@@ -432,22 +470,41 @@
         data.areaId = this.model1;
         data.shopNumber = this.shopCode;
         data.subjectId = [this.subjectCode];
+        //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
+        switch (this.tabName) {
+          case "capitalChain1":break;
+          case "capitalChain2":
+            data.collateState=1;
+            break;
+          case "capitalChain3":
+            data.collateState=0;
+            break;
+        }
         this.allMoneyList = {};
         let res = await goList(params,data);
-        if (res.code === 0) {
-          //if (res.data.page.content.length > 0) {
+        // if (res.code === 0) {
+        //   //if (res.data.page.content.length > 0) {
+        //     this.allMoneyList = res.data.moneyList;
+        //   //}
+        //   this.tableData = res.data.page.content;
+        //   this.tableData1 = res.data.page.content;
+        //   this.tableData2 = res.data.page.content;
+        //   this.page.total=res.data.page.totalElements
+        try {
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          let res = await goList(params,data);
+          if (res.code === 0) {
+            //if (res.data.page.content.length > 0) {
             this.allMoneyList = res.data.moneyList;
           //}
           this.tableData = res.data.page.content;
-          this.tableData1 = [];
-          this.tableData2 = [];
-          res.data.page.content.forEach(item => {
-            if (item.collateState) {
-              this.tableData1.push(item);
-            } else {
-              this.tableData2.push(item);
-            }
-          });
+          this.tableData1 = res.data.page.content;
+          this.tableData2 = res.data.page.content;
+          this.page.total=res.data.page.totalElements
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
 
@@ -491,7 +548,7 @@
             let res = await deleList(data);
             if (res.code === 0) {
               this.getList();
-              this.$Message.success("删除成功");
+              this.$Message.warning(res.message ||"删除成功");
             }
           },
           onCancel: () => {

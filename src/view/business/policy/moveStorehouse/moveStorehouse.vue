@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <!--      主菜单导航-->
       <div class="oper-top flex">
@@ -360,6 +360,8 @@ import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
 import {getSales} from "@/api/salesManagment/salesOrder";
 import * as tools from "_utils/tools";
+import { hideLoading, showLoading } from "@/utils/loading";
+
   import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
@@ -966,6 +968,7 @@ export default {
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.commitLoading = true;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getSubmitList(params)
         .then(res => {
           if (res.code == 0) {
@@ -974,11 +977,12 @@ export default {
             this.flag = 0;
           }
           this.commitLoading = false;
-
+          hideLoading()
         })
         .catch(e => {
           this.$Message.info("提交失败");
           this.commitLoading = false;
+          hideLoading()
         });
     },
     //作废
@@ -1023,7 +1027,16 @@ export default {
     removeCancel() {
       this.showRemove = false;
     },
-
+    //创建a标签
+    openwin(url) {
+      var a = document.createElement("a"); //创建a对象
+      a.setAttribute("href", url);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("id", "camnpr");
+      document.body.appendChild(a);
+      a.click(); //执行当前对象
+      document.body.removeChild(a)
+    },
     // 打印
     printTable() {
       // this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
@@ -1032,7 +1045,8 @@ export default {
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
-      window.open(routeUrl.href,"_blank");
+      // window.open(routeUrl.href,"_blank");
+      this.openwin(routeUrl.href)
       this.getList()
     },
     //添加配件

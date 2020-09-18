@@ -167,6 +167,8 @@ export default {
         this.subjectModelShow = false;
         this.$refs.voucherInput.subjectModelShowassist = false;
         this.$Message.success("转益成功");
+        //刷新本店待认领款 列表
+        this.$parent.$parent.queryClaimed()
       }
     }
   },

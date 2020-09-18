@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -210,6 +210,7 @@ import {
   daohuoruku
 } from "../../../../api/AlotManagement/threeHeadquarters.js";
 import { checkStore } from '@/api/system/systemApi'
+import {showLoading, hideLoading} from "@/utils/loading"
 
 export default {
   name: "threeHeadquarters",
@@ -376,6 +377,7 @@ export default {
       let size = this.pageList.size;
 
       //console.log(this.form, "this.form");
+      showLoading(".loadingClass")
       zongbuzhidiaoList(page, size, this.form)
         .then(res => {
           if (res.code === 0) {
@@ -386,8 +388,10 @@ export default {
             }
             //console.log(this.TopTableData, "this.TopTableData ==>257");
           }
+          hideLoading()
         })
         .catch(e => {
+          hideLoading()
           this.$Message.info("获取直调列表失败");
         });
     },

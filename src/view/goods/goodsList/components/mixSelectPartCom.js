@@ -20,6 +20,9 @@ export const mixSelectPartCom = {
 
       searchPartLayer: false, //配件名称查询层
       partName: "", //配件名称查询名字
+      partId: "",
+      partCode: "",
+      oemCode: "",
       treeData: [], //系统分类树形数据
 
       //查询选择
@@ -175,20 +178,40 @@ export const mixSelectPartCom = {
       this.loading = true;
       let data = {};
       let params = {}
+      let boolParams=false;
       params.page = this.page.num - 1;
       params.size = this.page.size;
       data.typeId = this.selectTreeItem.typeId;
       if (this.selectBrand && this.selectBrand !== "9999") {
         data.partBrandId = this.selectBrand;
       }
-      const qurry = this.partName.trim();
-      if(qurry.length > 0) {
-        data.partCode = qurry;
+      // const qurry = this.partName.trim()
+      // if(qurry.length > 0) {
+      //   data.partCode = qurry;
+      // }
+      data.name = this.partName
+      data.partInnerId = this.partId
+      data.partCode = this.partCode
+      data.oeCode = this.oemCode
+      if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
+        boolParams=true
       }
+      if(boolParams){
+        this.$Message.error("最少有一个筛选条件")
+        this.loading = false;
+        return false
+      }
+      let formData = {};
+      for (let k in data) {
+        if (data[k] && data[k].trim()) {
+          formData[k] = data[k];
+        }
+      }
+
       if(this.formPlanmain && this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
       }
-      getCarParts({data:data,params:params}).then(res => {
+      getCarParts({data:formData,params:params}).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
@@ -251,6 +274,9 @@ export const mixSelectPartCom = {
     init() {
       this.searchPartLayer = true;
       this.partName = "";
+      this.partId = "";
+      this.oemCode = "";
+      this.partCode = "";
       // this.getPartBrandAll();
       this.getCarClassifysFun();
       // this.getList();

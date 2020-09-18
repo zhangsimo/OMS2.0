@@ -2,20 +2,20 @@
   <div class="db mt10 clearfix">
     <div class="clearfix">
       <div class="db ml10 fr">
-        <button
+        <Button
           class="mr10 ivu-btn ivu-btn-default"
-          type="button"
           @click="preservationDraft"
           v-if="!disabletype"
+          :loading="preDis"
         >保存草稿
-        </button>
-        <button
+        </Button>
+        <Button
           class="mr10 ivu-btn ivu-btn-default"
-          type="button"
+          :loading="preDis"
           @click="preservationSubmission"
           v-if="!disabletype"
         >提交
-        </button>
+        </Button>
       </div>
     </div>
     <div class="content-oper content-oper-flex">
@@ -139,7 +139,7 @@
               <!--<Input v-model="thisApplyAccount" class="w140 mr10" />-->
               <Select
                 filterable
-                v-model="infoBase.thisPaymentAccount"
+                v-model="infoBase.thisPaymentAccountId"
                 @on-change="payMentFun"
                 label-in-value
                 style="width:150px"
@@ -197,9 +197,9 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc"/>
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber :min="0" v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">运费</span>
               <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">保险费</span>
@@ -220,10 +220,9 @@
                 :disabled="disabletype"
                 type="text"
                 class="w60 tc"
-                :min="0"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc" :min="0"/>
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
               <Input v-model="Actualtotalcollect" type="text" class="w60 tc" :disabled="disabletype"/>
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
@@ -231,7 +230,7 @@
               <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
               <Input type="text" v-model="Reconciliationtotal" :disabled="disabletype" class="w60 tc"/>
             </div>
-            <div class="db">
+            <div class="db pt10">
               <span class="mr5">计划结算类型</span>
               <Select class="w100" v-model="infoBase.billingType.value" disabled>
                 <Option
@@ -242,12 +241,46 @@
                 </Option>
               </Select>
               <span class="mr5 ml10">应收返利请示单号</span>
-              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" :disabled="disabletype"/>
+              <Input type="text" v-model="infoBase.rebateNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('request')"
+              >选择
+              </button>
               <span class="mr5 ml10">应收坏账请示单号</span>
-              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" :disabled="disabletype"/>
+              <Input type="text" v-model="infoBase.badDebNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('request2')"
+              >选择
+              </button>
+            </div>
+            <div class="db mt10">
               <span class="ml10" style="color:red">*</span>
               <span class="mr5">备注</span>
-              <Input type="text" v-model="infoBase.remark" class="w260 tc" :disabled="disabletype"/>
+              <Input type="text" v-model="infoBase.remark" class="w150 tc" :disabled="disabletype"/>
+              <span class="mr5 ml10">应付返利请示单号</span>
+              <Input type="text" v-model="infoBase.payingRebateNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('requestPay')"
+              >选择
+              </button>
+              <span class="mr5 ml10">应付坏账请示单号</span>
+              <Input type="text" v-model="infoBase.payingBadDebtNo" class="w200 tc" :disabled="disabletype"/>
+              <button
+                class="mr8 ml10 ivu-btn ivu-btn-default"
+                type="button"
+                :disabled="disabletype"
+                @click="openSelect('requestPay2')"
+              >选择
+              </button>
             </div>
           </div>
         </div>
@@ -293,8 +326,14 @@
         <Button type="default" @click="clientDataShow2=false">取消</Button>
       </div>
       <!--    选择的模态框-->
+      <!--      应收返利-->
       <requestCode ref="request" @backList="getBackList"></requestCode>
+      <!--      应收坏账-->
       <requestCode ref="request2" @backList="getBackList2"></requestCode>
+      <!--      应付返利-->
+      <requestCode ref="requestPay" @backList="getBackListPay"></requestCode>
+      <!--      应付坏账-->
+      <requestCode ref="requestPay2" @backList="getBackListPay2"></requestCode>
     </Modal>
   </div>
 </template>
@@ -314,12 +353,11 @@
   import {getClientTreeList, getCustomerDetails} from "../../../../api/system/essentialData/clientManagement";
   import {getNewSupplier, getSupplierTreeList} from "../../../../api/system/essentialData/supplierManagement";
   import {area} from "../../../../api/lease/registerApi";
-  import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
+  import {getBackList} from "@/api/documentApproval/documentApproval/documentApproval";
   import ClientData from "@/view/system/essentialData/clientManagement/ClientData"
   import ClientData2 from "@/view/system/essentialData/supplierManagement/ClientData"
   import requestCode from "@/view/documentApproval/component/popWindow/RequestCode"
   import selectDealings from "../../../settlementManagement/paymentmanage/component/selectCompany";
-
   // for (let i of res.data.one) {
   //   if (i.number === 3) {
   //     this.arrId[0] = i.accountNo;
@@ -344,6 +382,7 @@
         store: "", //弹框门店
         bill: "", //单据编号
         business: "", //业务类型
+        preDis:false,//保存草稿按钮接口没有返回不可点击
         companyInfo: "",
         thiscompanyInfo: "", //弹框往来单位
         infoBase: {
@@ -660,7 +699,7 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-
+            this.companyInfo=res.data.four[0].guestId
             if(!this.disabletype){
               /**进入 草稿状态 下面金额 应该没有值*/
               this.infoBase.reconciliation=0;
@@ -675,22 +714,8 @@
               this.infoBase.partsManagementFee=0;
               this.infoBase.otherFees=0;
             }
-
-            if(this.infoBase.guestName!=""){
-              getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
-                let arr = []
-                if (res2.code === 0) {
-                  res2.data.content.map(item => {
-                    arr.push({
-                      value: item.id,
-                    });
-                  });
-                  this.companyInfo = arr[0].value
-                  this.getAccountNameList();
-                }
-              })
-            }
           }
+          this.getAccountNameList("0");
         } else {
           getReconciliationNo({id: this.id}).then(res => {
             res.data.one.map(item => {
@@ -724,7 +749,7 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-
+            this.companyInfo=res.data.four[0].guestId
             if(!this.disabletype){
               /**进入 草稿状态 下面金额 应该没有值*/
               this.infoBase.reconciliation=0;
@@ -739,22 +764,9 @@
               this.infoBase.partsManagementFee=0;
               this.infoBase.otherFees=0;
             }
-
-            getGuestShortName({shortName:this.thiscompanyInfo,size:50}).then(res2 => {
-              let arr = []
-              if (res2.code === 0) {
-                res2.data.content.map(item => {
-                  arr.push({
-                    value: item.id,
-                  });
-                });
-                this.companyInfo = arr[0].value
-                this.getAccountNameList();
-              }
-            })
           });
+          this.getAccountNameList()
         }
-
       },
       async getAccountNameList(type) {
         this.infoBase.collectionName = "";
@@ -1026,12 +1038,24 @@
           }
         });
       },
+      //打开模态框
+      openSelect(request) {
+        this.$refs[request].open();
+      },
       //获取选择的信息
       getBackList(row) {
         this.infoBase.rebateNo = row.applyNo;
       },
       getBackList2(row) {
         this.infoBase.badDebNo = row.applyNo;
+      },
+      //应付返利
+      getBackListPay(row) {
+        this.infoBase.payingRebateNo = row.applyNo;
+      },
+      //应付坏账
+      getBackListPay2(row) {
+        this.infoBase.payingBadDebtNo = row.applyNo;
       },
       //获取客户分类
       getList() {
@@ -1123,16 +1147,23 @@
         this.list.four = [this.infoBase]
         // this.infoBase.reconciliation=0;
         // this.infoBase.reconciliation
+        this.preDis=true;
         if (num == 0) {
           let res = await CheckForSave(this.list, this.modelType)
           if (res.code === 0) {
+            this.preDis=false;
             this.$emit('closeModal', {})
+          }else{
+            this.preDis=false;
           }
         }
         if (num == 1) {
           let res = await CheckForSubmit(this.list, this.modelType)
           if (res.code === 0) {
+            this.preDis=false;
             this.$emit('closeModal', {})
+          }else{
+            this.preDis=false;
           }
         }
         // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {

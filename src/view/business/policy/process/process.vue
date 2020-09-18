@@ -1,6 +1,6 @@
 <template>
   <main
-    class="bigBox"
+    class="bigBox loadingClass"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); padding-top: 16px; height:100%"
   >
     <Tabs type="card" name="orderbox" class="it-box" :active-key="tabKey" @on-click="tabChange">
@@ -703,6 +703,8 @@ import "../../../lease/product/lease.less";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 import xeUtils from "xe-utils";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 import {
   tijiao,
   zuofei,
@@ -1389,6 +1391,7 @@ export default {
       if (this.tabKey === 0) {
         // 配件组装提交
         this.commitLoading = true;
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         tijiao(params)
           .then((res) => {
             // 点击列表行==>配件组装信息
@@ -1396,15 +1399,18 @@ export default {
               this.getListzu();
               this.$Message.success("提交成功");
             }
+            hideLoading()
             this.commitLoading = false;
           })
           .catch((e) => {
+            hideLoading()
             this.$Message.info("提交配件组装信息失败");
             this.commitLoading = false;
           });
       } else {
         // 配件拆分提交
         this.commitLoading = true;
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         tijiao2(params)
           .then((res) => {
             // 点击列表行==>配件组装信息
@@ -1412,9 +1418,11 @@ export default {
               this.getListchai();
               this.$Message.success("提交成功");
             }
+            hideLoading()
             this.commitLoading = false;
           })
           .catch((e) => {
+            hideLoading()
             this.$Message.info("提交配件拆分信息失败");
             this.commitLoading = false;
           });

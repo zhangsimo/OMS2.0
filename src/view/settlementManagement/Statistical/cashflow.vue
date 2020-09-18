@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -56,7 +56,7 @@
       <div>
         <div class="head">
           <span>昨日余额</span>
-          <span>{{ headData.yesterDayMoney }}</span>
+          <span>{{ headData.yesterdayMoney }}</span>
           <span>本日收款</span>
           <span>{{ headData.incomeMoney }}</span>
           <span>本日付款</span>
@@ -68,11 +68,11 @@
           <span>本期期初余额</span>
           <span>{{ headData.startMoney||0  }}</span>
           <span>本期累计收款</span>
-          <span>{{ headData.incomeMoneyTotal||0  }}</span>
+          <span>{{ headData.totalIncomeMoney||0  }}</span>
           <span>本期累计付款</span>
-          <span>{{ headData.paidMoneyTotal||0  }}</span>
+          <span>{{ headData.totalPaidMoney||0  }}</span>
           <span>本期期末余额</span>
-          <span>{{ headData.lanceMoneyEnd||0  }}</span>
+          <span>{{ headData.totalBalanceMoney||0  }}</span>
         </div>
       </div>
     </section>
@@ -138,6 +138,7 @@ import * as api from "_api/settlementManagement/financialStatement.js";
 import QuickDate from "@/components/getDate/dataget2.vue";
 import moment from "moment";
 import XEUtils from "xe-utils";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "cashflow",
   components: {
@@ -150,11 +151,11 @@ export default {
         balanceMoney: 0,
         incomeMoney: 0,
         paidMoney: 0,
-        yesterDayMoney: 0,
+        yesterdayMoney: 0,
         startMoney:0,
-        lanceMoneyEnd:0,
-        paidMoneyTotal:0,
-        incomeMoneyTotal:0
+        totalBalanceMoney:0,
+        totalPaidMoney:0,
+        totalIncomeMoney:0
       },
       tableData: [], // 主表
       dates: [], // 查询日期
@@ -281,10 +282,16 @@ export default {
           Reflect.deleteProperty(params, key);
         }
       }
-      let res = await api.findListPageAllCashFlow(params);
-      if (res.code == 0) {
-        this.tableData = res.data.content;
-        this.headData = res.data.content[0]["heandMoney"];
+      try {
+        showLoading(".loadingClass", "数据加载中，请勿操作")
+        let res = await api.findListPageAllCashFlowChange(params);
+        if (res.code == 0) {
+          this.tableData = res.data.flowList;
+          this.headData = res.data.moneyList
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
     }
   }

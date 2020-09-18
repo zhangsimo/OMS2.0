@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
@@ -39,6 +39,7 @@
               @click="isSubmit"
               :disabled="draftShow != 0||isNew"
               v-has="'submit'"
+              :loading="commitLoading"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
@@ -486,6 +487,8 @@ import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
 import SalesCus from "../../../components/allocation/salesCus";
+import { hideLoading, showLoading } from "@/utils/loading";
+
 export default {
   name: "presell",
   components: {
@@ -513,6 +516,7 @@ export default {
     };
     return {
       saveLoading: false,
+      commitLoading: false,
       leftTableHeight:0,
       rightTableHeight:0,
       isNew: true, //判断页面开始是否禁用
@@ -799,10 +803,20 @@ export default {
       order.route=this.$route.name
       order.id=this.id
       let routeUrl=this.$router.resolve({name:"print",query:order})
-      window.open(routeUrl.href,"_blank");
+      // window.open(routeUrl.href,"_blank");
+      this.openwin(routeUrl.href)
       this.getLeftList()
     },
-
+    //创建a标签
+    openwin(url) {
+      var a = document.createElement("a"); //创建a对象
+      a.setAttribute("href", url);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("id", "camnpr");
+      document.body.appendChild(a);
+      a.click(); //执行当前对象
+      document.body.removeChild(a)
+    },
     //获取客户额度
     getAllLimit() {
       const guestId = this.formPlan.guestId;
@@ -1215,6 +1229,8 @@ export default {
                 this.submitloading=true;
                 let data = {};
                 data = this.formPlan;
+                this.commitLoading = true
+                showLoading(".loadingClass", "数据加载中，请勿操作")
                 let res = await getSubmit(data);
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
@@ -1226,8 +1242,12 @@ export default {
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();
                   this.submitloading=false;
+                  hideLoading()
+                  this.commitLoading = false
                 }else{
                   this.submitloading=false;
+                  hideLoading()
+                  this.commitLoading = false
                 }
               },
               onCancel: () => {
@@ -1235,6 +1255,8 @@ export default {
               }
             });
           } catch (errMap) {
+            hideLoading()
+            this.commitLoading = false
             // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
           }
         } else {

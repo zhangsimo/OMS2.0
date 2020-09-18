@@ -33,7 +33,7 @@ export function certificationAuditRevocation(data) {
 // 资金统计表
 export function findListPageAllReport(params) {
   return axios.request({
-    url: `${api.omsSettle}/omsFinanceAccountStatistical/findListPageAllReport`,
+    url: `${api.omsSettle}/omsFinanceAccountStatistical/findCashStatisticalReportStatements`,
     method: "get",
     params
   });
@@ -71,6 +71,15 @@ export function addClaim(data) {
 export function findListPageAllCashFlow(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountCashFlow/findListPageAllReport`,
+    method: "get",
+    params,
+  });
+}
+
+// 现金流量表 查询
+export function findListPageAllCashFlowChange(params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountCashFlow/findCashFlowReportStatements`,
     method: "get",
     params,
   });

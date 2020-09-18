@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="Settlement" title="收付款结算" width="1300" @on-visible-change="hander">
     <div class="db">
-      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+      <Button class="ivu-btn ivu-btn-default mr10" @click="conserve" :loading="conserveDis">保存</Button>
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
@@ -172,6 +172,7 @@ export default {
         rpAmt: [{ required: true, validator: amtValid}]
       },
       Settlement: false, //弹框显示
+      conserveDis:false,//保存接口返回之前按钮不可点击
       check: 0,
       remark: "",
       reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
@@ -345,13 +346,17 @@ export default {
             two: this.BusinessType,
             three: this.tableData
           };
+          this.conserveDis=true;
           paymentRegain(obj).then(res => {
             if (res.code === 0) {
+              this.conserveDis=false;
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("其他收款收回成功!");
               this.$parent.getQuery();
               this.$parent.typeA = '';
+            }else{
+              this.conserveDis=false;
             }
           });
         } else if(this.$parent.Types === '其他收款核销'){
@@ -364,13 +369,17 @@ export default {
               obj3.two = this.BusinessType;
               obj3.three = this.tableData;
               obj3.type= 2
+              this.conserveDis=true;
               orderWriteOff(obj3).then(res => {
                 if (res.code === 0) {
+                  this.conserveDis=false;
                   this.Settlement = false;
                   this.$parent.claimModal = false;
                   this.$message.success("其他收款核销成功!");
                   this.$parent.Types = '';
                   this.$parent.getQuery();
+                }else{
+                  this.conserveDis=false;
                 }
               });
               // this.$XModal.message({ status: 'success', message: '校验成功！' })
@@ -385,12 +394,17 @@ export default {
           if(this.$parent.otherPayCus){
             obj2.one.paymentTypeCode = this.$parent.fund
           }
+          this.conserveDis=true;
           saveAccount(obj2).then(res => {
             if (res.code === 0) {
+              this.$emit("reloadParList")
+              this.conserveDis=false;
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("其他付款认领成功！");
               this.$parent.getQuery();
+            }else{
+              this.conserveDis=false;
             }
           });
         }

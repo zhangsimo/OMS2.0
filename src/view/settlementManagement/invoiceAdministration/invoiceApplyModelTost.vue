@@ -8,7 +8,7 @@
     <div>
       <div class="mb20">
         <span>发票申请数据</span>
-        <Button class="ml10" type="info" @click="submitConfig">确认核销</Button>
+        <Button class="ml10" type="info" @click="submitConfig" :loading="submitConfigDis">确认核销</Button>
       </div>
       <div>
         <Table
@@ -70,6 +70,7 @@ export default {
     return {
       model1: "",
       modals: false,
+      submitConfigDis:false,//核销接口没有返回之前按钮不可点击
       hxOjb: {
         invoiceApplyId: "",
         salesInvoiceId: ""
@@ -375,8 +376,10 @@ export default {
         }
         let d = this.data1.find(el => el.id == this.allSelectList[0].id);
         this.hxOjb.rpAmt = d.rpAmt ;
+        this.submitConfigDis=true;
         subManualList(this.hxOjb).then(res => {
           if (res.code === 0) {
+            this.submitConfigDis=false;
             this.$Message.warning("核销成功");
             this.model1 = false;
             this.hxOjb = {
@@ -384,6 +387,8 @@ export default {
               salesInvoiceId: ""
             };
             this.$parent.getDataList();
+          }else{
+            this.submitConfigDis=false;
           }
         });
       }

@@ -20,6 +20,7 @@ import {
   v4
 } from "uuid"
 import * as tools from "_utils/tools";
+import { hideLoading, showLoading } from "@/utils/loading";
 
 export const mixGoodsData = {
   data() {
@@ -426,7 +427,7 @@ export const mixGoodsData = {
       ) {
         return total
       }
-      if (columnIndex === 12) {
+      if (['orderAmt'].includes(type)) {
         let totals = 0;
         let sumarr = data.map(el => {
           return el.orderPrice * el.orderQty;
@@ -436,7 +437,7 @@ export const mixGoodsData = {
         this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
         return totals.toFixed(2);
       }
-      if (columnIndex === 17) {
+      if (columnIndex == 17) {
         let totals = 0;
         let sumarr = data.map(el => {
           return el.orderPrice - el.recentPrice;
@@ -453,8 +454,9 @@ export const mixGoodsData = {
 
       v.forEach(item => {
         item.id = undefined;
-        item.orderPrice = item.recentPrice || undefined;
-        item.orderQty = undefined;
+        item.orderPrice = item.recentPrice || 0.00;
+        item.orderQty = 0;
+        item.orderAmt = 0.00
       })
 
       let oldArr = [...this.tableData, ...v]
@@ -779,6 +781,7 @@ export const mixGoodsData = {
                     return this.$Message.error("请添加配件后再提交");
                   }
                   this.commitLoading = true
+                  showLoading(".loadingClass", "数据加载中，请勿操作")
                   saveCommit(objReq).then(res => {
                     this.submitloading = false;
                     this.loading = false;
@@ -788,12 +791,15 @@ export const mixGoodsData = {
                       this.$Message.success("提交成功");
                       this.commitLoading = false
                       this.getList();
+                      hideLoading()
                     } else {
                       this.submitloading = this.loading = false;
                       this.commitLoading = false
+                      hideLoading()
                     }
                   }).catch(e => {
                     this.commitLoading = false;
+                    hideLoading()
                   });
                 }
               },
@@ -822,6 +828,7 @@ export const mixGoodsData = {
                 return this.$Message.error("请添加配件后再提交");
               }
               this.commitLoading = true
+              showLoading(".loadingClass", "数据加载中，请勿操作")
               saveCommit(objReq).then(res => {
                 this.submitloading = this.loading = false;
                 if (res.code == 0) {
@@ -830,8 +837,10 @@ export const mixGoodsData = {
                   this.$Message.success("提交成功");
                   this.getList();
                 }
+                hideLoading()
                 this.commitLoading = false
               }).catch(e => {
+                hideLoading()
                 this.commitLoading = false
               });
             }

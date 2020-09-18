@@ -1,7 +1,7 @@
 <template>
     <main class="bigBox"
     style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%">
-      <div class="content-oper content-oper-flex">
+      <div class="content-oper content-oper-flex loadingClass">
         <section class="oper-box">
           <div class="oper-top flex">
             <div class="wlf">
@@ -305,6 +305,8 @@
   import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
   import ChangeOrder from "./compontents/changeOrder";
+  import { hideLoading, showLoading } from "@/utils/loading";
+
 
   export default {
       name: "applyFor",
@@ -801,6 +803,16 @@
             },
           })
         },
+        //创建a标签
+        openwin(url) {
+          var a = document.createElement("a"); //创建a对象
+          a.setAttribute("href", url);
+          a.setAttribute("target", "_blank");
+          a.setAttribute("id", "camnpr");
+          document.body.appendChild(a);
+          a.click(); //执行当前对象
+          document.body.removeChild(a)
+        },
         // 打印
         stamp(){
           let order = {};
@@ -808,7 +820,8 @@
           order.route=this.$route.name
           order.id=this.mainId
           let routeUrl=this.$router.resolve({name:"print",query:order})
-          window.open(routeUrl.href,"_blank");
+          // window.open(routeUrl.href,"_blank");
+          this.openwin(routeUrl.href)
           this.leftgetList()
         },
         //右侧表格复选框选中
@@ -1206,6 +1219,7 @@
                     }
                     try {
                       this.isCommitClick = true;
+                      showLoading(".loadingClass", "数据加载中，请勿操作")
                       let res = await commit(data);
                       if(!res){
                         this.isCommitClick = false;
@@ -1216,8 +1230,10 @@
                         this.isAdd = true;
                         this.$refs.formPlan.resetFields();
                       }
+                      hideLoading()
                     } catch (error) {
                       this.isCommitClick = false;
+                      hideLoading()
                     }
                   // }else{
                   //   this.$Message.warning('请先编辑收货信息')
