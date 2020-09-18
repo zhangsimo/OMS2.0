@@ -368,7 +368,6 @@
       async getInvoiceSellerList() {
         let res = await getInvoiceSellerList()
         if (res.code == 0) {
-          // console.log(res.data)
           this.invoiceSellerList = res.data
         }
       },
@@ -601,7 +600,8 @@
             payType: "DG",
             invoiceSort: "FY",
             invoicePurchaserId: this.$store.state.user.userData.currentShopId || "",
-            invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
+            // invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName || "",
+            invoiceSellerName: this.invoiceSellerList.length == 0 ? "" : this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName,
             billingType: 'FY'
           });
         }
