@@ -116,7 +116,8 @@
           show-elevator
           class="mt10 fr"
           show-sizer
-          @on-change="pageCode"
+          @on-change="changePage"
+          @on-page-size-change="changeSize"
           show-total
           size="small"
         />
@@ -1181,7 +1182,20 @@ export default {
       //   data:this.data1,
       //   columns:this.columns1
       // })
+      if(this.allTablist.length<1){
+        return this.$Message.error("请选择需要导出的数据")
+      }
       location.href=exportModifyData(this.allTablist)
+    },
+    //分页
+    changePage(p) {
+      this.form.page = p-1;
+      this.query();
+    },
+    changeSize(s) {
+      this.form.page =0;
+      this.form.size = s;
+      this.query();
     },
     operation(num) {
       switch (num) {
@@ -1283,7 +1297,11 @@ export default {
     },
     getDataList() {
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      getInvoiceList(this.form).then(res => {
+      let params={
+        page:this.form.page,
+        size:this.form.size
+      }
+      getInvoiceList(params,this.form).then(res => {
         if (res.code === 0) {
           this.data = res.data.content.map((item,index)=>{
             item.seq=index + this.form.page * this.form.size + 1

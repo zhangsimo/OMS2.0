@@ -56,6 +56,8 @@
           border
           resizable
           auto-resize
+          size="mini"
+          show-overflow="title"
           ref="xTable"
           show-footer
           max-height="400"
@@ -67,20 +69,20 @@
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="orgName" title="门店"></vxe-table-column>
-            <vxe-table-column field="accountNo" title="对账单号"></vxe-table-column>
-            <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-            <vxe-table-column field="businessTypeName" title="业务类型"></vxe-table-column>
-            <vxe-table-column field="reconciliationAmt" title="对账金额"></vxe-table-column>
-            <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
-            <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
+            <vxe-table-column field="orgName" width="140" title="门店"></vxe-table-column>
+            <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
+            <vxe-table-column field="guestName" width="120" title="往来单位"></vxe-table-column>
+            <vxe-table-column field="businessTypeName" width="80" title="业务类型"></vxe-table-column>
+            <vxe-table-column field="reconciliationAmt" width="80" title="对账金额"></vxe-table-column>
+            <vxe-table-column field="hasAmt" width="100" title="已收/付金额"></vxe-table-column>
+            <vxe-table-column field="unAmt" width="100" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
-              width="140"
+              width="120"
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
             ></vxe-table-column>
-            <vxe-table-column field="unAmtLeft" title="剩余未收/未付"></vxe-table-column>
+            <vxe-table-column field="unAmtLeft" width="120" title="剩余未收/未付"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -115,6 +117,8 @@
           style="flex:4"
           border
           resizable
+          size="mini"
+          show-overflow="title"
           auto-resize
           show-footer
           max-height="400"
@@ -126,17 +130,17 @@
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
-            <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-            <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-            <vxe-table-column field="paidMoney" title="支出金额">
+            <vxe-table-column field="accountName" width="120" title="收/付款账户"></vxe-table-column>
+            <vxe-table-column field="mateAccountName" width="120" title="科目代码"></vxe-table-column>
+            <vxe-table-column field="createTime" width="140" title="发生日期"></vxe-table-column>
+            <vxe-table-column field="incomeMoney" width="100" title="收入金额"></vxe-table-column>
+            <vxe-table-column field="paidMoney" width="100" title="支出金额">
               <template v-slot="{row}">
                 {{Math.abs(row.paidMoney)}}
               </template>
             </vxe-table-column>
-            <vxe-table-column field="thisClaimedAmt" title="本次认领金额"></vxe-table-column>
-            <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
+            <vxe-table-column field="thisClaimedAmt" width="100" title="本次认领金额"></vxe-table-column>
+            <vxe-table-column field="orgName" width="120" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
       </Col>

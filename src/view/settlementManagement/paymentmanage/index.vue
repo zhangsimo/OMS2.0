@@ -515,12 +515,13 @@ export default {
           title: "区域",
           key: "area",
           minWidth: 80,
+          tooltip: true,
           className: "tc"
         },
         {
           title: "门店",
           key: "orgName",
-          minWidth: 100,
+          minWidth: 200,
           className: "tc",
           tooltip:true
         },
@@ -800,7 +801,7 @@ export default {
           title: "对账门店",
           key: "accountOrgName",
           className: "tc",
-          minWidth: 80,
+          minWidth: 180,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -867,13 +868,14 @@ export default {
           title: "区域",
           key: "area",
           minWidth: 70,
+          tooltip: true,
           className: "tc"
         },
         {
           title: "门店",
           key: "orgName",
           tooltip:true,
-          minWidth: 70,
+          minWidth: 200,
           className: "tc"
         },
         {
@@ -1147,7 +1149,7 @@ export default {
           title: "对账门店",
           key: "accountOrgName",
           className: "tc",
-          minWidth: 80,
+          minWidth: 180,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -1297,6 +1299,7 @@ export default {
           title: "配件车型",
           key: "carModel",
           className: "tc",
+          tooltip: true,
           minWidth: 80
         },
         {
@@ -1325,6 +1328,7 @@ export default {
           title: "配件厂牌",
           key: "factoryBrand",
           className: "tc",
+          tooltip: true,
           minWidth: 80
         },
         {
@@ -1435,11 +1439,13 @@ export default {
           title: "区域",
           key: "area",
           className: "tc",
+          tooltip: true,
           minWidth: 80
         },
         {
           title: "店号",
           key: "shopCode",
+          tooltip: true,
           className: "tc",
           minWidth: 80
         },

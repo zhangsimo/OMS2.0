@@ -365,32 +365,38 @@ export default {
         {
           title: "配件编码",
           key: "partCode",
+          tooltip: true,
           className: "tc"
         },
         {
           title: "配件名称",
           key: "partName",
+          tooltip: true,
           width: 120,
           className: "tc"
         },
         {
           title: "品牌",
           key: "partBrand",
+          tooltip: true,
           className: "tc"
         },
         {
           title: "车型",
           key: "carModelName",
+          tooltip: true,
           className: "tc"
         },
         {
           title: "OEM码",
           key: "oemCode",
+          tooltip: true,
           className: "tc"
         },
         {
           title: "是否含税",
           key: "taxSign",
+          tooltip: true,
           className: "tc"
         },
         {

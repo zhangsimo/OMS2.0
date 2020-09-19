@@ -937,26 +937,31 @@
             title: "序号",
             type: "index",
             width: 40,
-            className: "tc"
+            className: "tc",
+            tooltip: true
           },
           {
             title: "收/付款单号",
             key: "fno",
-            className: "tc"
+            className: "tc",
+            tooltip: true
           },
           {
             title: "收/付款时间",
             key: "rpDate",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "收/付款方式",
             key: "sortName",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "收/付款账户",
             key: "account",
+            tooltip: true,
             className: "tc"
           },
           {
@@ -970,21 +975,25 @@
           {
             title: "审核状态",
             key: "startStatus",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "审核人",
             key: "auditor",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "审核日期",
             key: "auditorDate",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "备注",
             key: "remark",
+            tooltip: true,
             className: "tc"
           }
         ],
@@ -993,17 +1002,20 @@
             title: "序号",
             key: "index",
             width: 40,
+            tooltip: true,
             className: "tc"
           },
           {
             title: "门店",
             key: "orgName",
             className: "tc",
+            tooltip: true,
             minWidth: 80,
           },
           {
             title: "客户",
             key: "guestName",
+            tooltip: true,
             minWidth: 80,
             className: "tc"
           },
@@ -1011,12 +1023,14 @@
             title: "销售单号",
             key: "orderNo",
             minWidth: 80,
+            tooltip: true,
             className: "tc"
           },
           {
             title: "出库单号",
             key: "serviceId",
             minWidth: 80,
+            tooltip: true,
             className: "tc"
           },
           {
@@ -1069,6 +1083,7 @@
           {
             title: "序号",
             key: "index",
+            tooltip: true,
             width: 40,
             className: "tc"
           },
@@ -1076,24 +1091,28 @@
             title: "门店",
             key: "orgName",
             minWidth: 80,
+            tooltip: true,
             className: "tc"
           },
           {
             title: "客户",
             key: "guestName",
             minWidth: 80,
+            tooltip: true,
             className: "tc"
           },
           {
             title: "采购单号",
             key: "orderNo",
             minWidth: 80,
+            tooltip: true,
             className: "tc"
           },
           {
             title: "入库单号",
             key: "serviceId",
             minWidth: 80,
+            tooltip: true,
             className: "tc"
           },
           {

@@ -24,21 +24,26 @@ export default {
         {
           title: "收付款单号",
           key: "fno",
+          tooltip: true,
           align: "center"
         },
         {
           title: "对账单号",
           key: "accountNo",
+          tooltip: true,
           align: "center"
         },
         {
           title: "收款人/付款人",
           key: "createUname",
+          tooltip: true,
+          width: 100,
           align: "center"
         },
         {
           title: "收付款时间",
           key: "rpDate",
+          tooltip: true,
           align: "center"
         },
         // {
@@ -62,6 +67,7 @@ export default {
         {
           title: "往来单位",
           key: "guestName",
+          tooltip: true,
           align: "center"
         },
         {
@@ -76,41 +82,49 @@ export default {
         {
           title: "账户所属门店",
           key: "accountStoreName",
+          tooltip: true,
           align: "center"
         },
         {
           title: "收付款账户",
           key: "account",
+          tooltip: true,
           align: "center"
         },
         {
           title: "收付款开户行",
           key: "accountBank",
+          tooltip: true,
           align: "center"
         },
         {
           title: "收付款账号",
           key: "accountBankNo",
+          tooltip: true,
           align: "center"
         },
         {
           title: "对方户名",
           key: "otherAccountName",
+          tooltip: true,
           align: "center"
         },
         {
           title: "对方开户行",
           key: "otherAccountBank",
+          tooltip: true,
           align: "center"
         },
         {
           title: "对方账号",
           key: "otherAccountBankNo",
+          tooltip: true,
           align: "center"
         },
         {
           title: "收付款金额",
           key: "checkAmt",
+          tooltip: true,
           align: "center",
           // render: (h, p) => {
           //   let Number = p.row.checkAmt;
@@ -133,16 +147,19 @@ export default {
         {
           title: "审核人",
           key: "auditor",
+          tooltip: true,
           align: "center"
         },
         {
           title: "审核日期",
           key: "auditorDate",
+          tooltip: true,
           align: "center"
         },
         {
           title: "备注",
           key: "remark",
+          tooltip: true,
           align: "center"
         }
       ],

@@ -151,6 +151,13 @@
             </Row>
             <Row>
               <Col span="22">
+                <FormItem label="拼音码:">
+                  <Input v-model="spellCode" readonly/>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="22">
                 <FormItem label="通用编码：" prop="commonId">
                   <Input v-model="formValidate.commonId"></Input>
                 </FormItem>

@@ -11,6 +11,8 @@
         highlight-hover-row
         highlight-current-row
         :data="tableData"
+        size="mini"
+        show-overflow="title"
         align="center"
       >
         <vxe-table-column field="serviceId" title="费用报销申请单号"></vxe-table-column>
@@ -37,6 +39,7 @@
         border
         highlight-hover-row
         highlight-current-row
+        show-overflow="title"
         show-footer
         size="mini"
         height="200"
@@ -79,7 +82,7 @@
         <vxe-table-column field="summary" title="摘要"></vxe-table-column>
       </vxe-table>
     </Row>
-    <Modal title="因公借支申请查询" width="600" v-model="showChild">
+    <Modal title="因公借支申请查询" width="800" v-model="showChild">
       <Row>
         <span>申请日期：</span>
         <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
@@ -94,6 +97,8 @@
           auto-resize
           resizable
           border
+          size="mini"
+          show-overflow="title"
           highlight-hover-row
           highlight-current-row
           @checkbox-all="selectAllEvent"
@@ -107,7 +112,7 @@
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
           <vxe-table-column field="payAmt" title="借支金额"></vxe-table-column>
-          <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
+          <vxe-table-column field="applyTime" width="140" title="申请日期"></vxe-table-column>
           <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
           <vxe-table-column field="summary" title="摘要"></vxe-table-column>
         </vxe-table>
