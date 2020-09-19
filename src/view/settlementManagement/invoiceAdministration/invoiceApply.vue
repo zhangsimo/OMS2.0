@@ -1182,6 +1182,9 @@ export default {
       //   data:this.data1,
       //   columns:this.columns1
       // })
+      if(this.allTablist.length<1){
+        return this.$Message.error("请选择需要导出的数据")
+      }
       location.href=exportModifyData(this.allTablist)
     },
     //分页
