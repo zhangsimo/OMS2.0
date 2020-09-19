@@ -1977,7 +1977,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : ""
       };
-      this.getGeneral(obj);
+      this.query();
     },
     // 选择日期
     changedate(daterange) {
