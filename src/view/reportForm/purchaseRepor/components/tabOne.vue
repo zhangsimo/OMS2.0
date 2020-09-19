@@ -300,6 +300,9 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = false;
             }
+            // if(el.taxRate){
+            //   el.taxRate=`${el.taxRate*100}%`
+            // }
             return el;
           });
           // this.total = res.data.purchaseOrderBean
