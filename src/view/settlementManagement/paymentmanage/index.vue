@@ -282,6 +282,9 @@ import { creat } from "./../components";
 import moment from "moment";
 import {findGuest} from "../../../api/settlementManagement/advanceCollection";
 import {showLoading, hideLoading} from "@/utils/loading"
+import baseUrl from '_conf/url'
+import {TOKEN_KEY} from "@/libs/util";
+import Cookies from "js-cookie";
 export default {
   name:'payMentmanage',
   components: {
@@ -1977,7 +1980,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : ""
       };
-      this.getGeneral(obj);
+      this.query();
     },
     // 选择日期
     changedate(daterange) {
@@ -2185,16 +2188,31 @@ export default {
     // 导出汇总
     exportSummary() {
       if (this.data.length !== 0) {
-        let arrData = [...this.data]
-        arrData.map(item=>{
-          item.orgId = "\t"+item.orgId
-        })
-        this.$refs.summary.exportCsv({
-          filename: "应收应付汇总表",
-          original:false,
-          columns:this.columns,
-          data:arrData
-        });
+        // let arrData = [...this.data]
+        // arrData.map(item=>{
+        //   item.orgId = "\t"+item.orgId
+        // })
+        // this.$refs.summary.exportCsv({
+        //   filename: "应收应付汇总表",
+        //   original:false,
+        //   columns:this.columns,
+        //   data:arrData
+        // });
+        let obj = {
+          orgId: this.model1,
+          startDate: this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
+            : "",
+          endDate: this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
+            : "",
+          guestId:this.guestId
+        };
+        let params=""
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        location.href=`${baseUrl.omsSettle}/receivable/payable/export/getPage?${params}access_token=${Cookies.get(TOKEN_KEY)}`
       } else {
         this.$message.error("应收应付汇总表暂无数据");
       }

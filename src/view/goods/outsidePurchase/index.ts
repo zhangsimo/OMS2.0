@@ -240,15 +240,15 @@ export default class OutsidePurchase extends Vue {
   }
 
   async checkSelf({ row: { storeShelf } }) {
-    if (storeShelf == "") {
+    if (storeShelf == "" || !storeShelf) {
       this.isSelfOk = true;
     } else {
-      let res:any = await checkStore({ storeId: this.formPlanmain.storeId, name: storeShelf });
-      if (res.code == 0 && res.data != null) {
-        this.isSelfOk = true;
-      } else {
-        this.isSelfOk = false;
-      }
+        let res:any = await checkStore({ storeId: this.formPlanmain.storeId, name: storeShelf });
+        if (res.code == 0 && res.data != null) {
+          this.isSelfOk = true;
+        } else {
+          this.isSelfOk = false;
+        }
     }
   }
 
