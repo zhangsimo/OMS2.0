@@ -77,6 +77,7 @@
             <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
             <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
             <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
+            <vxe-table-column field="storeName" title="仓库" width="120"></vxe-table-column>
             <vxe-table-column field="enterQty" title="入库数量" width="90"></vxe-table-column>
             <vxe-table-column field="outableQty" title="可出库数量" width="90"></vxe-table-column>
             <vxe-table-column field="enterPrice" title="入库单价" width="120">
@@ -99,6 +100,10 @@
             <vxe-table-column field="guestName" title="供应商" width="120">
             </vxe-table-column>
             <vxe-table-column field="createTime" title="入库日期" width="120">
+            </vxe-table-column>
+            <vxe-table-column field="branchStockAge" title="本店库龄" width="80">
+            </vxe-table-column>
+            <vxe-table-column field="chainStockAge" title="连锁库龄" width="80">
             </vxe-table-column>
           </vxe-table>
         </div>
