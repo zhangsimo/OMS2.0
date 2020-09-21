@@ -1,13 +1,13 @@
 <template>
   <div>
-    <Modal class="claim" title="预收款认领" width="1000" v-model="visibal">
+    <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <div class="fr">
+        <div class="fr" v-if="this.$route.name !== 'settlementManagementExpensereimbursement'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
           <Input class="w180 mr10" v-model="calculation"/>
-          <Button>辅助计算</Button>
+          <Button @click="chooseAuxiliary">辅助计算</Button>
         </div>
       </div>
 
@@ -16,13 +16,16 @@
         show-footer
         highlight-hover-row
         highlight-current-row
-        @on-current-change="currentRow"
+        @current-change="selectRow"
+        show-overflow="title"
         :auto-resize="true"
+        :edit-rules="validRules"
         size="mini"
         align="center"
+        ref="xTree"
         :data="tableData"
-        :edit-config="{ trigger: 'click', mode: 'cell' }"
         :footer-method="addFooter"
+        :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       >
         <vxe-table-column title="操作" show-overflow="tooltip">
           <template v-slot="{ row }">
@@ -30,41 +33,41 @@
           </template>
         </vxe-table-column>
         <vxe-table-column
-          title="发生日期" width="80" field="data1"  show-overflow="tooltip">
+          title="发生日期" width="80" field="createTime"  show-overflow="tooltip">
         </vxe-table-column>
-        <vxe-table-column title="账户" width="100" field="data2" show-overflow="tooltip">
+        <vxe-table-column title="账户" width="100" field="accountName" show-overflow="tooltip">
 
         </vxe-table-column>
-        <vxe-table-column title="支出金额" width="100" field="data3" show-overflow="tooltip">
+        <vxe-table-column title="支出金额" width="100" field="paidMoney" show-overflow="tooltip">
 
         </vxe-table-column>
-        <vxe-table-column title="收入金额" width="100" field="data4" show-overflow="tooltip">
+        <vxe-table-column title="收入金额" width="100" field="incomeMoney" show-overflow="tooltip">
 
         </vxe-table-column>
         <vxe-table-column
           title="本次认领金额"
           width="120" 
-          field="data5" 
+          field="thisClaimedAmt" 
           show-overflow="tooltip"
           :edit-render="{ name: 'input' }"
           >
           <template v-slot:edit="{ row }">
             <el-input-number
               :min="0"
-              v-model="row.data5"
+              @change="changeNum"
+              v-model="row.thisClaimedAmt"
               :controls="false"
               size="mini"
-              :precision="0"
             />
           </template>
         </vxe-table-column>
-        <vxe-table-column title="已认领金额" width="100" field="data6" show-overflow="tooltip">
+        <vxe-table-column title="已认领金额" width="100" field="claimedAmt" show-overflow="tooltip">
 
         </vxe-table-column>
-        <vxe-table-column title="未认领金额" width="100" field="data7" show-overflow="tooltip">
+        <vxe-table-column title="未认领金额" width="100" field="unClaimedAmt" show-overflow="tooltip">
 
         </vxe-table-column>
-        <vxe-table-column title="智能匹配往来单位" width="180" field="data8" show-overflow="tooltip">
+        <vxe-table-column title="智能匹配往来单位" width="180" field="suppliers" show-overflow="tooltip">
 
         </vxe-table-column>
       </vxe-table>
@@ -75,34 +78,38 @@
       </div>
     </Modal>
     <PreClaimModal ref="PClaimModal"></PreClaimModal>
+    <voucherInput ref="voucherInput"></voucherInput>
   </div>
 </template>
 
 <script>
 import PreClaimModal from "./PreClaimModal"
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
+import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
+import { addClaim } from "_api/settlementManagement/financialStatement.js";
+
 export default {
   components: {
-    PreClaimModal
+    PreClaimModal,
+    voucherInput,
   },
+  props: ['titleName'],
   data(){
     return {
       visibal: false,
       calculation: '',
-      tableData: [
-        {id: 0, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 1, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 2, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 3, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 4, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 5, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 6, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-        {id: 7, data1: 1, data2: 2, data3: 3, data4: 4, data5: 5,data6: 6, data7: 7, data8: 8 },
-      ]
+      tableData: [],
+      outFlag: false,
+      financeAccountCashList: [], //选中待认领的数组
+      currentRow: {}, // 报销认领弹框中选中的行
+      validRules: {
+        thisClaimedAmt: [
+          { required: true, message: '请输入认领金额' },
+          { type: 'number', message: '请输入数字' }
+        ]
+      }
     }
   },
-
-
   methods: {
 
     // 弹框底部的合计
@@ -112,7 +119,7 @@ export default {
           if (columnIndex === 0) {
             return '合计'
           }
-          if (['data3', 'data4', 'data5', 'data6','data7'].includes(column.property)) {
+          if (['thisClaimedAmt'].includes(column.property)) {
             return this.sum(data, column.property, columnIndex)
           }
           return null
@@ -133,8 +140,8 @@ export default {
 
     //弹框打开
     open(){
+      this.tableData = []
       this.visibal = true
-      this.getTableList()
     },
 
     //弹框关闭
@@ -144,29 +151,87 @@ export default {
     
     //点击确认按钮后
     confirm(){
+      if(this.tableData.length === 0){
+        this.$message.error('请点击选择单据按钮，选择数据')
+        return
+      }
+      // this.$refs.xTree.validate((err) => {
+      //   if(err){
+      //     this.$message.error('待认领金额输入不正确')
+      //   }else{
+      //     this.$message.success('认领成功')
+      //   }
+      // })
+      let flag = this.tableData.some(v => {
+        return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0 
+      })
+      let flag1 = this.tableData.some(v => {
+        return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.paidMoney
+      })
+      if(flag){
+        this.$message.error('认领金额输入错误，不可为空')
+        return
+      }
+      if(flag1){
+        this.$message.error('认领金额超出范围')
+        return
+      }
+      this.financeAccountCashList = []
+      this.tableData.forEach(v => {
+        let o = {}
+        o.id = v.id
+        o.thisClaimedAmt = v.thisClaimedAmt + ''
+        this.financeAccountCashList.push(o)
+      })
+      let obj = {
+        financeAccountCashList: this.financeAccountCashList,
+        loanId:this.$store.state.businessBorrowing.loanId,
+        claimType: 4
+      }
+      addClaim(obj).then(res => {
+        if(res.code === 0){
+          this.$message.success('认领成功')
+          this.visibal = false
+          this.$parent.getQuery()
+        }
+      })
 
-
-      this.visibal = false
     },
 
     deleteItem(row){
-      console.log(row)
+      this.tableData = this.tableData.filter(item => item.id !== row.id)
     },
 
-    currentRow({row}){
-      console.log(row.id)
+    selectRow({row}){
+      this.currentRow = row
     },
 
     openPClaimModal(){
-      this.close()
       this.$refs.PClaimModal.open()
     },
 
-    async getTableList(){
-      console.log(111)
-      let obj = {}
-      let res = await claimedFund(obj)
-      console.log(res)
+    // 选择辅助计算弹框
+    chooseAuxiliary(){
+      this.$refs.voucherInput.subjectModelShowassist = true
+    },
+
+    setSelectData(list){
+      this.tableData = list
+    },
+
+    changeNum(newVal,oldVal){
+      // console.log(newVal)
+      // if(newVal === undefined || newVal === null){
+      //   this.$message.error('本次认领金额录入不可为空')
+      // }
+      // if(0 < newVal <= this.currentRow.incomeMoney || 0 < newVal <= this.currentRow.paidMoney) {
+      //   this.$message.error('本次认领金额录入错误，请重新输入')
+      // }
+    },
+    validate(num){
+      let reg = /^\d+(?=\.{0,1}\d+$|$)/
+        if(reg.test(num)) return true
+        return false
     }
   },
 }
