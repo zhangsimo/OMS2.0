@@ -630,13 +630,13 @@ export default {
         guestId:this.company?this.companyId:""
       }
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      getOnWay(data).then(res => {
-        if(res.data.length !==0){
-          res.data.map((item,index)=>{
+      getOnWay(params).then(res => {
+        if(res.data.content.length !==0){
+          res.data.content.map((item,index)=>{
             item.index = index +1
             item.taxSign = item.taxSign ? '是' : '否'
           })
-          this.data = res.data
+          this.data = res.data.content
           this.page.total=res.data.totalElements
           hideLoading()
         } else {
