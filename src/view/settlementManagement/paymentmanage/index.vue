@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -93,7 +93,6 @@
           ref="summary"
           highlight-current-row
           @current-change="selete"
-          :loading="data1Loading"
         >
           <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
           <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
@@ -282,6 +281,10 @@ import {getCustomerInformation} from "@/api/system/essentialData/clientManagemen
 import { creat } from "./../components";
 import moment from "moment";
 import {findGuest} from "../../../api/settlementManagement/advanceCollection";
+import {showLoading, hideLoading} from "@/utils/loading"
+import baseUrl from '_conf/url'
+import {TOKEN_KEY} from "@/libs/util";
+import Cookies from "js-cookie";
 export default {
   name:'payMentmanage',
   components: {
@@ -515,12 +518,13 @@ export default {
           title: "区域",
           key: "area",
           minWidth: 80,
+          tooltip: true,
           className: "tc"
         },
         {
           title: "门店",
           key: "orgName",
-          minWidth: 100,
+          minWidth: 200,
           className: "tc",
           tooltip:true
         },
@@ -800,7 +804,7 @@ export default {
           title: "对账门店",
           key: "accountOrgName",
           className: "tc",
-          minWidth: 80,
+          minWidth: 180,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -867,13 +871,14 @@ export default {
           title: "区域",
           key: "area",
           minWidth: 70,
+          tooltip: true,
           className: "tc"
         },
         {
           title: "门店",
           key: "orgName",
           tooltip:true,
-          minWidth: 70,
+          minWidth: 200,
           className: "tc"
         },
         {
@@ -1147,7 +1152,7 @@ export default {
           title: "对账门店",
           key: "accountOrgName",
           className: "tc",
-          minWidth: 80,
+          minWidth: 180,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -1297,6 +1302,7 @@ export default {
           title: "配件车型",
           key: "carModel",
           className: "tc",
+          tooltip: true,
           minWidth: 80
         },
         {
@@ -1325,6 +1331,7 @@ export default {
           title: "配件厂牌",
           key: "factoryBrand",
           className: "tc",
+          tooltip: true,
           minWidth: 80
         },
         {
@@ -1435,11 +1442,13 @@ export default {
           title: "区域",
           key: "area",
           className: "tc",
+          tooltip: true,
           minWidth: 80
         },
         {
           title: "店号",
           key: "shopCode",
+          tooltip: true,
           className: "tc",
           minWidth: 80
         },
@@ -1971,7 +1980,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : ""
       };
-      this.getGeneral(obj);
+      this.query();
     },
     // 选择日期
     changedate(daterange) {
@@ -2039,6 +2048,7 @@ export default {
       this.copyData = [];
       this.pageObj.total = 0;
       this.pageObj.num = 1;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getreceivable(obj).then(res => {
         this.data1Loading = false;
         if (res.data.length !== 0) {
@@ -2064,6 +2074,9 @@ export default {
           this.data = this.changePageList(this.pageObj.num,this.pageObj.size,this.copyData);
 
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     pageChange({type, currentPage, pageSize, $event}){
@@ -2175,16 +2188,31 @@ export default {
     // 导出汇总
     exportSummary() {
       if (this.data.length !== 0) {
-        let arrData = [...this.data]
-        arrData.map(item=>{
-          item.orgId = "\t"+item.orgId
-        })
-        this.$refs.summary.exportCsv({
-          filename: "应收应付汇总表",
-          original:false,
-          columns:this.columns,
-          data:arrData
-        });
+        // let arrData = [...this.data]
+        // arrData.map(item=>{
+        //   item.orgId = "\t"+item.orgId
+        // })
+        // this.$refs.summary.exportCsv({
+        //   filename: "应收应付汇总表",
+        //   original:false,
+        //   columns:this.columns,
+        //   data:arrData
+        // });
+        let obj = {
+          orgId: this.model1,
+          startDate: this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
+            : "",
+          endDate: this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
+            : "",
+          guestId:this.guestId
+        };
+        let params=""
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        location.href=`${baseUrl.omsSettle}/receivable/payable/export/getPage?${params}access_token=${Cookies.get(TOKEN_KEY)}`
       } else {
         this.$message.error("应收应付汇总表暂无数据");
       }

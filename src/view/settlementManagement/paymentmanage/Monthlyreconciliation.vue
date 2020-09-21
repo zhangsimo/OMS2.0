@@ -380,38 +380,41 @@
       </div>
       <vxe-table
         border
-        show-overflow
         ref="xTable"
         height="500px"
+        show-overflow="title"
         show-footer
         auto-resize
+        size="mini"
         :footer-method="handleSummary"
         :data="Reconciliationcontent"
         :edit-rules="validRules"
         :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       >
-        <vxe-table-column type="seq" title="序号" align="center"></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称" align="center"></vxe-table-column>
-        <vxe-table-column field="partSpecification" title="规格型号" align="center"></vxe-table-column>
-        <vxe-table-column field="partModel" title="适用车型" align="center"></vxe-table-column>
-        <vxe-table-column field="price" title="单价" align="center"></vxe-table-column>
-        <vxe-table-column field="quantity" title="数量" align="center"></vxe-table-column>
-        <vxe-table-column field="amount" title="金额" align="center"></vxe-table-column>
-        <vxe-table-column field="accountAmt" title="前期已对账金额" align="center"></vxe-table-column>
-        <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center"></vxe-table-column>
+        <vxe-table-column type="seq" title="序号" align="center" width="60" fixed="left"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码" align="center" width="120" fixed="left"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称" align="center" width="120" fixed="left"></vxe-table-column>
+        <vxe-table-column field="partSpecification" title="规格型号" align="center" width="80" fixed="left"></vxe-table-column>
+        <vxe-table-column field="partModel" title="适用车型" align="center" width="120" fixed="left"></vxe-table-column>
+        <vxe-table-column field="price" title="单价" align="center" width="80"></vxe-table-column>
+        <vxe-table-column field="quantity" title="数量" align="center" width="80"></vxe-table-column>
+        <vxe-table-column field="amount" title="金额" align="center" width="80"></vxe-table-column>
+        <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="120"></vxe-table-column>
+        <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="120"></vxe-table-column>
         <vxe-table-column
           field="thisNoAccountAmt"
           title="本次不对账金额"
           :edit-render="{name: 'input',immediate:true,events: {input: updateFooterEvent}}"
           align="center"
+          width="140"
         ></vxe-table-column>
-        <vxe-table-column title="本次对账金额" align="center">
+        <vxe-table-column width="120" title="本次对账金额" align="center">
           <template v-slot="{ row }">
             <span>{{ countAmount(row) | priceFilters }}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column
+          width="180"
           field="diffeReason"
           title="差异原因"
           :edit-render="{name: 'input'}"

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -108,6 +108,7 @@
   import {transferStock, stockParts} from "@/api/bill/saleOrder";
   import {goshop} from '@/api/settlementManagement/shopList'
   import moment from 'moment';
+  import {showLoading, hideLoading} from "@/utils/loading"
   // import { dragTable } from '@/libs/dragtable'
   export default {
     name: "billAllocationstock",
@@ -354,27 +355,32 @@
           {
             title: "配件编码",
             key: "partCode",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "配件名称",
             key: "partName",
+            tooltip: true,
             width: 120,
             className: "tc"
           },
           {
             title: "品牌",
             key: "partBrand",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "车型",
             key: "carModelName",
+            tooltip: true,
             className: "tc"
           },
           {
             title: "OEM码",
             key: "oemCode",
+            tooltip: true,
             className: "tc"
           },
           {
@@ -616,6 +622,7 @@
         if (obj.endTime) {
           obj.endTime = obj.endTime.split(' ')[0] + " 23:59:59"
         }
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         transferStock(param, obj).then(res => {
           if (res.data.vos.length !== 0) {
             res.data.vos.map((item, index) => {
@@ -626,9 +633,13 @@
             this.data = res.data.vos;
             this.page.total = res.data.TotalElements;
             this.total = res.data.AllotOutMainVO
+            hideLoading()
           } else {
+            hideLoading()
             this.data = [];
           }
+        }).catch(e => {
+          hideLoading()
         });
       },
       // 主表查询

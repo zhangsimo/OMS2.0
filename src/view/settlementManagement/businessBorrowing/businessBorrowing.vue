@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -399,6 +399,7 @@ import { goshop } from "@/api/settlementManagement/shopList";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
 import writeOff from "./components/writeOff";
+import {showLoading, hideLoading} from "@/utils/loading"
 // otherReceivables
 import moment from "moment";
 
@@ -607,11 +608,15 @@ export default {
           delete data[d];
         }
       }
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       api.findListPageAll(params, data).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
       this.serviceId = "";
       this.$refs.Record.init();

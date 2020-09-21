@@ -10,7 +10,7 @@
         border
         highlight-hover-row
         highlight-current-row
-        height="150"
+        show-overflow="title"
         size="mini"
         @current-change="currentChangeEvent"
         :data="tableData"
@@ -80,6 +80,7 @@
         border
         highlight-hover-row
         highlight-current-row
+        show-overflow="title"
         @radio-change="radioChangeEventCost"
         size="mini"
         :data="tbdata"

@@ -44,6 +44,9 @@
           <FormItem class="h50" label="供应商全称:" prop="fullName">
             <Input v-model="data.fullName" style="width: 480px"/>
           </FormItem>
+          <FormItem class="h50" label="拼音码:">
+            <Input v-model="spellCode" style="width: 480px" readonly/>
+          </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="票据类型:" prop="billTypeId" class="h50">
@@ -302,6 +305,7 @@
   } from "@/api/system/essentialData/clientManagement";
   import bankAccount from "@/view/system/essentialData/clientManagement/components/bankAccount";
   import AddInoice from "@/view/system/essentialData/clientManagement/AddInoice";
+  import {pinyin} from "../../../../utils/py";
 
   export default {
     name: "Data",
@@ -638,6 +642,12 @@
     created() {
       this.invoice = this.data.guestTaxpayerVOList || [];
       this.getList();
+    },
+    computed:{
+      spellCode(){
+        let spell=this.data?(this.data.fullName?(this.data.fullName==""?"":pinyin.getCamelChars(this.data.fullName)):""):""
+        return (this.data.pyName=spell)
+      }
     },
     methods: {
       //获取客户属性

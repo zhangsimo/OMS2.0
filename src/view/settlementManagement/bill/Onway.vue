@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -72,6 +72,7 @@ import {creat} from './../components'
 import {getOnWay} from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
 import moment from 'moment'
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "billOnway",
   components: {
@@ -628,6 +629,7 @@ export default {
         code:this.fno,
         guestId:this.company?this.companyId:""
       }
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getOnWay(params).then(res => {
         if(res.data.content.length !==0){
           res.data.content.map((item,index)=>{
@@ -636,9 +638,13 @@ export default {
           })
           this.data = res.data.content
           this.page.total=res.data.totalElements
+          hideLoading()
         } else {
           this.data = []
+          hideLoading()
         }
+      }).catch(e => {
+        hideLoading()
       });
     },
   }

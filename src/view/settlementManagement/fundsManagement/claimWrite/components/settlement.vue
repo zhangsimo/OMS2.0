@@ -59,26 +59,28 @@
           show-footer
           max-height="400"
           align="center"
+          size="mini"
+          show-overflow="title"
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="orgName" title="门店"></vxe-table-column>
-            <vxe-table-column field="accountNo" title="对账单号"></vxe-table-column>
-            <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-            <vxe-table-column field="businessTypeName" title="业务类型"></vxe-table-column>
-            <vxe-table-column field="reconciliationAmt" title="对账金额"></vxe-table-column>
-            <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
-            <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
+            <vxe-table-column field="orgName" title="门店" width="120"></vxe-table-column>
+            <vxe-table-column field="accountNo" title="对账单号" width="120"></vxe-table-column>
+            <vxe-table-column field="guestName" title="往来单位" width="120"></vxe-table-column>
+            <vxe-table-column field="businessTypeName" title="业务类型" width="80"></vxe-table-column>
+            <vxe-table-column field="reconciliationAmt" title="对账金额" width="80"></vxe-table-column>
+            <vxe-table-column field="hasAmt" title="已收/付金额" width="100"></vxe-table-column>
+            <vxe-table-column field="unAmt" title="未收/付金额" width="100"></vxe-table-column>
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
               width="140"
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
             ></vxe-table-column>
-            <vxe-table-column field="unAmtLeft" title="剩余未收/未付"></vxe-table-column>
+            <vxe-table-column field="unAmtLeft" title="剩余未收/未付" width="100"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -107,17 +109,17 @@
           </section>
         </div>
       </Col>
-      <Col span="8" style="overflow: scroll">
+      <Col span="8" style="overflow: hidden">
         <vxe-table
           class="ml10"
-          style="width: 500px;"
           border
           resizable
           auto-resize
           show-footer
           ref="vxeTable"
-          max-height="400"
           align="center"
+          size="mini"
+          show-overflow="title"
           :edit-rules="validRules"
           :footer-method="payCollection"
           :data="tableData"
@@ -125,19 +127,19 @@
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-            <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+            <vxe-table-column field="incomeMoney" title="收入金额" width="80"></vxe-table-column>
+            <vxe-table-column field="paidMoney" title="支出金额" width="80"></vxe-table-column>
             <vxe-table-column
               field="thisClaimedAmt"
               title="本次认领金额"
-              min-width="60"
+              width="120"
               :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
             >
             </vxe-table-column>
-            <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
-            <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-            <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
+            <vxe-table-column field="accountName" title="收/付款账户" width="100"></vxe-table-column>
+            <vxe-table-column field="mateAccountName" title="科目代码" width="100"></vxe-table-column>
+            <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+            <vxe-table-column field="orgName" title="所属门店" width="160"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
       </Col>

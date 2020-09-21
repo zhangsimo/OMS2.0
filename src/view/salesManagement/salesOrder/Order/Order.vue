@@ -105,17 +105,17 @@
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
-          <!--<div class="db">-->
-            <!--<Button-->
-              <!--class="mr5"-->
-              <!--size="small"-->
-              <!--@click="resetCancellation"-->
-              <!--:disabled="orderlistType.value != 5"-->
-              <!--v-has="'Cancellation'"-->
-            <!--&gt;-->
-              <!--<Icon type="md-close" size="14" />反作废-->
-            <!--</Button>-->
-          <!--</div>-->
+          <div class="db">
+            <Button
+              class="mr5"
+              size="small"
+              @click="resetCancellation"
+              :disabled="orderlistType.value != 5"
+              v-has="'Cancellation'"
+            >
+              <Icon type="md-close" size="14" />反作废
+            </Button>
+          </div>
           <div class="db">
             <Button class="mr5" size="small" @click="setDerive" v-has="'Derive'">
               <i class="iconfont mr5 icondaochuicon"></i> 导出
@@ -410,7 +410,7 @@ export default {
         this.$Modal.confirm({
           title: "是否确定反作废",
           onOk: async () => {
-            let res = this.$refs.right.save("reset");
+            let res = this.$refs.right.resetOrder();
           },
           onCancel: () => {
           }

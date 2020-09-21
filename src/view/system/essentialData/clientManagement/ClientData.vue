@@ -35,6 +35,9 @@
               <FormItem label="客户全称:" prop="fullName">
                 <Input v-model="data.fullName" style="width: 180px" />
               </FormItem>
+              <FormItem label="拼音码:">
+                <Input v-model="spellCode" style="width: 180px" readonly/>
+              </FormItem>
               <FormItem label="联系人:" prop="contactor">
                 <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
               </FormItem>
@@ -76,6 +79,9 @@
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
+              </FormItem>
+              <FormItem>
+                <div style="width: 180px;" class="h30"></div>
               </FormItem>
               <FormItem label="联系人手机:" prop="contactorTel">
                 <Input v-model="data.contactorTel" style="width: 180px" />
@@ -375,6 +381,8 @@
 </template>
 
 <script>
+//拼音码引入文件
+import {pinyin} from "../../../../utils/py.js"
 import Newplace from "./Newplace";
 import AddInoice from "@/view/system/essentialData/clientManagement/AddInoice";
 import {
@@ -875,11 +883,15 @@ export default {
       financeList:[]
     };
   },
-  // computed:{
-  //   place(){
-  //     return this.data
-  //   }
-  // },
+  computed:{
+    // place(){
+    //   return this.data
+    // }
+    spellCode(){
+      let spell=this.data?(this.data.fullName?(this.data.fullName==""?"":pinyin.getCamelChars(this.data.fullName)):""):""
+      return (this.data.pyName=spell)
+    }
+  },
   mounted() {
     this.placeList = this.data.guestLogisticsVOList || [];
     this.relevanceClientShow = this.data.guestVOList || [];
