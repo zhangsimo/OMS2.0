@@ -245,7 +245,7 @@
   </div>
 </template>
 <script>
-import ClaimModal from "../components/ClaimModal"
+import ClaimModal from "./components/ClaimModal"
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -484,22 +484,25 @@ export default {
         }
       }
 
-      // if (!this.currRow || !this.currRow.id) {
-      //   return this.$message.error("请选择数据");
-      // }
-      // if (type == 1) {
-      //   this.$refs.claimModal.open()
-      //   this.claimTitle = "预收款认领"
-      //   this.condition = 1
-      //   this.claimType = 2
-      //   this.amountType = 1
+      // if (type === 1) {
+      //   this.claimModal = true;
+      //   this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
+      //   
+      //   this.claimedList(1);
       // } else {
-      //   this.$refs.claimModal.open()
-      //   this.claimTitle = "预收款支出认领"
-      //   this.condition = 1
-      //   this.claimType = 3
-      //   this.amountType = 1
+      //   this.claimTit = "预收款支出认领";
+      //   if (
+      //     Object.keys(this.currRow).length !== 0 &&
+      //     this.currRow.expenditureNo &&
+      //     !this.currRow.expenditureClaimAmt
+      //   ) {
+      //     this.claimModal = true;
+      //     this.claimedList(2);
+      //   } else {
+      //     this.$message.error("请选择有预收款支出单号且未支出认领的数据");
+      //   }
       // }
+
 
     },
     //预收款支出认领

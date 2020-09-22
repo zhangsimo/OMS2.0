@@ -84,7 +84,6 @@
 
 <script>
 import PreClaimModal from "./PreClaimModal"
-// import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
 import { addClaim } from "_api/settlementManagement/businessBorrowing";
 
