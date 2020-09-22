@@ -35,7 +35,7 @@
           <div class="pt10">
             <Input
               v-model="searchForm.partCode"
-              placeholder="编码"
+              placeholder="品牌编码"
               class="w100 mr10"
               @on-enter="serch"
             />
@@ -193,7 +193,7 @@
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
             <Input
               v-model="searchForm1.partCode"
-              placeholder="编码"
+              placeholder="品牌编码"
               class="w100 mr10"
               @on-enter="queryBatch"
             ></Input>
