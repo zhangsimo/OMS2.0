@@ -192,7 +192,7 @@ import { findPageByDynamicQueryFirst } from "@/api/settlementManagement/advanceC
 import { creat } from "@/view/settlementManagement/components";
 import moment from "moment";
 import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
-
+import {showLoading, hideLoading} from "@/utils/loading"
 import bus from "@/view/settlementManagement/bill/Popup/Bus";
 
 export default {
@@ -594,14 +594,18 @@ export default {
             guestSourceId:objItem.id||""
           }
         }
+        showLoading()
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
+          hideLoading()
           this.reloadParentList()
           this.modal = false;
           this.claimTit == "预付款认领"
             ? this.$Message.success("预付款认领成功")
             : this.$Message.success("其他付款认领成功");
           this.formValidate.voucherInput=""
+        }else{
+          hideLoading()
         }
       }
     },
