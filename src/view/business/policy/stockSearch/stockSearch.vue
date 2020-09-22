@@ -20,6 +20,7 @@
             批次库存
           </li>
           <li
+            v-if="false"
             class="center"
             :class="{ 'tab-active': tabIndex == 2 }"
             @click="setTab(2)"
