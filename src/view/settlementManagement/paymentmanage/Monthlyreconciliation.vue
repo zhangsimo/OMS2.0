@@ -211,6 +211,7 @@
                 :page-size.sync="pageObj.size"
                 :total="pageObj.total"
                 @page-change="pageChange"
+                :page-sizes="[10,50,100,200,500]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -274,6 +275,7 @@
                 :page-size.sync="pageObj1.size"
                 :total="pageObj1.total"
                 @page-change="pageChange2"
+                :page-sizes="[10,50,100,200,500]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>

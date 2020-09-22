@@ -324,8 +324,10 @@ export default class TemporaryPurchase extends Vue {
     }
   }
   private selectOrderMan(val: any) {
-      this.formPlanmain.orderMan = "";
-      this.formPlanmain.orderManId = "";
+    if(!val){
+      this.formPlanmain.orderMan = this.user.userData.staffName;
+      this.formPlanmain.orderManId = this.user.userData.id;
+    }
   }
 
 

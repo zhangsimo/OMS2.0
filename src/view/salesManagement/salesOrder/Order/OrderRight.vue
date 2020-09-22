@@ -876,9 +876,10 @@
             // if (["orderPrice"].includes(column.property)) {
             //     return this.$utils.sum(data, column.property).toFixed(2);
             // }
-            if (columnIndex === 6) {
+            if (columnIndex === 6||["stockOutQty"].includes(column.property)) {
               return this.$utils.sum(data, column.property);
             }
+
             // if (columnIndex === 7) {
             //     return ` ${this.countAllPrice(data)} `;
             // }
