@@ -168,7 +168,7 @@
           data.shopId = res.currentCompany ? res.currentCompany.id ? res.currentCompany.id : '' : ''
           data.shopkeeper = res.data.shopkeeper
           localStorage.setItem('oms2-userList', JSON.stringify(data))
-          res.data.username = this.$store.state.user.userData.username
+          res.data.username = this.$store.state.user.username
           let token = await changeToken(res.data)
           if (token.code == 0) {
             setToken(token.data.access_token)
