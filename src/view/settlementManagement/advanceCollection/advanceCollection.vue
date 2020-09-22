@@ -39,7 +39,6 @@
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
-          <Button @click="handle">点击</Button>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
@@ -230,7 +229,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 认领支付弹框11 -->
-    <ClaimModal ref="claimModal"></ClaimModal>
+    <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal>
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -274,6 +273,7 @@ import _ from "lodash";
 
 import moment from "moment";
 import {showLoading, hideLoading} from "@/utils/loading"
+
 export default {
   name: "settlementManagementAdvanceCollection",
   components: {
@@ -288,6 +288,11 @@ export default {
   },
   data() {
     return {
+      amountType: null,
+      claimType: null,
+      claimTitle: "",
+      condition: undefined,
+      loanId: "",
       remoteloading: false,
       amt: null, //金额
       bankNameO: "", //对方户名
@@ -343,9 +348,6 @@ export default {
     }
   },
   methods: {
-    handle(){
-      this.$refs.claimModal.open()
-    },
     //获取门店
     async getShop() {
       let data = {};
@@ -481,6 +483,24 @@ export default {
           this.$message.error("请选择有预收款支出单号且未支出认领的数据");
         }
       }
+
+      // if (!this.currRow || !this.currRow.id) {
+      //   return this.$message.error("请选择数据");
+      // }
+      // if (type == 1) {
+      //   this.$refs.claimModal.open()
+      //   this.claimTitle = "预收款认领"
+      //   this.condition = 1
+      //   this.claimType = 2
+      //   this.amountType = 1
+      // } else {
+      //   this.$refs.claimModal.open()
+      //   this.claimTitle = "预收款支出认领"
+      //   this.condition = 1
+      //   this.claimType = 3
+      //   this.amountType = 1
+      // }
+
     },
     //预收款支出认领
     claimPay() {

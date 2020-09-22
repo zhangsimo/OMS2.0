@@ -3,12 +3,12 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <div class="fr" v-if="this.$route.name !== 'settlementManagementExpensereimbursement'">
+        <!-- <div class="fr" v-if="this.$route.name !== 'settlementManagementExpensereimbursement'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
           <Input class="w180 mr10" v-model="calculation"/>
           <Button @click="chooseAuxiliary">辅助计算</Button>
-        </div>
+        </div> -->
       </div>
 
       <vxe-table
@@ -84,9 +84,9 @@
 
 <script>
 import PreClaimModal from "./PreClaimModal"
-import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
+// import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
-import { addClaim } from "_api/settlementManagement/financialStatement.js";
+import { addClaim } from "_api/settlementManagement/businessBorrowing";
 
 export default {
   components: {

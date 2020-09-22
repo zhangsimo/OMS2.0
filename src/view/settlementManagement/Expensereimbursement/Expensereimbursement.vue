@@ -439,6 +439,10 @@
         }, //分页
         serviceId: "", //给子组件传的值
         remoteloading: false,
+        claimType: 4,
+        amountType: 2,
+        loanId: '',
+        condition: 1
       };
     },
     computed: {
@@ -634,7 +638,7 @@
         this.currRow = null;
         this.$refs.xTable.clearCurrentRow();
       },
-      //认领弹框认领
+      // 认领弹框认领
       claimPay() {
         if (this.claimSelection.length !== 0) {
           // currRow
@@ -721,8 +725,9 @@
       },
       // 选中行
       currentChangeEvent({row}) {
-        // console.log(row , 777888)
+        console.log(row.id)
         this.currRow = row;
+        this.loanId = row.id
         this.$store.commit("setLoanId", row.id)
         // this.reconciliationStatement.accountNo = row.serviceId;
         this.serviceId = row.serviceId;
