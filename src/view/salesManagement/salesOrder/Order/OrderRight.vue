@@ -468,7 +468,8 @@
     getDeleteList,
     getup/**按照编码品牌导入配件*/,
     getupInnerId/**按照内码导入配件*/,
-    getAccessList
+    getAccessList,
+    resetCancellation
   } from "@/api/salesManagment/salesOrder";
   import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
   import {getNewClient} from "@/api/system/essentialData/clientManagement";
@@ -1329,7 +1330,7 @@
                           hideLoading()
                         }
                       } catch (error) {
-                        
+
                       }
                     },
                     onCancel: () => {
@@ -1341,7 +1342,7 @@
                   return this.$Message.error("请稍后订单处理中...");
                 }
                 try {
-                  
+
                   this.isClickSave = true;
                   this.$parent.$parent.submitloading = true
                   this.$parent.$parent.commitLoading = true
@@ -1404,6 +1405,23 @@
       },
       getRUlInnerId(){
         this.upurlInnerId=getupInnerId+"id=" + this.formPlan.id;
+      },
+      async resetOrder(){
+        if (this.isClickSave) {
+          return this.$Message.error("请稍后订单处理中...");
+        }
+        this.isClickSave = true;
+        const data = {id:this.leftOneOrder.id};
+        let rep = await resetCancellation(data)
+        this.isClickSave = false;
+        if(rep.code==0){
+          this.$Message.success("反作废成功");
+          this.$parent.$parent.isAdd = false;
+          this.$parent.$parent.submitloading = false;
+          this.$refs.formPlan.resetFields();
+          this.$parent.$parent.$refs.OrderLeft.gitlistValue();
+          this.limitList = {};
+        }
       }
     },
     watch: {

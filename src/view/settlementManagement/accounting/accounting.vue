@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -559,6 +559,7 @@
   import moment from "moment";
   import {creat} from "./../components";
   import * as tools from "_utils/tools";
+  import {showLoading, hideLoading} from "@/utils/loading"  
 
   export default {
     name: 'accountings',
@@ -702,28 +703,33 @@
         //   }
         // }
         params.proofState = this.proofState
-        // 未审核
-        let res1 = await api.findCertificationAudit({
-          ...params,
-          auditState: 0,
-          page: this.page.num - 1,
-          size: this.page.size
-        });
-        // 已审核
-        let res2 = await api.findCertificationAudit({
-          ...params,
-          auditState: 1,
-          page: this.page1.num - 1,
-          size: this.page1.size
-        });
-        if (res1.code == 0) {
-          this.tableData = res1.data.content;
-          this.page.total = res1.data.totalElements
-        }
-        if (res2.code == 0) {
-          this.tableData1 = res2.data.content;
-          this.page1.total = res2.data.totalElements
-
+        try {
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          // 未审核
+          let res1 = await api.findCertificationAudit({
+            ...params,
+            auditState: 0,
+            page: this.page.num - 1,
+            size: this.page.size
+          });
+          // 已审核
+          let res2 = await api.findCertificationAudit({
+            ...params,
+            auditState: 1,
+            page: this.page1.num - 1,
+            size: this.page1.size
+          });
+          if (res1.code == 0) {
+            this.tableData = res1.data.content;
+            this.page.total = res1.data.totalElements
+          }
+          if (res2.code == 0) {
+            this.tableData1 = res2.data.content;
+            this.page1.total = res2.data.totalElements
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
       // 查询

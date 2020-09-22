@@ -128,6 +128,15 @@ export function getCancellation (data) {
   })
 }
 
+//反作废
+export function resetCancellation (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/reverseInvalidSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
 
 //返单
 export function getReorder (data) {

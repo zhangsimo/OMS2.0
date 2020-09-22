@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -357,6 +357,7 @@ import {
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
 // otherReceivables
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 import {
   kmType
 } from "@/api/settlementManagement/VoucherInput"
@@ -602,6 +603,8 @@ export default {
     queryClaimed() {
       if (this.claimTit === "其他付款认领") {
         this.claimedList(2);
+      }else if(this.claimTit === "其他收款收回"){
+        this.claimedList(1);
       } else {
         this.claimedList(2);
       }
@@ -621,11 +624,15 @@ export default {
         size: this.page.size,
         page: this.page.num - 1
       };
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
       this.serviceId = "";
       // this.$refs.Record.init();

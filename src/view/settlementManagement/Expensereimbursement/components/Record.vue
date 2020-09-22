@@ -26,21 +26,26 @@ export default {
         {
           title: "报销申请单号",
           key: "accountNo",
+          tooltip: true,
           align: "center"
         },
         {
           title: "报销付款/核销单号",
           key: "fno",
+          tooltip: true,
+          width: 120,
           align: "center"
         },
         {
           title: "付款时间",
           key: "rpDate",
+          tooltip: true,
           align: "center"
         },
         {
           title: "付款人",
           key: "createUname",
+          tooltip: true,
           align: "center"
         },
         {
@@ -70,41 +75,50 @@ export default {
         {
           title: "账户所属门店",
           key: "accountStoreName",
+          tooltip: true,
           align: "center"
         },
         {
           title: "付款账户",
           key: "account",
+          tooltip: true,
           align: "center"
         },
         {
           title: "付款开户行",
           key: "accountBank",
+          tooltip: true,
           align: "center"
         },
         {
           title: "付款账号",
           key: "accountBankNo",
+          tooltip: true,
           align: "center"
         },
         {
           title: "对方收款户名",
           key: "otherAccountName",
+          tooltip: true,
           align: "center"
         },
         {
           title: "对方收款开户行",
           key: "otherAccountBank",
+          width: 100,
+          tooltip: true,
           align: "center"
         },
         {
           title: "对方收款账号",
           key: "otherAccountBankNo",
+          tooltip: true,
           align: "center"
         },
         {
           title: "付款金额",
           key: "checkAmt",
+          tooltip: true,
           align: "center",
           // render: (h , p) => {
           //   let val = p.row.checkAmt
@@ -134,11 +148,13 @@ export default {
         {
           title: "审核日期",
           key: "auditorDate",
+          tooltip: true,
           align: "center"
         },
         {
           title: "备注",
           key: "remark",
+          tooltip: true,
           align: "center"
         }
       ],

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box paddinSize">
       <div class="flex">
         <div class="wlf">
@@ -109,6 +109,7 @@
           :summary-method="handleSummary"
           highlight-row
           @on-selection-change="requires"
+          align="center"
         ></Table>
         <Page
           :total="pagetotal"
@@ -358,6 +359,7 @@ import modelToast from "./modelToast.vue";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 import invoiceApplyTost from "./components/invoiceApplyTost"
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "invoiceAdministrationInvoiceManagement",
   components: {
@@ -411,9 +413,10 @@ export default {
                   },
                   domProps: {
                     title: params.row.registrationDate
+                    // title: this.dateFormat(params.row.registrationDate)
                   }
                 },
-                params.row.registrationDate
+                this.dateFormat(params.row.registrationDate)
               )
             ]);
           }
@@ -546,7 +549,7 @@ export default {
         {
           title: "开票日期",
           key: "billingDate",
-          minWidth: 70,
+          minWidth: 90,
           render: (h, params) => {
             return h("div", [
               h(
@@ -563,7 +566,7 @@ export default {
                     title: params.row.billingDate
                   }
                 },
-                params.row.billingDate
+                this.dateFormat(params.row.billingDate)
               )
             ]);
           }
@@ -591,8 +594,9 @@ export default {
         {
           title: "往来单位",
           key: "guestName",
-          minWidth: 70,
+          minWidth: 180,
           fixed: "left",
+          align: 'center',
           render: (h, params) => {
             return h("div", [
               h(
@@ -662,7 +666,7 @@ export default {
         {
           title: "登记时间",
           key: "registrationTime",
-          minWidth: 70,
+          minWidth: 150,
           className: "tc",
           render: (h, params) => {
             return h("div", [
@@ -906,7 +910,7 @@ export default {
         {
           title: "核销时间",
           key: "cancelTime",
-          minWidth: 70,
+          minWidth: 150,
           render: (h, params) => {
             return h("div", [
               h(
@@ -1011,6 +1015,12 @@ export default {
     };
   },
   methods: {
+    dateFormat(date){
+      let year = date.slice(0,4)
+      let month = date.slice(4,6)
+      let day = date.slice(6,8)
+      return year + '-' + month + '-' + day
+    },
     // 往来单位选择
     async getOne(query) {
       this.company = [];
@@ -1380,14 +1390,18 @@ export default {
     },
     //获取列表
     getTabList(data) {
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getManageList(data)
         .then(res => {
           if (res.code === 0) {
             this.data = res.data.content;
             this.pagetotal = res.data.totalElements;
           }
+          hideLoading()
         })
-        .catch(err => {});
+        .catch(err => {
+          hideLoading()
+        });
     },
     pageNumChange(pageNum) {
       this.form.page = pageNum;

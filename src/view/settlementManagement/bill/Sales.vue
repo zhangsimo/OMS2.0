@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -88,6 +88,7 @@ import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from 'moment'
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "billSales",
   components: {
@@ -626,6 +627,7 @@ export default {
         size: this.page.size,
         page: this.page.num - 1
       }
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getOrderlist(params,obj).then(res => {
         // console.log(res);
         if(res.data.vos.length !== 0){
@@ -645,9 +647,13 @@ export default {
           this.data = res.data.vos;
           this.page.total = res.data.TotalElements;
           // this.total = res.data.AllotOutMainVO
+          hideLoading()
         } else {
+          hideLoading()
           this.data = []
         }
+      }).catch(e => {
+        hideLoading()
       });
     },
     // 选中总表查询明细

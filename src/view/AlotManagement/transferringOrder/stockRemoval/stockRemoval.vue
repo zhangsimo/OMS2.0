@@ -1269,6 +1269,7 @@
               return this.$message.error('请稍后数据处理中....');
             }
             this.isOutClick = true;
+            showLoading(".loadingClass", "数据加载中，请勿操作")
             outDataList(params)
               .then(res => {
                 // 点击列表行==>配件组装信息
@@ -1277,8 +1278,10 @@
                   this.$Message.success("出库成功");
                 }
                 this.isOutClick = false;
+                hideLoading()
               }).catch(e => {
                 this.isOutClick = false;
+                hideLoading()
               })
             // .catch(e => {
             //   this.$Message.info("出库失败");

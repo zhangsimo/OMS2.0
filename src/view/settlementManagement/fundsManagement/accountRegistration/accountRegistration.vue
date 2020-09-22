@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -121,6 +121,7 @@ import {
 import { goshop } from '@/api/settlementManagement/shopList';
 import { getTableList } from "@/api/accountant/accountant";
 import informationRegistration from "./components/informationRegistration";
+import {showLoading, hideLoading} from "@/utils/loading"
 import {
   findListPageAll,
   addData,
@@ -269,6 +270,7 @@ export default {
         params.mateAccountCode = this.mateAccountCode;
       }
       params.sign="账户登记";
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       findListPageAll(params).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;
@@ -276,6 +278,9 @@ export default {
             item.shopList = JSON.parse(item.shopNameList);
           });
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
 

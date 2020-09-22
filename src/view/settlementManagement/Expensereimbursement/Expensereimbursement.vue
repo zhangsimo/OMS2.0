@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -84,6 +84,7 @@
             border
             highlight-hover-row
             highlight-current-row
+            show-overflow="tooltip"
             ref="xTable"
             @current-change="currentChangeEvent"
             :data="tableData"
@@ -387,6 +388,7 @@
   // otherReceivables
   import moment from "moment";
   import RegistrationEntry from "../bill/Popup/registrationEntry2";
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     inject: ['reload'],
@@ -610,11 +612,15 @@
         //     delete data[d];
         //   }
         // }
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         restful.findByDynamicQuery(params, data).then(res => {
           if (res.code == 0) {
             this.tableData = res.data.content;
             this.page.total = res.data.totalElements;
           }
+          hideLoading()
+        }).catch(e => {
+          hideLoading()
         });
         this.serviceId = "";
         this.$refs.Record.init();

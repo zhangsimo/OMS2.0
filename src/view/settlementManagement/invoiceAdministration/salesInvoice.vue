@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box paddinSize">
       <div class="flex">
         <div class="wlf">
@@ -361,6 +361,7 @@ import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 
 export default {
   name: "invoiceAdministrationSalesInvoice",
@@ -1587,11 +1588,15 @@ export default {
     //获取列表数据
     getTabList() {
       this.form.page = this.form.page;
+      showLoading(".loadingClass", "数据加载中，请勿操作")
       getSalesList(this.form).then(res => {
         if (res.code === 0) {
           this.data = res.data.content;
           this.pagetotal = res.data.totalElements;
         }
+        hideLoading()
+      }).catch(e => {
+        hideLoading()
       });
     },
     //字典匹配

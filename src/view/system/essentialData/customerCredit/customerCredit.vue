@@ -207,12 +207,8 @@
                 render: (h, params) => {
                   let state = params.row.isGuestResearch;
                   let zi = "";
-                  if (state === 0) {
-                    JSON.parse(params.row.researchStatus).value == 4 ? zi = JSON.parse(params.row.researchStatus).name : (JSON.parse(params.row.researchStatus).value == 1 ? zi = "审批中" : zi = "否");
-                  }
-                  if (state === 1) {
-                    zi = "是";
-                  }
+                  let jsonStatus=JSON.parse(params.row.researchStatus)
+                  jsonStatus.value ==2?(state==0?zi = "否":zi = "是"):(jsonStatus.value == 1 ? zi = "审批中":(jsonStatus.value == 4?zi="审批拒绝":(state==0?zi = "否":zi = "是")))
                   return h("span", zi);
                 }
               },

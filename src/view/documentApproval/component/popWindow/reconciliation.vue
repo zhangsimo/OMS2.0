@@ -781,9 +781,12 @@
             this.changeBtn = false;
             //修改收款户默认选中第一条
             if (type) {
-              this.infoBase.collectionName = this.collectionList[0].id;
-              this.infoBase.bankName = this.collectionList[0].accountBank;
-              this.infoBase.collectionAccount = this.collectionList[0].accountBankNo;
+              if(this.collectionList){
+                let jsonAcction=this.collectionList.filter(item=>(item.id==this.infoBase.collectionId))
+                this.infoBase.collectionName = jsonAcction[0].id;
+                this.infoBase.bankName = jsonAcction[0].accountBank;
+                this.infoBase.collectionAccount = jsonAcction[0].accountBankNo;
+              }
             }
           }
         }

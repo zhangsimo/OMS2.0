@@ -18,7 +18,6 @@ export const mixSelectPartCom = {
   data() {
     return {
       bands: [],
-      partId: "",
       Name: '名称',
       loading: false,
       treeLoading: false,
