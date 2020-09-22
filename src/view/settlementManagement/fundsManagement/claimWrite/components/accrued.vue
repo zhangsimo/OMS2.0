@@ -65,6 +65,7 @@
 <script>
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   props: { accrued: "" },
   components: {
@@ -157,11 +158,15 @@ export default {
           guestSourceId:objItem.id||""
         }
       }
+      showLoading()
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
+        hideLoading()
         this.modal = false;
         this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")
         this.$parent.$parent.queryClaimed()
+      }else{
+        hideLoading()
       }
     },
     //选择辅助核算回调
