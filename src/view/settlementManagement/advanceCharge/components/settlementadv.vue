@@ -133,6 +133,7 @@ import { mapGetters } from "vuex";
 import accountSelette from "./accountSelette";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   components: {
     accountSelette,
@@ -341,13 +342,16 @@ export default {
         if (this.gettlementData.sign == 4) {
           // 预付款核销
           this.conserveDis=true;
+          showLoading()
           let res = await api.addAll(data);
           if (res.code == 0) {
+            hideLoading()
             this.conserveDis=false;
             this.Settlement = false;
             this.$emit("getNewList", {});
             return this.$message.success("核销成功");
           }else{
+            hideLoading()
             this.conserveDis=false;
           }
         }
@@ -369,13 +373,16 @@ export default {
             data.three.push(item);
           });
           this.conserveDis=true;
+          showLoading()
           let res = await api.addAll(data);
           if (res.code == 0) {
+            hideLoading()
             this.conserveDis=false
             this.Settlement = false;
             this.$emit("getNewList", {});
             return this.$message.success("收回认领成功");
           }else{
+            hideLoading()
             this.conserveDis=false
           }
         }
@@ -397,14 +404,17 @@ export default {
             data.three.push(item);
           });
           this.conserveDis=true;
+          showLoading()
           let res = await api.addAll(data);
           if (res.code == 0) {
+            hideLoading()
             this.conserveDis=false;
             this.Settlement = false;
             this.$emit("getNewList", {});
             this.$emit("reloadParList")
             return this.$message.success("预付款认领成功");
           }else{
+            hideLoading()
             this.conserveDis=false;
           }
         }
