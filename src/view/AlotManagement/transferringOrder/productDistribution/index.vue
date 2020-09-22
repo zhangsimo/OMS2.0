@@ -146,7 +146,7 @@
           ></vxe-table-column>
 
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="partCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column
             field="carBrandModel"
             title="品牌车型"
@@ -190,7 +190,7 @@
               :current="pageList.page"
               :total="pageList.total"
               :page-size="pageList.size"
-              :page-size-opts="pageList.pageSizeOpts"
+              :page-size-opts="pageSizeOpts"
               show-sizer
               @on-change="changePage"
               @on-page-size-change="changeSize"
@@ -332,8 +332,8 @@ export default {
         page: 1,
         total: 0,
         size: 20,
-        pageSizeOpts: [20, 40, 60, 80, 100]
       },
+      pageSizeOpts: [20, 40, 60, 80, 100],
       pageTotal: 10,
       fenpeiCurrent: {},
       validRules: {
