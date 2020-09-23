@@ -62,20 +62,28 @@
                 </button>
               </div>
               <div class="db ml10">
+                <button
+                  class="mr8 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="getReportReconciliationt"
+                >导出对账清单
+                </button>
+              </div>
+              <div class="db ml10">
                 <Poptip placement="bottom">
-                  <button class="mr8 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
+                  <button class="mr8 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出配件明细</button>
                   <div slot="content">
                     <button
                       class="mr8 ivu-btn ivu-btn-default"
                       type="button"
-                      @click="getReportReconciliationt"
-                    >导出对账清单
+                      @click="getReportParts(0)"
+                    >导出全部
                     </button>
                     <button
                       class="mr8 ivu-btn ivu-btn-default"
                       type="button"
-                      @click="getReportParts"
-                    >导出配件明细
+                      @click="getReportParts(1)"
+                    >导出勾选
                     </button>
                   </div>
                 </Poptip>
@@ -154,18 +162,18 @@
             <div class="db mt20">
               <h5>应收业务销售出库/退货对账</h5>
               <!--<Table-->
-                <!--:columns="columns1"-->
-                <!--:data="data1"-->
-                <!--:loading="data1Loading"-->
-                <!--border-->
-                <!--max-height="400"-->
-                <!--@on-select="collectCheckout"-->
-                <!--@on-select-all="collectCheckoutAll"-->
-                <!--@on-select-cancel="collectNoCheckout"-->
-                <!--@on-select-all-cancel="collectNoCheckoutAll"-->
-                <!--show-summary-->
-                <!--:row-class-name="rowClassName"-->
-                <!--ref="receivable"-->
+              <!--:columns="columns1"-->
+              <!--:data="data1"-->
+              <!--:loading="data1Loading"-->
+              <!--border-->
+              <!--max-height="400"-->
+              <!--@on-select="collectCheckout"-->
+              <!--@on-select-all="collectCheckoutAll"-->
+              <!--@on-select-cancel="collectNoCheckout"-->
+              <!--@on-select-all-cancel="collectNoCheckoutAll"-->
+              <!--show-summary-->
+              <!--:row-class-name="rowClassName"-->
+              <!--ref="receivable"-->
               <!--&gt;</Table>-->
               <vxe-table
                 border
@@ -203,6 +211,8 @@
                 </vxe-table-column>
                 <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
                 </vxe-table-column>
+                <vxe-table-column field="remark" title="订单备注" align="center" width="140">
+                </vxe-table-column>
               </vxe-table>
               <vxe-pager
                 background
@@ -219,17 +229,17 @@
             <div class="db mt20">
               <h5>应付业务采购入库/退货对账</h5>
               <!--<Table-->
-                <!--:columns="columns1"-->
-                <!--:data="data2"-->
-                <!--border-->
-                <!--max-height="400"-->
-                <!--@on-select="paymentCheckout"-->
-                <!--@on-select-all="paymentCheckoutAll"-->
-                <!--@on-select-cancel="paymentNoCheckout"-->
-                <!--@on-select-all-cancel="paymentNoCheckoutAll"-->
-                <!--:row-class-name="rowClassName"-->
-                <!--show-summary-->
-                <!--ref="payable"-->
+              <!--:columns="columns1"-->
+              <!--:data="data2"-->
+              <!--border-->
+              <!--max-height="400"-->
+              <!--@on-select="paymentCheckout"-->
+              <!--@on-select-all="paymentCheckoutAll"-->
+              <!--@on-select-cancel="paymentNoCheckout"-->
+              <!--@on-select-all-cancel="paymentNoCheckoutAll"-->
+              <!--:row-class-name="rowClassName"-->
+              <!--show-summary-->
+              <!--ref="payable"-->
               <!--&gt;</Table>-->
               <vxe-table
                 border
@@ -266,6 +276,8 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="thisAccountAmt" title="本次对账金额" align="center" width="140">
+                </vxe-table-column>
+                <vxe-table-column field="remark" title="订单备注" align="center" width="140">
                 </vxe-table-column>
               </vxe-table>
               <vxe-pager
@@ -396,7 +408,8 @@
         <vxe-table-column type="seq" title="序号" align="center" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码" align="center" width="120" fixed="left"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称" align="center" width="120" fixed="left"></vxe-table-column>
-        <vxe-table-column field="partSpecification" title="规格型号" align="center" width="80" fixed="left"></vxe-table-column>
+        <vxe-table-column field="partSpecification" title="规格型号" align="center" width="80"
+                          fixed="left"></vxe-table-column>
         <vxe-table-column field="partModel" title="适用车型" align="center" width="120" fixed="left"></vxe-table-column>
         <vxe-table-column field="price" title="单价" align="center" width="80"></vxe-table-column>
         <vxe-table-column field="quantity" title="数量" align="center" width="80"></vxe-table-column>
@@ -508,9 +521,9 @@
     getCustomerDetails,
     getNewClient,
     getClientTreeList
-  } from "../../../api/system/essentialData/clientManagement";
-  import {getSupplierTreeList, getNewSupplier} from "../../../api/system/essentialData/supplierManagement";
-
+  } from "@/api/system/essentialData/clientManagement";
+  import {getSupplierTreeList, getNewSupplier} from "@/api/system/essentialData/supplierManagement";
+  import {payColMonthExportAcSta/**导出对账清单*/,payColMonthExportParts/**导出配件明细勾选*/,payColMonthExportPartsAll/**导出配件明细全部*/} from "@/api/settlementManagement/Import/index.js"
   import {creat} from "./../components";
   import {area} from "../../../api/lease/registerApi";
   import {
@@ -521,12 +534,9 @@
     getAccountName,
     getPaymentName
   } from "@/api/bill/saleOrder";
-  import Cookies from "js-cookie";
-  import {TOKEN_KEY} from "@/libs/util";
-  import baseUrl from "_conf/url";
   import index from "../../admin/roles";
-  import render from "../../../components/message/base/render";
-  import {findGuest} from "../../../api/settlementManagement/advanceCollection";
+  import render from "@/components/message/base/render";
+  import {findGuest} from "@/api/settlementManagement/advanceCollection";
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import moment from "moment";
 
@@ -612,7 +622,7 @@
         serviceCharge: 0, //手续费
         partsManagementFee: 0, //配件管理费
         otherFees: 0, //其他费用
-        totalvalue:"1",
+        totalvalue: "1",
         Reconciliation: false,
         modifyAccountAmt: 0,
         modal: false,
@@ -944,23 +954,23 @@
         if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
           if (this.Reconciliationtotal > 0) {
             this.info = false;
-            this.totalvalue="1";
+            this.totalvalue = "1";
           } else if (this.Reconciliationtotal < 0) {
             this.info = true;
-            this.totalvalue="0";
+            this.totalvalue = "0";
           } else {
             this.info = false;
-            this.totalvalue="2";
+            this.totalvalue = "2";
           }
         } else {
           this.info = false;
-          this.totalvalue="1";
+          this.totalvalue = "1";
         }
       },
-      changeTotal(){
-        if(this.totalvalue=="1" || this.totalvalue=="2"){
+      changeTotal() {
+        if (this.totalvalue == "1" || this.totalvalue == "2") {
           this.info = false;
-        }else if(this.totalvalue=="0"){
+        } else if (this.totalvalue == "0") {
           this.info = true;
         }
       },
@@ -1803,21 +1813,19 @@
           //     columns: this.columns1.filter((col, index) => index > 0)
           //   });
           // }
-          let str1 = "";
-          let str2 = "";
+          let str = "";
           this.paymentlist.map(item => {
-            str1 += `&serviceIdList=${item.serviceId}`;
+            str += `serviceIdList=${item.serviceId}&`;
           });
           this.collectlist.map(item => {
-            str2 += `&serviceIdList=${item.serviceId}`;
+            str += `serviceIdList=${item.serviceId}&`;
           });
           // for(var i=0;i<this.selectTableDataArr.length;i++){
           //   str+=`&ids=${this.selectTableDataArr[i].id}`
           // }
           // str1 = str1.substring(0, str1.length - 1);
           // str2 = str2.substring(0, str2.length - 1);
-          console.log(str1, str2)
-          location.href = `${baseUrl.omsSettle}/accounts/receivable/export/in/business?access_token=${Cookies.get(TOKEN_KEY)}${str1}${str2}`;
+          location.href = payColMonthExportAcSta(str);
         } else {
           // this.$message.error("请勾选要导出的对账清单");
           this.$message({
@@ -1828,31 +1836,50 @@
         }
       },
       // 导出配件明细
-      getReportParts() {
-        if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
-          let str1 = "";
-          let str2 = "";
-          this.paymentlist.map(item => {
-            str1 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
-          });
-          this.collectlist.map(item => {
-            str2 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
-          });
-          str1 = str1.substring(0, str1.length - 1);
-          str2 = str2.substring(0, str2.length - 1);
-          // console.log(str1,str2)
-          location.href = `${
-            baseUrl.omsOrder
-          }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
-            TOKEN_KEY
-          )}&aOrderCode=${str1}&bOrderCode=${str2}`;
+      getReportParts(type) {
+        if (type == 1) {
+          if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
+            let str1 = "";
+            let str2 = "";
+            this.paymentlist.map(item => {
+              str1 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
+            });
+            this.collectlist.map(item => {
+              str2 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
+            });
+            str1 = str1.substring(0, str1.length - 1);
+            str2 = str2.substring(0, str2.length - 1);
+            // console.log(str1,str2)
+            location.href = payColMonthExportParts(str1, str2)
+          } else {
+            // this.$message.error("请先勾选数据");
+            this.$message({
+              message: "请先勾选数据",
+              type: "error",
+              customClass: "zZindex"
+            });
+          }
         } else {
-          // this.$message.error("请先勾选数据");
-          this.$message({
-            message: "请先勾选数据",
-            type: "error",
-            customClass: "zZindex"
-          });
+          let obj = {orgId: this.model1, guestId: this.companyInfo};
+          obj.startDate = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          obj.endDate = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+            : ""
+          if (this.moreSearch.businessType) {
+            obj.serviceType = this.moreSearch.businessType;
+          }
+          if (this.moreSearch.orderNo) {
+            obj.serviceId = this.moreSearch.orderNo;
+          }
+          if (this.moreSearch.orderNo) {
+            obj.serviceId = this.moreSearch.orderNo;
+          }
+          if (this.moreSearch.taxMark) {
+            obj.taxSign = this.moreSearch.taxMark;
+          }
+          location.href=payColMonthExportPartsAll(obj)
         }
       },
       //更多查询

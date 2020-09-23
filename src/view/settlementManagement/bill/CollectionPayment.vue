@@ -66,21 +66,45 @@
           <!--            >导出</button>-->
           <!--          </div>-->
           <div class="db ml10">
-            <button
-              class="mr10 ivu-btn ivu-btn-default"
-              type="button"
-              @click="reportPayment(2)"
-            >导出收付款单记录
-            </button>
+            <Poptip placement="bottom">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出
+              </button>
+              <div slot="content">
+                <button
+                  class="mr8 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="reportPayment(2,'all')"
+                >导出全部
+                </button>
+                <button
+                  class="mr8 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="reportPayment(2,'parts')"
+                >导出勾选
+                </button>
+              </div>
+            </Poptip>
           </div>
-          <div class="db ml10">
-            <button
-              class="mr10 ivu-btn ivu-btn-default"
-              type="button"
-              @click="reportPayment(1)"
-            >导出收付款单
-            </button>
-          </div>
+          <!--          <div class="db ml10">-->
+          <!--            <Poptip placement="bottom">-->
+          <!--              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出收付款单-->
+          <!--              </button>-->
+          <!--              <div slot="content">-->
+          <!--                <button-->
+          <!--                  class="mr8 ivu-btn ivu-btn-default"-->
+          <!--                  type="button"-->
+          <!--                  @click="reportPayment(1,'all')"-->
+          <!--                >导出全部-->
+          <!--                </button>-->
+          <!--                <button-->
+          <!--                  class="mr8 ivu-btn ivu-btn-default"-->
+          <!--                  type="button"-->
+          <!--                  @click="reportPayment(1,'parts')"-->
+          <!--                >导出勾选-->
+          <!--                </button>-->
+          <!--              </div>-->
+          <!--            </Poptip>-->
+          <!--          </div>-->
         </div>
       </div>
     </section>
@@ -186,6 +210,10 @@
     getReceiptsPaymentsList
   } from "@/api/bill/saleOrder";
   import {goshop} from '@/api/settlementManagement/shopList';
+  import {
+    colPayExportLogHis/**导出收付款单记录*/,
+    colPayExportQuery/**导出收付款单*/
+  } from "@/api/settlementManagement/Import/index.js"
   import moment from "moment";
   import {set} from "xe-utils/methods";
   import index from "../../admin/roles";
@@ -729,11 +757,11 @@
         return sums;
         //
       },
-      openMore(){
-        this.accountNo='';
-        this.fno="";
-        this.createUname="";
-        this.startStatusName=""
+      openMore() {
+        this.accountNo = '';
+        this.fno = "";
+        this.createUname = "";
+        this.startStatusName = ""
         this.modal1 = true
       },
       //查询
@@ -791,48 +819,103 @@
         this.selectData = selection
       },
       //导出 收付款单查询 接口
-      exportQueryMethod(data) {
-        let str = ""
-        data.map((item, index) => {
-          if (index != data.length - 1) {
-            str += `&ids=${item}&`
-          } else {
-            str += `&ids=${item}`
+      exportQueryMethod(data, type) {
+        var str = ""
+        if (type == "all") {
+          let obj = {
+            startTime: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            endTime: this.value[1]
+              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : "",
+            orgId: this.BranchstoreId == 0 ? "" : this.BranchstoreId,
+            guestId: this.companyId,
+            accountNo: this.accountNo,
+            fno: this.fno,
+            createUname: this.createUname,
+            documentStatus: this.startStatusName,
+            size: this.page.total,
+            page: 0
           }
-        })
-        let PaymentRecordUrl = api.omsSettle +
-          `/payment/record/export/paymentRecord?${str}&size=${data.length}&page=0&access_token=` +
-          Cookies.get(TOKEN_KEY);
-        location.href = PaymentRecordUrl
+          for (var i in obj) {
+            str += `${i}=${obj[i]}&`
+          }
+          location.href = colPayExportQuery(str)
+        } else {
+          data.map(item => {
+            str += `ids=${item}&`
+          })
+          let params = `${str}size=${data.length}&page=0&`
+          location.href = colPayExportQuery(params)
+        }
       },
       //导出 收付款单查询记录 接口
-      exportLogMethod(data) {
-        let str = ""
-        // data.
-        data.map((item, index) => {
-          if (index != data.length - 1) {
-            str += `&accounNos=${item}&`
-          } else {
-            str += `&accounNos=${item}`
+      exportLogMethod(data, type) {
+        if (type == "all") {
+          let obj = {
+            startTime: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            endTime: this.value[1]
+              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : "",
+            orgId: this.BranchstoreId == 0 ? "" : this.BranchstoreId,
+            guestId: this.companyId,
+            accountNo: this.accountNo,
+            fno: this.fno,
+            createUname: this.createUname,
+            documentStatus: this.startStatusName,
+            size: this.page.total,
+            page: 0
           }
+          for (var i in obj) {
+            str += `${i}=${obj[i]}&`
+          }
+        }
+        let str = ""
+        data.map(item => {
+          str += `accounNos=${item}&`
         })
-        let paymentDetailUrl = api.omsSettle +
-          `/payment/record/export/paymentDetail?${str}&size=${data.length}&page=0&access_token=` +
-          Cookies.get(TOKEN_KEY);
-        location.href = paymentDetailUrl
+        let params = `${str}size=${data.length}&page=0&`
+        location.href = colPayExportLogHis(params)
       },
       //导出 收付款单查询/收付款单查询记录
-      async reportPayment(type) {
-        if (this.selectData.length > 0) {
-          if (type == 1) {
-            let arr = this.selectData.map(item => item.id)
-            this.exportQueryMethod(arr)
-          } else if (type == 2) {
-            let arr = this.selectData.map(item => item.accountNo)
-            this.exportLogMethod(arr)
+      async reportPayment(type, type2) {
+        if(this.data.length<1){
+          return this.$Message.error("暂无数据可导出")
+        }
+        var str = ""
+        if (type2 == "all") {
+          let obj = {
+            startTime: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            endTime: this.value[1]
+              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : "",
+            orgId: this.BranchstoreId == 0 ? "" : this.BranchstoreId,
+            guestId: this.companyId,
+            accountNo: this.accountNo,
+            fno: this.fno,
+            createUname: this.createUname,
+            documentStatus: this.startStatusName,
+            size: this.page.total,
+            page: 0
           }
+          for (var i in obj) {
+            str += `${i}=${obj[i]}&`
+          }
+          location.href = colPayExportQuery(str)
         } else {
-          this.$Message.error("请选择需要导出的数据")
+          if(this.selectData.length<1){
+            return this.$Message.error("请选择需要导出的数据!")
+          }
+          this.selectData.map(item => {
+            str += `ids=${item.id}&`
+          })
+          let params = `${str}size=${this.selectData.length}&page=0&`
+          location.href = colPayExportQuery(params)
         }
       },
       // 导出
@@ -878,7 +961,7 @@
           endTime: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          orgId: this.BranchstoreId==0?"":this.BranchstoreId,
+          orgId: this.BranchstoreId == 0 ? "" : this.BranchstoreId,
           guestId: this.companyId,
           accountNo: this.accountNo,
           fno: this.fno,
@@ -899,11 +982,13 @@
             });
             this.data = res.data.paymentRecordVosTemp;
             this.page.total = res.data.TotalElements;
-            this.total = res.data.PaymentRecordVo
+            this.total = res.data.PaymentRecordVo;
+            this.selectData = []
             hideLoading()
           } else {
             hideLoading()
             this.data = [];
+            this.selectData = []
           }
         }).catch(e => {
           hideLoading()

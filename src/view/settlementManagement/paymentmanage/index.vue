@@ -276,6 +276,7 @@ import {
   getSalelist,
   getNumberList
 } from "@/api/bill/saleOrder";
+import {payColExportAll/**导出汇总*/} from "@/api/settlementManagement/Import/index.js"
 import { goshop } from '@/api/settlementManagement/shopList';
 import {getCustomerInformation} from "@/api/system/essentialData/clientManagement";
 import { creat } from "./../components";
@@ -2212,7 +2213,7 @@ export default {
         for(var i in obj){
           params+=`${i}=${obj[i]}&`
         }
-        location.href=`${baseUrl.omsSettle}/receivable/payable/export/getPage?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+        location.href=payColExportAll(params)
       } else {
         this.$message.error("应收应付汇总表暂无数据");
       }
