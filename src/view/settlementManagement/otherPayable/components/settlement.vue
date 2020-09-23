@@ -152,6 +152,7 @@ import { expenditureClaim , orderWriteOff } from "_api/settlementManagement/othe
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   components: {
     accountSelette,
@@ -377,16 +378,21 @@ export default {
                 type: 1
               };
               this.conserveDis=true;
+              showLoading()
               orderWriteOff(obj).then(res => {
                 if (res.code === 0) {
+                  hideLoading()
                   this.conserveDis=false;
                   this.Settlement = false;
                   this.$message.success("其他付款核销成功");
                   this.$parent.getQuery();
                 }else{
                   this.conserveDis=false;
+                  hideLoading()
                 }
-              });
+              }).catch(err=>{
+                hideLoading()
+              })
               this.$XModal.message({ status: 'success', message: '校验成功！' })
             }
           })
@@ -397,17 +403,22 @@ export default {
             three: this.tableData
           };
           this.conserveDis=true;
+          showLoading()
           expenditureClaim(obj).then(res => {
             if (res.code === 0) {
+              hideLoading()
               this.conserveDis=false;
               this.Settlement = false;
               this.$message.success("保存成功");
               this.$parent.getQuery();
               this.$emit("reloadParList")
             }else{
+              hideLoading()
               this.conserveDis=false;
             }
-          });
+          }).catch(err=>{
+            hideLoading()
+          })
         }
       } else {
         this.$message.error("核对金额为0才能保存");

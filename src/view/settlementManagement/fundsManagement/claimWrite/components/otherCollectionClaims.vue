@@ -135,6 +135,7 @@ import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWri
 import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
 import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
 import { addClaim2 } from "_api/settlementManagement/advanceCollection.js";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   props: {
     accrued: "", //表格数据
@@ -398,6 +399,7 @@ export default {
             guestSourceId:objItem.id||""
           }
         }
+        showLoading()
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
           //刷新 列表
@@ -406,31 +408,46 @@ export default {
           this.$parent.$parent.$refs.claim.currentClaimed=[]
           this.modal = false;
           this.claimTit=="预收款认领"?this.$Message.success("预收款认领成功"):this.$Message.success("其他收款认领成功")
+          hideLoading()
+        }else{
+          hideLoading()
         }
       }else{
         data.guestId = objItem.id||"";
         data.financeAccountCashList = this.accrued
         if(this.claimTit=="预收款认领"){
           data.claimMoney=this.accrued[0].rpAmt;
+          showLoading()
           addClaim2(data).then(res=>{
             if(res.code===0){
+              hideLoading()
               this.$parent.$parent.queryClaimed()
               this.$parent.$parent.$refs.claim.currentClaimed=[]
               this.$Message.success('认领成功')
               this.modal = false;
+            }else{
+              hideLoading()
             }
+          }).catch(err=>{
+            hideLoading()
           })
         }else{
           data.subjectCode="2241";
           data.claimType=0;
           data.claimMoney=this.accrued[0].balanceMoney
+          showLoading()
           addClaim(data).then(res=>{
             if(res.code===0){
+              hideLoading()
               this.$parent.$parent.queryClaimed()
               this.$parent.$parent.$refs.claim.currentClaimed=[]
               this.$Message.success('认领成功')
               this.modal = false;
+            }else{
+              hideLoading()
             }
+          }).catch(err=>{
+            hideLoading()
           })
         }
       }
