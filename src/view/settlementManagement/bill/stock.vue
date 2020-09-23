@@ -52,8 +52,8 @@
             <Poptip placement="bottom">
               <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
               <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出汇总</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出配件明细</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
               </div>
             </Poptip>
           </div>
@@ -70,6 +70,8 @@
           show-summary
           highlight-row
           @on-row-click="election"
+          @on-select="selectTab"
+          @on-select-all="selectTab"
           max-height="400"
         ></Table>
 <!--        :summary-method="handleSummary"-->
@@ -114,6 +116,7 @@ import {
   getOutStockList,
   getOutStockPart
 } from "@/api/bill/saleOrder";
+import {stockExport/**销售出库 导出全部及导出勾选*/,stockReturnExport/**销售退货 导出全部及导出勾选*/} from "@/api/settlementManagement/Import/index.js"
 import { goshop } from '@/api/settlementManagement/shopList';
 import moment from "moment";
 import {showLoading, hideLoading} from "@/utils/loading"
@@ -127,7 +130,7 @@ export default {
     return {
       value: [],
       Branchstore: [
-        {id:"",name:'全部'}
+        {id:"0",name:'全部'}
       ], //分店名称
       page:{
         total:0,
@@ -139,6 +142,11 @@ export default {
       model1: "",
       modal1: false,
       columns: [
+        {
+          type: 'selection',
+          minWidth: 40,
+          className: "tc"
+        },
         {
           key: "index",
           title: "序号",
@@ -390,6 +398,7 @@ export default {
           }
         }
       ],
+      selectTabArr:[],
       columns1: [
         {
           key: "index",
@@ -644,6 +653,9 @@ export default {
       return sums;
       //
     },
+    selectTab(selection) {
+      this.selectTabArr = selection
+    },
     //查询
     query() {
       this.data1 = [];
@@ -682,22 +694,44 @@ export default {
     },
     // 导出汇总/配件明细
     report(type) {
-      if (type) {
-        if (this.data1.length !== 0) {
-          this.$refs.parts.exportCsv({
-            filename: "销售出库汇总-配件信息"
-          });
-        } else {
-          this.$message.error("销售出库汇总-配件信息暂无数据");
+      if(this.data.length<1){
+        return this.$Message.error("暂无数据可导出!")
+      }
+      if (type==0) {
+        //全部
+        let params="";
+        let obj = {
+          orgid: this.model1=="0"?"":this.model1,
+          guestId: this.company?this.companyId:"",
+          enterTypeId: this.typeName,
+          outDateStart:this.value[0]? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"): "",
+          outDateEnd:this.value[1]? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59": "",
+          size:this.page.total,
+          page:0
+        };
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        if(this.typeName=="050202"){
+          location.href=stockExport(params);
+        }else{
+          location.href=stockReturnExport(params);
         }
       } else {
-        let page={}
-        page.size=this.page.total;
-        page.num=1
-        if (this.data.length !== 0) {
-          this.getGeneralAll(page)
-        } else {
-          this.$message.error("销售出库汇总暂无数据");
+        //勾选
+        if(this.selectTabArr.length<1){
+          return this.$Message.error("请勾选需要导出的数据!")
+        }
+        let params=""
+        let str=""
+        this.selectTabArr.map(vb=>{
+          str+=`ids=${vb.id}&`
+        })
+        params=`${str}page=0&size=${this.selectTabArr.length}&enterTypeId=${this.typeName}&`
+        if(this.typeName=="050202"){
+          location.href=stockExport(params);
+        }else{
+          location.href=stockReturnExport(params);
         }
       }
     },
@@ -710,7 +744,7 @@ export default {
     getGeneralAll(param) {
       this.data1 = [];
       let obj = {
-        orgid: this.model1,
+        orgid: this.model1=="0"?"":this.model1,
         guestId: this.company?this.companyId:"",
         enterTypeId: this.typeName
       };

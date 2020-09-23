@@ -620,7 +620,7 @@ export default {
     },
     // 总表查询
     getGeneral() {
-      let params = {
+      let data = {
         size: this.page.size,
         page: this.page.num - 1,
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',

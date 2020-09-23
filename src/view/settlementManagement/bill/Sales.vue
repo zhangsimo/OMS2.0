@@ -46,8 +46,8 @@
             <Poptip placement="bottom">
               <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
               <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出汇总</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出配件明细</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
               </div>
             </Poptip>
           </div>
@@ -57,7 +57,7 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-          @on-row-click="election" max-height="400"></Table>
+          @on-row-click="election" @on-select="selectTab" @on-select-all="selectTab" max-height="400"></Table>
 <!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
@@ -85,6 +85,7 @@
 import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import selectDealings from "./components/SelectTheCustomer";
 import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
+import {salesExport/**导出全部及导出勾选*/} from "@/api/settlementManagement/Import/index.js"
 import { goshop } from '@/api/settlementManagement/shopList';
 import { creat } from "./../components";
 import moment from 'moment'
@@ -110,6 +111,11 @@ export default {
       total: {},//总合计对象
       model1: "",
       columns: [
+        {
+          type:'selection',
+          minWidth: 40,
+          className: "tc"
+        },
         {
           key:'index',
           title: "序号",
@@ -333,6 +339,7 @@ export default {
           minWidth: 120
         }
       ],
+      selectTabArr:[],//选中数组
       columns1: [
         {
           key:'index',
@@ -548,26 +555,61 @@ export default {
     Dealings() {
       this.$refs.selectDealings.addressShow= true;
     },
+    selectTab(selection) {
+      this.selectTabArr = selection
+    },
     // 导出汇总/配件明细
     report(type) {
-      if (type) {
-        if (this.data1.length !== 0) {
-          this.$refs.parts.exportCsv({
-            filename: "销售订单汇总-配件信息"
-          });
-        } else {
-          this.$message.error("销售订单汇总-配件信息暂无数据");
-        }
-      } else {
-        let page={}
-        page.size=this.page.total;
-        page.num=1
-        if (this.data.length !== 0) {
-          this.getGeneralAll(page)
-        } else {
-          this.$message.error("销售订单汇总暂无数据");
-        }
+      if(this.data.length<1){
+        return this.$Message.error("暂无数据可导出!")
       }
+      if(type==0){
+        //导出全部
+        let obj ={
+          belongSystem: this.type,
+          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+          orgid: this.model1,
+          guestId: this.company?this.companyId:"",
+          size: this.page.total,
+          page: 0
+        }
+        let params=""
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        location.href=salesExport(params)
+      }else{
+        //导出勾选
+        if(this.selectTabArr.length<1){
+          return this.$Message.error("请勾选需要导出的数据!")
+        }
+        let params="";
+        let str=""
+        this.selectTabArr.map(vb=>{
+          str+=`ids=${vb.id}&`
+        })
+        params=`${str}page=0&size=${this.selectTabArr.length}&`
+        location.href=salesExport(params)
+      }
+      // if (type) {
+      //   if (this.data1.length !== 0) {
+      //     this.$refs.parts.exportCsv({
+      //       filename: "销售订单汇总-配件信息"
+      //     });
+      //   } else {
+      //     this.$message.error("销售订单汇总-配件信息暂无数据");
+      //   }
+      // } else {
+      //   let page={}
+      //   page.size=this.page.total;
+      //   page.num=1
+      //   if (this.data.length !== 0) {
+      //     this.getGeneralAll(page)
+      //   } else {
+      //     this.$message.error("销售订单汇总暂无数据");
+      //   }
+      // }
     },
     // 总表查询
     getGeneralAll(param) {
@@ -647,10 +689,12 @@ export default {
           this.data = res.data.vos;
           this.page.total = res.data.TotalElements;
           // this.total = res.data.AllotOutMainVO
+          this.selectTabArr=[]
           hideLoading()
         } else {
           hideLoading()
           this.data = []
+          this.selectTabArr=[]
         }
       }).catch(e => {
         hideLoading()
