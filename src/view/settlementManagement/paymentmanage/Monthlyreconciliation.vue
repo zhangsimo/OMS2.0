@@ -896,7 +896,11 @@
           num: 1
         },
         copyData: [],
-        copyData1: []
+        copyData1: [],
+        //临时存储应付业务采购入库/退货对账勾选数据
+        tempPaymentlist:{},
+        //临时存储应收业务销售出库/退货对账
+        tempCollectlist:{},
       };
     },
     async mounted() {
@@ -968,11 +972,19 @@
         this.pageObj.num = currentPage;
         this.pageObj.size = pageSize;
         this.data1 = this.changePageList(currentPage, pageSize, this.copyData);
+        let currentPageArr = this.tempCollectlist['page'+currentPage];
+        if(currentPageArr&&currentPageArr.length&&currentPageArr.length>0){
+          this.$refs.receivable.setCheckboxRow(currentPageArr, true)
+        }
       },
       pageChange2({type, currentPage, pageSize, $event}) {
         this.pageObj1.num = currentPage;
         this.pageObj1.size = pageSize;
         this.data2 = this.changePageList(currentPage, pageSize, this.copyData1);
+        let currentPageArr = this.tempPaymentlist['page'+currentPage];
+        if(currentPageArr&&currentPageArr.length&&currentPageArr.length>0){
+          this.$refs.payable.setCheckboxRow(currentPageArr, true)
+        }
       },
       changePageList(currentPage, pageSize, sourceData) {
         let firstNum = pageSize * (currentPage - 1);
@@ -1408,23 +1420,22 @@
 
       // 应付选中
       paymentCheckout({selection, row}) {
-        this.paymentlist = selection;
-        this.totalpayment = 0;
-        selection.map(item => {
-          this.totalpayment += parseFloat(item.thisAccountAmt);
-        });
+        this.setTempPaymentList(selection);
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
         this.totalvalueFun();
         // this.tipText(this.paymentlist);
+
+
       },
       // 应收选中
       collectCheckout({selection, row}) {
-        this.collectlist = selection;
-        this.totalcollect = 0;
-        this.Actualtotalcollect = 0;
-        this.totalcollect = this.collectSum(selection)
+        this.setTempCollectlist(selection);
+        // this.collectlist = selection;
+        // this.totalcollect = 0;
+        // this.Actualtotalcollect = 0;
+        // this.totalcollect = this.collectSum(selection)
         // selection.map(item => {
         //   this.totalcollect += item.thisAccountAmt;
         // });
@@ -1436,17 +1447,39 @@
       },
       // 应收全选
       collectCheckoutAll({selection}) {
-        this.collectlist = selection;
-        this.totalcollect = this.collectSum(selection)
+        // this.collectlist = selection;
+        // this.totalcollect = this.collectSum(selection)
         // selection.map(item => {
         //   this.totalcollect += item.thisAccountAmt;
         // });
+        this.setTempCollectlist(selection);
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
         this.totalvalueFun();
         // this.tipText(this.collectlist);
       },
+
+      setTempCollectlist(selection){
+        this.tempCollectlist['page'+this.pageObj.num] = selection;
+        this.totalcollect = 0;
+        // this.Actualtotalcollect = 0;
+        this.collectlist = [];
+        for(let k in this.tempCollectlist){
+          let total = 0;
+          this.collectlist = [...this.collectlist,...this.tempCollectlist[k]];
+          total = this.tempCollectlist[k].reduce((pre,curr) => {
+            if(!isNaN(Number(curr.thisAccountAmt))){
+              return pre+parseFloat(curr.thisAccountAmt);
+            }
+          },0);
+          this.totalcollect  += total;
+        }
+        this.totalcollect = this.totalcollect.toFixed(2);
+
+      },
+
+
       //选中提醒
       tipText(row) {
         let dartArr = row.filter(item => item.existDraft === 1);
@@ -1473,17 +1506,29 @@
       },
       // 应付全选
       paymentCheckoutAll({selection}) {
-        this.paymentlist = selection;
-        this.totalpayment = 0
-        selection.map(item => {
-          this.totalpayment += parseFloat(item.thisAccountAmt);
-        });
+        this.setTempPaymentList(selection);
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
         this.totalvalueFun();
-        // this.tipText(this.paymentlist);
       },
+
+      setTempPaymentList(selection){
+        this.tempPaymentlist['page'+this.pageObj1.num] = selection;
+        this.totalpayment = 0;
+        this.paymentlist = [];
+        for(let k in this.tempPaymentlist){
+          this.paymentlist = [...this.paymentlist,...this.tempPaymentlist[k]];
+          let total = this.tempPaymentlist[k].reduce((pre,curr) => {
+            if(!isNaN(Number(curr.thisAccountAmt))){
+              return pre+parseFloat(curr.thisAccountAmt);
+            }
+          },0);
+          this.totalpayment += total;
+        }
+        this.totalpayment = this.totalpayment.toFixed(2);
+      },
+
       // 应付取消选中
       paymentNoCheckout(selection, row) {
         this.paymentlist = selection;
