@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -261,6 +261,7 @@ import settlementadv from "./components/settlementadv";
 import moment from "moment";
 import { mapMutations } from "vuex";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "settlementManagementAdvanceCharge",
   components: {
@@ -409,10 +410,16 @@ export default {
           Reflect.deleteProperty(obj, key);
         }
       }
-      let res = await api.findPageByDynamicQuery(obj);
-      if (res.code == 0) {
-        this.tableData = res.data.content;
-        this.page.total = res.data.totalElements;
+      try {
+        showLoading(".loadingClass", "数据加载中，请勿操作")
+        let res = await api.findPageByDynamicQuery(obj);
+        if (res.code == 0) {
+          this.tableData = res.data.content;
+          this.page.total = res.data.totalElements;
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
       this.serviceId = "";
       this.$refs.Record.init();

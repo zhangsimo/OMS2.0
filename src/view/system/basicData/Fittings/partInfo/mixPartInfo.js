@@ -6,7 +6,7 @@ import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamine
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
 
 import { getCarPartClass,getAllParts,getByManyCode,getAlreadyParts,savePartChange } from "_api/parts";
-
+import {pinyin} from "../../../../../utils/py";
 export const mixPartInfo = {
 
   data() {
@@ -228,6 +228,25 @@ export const mixPartInfo = {
       }
     }
   },
+  computed:{
+    spellCode(){
+      let car=""
+      this.carList.map(vb => {
+        let selectBrandData = this.carObj.carBrandData.filter(item => (vb.carBrand && item.erpCarBrandId == vb.carBrand));
+        if (selectBrandData.length > 0) {
+          car+=(selectBrandData[0].nameCn+vb.carName)
+        }
+      });
+      let brandNameFilter = this.brandArr.filter(item => (this.formValidate.partBrandId!=undefined && item.id == this.formValidate.partBrandId))
+      if (brandNameFilter.length > 0) {
+        this.formValidate.partBrandName = brandNameFilter[0].name
+      }
+      //配件名称+品牌车型1+品牌车型2+品牌
+      let str=(this.formValidate.name|| "")+(car || "")+(this.formValidate.partBrandName || "")
+      let spell=pinyin.getCamelChars(str)
+      return (this.formValidate.pyCode=spell)
+    }
+  },
   mounted(){
     //拉取适用车型品牌submit
     if(this.carObj.carBrandData.length==0){
@@ -360,14 +379,14 @@ export const mixPartInfo = {
       this.selectLevelFirst="";
       this.selectLevelSecond=""
       this.$refs.tabs.activeKey = 'active1'
-
+      this.formValidate.partBrandId=null
+      this.formValidate.partBrandName=""
       this.formValidate.carBrandName = ''
       this.formValidate.carModelName = ''
       this.formValidate.fullName = ''
       this.formValidate.customType = ""
       if (setData) {
         this.formValidate = setData;
-        console.log(this.formValidate)
         //赋值适用车型
         let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
         let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
@@ -661,6 +680,8 @@ export const mixPartInfo = {
               objReq.model = this.formValidate.model
               objReq.partTypeF = this.formValidate.partTypeF
               objReq.partTypeS = this.formValidate.partTypeS
+              //拼音码
+              objReq.pyCode=this.formValidate.pyCode
               this.isCart = false;
               if(!this.carList[0].carName && !this.carList[0].id){
                 this.btnIsLoadding = false;
@@ -837,7 +858,7 @@ export const mixPartInfo = {
       })
     },
     getSelectCarBrand(v){
-      console.log(v)
+      // console.log(v)
     }
   }
 }

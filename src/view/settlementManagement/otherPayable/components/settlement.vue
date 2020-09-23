@@ -59,6 +59,8 @@
           resizable
           auto-resize
           show-footer
+          size="mini"
+          show-overflow="title"
           max-height="400"
           align="center"
           :data="BusinessType"
@@ -67,20 +69,20 @@
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="orgName" title="门店"></vxe-table-column>
-            <vxe-table-column field="accountNo" title="对账单号"></vxe-table-column>
-            <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-            <vxe-table-column field="businessTypeName" title="业务类型"></vxe-table-column>
-            <vxe-table-column field="reconciliationAmt" title="对账金额"></vxe-table-column>
-            <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
-            <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
+            <vxe-table-column field="orgName" width="120" title="门店"></vxe-table-column>
+            <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
+            <vxe-table-column field="guestName" width="120" title="往来单位"></vxe-table-column>
+            <vxe-table-column field="businessTypeName" width="100" title="业务类型"></vxe-table-column>
+            <vxe-table-column field="reconciliationAmt" width="80" title="对账金额"></vxe-table-column>
+            <vxe-table-column field="hasAmt" width="120" title="已收/付金额"></vxe-table-column>
+            <vxe-table-column field="unAmt" width="120" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
               width="140"
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
             ></vxe-table-column>
-            <vxe-table-column field="unAmtLeft" title="剩余未收/未付"></vxe-table-column>
+            <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -117,6 +119,8 @@
           resizable
           auto-resize
           show-footer
+          size="mini"
+          show-overflow="title"
           max-height="400"
           ref="xTable"
           align="center"
@@ -126,12 +130,12 @@
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
-            <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-            <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-            <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
-            <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
+            <vxe-table-column field="accountName" width="120" title="收/付款账户"></vxe-table-column>
+            <vxe-table-column field="mateAccountName" width="100" title="科目代码"></vxe-table-column>
+            <vxe-table-column field="createTime" width="120" title="发生日期"></vxe-table-column>
+            <vxe-table-column field="incomeMoney" width="80" title="收入金额"></vxe-table-column>
+            <vxe-table-column field="paidMoney" width="80" title="支出金额"></vxe-table-column>
+            <vxe-table-column field="orgName" width="120" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
       </Col>
@@ -148,6 +152,7 @@ import { expenditureClaim , orderWriteOff } from "_api/settlementManagement/othe
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   components: {
     accountSelette,
@@ -373,16 +378,21 @@ export default {
                 type: 1
               };
               this.conserveDis=true;
+              showLoading()
               orderWriteOff(obj).then(res => {
                 if (res.code === 0) {
+                  hideLoading()
                   this.conserveDis=false;
                   this.Settlement = false;
                   this.$message.success("其他付款核销成功");
                   this.$parent.getQuery();
                 }else{
                   this.conserveDis=false;
+                  hideLoading()
                 }
-              });
+              }).catch(err=>{
+                hideLoading()
+              })
               this.$XModal.message({ status: 'success', message: '校验成功！' })
             }
           })
@@ -393,17 +403,22 @@ export default {
             three: this.tableData
           };
           this.conserveDis=true;
+          showLoading()
           expenditureClaim(obj).then(res => {
             if (res.code === 0) {
+              hideLoading()
               this.conserveDis=false;
               this.Settlement = false;
               this.$message.success("保存成功");
               this.$parent.getQuery();
               this.$emit("reloadParList")
             }else{
+              hideLoading()
               this.conserveDis=false;
             }
-          });
+          }).catch(err=>{
+            hideLoading()
+          })
         }
       } else {
         this.$message.error("核对金额为0才能保存");

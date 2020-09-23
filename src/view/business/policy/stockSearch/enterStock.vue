@@ -23,6 +23,14 @@
             <li
               v-if="!curronly"
               class="center lis"
+              :class="{ 'tab-active': tIndex == 6 }"
+              @click="setTab(6)"
+            >
+              本店库存
+            </li>
+            <li
+              v-if="!curronly"
+              class="center lis"
               :class="{ 'tab-active': tIndex == 5 }"
               @click="setTab(5)"
             >
@@ -51,6 +59,53 @@
               订单占用
             </li>
           </ul>
+        </div>
+        <!--本店库存-->
+        <div class="tabs-warp pt10" v-show="tIndex == 6">
+          <vxe-table
+            border
+            ref="hsOrder"
+            height="350"
+            highlight-hover-row
+            show-overflow="title"
+            resizable
+            auto-resize
+            :loading="outLoading"
+            size="mini"
+            :data="selfShopStock">
+            <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+            <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
+            <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
+            <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
+            <vxe-table-column field="storeName" title="仓库" width="120"></vxe-table-column>
+            <vxe-table-column field="enterQty" title="入库数量" width="90"></vxe-table-column>
+            <vxe-table-column field="outableQty" title="可出库数量" width="90"></vxe-table-column>
+            <vxe-table-column field="enterPrice" title="入库单价" width="120">
+              <template v-slot="{row}">
+                {{(row.enterPrice||0).toFixed(2)}}
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="taxRate" title="税率" width="70">
+            </vxe-table-column>
+            <vxe-table-column field="taxPrice" title="含税单价" width="70">
+              <template v-slot="{row}">
+                {{(row.taxPrice||0).toFixed(2)}}
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="noTaxPrice" title="不含税单价" width="90">
+              <template v-slot="{row}">
+                {{(row.noTaxPrice||0).toFixed(2)}}
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="guestName" title="供应商" width="120">
+            </vxe-table-column>
+            <vxe-table-column field="createTime" title="入库日期" width="120">
+            </vxe-table-column>
+            <vxe-table-column field="branchStockAge" title="本店库龄" width="80">
+            </vxe-table-column>
+            <vxe-table-column field="chainStockAge" title="连锁库龄" width="80">
+            </vxe-table-column>
+          </vxe-table>
         </div>
         <!--      入库明细-->
         <div class="tabs-warp" v-show="tIndex == 1">
@@ -401,7 +456,8 @@
     OtotalData,
     EtotalData,
     getLevel,
-    getUnsalable
+    getUnsalable,
+    getLotStock
   } from "@/api/business/stockSearch";
   import QuickDate from "_c/getDate/dateget_bill1.vue";
 
@@ -425,6 +481,8 @@
         tIndex: 4,
         // 存放点击选中的数据
         selectTableData: "",
+        //本店库存数据
+        selfShopStock:[],
         // 入库明细表
         enterInfo: [
           {
@@ -1119,6 +1177,9 @@
         if (this.tIndex == 5) {
           this.getUnsalableList();
         }
+        if (this.tIndex == 6) {
+          this.getLotList();
+        }
       },
       // // 修改每页显示条数-客户信息
       changeSizeCus(size) {
@@ -1150,6 +1211,24 @@
           this.getHold();
         }
       },
+
+      async getLotList(){
+        let data = {};
+        data.partCode = this.mainData.partCode;
+        data.old = this.mainData.orgid;
+        data.noStock = 0;
+        data.page = 0;
+        data.size = 10;
+        this.outLoading = true;
+        this.selfShopStock = [];
+        const rep = await getLotStock(data);
+        this.outLoading = false;
+        if(rep.code==0){
+          this.selfShopStock = rep.data.content||[];
+        }
+      },
+
+
       // 获取选择时间
       selectDate(date) {
         // 入库获取时间

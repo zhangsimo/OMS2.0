@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="modal" :title="claimTit" width="800">
+    <Modal v-model="modal" :title="claimTit" width="1000">
       <Row class="dbd" v-if="claimTit=='预付款认领'">
         <i-col span="14">
           <Checkbox
@@ -53,23 +53,23 @@
         highlight-hover-row
         highlight-current-row
         auto-resize
-        height="280"
         @current-change="currentChangeEvent"
         :edit-config="{trigger: 'click', mode: 'cell'}"
         size="mini"
+        show-overflow="title"
         :data="accrued"
       >
-        <vxe-table-column type="seq" title="序号"></vxe-table-column>
-        <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-        <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-        <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-        <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-        <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-        <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-        <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-        <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-        <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
-        <vxe-table-column title="支出金额">
+        <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column field="area" width="100" title="所属区域"></vxe-table-column>
+        <vxe-table-column field="shopName" width="140" title="所属门店"></vxe-table-column>
+        <vxe-table-column field="shopCode" width="80" title="所属店号"></vxe-table-column>
+        <vxe-table-column field="accountName" width="100" title="账户"></vxe-table-column>
+        <vxe-table-column field="accountCode" width="120" title="账号"></vxe-table-column>
+        <vxe-table-column field="bankName" width="120" title="开户行"></vxe-table-column>
+        <vxe-table-column field="mateAccountName" width="100" title="对应科目"></vxe-table-column>
+        <vxe-table-column field="createTime" width="140" title="发生日期"></vxe-table-column>
+        <vxe-table-column field="incomeMoney" width="80" title="收入金额"></vxe-table-column>
+        <vxe-table-column title="支出金额" width="80">
           <template v-slot="{row}">
             <div>{{Math.abs(row.paidMoney)}}</div>
           </template>
@@ -78,13 +78,15 @@
           field="rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
+          width="120"
           align="center"
         ></vxe-table-column>
-        <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
+        <vxe-table-column field="reciprocalAccountName" width="120" title="对方户名"></vxe-table-column>
         <vxe-table-column
           field="tradingNote"
           :edit-render="{name: 'input',immediate:true, attrs: {type: 'text'}}"
           title="交易备注"
+          width="160"
           align="center"
         ></vxe-table-column>
       </vxe-table>
@@ -104,13 +106,14 @@
         <Row>
           <vxe-table
             auto-resize
-            height="300"
             border
             highlight-hover-row
             highlight-current-row
             :data="tableData"
             @current-change="selected"
             align="center"
+            show-overflow="title"
+            size="mini"
             ref="xTable1"
           >
             <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->
@@ -189,7 +192,7 @@ import { findPageByDynamicQueryFirst } from "@/api/settlementManagement/advanceC
 import { creat } from "@/view/settlementManagement/components";
 import moment from "moment";
 import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
-
+import {showLoading, hideLoading} from "@/utils/loading"
 import bus from "@/view/settlementManagement/bill/Popup/Bus";
 
 export default {
@@ -591,14 +594,18 @@ export default {
             guestSourceId:objItem.id||""
           }
         }
+        showLoading()
         let res = await TurnToTheProfitAndLoss(data);
         if (res.code === 0) {
+          hideLoading()
           this.reloadParentList()
           this.modal = false;
           this.claimTit == "预付款认领"
             ? this.$Message.success("预付款认领成功")
             : this.$Message.success("其他付款认领成功");
           this.formValidate.voucherInput=""
+        }else{
+          hideLoading()
         }
       }
     },

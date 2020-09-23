@@ -101,7 +101,9 @@
         openModal(){
           this.artificialShow = true
           this.oneList = []
-          this.tableData=[{"claimShopCode":"","paidMoney":this.list.paidMoney?this.list.paidMoney:0,"incomeMoney":this.list.incomeMoney?this.list.incomeMoney:0,claimShopCode:''}]
+          setTimeout(()=>{
+            this.tableData=[{"claimShopCode":"","paidMoney":this.list.paidMoney?this.list.paidMoney:0,"incomeMoney":this.list.incomeMoney?this.list.incomeMoney:0}]
+          },10)
           this.getshopList()
         },
 

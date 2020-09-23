@@ -17,6 +17,7 @@
           :data="data"
           ref="summary"
           highlight-row
+          :tooltip="true"
           max-height="400"
         ></Table>
       </div>
@@ -52,6 +53,7 @@
           border
           :columns="columns1"
           :data="data1"
+          :tooltip="true"
           highlight-row
           @on-selection-change="requireMore"
           max-height="400"

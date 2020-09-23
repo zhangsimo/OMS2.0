@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -313,6 +313,7 @@
 
 
   import moment from 'moment'
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: "capitalChain",
@@ -529,15 +530,21 @@
         let params = {}
         params.page = this.page.num - 1
         params.size = this.page.size
-        let res = await goList(params, data)
-        if (res.code === 0) {
-          if (res.data.page.content.length > 0) {
-            this.allMoneyList = res.data.moneyList
+        try {
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          let res = await goList(params, data)
+          if (res.code === 0) {
+            if (res.data.page.content.length > 0) {
+              this.allMoneyList = res.data.moneyList
+            }
+            this.tableData = res.data.page.content
+            this.tableData1 = res.data.page.content
+            this.tableData2 = res.data.page.content
+            this.page.total=res.data.page.totalElements
           }
-          this.tableData = res.data.page.content
-          this.tableData1 = res.data.page.content
-          this.tableData2 = res.data.page.content
-          this.page.total=res.data.page.totalElements
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
 

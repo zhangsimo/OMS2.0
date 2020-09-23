@@ -51,6 +51,7 @@
 import { getSubjectList } from "_api/documentApproval/ExpenseReimbursement";
 import { TurnToTheProfitAndLoss,getSubjectMsg } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   name: "subject",
   props: {
@@ -160,15 +161,17 @@ export default {
           }
         }
       }
-
-
+      showLoading()
       let res = await TurnToTheProfitAndLoss(data);
       if (res.code === 0) {
+        hideLoading()
         this.subjectModelShow = false;
         this.$refs.voucherInput.subjectModelShowassist = false;
         this.$Message.success("转益成功");
         //刷新本店待认领款 列表
         this.$parent.$parent.queryClaimed()
+      }else{
+        hideLoading()
       }
     }
   },
