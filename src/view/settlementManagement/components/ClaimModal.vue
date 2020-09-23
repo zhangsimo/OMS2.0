@@ -239,13 +239,18 @@ export default {
     },
 
     changeNum(newVal,oldVal){
-      // console.log(newVal)
-      // if(newVal === undefined || newVal === null){
-      //   this.$message.error('本次认领金额录入不可为空')
-      // }
-      // if(0 < newVal <= this.currentRow.incomeMoney || 0 < newVal <= this.currentRow.paidMoney) {
-      //   this.$message.error('本次认领金额录入错误，请重新输入')
-      // }
+      if(newVal === undefined || newVal === null){
+        this.$message.error('本次认领金额录入不可为空')
+      }
+      if(this.$parent.condition == 1){
+        if( newVal < 0 || newVal >= this.currentRow.paidMoney) {
+          this.$message.error('本次认领金额录入错误，请重新输入')
+        }
+      }else{
+        if( newVal < 0 || newVal >= this.currentRow.incomeMoney) {
+          this.$message.error('本次认领金额录入错误，请重新输入')
+        }
+      }
     },
     validate(num){
       let reg = /^\d+(?=\.{0,1}\d+$|$)/
@@ -261,12 +266,5 @@ export default {
 .el-input-number{
   width: 100px;
 }
-// /deep/.vxe-table--header{
-//   width: 968px !important;
-// }
-
-// /deep/.vxe-table--body{
-//   width: 968px !important;
-// }
 
 </style>
