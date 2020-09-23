@@ -250,7 +250,7 @@
             <FormItem label="款项分类:" prop="fund">
               <Select v-model="formDynamic.fund" placeholder="请选择">
                 <Option
-                  v-for="item in fundList"
+                  v-for="item in fundListZanshi"
                   :value="item.itemName"
                   :key="item.id"
                 >{{ item.itemName }}</Option>
@@ -259,17 +259,17 @@
           </Form>
         </div>
         <div class="fund" v-show="!Classification">
-          <Form :label-width="80" style="width: 300px">
-            <FormItem label="款项分类:" prop="fund">
-              <Select v-model="formDynamic.fund" placeholder="请选择">
-                <Option
-                  v-for="item in fundList"
-                  :value="item.itemName"
-                  :key="item.id"
-                >{{ item.itemName }}</Option>
-              </Select>
-            </FormItem>
-          </Form>
+<!--          <Form :label-width="80" style="width: 300px">-->
+<!--            <FormItem label="款项分类:" prop="fund">-->
+<!--              <Select v-model="formDynamic.fund" placeholder="请选择">-->
+<!--                <Option-->
+<!--                  v-for="item in fundListZanshi"-->
+<!--                  :value="item.itemName"-->
+<!--                  :key="item.id"-->
+<!--                >{{ item.itemName }}</Option>-->
+<!--              </Select>-->
+<!--            </FormItem>-->
+<!--          </Form>-->
         </div>
       </Form>
       <div slot="footer">
@@ -289,6 +289,7 @@ import {
 } from "@/api/settlementManagement/VoucherInput"
 export default {
   name:'voucherInput',
+  props:['oneAccountent'],
   data(){
     return {
       currTab:'client',//当前tab页
@@ -329,7 +330,6 @@ export default {
         } //分页
       },
       categoryArr: [], //类别数组
-      oneAccountent: {}, //获取到的会计科目
       selectClass: 0,
       accountingName: "", //核算名称
       OtherModalAdd: false, //其他辅助弹框新增弹框状态
@@ -365,6 +365,7 @@ export default {
         ]
       },
       fundList: [], //款项分类数组
+      fundListZanshi: [], //款项分类数组
       voucherList:[],//选中内容
       voucherItem:{},
     }
@@ -531,7 +532,6 @@ export default {
     },
     //点击单选框获取辅助核算客户
     radioChangeEventClient({ row }) {
-      console.log(row)
       this.AssistAccounting = row.fullName;
       this.auxiliaryTypeCode = "1";
       this.auxiliaryCode = row.code;
@@ -731,10 +731,15 @@ export default {
     },
     //其他辅助核算款项分类
     fundGetList() {
+      console.log(this.oneAccountent[0].mateAccountCoding,1111)
       let params = {};
       params.dictCode = "CW00131";
       kmType(params).then(res => {
         this.fundList = res.data;
+        this.fundListZanshi=this.fundList.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
+        if(this.fundListZanshi.length<1){
+          this.Classification=false;
+        }
       });
     },
   }
