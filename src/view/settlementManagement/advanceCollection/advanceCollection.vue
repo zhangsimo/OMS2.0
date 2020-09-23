@@ -229,7 +229,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 认领支付弹框11 -->
-    <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal>
+    <!-- <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal> -->
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -245,7 +245,7 @@
   </div>
 </template>
 <script>
-import ClaimModal from "./components/ClaimModal"
+// import ClaimModal from "./components/ClaimModal"
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -284,15 +284,15 @@ export default {
     settlement,
     payApply,
     CreditSpending,
-    ClaimModal
+    // ClaimModal
   },
   data() {
     return {
-      amountType: null,
-      claimType: null,
-      claimTitle: "",
-      condition: undefined,
-      loanId: "",
+      // amountType: null,
+      // claimType: null,
+      // claimTitle: "",
+      // condition: undefined,
+      // loanId: "",
       remoteloading: false,
       amt: null, //金额
       bankNameO: "", //对方户名
