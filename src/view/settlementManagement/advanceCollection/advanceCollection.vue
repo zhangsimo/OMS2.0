@@ -397,9 +397,14 @@ export default {
       this.query();
     },
     // 快速查询
-    quickDate(data) {
+    async quickDate(data) {
       this.value = data;
-      this.getQuery();
+      if(this.selectShopList){
+        let arr = await creat(this.$refs.quickDate.val, this.$store);
+        this.value = arr[0];
+        this.BranchstoreId = arr[1];
+        this.getQuery();
+      }
     },
     //查询
     query() {
@@ -487,7 +492,7 @@ export default {
       // if (type === 1) {
       //   this.claimModal = true;
       //   this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
-      //   
+      //
       //   this.claimedList(1);
       // } else {
       //   this.claimTit = "预收款支出认领";
