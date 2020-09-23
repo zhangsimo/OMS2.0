@@ -184,7 +184,6 @@
             border
           ></Table>
           <Row>
-              <Col id="row">
                 <Page
                   id="page"
                   style="flex:right"
@@ -199,12 +198,6 @@
                   @on-change="pageChange"
                   @on-page-size-change="pageSizeChange"
                 ></Page>
-                  <!-- :current="List.page"
-                  :total="List.total"
-                  :page-size="List.pageSize"
-                  @on-page-size-change="onPurchasePageSizeChange1"
-                  @on-change="onPurchaseChange1" -->
-              </Col>
             </Row>
         </TabPane>
         <TabPane label="过期活动" name="name3">

@@ -4,7 +4,7 @@
     border
     :columns="columns1"
     :data="recordLists"
-    max-height="300px"
+    max-height="300"
   ></Table>
   <!--show-summary-->
   <!--:summary-method="handleSummary"-->
