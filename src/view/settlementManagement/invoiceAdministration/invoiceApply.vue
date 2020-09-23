@@ -1334,6 +1334,9 @@ export default {
     },
     quickDate(data){
       this.value = data;
+      if(this.selectShopList==true){
+        this.form.orgId = this.$store.state.user.userData.currentCompany!=null?this.$store.state.user.userData.currentCompany.id : ""
+      }
       this.form.startDate=this.value[0]?moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"): ""
       this.form.endDate=this.value[1]? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59": "",
       this.getDataList();
