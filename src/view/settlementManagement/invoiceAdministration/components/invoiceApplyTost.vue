@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" title="人工核销" width="90%">
+  <Modal v-model="modals" title="人工核销" width="1100px">
     <div>
       <div class="mb20 flex">
         <div class="mr10">
@@ -138,7 +138,8 @@ export default {
         {
           title: "公司名称",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          tooltip: true
         },
         {
           title: "对账单号",
@@ -161,12 +162,14 @@ export default {
               },
               params.row.accountNo
             );
-          }
+          },
+          tooltip: true
         },
         {
           title: "往来单位",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          tooltip: true
         },
         {
           title: "对账应付",
@@ -475,7 +478,7 @@ export default {
           title: "剩余未核销金额",
           key: "paymentBalance",
           className: "tc",
-          minWidth: 90
+          minWidth: 100
         },
         {
           title: "价税合计金额",

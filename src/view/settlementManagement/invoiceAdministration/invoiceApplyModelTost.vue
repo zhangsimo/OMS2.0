@@ -2,7 +2,7 @@
   <Modal
     v-model="modals"
     title="人工核销"
-    width="90%"
+    width="1100"
     @on-visible-change="visChange"
   >
     <div>
@@ -19,6 +19,7 @@
           highlight-row
           :tooltip="true"
           max-height="400"
+          size="small"
         ></Table>
       </div>
     </div>
@@ -51,6 +52,7 @@
       <div>
         <Table
           border
+          size="small"
           :columns="columns1"
           :data="data1"
           :tooltip="true"
@@ -81,6 +83,7 @@ export default {
         {
           title: "序号",
           className: "tc",
+          width: 80,
           render: (h, params) => {
             return h(
               "span",
@@ -91,51 +94,71 @@ export default {
         {
           title: "分店名称",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          tooltip: true,
+          width: 140
         },
         {
           title: "店号",
           key: "orgCode",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "往来单位",
           key: "guestName",
+          tooltip: true,
+          width: 140,
           className: "tc"
         },
         {
           title: "申请日期",
           key: "applyDate",
+          tooltip: true,
+          width: 130,
           className: "tc"
         },
         {
           title: "对账单号",
           key: "accountNo",
+          tooltip: true,
+          width: 130,
           className: "tc"
         },
         {
           title: "发票单位",
           key: "receiptUnit",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "申请开票金额",
           key: "applyAmt",
+          tooltip: true,
+          width: 100,
           className: "tc"
         },
         {
           title: "开票公司",
           key: "invoiceUnit",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "开票清单类型",
           key: "species",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "寄件方式",
           key: "sendingWay",
+          tooltip: true,
+          width: 80,
           className: "tc"
           // render: (h,params) =>{
           //     return h('span',(params.row.orderAmt).toFixed(2))
@@ -144,51 +167,71 @@ export default {
         {
           title: "快递单号",
           key: "sendingNumber",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "发票代码",
           key: "invoiceCode",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "发票号码",
           key: "invoiceNo",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "导入开票单位",
           key: "importInvoiceUnit",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "验证开票单位",
           key: "verifyInvoiceUnit",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "发票价税合计",
           key: "priceTaxTotal",
+          tooltip: true,
+          width: 100,
           className: "tc"
         },
         {
           title: "发票不含税金额",
           key: "notTaxAmt",
+          tooltip: true,
+          width: 110,
           className: "tc"
         },
         {
           title: "发票税额",
           key: "invoiceTax",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "已核销金额",
           key: "canceledTax",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "剩余未核销开票",
           key: "remainCancelTax",
+          tooltip: true,
+          width: 120,
           className: "tc"
         }
       ],
@@ -214,47 +257,64 @@ export default {
         {
           title: "发票类型",
           key: "invoiceTypeName",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "开票公司",
           key: "invoiceUnitName",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "分店",
           key: "orgName",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "店号",
           key: "orgCode",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "收款方式",
           key: "collectionTypeName",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "发票号码",
           key: "invoiceNo",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "发票单位",
           key: "receiptUnitName",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "开票日期",
           key: "invoiceDate",
+          tooltip: true,
+          width: 130,
           className: "tc"
         },
         {
           title: "本次核销金额",
           key: "rpAmt",
           className: "tc",
+          tooltip: true,
           width: 180,
           render: (h, params) => {
             return h("el-input-number", {
@@ -277,21 +337,29 @@ export default {
         {
           title: "已核销金额",
           key: "writeOffAmount",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "剩余未核销金额",
           key: "paymentBalance",
+          tooltip: true,
+          width: 110,
           className: "tc"
         },
         {
           title: "价税合计",
           key: "priceTaxTotal",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "发票金额",
           key: "sendingWay",
+          tooltip: true,
+          width: 80,
           className: "tc"
           // render: (h,params) =>{
           //     return h('span',(params.row.orderAmt).toFixed(2))
@@ -300,11 +368,15 @@ export default {
         {
           title: "发票税额",
           key: "invoiceAmount",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "往来单位",
           key: "receiptUnitName",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         // {
@@ -315,26 +387,36 @@ export default {
         {
           title: "开票业务",
           key: "invoiceServiceName",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "税率",
           key: "tax",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "备注",
           key: "remark",
+          tooltip: true,
+          width: 120,
           className: "tc"
         },
         {
           title: "导入人",
           key: "createUname",
+          tooltip: true,
+          width: 80,
           className: "tc"
         },
         {
           title: "导入时间",
           key: "importTime",
+          tooltip: true,
+          width: 130,
           className: "tc"
         }
       ],
