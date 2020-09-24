@@ -630,7 +630,7 @@ export default {
         guestId:this.company?this.companyId:""
       }
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      getOnWay(params).then(res => {
+      getOnWay(data).then(res => {
         if(res.data.content.length !==0){
           res.data.content.map((item,index)=>{
             item.index = index +1

@@ -184,21 +184,21 @@
             border
           ></Table>
           <Row>
-                <Page
-                  id="page"
-                  style="flex:right"
-                  show-sizer
-                  size="small"
-                  show-total
-                  :page-size-opts="pageSizeOpts"
-                  :current="page"
-                  :total="total"
-                  placement="top"
-                  :page-size="pageSize"
-                  @on-change="pageChange"
-                  @on-page-size-change="pageSizeChange"
-                ></Page>
-            </Row>
+            <Page
+              id="page"
+              style="float: right; margin-top: 10px"
+              show-sizer
+              size="small"
+              show-total
+              :page-size-opts="pageSizeOpts"
+              :current="page"
+              :total="total"
+              placement="top"
+              :page-size="pageSize"
+              @on-change="pageChange"
+              @on-page-size-change="pageSizeChange"
+            ></Page>
+          </Row>
         </TabPane>
         <TabPane label="过期活动" name="name3">
           <Table
