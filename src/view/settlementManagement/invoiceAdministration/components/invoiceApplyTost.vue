@@ -143,8 +143,10 @@ export default {
         },
         {
           title: "对账单号",
+          tooltip: true,
           key: "accountNo",
           className: "tc",
+          width: '180px',
           render: (h, params) => {
             return h(
               "span",
@@ -163,7 +165,22 @@ export default {
               params.row.accountNo
             );
           },
-          tooltip: true
+          // render: (h, params) => {
+          //   return h('div', [
+          //     h('span', {
+          //       style: {
+          //         display: 'inline-block',
+          //         width: '100%',
+          //         overflow: 'hidden',
+          //         textOverflow: 'ellipsis',
+          //         whiteSpace: 'nowrap'
+          //       },
+          //       domProps: {
+          //         title: params.row.guestName
+          //       }
+          //     }, params.row.guestName)
+          //   ])
+          // }
         },
         {
           title: "往来单位",
