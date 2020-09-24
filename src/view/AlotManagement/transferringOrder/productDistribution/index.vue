@@ -213,6 +213,8 @@
           keep-source
           :edit-rules="validRules"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
+          show-footer
+          :footer-method="footerMethod"
         >
           <vxe-table-column type="seq" title="序号"></vxe-table-column>
 
@@ -353,6 +355,27 @@ export default {
     }, 1000);
   },
   methods: {
+    footerMethod({ columns, data }){
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '合计'
+          }
+          if (['applyQty','hasAcceptQty','hasCancelQty'].includes(column.property)) {
+            let totals = data.reduce((prev,cur) => {
+              if(!isNaN(Number(cur[column.property]))){
+                return prev+parseFloat(cur[column.property])
+              }else{
+                return prev+0
+              }
+            },0)
+            return totals
+          }
+          return null
+        })
+      ]
+    },
+
     //获取配件品牌
     searchPartBrand() {
       let data = { pageSize: 10000 };

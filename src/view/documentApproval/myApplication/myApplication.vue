@@ -526,13 +526,13 @@ export default {
       this.approve ? params.approveUname = this.$store.state.user.userData.staffName : params
       switch (this.searchType) {
         case "0":
-          params.applyNo = this.searchTypeValue;
+          params.applyNo = this.searchTypeValue!=""?this.searchTypeValue.trim():"";
           break;
         case "1":
-          params.applicant = this.searchTypeValue;
+          params.applicant = this.searchTypeValue!=""?this.searchTypeValue.trim():"";
           break;
         case "2":
-          params.approveUname = this.searchTypeValue;
+          params.approveUname = this.searchTypeValue!=""?this.searchTypeValue.trim():"";
           break;
       }
       //清空复选框选中数据

@@ -138,12 +138,15 @@ export default {
         {
           title: "公司名称",
           key: "orgName",
-          className: "tc"
+          className: "tc",
+          tooltip: true
         },
         {
           title: "对账单号",
+          tooltip: true,
           key: "accountNo",
           className: "tc",
+          width: '180px',
           render: (h, params) => {
             return h(
               "span",
@@ -161,12 +164,29 @@ export default {
               },
               params.row.accountNo
             );
-          }
+          },
+          // render: (h, params) => {
+          //   return h('div', [
+          //     h('span', {
+          //       style: {
+          //         display: 'inline-block',
+          //         width: '100%',
+          //         overflow: 'hidden',
+          //         textOverflow: 'ellipsis',
+          //         whiteSpace: 'nowrap'
+          //       },
+          //       domProps: {
+          //         title: params.row.guestName
+          //       }
+          //     }, params.row.guestName)
+          //   ])
+          // }
         },
         {
           title: "往来单位",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          tooltip: true
         },
         {
           title: "对账应付",
@@ -475,7 +495,7 @@ export default {
           title: "剩余未核销金额",
           key: "paymentBalance",
           className: "tc",
-          minWidth: 90
+          minWidth: 100
         },
         {
           title: "价税合计金额",

@@ -143,25 +143,25 @@
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="sellTaxPrice"
+          field="taxPrice"
           title="含税销价"
           width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="sellTaxAmt"
+          field="taxAmt"
           title="含税金额"
           width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="sellNoTaxPrice"
+          field="noTaxPrice"
           title="不含税销价"
           width="80"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="sellNoTaxAmt"
+          field="noTaxAmt"
           title="不含税金额"
           width="80"
         ></vxe-table-column>

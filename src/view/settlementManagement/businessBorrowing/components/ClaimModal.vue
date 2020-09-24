@@ -213,6 +213,7 @@ export default {
 
     },
 
+    // 删除表格数据
     deleteItem(row){
       this.tableData = this.tableData.filter(item => item.id !== row.id)
     },
@@ -221,6 +222,7 @@ export default {
       this.currentRow = row
     },
 
+    // 打开认领款弹窗
     openPClaimModal(){
       this.$refs.PClaimModal.open()
     },
@@ -230,6 +232,7 @@ export default {
       this.$refs.voucherInput.subjectModelShowassist = true
     },
 
+    // 选中的数据拼接去重
     setSelectData(list){
       let arr = this.tableData.concat(list)
       const result = new Map()
@@ -237,20 +240,26 @@ export default {
       this.tableData = arr1
     },
 
+    // 改变认领款值触发
     changeNum(newVal,oldVal){
-      // console.log(newVal)
-      // if(newVal === undefined || newVal === null){
-      //   this.$message.error('本次认领金额录入不可为空')
-      // }
-      // if(0 < newVal <= this.currentRow.incomeMoney || 0 < newVal <= this.currentRow.paidMoney) {
-      //   this.$message.error('本次认领金额录入错误，请重新输入')
-      // }
+      if(newVal === undefined || newVal === null){
+        this.$message.error('本次认领金额录入不可为空')
+      }
+      if(this.$parent.condition == 1){
+        if( newVal < 0 || newVal > this.currentRow.paidMoney) {
+          this.$message.error('本次认领金额录入错误，请重新输入')
+        }
+      }else{
+        if( newVal < 0 || newVal > this.currentRow.incomeMoney) {
+          this.$message.error('本次认领金额录入错误，请重新输入')
+        }
+      }
     },
-    validate(num){
-      let reg = /^\d+(?=\.{0,1}\d+$|$)/
-        if(reg.test(num)) return true
-        return false
-    }
+    // validate(num){
+    //   let reg = /^\d+(?=\.{0,1}\d+$|$)/
+    //     if(reg.test(num)) return true
+    //     return false
+    // }
   },
 }
 </script>
@@ -260,12 +269,5 @@ export default {
 .el-input-number{
   width: 100px;
 }
-// /deep/.vxe-table--header{
-//   width: 968px !important;
-// }
-
-// /deep/.vxe-table--body{
-//   width: 968px !important;
-// }
 
 </style>

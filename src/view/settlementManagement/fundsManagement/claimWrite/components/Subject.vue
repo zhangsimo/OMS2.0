@@ -42,7 +42,7 @@
       </div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="[oneSubject]" @callBackFun="getCallBack"></voucherInput>
   </div>
 
 </template>
@@ -125,6 +125,7 @@ export default {
     getRaido({ row }) {
       this.oneSubject = row;
       if(this.oneSubject.auxiliaryAccountingName) {
+        this.oneSubject.mateAccountCoding=this.oneSubject.titleCode;
         this.$refs.voucherInput.subjectModelShowassist = true;
       }
     },
@@ -142,7 +143,7 @@ export default {
       data.subjectCode = this.oneSubject.titleCode;
       data.subjectId = this.oneSubject.id;
       data.claimType=8;
-      data.claimMoney = Math.abs(this.clime[0].incomeMoney||this.clime[0].paidMoney);
+      data.claimMoney = this.clime[0].unClaimedAmt
       if(this.oneSubject.auxiliaryAccountingName){
         data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
