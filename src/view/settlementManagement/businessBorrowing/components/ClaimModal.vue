@@ -57,6 +57,7 @@
               @change="changeNum"
               v-model="row.thisClaimedAmt"
               :controls="false"
+              :precision="2"
               size="mini"
             />
           </template>
@@ -138,7 +139,7 @@ export default {
         }
         total += parseFloat(value)
       })
-      return total
+      return total.toFixed(2)
     },
 
     //弹框打开
