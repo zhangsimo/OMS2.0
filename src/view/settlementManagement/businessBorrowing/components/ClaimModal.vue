@@ -246,11 +246,11 @@ export default {
         this.$message.error('本次认领金额录入不可为空')
       }
       if(this.$parent.condition == 1){
-        if( newVal < 0 || newVal >= this.currentRow.paidMoney) {
+        if( newVal < 0 || newVal > this.currentRow.paidMoney) {
           this.$message.error('本次认领金额录入错误，请重新输入')
         }
       }else{
-        if( newVal < 0 || newVal >= this.currentRow.incomeMoney) {
+        if( newVal < 0 || newVal > this.currentRow.incomeMoney) {
           this.$message.error('本次认领金额录入错误，请重新输入')
         }
       }
