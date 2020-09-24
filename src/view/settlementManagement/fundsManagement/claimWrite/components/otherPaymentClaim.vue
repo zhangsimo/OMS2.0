@@ -168,7 +168,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
     <settlement2 ref="settlement2" @reloadParList="reloadParentList"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
