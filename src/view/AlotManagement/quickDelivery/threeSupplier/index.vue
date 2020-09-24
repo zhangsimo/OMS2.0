@@ -277,7 +277,7 @@
         </vxe-table>
       </div>
     </section>
-    <print-show ref="print" :order-id="this.currentrow.id"></print-show>
+    <print-z-f ref="print" :order-id="this.currentrow.id"></print-z-f>
   </div>
 </template>
 
@@ -297,12 +297,12 @@ import { checkStore } from "@/api/system/systemApi";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
 import {showLoading, hideLoading} from "@/utils/loading"
-import PrintShow from "./printZF";
+import PrintZF from "./printZF";
 
 export default {
   name: "threeSupplier",
   components: {
-    PrintShow,
+    PrintZF,
     QuickDate,
     GoodCus
   },
