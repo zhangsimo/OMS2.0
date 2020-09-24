@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" title="人工核销" width="1100px">
+  <Modal v-model="modals" title="人工核销" width="90%">
     <div>
       <div class="mb20 flex">
         <div class="mr10">
