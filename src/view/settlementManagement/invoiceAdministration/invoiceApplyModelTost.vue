@@ -2,7 +2,7 @@
   <Modal
     v-model="modals"
     title="人工核销"
-    width="1100"
+    width="90%"
     @on-visible-change="visChange"
   >
     <div>

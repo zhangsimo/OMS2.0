@@ -130,7 +130,7 @@ export default {
     return {
       value: [],
       Branchstore: [
-        {id:"0",name:'全部'}
+        {id:"0",shortName:'全部'}
       ], //分店名称
       page:{
         total:0,
@@ -825,7 +825,7 @@ export default {
     getGeneral() {
       this.data1 = [];
       let obj = {
-        orgid: this.model1,
+        orgid: this.model1=="0"?"":this.model1,
         guestId: this.company?this.companyId:"",
         enterTypeId: this.typeName
       };

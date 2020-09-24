@@ -8,14 +8,14 @@ import {showLoading, hideLoading} from "@/utils/loading"
 import {v4} from "uuid";
 import Api from "_conf/url";
 import Axios from 'axios'
-// //对账单 导出对账单
-// export  function accountStateExport(params){
-//   return `${api.omsSettle}/statement/master/export/page?${params}access_token=${Cookies.get(TOKEN_KEY)}`
-// }
-// //对账单 导出对账单
-// export  function accountStateDetailExport(params){
-//   return `${api.omsSettle}/receivable/payable/export/document/details?${params}access_token=${Cookies.get(TOKEN_KEY)}`
-// }
+//对账单 导出对账单
+export  function accountStateExport(params){
+  return `${api.omsSettle}/statement/master/export/page?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//对账单 导出对账单
+export  function accountStateDetailExport(params){
+  return `${api.omsSettle}/receivable/payable/export/document/details?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 //收付款单查询 导出收付款单记录
 export function colPayExportLogHis(params){
   return `${api.omsSettle}/payment/record/export/paymentDetail?${params}access_token=${Cookies.get(TOKEN_KEY)}`
@@ -43,6 +43,10 @@ export function allocationStockExport(params,data){
 export function allocationWareHouseingExport(params) {
   return `${api.omsOrder}/allotEnterMain/export/queryAllotEnterMains?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
+//调出在途 导出
+export function onWayExport(params) {
+  return `${api.omsOrder}/allotOutMain/export/queryOnOrderStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 //采购入库明细 导出 采购入库
 export function enteralExport(params){
   return `${api.omsOrder}/enterMain/export/findEnterMain?${params}access_token=${Cookies.get(TOKEN_KEY)}`
@@ -66,6 +70,10 @@ export function stockReturnExport(params){
 //应收应付 导出汇总
 export function payColExportAll(params){
   return `${api.omsSettle}/receivable/payable/export/getPage?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//应收应付 导出单据明细
+export function payColExportDetail(params){
+  return `${api.omsSettle}/receivable/payable/export/sales/purchase?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
 //应收应付 月结对账 导出对账清单
 export function payColMonthExportAcSta(params){

@@ -101,3 +101,7 @@ export function exportModifyData(params){
   }
   return `${api.omsSettle}/invoiceApply/export/findinvoiceApplyDetail?${str}access_token=${Cookies.get(TOKEN_KEY)}`
 }
+//开票申请查询与核销 导出汇总
+export function exportAll(params){
+  return `${api.omsSettle}/invoiceApply/export/queryPageByStatus?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
