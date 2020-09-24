@@ -276,7 +276,7 @@ import {
   getSalelist,
   getNumberList
 } from "@/api/bill/saleOrder";
-import {payColExportAll/**导出汇总*/} from "@/api/settlementManagement/Import/index.js"
+import {payColExportAll/**导出汇总*/,payColExportDetail/**导出明细*/} from "@/api/settlementManagement/Import/index.js"
 import { goshop } from '@/api/settlementManagement/shopList';
 import {getCustomerInformation} from "@/api/system/essentialData/clientManagement";
 import { creat } from "./../components";
@@ -1769,6 +1769,7 @@ export default {
       data: [],
       data1: [],
       data2: [],
+      selectTabJson:{},
       data3: [],
       data4: [],
       typelist: [
@@ -2171,7 +2172,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : ""
       };
-
+      this.selectTabJson=row;
       this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
       this.getDetailed(row, this.value);
     },
@@ -2224,39 +2225,58 @@ export default {
     },
     // 导出单据
     exportBill() {
-      if (this.detailedList === "key1") {
-        if (this.data1.length !== 0) {
-          let arrData = [...this.data1]
-          arrData.map((item,index) => {
-            item.orgId = "\t"+item.orgId
-            item.index = index+1
-          })
-          this.$refs.sale.exportCsv({
-            filename: "销售清单",
-            original:false,
-            columns:this.columns1,
-            data:arrData
-          });
-        } else {
-          this.$message.error("销售清单暂无数据");
-        }
-      } else if (this.detailedList === "key2") {
-        if (this.data2.length !== 0) {
-          let arrData = [...this.data2]
-          arrData.map((item,index) => {
-            item.orgId = "\t"+item.orgId
-            item.index = index+1
-          })
-          this.$refs.purchase.exportCsv({
-            filename: "采购清单",
-            original:false,
-            columns:this.columns2,
-            data:arrData
-          });
-        } else {
-          this.$message.error("销售清单暂无数据");
-        }
+      if(this.data1.length<1 && this.data2.length<1){
+        return this.$message.error("暂无单据明细!")
       }
+      let obj={
+        tenantId: this.selectTabJson.tenantId,
+        orgId: this.selectTabJson.orgId,
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD")+" 00:00:00"
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
+          : "",
+        guestId: this.selectTabJson.guestId
+      }
+      let params=""
+      for(var i in obj){
+        params+=`${i}=${obj[i]}&`
+      }
+      location.href=payColExportDetail(params)
+      // if (this.detailedList === "key1") {
+      //   if (this.data1.length !== 0) {
+      //     let arrData = [...this.data1]
+      //     arrData.map((item,index) => {
+      //       item.orgId = "\t"+item.orgId
+      //       item.index = index+1
+      //     })
+      //     this.$refs.sale.exportCsv({
+      //       filename: "销售清单",
+      //       original:false,
+      //       columns:this.columns1,
+      //       data:arrData
+      //     });
+      //   } else {
+      //     this.$message.error("销售清单暂无数据");
+      //   }
+      // } else if (this.detailedList === "key2") {
+      //   if (this.data2.length !== 0) {
+      //     let arrData = [...this.data2]
+      //     arrData.map((item,index) => {
+      //       item.orgId = "\t"+item.orgId
+      //       item.index = index+1
+      //     })
+      //     this.$refs.purchase.exportCsv({
+      //       filename: "采购清单",
+      //       original:false,
+      //       columns:this.columns2,
+      //       data:arrData
+      //     });
+      //   } else {
+      //     this.$message.error("销售清单暂无数据");
+      //   }
+      // }
     },
     // 出/入库明细导出
     exportDetail(type) {

@@ -147,6 +147,7 @@ import {
   updateNumber,
   writeData,
   exportModifyData/**导出配件明细*/,
+  exportAll/**导出汇总*/,
   getOptionFdList,
   getOptionGuesList
 } from "_api/salesManagment/invoiceApply";
@@ -974,7 +975,7 @@ export default {
         {
           title: "金额",
           minWidth: 100,
-          key: "taxAmt",
+          key: "applyAmtSell",
           className: "tc"
         },
         {
@@ -1347,11 +1348,25 @@ export default {
       this.getDataList();
     },
     exportSummary(){
-      this.$refs.summary.exportCsv({
-        filename:"开票申请查询与核销汇总表",
-        data:this.data,
-        columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
-      })
+      // this.$refs.summary.exportCsv({
+      //   filename:"开票申请查询与核销汇总表",
+      //   data:this.data,
+      //   columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
+      // })
+      let params="";
+      let obj={
+        orgId:this.form.orgId,
+        guestId:this.form.guestId,
+        page: 0,
+        size: this.pagetotal,
+        startDate: this.form.startDate,
+        endDate: this.form.endDate,
+        cancalStatus: this.form.cancalStatus,
+      };
+      for(var i in obj){
+        params+=`${i}=${obj[i]}&`
+      }
+      location.href=exportAll(params)
     },
     modifyData(){
       // this.$refs.parts.exportCsv({
@@ -1468,6 +1483,7 @@ export default {
         if (res.code === 0) {
           this.data1 = res.data.map((item,index)=>{
             item.isOilPart==0?item.isOilPartText="不含税":(item.isOilPart==1?item.isOilPartText="含税油品":item.isOilPartText="含税配件")
+            item.applyAmtSell=item.applyAmt
             item.applyAmt=this.details.applyAmt
             // item.
             item.seq=index+1
