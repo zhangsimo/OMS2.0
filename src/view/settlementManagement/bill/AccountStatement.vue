@@ -1592,6 +1592,9 @@
         this.statementStatusflag = false
         this.hedgingfalg = false
         this.receivefalg = false
+        if (row.statementStatus.value == 1) {
+          this.taxArrearsfalg = true
+        }
         if (row.statementStatus.value == 4) {
           this.statementStatusflag = true
         }
