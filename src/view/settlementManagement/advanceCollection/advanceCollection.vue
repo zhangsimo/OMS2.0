@@ -399,12 +399,12 @@ export default {
     // 快速查询
     async quickDate(data) {
       this.value = data;
-      if(this.selectShopList){
+      // if(this.selectShopList){
         let arr = await creat(this.$refs.quickDate.val, this.$store);
         this.value = arr[0];
         this.BranchstoreId = arr[1];
         this.getQuery();
-      }
+      // }
     },
     //查询
     query() {
