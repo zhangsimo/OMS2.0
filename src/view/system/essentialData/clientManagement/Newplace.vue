@@ -111,7 +111,7 @@
     computed: {
       address() {
         let one = "", two = "", three = ""
-        let four = this.data.streetAddress;
+        let four = this.data.streetAddress||"";
         this.place.map(item => {
           if (item.id === this.data.provinceId && item.id != undefined) {
             one = item.name;
