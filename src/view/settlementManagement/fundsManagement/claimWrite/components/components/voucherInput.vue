@@ -522,7 +522,7 @@ export default {
       params.searchType = 0;
       params.page = this.client.page.num - 1;
       params.size = this.client.page.size;
-      params.isInterior = this.dealings ? 1 : "";
+      params.isInterior = this.dealings ? 2 : "";
       queryCreditLike(params).then(res => {
           if (res.code === 0) {
           this.AssistTableDataKeHu = res.data.content;
@@ -557,7 +557,7 @@ export default {
       params.searchType = 1;
       params.page = this.supplier.page.num - 1;
       params.size = this.supplier.page.size;
-      params.isInterior = this.dealings ? 1 : "";
+      params.isInterior = this.dealings ? 2 : "";
       queryCreditLike(params).then(res => {
         if (res.code === 0) {
           this.AssistTableDataGongYingShang = res.data.content;
