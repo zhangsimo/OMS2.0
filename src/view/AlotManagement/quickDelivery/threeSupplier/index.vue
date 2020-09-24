@@ -103,7 +103,7 @@
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column  title="操作" width="140">
+          <vxe-table-column  title="操作" width="130">
             <template v-slot="{ row, rowIndex }">
               <span class="mr10" style="color: #40a6ff;cursor: pointer" @click="ruku">到货入库</span>
               <span style="color: #40a6ff;cursor: pointer" @click="print(row)">打印</span>
@@ -113,11 +113,11 @@
             show-overflow="tooltip"
             field="serviceId"
             title="业务单号"
-            width="200"
+            width="180"
           ></vxe-table-column>
           <vxe-table-column
             show-overflow="tooltip"
-            width="200"
+            width="180"
             field="guestName"
             title="供应商名称"
           ></vxe-table-column>
@@ -127,7 +127,7 @@
             field="billStatusName"
             title="状态"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="remark" width="160" title="备注"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="remark" width="180" title="备注"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
                              width="160"
                              field="enterStoreId"
@@ -152,7 +152,7 @@
           <vxe-table-column  show-overflow="tooltip"
                              field="auditDate"
                              title="提交日期"
-                             width="150"
+                             width="130"
           ></vxe-table-column>
           <!--<vxe-table-column  show-overflow="tooltip"-->
                              <!--field="printCount"-->
@@ -167,18 +167,18 @@
           <vxe-table-column  show-overflow="tooltip"
                              field="enterTime"
                              title="入库日期"
-                             width="150"
+                             width="130"
           ></vxe-table-column>
           <!--<vxe-table-column  show-overflow="tooltip" field="orderMan" title="采购员"></vxe-table-column>-->
           <vxe-table-column  show-overflow="tooltip"
             field="billTypeName"
             title="票据类型"
-                             width="100"
+                             width="80"
           ></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
             field="settleTypeName"
             title="结算方式"
-            width="100"
+            width="80"
           ></vxe-table-column>
         </vxe-table>
       </div>
