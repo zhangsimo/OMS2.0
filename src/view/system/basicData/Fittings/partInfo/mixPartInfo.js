@@ -481,15 +481,20 @@ export const mixPartInfo = {
     //获取品牌品质
     getQuiltyAndBrand() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
+        console.log(res)
         if (res.code == 0) {
           this.qualityArr = res.data.content
-          .filter( el => (el.qualityCode === "000070" || el.qualityCode === "000071"))
+          // .filter( el => (el.qualityCode === "000070" || el.qualityCode === "000071" || el.qualityCode === "000072"))
           .map(el => {
             if(el.qualityCode === "000070") {
               el.name = "原厂件"
             }
             if(el.qualityCode === "000071") {
               el.name = "品牌件"
+            }
+            if(el.qualityCode === "000072"){
+              el.name = "再制造件"
+              el.children[0].name = "拆车件"
             }
             return el;
           })

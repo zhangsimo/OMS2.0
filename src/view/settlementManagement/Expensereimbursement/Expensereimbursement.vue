@@ -360,10 +360,13 @@
     <!--因公借支核销-->
     <write-off ref="writeOff" :table="currRow"></write-off>
     <registration-entry ref="registrationEntry" @upData="query"></registration-entry>
+    <!-- 报销认领新弹框 -->
+    <ClaimModal ref="claimModal" titleName="报销认领"></ClaimModal>
   </div>
 </template>
 
 <script>
+  import ClaimModal from "../components/ClaimModal"
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import claim from "./components/claimed";
   // import settlement from "./components/settlement";
@@ -401,7 +404,8 @@
       Record,
       verification,
       writeOff,
-      claimGuest
+      claimGuest,
+      ClaimModal
     },
     data() {
       return {
@@ -435,6 +439,10 @@
         }, //分页
         serviceId: "", //给子组件传的值
         remoteloading: false,
+        claimType: 4,
+        amountType: 2,
+        loanId: '',
+        condition: 1
       };
     },
     computed: {
@@ -471,16 +479,19 @@
         if (!this.currRow || !this.currRow.id) {
           return this.$message.error("请选择数据");
         }
-        this.$refs.claim.claimedPage = {
-          page: 1,
-          total: 0,
-          size: 10
-        }
-        this.claimModal = true;
-        this.claimTit = "预付款认领";
-        this.claimCollectType = 1;
-        this.$store.commit("setClaimType", 2)
-        this.claimedList();
+        // this.$refs.claim.claimedPage = {
+        //   page: 1,
+        //   total: 0,
+        //   size: 10
+        // }
+        // this.claimModal = true;
+        // this.claimTit = "预付款认领";
+        // this.claimCollectType = 1;
+        // this.$store.commit("setClaimType", 2)
+        // this.claimedList();
+
+        this.$refs.claimModal.open()
+
       },
       //其他收款认领弹窗查询
       claimedList() {
@@ -627,7 +638,7 @@
         this.currRow = null;
         this.$refs.xTable.clearCurrentRow();
       },
-      //认领弹框认领
+      // 认领弹框认领
       claimPay() {
         if (this.claimSelection.length !== 0) {
           // currRow
@@ -714,8 +725,9 @@
       },
       // 选中行
       currentChangeEvent({row}) {
-        // console.log(row , 777888)
+        console.log(row.id)
         this.currRow = row;
+        this.loanId = row.id
         this.$store.commit("setLoanId", row.id)
         // this.reconciliationStatement.accountNo = row.serviceId;
         this.serviceId = row.serviceId;

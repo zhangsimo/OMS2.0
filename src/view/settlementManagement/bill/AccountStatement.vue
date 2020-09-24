@@ -408,6 +408,7 @@
   import {getGuestShortName} from "@/api/documentApproval/documentApproval/documentApproval";
   import invoiceApplyTost from "@/view/settlementManagement/invoiceAdministration/components/invoiceApplyTost"
   import {showLoading, hideLoading} from "@/utils/loading"
+  import {accountStateExport/**导出对账单*/,accountStateDetailExport/**导出单据明细*/} from "@/api/settlementManagement/Import/index.js"
 
   export default {
     name: 'accountStatement',
@@ -1188,16 +1189,16 @@
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      this.$nextTick( () => {
+      this.$nextTick(() => {
         this.value = arr[0];
       })
       this.getShop()
     },
     computed: {
       selectShopList() {
-        if(this.$store.state.user.userData.currentCompany!=null){
+        if (this.$store.state.user.userData.currentCompany != null) {
           return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-        }else{
+        } else {
           return true
         }
       }
@@ -1591,6 +1592,9 @@
         this.statementStatusflag = false
         this.hedgingfalg = false
         this.receivefalg = false
+        if (row.statementStatus.value == 1) {
+          this.taxArrearsfalg = true
+        }
         if (row.statementStatus.value == 4) {
           this.statementStatusflag = true
         }
@@ -1740,36 +1744,46 @@
       // 导出对账单/单据明细
       report(type) {
         if (type) {
-          if (this.tab === "name1") {
-            if (this.data3.length !== 0) {
-              this.$refs.collectBill.exportCsv({
-                filename: "应收单据明细"
-              });
-            } else {
-              this.$message({
-                message: "应收单据明细暂无数据",
-                customClass: "zZindex",
-                type: "error"
-              });
-            }
-          } else if (this.tab === "name2") {
-            if (this.data4.length !== 0) {
-              this.$refs.payBill.exportCsv({
-                filename: "应付单据明细"
-              });
-            } else {
-              this.$message({
-                message: "应付单据明细暂无数据",
-                customClass: "zZindex",
-                type: "error"
-              });
-            }
+          if(this.data3.length<1 && this.data4.length<1){
+            return this.$message({message:"暂无单据明细",customClass: "zZindex",type: "error"})
           }
+          let obj = {
+            orgId: this.reconciliationStatement.orgId,
+            startDate: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            endDate: this.value[1]
+              ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            guestId: this.reconciliationStatement.guestId,
+            accountNo: this.reconciliationStatement.accountNo,
+            serviceId: this.reconciliationStatement.serviceId
+          };
+          let params=""
+          for(var i in obj){
+            params+=`${i}=${obj[i]}&`
+          }
+          location.href=accountStateDetailExport(params)
         } else {
           if (this.data1.length !== 0) {
-            this.$refs.accountStatement.exportCsv({
-              filename: "对账单"
-            });
+            let obj = {
+              startDate: this.value[0]
+                ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
+                : "",
+              endDate: this.value[1]
+                ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+                : "",
+              orgId: this.model1,
+              statementStatus: this.Reconciliationtype,
+              guestId: this.receiveGuestId,
+              page:0,
+              size:this.pagetotal
+            };
+            let params=""
+            for(var i in obj){
+              params+=`${i}=${obj[i]}&`
+            }
+            location.href = accountStateExport(params)
           } else {
             this.$message({
               message: "对账单暂无数据",
@@ -2196,7 +2210,8 @@
     width: 1500px !important;
     color: #adc6ff !important;
   }
-  ::-webkit-scrollbar :hover{
+
+  ::-webkit-scrollbar :hover {
     width: 1500px !important;
     color: #adc6ff !important;
   }

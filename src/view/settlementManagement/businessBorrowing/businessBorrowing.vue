@@ -375,6 +375,9 @@
     <!--<settlement ref="settlement"></settlement>-->
     <!--因公借支核销-->
     <write-off ref="writeOff" :table="currRow"></write-off>
+
+    <!-- 因公借支认领 -->
+    <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal>
   </div>
 </template>
 
@@ -402,6 +405,7 @@ import writeOff from "./components/writeOff";
 import {showLoading, hideLoading} from "@/utils/loading"
 // otherReceivables
 import moment from "moment";
+import ClaimModal from "./components/ClaimModal"
 
 export default {
   inject: ["reload"],
@@ -413,10 +417,15 @@ export default {
     Record,
     verification,
     writeOff,
-    claimGuest
+    claimGuest,
+    ClaimModal
   },
   data() {
     return {
+      amountType: null,
+      claimType: null,
+      claimTitle: "",
+      condition: undefined,
       remoteloading: false,
       loanId: "",
       value: [], //查询日期数组
@@ -478,23 +487,37 @@ export default {
       if (!this.currRow || !this.currRow.id) {
         return this.$message.error("请选择数据");
       }
-      this.$refs.claim.claimedPage = {
-        page: 1,
-        total: 0,
-        size: 10
-      };
+      // this.$refs.claim.claimedPage = {
+      //   page: 1,
+      //   total: 0,
+      //   size: 10
+      // };
+      // if (type == 1) {
+      //   this.claimModal = true;
+      //   this.claimTit = "因公借支认领";
+      //   this.claimCollectType = 1;
+      //   this.$store.commit("setClaimType", 2);
+      //   this.claimedList(2);
+      // } else {
+      //   this.claimModal = true;
+      //   this.claimTit = "因公借支收回";
+      //   this.claimCollectType = 2;
+      //   this.$store.commit("setClaimType", 3);
+      //   this.claimedList(1);
+      // }
+
       if (type == 1) {
-        this.claimModal = true;
-        this.claimTit = "因公借支认领";
-        this.claimCollectType = 1;
-        this.$store.commit("setClaimType", 2);
-        this.claimedList(2);
+        this.$refs.claimModal.open()
+        this.claimTitle = "因公借支认领"
+        this.condition = 1
+        this.claimType = 2
+        this.amountType = 2
       } else {
-        this.claimModal = true;
-        this.claimTit = "因公借支收回";
-        this.claimCollectType = 2;
-        this.$store.commit("setClaimType", 3);
-        this.claimedList(1);
+        this.$refs.claimModal.open()
+        this.claimTitle = "因公借支收回"
+        this.condition = 2
+        this.claimType = 3
+        this.amountType = 1
       }
     },
     //其他收款认领弹窗查询

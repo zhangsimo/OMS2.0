@@ -253,6 +253,7 @@
               size="small"
               highlight-row
               :stripe="true"
+              ref="addressTable"
               :columns="columns"
               :edit-rules="validRulesAddress"
               :data="placeList"
@@ -1152,6 +1153,7 @@ export default {
     addPlace() {
       this.oneNew = {};
       this.newplace = true;
+      this.$refs.addressTable.clearCurrentRow();
       this.$refs.child.resetFields();
     },
     //删除地址

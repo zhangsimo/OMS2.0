@@ -1273,7 +1273,8 @@
         // 导入 编码品牌导入配件
         handleBeforeUpload() {
           if (this.datadata.new) {
-            return this.$Message.error("请先保存数据!");
+            this.$Message.error("请先保存数据!");
+            return false;
           }
           let refs = this.$refs;
           refs.upload.clearFiles();
@@ -1281,7 +1282,8 @@
         // 导入 内码导入配件
         handleBeforeUploadInnerId(){
           if (this.datadata.new) {
-            return this.$Message.error("请先保存数据!");
+             this.$Message.error("请先保存数据!");
+            return false;
           }
           let refs = this.$refs;
           refs.upload1.clearFiles();

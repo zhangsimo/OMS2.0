@@ -73,6 +73,7 @@ import {getOnWay} from "@/api/bill/saleOrder";
 import { goshop } from '@/api/settlementManagement/shopList';
 import moment from 'moment'
 import {showLoading, hideLoading} from "@/utils/loading"
+import {onWayExport/**导出*/} from "@/api/settlementManagement/Import/index.js"
 export default {
   name: "billOnway",
   components: {
@@ -611,16 +612,27 @@ export default {
     // 导出
     report(){
       if(this.data.length !==0){
-        this.$refs.summary.exportCsv({
-          filename: '在途库存'
-        })
+        let params=""
+        let obj={
+          size: this.page.total,
+          page: 0,
+          startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+          endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59" : '',
+          orgid:this.model1,
+          code:this.fno,
+          guestId:this.company?this.companyId:""
+        }
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        location.href=onWayExport(params)
       } else {
         this.$message.error('在途库存暂无数据')
       }
     },
     // 总表查询
     getGeneral() {
-      let params = {
+      let data = {
         size: this.page.size,
         page: this.page.num - 1,
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
@@ -630,11 +642,16 @@ export default {
         guestId:this.company?this.companyId:""
       }
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      getOnWay(params).then(res => {
+      getOnWay(data).then(res => {
         if(res.data.content.length !==0){
           res.data.content.map((item,index)=>{
             item.index = index +1
-            item.taxSign = item.taxSign ? '是' : '否'
+            if ([1, "1", "是"].includes(item.taxSign)) {
+              item.taxSign = true;
+            }
+            if ([0, "0", "否"].includes(item.taxSign)) {
+              item.taxSign = false;
+            }
           })
           this.data = res.data.content
           this.page.total=res.data.totalElements

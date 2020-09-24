@@ -184,28 +184,21 @@
             border
           ></Table>
           <Row>
-              <Col id="row">
-                <Page
-                  id="page"
-                  style="flex:right"
-                  show-sizer
-                  size="small"
-                  show-total
-                  :page-size-opts="pageSizeOpts"
-                  :current="page"
-                  :total="total"
-                  placement="top"
-                  :page-size="pageSize"
-                  @on-change="pageChange"
-                  @on-page-size-change="pageSizeChange"
-                ></Page>
-                  <!-- :current="List.page"
-                  :total="List.total"
-                  :page-size="List.pageSize"
-                  @on-page-size-change="onPurchasePageSizeChange1"
-                  @on-change="onPurchaseChange1" -->
-              </Col>
-            </Row>
+            <Page
+              id="page"
+              style="float: right; margin-top: 10px"
+              show-sizer
+              size="small"
+              show-total
+              :page-size-opts="pageSizeOpts"
+              :current="page"
+              :total="total"
+              placement="top"
+              :page-size="pageSize"
+              @on-change="pageChange"
+              @on-page-size-change="pageSizeChange"
+            ></Page>
+          </Row>
         </TabPane>
         <TabPane label="过期活动" name="name3">
           <Table

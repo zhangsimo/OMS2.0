@@ -65,16 +65,16 @@
       <div class="inner-box">
         <Tabs v-model="tabsName" :animated="false" @on-click="changeTab">
           <TabPane label="可处理信息" name="name1">
-            <Table size="small" height="389" ref="hsOrder" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
+            <Table size="small" height="389" ref="hsOrder" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="待处理" name="name2">
-            <Table size="small" ref="hsOrder" height="389" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
+            <Table size="small" ref="hsOrder" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="已处理配件查询" name="name3">
-            <Table size="small" height="389" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
+            <Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
           </TabPane>
           <TabPane label="历史订单" name="name4">
-            <Table size="small" height="389" @on-selection-change="selectTabelData" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
+            <Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
           </TabPane>
         </Tabs>
         <div ref="planPage">
@@ -225,7 +225,7 @@
 </template>
 
 <script>
-  import {getTopList, getClient, selectCompany} from "_api/salesManagment/acceptance.js";
+  import {getTopList, getClient, selectCompany,hsIndexImport/**华胜订单处理导出*/,hsIndexImportPost} from "_api/salesManagment/acceptance.js";
   import {getHuaShengOrders,setHuaShengOrder,getClientInfo,getHsStore,findInfoById} from "../../../api/salesManagment/sellReturn";
   import getDate from '@/components/getDate/dateget'
   import {getDigitalDictionary} from "../../../api/system/essentialData/clientManagement";
@@ -242,8 +242,6 @@
   import SelectSupplier from "@/view/AlotManagement/transferringOrder/applyFor/compontents/supplier/selectSupplier2";
   import SalesCus from "../../../components/allocation/salesCus";
   import AllocationCus from "../../../components/allocation/allocationCus";
-
-  import {showLoading, hideLoading} from "@/utils/loading"
 
 
   export default {
@@ -340,7 +338,7 @@
           },
           {
             title: "规格",
-            key: "unit",
+            key: "spec",
             minWidth: 60,
             tooltip: true,
           },
@@ -412,7 +410,7 @@
           },
           {
             title: "单位",
-            key: "spec",
+            key: "unit",
             minWidth: 60,
             tooltip: true,
           },
@@ -492,7 +490,7 @@
           },
           {
             title: "规格",
-            key: "unit",
+            key: "spec",
             minWidth: 60,
             tooltip: true,
           },
@@ -600,7 +598,7 @@
           },
           {
             title: "单位",
-            key: "spec",
+            key: "unit",
             minWidth: 60,
             tooltip: true,
           },
@@ -739,17 +737,11 @@
         params.page = this.page.num - 1;
         params.size = this.page.size;
         this.loading = true;
-        try {
-          showLoading(".loadingClass")
-          let repData = await getHuaShengOrders(params,data);
-          this.loading = false;
-          if(repData.code===0){
-            this.hsOrderList1 = repData.data.content||[];
-            this.page.total = repData.data.totalElements
-          }
-          hideLoading()
-        } catch (error) {
-          hideLoading()          
+        let repData = await getHuaShengOrders(params,data);
+        this.loading = false;
+        if(repData.code===0){
+          this.hsOrderList1 = repData.data.content||[];
+          this.page.total = repData.data.totalElements
         }
       },
 
@@ -1001,7 +993,7 @@
 
       // 供应商子组件内容
       getSupplierName(a){
-        console.log(a)
+        // console.log(a)
         // this.isInternalId = a.isInternalId
         // this.formPlan.guestName = a.id
         this.formPlan2.guestName = a.shortName
@@ -1076,15 +1068,25 @@
       },
       //导出
       exportHandle(){
-        if(this.selectTableDataArr.length==0){
-          this.$Message.error("请选择要导出的数据");
+        if(this.hsOrderList1.length==0){
+          this.$Message.error("没有可导出的数据!");
           return
         }
-        this.$refs.hsOrder.exportCsv({
-          filename: '华胜订单数据',
-          columns: this.columnsPart,
-          data:this.selectTableDataArr
-        });
+        let params={}
+        params.status = this.searchData.status==undefined?"":this.searchData.status;
+        if(this.searchData.partName.trim()){
+          params.partName = this.searchData.partName.trim();
+        }
+        if(this.queryTime[0]){
+          params.startDate = this.queryTime[0] || ''
+          params.endDate = this.queryTime[1] || ''
+        }
+        if(this.company){
+          params.companyId = this.company
+        }
+        params.page = 0;
+        params.size = this.page.total;
+        location.href=hsIndexImport(params)
       },
 
       getArrayParams() {
@@ -1112,7 +1114,7 @@
       },
       //获取选择公司
       getCompany(v) {
-        console.log('vvv',v)
+        // console.log('vvv',v)
         this.company = v
       },
       //获取时间
@@ -1203,7 +1205,7 @@
       },
       showNewOrder(row) { //弹出生成采购订单模态框
         this.clickRow = JSON.parse(JSON.stringify(row));
-        console.log(this.clickRow)
+        // console.log(this.clickRow)
         this.$refs.newOrder.openModal()
       },
       //分页查询预售单受理信息上
@@ -1290,10 +1292,14 @@
         this.getTopList()
       },
       //监听状态
-      orderType: function (val, old) {
-        this.page.num = 1
-        this.page.size = 10
-        this.getTopList()
+      orderType: {
+        handler:function (val, old) {
+          this.page.num = 1
+          this.page.size = 10
+          this.getTopList()
+        },
+        immediate:true,
+        deep:true
       },
       //监听公司
       company: function (val, old) {

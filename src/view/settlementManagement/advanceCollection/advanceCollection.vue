@@ -228,6 +228,8 @@
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
+    <!-- 认领支付弹框11 -->
+    <!-- <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal> -->
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -243,6 +245,7 @@
   </div>
 </template>
 <script>
+// import ClaimModal from "./components/ClaimModal"
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -270,6 +273,7 @@ import _ from "lodash";
 
 import moment from "moment";
 import {showLoading, hideLoading} from "@/utils/loading"
+
 export default {
   name: "settlementManagementAdvanceCollection",
   components: {
@@ -279,10 +283,16 @@ export default {
     claimGuest,
     settlement,
     payApply,
-    CreditSpending
+    CreditSpending,
+    // ClaimModal
   },
   data() {
     return {
+      // amountType: null,
+      // claimType: null,
+      // claimTitle: "",
+      // condition: undefined,
+      // loanId: "",
       remoteloading: false,
       amt: null, //金额
       bankNameO: "", //对方户名
@@ -387,9 +397,14 @@ export default {
       this.query();
     },
     // 快速查询
-    quickDate(data) {
+    async quickDate(data) {
       this.value = data;
-      this.getQuery();
+      // if(this.selectShopList){
+        let arr = await creat(this.$refs.quickDate.val, this.$store);
+        this.value = arr[0];
+        this.BranchstoreId = arr[1];
+        this.getQuery();
+      // }
     },
     //查询
     query() {
@@ -473,6 +488,27 @@ export default {
           this.$message.error("请选择有预收款支出单号且未支出认领的数据");
         }
       }
+
+      // if (type === 1) {
+      //   this.claimModal = true;
+      //   this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
+      //
+      //   this.claimedList(1);
+      // } else {
+      //   this.claimTit = "预收款支出认领";
+      //   if (
+      //     Object.keys(this.currRow).length !== 0 &&
+      //     this.currRow.expenditureNo &&
+      //     !this.currRow.expenditureClaimAmt
+      //   ) {
+      //     this.claimModal = true;
+      //     this.claimedList(2);
+      //   } else {
+      //     this.$message.error("请选择有预收款支出单号且未支出认领的数据");
+      //   }
+      // }
+
+
     },
     //预收款支出认领
     claimPay() {
@@ -602,5 +638,8 @@ export default {
 }
 .vxe-table .vxe-body--column:not(.col--ellipsis) {
   padding: 0px 10px !important;
+}
+.el-input-number{
+  width: 100px;
 }
 </style>
