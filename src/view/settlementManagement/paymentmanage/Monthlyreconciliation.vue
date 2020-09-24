@@ -1150,6 +1150,16 @@
           this.paymentlist = [];
           // this.storeAccount(this.parameter.orgId);
           // this.Initialization();
+
+          this.pageObj.size = 10;
+          this.pageObj.total = 0;
+          this.pageObj.num = 1;
+          this.pageObj1.size = 10;
+          this.pageObj1.total = 0;
+          this.pageObj1.num = 1;
+          this.copyData = [];
+          this.copyData1 = [];
+
           this.$refs.quickDate.resetFun();
         }
       },
