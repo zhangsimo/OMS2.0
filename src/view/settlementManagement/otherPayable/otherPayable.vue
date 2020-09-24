@@ -321,7 +321,7 @@
     <settlement ref="settlement"></settlement>
     <!--其他付款申请-->
     <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
-    <voucher-input ref="voucherInput" @callBackFun="getCallBack"></voucher-input>
+    <voucher-input ref="voucherInput" :oneAccountent="claimSelection"  @callBackFun="getCallBack"></voucher-input>
   </div>
 </template>
 
@@ -699,7 +699,7 @@ export default {
     selection(arr) {
       // console.log(arr);
       this.claimSelection = [];
-      this.claimSelection.push({ id: arr.id });
+      this.claimSelection.push({ id: arr.id ,mateAccountCoding:arr.mateAccountCoding});
     },
     //撤回弹框是否打开
     visChange(type) {

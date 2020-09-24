@@ -46,8 +46,8 @@
             <Poptip placement="bottom">
               <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
               <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出汇总</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出配件明细</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
               </div>
             </Poptip>
           </div>
@@ -56,7 +56,8 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row @on-row-click="election" :summary-method="handleSummary"></Table>
+        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row @on-row-click="election" :summary-method="handleSummary" @on-select="selectTab"
+               @on-select-all="selectTab"></Table>
         <div class="clearfix">
           <Page
             class-name="fr mb10 mt10"
@@ -87,6 +88,8 @@ import { goshop } from '@/api/settlementManagement/shopList'
 import { transferWarehousing, wouseParts } from "@/api/bill/saleOrder";
 import moment from 'moment'
 import {showLoading, hideLoading} from "@/utils/loading"
+import {allocationWareHouseingExport/**导出全部及导出明细*/} from "@/api/settlementManagement/Import/index.js"
+
 export default {
   name: "billAllocationwarehousing",
   components: {
@@ -110,6 +113,11 @@ export default {
       total: {},//总合计对象
       value: [],
       columns: [
+        {
+          type:'selection',
+          minWidth: 40,
+          className: "tc"
+        },
         {
           key:'index',
           title: "序号",
@@ -355,6 +363,7 @@ export default {
           }
         }
       ],
+      selectTabArr:[],//选中数组
       columns1: [
         {
           key:'index',
@@ -617,8 +626,8 @@ export default {
     getTransferWarehousing() {
       let obj = {
         createTimeStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
-        orgid: this.model1,
+        createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59" : '',
+        orgid: this.model1=="0"?"":this.model1,
         guestId: this.company?this.companyId:"",
         orderTypeId:this.type
       };
@@ -638,10 +647,12 @@ export default {
           this.data = res.data.vos;
           this.page.total = res.data.TotalElements;
           this.total = res.data.AllotOutMainVO
+          this.selectTabArr=[]
           hideLoading()
         } else {
           hideLoading()
           this.data = []
+          this.selectTabArr=[]
         }
       }).catch(e => {
         hideLoading()
@@ -651,7 +662,7 @@ export default {
       let obj = {
         createTimeStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
         createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
-        orgid: this.model1,
+        orgid: this.model1=="0"?"":this.model1,
         guestId: this.company?this.companyId:"",
         orderTypeId:this.type
       };
@@ -682,26 +693,41 @@ export default {
         }
       });
     },
-    // 导出汇总/配件明细
+    // 导出全部/勾选
     report(type) {
-      if (type) {
-        if (this.data1.length !== 0) {
-          this.$refs.parts.exportCsv({
-            filename: "调拨入库单汇总-配件信息"
-          });
-        } else {
-          this.$message.error("调拨入库单汇总-配件信息暂无数据");
+      if(this.data.length<1){
+        return this.$Message.error("没有数据可导出")
+      }
+      if (type==0) {
+        let obj = {
+          createTimeStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+          createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59" : '',
+          orgid: this.model1=="0"?"":this.model1,
+          guestId: this.company?this.companyId:"",
+          orderTypeIdInt:this.type,
+          size:this.page.total,
+          page:0
+        };
+        let params=""
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
         }
+        location.href=allocationWareHouseingExport(params)
       } else {
-        let page={}
-        page.size=this.page.total;
-        page.num=1
-        if (this.data.length !== 0) {
-          this.getTransferWarehousingAll(page)
-        } else {
-          this.$message.error("调拨入库单汇总暂无数据");
+        if(this.selectTabArr.length>0){
+          let str=""
+          this.selectTabArr.map(vb=>{
+            str+=`ids=${vb.id}&`
+          })
+          let params=`${str}size=${this.selectTabArr.length}&page=0&orderTypeIdInt=${this.type}&`
+          location.href=allocationWareHouseingExport(params)
+        }else{
+          return this.$Message.error("请勾选需要导出的数据!")
         }
       }
+    },
+    selectTab(selection) {
+      this.selectTabArr = selection
     },
     // 选中数据
     election(row) {

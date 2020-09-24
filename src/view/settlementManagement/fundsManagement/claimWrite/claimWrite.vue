@@ -159,7 +159,7 @@
                   <span>查询</span>
                 </button>
                 <br/>
-                <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete">撤销分配</Button>
+                <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete" :disabled="cancelDis">撤销分配</Button>
                 <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
                 <Button class="mt10 ml10" @click="openOtherCollectionClaims('预收款认领')">预收款认领</Button>
                 <Button class="mt10 ml10" @click="openOtherPaymentClaims('预付款认领')">预付款认领</Button>
@@ -212,6 +212,7 @@
                 <button
                   class="ivu-btn ivu-btn-default ml10 mt10"
                   type="button"
+                  :disabled="distributionLoading"
                   @click="distributionShop"
                 >分配至本店
                 </button>
@@ -301,6 +302,8 @@
     },
     data() {
       return {
+        cancelDis: false,//控制撤销分配按钮禁用
+        distributionLoading: false,//控制分配至本店按钮禁用
         model1: "",//未核销对账单 查询分店绑定model
         value: [],//未核销对账单 查询快速
         // applyDate:"",//未核销对账单 查询申请日期value
@@ -1061,12 +1064,17 @@
               this.$refs.claim.currentClaimed.map(item => {
                 arr.push(item.id);
               });
+              this.cancelDis = true
               distributionRevoke(arr).then(res => {
                 if (res.code === 0) {
                   this.$message.success("撤销成功");
+                  this.$refs.claim.currentClaimed = []
                   this.claimedList();
                   this.distributionList();
                 }
+                this.cancelDis = false
+              }).catch(e => {
+                this.cancelDis = false
               });
             },
             onCancel: () => {
@@ -1114,12 +1122,17 @@
           this.currentDistribution.map(item => {
             obj.push({id: item.id});
           });
+          this.distributionLoading = true
           distributionShop(obj).then(res => {
             if (res.code === 0) {
               this.$message.success("分配成功");
+              this.currentDistribution = []
               this.distributionList();
               this.claimedList();
             }
+            this.distributionLoading = false
+          }).catch(e => {
+            this.distributionLoading = false
           });
         } else {
           this.$message.error("请先选择数据");

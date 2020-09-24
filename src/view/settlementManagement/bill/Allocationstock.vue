@@ -30,7 +30,7 @@
           </div>
           <div class="db">
             <span>类型：</span>
-            <Select v-model="type" style="width:200px" @on-change="getTransferStock">
+            <Select v-model="type" style="width:200px" @on-change="getTransferStock(page)">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -49,8 +49,8 @@
             <Poptip placement="bottom">
               <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
               <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出汇总</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出配件明细</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
               </div>
             </Poptip>
           </div>
@@ -69,6 +69,8 @@
           highlight-row
           max-height=500
           @on-row-click="election"
+          @on-select="selectTab"
+          @on-select-all="selectTab"
         ></Table>
         <div class="clearfix">
           <Page
@@ -106,6 +108,7 @@
   import selectDealings from "./components/SelectTheCustomer";
   import {creat} from "./../components";
   import {transferStock, stockParts} from "@/api/bill/saleOrder";
+  import {allocationStockExport/**导出全部及导出明细*/} from "@/api/settlementManagement/Import/index.js"
   import {goshop} from '@/api/settlementManagement/shopList'
   import moment from 'moment';
   import {showLoading, hideLoading} from "@/utils/loading"
@@ -132,6 +135,13 @@
         model1: "",
         modal1: false,
         columns: [
+          {
+            key: 'id',
+            type: 'selection',
+            width: 60,
+            align: 'center',
+            className: "tc"
+          },
           {
             key: 'index',
             title: "序号",
@@ -345,6 +355,7 @@
             }
           }
         ],
+        selectTabArr: [],//选中数组
         columns1: [
           {
             key: 'index',
@@ -611,8 +622,8 @@
         let obj = {
           startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
           endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
-          orgid: this.model1==0?"":this.model1,
-          guestId: this.company?this.companyId:"",
+          orgid: this.model1 == 0 ? "" : this.model1,
+          guestId: this.company ? this.companyId : "",
           orderTypeId: this.type
         };
         let param = {
@@ -633,51 +644,15 @@
             this.data = res.data.vos;
             this.page.total = res.data.TotalElements;
             this.total = res.data.AllotOutMainVO
+            this.selectTabArr=[]
             hideLoading()
           } else {
             hideLoading()
             this.data = [];
+            this.selectTabArr=[]
           }
         }).catch(e => {
           hideLoading()
-        });
-      },
-      // 主表查询
-      getTransferStockAll(params) {
-        let obj = {
-          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
-          orgid: this.model1==0?"":this.model1,
-          guestId: this.company?this.companyId:"",
-          orderTypeId: this.type
-        };
-        let param = {
-          size: params.size,
-          page: params.num - 1
-        }
-        if (obj.endTime) {
-          obj.endTime = obj.endTime.split(' ')[0] + " 23:59:59"
-        }
-        transferStock(param, obj).then(res => {
-          if (res.data.vos.length !== 0) {
-            res.data.vos.map((item, index) => {
-              item.index = index + 1;
-              item.billstate = item.settleStatus ? item.settleStatus.value ? '已出库' : '未出库' : ''
-              item.orderTypeId = item.orderTypeId === 1 ? "调拨出库" : "调出退货";
-            });
-            this.data = res.data.vos;
-            if(this.data.length==params.size){
-              this.data = res.data.vos;
-              this.$refs.summary.exportCsv({
-                types: ["csv"],
-                filename: "调拨出库单汇总",
-                columns:this.columns,
-                data: res.data.vos,
-              });
-            }
-          } else {
-            this.$Message.error("暂无数据")
-          }
         });
       },
       // 往来单位
@@ -687,26 +662,41 @@
       // 高级查询
       ok() {
       },
+      selectTab(selection) {
+        this.selectTabArr = selection
+      },
       // 导出汇总/配件明细
       report(type) {
-        if (type) {
-          if (this.data1.length !== 0) {
-            this.$refs.parts.exportCsv({
-              filename: "调拨出库单汇总-配件信息"
-            });
-          } else {
-            this.$message.error("调拨出库单汇总-配件信息暂无数据");
-          }
+        if(this.data.length<1){
+          return this.$Message.error("没有数据可导出")
+        }
+        let params;
+        let data = {
+          num: 0,
+          size: this.page.total
+        };
+        //导出全部参数同查询接口
+        //导出勾选参数为ids=选中id以及分页参数
+        if (type == 0) {
+          data.type = "all";
+          data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '';
+          data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : '';
+          data.orgid = this.model1 == 0 ? "" : this.model1;
+          data.guestId = this.company ? this.companyId : "";
+          data.orderTypeId = this.type
+          params = "parts"
+          location.href = allocationStockExport(params, data)
+          // console.log( allocationStockExport(params, data))
         } else {
-          let page={}
-          page.size=this.page.total;
-          page.num=1
-          if (this.data.length !== 0) {
-            this.getTransferStockAll(page)
-            // this.getTransferStock(this.page)
-          } else {
-            this.$message.error("内部调拨出库单汇总暂无数据");
+          params = this.selectTabArr;
+          data.type = "parts";
+          if(this.selectTabArr.length<1){
+            return this.$Message.error("请勾选需要导出的数据!")
           }
+          data.size=this.selectTabArr.length;
+          data.orderTypeId = this.type
+          location.href = allocationStockExport(params, data)
+          // console.log( allocationStockExport(params, data))
         }
       },
       // 选中数据

@@ -102,50 +102,36 @@
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" title="操作">
+          <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column  title="操作" width="130">
             <template v-slot="{ row, rowIndex }">
-              <Button type="text" @click="ruku">到货入库</Button>
+              <span class="mr10" style="color: #40a6ff;cursor: pointer" @click="ruku">到货入库</span>
+              <span style="color: #40a6ff;cursor: pointer" @click="print(row)">打印</span>
             </template>
           </vxe-table-column>
-
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column
+            show-overflow="tooltip"
             field="serviceId"
             title="业务单号"
+            width="180"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column
+            show-overflow="tooltip"
+            width="180"
             field="guestName"
             title="供应商名称"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column
+            width="80"
+            show-overflow="tooltip"
             field="billStatusName"
             title="状态"
           ></vxe-table-column>
-
-          <vxe-table-column  show-overflow="tooltip" field="orderMan" title="采购员"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="remark" width="180" title="备注"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
-            field="billTypeName"
-            title="票据类型"
-          ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
-            field="settleTypeName"
-            title="结算方式"
-            width="100"
-          ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
-            field="auditor"
-            title="提交人"
-            width="100"
-          ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
-            field="auditDate"
-            title="提交日期"
-          ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
-            width="160"
-            field="enterStoreId"
-            title="入库仓库"
+                             width="160"
+                             field="enterStoreId"
+                             title="入库仓库"
           >
             <!-- :edit-render="{
               name: 'select',
@@ -159,14 +145,40 @@
             </template>
           </vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
-            field="enterTime"
-            title="入库日期"
-            width="100"
+                             field="auditor"
+                             title="提交人"
+                             width="70"
           ></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
-            field="enterUname"
-            title="操作人"
-            width="100"
+                             field="auditDate"
+                             title="提交日期"
+                             width="130"
+          ></vxe-table-column>
+          <!--<vxe-table-column  show-overflow="tooltip"-->
+                             <!--field="printCount"-->
+                             <!--title="打印次数"-->
+                             <!--width="80"-->
+          <!--&gt;</vxe-table-column>-->
+          <vxe-table-column  show-overflow="tooltip"
+                             field="enterUname"
+                             title="入库人"
+                             width="70"
+          ></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
+                             field="enterTime"
+                             title="入库日期"
+                             width="130"
+          ></vxe-table-column>
+          <!--<vxe-table-column  show-overflow="tooltip" field="orderMan" title="采购员"></vxe-table-column>-->
+          <vxe-table-column  show-overflow="tooltip"
+            field="billTypeName"
+            title="票据类型"
+                             width="80"
+          ></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip"
+            field="settleTypeName"
+            title="结算方式"
+            width="80"
           ></vxe-table-column>
         </vxe-table>
       </div>
@@ -178,11 +190,12 @@
         <Col span="12" offset="12" style="text-align:right">
           <div>
             <Page
-              :current="pageList.page + 1"
+              :current="pageList.page"
               :total="pageList.total"
               :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
+              show-total
               @on-change="changePage"
               @on-page-size-change="changeSize"
             />
@@ -204,7 +217,7 @@
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column  show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
+          <vxe-table-column width="50"  type="seq" title="序号"></vxe-table-column>
 
           <!-- <vxe-table-column  show-overflow="tooltip" title="操作" width="80">
                 <template v-slot="{ row }">
@@ -214,12 +227,13 @@
 
           <vxe-table-column  show-overflow="tooltip"
             field="partCode"
+                             width="150"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
             field="partName"
             title="配件名称"
-            width="100"
+            width="150"
           ></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
@@ -248,6 +262,7 @@
             }"
           ></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
+                             width="150"
             field="storeShelf"
             title="仓位"
             :edit-render="{
@@ -256,12 +271,13 @@
               events: { blur: checkSelf }
             }"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="150"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="spec" title="规格"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="150"></vxe-table-column>
         </vxe-table>
       </div>
     </section>
+    <print-z-f ref="print" :order-id="this.currentrow.id"></print-z-f>
   </div>
 </template>
 
@@ -281,10 +297,12 @@ import { checkStore } from "@/api/system/systemApi";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
 import {showLoading, hideLoading} from "@/utils/loading"
+import PrintZF from "./printZF";
 
 export default {
   name: "threeSupplier",
   components: {
+    PrintZF,
     QuickDate,
     GoodCus
   },
@@ -306,7 +324,7 @@ export default {
       BottomTableData: [], //下侧表格list
       // 分页数据
       pageList: {
-        page: 0,
+        page: 1,
         total: 0,
         pageSize: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
@@ -452,7 +470,7 @@ export default {
     },
     //搜索
     search() {
-      let page = this.pageList.page;
+      let page = this.pageList.page-1;
       let size = this.pageList.pageSize;
       //console.log(this.form, "this.form");
       this.BottomTableData = [];
@@ -460,7 +478,7 @@ export default {
       zongbuzhidiaoList(page, size, this.form).then(res => {
         if (res.code === 0) {
           this.TopTableData = res.data.content || [];
-          this.pageList.total = res.totalElements;
+          this.pageList.total = res.data.totalElements;
           for (var i = 0; i < this.TopTableData.length; i++) {
             this.TopTableData[i].enterStoreId = this.storeArray[0].value;
           }
@@ -493,6 +511,11 @@ export default {
         // this.form.billType = v.billTypeId || "";
       }
     },
+
+    print(row){
+      this.$refs.print.openModal(row.id);
+    },
+
     changeSize(s) {
       this.pageList.page = 0;
       this.pageList.size = s;
