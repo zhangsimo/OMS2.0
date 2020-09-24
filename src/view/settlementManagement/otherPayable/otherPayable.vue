@@ -321,7 +321,7 @@
     <settlement ref="settlement"></settlement>
     <!--其他付款申请-->
     <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
-    <voucher-input ref="voucherInput" @callBackFun="getCallBack"></voucher-input>
+    <voucher-input ref="voucherInput" :oneAccountent="[claimSelection]"  @callBackFun="getCallBack"></voucher-input>
   </div>
 </template>
 

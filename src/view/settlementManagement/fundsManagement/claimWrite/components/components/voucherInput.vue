@@ -731,7 +731,6 @@ export default {
     },
     //其他辅助核算款项分类
     fundGetList() {
-      console.log(this.oneAccountent[0].mateAccountCoding,1111)
       let params = {};
       params.dictCode = "CW00131";
       kmType(params).then(res => {
