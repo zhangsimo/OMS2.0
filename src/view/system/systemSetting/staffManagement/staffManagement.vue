@@ -68,7 +68,18 @@
         :data="staffList"
         ref="currentRowTable"
         @on-current-change="selection"
-      ></Table>
+      >
+        <template slot-scope="{ row }" slot="userRoles">
+          <Tag
+            v-for="item in row.userRoles"
+            :key="item.id"
+            :name="item.id"
+            :color=" item.systemType === 0 ? 'error': item.systemType === 2?'success' :'warning'"
+          >
+            {{ item.displayName}}
+          </Tag>
+        </template>
+      </Table>
       <Page
         :total="page.total"
         :page-size="page.size"
@@ -144,7 +155,18 @@
             size="small"
             @on-selection-change="getOneCliemt"
 
-          ></Table>
+          >
+            <template slot-scope="{ row }" slot="userRoles">
+              <Tag
+                v-for="item in row.userRoles"
+                :key="item.id"
+                :name="item.id"
+                :color=" item.systemType === 0 ? 'error': item.systemType === 2?'success' :'warning'"
+              >
+                {{ item.displayName}}
+              </Tag>
+            </template>
+          </Table>
         </div>
         <Page
           :total="page2.total"
@@ -165,7 +187,7 @@
 <script>
 import {
   getStaffList,
-  editUser,
+  addUser,
   changeeditUser,
   findCompanyList,
   putNewCompany,
@@ -246,9 +268,27 @@ export default {
         },
         {
           title: "角色",
-          align: "center",
-          key: "userRoleName",
-          minWidth: 80
+          align: "left",
+          slot: 'userRoles',
+          minWidth: 80,
+          // render:(h,params) => {
+          //   let arr = params.row.userRoles || []
+          //   let newArr = []
+          //   arr.forEach( item => {
+          //     newArr.push(
+          //       h('div',
+          //         {
+          //           style: {
+          //             backgroundColor:  item.systemType === 0 ? '#ed4014': '#19be6b',
+          //             color:'#ffffff'
+          //           },
+          //         },
+          //         item.displayName
+          //       )
+          //     )
+          //   })
+          //   return newArr
+          // }
         },
         {
           title: "性别",
@@ -327,10 +367,11 @@ export default {
         },
         {
           title: "角色",
-          align: "center",
-          key: "userRoleName",
-          minWidth: 80
+          align: "left",
+          slot: 'userRoles',
+          minWidth: 80,
         },
+
         // {
         //   title: "公司地址",
         //   align: "center",
@@ -516,11 +557,12 @@ export default {
       this.newStaff = {
         single: false,
         singtwo: false,
-        gender: 0
+        gender: 0,
+        userRoles:[]
       };
       this.modalShow = true;
       this.isNextAdd = true;
-      this.$refs.currentRowTable.clearCurrentRow();
+      // this.$refs.currentRowTable.clearCurrentRow();
       this.oneStaffChange = {};
       this.$refs.child.financeList=[]
       this.oneStaffChange.staffAccountVoList=[]
@@ -528,6 +570,7 @@ export default {
     },
     // 确认
     submit(type = "add") {
+      if (this.newStaff.userRoles.length === 0) return this.$Message.error('角色必选')
       this.$refs.child.handleSubmit(() => {
         let stop = this.$loading();
         if (this.title == "新增员工") {
@@ -535,11 +578,9 @@ export default {
           data = JSON.parse(JSON.stringify(this.newStaff));
           data.single = data.single ? 1 : 0;
           data.singtwo = data.single ? 1 : 0;
-          // data.staffAccountVoList = this.oneStaffChange.staffAccountVoList
           data.groupId = data.groundIds[data.groundIds.length -1]
-          // data.groundIds = JSON.parse(data.groundIds);
-          // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
-          editUser(data, this.$store.state.user.userData.groupId)
+          data.userRoles.forEach( item => delete  item.del)
+          addUser(data, this.$store.state.user.userData.groupId)
             .then(res => {
               stop();
               if (res.code == 0) {
@@ -563,8 +604,9 @@ export default {
           data.single = data.single ? 1 : 0;
           data.singtwo = data.singtwo ? 1 : 0;
           data.groupId = data.groundIds[data.groundIds.length -1]
-          // data.groundIds = JSON.stringify(data.groundIds);
-          // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
+          data.userRoles.forEach( item => {
+            delete  item.system
+          })
           changeeditUser(data)
             .then(res => {
               stop();
