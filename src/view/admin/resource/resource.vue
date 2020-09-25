@@ -266,6 +266,7 @@
         this.$refs.child.handleSubmit(() => {
           let stop = this.$loading()
           this.newRes.scope = this.sysType
+          this.newRes.systemScope = this.sysType
           addOrUpdate(this.newRes).then(res => {
             stop()
             if (res.code == 0) {

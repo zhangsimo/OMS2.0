@@ -118,10 +118,11 @@ export function deleteWMSChangeUserRoles (data) {
 
 //获取树形
 // 查询整个资源树
-export function findRootRes () {
+export function findRootRes (params) {
   return axios.request({
     url: `${api.authApi}/resource/findRootResShop`,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
@@ -136,8 +137,16 @@ export function findRootResWms () {
 // 获取仓库
 export function getWarehouse () {
   return axios.request({
-    url: `${api.passportApi}/warehouse/queryWarehouse?page=0&size=1000`,
+    url: `${api.authApi}/warehouse/queryWarehouse?page=0&size=1000`,
     method: 'post',
     data: {},
+  })
+}
+
+//获取全部系统角色
+export function findAllJob () {
+  return axios.request({
+    url: `${api.authApi}/role/getAllRoles`,
+    method: 'get'
   })
 }

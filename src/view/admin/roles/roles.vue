@@ -1,5 +1,11 @@
 <template>
   <div class="bigbox">
+    <div class="oper-top">
+      当前系统：
+      <Select v-model='systemScope' style='width: 120px' class="mr20" @on-change="sysTypeChange">
+        <Option v-for='item in sysTypeArr' :value="item.scope" :key="item.id">{{item.title}}</Option>
+      </Select>
+    </div>
     <div class="demo-split">
       <Split v-model="split1">
         <div slot="left" class="demo-split-pane">
@@ -31,6 +37,7 @@
               <vxe-table-column title="序号" type="seq" width="50"></vxe-table-column>
               <vxe-table-column field="displayName" title="角色名称"></vxe-table-column>
               <vxe-table-column field="name" title="角色描述"></vxe-table-column>
+              <vxe-table-column field="scopeName" title="系统"></vxe-table-column>
             </vxe-table>
             <Page
               :total="page.total"
@@ -147,6 +154,9 @@
   height: 100%;
   width: 100%;
   background: #fff;
+}
+.oper-top {
+  line-height: 46px;
 }
 .demo-split {
   height: 100%;

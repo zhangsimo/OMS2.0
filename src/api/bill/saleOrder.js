@@ -404,3 +404,13 @@ export function setCancal(params) {
     params
   })
 }
+
+
+//撤回发票对冲
+export function backHedging(data, modelType) {
+  return axios.request({
+    url: `${api.omsSettle}/statement/master/recallHedge`,
+    method: 'post',
+    data
+  })
+}

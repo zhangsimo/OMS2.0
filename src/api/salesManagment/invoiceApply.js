@@ -105,3 +105,11 @@ export function exportModifyData(params){
 export function exportAll(params){
   return `${api.omsSettle}/invoiceApply/export/queryPageByStatus?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
+
+export function backApply(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/revokeApply`,
+    method: "post",
+    data
+  });
+}

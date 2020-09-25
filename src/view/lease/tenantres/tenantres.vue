@@ -42,6 +42,9 @@
           <div class="db right ml10 btn-title">
             <Input v-model="tenantID" placeholder="租户ID" style="width: 200px;" class="mr10" />
 <!--            <Input v-model="resID" placeholder="资源ID" style="width: 140px;" class="mr10" />-->
+            <Select v-model='sysType' style='width: 120px' class="mr20">
+              <Option v-for='item in sysTypeArr' :value="item.scope" :key="item.scope">{{item.title}}</Option>
+            </Select>
             <Button class="mr10 w90" @click="qureyTable">
               <span class="center">
                 <Icon custom="iconfont iconchaxunicon icons" />查询

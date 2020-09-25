@@ -197,6 +197,14 @@
           :disabled="ifRecallWriteOff"
         >撤回核销
         </button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          v-has="'revocation'"
+          @click="backCancel"
+          :disabled="ifRecallHedge"
+        >撤回发票对冲
+        </button>
         <Table
           border
           :columns="columns1"
@@ -396,7 +404,8 @@
     setCanwithdraw,
     setApply,
     setCancal,
-    account
+    account,
+    backHedging
   } from "@/api/bill/saleOrder";
   import {hedgingApplyNo, applyNo} from "@/api/bill/popup";
   import {goshop} from '@/api/settlementManagement/shopList'
@@ -1185,20 +1194,21 @@
         ifRecallApply: true,//是否可以撤回申请
         ifRecallWriteOff: true,//是否可以撤回审核
         ownEnterList: false,//判断是否可以进项发票核销
+        ifRecallHedge:true,//判断是否可以撤回发票对冲
       };
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      this.$nextTick(() => {
+      this.$nextTick( () => {
         this.value = arr[0];
       })
       this.getShop()
     },
     computed: {
       selectShopList() {
-        if (this.$store.state.user.userData.currentCompany != null) {
+        if(this.$store.state.user.userData.currentCompany!=null){
           return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-        } else {
+        }else{
           return true
         }
       }
@@ -1249,11 +1259,24 @@
             this.getAccountStatement();
           }
         }
+        //撤回核销
         if (!this.ifRecallWriteOff) {
           let data = {}
           data.id = this.reconciliationStatement.id
           data.revokeReason = this.revokeReason
           let res = await setCancal(data)
+          if (res.code === 0) {
+            this.modalShow = false;
+            this.$Message.success('撤回成功')
+            this.getAccountStatement();
+          }
+          }
+        //撤回发票对冲
+        if (!this.ifRecallHedge) {
+          let data = {}
+          data.id = this.reconciliationStatement.id
+          data.revokeReason = this.revokeReason
+          let res = await backHedging(data)
           if (res.code === 0) {
             this.modalShow = false;
             this.$Message.success('撤回成功')
@@ -1374,10 +1397,8 @@
       },
       // 销售开票申请
       saleApplication() {
-        if (
-          Object.keys(this.reconciliationStatement).length !== 0 &&
-          this.reconciliationStatement.billingTypeName === "收款"
-        ) {
+          if (Object.keys(this.reconciliationStatement).length == 0) return this.$Message.error('请选择一条对账单')
+          if (this.reconciliationStatement.statementStatus.value == 1) return  this.$Message.error('审核中不能进行销售开票申请')
           if (this.reconciliationStatement.ownSellOutList === 0) {
             return this.$Message.error('该对账单不包含销售出库单据，不能开票！')
           }
@@ -1416,9 +1437,7 @@
           } else {
             this.$refs.noTax.init();
           }
-        } else {
-          this.$message.error("只能勾选计划对账类型为收款的对账单");
-        }
+
       },
       // 单据合计方式
       handleSummary({columns, data}) {
@@ -1592,9 +1611,6 @@
         this.statementStatusflag = false
         this.hedgingfalg = false
         this.receivefalg = false
-        if (row.statementStatus.value == 1) {
-          this.taxArrearsfalg = true
-        }
         if (row.statementStatus.value == 4) {
           this.statementStatusflag = true
         }
@@ -1630,6 +1646,7 @@
             if (res.code === 0) {
               this.ifRecallApply = !res.data.ifRecallApply
               this.ifRecallWriteOff = !res.data.ifRecallWriteOff
+              this.ifRecallHedge = !res.data.ifRecallHedge
             }
           }
         )
@@ -2210,8 +2227,7 @@
     width: 1500px !important;
     color: #adc6ff !important;
   }
-
-  ::-webkit-scrollbar :hover {
+  ::-webkit-scrollbar :hover{
     width: 1500px !important;
     color: #adc6ff !important;
   }

@@ -1,5 +1,7 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
+import { findResScope } from '_api/admin/resourceApi'
+// @ts-ignore
 import { queryRolesByPage, deleteById, getStaff, saveStaffJurisdiction, saveOrder, findRootRes } from '_api/admin/roleApi.js';
 // @ts-ignore
 // import {findRootRes} from '_api/admin/resourceApi'
@@ -19,7 +21,7 @@ import ChangeRolse from "@/view/admin/roles/ChangeRolse.vue";
 export default class Role extends Vue {
 
   //中间分割线比例
-  private split1: number = 0.3
+  private split1: number = 0.4
   //右侧表格数据
   private tableData: SelectTypes[] = []
 
@@ -31,6 +33,12 @@ export default class Role extends Vue {
     num: 1,
     total: 0
   }
+
+
+  private sysTypeArr:Array<any>= [] //获取目前所有系统
+
+
+  private systemScope:string = 'oms' //当前系统
   //点击获取的员工
   private oneStaff: any = {}
   //右侧权限树形图
@@ -63,19 +71,51 @@ export default class Role extends Vue {
   //-------------------mounted-----------------------------------------------
 
   private mounted() {
+    this.findResScope()
     this.getLeftList()
     this.right = this.$store.state.user.userData.shopkeeper
   }
   //-------------------------------methods-----------------------------------------
-  //获取左侧全部员工
+  //获取当前全部系统
+  findResScope() {
+    findResScope().then(res => {
+      this.sysTypeArr = res.data || []
+    })
+  }
+
+
+  //切换当前系统
+  sysTypeChange(){
+    this.getLeftList()
+    this.treeList = []
+  }
+
+  //获取左侧全部角色
   private async getLeftList() {
     let data: any = {}
     data.size = this.page.size
     data.page = this.page.num - 1
     data.systemType = 0
+    data.systemScope = this.systemScope
     let res: any = await queryRolesByPage(data)
     if (res.code == 0) {
       this.tableData = res.data.content
+      this.tableData.map( item=>  {
+        switch(item.systemType){
+          case 0:
+            item.scopeName = '订单管理系统'
+            break
+          case 1:
+            item.scopeName = '仓储管理系统'
+            break
+          case 2:
+            item.scopeName = '税务财务系统'
+            break
+          case 3:
+            item.scopeName = '权限管理系统'
+            break
+        }
+      })
       this.page.total = res.data.totalElements
       this.oneStaff = {}
     }
@@ -102,6 +142,7 @@ export default class Role extends Vue {
     data.page = this.pageRight.num - 1
     data.size = this.pageRight.size
     data.roleId = this.oneStaff.id
+    data.systemScope = this.systemScope
     let res = await getStaff(data)
     if (res.code === 0) {
       this.rightTableData = res.data.content
@@ -201,7 +242,9 @@ export default class Role extends Vue {
   private async findRootRes() {
     // @ts-ignore
     let stop: any = this.$loading()
-    let res: any = await findRootRes()
+    let data:any ={}
+    data.systemScope = this.systemScope
+    let res: any = await findRootRes(data)
     if (res.code === 0) {
       stop()
       let tmp = res.data
@@ -255,7 +298,9 @@ export default class Role extends Vue {
     // @ts-ignore
     let stop: any = this.$loading()
     // this.role.id = ''
-    saveOrder(this.role, this.role.resIds).then(res => {
+    let data:any = {}
+    data.systemScope = this.systemScope
+    saveOrder(this.role, this.role.resIds , data).then(res => {
       if (res.code == 0) {
         this.getLeftList()
         console.log(this.role)
