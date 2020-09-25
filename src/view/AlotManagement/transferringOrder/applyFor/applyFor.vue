@@ -233,32 +233,32 @@
                     :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
                     @keydown="keydown"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
-                    <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" type="checkbox" width="40" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="80"></vxe-table-column>
                      <vxe-table-column  show-overflow="tooltip"
                        field="applyQty"
                        title="申请数量"
                        :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
                     </vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="90"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="50"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" title="紧销品" width="100">
+                    <vxe-table-column  show-overflow="tooltip" field="enterUnitId" title="方向" width="60"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="90"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" title="紧销品" width="60">
                       <template v-slot="{ row }">
                         <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                       </template>
                     </vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="入库数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="80"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasCancelQty" title="取消数量" width="80"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="80"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasInQty" title="入库数量" width="80"></vxe-table-column>
                   </vxe-table>
                   <!-- <div ref="planPage">
                   <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
@@ -871,7 +871,10 @@
               if (columnIndex === 0) {
                 return '和值'
               }
-              if (['applyQty'].includes(column.property)) {
+              if (columnIndex === 2) {
+                return (data||[]).length+'条'
+              }
+              if (['applyQty','hasAcceptQty','hasCancelQty','hasOutQty','hasInQty'].includes(column.property)) {
                 return this.$utils.sum(data, column.property)
               }
               return null
