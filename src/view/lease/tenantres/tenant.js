@@ -1,4 +1,5 @@
 import * as api from "_api/lease/tenantres";
+import { findResScope} from '_api/admin/resourceApi'
 
 
 
@@ -88,6 +89,10 @@ const data = function() {
     tbdata: [], // 表身
     selectData: new Set(), // 选中的数据
     canSave: false,
+    sysTypeArr:[
+      {title:'全部' , scope:'all'}
+    ],//获取全部系统
+    sysType:'oms',//当前系统
   };
 };
 
@@ -209,6 +214,13 @@ const queryTree = function(self) {
 };
 
 const methods = {
+//搜索全部系统
+  findResScope() {
+    findResScope().then(res => {
+      this.sysTypeArr = [...this.sysTypeArr,...res.data]
+    })
+  },
+
   async initTree() {
     let res = await api.getOmsAuth();
     if (res.code === 0) {
@@ -224,6 +236,7 @@ const methods = {
     params.tenantNo = this.tenantID;
     params.page = 0
     params.size = 10000
+    params.systemScope = this.sysType === 'all' ? '' : this.sysType
     let res = await api.getAll(params);
     if (res.code === 0) {
       sessionStorage.setItem('leaseRight' , this.tenantID)
@@ -252,6 +265,7 @@ const methods = {
     if(sessionStorage.getItem('leaseRight') != null){
       data.tenantNo = sessionStorage.getItem('leaseRight')
     }
+    data.systemScope = this.sysType
     let obj = await api.hasLessee(data)
     if(obj.code === 0){
       if(!obj.data.id) return this.$message.error('未查询到此租户')
@@ -342,6 +356,7 @@ const methods = {
 const mounted = function() {
   this.initTree();
   treeExpand(this, this.treeData);
+  this.findResScope()
   // this.initList();
 };
 
