@@ -1150,41 +1150,41 @@ export default [
     },
     component: Main,
     children: [
-      {
-        path: "/navigator",
-        redirect: "",
-        mark: "",
-        meta: { keepAlive: true,
-          title: "领航者驾驶舱",
-        },
-        component: parentView,
-        children: [
-          {
-            path: "balance",
-            name: "balance",
-            mark: "",
-            meta: { keepAlive: true,
-              // hideInMenu: true,
-              title: "资产负债表",
-            },
-            component: () =>
-              import("@/view/reportForm/navigator/balance.vue")
-          },
-          {
-            path: "income",
-            name: "income",
-            mark: "",
-            meta: {
-              keepAlive: true,
-              // hideInMenu: true,
-              title: "利润表",
-
-            },
-            component: () =>
-              import("@/view/system/basicData/Fittings/Fittings.vue")
-          }
-      ]
-      },
+      // {
+      //   path: "/navigator",
+      //   redirect: "",
+      //   mark: "",
+      //   meta: { keepAlive: true,
+      //     title: "领航者驾驶舱",
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "balance",
+      //       name: "balance",
+      //       mark: "",
+      //       meta: { keepAlive: true,
+      //         // hideInMenu: true,
+      //         title: "资产负债表",
+      //       },
+      //       component: () =>
+      //         import("@/view/reportForm/navigator/balance.vue")
+      //     },
+      //     {
+      //       path: "income",
+      //       name: "income",
+      //       mark: "",
+      //       meta: {
+      //         keepAlive: true,
+      //         // hideInMenu: true,
+      //         title: "利润表",
+      //
+      //       },
+      //       component: () =>
+      //         import("@/view/system/basicData/Fittings/Fittings.vue")
+      //     }
+      // ]
+      // },
       {
         path: "/reportForm/purchaseRepor/reporIndex",
         name: "reportFormProcurement ",
