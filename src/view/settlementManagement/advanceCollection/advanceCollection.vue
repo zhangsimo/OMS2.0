@@ -529,9 +529,9 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
-        orgid: this.BranchstoreId,
+        orgid: this.BranchstoreId=="0"?"":this.BranchstoreId,
         guestId: this.companyId,
         size: this.page.size,
         page: this.page.num - 1

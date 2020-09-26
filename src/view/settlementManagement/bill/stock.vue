@@ -792,7 +792,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : ""),
           (obj.enterDateEnd = this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
           getWarehousingList(params,obj).then(res => {
             if (res.data.vos.length !== 0) {
@@ -871,7 +871,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : ""),
           (obj.enterDateEnd = this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : ""),
           getWarehousingList(params,obj).then(res => {
             if (res.data.vos.length !== 0) {

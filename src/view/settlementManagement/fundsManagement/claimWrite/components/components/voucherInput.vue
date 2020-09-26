@@ -387,7 +387,7 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        if(this.fundList.length==0){
+        if(this.fundListZanshi.length==0){
           this.fundGetList();
         }
 
