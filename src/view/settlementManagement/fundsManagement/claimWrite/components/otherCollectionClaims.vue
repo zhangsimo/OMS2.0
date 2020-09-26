@@ -368,7 +368,6 @@
         this.accruedList=this.accrued;
         this.$refs.voucherInput.modal = !this.$refs.voucherInput.modal
         if (this.voucherinputModel = true) {
-          this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
           this.openVoucherInput()
         } else {
           this.$refs.voucherInput.modal = false

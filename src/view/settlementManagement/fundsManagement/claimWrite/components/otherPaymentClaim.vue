@@ -168,7 +168,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
     <settlement2 ref="settlement2" @reloadParList="reloadParentList"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
@@ -259,6 +259,7 @@ export default {
       Branchstore: [{ id: 0, name: "全部" }],
       currentAccount: {},
       currentAccountItem:{},
+      accruedList:[{mateAccountCoding:""}]
     };
   },
   async mounted() {
@@ -281,6 +282,7 @@ export default {
       if(this.company.length==0){
         this.getOne();
       }
+      this.claimTit == '预付款认领' ?this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
       this.oneSubject = {};
       this.modal = true;
       this.getQuery();
@@ -404,11 +406,9 @@ export default {
       if (!this.voucherinputModel) {
         if(this.currentAccount.accountNo){
             if(this.claimTit=="预付款认领"){
-              this.accrued[0].mateAccountCoding="2203"
               this.changeAmt();
               this.$refs.settlement.Settlement = true;
             }else{
-              this.accrued[0].mateAccountCoding="2241"
               this.changeAmt();
               this.paymentId = "YJDZ";
               this.$refs.settlement2.Settlement = true;
