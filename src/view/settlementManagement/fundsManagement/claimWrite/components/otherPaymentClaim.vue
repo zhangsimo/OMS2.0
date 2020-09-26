@@ -404,9 +404,11 @@ export default {
       if (!this.voucherinputModel) {
         if(this.currentAccount.accountNo){
             if(this.claimTit=="预付款认领"){
+              this.accrued[0].mateAccountCoding="2203"
               this.changeAmt();
               this.$refs.settlement.Settlement = true;
             }else{
+              this.accrued[0].mateAccountCoding="2241"
               this.changeAmt();
               this.paymentId = "YJDZ";
               this.$refs.settlement2.Settlement = true;

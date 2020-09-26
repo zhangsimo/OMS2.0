@@ -10,7 +10,7 @@
             <FormItem label="选择辅助核算：" prop="voucherInput">
               <Row>
                 <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
+                  <i-input :value.sync="formValidate.voucherInput" v-model="MessageValue"></i-input>
                 </i-col>
                 <i-col span="2" class="ml10">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
@@ -26,7 +26,7 @@
             <FormItem label="选择辅助核算：" prop="voucherInput">
               <Row>
                 <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
+                  <i-input :value.sync="formValidate.voucherInput" v-model="MessageValue"></i-input>
                 </i-col>
                 <i-col span="2" class="ml10">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
@@ -103,364 +103,367 @@
         <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
+      <InputNumber v-model="amt" class="w50"/>
       <span class="ml10">对方户名：</span>
-      <Input v-model="bankName" class="w100" />
+      <Input v-model="bankName" class="w100"/>
       <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
       <Button class="ml10" v-if="claimTit == '其他收款认领'" @click="claimPay">认领</Button>
       <Button class="ml10" v-else @click="claimCollection">认领</Button>
-      <claim ref="claim" @selection="selection" />
+      <claim ref="claim" @selection="selection"/>
       <div slot="footer"></div>
     </Modal>
     <claimGuest ref="claimGuest"></claimGuest>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
     <!--其他收款核销-->
     <settlement ref="settlement"></settlement>
   </div>
 </template>
 <script>
-import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
-import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
-import quickDate from "@/components/getDate/dateget_bill.vue";
-// import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
-import claimGuest from "@/view/settlementManagement/otherPayable/components/claimGuest";
+  import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
+  import claim from "@/view/settlementManagement/otherReceivables/components/claimed.vue";
+  import quickDate from "@/components/getDate/dateget_bill.vue";
+  // import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
+  import claimGuest from "@/view/settlementManagement/otherPayable/components/claimGuest";
 
-import {findGuest} from "@/api/settlementManagement/advanceCollection.js";
-import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
-import { claimedFund } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
-import { TurnToTheProfitAndLoss } from "@/api/settlementManagement/fundsManagement/claimWrite.js";
-import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
-import { addClaim2 } from "_api/settlementManagement/advanceCollection.js";
-import {showLoading, hideLoading} from "@/utils/loading"
-export default {
-  props: {
-    accrued: "", //表格数据
-  },
-  components: {
-    voucherInput,claim,settlement,claimGuest
-  },
-  data() {
-    const amtValid = ({cellValue, row }) => {
-      return new Promise((resolve, reject) => {
-        if(cellValue){
-          let trueValue =
-            Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
-          if (trueValue) {
-            reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+  import {findGuest} from "@/api/settlementManagement/advanceCollection.js";
+  import settlement from "@/view/settlementManagement/otherReceivables/components/settlement";
+  import {claimedFund} from "@/api/settlementManagement/fundsManagement/claimWrite.js";
+  import {TurnToTheProfitAndLoss} from "@/api/settlementManagement/fundsManagement/claimWrite.js";
+  import {addClaim} from "_api/settlementManagement/otherPayable/otherPayable";
+  import {addClaim2} from "_api/settlementManagement/advanceCollection.js";
+  import {showLoading, hideLoading} from "@/utils/loading"
+
+  export default {
+    props: {
+      accrued: "", //表格数据
+    },
+    components: {
+      voucherInput, claim, settlement, claimGuest
+    },
+    data() {
+      const amtValid = ({cellValue, row}) => {
+        return new Promise((resolve, reject) => {
+          if (cellValue) {
+            let trueValue =
+              Math.abs(row.rpAmt) > Math.abs(row.incomeMoney || row.paidMoney);
+            if (trueValue) {
+              reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+            } else {
+              resolve();
+            }
           } else {
-            resolve();
+            reject(new Error("本次认领金额必填"));
           }
-        }else{
-          reject(new Error("本次认领金额必填"));
-        }
-      });
-    };
-    return {
-      voucherinputModel: false,
-      formValidate:{voucherInput:""},
-      ruleValidate:{
-        voucherInput:[{ required: true, message: '必填项', trigger: 'blur' }]
-      },
-      // 表格验证  本次认领金额  是否符合条件
-      validRules: {
-        rpAmt: [{ validator: amtValid }],
-        balanceMoney: [{ required: true, validator: amtValid }]
-      },
-      modal: false, //模态框展示
-      oneSubject: {}, //单选获取到的数据
-      company: [], //往来单位数组
-      companyId: "", //往来单位
-      claimModal: false, //认领弹框
-      claimTit: "预收款认领", //认领弹框标题
-      amt: null, //认领弹框金额
-      bankName: "", //认领弹框对方户名
-      tableData: [], //表格信息
-      page: {
-        num: 1,
-        size: 10,
-        total: 0,
-        opts: [20, 50, 100, 200]
-      }, //分页
-      serviceId: "", //给子组件传的值,
-      MessageValue:"",
-      claimSelection: []
-    };
-  },
-  mounted(){
-
-  },
-  methods: {
-    // 打开模态框
-    open() {
-      if(this.company.length==0){
-        this.getOne();
-      }
-      this.oneSubject = {};
-      this.modal = true;
-      this.$nextTick(()=>{
-        this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
-      })
-
-
-
-    },
-    //判断是否可选择
-    checkMethod({ row }) {
-      return row.isDetailSubject == 0;
-    },
-    //获取单选框
-    getRaido({ row }) {
-      this.oneSubject = row;
-    },
-    openVoucherInput() {
-      if(this.claimTit=='预收款认领'){
-        this.$refs.voucherInput.Classification = false;
-      }else{
-        this.$refs.voucherInput.Classification = true;
-      }
-      this.$refs.voucherInput.subjectModelShowassist = true;
-    },
-    async openClimed(claimTit){
-      this.getMessage()
-      if(this.MessageValue==""){
-        this.$Message.error("请选择辅助核算")
-      }else{
-        const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
-        if (errMap) {
-        } else {
-          this.ok()
-        }
-      }
-    },
-    //校验表单
-    handleSubmit(callback) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          callback && callback();
-        } else {
-          this.$Message.error("带*为必填");
-        }
-      });
-    },
-    //预收款弹框是否打开
-    visChangeClaim(type) {
-      this.$refs.claim.currentClaimed = {};
-      if (!type) {
-        this.companyId = "";
-        this.amt = null;
-        this.claimSelection = [];
-      }
-    },
-    //其他付款认领弹窗查询
-    claimedList(type) {
-      let obj = {
-        amount: this.amt,
-        reciprocalAccountName: this.bankNameO,
-        page: this.$refs.claim.claimedPage.page - 1,
-        size: this.$refs.claim.claimedPage.size,
-        amountType: type,
-        guestId: this.companyId
+        });
       };
-      claimedFund(obj).then(res => {
-        if (res.code === 0) {
-          this.$refs.claim.claimedData = res.data.content;
-          this.$refs.claim.claimedPage.total = res.data.totalElements;
+      return {
+        voucherinputModel: false,
+        formValidate: {voucherInput: ""},
+        ruleValidate: {
+          voucherInput: [{required: true, message: '必填项', trigger: 'blur'}]
+        },
+        // 表格验证  本次认领金额  是否符合条件
+        validRules: {
+          rpAmt: [{validator: amtValid}],
+          balanceMoney: [{required: true, validator: amtValid}]
+        },
+        modal: false, //模态框展示
+        oneSubject: {}, //单选获取到的数据
+        company: [], //往来单位数组
+        companyId: "", //往来单位
+        claimModal: false, //认领弹框
+        claimTit: "预收款认领", //认领弹框标题
+        amt: null, //认领弹框金额
+        bankName: "", //认领弹框对方户名
+        tableData: [], //表格信息
+        page: {
+          num: 1,
+          size: 10,
+          total: 0,
+          opts: [20, 50, 100, 200]
+        }, //分页
+        serviceId: "", //给子组件传的值,
+        MessageValue: "",
+        claimSelection: [],
+        //this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
+        accruedList:[{mateAccountCoding:""}]
+      };
+    },
+    mounted() {
+
+    },
+    methods: {
+      // 打开模态框
+      open() {
+        this.claimTit == '预收款认领' ?this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
+        if (this.company.length == 0) {
+          this.getOne();
         }
-      });
-    },
-    //认领弹框查询
-    queryClaimed() {
-      if (this.claimTit === "其他付款认领") {
-        this.claimedList(2);
-      } else {
-        this.claimedList(2);
-      }
-    },
-    //收回认领
-    claimCollection() {
-      if (Object.keys(this.$refs.claim.currentClaimed).length !== 0) {
-        if (
-          Math.abs(this.$refs.claim.currentClaimed.incomeMoney) <
-          this.oneSubject.paymentBalance
-        ) {
-          this.paymentId = "YSK";
-          this.typeA = "收回";
-        } else {
-          this.$message.error("收入金额大于其他其他收款余额，无法认领");
-        }
-      } else {
-        this.$message.error("请选择认领的数据");
-      }
-    },
-    //子组件的数据
-    getMessage() {
-      this.MessageValue = this.$refs.voucherInput.AssistAccounting;
-    },
-    //认领弹框认领
-    claimPay() {
-      if (Object.keys(this.$refs.claim.currentClaimed).length !== 0) {
-        if (
-          Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
-          this.oneSubject.applyAmt
-        ) {
-          this.$refs.settlement.Settlement = true;
-          this.paymentId = "YJDZ";
-        } else {
-          this.$message.error("金额大于其他付款申请金额，无法认领");
-        }
-      } else {
-        this.$message.error("请选择认领的数据");
-      }
-    },
-    //认领弹框传参数据
-    selection(arr) {
-      this.claimSelection = [];
-      this.claimSelection.push({ id: arr.id });
-    },
-    // 往来单位选择
-    async getOne() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            this.company.push({
-              value: item.id,
-              label: item.fullName
-            });
-          });
-        }
-      });
-    },
-    // 选中行
-    currentChangeEvent({ row }) {
-      this.oneSubject = row;
-      // console.log(row,"???")
-    //   this.reconciliationStatement.accountNo = row.serviceId;
-    //   this.serviceId = row.serviceId;
-    //   this.$refs.Record.init();
-    },
-    //表尾合计
-    footerMethod({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return "合计";
-          }
-          if (
-            [
-              "applyAmt",
-              "writeOffAmount",
-              "paymentRegainAmt",
-              "paymentBalance"
-            ].includes(column.property)
-          ) {
-            return this.$utils.sum(data, column.property);
-          }
-          return null;
+        this.oneSubject = {};
+        this.modal = true;
+        this.$nextTick(() => {
+          this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
         })
-      ];
-    },
-    changeModel(){
-      this.$refs.voucherInput.modal=!this.$refs.voucherInput.modal
-      if(this.voucherinputModel=true){
-          this.openVoucherInput()
-      }else{
-          this.$refs.voucherInput.modal=false
-      }
-    },
-    async ok(){
-      let data = {};
-      data.detailId = this.accrued[0].id;
-      data.claimMoney=this.accrued[0].rpAmt || this.accrued[0].balanceMoney;
-      let objItem = this.$refs.voucherInput.voucherItem;
-      if(this.voucherinputModel){
-        if(this.claimTit=="预收款认领"){
-          data.subjectCode="1123";
-          data.claimType=3
-        }else{
-          data.subjectCode="2241";
-          data.claimType=5;
-          data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
+      },
+      //判断是否可选择
+      checkMethod({row}) {
+        return row.isDetailSubject == 0;
+      },
+      //获取单选框
+      getRaido({row}) {
+        this.oneSubject = row;
+      },
+      openVoucherInput() {
+        if (this.claimTit == '预收款认领') {
+          this.$refs.voucherInput.Classification = false;
+        } else {
+          this.$refs.voucherInput.Classification = true;
         }
-        data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
-        if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
-          data.isAuxiliaryAccounting=0 //是否辅助核算类
-        }else{
-          data.isAuxiliaryAccounting=1
-        }
-        data.auxiliaryName=this.MessageValue //辅助核算名称
-        data.auxiliaryCode=this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
-        if(objItem.hasOwnProperty("id")){
-          data.suppliersBean = {
-            guestSourceName:objItem.fullName||"",
-            guestSourceId:objItem.id||""
+        this.$refs.voucherInput.subjectModelShowassist = true;
+      },
+      async openClimed(claimTit) {
+        this.getMessage()
+        if (this.MessageValue == "") {
+          this.$Message.error("请选择辅助核算")
+        } else {
+          const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+          if (errMap) {
+          } else {
+            this.ok()
           }
         }
-        showLoading()
-        let res = await TurnToTheProfitAndLoss(data);
-        if (res.code === 0) {
-          //刷新 列表
-          this.$parent.$parent.queryClaimed()
-          //清空选中
-          this.$parent.$parent.$refs.claim.currentClaimed=[]
-          this.modal = false;
-          this.claimTit=="预收款认领"?this.$Message.success("预收款认领成功"):this.$Message.success("其他收款认领成功")
-          hideLoading()
-        }else{
-          hideLoading()
+      },
+      //校验表单
+      handleSubmit(callback) {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            callback && callback();
+          } else {
+            this.$Message.error("带*为必填");
+          }
+        });
+      },
+      //预收款弹框是否打开
+      visChangeClaim(type) {
+        this.$refs.claim.currentClaimed = {};
+        if (!type) {
+          this.companyId = "";
+          this.amt = null;
+          this.claimSelection = [];
         }
-      }else{
-        data.guestId = objItem.id||"";
-        data.financeAccountCashList = this.accrued
-        if(this.claimTit=="预收款认领"){
-          data.claimMoney=this.accrued[0].rpAmt;
-          showLoading()
-          addClaim2(data).then(res=>{
-            if(res.code===0){
-              hideLoading()
-              this.$parent.$parent.queryClaimed()
-              this.$parent.$parent.$refs.claim.currentClaimed=[]
-              this.$Message.success('认领成功')
-              this.modal = false;
-            }else{
-              hideLoading()
-            }
-          }).catch(err=>{
-            hideLoading()
-          })
-        }else{
-          data.subjectCode="2241";
-          data.claimType=0;
-          data.claimMoney=this.accrued[0].balanceMoney
-          showLoading()
-          addClaim(data).then(res=>{
-            if(res.code===0){
-              hideLoading()
-              this.$parent.$parent.queryClaimed()
-              this.$parent.$parent.$refs.claim.currentClaimed=[]
-              this.$Message.success('认领成功')
-              this.modal = false;
-            }else{
-              hideLoading()
-            }
-          }).catch(err=>{
-            hideLoading()
-          })
+      },
+      //其他付款认领弹窗查询
+      claimedList(type) {
+        let obj = {
+          amount: this.amt,
+          reciprocalAccountName: this.bankNameO,
+          page: this.$refs.claim.claimedPage.page - 1,
+          size: this.$refs.claim.claimedPage.size,
+          amountType: type,
+          guestId: this.companyId
+        };
+        claimedFund(obj).then(res => {
+          if (res.code === 0) {
+            this.$refs.claim.claimedData = res.data.content;
+            this.$refs.claim.claimedPage.total = res.data.totalElements;
+          }
+        });
+      },
+      //认领弹框查询
+      queryClaimed() {
+        if (this.claimTit === "其他付款认领") {
+          this.claimedList(2);
+        } else {
+          this.claimedList(2);
         }
+      },
+      //收回认领
+      claimCollection() {
+        if (Object.keys(this.$refs.claim.currentClaimed).length !== 0) {
+          if (
+            Math.abs(this.$refs.claim.currentClaimed.incomeMoney) <
+            this.oneSubject.paymentBalance
+          ) {
+            this.paymentId = "YSK";
+            this.typeA = "收回";
+          } else {
+            this.$message.error("收入金额大于其他其他收款余额，无法认领");
+          }
+        } else {
+          this.$message.error("请选择认领的数据");
+        }
+      },
+      //子组件的数据
+      getMessage() {
+        this.MessageValue = this.$refs.voucherInput.AssistAccounting;
+      },
+      //认领弹框认领
+      claimPay() {
+        if (Object.keys(this.$refs.claim.currentClaimed).length !== 0) {
+          if (
+            Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
+            this.oneSubject.applyAmt
+          ) {
+            this.$refs.settlement.Settlement = true;
+            this.paymentId = "YJDZ";
+          } else {
+            this.$message.error("金额大于其他付款申请金额，无法认领");
+          }
+        } else {
+          this.$message.error("请选择认领的数据");
+        }
+      },
+      //认领弹框传参数据
+      selection(arr) {
+        this.claimSelection = [];
+        this.claimSelection.push({id: arr.id});
+      },
+      // 往来单位选择
+      async getOne() {
+        findGuest({size: 2000}).then(res => {
+          if (res.code === 0) {
+            res.data.content.map(item => {
+              this.company.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+          }
+        });
+      },
+      // 选中行
+      currentChangeEvent({row}) {
+        this.oneSubject = row;
+        // console.log(row,"???")
+        //   this.reconciliationStatement.accountNo = row.serviceId;
+        //   this.serviceId = row.serviceId;
+        //   this.$refs.Record.init();
+      },
+      //表尾合计
+      footerMethod({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (
+              [
+                "applyAmt",
+                "writeOffAmount",
+                "paymentRegainAmt",
+                "paymentBalance"
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property);
+            }
+            return null;
+          })
+        ];
+      },
+      changeModel() {
+        this.accruedList=this.accrued;
+        this.$refs.voucherInput.modal = !this.$refs.voucherInput.modal
+        if (this.voucherinputModel = true) {
+          this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
+          this.openVoucherInput()
+        } else {
+          this.$refs.voucherInput.modal = false
+        }
+      },
+      async ok() {
+        let data = {};
+        data.detailId = this.accrued[0].id;
+        data.claimMoney = this.accrued[0].rpAmt || this.accrued[0].balanceMoney;
+        let objItem = this.$refs.voucherInput.voucherItem;
+        if (this.voucherinputModel) {
+          if (this.claimTit == "预收款认领") {
+            data.subjectCode = "1123";
+            data.claimType = 3
+          } else {
+            data.subjectCode = "2241";
+            data.claimType = 5;
+            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
+          }
+          data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+          if (data.auxiliaryTypeCode == "1" || data.auxiliaryTypeCode == "2" || data.auxiliaryTypeCode == "3" || data.auxiliaryTypeCode == "4") {
+            data.isAuxiliaryAccounting = 0 //是否辅助核算类
+          } else {
+            data.isAuxiliaryAccounting = 1
+          }
+          data.auxiliaryName = this.MessageValue //辅助核算名称
+          data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
+          if (objItem.hasOwnProperty("id")) {
+            data.suppliersBean = {
+              guestSourceName: objItem.fullName || "",
+              guestSourceId: objItem.id || ""
+            }
+          }
+          showLoading()
+          let res = await TurnToTheProfitAndLoss(data);
+          if (res.code === 0) {
+            //刷新 列表
+            this.$parent.$parent.queryClaimed()
+            //清空选中
+            this.$parent.$parent.$refs.claim.currentClaimed = []
+            this.modal = false;
+            this.claimTit == "预收款认领" ? this.$Message.success("预收款认领成功") : this.$Message.success("其他收款认领成功")
+            hideLoading()
+          } else {
+            hideLoading()
+          }
+        } else {
+          data.guestId = objItem.id || "";
+          data.financeAccountCashList = this.accrued
+          if (this.claimTit == "预收款认领") {
+            data.claimMoney = this.accrued[0].rpAmt;
+            showLoading()
+            addClaim2(data).then(res => {
+              if (res.code === 0) {
+                hideLoading()
+                this.$parent.$parent.queryClaimed()
+                this.$parent.$parent.$refs.claim.currentClaimed = []
+                this.$Message.success('认领成功')
+                this.modal = false;
+              } else {
+                hideLoading()
+              }
+            }).catch(err => {
+              hideLoading()
+            })
+          } else {
+            data.subjectCode = "2241";
+            data.claimType = 0;
+            data.claimMoney = this.accrued[0].balanceMoney
+            showLoading()
+            addClaim(data).then(res => {
+              if (res.code === 0) {
+                hideLoading()
+                this.$parent.$parent.queryClaimed()
+                this.$parent.$parent.$refs.claim.currentClaimed = []
+                this.$Message.success('认领成功')
+                this.modal = false;
+              } else {
+                hideLoading()
+              }
+            }).catch(err => {
+              hideLoading()
+            })
+          }
+        }
+      },
+      //选择辅助核算回调
+      getCallBack() {
+        this.getMessage();
       }
-    },
-    //选择辅助核算回调
-    getCallBack(){
-      this.getMessage();
     }
-  }
-};
+  };
 </script>
 <style lang="less" scoped>
-.dbd {
-  padding-bottom: 25px;
-}
+  .dbd {
+    padding-bottom: 25px;
+  }
 </style>
