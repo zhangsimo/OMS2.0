@@ -41,7 +41,11 @@
         :edit-config="{trigger: 'click', mode: 'cell'}"
       >
         <vxe-table-column type="seq" title="序号"></vxe-table-column>
-        <vxe-table-column field="name" title="仓位" :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-table-column field="name" title="仓位" :edit-render="{name: 'input'}" :filters="[{ data: '' }]" :filter-method="filterPositionMethod">
+          <template v-slot:filter="{ $panel, column }">
+            <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="area" title="区域" :edit-render="{name: 'input'}"></vxe-table-column>
         <vxe-table-column title="是否禁用">
           <template v-slot="{ row }">{{ row.isDisabled ? '是' : '否' }}</template>
@@ -213,6 +217,9 @@ export default {
     }
   },
   methods: {
+    filterPositionMethod({ option, row }){
+      return (row.name||"").indexOf(option.data)>-1
+    },
     //获取仓位
     async getAllWarehouseList() {
       let id = this.storeId.id;
