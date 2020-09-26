@@ -308,6 +308,8 @@
                   show-overflow
                   :data="Leftcurrentrow.detailVOS"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
+                  :footer-method="footerMethod"
+                  show-footer
                 >
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -797,6 +799,27 @@
       // 调接口获取配件组装列表信息
     },
     methods: {
+      //合计
+      footerMethod({ columns, data }) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              // let tex = this.Bottom.tbdata.length
+              return "合计";
+            }
+            if (columnIndex === 1) {
+              // let tex = this.Bottom.tbdata.length
+              return (data||[]).length +"条";
+            }
+            if (["applyQty"].includes(column.property)) {
+              return this.$utils.sum(data, column.property);
+            }
+            return null;
+          })
+        ];
+      },
+
+
       throwNameFun(name){
         this.selectSupplierName(name)
       },
