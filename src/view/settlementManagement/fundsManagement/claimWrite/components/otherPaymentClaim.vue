@@ -382,12 +382,12 @@ export default {
       this.oneSubject = row;
     },
     changePage(page) {
-      this.personage.page.num = page;
+      this.page.num = page;
       this.getQuery();
     },
-    changeSize(page) {
-      this.personage.page.num = 1;
-      this.personage.page.size = size;
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
       this.getQuery();
     },
     openVoucherInput() {
