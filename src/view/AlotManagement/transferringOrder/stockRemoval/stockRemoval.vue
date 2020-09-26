@@ -308,18 +308,20 @@
                   show-overflow
                   :data="Leftcurrentrow.detailVOS"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
+                  :footer-method="footerMethod"
+                  show-footer
                 >
                   <vxe-table-column
                     show-overflow="tooltip"
                     type="seq"
-                    width="60"
+                    width="50"
                     title="序号"
                     fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     type="checkbox"
-                    width="60"
+                    width="40"
                     fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
@@ -340,14 +342,14 @@
                     show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
-                    width="100"
+                    width="80"
                     fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="applyQty"
                     title="申请数量"
-                    width="100"
+                    width="80"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -360,7 +362,7 @@
                     show-overflow="tooltip"
                     field="stockOutQty"
                     title="缺货数量"
-                    width="100"
+                    width="70"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -368,6 +370,11 @@
                     title="仓位"
                     width="100"
                   ></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" title="紧销品" width="60">
+                    <template v-slot="{ row }">
+                      <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="carBrandName"
@@ -378,7 +385,7 @@
                     show-overflow="tooltip"
                     field="unit"
                     title="单位"
-                    width="100"
+                    width="50"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -390,25 +397,25 @@
                     show-overflow="tooltip"
                     field="partInnerId"
                     title="配件内码"
-                    width="120"
+                    width="90"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="spec"
                     title="规格"
-                    width="100"
+                    width="80"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="hasOutQty"
                     title="出库数量"
-                    width="100"
+                    width="80"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="hasCancelQty"
                     title="取消数量"
-                    width="100"
+                    width="80"
                   ></vxe-table-column>
                 </vxe-table>
               </div>
@@ -797,6 +804,27 @@
       // 调接口获取配件组装列表信息
     },
     methods: {
+      //合计
+      footerMethod({ columns, data }) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              // let tex = this.Bottom.tbdata.length
+              return "合计";
+            }
+            if (columnIndex === 2) {
+              // let tex = this.Bottom.tbdata.length
+              return (data||[]).length +"条";
+            }
+            if (["applyQty",'hasAcceptQty','stockOutQty','hasOutQty','hasCancelQty'].includes(column.property)) {
+              return this.$utils.sum(data, column.property);
+            }
+            return null;
+          })
+        ];
+      },
+
+
       throwNameFun(name){
         this.selectSupplierName(name)
       },
