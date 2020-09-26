@@ -285,7 +285,8 @@ export default {
       this.claimTit == '预付款认领' ?this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
       this.oneSubject = {};
       this.modal = true;
-      this.getQuery();
+      this.$refs.quickDate.resetFun()
+      // this.getQuery();
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
       })
@@ -342,10 +343,10 @@ export default {
         if (res.code == 0) {
           if (res.data.content.length <= 0) {
             this.$message.success("暂无数据");
-          } else {
+          }
             this.tableData = res.data.content;
             this.page.total = res.data.totalElements;
-          }
+          
         }
       }
       this.serviceId = "";
