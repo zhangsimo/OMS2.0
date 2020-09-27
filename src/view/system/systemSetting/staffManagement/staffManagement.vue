@@ -580,6 +580,7 @@ export default {
           data.singtwo = data.single ? 1 : 0;
           data.groupId = data.groundIds[data.groundIds.length -1]
           data.userRoles.forEach( item => delete  item.del)
+          data.entryTime = moment(data.entryTime).format("YYYY-MM-DD")
           addUser(data, this.$store.state.user.userData.groupId)
             .then(res => {
               stop();
@@ -607,6 +608,7 @@ export default {
           data.userRoles.forEach( item => {
             delete  item.system
           })
+          data.entryTime = moment(data.entryTime).format("YYYY-MM-DD")
           changeeditUser(data)
             .then(res => {
               stop();
