@@ -946,7 +946,15 @@ export default {
     //获取分店
     async getCommpany() {
       let arr = await creat([], this.$store);
-      this.Branchstore = [{ value: "", label: "全连锁" }, ...arr[2]] || [
+      //中文开头
+      let arrStore = (arr[2]||[]).filter(item => /^[\u4e00-\u9fa5]/.test(item.label)).sort((a,b)=>{
+        return a.label.localeCompare(b.label)
+      });
+      //非中文开头
+      let arrStore2 = (arr[2]||[]).filter(item => !/^[\u4e00-\u9fa5]/.test(item.label)).sort((a,b)=>{
+        return a.label.localeCompare(b.label)
+      });
+      this.Branchstore = [{ value: "", label: "全连锁" }, ...arrStore2,...arrStore] || [
         { value: "", label: "全连锁" }
       ];
       this.searchForm.old = arr[1] || "";
