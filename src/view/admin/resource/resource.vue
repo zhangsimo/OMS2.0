@@ -253,7 +253,6 @@
       modalHide() {
         this.modal = false
         this.title = '新增资源'
-
         this.newRes.id = null
         this.newRes.pId = null
         this.newRes.displayName = ''
@@ -266,6 +265,7 @@
         this.$refs.child.handleSubmit(() => {
           let stop = this.$loading()
           this.newRes.scope = this.sysType
+          this.newRes.systemScope = this.sysType
           addOrUpdate(this.newRes).then(res => {
             stop()
             if (res.code == 0) {

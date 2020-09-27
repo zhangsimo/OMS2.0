@@ -216,8 +216,10 @@
           @keydown="keydown"
           :data="BottomTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
+          show-footer
+          :footer-method="footerMethod"
         >
-          <vxe-table-column width="50"  type="seq" title="序号"></vxe-table-column>
+          <vxe-table-column width="60"  type="seq" title="序号"></vxe-table-column>
 
           <!-- <vxe-table-column  show-overflow="tooltip" title="操作" width="80">
                 <template v-slot="{ row }">
@@ -227,31 +229,31 @@
 
           <vxe-table-column  show-overflow="tooltip"
             field="partCode"
-                             width="150"
+                             width="130"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip"
             field="partName"
             title="配件名称"
-            width="150"
+            width="130"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="70"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" width="100"
             field="orderQty"
             title="订单数量"
           ></vxe-table-column>
 
-          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" width="120"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" width="110"
             field="trueEnterQty"
             title="已入库数量"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column  show-overflow="tooltip" width="100"
             field="adjustQty"
             title="已取消数量"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip"
+          <vxe-table-column  show-overflow="tooltip" width="150"
             field="thisQty"
             title="本次入库数量"
             :edit-render="{
@@ -271,8 +273,8 @@
               events: { blur: checkSelf }
             }"
           ></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="150"></vxe-table-column>
-          <vxe-table-column  show-overflow="tooltip" field="spec" title="规格"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="120"></vxe-table-column>
+          <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="110"></vxe-table-column>
           <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="150"></vxe-table-column>
         </vxe-table>
       </div>
@@ -343,6 +345,29 @@ export default {
     this.search();
   },
   methods: {
+    footerMethod({ columns, data }){
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '合计'
+          }
+          if (['orderQty','trueEnterQty','adjustQty'].includes(column.property)) {
+            let totals = data.reduce((prev,cur) => {
+              if(!isNaN(Number(cur[column.property]))){
+                return prev+parseFloat(cur[column.property])
+              }else{
+                return prev+0
+              }
+            },0)
+            return totals
+          }
+          if(columnIndex==1){
+            return (data||[]).length+'条';
+          }
+          return null
+        })
+      ]
+    },
 
     //------------------------------------------------------------------------//
     //表格tab切换可编辑部位

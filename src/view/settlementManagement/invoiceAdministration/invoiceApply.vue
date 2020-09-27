@@ -757,7 +757,7 @@ export default {
           minWidth: 100,
           className: "tc",
           render: (h , params) => {
-            return h('span' , params.row.invoiceKind == 1 ? '增值税普通发票' : '增值税专用发票')
+            return h('span' , params.row.invoiceKind == 1 ? 'c' : 's')
           }
         },
         {
@@ -866,7 +866,7 @@ export default {
           className: "tc",
           render:(h,params)=>{
             let text=""
-            params.row.isOilPart==1?text="成品油发票":text="普通发票"
+            params.row.isOilPart==1?text="1":text="0"
             return h("span",text)
           }
         },
@@ -957,7 +957,7 @@ export default {
         {
           title: "计量单位",
           minWidth: 100,
-          key: "unit",
+          key: "calculateUnit",
           className: "tc",
         },
         {
@@ -1058,6 +1058,12 @@ export default {
               }, params.row.outNo)
             ])
           }
+        },
+        {
+          title: "单位",
+          minWidth: 100,
+          key: "unit",
+          className: "tc"
         },
         {
           title: "油品包装规格",

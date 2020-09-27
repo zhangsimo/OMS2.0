@@ -16,7 +16,7 @@
                 <i-col span="8">
                   <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
-                <i-col span="2">
+                <i-col span="2" class="ml10">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
               </Row>
@@ -168,7 +168,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
     <settlement2 ref="settlement2" @reloadParList="reloadParentList"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
@@ -259,6 +259,7 @@ export default {
       Branchstore: [{ id: 0, name: "全部" }],
       currentAccount: {},
       currentAccountItem:{},
+      accruedList:[{mateAccountCoding:""}]
     };
   },
   async mounted() {
@@ -281,9 +282,13 @@ export default {
       if(this.company.length==0){
         this.getOne();
       }
+      this.claimTit == '预付款认领' ?this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
       this.oneSubject = {};
       this.modal = true;
-      this.getQuery();
+      if(!this.voucherinputModel){
+        this.$refs.quickDate.resetFun()
+      }
+      // this.getQuery();
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
       })
@@ -340,10 +345,10 @@ export default {
         if (res.code == 0) {
           if (res.data.content.length <= 0) {
             this.$message.success("暂无数据");
-          } else {
+          }
             this.tableData = res.data.content;
             this.page.total = res.data.totalElements;
-          }
+          
         }
       }
       this.serviceId = "";
@@ -368,6 +373,7 @@ export default {
     },
     // 快速查询
     quickDate(data) {
+      this.page.num = 1
       this.value = data;
       this.getQuery();
     },
@@ -380,12 +386,12 @@ export default {
       this.oneSubject = row;
     },
     changePage(page) {
-      this.personage.page.num = page;
+      this.page.num = page;
       this.getQuery();
     },
-    changeSize(page) {
-      this.personage.page.num = 1;
-      this.personage.page.size = size;
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
       this.getQuery();
     },
     openVoucherInput() {

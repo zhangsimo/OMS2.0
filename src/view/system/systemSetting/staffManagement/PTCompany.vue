@@ -9,11 +9,32 @@
         <a class="mr20 iconfont iconshanchuicon" @click="cancel"> 取消</a>
       </div>
       <Form ref="formValidate" :model="formValidate"  :rules="ruleValidate" :label-width="80">
-        <FormItem label="角色名称:" prop="userRoleIdTwo">
-          <Select v-model="formValidate.userRoleIdTwo" style="width:150px" >
-            <Option v-for="item in jobList" :value="item.id" :key="item.id">{{ item.displayName }}</Option>
-          </Select>
+        <FormItem label="系统角色:" style="position: relative">
+          <Cascader
+            style="width:60%"
+            :data="jobList"
+            v-model="userRoleId"
+            placeholder=""
+            @on-change="getJob"
+          ></Cascader>
+          <div class="jobTags">
+            <Tag
+              v-for="item in formValidate.userRoles"
+              :key="item.id"
+              :name="item.id"
+              :color=" item.systemType === 0 ? 'error': 'success'"
+              closable
+              @on-close="handleClose"
+            >
+              {{ item.displayName}}
+            </Tag>
+          </div>
         </FormItem>
+<!--        <FormItem label="角色名称:" prop="userRoleIdTwo">-->
+<!--          <Select v-model="formValidate.userRoleIdTwo" style="width:150px" >-->
+<!--            <Option v-for="item in jobList" :value="item.id" :key="item.id">{{ item.displayName }}</Option>-->
+<!--          </Select>-->
+<!--        </FormItem>-->
       </Form>
       <div class="companyList">
         <Table :columns="columns" border :loading="loading" stripe :data="companyList" height="440" size="small"
@@ -29,6 +50,7 @@
 <script>
   import {getCompanyList , addEditUser} from '@/api/system/systemSetting/staffManagenebt'
   import {queryRolesByPage } from '_api/admin/roleApi.js';
+  import { findAllJob } from "_api/admin/roleApi.js";
 
   export default {
         name: "PTCompany",
@@ -76,7 +98,8 @@
                     },
                 ],
               formValidate:{
-                userRoleIdTwo:''
+                userRoleIdTwo:'',
+                userRoles:[]
               },//表单总数据
               ruleValidate:{
                 userRoleIdTwo:[
@@ -84,6 +107,7 @@
                 ],
               },//表单校验
               jobList:[],//角色列表
+              userRoleId:[], //选择获取到的岗位
             }
         },
         mounted(){
@@ -112,7 +136,10 @@
                 this.selectedArr = []
                 this.shopCode = ''
                 this.compentName = ''
-              this.$refs.formValidate.resetFields()
+              this.formValidate = {
+                userRoles:[]
+              }
+              this.getlist()
             },
             //切换分页条数
             selectPage(size) {
@@ -149,29 +176,29 @@
               if(this.selectedArr.length < 1){
                 return  this.$Message.error('至少选择一个公司')
               }
-              this.$refs.formValidate.validate(valid => {
-                if (valid) {
+
                   let companyList = ''
                   this.selectedArr.forEach( item => {
                     companyList += item.id + ','
                   })
                   companyList = companyList.substring(0 ,companyList.length -1 )
                   this.data.companyList = '('+ companyList + ')'
-                  this.data.userRoleIdNew = this.formValidate.userRoleIdTwo
+                  this.data.userRolesNew = this.formValidate.userRoles || []
                   this.data.groundIds = this.data.groundIdsStr.split(',')
+                  delete this.data.userRoles
+                  this.data.userRolesNew.forEach( item => {
+                     delete item.system
+                    delete  item.del
+                  })
 
                   let stop = this.$loading()
                   addEditUser(this.data).then( res => {
                     stop()
-                    this.getlist()
-                    this.$emit('colseMdole' , res)
+                    if (res.code === 0){
+                      this.getlist()
+                      this.$emit('colseMdole' , res)
+                    }
                   })
-                } else {
-                  this.$Message.error('兼职岗位必选');
-                }
-              })
-
-
             },
           //清空
             cancel(){
@@ -180,17 +207,52 @@
             this.$emit('colseMdole' , this.data)
             this.getlist()
           },
-          //获取全部岗位
-          async getLeftList(){
-            let data ={}
-            data.size = 9999
-            data.page = 0
-            data.systemType = 0
-            let res = await queryRolesByPage(data)
-            if(res.code == 0){
-              this.jobList = res.data.content
+          //获取全部角色
+          async getLeftList() {
+            let res = await findAllJob();
+            if (res.code == 0) {
+              this.jobList = res.data
+              this.changeTreeList(this.jobList)
             }
           },
+
+          //重组角色树形图数据
+          changeTreeList(val){
+            if (Array.isArray(val) && val.length > 0){
+              val.forEach(item => {
+                item.value = item.id
+                item.label = item.displayName
+                item.children = item.roles ? item.roles : ''
+                if (item.children) {
+                  this.changeTreeList(item.children)
+                }
+              })
+            }
+          },
+          //获取角色push斤tag清除所获取数据
+          getJob(value, selectedData){
+            this.userRoleId = []
+            let cont = selectedData[selectedData.length -1]
+            //判断父级是否是重复如果重复则覆盖原先选择的数据保证当钱系统只有条
+            let index
+            this.formValidate.userRoles.forEach( (item , i)  => {
+              if(item.systemType == cont.systemType){
+                index = i
+              } })
+            if (Number.isFinite(index)){
+              this.$set(this.formValidate.userRoles , index , cont )
+            }else {
+              this.formValidate.userRoles.push(cont)
+            }
+          },
+
+          //关闭获取到角色tag
+          handleClose(event, name){
+            const index = this.formValidate.userRoles.indexOf(name);
+            this.formValidate.userRoles.splice(index, 1);
+          },
+
+
           //清空校验
           resetFields() {
             this.$refs.formValidate.resetFields()
@@ -215,4 +277,10 @@
 .companyList {
   margin-bottom: 10px;
 }
+.jobTags {
+  position: absolute;
+  top: -2px;
+  left: 5px;
+}
+
 </style>

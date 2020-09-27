@@ -384,10 +384,14 @@ export default {
 
     showOrhideModel(v){
       if(v){
+        this.SupperlierNameOrCode = ''
+        this.FullNameOrCode = ''
+        this.formDynamic.fund = ''
+        this.dealings = false
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        if(this.fundList.length==0){
+        if(this.fundListZanshi.length==0){
           this.fundGetList();
         }
 
@@ -398,12 +402,16 @@ export default {
 
         // this.SelectGetlistJi();
         // this.businessType();
-        if(this.AssistTableDataKeHu.length==0){
-          this.ClientgetList(); //客户初始化
-        }
-        if(this.AssistTableDataGongYingShang.length==0){
-          this.SupperliergetList(); //供应商初始化
-        }
+
+        this.ClientgetList()
+        this.SupperliergetList()
+
+        // if(this.AssistTableDataKeHu.length==0){
+        //   this.ClientgetList(); //客户初始化
+        // }
+        // if(this.AssistTableDataGongYingShang.length==0){
+        //   this.SupperliergetList(); //供应商初始化
+        // }
         if(this.list.length==0){
           this.getListCompany(); // 公司
         }
