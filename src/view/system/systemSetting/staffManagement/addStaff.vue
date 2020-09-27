@@ -116,7 +116,7 @@
         </div>
         <div style="display: flex">
           <div style="flex-flow: row nowrap;width: 100%">
-            <FormItem label="入职时间：" style prop="entryTime">
+            <FormItem label="入职时间："  prop="entryTime">
               <Date-picker
                 v-model="data.entryTime"
                 type="date"
@@ -472,7 +472,8 @@ export default {
 
     //关闭获取到角色tag
     handleClose(event, name){
-      const index = this.data.userRoles.indexOf(name);
+        let index = null
+      this.data.userRoles.forEach( ( item ,idx ) => {if(item.id === name) { index = idx}});
       this.data.userRoles.splice(index, 1);
     },
 
@@ -603,25 +604,11 @@ export default {
               item.wagesSign = newarr.wagesSign;
             }
           });
-          // if (bool == true) {
-          //   if (item.id == this.selectFinTab.id) {
-          //     let newarr = {};
-          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
-          //     item.id = newarr.id;
-          //     item.tenantId = newarr.tenantId;
-          //     item.guestId = newarr.guestId;
-          //     item.accountBank = newarr.accountBank;
-          //     item.accountBankNo = newarr.accountBankNo;
-          //     item.accountName = newarr.accountName;
-          //     item.accountType = newarr.accountType;
-          //     item.wagesSign = newarr.wagesSign;
-          //   }
+
             this.disposeFinData();
             this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
-          // } else {
-          //   return this.$Message.error("该银行卡已添加过");
-          // }
+
           this.data.staffAccountVoList = this.financeList;
         } else {
 

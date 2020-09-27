@@ -253,7 +253,6 @@
       modalHide() {
         this.modal = false
         this.title = '新增资源'
-
         this.newRes.id = null
         this.newRes.pId = null
         this.newRes.displayName = ''
