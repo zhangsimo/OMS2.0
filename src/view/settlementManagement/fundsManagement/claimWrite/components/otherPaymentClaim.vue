@@ -16,7 +16,7 @@
                 <i-col span="8">
                   <i-input :value.sync="formValidate.voucherInput"  v-model="MessageValue"></i-input>
                 </i-col>
-                <i-col span="2">
+                <i-col span="2" class="ml10">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
               </Row>
@@ -285,7 +285,9 @@ export default {
       this.claimTit == '预付款认领' ?this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
       this.oneSubject = {};
       this.modal = true;
-      this.$refs.quickDate.resetFun()
+      if(!this.voucherinputModel){
+        this.$refs.quickDate.resetFun()
+      }
       // this.getQuery();
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
@@ -371,6 +373,7 @@ export default {
     },
     // 快速查询
     quickDate(data) {
+      this.page.num = 1
       this.value = data;
       this.getQuery();
     },
