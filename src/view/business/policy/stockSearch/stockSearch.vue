@@ -312,12 +312,12 @@
           <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column field="guestName" title="供应商" width="140" fixed="left"></vxe-table-column>
           <vxe-table-column field="createTime" title="入库日期" width="100" fixed="left"  remote-sort></vxe-table-column>
-          <vxe-table-column field="partCode" title="配件编码" width="110" fixed="left"></vxe-table-column>
+          <vxe-table-column field="part Code" title="配件编码" width="110" fixed="left"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="110" fixed="left"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]" :filter-method="filterNameMethod1"></vxe-table-column>
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-          <vxe-table-column field="carBrandName" title="厂牌" width="80"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="厂牌" width="70"></vxe-table-column>
           <vxe-table-column field="enterQty" title="入库数量" width="70">
           </vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
