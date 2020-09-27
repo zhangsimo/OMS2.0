@@ -189,6 +189,7 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
+      console.log(value,1111)
       if (value.fullName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.fullName,
@@ -197,8 +198,8 @@ export default {
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          mateAccountName:val.titleName,
-          mateAccountCode:val.titleCode,
+          mateAccountName:this.obj.titleName,
+          mateAccountCode:this.obj.titleCode,
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -208,8 +209,19 @@ export default {
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          mateAccountName:val.titleName,
-          mateAccountCode:val.titleCode,
+          mateAccountName:this.obj.titleName,
+          mateAccountCode:this.obj.titleCode,
+        });
+      }else if(value.itemName){
+        this.BusinessType.push({
+          serviceTypeName: this.obj.fullName + "-" + value.itemName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAmt: 0,
+          unAmtLeft: 0,
+          mateAccountName:this.obj.titleName,
+          mateAccountCode:this.obj.titleCode,
         });
       }
     });
