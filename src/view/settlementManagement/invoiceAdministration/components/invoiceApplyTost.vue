@@ -759,7 +759,7 @@ export default {
         {
           title: "对号账单",
           key: "accountNo",
-          width: 70,
+          width: 180,
           render: (h, params) => {
             let arr = [];
             if (params.row.accountNo != null) {

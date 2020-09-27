@@ -91,20 +91,32 @@
         </div>
         <div style="display: flex">
           <div style="flex-flow: row nowrap;width: 100%">
-            <FormItem label="角色名称:" prop="userRoleId">
-              <Select v-model="data.userRoleId" style="width:150px">
-                <Option
-                  v-for="item in jobList"
-                  :value="item.id"
-                  :key="item.id"
-                >{{ item.displayName }}</Option>
-              </Select>
+            <FormItem label="系统角色:" style="position: relative">
+              <Cascader
+                style="width:80%"
+                :data="jobList"
+                v-model="userRoleId"
+                placeholder=""
+                @on-change="getJob"
+              ></Cascader>
+              <div class="jobTags">
+              <Tag
+                v-for="item in data.userRoles"
+                :key="item.id"
+                :name="item.id"
+                :color=" item.systemType === 0 ? 'error': 'success'"
+                closable
+                @on-close="handleClose"
+              >
+                {{ item.displayName}}
+              </Tag>
+              </div>
             </FormItem>
           </div>
         </div>
         <div style="display: flex">
           <div style="flex-flow: row nowrap;width: 100%">
-            <FormItem label="入职时间：" style prop="entryTime">
+            <FormItem label="入职时间："  prop="entryTime">
               <Date-picker
                 v-model="data.entryTime"
                 type="date"
@@ -217,7 +229,7 @@
 <script>
 import { getcompany ,setPhone } from "@/api/system/systemSetting/staffManagenebt";
 import { findGuest } from "@/api/settlementManagement/advanceCollection";
-import { queryRolesByPage } from "_api/admin/roleApi.js";
+import { findAllJob } from "_api/admin/roleApi.js";
 import { goshop } from "@/api/settlementManagement/fundsManagement/capitalChain";
 import staffAccount from '@/view/system/systemSetting/staffManagement/components/staffAccount'
 export default {
@@ -320,7 +332,39 @@ export default {
         { name: "是", value: 0 },
         { name: "否", value: 1 }
       ],
-      jobList: [], //获取当前岗位
+      jobList: [
+        {
+          value: 'zhejiang',
+          label: '浙江',
+          children: [{
+            value: 'hangzhou',
+            label: '杭州',
+            children: [{
+              value: 'xihu',
+              label: '西湖'
+            }]
+          }]
+        },
+        {
+          value: 'jiangsu',
+          label: '江苏',
+          children: [{
+            value: 'nanjing',
+            label: '南京',
+            children: [{
+              value: 'zhonghuamen',
+              label: '中华门'
+            },
+              {
+                value: 'xuanwuhu',
+                label: '玄武湖'
+              },
+
+            ]
+          }]
+        }
+      ], //获取当前岗位
+      userRoleId:[], //选择获取到的岗位
       business: 0,
       list: [], //公司信息
       gusetList: [], //往来单位信息
@@ -394,6 +438,7 @@ export default {
       enAble:"启用",
       accountAddId:0,
       financeList:[],
+      tabList: [] //tag列表数据(所选角色)
     };
   },
   mounted() {
@@ -407,6 +452,31 @@ export default {
       this.tabIndex = index;
       this.showSearch = this.shopkeeper == 1 || index == 0;
     },
+
+    //获取角色push斤tag清除所获取数据
+    getJob(value, selectedData){
+      this.userRoleId = []
+      let cont = selectedData[selectedData.length -1]
+      //判断父级是否是重复如果重复则覆盖原先选择的数据保证当钱系统只有条
+       let index
+        this.data.userRoles.forEach( (item , i)  => {
+        if(item.systemType == cont.systemType){
+          index = i
+        } })
+      if (Number.isFinite(index)){
+        this.$set(this.data.userRoles , index , cont )
+      }else {
+        this.data.userRoles.push(cont)
+      }
+    },
+
+    //关闭获取到角色tag
+    handleClose(event, name){
+        let index = null
+      this.data.userRoles.forEach( ( item ,idx ) => {if(item.id === name) { index = idx}});
+      this.data.userRoles.splice(index, 1);
+    },
+
     //获取公司
     async getList() {
       let data = {};
@@ -534,25 +604,11 @@ export default {
               item.wagesSign = newarr.wagesSign;
             }
           });
-          // if (bool == true) {
-          //   if (item.id == this.selectFinTab.id) {
-          //     let newarr = {};
-          //     newarr = JSON.parse(JSON.stringify(this.selectFinTab));
-          //     item.id = newarr.id;
-          //     item.tenantId = newarr.tenantId;
-          //     item.guestId = newarr.guestId;
-          //     item.accountBank = newarr.accountBank;
-          //     item.accountBankNo = newarr.accountBankNo;
-          //     item.accountName = newarr.accountName;
-          //     item.accountType = newarr.accountType;
-          //     item.wagesSign = newarr.wagesSign;
-          //   }
+
             this.disposeFinData();
             this.$Message.success("修改银行卡信息成功");
             this.bankAccount = false;
-          // } else {
-          //   return this.$Message.error("该银行卡已添加过");
-          // }
+
           this.data.staffAccountVoList = this.financeList;
         } else {
 
@@ -582,17 +638,31 @@ export default {
         }
       });
     },
-    //获取全部岗位
+    //获取全部角色
     async getLeftList() {
-      let data = {};
-      data.size = 9999;
-      data.page = 0;
-      data.systemType = 0;
-      let res = await queryRolesByPage(data);
+      let res = await findAllJob();
       if (res.code == 0) {
-        this.jobList = res.data.content;
+        this.jobList = res.data
+        this.changeTreeList(this.jobList)
       }
     },
+
+    //重组角色树形图数据
+    changeTreeList(val){
+      if (Array.isArray(val) && val.length > 0){
+        val.forEach(item => {
+          item.value = item.id
+          item.label = item.displayName
+          item.children = item.roles ? item.roles : ''
+          if (item.children) {
+            this.changeTreeList(item.children)
+          }
+        })
+      }
+    },
+
+
+
     //删除校验
     resetFields() {
       this.$refs.form.resetFields();
@@ -660,5 +730,10 @@ export default {
     color: #fd5c5c;
   }
 }
+  .jobTags {
+    position: absolute;
+    top: -2px;
+    left: 5px;
+  }
 
 </style>

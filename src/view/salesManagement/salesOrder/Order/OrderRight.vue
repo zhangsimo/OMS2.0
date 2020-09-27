@@ -873,6 +873,9 @@
             if (columnIndex === 0) {
               return "合计";
             }
+            if (columnIndex === 3) {
+              return (data||[]).length+"条";
+            }
             // if (["orderPrice"].includes(column.property)) {
             //     return this.$utils.sum(data, column.property).toFixed(2);
             // }

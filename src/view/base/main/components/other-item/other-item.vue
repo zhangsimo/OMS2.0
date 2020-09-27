@@ -53,7 +53,18 @@
           </vxe-table-column>
           <vxe-table-column field="orgid" title="门店编号" width="150"></vxe-table-column>
           <vxe-table-column field="shortName" title="公司名称"></vxe-table-column>
-          <vxe-table-column field="userRoleName" title="角色名称"></vxe-table-column>
+          <vxe-table-column  title="角色名称">
+            <template v-slot="{ row }" >
+              <Tag
+                v-for="item in row.userRoles"
+                :key="item.id"
+                :name="item.id"
+                :color=" item.systemType === 0 ? 'error': item.systemType === 2?'success' :'warning'"
+              >
+                {{ item.displayName}}
+              </Tag>
+            </template>
+          </vxe-table-column>
         </vxe-table>
       </div>
     </Modal>
@@ -168,7 +179,7 @@
           data.shopId = res.currentCompany ? res.currentCompany.id ? res.currentCompany.id : '' : ''
           data.shopkeeper = res.data.shopkeeper
           localStorage.setItem('oms2-userList', JSON.stringify(data))
-          res.data.username = this.$store.state.user.username
+          res.data.username = localStorage.getItem('username')
           let token = await changeToken(res.data)
           if (token.code == 0) {
             setToken(token.data.access_token)

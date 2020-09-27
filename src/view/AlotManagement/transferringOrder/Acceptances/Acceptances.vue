@@ -223,6 +223,10 @@ export default {
             // let tex = this.Bottom.tbdata.length
             return "合计";
           }
+          if (columnIndex === 1) {
+            // let tex = this.Bottom.tbdata.length
+            return (data||[]).length +"条";
+          }
           if (["applyQty"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
           }

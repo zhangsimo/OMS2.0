@@ -16,6 +16,12 @@ module.exports = {
       .set("_mixins", resolve("src/mixins"))
       ;
   },
+  configureWebpack: {
+    externals: {
+      'Highcharts':'highcharts', // 配置使用CDN
+      'Highcharts3D':'highcharts-3d'
+    }
+  },
   css: {
     loaderOptions: {
       less: {

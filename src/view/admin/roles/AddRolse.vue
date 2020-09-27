@@ -10,6 +10,11 @@
             <Option v-for="item in codeList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
           </Select>
         </FormItem>
+        <FormItem label="角色系统:" prop="systemScope">
+          <Select v-model="list.systemScope" style="width:200px">
+            <Option v-for="item in sysTypeArr" :value="item.scope" :key="item.id">{{ item.title }}</Option>
+          </Select>
+        </FormItem>
         <FormItem label="角色描述:">
           <Input
             v-model="list.name"
@@ -34,6 +39,8 @@ import { Vue, Component } from "vue-property-decorator";
 import { addNewStaffe } from "_api/admin/roleApi";
 // @ts-ignore
 import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
+// @ts-ignore
+import { findResScope } from '_api/admin/resourceApi'
 
 @Component
 export default class AddRolse extends Vue {
@@ -43,6 +50,8 @@ export default class AddRolse extends Vue {
   private codeList: any =[]
   //判断模态框状态
   private staffShow: boolean = false;
+
+  private sysTypeArr:Array<any>= [] //获取目前所有系统
 
 
   //获取当前唯一标识数组
@@ -59,9 +68,13 @@ export default class AddRolse extends Vue {
   }
 
 
+
+
+
   //校验
   private ruleValidate: Object = {
-    displayName: [{ required: true, message: "角色名称必填", trigger: "blur" }]
+    displayName: [{ required: true, message: "角色名称必填", trigger: "blur" }],
+    systemScope:[{required: true, message: "角色系统必填", trigger: "change" ,type:'string'}]
   };
   private systemType: string|number;
   //------------methods----------------
@@ -69,10 +82,22 @@ export default class AddRolse extends Vue {
   private openModal(systemType) {
     this.systemType = systemType
     this.staffShow = true;
+    this.findResScope()
     this.list = {};
     this.handleReset();
     this.getroleList()
   }
+
+
+
+  //获取当前全部系统
+  findResScope() {
+    findResScope().then(res => {
+      this.sysTypeArr = res.data || []
+    })
+  }
+
+
   //清除校验
   private handleReset() {
     let form: any = this.$refs.formValidate;
