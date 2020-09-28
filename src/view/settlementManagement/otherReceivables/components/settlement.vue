@@ -247,6 +247,15 @@ export default {
           rpAmt: 0,
           unAmtLeft: 0
         });
+      }else if(value.itemName){
+        this.BusinessType.push({
+          businessTypeName: this.obj.fullName + "-" + value.itemName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAmt: 0,
+          unAmtLeft: 0
+        });
       }
     });
     //收付款信息

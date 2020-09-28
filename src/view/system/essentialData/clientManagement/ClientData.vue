@@ -80,8 +80,15 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem>
-                <div style="width: 180px;" class="h30"></div>
+              <FormItem label="所属门店:" class="h50">
+                <Select v-model="data.compCode" style="width:180px" class="mr10">
+                  <Option
+                    v-for="item in tableComData"
+                    :value="item.orgid"
+                    :key="item.orgid"
+                  >{{ item.shortName }}
+                  </Option>
+                </Select>
               </FormItem>
               <FormItem label="联系人手机:" prop="contactorTel">
                 <Input v-model="data.contactorTel" style="width: 180px" />
@@ -392,6 +399,7 @@ import {
   getCustomer
 } from "@/api/system/essentialData/clientManagement";
 import bankAccount from "@/view/system/essentialData/clientManagement/components/bankAccount";
+import {getUserAllCompany/**获取门店*/} from '@/api/base/user'
 import { forOf } from "xe-utils/methods";
 export default {
   name: "Data",
@@ -881,7 +889,8 @@ export default {
       deleteOneClient: [], //获取删除项
       pitchOneBank: [],
       tit: "新增开票", //开票弹窗
-      financeList:[]
+      financeList:[],
+      tableComData:[]//门店数组
     };
   },
   computed:{
@@ -898,11 +907,24 @@ export default {
     this.relevanceClientShow = this.data.guestVOList || [];
     this.invoice = this.data.guestTaxpayerVOList || [];
     this.getList();
+    this.getComList();
     this.getClienlist();
     this.disposeFinData();
     this.sessionKey = sessionStorage.getItem("key");
   },
   methods: {
+    //获取所有公司信息
+    async getComList() {
+      let data = {}
+      data.size = 10000
+      data.page = 0
+      data.id = this.$store.state.user.userData.id
+      data.tenantCompanyName = "";
+      let res = await getUserAllCompany(data)
+      if (res.code === 0) {
+        this.tableComData = res.data.content
+      }
+    },
     //设置为默认收货地址
     setDefault(id){
       this.placeList.map(item => {

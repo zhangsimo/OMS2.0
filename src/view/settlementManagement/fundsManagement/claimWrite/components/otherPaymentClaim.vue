@@ -285,9 +285,11 @@ export default {
       this.claimTit == '预付款认领' ?this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
       this.oneSubject = {};
       this.modal = true;
+      
       if(!this.voucherinputModel){
         this.$refs.quickDate.resetFun()
       }
+      this.MessageValue = ''
       // this.getQuery();
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"rpAmt")
