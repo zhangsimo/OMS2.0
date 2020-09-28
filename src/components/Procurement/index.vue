@@ -269,11 +269,13 @@
       }
       ;
       // this.shows = false;
-      selectRow.forEach((el: any) => {
+      let throwSelectRow:Array<any> = selectRow.map((item: any) => {
+        let el:any = {...item}
         el.sourceDetailId = el.id;
         Reflect.deleteProperty(el, 'id');
+        return el
       })
-      return selectRow;
+      return throwSelectRow;
     }
 
     @Emit('getPlanOrder')
@@ -308,7 +310,8 @@
       }
       let data: Array<any> = new Array();
       if (res.code == 0) {
-        data = (res.data.content || []).map(el => {
+        data = (res.data.content || []).map(item => {
+          let el:any = {...item}
           el.sourceDetailId = el.id;
           Reflect.deleteProperty(el, 'id');
           return el;
