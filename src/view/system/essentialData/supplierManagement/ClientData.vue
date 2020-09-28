@@ -152,6 +152,16 @@
               <FormItem label="电话:" class="h50">
                 <Input v-model="data.tel" style="width: 180px"/>
               </FormItem>
+              <FormItem label="门店:" class="h50">
+                <Select v-model="data.compCode" style="width:180px" class="mr10">
+                  <Option
+                    v-for="item in tableComData"
+                    :value="item.orgid"
+                    :key="item.orgid"
+                  >{{ item.shortName }}
+                  </Option>
+                </Select>
+              </FormItem>
             </div>
           </div>
           <FormItem label="备注:" class="h50">
@@ -306,6 +316,7 @@
   import bankAccount from "@/view/system/essentialData/clientManagement/components/bankAccount";
   import AddInoice from "@/view/system/essentialData/clientManagement/AddInoice";
   import {pinyin} from "../../../../utils/py";
+  import {getUserAllCompany/**获取门店*/} from '@/api/base/user'
 
   export default {
     name: "Data",
@@ -637,11 +648,13 @@
         invoice: [],
         newInoiceShow: false, //开票
         tit: "新增开票", //开票弹窗
+        tableComData:[],//门店数组
       };
     },
     created() {
       this.invoice = this.data.guestTaxpayerVOList || [];
       this.getList();
+      this.getComList();
     },
     computed:{
       spellCode(){
@@ -650,6 +663,18 @@
       }
     },
     methods: {
+      //获取所有公司信息
+      async getComList() {
+        let data = {}
+        data.size = 10000
+        data.page = 0
+        data.id = this.$store.state.user.userData.id
+        data.tenantCompanyName = "";
+        let res = await getUserAllCompany(data)
+        if (res.code === 0) {
+          this.tableComData = res.data.content
+        }
+      },
       //获取客户属性
       async getList() {
         let data = {};
