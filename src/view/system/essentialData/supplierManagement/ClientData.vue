@@ -152,7 +152,7 @@
               <FormItem label="电话:" class="h50">
                 <Input v-model="data.tel" style="width: 180px"/>
               </FormItem>
-              <FormItem label="门店:" class="h50">
+              <FormItem label="所属门店:" class="h50">
                 <Select v-model="data.compCode" style="width:180px" class="mr10">
                   <Option
                     v-for="item in tableComData"
