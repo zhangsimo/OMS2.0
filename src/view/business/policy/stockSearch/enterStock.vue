@@ -360,6 +360,8 @@
             :stripe="true"
             :columns="occupy"
             :data="contentThree.dataThree"
+            show-summary
+            :summary-method="handleSummary4"
             height="405"
           ></Table>
         </div>
@@ -1282,6 +1284,48 @@
               sums[key] = {
                 key,
                 value: this.total1.enterAmt
+              };
+            }
+          } else {
+            sums[key] = {
+              key,
+              value: ""
+            };
+          }
+        });
+
+        return sums;
+      },
+      handleSummary4({columns, data}) {
+        const sums = {};
+        columns.forEach((column, index) => {
+          const key = column.key;
+          if (index === 0) {
+            sums[key] = {
+              key,
+              value: "合值"
+            };
+            return;
+          }
+          if (["lockStockQty"].includes(key)) {
+            const values = data.map(item => Number(item[key]));
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v
+              };
+            } else {
+              sums[key] = {
+                key,
+                value: 'N/A'
               };
             }
           } else {
