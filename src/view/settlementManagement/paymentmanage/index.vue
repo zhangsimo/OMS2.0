@@ -2120,27 +2120,31 @@ export default {
         guestId: data.guestId
       }).then(res => {
         if (res.data.one) {
-          res.data.one.map((item, index) => {
+
+          let arrData = res.data.one.filter(item => item.noCharOffAmt!=0||item.noAccountAmt!=0);
+
+          arrData.map((item, index) => {
             item.num = index + 1;
             item.guestTypeName = item.guestType.name;
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
-          this.copyData1 = res.data.one;
-          this.pageObj1.total = res.data.one.length;
+          this.copyData1 = arrData;
+          this.pageObj1.total = arrData.length;
           this.data1 = this.changePageList(this.pageObj1.num,this.pageObj1.size,this.copyData1);
         } else {
           this.data1 = [];
         }
         if (res.data.two) {
-          res.data.two.map((item, index) => {
+          let arrData2 = res.data.two.filter(item => item.noCharOffAmt!=0||item.noAccountAmt!=0)
+          arrData2.map((item, index) => {
             item.num = index + 1;
             item.guestTypeName = item.guestType.name;
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
-          this.copyData2 = res.data.two;
-          this.pageObj2.total = res.data.two.length;
+          this.copyData2 = arrData2;
+          this.pageObj2.total = arrData2.length;
           this.data2 = this.changePageList(this.pageObj2.num,this.pageObj2.size,this.copyData2);
         } else {
           this.data2 = [];
