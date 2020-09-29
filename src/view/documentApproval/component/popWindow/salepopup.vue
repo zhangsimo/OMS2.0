@@ -102,7 +102,7 @@
             </Select>
           </FormItem>
           <FormItem label="开票税率" prop="taxRate">
-            <Select v-model="invoice.taxRate" class="ml5 w200" :disabled="modelType.type==3">
+            <Select v-model="invoice.taxRate" class="ml5 w200"  disabled>
               <Option
                 v-for="item in invoice.rateBillingList"
                 :value="item.value"
