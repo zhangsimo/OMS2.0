@@ -80,7 +80,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="所属门店:" class="h50">
+              <FormItem label="所属门店:">
                 <Select v-model="data.compCode" style="width:180px" class="mr10">
                   <Option
                     v-for="item in tableComData"
