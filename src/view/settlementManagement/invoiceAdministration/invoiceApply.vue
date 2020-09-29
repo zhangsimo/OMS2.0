@@ -19,7 +19,7 @@
 <!--            ></Date-picker>-->
 <!--          </div>-->
           <div class="db ml20">
-            <span>审批日期：</span>
+            <span>申请日期：</span>
             <Date-picker
               :value="value"
               @on-change="changedate"
@@ -322,28 +322,28 @@ export default {
             ])
           }
         },
-        {
-          title: "审核日期",
-          key: "updateTime",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.updateTime
-                }
-              }, params.row.updateTime)
-            ])
-          }
-        },
+        // {
+        //   title: "审核日期",
+        //   key: "updateTime",
+        //   className: "tc",
+        //   minWidth: 100,
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('span', {
+        //         style: {
+        //           display: 'inline-block',
+        //           width: '100%',
+        //           overflow: 'hidden',
+        //           textOverflow: 'ellipsis',
+        //           whiteSpace: 'nowrap'
+        //         },
+        //         domProps: {
+        //           title: params.row.updateTime
+        //         }
+        //       }, params.row.updateTime)
+        //     ])
+        //   }
+        // },
         {
           title: "对账单号",
           key: "accountNo",
