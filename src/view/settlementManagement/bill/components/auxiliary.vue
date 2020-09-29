@@ -501,12 +501,14 @@ export default {
     radioChangeEventClient({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "1";
+      this.AssistAccounting.auxiliaryTypeCode = "1";
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算供应商
     radioChangeEventSupplier({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "2";
+      this.AssistAccounting.auxiliaryTypeCode = "2"
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算个人
@@ -519,6 +521,7 @@ export default {
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "CW0011X";
+      this.AssistAccounting.auxiliaryTypeCode = "CW0011X"
       // this.auxiliaryCode = row.itemCode;
       // console.log(row)
     },
