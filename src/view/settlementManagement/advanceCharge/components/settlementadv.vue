@@ -371,86 +371,85 @@ export default {
           };
           data.two.push(item);
         });
-        console.log(data,1111)
-        // if (this.gettlementData.sign == 4) {
-        //   // 预付款核销
-        //   this.conserveDis=true;
-        //   showLoading()
-        //   let res = await api.addAll(data);
-        //   if (res.code == 0) {
-        //     hideLoading()
-        //     this.conserveDis=false;
-        //     this.Settlement = false;
-        //     this.$emit("getNewList", {});
-        //     return this.$message.success("核销成功");
-        //   }else{
-        //     hideLoading()
-        //     this.conserveDis=false;
-        //   }
-        // }
-        // if (this.gettlementData.sign == 5) {
-        //   // 预付款收回认领
-        //   data.three = [];
-        //   this.gettlementData.list.forEach(el => {
-        //     let item = {
-        //       accountName: el.accountName,
-        //       id: el.id,
-        //       mateAccountCode: el.mateAccountCode,
-        //       mateAccountName: el.mateAccountName,
-        //       incomeMoney: el.incomeMoney,
-        //       paidMoney: el.paidMoney,
-        //       orgId: el.ownStoreId,
-        //       orgName: el.ownStoreName,
-        //       amt: el.amt
-        //     };
-        //     data.three.push(item);
-        //   });
-        //   this.conserveDis=true;
-        //   showLoading()
-        //   let res = await api.addAll(data);
-        //   if (res.code == 0) {
-        //     hideLoading()
-        //     this.conserveDis=false
-        //     this.Settlement = false;
-        //     this.$emit("getNewList", {});
-        //     return this.$message.success("收回认领成功");
-        //   }else{
-        //     hideLoading()
-        //     this.conserveDis=false
-        //   }
-        // }
-        // if (this.gettlementData.sign == 9) {
-        //   // 预付款认领
-        //   data.three = [];
-        //   this.gettlementData.list.forEach(el => {
-        //     let item = {
-        //       accountName: el.accountName,
-        //       id: el.id,
-        //       mateAccountCode: el.mateAccountCode,
-        //       mateAccountName: el.mateAccountName,
-        //       incomeMoney: Math.abs(el.incomeMoney),
-        //       paidMoney: Math.abs(el.paidMoney),
-        //       orgId: el.ownStoreId,
-        //       orgName: el.ownStoreName,
-        //       amt: el.amt
-        //     };
-        //     data.three.push(item);
-        //   });
-        //   this.conserveDis=true;
-        //   showLoading()
-        //   let res = await api.addAll(data);
-        //   if (res.code == 0) {
-        //     hideLoading()
-        //     this.conserveDis=false;
-        //     this.Settlement = false;
-        //     this.$emit("getNewList", {});
-        //     this.$emit("reloadParList")
-        //     return this.$message.success("预付款认领成功");
-        //   }else{
-        //     hideLoading()
-        //     this.conserveDis=false;
-        //   }
-        // }
+        if (this.gettlementData.sign == 4) {
+          // 预付款核销
+          this.conserveDis=true;
+          showLoading()
+          let res = await api.addAll(data);
+          if (res.code == 0) {
+            hideLoading()
+            this.conserveDis=false;
+            this.Settlement = false;
+            this.$emit("getNewList", {});
+            return this.$message.success("核销成功");
+          }else{
+            hideLoading()
+            this.conserveDis=false;
+          }
+        }
+        if (this.gettlementData.sign == 5) {
+          // 预付款收回认领
+          data.three = [];
+          this.gettlementData.list.forEach(el => {
+            let item = {
+              accountName: el.accountName,
+              id: el.id,
+              mateAccountCode: el.mateAccountCode,
+              mateAccountName: el.mateAccountName,
+              incomeMoney: el.incomeMoney,
+              paidMoney: el.paidMoney,
+              orgId: el.ownStoreId,
+              orgName: el.ownStoreName,
+              amt: el.amt
+            };
+            data.three.push(item);
+          });
+          this.conserveDis=true;
+          showLoading()
+          let res = await api.addAll(data);
+          if (res.code == 0) {
+            hideLoading()
+            this.conserveDis=false
+            this.Settlement = false;
+            this.$emit("getNewList", {});
+            return this.$message.success("收回认领成功");
+          }else{
+            hideLoading()
+            this.conserveDis=false
+          }
+        }
+        if (this.gettlementData.sign == 9) {
+          // 预付款认领
+          data.three = [];
+          this.gettlementData.list.forEach(el => {
+            let item = {
+              accountName: el.accountName,
+              id: el.id,
+              mateAccountCode: el.mateAccountCode,
+              mateAccountName: el.mateAccountName,
+              incomeMoney: Math.abs(el.incomeMoney),
+              paidMoney: Math.abs(el.paidMoney),
+              orgId: el.ownStoreId,
+              orgName: el.ownStoreName,
+              amt: el.amt
+            };
+            data.three.push(item);
+          });
+          this.conserveDis=true;
+          showLoading()
+          let res = await api.addAll(data);
+          if (res.code == 0) {
+            hideLoading()
+            this.conserveDis=false;
+            this.Settlement = false;
+            this.$emit("getNewList", {});
+            this.$emit("reloadParList")
+            return this.$message.success("预付款认领成功");
+          }else{
+            hideLoading()
+            this.conserveDis=false;
+          }
+        }
       } else {
         this.$message.error("核对金额为0才能保存");
       }
