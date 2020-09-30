@@ -11,7 +11,7 @@
           @current-change="currentChangeEvent"
           header-row-class-name="headerTitle"
           :data="tableData">
-          <vxe-table-column  title="华胜集团信息表" class="sdfsdf">
+          <vxe-table-column  title="佳配经营情况" class="sdfsdf">
           <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
           <vxe-table-column field="name" title="指示名称"></vxe-table-column>
           <vxe-table-column field="sex" title="预算值">

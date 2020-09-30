@@ -42,26 +42,26 @@ const dev = {
 const test = {
   omsTask: "https://tsapi2.g-parts.cn/oms-task-provider",
   omsEdit: "https://tsapi2.g-parts.cn/oms-edi-provider",
+  omstaxset:'https://tsapi2.g-parts.cn/oms-tax-provider', //财务系统微服务
   // omsEdit: "http://192.168.21.59:9220",
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
   // omsApi:"http://192.168.21.59:9240",
   tokenApi: "https://tsapi2.g-parts.cn",
-  // tokenApi: "http://192.168.30.226:5600",
+  // tokenApi: "http://192.168.15.191:5600",
+  // wmsApi: "http://192.168.30.97:9250",
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
-  // wmsApi: "http://192.168.30.179:9250", // 徐林烽
-
+  // wmsApi: "http://192.168.21.59:9250", // 徐林烽
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  // omsOrder: "http://192.168.15.142:9210",
-  // omsOrder: "http://192.168.30.179:9210",
+  // omsOrder: "http://192.168.30.97:9210",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
-  // passportApi: "http://192.168.15.142:5200",
+  // passportApi: "http://192.168.15.191:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
-  // authApi: "http://192.168.15.142:5200",
+  // authApi: "http://192.168.15.191:5200",
   authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // omsBatch: 'http://192.168.21.59:9260', // 9260
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
-  // omsSettle: "http://192.168.21.162:9270",
+  // omsSettle: "http://192.168.30.21:9270",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   // omsSotck: "http://192.168.21.59:9280", //9280
@@ -78,6 +78,7 @@ const test = {
 const audit = {
   omsTask: "https://uatapi2.g-part.cn/oms-task-provider",
   omsEdit: "https://uatapi2.g-part.cn/oms-edi-provider",
+  omstaxset:'https://uatapi2.g-part.cn/oms-tax-provider', //财务系统微服务
   omsApi: "https://uatapi2.g-part.cn/oms-lease-provider",
   tokenApi: "https://uatapi2.g-part.cn",
   wmsApi: "https://uatapi2.g-part.cn/oms-system-provider",
@@ -103,6 +104,7 @@ const pro = {
   omsTask: "https://api2.g-part.cn/oms-task-provider",
   omsEdit: "https://api2.g-part.cn/oms-edi-provider",
   omsApi: "https://api2.g-part.cn/oms-lease-provider",
+  omstaxset:'https://api2.g-part.cn/oms-tax-provider', //财务系统微服务
   tokenApi: "https://api2.g-part.cn",
   wmsApi: "https://api2.g-part.cn/oms-system-provider",
   omsProduct: "https://api2.g-part.cn/oms-product-provider",
