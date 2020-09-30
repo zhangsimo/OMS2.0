@@ -41,6 +41,7 @@
 
 <script>
   import {allmoneyList} from '@/api/set/userManagement'
+  import Highcharts from 'highcharts'
     export default {
         name: "balance",
         data(){
