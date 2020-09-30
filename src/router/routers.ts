@@ -1165,7 +1165,7 @@ export default [
             mark: "7201",
             meta: { keepAlive: true,
               // hideInMenu: true,
-              title: "资产负债表",
+              title: "经营情况表",
             },
             component: () =>
               import("@/view/reportForm/navigator/balance.vue")
