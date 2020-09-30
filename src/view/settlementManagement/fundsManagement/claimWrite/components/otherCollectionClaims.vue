@@ -208,6 +208,7 @@
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
         })
+        this.MessageValue = ''
       },
       //判断是否可选择
       checkMethod({row}) {

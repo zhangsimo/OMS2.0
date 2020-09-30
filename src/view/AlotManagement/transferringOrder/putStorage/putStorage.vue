@@ -848,7 +848,7 @@ export default {
         Reflect.deleteProperty(data, "createUid")
       }
       // data.status = "STOCKING";
-      getDBSQlist(data, 10, 1)
+      getDBSQlist(data, this.$refs.addInCom.pageList.size, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {

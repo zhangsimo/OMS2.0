@@ -80,7 +80,7 @@
             </Select>
           </FormItem>
           <FormItem label="开票税率" prop="invoiceTax">
-            <Select v-model="invoice.invoiceTax" class="ml5 w200" disabled="">
+            <Select v-model="invoice.invoiceTax" class="ml5 w200" disabled>
               <Option
                 v-for="item in invoice.rateBillingList"
                 :value="item.value"
@@ -89,7 +89,7 @@
             </Select>
           </FormItem>
           <FormItem label="票据类型" prop="invoiceType">
-            <Select v-model="invoice.invoiceType" class="ml5 w200" disabled>
+            <Select v-model="invoice.invoiceType" class="ml5 w200">
               <Option
                 v-for="item in invoice.typeBillingList"
                 :value="item.value"

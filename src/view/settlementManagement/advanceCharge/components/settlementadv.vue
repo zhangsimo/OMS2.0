@@ -189,6 +189,11 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
+      if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
+        value.isAuxiliaryAccounting=0 //是否辅助核算类
+      }else{
+        value.isAuxiliaryAccounting=1
+      }
       if (value.fullName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.fullName,
@@ -197,8 +202,12 @@ export default {
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          mateAccountName:val.titleName,
-          mateAccountCode:val.titleCode,
+          mateAccountName:this.obj.titleName,
+          mateAccountCode:this.obj.titleCode,
+          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+          auxiliaryName:value.fullName, //辅助核算名称
+          auxiliaryCode:value.code //辅助核算项目编码
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -208,8 +217,27 @@ export default {
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          mateAccountName:val.titleName,
-          mateAccountCode:val.titleCode,
+          mateAccountName:this.obj.titleName,
+          mateAccountCode:this.obj.titleCode,
+          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+          auxiliaryName:value.fullName, //辅助核算名称
+          auxiliaryCode:value.code //辅助核算项目编码
+        });
+      }else if(value.itemName){
+        this.BusinessType.push({
+          serviceTypeName: this.obj.fullName + "-" + value.itemName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAmt: 0,
+          unAmtLeft: 0,
+          mateAccountName:this.obj.titleName,
+          mateAccountCode:this.obj.titleCode,
+          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+          auxiliaryName:value.fullName, //辅助核算名称
+          auxiliaryCode:value.code //辅助核算项目编码
         });
       }
     });
@@ -336,6 +364,10 @@ export default {
             unAmtLeft: el.unAmtLeft,
             mateAccountName:el.mateAccountName,
             mateAccountCode:el.mateAccountCode,
+            auxiliaryTypeCode:el.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting:el.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName:el.auxiliaryName, //辅助核算名称
+            auxiliaryCode:el.auxiliaryCode //辅助核算项目编码
           };
           data.two.push(item);
         });

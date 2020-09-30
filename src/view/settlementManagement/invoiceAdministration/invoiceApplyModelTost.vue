@@ -324,7 +324,7 @@ export default {
                 value: params.row.paymentBalance  || 0.00,
                 size: "small",
                 min: 0.00,
-                max: params.row.paymentBalance<this.data[0].applyAmt?params.row.paymentBalance:this.data[0].applyAmt,
+                max: params.row.paymentBalance<this.data[0].remainCancelTax?params.row.paymentBalance:this.data[0].remainCancelTax,
               },
               on: {
                 input: val => {
@@ -451,7 +451,9 @@ export default {
         this.$Message.warning("请选择要核销的数据");
       } else if (this.allSelectList.length >= 2) {
         this.$Message.warning("请选择一条数据");
-      } else {
+      }else if(this.data[0].remainCancelTax<=0){
+        this.$Message.warning("剩余开票金额为0！")
+      }else {
         this.hxOjb.salesInvoiceId = this.allSelectList[0].id;
         this.hxOjb.invoiceApplyId = this.data[0].id;
         if(this.allSelectList[0].rpAmt<0.01){
