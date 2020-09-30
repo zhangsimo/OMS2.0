@@ -126,6 +126,7 @@ export default {
       this.oneSubject = row;
       if(this.oneSubject.auxiliaryAccountingName) {
         this.oneSubject.mateAccountCoding=this.oneSubject.titleCode;
+        this.$refs.voucherInput.voucherItem = {};
         this.$refs.voucherInput.subjectModelShowassist = true;
       }
     },
@@ -160,6 +161,12 @@ export default {
             guestSourceName:objItem.fullName||"",
             guestSourceId:objItem.id||""
           }
+        }else {
+          this.$refs.voucherInput.subjectModelShowassist = true;
+          setTimeout(() =>{
+            this.$Message.warning("请选择辅助核算");
+          },500)
+          return;
         }
       }
       showLoading()

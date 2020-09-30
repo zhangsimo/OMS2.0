@@ -19,7 +19,7 @@
 <!--            ></Date-picker>-->
 <!--          </div>-->
           <div class="db ml20">
-            <span>审批日期：</span>
+            <span>申请日期：</span>
             <Date-picker
               :value="value"
               @on-change="changedate"
@@ -98,11 +98,18 @@
           v-has="'labour'"
         >人工核销</button>
         <button
-          class="ivu-btn ivu-btn-default"
+          class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="operation(5)"
           v-has="'backout'"
         >撤销核销</button>
+        <button
+          v-has = "'backout'"
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="backCancel"
+        >撤回申请
+        </button>
       </div>
       <div class="mt20">
         <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
@@ -136,6 +143,23 @@
       </div>
     </section>
     <invoiceApplyModelTost ref="Toast"></invoiceApplyModelTost>
+
+<!--    //撤销审核模态框-->
+    <Modal v-model="modalShow" title="撤回申请">
+      <Row>
+        <Col span="4">
+          <span>撤回原因：</span>
+        </Col>
+        <Col span="20">
+          <Input v-model="revokeReason"/>
+        </Col>
+      </Row>
+      <div slot="footer">
+        <Button type='primary' @click='reClose'>确定</Button>
+        <Button type='default' @click='modalShow = false'>取消</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 <script>
@@ -149,7 +173,8 @@ import {
   exportModifyData/**导出配件明细*/,
   exportAll/**导出汇总*/,
   getOptionFdList,
-  getOptionGuesList
+  getOptionGuesList,
+  backApply
 } from "_api/salesManagment/invoiceApply";
 import { goshop } from '@/api/settlementManagement/shopList';
 import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
@@ -297,28 +322,28 @@ export default {
             ])
           }
         },
-        {
-          title: "审核日期",
-          key: "updateTime",
-          className: "tc",
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('span', {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                domProps: {
-                  title: params.row.updateTime
-                }
-              }, params.row.updateTime)
-            ])
-          }
-        },
+        // {
+        //   title: "审核日期",
+        //   key: "updateTime",
+        //   className: "tc",
+        //   minWidth: 100,
+        //   render: (h, params) => {
+        //     return h('div', [
+        //       h('span', {
+        //         style: {
+        //           display: 'inline-block',
+        //           width: '100%',
+        //           overflow: 'hidden',
+        //           textOverflow: 'ellipsis',
+        //           whiteSpace: 'nowrap'
+        //         },
+        //         domProps: {
+        //           title: params.row.updateTime
+        //         }
+        //       }, params.row.updateTime)
+        //     ])
+        //   }
+        // },
         {
           title: "对账单号",
           key: "accountNo",
@@ -1319,7 +1344,9 @@ export default {
       allTablist: [],
       flag: true,
       loading1: false,//查询时判断
-      company:[]
+      company:[],
+      modalShow:false,//撤销模态框
+      revokeReason:'',//撤销理由
     };
   },
   computed:{
@@ -1332,6 +1359,31 @@ export default {
     }
   },
   methods: {
+
+    //撤销模态框
+    backCancel() {
+      if (this.allTablist.length  === 0) return this.$Message.error('请选择一条需要撤回的申请')
+      if (this.allTablist.length > 1) return this.$Message.error('只能选择一条需要撤回的申请')
+      if (this.allTablist.length  === 1 && this.allTablist[0].cancalStatus === 1) return this.$Message.error('该条数据已核销不能撤回')
+      this.revokeReason = ''
+      this.modalShow = true;
+    },
+
+    //确定撤销
+   async reClose(){
+      if (!this.revokeReason.trim()) return this.$Message.error('撤回原因必须')
+      let data ={}
+      data.id = this.allTablist[0].id
+      data.revokeReason = this.revokeReason
+      let res = await backApply(data)
+      if (res.code === 0 ){
+        this.modalShow = false;
+        this.$Message.success('撤销成功')
+        this.query()
+      }
+
+    },
+
     //选择查询条件
     chooseTable(num) {
       this.isActive = num;
@@ -1466,6 +1518,8 @@ export default {
         return this.$Message.warning("请选择要核销的数据！");
       } else if (this.allTablist.length >= 2) {
         return this.$Message.warning("请选择一条要核销的数据！");
+      }else if(this.allTablist[0].remainCancelTax<=0){
+        return this.$Message.warning("剩余未核销金额为0")
       } else {
         this.$refs.Toast.data = this.allTablist;
         this.$refs.Toast.modals = true;

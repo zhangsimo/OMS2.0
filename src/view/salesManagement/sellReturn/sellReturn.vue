@@ -1301,8 +1301,14 @@
             if (columnIndex === 0) {
               return "和值";
             }
-            if (["orderPrice", "orderAmt"].includes(column.property)) {
+            if (columnIndex === 2) {
+              return (data||[]).length+"条";
+            }
+            if(["orderAmt"].includes(column.property)){
               return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            if(["orderQty"].includes(column.property)){
+              return this.$utils.sum(data, column.property);
             }
             if (columnIndex === 7) {
               return ` ${this.countAllAmount(data)} `;

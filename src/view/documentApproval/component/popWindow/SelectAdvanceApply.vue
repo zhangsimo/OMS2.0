@@ -48,7 +48,7 @@
   import moment from 'moment'
   import { findGuest } from "_api/settlementManagement/advanceCollection.js";
   import {getPchsList} from '@/api/documentApproval/AdvanceApply.js'
-
+  import {ThisWeekStr} from '@/components/getDate/index.js'
   export default {
     name: "requestCode",
     data(){
@@ -68,13 +68,13 @@
       //打开模态框
       open() {
         this.modelShow = true
-        let date = []
-        let weekOfday = parseInt(moment().format('d')) // 计算今天是这周第几天 周日为一周中的第一天
-        let start = moment().subtract(weekOfday-1, 'days').format('YYYY-MM-DD') // 周一日期
-        let end = moment().add(7 - weekOfday, 'days').format('YYYY-MM-DD') // 周日日期
-        date.push(start)
-        date.push(end)
-        this.date = date
+        // let date = []
+        // let weekOfday = parseInt(moment().format('d'))==0?7:parseInt(moment().format('d')) // 计算今天是这周第几天
+        // let start = moment().subtract(weekOfday-1, 'days').format('YYYY-MM-DD') // 周一日期
+        // let end = moment().add(7 - weekOfday, 'days').format('YYYY-MM-DD') // 周日日期
+        // date.push(start)
+        // date.push(end)
+        this.date = ThisWeekStr()
         this.getOne()
         this.companyId = 0
         this.checkedList = {}

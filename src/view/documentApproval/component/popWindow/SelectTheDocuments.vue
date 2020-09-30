@@ -43,6 +43,7 @@
 <script>
   import moment from 'moment'
   import {getOnBusiness} from '_api/documentApproval/ExpenseReimbursement'
+  import {ThisWeekStr} from '@/components/getDate/index.js'
 
   export default {
     name: "requestCode",
@@ -59,13 +60,13 @@
       open() {
         this.checkedList =[]
         this.modelShow = true
-        let date = []
-        let weekOfday = parseInt(moment().format('d')) // 计算今天是这周第几天 周日为一周中的第一天
-        let start = moment().subtract(weekOfday-1, 'days').format('YYYY-MM-DD') // 周一日期
-        let end = moment().add(7 - weekOfday, 'days').format('YYYY-MM-DD') // 周日日期
-        date.push(start)
-        date.push(end)
-        this.date = date
+        // let date = []
+        // let weekOfday = parseInt(moment().format('d'))==0?7:parseInt(moment().format('d')) // 计算今天是这周第几天 周日为一周中的第一天
+        // let start = moment().subtract(weekOfday-1, 'days').format('YYYY-MM-DD') // 周一日期
+        // let end = moment().add(7 - weekOfday, 'days').format('YYYY-MM-DD') // 周日日期
+        // date.push(start)
+        // date.push(end)
+        this.date = ThisWeekStr()
         this.query()
       },
 

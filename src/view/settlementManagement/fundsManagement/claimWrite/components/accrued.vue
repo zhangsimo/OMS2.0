@@ -107,6 +107,7 @@ export default {
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"balanceMoney")
       })
+      this.MessageValue = ""
     },
     //判断是否可选择
     checkMethod({ row }) {

@@ -140,7 +140,6 @@
           type="button"
           @click="saleApplication"
           v-has="'market'"
-          :disabled="taxArrearsfalg"
         >销售开票申请
         </button>
         <button
