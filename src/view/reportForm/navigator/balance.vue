@@ -1,6 +1,13 @@
 <template>
     <div class="box">
       <div class="mb100">
+        <h1 class="titlecs">
+          佳配经营情况
+        </h1>
+        <div class="titlecs dateT">
+            本月目标进度(截止日期: <i>{{date}}</i> )
+            本月时间进度: <i>{{monthDays}}</i>
+        </div>
         <vxe-table
           height="250"
           border
@@ -11,7 +18,6 @@
           @current-change="currentChangeEvent"
           header-row-class-name="headerTitle"
           :data="tableData">
-          <vxe-table-column  title="佳配经营情况" class="sdfsdf">
           <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
           <vxe-table-column field="name" title="指示名称"></vxe-table-column>
           <vxe-table-column field="sex" title="预算值">
@@ -29,7 +35,6 @@
               {{gettLve(row.sex ,row.age)}}
             </template>
           </vxe-table-column>
-          </vxe-table-column>
         </vxe-table>
       </div>
       <div class="canvasBox">
@@ -42,6 +47,7 @@
 <script>
   import {allmoneyList} from '@/api/set/userManagement'
   import Highcharts from 'highcharts'
+  import moment from 'moment'
     export default {
         name: "balance",
         data(){
@@ -226,8 +232,10 @@
                   4025257,
                 ]//毛利
               }
-            }
-
+            },
+            //日期
+            date:moment().format("YYYY-MM-DD"),
+            circle:30,//进度
           }
     },
       mounted(){
@@ -473,14 +481,21 @@
               this.showWire()
               break
           }
-        }
+        },
       },
       computed:{
         gettLve(all,now){
           return function (all , now) {
-            return  this.$utils.divide( now , all).toFixed(2) +'%'
+            return  this.$utils.divide( now , all).toFixed(2) * 100 +'%'
 
           }
+        },
+        //获取当前月天数
+        monthDays(){
+          let  days = moment().format('DD')
+          let  mon = moment().endOf('day').format('DD')
+          let lve  = this.$utils.divide(days , mon)
+          return lve*100 +'%'
         }
       },
       filters:{
@@ -503,11 +518,14 @@
   grid-template-rows: repeat(1, 400px);
   grid-template-columns: repeat(2, 49%)
 }
+.titlecs {
+  border: 1px #e8eaec solid;
+  border-bottom: none;
+  line-height: 48px;
+  text-align: center;
+}
 
 </style>
 <style scoped>
-  .box >>> .headerTitle:nth-child(1) {
-    font-size: 22px;
-    background-color: #fff;
-  }
+
 </style>
