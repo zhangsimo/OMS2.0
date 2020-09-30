@@ -494,7 +494,7 @@
         monthDays(){
           let  days = moment().format('DD')
           let  mon = moment().endOf('day').format('DD')
-          let lve  = this.$utils.divide(days , mon)
+          let lve  = this.$utils.divide(days , mon).toFixed(0)
           return lve*100 +'%'
         }
       },
