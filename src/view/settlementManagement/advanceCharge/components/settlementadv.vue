@@ -189,7 +189,11 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
-      console.log(value,1111)
+      if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
+        value.isAuxiliaryAccounting=0 //是否辅助核算类
+      }else{
+        value.isAuxiliaryAccounting=1
+      }
       if (value.fullName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.fullName,
@@ -200,6 +204,10 @@ export default {
           unAmtLeft: 0,
           mateAccountName:this.obj.titleName,
           mateAccountCode:this.obj.titleCode,
+          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+          auxiliaryName:value.fullName, //辅助核算名称
+          auxiliaryCode:value.code //辅助核算项目编码
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -211,6 +219,10 @@ export default {
           unAmtLeft: 0,
           mateAccountName:this.obj.titleName,
           mateAccountCode:this.obj.titleCode,
+          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+          auxiliaryName:value.fullName, //辅助核算名称
+          auxiliaryCode:value.code //辅助核算项目编码
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -222,6 +234,10 @@ export default {
           unAmtLeft: 0,
           mateAccountName:this.obj.titleName,
           mateAccountCode:this.obj.titleCode,
+          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+          auxiliaryName:value.fullName, //辅助核算名称
+          auxiliaryCode:value.code //辅助核算项目编码
         });
       }
     });
@@ -348,88 +364,93 @@ export default {
             unAmtLeft: el.unAmtLeft,
             mateAccountName:el.mateAccountName,
             mateAccountCode:el.mateAccountCode,
+            auxiliaryTypeCode:el.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting:el.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName:el.auxiliaryName, //辅助核算名称
+            auxiliaryCode:el.auxiliaryCode //辅助核算项目编码
           };
           data.two.push(item);
         });
-        if (this.gettlementData.sign == 4) {
-          // 预付款核销
-          this.conserveDis=true;
-          showLoading()
-          let res = await api.addAll(data);
-          if (res.code == 0) {
-            hideLoading()
-            this.conserveDis=false;
-            this.Settlement = false;
-            this.$emit("getNewList", {});
-            return this.$message.success("核销成功");
-          }else{
-            hideLoading()
-            this.conserveDis=false;
-          }
-        }
-        if (this.gettlementData.sign == 5) {
-          // 预付款收回认领
-          data.three = [];
-          this.gettlementData.list.forEach(el => {
-            let item = {
-              accountName: el.accountName,
-              id: el.id,
-              mateAccountCode: el.mateAccountCode,
-              mateAccountName: el.mateAccountName,
-              incomeMoney: el.incomeMoney,
-              paidMoney: el.paidMoney,
-              orgId: el.ownStoreId,
-              orgName: el.ownStoreName,
-              amt: el.amt
-            };
-            data.three.push(item);
-          });
-          this.conserveDis=true;
-          showLoading()
-          let res = await api.addAll(data);
-          if (res.code == 0) {
-            hideLoading()
-            this.conserveDis=false
-            this.Settlement = false;
-            this.$emit("getNewList", {});
-            return this.$message.success("收回认领成功");
-          }else{
-            hideLoading()
-            this.conserveDis=false
-          }
-        }
-        if (this.gettlementData.sign == 9) {
-          // 预付款认领
-          data.three = [];
-          this.gettlementData.list.forEach(el => {
-            let item = {
-              accountName: el.accountName,
-              id: el.id,
-              mateAccountCode: el.mateAccountCode,
-              mateAccountName: el.mateAccountName,
-              incomeMoney: Math.abs(el.incomeMoney),
-              paidMoney: Math.abs(el.paidMoney),
-              orgId: el.ownStoreId,
-              orgName: el.ownStoreName,
-              amt: el.amt
-            };
-            data.three.push(item);
-          });
-          this.conserveDis=true;
-          showLoading()
-          let res = await api.addAll(data);
-          if (res.code == 0) {
-            hideLoading()
-            this.conserveDis=false;
-            this.Settlement = false;
-            this.$emit("getNewList", {});
-            this.$emit("reloadParList")
-            return this.$message.success("预付款认领成功");
-          }else{
-            hideLoading()
-            this.conserveDis=false;
-          }
-        }
+        console.log(data,1111)
+        // if (this.gettlementData.sign == 4) {
+        //   // 预付款核销
+        //   this.conserveDis=true;
+        //   showLoading()
+        //   let res = await api.addAll(data);
+        //   if (res.code == 0) {
+        //     hideLoading()
+        //     this.conserveDis=false;
+        //     this.Settlement = false;
+        //     this.$emit("getNewList", {});
+        //     return this.$message.success("核销成功");
+        //   }else{
+        //     hideLoading()
+        //     this.conserveDis=false;
+        //   }
+        // }
+        // if (this.gettlementData.sign == 5) {
+        //   // 预付款收回认领
+        //   data.three = [];
+        //   this.gettlementData.list.forEach(el => {
+        //     let item = {
+        //       accountName: el.accountName,
+        //       id: el.id,
+        //       mateAccountCode: el.mateAccountCode,
+        //       mateAccountName: el.mateAccountName,
+        //       incomeMoney: el.incomeMoney,
+        //       paidMoney: el.paidMoney,
+        //       orgId: el.ownStoreId,
+        //       orgName: el.ownStoreName,
+        //       amt: el.amt
+        //     };
+        //     data.three.push(item);
+        //   });
+        //   this.conserveDis=true;
+        //   showLoading()
+        //   let res = await api.addAll(data);
+        //   if (res.code == 0) {
+        //     hideLoading()
+        //     this.conserveDis=false
+        //     this.Settlement = false;
+        //     this.$emit("getNewList", {});
+        //     return this.$message.success("收回认领成功");
+        //   }else{
+        //     hideLoading()
+        //     this.conserveDis=false
+        //   }
+        // }
+        // if (this.gettlementData.sign == 9) {
+        //   // 预付款认领
+        //   data.three = [];
+        //   this.gettlementData.list.forEach(el => {
+        //     let item = {
+        //       accountName: el.accountName,
+        //       id: el.id,
+        //       mateAccountCode: el.mateAccountCode,
+        //       mateAccountName: el.mateAccountName,
+        //       incomeMoney: Math.abs(el.incomeMoney),
+        //       paidMoney: Math.abs(el.paidMoney),
+        //       orgId: el.ownStoreId,
+        //       orgName: el.ownStoreName,
+        //       amt: el.amt
+        //     };
+        //     data.three.push(item);
+        //   });
+        //   this.conserveDis=true;
+        //   showLoading()
+        //   let res = await api.addAll(data);
+        //   if (res.code == 0) {
+        //     hideLoading()
+        //     this.conserveDis=false;
+        //     this.Settlement = false;
+        //     this.$emit("getNewList", {});
+        //     this.$emit("reloadParList")
+        //     return this.$message.success("预付款认领成功");
+        //   }else{
+        //     hideLoading()
+        //     this.conserveDis=false;
+        //   }
+        // }
       } else {
         this.$message.error("核对金额为0才能保存");
       }
