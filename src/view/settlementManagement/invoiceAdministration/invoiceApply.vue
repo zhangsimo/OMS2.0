@@ -1518,6 +1518,8 @@ export default {
         return this.$Message.warning("请选择要核销的数据！");
       } else if (this.allTablist.length >= 2) {
         return this.$Message.warning("请选择一条要核销的数据！");
+      }else if(this.allTablist[0].remainCancelTax<=0){
+        return this.$Message.warning("剩余未核销金额为0")
       } else {
         this.$refs.Toast.data = this.allTablist;
         this.$refs.Toast.modals = true;
