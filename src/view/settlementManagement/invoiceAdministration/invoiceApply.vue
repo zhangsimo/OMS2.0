@@ -1109,6 +1109,12 @@ export default {
           className: "tc"
         },
         {
+          title:"数量",
+          minWidth:50,
+          key:"matchQty",
+          className: "tc"
+        },
+        {
           title: "销售单价",
           minWidth: 100,
           key: "salePrice",

@@ -80,6 +80,7 @@
                 v-for="item in getAccShopList"
                 :value="item.shopName"
                 :key="item.shopCode"
+                class="w150"
               >{{ item.shopName }}
               </Option>
             </Select>
