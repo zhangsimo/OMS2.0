@@ -30,7 +30,7 @@
               {{row.age | getfour}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="lve" title="达成率">
+          <vxe-table-column  title="达成率">
             <template v-slot="{row}">
               {{gettLve(row.sex ,row.age)}}
             </template>
@@ -57,9 +57,9 @@
             wire:null, //折现图dom(关闭的时候是否要销毁?)
             wList:{}, //折线图数据
             tableData:[
-              {name:'收入' ,sex:1069332600, age:841368225 , lve:'85.59%'},
-              {name:'成本' ,sex:1025982359 , age:808266642 , lve:'78.78%'},
-              {name:'毛利' ,sex:43350240 , age:33101596 , lve:'76.35%'},
+              {name:'收入' ,sex:1069332600, age:841368225 },
+              {name:'成本' ,sex:1025982359 , age:808266642 },
+              {name:'毛利' ,sex:43350240 , age:33101596 },
             ],//表格数据
             list:{},//当前需要展示的数据
             //预计
@@ -118,9 +118,9 @@
                   125172426,
                   125886316,
                   126445637,
-                  0,
-                  0,
-                  0
+                  125698292,
+                  127162822,
+                  127806291
                 ],//收入
                 cost:[
                   82788444,
@@ -132,9 +132,9 @@
                   120101615,
                   120788089,
                   121325799,
-                  0,
-                  0,
-                  0
+                  120605143,
+                  122012912,
+                  122614519
                 ],//成本
                 grossMargin:[
                   3485414,
@@ -146,9 +146,9 @@
                   5070809,
                   5098226,
                   5119840,
-                    0,
-                  0,
-                  0
+                  5093147,
+                  5149911,
+                  5191777
                 ]//毛利
               }
             },
@@ -209,7 +209,6 @@
                   121978655,
                   105977195,
                   111048351,
-                  98575135,
                 ],//收入
                 cost:[
                   70401072,
@@ -234,7 +233,7 @@
               }
             },
             //日期
-            date:moment().format("YYYY-MM-DD"),
+            date:moment().subtract(1, 'days').format('YYYY-MM-DD'),
             circle:30,//进度
           }
     },
@@ -290,7 +289,7 @@
                },
                tooltip: {
                  headerFormat: '<b>{point.key}</b><br>',
-                 pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                 pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
                },
                plotOptions: {
                  column: {
@@ -409,42 +408,49 @@
         },
 
         //进入页面刷获取数据
-     async   getList(){
-            let res = await allmoneyList()
-       if (res.code === 0){
-         this.reality[2019].income = []
-         this.reality[2020].income = []
-         var salesALL= 0,
-              amtAll = 0
-          res.data.forEach( item => {
-            if (item.salesMonth.includes('2019')){
-              this.reality[2019].income.push(Math.floor(item.sellAmt))
-            }else {
-              this.reality[2020].income.push(Math.floor(item.sellAmt))
-              salesALL =  this.$utils.add(salesALL , item.sellAmt)
-            }
-            this.$utils.add(amtAll , item.sellAmt)
-          })
-         this.tableData[0].age = salesALL.toFixed(0)
-       }
-       let newAmt =[],
-         amt=[]
-       res.data.slice(20).forEach( item =>{
+     async   getList() {
+       let res = await allmoneyList()
+       if (res.code === 0) {
+       let newAmt = [],
+         amt = [],
+         sellAmt = []
+       res.data.slice(20).forEach(item => {
          newAmt.push(Math.floor(item.enterAmt))
          amt.push(Math.floor(item.amt))
+         sellAmt.push(Math.floor(item.sellAmt))
        })
 
-       this.reality[2020].cost = [...this.reality[2020].cost , ...newAmt]
-       this.reality[2020].grossMargin = [...this.reality[2020].grossMargin , ...amt]
+       this.reality[2020].cost = [...this.reality[2020].cost, ...newAmt]
+       this.reality[2020].grossMargin = [...this.reality[2020].grossMargin, ...amt]
+       this.reality[2020].income = [...this.reality[2020].income, ...sellAmt]
 
-          this.list = {
-            predict: this.predict[2020].income,
-            reality:this.reality[2020].income,
-            lastReality:this.reality[2019].income,
-            title:'收入'
-          }
-          this.showForm()
-          this.showWire()
+       this.list = {
+         predict: this.predict[2020].income,
+         reality: this.reality[2020].income,
+         lastReality: this.reality[2019].income,
+         title: '收入'
+       }
+       let moth = this.$utils.toNumber(moment(this.date).format('MM')) - 1
+        console.log(this.reality[2020] , 4546)
+         this.tableData.forEach( item => {
+           switch (item.name) {
+             case '收入':
+               item.sex = this.predict[2020].income[moth]
+               item.age = this.reality[2020].income[moth]
+             break
+             case '成本':
+               item.sex = this.predict[2020].cost[moth]
+               item.age = this.reality[2020].cost[moth]
+               break
+             case '毛利':
+               item.sex = this.predict[2020].grossMargin[moth]
+               item.age = this.reality[2020].grossMargin[moth]
+           }
+         })
+         console.log(this.tableData)
+       this.showForm()
+       this.showWire()
+     }
         },
 
         //表格选中
@@ -492,10 +498,11 @@
         },
         //获取当前月天数
         monthDays(){
-          let  days = moment().format('DD')
-          let  mon = moment().endOf('day').format('DD')
-          let lve  = this.$utils.divide(days , mon).toFixed(0)
-          return lve*100 +'%'
+           let yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD')
+          let  days = moment(yesterday).format('DD')
+          let  mon = moment(yesterday).endOf('month').format('DD')
+          let lve  = this.$utils.divide(days , mon)*100
+          return lve.toFixed(0) +'%'
         }
       },
       filters:{
@@ -527,5 +534,7 @@
 
 </style>
 <style scoped>
-
+.canvasBox >>> .highcharts-credits {
+  display: none;
+}
 </style>
