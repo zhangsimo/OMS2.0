@@ -152,6 +152,7 @@
               :columns="columns1"
               :data="data1"
               class="mt10"
+              style="width:100%"
               ref="receivables"
               show-summary
               :summary-method="summary"
@@ -164,6 +165,7 @@
               :columns="columns2"
               :data="data2"
               class="mt10"
+              style="width:100%"
               ref="payment"
               show-summary
               :summary-method="summary"
@@ -261,19 +263,22 @@
             type: 'selection',
             width: 60,
             align: 'center',
-            className: "tc"
+            className: "tc",
+            resizable: true,
           },
           {
             title: "序号",
             key: "num",
-            minWidth: 40,
+            width: 40,
             className: "tc",
+            resizable: true,
           },
           {
             title: "公司名称",
             key: "groupName",
-            minWidth: 100,
+            width:200,
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -294,8 +299,9 @@
           {
             title: "对账单号",
             key: "accountNo",
-            minWidth: 100,
+            width:200,
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -315,9 +321,10 @@
           },
           {
             title: "对账单收付款单号",
-            minWidth: 140,
+            width: 140,
             slot: "fno",
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -339,7 +346,8 @@
             title: "往来单位",
             key: "guestName",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width:200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -361,49 +369,54 @@
             title: "收付类型",
             key: "sortName",
             className: "tc",
-            minWidth: 120
+            resizable: true,
+            width: 120
           },
           {
             title: "收付款金额",
             key: "cpAmt",
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h(
                 "span",
                 params.row.cpAmt ? parseFloat(params.row.cpAmt).toFixed(2) : 0
               );
             },
-            minWidth: 150
+            width:200
           },
           {
             title: "已冲减/已审核",
             key: "endAmt",
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h(
                 "span",
                 params.row.endAmt ? parseFloat(params.row.endAmt).toFixed(2) : 0
               );
             },
-            minWidth: 100
+            width:200
           },
           {
             title: "未冲减/未审核",
             key: "unAmt",
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h(
                 "span",
                 params.row.unAmt ? parseFloat(params.row.unAmt).toFixed(2) : 0
               );
             },
-            minWidth: 100
+            width:200
           },
           {
             title: "收款目的",
             key: "purpose",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width:200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -425,13 +438,15 @@
             title: "收付款人",
             key: "createUname",
             className: "tc",
-            minWidth: 100
+            resizable: true,
+            width:200
           },
           {
             title: "收付款时间",
             key: "rpDate",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width:200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -453,7 +468,8 @@
             title: "备注",
             key: "remark",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width:200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -475,19 +491,22 @@
             title: "审核状态",
             key: "startStatusName",
             className: "tc",
-            minWidth: 100
+            resizable: true,
+            width:200
           },
           {
             title: "审核人",
             key: "auditor",
             className: "tc",
-            minWidth: 100
+            resizable: true,
+            width:200
           },
           {
             title: "审核日期",
             key: "auditorDate",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width:200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -511,22 +530,27 @@
             title: "序号",
             key: "num",
             width: 40,
-            className: "tc"
+            className: "tc",
+            resizable: true,
           },
           {
             title: "收款单号",
             key: "fno",
-            className: "tc"
+            className: "tc", width:200,
+            resizable: true,
           },
           {
             title: "收款时间",
             key: "checkDate",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "收款方式",
-            width: 120,
+            width:200,
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('span', params.row.sort.name)
             }
@@ -535,11 +559,15 @@
             title: "收款账户",
             key: "account",
             className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "收款金额",
             key: "checkAmt",
             className: "tc",
+            width: 200,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.checkAmt.toFixed(2));
             }
@@ -547,22 +575,30 @@
           {
             title: "审核状态",
             key: "startStatusName",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "审核人",
             key: "auditor",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "审核日期",
             key: "auditorDate",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "备注",
             key: "remark",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           }
         ],
         columns2: [
@@ -570,22 +606,28 @@
             title: "序号",
             key: "num",
             width: 40,
-            className: "tc"
+            className: "tc",
+            resizable: true,
           },
           {
             title: "付款单号",
             key: "fno",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "付款时间",
             key: "checkDate",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "付款方式",
             width: 120,
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('span', params.row.sort.name)
             }
@@ -593,12 +635,16 @@
           {
             title: "付款账户",
             key: "account",
-            className: "tc"
+            className: "tc",
+            width:200,
+            resizable: true,
           },
           {
             title: "付款金额",
             key: "checkAmt",
             className: "tc",
+            width:200,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.checkAmt.toFixed(2));
             }
@@ -606,22 +652,26 @@
           {
             title: "审核状态",
             key: "startStatusName",
-            className: "tc"
+            className: "tc",
+            width:200,
           },
           {
             title: "审核人",
             key: "auditor",
-            className: "tc"
+            className: "tc",
+            width:200,
           },
           {
             title: "审核日期",
             key: "auditorDate",
-            className: "tc"
+            className: "tc",
+            width:200,
           },
           {
             title: "备注",
             key: "remark",
-            className: "tc"
+            className: "tc",
+            width:200,
           }
         ],
         data: [],
@@ -882,7 +932,7 @@
       },
       //导出 收付款单查询/收付款单查询记录
       async reportPayment(type, type2) {
-        if(this.data.length<1){
+        if (this.data.length < 1) {
           return this.$Message.error("暂无数据可导出")
         }
         var str = ""
@@ -908,7 +958,7 @@
           }
           location.href = colPayExportQuery(str)
         } else {
-          if(this.selectData.length<1){
+          if (this.selectData.length < 1) {
             return this.$Message.error("请选择需要导出的数据!")
           }
           this.selectData.map(item => {
@@ -1029,7 +1079,7 @@
 
   .pro span {
     display: inline-block;
-    width: 100px;
+    width:200px;
     text-align: right;
   }
 
