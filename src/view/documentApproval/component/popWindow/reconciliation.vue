@@ -262,7 +262,10 @@
             <div class="db mt10">
               <span class="ml10" style="color:red">*</span>
               <span class="mr5">备注</span>
-              <Input type="text" v-model="infoBase.remark" class="w150 tc" :disabled="disabletype"/>
+              <Tooltip :content="infoBase.remark">
+                <Input type="text" v-model="infoBase.remark" style="width: 100%;white-space:normal;word-wrap:break-word;" class="w150 tc" :disabled="disabletype"/>
+                <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(infoBase.remark||"").trim()}}</div>
+              </Tooltip>
               <span class="mr5 ml10">应付返利请示单号</span>
               <Input type="text" v-model="infoBase.payingRebateNo" class="w200 tc" :disabled="disabletype"/>
               <button
@@ -1291,5 +1294,12 @@
   .info .flex i {
     position: relative;
     left: -30px;
+  }
+  .remark{
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    textOverflow: ellipsis;
+    whiteSpace: nowrap;
   }
 </style>

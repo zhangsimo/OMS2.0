@@ -348,13 +348,15 @@
             title: "序号",
             type: "index",
             align: "center",
-            width: 40
+            width: 40,
+            resizable: true,
           },
           {
             title: "门店名称",
             key: "orgName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -376,7 +378,8 @@
             title: "对账单号",
             key: "accountNo",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -398,7 +401,8 @@
             title: "实际收款/付款",
             key: "actualCollectionOrPayment",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -420,7 +424,8 @@
             title: "已收/已付金额",
             key: "amountReceivedOrPaid",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -442,7 +447,8 @@
             title: "未收/未付金额",
             key: "amountNoCharOffOrUnpaid",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -464,7 +470,8 @@
             title: "往来单位",
             key: "guestName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -486,7 +493,8 @@
             title: "发生日期",
             key: "createTime",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -508,7 +516,8 @@
             title: "收付类型",
             key: "receivePaymentTypeName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -533,26 +542,30 @@
             title: "选择",
             type: "selection",
             align: "center",
-            width: 40
+            width: 40,
+            resizable: true,
           },
           {
             title: "序号",
             type: "index",
             align: "center",
-            width: 40
+            width: 40,
+            resizable: true,
           },
           //businessType
           {
             title: "业务类别",
             key: "businessType",
             align: "center",
-            width: 100
+            width: 100,
+            resizable: true,
           },
           {
             title: "发生日期",
             key: "createTime",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -574,19 +587,22 @@
             title: "收入金额",
             key: "incomeMoney",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
           },
           {
             title: "支出金额",
             key: "paidMoney",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
           },
           {
             title: "对方户名",
             key: "reciprocalAccountName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -608,7 +624,8 @@
             title: "所属区域",
             key: "area",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -630,7 +647,8 @@
             title: "所属门店",
             key: "shopName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -652,7 +670,8 @@
             title: "所属店号",
             key: "shopCode",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -674,7 +693,8 @@
             title: "账户",
             key: "accountName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -696,7 +716,8 @@
             title: "账号",
             key: "accountCode",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -718,7 +739,8 @@
             title: "开户行",
             key: "bankName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -740,13 +762,15 @@
             title: "对应科目",
             key: "mateAccountName",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
           },
           {
             title: "交易备注",
             key: "tradingNote",
             align: "center",
-            minWidth: 100,
+            width: 100,
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
