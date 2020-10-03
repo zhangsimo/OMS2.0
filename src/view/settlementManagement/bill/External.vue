@@ -119,7 +119,10 @@
     getOutStockPart
   } from "@/api/bill/saleOrder";
   import {goshop} from '@/api/settlementManagement/shopList';
-  import {enteralExport/**采购入库 导出全部及导出勾选*/,enteralReturnExport/**采购退货 导出全部及导出勾选*/} from "@/api/settlementManagement/Import/index.js"
+  import {
+    enteralExport/**采购入库 导出全部及导出勾选*/,
+    enteralReturnExport/**采购退货 导出全部及导出勾选*/
+  } from "@/api/settlementManagement/Import/index.js"
   import moment from "moment";
   import {showLoading, hideLoading} from "@/utils/loading"
 
@@ -147,20 +150,23 @@
         columns: [
           {
             type: 'selection',
-            minWidth: 40,
-            className: "tc"
+            width: 40,
+            className: "tc",
+            resizable: true,
           },
           {
             key: "index",
             title: "序号",
-            minWidth: 40,
-            className: "tc"
+            width: 40,
+            className: "tc",
+            resizable: true,
           },
           {
             title: "分店名称",
             key: "guestOrgName",
-            minWidth: 100,
+            width: 150,
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -182,7 +188,8 @@
             title: "单号",
             key: "code",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width: 150,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -203,8 +210,9 @@
           {
             title: "供应商",
             key: "guestName",
-            minWidth: 100,
+            width: 150,
             className: "tc",
+            resizable: true,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -226,7 +234,8 @@
             title: "订单号",
             key: "orderCode",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -248,12 +257,14 @@
             title: "单据类型",
             key: "enterTypeIdName",
             className: "tc",
+            resizable: true,
             width: 80
           },
           {
             title: "仓库",
             key: "storeName",
             className: "tc",
+            resizable: true,
             width: 70,
             render: (h, params) => {
               return h('div', [
@@ -276,6 +287,7 @@
             title: "制单人",
             key: "createUname",
             className: "tc",
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -298,7 +310,8 @@
             title: "制单日期",
             key: "createTime",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width: 150,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -320,7 +333,8 @@
             title: "审核日期",
             key: "auditDate",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width: 150,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -342,25 +356,29 @@
             title: "是否含税",
             key: "taxSign",
             className: "tc",
+            resizable: true,
             width: 70
           },
           {
             title: "金额",
             key: "outAmt",
             className: "tc",
+            resizable: true,
             width: 90
           },
           {
             title: "单据状态",
             key: "auditSign",
             className: "tc",
+            resizable: true,
             width: 80
           },
           {
             title: "备注",
             key: "remark",
             className: "tc",
-            minWidth: 100,
+            resizable: true,
+            width: 150,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -382,7 +400,8 @@
             title: "退货原因",
             key: "rtnReasonName",
             className: "tc",
-            width: 100
+            resizable: true,
+            width: 150
           },
         ],
         selectTabArr: [],//选中数组
@@ -391,48 +410,62 @@
             key: "index",
             title: "序号",
             width: 40,
-            className: "tc"
+            className: "tc",
+            resizable: true,
           },
           {
             title: "配件编码",
             key: "partCode",
             tooltip: true,
-            className: "tc"
+            className: "tc",
+            width: 150,
+            resizable: true,
           },
           {
             title: "配件名称",
             key: "partName",
             width: 120,
             tooltip: true,
-            className: "tc"
+            className: "tc",
+            resizable: true,
           },
           {
             title: "品牌",
             key: "partBrand",
             tooltip: true,
-            className: "tc"
+            className: "tc",
+            width: 150,
+            resizable: true,
           },
           {
             title: "车型",
             key: "carModelName",
             tooltip: true,
-            className: "tc"
+            className: "tc",
+            width: 150,
+            resizable: true,
           },
           {
             title: "OEM码",
             key: "oemCode",
             tooltip: true,
-            className: "tc"
+            className: "tc",
+            width: 150,
+            resizable: true,
           },
           {
             title: "是否含税",
             key: "taxSign",
-            className: "tc"
+            className: "tc",
+            width: 150,
+            resizable: true,
           },
           {
             title: "不含税单价",
             key: "noTaxPrice",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.noTaxPrice.toFixed(2));
             }
@@ -441,6 +474,8 @@
             title: "不含税金额",
             key: "noTaxAmt",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.noTaxAmt.toFixed(2));
             }
@@ -449,6 +484,8 @@
             title: "含税单价",
             key: "taxPrice",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.taxPrice.toFixed(2));
             }
@@ -457,6 +494,8 @@
             title: "含税金额",
             key: "taxAmt",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.taxAmt.toFixed(2));
             }
@@ -465,6 +504,8 @@
             title: "数量",
             key: "enterQty",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               let qty = params.row.enterQty ? params.row.enterQty : params.row.rtnableQty
               return h("span", qty);
@@ -474,6 +515,8 @@
             title: "单价",
             key: "enterPrice",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.enterPrice.toFixed(2));
             }
@@ -482,6 +525,8 @@
             title: "金额",
             key: "sellAmt",
             className: "tc",
+            width: 150,
+            resizable: true,
             render: (h, params) => {
               return h("span", params.row.sellAmt.toFixed(2));
             }
@@ -654,7 +699,7 @@
         }
         if (type == 0) {
           //导出全部
-          let params=""
+          let params = ""
           let obj = {
             orgid: this.model1 == 0 ? "" : this.model1,
             guestId: this.company ? this.companyId : "",
@@ -668,33 +713,33 @@
           obj.enterDateEnd = this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : ""
-          for(var i in obj){
-            params+=`${i}=${obj[i]}&`
+          for (var i in obj) {
+            params += `${i}=${obj[i]}&`
           }
-          if(this.type=="050101"){
+          if (this.type == "050101") {
             //采购入库
-            location.href=enteralExport(params)
-          }else{
+            location.href = enteralExport(params)
+          } else {
             //采购退货
-            location.href=enteralReturnExport(params)
+            location.href = enteralReturnExport(params)
           }
-        }else{
+        } else {
           //导出勾选
-          if(this.selectTabArr.length<1){
+          if (this.selectTabArr.length < 1) {
             return this.$Message.error("请勾选需要导出的数据!")
           }
-          let params=""
-          let str=""
-          this.selectTabArr.map(vb=>{
-            str+=`ids=${vb.id}&`
+          let params = ""
+          let str = ""
+          this.selectTabArr.map(vb => {
+            str += `ids=${vb.id}&`
           })
-          params=`${str}page=0&size=${this.selectTabArr.length}&enterTypeId=${this.type}&`
-          if(this.type=="050101"){
+          params = `${str}page=0&size=${this.selectTabArr.length}&enterTypeId=${this.type}&`
+          if (this.type == "050101") {
             //采购入库
-            location.href=enteralExport(params)
-          }else{
+            location.href = enteralExport(params)
+          } else {
             //采购退货
-            location.href=enteralReturnExport(params)
+            location.href = enteralReturnExport(params)
           }
         }
       },
@@ -728,12 +773,12 @@
               this.data = res.data.vos;
               this.page.total = res.data.TotalElements;
               // this.total = res.data.AllotOutMainVO
-              this.selectTabArr=[]
+              this.selectTabArr = []
               hideLoading()
             } else {
               hideLoading()
               this.data = [];
-              this.selectTabArr=[]
+              this.selectTabArr = []
             }
           }).catch(e => {
             hideLoading()
@@ -755,10 +800,10 @@
                 this.data = res.data.vos;
                 this.page.total = res.data.TotalElements;
                 // this.total = res.data.AllotOutMainVO
-                this.selectTabArr=[]
+                this.selectTabArr = []
               } else {
                 this.data = [];
-                this.selectTabArr=[]
+                this.selectTabArr = []
               }
             });
         }

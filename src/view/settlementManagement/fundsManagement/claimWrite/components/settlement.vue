@@ -225,6 +225,11 @@
         this.obj = val;
       });
       bus.$on("ChildContent", value => {
+        if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
+          value.isAuxiliaryAccounting=0 //是否辅助核算类
+        }else{
+          value.isAuxiliaryAccounting=1
+        }
         if (value.fullName) {
           this.BusinessType.push({
             businessTypeName: this.obj.fullName + "-" + value.fullName,
@@ -232,7 +237,13 @@
             hasAmt: 0,
             unAmt: 0,
             rpAmt: 0,
-            unAmtLeft: 0
+            unAmtLeft: 0,
+            mateAccountCode: this.obj.titleCode,
+            mateAccountName: this.obj.titleName,
+            auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName:value.fullName, //辅助核算名称
+            auxiliaryCode:value.code //辅助核算项目编码
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -241,7 +252,13 @@
             hasAmt: 0,
             unAmt: 0,
             rpAmt: 0,
-            unAmtLeft: 0
+            unAmtLeft: 0,
+            mateAccountCode: this.obj.titleCode,
+            mateAccountName: this.obj.titleName,
+            auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName:value.fullName, //辅助核算名称
+            auxiliaryCode:value.code //辅助核算项目编码
           });
         }else if(value.itemName){
           this.BusinessType.push({
@@ -250,7 +267,13 @@
             hasAmt: 0,
             unAmt: 0,
             rpAmt: 0,
-            unAmtLeft: 0
+            unAmtLeft: 0,
+            mateAccountCode: this.obj.titleCode,
+            mateAccountName: this.obj.titleName,
+            auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName:value.fullName, //辅助核算名称
+            auxiliaryCode:value.code //辅助核算项目编码
           });
         }
       });
