@@ -1,9 +1,9 @@
 <template>
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
-      <Button :loading="disabled" @click="submit">因公借支核销</Button>
+      <Button :loading="disabled" :disabled="currRow==null" @click="submit">因公借支核销</Button>
     </Row>
-    <Row class="mt20">
+    <div class="mt20">
       <vxe-table
         auto-resize
         resizable
@@ -12,6 +12,7 @@
         highlight-current-row
         show-overflow="title"
         size="mini"
+        class="mt20"
         @current-change="currentChangeEvent"
         :data="tableData"
         align="center"
@@ -42,7 +43,7 @@
           </template>
         </vxe-table-column>
       </vxe-table>
-    </Row>
+    </div>
     <Row class="mb20 mt20">
       <Col span="8">
         <span>日期：</span>
@@ -124,7 +125,7 @@ export default {
     table: {
       type: Object,
       default: null,
-    }
+    },
   },
   data() {
     const amtValid = ({ row, cellValue }) => {
@@ -166,7 +167,7 @@ export default {
         ]
       },
       show: false,
-      disabled: true,
+      disabled: false,
       currRow: null,
       price: 0,
       date: [],
@@ -177,7 +178,7 @@ export default {
         num: 1,
         size: 10,
         total: 0,
-        opts: [20, 50, 100, 200]
+        opts: [10,20, 50, 100, 200]
       } //分页
     };
   },
@@ -202,12 +203,12 @@ export default {
     init() {
       this.date = [];
       this.price = 0;
-      this.disabled = true;
+      this.disabled = false;
       this.page = {
         num: 1,
-        size: 20,
+        size: 10,
         total: 0,
-        opts: [20, 50, 100, 200]
+        opts: [10,20, 50, 100, 200]
       }
     },
     cancel() {
@@ -241,7 +242,7 @@ export default {
       }
       let data = {
         writeOffStatus: 0,
-        reimbursementAmount:1
+        reimbursementAmount:-1
       }
 
       if (this.date.length === 2 && this.date[0]) {
@@ -261,6 +262,10 @@ export default {
       }
     },
     async submit() {
+      var rpAmt=this.tableData[0].paymentReturnBalance<this.tableData[0].totalPrice?this.tableData[0].paymentReturnBalance:this.tableData[0].totalPrice
+      if(this.tableData[0].writeOffAmount>rpAmt){
+        return this.$message.error("因公借支核销金额不能大于报销未核销余额")
+      }
       const errMap = await this.$refs.tableXt.validate().catch(errMap => errMap)
       if(errMap){
 

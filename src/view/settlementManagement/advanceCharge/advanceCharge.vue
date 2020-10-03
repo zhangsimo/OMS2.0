@@ -95,6 +95,7 @@
             resizable
             border
             show-overflow
+            resizeable
             highlight-hover-row
             highlight-current-row
             @current-change="currentChangeEvent"

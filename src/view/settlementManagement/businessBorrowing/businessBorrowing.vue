@@ -95,6 +95,7 @@
             auto-resize
             resizable
             border
+            resizeable
             show-overflow
             highlight-hover-row
             highlight-current-row
