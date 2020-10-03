@@ -121,6 +121,8 @@
             highlight-current-row
             highlight-hover-row
             stripe
+            auto-resize
+            resizable
             ref="capitalChain1"
             align="center"
             height="500"
@@ -325,6 +327,8 @@
               highlight-current-row
               highlight-hover-row
               stripe
+              auto-resize
+              resizable
               ref="capitalChain2"
               align="center"
               height="500"
@@ -559,7 +563,7 @@
   import moment from "moment";
   import {creat} from "./../components";
   import * as tools from "_utils/tools";
-  import {showLoading, hideLoading} from "@/utils/loading"  
+  import {showLoading, hideLoading} from "@/utils/loading"
 
   export default {
     name: 'accountings',

@@ -76,6 +76,7 @@
           highlight-current-row
           highlight-hover-row
           stripe
+          resizable
           ref="xTable"
           align="center"
           height="500"
