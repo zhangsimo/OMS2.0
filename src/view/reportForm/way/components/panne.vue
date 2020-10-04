@@ -34,19 +34,25 @@
             />
           </div>
           <div class="db mr10">
-            <Select
-              v-model="search.guestId"
-              class="w120"
-              placeholder="请选择供应商"
-              filterable clearable
-            >
-              <Option
-                v-for="item in supplityArr"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.fullName }}</Option
-              >
-            </Select>
+<!--            <Select-->
+<!--              v-model="search.guestId"-->
+<!--              class="w120"-->
+<!--              placeholder="请选择供应商"-->
+<!--              filterable clearable-->
+<!--            >-->
+<!--              <Option-->
+<!--                v-for="item in supplityArr"-->
+<!--                :value="item.id"-->
+<!--                :key="item.id"-->
+<!--                >{{ item.fullName }}</Option-->
+<!--              >-->
+<!--            </Select>-->
+              <Input
+                v-model="search.guestFullName"
+                placeholder="请输入供应商"
+                class="w120"
+                clearable
+              />
           </div>
           <div class="db mr10">
             <Select
