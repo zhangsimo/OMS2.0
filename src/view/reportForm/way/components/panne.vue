@@ -137,7 +137,7 @@ export default {
     // 快速日期查询
     async getDataQuick(v) {
       this.search.submitDate = v;
-      this.search.auditDate = v;
+      // this.search.auditDate = v;
       if(this.selectShopList){
         var arr = await creat("", this.$store);
         this.search.orgid = arr[1];
