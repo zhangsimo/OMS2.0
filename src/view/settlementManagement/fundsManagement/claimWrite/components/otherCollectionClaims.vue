@@ -377,13 +377,14 @@
       async ok() {
         let data = {};
         data.detailId = this.accrued[0].id;
-        data.claimMoney = this.accrued[0].rpAmt || this.accrued[0].balanceMoney;
         let objItem = this.$refs.voucherInput.voucherItem;
         if (this.voucherinputModel) {
           if (this.claimTit == "预收款认领") {
+            data.claimMoney = this.accrued[0].rpAmt;
             data.subjectCode = "1123";
             data.claimType = 3
           } else {
+            data.claimMoney = this.accrued[0].balanceMoney
             data.subjectCode = "2241";
             data.claimType = 5;
             data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
@@ -401,6 +402,13 @@
               guestSourceName: objItem.fullName || "",
               guestSourceId: objItem.id || ""
             }
+          }
+          if(data.claimMoney==null || data.claimMoney<=0){
+            this.$Message.error("本次认领金额不可为零或小于零")
+            return
+          }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
+            this.$Message.error("本次认领金额不可大于支付金额")
+            return
           }
           showLoading()
           let res = await TurnToTheProfitAndLoss(data);
@@ -420,6 +428,13 @@
           data.financeAccountCashList = this.accrued
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
+            if(data.claimMoney==null || data.claimMoney<=0){
+              this.$Message.error("本次认领金额不可为零或小于零")
+              return
+            }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
+              this.$Message.error("本次认领金额不可大于支付金额")
+              return
+            }
             showLoading()
             addClaim2(data).then(res => {
               if (res.code === 0) {
@@ -438,6 +453,13 @@
             data.subjectCode = "2241";
             data.claimType = 0;
             data.claimMoney = this.accrued[0].balanceMoney
+            if(data.claimMoney==null || data.claimMoney<=0){
+              this.$Message.error("本次认领金额不可为零或小于零")
+              return
+            }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
+              this.$Message.error("本次认领金额不可大于支付金额")
+              return
+            }
             showLoading()
             addClaim(data).then(res => {
               if (res.code === 0) {
