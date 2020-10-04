@@ -901,7 +901,7 @@ export default class OutsidePurchase extends Vue {
 
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
   private showModel(name) {
-    if(this.formPlanmain.storeId){
+    if(this.formPlanmain.storeId || name=="moreSearch"){
       let ref: any = this.$refs[name];
       ref.init();
     }else{
