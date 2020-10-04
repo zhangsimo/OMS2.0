@@ -371,6 +371,14 @@
             className: 'tc',
             resizable: true,
             width: 100,
+            render: (h, params) => {
+              return h('Checkbox', {
+                props: {
+                  value: params.row.taxSign,
+                  disabled:"disabled"
+                }
+              })
+            }
           },
           {
             title: '税率',

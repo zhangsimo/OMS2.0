@@ -56,7 +56,7 @@
           </div>
           <div class="db mr10">
             <Select
-              v-model="search.storeId"
+              v-model="search.orgid"
               class="w120"
               placeholder="请选择分店"
               filterable clearable
@@ -105,7 +105,7 @@ export default {
         submitDate: ToDayStr(), // 提交日期
         content: "", // 编码名称
         guestId: "", // 供应商
-        storeId: "" // 门店
+        orgid: "" // 门店
       }
     };
   },
@@ -122,7 +122,7 @@ export default {
         })
     }
     var arr = await creat("", this.$store);
-    this.search.storeId = arr[1];
+    this.search.orgid = arr[1];
   },
   computed: {
     selectShopList() {
@@ -137,7 +137,7 @@ export default {
     // 快速日期查询
     async getDataQuick(v) {
       this.search.submitDate = v;
-      this.search.auditDate = v;
+      // this.search.auditDate = v;
       if(this.selectShopList){
         var arr = await creat("", this.$store);
         this.search.orgid = arr[1];
