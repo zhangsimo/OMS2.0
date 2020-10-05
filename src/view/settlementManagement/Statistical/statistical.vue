@@ -81,6 +81,8 @@
         ref="xTable"
         size="mini"
         border
+        auto-resize
+        resizable
         :data="tableData"
       >
         <vxe-table-column title="序号" type="seq" width="60" fixed="left"></vxe-table-column>

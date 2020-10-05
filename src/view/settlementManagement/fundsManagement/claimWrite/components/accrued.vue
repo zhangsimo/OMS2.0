@@ -126,7 +126,14 @@ export default {
       if (errMap) {
       } else {
         if(this.MessageValue){
-          this.ok();
+          let rpAmt=Math.abs(this.accrued[0].incomeMoney==0?this.accrued[0].paidMoney:this.accrued[0].incomeMoney)
+          if(this.accrued[0].balanceMoney>rpAmt){
+            return this.$message.error("本次认领金额输入错误，请重新输入")
+          }else if(this.accrued[0].balanceMoney<0){
+            return this.$message.error("本次认领金额不可小于零")
+          }else{
+            this.ok();
+          }
         }else{
           this.$Message.error("请选择辅助核算");
         }

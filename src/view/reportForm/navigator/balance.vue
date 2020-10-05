@@ -509,6 +509,8 @@
           getfour(value){
               if (value){
                 return value.toString().replace(/\B(?=(\d{4})+(?!\d))/g, ',')
+              }else {
+                return 0
               }
           }
       }
