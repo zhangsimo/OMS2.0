@@ -130,14 +130,14 @@
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group4" title="销售税率信息">
-        <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="销售含税" width="70">
+        <vxe-table-column show-overflow="tooltip" field="taxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
-            <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
+            <Checkbox disabled v-model="row.taxSign"></Checkbox>
           </template>
         </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="sellTaxRate"
+          field="taxRate"
           title="销售税率"
           width="70"
         ></vxe-table-column>
@@ -382,13 +382,13 @@
             if ([1, "1", "是"].includes(el.sellTaxSign)) {
               el.sellTaxSign = true;
             }
-            if ([0, "0", "否"].includes(el.taxSign)) {
+            if ([0, "0", "否"].includes(el.sellTaxSign)) {
               el.sellTaxSign = false;
             }
-            if ([1, "1", "是"].includes(el.sellTaxSign)) {
+            if ([1, "1", "是"].includes(el.isMakActivity)) {
               el.isMakActivity = true;
             }
-            if ([0, "0", "否"].includes(el.taxSign)) {
+            if ([0, "0", "否"].includes(el.isMakActivity)) {
               el.isMakActivity = false;
             }
             return el;

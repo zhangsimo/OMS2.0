@@ -134,12 +134,12 @@
           width="164"
 
         ></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip"
-          field="guestName"
-          title="第一供应商"
-          width="130"
+<!--        <vxe-table-column  show-overflow="tooltip"-->
+<!--          field="guestName"-->
+<!--          title="第一供应商"-->
+<!--          width="130"-->
 
-        ></vxe-table-column>
+<!--        ></vxe-table-column>-->
         <vxe-table-column  show-overflow="tooltip"
           field="remark"
           title="订单备注"
