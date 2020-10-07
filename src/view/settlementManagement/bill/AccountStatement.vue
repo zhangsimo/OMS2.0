@@ -386,6 +386,9 @@
   </div>
 </template>
 <script>
+  //往来单位 接口换成与 应收应付 一致
+  import {findGuest} from "../../../api/settlementManagement/advanceCollection";
+
   import settlementMoadl from "./components/settlement";
   import hedgingInvoice from "./Popup/hedgingInvoice";
   import registrationEntry from "./Popup/registrationEntry";
@@ -1389,10 +1392,10 @@
           this.loading1 = true
           let arr = []
           let req = {
-            shortName: query,
-            size: 50,
+            fullName: query,
+            size: 20,
           }
-          let res = await getGuestShortName(req);
+          let res = await findGuest(req);
           if (res.code == 0) {
             this.loading1 = false
             res.data.content.map(item => {
