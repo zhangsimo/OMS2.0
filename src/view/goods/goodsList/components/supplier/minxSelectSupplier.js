@@ -150,7 +150,7 @@ export const mixSelectSupplier = {
       this.ArrayList = [];
       api.getSupplier(this.params).then(res => {
         this.loading = false;
-        this.partData =(res.data.content || []).filter(el=>el?.isDisabled==0)
+        this.partData =(res.data.content || []).filter(el=>el.isDisabled==0)
         this.page.total = res.data.totalElements;
         // console.log(res.data, "res =>135");
         for (var i = 0; i < res.data.length; i++) {
@@ -181,13 +181,13 @@ export const mixSelectSupplier = {
     },
     //配件表格点击的行
     selectTabelData(v) {
-      if(v?.isDisabled==1){
+      if(v.isDisabled==1){
         return this.$refs.tableRef.clearCurrentRow()
       }
       this.selectTableItem = v;
     },
     dblclick(v){
-      if(v?.isDisabled==1){
+      if(v.isDisabled==1){
         return this.$refs.tableRef.clearCurrentRow()
       }
       this.selectTableItem = v;
