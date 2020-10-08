@@ -150,6 +150,7 @@ export const mixSelectSupplier = {
       this.ArrayList = [];
       api.getSupplier(this.params).then(res => {
         this.loading = false;
+        // this.partData =(res.data.content || []).filter(el=>el.isDisabled==0)
         this.partData =(res.data.content || []).filter(el=>el.isDisabled==0)
         this.page.total = res.data.totalElements;
         // console.log(res.data, "res =>135");
