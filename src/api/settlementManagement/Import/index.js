@@ -8,6 +8,10 @@ import {showLoading, hideLoading} from "@/utils/loading"
 import {v4} from "uuid";
 import Api from "_conf/url";
 import Axios from 'axios'
+//撤销流水账查询 导出
+export function undoFlowQueryExport(params){
+  return `${api.omsSettle}/revoke/record/export/findPageByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 //对账单 导出对账单
 export  function accountStateExport(params){
   return `${api.omsSettle}/statement/master/export/page?${params}access_token=${Cookies.get(TOKEN_KEY)}`
@@ -90,4 +94,20 @@ export function payColMonthExportPartsAll(params){
     str+=`${i}=${params[i]}&`
   }
   return `${api.omsOrder}/pchsEnterMain/export/in/detailAll?${str}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//应收应付 下侧 销售清单/采购清单 弹框导出
+export function payColSelOrPurchaseExport(params){
+  return `${api.omsOrder}/pchsEnterMain/export/findOrderDetail?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//预收款  导出
+export function advanceCollectionExport(params){
+  return `${api.omsSettle}/advanceCollection/export/findPageByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//其他付款 导出
+export function otherPayableExport(params){
+  return `${api.omsSettle}/otherAccountsPayment/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//费用报销 导出
+export function expensereimbursementExport(params){
+  return `${api.omsSettle}/omsFinanceCostReimbursement/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }

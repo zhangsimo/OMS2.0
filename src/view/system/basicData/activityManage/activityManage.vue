@@ -390,7 +390,7 @@ export default {
               key: "isVender",
               render: (h, params) => {
                 // console.log(params)
-                let text = params.row.isBelowCost ? "是" : "否";
+                let text = (params.row.isVender!=0 ? "是" : "否");
                 return h("span", {}, text);
               }
             },
@@ -820,12 +820,12 @@ export default {
       data5: [],
       data6: [],
       loading2:false,
-      
+
       page: 1,
       total: 0,
       size: 20,
       pageSize: 10,
-      pageSizeOpts: [10, 20, 30, 40, 50] 
+      pageSizeOpts: [10, 20, 30, 40, 50]
     };
   },
   mounted() {

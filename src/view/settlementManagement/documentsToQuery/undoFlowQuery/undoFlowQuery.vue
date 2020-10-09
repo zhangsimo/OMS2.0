@@ -34,6 +34,8 @@
       resizable
       size="mini"
       align="center"
+      auto-resize
+      resizeable
       highlight-hover-row
       highlight-current-row
       show-overflow
@@ -76,7 +78,7 @@
   import {creat} from "../../components";
   import {runningWater} from "@/api/settlementManagement/documentsToQuery/undoFlowQuery";
   import {goshop} from "@/api/settlementManagement/shopList";
-
+  import {undoFlowQueryExport/**导出*/} from "@/api/settlementManagement/Import/index.js";
   import moment from "moment";
   import {showLoading, hideLoading} from "@/utils/loading"
 
@@ -145,7 +147,7 @@
             .format("YYYY-MM-DD HH:mm:ss")
           : "";
         try {
-          
+
           showLoading(".loadingClass", "数据加载中，请勿操作")
           let res = await runningWater(data);
           if (res.code === 0) {
@@ -187,10 +189,25 @@
       exportSelectEvent() {
         if (this.tableData.length === 0)
           return this.$Message.error("暂无数据导出");
-        this.$refs.xTable.exportData({
-          types: ["csv"],
-          filename: "撤销流水帐表格"
-        });
+        let params="";
+        let data={};
+        data.orgId = this.shopCode;
+        data.startDate = this.value[0]
+          ? moment(this.value[0])
+            .startOf("day")
+            .format("YYYY-MM-DD HH:mm:ss")
+          : "";
+        data.endDate = this.value[1]
+          ? moment(this.value[1])
+            .endOf("day")
+            .format("YYYY-MM-DD HH:mm:ss")
+          : "";
+        data.page=0;
+        data.size=this.page.total;
+        for(var i in data){
+          params+=`${i}=${data[i]}&`
+        }
+        location.href=undoFlowQueryExport(params)
       }
     }
   };

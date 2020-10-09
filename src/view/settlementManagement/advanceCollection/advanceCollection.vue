@@ -80,7 +80,7 @@
           @click="revokeCollection(2)"
           :disabled="!currRow.expenditureNo"
         >预收款支出撤回</Button>
-        <Button v-has="'export'" class="ml10">导出</Button>
+        <Button v-has="'export'" class="ml10" @click="exportTable">导出</Button>
       </div>
     </section>
     <section class="con-box">
@@ -268,6 +268,7 @@ import {
   getAllSalesList,
   getPayList
 } from "@/view/documentApproval/component/utils";
+import {advanceCollectionExport/**导出*/} from "@/api/settlementManagement/Import/index.js"
 import { goshop } from "@/api/settlementManagement/shopList";
 import _ from "lodash";
 
@@ -550,6 +551,30 @@ export default {
       this.$refs.Record.init();
       this.currRow = {};
     },
+    //导出
+    exportTable(){
+      if(this.tableData.length<1){
+        return this.$Message.error("暂无数据导出")
+      }else{
+        let obj = {
+          startDate: this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : "",
+          endDate: this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
+            : "",
+          orgid: this.BranchstoreId=="0"?"":this.BranchstoreId,
+          guestId: this.companyId,
+          size: this.page.total,
+          page: 0
+        };
+        let params="";
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        location.href=advanceCollectionExport(params)
+      }
+    },
     // 预收款认领查询
     queryClaimed() {
       if (this.claimTit === "预收款认领") {
@@ -609,7 +634,7 @@ export default {
       this.page.num = 1;
       this.page.size = size;
       this.getQuery();
-    }
+    },
   }
 };
 </script>
