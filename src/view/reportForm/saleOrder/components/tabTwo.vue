@@ -107,19 +107,19 @@
       <vxe-table-column show-overflow="tooltip" field="group3" title="数量/单价">
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderQty"
+          field="sellQty"
           title="数量"
           width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderPrice"
+          field="sellPrice"
           title="销售单价"
           width="70"
         ></vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
-          field="orderAmt"
+          field="sellAmt"
           title="金额"
           width="80"
         ></vxe-table-column>
