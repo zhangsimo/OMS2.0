@@ -327,7 +327,7 @@ export default {
       }
       let res = await getTreeClient(data);
       if (res.code === 0) {
-        this.tableData = res.data.content;
+        this.tableData = (res.data.content || []).filter(el=>el.isDisabled==0);
         this.page1.total = res.data.totalElements;
       }
     },

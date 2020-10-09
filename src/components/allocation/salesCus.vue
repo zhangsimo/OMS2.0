@@ -74,7 +74,7 @@
         this.loading = true;
         getTreeClient(req).then(res => {
           this.loading = false;
-          this.options = res.data.content || [];
+          this.options = (res.data.content || []).filter(el=>el.isDisabled==0);
         });
       },
       selectItem(v){

@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query" :disabled="selectShopList">
+            <Select v-model="BranchstoreId" class="w150" filterable  @on-change="query" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -74,7 +74,7 @@
         <Button v-has="'payrevoke'" class="ml10" @click="revokeCollection(3)">其他付款申请撤回</Button>
         <Button v-has="'otherPayrevoke'" class="ml10" @click="revokeCollection(1)">其他付款支出认领撤回</Button>
         <Button v-has="'otherClaimRevoke'" class="ml10" @click="revokeCollection(2)">其他付款核销撤回</Button>
-        <Button v-has="'export'" class="ml10">导出</Button>
+        <Button v-has="'export'" class="ml10" @click="exportTable">导出</Button>
       </div>
     </section>
     <section class="con-box">
@@ -338,6 +338,7 @@ import OtherPayment from "../../documentApproval/component/OtherPayment";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
 import { goshop } from "@/api/settlementManagement/shopList";
 import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
+import {otherPayableExport /**导出*/} from "@/api/settlementManagement/Import"
 import {showLoading, hideLoading} from "@/utils/loading"
 import {
   findAdvance,
@@ -476,12 +477,11 @@ export default {
         endTime: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
-        orgid: this.BranchstoreId,
+        orgid: this.BranchstoreId==0?"":this.BranchstoreId,
         guestId: this.companyId,
         size: this.page.size,
         page: this.page.num - 1
       };
-      this.BranchstoreId==0?obj.orgid="":obj.orgid=this.BranchstoreId
       showLoading(".loadingClass", "数据加载中，请勿操作")
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
@@ -496,6 +496,29 @@ export default {
       this.serviceId = "";
       this.$refs.Record.init();
       this.currRow = {};
+    },
+    exportTable(){
+      if(this.tableData.length<1){
+        return this.$Message.error("暂无数据导出")
+      }else{
+        let obj = {
+          startTime: this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
+            : "",
+          endTime: this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+            : "",
+          orgid: this.BranchstoreId==0?"":this.BranchstoreId,
+          guestId: this.companyId,
+          size: this.page.total,
+          page: 0
+        };
+        let params="";
+        for(var i in obj){
+          params+=`${i}=${obj[i]}&`
+        }
+        location.href=otherPayableExport(params)
+      }
     },
     //其他收款认领/其他付款支出认领
     claimCollect(type) {
