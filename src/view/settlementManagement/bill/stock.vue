@@ -746,8 +746,7 @@
             enterTypeId: this.typeName,
             outDateStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
             outDateEnd: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           };
           for (var i in obj) {
             params += `${i}=${obj[i]}&`
@@ -767,7 +766,7 @@
           this.selectTabArr.map(vb => {
             str += `ids=${vb.id}&`
           })
-          params = `${str}page=0&size=${this.selectTabArr.length}&enterTypeId=${this.typeName}&`
+          params = `${str}pagesize=${this.selectTabArr.length}&enterTypeId=${this.typeName}&`
           if (this.typeName == "050202") {
             location.href = stockExport(params);
           } else {
