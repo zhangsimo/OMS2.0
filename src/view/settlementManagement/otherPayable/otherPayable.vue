@@ -510,8 +510,7 @@ export default {
             : "",
           orgid: this.BranchstoreId==0?"":this.BranchstoreId,
           guestId: this.companyId,
-          size: this.page.total,
-          page: 0
+          pagesize: this.page.total,
         };
         let params="";
         for(var i in obj){
