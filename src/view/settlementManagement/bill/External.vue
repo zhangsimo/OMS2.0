@@ -704,8 +704,7 @@
             orgid: this.model1 == 0 ? "" : this.model1,
             guestId: this.company ? this.companyId : "",
             enterTypeId: this.type,
-            size: this.page.total,
-            page: 0,
+            pagesize: this.page.total,
           };
           obj.enterDateStart = this.value[0]
             ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -733,7 +732,7 @@
           this.selectTabArr.map(vb => {
             str += `ids=${vb.id}&`
           })
-          params = `${str}page=0&size=${this.selectTabArr.length}&enterTypeId=${this.type}&`
+          params = `${str}pagesize=${this.selectTabArr.length}&enterTypeId=${this.type}&`
           if (this.type == "050101") {
             //采购入库
             location.href = enteralExport(params)
