@@ -916,8 +916,7 @@
             fno: this.fno,
             createUname: this.createUname,
             documentStatus: this.startStatusName,
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           }
           for (var i in obj) {
             str += `${i}=${obj[i]}&`
@@ -950,8 +949,7 @@
             fno: this.fno,
             createUname: this.createUname,
             documentStatus: this.startStatusName,
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           }
           for (var i in obj) {
             str += `${i}=${obj[i]}&`
