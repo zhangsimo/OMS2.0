@@ -1413,8 +1413,7 @@
         let obj = {
           orgId: this.form.orgId,
           guestId: this.form.guestId,
-          page: 0,
-          size: this.pagetotal,
+          pagesize: this.pagetotal,
           startDate: this.form.startDate,
           endDate: this.form.endDate,
           cancalStatus: this.form.cancalStatus,
