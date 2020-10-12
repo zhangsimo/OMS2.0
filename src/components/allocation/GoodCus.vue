@@ -88,7 +88,7 @@ export default {
       fapi.getSupplier(req).then(res => {
         if (res.code === 0) {
           this.loading = false;
-          this.options = res.data.content || [];
+          this.options = (res.data.content || []).filter(el=>el.isDisabled==0)
         }
       });
     },

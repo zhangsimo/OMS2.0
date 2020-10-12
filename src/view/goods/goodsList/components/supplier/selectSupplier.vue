@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="fr partCheck-right" style="width: 758px">
-          <Table height="389" @on-current-change="selectTabelData" highlight-row :loading="loading" border :stripe="true" @on-row-dblclick="dblclick" :columns="columnsPart" :data="partData"></Table>
+          <Table ref="tableRef" height="389" @on-current-change="selectTabelData" highlight-row :loading="loading" border :stripe="true" @on-row-dblclick="dblclick" :columns="columnsPart" :data="partData"></Table>
           <Page size="small" class-name="page-con fr pt10" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
                 @on-page-size-change="changeSize" show-sizer show-total></Page>
         </div>

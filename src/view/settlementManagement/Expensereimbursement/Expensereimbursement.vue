@@ -65,14 +65,8 @@
         >因公借支核销撤回
         </Button
         >
-        <Button class="ml10" v-has="'export'"
-        >导出
-        </Button
-        >
-        <Button class="ml10" @click="openRegEnter"
-        >进项登记及修改
-        </Button
-        >
+        <Button class="ml10" v-has="'export'" @click="exportTable">导出</Button>
+        <Button class="ml10" @click="openRegEnter">进项登记及修改</Button>
       </div>
     </section>
     <section class="con-box">
@@ -388,11 +382,11 @@
   import claimGuest from "./components/claimGuest";
   import writeOff from "./components/writeOff";
   import * as restful from "_api/settlementManagement/financialStatement.js";
+  import {expensereimbursementExport/**导出*/}from "@/api/settlementManagement/Import"
   // otherReceivables
   import moment from "moment";
   import RegistrationEntry from "../bill/Popup/registrationEntry2";
   import {showLoading, hideLoading} from "@/utils/loading"
-
   export default {
     inject: ['reload'],
     name: "settlementManagementExpensereimbursement",
@@ -418,7 +412,7 @@
         requestCode: "", //费用报销申请单号
         currRow: null, //选中行
         claimModal: false, //认领弹框
-        claimPayDis:false,//认领接口返回之前不可再次点击按钮
+        claimPayDis: false,//认领接口返回之前不可再次点击按钮
         revoke: false, //撤回弹框
         claimTit: "", //认领弹框标题
         revokeTit: "", //撤回弹框标题
@@ -447,9 +441,9 @@
     },
     computed: {
       selectShopList() {
-        if(this.$store.state.user.userData.currentCompany!=null){
+        if (this.$store.state.user.userData.currentCompany != null) {
           return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-        }else{
+        } else {
           return true
         }
       }
@@ -502,7 +496,7 @@
           size: this.$refs.claim.claimedPage.size,
           amountType: 2,
           suppliers: this.companyId,
-          claimShopCode:this.$store.state.user.userData.currentCompany.code
+          claimShopCode: this.$store.state.user.userData.currentCompany.code
         };
         if (this.bankNameO) {
           obj.reciprocalAccountName = this.bankNameO;
@@ -565,9 +559,9 @@
         //   this.$message.error("请选择数据");
         // }
       },
-      openRegEnter(){
+      openRegEnter() {
         // console.log(this.currRow)
-        if (this.currRow&&this.currRow.hasOwnProperty("id")) {
+        if (this.currRow && this.currRow.hasOwnProperty("id")) {
           this.$refs.registrationEntry.accountData = [];
           let objItem = {...this.currRow};
           objItem.orgId = objItem.orgid
@@ -588,7 +582,6 @@
       },
 
 
-
       //认领弹框查询
       queryClaimed() {
         this.$refs.claim.claimedPage.page = 1;
@@ -600,6 +593,30 @@
           t = 1
         }
         this.claimedList()
+      },
+      //导出
+      exportTable(){
+        if(this.tableData.length<1){
+          return this.$Message.error("暂无数据可导出")
+        }else{
+          let obj = {
+            startTime: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
+              : "",
+            endTime: this.value[1]
+              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : "",
+            orgid: this.BranchstoreId,
+            serviceId: this.requestCode,
+            size:this.page.total,
+            page:0
+          };
+          let params='';
+          for(var i in obj){
+            params+=`${i}=${obj[i]}&`
+          }
+          location.href=expensereimbursementExport(params)
+        }
       },
       //初始化
       getQuery() {
@@ -646,21 +663,21 @@
             return this.$message.error("金额大于因公借支金额金额，无法认领")
           }
           // this.$refs.claimGuest.modal = true;
-          let obj ={
-            financeAccountCashList:this.$store.state.businessBorrowing.financeAccountCashList,
-            loanId:this.$store.state.businessBorrowing.loanId,
+          let obj = {
+            financeAccountCashList: this.$store.state.businessBorrowing.financeAccountCashList,
+            loanId: this.$store.state.businessBorrowing.loanId,
             claimType: 4,
           }
-          this.claimPayDis=true;
+          this.claimPayDis = true;
           restful.addClaim(obj).then(res => {
-            if(res.code===0){
+            if (res.code === 0) {
               this.$message.success('认领成功')
-              this.claimPayDis=false;
+              this.claimPayDis = false;
               this.claimModal = false
               this.$parent.getQuery()
               // this.$parent.reload();
-            }else{
-              this.claimPayDis=false;
+            } else {
+              this.claimPayDis = false;
             }
           })
           this.claimModal = false;

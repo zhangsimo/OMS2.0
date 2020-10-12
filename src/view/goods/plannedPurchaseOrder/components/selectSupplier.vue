@@ -221,7 +221,7 @@ export default class SelectSupplier extends Vue {
     let res = await api.getSupplier(params);
     if (res.code == 0) {
       this.loading = false;
-      this.partData = res.data.content;
+      this.partData = (res.data.content || []).filter(el=>el.isDisabled==0);
       this.page.total = res.data.totalElements;
     }
   }
