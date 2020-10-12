@@ -634,22 +634,22 @@
         //对账应付-应付坏账-应付返利
         this.infoBase.payingBadDebts = this.infoBase.payingBadDebts ? this.infoBase.payingBadDebts : 0;
         this.infoBase.dealingRebates = this.infoBase.dealingRebates ? this.infoBase.dealingRebates : 0;
-        return (
+        return parseFloat(
           this.infoBase.reconciliation * 1 - this.infoBase.payingBadDebts * 1 - this.infoBase.dealingRebates * 1
-        );
+        ).toFixed(2);
       },
       //实际应收合计
       Actualtotalcollect() {
         //对账应收-应收坏账-应收返利  +运费(infoBase.transportExpenses)+保险费(infoBase.insuranceExpenses)+手续费(infoBase.serviceCharge)+配件管理费(infoBase.partsManagementFee)+其他费用(infoBase.otherFees)
         this.infoBase.badDebtReceivable = this.infoBase.badDebtReceivable ? this.infoBase.badDebtReceivable : 0;
         this.infoBase.accountReceivable = this.infoBase.accountReceivable ? this.infoBase.accountReceivable : 0;
-        return (
+        return parseFloat(
           this.infoBase.accountReceivable * 1 - this.infoBase.badDebtReceivable * 1 - this.infoBase.receivableRebate * 1 + this.infoBase.transportExpenses * 1 + this.infoBase.insuranceExpenses * 1 + this.infoBase.serviceCharge * 1 + this.infoBase.partsManagementFee * 1 + this.infoBase.otherFees * 1
-        );
+        ).toFixed(2);
       },
       //本次对账结算合计
       Reconciliationtotal() {
-        return this.Actualtotalcollect - this.Actualtotalpayment;
+        return parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
       },
     },
     methods: {
