@@ -819,7 +819,22 @@
             className: "tc",
             resizable: true,
             render: (h, params) => {
-              return h('span', params.row.invoiceKind == 1 ? 'c' : 's')
+              let text=null;
+              switch (params.row.invoiceKind) {
+                case "010101":
+                  text=null//收据
+                  break;
+                case "010102":
+                  text="c";//普票
+                  break;
+                case "010103":
+                  text="s";//专票
+                  break;
+                default:
+                  text=null;
+                  break;
+              }
+              return h('span', text)
             }
           },
           {
