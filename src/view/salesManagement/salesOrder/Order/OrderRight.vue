@@ -409,6 +409,7 @@
           <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
         </vxe-table>
       </Form>
+      <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.auditor:""}}</span><span>提交日期：{{formPlan?formPlan.auditDate:""}}</span></div>
     </div>
 
     <!--   新增客户资料-->

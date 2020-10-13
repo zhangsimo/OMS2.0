@@ -153,22 +153,22 @@
                       </Col>
                     </Row>
                   </FormItem>
-                  <FormItem class="form-Item" label="采购员：" prop="orderManId">
-                    <Select
-                      v-model="formPlanmain.orderManId"
-                      class="w160"
-                      :disabled="isInput"
-                      label-in-value
-                      @on-change="selectOrderMan"
-                      filterable
-                    >
-                      <Option
-                        v-for="item in salesList"
-                        :value="item.value"
-                        :key="item.value"
-                      >{{ item.label }}</Option>
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem class="form-Item" label="采购员：" prop="orderManId">-->
+                    <!--<Select-->
+                      <!--v-model="formPlanmain.orderManId"-->
+                      <!--class="w160"-->
+                      <!--:disabled="isInput"-->
+                      <!--label-in-value-->
+                      <!--@on-change="selectOrderMan"-->
+                      <!--filterable-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in salesList"-->
+                        <!--:value="item.value"-->
+                        <!--:key="item.value"-->
+                      <!--&gt;{{ item.label }}</Option>-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem class="form-Item" label="票据类型：" prop="billTypeId">
                     <Select class="w160" v-model="formPlanmain.billTypeId" :disabled="isInput">
                       <Option
@@ -452,6 +452,7 @@
                   width="100"
                 ></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{selectTableRow?selectTableRow.createUname:""}}</span><span>创建日期：{{selectTableRow?selectTableRow.createTime:""}}</span><span>提交人：{{selectTableRow?selectTableRow.auditor:""}}</span><span>提交日期：{{selectTableRow?selectTableRow.auditDate:""}}</span></div>
             </div>
           </Split>
         </div>

@@ -68,11 +68,11 @@ export const mixGoodsData = {
           message: "计划采购日期不能为空",
           trigger: "change"
         }],
-        orderManId: [{
-          required: true,
-          validator: validateOrderMan,
-          trigger: "change"
-        }],
+        // orderManId: [{
+        //   required: true,
+        //   validator: validateOrderMan,
+        //   trigger: "change"
+        // }],
         billType: [{
           required: true,
           message: "票据类型不能为空",
