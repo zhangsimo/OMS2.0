@@ -1880,8 +1880,7 @@
               orgId: this.model1,
               statementStatus: this.Reconciliationtype,
               guestId: this.receiveGuestId,
-              page:0,
-              size:this.pagetotal
+              pagesize:this.pagetotal
             };
             let params=""
             for(var i in obj){

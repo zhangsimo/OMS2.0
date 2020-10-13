@@ -19,13 +19,15 @@ export default {
           title: "序号",
           type: "index",
           align: "center",
-          width: 40
+          width: 40,
+          resizable:true,
         },
         {
           title: "收付款单号",
           key: "fno",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -47,7 +49,8 @@ export default {
           title: "对账单号",
           key: "accountNo",
           align: "center",
-          minWidth: 80,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -69,7 +72,8 @@ export default {
           title: "收款人/付款人",
           key: "createUname",
           align: "center",
-          minWidth: 100,
+          width: 120,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -91,7 +95,8 @@ export default {
           title: "收付款时间",
           key: "rpDate",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -113,7 +118,8 @@ export default {
           title: "收付款业务类型",
           key: "furpose",
           align: "center",
-          minWidth: 120,
+          width: 100,
+          resizable:true,
           render: (h, p) => {
             let val = p.row.furpose.name;
             return h("span", val);
@@ -123,7 +129,8 @@ export default {
           title: "往来单位",
           key: "guestName",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -145,7 +152,8 @@ export default {
           title: "收付款方式",
           key: "sort",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, p) => {
             let val = p.row.sort.name;
             return h("span", val);
@@ -155,7 +163,8 @@ export default {
           title: "账户所属门店",
           key: "accountStoreName",
           align: "center",
-          minWidth: 120,
+          width: 120,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -177,7 +186,8 @@ export default {
           title: "收付款账户",
           key: "account",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -199,7 +209,8 @@ export default {
           title: "收付款开户行",
           key: "accountBank",
           align: "center",
-          minWidth: 120,
+          width: 120,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -221,7 +232,8 @@ export default {
           title: "收付款账号",
           key: "accountBankNo",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -243,7 +255,8 @@ export default {
           title: "对方户名",
           key: "otherAccountName",
           align: "center",
-          minWidth: 80,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -265,7 +278,8 @@ export default {
           title: "对方开户行",
           key: "otherAccountBank",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -287,7 +301,8 @@ export default {
           title: "对方账号",
           key: "otherAccountBankNo",
           align: "center",
-          minWidth: 80,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -309,13 +324,15 @@ export default {
           title: "收付款金额",
           key: "checkAmt",
           align: "center",
-          minWidth: 100,
+          width: 100,
+          resizable:true,
         },
         {
           title: "审核状态",
           key: "startStatus",
           align: "center",
-          minWidth: 80,
+          width: 100,
+          resizable:true,
           render: (h, p) => {
             let val = p.row.startStatus.name;
             return h("span", val);
@@ -325,7 +342,8 @@ export default {
           title: "审核人",
           key: "auditor",
           align: "center",
-          minWidth: 70,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -347,7 +365,8 @@ export default {
           title: "审核日期",
           key: "auditorDate",
           align: "center",
-          minWidth: 80,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -369,7 +388,8 @@ export default {
           title: "备注",
           key: "remark",
           align: "center",
-          minWidth: 60,
+          width: 100,
+          resizable:true,
           render: (h, params) => {
             return h('div', [
               h('span', {

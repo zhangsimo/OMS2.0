@@ -56,6 +56,32 @@ export function getClient () {
   })
 }
 
+// 每日销售统计
+export function getDailySalesStatistics(data = {}, params) {
+  let argument=data;
+  argument.page=params.page;
+  argument.size=params.size;
+  return axios.request({
+    url: `${api.omsBatch}/sellReport/report`,
+    method: 'get',
+    params:argument,
+  })
+}
+//每日销售统计导出
+export function getDailySalesStatisticsExport(params){
+  return `${api.omsBatch}/sellReport/export?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+// 进销存排行
+export function getSalesAndInventoryList(data = {}, params) {
+  return axios.request({
+    url: `${api.omsBatch}`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
+
 // 采购报表_采购订单明细
 export function getPjPchsOrderMainDetailList(data = {}, params) {
   return axios.request({
@@ -95,7 +121,19 @@ export function getPjPchsPlanDetailList(data = {}, params) {
       params,
   })
 }
-
+//采购排行分析 查询
+export function getPurchaseReporAnalysis(data={},params){
+  return axios.request({
+    url: `${api.omsOrder}/pchsEnterMain/getPjPchsEnterAnalyze`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+//采购排行分析 导出
+export function purchaseReporAnalysisExport(params){
+  return `${api.omsBatch}?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 // 销售报表_销售订单明细
 export function getPjSellOrderMainDetailList(data = {}, params) {
   return axios.request({
@@ -130,7 +168,15 @@ export function getPjSellOutRtnMainDetails(data = {}, params) {
       params,
   })
 }
-
+//销售排行分析
+export function getPjSellAnalyze(data = {}, params){
+  return axios.request({
+    url: `${api.omsOrder}/sellOutMain/getPjSellAnalyze`,
+    method: 'post',
+    data,
+    params,
+  })
+}
 // 调拨报表_调拨入库明细
 export function getAllotApplyDetails(data = {}, params) {
   return axios.request({
