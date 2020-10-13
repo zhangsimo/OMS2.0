@@ -132,8 +132,12 @@
             //获取活动内容
            async getList(){
                 let data ={}
-                data.partName = this.Outform.partCode.trim()
-                data.activityName = this.Outform.activityName.trim()
+                if(this.Outform.partCode.trim()){
+                  data.partName = this.Outform.partCode.trim()
+                }
+                if(this.Outform.activityName.trim()){
+                  data.activityName = this.Outform.activityName.trim()
+                }
                let res = await getActivity(data)
                   if(res.code === 0){
                       this.tableDataBottom = res.data
