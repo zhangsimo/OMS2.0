@@ -436,7 +436,6 @@
         claimType: 4,
         amountType: 2,
         loanId: '',
-        condition: 1
       };
     },
     computed: {
