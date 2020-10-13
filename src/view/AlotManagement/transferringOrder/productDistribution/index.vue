@@ -108,9 +108,12 @@
               </div>
             </Modal>
           </div>
-          <!-- <div class="db mr10">
-            <Button class="mr20" >导出</Button>
-          </div>-->
+          <div class="db mr10">
+            <Checkbox v-model="single">显示有库存</Checkbox>
+          </div>
+          <div class="db mr10">
+            <Checkbox v-model="single">今日到货产品</Checkbox>
+          </div>
         </div>
       </div>
     </section>
@@ -130,7 +133,7 @@
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="seq" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
 
           <vxe-table-column
             field="partCode"
@@ -216,9 +219,9 @@
           show-footer
           :footer-method="footerMethod"
         >
-          <vxe-table-column type="seq" title="序号"></vxe-table-column>
+          <vxe-table-column width="50" type="seq" title="序号"></vxe-table-column>
 
-          <vxe-table-column title="操作" width="180">
+          <vxe-table-column title="操作" width="140">
             <template v-slot="{ row }">
               <Button type="text" @click="sureBaocunsave(row)">保存</Button>
               <Button type="text" @click="sureBaocunfenpei(row)"
@@ -227,22 +230,25 @@
             </template>
           </vxe-table-column>
 
-          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
+          <vxe-table-column field="guestName" title="申请方" width="120"></vxe-table-column>
           <vxe-table-column
             field="serviceId"
             title="调拨申请单号"
-            width="100"
+            width="170"
           ></vxe-table-column>
           <vxe-table-column
             field="partCode"
+            width="120"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
+            width="120"
             title="配件名称"
           ></vxe-table-column>
           <vxe-table-column
             field="auditDate"
+            width="170"
             title="提交日期"
           ></vxe-table-column>
           <vxe-table-column
