@@ -22,7 +22,7 @@ export function editUser (data , id) {
 // 新增用户信息
 export function addUser (data , id) {
   return axios.request({
-    url: `${api.authApi}/tenantUsers/v2/save?groupId=${id}`,
+    url: `${api.authApi}/tenantUsers/save2?groupId=${id}`,
     method: 'post',
     data
   })
