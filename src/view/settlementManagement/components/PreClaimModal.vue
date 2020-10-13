@@ -52,6 +52,7 @@
       <vxe-table-column title="发生日期" field="createTime"></vxe-table-column>
       <vxe-table-column title="业务类别" field="businessType"></vxe-table-column>
       <vxe-table-column title="支出金额" field="paidMoney"></vxe-table-column>
+      <vxe-table-column title="收入金额" field="incomeMoney"></vxe-table-column>
       <vxe-table-column title="未认领金额" field="unClaimedAmt"></vxe-table-column>
       <vxe-table-column title="对方户名" field="reciprocalAccountName"></vxe-table-column>
       <vxe-table-column title="账户" field="accountName"></vxe-table-column>
@@ -152,7 +153,7 @@ export default {
       })
       claimedFund(obj).then(res => {
         if (res.code === 0) {
-          this.tableData = res.data.content.filter(item => item.paidMoney != 0 || item.unClaimedAmt != 0);
+          this.tableData = res.data.content.filter(item => item.unClaimedAmt != 0);
           this.claimedPage.total = res.data.totalElements;
         }
       })

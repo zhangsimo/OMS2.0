@@ -1,6 +1,7 @@
 import api from '_conf/url'
 import axios from '@/libs/api.request'
-
+import {TOKEN_KEY} from "@/libs/util";
+import Cookies from "js-cookie";
 // 获取汇总库存数据
 export function getAllStock (data) {
   return axios.request({
@@ -10,7 +11,9 @@ export function getAllStock (data) {
   });
 }
 //汇总库存数据导出
-export const exportAll=api.omsSotck + `/partStoreStock/export/PartStoreStock?`
+export function exportAll(params){
+  return `${api.omsSotck}/partStoreStock/export/PartStoreStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 //   批次库存查询
 export function getLotStock (data) {
   return axios.request({
@@ -20,7 +23,9 @@ export function getLotStock (data) {
   });
 }
 // 批次库存导出
-export const exportPart=api.omsOrder + `/enterMain/export/BatchStock?`
+export function exportPart(params){
+  return `${api.omsOrder}/enterMain/export/BatchStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 // 获取入库明细数据
 export function getEnter (data) {
   return axios.request({

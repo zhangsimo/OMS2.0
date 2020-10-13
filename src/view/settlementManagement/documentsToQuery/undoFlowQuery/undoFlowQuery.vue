@@ -202,8 +202,7 @@
             .endOf("day")
             .format("YYYY-MM-DD HH:mm:ss")
           : "";
-        data.page=0;
-        data.size=this.page.total;
+        data.pagesize=this.page.total;
         for(var i in data){
           params+=`${i}=${data[i]}&`
         }
