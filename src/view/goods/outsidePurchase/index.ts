@@ -929,7 +929,7 @@ export default class OutsidePurchase extends Vue {
       //获取左侧侧表格高度
       this.leftTableHeight = wrapH - 70;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 78;
     })
   }
 

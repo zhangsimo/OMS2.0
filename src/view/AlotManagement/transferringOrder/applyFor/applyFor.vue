@@ -264,6 +264,7 @@
                   <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
                   @on-page-size-change="changeSize" show-sizer show-total></Page>
                   </div> -->
+                  <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.commitUname:""}}</span><span>提交日期：{{datadata?datadata.commitDate:""}}</span></div>
                 </div>
               </Split>
             </div>
