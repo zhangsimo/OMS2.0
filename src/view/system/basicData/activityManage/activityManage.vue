@@ -44,7 +44,7 @@
               v-has="'apply'"
             >申请活动</Button>
             <Button @click="cancelApply" type="warning" class="mr10 w90" v-has="'noApply'"
-              v-if="checkedData[0] && checkedData[0].state != '待审核'"
+              v-if="checkedData[0] && checkedData[0].state != '待审核'&& checkedData[0].state != '已取消'"
             >取消申请</Button>
             <Button
               type="warning"
@@ -849,7 +849,7 @@ export default {
       getActApplicationTable().then(res => {
         // console.log(res)
         if (res.code === 0) {
-          this.data1 = (res.data||[]).filter(item => item.state!='已取消');
+          this.data1 = (res.data||[]);
         }
       });
     },
@@ -866,7 +866,7 @@ export default {
       this.loading2 = true;
       getSelectActApply(data).then(res => {
         this.loading2 = false;
-        this.data1 = (res.data||[]).filter(item => item.state!='已取消');
+        this.data1 = (res.data||[]);
         this.data4 = [];
       });
       this.checkedData.length = 0;
@@ -1050,7 +1050,8 @@ export default {
         if (res.code === 0) {
           this.$Message.success("操作成功");
           this.data4 = [];
-          this.getActApplicationForm();
+          // this.getActApplicationForm();
+          this.selectActApply();
         }
       });
     },
