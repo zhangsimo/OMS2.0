@@ -191,20 +191,20 @@
                       placeholder="选择日期"
                     ></DatePicker>
                   </FormItem>
-                  <FormItem label="计划员：" prop="orderManId">
-                    <Select
-                      v-model="formPlan.orderManId"
-                      class="w160"
-                      :disabled="isinput"
-                      filterable
-                    >
-                      <Option
-                        v-for="item in salesList"
-                        :value="item.value"
-                        :key="item.value"
-                      >{{ item.label }}</Option>
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem label="计划员：" prop="orderManId">-->
+                    <!--<Select-->
+                      <!--v-model="formPlan.orderManId"-->
+                      <!--class="w160"-->
+                      <!--:disabled="isinput"-->
+                      <!--filterable-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in salesList"-->
+                        <!--:value="item.value"-->
+                        <!--:key="item.value"-->
+                      <!--&gt;{{ item.label }}</Option>-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem label="备注：">
                     <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
                       <Input
@@ -575,6 +575,7 @@
               <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
               <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
               <!--</div>-->
+              <div class="table-bottom-text flex"><span>创建人：{{selectPlanOrderItem.createUname}}</span><span>创建日期：{{selectPlanOrderItem.createTime}}</span><span>提交人：{{selectPlanOrderItem.auditor}}</span><span>提交日期：{{selectPlanOrderItem.auditDate}}</span></div>
             </div>
           </Split>
         </div>
@@ -773,11 +774,11 @@ export default {
           key: "createUname",
           minWidth: 140,
         },
-        {
-          title: "计划员",
-          key: "orderMan",
-          minWidth: 120,
-        },
+        // {
+        //   title: "计划员",
+        //   key: "orderMan",
+        //   minWidth: 120,
+        // },
         {
           title: "计划单号",
           key: "serviceId",
@@ -870,7 +871,7 @@ export default {
         //获取左侧侧表格高度
         this.leftTableHeight = wrapH - 100;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 40;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 70;
       });
     },
     initStart() {

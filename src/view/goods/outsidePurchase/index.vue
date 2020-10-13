@@ -520,6 +520,7 @@
                   width="100"
                 ></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{selectTableRow?selectTableRow.createUname:""}}</span><span>创建日期：{{selectTableRow?selectTableRow.createTime:""}}</span><span>提交人：{{selectTableRow?selectTableRow.auditor:""}}</span><span>提交日期：{{selectTableRow?selectTableRow.auditDate:""}}</span></div>
             </div>
           </Split>
         </div>
