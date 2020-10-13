@@ -115,7 +115,7 @@ export default {
         fiscalMonth: this.$refs.queryCriteria.monthParticular
       };
       if(this.$refs.queryCriteria.shopId != "") {
-        obj.shopId = this.$refs.queryCriteria.shopId
+        obj.shopNumber = this.$refs.queryCriteria.shopId
       }
       groupBalanceSheet(obj).then(res => {
         if (res.code === 0) {
