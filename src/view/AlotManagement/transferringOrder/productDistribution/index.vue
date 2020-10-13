@@ -214,6 +214,7 @@
           highlight-hover-row
           :data="BottomTableData"
           keep-source
+          show-overflow
           :edit-rules="validRules"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
           show-footer
@@ -221,7 +222,7 @@
         >
           <vxe-table-column width="50" type="seq" title="序号"></vxe-table-column>
 
-          <vxe-table-column title="操作" width="140">
+          <vxe-table-column title="操作" width="160">
             <template v-slot="{ row }">
               <Button type="text" @click="sureBaocunsave(row)">保存</Button>
               <Button type="text" @click="sureBaocunfenpei(row)"
