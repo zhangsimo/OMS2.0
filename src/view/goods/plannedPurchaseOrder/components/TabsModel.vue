@@ -82,7 +82,7 @@ export default class TabsModel extends Vue {
     },
     {
       title: "公司名称",
-      key: "companyName",
+      key: "orgName",
       minWidth: 100
     },
     {
@@ -96,8 +96,8 @@ export default class TabsModel extends Vue {
       minWidth: 100
     },
     {
-      title: "仓库",
-      key: "storeName",
+      title: "滞销数量",
+      key: "enterQty",
       minWidth: 100
     },
   ];
