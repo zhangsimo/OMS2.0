@@ -863,7 +863,6 @@
       //checkbox 单个选择
       selectTabSummary(selection) {
         this.selectData = selection
-        console.log(this.selectData)
       },
       //checkbox 选择全部
       selectAllSummary(selection) {
