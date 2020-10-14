@@ -5,7 +5,7 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        
+
         <div class="db mr5 item">
           <span class="mr5">编码:</span>
           <el-input class="w120 mr10" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="search"/>
@@ -153,6 +153,9 @@
                 </vxe-table>
               </div></div
           ></TabPane> -->
+          <TabPane label="批次库存" tab="search">
+
+          </TabPane>
           <TabPane label="关联配件" tab="search">
             <div class="marketBox">
               <vxe-table
@@ -240,7 +243,7 @@
               </vxe-table>
             </div>
           </TabPane>
-          <TabPane label="销售记录" tab="search">
+          <TabPane label="连锁销售记录" tab="search">
             <div class="marketBox">
               <vxe-table
                 border
@@ -292,6 +295,47 @@
                   field="sellPrice"
                   title="销价"
                   width="100"
+                ></vxe-table-column>
+              </vxe-table>
+            </div>
+          </TabPane>
+          <TabPane label="本店销售记录" tab="search">
+            <div class="marketBox">
+              <vxe-table
+                border
+                auto-resize
+                resizable
+                size="mini"
+                align="center"
+                height="200"
+                highlight-hover-row
+                :loading="loading1"
+                :data="allList.chainStock"
+              >
+                <vxe-table-column
+                  type="seq"
+                  title="序号"
+                  width="50"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partCode"
+                  title="配件编码"
+                  width="120"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="companyName"
+                  title="公司名称"
+                  width="120"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="storeName"
+                  title="仓库"
+                  width="120"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  title="可售数量"
+                  min-width="120"
                 ></vxe-table-column>
               </vxe-table>
             </div>

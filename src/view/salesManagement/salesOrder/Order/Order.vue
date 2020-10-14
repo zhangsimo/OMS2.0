@@ -86,6 +86,17 @@
             <Button
               class="mr5"
               size="small"
+              @click="printModelOpen"
+              :disabled="orderlistType.value == 5"
+              v-has="'print'"
+            >
+              <i class="iconfont mr5 icondayinicon"></i> 打印发货申请
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              size="small"
               @click="setBackOrder"
               :loading="backloading"
               :disabled="backShow"
@@ -282,6 +293,10 @@ export default {
       // window.open(routeUrl.href,"_blank");
       this.openwin(routeUrl.href)
       this.$refs.OrderLeft.gitlistValue()
+    },
+    //打印发货申请
+    printModelOpen(){
+      this.$refs.right.printModelShow();
     },
     //打开更多搜索
     openQueryModal() {

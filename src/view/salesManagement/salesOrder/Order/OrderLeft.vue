@@ -35,7 +35,7 @@
         <vxe-table-column show-overflow field="createTime" title="创建日期" min-width="120"></vxe-table-column>
         <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="auditor" title="提交人" min-width="80" show-overflow></vxe-table-column>
         <vxe-table-column show-overflow field="auditDate" title="提交日期" min-width="120"></vxe-table-column>
-        <vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>
+        <!--<vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>-->
       </vxe-table>
     </div>
     <Page
