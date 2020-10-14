@@ -1094,8 +1094,8 @@
           (data.oemCode == "" || data.oemCode.trim() == "") && //oem码
           (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
           (data.partId == "" || data.partId.trim() == "") && //内码
-          (data.partBrand == "" || data.partBrand.trim() == "") && //品牌
-          ((data.old || data.old.trim() == "") && this.showSearch == false)&& //公司
+          (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
+          ((data.old || ( data.old && data.old.trim() == "")) && this.showSearch == false)&& //公司
           (this.searchForm1.storeIds.length<1)
         ) {
           return this.$message.error("至少有一个筛选条件")
