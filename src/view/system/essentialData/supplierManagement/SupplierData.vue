@@ -141,13 +141,13 @@ export default {
       fasttipsType: "fullName", //快速查询种类
       fasttipsTitle: "", //快速查询内容
       columns: [
-        { title: "序号", align: "center", type: "index", key: "name" },
+        { title: "序号", align: "center", type: "index", key: "name",width:50 },
         {
           title: "基本信息",
           align: "center",
           children: [
             {
-              title: "序号",
+              title: "选择",
               align: "center",
               render: (h, params) => {
                 return h("span", { class: "table-radio" });
@@ -162,7 +162,35 @@ export default {
               title: "供应商全称",
               key: "fullName",
               align: "center"
-            }
+            },
+            {
+              title: "禁用",
+              align: "center",
+              render: (h, params) => {
+                let text = "";
+                params.row.isDisabled == 0 ? (text = "否") : (text = "是");
+                return h("span", {}, text);
+              }
+            },
+            {
+              title: "审批状态",
+              align: "center",
+              render: (h, params) => {
+                let text = "";
+                switch (params.row.approveStatus) {
+                  case "0"|0:
+                    text="待审批"
+                    break;
+                  case "1"|1:
+                    text="通过"
+                    break;
+                  case "2"|2:
+                    text="审批不通过"
+                    break;
+                }
+                return h("span", {}, text);
+              }
+            },
           ]
         },
         {
@@ -266,16 +294,6 @@ export default {
               title: "最后操作时间",
               key: "updateTime",
               align: "center"
-            },
-            {
-              title: "禁用",
-
-              align: "center",
-              render: (h, params) => {
-                let text = "";
-                params.row.isDisabled == 0 ? (text = "否") : (text = "是");
-                return h("span", {}, text);
-              }
             },
             {
               title: "供应商编码",

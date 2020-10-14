@@ -331,7 +331,9 @@ export default {
           this.$parent.claimModal = false;
         }
       } else {
-        this.tableData = [];
+        if(this.$route.name=="accountStatement"){
+          this.tableData = [];
+        }
         let sign = 0;
         if (this.$parent.paymentId === "YSK") {
           sign = 2;
