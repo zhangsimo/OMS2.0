@@ -1083,6 +1083,13 @@
       hander(type) {
         // this.modal1 = true
         if (type) {
+          this.searchForm3.guestName="";
+          if (this.$refs.quickDate1) {
+            this.$refs.quickDate1.searchQuick = "7";
+          }
+          if (this.$refs.quickDate2) {
+            this.$refs.quickDate2.searchQuick = "7";
+          }
           this.getEnters();
         }
       },
@@ -1183,8 +1190,8 @@
         }
         if (this.tIndex == 1) {
           //这里是因为tab切换时quickDate的searchQuick没有清空转回到7
-          if (this.$refs.quickDate1) {
-            this.$refs.quickDate1.searchQuick = "7";
+          if (this.$refs.quickDate2) {
+            this.$refs.quickDate2.searchQuick = "7";
           }
           this.getList();
         }

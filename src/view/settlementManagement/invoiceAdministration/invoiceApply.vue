@@ -1424,6 +1424,9 @@
         //   data:this.data,
         //   columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
         // })
+        if(this.data.length<1){
+          return this.$message.error("暂无数据可导出")
+        }
         let params = "";
         let obj = {
           orgId: this.form.orgId,

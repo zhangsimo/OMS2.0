@@ -962,7 +962,7 @@
           this.selectData.map(item => {
             str += `ids=${item.id}&`
           })
-          let params = `${str}size=${this.selectData.length}&page=0&`
+          let params = `${str}pagesize=${this.selectData.length}&`
           location.href = colPayExportQuery(params)
         }
       },
