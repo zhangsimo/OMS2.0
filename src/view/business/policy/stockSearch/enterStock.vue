@@ -475,6 +475,7 @@
     getLotStock
   } from "@/api/business/stockSearch";
   import QuickDate from "_c/getDate/dateget_bill1.vue";
+  import {ThisYearStr} from "_c/getDate/index_bill.js"
 
   export default {
     name: "enterStock",
@@ -1083,6 +1084,8 @@
       hander(type) {
         // this.modal1 = true
         if (type) {
+          this.searchForm3.startEnterDate=ThisYearStr()[0]
+          this.searchForm3.endEnterDate=ThisYearStr()[1]
           this.searchForm3.guestName="";
           if (this.$refs.quickDate1) {
             this.$refs.quickDate1.searchQuick = "7";
