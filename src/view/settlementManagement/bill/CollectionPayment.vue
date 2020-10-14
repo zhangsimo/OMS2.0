@@ -118,7 +118,7 @@
           show-summary
           highlight-row
           :summary-method="handleSummary"
-          @on-select="selectTabSummary"
+          @on-selection-change="selectTabSummary"
           @on-select-all="selectAllSummary"
           @on-row-click="election"
           max-height="400"
