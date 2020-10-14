@@ -1074,8 +1074,8 @@
       async getEnters() {
         this.oneTime = "";
         this.twoTime = "";
-        this.searchForm2.startEnterDate = "";
-        this.searchForm2.endEnterDate = "";
+        this.searchForm2.startEnterDate = ThisYearStr()[0];
+        this.searchForm2.endEnterDate = ThisYearStr()[1];
         this.searchForm2.guestName = "";
         this.modal1 = true;
         this.tIndex = 4;
