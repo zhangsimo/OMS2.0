@@ -118,7 +118,7 @@
           show-summary
           highlight-row
           :summary-method="handleSummary"
-          @on-select="selectTabSummary"
+          @on-selection-change="selectTabSummary"
           @on-select-all="selectAllSummary"
           @on-row-click="election"
           max-height="400"
@@ -863,6 +863,7 @@
       //checkbox 单个选择
       selectTabSummary(selection) {
         this.selectData = selection
+        console.log(this.selectData)
       },
       //checkbox 选择全部
       selectAllSummary(selection) {
