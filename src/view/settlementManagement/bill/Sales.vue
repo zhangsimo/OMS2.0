@@ -60,7 +60,7 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-               @on-row-click="election" @on-select="selectTab" @on-select-all="selectTab" max-height="400"></Table>
+               @on-row-click="election" @on-selection-change="selectTab" @on-select-all="selectTab" max-height="400"></Table>
         <!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
