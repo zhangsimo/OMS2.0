@@ -140,7 +140,8 @@ export const mixSelectSupplier = {
         req.supplierTypeFirst = this.selectTreeItem.id;
       }
       // req.isDisabled = this.isDisable ? 1 : 0;
-
+      req.isDisabled = 0;//供应商是否禁用 0非禁用 1禁用
+      req.approveStatus = 1//供应商是否审批通过 1审批通过 2审批不通过 0 审核中
       req.page = this.page.num - 1;
       req.size = this.page.size;
       this.params = req;
