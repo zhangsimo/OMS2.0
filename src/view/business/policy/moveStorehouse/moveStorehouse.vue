@@ -1190,13 +1190,13 @@ export default {
     },
     //分页
     changePage(p) {
-      // this.page.num = p
-      // this.getList()
+      this.Left.page.num = p
+      this.getList()
     },
     changeSize(size) {
-      // this.page.num = 1
-      // this.page.size = size
-      // this.getList()
+      this.Left.page.num = 1
+      this.Left.page.size = size
+      this.getList()
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
