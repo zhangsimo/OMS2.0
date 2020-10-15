@@ -154,7 +154,75 @@
               </div></div
           ></TabPane> -->
           <TabPane label="批次库存" tab="search">
-
+            <div class="marketBox">
+              <vxe-table
+                border
+                auto-resize
+                resizable
+                align="center"
+                :loading="loading1"
+                size="mini"
+                height="200"
+                highlight-hover-row
+                :data="allList.relearnedPart"
+              >
+                <vxe-table-column
+                  field="code"
+                  title="配件编码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partBrandName"
+                  width="80"
+                  title="品牌"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partBrandName"
+                  width="70"
+                  title="仓库"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="70"
+                  title="入库数量"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="80"
+                  title="可出库数量"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="70"
+                  title="入库单价"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="50"
+                  title="税率"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="70"
+                  title="含税单价"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="80"
+                  title="不含税单价"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="160"
+                  title="供应商（取最近供应商）"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="130"
+                  title="入库日期"
+                ></vxe-table-column>
+              </vxe-table>
+            </div>
           </TabPane>
           <TabPane label="关联配件" tab="search">
             <div class="marketBox">
