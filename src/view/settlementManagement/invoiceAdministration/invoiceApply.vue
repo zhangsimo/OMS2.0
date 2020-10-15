@@ -819,7 +819,22 @@
             className: "tc",
             resizable: true,
             render: (h, params) => {
-              return h('span', params.row.invoiceKind == 1 ? 'c' : 's')
+              let text=null;
+              switch (params.row.invoiceKind) {
+                case "010101":
+                  text=null//收据
+                  break;
+                case "010102":
+                  text="c";//普票
+                  break;
+                case "010103":
+                  text="s";//专票
+                  break;
+                default:
+                  text=null;
+                  break;
+              }
+              return h('span', text)
             }
           },
           {
@@ -1409,12 +1424,14 @@
         //   data:this.data,
         //   columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
         // })
+        if(this.data.length<1){
+          return this.$message.error("暂无数据可导出")
+        }
         let params = "";
         let obj = {
           orgId: this.form.orgId,
           guestId: this.form.guestId,
-          page: 0,
-          size: this.pagetotal,
+          pagesize: this.pagetotal,
           startDate: this.form.startDate,
           endDate: this.form.endDate,
           cancalStatus: this.form.cancalStatus,

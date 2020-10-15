@@ -934,22 +934,22 @@
         //对账应付-应付坏账-应付返利
         this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
         this.totalpayment = this.totalpayment ? this.totalpayment : 0;
-        return (
+        return parseFloat(
           this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
-        );
+        ).toFixed(2);
       },
       //实际应收合计
       Actualtotalcollect() {
         //对账应收-应收坏账-应收返利  +运费(transportExpenses)+保险费(insuranceExpenses)+手续费(serviceCharge)+配件管理费(partsManagementFee)+其他费用(otherFees)
         this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
         this.totalcollect = this.totalcollect ? this.totalcollect : 0;
-        return (
+        return parseFloat(
           this.totalcollect * 1 - this.collectBaddebt * 1 - this.collectRebate * 1 + this.transportExpenses * 1 + this.insuranceExpenses * 1 + this.serviceCharge * 1 + this.partsManagementFee * 1 + this.otherFees * 1
-        );
+        ).toFixed(2);
       },
       //本次对账结算合计
       Reconciliationtotal() {
-        return this.Actualtotalcollect - this.Actualtotalpayment;
+        return parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
       }
     },
     methods: {

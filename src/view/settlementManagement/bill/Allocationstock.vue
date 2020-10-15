@@ -69,7 +69,7 @@
           highlight-row
           max-height=500
           @on-row-click="election"
-          @on-select="selectTab"
+          @on-selection-change="selectTab"
           @on-select-all="selectTab"
         ></Table>
         <div class="clearfix">
@@ -713,8 +713,7 @@
         }
         let params;
         let data = {
-          num: 0,
-          size: this.page.total
+          pagesize: this.page.total
         };
         //导出全部参数同查询接口
         //导出勾选参数为ids=选中id以及分页参数
@@ -734,7 +733,7 @@
           if (this.selectTabArr.length < 1) {
             return this.$Message.error("请勾选需要导出的数据!")
           }
-          data.size = this.selectTabArr.length;
+          data.pagesize = this.selectTabArr.length;
           data.orderTypeId = this.type
           location.href = allocationStockExport(params, data)
           // console.log( allocationStockExport(params, data))

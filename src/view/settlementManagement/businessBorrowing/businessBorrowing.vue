@@ -426,7 +426,6 @@ export default {
       amountType: null,
       claimType: null,
       claimTitle: "",
-      condition: undefined,
       remoteloading: false,
       loanId: "",
       value: [], //查询日期数组
@@ -510,13 +509,11 @@ export default {
       if (type == 1) {
         this.$refs.claimModal.open()
         this.claimTitle = "因公借支认领"
-        this.condition = 1
         this.claimType = 2
         this.amountType = 2
       } else {
         this.$refs.claimModal.open()
-        this.claimTitle = "因公借支收回"
-        this.condition = 2
+        this.claimTitle = "因公借支收回认领"
         this.claimType = 3
         this.amountType = 1
       }

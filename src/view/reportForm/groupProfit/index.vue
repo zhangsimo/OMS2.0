@@ -510,7 +510,7 @@ export default {
         endYearMonth: this.$refs.queryCriteria.yearParticular1.toFixed() + m2
       };
       if(this.$refs.queryCriteria.shopId != "") {
-        obj.shopId = this.$refs.queryCriteria.shopId
+        obj.shopNumber = this.$refs.queryCriteria.shopId
       }
       groupProfitSheet(obj).then(res => {
         if (res.code === 0) {

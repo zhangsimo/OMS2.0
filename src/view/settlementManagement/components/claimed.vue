@@ -56,7 +56,7 @@
             key: "businessType",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -79,7 +79,7 @@
             key: "createTime",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -102,28 +102,28 @@
             key: "incomeMoney",
             align: "center",
             resizable: true,
-            minWidth: 100
+            width: 100
           },
           {
             title: "支出金额",
             key: "paidMoney",
             align: "center",
             resizable: true,
-            minWidth: 100
+            width: 100
           },
           {
             title: "未认领金额",
             key: "unClaimedAmt",
             align: "center",
             resizable: true,
-            minWidth: 100
+            width: 100
           },
           {
             title: "对方户名",
             key: "reciprocalAccountName",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -146,7 +146,7 @@
             key: "suppliers",
             align: "center",
             resizable: true,
-            minWidth: 160,
+            width: 160,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -169,7 +169,7 @@
             key: "area",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -192,7 +192,7 @@
             key: "shopName",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -215,7 +215,7 @@
             key: "shopCode",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -238,7 +238,7 @@
             key: "accountName",
             align: "center",
             resizable: true,
-            minWidth: 60,
+            width: 60,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -261,7 +261,7 @@
             key: "accountCode",
             align: "center",
             resizable: true,
-            minWidth: 60,
+            width: 60,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -284,7 +284,7 @@
             key: "bankName",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -307,21 +307,21 @@
             key: "mateAccountName",
             align: "center",
             resizable: true,
-            minWidth: 100
+            width: 100
           },
           {
             title: "已认领金额",
             key: "claimedAmt",
             align: "center",
             resizable: true,
-            minWidth: 100
+            width: 100
           },
           {
             title: "交易备注",
             key: "tradingNote",
             align: "center",
             resizable: true,
-            minWidth: 100,
+            width: 100,
             render: (h, params) => {
               return h('div', [
                 h('span', {

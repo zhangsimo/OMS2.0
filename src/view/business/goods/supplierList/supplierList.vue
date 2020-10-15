@@ -162,23 +162,23 @@
                       </Col>
                     </Row>
                   </FormItem>
-                  <FormItem label="退货员：" prop="storeId">
-                    <Select
-                      class="w160"
-                      :disabled="presentrowMsg !== 0 || buttonDisable"
-                      v-model="formPlan.storeId"
-                      filterable
-                      label-in-value
-                      @on-change="selectOrderMan"
-                    >
-                      <Option
-                        v-for="item in userMap"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.label }}
-                      </Option>
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem label="退货员：" prop="storeId">-->
+                    <!--<Select-->
+                      <!--class="w160"-->
+                      <!--:disabled="presentrowMsg !== 0 || buttonDisable"-->
+                      <!--v-model="formPlan.storeId"-->
+                      <!--filterable-->
+                      <!--label-in-value-->
+                      <!--@on-change="selectOrderMan"-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in userMap"-->
+                        <!--:value="item.id"-->
+                        <!--:key="item.id"-->
+                      <!--&gt;{{ item.label }}-->
+                      <!--</Option>-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem label="退货日期：" prop="orderDate" class="fs12">
                     <DatePicker
                       style="width: 160px"
@@ -392,6 +392,7 @@
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
               <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
               <!--</div>-->
+              <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.auditor:""}}</span><span>提交日期：{{datadata?datadata.auditDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -501,14 +502,14 @@
               trigger: "change",
             },
           ],
-          storeId: [
-            {
-              required: true,
-              type: "string",
-              message: "请选择退货员",
-              trigger: "change",
-            },
-          ],
+          // storeId: [
+          //   {
+          //     required: true,
+          //     type: "string",
+          //     message: "请选择退货员",
+          //     trigger: "change",
+          //   },
+          // ],
           // orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
           cause: [
             {
@@ -1574,7 +1575,7 @@
           //获取左侧侧表格高度
           this.leftTableHeight = wrapH - 70;
           //获取右侧表格高度
-          this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
+          this.rightTableHeight = wrapH - planFormH - planBtnH - 70;
         });
       },
       showOwen() {

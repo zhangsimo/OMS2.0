@@ -118,7 +118,7 @@
           show-summary
           highlight-row
           :summary-method="handleSummary"
-          @on-select="selectTabSummary"
+          @on-selection-change="selectTabSummary"
           @on-select-all="selectAllSummary"
           @on-row-click="election"
           max-height="400"
@@ -916,8 +916,7 @@
             fno: this.fno,
             createUname: this.createUname,
             documentStatus: this.startStatusName,
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           }
           for (var i in obj) {
             str += `${i}=${obj[i]}&`
@@ -950,8 +949,7 @@
             fno: this.fno,
             createUname: this.createUname,
             documentStatus: this.startStatusName,
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           }
           for (var i in obj) {
             str += `${i}=${obj[i]}&`
@@ -964,7 +962,7 @@
           this.selectData.map(item => {
             str += `ids=${item.id}&`
           })
-          let params = `${str}size=${this.selectData.length}&page=0&`
+          let params = `${str}pagesize=${this.selectData.length}&`
           location.href = colPayExportQuery(params)
         }
       },
