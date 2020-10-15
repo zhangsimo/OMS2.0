@@ -69,7 +69,7 @@
           highlight-row
           max-height=500
           @on-row-click="election"
-          @on-select="selectTab"
+          @on-selection-change="selectTab"
           @on-select-all="selectTab"
         ></Table>
         <div class="clearfix">
