@@ -244,7 +244,7 @@ export default {
         let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
         this.$refs.OrderLeft.leftTableHeight = wrapH - 120;
-        this.$refs.right.rightTableHeight = wrapH - planFormH - 110;
+        this.$refs.right.rightTableHeight = wrapH - planFormH - 140;
       });
     },
     gitlistValue(){

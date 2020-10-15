@@ -204,11 +204,13 @@ export const mixSelectPartCom  = {
       if(this.searchValue.trim()){
         req[this.searchType] = this.searchValue.trim()
       }
+      req.isDisabled = 0;//供应商是否禁用 0非禁用 1禁用
+      req.approveStatus = 1//供应商是否审批通过 1审批通过 2审批不通过 0 审核中
       req.page = this.page.num
       req.size = this.page.size
       getCarPartsTwo(req).then(res => {
         this.loading = false;
-        console.log(this.partData)
+        // console.log(this.partData)
         this.partData = res.data.content||[];
         this.page.total = res.data.totalElements
       })
@@ -218,7 +220,7 @@ export const mixSelectPartCom  = {
     getPartBrandAll(){
       getAllBrand({page: 1,pageSize: 1000}).then(res => {
         let filterData = res.data.content.filter(item => item.qualityCode=='品牌件')
-        console.log(filterData)
+        // console.log(filterData)
         if(filterData.length>0){
           if(filterData[0].children&&filterData[0].children.length>0){
             filterData[0].children.map(item => {

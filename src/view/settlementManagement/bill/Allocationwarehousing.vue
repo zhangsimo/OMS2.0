@@ -61,7 +61,7 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row @on-row-click="election"
-               :summary-method="handleSummary" @on-select="selectTab"
+               :summary-method="handleSummary" @on-selection-change="selectTab"
                @on-select-all="selectTab"></Table>
         <div class="clearfix">
           <Page
@@ -752,8 +752,7 @@
             orgid: this.model1 == "0" ? "" : this.model1,
             guestId: this.company ? this.companyId : "",
             orderTypeIdInt: this.type,
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           };
           let params = ""
           for (var i in obj) {
@@ -766,7 +765,7 @@
             this.selectTabArr.map(vb => {
               str += `ids=${vb.id}&`
             })
-            let params = `${str}size=${this.selectTabArr.length}&page=0&orderTypeIdInt=${this.type}&`
+            let params = `${str}pagesize=${this.selectTabArr.length}&orderTypeIdInt=${this.type}&`
             location.href = allocationWareHouseingExport(params)
           } else {
             return this.$Message.error("请勾选需要导出的数据!")

@@ -409,6 +409,7 @@
           <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
         </vxe-table>
       </Form>
+      <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.auditor:""}}</span><span>提交日期：{{formPlan?formPlan.auditDate:""}}</span></div>
     </div>
 
     <!--   新增客户资料-->
@@ -1297,49 +1298,37 @@
                 item => (item.orderPrice * 1 < item.averagePrice * 1&&item.isMarkActivity!=1)
               );
               if (orderList.length > 0) {
-                let text = "";
-                orderList.forEach(item => {
-                  text += `<p>${item.partName}的销售价格低于进货价</p>`;
-                });
                 let timer = null;
                 clearTimeout(timer);
-                timer = setTimeout(() => {
-                  this.$Modal.confirm({
-                    title: "提示",
-                    content: text,
-                    onOk: async () => {
-                      if (this.isClickSave) {
-                        return this.$Message.error("请稍后订单处理中...");
-                      }
-                      this.$parent.$parent.submitloading = true;
-                      this.isClickSave = true;
-                      try {
-                        this.$parent.$parent.commitLoading = true;
-                        showLoading(".loadingClass", "数据加载中，请勿操作")
-                        let res = await getSubmitList(data);
-                        this.isClickSave = false;
-                        if (res.code === 0) {
-                          this.$Message.success("提交成功");
-                          this.$parent.$parent.isAdd = false;
-                          this.$parent.$parent.submitloading = false;
-                          this.$parent.$parent.orderlistType.value = 1;
-                          this.limitList = {};
-                          this.$store.commit("setleftList", res);
-                          this.$refs.formPlan.resetFields();
-                          hideLoading()
-                          this.$parent.$parent.commitLoading = false;
-                        } else {
-                          this.$parent.$parent.commitLoading = false;
-                          this.$parent.$parent.submitloading = false;
-                          hideLoading()
-                        }
-                      } catch (error) {
-
-                      }
-                    },
-                    onCancel: () => {
+                timer = setTimeout(async () => {               
+                  if (this.isClickSave) {
+                    return this.$Message.error("请稍后订单处理中...");
+                  }
+                  this.$parent.$parent.submitloading = true;
+                  this.isClickSave = true;
+                  try {
+                    this.$parent.$parent.commitLoading = true;
+                    showLoading(".loadingClass", "数据加载中，请勿操作")
+                    let res = await getSubmitList(data);
+                    this.isClickSave = false;
+                    if (res.code === 0) {
+                      this.$Message.success("提交成功");
+                      this.$parent.$parent.isAdd = false;
+                      this.$parent.$parent.submitloading = false;
+                      this.$parent.$parent.orderlistType.value = 1;
+                      this.limitList = {};
+                      this.$store.commit("setleftList", res);
+                      this.$refs.formPlan.resetFields();
+                      hideLoading()
+                      this.$parent.$parent.commitLoading = false;
+                    } else {
+                      this.$parent.$parent.commitLoading = false;
+                      this.$parent.$parent.submitloading = false;
+                      hideLoading()
                     }
-                  });
+                  } catch (error) {
+                    hideLoading()
+                  }
                 }, 500);
               } else {
                 if (this.isClickSave) {

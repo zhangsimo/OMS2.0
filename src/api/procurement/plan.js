@@ -375,3 +375,13 @@ export function getMoteSupplier(name) {
     data: {},
   });
 }
+
+//打印
+export function printTableZF(params){
+  return  axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/directPrint`,
+    method: "post",
+    params: params,
+    data: {},
+  });
+}

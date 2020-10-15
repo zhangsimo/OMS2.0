@@ -442,6 +442,19 @@
             show-sizer
             show-total
           ></Page>
+          <Page
+            class="fr mr10 mt10"
+            v-show="tIndex == 6"
+            class-name="page-con"
+            :page-size-opts="[10,20,30,40,50]"
+            :current="selfShopStockPage.num"
+            :total="selfShopStockPage.total"
+            :page-size="selfShopStockPage.size"
+            @on-change="changePageCus"
+            @on-page-size-change="changeSizeCus"
+            show-sizer
+            show-total
+          ></Page>
         </div>
         <!--      点击查看显示-->
       </section>
@@ -462,6 +475,7 @@
     getLotStock
   } from "@/api/business/stockSearch";
   import QuickDate from "_c/getDate/dateget_bill1.vue";
+  import {ThisYearStr} from "_c/getDate/index_bill.js"
 
   export default {
     name: "enterStock",
@@ -485,6 +499,11 @@
         selectTableData: "",
         //本店库存数据
         selfShopStock:[],
+        selfShopStockPage:{
+          num:1,
+          total:0,
+          size:10
+        },
         // 入库明细表
         enterInfo: [
           {
@@ -1055,8 +1074,8 @@
       async getEnters() {
         this.oneTime = "";
         this.twoTime = "";
-        this.searchForm2.startEnterDate = "";
-        this.searchForm2.endEnterDate = "";
+        this.searchForm2.startEnterDate = ThisYearStr()[0];
+        this.searchForm2.endEnterDate = ThisYearStr()[1];
         this.searchForm2.guestName = "";
         this.modal1 = true;
         this.tIndex = 4;
@@ -1065,6 +1084,15 @@
       hander(type) {
         // this.modal1 = true
         if (type) {
+          this.searchForm3.startEnterDate=ThisYearStr()[0]
+          this.searchForm3.endEnterDate=ThisYearStr()[1]
+          this.searchForm3.guestName="";
+          if (this.$refs.quickDate1) {
+            this.$refs.quickDate1.searchQuick = "7";
+          }
+          if (this.$refs.quickDate2) {
+            this.$refs.quickDate2.searchQuick = "7";
+          }
           this.getEnters();
         }
       },
@@ -1165,8 +1193,8 @@
         }
         if (this.tIndex == 1) {
           //这里是因为tab切换时quickDate的searchQuick没有清空转回到7
-          if (this.$refs.quickDate1) {
-            this.$refs.quickDate1.searchQuick = "7";
+          if (this.$refs.quickDate2) {
+            this.$refs.quickDate2.searchQuick = "7";
           }
           this.getList();
         }
@@ -1194,6 +1222,10 @@
           this.contentTwo.page.page = 1;
 
           this.getOuts();
+        }  else if (this.tIndex == 6){
+          this.selfShopStockPage.size = size;
+          this.selfShopStockPage.num=1;
+          this.getLotList()
         } else {
           this.contentThree.page.page = 1;
           this.contentThree.page.size = size;
@@ -1208,6 +1240,9 @@
         } else if (this.tIndex == 2) {
           this.contentTwo.page.num = currentPage;
           this.getOuts();
+        } else if (this.tIndex == 6){
+          this.selfShopStockPage.num=currentPage;
+          this.getLotList()
         } else {
           this.contentThree.page.num = currentPage;
           this.getHold();
@@ -1219,14 +1254,15 @@
         data.partCode = this.mainData.partCode;
         data.old = this.mainData.orgid;
         data.noStock = 0;
-        data.page = 0;
-        data.size = 10;
+        data.page = this.selfShopStockPage.num-1;
+        data.size =this.selfShopStockPage.size;
         this.outLoading = true;
         this.selfShopStock = [];
         const rep = await getLotStock(data);
         this.outLoading = false;
         if(rep.code==0){
           this.selfShopStock = rep.data.content||[];
+          this.selfShopStockPage.total=rep.data.totalElements;
         }
       },
 

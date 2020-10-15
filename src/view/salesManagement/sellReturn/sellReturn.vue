@@ -110,7 +110,7 @@
                 class-name="page-con"
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
-                :page-size-opts="[20, 50, 100, 200]"
+                :page-size-opts="[10,20, 50, 100, 200]"
                 class="mr10"
               ></Page>
             </div>
@@ -397,6 +397,7 @@
                                     width="120"></vxe-table-column>
                 </vxe-table>
               </Form>
+              <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.auditor:""}}</span><span>提交日期：{{formPlan?formPlan.auditDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -717,7 +718,7 @@
           let planFormH = this.$refs.planForm.offsetHeight;
           //获取左侧侧表格高度
           this.leftTableHeight = wrapH - 90;
-          this.rightTableHeight = wrapH - planFormH - 120;
+          this.rightTableHeight = wrapH - planFormH - 150;
         });
       },
       //检验仓位（参照采购入库）

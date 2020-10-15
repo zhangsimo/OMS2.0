@@ -167,22 +167,12 @@ export default {
       //     this.$message.success('认领成功')
       //   }
       // })
-      if(this.$parent.condition == 1){
-        let flag1 = this.tableData.some(v => {
-          return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.paidMoney
-        })
-        if(flag1){
-          this.$message.error('认领金额超出范围')
-          return
-        }
-      }else{
-        let flag2 = this.tableData.some(v => {
-          return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.incomeMoney
-        })
-        if(flag2){
-          this.$message.error('认领金额超出范围')
-          return
-        }
+      let flag1 = this.tableData.some(v => {
+        return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.unClaimedAmt
+      })
+      if(flag1){
+        this.$message.error('本次认领金额录入错误，请重新输入')
+        return
       }
       let flag = this.tableData.some(v => {
         return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0 
@@ -243,14 +233,8 @@ export default {
       if(newVal === undefined || newVal === null){
         this.$message.error('本次认领金额录入不可为空')
       }
-      if(this.$parent.condition == 1){
-        if( newVal < 0 || newVal > this.currentRow.paidMoney) {
-          this.$message.error('本次认领金额录入错误，请重新输入')
-        }
-      }else{
-        if( newVal < 0 || newVal > this.currentRow.incomeMoney) {
-          this.$message.error('本次认领金额录入错误，请重新输入')
-        }
+      if( newVal < 0 || newVal > this.currentRow.unClaimedAmt) {
+        this.$message.error('本次认领金额录入错误，请重新输入')
       }
     },
     validate(num){

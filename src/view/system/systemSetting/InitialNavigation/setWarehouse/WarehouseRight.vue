@@ -125,7 +125,7 @@ import {
   getAllseffactList,
   addNewseffact
 } from "@/api/system/setWarehouse";
-
+import {showLoading,hideLoading} from "../../../../../utils/loading";
 import AddNewWarehouse from "./AddNewWarehouse";
 export default {
   name: "WarehouseRight",
@@ -278,12 +278,16 @@ export default {
     sureNew() {
       this.$refs.child.handleSubmit(() => {
         this.newWarehouseOne.storeId = this.storeId.id;
+        showLoading()
         getAdd(this.newWarehouseOne).then(res => {
+          hideLoading()
           if (res.code == 0) {
             this.warehouseIsShow = false;
             this.getAllWarehouseList();
           }
-        });
+        }).catch(err=>{
+          hideLoading()
+        })
       });
     },
     //删除员工

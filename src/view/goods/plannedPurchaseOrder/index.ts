@@ -99,11 +99,11 @@ export default class PlannedPurchaseOrder extends Vue {
         key: "guestName",
         minWidth: 170
       },
-      {
-        title: "采购员",
-        key: "orderMan",
-        minWidth: 140
-      },
+      // {
+      //   title: "采购员",
+      //   key: "orderMan",
+      //   minWidth: 140
+      // },
       {
         title: "订单单号",
         key: "serviceId",
@@ -177,9 +177,9 @@ export default class PlannedPurchaseOrder extends Vue {
   };
   private ruleValidate: ruleValidate = {
     guestId: [{ required: true, message: "供应商不能为空", trigger: "change" }],
-    orderManId: [
-      { required: true, message: "采购员不能为空", trigger: "change" }
-    ],
+    // orderManId: [
+    //   { required: true, message: "采购员不能为空", trigger: "change" }
+    // ],
     billTypeId: [
       { required: true, message: "请选票据类型", trigger: "change" }
     ],
@@ -912,7 +912,7 @@ export default class PlannedPurchaseOrder extends Vue {
       //获取左侧侧表格高度
       this.leftTableHeight = wrapH - 70;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 78;
     });
   }
 

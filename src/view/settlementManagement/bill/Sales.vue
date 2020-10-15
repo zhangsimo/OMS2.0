@@ -60,7 +60,7 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-               @on-row-click="election" @on-select="selectTab" @on-select-all="selectTab" max-height="400"></Table>
+               @on-row-click="election" @on-selection-change="selectTab" @on-select-all="selectTab" max-height="400"></Table>
         <!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
@@ -606,8 +606,7 @@
             endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
             orgid: this.model1,
             guestId: this.company ? this.companyId : "",
-            size: this.page.total,
-            page: 0
+            pagesize: this.page.total,
           }
           let params = ""
           for (var i in obj) {
@@ -624,81 +623,9 @@
           this.selectTabArr.map(vb => {
             str += `ids=${vb.id}&`
           })
-          params = `${str}page=0&size=${this.selectTabArr.length}&`
+          params = `${str}pagesize=${this.selectTabArr.length}&`
           location.href = salesExport(params)
         }
-        // if (type) {
-        //   if (this.data1.length !== 0) {
-        //     this.$refs.parts.exportCsv({
-        //       filename: "销售订单汇总-配件信息"
-        //     });
-        //   } else {
-        //     this.$message.error("销售订单汇总-配件信息暂无数据");
-        //   }
-        // } else {
-        //   let page={}
-        //   page.size=this.page.total;
-        //   page.num=1
-        //   if (this.data.length !== 0) {
-        //     this.getGeneralAll(page)
-        //   } else {
-        //     this.$message.error("销售订单汇总暂无数据");
-        //   }
-        // }
-      },
-      // 总表查询
-      getGeneralAll(param) {
-        let obj = {
-          belongSystem: this.type,
-          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : '',
-          orgid: this.model1,
-          guestId: this.company ? this.companyId : ""
-        }
-        let params = {
-          size: param.size,
-          page: param.num - 1
-        }
-        getOrderlist(params, obj).then(res => {
-          // console.log(res);
-          if (res.data.vos.length !== 0) {
-            res.data.vos.map((item, index) => {
-              switch (item.sourceType) {
-                case '0':
-                  item.sourceType = '普通单据';
-                  break;
-                case '1':
-                  item.sourceType = '采购订单';
-                  break;
-                case '2':
-                  item.sourceType = '销售出库';
-                  break;
-                case '3':
-                  item.sourceType = 'WMS';
-                  break;
-                default:
-                  item.sourceType = ''
-              }
-              item.belongSystem = item.belongSystem ? item.belongSystem === 1 ? '体系外' : '体系内' : '华胜连锁'
-              item.orderTypeName = item.orderType ? item.orderType.name : ''
-              item.billstate = item.billStatusId ? item.billStatusId.name : ''
-              item.guestId = "\t" + item.guestId
-              item.index = index + 1
-            })
-            this.data = res.data.vos;
-            if (this.data.length == params.size) {
-              this.data = res.data.vos;
-              this.$refs.summary.exportCsv({
-                types: ["csv"],
-                filename: "销售订单汇总",
-                columns: this.columns,
-                data: res.data.vos,
-              });
-            }
-          } else {
-            this.data = []
-          }
-        });
       },
       // 总表查询
       getGeneral() {
@@ -706,7 +633,7 @@
           belongSystem: this.type,
           startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
           endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : '',
-          orgid: this.model1,
+          orgid: this.model1==0?"":this.model1,
           guestId: this.company ? this.companyId : ""
         }
         let params = {
@@ -747,6 +674,7 @@
           } else {
             hideLoading()
             this.data = []
+            this.page.total = res.data.TotalElements;
             this.selectTabArr = []
           }
         }).catch(e => {

@@ -149,7 +149,7 @@
                       :value="Leftcurrentrow.orderManId"
                       @on-change="selectOrderMan"
                       filterable
-                      style="width: 240px"
+                      style="width: 180px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                       label-in-value
                     >
@@ -182,6 +182,15 @@
                       class="w160"
                       v-model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
+                    />
+                    </Tooltip>
+                  </FormItem>
+                  <FormItem label="备注" :label-width="80" prop="remark">
+                    <Tooltip :content="Leftcurrentrow.remark">
+                    <Input
+                      :disabled="Leftcurrentrow.status.value !== 0"
+                      class="w160"
+                      v-model="Leftcurrentrow.remark"
                     />
                     </Tooltip>
                   </FormItem>
@@ -558,7 +567,8 @@ export default {
         orderManId:"",
         auditDate: "", //移仓日期
         serviceId: "", //移仓单号
-        detailVOList: []
+        detailVOList: [],
+        remark: ""
       }, //右边所有数据（含提交）
       ruleValidate: {
         storeId: [
@@ -1180,13 +1190,13 @@ export default {
     },
     //分页
     changePage(p) {
-      // this.page.num = p
-      // this.getList()
+      this.Left.page.num = p
+      this.getList()
     },
     changeSize(size) {
-      // this.page.num = 1
-      // this.page.size = size
-      // this.getList()
+      this.Left.page.num = 1
+      this.Left.page.size = size
+      this.getList()
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},

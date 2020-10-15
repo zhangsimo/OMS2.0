@@ -89,6 +89,7 @@ export default class Roleswms extends Vue {
     data.size = this.page.size
     data.page = this.page.num - 1
     data.systemType = 1
+    data.systemScope ='wms'
     let res: any = await queryRolesByPage(data)
     if (res.code == 0) {
       this.tableData = res.data.content

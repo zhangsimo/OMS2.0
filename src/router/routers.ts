@@ -3,7 +3,8 @@ import parentView from "@/components/parent-view";
 
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
- * meta: { keepAlive: true,
+ * meta: {
+ *  keepAlive: true,
  *  hideInMenu: (false) 设为true后在左侧菜单不会显示该页面选项
  *  keepAlive: (false) 设为false后页面不会缓存
  *  access: (null) 可访问该页面的权限数组，当前路由设置的权限会影响子路由
@@ -1198,6 +1199,26 @@ export default [
           }
       ]
       },
+      // {
+      //   path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
+      //   name: "dailySalesStatistics",
+      //   redirect: "",
+      //   // mark: "7107",
+      //   meta: { keepAlive: true,
+      //     title: "每日销售统计",
+      //   },
+      //   component: () => import("@/view/reportForm/dailySalesStatistics/index.vue"),
+      // },
+      // {
+      //   path: "/reportForm/salesAndInventorylist/salesAndInventorylist",
+      //   name: "salesAndInventorylist",
+      //   redirect: "",
+      //   // mark: "7108",
+      //   meta: { keepAlive: true,
+      //     title: "进销存排行",
+      //   },
+      //   component: () => import("@/view/reportForm/salesAndInventorylist/index.vue"),
+      // },
       {
         path: "/reportForm/purchaseRepor/reporIndex",
         name: "reportFormProcurement ",
@@ -1219,6 +1240,27 @@ export default [
 
         },
         component: () => import("@/view/reportForm/saleOrder/index.vue"),
+      },
+      {
+        path: "/reportForm/purchaseReporAnalysis",
+        name: "purchaseReporAnalysis ",
+        redirect: "",
+        mark: "7109",
+        meta: {
+          keepAlive: true,
+          title: "采购排行分析",
+        },
+        component: () => import("@/view/reportForm/purchaseReporAnalysis/index.vue"),
+      },
+      {
+        path: "/reportForm/saleOrderAnalysis",
+        name: "saleOrderAnalysis",
+        redirect: "",
+        mark: "7110",
+        meta: { keepAlive: true,
+          title: "销售排行分析",
+        },
+        component: () => import("@/view/reportForm/saleOrderAnalysis/index.vue"),
       },
       {
         path: "/reportForm/purchaseRepor/transfer",

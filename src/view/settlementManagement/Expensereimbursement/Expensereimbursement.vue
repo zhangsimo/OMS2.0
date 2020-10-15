@@ -436,7 +436,6 @@
         claimType: 4,
         amountType: 2,
         loanId: '',
-        condition: 1
       };
     },
     computed: {
@@ -608,8 +607,7 @@
               : "",
             orgid: this.BranchstoreId,
             serviceId: this.requestCode,
-            size:this.page.total,
-            page:0
+            pagesize:this.page.total,
           };
           let params='';
           for(var i in obj){
