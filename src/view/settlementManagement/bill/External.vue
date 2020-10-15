@@ -72,7 +72,7 @@
           show-summary
           highlight-row
           @on-row-click="election"
-          @on-select="selectTab"
+          @on-selection-change="selectTab"
           @on-select-all="selectTab"
           max-height="400"
         ></Table>

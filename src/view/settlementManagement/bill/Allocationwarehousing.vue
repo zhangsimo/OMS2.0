@@ -61,7 +61,7 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row @on-row-click="election"
-               :summary-method="handleSummary" @on-select="selectTab"
+               :summary-method="handleSummary" @on-selection-change="selectTab"
                @on-select-all="selectTab"></Table>
         <div class="clearfix">
           <Page
