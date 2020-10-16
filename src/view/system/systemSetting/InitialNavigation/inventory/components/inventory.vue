@@ -319,14 +319,15 @@ export default {
       // console.log(this.mid,77777)
       // console.log(this.oneWarehouse, "选择表一的数据");
       this.twoList = data.row.details;
-      console.log(1212);
+      // console.log(1212);
       // console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
     },
     //获取仓库下拉选择信息
     async getStoreHoure() {
-      let res = await getwarehouse({});
+      let shopNum=this.$store.state.user.userData.currentCompany?this.$store.state.user.userData.currentCompany.id:""
+      let res = await getwarehouse({shopNumber:shopNum});
       if (res.code == 0) {
-        console.log(res, "res=>31");
+        // console.log(res, "res=>31");
         //getColumnByField(fileid) 根据列的字段名获取列
         // console.log(column, 123123123);
         res.data.map(item => {
