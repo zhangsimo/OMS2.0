@@ -538,7 +538,7 @@ export default {
     },
 
     print(row){
-      this.$refs.print.openModal(row.id);
+      this.$refs.print.openModal(row);
     },
 
     changeSize(s) {

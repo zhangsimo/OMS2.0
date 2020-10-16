@@ -180,6 +180,7 @@
 <script>
   import * as api from "_api/procurement/plan";
   import * as tools from "../../../../utils/tools";
+  import {printTableZF} from "../../../../api/procurement/plan";
 
   export default {
     name: "printZF",
@@ -221,9 +222,9 @@
         iframe.contentWindow.print();
         document.body.removeChild(iframe);
       },
-      async openModal(orderId) {
-        if (orderId) {
-          let res = await api.print(orderId);
+      async openModal(row) {
+        if (row.hasOwnProperty("id")) {
+          let res = await printTableZF({id:row.id,storeId:row.enterStoreId});
           if (res.code === 0) {
             this.printShow = true;
             this.onelist = res.data;
