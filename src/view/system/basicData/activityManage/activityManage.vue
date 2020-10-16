@@ -54,7 +54,7 @@
               type="warning"
               class="mr10"
               @click="showApplication('edit')"
-              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
+              v-show="this.checkedData.length > 0 && this.checkedData[0].row.state === '草稿'"
               v-has="'compile'"
             >编辑/重新提交
             </Button>
@@ -63,7 +63,7 @@
               class="mr10 w90"
               @click="showReview"
               v-has="'audit'"
-              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'&&!this.checkedData[0].processInstanceId"
+              v-show="this.checkedData.length > 0 && this.checkedData[0].row.state === '待审核'&&!this.checkedData[0].row.processInstanceId"
             >审核
             </Button>
           </div>
@@ -835,7 +835,7 @@
           this.$Message.info("请选择一条申请");
           return;
         }
-        let item = this.checkedData[0];
+        let item = this.checkedData[0].row;
         this.actIfoTableData.id = item.id;
         cancelActApply(this.actIfoTableData).then(res => {
           // //console.log(res)
@@ -875,7 +875,7 @@
         };
         if (status == "edit") {
           this.applicationDialog = true;
-          let item = this.checkedData[0];
+          let item = this.checkedData[0].row;
           this.single = item.isVender === 0 ? false : true;
           this.single2 = item.isBelowCost === 0 ? false : true;
           this.formValidate.remark = item.remark;
@@ -1000,7 +1000,7 @@
           return;
         }
         this.reViewDialog = false;
-        let item = this.checkedData[0];
+        let item = this.checkedData[0].row;
         this.tableFormDate.id = item.id;
         auditActivity({
           id: this.tableFormDate.id,
