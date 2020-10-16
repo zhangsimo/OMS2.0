@@ -33,6 +33,7 @@
           size="mini"
           highlight-hover-row
           highlight-current-row
+          show-overflow="title"
           @current-change="getOneActivity"
           :data="tableDataBottom"
         >
