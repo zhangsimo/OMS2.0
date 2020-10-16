@@ -708,7 +708,10 @@ export default class TemporaryPurchase extends Vue {
     this.openwin(routeUrl.href)
     this.getListData()
   }
-
+  //导出
+  private exportForm(){
+    location.href=api.tempoaryPurchaseExport(this.mainId)
+  }
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;

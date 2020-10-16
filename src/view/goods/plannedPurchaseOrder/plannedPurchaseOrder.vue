@@ -12,17 +12,20 @@
                 v-for="(item, index) in purchaseTypeArr"
                 :value="item.value"
                 :key="index"
-              >{{ item.label }}</Option>
+              >{{ item.label }}
+              </Option>
             </Select>
           </div>
           <div class="db">
             <Button type="default" @click="showModel('moreSearch')" class="mr10">
-              <Icon type="ios-more" />更多
+              <Icon type="ios-more"/>
+              更多
             </Button>
           </div>
           <div class="db">
             <Button class="mr10" @click="addPro" v-has="'add'">
-              <Icon type="md-add" />新增
+              <Icon type="md-add"/>
+              新增
             </Button>
           </div>
           <div class="db">
@@ -54,6 +57,11 @@
             </Button>
           </div>
           <div class="db">
+            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
+              <i class="iconfont mr5 icondaochuicon"></i> 导出
+            </Button>
+          </div>
+          <div class="db">
             <Button
               @click="abandoned"
               class="mr10"
@@ -61,7 +69,8 @@
               v-has="'invalidate'"
               :loading="cancelLoading"
             >
-              <Icon type="md-close" size="14" />作废
+              <Icon type="md-close" size="14"/>
+              作废
             </Button>
           </div>
           <div class="db">
@@ -154,20 +163,20 @@
                     </Row>
                   </FormItem>
                   <!--<FormItem class="form-Item" label="采购员：" prop="orderManId">-->
-                    <!--<Select-->
-                      <!--v-model="formPlanmain.orderManId"-->
-                      <!--class="w160"-->
-                      <!--:disabled="isInput"-->
-                      <!--label-in-value-->
-                      <!--@on-change="selectOrderMan"-->
-                      <!--filterable-->
-                    <!--&gt;-->
-                      <!--<Option-->
-                        <!--v-for="item in salesList"-->
-                        <!--:value="item.value"-->
-                        <!--:key="item.value"-->
-                      <!--&gt;{{ item.label }}</Option>-->
-                    <!--</Select>-->
+                  <!--<Select-->
+                  <!--v-model="formPlanmain.orderManId"-->
+                  <!--class="w160"-->
+                  <!--:disabled="isInput"-->
+                  <!--label-in-value-->
+                  <!--@on-change="selectOrderMan"-->
+                  <!--filterable-->
+                  <!--&gt;-->
+                  <!--<Option-->
+                  <!--v-for="item in salesList"-->
+                  <!--:value="item.value"-->
+                  <!--:key="item.value"-->
+                  <!--&gt;{{ item.label }}</Option>-->
+                  <!--</Select>-->
                   <!--</FormItem>-->
                   <FormItem class="form-Item" label="票据类型：" prop="billTypeId">
                     <Select class="w160" v-model="formPlanmain.billTypeId" :disabled="isInput">
@@ -175,7 +184,8 @@
                         v-for="(item, index) in pjTypes"
                         :key="index"
                         :value="item.value"
-                      >{{ item.label }}</Option>
+                      >{{ item.label }}
+                      </Option>
                     </Select>
                   </FormItem>
                   <FormItem class="form-Item" label="结算方式：" prop="settleTypeId">
@@ -184,7 +194,8 @@
                         v-for="(item, index) in settleMethods"
                         :key="index"
                         :value="item.value"
-                      >{{ item.label }}</Option>
+                      >{{ item.label }}
+                      </Option>
                     </Select>
                   </FormItem>
                   <FormItem class="form-Item" label="入库仓：" prop="storeId">
@@ -193,7 +204,8 @@
                         v-for="(item, index) in inStores"
                         :key="index"
                         :value="item.value"
-                      >{{ item.label }}</Option>
+                      >{{ item.label }}
+                      </Option>
                     </Select>
                   </FormItem>
                   <FormItem class="form-Item" label="订货日期：" prop="orderDate">
@@ -239,7 +251,8 @@
                         :key="index"
                         :value="item.value"
                         v-show="item.value!=$store.state.user.userData.shopId"
-                      >{{item.label}}</Option>
+                      >{{item.label}}
+                      </Option>
                     </Select>
                   </FormItem>
                   <FormItem class="form-Item" label="订单号：">
@@ -275,7 +288,8 @@
                       @click="selectPlan"
                       :disabled="isInput || formPlanmain.guestId.length <= 0"
                       v-has="'selectProject'"
-                    >选择滚动计划</Button>
+                    >选择滚动计划
+                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -285,7 +299,8 @@
                       :disabled="isInput"
                       v-has="'delete'"
                     >
-                      <Icon custom="iconfont iconlajitongicon icons" />删除配件
+                      <Icon custom="iconfont iconlajitongicon icons"/>
+                      删除配件
                     </Button>
                   </div>
                   <div class="fl mb5">
@@ -295,7 +310,8 @@
                       :disabled="adjustButtonDisable"
                       @click="showModel('adjustModel')"
                       v-has="'adj'"
-                    >订单调整</Button>
+                    >订单调整
+                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -304,7 +320,8 @@
                       :disabled="isInput"
                       @click="showGoodsInfo"
                       v-has="'info'"
-                    >收货信息</Button>
+                    >收货信息
+                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -313,7 +330,8 @@
                       @click="showModel('purchaseAmount')"
                       :disabled="isInput"
                       v-has="'amount'"
-                    >采购金额填写</Button>
+                    >采购金额填写
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -432,7 +450,7 @@
                 </vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
-                  field="carBrandName"
+                  field="carModelName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
@@ -452,7 +470,9 @@
                   width="100"
                 ></vxe-table-column>
               </vxe-table>
-              <div class="table-bottom-text flex"><span>创建人：{{selectTableRow?selectTableRow.createUname:""}}</span><span>创建日期：{{selectTableRow?selectTableRow.createTime:""}}</span><span>提交人：{{selectTableRow?selectTableRow.auditor:""}}</span><span>提交日期：{{selectTableRow?selectTableRow.auditDate:""}}</span></div>
+              <div class="table-bottom-text flex">
+                <span>创建人：{{selectTableRow?selectTableRow.createUname:""}}</span><span>创建日期：{{selectTableRow?selectTableRow.createTime:""}}</span><span>提交人：{{selectTableRow?selectTableRow.auditor:""}}</span><span>提交日期：{{selectTableRow?selectTableRow.auditDate:""}}</span>
+              </div>
             </div>
           </Split>
         </div>
@@ -483,14 +503,12 @@
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
     <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
-    <!-- 打印 -->
-    <print-model ref="PrintModel" :orderId="mainId"></print-model>
   </div>
 </template>
 
 <script src="./index.ts"></script>
 
 <style lang="less" scoped>
-@import url("../../lease/product/lease.less");
-@import url("./index");
+  @import url("../../lease/product/lease.less");
+  @import url("./index");
 </style>

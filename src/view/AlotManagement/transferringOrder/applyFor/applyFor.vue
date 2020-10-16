@@ -30,6 +30,9 @@
                 <Button @click="stamp" :disabled="(presentrowMsg === 0 && resId)||presentrowMsg === 7||presentrowMsg === 8 " class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
               </div>
               <div class="db">
+                <Button @click="exportForm" :disabled="(presentrowMsg === 0 && resId)||presentrowMsg === 7||presentrowMsg === 8 " class="mr10" v-has="'export'"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
+              </div>
+              <div class="db">
                 <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
               </div>
             </div>
@@ -303,7 +306,7 @@
   } from "_api/purchasing/purchasePlan";
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
-  import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
+  import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/,applyForExport/**导出*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
   import ChangeOrder from "./compontents/changeOrder";
   import { hideLoading, showLoading } from "@/utils/loading";
@@ -824,6 +827,12 @@
           // window.open(routeUrl.href,"_blank");
           this.openwin(routeUrl.href)
           this.leftgetList()
+        },
+        exportForm(){
+          if(this.mainId){
+            return this.$Message.error("请选择需要导出的信息")
+          }
+          location.href=applyForExport(this.rowId)
         },
         //右侧表格复选框选中
         selectChange(msg){
