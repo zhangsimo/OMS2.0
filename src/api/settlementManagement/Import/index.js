@@ -111,3 +111,7 @@ export function otherPayableExport(params){
 export function expensereimbursementExport(params){
   return `${api.omsSettle}/omsFinanceCostReimbursement/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
+//每日资金审核 导出
+export function exportDailyFundAudit(params){
+  return `${api.omsSettle}/omsFinanceAccountEverydayAudit/export/AllAudit?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}

@@ -666,7 +666,10 @@ export default class InterPurchase extends Vue {
     this.openwin(routeUrl.href)
     this.getListData();
   }
-
+  //导出
+  private exportForm(){
+    location.href=api.interPurchaseExport(this.mainId)
+  }
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
