@@ -5,7 +5,7 @@
       class="mt10"
       :columns="claimed"
       :data="claimedData"
-      max-height="400"
+      max-height="550"
       @on-selection-change="claimedSelection"
     ></Table>
     <Page
