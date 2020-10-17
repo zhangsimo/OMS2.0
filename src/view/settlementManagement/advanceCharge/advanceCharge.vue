@@ -286,7 +286,7 @@ export default {
       value: [], //日期
       company: [], //往来单位
       companyId: 0, //往来单位
-      Branchstore: [{ id: "0", name: "全部" }], //分店名称
+      Branchstore: [{ id: 0, name: "全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
       page: {
