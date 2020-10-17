@@ -2,13 +2,21 @@
   <Modal v-model="showInfo" class="activity-model" title="选择活动" width="1300">
     <div class="OutboundInfo">
       <div class="header">
-        <Form ref="formOne" :model="Outform" inline>
-          <FormItem>
+        <Form ref="formOne" :model="Outform" :label-width="60" inline>
+          <FormItem label="配件：">
             <Input
               type="text"
               placeholder="配件编码/名称"
-              style="width: 250px"
+              class="w250"
               v-model="Outform.partCode"
+            />
+          </FormItem>
+          <FormItem label="活动：">
+            <Input
+              type="text"
+              placeholder="活动名称"
+              class="w250"
+              v-model="Outform.activityName"
             />
           </FormItem>
           <Button class="mr10" type='warning' @click="query"><Icon type="ios-search" size="14" /> 查询</Button>
@@ -25,6 +33,7 @@
           size="mini"
           highlight-hover-row
           highlight-current-row
+          show-overflow="title"
           @current-change="getOneActivity"
           :data="tableDataBottom"
         >
@@ -108,6 +117,7 @@
                 showInfo: false, // 销售出库订单信息——表单
                 Outform :{
                     partCode: "",
+                    activityName: ""
                 },
                 tableDataBottom:[], //下面表格数据
                 oneList:{},//获取点击到的信息
@@ -123,7 +133,12 @@
             //获取活动内容
            async getList(){
                 let data ={}
-                data.partName = this.Outform.partCode
+                if(this.Outform.partCode.trim()){
+                  data.partName = this.Outform.partCode.trim()
+                }
+                if(this.Outform.activityName.trim()){
+                  data.activityName = this.Outform.activityName.trim()
+                }
                let res = await getActivity(data)
                   if(res.code === 0){
                       this.tableDataBottom = res.data

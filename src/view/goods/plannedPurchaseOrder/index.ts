@@ -15,7 +15,6 @@ import FeeRegistration from "./components/FeeRegistration.vue";
 import ProcurementModal from "./components/ProcurementModal.vue";
 import AdjustModel from "./components/AdjustModel.vue";
 import TabsModel from "./components/TabsModel.vue";
-import PrintModel from "./components/print.vue";
 import StatusModal from "./components/checkApprovalModal.vue";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
@@ -713,6 +712,13 @@ export default class PlannedPurchaseOrder extends Vue {
     document.body.appendChild(a);
     a.click(); //执行当前对象
     document.body.removeChild(a)
+  }
+  //导出
+  private exportForm(){
+    if(this.selectLeftItemId=="" || this.selectLeftItemId==undefined){
+      return this.$Message.error("请选择要导出的数据")
+    }
+    location.href=api.plannedPurchaseExport(this.selectLeftItemId)
   }
   //表格单选选中
   private selectTabelData(v: any) {
