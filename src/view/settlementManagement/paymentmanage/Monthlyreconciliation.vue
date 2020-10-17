@@ -27,6 +27,7 @@
                   v-model="model1"
                   class="w200"
                   @on-change="storeAccount"
+                  :disabled="selectShopList"
                   clearable
                 >
                   <Option
@@ -929,6 +930,14 @@
       // this.$refs.quickDate.getval(1);
     },
     computed: {
+      //门店禁选
+      selectShopList() {
+        if (this.$store.state.user.userData.currentCompany != null) {
+          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        } else {
+          return true
+        }
+      },
       //实际应付合计
       Actualtotalpayment() {
         //对账应付-应付坏账-应付返利
