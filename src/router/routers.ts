@@ -1409,6 +1409,20 @@ export default [
               )
           },
           {
+            path: "issuing-office",
+            name: "issuingOffice",
+            mark: "3105",
+            meta: { keepAlive: true,
+              // hideInMenu: true,
+              title: "开票单位",
+
+            },
+            component: () =>
+              import(
+                "@/view/system/basicData/issuingOffice/index.vue"
+                )
+          },
+          {
             path: "priceManage",
             name: "priceManage",
             mark: "9105",
