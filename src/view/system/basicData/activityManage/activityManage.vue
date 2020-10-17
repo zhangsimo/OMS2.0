@@ -865,7 +865,7 @@
       // 单击活动信息表格获取行数据
       onRowClick2(rowValue2) {
         // //console.log(rowValue2)
-        this.actIfoTableData.id = rowValue2.id;
+        this.actIfoTableData.id = rowValue2.row.id;
         this.checkedData2 = [rowValue2];
       },
       // 弹出申请活动窗口
