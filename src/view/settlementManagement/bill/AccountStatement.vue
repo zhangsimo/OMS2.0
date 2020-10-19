@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150" :disabled="selectShopList">
+            <Select v-model="model1" on-change="change" class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -460,7 +460,7 @@
         model3: "",
         Reconciliationtype: "",
         Branchstore: [
-          {id: '0', name: '全部'}
+          {id: 0, name: '全部'}
         ],
         modal1: false,
         text: "",
@@ -1419,6 +1419,7 @@
       async getShop() {
         let data = {}
         let res = await goshop(data)
+        
         if (res.code === 0) return this.Branchstore = [...this.Branchstore, ...res.data]
       },
       //资金认领核销
@@ -1447,7 +1448,7 @@
             this.reconciliationStatement.guestId,
             this.reconciliationStatement.id
           );
-          this.$refs.registrationEntry.modal1 = true;
+          this.$refs.registrationEntry.modal1 = true;  
         } else {
           this.$message.error("只能勾选计划对账类型为付款的对账单");
         }
@@ -1660,6 +1661,11 @@
           statementStatus: this.Reconciliationtype,
           guestId: this.receiveGuestId
         };
+        for (let key in obj) {
+          if (!obj[key]) {
+            Reflect.deleteProperty(obj, key);
+          }
+        }
         obj.page = this.page.num - 1
         obj.size = this.page.size
         showLoading(".loadingClass", "数据加载中，请勿操作")
@@ -2136,6 +2142,9 @@
       // 收付款关闭
       close() {
         this.Settlement = false;
+      },
+      change(val){
+        console.log(11111)
       },
       // 撤销按钮
       Revoke() {

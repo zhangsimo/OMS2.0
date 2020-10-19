@@ -286,7 +286,7 @@ export default {
       value: [], //日期
       company: [], //往来单位
       companyId: 0, //往来单位
-      Branchstore: [{ id: "0", name: "全部" }], //分店名称
+      Branchstore: [{ id: 0, name: "全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
       page: {
@@ -403,14 +403,14 @@ export default {
         ...obj,
         orgid: this.BranchstoreId,
         guestId: this.companyId,
-        size: this.page.size,
-        page: this.page.num - 1
       };
       for (let key in obj) {
         if (!obj[key]) {
           Reflect.deleteProperty(obj, key);
         }
       }
+      obj.size = this.page.size
+      obj.page = this.page.num - 1
       try {
         showLoading(".loadingClass", "数据加载中，请勿操作")
         let res = await api.findPageByDynamicQuery(obj);

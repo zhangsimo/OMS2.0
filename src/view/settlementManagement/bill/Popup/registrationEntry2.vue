@@ -340,7 +340,7 @@
       };
     },
     mounted() {
-      this.getInvoiceSellerList()
+      // this.getInvoiceSellerList()
       this.$refs.xTable.recalculate(true)
       this.getDictionary("PAYMENT_TYPE"); //付款方式
       this.getDictionary("TaxRate"); //税率
@@ -409,6 +409,7 @@
       // 对话框是否显示
       visChange(flag) {
         if (flag) {
+          this.getInvoiceSellerList()
           this.purchaserList = this.$parent.Branchstore;
           this.detailed();
         }
@@ -432,7 +433,7 @@
       // 数据字典
       getDictionary(dictCode) {
         getDataDictionaryTable({dictCode}).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.data[0].dictCode === "PAYMENT_TYPE") {
             res.data.map(item => {
               this.paymentMethod.push({
