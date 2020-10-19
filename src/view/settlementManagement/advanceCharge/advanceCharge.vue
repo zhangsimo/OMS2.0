@@ -403,14 +403,14 @@ export default {
         ...obj,
         orgid: this.BranchstoreId,
         guestId: this.companyId,
-        size: this.page.size,
-        page: this.page.num - 1
       };
       for (let key in obj) {
         if (!obj[key]) {
           Reflect.deleteProperty(obj, key);
         }
       }
+      obj.size = this.page.size
+      obj.page = this.page.num - 1
       try {
         showLoading(".loadingClass", "数据加载中，请勿操作")
         let res = await api.findPageByDynamicQuery(obj);

@@ -1448,7 +1448,7 @@
             this.reconciliationStatement.guestId,
             this.reconciliationStatement.id
           );
-          this.$refs.registrationEntry.modal1 = true;
+          this.$refs.registrationEntry.modal1 = true;  
         } else {
           this.$message.error("只能勾选计划对账类型为付款的对账单");
         }
@@ -1661,13 +1661,13 @@
           statementStatus: this.Reconciliationtype,
           guestId: this.receiveGuestId
         };
-        obj.page = this.page.num - 1
-        obj.size = this.page.size
         for (let key in obj) {
           if (!obj[key]) {
             Reflect.deleteProperty(obj, key);
           }
         }
+        obj.page = this.page.num - 1
+        obj.size = this.page.size
         showLoading(".loadingClass", "数据加载中，请勿操作")
         AccountStatement(obj).then(res => {
           this.pagetotal = res.data.totalElements;
