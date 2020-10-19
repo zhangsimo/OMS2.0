@@ -740,7 +740,6 @@
       },
       // 选中行
       currentChangeEvent({row}) {
-        console.log(row.id)
         this.currRow = row;
         this.loanId = row.id
         this.$store.commit("setLoanId", row.id)
