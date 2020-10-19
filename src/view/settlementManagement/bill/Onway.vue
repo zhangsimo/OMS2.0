@@ -19,7 +19,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -89,7 +89,7 @@
         fno: '',//调拨单号
         value: [],
         Branchstore: [
-          {id: 0, name: '全部'}
+          {id: 0, name: '全部',shortName:"全部"}
         ], //分店名称
         model1: "",
         columns: [
@@ -655,7 +655,7 @@
             pagesize: this.page.total,
             startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
             endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0] + " 23:59:59" : '',
-            orgid: this.model1,
+            orgid: this.model1==0?"":this.model1,
             code: this.fno,
             guestId: this.company ? this.companyId : ""
           }
@@ -674,7 +674,7 @@
           page: this.page.num - 1,
           startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
           endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0] + " 23:59:59" : '',
-          orgid: this.model1,
+          orgid: this.model1==0?"":this.model1,
           code: this.fno,
           guestId: this.company ? this.companyId : ""
         }
