@@ -5,8 +5,6 @@
         <div class="wlf">
           <div class="db mr15">
             <span>快速查询：</span>
-          </div>
-          <div class="db mr15">
             <quick-date
               class="mr10"
               ref="quickDate"
@@ -37,7 +35,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
+                >{{ item.shortName }}</Option
               >
             </Select>
           </div>
@@ -238,7 +236,7 @@ export default {
     async getShop() {
       let data = {};
       data.supplierTypeSecond = this.BranchstoreId;
-      this.Branchstore = [{ id: 0, name: "全部" }];
+      this.Branchstore = [{ id: 0, name: "全部",shortName:"全部" }];
       let res = await goshop(data);
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];

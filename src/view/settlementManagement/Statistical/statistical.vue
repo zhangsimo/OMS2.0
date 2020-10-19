@@ -5,15 +5,13 @@
         <div class="wlf">
           <div class="db mr15">
             <span>快速查询：</span>
-          </div>
-          <div class="db mr15">
             <quick-date
               class="mr10"
               ref="quickDate"
               @quickDate="getDataQuick"
             ></quick-date>
           </div>
-          <div class="db ml15">
+          <div class="db mr15">
             <span>起止日期：</span>
             <Date-picker
               v-model="dates"
@@ -22,7 +20,7 @@
               class="w200"
             ></Date-picker>
           </div>
-          <div class="db ml15">
+          <div class="db mr15">
             <span>对应科目：</span>
             <el-cascader
               ref="casecader"
@@ -33,28 +31,28 @@
               collapse-tags
               clearable></el-cascader>
           </div>
-          <div class="db ml15">
+          <div class="db mr15">
             <span>账号：</span>
-            <Input v-model="accountCode" class="w140 mr10" />
+            <Input v-model="accountCode" class="w140" />
           </div>
-          <div class="db ml15">
+          <div class="db mr15">
             <span>区域：</span>
             <Select v-model="areaId" class="w150" @on-change="changeArea" :disabled="selectShopList">
               <Option v-for="item in areas" :value="item.id" :key="item.id">{{item.companyName}}</Option>
             </Select>
           </div>
-          <div class="db ml15">
+          <div class="db mr15">
             <span>门店名称：</span>
             <Select v-model="BranchstoreId" class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
+                >{{ item.shortName }}</Option
               >
             </Select>
           </div>
-          <div class="db ml15">
+          <div class="db">
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
@@ -504,7 +502,7 @@ export default {
       areaId: 0, // 区域id
       areas: [{ id: 0, companyName: "全部" }], // 区域
       BranchstoreId: "", // 门店id
-      Branchstore: [{ id: 0, name: "全部" }], // 门店
+      Branchstore: [{ id: 0, name: "全部",shortName:"全部" }], // 门店
 
       accountCode:'',//账号
       mateAccountCode:'',//对应科目
@@ -603,7 +601,7 @@ export default {
     async getShop() {
       let data = {};
       data.supplierTypeSecond = this.BranchstoreId;
-      this.Branchstore = [{ id: 0, name: "全部" }];
+      this.Branchstore = [{ id: 0, name: "全部",shortName:"全部" }];
       let res = await goshop(data);
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];
