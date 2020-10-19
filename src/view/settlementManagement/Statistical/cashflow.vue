@@ -32,12 +32,12 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="BranchstoreId" class="w150" :disabled="selectShopList">
+            <Select v-model="BranchstoreId" class="w150" @on-change="query" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
+                >{{ item.shortName }}</Option
               >
             </Select>
           </div>
@@ -238,7 +238,7 @@ export default {
     async getShop() {
       let data = {};
       data.supplierTypeSecond = this.BranchstoreId;
-      this.Branchstore = [{ id: 0, name: "全部" }];
+      this.Branchstore = [{ id: 0, shortName: "全部" }];
       let res = await goshop(data);
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];

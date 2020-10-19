@@ -45,12 +45,12 @@
           </div>
           <div class="db ml15">
             <span>门店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" :disabled="selectShopList">
+            <Select v-model="BranchstoreId" class="w150" @on-change="query" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
+                >{{ item.shortName }}</Option
               >
             </Select>
           </div>
@@ -504,7 +504,7 @@ export default {
       areaId: 0, // 区域id
       areas: [{ id: 0, companyName: "全部" }], // 区域
       BranchstoreId: "", // 门店id
-      Branchstore: [{ id: 0, name: "全部" }], // 门店
+      Branchstore: [{ id: 0, shortName: "全部" }], // 门店
 
       accountCode:'',//账号
       mateAccountCode:'',//对应科目
@@ -603,7 +603,7 @@ export default {
     async getShop() {
       let data = {};
       data.supplierTypeSecond = this.BranchstoreId;
-      this.Branchstore = [{ id: 0, name: "全部" }];
+      this.Branchstore = [{ id: 0, shortName: "全部" }];
       let res = await goshop(data);
       if (res.code === 0) {
         this.Branchstore = [...this.Branchstore, ...res.data];
