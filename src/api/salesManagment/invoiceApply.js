@@ -61,12 +61,20 @@ export function subManualList2(data) {
     data
   });
 }
-//更新快运单号
+//更新快运单号 单个
 export function updateNumber(params) {
   return axios.request({
     url: `${api.omsSettle}/invoiceApply/updateExpressBillNo`,
     method: "get",
     params
+  });
+}
+//更新快运单号 单个
+export function updateNumberList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/updateExpressBillNoAll`,
+    method: "post",
+    data
   });
 }
 //撤回核销

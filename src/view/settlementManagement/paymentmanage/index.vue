@@ -25,7 +25,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -59,9 +59,9 @@
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="exportSummary"
-                >导出汇总
+                >导出全部
                 </button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportBill">导出单据</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportList">导出勾选</button>
               </div>
             </Poptip>
             <button
@@ -97,7 +97,9 @@
           ref="summary"
           highlight-current-row
           @current-change="selete"
+          @select-change="selectBox"
         >
+          <vxe-table-column width="50" type="selection" align="center"></vxe-table-column>
           <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
           <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
           <vxe-table-column field="area" title="区域" align="center" width="70"></vxe-table-column>
@@ -287,7 +289,8 @@
   import {
     payColExportAll/**导出汇总*/,
     payColExportDetail/**导出明细*/,
-    payColSelOrPurchaseExport/**销售清单采购清单导出*/
+    payColSelOrPurchaseExport/**销售清单采购清单导出*/,
+    payColExportSelect/**导出勾选*/
   } from "@/api/settlementManagement/Import/index.js"
   import {goshop} from '@/api/settlementManagement/shopList';
   import {getCustomerInformation} from "@/api/system/essentialData/clientManagement";
@@ -505,13 +508,13 @@
             key: "index",
             width: 40,
             className: "tc",
-resizable: true,
+            resizable: true,
           },
           {
             title: "店号",
             key: "shopCode",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60,
             render: (h, params) => {
               return h('div', [
@@ -536,21 +539,21 @@ resizable: true,
             width: 80,
             tooltip: true,
             className: "tc",
-resizable: true,
+            resizable: true,
           },
           {
             title: "门店",
             key: "orgName",
             width: 200,
             className: "tc",
-resizable: true,
+            resizable: true,
             tooltip: true
           },
           {
             title: "客户/供应商名称",
             key: "guestName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 120,
             render: (h, params) => {
               return h('div', [
@@ -573,7 +576,7 @@ resizable: true,
             title: "客户供应商类别",
             key: "guestTypeName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 100,
             render: (h, params) => {
               return h('div', [
@@ -596,7 +599,7 @@ resizable: true,
             title: "销售订单号",
             key: "orderNo",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 100,
             render: (h, params) => {
               return h('div', [
@@ -619,7 +622,7 @@ resizable: true,
             title: "出库单号",
             key: "serviceId",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h(
@@ -668,7 +671,7 @@ resizable: true,
             title: "来源",
             key: "serviceSourceName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 50,
             render: (h, params) => {
               return h('div', [
@@ -691,7 +694,7 @@ resizable: true,
             title: "业务类型",
             key: "serviceTypeName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -714,7 +717,7 @@ resizable: true,
             title: "含税标志",
             key: "taxSignName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -742,7 +745,7 @@ resizable: true,
             title: "转单日期",
             key: "transferDate",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -765,28 +768,28 @@ resizable: true,
             title: "应收金额",
             key: "rpAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "已收金额",
             key: "charOffAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "未收金额",
             key: "noCharOffAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "业务员",
             key: "salesman",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 100,
             tooltip: true
           },
@@ -794,28 +797,28 @@ resizable: true,
             title: "已对账金额",
             key: "accountAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "未对账金额",
             key: "noAccountAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "草稿金额",
             key: "draftAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "备注",
             key: "remark",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60,
             render: (h, params) => {
               return h('div', [
@@ -838,7 +841,7 @@ resizable: true,
             title: "对账门店",
             key: "accountOrgName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 180,
             render: (h, params) => {
               return h('div', [
@@ -861,7 +864,7 @@ resizable: true,
             title: "对账人",
             key: "accountMan",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 100,
             tooltip: true
           },
@@ -869,7 +872,7 @@ resizable: true,
             title: "对账订单",
             key: "accountNo",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 150,
             tooltip: true
           }
@@ -881,13 +884,13 @@ resizable: true,
             key: "index",
             width: 40,
             className: "tc",
-resizable: true,
+            resizable: true,
           },
           {
             title: "店号",
             key: "shopCode",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 70,
             render: (h, params) => {
               return h('div', [
@@ -912,7 +915,7 @@ resizable: true,
             width: 70,
             tooltip: true,
             className: "tc",
-resizable: true,
+            resizable: true,
           },
           {
             title: "门店",
@@ -920,13 +923,13 @@ resizable: true,
             tooltip: true,
             width: 200,
             className: "tc",
-resizable: true,
+            resizable: true,
           },
           {
             title: "客户/供应商名称",
             key: "guestName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 120,
             render: (h, params) => {
               return h('div', [
@@ -949,7 +952,7 @@ resizable: true,
             title: "客户供应商类别",
             key: "guestTypeName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 120,
             render: (h, params) => {
               return h('div', [
@@ -972,7 +975,7 @@ resizable: true,
             title: "采购订单号",
             key: "orderNo",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -995,7 +998,7 @@ resizable: true,
             title: "入库单号",
             key: "serviceId",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h(
@@ -1039,7 +1042,7 @@ resizable: true,
             title: "来源",
             key: "serviceSourceName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 50,
             render: (h, params) => {
               return h('div', [
@@ -1062,7 +1065,7 @@ resizable: true,
             title: "业务类型",
             key: "serviceTypeName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1085,7 +1088,7 @@ resizable: true,
             title: "含税标志",
             key: "taxSignName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1113,7 +1116,7 @@ resizable: true,
             title: "转单日期",
             key: "transferDate",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1136,28 +1139,28 @@ resizable: true,
             title: "应付金额",
             key: "rpAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "已付金额",
             key: "charOffAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "未付金额",
             key: "noCharOffAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "业务员",
             key: "salesman",
             className: "tc",
-resizable: true,
+            resizable: true,
             tooltip: true,
             width: 80
           },
@@ -1165,28 +1168,28 @@ resizable: true,
             title: "已对账金额",
             key: "accountAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "未对账金额",
             key: "noAccountAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "草稿金额",
             key: "draftAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "备注",
             key: "remark",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60,
             render: (h, params) => {
               return h('div', [
@@ -1209,7 +1212,7 @@ resizable: true,
             title: "对账门店",
             key: "accountOrgName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 180,
             render: (h, params) => {
               return h('div', [
@@ -1233,7 +1236,7 @@ resizable: true,
             key: "accountMan",
             tooltip: true,
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
@@ -1241,7 +1244,7 @@ resizable: true,
             key: "accountNo",
             tooltip: true,
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           }
         ],
@@ -1251,27 +1254,27 @@ resizable: true,
             type: "index",
             width: 40,
             className: "tc",
-resizable: true,
+            resizable: true,
           },
           {
             title: "区域",
             key: "area",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "店号",
             key: "shopCode",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "入库时间",
             key: "auditDate",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 100,
             render: (h, params) => {
               return h('div', [
@@ -1294,7 +1297,7 @@ resizable: true,
             title: "客户/供应商名称",
             key: "guestName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 180,
             render: (h, params) => {
               return h('div', [
@@ -1317,7 +1320,7 @@ resizable: true,
             title: "配件编码",
             key: "partCode",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1340,7 +1343,7 @@ resizable: true,
             title: "配件名称",
             key: "partName",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1363,14 +1366,14 @@ resizable: true,
             title: "配件规格",
             key: "specification",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80
           },
           {
             title: "配件车型",
             key: "carModel",
             className: "tc",
-resizable: true,
+            resizable: true,
             tooltip: true,
             width: 80
           },
@@ -1378,7 +1381,7 @@ resizable: true,
             title: "配件品牌",
             key: "partBrand",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1401,7 +1404,7 @@ resizable: true,
             title: "配件厂牌",
             key: "factoryBrand",
             className: "tc",
-resizable: true,
+            resizable: true,
             tooltip: true,
             width: 80
           },
@@ -1409,7 +1412,7 @@ resizable: true,
             title: "OEM码",
             key: "oemCode",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 80,
             render: (h, params) => {
               return h('div', [
@@ -1432,42 +1435,42 @@ resizable: true,
             title: "税率",
             key: "taxRate",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60
           },
           {
             title: "数量",
             key: "qty",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60
           },
           {
             title: "单位",
             key: "unitId",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60
           },
           {
             title: "单价",
             key: "price",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60
           },
           {
             title: "金额",
             key: "orderAmt",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60
           },
           {
             title: "备注",
             key: "remark",
             className: "tc",
-resizable: true,
+            resizable: true,
             width: 60,
             render: (h, params) => {
               return h('div', [
@@ -1888,7 +1891,7 @@ resizable: true,
           }
         ],
         Branchstore: [
-          {id: '0', name: '全部'}
+          {id: '0', name: '全部', shortName: "全部"}
         ],
         business: [
           {
@@ -1911,7 +1914,8 @@ resizable: true,
         data1Loading: false,
         copyData: [],
         copyData1: [],
-        copyData2: []
+        copyData2: [],
+        selectBoxList:[]//应收应付 数组 勾选
       };
     },
     computed: {
@@ -2281,6 +2285,9 @@ resizable: true,
         this.$refs.Monthlyreconciliation.parameter = {...row, ...date};
         this.getDetailed(row, this.value);
       },
+      selectBox({selection}){
+        this.selectBoxList=selection;
+      },
       // 查询出/入库单号明细
       async getList(obj) {
         let detailed = [];
@@ -2292,19 +2299,9 @@ resizable: true,
         });
         return {detailed};
       },
-      // 导出汇总
+      // 导出汇总/全部
       exportSummary() {
         if (this.data.length !== 0) {
-          // let arrData = [...this.data]
-          // arrData.map(item=>{
-          //   item.orgId = "\t"+item.orgId
-          // })
-          // this.$refs.summary.exportCsv({
-          //   filename: "应收应付汇总表",
-          //   original:false,
-          //   columns:this.columns,
-          //   data:arrData
-          // });
           let obj = {
             orgId: this.model1,
             startDate: this.value[0]
@@ -2323,6 +2320,17 @@ resizable: true,
         } else {
           this.$message.error("应收应付汇总表暂无数据");
         }
+      },
+      //导出勾选
+      exportList(){
+        if(this.selectBoxList.length<1){
+          return this.$Message.error("请勾选需要导出的数据")
+        }
+        let params="";
+        for(let i=0;i<this.selectBoxList.length;i++){
+          params+=`ids=${this.selectBoxList[i].id}&`
+        }
+        location.href=payColExportSelect(params);
       },
       // 当前标签页的name
       tabName(name) {
@@ -2349,39 +2357,6 @@ resizable: true,
           params += `${i}=${obj[i]}&`
         }
         location.href = payColExportDetail(params)
-        // if (this.detailedList === "key1") {
-        //   if (this.data1.length !== 0) {
-        //     let arrData = [...this.data1]
-        //     arrData.map((item,index) => {
-        //       item.orgId = "\t"+item.orgId
-        //       item.index = index+1
-        //     })
-        //     this.$refs.sale.exportCsv({
-        //       filename: "销售清单",
-        //       original:false,
-        //       columns:this.columns1,
-        //       data:arrData
-        //     });
-        //   } else {
-        //     this.$message.error("销售清单暂无数据");
-        //   }
-        // } else if (this.detailedList === "key2") {
-        //   if (this.data2.length !== 0) {
-        //     let arrData = [...this.data2]
-        //     arrData.map((item,index) => {
-        //       item.orgId = "\t"+item.orgId
-        //       item.index = index+1
-        //     })
-        //     this.$refs.purchase.exportCsv({
-        //       filename: "采购清单",
-        //       original:false,
-        //       columns:this.columns2,
-        //       data:arrData
-        //     });
-        //   } else {
-        //     this.$message.error("销售清单暂无数据");
-        //   }
-        // }
       },
       // 出/入库明细导出
       exportDetail(type) {
