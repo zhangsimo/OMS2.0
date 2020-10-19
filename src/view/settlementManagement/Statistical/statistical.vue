@@ -43,7 +43,7 @@
           </div>
           <div class="db mr15">
             <span>门店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" :disabled="selectShopList">
+            <Select v-model="BranchstoreId" class="w150" @on-change="query" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
