@@ -407,7 +407,7 @@
         BranchstoreId: "", //分店名称
         company: [], //往来单位数组
         Branchstore: [
-          {id: '0', name: '全部'}
+          {id: 0, name: '全部'}
         ], //分店名称
         requestCode: "", //费用报销申请单号
         currRow: null, //选中行
@@ -740,7 +740,6 @@
       },
       // 选中行
       currentChangeEvent({row}) {
-        console.log(row.id)
         this.currRow = row;
         this.loanId = row.id
         this.$store.commit("setLoanId", row.id)

@@ -394,6 +394,14 @@ export default {
           label: "客户信用额度"
         },
         {
+          value:"18",
+          label:"活动申请"
+        },
+        {
+          value:"19",
+          label: "供应商资料"
+        },
+        {
           value: "20",
           label: "配件资料"
         }
@@ -541,6 +549,7 @@ export default {
       if (res.code === 0) {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
+        this.statusData=[];
       }
     },
 
