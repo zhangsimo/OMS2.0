@@ -115,7 +115,7 @@
           @click="backCancel"
         >撤回申请
         </button>
-        <Button class="ml10" @click="saveSendingNumber">批量保存快递单号</Button>
+        <Button class="ml10" @click="saveSendingNumber" v-has="'saveSendingNumber'">保存</Button>
       </div>
       <div class="mt20">
         <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
@@ -1402,14 +1402,18 @@
           };
           arr.push(form)
         })
+        showLoading()
         updateNumberList(arr).then(res => {
           if (res.code === 0) {
             this.$Message.success(res.data);
             this.getDataList();
             //清空选中
             this.$refs.summary.selectAll(false);
+            hideLoading()
           }
-        });
+        }).catch(err=>{
+          hideLoading()
+        })
       },
       //确定撤销
       async reClose() {
