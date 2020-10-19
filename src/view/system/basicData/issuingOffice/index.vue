@@ -199,7 +199,7 @@
           </Col>
           <Col span="11">
             <FormItem label="开票限额：" prop="partTypeS">
-              <Input :value="(formValidate.version||0)*(1+(formValidate.rate)||0)"></Input>
+              <Input :value="((formValidate.version||0)*(1+(formValidate.rate)||0)).toFixed(0)"></Input>
             </FormItem>
           </Col>
         </Row>
