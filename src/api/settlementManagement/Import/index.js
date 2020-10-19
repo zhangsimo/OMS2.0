@@ -71,9 +71,13 @@ export function stockExport(params){
 export function stockReturnExport(params){
   return `${api.omsOrder}/enterMain/export/findEnterMain?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
-//应收应付 导出汇总
+//应收应付 导出汇总/导出全部
 export function payColExportAll(params){
   return `${api.omsSettle}/receivable/payable/export/getPage?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//应收应付 导出勾选
+export function payColExportSelect(params){
+  return `${api.omsSettle}/receivable/payable/export/getdto?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
 //应收应付 导出单据明细
 export function payColExportDetail(params){
