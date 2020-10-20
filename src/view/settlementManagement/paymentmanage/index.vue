@@ -97,6 +97,7 @@
           ref="summary"
           highlight-current-row
           @current-change="selete"
+          @select-all="selectBox"
           @select-change="selectBox"
         >
           <vxe-table-column width="50" type="selection" align="center"></vxe-table-column>
