@@ -121,7 +121,6 @@
           <div>
             <vxe-table
               border
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row
@@ -179,7 +178,6 @@
           <div>
             <vxe-table
               border
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row
@@ -237,7 +235,6 @@
           <div>
             <vxe-table
               border
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row

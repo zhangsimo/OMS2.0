@@ -116,7 +116,6 @@
         <TabPane label="未审核" name="capitalChain1">
           <vxe-table
             border
-            show-footer
             show-overflow
             highlight-current-row
             highlight-hover-row
@@ -187,7 +186,6 @@
           <div>
             <vxe-table
               border
-              show-footer
               show-overflow
               highlight-current-row
               highlight-hover-row
@@ -616,7 +614,5 @@
   .inner-box {
     overflow-x: scroll;
   }
-  /deep/.fixed-left--wrapper {
-    overflow-x: hidden !important;
-  }
+
 </style>
