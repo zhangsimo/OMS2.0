@@ -61,7 +61,7 @@
                   @click="exportSummary"
                 >导出全部
                 </button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportList">导出勾选</button>
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportList">导出勾选</button>-->
               </div>
             </Poptip>
             <button
