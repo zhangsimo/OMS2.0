@@ -36,7 +36,7 @@
             <!-- <i class="iconfont iconcaidan input" @click="Dealings(1)"></i> -->
           </div>
           <div class="db ml20">
-            <span>客户：</span>
+            <span>往来单位：</span>
             <!--              <Select v-model="form.guestId" style="width:180px">-->
             <!--                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>-->
             <!--              </Select>-->
