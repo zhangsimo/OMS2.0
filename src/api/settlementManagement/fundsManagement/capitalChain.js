@@ -154,4 +154,14 @@ export function getSubjectType (params){
 //获取当前科目
 
 
+//获取开票单位
+export function getIssuingList (params){
+  return axios.request({
+    url: `${api.omsSettle}/issuingOffice/queryAll`,
+    method: 'get',
+    params
+  });
+}
+
+
 

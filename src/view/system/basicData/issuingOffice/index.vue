@@ -5,14 +5,8 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr20">
-            <span class="mr10">区域</span>
-            <Select v-model="areaId" style="width:150px" @on-change='changeArea' label-in-value>
-              <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.companyName }}</Option>
-            </Select>
-          </div>
-          <div class="db mr20">
             <span class="mr10">门店</span>
-            <Select v-model="shopNumber" style="width:150px" @on-change='changeShop' label-in-value>
+            <Select v-model="shopId" style="width:150px" @on-change='changeShop' label-in-value>
               <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
@@ -222,7 +216,7 @@
 </template>
 
 <script>
-  import {are, goshop} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are, goshop,getIssuingList} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getDigitalDictionary} from "../../../../api/system/essentialData/clientManagement";
   import StoreAlocated
     from "../../../settlementManagement/fundsManagement/accountRegistration/components/components/StoreAlocated";
@@ -231,6 +225,8 @@
     components: {StoreAlocated},
     data(){
 		  return {
+		    //查询值
+        shopId:'',
 		    //开票信息层
         issuingInfo:false,
         //开票信息数据字段
@@ -264,6 +260,7 @@
     mounted(){
 		  this.getAllAre();
 		  this.getShop();
+		  this.getList();
     },
     methods:{
       //获取全部地址
@@ -283,16 +280,7 @@
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopListArr = [...this.shopListArr, ...res.data]
-          // this.$nextTick(() => {
-          //   this.ChangeData.shopNumber = this.$store.state.user.userData.shopId;
-          //   if (this.ChangeData.shopNumber) {
-          //     this.ChangeData.shopCode = this.shopListArr.filter(item => item.id == this.ChangeData.shopNumber)[0].code;
-          //     this.ChangeData.shopName = this.shopListArr.filter(item => item.id == this.ChangeData.shopNumber)[0].name;
-          //   }
-          // })
-          // if (this.$store.state.user.userData.shopkeeper != 0) {
-          //   this.getThisArea()//获取当前门店地址
-          // }
+          this.shopId = this.$store.state.user.userData.currentShopId ||"";
         }
       },
 
@@ -333,6 +321,11 @@
           //票据类型
           this.invoiceMap = res.data["CS00107"] || [];
         }
+      },
+
+      async getList(){
+        let rep = await getIssuingList({shopId:this.shopId,page:0,pageSize:0});
+
       },
 
       modelShowHide(v){
