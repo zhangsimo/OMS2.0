@@ -24,7 +24,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -379,7 +379,7 @@ export default {
       company: [], //往来单位数组
       companyId: "", //往来单位
       Branchstore: [
-        {id:0 ,name:'全部'}
+        {id:0 ,shortName:'全部'}
       ], //分店名称
       currRow: {}, //选中行
       claimModal: false, //认领弹框

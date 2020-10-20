@@ -397,7 +397,7 @@
             resizable: true,
             width: 100,
             render: (h, params) => {
-              return h('span', params.row.taxPrice ? (params.row.taxPrice).toFixed(2) : '')
+              return h('span', params.row.taxPrice ? (params.row.taxPrice) : '')
             }
           },
           {
@@ -430,7 +430,7 @@
             resizable: true,
             width: 100,
             render: (h, params) => {
-              return h('span', (params.row.taxPrice).toFixed(2))
+              return h('span', (params.row.taxPrice))
             }
           },
           {
@@ -598,9 +598,9 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               if (index === 19 || index === 21) {

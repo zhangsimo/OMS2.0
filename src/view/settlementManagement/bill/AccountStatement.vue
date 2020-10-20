@@ -20,12 +20,12 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" on-change="change" class="w150" :disabled="selectShopList">
+            <Select v-model="model1" @on-change="query" class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -460,7 +460,7 @@
         model3: "",
         Reconciliationtype: "",
         Branchstore: [
-          {id: 0, name: '全部'}
+          {id: 0, shortName: '全部'}
         ],
         modal1: false,
         text: "",
@@ -1419,7 +1419,6 @@
       async getShop() {
         let data = {}
         let res = await goshop(data)
-        
         if (res.code === 0) return this.Branchstore = [...this.Branchstore, ...res.data]
       },
       //资金认领核销
@@ -2142,9 +2141,6 @@
       // 收付款关闭
       close() {
         this.Settlement = false;
-      },
-      change(val){
-        console.log(11111)
       },
       // 撤销按钮
       Revoke() {
