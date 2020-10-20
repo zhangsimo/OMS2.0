@@ -829,7 +829,7 @@
           this.leftgetList()
         },
         exportForm(){
-          if(this.mainId){
+          if(!this.mainId){
             return this.$Message.error("请选择需要导出的信息")
           }
           location.href=applyForExport(this.rowId)
