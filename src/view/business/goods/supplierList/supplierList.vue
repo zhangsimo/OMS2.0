@@ -1164,6 +1164,7 @@
         // console.log(a)
         this.formPlan.guestName = a.fullName;
         this.guestidId = a.id;
+        this.Right.tbdata = []
       },
       leftgetList() {
         let data = {};
