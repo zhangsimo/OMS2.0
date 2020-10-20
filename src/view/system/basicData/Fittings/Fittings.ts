@@ -18,7 +18,11 @@ let valiCode = (rule, value, callback) => {
   if (!value) {
     callback(new Error("报税编码不能为空"));
   }else{
-    callback();
+    if(/^\d{19}$/.test(value)){
+      callback();
+    }else{
+      callback(new Error("请输入19位纯数字"));
+    }
   }
 }
 
@@ -41,7 +45,9 @@ export default class Fittings extends Vue {
   //添加报税编码层
   private typeShow:boolean = false;
   private taxTeturns:any = {
-    code:''
+    code:'',
+    typeName:'',
+    superior:''
   };
   private ruleValidate:any = {
     code: [
@@ -693,7 +699,6 @@ export default class Fittings extends Vue {
       if (valid) {
         this.$Message.success('Success!');
       } else {
-        this.$Message.error('Fail!');
       }
     })
   }

@@ -288,11 +288,11 @@
         :rules="ruleValidate"
       >
         <div class="clearfix purchase" ref="planForm">
-          <FormItem label="分类名称：" prop="guestId">
-            <Input class="w200" v-model="taxTeturns.code" disabled/>
+          <FormItem label="分类名称：" prop="typeName">
+            <Input class="w200" v-model="taxTeturns.typeName" disabled/>
           </FormItem>
-          <FormItem label="上级分类：" prop="guestId">
-            <Input class="w200" v-model="taxTeturns.code" disabled/>
+          <FormItem label="上级分类：" prop="superior">
+            <Input class="w200" v-model="taxTeturns.superior" disabled/>
           </FormItem>
           <FormItem label="报税编码：" prop="code">
             <Input class="w200" v-model="taxTeturns.code"/>
