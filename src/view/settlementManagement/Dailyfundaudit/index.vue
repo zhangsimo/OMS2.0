@@ -5,8 +5,6 @@
         <div class="wlf">
           <div class="db mr15">
             <span>快速查询：</span>
-          </div>
-          <div class="db mr15">
             <quick-date
               class="mr10"
               ref="quickDate"
