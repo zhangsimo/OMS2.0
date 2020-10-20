@@ -52,18 +52,20 @@
             </button>
           </div>
           <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="exportSummary"
-                >导出全部
-                </button>
-<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportList">导出勾选</button>-->
-              </div>
-            </Poptip>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'" @click="exportSummary">导出
+            </button>
+            <!--            <Poptip placement="bottom">-->
+            <!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+            <!--              <div slot="content">-->
+            <!--                <button-->
+            <!--                  class="mr10 ivu-btn ivu-btn-default"-->
+            <!--                  type="button"-->
+            <!--                  @click="exportSummary"-->
+            <!--                >导出全部-->
+            <!--                </button>-->
+            <!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportList">导出勾选</button>-->
+            <!--              </div>-->
+            <!--            </Poptip>-->
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
@@ -97,10 +99,10 @@
           ref="summary"
           highlight-current-row
           @current-change="selete"
-          @select-all="selectBox"
-          @select-change="selectBox"
         >
-          <vxe-table-column width="50" type="selection" align="center"></vxe-table-column>
+          <!--          @select-all="selectBox"-->
+          <!--          @select-change="selectBox"-->
+          <!--          <vxe-table-column width="50" type="selection" align="center"></vxe-table-column>-->
           <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
           <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
           <vxe-table-column field="area" title="区域" align="center" width="70"></vxe-table-column>
@@ -1916,7 +1918,7 @@
         copyData: [],
         copyData1: [],
         copyData2: [],
-        selectBoxList:[]//应收应付 数组 勾选
+        selectBoxList: []//应收应付 数组 勾选
       };
     },
     computed: {
@@ -2286,8 +2288,8 @@
         this.$refs.Monthlyreconciliation.parameter = {...row, ...date};
         this.getDetailed(row, this.value);
       },
-      selectBox({selection}){
-        this.selectBoxList=selection;
+      selectBox({selection}) {
+        this.selectBoxList = selection;
       },
       // 查询出/入库单号明细
       async getList(obj) {
@@ -2323,15 +2325,15 @@
         }
       },
       //导出勾选
-      exportList(){
-        if(this.selectBoxList.length<1){
+      exportList() {
+        if (this.selectBoxList.length < 1) {
           return this.$Message.error("请勾选需要导出的数据")
         }
-        let params="";
-        for(let i=0;i<this.selectBoxList.length;i++){
-          params+=`ids=${this.selectBoxList[i].id}&`
+        let params = "";
+        for (let i = 0; i < this.selectBoxList.length; i++) {
+          params += `ids=${this.selectBoxList[i].id}&`
         }
-        location.href=payColExportSelect(params);
+        location.href = payColExportSelect(params);
       },
       // 当前标签页的name
       tabName(name) {
