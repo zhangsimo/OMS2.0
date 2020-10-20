@@ -13,6 +13,15 @@ import PartInfo from "./partInfo/partInfo";
 import { getCarPartClass } from "_api/parts";
 
 import _ from 'lodash';
+
+let valiCode = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error("报税编码不能为空"));
+  }else{
+    callback();
+  }
+}
+
 @Component({
   components: {
     PartInfo
@@ -29,6 +38,17 @@ export default class Fittings extends Vue {
       id: "0"
     }
   ];
+  //添加报税编码层
+  private typeShow:boolean = false;
+  private taxTeturns:any = {
+    code:''
+  };
+  private ruleValidate:any = {
+    code: [
+      { validator:valiCode }
+    ]
+  };
+
   // 侧树形菜单
   private treeData: Array<Tree> = [];
   // 查询条件数组
@@ -659,5 +679,22 @@ export default class Fittings extends Vue {
     } else {
       self.$Message.error(res.message);
     }
+  }
+
+  private showChangeType(){
+    this.typeShow = true
+  }
+
+
+
+  private handleSubmit(name:string){
+    const refDom:any = this.$refs[name];
+    refDom.validate((valid) => {
+      if (valid) {
+        this.$Message.success('Success!');
+      } else {
+        this.$Message.error('Fail!');
+      }
+    })
   }
 }

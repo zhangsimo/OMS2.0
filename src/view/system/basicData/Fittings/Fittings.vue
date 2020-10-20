@@ -54,7 +54,11 @@
     <section class="part-main con-box flex">
       <Split v-model="split" min="200" max="570">
         <div slot="left" class="tree-warp">
-          <div class="title">配件分类</div>
+          <div class="title">配件分类
+            <Button class="ml20" @click="showChangeType">
+              修改
+            </Button>
+          </div>
           <Tree
             class="tree"
             :data="treeData"
@@ -272,6 +276,34 @@
       :showSpe="true"
       @throwData="submitSave"
     ></part-info>
+    <Modal
+      v-model="typeShow"
+      title="修改配件分类"
+      width="400">
+      <Form
+        inline
+        ref="formPlan"
+        :model="taxTeturns"
+        :label-width="100"
+        :rules="ruleValidate"
+      >
+        <div class="clearfix purchase" ref="planForm">
+          <FormItem label="分类名称：" prop="guestId">
+            <Input class="w200" v-model="taxTeturns.code" disabled/>
+          </FormItem>
+          <FormItem label="上级分类：" prop="guestId">
+            <Input class="w200" v-model="taxTeturns.code" disabled/>
+          </FormItem>
+          <FormItem label="报税编码：" prop="code">
+            <Input class="w200" v-model="taxTeturns.code"/>
+          </FormItem>
+        </div>
+      </Form>
+      <div slot="footer">
+        <Button type="primary" @click="handleSubmit('formPlan')">保存</Button>
+        <Button type="primary" @click="typeShow=false">取消</Button>
+      </div>
+    </Modal>
   </main>
 </template>
 
