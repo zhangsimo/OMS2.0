@@ -69,6 +69,12 @@
             >
           </div>
           <div class="db">
+            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
+              <i class="iconfont mr5 icondaochuicon"></i>
+              导出
+            </Button>
+          </div>
+          <div class="db">
             <Button @click="abandoned" class="mr10"
                     :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
                     v-has="'invalidate'"

@@ -83,12 +83,14 @@ export default {
       // }
       req.num = 0;
       req.size = 1000;
+      req.isDisabled = 0;//供应商是否禁用 0非禁用 1禁用
+      req.approveStatus = 1//供应商是否审批通过 1审批通过 2审批不通过 0 审核中
       this.loading = true;
       this.options = [];
       fapi.getSupplier(req).then(res => {
         if (res.code === 0) {
           this.loading = false;
-          this.options = (res.data.content || []).filter(el=>el.isDisabled==0)
+          this.options = (res.data.content || [])
         }
       });
     },

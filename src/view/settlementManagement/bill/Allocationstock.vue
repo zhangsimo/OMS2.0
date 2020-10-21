@@ -19,7 +19,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -69,7 +69,7 @@
           highlight-row
           max-height=500
           @on-row-click="election"
-          @on-select="selectTab"
+          @on-selection-change="selectTab"
           @on-select-all="selectTab"
         ></Table>
         <div class="clearfix">
@@ -123,7 +123,7 @@
       return {
         value: [],
         Branchstore: [
-          {id: 0, name: '全部'}
+          {id: 0, name: '全部',shortName:"全部"}
         ], //分店名称
         page: {
           total: 0,
@@ -442,7 +442,7 @@
             width: 150,
             resizable: true,
             render: (h, params) => {
-              return h('span', (params.row.noTaxPrice).toFixed(2))
+              return h('span', (params.row.noTaxPrice))
             }
           },
           {
@@ -452,7 +452,7 @@
             width: 150,
             resizable: true,
             render: (h, params) => {
-              return h('span', (params.row.noTaxAmt).toFixed(2))
+              return h('span', (params.row.noTaxAmt))
             }
           },
           {
@@ -593,14 +593,14 @@
             return;
           }
           const values = data.map(item => Number(item[key]));
-          if (index > 6 && index !== 11) {
+          if (index > 8 && index !== 11) {
             if (!values.every(value => isNaN(value))) {
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               sums[key] = {
@@ -608,7 +608,22 @@
                 value: v.toFixed(2)
               };
             }
-          } else if (index === 11) {
+          } else if (index===7 || index===8) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return Math.round((prev + Number.EPSILON) * 10000) / 10000 + Math.round((curr + Number.EPSILON) * 10000) / 10000;
+                } else {
+                  return Math.round((prev + Number.EPSILON) * 10000) / 10000;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v.toFixed(4)
+              };
+            }
+          }  else if (index === 11) {
             if (!values.every(value => isNaN(value))) {
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);

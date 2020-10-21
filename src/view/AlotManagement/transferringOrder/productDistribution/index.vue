@@ -588,7 +588,7 @@ export default {
     },
     getList() {
       const params = {
-        partCode: this.rowStatus.partCode
+        partId: this.rowStatus.partId
       };
       shenqingdanliebiao(params)
         .then(res => {

@@ -25,12 +25,12 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="shopCode" filterable class="w150" :disabled="selectShopList">
+            <Select v-model="shopCode" filterable class="w150" @on-change="query" :disabled="selectShopList">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -469,7 +469,7 @@
       async getShop() {
         let data = {}
         data.supplierTypeSecond = this.model1
-        this.shopList = [{id: 0, name: '全部'}]
+        this.shopList = [{id: 0, shortName: '全部'}]
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList, ...res.data]

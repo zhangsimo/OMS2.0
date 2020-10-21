@@ -21,11 +21,11 @@
         this.$refs.tabOne.getList();
       },
       async exportxls(data) {
-        // this.$refs.tabOne.export()
-        this.$Modal.warning({
-          title:"通知",
-          content:"此业务请联系IT服务台导出报表数据"
-        })
+        this.$refs.tabOne.export()
+        // this.$Modal.warning({
+        //   title:"通知",
+        //   content:"此业务请联系IT服务台导出报表数据"
+        // })
       },
     }
   };

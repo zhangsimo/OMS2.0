@@ -82,7 +82,7 @@ export default class TabsModel extends Vue {
     },
     {
       title: "公司名称",
-      key: "companyName",
+      key: "orgName",
       minWidth: 100
     },
     {
@@ -96,8 +96,8 @@ export default class TabsModel extends Vue {
       minWidth: 100
     },
     {
-      title: "仓库",
-      key: "storeName",
+      title: "滞销数量",
+      key: "enterQty",
       minWidth: 100
     },
   ];
@@ -258,7 +258,7 @@ export default class TabsModel extends Vue {
     let res:any = await api.queryPartStockAndLog(this.partId);
     if(res.code == 0) {
       if(this.type === "外采") {
-        this.Tab0tableData = res.data.unsalableStock // 滞销信息
+        this.Tab0tableData = (res.data.unsalableStock || []).filter(el=>el.enterQty!=0) // 滞销信息
       }
       this.Tab1tableData = res.data.orgStock // 本地
       this.Tab2tableData = res.data.chainStock // 连锁

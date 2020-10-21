@@ -3,10 +3,11 @@ import axios from "@/libs/api.request";
 import api from "_conf/url";
 
 // 获取主表
-export function findByDynamicQuery(data) {
+export function findByDynamicQuery(params,data) {
   return axios.request({
     url: `${api.omsSettle}/otherAccountsPayment/findByDynamicQuery`,
     method: "post",
+    params,
     data
   });
 }

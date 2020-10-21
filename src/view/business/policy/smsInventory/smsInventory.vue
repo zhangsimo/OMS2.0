@@ -331,7 +331,7 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId" ></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="2" :storeId="formPlan.storeId" ></Select-part-com>
     <!--更多弹框-->
     <More
       :getShowMore="showMore"
@@ -750,7 +750,6 @@ export default {
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
       this.getList();
     },
     // //盘点仓库

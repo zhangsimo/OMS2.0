@@ -1,6 +1,6 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-
+import Cookies from 'js-cookie';
 // 供应商分类
 export function getSupplierType(params) {
   return axios.request({
@@ -47,7 +47,11 @@ export function queryByConditions(params, data = {}) {
     data
   });
 }
-
+//计划采购订单导出
+export function plannedPurchaseExport(params){
+  let token = Cookies.get('token');
+  return `${api.omsOrder}/pchsOrderPlan/export?id=${params}&access_token=${token}`
+}
 // 国际采购主数据-分页查询
 export function findPageByInternationDynamicQuery(params, data = {}) {
   return axios.request({
@@ -66,7 +70,11 @@ export function queryByInternationConditions(params, data = {}) {
     data
   });
 }
-
+//国际采购订单导出
+export function interPurchaseExport(params){
+  let token = Cookies.get('token');
+  return `${api.omsOrder}/pchsOrderInternation/export?id=${params}&access_token=${token}`
+}
 // 采购计划单
 export function getPchsPlan(params, data = {}) {
   return axios.request({
@@ -187,7 +195,15 @@ export function print(id) {
     data: {},
   });
 }
-
+//打印
+export function printTable(params){
+  return  axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/directPrint`,
+    method: "post",
+    params: params,
+    data: {},
+  });
+}
 // 费用登记-查询左侧
 export function findPageByguest(params, data) {
   return axios.request({
@@ -252,6 +268,11 @@ export function temporaryQueryByConditions(params, data = {}) {
     data
   });
 };
+//临时采购订单导出
+export function tempoaryPurchaseExport(params){
+  let token = Cookies.get('token');
+  return `${api.omsOrder}/pchsOrderTemporary/export?id=${params}&access_token=${token}`
+}
 // 临时采购保存草稿
 export function temporarySaveDraft(data) {
   return axios.request({
@@ -302,6 +323,11 @@ export function outsideQueryByConditions(params, data = {}) {
     data
   });
 };
+//外采导出
+export function outsidePurchaseExport(params){
+  let token = Cookies.get('token');
+  return `${api.omsOrder}/pchsOrderExternal/export?id=${params}&access_token=${token}`
+}
 // 外采购--保存草稿
 export function outsideSaveDraft(data) {
   return axios.request({
@@ -372,6 +398,16 @@ export function getMoteSupplier(name) {
     url: `${api.omsOrder}/optGroup/optGuest`,
     method: "post",
     params: { name },
+    data: {},
+  });
+}
+
+//打印
+export function printTableZF(params){
+  return  axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/directPrint`,
+    method: "post",
+    params: params,
     data: {},
   });
 }

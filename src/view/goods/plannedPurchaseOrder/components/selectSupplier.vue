@@ -205,6 +205,8 @@ export default class SelectSupplier extends Vue {
     let params: any = {};
     params.page = this.page.num - 1;
     params.size = this.page.size;
+    params.isDisabled = 0;//供应商是否禁用 0非禁用 1禁用
+    params.approveStatus = 1//供应商是否审批通过 1审批通过 2审批不通过 0 审核中
     let arr = [
       'fullName',
       'code',
@@ -221,7 +223,7 @@ export default class SelectSupplier extends Vue {
     let res = await api.getSupplier(params);
     if (res.code == 0) {
       this.loading = false;
-      this.partData = (res.data.content || []).filter(el=>el.isDisabled==0);
+      this.partData = (res.data.content || [])
       this.page.total = res.data.totalElements;
     }
   }

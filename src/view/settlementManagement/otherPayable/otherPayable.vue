@@ -478,12 +478,14 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
         orgid: this.BranchstoreId==0?"":this.BranchstoreId,
-        guestId: this.companyId,
-        size: this.page.size,
-        page: this.page.num - 1
+        guestId: this.companyId
       };
+      let params = {
+        page: this.page.num - 1,
+        size: this.page.size
+      }
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      findByDynamicQuery(obj).then(res => {
+      findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           // console.log(res.data.content)

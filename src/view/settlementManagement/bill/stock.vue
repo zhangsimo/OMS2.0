@@ -72,7 +72,7 @@
           show-summary
           highlight-row
           @on-row-click="election"
-          @on-select="selectTab"
+          @on-selection-change="selectTab"
           @on-select-all="selectTab"
           max-height="400"
         ></Table>
@@ -478,7 +478,7 @@
             resizable: true,
             width: 150,
             render: (h, params) => {
-              return h("span", params.row.noTaxPrice.toFixed(2));
+              return h("span", params.row.noTaxPrice);
             }
           },
           {
@@ -658,9 +658,9 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return parseFloat(prev.toFixed(2)) + parseFloat(curr.toFixed(2))
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               sums[key] = {

@@ -397,6 +397,7 @@
             if ([0, "0", "否"].includes(el.isMakActivity)) {
               el.isMakActivity = false;
             }
+            el.sellNoTaxPrice=Math.round((el.sellNoTaxPrice + Number.EPSILON) * 100) / 100;
             return el;
           });
           // this.total = res.data.sellOutBean;

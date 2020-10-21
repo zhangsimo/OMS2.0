@@ -118,7 +118,7 @@
           show-summary
           highlight-row
           :summary-method="handleSummary"
-          @on-select="selectTabSummary"
+          @on-selection-change="selectTabSummary"
           @on-select-all="selectAllSummary"
           @on-row-click="election"
           max-height="400"
@@ -962,7 +962,7 @@
           this.selectData.map(item => {
             str += `ids=${item.id}&`
           })
-          let params = `${str}size=${this.selectData.length}&page=0&`
+          let params = `${str}pagesize=${this.selectData.length}&`
           location.href = colPayExportQuery(params)
         }
       },

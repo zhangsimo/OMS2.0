@@ -23,8 +23,6 @@
               </Option
               >
             </Select>
-          </div>
-          <div class="db mr10">
             <Checkbox class="mr20 ml10" v-model="search.guestPart">
               包含内部客户
             </Checkbox>
@@ -337,7 +335,7 @@
 
       },
       select1(option) {
-        this.search.partBrand = option.value || "";
+        this.search.partBrand = option.label;
       },
       //品牌模糊搜索
       async partBrandRemote(query) {
@@ -367,9 +365,6 @@
       // 查询
       query() {
         this.moreModel=false;
-        if (this.search.enterDate[0] == "") {
-          return this.$message.error("出库日期必须选择！")
-        }
         let data = {};
         for (let key in this.search) {
           if (this.search[key]) {
