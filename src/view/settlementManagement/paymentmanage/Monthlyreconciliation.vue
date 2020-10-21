@@ -27,7 +27,7 @@
                   v-model="model1"
                   class="w200"
                   @on-change="storeAccount"
-                  :disabled="selectShopList"
+                  disabled
                   clearable
                 >
                   <Option
