@@ -994,14 +994,14 @@
             params.startTime = this.selectArr[0]
             params.endTime = this.selectArr[1]
           }
-          if(this.moreArr.createData){
+          if(this.moreArr.createData&&this.moreArr.createData[0]){
             params.startTime = this.moreArr.createData[0] + " 00:00:00"
             params.endTime = this.moreArr.createData[1] + " 23:59:59"
           }
           if(this.purchaseType !== '9999'){
             params.status = this.purchaseType
           }
-          if(this.moreArr.submitData){
+          if(this.moreArr.submitData&&this.moreArr.submitData[0]){
             params.commitDateStart = this.moreArr.submitData[0] + " 00:00:00"
             params.commitDateEnd = this.moreArr.submitData[1] + " 23:59:59"
           }
