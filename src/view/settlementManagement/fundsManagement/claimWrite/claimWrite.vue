@@ -175,7 +175,7 @@
                       <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
                       <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
                       <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
-                      <claim ref="claim"/>
+                      <claim ref="claim" @selection='getSelection' />
                     </div>
                   </TabPane>
                   <TabPane label="连锁待分配款项">
@@ -302,6 +302,7 @@
   import otherPaymentClaim from "@/view/settlementManagement/fundsManagement/claimWrite/components/otherPaymentClaim";
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import moment from "moment";
+import { forEach } from '@/libs/tools';
 
   export default {
     name: "claimWrite",
@@ -1059,7 +1060,7 @@
           this.$refs.otherCollectionClaims.claimTit = claimTit;
           if (this.claimedSubjectList[0].incomeMoney > 0) {
             this.claimedSubjectList.map(item => {
-              item.incomeMoney = item.unClaimedAmt;
+              // item.incomeMoney = item.unClaimedAmt;
               if (claimTit = "预收款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
                 item.balanceMoney = Math.abs(item.unClaimedAmt);
@@ -1090,7 +1091,7 @@
           this.$refs.otherPaymentClaim.claimTit = claimTit;
           if (Math.abs(this.claimedSubjectList[0].paidMoney)>0 || this.claimedSubjectList[0].incomeMoney <= 0) {
             this.claimedSubjectList.map(item => {
-              item.paidMoney = item.unClaimedAmt;
+              // item.paidMoney = item.unClaimedAmt;
               if (claimTit = "预付款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
                 // item.incomeMoney=item.rpAmt
@@ -1342,6 +1343,13 @@
         this.distributionPage.page = 1;
         this.distributionPage.size = val;
         this.distributionList();
+      },
+      getSelection(selection){
+        let count = 0
+        selection.forEach(item => {
+          count += item.unClaimedAmt
+        })
+        this.claimedAmt = count
       }
     }
   };
