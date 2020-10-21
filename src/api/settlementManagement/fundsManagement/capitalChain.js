@@ -155,11 +155,11 @@ export function getSubjectType (params){
 
 
 //获取开票单位
-export function getIssuingList (params){
+export function getIssuingList (data){
   return axios.request({
     url: `${api.omsSettle}/issuingOffice/queryAll`,
-    method: 'get',
-    params
+    method: 'post',
+    data
   });
 }
 
