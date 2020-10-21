@@ -175,7 +175,7 @@
                       <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
                       <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
                       <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
-                      <claim ref="claim" @selection='getSelection' />
+                      <claim ref="claim" @selection1='getSelection' />
                     </div>
                   </TabPane>
                   <TabPane label="连锁待分配款项">
