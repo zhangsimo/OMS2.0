@@ -628,10 +628,12 @@ export default {
           Reflect.deleteProperty(obj, key);
         }
       }
-      obj.page = this.page.num - 1 
-      obj.size = this.page.size
+      
+      let params = {}
+      params.page = this.page.num - 1 
+      params.size = this.page.size
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      findByDynamicQuery(obj).then(res => {
+      findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
