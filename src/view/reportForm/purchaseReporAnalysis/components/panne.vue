@@ -166,7 +166,7 @@
   import {getSupplierTreeList} from '@/api/system/essentialData/supplierManagement'
   import {getCarPartClass} from "_api/parts";
   import {getCarBrandAll} from "_api/system/systemSetting/Initialization";
-
+  import {ThisMonthStr} from "_c/getDate/index_bill.js"
   export default {
     components: {QuickDate},
     props: {
@@ -214,7 +214,7 @@
           carModelName: "",//品牌车型
           partInnerCode: "",//配件内码
           partCode: "",//配件编码
-          enterDate: ToDayStr(), // 提交日期
+          enterDate: ThisMonthStr(), // 提交日期
           orgid: "" // 门店
         },
         moreModel: false,//更多查询
@@ -321,7 +321,7 @@
       async treeInit() {
         let res = await getCarPartClass();
         this.typepf = res;
-        console.log(res,11111)
+        // console.log(res,11111)
         if (this.search.partTypeF) {
           this.changetype(this.search.partTypeF);
         }
