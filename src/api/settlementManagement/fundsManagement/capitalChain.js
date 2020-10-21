@@ -155,11 +155,30 @@ export function getSubjectType (params){
 
 
 //获取开票单位
-export function getIssuingList (data){
+export function getIssuingList (data,params){
   return axios.request({
     url: `${api.omsSettle}/issuingOffice/queryAll`,
     method: 'post',
+    data,
+    params
+  });
+}
+
+//新增、编辑开票单位
+export function issuingSaveOrUpdate (data){
+  return axios.request({
+    url: `${api.omsSettle}/issuingOffice/saveOrUpdate`,
+    method: 'post',
     data
+  });
+}
+
+//禁用，启动开票单位
+export function issuingUpdateStatus (params){
+  return axios.request({
+    url: `${api.omsSettle}/issuingOffice/updateStatus`,
+    method: 'get',
+    params
   });
 }
 

@@ -43,16 +43,6 @@
             title="序号"
           ></vxe-table-column>
           <vxe-table-column
-            field="unsalableQty"
-            title="操作"
-            width="120"
-          >
-            <template v-slot="{row}">
-              <Button class="mr10" size="small" v-has="'add'">编辑</Button>
-              <Button size="small" v-has="'add'">删除</Button>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column
             show-overflow="tooltip"
             field="areaName"
             title="所属区域"
@@ -116,7 +106,31 @@
               <tag v-for="v in row.shopNameList">{{v.shopName}}</tag>
             </template>
           </vxe-table-column>
+          <vxe-table-column
+            field="unsalableQty"
+            title="操作"
+            width="120"
+          >
+            <template v-slot="{row}">
+              <Button class="mr10" size="small" @click="addIssuing(row)">编辑</Button>
+              <Button type="error" size="small" v-if="row.status==0" @click="changeStatus(row)">禁用</Button>
+              <Button type="success" size="small" v-if="row.status==1" @click="changeStatus(row)">启用</Button>
+            </template>
+          </vxe-table-column>
         </vxe-table>
+
+        <Page
+          size="small"
+          :current="page.num"
+          class-name="page-con fr pt10"
+          :total="page.total"
+          :page-size="page.size"
+          @on-change="changePage"
+          @on-page-size-change="changeSize"
+          show-sizer
+          show-total
+          :page-size-opts="[10, 20, 30,50]"
+        ></Page>
       </div>
     </section>
     <Modal
@@ -129,7 +143,7 @@
         <Row>
           <Col span="11">
             <FormItem label="所属区域：" prop="areaId">
-              <Select v-model="formValidate.areaId" style="width:190px" label-in-value>
+              <Select v-model="formValidate.areaId" style="width:190px" @on-change="changeArea" label-in-value>
                 <Option v-if="item.id!=='0'" v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.companyName }}</Option>
               </Select>
             </FormItem>
@@ -159,8 +173,8 @@
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="发票种类：" prop="invoiceTypeCode">
-              <Select v-model="formValidate.invoiceTypeCode" style="width:190px" filterable>
+            <FormItem label="发票种类：" prop="invoiceType">
+              <Select v-model="formValidate.invoiceType" style="width:190px" filterable>
                 <Option
                   v-for="item in invoiceMap"
                   :value="item.itemCode"
@@ -171,11 +185,11 @@
           </Col>
           <Col span="11">
             <FormItem label="发票版本：" prop="invoiceVersion">
-              <Select v-model="formValidate.invoiceVersion" style="width:190px" filterable>
+              <Select v-model="formValidate.invoiceVersion" @on-change="issuingXE" style="width:190px" filterable>
                 <Option
                   v-for="item in InvoiceVersion"
-                  :value="item.itemValueOne"
-                  :key="item.itemValueOne"
+                  :value="item.itemCode"
+                  :key="item.itemCode"
                 >{{item.itemName}}</Option>
               </Select>
             </FormItem>
@@ -184,33 +198,33 @@
         <Row>
           <Col span="11">
             <FormItem label="适用税率：" prop="taxRate">
-              <Select v-model="formValidate.taxRate" style="width:190px" filterable>
+              <Select v-model="formValidate.taxRate" @on-change="issuingXE" style="width:190px" filterable>
                 <Option
                   v-for="item in taxRate"
-                  :value="item.itemValueOne"
-                  :key="item.itemValueOne"
+                  :value="item.itemCode"
+                  :key="item.itemCode"
                 >{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="开票限额：">
-              <Input disabled style="width:190px" :value="issuingXE"></Input>
+            <FormItem label="开票限额：" prop="invoiceQuota">
+              <Input disabled style="width:190px" :value="formValidate.invoiceQuota"></Input>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="22">
-            <FormItem label="可见门店：" prop="strShopList">
-              <Input class="w350" v-model="formValidate.strShopList"></Input>
+            <FormItem label="可见门店：" prop="shopListName">
+              <Input class="w350" v-model="formValidate.shopListName" readonly></Input>
               <Button class="ml10" @click="openStoreModal">选择</Button>
             </FormItem>
           </Col>
         </Row>
       </Form>
       <div slot="footer">
-        <Button class="mr10" type="primary" v-has="'add'">保存</Button>
-        <Button v-has="'add'">取消</Button>
+        <Button class="mr10" type="primary" @click="submitForm('proModalForm')">保存</Button>
+        <Button @click="issuingInfo=false">取消</Button>
       </div>
     </Modal>
     <store-alocated ref="StoreModal" @TreeValue="getTreeValue"></store-alocated>
@@ -218,7 +232,7 @@
 </template>
 
 <script>
-  import {are, goshop,getIssuingList} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are, goshop,getIssuingList,issuingSaveOrUpdate,issuingUpdateStatus} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getDigitalDictionary} from "../../../../api/system/essentialData/clientManagement";
   import StoreAlocated
     from "../../../settlementManagement/fundsManagement/accountRegistration/components/components/StoreAlocated";
@@ -236,11 +250,42 @@
         issuingInfo:false,
         //开票信息数据字段
         formValidate:{
-          shopListName:'111'
+          areaId:'',//区域ID
+          areaName:'',//区域名称
+          orgid:'',//门店ID
+          shopName:'',//门店名称
+          shopCode:'',//门店号
+          name:'',//发票单位
+          invoiceType:'',//发票种类
+          invoiceVersion:'',//发票版本
+          taxRate:'',//税率
+          invoiceQuota:'',//开票限额
+          strShopList:'',//可见门店Id
+          shopListName:''//可见门店名称
         },
 
         ruleValidate:{
-
+          areaId:[
+            {required: true, message: '所属区域不能为空', trigger: 'change'}
+          ],
+          orgid:[
+            {required: true, message: '所属门店不能为空', trigger: 'change'}
+          ],
+          name:[
+            {required: true, message: '发票单位不能为空', trigger: 'blur'}
+          ],
+          invoiceType:[
+            {required: true, message: '发票种类不能为空', trigger: 'change'}
+          ],
+          invoiceVersion:[
+            {required: true, message: '发票版本不能为空', trigger: 'change'}
+          ],
+          taxRate:[
+            {required: true, message: '适用税率不能为空', trigger: 'change'}
+          ],
+          shopListName:[
+            {required: true, message: '可见门店不能为空', trigger: 'blur'}
+          ],
         },
 
         Branchstore: [{id: "0", companyName: '全部'}], //区域数组
@@ -252,15 +297,19 @@
         //可见门店id
         shopList:[],
         tableData:[],
+
+        //分页信息
+        page:{
+          num:1,
+          total:0,
+          size:10
+        }
       }
     },
     computed:{
-		  issuingXE(){
-        return ((this.formValidate.version||0)*(1+(this.formValidate.rate)||0)).toFixed(0)
-      },
+
     },
     mounted(){
-		  this.getAllAre();
 		  this.getShop();
       this.getList();
     },
@@ -278,7 +327,7 @@
         let data = {}
         data.supplierTypeSecond = this.formValidate.areaId ? this.formValidate.areaId : '0';
         // console.log(this.ChangeData.areaId)
-        this.shopListArr = [{id: "0", name: '全部'}]
+        this.shopListArr = [{id: "0", shortName: '全部'}]
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopListArr = [...this.shopListArr, ...res.data];
@@ -287,15 +336,34 @@
 
       addIssuing(row){
         this.issuingInfo = true;
-        if(row){
-
-          // this.formValidate.shopNumber =
+        this.shopList = [];
+        this.$refs['proModalForm'].resetFields();
+        if(row.hasOwnProperty("id")){
+          this.formValidate.id = row.id;
+          this.formValidate.areaId = row.areaId;
+          this.formValidate.areaName = row.areaName;
+          this.formValidate.orgid = row.orgid;
+          this.formValidate.shopName = row.shopName;
+          this.formValidate.shopCode = row.shopCode;
+          this.formValidate.name = row.name;
+          this.formValidate.invoiceType = row.invoiceType;
+          this.formValidate.invoiceVersion = row.invoiceVersion;
+          this.formValidate.taxRate = row.taxRate;
+          this.formValidate.invoiceQuota = row.invoiceQuota;
+          this.formValidate.shopListName = row.shopNameList.map(item => {
+            this.shopList.push(item.id);
+            return item.shopName
+          }).join(';');
+          this.formValidate.strShopList = this.shopList;
         }
       },
 
+
+
       //显示门店弹框
       openStoreModal() {
-        this.$refs.StoreModal.openModal({shopList:this.shopList})
+        this.$refs.StoreModal.openModal({shopList:this.shopList});
+
       },
       //获取子组件显示门店
       getTreeValue(value) {
@@ -307,8 +375,8 @@
         })
 
         this.formValidate.shopListName = newArr.join(";");
-        this.shopList=Array.from(new Set(this.shopList))
-        console.log(this.shopList)
+        this.shopList=Array.from(new Set(this.shopList));
+        this.formValidate.strShopList = this.shopList;
         // console.log(this.shopList,value,1111)
       },
 
@@ -336,7 +404,8 @@
       changeShopIssuing(v){
         let filterData = this.shopListArr.filter(item => item.id==v);
         if(filterData.length>0){
-          this.formValidate.code = filterData[0].code;
+          this.formValidate.shopCode = filterData[0].code;
+          this.formValidate.shopName   = filterData[0].shortName;
         }
       },
 
@@ -347,8 +416,14 @@
         if(this.name.trim()){
           req.name = this.name
         }
-        req.orgid = this.shopId;
-        const rep = await getIssuingList(req);
+        if(this.shopId!='0'){
+          req.orgid = this.shopId
+        }
+        // req.orgid = this.shopId=='0'?"":this.shopId;
+        let params = {};
+        params.page = this.page.num - 1;
+        params.size = this.page.size;
+        const rep = await getIssuingList(req,params);
         this.loading = false;
         if(rep.code==0){
           this.tableData = rep.data['content']||[];
@@ -356,16 +431,68 @@
             if(item.shopNameList){
               item.shopNameList = JSON.parse(item.shopNameList)
             }
-          })
+          });
+          this.page.total = rep.data.totalElements;
         }
-
       },
 
       modelShowHide(v){
         if(v){
-          this.getRate();
+          if(this.InvoiceVersion.length==0){
+            this.getRate();
+          }
+          if(this.Branchstore.length<2){
+            this.getAllAre();
+          }
+        }else{
+          this.$refs.StoreModal.getTreeList();
         }
-      }
+      },
+      //新增开票单位
+      submitForm(name){
+        this.$refs[name].validate(async (valid) => {
+          if (valid) {
+            console.log(this.formValidate)
+            let rep = await issuingSaveOrUpdate(this.formValidate);
+            if(rep.code==0){
+              this.$Message.success('操作成功!');
+              this.issuingInfo = false;
+              this.getList();
+            }
+          } else {
+          }
+        })
+      },
+      //获取开票限额
+      issuingXE(){
+        let filterData = this.InvoiceVersion.filter(item => item.itemCode==this.formValidate.invoiceVersion);
+        let filterDataRate = this.taxRate.filter(item => item.itemCode==this.formValidate.taxRate);
+        this.formValidate.invoiceQuota = ((filterData.length>0?filterData[0].itemValueOne:0)*(1+(filterDataRate.length>0?filterDataRate[0].itemValueOne:0))).toFixed(0);
+      },
+      //获取选中区域名称
+      changeArea(v){
+        if(v){
+          this.formValidate.areaName = v.label;
+        }
+      },
+      //修改状态
+      async changeStatus(row){
+        let rep = await issuingUpdateStatus({id:row.id,status:row.status?0:1});
+        if(rep.code==0){
+          this.$Message.success('操作成功!');
+          this.getList();
+        }
+      },
+      //分页
+      changePage(p) {
+        this.page.num = p;
+        this.getList();
+      },
+      changeSize(size) {
+        this.page.num = 1;
+        this.page.size = size;
+        this.getList();
+      },
     }
 	}
 </script>
