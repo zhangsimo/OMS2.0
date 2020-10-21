@@ -29,12 +29,12 @@
           </div>
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
-            <Poptip placement="bottom-start" v-model="moreModel">
+            <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
               <Button class="mr10" @click="moreOpen">更多查询</Button>
               <div slot="content" class="h300 pr20" style="overflow-y: scroll">
-                <div class="data ml30 pl25">
-                  <Row class="mb30">
-                    <span>入库日期: </span>
+                <div class="data ml10 pl50">
+                  <Row class="mb20">
+                    <span class="ml10">入库日期: </span>
                     <DatePicker
                       type="daterange"
                       placement="bottom-end"
@@ -44,7 +44,7 @@
                     ></DatePicker>
                   </Row>
                 </div>
-                <Form :label-width="80" class="ml10 pl25">
+                <Form :label-width="100" class="ml10 pl25">
                   <FormItem label="供应商编码: ">
                     <Input type="text" class="w300 ml5" v-model="search.guestCode"/>
                   </FormItem>
@@ -106,9 +106,9 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="品牌   : ">
+                  <FormItem label="品牌: ">
                     <Select
-                      class="w240 ml5"
+                      class="w300 ml5"
                       clearable
                       label-in-value
                       filterable
@@ -131,7 +131,7 @@
                   <Col span="18">
                     <Row>
                       <Col span="6">
-                        <Button class="mr15" type="primary" @click="query">确定</Button>
+                        <Button class="ml20" type="primary" @click="query">确定</Button>
                       </Col>
                       <Col span="12">
                         <Button @click="cancelContent(0)">取消</Button>
@@ -139,7 +139,7 @@
                     </Row>
                   </Col>
                   <Col span="6" class="flex" style="flex-direction: row-reverse;">
-                    <Button class="ml15" type="primary" @click="cancelContent(1)">清空条件</Button>
+                    <Button class="ml30" type="primary" @click="cancelContent(1)">清空条件</Button>
                   </Col>
                 </Row>
               </div>
@@ -393,6 +393,9 @@
         } else if (type == 1) {//更多查询点击清空查询
           this.resetMoreReseach();
         }
+      },
+      poperHide(){
+        this.moreModel=false;
       },
       getmoreData(data) {
         if (data != null) {
