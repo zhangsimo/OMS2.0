@@ -22,7 +22,7 @@
     data() {
       return {
         val: [],
-        searchQuick: "1",
+        searchQuick: "5",
         dateQiuck: [
           // { value: "0", label: "请选择" },
           { value: "1", label: "今天" },
@@ -82,13 +82,13 @@
             this.val = prevYearStr();
             break;
           default:
-            this.val = ToDayStr();
+            this.val = ThisMonthStr();
             break;
         }
         this.$emit("quickDate", this.val);
       },
       resetFun(){
-        this.getval(this.searchQuick='1');
+        this.getval(this.searchQuick='5');
       }
     },
     computed: {}
