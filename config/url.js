@@ -61,8 +61,8 @@ const test = {
   authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // omsBatch: 'http://192.168.21.59:9260', // 9260
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
-  omsSettle: "http://192.168.30.97:9270",
-  // omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
+  // omsSettle: "http://192.168.30.21:9270",
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   // omsSotck: "http://192.168.21.59:9280", //9280
   uploadApi:
