@@ -109,10 +109,10 @@
             </Modal>
           </div>
           <div class="db mr10">
-            <Checkbox v-model="single">显示有库存</Checkbox>
+            <Checkbox @on-change="queryFun" v-model="stockBoolean">显示有库存</Checkbox>
           </div>
           <div class="db mr10">
-            <Checkbox v-model="single">今日到货产品</Checkbox>
+            <Checkbox @on-change="queryFun" v-model="ArrivalBoolean">今日到货产品</Checkbox>
           </div>
         </div>
       </div>
@@ -351,7 +351,12 @@ export default {
         ]
       },
       //一键分配loading
-      oneLoading:false
+      oneLoading:false,
+
+      //是否有库存，是否今日到货
+      stockBoolean:false,
+      ArrivalBoolean:false,
+
     };
   },
   created() {
@@ -437,6 +442,8 @@ export default {
     search(params) {
       let req = {...params, ...this.pageList};
       req.page = req.page-1;
+      req.stockBoolean = this.stockBoolean;
+      req.ArrivalBoolean = this.ArrivalBoolean;
       // params.storeId = this.idValue;
       jinqiaopinliebiao(req)
         .then(res => {
