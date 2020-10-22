@@ -105,6 +105,8 @@
             </div>
           </div>
         </section>
+<!--        对账单单号明细-->
+
         <section class="con-box">
           <div class="inner-box">
             <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
@@ -517,7 +519,6 @@
   import ClientData from "../../system/essentialData/clientManagement/ClientData"
   import ClientData2 from "../../system/essentialData/supplierManagement/ClientData"
   import requestCode from "@/view/documentApproval/component/popWindow/RequestCode"
-
   import {
     getCustomerDetails,
     getNewClient,
@@ -536,7 +537,6 @@
     getPaymentName
   } from "@/api/bill/saleOrder";
   import index from "../../admin/roles";
-  import render from "@/components/message/base/render";
   import {findGuest} from "@/api/settlementManagement/advanceCollection";
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import moment from "moment";
@@ -633,6 +633,11 @@
           {
             title: "已勾选明细统计",
             key: "Detailedstatistics",
+            className: "tc"
+          },
+          {
+            title:'对账单申请',
+            key:'accountNo',
             className: "tc"
           },
           {
