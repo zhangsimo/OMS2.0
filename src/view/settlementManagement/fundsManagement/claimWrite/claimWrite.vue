@@ -34,9 +34,10 @@
     <section class="con-box">
       <div class="inner-box">
         <Split v-model="split1">
-          <div slot="left">
+          <div slot="left"  v-show="!rightValue">
             <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
             <!--            <span>快速查询：</span>-->
+            <div style="line-height: 36px">
             <quickDate class="w60 mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
             <span>申请日期：</span>
             <Date-picker
@@ -79,16 +80,20 @@
             <!--            </Select>-->
             <span class="ml10">金额：</span>
             <InputNumber v-model="amtNo" class="w80"/>
-            <button class="ivu-btn ivu-btn-default ml10 mt10" type="button" @click="queryNoWrite">
+            <button class="ivu-btn ivu-btn-default ml10  mr10" type="button" @click="queryNoWrite">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
+            <Tooltip :content="leftValue ? '缩小' : '放大'" placement="bottom">
+              <Icon @click.native="handleChangeLeft" :custom="leftValue ? 'iconfont iconsuoxiaoicon icons' : 'iconfont iconkuodaicon icons'" style="cursor: pointer;"></Icon>
+            </Tooltip>
+            </div>
             <Table
               border
               class="mt10"
               :columns="accountNoWrite"
               :data="accountNoWriteData"
-              max-height="400"
+              max-height="550"
               highlight-row
               @on-current-change="accountNoWriteChange"
             ></Table>
@@ -105,139 +110,151 @@
               @on-page-size-change="sizeChangeNo"
             />
           </div>
-          <div slot="right" style="height:100%">
-            <Split v-model="split2" mode="vertical">
-              <div slot="top" class="pl10">
-                <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
-                <!--                <span class="pl10">快速查询：</span>-->
-                <quickDate class="w80 mr10" ref="quickDate2" @quickDate="quickDate2"></quickDate>
-                <span>申请日期：</span>
-                <Date-picker
-                  format="yyyy-MM-dd"
-                  :value="value2"
-                  @on-change="changedate2"
-                  type="daterange"
-                  placeholder="选择日期"
-                  class="w200 mr10"
-                ></Date-picker>
-                <span>分店名称：</span>
-                <Select v-model="model2" filterable class="w150 mr10" :disabled="selectShopList">
-                  <Option
-                    v-for="item in orgList"
-                    :value="item.id"
-                    :key="item.id"
-                  >{{ item.name }}
-                  </Option>
-                </Select>
-                <span class="ml10">往来单位：</span>
-                <Select
-                  v-model="companyIdClaim"
-                  class="w100"
-                  clearable
-                  filterable
-                  remote
-                  :loading="remoteloading2"
-                  :remote-method="getOne2"
-                >
-                  <Option v-for="item in company2" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-                <span class="ml10">金额：</span>
-                <InputNumber v-model="amtClaim" class="w80"/>
-                <span class="ml10">对方户名：</span>
-                <Input v-model="bankNameOClaim" class="w100 mr10"/>
-                <span>业务类别：</span>
-                <Select v-model="businessType" clearable class="w150 mr10">
-                  <Option
-                    v-for="item in businessTypeList"
-                    :value="item.itemName"
-                    :key="item.id"
-                  >{{ item.itemName }}
-                  </Option>
-                </Select>
-                <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
-                  <i class="iconfont iconchaxunicon"></i>
-                  <span>查询</span>
-                </button>
-                <br/>
-                <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete" :disabled="cancelDis">撤销分配</Button>
-                <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
-                <Button class="mt10 ml10" @click="openOtherCollectionClaims('预收款认领')">预收款认领</Button>
-                <Button class="mt10 ml10" @click="openOtherPaymentClaims('预付款认领')">预付款认领</Button>
-                <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
-                <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
-                <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
-                <claim ref="claim"/>
-              </div>
-              <div slot="bottom" class="pl10">
-                <h4 class="mb10 p5 pl10" style="background:#F2F2F2">连锁待分配款项</h4>
-                <!--                <span class="pl10 mr10">快速查询：</span>-->
-                <quickDate class="w60 mr10" ref="quickDate3" @quickDate="quickDate3"></quickDate>
-                <span>发生日期：</span>
-                <Date-picker
-                  format="yyyy-MM-dd"
-                  :value="value3"
-                  @on-change="changedate3"
-                  type="daterange"
-                  placeholder="选择日期"
-                  class="w200 mr10"
-                  transfer
-                ></Date-picker>
-                <span class="ml10">区域：</span>
-                <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable>
-<!--                  :disabled="selectShopList"-->
-                  <Option
-                    v-for="item in areaList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}
-                  </Option>
-                </Select>
-                <span class="ml10">门店：</span>
-                <Select transfer v-model="orgId" class="w150" filterable >
-<!--                  :disabled="selectShopList"-->
-                  <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-                <span class="ml10">金额：</span>
-                <InputNumber v-model="amtDis" class="w80"/>
-                <span class="ml10">对方户名：</span>
-                <Input v-model="bankNameODis" class="w100"/>
-                <button
-                  class="ivu-btn ivu-btn-default ml10"
-                  type="button"
-                  @click="queryDistribution"
-                >
-                  <i class="iconfont iconchaxunicon"></i>
-                  <span>查询</span>
-                </button>
-                <button
-                  class="ivu-btn ivu-btn-default ml10 mt10"
-                  type="button"
-                  :disabled="distributionLoading"
-                  @click="distributionShop"
-                >分配至本店
-                </button>
-                <Table
-                  border
-                  class="mt10"
-                  :columns="distribution"
-                  :data="distributionData"
-                  max-height="400"
-                  @on-selection-change="distributionSelection"
-                ></Table>
-                <Page
-                  show-sizer
-                  show-total
-                  show-elevator
-                  class="mt10 tr"
-                  size="small"
-                  :total="distributionPage.total"
-                  :current="distributionPage.page"
-                  :page-size="distributionPage.size"
-                  @on-change="pageChange"
-                  @on-page-size-change="sizeChange"
-                />
-              </div>
-            </Split>
+          <div slot="right" style="height:100%" v-show="!leftValue">
+                <Tabs type="card">
+                  <TabPane label="本店待认领款">
+                    <div class="card">
+                      <div style="line-height: 36px">
+                        <quickDate class="w80 mr10" ref="quickDate2" @quickDate="quickDate2"></quickDate>
+                        <span>申请日期：</span>
+                        <Date-picker
+                          format="yyyy-MM-dd"
+                          :value="value2"
+                          @on-change="changedate2"
+                          type="daterange"
+                          placeholder="选择日期"
+                          class="w200 mr10"
+                        ></Date-picker>
+                        <span>分店名称：</span>
+                        <Select v-model="model2" filterable class="w150 mr10" :disabled="selectShopList">
+                          <Option
+                            v-for="item in orgList"
+                            :value="item.id"
+                            :key="item.id"
+                          >{{ item.name }}
+                          </Option>
+                        </Select>
+                        <span class="ml10">往来单位：</span>
+                        <Select
+                          v-model="companyIdClaim"
+                          class="w100"
+                          clearable
+                          filterable
+                          remote
+                          :loading="remoteloading2"
+                          :remote-method="getOne2"
+                        >
+                          <Option v-for="item in company2" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                        <span class="ml10">金额：</span>
+                        <InputNumber v-model="amtClaim" class="w80"/>
+                        <span class="ml10">对方户名：</span>
+                        <Input v-model="bankNameOClaim" class="w100 mr10"/>
+                        <span>业务类别：</span>
+                        <Select v-model="businessType" clearable class="w150 mr10">
+                          <Option
+                            v-for="item in businessTypeList"
+                            :value="item.itemName"
+                            :key="item.id"
+                          >{{ item.itemName }}
+                          </Option>
+                        </Select>
+                        <button class="ivu-btn ivu-btn-default ml10 mr10" type="button" @click="queryClaimed">
+                          <i class="iconfont iconchaxunicon"></i>
+                          <span>查询</span>
+                        </button>
+                        <Tooltip :content="rightValue ? '缩小' : '放大'" placement="bottom">
+                          <Icon @click.native="handleChangeRight" :custom="leftValue ? 'iconfont iconsuoxiaoicon icons' : 'iconfont iconkuodaicon icons'" style="cursor: pointer;"></Icon>
+                        </Tooltip>
+                      </div>
+                      <br/>
+                      <Button class="mt10 ml10" v-has="'revoke'" @click="distributionDelete" :disabled="cancelDis">撤销分配</Button>
+                      <Button class="mt10 ml10" v-has="'now'" @click="openSubjecMoadl">转当期损益</Button>
+                      <Button class="mt10 ml10" @click="openOtherCollectionClaims('预收款认领')">预收款认领</Button>
+                      <Button class="mt10 ml10" @click="openOtherPaymentClaims('预付款认领')">预付款认领</Button>
+                      <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
+                      <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
+                      <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
+                      <claim ref="claim"/>
+                    </div>
+                  </TabPane>
+                  <TabPane label="连锁待分配款项">
+                    <div class="card">
+                      <div style="line-height: 36px">
+                        <quickDate class="w60 mr10" ref="quickDate3" @quickDate="quickDate3"></quickDate>
+                        <span>发生日期：</span>
+                        <Date-picker
+                          format="yyyy-MM-dd"
+                          :value="value3"
+                          @on-change="changedate3"
+                          type="daterange"
+                          placeholder="选择日期"
+                          class="w200 mr10"
+                          transfer
+                        ></Date-picker>
+                        <span class="ml10">区域：</span>
+                        <Select transfer v-model="areaId" class="w100" @on-change="getShop(areaId)" filterable>
+                          <!--                  :disabled="selectShopList"-->
+                          <Option
+                            v-for="item in areaList"
+                            :value="item.value"
+                            :key="item.value"
+                          >{{ item.label }}
+                          </Option>
+                        </Select>
+                        <span class="ml10">门店：</span>
+                        <Select transfer v-model="orgId" class="w150" filterable >
+                          <!--                  :disabled="selectShopList"-->
+                          <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                        <span class="ml10">金额：</span>
+                        <InputNumber v-model="amtDis" class="w80"/>
+                        <span class="ml10">对方户名：</span>
+                        <Input v-model="bankNameODis" class="w100"/>
+                        <button
+                          class="ivu-btn ivu-btn-default ml10"
+                          type="button"
+                          @click="queryDistribution"
+                        >
+                          <i class="iconfont iconchaxunicon"></i>
+                          <span>查询</span>
+                        </button>
+                        <button
+                          class="ivu-btn ivu-btn-default ml10 mr10"
+                          type="button"
+                          :disabled="distributionLoading"
+                          @click="distributionShop"
+                        >分配至本店
+                        </button>
+                        <Tooltip :content="rightValue ? '缩小' : '放大'" placement="bottom">
+                          <Icon @click.native="handleChangeRight" :custom="leftValue ? 'iconfont iconsuoxiaoicon icons' : 'iconfont iconkuodaicon icons'" style="cursor: pointer;"></Icon>
+                        </Tooltip>
+                      </div>
+                      <Table
+                        border
+                        class="mt10"
+                        :columns="distribution"
+                        :data="distributionData"
+                        max-height="550"
+                        @on-selection-change="distributionSelection"
+                      ></Table>
+                      <Page
+                        show-sizer
+                        show-total
+                        show-elevator
+                        class="mt10 tr"
+                        size="small"
+                        :total="distributionPage.total"
+                        :current="distributionPage.page"
+                        :page-size="distributionPage.size"
+                        @on-change="pageChange"
+                        @on-page-size-change="sizeChange"
+                      />
+
+                    </div>
+                  </TabPane>
+                </Tabs>
+
             <!-- 转当期损益 -->
             <subject ref="subjecModal" :clime="claimedSubjectList"></subject>
             <!-- 预收款认领 collectionClaims-->
@@ -317,7 +334,6 @@
         remoteloading2: false,
         title: "预付款认领", //弹框标题
         split1: 0.4, //左右面板分割
-        split2: 0.52, //上下面板分割
         orgName: "", //门店
         companyIdNo: "", //未核销往来单位
         companyIdClaim: "", //待认领往来单位
@@ -798,7 +814,8 @@
         currentDistribution: [], //本店待认领款选中的数据
         claimedAmt: null, //认领款勾选金额
         difference: null, //差异
-
+        leftValue:false,//左侧方法判断
+        rightValue:false,//右侧判断方法
         writeBool: false,//判断 是否可以打开核销对账单
       };
     },
@@ -843,6 +860,29 @@
       }
     },
     methods: {
+      //左侧点击放大
+      handleChangeLeft(){
+        if (this.leftValue){
+          this.leftValue = !this.leftValue
+          this.split1 = 0.4
+        } else {
+          this.split1 = 1
+          this.leftValue = !this.leftValue
+        }
+      },
+
+      //右侧点击放大
+      handleChangeRight(){
+        if (this.rightValue){
+          this.rightValue = !this.rightValue
+          this.split1 = 0.4
+
+        } else {
+          this.split1 = 0
+          this.rightValue = !this.rightValue
+        }
+      },
+
       // 快速查询 未核销对账单
       quickDate(data) {
         this.value = data ? data : ["", ""];
@@ -1311,4 +1351,7 @@
   .bottom-pane {
     overflow: auto;
   }
+ .card {
+   padding-left: 10px;
+ }
 </style>

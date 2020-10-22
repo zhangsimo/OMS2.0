@@ -22,7 +22,7 @@
               class="w200"
             ></Date-picker>
           </div>
-          <div class="mr10 flexd">
+          <div class="mr10 db">
             <span>发票销售方名称：</span>
             <Select v-model="form.invoiceSellerName" style="width:160px" clearable filterable>
               <Option
@@ -34,7 +34,7 @@
               >
             </Select>
           </div>
-          <div class="mr10 flexd">
+          <div class="mr10 db">
             <span>往来单位：</span>
             <Select
               v-model="form.guestId"
