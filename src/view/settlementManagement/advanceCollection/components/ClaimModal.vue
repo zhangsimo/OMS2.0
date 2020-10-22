@@ -3,12 +3,12 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <!-- <div class="fr" v-if="this.$route.name !== 'settlementManagementExpensereimbursement'">
+        <div class="fr">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
           <Input class="w180 mr10" v-model="calculation"/>
           <Button @click="chooseAuxiliary">辅助计算</Button>
-        </div> -->
+        </div>
       </div>
 
       <vxe-table
@@ -57,6 +57,7 @@
               @change="changeNum"
               v-model="row.thisClaimedAmt"
               :controls="false"
+              :precision="2"
               size="mini"
             />
           </template>
@@ -78,15 +79,14 @@
       </div>
     </Modal>
     <PreClaimModal ref="PClaimModal"></PreClaimModal>
-    <voucherInput ref="voucherInput"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList"></voucherInput>
   </div>
 </template>
 
 <script>
 import PreClaimModal from "./PreClaimModal"
 import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
-import { addClaim } from "_api/settlementManagement/advanceCollection.js";
-
+import { addClaim } from "_api/settlementManagement/businessBorrowing";
 
 export default {
   components: {
@@ -108,7 +108,8 @@ export default {
           { required: true, message: '请输入认领金额' },
           { type: 'number', message: '请输入数字' }
         ]
-      }
+      },
+      accruedList:[{mateAccountCoding:""}]
     }
   },
   computed: {
@@ -139,12 +140,14 @@ export default {
         }
         total += parseFloat(value)
       })
-      return total
+      return total.toFixed(2)
     },
 
     //弹框打开
     open(){
       this.tableData = []
+      this.amountType == 1 ?this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
+      this.$refs.voucherInput.Classification = true
       this.visibal = true
     },
 
@@ -166,22 +169,12 @@ export default {
       //     this.$message.success('认领成功')
       //   }
       // })
-      if(this.$parent.condition == 1){
-        let flag1 = this.tableData.some(v => {
-          return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.paidMoney
-        })
-        if(flag1){
-          this.$message.error('认领金额超出范围')
-          return
-        }
-      }else{
-        let flag2 = this.tableData.some(v => {
-          return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.incomeMoney
-        })
-        if(flag2){
-          this.$message.error('认领金额超出范围')
-          return
-        }
+      let flag1 = this.tableData.some(v => {
+        return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.unClaimedAmt
+      })
+      if(flag1) {
+        this.$message.error("本次认领金额录入错误，请重新输入")
+        return
       }
       let flag = this.tableData.some(v => {
         return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0 
@@ -201,7 +194,8 @@ export default {
       })
       let obj = {
         financeAccountCashList: this.financeAccountCashList,
-        // guestId
+        loanId:this.$parent.loanId,
+        claimType: this.$parent.claimType
       }
       addClaim(obj).then(res => {
         if(res.code === 0){
@@ -213,6 +207,7 @@ export default {
 
     },
 
+    // 删除表格数据
     deleteItem(row){
       this.tableData = this.tableData.filter(item => item.id !== row.id)
     },
@@ -221,6 +216,7 @@ export default {
       this.currentRow = row
     },
 
+    // 打开认领款弹窗
     openPClaimModal(){
       this.$refs.PClaimModal.open()
     },
@@ -230,6 +226,7 @@ export default {
       this.$refs.voucherInput.subjectModelShowassist = true
     },
 
+    // 选中的数据拼接去重
     setSelectData(list){
       let arr = this.tableData.concat(list)
       const result = new Map()
@@ -237,20 +234,20 @@ export default {
       this.tableData = arr1
     },
 
+    // 改变认领款值触发
     changeNum(newVal,oldVal){
-      // console.log(newVal)
-      // if(newVal === undefined || newVal === null){
-      //   this.$message.error('本次认领金额录入不可为空')
-      // }
-      // if(0 < newVal <= this.currentRow.incomeMoney || 0 < newVal <= this.currentRow.paidMoney) {
-      //   this.$message.error('本次认领金额录入错误，请重新输入')
-      // }
+      if(newVal === undefined || newVal === null){
+        this.$message.error('本次认领金额录入不可为空')
+      }
+      if( newVal < 0 || newVal > this.currentRow.unClaimedAmt) {
+        this.$message.error('本次认领金额录入错误，请重新输入')
+      }
     },
-    validate(num){
-      let reg = /^\d+(?=\.{0,1}\d+$|$)/
-        if(reg.test(num)) return true
-        return false
-    }
+    // validate(num){
+    //   let reg = /^\d+(?=\.{0,1}\d+$|$)/
+    //     if(reg.test(num)) return true
+    //     return false
+    // }
   },
 }
 </script>
@@ -260,12 +257,5 @@ export default {
 .el-input-number{
   width: 100px;
 }
-// /deep/.vxe-table--header{
-//   width: 968px !important;
-// }
-
-// /deep/.vxe-table--body{
-//   width: 968px !important;
-// }
 
 </style>
