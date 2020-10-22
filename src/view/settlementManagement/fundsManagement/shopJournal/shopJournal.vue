@@ -31,7 +31,7 @@
                 v-for="item in shopList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -618,7 +618,7 @@
         // this.model1 = arr[0].supplierTypeSecond
         let data = {}
         data.supplierTypeSecond = this.model1
-        this.shopList = [{id: 0, name: '全部'}]
+        this.shopList = [{id: 0, name: '全部',shortName:"全部"}]
         let rep = await getAccShopList();
         if (rep.code == 0) {
           this.getAccShopList = rep.data
@@ -820,6 +820,7 @@
 
       //查询
       query() {
+        this.page.num=1;
         this.getList()
       },
 
