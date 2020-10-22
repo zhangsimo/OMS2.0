@@ -279,12 +279,9 @@
 
 <script>
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
-  import {getClient} from '@/api/salesManagment/salesOrder'
-  // import selectDealings from "./../bill/components/selectCompany";
   import Monthlyreconciliation from "./Monthlyreconciliation.vue";
   import PrintShow from "./component/PrintShow";
   import {
-    getStorelist,
     getreceivable,
     getSalelist,
     getNumberList
@@ -296,20 +293,14 @@
     payColExportSelect/**导出勾选*/
   } from "@/api/settlementManagement/Import/index.js"
   import {goshop} from '@/api/settlementManagement/shopList';
-  import {getCustomerInformation} from "@/api/system/essentialData/clientManagement";
   import {creat} from "./../components";
   import moment from "moment";
   import {findGuest} from "../../../api/settlementManagement/advanceCollection";
   import {showLoading, hideLoading} from "@/utils/loading"
-  import baseUrl from '_conf/url'
-  import {TOKEN_KEY} from "@/libs/util";
-  import Cookies from "js-cookie";
-
   export default {
     name: 'payMentmanage',
     components: {
       quickDate,
-      // selectDealings,
       Monthlyreconciliation,
       PrintShow
     },
