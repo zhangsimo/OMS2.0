@@ -382,6 +382,7 @@
             @on-current-change="selectTable"
             border
             align="left"
+            :loading="levelLoading"
             :stripe="true"
             :columns="levelType"
             :data="levelList"
@@ -853,6 +854,7 @@
             key: "updateTime",
           },
         ],
+        levelLoading:false,
         //滞销信息
         unsalableType: [
           {
@@ -1025,6 +1027,7 @@
         this.searchForm2.guestName = "";
         this.modal1 = true;
         this.tIndex = 4;
+        this.levelList =[];
         this.getLevelList();
       },
       hander(type) {
@@ -1046,10 +1049,14 @@
       //级别销价请求
       async getLevelList() {
         let data = {}
+        this.levelLoading=true;
         data.partId = this.mainData.partId
         let res = await getUnsalable(data)
         if (res.code === 0) {
+          this.levelLoading=false;
           this.levelList = res.data
+        }else{
+          this.levelLoading=false;
         }
       },
 
