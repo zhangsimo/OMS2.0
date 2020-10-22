@@ -151,7 +151,7 @@ export default {
         data.subjectCode="1122";
         data.claimType=1
       }
-      data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+      data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2?1:this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
       if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
         data.isAuxiliaryAccounting=0 //是否辅助核算类
       }else{

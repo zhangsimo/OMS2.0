@@ -709,7 +709,8 @@ export default {
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row.itemName;
-      this.auxiliaryTypeCode = "CW0011X";
+      this.auxiliaryTypeCode = row.dictCode;
+      this.auxiliaryCode=row.itemCode;
       this.voucherItem = {};
       // console.log(row)
     },

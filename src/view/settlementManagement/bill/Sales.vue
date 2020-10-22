@@ -19,7 +19,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -105,7 +105,7 @@
       return {
         value: [],
         Branchstore: [
-          {id: 0, name: '全部'}
+          {id: 0, name: '全部',shortName:"全部"}
         ], //分店名称
         page: {
           total: 0,
@@ -498,9 +498,9 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               sums[key] = {
@@ -508,7 +508,7 @@
                 value: v.toFixed(2)
               };
             }
-          } else if (index === 11) {
+          } else if (index === 11 || index===6) {
             if (!values.every(value => isNaN(value))) {
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);

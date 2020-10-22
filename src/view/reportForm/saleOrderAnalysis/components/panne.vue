@@ -23,8 +23,6 @@
               </Option
               >
             </Select>
-          </div>
-          <div class="db mr10">
             <Checkbox class="mr20 ml10" v-model="search.guestPart">
               包含内部客户
             </Checkbox>
@@ -36,12 +34,12 @@
               <div slot="content" class="h300 pr20" style="overflow-y: scroll">
                 <div class="data ml10 pl50">
                   <Row class="mb20">
-                    <span class="ml5">出库日期: </span>
+                    <span class="ml10">出库日期: </span>
                     <DatePicker
                       type="daterange"
                       placement="bottom-end"
                       style="width: 300px"
-                      class="ml10"
+                      class="ml5"
                       v-model="search.enterDate"
                     ></DatePicker>
                   </Row>
@@ -133,7 +131,7 @@
                   <Col span="18">
                     <Row>
                       <Col span="6">
-                        <Button class="mr15" type="primary" @click="query">确定</Button>
+                        <Button class="ml20" type="primary" @click="query">确定</Button>
                       </Col>
                       <Col span="12">
                         <Button @click="cancelContent(0)">取消</Button>
@@ -141,7 +139,7 @@
                     </Row>
                   </Col>
                   <Col span="6" class="flex" style="flex-direction: row-reverse;">
-                    <Button class="mr15" type="primary" @click="cancelContent(1)">清空条件</Button>
+                    <Button class="ml30" type="primary" @click="cancelContent(1)">清空条件</Button>
                   </Col>
                 </Row>
               </div>
@@ -337,7 +335,7 @@
 
       },
       select1(option) {
-        this.search.partBrand = option.value || "";
+        this.search.partBrand = option.label;
       },
       //品牌模糊搜索
       async partBrandRemote(query) {
@@ -367,9 +365,6 @@
       // 查询
       query() {
         this.moreModel=false;
-        if (this.search.enterDate[0] == "") {
-          return this.$message.error("出库日期必须选择！")
-        }
         let data = {};
         for (let key in this.search) {
           if (this.search[key]) {

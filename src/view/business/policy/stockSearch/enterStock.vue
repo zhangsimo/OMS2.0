@@ -70,6 +70,7 @@
             show-overflow="title"
             resizable
             auto-resize
+            align="left"
             :loading="outLoading"
             size="mini"
             :data="selfShopStock">
@@ -169,6 +170,7 @@
             show-overflow="title"
             resizable
             auto-resize
+            align="left"
             :loading="enterLoading"
             size="mini"
             :data="contentOne.dataOne"
@@ -282,6 +284,7 @@
             show-overflow="title"
             resizable
             auto-resize
+            align="left"
             :loading="outLoading"
             size="mini"
             :data="contentTwo.dataTwo"
@@ -359,6 +362,7 @@
             border
             :stripe="true"
             :columns="occupy"
+            align="left"
             :data="contentThree.dataThree"
             show-summary
             :summary-method="handleSummary4"
@@ -377,6 +381,8 @@
             size="small"
             @on-current-change="selectTable"
             border
+            align="left"
+            :loading="levelLoading"
             :stripe="true"
             :columns="levelType"
             :data="levelList"
@@ -392,6 +398,7 @@
           <Table
             class="table-highlight-row"
             highlight-row
+            align="left"
             size="small"
             @on-current-change="selectTable"
             border
@@ -509,83 +516,71 @@
           {
             title: "序号",
             type: "index",
-            align: "center",
             key: "index",
             minWidth: 40
           },
           {
             title: "配件编码",
-            align: "center",
             key: "partCode",
             tooltip:true,
             minWidth: 110
           },
           {
             title: "配件名称",
-            align: "center",
             tooltip:true,
             key: "partName",
             minWidth: 110
           },
           {
             title: "单位",
-            align: "center",
             key: "enterUnitId",
             tooltip:true,
             minWidth: 40
           },
           {
             title: "品牌",
-            align: "center",
             key: "partBrand",
             tooltip:true,
             minWidth: 80
           },
           {
             title: "品牌车型",
-            align: "center",
             key: "carModelName",
             tooltip:true,
             minWidth: 90
           },
           {
             title: "仓库",
-            align: "center",
             key: "storeName",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "供应商",
-            align: "center",
             key: "guestName",
             tooltip:true,
             minWidth: 120
           },
           {
             title: "入库日期",
-            align: "center",
             key: "createTime",
             tooltip:true,
             minWidth: 120
           },
           {
             title: "入库人",
-            align: "center",
             key: "enterMan",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "入库数量",
-            align: "center",
             key: "enterQty",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "入库单价",
-            align: "center",
             key: "enterPrice",
             tooltip:true,
             minWidth: 70,
@@ -596,7 +591,6 @@
           },
           {
             title: "金额",
-            align: "center",
             key: "enterAmt",
             tooltip:true,
             minWidth: 80,
@@ -607,14 +601,12 @@
           },
           {
             title: "税率",
-            align: "center",
             key: "taxRate",
             tooltip:true,
             minWidth: 40
           },
           {
             title: "不含税单价",
-            align: "center",
             key: "noTaxPrice",
             tooltip:true,
             minWidth: 80,
@@ -625,7 +617,6 @@
           },
           {
             title: "不含税金额",
-            align: "center",
             key: "noTaxAmt",
             tooltip:true,
             minWidth: 80,
@@ -636,28 +627,24 @@
           },
           {
             title: "入库单号",
-            align: "center",
             key: "code",
             tooltip:true,
             minWidth: 160
           },
           {
             title: "创建人",
-            align: "center",
             key: "createUname",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "入库类型",
-            align: "center",
             key: "enterTypeId",
             tooltip:true,
             minWidth: 80
           },
           {
             title: "备注",
-            align: "center",
             key: "remark",
             tooltip:true,
             minWidth: 140
@@ -668,83 +655,71 @@
           {
             title: "序号",
             type: "index",
-            align: "center",
             key: "index",
             minWidth: 40
           },
           {
             title: "配件编码",
-            align: "center",
             key: "partCode",
             tooltip:true,
             minWidth: 110
           },
           {
             title: "配件名称",
-            align: "center",
             key: "partName",
             tooltip:true,
             minWidth: 110
           },
           {
             title: "单位",
-            align: "center",
             key: "systemUnitId",
             tooltip:true,
             minWidth: 40
           },
           {
             title: "品牌",
-            align: "center",
             key: "partBrand",
             tooltip:true,
             minWidth: 80
           },
           {
             title: "品牌车型",
-            align: "center",
             key: "carModelName",
             tooltip:true,
             minWidth: 90
           },
           {
             title: "仓库",
-            align: "center",
             key: "storeName",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "客户",
-            align: "center",
             key: "guestName",
             tooltip:true,
             minWidth: 120
           },
           {
             title: "出库日期",
-            align: "center",
             key: "outDate",
             tooltip:true,
             minWidth: 120
           },
           {
             title: "出库人",
-            align: "center",
             key: "outMan",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "出库数量",
-            align: "center",
             key: "sellQty",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "出库单价",
-            align: "center",
             key: "sellPrice",
             tooltip:true,
             minWidth: 70,
@@ -755,7 +730,6 @@
           },
           {
             title: "出库金额",
-            align: "center",
             key: "sellAmt",
             tooltip:true,
             minWidth: 80,
@@ -766,7 +740,6 @@
           },
           {
             title: "含税标记",
-            align: "center",
             key: "taxRate",
             tooltip:true,
             minWidth: 70,
@@ -782,28 +755,24 @@
           },
           {
             title: "税率",
-            align: "center",
             key: "taxRate",
             tooltip:true,
             minWidth: 40
           },
           {
             title: "含税单价",
-            align: "center",
             key: "taxPrice",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "含税金额",
-            align: "center",
             key: "taxAmt",
             tooltip:true,
             minWidth: 80
           },
           {
             title: "不含税单价",
-            align: "center",
             key: "noTaxPrice",
             tooltip:true,
             minWidth: 80,
@@ -814,7 +783,6 @@
           },
           {
             title: "不含税金额",
-            align: "center",
             key: "noTaxAmt",
             tooltip:true,
             minWidth: 80,
@@ -825,28 +793,24 @@
           },
           {
             title: "出库单号",
-            align: "center",
             key: "serviceId",
             tooltip:true,
             minWidth: 160
           },
           {
             title: "创建人",
-            align: "center",
             key: "createUname",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "出库类型",
-            align: "center",
             key: "enterTypeId",
             tooltip:true,
             minWidth: 70
           },
           {
             title: "备注",
-            align: "center",
             key: "remark",
             tooltip:true,
             minWidth: 140
@@ -856,27 +820,22 @@
         levelType: [
           {
             title: "配件编码",
-            align: "center",
             key: "partCode",
           },
           {
             title: "配件名称",
-            align: "center",
             key: "partName",
           },
           {
             title: "品牌",
-            align: "center",
             key: "partBrand",
           },
           {
             title: "级别",
-            align: "center",
             key: "strategyName",
           },
           {
             title: "销售价",
-            align: "center",
             key: "sellPrice",
             render(h, params) {
               if (params.row.strategyName == "最低售价") {
@@ -888,44 +847,38 @@
           },
           {
             title: "更新人",
-            align: "center",
             key: "updateUname",
           },
           {
             title: "更新日期",
-            align: "center",
             key: "updateTime",
           },
         ],
+        levelLoading:false,
         //滞销信息
         unsalableType: [
           {
             title: "配件编码",
-            align: "center",
             key: "partCode",
             minWidth: 170
           },
           {
             title: "配件名称",
-            align: "center",
             key: "partName",
             minWidth: 170
           },
           {
             title: "品牌",
-            align: "center",
             key: "partBrand",
             minWidth: 170
           },
           {
             title: "分店名称",
-            align: "center",
             key: "orgName",
             minWidth: 170
           },
           {
             title: "滞销数量",
-            align: "center",
             key: "enterQty",
             minWidth: 170
           },
@@ -935,61 +888,56 @@
           {
             title: "序号",
             type: "index",
-            align: "center",
             key: "index",
             minWidth: 40
           },
           {
             title: "业务单号",
-            align: "center",
             key: "serviceId",
-            minWidth: 170
+            minWidth: 180
           },
           {
             title: "客户",
-            align: "center",
             key: "guestName",
-            minWidth: 120
+            minWidth: 150
           },
           {
             title: "配件编码",
-            align: "center",
             key: "partCode",
             minWidth: 120
           },
           {
             title: "配件名称",
-            align: "center",
             key: "partName",
             minWidth: 120
           },
           {
+            title: "订单数量",
+            key: "orderQty",
+            minWidth: 80
+          },
+          {
             title: "占用数量",
-            align: "center",
             key: "lockStockQty",
-            minWidth: 120
+            minWidth: 80
           },
           {
             title: "仓库",
-            align: "center",
             key: "storeName",
-            minWidth: 120
+            minWidth: 80
           },
           {
             title: "创建人",
-            align: "center",
             key: "createUname",
-            minWidth: 120
+            minWidth: 70
           },
           {
             title: "创建日期",
-            align: "center",
             key: "createDate",
             minWidth: 80
           },
           {
             title: "备注",
-            align: "center",
             key: "remark",
             minWidth: 120
           }
@@ -1027,7 +975,7 @@
           page: {
             num: 1,
             total: 0,
-            size: 10
+            size: 20
           },
           //数据
           dataThree: [
@@ -1079,6 +1027,7 @@
         this.searchForm2.guestName = "";
         this.modal1 = true;
         this.tIndex = 4;
+        this.levelList =[];
         this.getLevelList();
       },
       hander(type) {
@@ -1100,10 +1049,14 @@
       //级别销价请求
       async getLevelList() {
         let data = {}
+        this.levelLoading=true;
         data.partId = this.mainData.partId
         let res = await getUnsalable(data)
         if (res.code === 0) {
+          this.levelLoading=false;
           this.levelList = res.data
+        }else{
+          this.levelLoading=false;
         }
       },
 
@@ -1343,7 +1296,7 @@
             };
             return;
           }
-          if (["lockStockQty"].includes(key)) {
+          if (["lockStockQty","orderQty"].includes(key)) {
             const values = data.map(item => Number(item[key]));
             if (!values.every(value => isNaN(value))) {
               const v = values.reduce((prev, curr) => {

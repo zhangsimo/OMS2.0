@@ -22,12 +22,12 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" :disabled="selectShopList" class="w150" filterable clearable>
+            <Select v-model="BranchstoreId" :disabled="selectShopList" @on-change="query" class="w150" filterable clearable>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -407,7 +407,7 @@
         BranchstoreId: "", //分店名称
         company: [], //往来单位数组
         Branchstore: [
-          {id: '0', name: '全部'}
+          {id: 0, shortName: '全部'}
         ], //分店名称
         requestCode: "", //费用报销申请单号
         currRow: null, //选中行
@@ -633,11 +633,11 @@
           serviceId: this.requestCode
           // guestId: this.companyId,
         };
-        // for (let d in data) {
-        //   if (!data[d]) {
-        //     delete data[d];
-        //   }
-        // }
+        for (let d in data) {
+          if (!data[d]) {
+            delete data[d];
+          }
+        }
         showLoading(".loadingClass", "数据加载中，请勿操作")
         restful.findByDynamicQuery(params, data).then(res => {
           if (res.code == 0) {
@@ -740,7 +740,6 @@
       },
       // 选中行
       currentChangeEvent({row}) {
-        console.log(row.id)
         this.currRow = row;
         this.loanId = row.id
         this.$store.commit("setLoanId", row.id)

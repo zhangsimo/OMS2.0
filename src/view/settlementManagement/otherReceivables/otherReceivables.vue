@@ -24,7 +24,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -379,7 +379,7 @@ export default {
       company: [], //往来单位数组
       companyId: "", //往来单位
       Branchstore: [
-        {id:'0' ,name:'全部'}
+        {id:0 ,shortName:'全部'}
       ], //分店名称
       currRow: {}, //选中行
       claimModal: false, //认领弹框
@@ -622,11 +622,18 @@ export default {
           : "",
         orgid: this.BranchstoreId,
         guestId: this.companyId,
-        size: this.page.size,
-        page: this.page.num - 1
       };
+      for (let key in obj) {
+        if (!obj[key]) {
+          Reflect.deleteProperty(obj, key);
+        }
+      }
+      
+      let params = {}
+      params.page = this.page.num - 1 
+      params.size = this.page.size
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      findByDynamicQuery(obj).then(res => {
+      findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;

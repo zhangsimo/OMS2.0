@@ -242,6 +242,7 @@
       this.$nextTick(() => (this.$refs.input as any).focus());
       this.reset();
       // this.getPchsPlanList();
+
       this.shows = true;
     }
 
@@ -340,6 +341,7 @@
       this.selectRow = new Array();
       this.tableDataBm = new Array();
       this.filters = [];
+      this.tableData = [];
       this.partId = "";
       this.partName = "";
       this.partCode = "";

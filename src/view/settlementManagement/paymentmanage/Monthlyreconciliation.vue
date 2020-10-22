@@ -27,6 +27,7 @@
                   v-model="model1"
                   class="w200"
                   @on-change="storeAccount"
+                  disabled
                   clearable
                 >
                   <Option
@@ -104,14 +105,16 @@
             </div>
           </div>
         </section>
+<!--        对账单单号明细-->
+
         <section class="con-box">
           <div class="inner-box">
+<!--            对账单单号-->
             <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
             <div class="db mt10 info" v-show="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <!--<Input type="text" class="w140 mr10" v-model="collectionAccountName" readonly />-->
                 <Select
                   filterable
                   v-model="collectionUname"
@@ -134,7 +137,6 @@
                 <Input v-model="collectionAccount" class="w140 mr10" readonly/>
                 <span style="color:red">*</span>
                 <span>本次申请付款账户：</span>
-                <!--<Input v-model="thisApplyAccount" class="w140 mr10" />-->
                 <Select
                   filterable
                   v-model="paymentUname"
@@ -161,20 +163,6 @@
             <!-- 应收业务销售出库/退货对账 -->
             <div class="db mt20">
               <h5>应收业务销售出库/退货对账</h5>
-              <!--<Table-->
-              <!--:columns="columns1"-->
-              <!--:data="data1"-->
-              <!--:loading="data1Loading"-->
-              <!--border-->
-              <!--max-height="400"-->
-              <!--@on-select="collectCheckout"-->
-              <!--@on-select-all="collectCheckoutAll"-->
-              <!--@on-select-cancel="collectNoCheckout"-->
-              <!--@on-select-all-cancel="collectNoCheckoutAll"-->
-              <!--show-summary-->
-              <!--:row-class-name="rowClassName"-->
-              <!--ref="receivable"-->
-              <!--&gt;</Table>-->
               <vxe-table
                 border
                 :row-class-name="rowClassName"
@@ -228,19 +216,6 @@
             <!-- 应付业务采购入库/退货对账 -->
             <div class="db mt20">
               <h5>应付业务采购入库/退货对账</h5>
-              <!--<Table-->
-              <!--:columns="columns1"-->
-              <!--:data="data2"-->
-              <!--border-->
-              <!--max-height="400"-->
-              <!--@on-select="paymentCheckout"-->
-              <!--@on-select-all="paymentCheckoutAll"-->
-              <!--@on-select-cancel="paymentNoCheckout"-->
-              <!--@on-select-all-cancel="paymentNoCheckoutAll"-->
-              <!--:row-class-name="rowClassName"-->
-              <!--show-summary-->
-              <!--ref="payable"-->
-              <!--&gt;</Table>-->
               <vxe-table
                 border
                 :row-class-name="rowClassName"
@@ -516,7 +491,6 @@
   import ClientData from "../../system/essentialData/clientManagement/ClientData"
   import ClientData2 from "../../system/essentialData/supplierManagement/ClientData"
   import requestCode from "@/view/documentApproval/component/popWindow/RequestCode"
-
   import {
     getCustomerDetails,
     getNewClient,
@@ -535,7 +509,6 @@
     getPaymentName
   } from "@/api/bill/saleOrder";
   import index from "../../admin/roles";
-  import render from "@/components/message/base/render";
   import {findGuest} from "@/api/settlementManagement/advanceCollection";
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import moment from "moment";
@@ -632,6 +605,11 @@
           {
             title: "已勾选明细统计",
             key: "Detailedstatistics",
+            className: "tc"
+          },
+          {
+            title:'对账单申请',
+            key:'information',
             className: "tc"
           },
           {
@@ -929,6 +907,14 @@
       // this.$refs.quickDate.getval(1);
     },
     computed: {
+      //门店禁选
+      selectShopList() {
+        if (this.$store.state.user.userData.currentCompany != null) {
+          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        } else {
+          return true
+        }
+      },
       //实际应付合计
       Actualtotalpayment() {
         //对账应付-应付坏账-应付返利
@@ -1007,8 +993,6 @@
       // 快速查询
       quickDate(data) {
         this.value = data ? data : ["", ""];
-        // this.data1 = [];
-        // this.data2 = [];
         let obj = {
           orgId: this.model1,
           startDate: this.value[0]
@@ -1229,48 +1213,23 @@
         this.pageObj1.num = 1;
         getReconciliation(obj).then(res => {
           this.data1Loading = false;
-          // let Statementexcludingtax = 0;
-          // let Taxincludedpartsstatement = 0;
-          // let Statementoilincludingtax = 0;
-          // let Statementexcludingtax1 = 0;
-          // let Taxincludedpartsstatement1 = 0;
-          // let Statementoilincludingtax1 = 0;
           for (let i of res.data.one) {
             if (i.number === 3) {
               this.arrId[0] = i.accountNo;
-              // Statementexcludingtax = i.accountNo;
-              // Statementexcludingtax1 = i.accountSumAmt;
             } else if (i.number === 1) {
               this.arrId[1] = i.accountNo;
-              // Taxincludedpartsstatement = i.accountNo;
-              // Taxincludedpartsstatement1 = i.accountSumAmt;
-            } else {
+            } else if (i.number === 2){
               this.arrId[2] = i.accountNo;
-              // Statementoilincludingtax = i.accountNo;
-              // Statementoilincludingtax1 = i.accountSumAmt;
+            }else{
+              this.arrId[3] = i.accountNo;
             }
           }
-          // this.data = [
-          //   {
-          //     Detailedstatistics: "对账单号",
-          //     Statementexcludingtax,
-          //     Taxincludedpartsstatement,
-          //     Statementoilincludingtax
-          //   },
-          //   {
-          //     Detailedstatistics: "对账金额",
-          //     Statementexcludingtax: Statementexcludingtax1,
-          //     Taxincludedpartsstatement: Taxincludedpartsstatement1,
-          //     Statementoilincludingtax: Statementoilincludingtax1
-          //   }
-          // ];
+
           if (res.data.two.length !== 0) {
             res.data.two.map(item => {
               item.serviceTypeName = item.serviceType.name;
               item.speciesName = item.species.name;
             });
-            // console.log(res.data.two.thisAccountAmt)
-            // this.data1 = res.data.two;
             this.copyData = res.data.two;
             this.pageObj.total = res.data.two.length;
             this.data1 = this.changePageList(this.pageObj.num, this.pageObj.size, this.copyData);
@@ -1343,6 +1302,7 @@
           this.data = [
             {
               Detailedstatistics: "对账单号",
+              information: this.collectlist.length> 0 || this.paymentlist.length > 0 ? this.arrId[3] : "",
               Statementexcludingtax: res.data.hasOwnProperty("one")
                 ? this.arrId[0]
                 : "",
@@ -1366,8 +1326,6 @@
                 : ""
             }
           ];
-          // this.accountData = JSON.parse(JSON.stringify(this.data));
-
 
         });
       },
@@ -1445,39 +1403,23 @@
         this.getAccountNameList();
         this.getPaymentNameList();
         this.totalvalueFun();
-        // this.tipText(this.paymentlist);
-
-
       },
+
       // 应收选中
       collectCheckout({selection, row}) {
         this.setTempCollectlist(selection);
-        // this.collectlist = selection;
-        // this.totalcollect = 0;
-        // this.Actualtotalcollect = 0;
-        // this.totalcollect = this.collectSum(selection)
-        // selection.map(item => {
-        //   this.totalcollect += item.thisAccountAmt;
-        // });
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
         this.totalvalueFun();
-        // this.tipText(this.collectlist);
       },
       // 应收全选
       collectCheckoutAll({selection}) {
-        // this.collectlist = selection;
-        // this.totalcollect = this.collectSum(selection)
-        // selection.map(item => {
-        //   this.totalcollect += item.thisAccountAmt;
-        // });
         this.setTempCollectlist(selection);
         this.getSettlementComputed();
         this.getAccountNameList();
         this.getPaymentNameList();
         this.totalvalueFun();
-        // this.tipText(this.collectlist);
       },
 
       setTempCollectlist(selection){
@@ -1591,16 +1533,6 @@
       async noReconciliation() {
         const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
         if (!errMap) {
-          // if (this.flag) {
-          //   if (this.Reason) {
-          //     this.$message({
-          //       message: "差异原因必填",
-          //       type: "error",
-          //       customClass: "zZindex"
-          //     });
-          //     return "";
-          //   }
-          // }
           let sum = 0;
           this.Reconciliationcontent.map(item => {
             sum += item.thisNoAccountAmt * 1;
@@ -1609,7 +1541,6 @@
           if (this.business === "销售退货" || this.business === "销售出库") {
 
             //金额为负数是退货
-            // console.log("sum", sum)
             let sum1 = 0;
             if (this.data1[index].rpAmt >= 0) {
               sum1 =
@@ -1758,6 +1689,10 @@
               number: "2",
               accountNo: this.data[0].Statementoilincludingtax,
               accountSumAmt: this.data[1].Statementoilincludingtax
+            },
+            {
+              number: "0",
+              accountNo: this.data[0].information,
             }
           ];
           let four = [
@@ -1854,20 +1789,6 @@
       // 对账清单导出
       getReportReconciliationt() {
         if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
-          // if (this.paymentlist.length !== 0) {
-          //   this.$refs.payable.exportCsv({
-          //     filename: "采购清单",
-          //     data: this.paymentlist,
-          //     columns: this.columns1.filter((col, index) => index > 0)
-          //   });
-          // }
-          // if (this.collectlist.length !== 0) {
-          //   this.$refs.receivable.exportCsv({
-          //     filename: "销售清单",
-          //     data: this.collectlist,
-          //     columns: this.columns1.filter((col, index) => index > 0)
-          //   });
-          // }
           let str = "";
           this.paymentlist.map(item => {
             str += `serviceIdList=${item.serviceId}&`;
@@ -1875,11 +1796,6 @@
           this.collectlist.map(item => {
             str += `serviceIdList=${item.serviceId}&`;
           });
-          // for(var i=0;i<this.selectTableDataArr.length;i++){
-          //   str+=`&ids=${this.selectTableDataArr[i].id}`
-          // }
-          // str1 = str1.substring(0, str1.length - 1);
-          // str2 = str2.substring(0, str2.length - 1);
           location.href = payColMonthExportAcSta(str);
         } else {
           // this.$message.error("请勾选要导出的对账清单");

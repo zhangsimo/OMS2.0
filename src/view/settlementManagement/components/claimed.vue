@@ -5,7 +5,7 @@
       class="mt10"
       :columns="claimed"
       :data="claimedData"
-      max-height="400"
+      max-height="550"
       @on-selection-change="claimedSelection"
     ></Table>
     <Page
@@ -367,21 +367,21 @@
       //本店待认领款页码
       pageChangeAmt(val) {
         this.claimedPage.page = val;
-        this.$parent.$parent.$parent.claimedList()
+        this.$parent.$parent.$parent.$parent.claimedList()
       },
       //本店待认领款每页条数
       sizeChangeAmt(val) {
         this.claimedPage.page = 1;
         this.claimedPage.size = val;
-        this.$parent.$parent.$parent.claimedList()
+        this.$parent.$parent.$parent.$parent.claimedList()
       }
     },
     watch: {
       currentClaimed: {
         handler(val, od) {
           if (val !== od) {
-            if (this.$parent.$parent.$parent.difference !== undefined) {
-              const that = this.$parent.$parent.$parent
+            if (this.$parent.$parent.$parent.$parent.difference !== undefined) {
+              const that = this.$parent.$parent.$parent.$parent
               that.claimedAmt = 0;
               val.map(item => {
                 if (item.paidMoney) {

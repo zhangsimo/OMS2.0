@@ -36,9 +36,6 @@
     },
     methods: {
       tabName() {
-        if(this.$refs.panne.search.enterDate[0]==""){
-          return this.$message.error("出库日期必须选择！")
-        }
         let data={}
         for (let key in this.$refs.panne.search) {
           if (this.$refs.panne.search[key]) {

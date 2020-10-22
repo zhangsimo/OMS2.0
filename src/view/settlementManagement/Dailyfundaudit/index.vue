@@ -5,8 +5,6 @@
         <div class="wlf">
           <div class="db mr15">
             <span>快速查询：</span>
-          </div>
-          <div class="db mr15">
             <quick-date
               class="mr10"
               ref="quickDate"
@@ -63,8 +61,14 @@
             </button>
           </div>
           <div class="db ml5">
+            <Button type="default" @click="exportTable" v-has="'export'">
+              <i class="icon icon-"></i>
+              导出
+            </Button>
+          </div>
+          <div class="db ml5">
             <button
-              class="mr10 ivu-btn ivu-btn-default"
+              class="ivu-btn ivu-btn-default"
               type="button"
               @click="SubmitAudit"
               :disabled="oneList.length <= 0"
@@ -153,7 +157,7 @@
   import TableSix from "./components/TableSix";
   import TableSeven from "./components/TableSeven";
   import TableEight from "./components/TableEight";
-
+  import {exportDailyFundAudit /**导出*/} from "../../../api/settlementManagement/Import";
   import {findGuest} from "_api/settlementManagement/advanceCollection.js";
   import * as api from "_api/settlementManagement/Dailyfundaudit/index.js";
   import {goshop} from '@/api/settlementManagement/shopList';
@@ -267,43 +271,44 @@
       // 查询
       async query() {
         this.oneList = [];
-
-        let params = {
-          startTime: this.dates[0],
-          endTime: this.dates[1],
-          guestSourceId: this.companyId,
-          businessNumbers: this.payOrderNo,
-          businessNumbersList: this.orderNo,
-          shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
-          size: this.page.size,
-        }
-
-        if (this.dates.length === 2 && this.dates[0]) {
-          params.startTime = moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
-          params.endTime = moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
-        }
-
-        for (let key in params) {
-          if (!params[key]) {
-            Reflect.deleteProperty(params, key)
-          }
-        }
-
-        params.page = this.page.num - 1;
-        try {
-          [
-            this.tableData1,
-            this.tableData2,
-            this.tableData3,
-            this.tableData4,
-            this.tableData5,
-            this.tableData6,
-            this.tableData7,
-            this.tableData8
-          ] = await api.getTableData(params);
-          this.getPageList(this.tabName)
-        } catch (error) {
-        }
+        this.getPageList(this.tabName)
+        //
+        // let params = {
+        //   startTime: this.dates[0],
+        //   endTime: this.dates[1],
+        //   guestSourceId: this.companyId,
+        //   businessNumbers: this.payOrderNo,
+        //   businessNumbersList: this.orderNo,
+        //   shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
+        //   size: this.page.size,
+        // }
+        //
+        // if (this.dates.length === 2 && this.dates[0]) {
+        //   params.startTime = moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
+        //   params.endTime = moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
+        // }
+        //
+        // for (let key in params) {
+        //   if (!params[key]) {
+        //     Reflect.deleteProperty(params, key)
+        //   }
+        // }
+        //
+        // params.page = this.page.num - 1;
+        // try {
+        //   [
+        //     this.tableData1,
+        //     this.tableData2,
+        //     this.tableData3,
+        //     this.tableData4,
+        //     this.tableData5,
+        //     this.tableData6,
+        //     this.tableData7,
+        //     this.tableData8
+        //   ] = await api.getTableData(params);
+        //   this.getPageList(this.tabName)
+        // } catch (error) {
+        // }
       },
       // 切换tabs
       clickTabs(data) {
@@ -360,6 +365,28 @@
         this.page.size = size;
         // console.log(this.tabName, 1111)
         this.getPageList(this.tabName)
+      },
+      exportTable(){
+        if(this.tableData1.length<1&&this.tableData2.length<1&&this.tableData3.length<1&&this.tableData4.length<1&&this.tableData5.length<1&&this.tableData6.length<1&&this.tableData7.length<1&&this.tableData8){
+          return this.$message.error("暂无数据可导出")
+        }
+        let data={
+          startTime: this.dates[0]?moment(this.dates[0])
+            .startOf("day")
+            .format("YYYY-MM-DD HH:mm:ss"):"",
+          endTime: this.dates[1]?moment(this.dates[1])
+            .endOf("day")
+            .format("YYYY-MM-DD HH:mm:ss"):"",
+          guestSourceId: this.companyId,
+          businessNumbers: this.payOrderNo,
+          businessNumbersList: this.orderNo,
+          shopNumber: this.BranchstoreId==0?"":this.BranchstoreId
+        }
+        let params=""
+        for(let i in data){
+          params+=`${i}=${data[i]}&`
+        }
+        location.href=exportDailyFundAudit(params)
       },
       // 勾选的数据
       selection(arr) {
