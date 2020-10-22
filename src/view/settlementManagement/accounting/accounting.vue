@@ -21,7 +21,7 @@
                 v-for="(item,index) in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option
               >
             </Select>
@@ -578,7 +578,7 @@
         date: '', // 发生日期
         store: "", // 门店code
         // single:0,//复选框状态
-        Branchstore: [{id: "0", name: "全部"}], //分店名称
+        Branchstore: [{id: "0", name: "全部",shortName:"全部"}], //分店名称
         subjectId: '0', // 对应科目id
         subjecties: [{id: '0', titleName: "全部"}], // 科目
         content: "", // 撤销原因
@@ -738,6 +738,8 @@
       },
       // 查询
       query() {
+        this.page.num=1;
+        this.page1.num=1;
         this.getTable();
       },
 

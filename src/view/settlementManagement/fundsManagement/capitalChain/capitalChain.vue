@@ -469,7 +469,7 @@
       async getShop() {
         let data = {}
         data.supplierTypeSecond = this.model1
-        this.shopList = [{id: 0, shortName: '全部'}]
+        this.shopList = [{id: 0, name: '全部',shortName:"全部"}]
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList, ...res.data]
@@ -556,6 +556,7 @@
 
       //查询
       query() {
+        this.page.num=1;
         this.getList()
       },
 
