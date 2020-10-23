@@ -54,7 +54,7 @@
                 v-for="item in orgList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
             <span>往来单位：</span>
@@ -131,7 +131,7 @@
                             v-for="item in orgList"
                             :value="item.id"
                             :key="item.id"
-                          >{{ item.name }}
+                          >{{ item.shortName }}
                           </Option>
                         </Select>
                         <span class="ml10">往来单位：</span>
@@ -205,7 +205,7 @@
                         <span class="ml10">门店：</span>
                         <Select transfer v-model="orgId" class="w150" filterable >
                           <!--                  :disabled="selectShopList"-->
-                          <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                          <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
                         </Select>
                         <span class="ml10">金额：</span>
                         <InputNumber v-model="amtDis" class="w80"/>
@@ -343,7 +343,7 @@ import { forEach } from '@/libs/tools';
         company: [], //往来单位下拉框
         company2: [], //往来单位下拉框
         orgId: "", //门店  连锁待分配款项
-        orgList: [{id: "", name: "全部"}], //分店名称
+        orgList: [{id: "", shortName: "全部"}], //分店名称
         claimedSubjectList: [], //获取到点击到的本店认领数据
         areaId: 0, //区域
         areaList: [{value: 0, label: "全部"}], //区域
@@ -918,7 +918,7 @@ import { forEach } from '@/libs/tools';
       async getShop(areaId) {
         let data = {};
         data.supplierTypeSecond = areaId
-        this.orgList=[{id: "", name: "全部"}]
+        this.orgList=[{id: "", shortName: "全部"}]
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = Array.from(new Set([...this.orgList, ...res.data]))

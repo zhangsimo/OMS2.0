@@ -41,7 +41,7 @@
                 v-for="item in proTypeList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option
               >
             </Select>
@@ -277,7 +277,7 @@
                   v-for="item in proTypeList"
                   :value="item.id"
                   :key="item.id"
-                >{{ item.name }}
+                >{{ item.shortName }}
                 </Option
                 >
               </Select>

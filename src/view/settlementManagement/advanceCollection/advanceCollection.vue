@@ -21,7 +21,7 @@
           <div class="db ml20">
             <span>分店名称：</span>
             <Select v-model="BranchstoreId" class="w150" filterable clearable @on-change="query" :disabled="selectShopList">
-              <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml20">
@@ -305,7 +305,7 @@ export default {
       value: [], //日期
       company: [], //往来单位
       companyId: "", //往来单位
-      Branchstore: [{ id: "0", name: "全部" }], //分店名称
+      Branchstore: [{ id: "0", shortName: "全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
       page: {

@@ -31,7 +31,7 @@
           <div class="db ml15">
             <span>门店：</span>
             <Select v-model="shopCode" filterable class="w150 mr15" :disabled="selectShopList">
-              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -371,7 +371,7 @@
         Branchstore: [{id: 0, companyName: "全部"}],
         model1: 0, //获取到地址id
         shopCode: 0, //获取到门店id
-        shopList: [{id: '0', name: "全部"}], //门店列表
+        shopList: [{id: '0', shortName: "全部"}], //门店列表
         subjectCode: new Array(), //科目id
         tabName: "capitalChain1",
         subJectList: [], //科目列表
