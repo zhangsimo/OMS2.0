@@ -121,15 +121,6 @@
           <div class="db mt10 info" v-if="infoBase.billingType.value==0">
             <h5 class="p10">付款信息</h5>
             <div class="flex p10">
-              <!--              <span>收款户名：</span>-->
-              <!--              <Input type="text" class="w140 mr10" v-model="infoBase.collectionName" readonly />-->
-              <!--              <span>开户行：</span>-->
-              <!--              <Input v-model="infoBase.bankName" class="w140 mr10" readonly />-->
-              <!--              <span>收款账号：</span>-->
-              <!--              <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly />-->
-              <!--              <span>本次申请付款账户：</span>-->
-              <!--              <Input v-model="infoBase.thisPaymentAccount" class="w140 mr10" />-->
-
               <span>收款户名：</span>
               <Select
                 filterable
@@ -153,7 +144,6 @@
               <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly/>
               <span style="color:red">*</span>
               <span>本次申请付款账户：</span>
-              <!--<Input v-model="thisApplyAccount" class="w140 mr10" />-->
               <Select
                 filterable
                 v-model="infoBase.thisPaymentAccountId"
@@ -1136,7 +1126,7 @@
       },
       // 保存接口
       async getPreservation(num) {
-        if (this.infoBase.billingType.value === "0") {
+        if (this.infoBase.billingType.value == "0") {
           if (!this.infoBase.collectionName)
             return this.$message.error("收款户名不能为空");
           if (!this.infoBase.bankName) return this.$message.error("开户行不能为空");
