@@ -159,6 +159,7 @@
   import { getClientTreeList } from "@/api/system/essentialData/clientManagement";
   import {getCarPartClass} from "_api/parts";
   import {getCarBrandAll} from "_api/system/systemSetting/Initialization";
+  import {ThisMonthStr} from "_c/getDate/index_bill.js"
 
   export default {
     components: {QuickDate},
@@ -210,7 +211,7 @@
           partBrand: "",//配件品牌
           partId: "",//配件内码
           partCode: "",//配件编码
-          enterDate: ToDayStr(), // 提交日期
+          enterDate: ThisMonthStr(), // 提交日期
           orgid: "" // 门店
         },
         moreModel:false,//更多查询是否开启
@@ -379,7 +380,7 @@
           partBrand: "",//配件品牌
           partId: "",//配件内码
           partCode: "",//配件编码
-          enterDate: [], // 提交日期
+          enterDate: this.search.enterDate, // 提交日期
           orgid:this.search.orgid
         }
         this.search=data
