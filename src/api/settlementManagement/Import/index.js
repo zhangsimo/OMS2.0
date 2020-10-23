@@ -119,3 +119,13 @@ export function expensereimbursementExport(params){
 export function exportDailyFundAudit(params){
   return `${api.omsSettle}/omsFinanceAccountEverydayAudit/export/AllAudit?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
+
+//价格管理 最低销价  导出
+export function priceExport(data){
+  return `${api.wmsApi}/sellPricePart/export/findPartPrice?${data}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+
+//价格管理 非最低销价  导出
+export function priceExport2(data){
+  return `${api.wmsApi}/sellPricePart/export/findPartPriceList?${data}access_token=${Cookies.get(TOKEN_KEY)}`
+}

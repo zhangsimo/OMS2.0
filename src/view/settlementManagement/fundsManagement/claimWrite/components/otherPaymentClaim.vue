@@ -75,6 +75,7 @@
             <div>{{Math.abs(row.paidMoney)}}</div>
           </template>
         </vxe-table-column>
+        <vxe-table-column field="unClaimedAmt" width="80" title="未认领金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
@@ -291,6 +292,7 @@
           this.$refs.quickDate.resetFun()
         }
         this.MessageValue = ''
+        this.$refs.voucherInput.AssistAccounting = ''
         // this.getQuery();
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
@@ -593,6 +595,10 @@
             return
           } else if (data.claimMoney > Math.abs(this.accrued[0].paidMoney)) {
             this.$Message.error("本次认领金额不可大于支付金额")
+            return
+          }
+          if(data.claimMoney > this.accrued[0].unClaimedAmt){
+            this.$Message.error('本次认领金额不可大于未认领金额')
             return
           }
           data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2?1:this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个

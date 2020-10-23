@@ -119,6 +119,7 @@
         <vxe-table-column field="billStatusName" title="当前状态"></vxe-table-column>
         <vxe-table-column field="applyNo" title="申请单号"></vxe-table-column>
         <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
+        <vxe-table-column field="receiveGuestName" title="往来单位"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
         <vxe-table-column field="applyTypeName" title="申请类型"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>

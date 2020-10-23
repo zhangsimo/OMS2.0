@@ -65,6 +65,7 @@
         <vxe-table-column field="createTime" width="140" title="发生日期"></vxe-table-column>
         <vxe-table-column field="incomeMoney" width="80" title="收入金额"></vxe-table-column>
         <vxe-table-column field="paidMoney" width="80" title="支出金额"></vxe-table-column>
+        <vxe-table-column field="unClaimedAmt" width="80" title="未认领金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
@@ -205,10 +206,11 @@
         }
         this.oneSubject = {};
         this.modal = true;
+        this.MessageValue = ''
+        this.$refs.voucherInput.AssistAccounting = ''
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
         })
-        this.MessageValue = ''
       },
       //判断是否可选择
       checkMethod({row}) {
@@ -410,6 +412,10 @@
             this.$Message.error("本次认领金额不可大于支付金额")
             return
           }
+          if(data.claimMoney > this.accrued[0].unClaimedAmt){
+            this.$Message.error('本次认领金额不可大于未认领金额')
+            return
+          }
           showLoading()
           let res = await TurnToTheProfitAndLoss(data);
           if (res.code === 0) {
@@ -435,6 +441,10 @@
               this.$Message.error("本次认领金额不可大于支付金额")
               return
             }
+            if(data.claimMoney > this.accrued[0].unClaimedAmt){
+              this.$Message.error('本次认领金额不可大于未认领金额')
+              return
+            }
             showLoading()
             addClaim2(data).then(res => {
               if (res.code === 0) {
@@ -458,6 +468,10 @@
               return
             }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
               this.$Message.error("本次认领金额不可大于支付金额")
+              return
+            }
+            if(data.claimMoney > this.accrued[0].unClaimedAmt){
+              this.$Message.error('本次认领金额不可大于未认领金额')
               return
             }
             showLoading()
