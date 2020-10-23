@@ -172,14 +172,18 @@ export default {
           guestSourceId:objItem.id||""
         }
       }
-      showLoading()
-      let res = await TurnToTheProfitAndLoss(data);
-      if (res.code === 0) {
-        hideLoading()
-        this.modal = false;
-        this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")
-        this.$parent.$parent.queryClaimed()
-      }else{
+      try {
+        showLoading('body',"保存中，请勿操作。。。")
+        let res = await TurnToTheProfitAndLoss(data);
+        if (res.code === 0) {
+          this.modal = false;
+          this.bool?this.$Message.success("转应付款成功"):this.$Message.success("转应收款成功")
+          this.$parent.$parent.queryClaimed()
+          hideLoading()
+        }else{
+          hideLoading()
+        }
+      } catch (error) {
         hideLoading()
       }
     },

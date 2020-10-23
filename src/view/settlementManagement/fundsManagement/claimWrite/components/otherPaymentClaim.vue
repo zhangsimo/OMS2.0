@@ -619,17 +619,21 @@
               guestSourceId: objItem.id || ""
             }
           }
-          showLoading()
-          let res = await TurnToTheProfitAndLoss(data);
-          if (res.code === 0) {
-            hideLoading()
-            this.reloadParentList()
-            this.modal = false;
-            this.claimTit == "预付款认领"
-              ? this.$Message.success("预付款认领成功")
-              : this.$Message.success("其他付款认领成功");
-            this.formValidate.voucherInput = ""
-          } else {
+          try {
+            showLoading('body',"保存中，请勿操作。。。")
+            let res = await TurnToTheProfitAndLoss(data);
+            if (res.code === 0) {
+              this.reloadParentList()
+              this.modal = false;
+              this.claimTit == "预付款认领"
+                ? this.$Message.success("预付款认领成功")
+                : this.$Message.success("其他付款认领成功");
+              this.formValidate.voucherInput = ""
+              hideLoading()
+            } else {
+              hideLoading()
+            }
+          } catch (error) {
             hideLoading()
           }
         }
