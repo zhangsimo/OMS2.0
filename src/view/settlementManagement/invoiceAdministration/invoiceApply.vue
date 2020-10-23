@@ -31,7 +31,7 @@
           <div class="ml20 flexd">
             <span>分店名称：</span>
             <Select v-model="form.orgId" style="width:180px" :disabled="selectShopList">
-              <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+              <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.shortName}}</Option>
             </Select>
             <!-- <i class="iconfont iconcaidan input" @click="Dealings(1)"></i> -->
           </div>

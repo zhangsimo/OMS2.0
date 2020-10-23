@@ -129,6 +129,7 @@
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额" width="80"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额" width="80"></vxe-table-column>
+            <vxe-table-column field="unClaimedAmt" title="未认领金额" width="80"></vxe-table-column>
             <vxe-table-column
               field="thisClaimedAmt"
               title="本次认领金额"
@@ -373,6 +374,11 @@
               this.$message.error("本次认领金额不可小于0")
               bool=false;
               return
+            }
+            if(row.thisClaimedAmt <= 0 || row.thisClaimedAmt > row.unClaimedAmt){
+              this.$message.error('本次认领金额不可大于未认领金额')
+              bool=false
+              return 
             }
           })
           if(bool){

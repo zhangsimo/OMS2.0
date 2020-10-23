@@ -24,7 +24,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -238,7 +238,7 @@
         tab: "key1",
         value: [],
         Branchstore: [
-          {id: 0, name: '全部'}
+          {id: 0, shortName: '全部'}
         ], //分店名称
         page: {
           total: 0,
