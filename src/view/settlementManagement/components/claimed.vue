@@ -355,11 +355,13 @@
           });
           if (!s && n || s && !n) {
             this.currentClaimed = selection;
+            // this.$emit('selection1', selection)
           } else {
             this.$message.error("不能同时选中收入和支出");
           }
         } else {
           this.currentClaimed = selection;
+          // this.$emit('selection1', selection)
         }
         bus.$emit("paymentInfo", selection);
         this.$emit('selection', selection)
@@ -384,10 +386,14 @@
               const that = this.$parent.$parent.$parent.$parent
               that.claimedAmt = 0;
               val.map(item => {
-                if (item.paidMoney) {
-                  that.claimedAmt += item.paidMoney * 1;
-                } else {
-                  that.claimedAmt += item.incomeMoney * 1;
+                // if (item.paidMoney) {
+                //   that.claimedAmt += item.paidMoney * 1;
+                // } else {
+                //   that.claimedAmt += item.incomeMoney * 1;
+                // }
+                if(item.unClaimedAmt){
+                  that.claimedAmt += item.unClaimedAmt * 1
+                  that.claimedAmt = Number(that.claimedAmt.toFixed(2))
                 }
               });
               that.difference = that.currentAccount.actualCollectionOrPayment

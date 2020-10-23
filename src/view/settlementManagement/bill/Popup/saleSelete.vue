@@ -73,7 +73,10 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$refs.idDetailed.modal1 = true;
+                    this.$refs.idDetailed.infoData.accountNo=params.row.accountNo
+                    setTimeout(()=>{
+                      this.$refs.idDetailed.modal1 = true;
+                    },10)
                     // this.$refs.idDetailed.modal1 = true;
                   }
                 }

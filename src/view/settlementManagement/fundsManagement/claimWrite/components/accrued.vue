@@ -31,6 +31,7 @@
             {{Math.abs(row.paidMoney)}}
           </template>
         </vxe-table-column>
+        <vxe-table-column field="unClaimedAmt" width="80" title="未认领金额"></vxe-table-column>
         <vxe-table-column
           field="balanceMoney"
           v-model="accrued[0].balanceMoney"
@@ -104,10 +105,11 @@ export default {
     open() {
       this.oneSubject = {};
       this.modal = true;
+      this.MessageValue = ""
+      this.$refs.voucherInput.AssistAccounting = ''
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"balanceMoney")
       })
-      this.MessageValue = ""
     },
     //判断是否可选择
     checkMethod({ row }) {
@@ -144,6 +146,10 @@ export default {
       let data = {};
       data.detailId = this.accrued[0].id;
       data.claimMoney=this.accrued[0].balanceMoney
+      if(data.claimMoney > this.accrued[0].unClaimedAmt){
+        this.$Message.error('本次认领金额不可大于未认领金额')
+        return
+      }
       if(this.bool){
         data.subjectCode="2202";
         data.claimType=2
