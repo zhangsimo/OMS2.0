@@ -209,7 +209,7 @@
                 :page-size.sync="pageObj.size"
                 :total="pageObj.total"
                 @page-change="pageChange"
-                :page-sizes="[10,50,100,200,500]"
+                :page-sizes="[50,100,200,500,1000]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -262,7 +262,7 @@
                 :page-size.sync="pageObj1.size"
                 :total="pageObj1.total"
                 @page-change="pageChange2"
-                :page-sizes="[10,50,100,200,500]"
+                :page-sizes="[50,100,200,500,1000]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -874,12 +874,12 @@
         provinceArr2: [],
         treeDiagramList2: [],
         pageObj: {
-          size: 10,
+          size: 50,
           total: 0,
           num: 1
         },
         pageObj1: {
-          size: 10,
+          size: 50,
           total: 0,
           num: 1
         },
@@ -1135,10 +1135,10 @@
           // this.storeAccount(this.parameter.orgId);
           // this.Initialization();
 
-          this.pageObj.size = 10;
+          this.pageObj.size = 50;
           this.pageObj.total = 0;
           this.pageObj.num = 1;
-          this.pageObj1.size = 10;
+          this.pageObj1.size = 50;
           this.pageObj1.total = 0;
           this.pageObj1.num = 1;
           this.copyData = [];
