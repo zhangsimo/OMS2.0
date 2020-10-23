@@ -393,6 +393,7 @@
                 // }
                 if(item.unClaimedAmt){
                   that.claimedAmt += item.unClaimedAmt * 1
+                  that.claimedAmt = Number(that.claimedAmt.toFixed(2))
                 }
               });
               that.difference = that.currentAccount.actualCollectionOrPayment
