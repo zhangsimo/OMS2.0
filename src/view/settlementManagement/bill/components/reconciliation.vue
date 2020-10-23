@@ -19,36 +19,45 @@
         <section class="con-box">
           <div class="inner-box">
             <Row>
-              <Col span="6">
+              <Col span="4">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
+                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账申请单</div>
+              </Col>
+              <Col span="5">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
               </Col>
             </Row>
             <Row>
-              <Col span="6">
+              <Col span="4">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
+                <div
+                  style="border:1px solid #dddddd;line-height:40px"
+                  class="tc h40"
+                >{{accountData[3].accountNo}}</div>
+              </Col>
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
                 >{{accountData[0].accountNo}}</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
                 >{{accountData[1].accountNo}}</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
@@ -56,22 +65,28 @@
               </Col>
             </Row>
             <Row>
-              <Col span="6">
+              <Col span="4">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
+                <div
+                  style="border:1px solid #dddddd;line-height:40px"
+                  class="tc h40"
+                >{{accountData[3].accountSumAmt}}</div>
+              </Col>
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
                 >{{accountData[0].accountSumAmt}}</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
                 >{{accountData[1].accountSumAmt}}</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
