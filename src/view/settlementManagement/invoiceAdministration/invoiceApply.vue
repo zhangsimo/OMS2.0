@@ -140,6 +140,7 @@
           class="mt10 fr"
           show-sizer
           @on-change="changePage"
+          :page-size-opts="pageSizeOpts"
           @on-page-size-change="changeSize"
           show-total
           size="small"
@@ -1345,6 +1346,7 @@
         Branchstore: [1, 2, 3, 4, 5],
         Reconciliationlist: [],
         pagetotal: 0,
+        pageSizeOpts:[10,50,100,200],
         Reconciliationtype: "",
         isActive: "",
         guestNameList: [],
