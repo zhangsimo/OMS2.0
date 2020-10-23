@@ -54,7 +54,7 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt" :label-width="150">
-            <InputNumber :max="999999" :min="0" v-model="invoice.invoiceTaxAmt" class="ml5 w100"/>
+            <InputNumber :max="1000000000" :min="0" v-model="invoice.invoiceTaxAmt" class="ml5 w100"/>
           </FormItem>
           <FormItem label="申请说明" :label-width="150">
             <Input v-model="invoice.remark" class="ml5 w100" />

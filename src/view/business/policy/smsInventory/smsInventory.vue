@@ -750,7 +750,6 @@ export default {
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
       this.getList();
     },
     // //盘点仓库

@@ -1060,9 +1060,11 @@
         this.getAllStocks();
       },
       //汇总查看
-      showList(val) {
-        this.selectTableData = val;
-        this.$refs.look.getEnters();
+      showList(row) {
+        this.selectTableData = row;
+        setTimeout(()=>{
+          this.$refs.look.getEnters();
+        },1)
       },
       // 批次库存请求
       async getLotStocks() {
