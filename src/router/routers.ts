@@ -1199,16 +1199,16 @@ export default [
           }
       ]
       },
-      // {
-      //   path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
-      //   name: "dailySalesStatistics",
-      //   redirect: "",
-      //   // mark: "7107",
-      //   meta: { keepAlive: true,
-      //     title: "每日销售统计",
-      //   },
-      //   component: () => import("@/view/reportForm/dailySalesStatistics/index.vue"),
-      // },
+      {
+        path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
+        name: "dailySalesStatistics",
+        redirect: "",
+        mark: "7107",
+        meta: { keepAlive: true,
+          title: "每日销售统计",
+        },
+        component: () => import("@/view/reportForm/dailySalesStatistics/index.vue"),
+      },
       // {
       //   path: "/reportForm/salesAndInventorylist/salesAndInventorylist",
       //   name: "salesAndInventorylist",

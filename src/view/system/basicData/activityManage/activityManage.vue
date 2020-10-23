@@ -370,6 +370,7 @@
             :headers="headers"
             :before-upload="handleBeforeUpload"
             :on-success="onSuccess"
+            :on-error="waring"
             style="display: inline-block"
           >
             <Button type="primary" class="w90 mr10">活动导入</Button>
@@ -905,11 +906,32 @@
       // 成功函数
       onSuccess(response) {
         if (response.code === 0) {
-          this.data5 = response.data;
+          this.data5 = response.data.activityDetailVOS;
+          if(response.data.errorStr.length>0){
+            this.warning(response.data.errorStr)
+          }
         } else {
           this.$Message.error(response.message);
         }
       },
+      warning(nodesc) {
+        let str = ""
+        if (nodesc.length > 0) {
+          nodesc.map((item, index) => {
+            if (index != nodesc.length - 1) {
+              str += `${item}<br/>`
+            } else {
+              str += `${item}`
+            }
+          })
+        }
+        this.$Notice.warning({
+          title: '上传错误信息',
+          desc: str,
+          duration: 0
+        });
+      },
+      //错误函数
       onFormatError(file) {
         this.$Message.error("只支持xls xlsx后缀的文件");
       },

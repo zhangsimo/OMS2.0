@@ -23,7 +23,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -201,7 +201,7 @@
         dates: [], // 查询日期
         BranchstoreId: "", // 分店id
         Branchstore: [
-          {id: '0', name: '全部'}
+          {id: '0', shortName: '全部'}
         ], //分店名称
         companyId: "", // 往来单位id
         company: [], // 往来单位
