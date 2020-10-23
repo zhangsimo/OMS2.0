@@ -54,7 +54,7 @@
                 v-for="item in orgList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
             <span>往来单位：</span>
@@ -131,7 +131,7 @@
                             v-for="item in orgList"
                             :value="item.id"
                             :key="item.id"
-                          >{{ item.name }}
+                          >{{ item.shortName }}
                           </Option>
                         </Select>
                         <span class="ml10">往来单位：</span>
@@ -175,7 +175,7 @@
                       <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
                       <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
                       <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
-                      <claim ref="claim"/>
+                      <claim ref="claim" @selection1='getSelection' />
                     </div>
                   </TabPane>
                   <TabPane label="连锁待分配款项">
@@ -205,7 +205,7 @@
                         <span class="ml10">门店：</span>
                         <Select transfer v-model="orgId" class="w150" filterable >
                           <!--                  :disabled="selectShopList"-->
-                          <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                          <Option v-for="item in orgList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
                         </Select>
                         <span class="ml10">金额：</span>
                         <InputNumber v-model="amtDis" class="w80"/>
@@ -302,6 +302,7 @@
   import otherPaymentClaim from "@/view/settlementManagement/fundsManagement/claimWrite/components/otherPaymentClaim";
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import moment from "moment";
+import { forEach } from '@/libs/tools';
 
   export default {
     name: "claimWrite",
@@ -342,7 +343,7 @@
         company: [], //往来单位下拉框
         company2: [], //往来单位下拉框
         orgId: "", //门店  连锁待分配款项
-        orgList: [{id: "", name: "全部"}], //分店名称
+        orgList: [{id: "", shortName: "全部"}], //分店名称
         claimedSubjectList: [], //获取到点击到的本店认领数据
         areaId: 0, //区域
         areaList: [{value: 0, label: "全部"}], //区域
@@ -917,7 +918,7 @@
       async getShop(areaId) {
         let data = {};
         data.supplierTypeSecond = areaId
-        this.orgList=[{id: "", name: "全部"}]
+        this.orgList=[{id: "", shortName: "全部"}]
         let res = await goshop(data);
         if (res.code === 0) {
           this.orgList = Array.from(new Set([...this.orgList, ...res.data]))
@@ -1059,7 +1060,7 @@
           this.$refs.otherCollectionClaims.claimTit = claimTit;
           if (this.claimedSubjectList[0].incomeMoney > 0) {
             this.claimedSubjectList.map(item => {
-              item.incomeMoney = item.unClaimedAmt;
+              // item.incomeMoney = item.unClaimedAmt;
               if (claimTit = "预收款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
                 item.balanceMoney = Math.abs(item.unClaimedAmt);
@@ -1090,7 +1091,7 @@
           this.$refs.otherPaymentClaim.claimTit = claimTit;
           if (Math.abs(this.claimedSubjectList[0].paidMoney)>0 || this.claimedSubjectList[0].incomeMoney <= 0) {
             this.claimedSubjectList.map(item => {
-              item.paidMoney = item.unClaimedAmt;
+              // item.paidMoney = item.unClaimedAmt;
               if (claimTit = "预付款认领") {
                 item.rpAmt = Math.abs(item.paidMoney || item.incomeMoney);
                 // item.incomeMoney=item.rpAmt
@@ -1342,6 +1343,13 @@
         this.distributionPage.page = 1;
         this.distributionPage.size = val;
         this.distributionList();
+      },
+      getSelection(selection){
+        let count = 0
+        selection.forEach(item => {
+          count += item.unClaimedAmt
+        })
+        this.claimedAmt = count
       }
     }
   };

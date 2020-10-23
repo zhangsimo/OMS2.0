@@ -693,8 +693,14 @@ export default {
         this.dataloading1=true
         detailsDocuments(this.infoData).then(res => {
           if (res.code === 0) {
-            this.data1 = res.data.one;
-            this.data2 = res.data.two;
+            this.data1 =( res.data.one || []).map(el=>{
+              el.guestTypeName=el.guestType.name;
+              return el;
+            });
+            this.data2 =(  res.data.two || []).map(el=>{
+              el.guestTypeName=el.guestType.name;
+              return el;
+            });;
             this.dataloading1=false;
           }else{
             this.dataloading1=false;

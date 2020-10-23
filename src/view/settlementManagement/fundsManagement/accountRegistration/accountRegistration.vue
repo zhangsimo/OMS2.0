@@ -16,7 +16,7 @@
           <div class="db ml15">
             <span>门店：</span>
             <Select v-model="shopCode" filterable class="w150" :disabled="selectShopList">
-              <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml15">

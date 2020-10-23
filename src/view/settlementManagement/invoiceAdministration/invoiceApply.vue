@@ -31,7 +31,7 @@
           <div class="ml20 flexd">
             <span>分店名称：</span>
             <Select v-model="form.orgId" style="width:180px" :disabled="selectShopList">
-              <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+              <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.shortName}}</Option>
             </Select>
             <!-- <i class="iconfont iconcaidan input" @click="Dealings(1)"></i> -->
           </div>
@@ -140,6 +140,7 @@
           class="mt10 fr"
           show-sizer
           @on-change="changePage"
+          :page-size-opts="pageSizeOpts"
           @on-page-size-change="changeSize"
           show-total
           size="small"
@@ -1345,6 +1346,7 @@
         Branchstore: [1, 2, 3, 4, 5],
         Reconciliationlist: [],
         pagetotal: 0,
+        pageSizeOpts:[10,50,100,200],
         Reconciliationtype: "",
         isActive: "",
         guestNameList: [],
