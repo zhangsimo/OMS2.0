@@ -180,7 +180,7 @@ export default {
       }
     },
     seleteQuery() {
-      let obj = {
+      let data = {
         startDate: this.dateQuery[0]
           ? moment(this.dateQuery[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
@@ -191,7 +191,10 @@ export default {
         guestId: this.companyId,
         paymentBalance:0
       };
-      findByDynamicQuery(obj).then(res => {
+      let obj={
+
+      }
+      findByDynamicQuery(obj,data).then(res => {
         if (res.code === 0) {
           this.accountData = res.data.content;
         }
