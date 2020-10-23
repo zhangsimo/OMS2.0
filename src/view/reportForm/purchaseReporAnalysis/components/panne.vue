@@ -255,7 +255,7 @@
     },
     methods: {
       changeShowPerson() {
-        this.search.showPerson = this.search.guestPart ? 1 : 0;
+        this.search.showPerson = this.search.guestPart==true ? 1 : 0;
       },
       //供应商等级
       getTreeList() {
@@ -339,23 +339,7 @@
       // 查询
       query() {
         this.moreModel = false;
-        let data = {};
-        for (let key in this.search) {
-          if (this.search[key]) {
-            if (key == "enterDate") {
-              if (this.search["enterDate"][0]) {
-                data.enterDateStart =
-                  moment(this.search["enterDate"][0]).format("YYYY-MM-DD HH:mm:ss");
-                data.enterDateEnd =
-                  moment(this.search["enterDate"][1]).endOf("day").format("YYYY-MM-DD HH:mm:ss");
-              }
-              this.search.guestPart == true ? this.search.showPerson = 1 : this.search.showPerson = 0
-            } else {
-              data[key] = this.search[key];
-            }
-          }
-        }
-        this.$emit("search", data);
+        this.$emit("search", this.search);
       },
       // 更多
       moreOpen() {

@@ -361,28 +361,7 @@
       // 查询
       query() {
         this.moreModel=false;
-        let data = {};
-        for (let key in this.search) {
-          if (this.search[key]) {
-            if (key == "enterDate") {
-              if (this.search["enterDate"][0]) {
-                data.enterDateStart =
-                  moment(this.search["enterDate"][0]).format("YYYY-MM-DD") +
-                  " 00:00:00";
-                data.enterDateEnd =
-                  moment(this.search["enterDate"][1]).endOf("day").format("YYYY-MM-DD HH:mm:ss");
-              }
-              this.search.guestPart == true ? this.search.showPerson = 1 : this.search.showPerson = 0
-            } else {
-              data[key] = this.search[key];
-            }
-          }
-        }
-        if (this.quickDates.length >= 2 && this.quickDates[0]) {
-          data.enterDateStart = this.quickDates[0];
-          data.enterDateEnd = this.quickDates[1];
-        }
-        this.$emit("search", data);
+        this.$emit("search", this.search);
       },
       //更多查询清空
       async resetMoreReseach() {
