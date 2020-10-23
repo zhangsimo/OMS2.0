@@ -237,7 +237,8 @@ export default {
       accountData: [
         { accountNo: "", accountSumAmt: "" },
         { accountNo: "", accountSumAmt: "" },
-        { accountNo: "", accountSumAmt: "" }
+        { accountNo: "", accountSumAmt: "" },
+        { accountNo: "", accountSumAmt: "" },
       ], //对账单号
       store: "", //弹框门店
       bill: "", //单据编号
@@ -470,7 +471,8 @@ export default {
           this.accountData = [
             {accountNo: "", accountSumAmt: ""},
             {accountNo: "", accountSumAmt: ""},
-            {accountNo: "", accountSumAmt: ""}
+            {accountNo: "", accountSumAmt: ""},
+            { accountNo: "", accountSumAmt: "" },
           ]
         }
         res.data.one.map(item => {
@@ -486,6 +488,11 @@ export default {
             };
           } else if (item.number === 3) {
             this.accountData[2] = {
+              accountNo: item.accountNo,
+              accountSumAmt: item.accountSumAmt
+            };
+          }else{
+            this.accountData[3] = {
               accountNo: item.accountNo,
               accountSumAmt: item.accountSumAmt
             };
