@@ -419,7 +419,7 @@
           collectionName: "", //收款户名
           bankName: "", //开户行
           collectionAccount: "", //收款账号
-          thisPaymentAccount: "", //本次申请付款账户
+          thisPaymentAccountId: "", //本次申请付款账户
           billingType: {value: 0} //计划结算类型
         },
         arrId:[],
@@ -1126,13 +1126,13 @@
       },
       // 保存接口
       async getPreservation(num) {
-        if (this.infoBase.billingType.value == "0") {
+        if (this.infoBase.billingType.value == "0" && num == 1) {
           if (!this.infoBase.collectionName)
             return this.$message.error("收款户名不能为空");
           if (!this.infoBase.bankName) return this.$message.error("开户行不能为空");
           if (!this.infoBase.collectionAccount)
             return this.$message.error("银行账号不能为空");
-          if (!this.infoBase.thisPaymentAccount)
+          if (!this.infoBase.thisPaymentAccountId)
             return this.$message.error("付款账户不能为空");
         }
         if (this.infoBase.badDebtReceivable - this.infoBase.payingBadDebts > 100) {
