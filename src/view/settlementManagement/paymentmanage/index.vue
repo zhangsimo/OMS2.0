@@ -273,14 +273,12 @@
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation"/>
-    <PrintShow ref="PrintShow" :title="tit"/>
   </div>
 </template>
 
 <script>
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
   import Monthlyreconciliation from "./Monthlyreconciliation.vue";
-  import PrintShow from "./component/PrintShow";
   import {
     getreceivable,
     getSalelist,
@@ -302,7 +300,6 @@
     components: {
       quickDate,
       Monthlyreconciliation,
-      PrintShow
     },
     data() {
       return {
@@ -2382,6 +2379,16 @@
           location.href = payColSelOrPurchaseExport(params)
         }
       },
+      //创建a标签
+      openwin(url) {
+        var a = document.createElement("a"); //创建a对象
+        a.setAttribute("href", url);
+        a.setAttribute("target", "_blank");
+        a.setAttribute("id", "camnpr");
+        document.body.appendChild(a);
+        a.click(); //执行当前对象
+        document.body.removeChild(a)
+      },
       // 打印
       print(type) {
         type ? (this.tit = "采购入库") : (this.tit = "销售出库");
@@ -2402,7 +2409,7 @@
             route: this.$route.name
           };
           let routeUrl = this.$router.resolve({name: "print", query: order})
-          window.open(routeUrl.href, "_blank");
+          this.openwin(routeUrl.href)
         }, 0)
       },
       //获取公司
