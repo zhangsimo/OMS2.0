@@ -103,7 +103,7 @@
             min-width="200"
           >
             <template v-slot="{row}">
-              <tag v-for="v in row.shopNameList">{{v.shopName}}</tag>
+              <tag v-for="(v,index) in row.shopNameList" :key="index">{{v.shopName}}</tag>
             </template>
           </vxe-table-column>
           <vxe-table-column
