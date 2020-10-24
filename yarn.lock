@@ -9160,7 +9160,7 @@ ws@^6.0.0, ws@^6.2.1:
   dependencies:
     async-limiter "~1.0.0"
 
-xe-utils@^2.7.15:
+xe-utils@^2.7.8:
   version "2.7.16"
   resolved "https://registry.npm.taobao.org/xe-utils/download/xe-utils-2.7.16.tgz#8f401d46e6ba5e865748c518894257b0c0067d85"
   integrity sha1-j0AdRua6XoZXSMUYiUJXsMAGfYU=
