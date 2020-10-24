@@ -6,7 +6,7 @@
         <div class="fr">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
-          <Input class="w180 mr10" v-model="calculation"/>
+          <Input class="w180 mr10" readonly v-model="calculation"/>
           <Button @click="chooseAuxiliary">辅助计算</Button>
         </div>
       </div>
@@ -79,14 +79,15 @@
       </div>
     </Modal>
     <PreClaimModal ref="PClaimModal"></PreClaimModal>
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
   </div>
 </template>
 
 <script>
 import PreClaimModal from "./PreClaimModal"
-import voucherInput from "@/view/settlementManagement/fundsManagement/claimWrite/components/components/voucherInput";
-import { addClaim } from "_api/settlementManagement/businessBorrowing";
+import voucherInput from "./voucherInput";
+import { addClaim } from "_api/settlementManagement/advanceCollection.js";
+
 
 export default {
   components: {
@@ -97,7 +98,7 @@ export default {
   data(){
     return {
       visibal: false,
-      calculation: '',
+      calculation: '', //选中辅助计算的名称
       tableData: [],
       outFlag: false,
       type: this.amountType,
@@ -109,7 +110,8 @@ export default {
           { type: 'number', message: '请输入数字' }
         ]
       },
-      accruedList:[{mateAccountCoding:""}]
+      accruedList:[{mateAccountCoding:""}],
+      voucherItem:{}, //获取辅助计算选中的数据
     }
   },
   computed: {
@@ -147,7 +149,9 @@ export default {
     open(){
       this.tableData = []
       this.amountType == 1 ?this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
-      this.$refs.voucherInput.Classification = true
+      this.$refs.voucherInput.Classification = 0
+      this.voucherItem = {} //打开时清空上次选中的辅助核算数据
+      this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
     },
 
@@ -184,7 +188,10 @@ export default {
         return
       }
       
-      
+      if(!this.voucherItem.id){
+        this.$message.error('请选择辅助核算')
+        return 
+      }
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
         let o = {}
@@ -194,8 +201,8 @@ export default {
       })
       let obj = {
         financeAccountCashList: this.financeAccountCashList,
-        loanId:this.$parent.loanId,
-        claimType: this.$parent.claimType
+        claimType: this.$parent.claimType,
+        guestId: this.voucherItem.id
       }
       addClaim(obj).then(res => {
         if(res.code === 0){
@@ -248,6 +255,13 @@ export default {
     //     if(reg.test(num)) return true
     //     return false
     // }
+    getCallBack() {
+      this.getMessage();
+    },
+    getMessage() {
+      this.calculation = this.$refs.voucherInput.AssistAccounting;
+      this.voucherItem = this.$refs.voucherInput.voucherItem
+    },
   },
 }
 </script>
