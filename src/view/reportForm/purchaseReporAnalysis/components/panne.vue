@@ -31,28 +31,24 @@
             <Button type="warning" @click="query" class="mr10">查询</Button>
             <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
               <Button class="mr10" @click="moreOpen">更多查询</Button>
-              <div slot="content" class="h300 pr20" style="overflow-y: scroll">
-                <div class="data ml10 pl50">
-                  <Row class="mb20">
-                    <span class="ml10">入库日期: </span>
+              <div slot="content" class="h300">
+                <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
+                  <FormItem label="入库日期: " class="h20">
                     <DatePicker
                       type="daterange"
-                      placement="bottom-end"
-                      style="width: 300px"
-                      class="ml5"
+                      placement="bottom-start"
+                      class="ml10 w300"
                       v-model="search.enterDate"
                     ></DatePicker>
-                  </Row>
-                </div>
-                <Form :label-width="100" class="ml10 pl25">
-                  <FormItem label="供应商编码: ">
-                    <Input type="text" class="w300 ml5" v-model="search.guestCode"/>
                   </FormItem>
-                  <FormItem label="供应商名称: ">
-                    <Input type="text" class="w300 ml5" v-model="search.guestName"/>
+                  <FormItem label="供应商编码: " class="h20">
+                    <Input type="text" class="w300 ml10" v-model="search.guestCode"/>
                   </FormItem>
-                  <FormItem label="供应商体系: " prop="belongSystem" class="h40">
-                    <Select v-model="search.belongSystem" class="ml5 mr10 w300">
+                  <FormItem label="供应商名称: " class="h20">
+                    <Input type="text" class="w300 ml10" v-model="search.guestName"/>
+                  </FormItem>
+                  <FormItem label="供应商体系: " prop="belongSystem" class="h20">
+                    <Select v-model="search.belongSystem" class="ml10 mr10 w300">
                       <Option
                         v-for="item in Subordinate"
                         :value="item.value"
@@ -61,40 +57,43 @@
                       </Option>
                     </Select>
                   </FormItem>
-<!--                  <FormItem label="供应商分类: ">-->
-<!--                    <el-cascader-->
-<!--                      ref="casecader"-->
-<!--                      size="small"-->
-<!--                      :options="treeDiagramList"-->
-<!--                      @change="getGYSFLlist"-->
-<!--                      :props="{ multiple: true, children: 'children',label:'title',value:'id' }"-->
-<!--                      collapse-tags-->
-<!--                      clearable></el-cascader>-->
-<!--                  </FormItem>-->
-                  <FormItem label="配件编码: ">
-                    <Input type="text" class="w300 ml5" v-model="search.partCode"/>
+                  <!--                  <FormItem label="供应商分类: ">-->
+                  <!--                    <el-cascader-->
+                  <!--                      ref="casecader"-->
+                  <!--                      size="small"-->
+                  <!--                      :options="treeDiagramList"-->
+                  <!--                      @change="getGYSFLlist"-->
+                  <!--                      :props="{ multiple: true, children: 'children',label:'title',value:'id' }"-->
+                  <!--                      collapse-tags-->
+                  <!--                      clearable></el-cascader>-->
+                  <!--                  </FormItem>-->
+                  <FormItem label="配件内码: " class="h20">
+                    <Input type="text" class="w300 ml10" v-model="search.partId"/>
                   </FormItem>
-                  <FormItem label="配件名称: ">
-                    <Input type="text" class="w300 ml5" v-model="search.partName"/>
+                  <FormItem label="配件编码: " class="h20">
+                    <Input type="text" class="w300 ml10" v-model="search.partCode"/>
                   </FormItem>
-<!--                  <FormItem label="配件分类">-->
-<!--                    <Select-->
-<!--                      v-model="search.partTypeF"-->
-<!--                      @on-change="changetype"-->
-<!--                      class="w300 ml5"-->
-<!--                      filterable>-->
-<!--                      <Option-->
-<!--                        v-for="item in typepf"-->
-<!--                        :value="item.typeId"-->
-<!--                        :key="item.typeId"-->
-<!--                      >{{item.name}}-->
-<!--                      </Option>-->
-<!--                    </Select>-->
-<!--                  </FormItem>-->
-                  <FormItem label="适用车款: ">
+                  <FormItem label="配件名称: " class="h20">
+                    <Input type="text" class="w300 ml10" v-model="search.partName"/>
+                  </FormItem>
+                  <!--                  <FormItem label="配件分类">-->
+                  <!--                    <Select-->
+                  <!--                      v-model="search.partTypeF"-->
+                  <!--                      @on-change="changetype"-->
+                  <!--                      class="w300 ml10"-->
+                  <!--                      filterable>-->
+                  <!--                      <Option-->
+                  <!--                        v-for="item in typepf"-->
+                  <!--                        :value="item.typeId"-->
+                  <!--                        :key="item.typeId"-->
+                  <!--                      >{{item.name}}-->
+                  <!--                      </Option>-->
+                  <!--                    </Select>-->
+                  <!--                  </FormItem>-->
+                  <FormItem label="适用车款: " class="h20">
                     <Select
                       @on-change="getSelectCarBrand"
-                      class="w300 ml5"
+                      class="w300 ml10"
                       v-model="search.carModelName"
                       filterable
                     >
@@ -106,9 +105,9 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="品牌: ">
+                  <FormItem label="品牌: " class="h20">
                     <Select
-                      class="w300 ml5"
+                      class="w300 ml10"
                       clearable
                       label-in-value
                       filterable
@@ -127,19 +126,19 @@
                     </Select>
                   </FormItem>
                 </Form>
-                <Row>
-                  <Col span="18">
+                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pt5 pr30 w400">
+                  <Col span="20">
                     <Row>
-                      <Col span="6">
-                        <Button class="ml20" type="primary" @click="query">确定</Button>
+                      <Col span="7" class="ml5">
+                        <Button type="primary" @click="query">确定</Button>
                       </Col>
-                      <Col span="12">
+                      <Col span="6">
                         <Button @click="cancelContent(0)">取消</Button>
                       </Col>
                     </Row>
                   </Col>
-                  <Col span="6" class="flex" style="flex-direction: row-reverse;">
-                    <Button class="ml30" type="primary" @click="cancelContent(1)">清空条件</Button>
+                  <Col span="4" class="flex pl10" style="flex-direction: row-reverse;">
+                    <Button type="primary" @click="cancelContent(1)">清空条件</Button>
                   </Col>
                 </Row>
               </div>
@@ -164,6 +163,7 @@
   import {getCarPartClass} from "_api/parts";
   import {getCarBrandAll} from "_api/system/systemSetting/Initialization";
   import {ThisMonthStr} from "_c/getDate/index_bill.js"
+
   export default {
     components: {QuickDate},
     props: {
@@ -209,7 +209,7 @@
           partTypeF: "",//配件分类
           partBrand: "",//配件品牌
           carModelName: "",//品牌车型
-          partInnerCode: "",//配件内码
+          partId: "",//配件内码
           partCode: "",//配件编码
           enterDate: ThisMonthStr(), // 提交日期
           orgid: "" // 门店
@@ -246,7 +246,7 @@
       if (this.carObj.carBrandData.length < 1) {
         this.getCarBrand()
       }
-      if (this.typepf.length<1) {
+      if (this.typepf.length < 1) {
         this.treeInit();
       }
       var arr = await creat("", this.$store);
@@ -255,7 +255,7 @@
     },
     methods: {
       changeShowPerson() {
-        this.search.showPerson = this.search.guestPart ? 1 : 0;
+        this.search.showPerson = this.search.guestPart==true ? 1 : 0;
       },
       //供应商等级
       getTreeList() {
@@ -339,27 +339,7 @@
       // 查询
       query() {
         this.moreModel = false;
-        let data = {};
-        for (let key in this.search) {
-          if (this.search[key]) {
-            if (key == "enterDate") {
-              if (this.search["enterDate"][0]) {
-                data.enterDateStart =
-                  moment(this.search["enterDate"][0]).format("YYYY-MM-DD") +
-                  " 00:00:00";
-                data.enterDateEnd =
-                  moment(this.search["enterDate"][1]).endOf("day").format("YYYY-MM-DD HH:mm:ss");
-              }
-              this.search.guestPart == true ? this.search.showPerson = 1 : this.search.showPerson = 0
-            } else {
-              data[key] = this.search[key];
-            }
-          }
-        }
-        this.$emit("search", data);
-        setTimeout(()=>{
-          this.search.enterDate=ThisMonthStr()
-        },0)
+        this.$emit("search", this.search);
       },
       // 更多
       moreOpen() {
@@ -378,9 +358,9 @@
           partTypeF: "",//配件分类
           partBrand: "",//配件品牌
           carModelName: "",//品牌车型
-          partInnerCode: "",//配件内码
+          partId: "",//配件内码
           partCode: "",//配件编码
-          enterDate: [], // 提交日期
+          enterDate: this.search.enterDate, // 提交日期
           orgid: this.search.orgid
         }
         this.search = data;
@@ -388,14 +368,14 @@
       cancelContent(type) {
         if (type == 0) {//更多点击取消 先清空再关闭
           this.resetMoreReseach()
-          this.search.enterDate=ThisMonthStr()
+          this.search.enterDate = ThisMonthStr()
           this.moreModel = false;
         } else if (type == 1) {//更多查询点击清空查询
           this.resetMoreReseach();
         }
       },
-      poperHide(){
-        this.moreModel=false;
+      poperHide() {
+        this.moreModel = false;
       },
       getmoreData(data) {
         if (data != null) {

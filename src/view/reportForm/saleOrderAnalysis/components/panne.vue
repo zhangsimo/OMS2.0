@@ -31,27 +31,23 @@
             <Button type="warning" @click="query" class="mr10">查询</Button>
             <Poptip placement="bottom-start" v-model="moreModel">
               <Button class="mr10" @click="moreOpen">更多查询</Button>
-              <div slot="content" class="h300 pr20" style="overflow-y: scroll">
-                <div class="data ml10 pl50">
-                  <Row class="mb20">
-                    <span class="ml10">出库日期: </span>
+              <div slot="content" class="h300">
+                <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
+                  <FormItem label="出库日期: " class="h20">
                     <DatePicker
                       type="daterange"
-                      placement="bottom-end"
-                      style="width: 300px"
-                      class="ml5"
+                      placement="bottom-start"
+                      class="ml5 w300"
                       v-model="search.enterDate"
                     ></DatePicker>
-                  </Row>
-                </div>
-                <Form :label-width="100" class="ml10 pl25">
-                  <FormItem label="客户编码: ">
+                  </FormItem>
+                  <FormItem label="客户编码: " class="h20">
                     <Input type="text" class="w300 ml5" v-model="search.guestCode"/>
                   </FormItem>
-                  <FormItem label="客户名称: ">
+                  <FormItem label="客户名称: " class="h20">
                     <Input type="text" class="w300 ml5" v-model="search.guestName"/>
                   </FormItem>
-<!--                  <FormItem label="客户分类: ">-->
+<!--                  <FormItem label="客户分类: " class="h20">-->
 <!--                    <el-cascader-->
 <!--                      ref="casecader"-->
 <!--                      size="small"-->
@@ -61,16 +57,16 @@
 <!--                      collapse-tags-->
 <!--                      clearable></el-cascader>-->
 <!--                  </FormItem>-->
-                  <FormItem label="配件内码: ">
+                  <FormItem label="配件内码: " class="h20">
                     <Input type="text" class="w300 ml5" v-model="search.partId"/>
                   </FormItem>
-                  <FormItem label="配件编码: ">
+                  <FormItem label="配件编码: " class="h20">
                     <Input type="text" class="w300 ml5" v-model="search.partCode"/>
                   </FormItem>
-                  <FormItem label="配件名称: ">
+                  <FormItem label="配件名称: " class="h20">
                     <Input type="text" class="w300 ml5" v-model="search.partName"/>
                   </FormItem>
-                  <FormItem label="配件一级: ">
+                  <FormItem label="配件一级: " class="h20">
                     <Select v-model="search.partTypeF" @on-change="changetype" class="w300 ml5" filterable>
                       <Option
                         v-for="item in typepf"
@@ -80,7 +76,7 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="配件二级: ">
+                  <FormItem label="配件二级: " class="h20">
                     <Select v-model="search.partTypeS" @on-change="changetypeS" class="w300 ml5" filterable>
                       <Option
                         v-for="item in typeps"
@@ -90,7 +86,7 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="品牌车型: ">
+                  <FormItem label="品牌车型: " class="h20">
                     <Select
                       @on-change="getSelectCarBrand"
                       class="w300 ml5"
@@ -105,7 +101,7 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="品牌: ">
+                  <FormItem label="品牌: " class="h20">
                     <Select
                       class="w300 ml5"
                       clearable
@@ -127,19 +123,19 @@
                     </Select>
                   </FormItem>
                 </Form>
-                <Row>
-                  <Col span="18">
+                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pr30 w400 pt5">
+                  <Col span="20">
                     <Row>
-                      <Col span="6">
-                        <Button class="ml20" type="primary" @click="query">确定</Button>
+                      <Col span="7" class="ml5">
+                        <Button type="primary" @click="query">确定</Button>
                       </Col>
-                      <Col span="12">
+                      <Col span="6">
                         <Button @click="cancelContent(0)">取消</Button>
                       </Col>
                     </Row>
                   </Col>
-                  <Col span="6" class="flex" style="flex-direction: row-reverse;">
-                    <Button class="ml30" type="primary" @click="cancelContent(1)">清空条件</Button>
+                  <Col span="4" class="flex pl10" style="flex-direction: row-reverse;">
+                    <Button type="primary" @click="cancelContent(1)">清空条件</Button>
                   </Col>
                 </Row>
               </div>
@@ -163,6 +159,7 @@
   import { getClientTreeList } from "@/api/system/essentialData/clientManagement";
   import {getCarPartClass} from "_api/parts";
   import {getCarBrandAll} from "_api/system/systemSetting/Initialization";
+  import {ThisMonthStr} from "_c/getDate/index_bill.js"
 
   export default {
     components: {QuickDate},
@@ -214,7 +211,7 @@
           partBrand: "",//配件品牌
           partId: "",//配件内码
           partCode: "",//配件编码
-          enterDate: ToDayStr(), // 提交日期
+          enterDate: ThisMonthStr(), // 提交日期
           orgid: "" // 门店
         },
         moreModel:false,//更多查询是否开启
@@ -365,28 +362,7 @@
       // 查询
       query() {
         this.moreModel=false;
-        let data = {};
-        for (let key in this.search) {
-          if (this.search[key]) {
-            if (key == "enterDate") {
-              if (this.search["enterDate"][0]) {
-                data.enterDateStart =
-                  moment(this.search["enterDate"][0]).format("YYYY-MM-DD") +
-                  " 00:00:00";
-                data.enterDateEnd =
-                  moment(this.search["enterDate"][1]).endOf("day").format("YYYY-MM-DD HH:mm:ss");
-              }
-              this.search.guestPart == true ? this.search.showPerson = 1 : this.search.showPerson = 0
-            } else {
-              data[key] = this.search[key];
-            }
-          }
-        }
-        if (this.quickDates.length >= 2 && this.quickDates[0]) {
-          data.enterDateStart = this.quickDates[0];
-          data.enterDateEnd = this.quickDates[1];
-        }
-        this.$emit("search", data);
+        this.$emit("search", this.search);
       },
       //更多查询清空
       async resetMoreReseach() {
@@ -404,7 +380,7 @@
           partBrand: "",//配件品牌
           partId: "",//配件内码
           partCode: "",//配件编码
-          enterDate: [], // 提交日期
+          enterDate: this.search.enterDate, // 提交日期
           orgid:this.search.orgid
         }
         this.search=data
