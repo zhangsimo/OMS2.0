@@ -101,7 +101,7 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="品牌: " class="h20">
+                  <FormItem label="品牌: " class="h20 pb30">
                     <Select
                       class="w300 ml5"
                       clearable
@@ -123,7 +123,7 @@
                     </Select>
                   </FormItem>
                 </Form>
-                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pr30 w400 pt5">
+                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pt10 mt10 pr30 w400">
                   <Col span="20">
                     <Row>
                       <Col span="7" class="ml5">
