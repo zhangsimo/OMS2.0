@@ -607,7 +607,9 @@ export default {
         this.departmentVal = selectedData[selectedData.length - 1].groupCode;
         this.auxiliaryTypeCode = "3";
       }
-      this.voucherItem = {};
+      this.voucherItem = {
+        id: val[0]
+      };
     },
     // 辅助弹框个人搜索
     SearchPersonal() {
