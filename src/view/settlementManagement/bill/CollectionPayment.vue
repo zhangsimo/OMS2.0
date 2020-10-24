@@ -238,7 +238,7 @@
         tab: "key1",
         value: [],
         Branchstore: [
-          {id: 0, shortName: '全部'}
+          {id: 0, name: '全部',shortName:"全部"}
         ], //分店名称
         page: {
           total: 0,
