@@ -31,8 +31,8 @@
             <Button type="warning" @click="query" class="mr10">查询</Button>
             <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
               <Button class="mr10" @click="moreOpen">更多查询</Button>
-              <div slot="content" class="h300">
-                <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
+              <div slot="content">
+                <Form :label-width="80" class="pl5 h300 pb20" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
                   <FormItem label="入库日期: " class="h20">
                     <DatePicker
                       type="daterange"
@@ -47,7 +47,7 @@
                   <FormItem label="供应商名称: " class="h20">
                     <Input type="text" class="w300 ml10" v-model="search.guestName"/>
                   </FormItem>
-                  <FormItem label="供应商体系: " prop="belongSystem" class="h20">
+                  <FormItem label="供应商体系: " class="h20">
                     <Select v-model="search.belongSystem" class="ml10 mr10 w300">
                       <Option
                         v-for="item in Subordinate"
@@ -57,16 +57,20 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <!--                  <FormItem label="供应商分类: ">-->
-                  <!--                    <el-cascader-->
-                  <!--                      ref="casecader"-->
-                  <!--                      size="small"-->
-                  <!--                      :options="treeDiagramList"-->
-                  <!--                      @change="getGYSFLlist"-->
-                  <!--                      :props="{ multiple: true, children: 'children',label:'title',value:'id' }"-->
-                  <!--                      collapse-tags-->
-                  <!--                      clearable></el-cascader>-->
-                  <!--                  </FormItem>-->
+                  <FormItem label="供应商分类: " class="h20">
+                    <el-cascader
+                      ref="casecader"
+                      class="ml10 mr10 w300"
+                      size="small"
+                      :options="supplierTypes"
+                      placeholder=""
+                      v-model="search.supplierTypes"
+                      @change="getGYSFLlist"
+                      :props="{ multiple: true, children: 'children',label:'title',value:'id' }"
+                      :show-all-levels="true"
+                      collapse-tags
+                      clearable></el-cascader>
+                  </FormItem>
                   <FormItem label="配件内码: " class="h20">
                     <Input type="text" class="w300 ml10" v-model="search.partId"/>
                   </FormItem>
@@ -76,20 +80,20 @@
                   <FormItem label="配件名称: " class="h20">
                     <Input type="text" class="w300 ml10" v-model="search.partName"/>
                   </FormItem>
-                  <!--                  <FormItem label="配件分类">-->
-                  <!--                    <Select-->
-                  <!--                      v-model="search.partTypeF"-->
-                  <!--                      @on-change="changetype"-->
-                  <!--                      class="w300 ml10"-->
-                  <!--                      filterable>-->
-                  <!--                      <Option-->
-                  <!--                        v-for="item in typepf"-->
-                  <!--                        :value="item.typeId"-->
-                  <!--                        :key="item.typeId"-->
-                  <!--                      >{{item.name}}-->
-                  <!--                      </Option>-->
-                  <!--                    </Select>-->
-                  <!--                  </FormItem>-->
+                  <FormItem label="配件分类" class="h20">
+                    <Select
+                      v-model="search.typeId"
+                      @on-change="changetype"
+                      class="ml10 mr10 w300"
+                      filterable>
+                      <Option
+                        v-for="item in typepf"
+                        :value="item.typeId"
+                        :key="item.typeId"
+                      >{{item.name}}
+                      </Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="适用车款: " class="h20">
                     <Select
                       @on-change="getSelectCarBrand"
@@ -126,7 +130,7 @@
                     </Select>
                   </FormItem>
                 </Form>
-                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pt10 pr30 w400">
+                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pr30 w400">
                   <Col span="20">
                     <Row>
                       <Col span="7" class="ml5">
@@ -196,7 +200,8 @@
             value: 2
           }
         ],//供应商体系
-        treeDiagramList: "",//供应商分类
+        supplierTypes: [],//供应商分类
+        list:[],
         shoppingList: [{id: "", shortName: "全部", fullName: "全部", name: "全部"}],//门店数组
         search: {
           isPanne: true,
@@ -205,8 +210,8 @@
           guestCode: "",//供应商编码
           guestName: "",//供应商名称
           belongSystem: "",//供应商体系
-          treeDiagramList: [],//供应商分类
-          partTypeF: "",//配件分类
+          supplierTypes: [],//供应商分类
+          typeId: "",//配件分类
           partBrand: "",//配件品牌
           carModelName: "",//品牌车型
           partId: "",//配件内码
@@ -261,27 +266,32 @@
       getTreeList() {
         getSupplierTreeList().then(res => {
           if (res.code == 0) {
-            this.list = res.data
-            let leverOne = res.data.filter(item => item.lever == 1)
-            leverOne.map(item => {
-              item.children = []
-              item.code = item.id
-              this.list.forEach(el => {
-                if (item.id == el.parentId) {
-                  item.children.push(el)
-                }
-              })
-            })
-            this.treeDiagramList = leverOne
+            let content = res.data || [];
+            this.supplierTypes = this.treeDataFun(content)
           }
         })
+      },
+      treeDataFun(content) {
+        let level1 = content.filter(item => item.lever === 1 );
+        return this.treeFilterData(level1, content);
+      },
+      treeFilterData(treeData, content) {
+        treeData.map(item => {
+          let arrData = content.filter(item1 => item1.parentId == item.id);
+          if (arrData.length > 0) {
+            item.children = this.treeFilterData(arrData, content)
+          } else {
+            item.children = null
+          }
+        })
+        return treeData
       },
       //供应商分类 点击
       getGYSFLlist(v) {
         if (v.length == 0) {
-          return this.search.treeDiagramList = []
+          return this.search.supplierTypes = []
         }
-        this.search.treeDiagramList = v;
+        this.search.supplierTypes = v;
       },
       //获取所有车型品牌
       getCarBrand() {
@@ -317,8 +327,8 @@
         let res = await getCarPartClass();
         this.typepf = res;
         // console.log(res,11111)
-        if (this.search.partTypeF) {
-          this.changetype(this.search.partTypeF);
+        if (this.search.typeId) {
+          this.changetype(this.search.typeId);
         }
       },
       changetype(v) {
@@ -354,8 +364,8 @@
           guestCode: "",//供应商编码
           guestName: "",//供应商名称
           belongSystem: "",//供应商体系
-          treeDiagramList: [],//供应商分类
-          partTypeF: "",//配件分类
+          supplierTypes: [],//供应商分类
+          typeId: "",//配件分类
           partBrand: "",//配件品牌
           carModelName: "",//品牌车型
           partId: "",//配件内码
