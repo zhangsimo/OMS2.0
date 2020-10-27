@@ -976,7 +976,7 @@
         this.getList();
       },
       async baocun1() {
-        let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {
+        let zero = tools.isZero1(this.Leftcurrentrow.detailVOS, {
           qty: "hasAcceptQty"
         });
         if (zero) return;
@@ -1116,7 +1116,7 @@
               this.$Message.info("请先保存新增出库单");
               return;
             }
-            let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {
+            let zero = tools.isZero1(this.Leftcurrentrow.detailVOS, {
               qty: "hasAcceptQty"
             });
             if (zero) return;

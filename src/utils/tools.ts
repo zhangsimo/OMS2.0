@@ -189,7 +189,7 @@ export function isZero(data: Array<any>, { qty, price }): boolean {
   let zero1: any, zero2: any;
 
   if (qty) {
-    zero1 = data.find(el => el[qty] === undefined); // || el[qty] * 1 <= 0
+    zero1 = data.find(el => el[qty] === undefined|| el[qty] * 1 <= 0); // || el[qty] * 1 <= 0
   }
 
   if (price) {
@@ -217,7 +217,7 @@ export function isZero1(data: Array<any>, { qty, price }): boolean {
   let zero1: any, zero2: any;
 
   if (qty) {
-    zero1 = data.find(el => el[qty] === undefined|| el[qty] * 1 <= 0); // || el[qty] * 1 <= 0
+    zero1 = data.find(el => el[qty] === undefined); // || el[qty] * 1 <= 0
   }
 
   if (price) {
