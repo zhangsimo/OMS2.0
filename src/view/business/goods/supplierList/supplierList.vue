@@ -81,8 +81,8 @@
               class="mr10"
               @click="returnBack"
               :disabled="presentrowMsg!=1"
+              v-has="'returnBack'"
             >
-              <!--              v-has="'returnBack'"-->
               <i class="iconfont mr5 iconziyuan14"></i>返单
             </Button>
           </div>
