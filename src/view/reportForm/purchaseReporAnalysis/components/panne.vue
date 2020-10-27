@@ -32,7 +32,7 @@
             <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
               <Button class="mr10" @click="moreOpen">更多查询</Button>
               <div slot="content">
-                <Form :label-width="80" class="pl5 h300 pb20" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
+                <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
                   <FormItem label="入库日期: " class="h20">
                     <DatePicker
                       type="daterange"
@@ -130,7 +130,7 @@
                     </Select>
                   </FormItem>
                 </Form>
-                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pr30 w400">
+                <Row style="background-color: #ffffff;" class="pb5 pr30 w400">
                   <Col span="20">
                     <Row>
                       <Col span="7" class="ml5">
