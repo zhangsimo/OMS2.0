@@ -8,7 +8,7 @@
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
-            <span>制单日期：</span>
+            <!--<span>制单日期：</span>-->
             <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"
                          @on-change="dateChange"></Date-picker>
           </div>
@@ -29,7 +29,7 @@
             <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
-          <div class="db">
+          <div class="db mr10">
             <span>类型：</span>
             <Select v-model="type" style="width:200px" @on-change="getTransferWarehousing">
               <Option
@@ -39,6 +39,14 @@
               >{{ item.label }}
               </Option>
             </Select>
+          </div>
+          <div class="db mr10">
+            <Input
+              v-model="partCodeOrName"
+              placeholder="配件编码/名称"
+              class="w200"
+              clearable
+            />
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -110,6 +118,7 @@
         ], //分店名称
         model1: "",
         modal1: false,
+        partCodeOrName:'',
         page: {
           total: 0,
           sizeArr: [10, 20, 30, 40, 50],
