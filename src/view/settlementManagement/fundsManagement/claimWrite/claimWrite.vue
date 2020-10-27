@@ -1056,12 +1056,16 @@
             : "",     //结束时间参数
           // createTime:this.applyDate //日期查询时间发生日期
         };
+        this.accountNoWriteLoading=true;
         accountNoSelete(obj).then(res => {
           if (res.code === 0) {
             this.accountNoWriteData = res.data.content;
             this.accountPage.total = res.data.totalElements;
           }
-        });
+          this.accountNoWriteLoading=false
+        }).catch(err=>{
+          this.accountNoWriteLoading=false;
+        })
       },
       //本店待认领款查询接口
       claimedList() {
