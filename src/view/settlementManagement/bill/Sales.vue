@@ -649,6 +649,9 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
+        }
         showLoading(".loadingClass", "数据加载中，请勿操作")
         getOrderlist(params, obj).then(res => {
           // console.log(res);

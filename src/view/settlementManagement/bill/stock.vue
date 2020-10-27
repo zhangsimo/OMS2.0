@@ -918,6 +918,9 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
+        }
         if (this.typeName === "050202") {
           obj.outDateStart = this.value[0]
             ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")

@@ -706,6 +706,9 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
+        }
         showLoading(".loadingClass", "数据加载中，请勿操作")
         transferWarehousing(params, obj).then(res => {
           if (res.data.vos.length !== 0) {

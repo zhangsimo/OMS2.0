@@ -815,6 +815,9 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
+        }
         // console.log(this.value)
         if (this.type === "050101") {
           (obj.enterDateStart = this.value[0]
