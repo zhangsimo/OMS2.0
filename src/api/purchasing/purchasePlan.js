@@ -18,6 +18,14 @@ export function getSupplierList(data) {
     data
   })
 }
+//采购退货返单接口
+export function returnBack(data){
+  return axios.request({
+    url:`${api.omsOrder}/sellOrderReturn/reorder`,
+    method:"post",
+    data
+  })
+}
 // 获取供应商列表
 // /guest/findForAllot
 export function findForAllot(data) {

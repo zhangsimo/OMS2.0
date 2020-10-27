@@ -23,6 +23,7 @@ export const mixSelectPartCom = {
       partId: "",
       partCode: "",
       oemCode: "",
+      showDisabled:false,//显示禁用
       treeData: [], //系统分类树形数据
 
       //查询选择
@@ -207,7 +208,7 @@ export const mixSelectPartCom = {
           formData[k] = data[k];
         }
       }
-
+      formData.isDisabled=this.showDisabled==false?0:1;
       if(this.formPlanmain && this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
       }

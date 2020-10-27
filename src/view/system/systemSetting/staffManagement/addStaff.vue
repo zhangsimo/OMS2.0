@@ -73,7 +73,7 @@
           <div style="flex-flow: row nowrap;width: 100%">
             <FormItem label="入职公司:" prop="shopNumber">
               <Select v-model="data.shopNumber" style="width:150px">
-                <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
               </Select>
             </FormItem>
           </div>

@@ -431,7 +431,7 @@ export default {
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
-      Branchstore: [{ id: 0, shortName: "全部" }], //分店名称
+      Branchstore: [{ id: "0", name: "全部",shortName:"全部" }], //分店名称
       requestCode: "", //申请单号
       currRow: null, //选中行
       claimModal: false, //认领弹框

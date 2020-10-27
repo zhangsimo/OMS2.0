@@ -75,6 +75,7 @@
             <div>{{Math.abs(row.paidMoney)}}</div>
           </template>
         </vxe-table-column>
+        <vxe-table-column field="unClaimedAmt" width="80" title="未认领金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
           :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
@@ -248,7 +249,7 @@
         tableData: [], //表格信息
         page: {
           num: 1,
-          size: 10,
+          size: 20,
           total: 0,
           opts: [20, 50, 100, 200]
         }, //分页
@@ -291,6 +292,7 @@
           this.$refs.quickDate.resetFun()
         }
         this.MessageValue = ''
+        this.$refs.voucherInput.AssistAccounting = ''
         // this.getQuery();
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
@@ -299,7 +301,7 @@
       //付款查询接口
       async getQuery() {
         if (this.claimTit == "其他付款认领") {
-          let obj = {
+          let data = {
             startTime: this.value[0]
               ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
               : "",
@@ -308,11 +310,13 @@
               : "",
             orgid: this.BranchstoreId,
             guestId: this.companyId,
-            size: this.page.size,
-            page: this.page.num - 1,
             claimAmt: 0
           };
-          findByDynamicQuery(obj).then(res => {
+          let obj={
+            size: this.page.size,
+            page: this.page.num - 1,
+          }
+          findByDynamicQuery(obj,data).then(res => {
             if (res.code === 0) {
               this.tableData = res.data.content;
               this.page.total = res.data.totalElements;
@@ -595,6 +599,10 @@
             this.$Message.error("本次认领金额不可大于支付金额")
             return
           }
+          if(data.claimMoney > this.accrued[0].unClaimedAmt){
+            this.$Message.error('本次认领金额不可大于未认领金额')
+            return
+          }
           data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2?1:this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if (data.auxiliaryTypeCode == "1" || data.auxiliaryTypeCode == "2" || data.auxiliaryTypeCode == "3" || data.auxiliaryTypeCode == "4") {
             data.isAuxiliaryAccounting = 0 //是否辅助核算类
@@ -611,17 +619,21 @@
               guestSourceId: objItem.id || ""
             }
           }
-          showLoading()
-          let res = await TurnToTheProfitAndLoss(data);
-          if (res.code === 0) {
-            hideLoading()
-            this.reloadParentList()
-            this.modal = false;
-            this.claimTit == "预付款认领"
-              ? this.$Message.success("预付款认领成功")
-              : this.$Message.success("其他付款认领成功");
-            this.formValidate.voucherInput = ""
-          } else {
+          try {
+            showLoading('body',"保存中，请勿操作。。。")
+            let res = await TurnToTheProfitAndLoss(data);
+            if (res.code === 0) {
+              this.reloadParentList()
+              this.modal = false;
+              this.claimTit == "预付款认领"
+                ? this.$Message.success("预付款认领成功")
+                : this.$Message.success("其他付款认领成功");
+              this.formValidate.voucherInput = ""
+              hideLoading()
+            } else {
+              hideLoading()
+            }
+          } catch (error) {
             hideLoading()
           }
         }

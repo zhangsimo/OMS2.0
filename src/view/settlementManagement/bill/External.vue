@@ -104,12 +104,20 @@
         ></Table>
       </div>
     </section>
+    <!--采购入库打印-->
+    <enternalPrint ref="enternalPrint"></enternalPrint>
+    <!--采购退货打印-->
+    <enternalReturnPrint ref="enternalReturnPrint"></enternalReturnPrint>
     <selectDealings ref="selectDealings" @selectSearchName="getOne"/>
   </div>
 </template>
 
 <script>
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
+  //采购入库打印
+  import enternalPrint from "./components/printShow/enternalPrint";
+  //采购退货打印
+  import enternalReturnPrint from "./components/printShow/enternalReturnPrint";
   import selectDealings from "./components/selectCompany";
   import {creat} from "./../components";
   import {
@@ -130,7 +138,9 @@
     name: "billExternal",
     components: {
       quickDate,
-      selectDealings
+      selectDealings,
+      enternalPrint,//采购入库  打印
+      enternalReturnPrint //采购退货 打印
     },
     data() {
       return {
@@ -160,6 +170,34 @@
             width: 40,
             className: "tc",
             resizable: true,
+          },
+          {
+            title: "操作",
+            width: 60,
+            className: "tc",
+            resizable: true,
+            render:(h,params)=>{
+              return h('div', [
+                h('span', {
+                  style: {
+                    color: "#40a6ff",
+                    cursor: "pointer"
+                  },
+                  domProps: {
+                    title: "打印"
+                  },
+                  on:{
+                    click:async ()=>{
+                      if(params.row.enterTypeIdName=="采购入库"){
+                        this.$refs.enternalPrint.openModal(params.row)
+                      }else if(params.row.enterTypeIdName=="采购退货"){
+                        this.$refs.enternalReturnPrint.openModal(params.row)
+                      }
+                    }
+                  }
+                }, "打印")
+              ])
+            }
           },
           {
             title: "分店名称",
@@ -467,7 +505,7 @@
             width: 150,
             resizable: true,
             render: (h, params) => {
-              return h("span", params.row.noTaxPrice.toFixed(2));
+              return h("span", params.row.noTaxPrice);
             }
           },
           {
@@ -620,19 +658,19 @@
             return;
           }
           const values = data.map(item => Number(item[key]));
-          if (index > 6 && index !== 11) {
+          if (index > 6 && index !== 11 && index != 7) {
             if (!values.every(value => isNaN(value))) {
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               sums[key] = {
                 key,
-                value: v.toFixed(2)
+                value: v
               };
             }
           } else if (index === 11) {
@@ -640,7 +678,22 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
+                } else {
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
+          } else if (index === 7) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr
                 } else {
                   return prev;
                 }

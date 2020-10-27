@@ -1199,16 +1199,16 @@ export default [
           }
       ]
       },
-      // {
-      //   path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
-      //   name: "dailySalesStatistics",
-      //   redirect: "",
-      //   // mark: "7107",
-      //   meta: { keepAlive: true,
-      //     title: "每日销售统计",
-      //   },
-      //   component: () => import("@/view/reportForm/dailySalesStatistics/index.vue"),
-      // },
+      {
+        path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
+        name: "dailySalesStatistics",
+        redirect: "",
+        mark: "7107",
+        meta: { keepAlive: true,
+          title: "每日销售统计",
+        },
+        component: () => import("@/view/reportForm/dailySalesStatistics/index.vue"),
+      },
       // {
       //   path: "/reportForm/salesAndInventorylist/salesAndInventorylist",
       //   name: "salesAndInventorylist",
@@ -1407,6 +1407,20 @@ export default [
               import(
                 "@/view/AlotManagement/transferringOrder/productDistribution/index.vue"
               )
+          },
+          {
+            path: "issuing-office",
+            name: "issuingOffice",
+            mark: "3105",
+            meta: { keepAlive: true,
+              // hideInMenu: true,
+              title: "开票单位",
+
+            },
+            component: () =>
+              import(
+                "@/view/system/basicData/issuingOffice/index.vue"
+                )
           },
           {
             path: "priceManage",

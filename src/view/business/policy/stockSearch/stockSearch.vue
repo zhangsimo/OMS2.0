@@ -551,6 +551,7 @@
       :styles="{ top: '50px', width: '700px' }"
       :footer-hide="true"
     >
+      <div class="positionDom">
       <vxe-form
         ref="xForm"
         class="my-form2"
@@ -579,7 +580,7 @@
         </vxe-form-item>
         <vxe-form-item title="仓位" field="shelf" span="12">
           <template v-slot="scope">
-            <vxe-input size="mini" v-model="formPlan2.shelf" class="w200" @blur="checkSelf"></vxe-input>
+            <vxe-input size="mini" v-model="formPlan2.shelf" class="w200"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="库存上限" field="upLimit" span="12">
@@ -608,7 +609,7 @@
         <Button type="primary" class="w80" @click="handleSubmit()">确定</Button>
         <Button class="w80" @click="positionModel=false" style="margin-left: 8px">取消</Button>
       </div>
-
+      </div>
     </Modal>
   </div>
 </template>
@@ -1412,33 +1413,32 @@
         this.defaultSort = order;
         this.getLotStocks();
       },
-      checkSelf({value}) {
-        // console.log(value)
-        if (value == "") {
+
+      async handleSubmit() {
+        if (this.formPlan2.shelf == "") {
           this.isSelfOk = true;
         } else {
-          checkStore({storeId: this.formPlan2.storeId, name: value}).then(
-            res => {
-              if (res.code == 0 && res.data != null) {
-                this.isSelfOk = true;
-              } else {
-                this.isSelfOk = false;
-              }
-            }
-          );
+          showLoading('.positionDom','仓位验证中...');
+          let res = await checkStore({storeId: this.formPlan2.storeId, name: this.formPlan2.shelf});
+          hideLoading();
+          if (res.code == 0 && res.data != null) {
+            this.isSelfOk = true;
+          } else {
+            this.isSelfOk = false;
+            return
+          }
         }
-      },
-      async handleSubmit() {
+
+
         if (!this.isSelfOk) {
-          return this.$message.error("请填写正确的仓位!");
+          return this.$Message.error("请填写正确的仓位!");
         }
         let rep = await setPosition(this.formPlan2)
         if (rep.code == 0) {
           this.positionModel = false;
-          this.$message.success("仓位设置成功!");
+          this.$Message.success("仓位设置成功!");
           this.formPlan2 = {};
           this.getAllStocks();
-
         }
       }
     }

@@ -460,7 +460,7 @@
         model3: "",
         Reconciliationtype: "",
         Branchstore: [
-          {id: 0, shortName: '全部'}
+          {id: '0', name: '全部',shortName:"全部"}
         ],
         modal1: false,
         text: "",
@@ -1447,7 +1447,7 @@
             this.reconciliationStatement.guestId,
             this.reconciliationStatement.id
           );
-          this.$refs.registrationEntry.modal1 = true;  
+          this.$refs.registrationEntry.modal1 = true;
         } else {
           this.$message.error("只能勾选计划对账类型为付款的对账单");
         }

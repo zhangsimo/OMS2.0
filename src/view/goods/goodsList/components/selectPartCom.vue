@@ -34,7 +34,9 @@
           <span class="mr5">OE:</span>
           <Input placeholder="OE码" style="width: 120px" v-model="oemCode" @on-enter="search"/>
         </div>
-
+        <div class="db mr5 fl">
+          <div class="mt5"><Checkbox v-model="showDisabled" @on-change="getList">显示禁用</Checkbox></div>
+        </div>
         <!-- <Select
           placeholder="选择品牌"
           filterable

@@ -360,7 +360,8 @@
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
             <template v-slot:edit="{ row }">
-              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>
+<!--              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>-->
+              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0" :controls="false"></vxe-input>
             </template>
           </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" title="金额" width="110">
@@ -1300,7 +1301,7 @@
               if (orderList.length > 0) {
                 let timer = null;
                 clearTimeout(timer);
-                timer = setTimeout(async () => {               
+                timer = setTimeout(async () => {
                   if (this.isClickSave) {
                     return this.$Message.error("请稍后订单处理中...");
                   }
