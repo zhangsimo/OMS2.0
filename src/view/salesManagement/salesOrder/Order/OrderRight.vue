@@ -1143,7 +1143,7 @@
           return
         }
         this.$refs.formPlan.validate(async valid => {
-          let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+          let zero = tools.isZero1(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
           if (valid) {
             try {
@@ -1279,7 +1279,7 @@
           return
         }
         this.$refs.formPlan.validate(async valid => {
-          let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+          let zero = tools.isZero1(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
           this.formPlan.detailList.map(item => {
             item.orderAmt = this.$utils.toNumber(item.orderQty) * this.$utils.toNumber(item.orderPrice)
