@@ -580,7 +580,7 @@
         </vxe-form-item>
         <vxe-form-item title="仓位" field="shelf" span="12">
           <template v-slot="scope">
-            <vxe-input size="mini" v-model="formPlan2.shelf" class="w200" @blur="checkSelf"></vxe-input>
+            <vxe-input size="mini" v-model="formPlan2.shelf" class="w200"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="库存上限" field="upLimit" span="12">
@@ -1413,25 +1413,23 @@
         this.defaultSort = order;
         this.getLotStocks();
       },
-      checkSelf({value}) {
-        // console.log(value)
-        if (value == "") {
+
+      async handleSubmit() {
+        if (this.formPlan2.shelf == "") {
           this.isSelfOk = true;
         } else {
           showLoading('.positionDom','仓位验证中...');
-          checkStore({storeId: this.formPlan2.storeId, name: value}).then(
-            res => {
-              hideLoading();
-              if (res.code == 0 && res.data != null) {
-                this.isSelfOk = true;
-              } else {
-                this.isSelfOk = false;
-              }
-            }
-          );
+          let res = await checkStore({storeId: this.formPlan2.storeId, name: this.formPlan2.shelf});
+          hideLoading();
+          if (res.code == 0 && res.data != null) {
+            this.isSelfOk = true;
+          } else {
+            this.isSelfOk = false;
+            return
+          }
         }
-      },
-      async handleSubmit() {
+
+
         if (!this.isSelfOk) {
           return this.$Message.error("请填写正确的仓位!");
         }
@@ -1441,7 +1439,6 @@
           this.$Message.success("仓位设置成功!");
           this.formPlan2 = {};
           this.getAllStocks();
-
         }
       }
     }
