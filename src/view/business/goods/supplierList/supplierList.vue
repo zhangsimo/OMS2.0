@@ -80,8 +80,7 @@
             <Button
               class="mr10"
               @click="returnBack"
-              :loading="commitLoading"
-              :disabled="buttonDisable || presentrowMsg !== 0"
+              :disabled="presentrowMsg!=1"
             >
               <!--              v-has="'returnBack'"-->
               <i class="iconfont mr5 iconziyuan14"></i>返单
