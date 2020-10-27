@@ -416,7 +416,7 @@
             this.$Message.error('本次认领金额不可大于未认领金额')
             return
           }
-          showLoading()
+          showLoading('body',"保存中，请勿操作。。。")
           let res = await TurnToTheProfitAndLoss(data);
           if (res.code === 0) {
             //刷新 列表
@@ -445,14 +445,14 @@
               this.$Message.error('本次认领金额不可大于未认领金额')
               return
             }
-            showLoading()
+            showLoading('body',"保存中，请勿操作。。。")
             addClaim2(data).then(res => {
               if (res.code === 0) {
-                hideLoading()
                 this.$parent.$parent.queryClaimed()
                 this.$parent.$parent.$refs.claim.currentClaimed = []
                 this.$Message.success('认领成功')
                 this.modal = false;
+                hideLoading()
               } else {
                 hideLoading()
               }
@@ -474,14 +474,14 @@
               this.$Message.error('本次认领金额不可大于未认领金额')
               return
             }
-            showLoading()
+            showLoading('body',"保存中，请勿操作。。。")
             addClaim(data).then(res => {
               if (res.code === 0) {
-                hideLoading()
                 this.$parent.$parent.queryClaimed()
                 this.$parent.$parent.$refs.claim.currentClaimed = []
                 this.$Message.success('认领成功')
                 this.modal = false;
+                hideLoading()
               } else {
                 hideLoading()
               }

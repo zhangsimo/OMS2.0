@@ -4341,6 +4341,11 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.npm.taobao.org/hex-color-regex/download/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha1-TAb8y0YC/iYCs8k9+C1+fb8aio4=
 
+highcharts@^8.2.0:
+  version "8.2.2"
+  resolved "https://registry.npm.taobao.org/highcharts/download/highcharts-8.2.2.tgz?cache=0&sync_timestamp=1603355153451&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fhighcharts%2Fdownload%2Fhighcharts-8.2.2.tgz#3eb1a694cff013d3385c3ca8e58e69a27be52cab"
+  integrity sha1-PrGmlM/wE9M4XDyo5Y5ponvlLKs=
+
 highlight.js@^9.6.0:
   version "9.16.2"
   resolved "https://registry.npm.taobao.org/highlight.js/download/highlight.js-9.16.2.tgz#68368d039ffe1c6211bcc07e483daf95de3e403e"
@@ -9156,9 +9161,9 @@ ws@^6.0.0, ws@^6.2.1:
     async-limiter "~1.0.0"
 
 xe-utils@^2.7.8:
-  version "2.7.8"
-  resolved "https://registry.npm.taobao.org/xe-utils/download/xe-utils-2.7.8.tgz#c8df5ac56be3c47a76ea9e8af55b4a051d89ea5e"
-  integrity sha1-yN9axWvjxHp26p6K9VtKBR2J6l4=
+  version "2.7.16"
+  resolved "https://registry.npm.taobao.org/xe-utils/download/xe-utils-2.7.16.tgz#8f401d46e6ba5e865748c518894257b0c0067d85"
+  integrity sha1-j0AdRua6XoZXSMUYiUJXsMAGfYU=
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"

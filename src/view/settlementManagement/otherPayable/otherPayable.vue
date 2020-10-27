@@ -378,7 +378,7 @@ export default {
       },
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
-      Branchstore: [{ id: 0, shortName: "全部" }], //分店名称
+      Branchstore: [{ id: 0, name: "全部",shortName:"全部" }], //分店名称
       company: [], //往来单位数组
       companyId: "", //往来单位
       currRow: {}, //选中行

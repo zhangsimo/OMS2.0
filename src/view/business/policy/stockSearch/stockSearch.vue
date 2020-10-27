@@ -551,6 +551,7 @@
       :styles="{ top: '50px', width: '700px' }"
       :footer-hide="true"
     >
+      <div class="positionDom">
       <vxe-form
         ref="xForm"
         class="my-form2"
@@ -608,7 +609,7 @@
         <Button type="primary" class="w80" @click="handleSubmit()">确定</Button>
         <Button class="w80" @click="positionModel=false" style="margin-left: 8px">取消</Button>
       </div>
-
+      </div>
     </Modal>
   </div>
 </template>
@@ -1417,8 +1418,10 @@
         if (value == "") {
           this.isSelfOk = true;
         } else {
+          showLoading('.positionDom','仓位验证中...');
           checkStore({storeId: this.formPlan2.storeId, name: value}).then(
             res => {
+              hideLoading();
               if (res.code == 0 && res.data != null) {
                 this.isSelfOk = true;
               } else {
@@ -1430,12 +1433,12 @@
       },
       async handleSubmit() {
         if (!this.isSelfOk) {
-          return this.$message.error("请填写正确的仓位!");
+          return this.$Message.error("请填写正确的仓位!");
         }
         let rep = await setPosition(this.formPlan2)
         if (rep.code == 0) {
           this.positionModel = false;
-          this.$message.success("仓位设置成功!");
+          this.$Message.success("仓位设置成功!");
           this.formPlan2 = {};
           this.getAllStocks();
 

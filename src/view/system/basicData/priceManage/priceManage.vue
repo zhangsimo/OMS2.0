@@ -137,6 +137,10 @@
               />
               <Input v-model="part.partInner" placeholder="请输入内码" style="width: 140px;" class="mr10" />
               <Input v-model="part.oemCode" placeholder="请输入OE码" style="width: 140px;" class="mr10" />
+              <Select v-if="curronly" v-model="removeLimit" clearable placeholder="是否解除限制" style="width: 140px;" class="mr10">
+                <Option value="1" key="1">是</Option>
+                <Option value="0" key="0">否</Option>
+              </Select>
               <Button :disabled="disabled" class="mr10 w90" @click="queryPart" type="warning">
                 <span class="center">
                   <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -145,11 +149,6 @@
               <Button :disabled="disabled" class="mr10 w90" @click="addAccessories">
                 <span class="center">
                   <Icon type="md-add" />添加配件
-                </span>
-              </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="importModule">
-                <span class="center">
-                  <Icon type="md-add" />导入
                 </span>
               </Button>
               <Button class="mr10 w90" @click="deletePart">
@@ -161,6 +160,14 @@
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>
+              </Button>
+              <Button :disabled="disabled" class="mr10 w90" @click="importModule">
+                <span class="center">
+                  <Icon type="md-add" />导入
+                </span>
+              </Button>
+              <Button class="mr10 w90" @click="exportPrice">
+                <span class="center">导出</span>
               </Button>
             </div>
             <vxe-table
@@ -298,6 +305,7 @@ import DiaLog from "./dialog.vue";
 // import selectPartCom from "@/view/AlotManagement/transferringOrder/stockRemoval/compontents/selectPartCom.vue";
 import selectPartCom from "@/view/system/basicData/priceManage/components/selectPartCom.vue";
 import importXLS from "@/view/settlementManagement/components/importXLS.vue";
+import {priceExport,priceExport2} from "../../../../api/settlementManagement/Import";
 // strategyId
 export default {
   name: "priceManage",
@@ -376,7 +384,8 @@ export default {
         upUrl: api.impUrl
       },
       // 配件表格中默认选中
-      defaultSelecteRows: []
+      defaultSelecteRows: [],
+      removeLimit:''
     };
   },
   components: {
@@ -448,6 +457,9 @@ export default {
       }
       if (this.part.oemCode.trim()) {
         data.oemCode = this.part.oemCode.trim()
+      }
+      if(this.removeLimit!=undefined&&this.removeLimit!=''&&this.curronly){
+        data.removeLimit = this.removeLimit;
       }
       params.strategyId = this.currRow.id;
       params.page = this.part.page.num - 1;
@@ -888,7 +900,40 @@ export default {
         }
       }
 
-    }
+    },
+    //导出配件
+    exportPrice(){
+      if(this.part.tbdata.length>0){
+        let params = {};
+        if (this.part.fullname.trim()) {
+          params.fullName = this.part.fullname.trim();
+        }
+        if (this.part.code.trim()) {
+          params.partCode = this.part.code.trim();
+        }
+        if (this.part.partInner.trim()) {
+          params.partId = this.part.partInner.trim()
+        }
+        if (this.part.oemCode.trim()) {
+          params.oemCode = this.part.oemCode.trim()
+        }
+        if(this.rowPriceManege.id != undefined) {
+          params.strategyId = this.rowPriceManege.id
+        }
+        params.pagesize = this.part.page.total;
+        let str = ""
+        for (let i in params) {
+          str += `${i}=${params[i]}&`
+        }
+        if(this.curronly){
+          location.href = priceExport(str);
+        }else{
+          location.href = priceExport2(str);
+        }
+      }else{
+        this.$message.error("暂无导出数据");
+      }
+    },
   },
   mounted() {
     this.getLevelList();

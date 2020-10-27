@@ -294,6 +294,22 @@ export function Printing(params) {
   })
 }
 
+//对账与结算 采购入库打印/销售退货打印
+export function enternalPrintApi(params){
+  return axios.request({
+    url: `${api.omsOrder}/enterMain/enterMain/detail/print`,
+    method: 'get',
+    params
+  })
+}
+//对账与结算 采购退货打印/销售出库打印
+export function enternalReturnPrintApi(params){
+  return axios.request({
+    url: `${api.omsOrder}/outMain/detail/print`,
+    method: 'get',
+    params
+  })
+}
 // 对账单审核
 export function accountRevoke(data) {
   return axios.request({

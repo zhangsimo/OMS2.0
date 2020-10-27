@@ -249,7 +249,7 @@
         tableData: [], //表格信息
         page: {
           num: 1,
-          size: 10,
+          size: 20,
           total: 0,
           opts: [20, 50, 100, 200]
         }, //分页
@@ -301,7 +301,7 @@
       //付款查询接口
       async getQuery() {
         if (this.claimTit == "其他付款认领") {
-          let obj = {
+          let data = {
             startTime: this.value[0]
               ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
               : "",
@@ -310,11 +310,13 @@
               : "",
             orgid: this.BranchstoreId,
             guestId: this.companyId,
-            size: this.page.size,
-            page: this.page.num - 1,
             claimAmt: 0
           };
-          findByDynamicQuery(obj).then(res => {
+          let obj={
+            size: this.page.size,
+            page: this.page.num - 1,
+          }
+          findByDynamicQuery(obj,data).then(res => {
             if (res.code === 0) {
               this.tableData = res.data.content;
               this.page.total = res.data.totalElements;
@@ -617,17 +619,21 @@
               guestSourceId: objItem.id || ""
             }
           }
-          showLoading()
-          let res = await TurnToTheProfitAndLoss(data);
-          if (res.code === 0) {
-            hideLoading()
-            this.reloadParentList()
-            this.modal = false;
-            this.claimTit == "预付款认领"
-              ? this.$Message.success("预付款认领成功")
-              : this.$Message.success("其他付款认领成功");
-            this.formValidate.voucherInput = ""
-          } else {
+          try {
+            showLoading('body',"保存中，请勿操作。。。")
+            let res = await TurnToTheProfitAndLoss(data);
+            if (res.code === 0) {
+              this.reloadParentList()
+              this.modal = false;
+              this.claimTit == "预付款认领"
+                ? this.$Message.success("预付款认领成功")
+                : this.$Message.success("其他付款认领成功");
+              this.formValidate.voucherInput = ""
+              hideLoading()
+            } else {
+              hideLoading()
+            }
+          } catch (error) {
             hideLoading()
           }
         }

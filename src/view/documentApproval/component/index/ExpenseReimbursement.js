@@ -1,4 +1,5 @@
 import moment from "moment";
+import registrationEntry from "../popWindow/RegistrationEntry"
 import requestCode from "../popWindow/RequestCode";
 import subject from "../popWindow/Subject";
 import selectTheDocuments from "../popWindow/SelectTheDocuments";
@@ -20,7 +21,8 @@ export default {
     subject,
     selectTheDocuments,
     upphoto,
-    flowbox
+    flowbox,
+    registrationEntry
   },
   // inject:['modelType'],
   props: {
@@ -231,7 +233,10 @@ export default {
         this.modelType = true;
       }
     },
-
+    //打开进项发票登记弹框
+    registrationEntryOpen(row){
+      this.$refs.registrationEntry.modal1=true;
+    },
     //收款人账号搜索触发
     remoteMethod1(query) {
       this.getOptionsList(query)
