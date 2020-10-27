@@ -1109,7 +1109,7 @@
             }
           },
           onCancel: () => {
-            this.$Message.info("取消作废");
+            this.$Message.info("取消返单");
           },
         });
       },
