@@ -57,6 +57,7 @@
           <div class="db ml15">
             <span>对应科目：</span>
             <el-cascader
+              class="h30"
               ref="casecader"
               size="small"
               :options="options"
@@ -65,7 +66,7 @@
               collapse-tags
               clearable></el-cascader>
           </div>
-          <div class="db mr10">
+          <div class="db mr10 ml15">
             <span>金额：</span>
             <vxe-input type="float" class="w100 h30" v-model="accountMoney" digits="2"></vxe-input>
           </div>
