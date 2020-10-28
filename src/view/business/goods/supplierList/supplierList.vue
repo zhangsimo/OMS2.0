@@ -1450,6 +1450,8 @@
             el.orginOrderQty = el.orderQty;
             return el;
           });
+        }else{
+          this.Right.tbdata=[];
         }
         this.presentrowMsg = row.billStatusId.value;
         // console.log(this.presentrowMsg)
