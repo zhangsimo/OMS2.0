@@ -1109,9 +1109,9 @@
             }
           },
           onCancel: () => {
-            this.$Message.info("取消作废");
+            this.$Message.info("取消返单");
           },
-        });
+        });香蕉
       },
       //右侧表格复选框选中
       selectChange(msg) {
@@ -1450,6 +1450,8 @@
             el.orginOrderQty = el.orderQty;
             return el;
           });
+        }else{
+          this.Right.tbdata=[];
         }
         this.presentrowMsg = row.billStatusId.value;
         // console.log(this.presentrowMsg)
