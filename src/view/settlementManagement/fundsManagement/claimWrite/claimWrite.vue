@@ -1006,7 +1006,7 @@
       },
       //未核销选中的数据
       accountNoWriteChange(currentRow) {
-        this.currentAccount = currentRow;
+        this.currentAccount = currentRow.row;
         this.difference = currentRow.actualCollectionOrPayment - this.claimedAmt;
       },
       //连锁待分配款项选中的数据
