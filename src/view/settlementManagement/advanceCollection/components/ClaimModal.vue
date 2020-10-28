@@ -3,7 +3,7 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <div class="fr">
+        <div class="fr" v-show="titleName!='预收款支出认领'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
           <Input class="w180 mr10" readonly v-model="calculation"/>
@@ -46,8 +46,8 @@
         </vxe-table-column>
         <vxe-table-column
           title="本次认领金额"
-          width="120" 
-          field="thisClaimedAmt" 
+          width="120"
+          field="thisClaimedAmt"
           show-overflow="tooltip"
           :edit-render="{ name: 'input' }"
           >
@@ -87,7 +87,8 @@
 import PreClaimModal from "./PreClaimModal"
 import voucherInput from "./voucherInput";
 import { addClaim } from "_api/settlementManagement/advanceCollection.js";
-
+import {saveAccount} from "../../../../api/settlementManagement/seleteAccount";
+import {wirteAccount} from "../../../../api/settlementManagement/seleteAccount";
 
 export default {
   components: {
@@ -110,6 +111,9 @@ export default {
           { type: 'number', message: '请输入数字' }
         ]
       },
+      dataOne:[],//预收款支出认领 one 对账单
+      dataTwo:[],//会计科目
+      dataThree:[],//数组
       accruedList:[{mateAccountCoding:""}],
       voucherItem:{}, //获取辅助计算选中的数据
     }
@@ -153,13 +157,27 @@ export default {
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
+      if(this.titleName!='预收款认领'){
+        wirteAccount({accountNo:this.$parent.serviceId,sign:3}).then(res=>{
+          if(res.code===0){
+            // this.dataOne=
+            res.data.one.furposeName = res.data.one.furpose.name;
+            res.data.one.sortName = res.data.one.sort.name;
+            this.dataOne = res.data.one;
+            res.data.two.map(item => {
+              item.businessTypeName = item.businessType.name;
+            });
+            this.dataTwo = res.data.two;
+          }
+        })
+      }
     },
 
     //弹框关闭
     close(){
       this.visibal = false
     },
-    
+
     //点击确认按钮后
     confirm(){
       if(this.tableData.length === 0){
@@ -181,16 +199,16 @@ export default {
         return
       }
       let flag = this.tableData.some(v => {
-        return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0 
+        return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0
       })
       if(flag){
         this.$message.error('认领金额输入错误，不可为空')
         return
       }
-      
-      if(!this.voucherItem.id){
+
+      if(!this.voucherItem.id && this.titleName!='预收款支出认领'){
         this.$message.error('请选择辅助核算')
-        return 
+        return
       }
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
@@ -199,18 +217,40 @@ export default {
         o.thisClaimedAmt = v.thisClaimedAmt + ''
         this.financeAccountCashList.push(o)
       })
-      let obj = {
-        financeAccountCashList: this.financeAccountCashList,
-        claimType: this.$parent.claimType,
-        guestId: this.voucherItem.id
-      }
-      addClaim(obj).then(res => {
-        if(res.code === 0){
-          this.$message.success('认领成功')
-          this.visibal = false
-          this.$parent.getQuery()
+      if(this.titleName=='预收款认领'){
+        let obj = {
+          financeAccountCashList: this.financeAccountCashList,
+          claimType: this.$parent.claimType,
+          guestId: this.voucherItem.id
         }
-      })
+        addClaim(obj).then(res => {
+          if(res.code === 0){
+            this.$message.success('认领成功')
+            this.visibal = false
+            this.$parent.getQuery()
+          }
+        })
+      }else if(this.titleName=='预收款支出认领'){
+        let arr=[];
+        this.tableData.map(el=>{
+          let data={};
+          data.id=el.id;
+          data.thisClaimedAmt=el.thisClaimedAmt;
+          arr.push(data)
+        })
+        let data={
+          one:this.dataOne,
+          two:this.dataTwo,
+          three:arr
+        }
+        saveAccount(data).then(res=>{
+          if(res.code===0){
+            this.$message.error("认领成功")
+            this.visibal = false
+            this.$parent.getQuery()
+          }
+        })
+      }
 
     },
 
@@ -237,7 +277,7 @@ export default {
     setSelectData(list){
       let arr = this.tableData.concat(list)
       const result = new Map()
-      let arr1 = arr.filter(item => !result.has(item.id) && result.set(item.id, 1))   
+      let arr1 = arr.filter(item => !result.has(item.id) && result.set(item.id, 1))
       this.tableData = arr1
     },
 
