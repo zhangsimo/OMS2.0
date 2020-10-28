@@ -474,7 +474,6 @@ export default {
             {accountNo: "", accountSumAmt: ""},
             { accountNo: "", accountSumAmt: "" },
           ]
-        }
         res.data.one.map(item => {
           if (item.number === 1) {
             this.accountData[0] = {
@@ -511,6 +510,7 @@ export default {
         });
         this.data2 = res.data.three;
         this.infoBase = res.data.four[0];
+        }
       });
     }
   }
