@@ -331,7 +331,7 @@
           }
           let accountNo = this.$parent.reconciliationStatement
             ? this.$parent.reconciliationStatement.accountNo
-            : this.$parent.currentAccount.accountNo;
+            : this.$parent.currentAccount.row.accountNo;
           wirteAccount({
             accountNo,
             sign
