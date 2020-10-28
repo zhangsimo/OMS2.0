@@ -1006,13 +1006,8 @@
       },
       //未核销选中的数据
       accountNoWriteChange(currentRow) {
-<<<<<<< HEAD
-        this.currentAccount = currentRow.row;
-        this.difference = currentRow.actualCollectionOrPayment - this.claimedAmt;
-=======
         this.currentAccount = currentRow;
         this.difference = currentRow.row.actualCollectionOrPayment - this.claimedAmt;
->>>>>>> 临时
       },
       //连锁待分配款项选中的数据
       distributionSelection(selection) {
