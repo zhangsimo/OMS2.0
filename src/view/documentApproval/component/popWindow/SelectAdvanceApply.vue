@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="modelShow"
-    title="预收款单据"
+    title="预付款单据"
     width="1000px"
   >
     <div class="clearfix">
@@ -24,7 +24,8 @@
         highlight-hover-row
         auto-resize
         height="300"
-        :radio-config="{trigger: 'row', highlight: true, range: true}"
+        row-id="id"
+        :radio-config="{trigger: 'row', highlight: true, range: true, reserve:true}"
         size="mini"
         @radio-change="selectChangeEvent"
         :data="tableData">
@@ -106,7 +107,7 @@
         let res = await getPchsList(data)
         if(res.code === 0) {
           this.$Message.success('查询成功')
-          this.tableData = res.data
+          this.tableData = (res.data || [])
         }
       },
 

@@ -169,6 +169,17 @@
               attrs: { type: 'number', disabled: false }
             }"
           ></vxe-table-column>
+<!--          <vxe-table-column-->
+<!--            field=""-->
+<!--            title="进项发票登记"-->
+<!--            width="100"-->
+<!--          >-->
+<!--            <template v-slot="{row}">-->
+<!--              <Button size="small" type="primary" @click="registrationEntryOpen(row)"-->
+<!--                      :disabled="row.billTypeId!='010103'" style="font-size: 10px;">进项发票登记-->
+<!--              </Button>-->
+<!--            </template>-->
+<!--          </vxe-table-column>-->
           <vxe-table-column
             field="remark"
             title="备注"
@@ -380,6 +391,7 @@
       ref="documnets"
       @backList="getBusinessList"
     ></selectTheDocuments>
+    <registrationEntry ref="registrationEntry"></registrationEntry>
     <div slot="footer"></div>
   </Modal>
 </template>

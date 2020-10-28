@@ -209,7 +209,7 @@
                 :page-size.sync="pageObj.size"
                 :total="pageObj.total"
                 @page-change="pageChange"
-                :page-sizes="[10,50,100,200,500]"
+                :page-sizes="[50,100,200,500,1000]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -262,7 +262,7 @@
                 :page-size.sync="pageObj1.size"
                 :total="pageObj1.total"
                 @page-change="pageChange2"
-                :page-sizes="[10,50,100,200,500]"
+                :page-sizes="[50,100,200,500,1000]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -595,6 +595,7 @@
         serviceCharge: 0, //手续费
         partsManagementFee: 0, //配件管理费
         otherFees: 0, //其他费用
+        noPayTotal: 0,  //本次不对账合计
         totalvalue: "1",
         Reconciliation: false,
         modifyAccountAmt: 0,
@@ -874,12 +875,12 @@
         provinceArr2: [],
         treeDiagramList2: [],
         pageObj: {
-          size: 10,
+          size: 50,
           total: 0,
           num: 1
         },
         pageObj1: {
-          size: 10,
+          size: 50,
           total: 0,
           num: 1
         },
@@ -1135,10 +1136,10 @@
           // this.storeAccount(this.parameter.orgId);
           // this.Initialization();
 
-          this.pageObj.size = 10;
+          this.pageObj.size = 50;
           this.pageObj.total = 0;
           this.pageObj.num = 1;
-          this.pageObj1.size = 10;
+          this.pageObj1.size = 50;
           this.pageObj1.total = 0;
           this.pageObj1.num = 1;
           this.copyData = [];
@@ -1565,8 +1566,12 @@
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
             this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
-            this.totalcollect = sum1
-            this.Actualtotalcollect = sum1
+            let sum3 = 0
+            this.data1.forEach(item => {
+              sum3 += parseFloat(item.thisAccountAmt)
+            })
+            this.totalcollect = sum3
+            this.Actualtotalcollect = sum3
           } else {
             let sum1 = 0
             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1591,12 +1596,17 @@
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
             this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
-            this.totalpayment = sum1
-            this.Actualtotalpayment = sum1
+            let sum3 = 0
+            this.data2.forEach(item => {
+              sum3 += parseFloat(item.thisAccountAmt)
+            })
+            this.totalpayment = sum3
+            this.Actualtotalpayment = sum3
           }
           this.Reconciliation = false;
         } else {
           this.$message.error("信息填写错误");
+          return
         }
       },
       // 保存接口

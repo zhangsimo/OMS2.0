@@ -234,7 +234,13 @@ export default {
     saveLoadingF(a){
       this.saveLoading = a
     },
-    showOwen() {
+    showOwen(v) {
+      if (this.isAdd) {
+        this.$nextTick(()=>{
+          this.showSelf = !v;
+        })
+        return this.$Message.error("请先保存数据");
+      }
       tools.setSession("self", { salesOrder: this.showSelf });
       this.reset();
     },
@@ -285,6 +291,9 @@ export default {
     },
     //打开更多搜索
     openQueryModal() {
+      if (this.isAdd) {
+        return this.$Message.error("请先保存数据");
+      }
       // this.queryList = { showPerson: true };
       this.$refs.morequeryModal.openModal();
     },

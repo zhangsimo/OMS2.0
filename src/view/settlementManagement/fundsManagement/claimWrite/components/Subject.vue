@@ -169,16 +169,20 @@ export default {
           return;
         }
       }
-      showLoading()
-      let res = await TurnToTheProfitAndLoss(data);
-      if (res.code === 0) {
-        hideLoading()
-        this.subjectModelShow = false;
-        this.$refs.voucherInput.subjectModelShowassist = false;
-        this.$Message.success("转益成功");
-        //刷新本店待认领款 列表
-        this.$parent.$parent.queryClaimed()
-      }else{
+      try {
+        showLoading('body',"保存中，请勿操作。。。")
+        let res = await TurnToTheProfitAndLoss(data);
+        if (res.code === 0) {
+          this.subjectModelShow = false;
+          hideLoading()
+          this.$refs.voucherInput.subjectModelShowassist = false;
+          this.$Message.success("转益成功");
+          //刷新本店待认领款 列表
+          this.$parent.$parent.queryClaimed()
+        }else{
+          hideLoading()
+        }
+      } catch (error) {
         hideLoading()
       }
     }

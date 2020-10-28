@@ -169,7 +169,7 @@
         if (flag) {
           this.accessoriesBillingData = [];
           this.accessoriesBillingData.push(this.information);
-          approvalStatus({instanceId: this.information.processInstance}).then(res => {
+          approvalStatus({instanceId: this.information.processInstance==null?"":this.information.processInstance}).then(res => {
             if (res.code == 0) {
               bus.$emit('approval', res.data.operationRecords)
             }

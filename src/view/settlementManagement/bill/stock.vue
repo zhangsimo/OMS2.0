@@ -104,6 +104,10 @@
         ></Table>
       </div>
     </section>
+    <!--打印 销售出库-->
+    <stockPrint ref="stockPrint"></stockPrint>
+    <!--打印 销售退货-->
+    <stockReturnPrint ref="stockReturnPrint"></stockReturnPrint>
     <selectDealings ref="selectDealings" @getOne="getOne"/>
   </div>
 </template>
@@ -111,6 +115,9 @@
 <script>
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import selectDealings from "./components/SelectTheCustomer";
+  //打印 销售出库
+  import stockPrint from "./components/printShow/stockPrint";
+  import stockReturnPrint from "./components/printShow/stockReturnPrint";
   import {creat} from "./../components";
   import {
     getWarehousingList,
@@ -130,7 +137,9 @@
     name: "billStock",
     components: {
       quickDate,
-      selectDealings
+      selectDealings,
+      stockPrint,//打印 销售出库
+      stockReturnPrint,//打印 销售退货
     },
     data() {
       return {
@@ -160,6 +169,34 @@
             width: 40,
             className: "tc",
             resizable: true,
+          },
+          {
+            title: "操作",
+            width: 60,
+            className: "tc",
+            resizable: true,
+            render:(h,params)=>{
+              return h('div', [
+                h('span', {
+                  style: {
+                    color: "#40a6ff",
+                    cursor: "pointer"
+                  },
+                  domProps: {
+                    title: "打印"
+                  },
+                  on:{
+                    click:async ()=>{
+                      if(params.row.enterTypeIdName=="销售出库"){
+                        this.$refs.stockPrint.openModal(params.row)
+                      }else if(params.row.enterTypeIdName=="销售退货"){
+                        this.$refs.stockReturnPrint.openModal(params.row)
+                      }
+                    }
+                  }
+                }, "打印")
+              ])
+            }
           },
           {
             title: "分店名称",

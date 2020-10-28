@@ -77,6 +77,16 @@
             </Button>
           </div>
           <div class="db">
+            <Button
+              class="mr10"
+              @click="returnBack"
+              :disabled="presentrowMsg!=1"
+              v-has="'returnBack'"
+            >
+              <i class="iconfont mr5 iconziyuan14"></i>返单
+            </Button>
+          </div>
+          <div class="db">
             <div class="mt5">
               <Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox>
             </div>
@@ -163,21 +173,21 @@
                     </Row>
                   </FormItem>
                   <!--<FormItem label="退货员：" prop="storeId">-->
-                    <!--<Select-->
-                      <!--class="w160"-->
-                      <!--:disabled="presentrowMsg !== 0 || buttonDisable"-->
-                      <!--v-model="formPlan.storeId"-->
-                      <!--filterable-->
-                      <!--label-in-value-->
-                      <!--@on-change="selectOrderMan"-->
-                    <!--&gt;-->
-                      <!--<Option-->
-                        <!--v-for="item in userMap"-->
-                        <!--:value="item.id"-->
-                        <!--:key="item.id"-->
-                      <!--&gt;{{ item.label }}-->
-                      <!--</Option>-->
-                    <!--</Select>-->
+                  <!--<Select-->
+                  <!--class="w160"-->
+                  <!--:disabled="presentrowMsg !== 0 || buttonDisable"-->
+                  <!--v-model="formPlan.storeId"-->
+                  <!--filterable-->
+                  <!--label-in-value-->
+                  <!--@on-change="selectOrderMan"-->
+                  <!--&gt;-->
+                  <!--<Option-->
+                  <!--v-for="item in userMap"-->
+                  <!--:value="item.id"-->
+                  <!--:key="item.id"-->
+                  <!--&gt;{{ item.label }}-->
+                  <!--</Option>-->
+                  <!--</Select>-->
                   <!--</FormItem>-->
                   <FormItem label="退货日期：" prop="orderDate" class="fs12">
                     <DatePicker
@@ -392,7 +402,8 @@
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
               <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
               <!--</div>-->
-              <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.auditor:""}}</span><span>提交日期：{{datadata?datadata.auditDate:""}}</span></div>
+              <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.auditor:""}}</span><span>提交日期：{{datadata?datadata.auditDate:""}}</span>
+              </div>
             </div>
           </Split>
         </div>
@@ -434,7 +445,7 @@
     saveObsolete,
     queryByConditions,
   } from "../../../../api/business/supplierListApi";
-  import {getSupplierList} from "_api/purchasing/purchasePlan";
+  import {getSupplierList, returnBack} from "_api/purchasing/purchasePlan";
   import {getSales} from "@/api/salesManagment/salesOrder";
   import {v4} from "uuid";
   import GoodCus from "_c/allocation/GoodCus.vue";
@@ -1077,6 +1088,30 @@
         // window.open(routeUrl.href, "_blank");
         this.openwin(routeUrl.href)
         this.leftgetList();
+      },
+      //返单
+      returnBack() {
+        this.$Modal.confirm({
+          title: "是否返单",
+          onOk: async () => {
+            let params = {};
+            params.id = this.mainId;
+            try {
+              this.cancelLoading = true;
+              let res = await returnBack(params);
+              if (res.code == 0) {
+                this.$Message.success("返单成功");
+                this.leftgetList();
+              }
+              this.cancelLoading = false;
+            } catch (error) {
+              this.cancelLoading = false;
+            }
+          },
+          onCancel: () => {
+            this.$Message.info("取消作废");
+          },
+        });
       },
       //右侧表格复选框选中
       selectChange(msg) {
