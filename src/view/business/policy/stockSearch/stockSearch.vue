@@ -288,22 +288,6 @@
             <!--<Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>-->
           </div>
         </div>
-        <!--        表-->
-        <!--<Table-->
-        <!--class="table-highlight-row"-->
-        <!--highlight-row-->
-        <!--size="small"-->
-        <!--ref="table2"-->
-        <!--align="left"-->
-        <!--border-->
-        <!--:loading="loading2"-->
-        <!--:stripe="true"-->
-        <!--:columns="columns2"-->
-        <!--:data="contentTwo.dataTwo"-->
-        <!--height="400"-->
-        <!--show-summary-->
-        <!--:summary-method="handleSummary"-->
-        <!--&gt;</Table>-->
         <vxe-table
           border
           ref="xTable3"
@@ -329,9 +313,8 @@
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
           <vxe-table-column field="carBrandName" title="厂牌" width="70"></vxe-table-column>
-          <vxe-table-column field="enterQty" title="入库数量" width="70">
-          </vxe-table-column>
-          <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
+          <vxe-table-column field="" title="可售数量" width="70"></vxe-table-column>
+          <vxe-table-column field="outableQty" title="库存数量" width="70"></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
@@ -376,6 +359,8 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="serviceId" title="入库单号" width="124"></vxe-table-column>
+          <vxe-table-column field="enterQty" title="入库数量" width="70">
+          </vxe-table-column>
           <vxe-table-column field="originGuestName" title="第一供应商" width="150"></vxe-table-column>
           <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
