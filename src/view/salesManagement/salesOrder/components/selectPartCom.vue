@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1100" class="sales-part-model">
+    <Modal v-model="searchPartLayer" draggable title="配件选择" width="1100" class="sales-part-model">
       <div class="partCheck-hd">
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
