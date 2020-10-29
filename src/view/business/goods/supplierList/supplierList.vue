@@ -139,7 +139,7 @@
                   <FormItem label="供应商：" prop="guestName" class="fs12">
                     <Row>
                       <Col span="22">
-                        <Tooltip :content="formPlan.guestName">
+                        <Tooltip :content="formPlan.guestName" placement="top">
                           <GoodCus
                             style="width: 120px"
                             :title="formPlan.guestName"
