@@ -127,19 +127,25 @@
       //弹框打开
       open() {
         this.tableData = []
-        this.visibal = true
-        wirteAccount({accountNo: this.$parent.serviceId, sign: this.titleName == '预付款认领' ? 9 : 5}).then(res => {
-          if (res.code === 0) {
-            // this.dataOne=
-            res.data.one.furposeName = res.data.one.furpose.name;
-            res.data.one.sortName = res.data.one.sort.name;
-            this.dataOne = res.data.one;
-            res.data.two.map(item => {
-              item.businessTypeName = item.businessType.name;
-            });
-            this.dataTwo = res.data.two;
+        this.visibal = true;
+        setTimeout(()=>{
+          let params={
+            accountNo: this.$parent.serviceId,
+            sign:this.titleName == '预付款认领'?9:5
           }
-        })
+          wirteAccount(params).then(res => {
+            if (res.code === 0) {
+              // this.dataOne=
+              res.data.one.furposeName = res.data.one.furpose.name;
+              res.data.one.sortName = res.data.one.sort.name;
+              this.dataOne = res.data.one;
+              res.data.two.map(item => {
+                item.businessTypeName = item.businessType.name;
+              });
+              this.dataTwo = res.data.two;
+            }
+          })
+        },10)
       },
 
       //弹框关闭
