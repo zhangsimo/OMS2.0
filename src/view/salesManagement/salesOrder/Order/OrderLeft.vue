@@ -270,7 +270,6 @@ export default {
       }
     },
     filterOrderNo({ value, row, column }){
-      console.log(value)
       let {property} = column;
       if(!value){
         return !row[property]
