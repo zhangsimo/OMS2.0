@@ -4,7 +4,7 @@ export default {
     oneOrder:{},//一条销售
     leftList:{},//右侧操作成功后返回的值
     salseList:[],//获取到员工跟往来单位
-    filterGuestName:[],//记录销售订单客户筛选的数据
+    filterList:{},//记录销售订单选中筛选的数据
   },
   mutations:{
     setOrederQuery(state,data){
@@ -21,7 +21,7 @@ export default {
 
     },
     SETGUESTNAME(state,data){
-      state.filterGuestName = data
+      state.filterList = data
     }
   },
   actions:{
