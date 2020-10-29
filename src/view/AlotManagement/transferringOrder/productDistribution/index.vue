@@ -11,6 +11,12 @@
               style="width: 160px"
               class="mr10"
             />
+            <Input
+              v-model="form.partInnerId"
+              placeholder="配件内码"
+              style="width: 120px"
+              class="mr10"
+            />
             <Select
               v-model="form.partBrandCode"
               class="w200 mr10"
@@ -138,6 +144,10 @@
           <vxe-table-column
             field="partCode"
             title="配件编码"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="partInnerId"
+            title="配件内码"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
@@ -316,6 +326,7 @@ export default {
       },
       //搜索
       form: {
+        partInnerId:'',
         pageNumber: 0,
         size: 10,
         queryCode: "",

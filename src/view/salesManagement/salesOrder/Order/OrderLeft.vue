@@ -15,6 +15,7 @@
         highlight-current-row
         :height="leftTableHeight"
         :data="tableData"
+        @filter-change="filterChange"
         resizable
       >
         <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
@@ -88,6 +89,7 @@ export default {
       Flaga: true,
       selectItemId:'',
       leftTableHeight:0,
+      filterCheckObj:this.$store.state.dataList.filterList||{}//记录筛选的数据
     };
   },
   mounted() {
@@ -184,7 +186,13 @@ export default {
       let arr = rData.map(el => el[cos]);
       let set = new Set(arr);
       set.forEach(el => {
-        arrData.push({ label: el, value: el });
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
       });
       this.$nextTick(()=>{
         const xtable = this.$refs.currentRowTable;
@@ -267,11 +275,16 @@ export default {
         return !row[property]
       }
       if(row[property]){
-        return row[property].indexOf(value) > -1;
+        return row[property] == value;
       }else{
         return false
       }
     },
+    filterChange({property, values}){
+      this.filterCheckObj = this.$store.state.dataList.filterList;
+      this.filterCheckObj[property] = values;
+      this.$store.dispatch('setGuestName',this.filterCheckObj);
+    }
   },
   watch: {
     //监听时间
