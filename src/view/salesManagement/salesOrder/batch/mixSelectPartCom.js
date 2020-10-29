@@ -201,7 +201,7 @@ export const mixSelectPartCom  = {
       }
 
       if(this.partName.trim()){
-        req.partCode = this.partName.trim()
+        req.partCode = this.partName.replace(/[\W]/g,'');
       }
       req.page = this.page.num -1;
       req.size = this.page.size;

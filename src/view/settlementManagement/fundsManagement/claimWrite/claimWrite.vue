@@ -1,32 +1,31 @@
 <template>
   <div class="content-oper content-oper-flex">
-    <section class="oper-box">
-      <div class="oper-top flex">
-        <div class="db mt20">
-          <span>门店：</span>
-          <Input v-model="orgName" readonly class="w100"/>
-          <Button class="ml10" @click="write">核销对账单</Button>
-        </div>
-      </div>
-      <div class="ml20 mb10">
-        <Row>
-          <Col span="6">
-            <span>对账单勾选金额</span>
+    <section class="oper-box headerTitle">
+      <div class="headerbox">
+      <Row>
+          <Col span="20">
+            <Row class="db">
+              <Col span="6">
+                <span class="title">门店：</span>
+                <span class="pl10">{{orgName}}</span>
+              </Col>
+              <Col span="6">
+                <span class="title">对账单金额:</span>
+                <span>{{ currentAccount.row ? currentAccount.row.actualCollectionOrPayment : ''}}</span>
+
+              </Col>
+              <Col span="6">
+                <span class="title">认领款金额:</span>
+                <span>{{claimedAmt}}</span>
+              </Col>
+              <Col span="6">
+                <span class="title">差异</span>
+                <span>{{difference ? difference.toFixed(2) : ''}}</span>
+              </Col>
+            </Row>
           </Col>
-          <Col span="3">
-            <span>{{ currentAccount.row ? currentAccount.row.actualCollectionOrPayment : ''}}</span>   
-          </Col>
-          <Col span="6">
-            <span>认领款勾选金额</span>
-          </Col>
-          <Col span="3">
-            <span>{{claimedAmt}}</span>
-          </Col>
-          <Col span="2">
-            <span>差异</span>
-          </Col>
-          <Col span="2">
-            <span>{{difference ? difference.toFixed(2) : ''}}</span>
+          <Col span="4">
+            <Button class="ml10" @click="write">核销对账单</Button>
           </Col>
         </Row>
       </div>
@@ -1156,7 +1155,7 @@
     }
   };
 </script>
-<style>
+<style scoped lang="less">
   .top-pane,
   .bottom-pane {
     overflow: auto;
@@ -1164,4 +1163,31 @@
  .card {
    padding-left: 10px;
  }
+  .headerTitle {
+    padding-left: 10px;
+    width: 100%;
+    height: 46px;
+    position: relative;
+    .headerbox {
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      box-sizing: border-box;
+      span {
+        display: inline-block;
+        line-height: 30px;
+      }
+    }
+    .db {
+      border: 1px #ddd solid;
+      border-left: none;
+    }
+    .title {
+      width: 100px;
+      text-align: center;
+      border-right: 1px #ddd solid;
+      border-left: 1px #ddd solid;
+    }
+  }
 </style>

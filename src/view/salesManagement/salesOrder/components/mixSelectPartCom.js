@@ -267,7 +267,7 @@ export const mixSelectPartCom = {
         req.partCode = this.partCode
         req.partInnerId = this.partId
         req.name = this.partName
-        req.oeCode = this.oemCode
+        req.oeCode = this.oemCode.replace(/[\W]/g,'');
         let formData = {};
         for (let k in req) {
           if (req[k] && req[k].trim()) {
@@ -296,7 +296,7 @@ export const mixSelectPartCom = {
         req.partCode = this.partCode
         req.partId = this.partId
         req.partName = this.partName
-        req.oemCode = this.oemCode
+        req.oemCode = this.oemCode.replace(/[\W]/g,'');
         let formData = {};
         for (let k in req) {
           if (req[k] && req[k].trim()) {
@@ -379,6 +379,17 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
         this.$emit("selectPartName", item);
+        this.$nextTick(() => {
+          if(this.partCode){
+            this.$refs.elinput.focus();
+          }else if(this.partId){
+            this.$refs.elinputpartId.focus();
+          }else if(this.partName){
+            this.$refs.elinputpartName.focus();
+          }else if(this.oemCode){
+            this.$refs.elinputoemCode.focus();
+          }
+        })
       } else {
         this.$Message.error("请选择数据");
       }

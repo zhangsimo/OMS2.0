@@ -38,16 +38,16 @@ export default {
         receiverId: [
           {required: true, message: '收款人账户必填', trigger: 'change'}
         ],
-        receiveBank: [
-          {required: true, message: '开户行名称必填', trigger: 'blur'}
-        ],
+        // receiveBank: [
+        //   {required: true, message: '开户行名称必填', trigger: 'blur'}
+        // ],
         paymentTerm: [
           {required: true, type: 'date', message: '付款期限必填', trigger: 'change'}
         ],
-        receiveBankNo: [
-          {required: true, message: '开户账号必填', trigger: 'blur'}
+        // receiveBankNo: [
+        //   {required: true, message: '开户账号必填', trigger: 'blur'}
 
-        ],
+        // ],
         paymentAccount: [
           {required: true, type: 'string', message: '付款账户必选', trigger: 'change'}
 
@@ -261,6 +261,8 @@ export default {
       this.$refs.formInline.validate(async (valid) => {
         if (valid) {
           let valg = false
+          if(this.formInline.receiveBank == '') return this.$Message.error("开户行名称必填")
+          if(this.formInline.receiveBankNo == '') return this.$Message.error("银行账号必填")
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
             valg = parseFloat(this.formInline.details[0].amountCollected) < parseFloat(this.formInline.applyAmt) ? true : false
           }
