@@ -6,7 +6,7 @@
           <FormItem label="配件：">
             <Input
               type="text"
-              placeholder="配件编码/名称"
+              placeholder="配件编码/名称/OEM"
               class="w250"
               v-model="Outform.partCode"
             />
@@ -134,7 +134,7 @@
            async getList(){
                 let data ={}
                 if(this.Outform.partCode.trim()){
-                  data.partName = this.Outform.partCode.trim()
+                  data.partName = this.Outform.partCode.replace(/[\W]/g,'');
                 }
                 if(this.Outform.activityName.trim()){
                   data.activityName = this.Outform.activityName.trim()
