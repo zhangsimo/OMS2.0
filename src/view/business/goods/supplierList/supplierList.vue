@@ -139,7 +139,7 @@
                   <FormItem label="供应商：" prop="guestName" class="fs12">
                     <Row>
                       <Col span="22">
-                        <Tooltip :content="formPlan.guestName">
+                        <Tooltip :content="formPlan.guestName" placement="top">
                           <GoodCus
                             style="width: 120px"
                             :title="formPlan.guestName"
@@ -577,53 +577,62 @@
           columns: [
             {
               title: "序号",
-              minWidth: 50,
+              width: 50,
               type: "index",
+              resizable:true
             },
             {
               title: "状态",
               key: "billStatusId",
-              minWidth: 70,
+              width: 70,
               render: (h, params) => {
                 let name = params.row.billStatusId.name;
                 return h("span", name);
               },
+              resizable:true,
             },
             {
               title: "供应商",
               key: "guestName",
-              minWidth: 80,
+              width: 170,
+              resizable:true
             },
             {
               title: "创建日期",
               key: "createTime",
-              minWidth: 120,
+              width: 120,
+              resizable:true
             },
             {
               title: "创建人",
               key: "createUname",
-              minWidth: 100,
+              width: 100,
+              resizable:true
             },
             {
               title: "采退单号",
               key: "serviceId",
-              minWidth: 120,
+              width: 120,
+              resizable:true
             },
             {
               title: "打印次数",
               key: "printTimes",
-              minWidth: 70,
+              width: 70,
+              resizable:true
             },
             {
               title: "提交人",
               key: "auditor",
-              minWidth: 100,
+              width: 100,
+              resizable:true
             },
             {
               title: "提交日期",
               align: "center",
               key: "auditDate",
-              minWidth: 170,
+              width: 170,
+              resizable:true
             },
           ],
           tbdata: [],

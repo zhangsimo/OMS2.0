@@ -857,6 +857,8 @@ export default {
               });
               const rate = res.data.invoiceType
               this.invoice = res.data;
+              this.accessoriesBillingData =[];
+              this.accessoriesBillingData2 =[];
               this.invoice.statementAmountOwed = res.data.statementAmtOwed;
               this.invoice.amountExcludingTax = res.data.notTaxAmt;
               this.invoice.applyMoney = res.data.applyAmt;
