@@ -40,7 +40,7 @@
             <!--              <Select v-model="form.guestId" style="width:180px">-->
             <!--                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>-->
             <!--              </Select>-->
-            <Select
+            <!-- <Select
               v-model="form.guestId"
               clearable
               filterable
@@ -56,7 +56,8 @@
               >{{ item.label }}
               </Option
               >
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="form.guestName">
           </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" v-noresub="1000" @click="query" type="button">
@@ -1352,7 +1353,7 @@
         guestNameList: [],
         form: {
           orgId: '',
-          guestId: '',
+          guestName: '',
           page: 0,
           size: 10,
           startDate: "",
@@ -1465,7 +1466,7 @@
         let params = "";
         let obj = {
           orgId: this.form.orgId,
-          guestId: this.form.guestId,
+          guestName: this.form.guestName,
           pagesize: this.pagetotal,
           startDate: this.form.startDate,
           endDate: this.form.endDate,
@@ -1611,6 +1612,7 @@
           page: this.form.page,
           size: this.form.size
         }
+        this.form.guestName = this.form.guestName.trim()
         getInvoiceList(params, this.form).then(res => {
           if (res.code === 0) {
             this.data = res.data.content.map((item, index) => {

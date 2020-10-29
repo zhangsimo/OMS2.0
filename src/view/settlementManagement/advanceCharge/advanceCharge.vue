@@ -25,7 +25,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -36,7 +36,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="companyId" />
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -285,7 +286,7 @@ export default {
       claimedSelectData: [], // 认领弹窗选择的数据
       value: [], //日期
       company: [], //往来单位
-      companyId: 0, //往来单位
+      companyId: '', //往来单位
       Branchstore: [{ id: "0", name: "全部",shortName:"全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
@@ -402,7 +403,7 @@ export default {
       obj = {
         ...obj,
         orgid: this.BranchstoreId,
-        guestId: this.companyId,
+        guestName: this.companyId.trim(),
         size: this.page.size,
         page: this.page.num - 1
       };

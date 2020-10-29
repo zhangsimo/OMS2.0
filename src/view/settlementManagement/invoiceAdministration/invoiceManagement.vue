@@ -36,7 +36,7 @@
           </div>
           <div class="mr10 db">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="form.guestId"
               class="w150"
               clearable
@@ -47,7 +47,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="form.guestName">
           </div>
           <button class="ivu-btn ivu-btn-default" @click="query" type="button">
             <i class="iconfont iconchaxunicon"></i>
@@ -405,14 +406,12 @@
             fixed: "left",
             className: "tc",
             resizable: true,
-            resizable: true,
           },
           {
             title: "序号",
             width: 50,
             fixed: "left",
             className: "tc",
-            resizable: true,
             resizable: true,
             render: (h, params) => {
               return h(
@@ -422,11 +421,39 @@
             }
           },
           {
+            title: "往来单位",
+            key: "guestName",
+            width: 180,
+            fixed: "left",
+            align: 'center',
+            className: "tc",
+            resizable: true,
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "span",
+                  {
+                    style: {
+                      display: "inline-block",
+                      width: "100%",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap"
+                    },
+                    domProps: {
+                      title: params.row.guestName
+                    }
+                  },
+                  params.row.guestName
+                )
+              ]);
+            }
+          },
+          {
             title: "导入勾选数据时间",
             key: "registrationDate",
             width: 120,
             className: "tc",
-            resizable: true,
             resizable: true,
             render: (h, params) => {
               return h("div", [
@@ -456,7 +483,6 @@
             width: 100,
             className: "tc",
             resizable: true,
-            resizable: true,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -483,7 +509,6 @@
             key: "shopNo",
             width: 60,
             className: "tc",
-            resizable: true,
             resizable: true,
             render: (h, params) => {
               return h("div", [
@@ -512,7 +537,6 @@
             width: 70,
             className: "tc",
             resizable: true,
-            resizable: true,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -539,7 +563,6 @@
             key: "invoiceNo",
             width: 65,
             className: "tc",
-            resizable: true,
             resizable: true,
             render: (h, params) => {
               return h("div", [
@@ -568,7 +591,6 @@
             width: 110,
             className: "tc",
             resizable: true,
-            resizable: true,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -595,7 +617,6 @@
             key: "billingDate",
             width: 90,
             className: "tc",
-            resizable: true,
             resizable: true,
             render: (h, params) => {
               return h("div", [
@@ -645,35 +666,6 @@
             width: 70,
             className: "tc",
             resizable: true,
-          },
-          {
-            title: "往来单位",
-            key: "guestName",
-            width: 180,
-            fixed: "left",
-            align: 'center',
-            className: "tc",
-            resizable: true,
-            render: (h, params) => {
-              return h("div", [
-                h(
-                  "span",
-                  {
-                    style: {
-                      display: "inline-block",
-                      width: "100%",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap"
-                    },
-                    domProps: {
-                      title: params.row.guestName
-                    }
-                  },
-                  params.row.guestName
-                )
-              ]);
-            }
           },
           {
             title: "付款方式",
@@ -1083,7 +1075,7 @@
           page: 0,
           size: 10,
           canceled: "",
-          guestId: "",
+          guestName: "",
           invoiceSellerName: "",
         },
         allTablist: [],
@@ -1482,6 +1474,7 @@
       //获取列表
       getTabList(data) {
         showLoading(".loadingClass", "数据加载中，请勿操作")
+        data.guestName = data.guestName.trim()
         getManageList(data)
           .then(res => {
             if (res.code === 0) {

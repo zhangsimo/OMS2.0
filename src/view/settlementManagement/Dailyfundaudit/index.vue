@@ -29,7 +29,7 @@
           </div>
           <div class="db ml15">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -40,7 +40,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="companyId" />    
           </div>
           <div class="db ml15">
             <span>收付款单号：</span>
@@ -321,7 +322,7 @@
         let params = {
           startTime: this.dates[0]?moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00":"",
           endTime: this.dates[1]?moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59":"",
-          guestSourceId: this.companyId,
+          guestSourceName: this.companyId.trim(),
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,
           shopNumber: this.BranchstoreId==0?"":this.BranchstoreId,
@@ -377,7 +378,7 @@
           endTime: this.dates[1]?moment(this.dates[1])
             .endOf("day")
             .format("YYYY-MM-DD HH:mm:ss"):"",
-          guestSourceId: this.companyId,
+          guestSourceName: this.companyId,
           businessNumbers: this.payOrderNo,
           businessNumbersList: this.orderNo,
           shopNumber: this.BranchstoreId==0?"":this.BranchstoreId
