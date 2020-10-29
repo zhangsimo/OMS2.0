@@ -313,8 +313,8 @@
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
           <vxe-table-column field="carBrandName" title="厂牌" width="70"></vxe-table-column>
-          <vxe-table-column field="enableSellQty" title="可售数量" width="70"></vxe-table-column>
           <vxe-table-column field="outableQty" title="库存数量" width="70"></vxe-table-column>
+          <vxe-table-column field="enableSellQty" title="可售数量" width="70"></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
