@@ -379,6 +379,17 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
         this.$emit("selectPartName", item);
+        this.$nextTick(() => {
+          if(this.partCode){
+            this.$refs.elinput.focus();
+          }else if(this.partId){
+            this.$refs.elinputpartId.focus();
+          }else if(this.partName){
+            this.$refs.elinputpartName.focus();
+          }else if(this.oemCode){
+            this.$refs.elinputoemCode.focus();
+          }
+        })
       } else {
         this.$Message.error("请选择数据");
       }
