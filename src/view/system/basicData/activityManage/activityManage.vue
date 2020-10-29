@@ -191,6 +191,22 @@
               <vxe-table-column field="remark" title="备注"></vxe-table-column>
             </vxe-table-column>
           </vxe-table>
+          <Row>
+            <Page
+              id="page"
+              style="float: right; margin-top: 10px; margin-bottom: 10px"
+              show-sizer
+              size="small"
+              show-total
+              :page-size-opts="page1.pageSizeOpts"
+              :current="page1.num"
+              :total="page1.total"
+              placement="top"
+              :page-size="page1.pageSize"
+              @on-change="pageChange1"
+              @on-page-size-change="pageSizeChange1"
+            ></Page>
+          </Row>
           <vxe-table
             border
             align="center"
@@ -323,6 +339,22 @@
             <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
             <vxe-table-column field="remark" title="备注"></vxe-table-column>
           </vxe-table>
+          <Row>
+            <Page
+              id="page"
+              style="float: right; margin-top: 10px"
+              show-sizer
+              size="small"
+              show-total
+              :page-size-opts="page3.pageSizeOpts"
+              :current="page3.num"
+              :total="page3.total"
+              placement="top"
+              :page-size="page3.pageSize"
+              @on-change="pageChange3"
+              @on-page-size-change="pageSizeChange3"
+            ></Page>
+          </Row>
         </TabPane>
       </Tabs>
     </section>
@@ -574,7 +606,21 @@
         total: 0,
         size: 20,
         pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        pageSizeOpts: [10, 20, 30, 40, 50],
+        page1: {
+          num: 1,
+          total: 0,
+          size: 20,
+          pageSize: 10,
+          pageSizeOpts: [10, 20, 30, 40, 50],
+        },
+        page3: {
+          num: 1,
+          total: 0,
+          size: 20,
+          pageSize: 10,
+          pageSizeOpts: [10, 20, 30, 40, 50],
+        }
       };
     },
     mounted() {
@@ -582,28 +628,53 @@
       this.getActApplicationForm();
     },
     methods: {
+      waring(){
+
+      },
       pageChange(val) {
         this.page = val;
         this.getActivity()
         // this.data2 = []
       },
       pageSizeChange(val) {
+        this.page = 1
         this.pageSize = val
         this.getActivity()
         // this.data2 = []
+      },
+       pageChange1(val) {
+        this.page1.num = val;
+        this.selectActApply()
+      },
+      pageSizeChange1(val) {
+        this.page1.num = 1
+        this.page1.pageSize = val
+        this.selectActApply()
+      },
+       pageChange3(val) {
+        this.page3.num = val;
+        this.getExpiredActivityIfo()
+      },
+      pageSizeChange3(val) {
+        this.page3.num = 1
+        this.page3.pageSize = val
+        this.getExpiredActivityIfo()
       },
 
       // 活动申请页面
       getActApplicationForm() {
         this.loading1 = true;
-        getActApplicationTable().then(res => {
+        this.getDataObj.size = this.page1.pageSize
+        this.getDataObj.page = this.page1.num - 1
+        getActApplicationTable(this.getDataObj).then(res => {
           // //console.log(res)
           if (res.code === 0) {
-            this.data1 = (res.data || []).map(el => {
+            this.data1 = (res.data.content || []).map(el => {
               el.isVenderText = el.isVender != 0 ? "是" : "否";
               el.isCancelFlowText = el.isCancelFlow ? "是" : "否";
               return el;
             });
+            this.page1.total = res.data.totalElements
             this.loading1 = false;
           }
         }).catch(err => {
@@ -613,6 +684,8 @@
       // 根据条件查询活动申请
       selectActApply() {
         let data = {}
+        this.getDataObj.size = this.page1.pageSize
+        this.getDataObj.page = this.page1.num - 1
         // this.getDataObj.beginDate = this.getDataObj.beginDate ? this.getDataObj.beginDate + " 00:00:00" : "";
         // this.getDataObj.endDate = this.getDataObj.endDate ? this.getDataObj.endDate + " 23:59:59" : "";
         for (let key in this.getDataObj) {
@@ -623,12 +696,14 @@
         this.loading1 = true;
         getSelectActApply(data).then(res => {
           this.loading1 = false;
-          this.data1 = (res.data || []).map(el => {
+          this.data1 = (res.data.content || []).map(el => {
             el.isVenderText = el.isVender != 0 ? "是" : "否";
             el.isCancelFlowText = el.isCancelFlow ? "是" : "否";
             return el;
           });
           this.data4 = [];
+          this.page1.total = res.data.totalElements
+          this.loading1 = false
         });
         this.checkedData.length = 0;
       },
@@ -701,12 +776,15 @@
       // 过期活动页面
       getExpiredTable() {
         this.loading3 = true;
-        getExpiredActTable().then(res => {
+        this.getDataObj.size = this.page3.pageSize
+        this.getDataObj.page = this.page3.num - 1
+        getExpiredActTable(this.getDataObj).then(res => {
           // //console.log(res)
-          this.data3 = res.data.map(el => {
+          this.data3 = res.data.content.map(el => {
             el.isGift == 0 ? el.isGiftBoolean = false : el.isGiftBoolean = true;
             return el;
           });
+          this.page3.total = res.data.totalElements
           this.loading3 = false;
         }).catch(err => {
           this.loading3 = false;
@@ -782,11 +860,14 @@
       // 过期活动查询
       getExpiredActivityIfo() {
         this.loading3=true;
+        this.getDataObj.size = this.page3.pageSize
+        this.getDataObj.page = this.page3.num - 1
         getExpiredActivityList(this.getDataObj).then(res => {
-          this.data3 = res.data.map(el => {
+          this.data3 = res.data.content.map(el => {
             el.isGift == 0 ? el.isGiftBoolean = false : el.isGiftBoolean = true;
             return el;
           });
+          this.page3.total = res.data.totalElements;
           this.loading3=false;
         }).catch(err=>{
           this.loading3=false;
