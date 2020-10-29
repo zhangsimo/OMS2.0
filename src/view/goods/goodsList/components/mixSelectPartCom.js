@@ -293,9 +293,27 @@ export const mixSelectPartCom = {
         this.$emit("selectPartName", this.selectTableItem);
         // this.searchPartLayer = false;
         this.$Message.success("已添加");
+        this.focusInput();
       } else {
         this.$Message.error("请选择数据");
       }
+    },
+    focus(event){
+      event.currentTarget.select();
+    },
+    focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          this.$refs.Input.focus();
+        }else if(this.partId){
+          this.$refs.elinputpartId.focus();
+        }else if(this.partName){
+          this.$refs.elinputpartName.focus();
+        }else if(this.oemCode){
+          this.$refs.elinputoemCode.focus();
+        }
+
+      })
     },
     cancel() {
       this.searchPartLayer = false;
@@ -343,6 +361,7 @@ export const mixSelectPartCom = {
 
     throwDataChangeNum(v){
       this.$emit("selectPartName2", v);
+      this.focusInput();
     }
   }
 };

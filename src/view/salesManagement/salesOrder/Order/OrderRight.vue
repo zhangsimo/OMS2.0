@@ -357,7 +357,7 @@
             field="orderPrice"
             title="单价"
             width="100"
-            :edit-render="{name: 'input' ,attrs: {disabled: false}}"
+            :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
           >
             <template v-slot:edit="{ row }">
 <!--              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>-->

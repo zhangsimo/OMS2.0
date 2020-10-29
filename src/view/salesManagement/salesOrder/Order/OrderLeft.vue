@@ -275,7 +275,7 @@ export default {
         return !row[property]
       }
       if(row[property]){
-        return row[property].indexOf(value) > -1;
+        return row[property] == value;
       }else{
         return false
       }
