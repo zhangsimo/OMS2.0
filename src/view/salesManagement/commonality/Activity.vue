@@ -6,7 +6,7 @@
           <FormItem label="配件：">
             <Input
               type="text"
-              placeholder="配件编码/名称"
+              placeholder="配件编码/名称/OEM"
               class="w250"
               v-model="Outform.partCode"
             />
