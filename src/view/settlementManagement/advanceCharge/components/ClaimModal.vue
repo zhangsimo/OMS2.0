@@ -167,11 +167,6 @@
           this.$message.error('认领金额输入错误，不可为空')
           return
         }
-
-        if (!this.voucherItem.id && this.titleName != '预收款支出认领') {
-          this.$message.error('请选择辅助核算')
-          return
-        }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {
           let o = {}

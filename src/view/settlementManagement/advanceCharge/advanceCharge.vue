@@ -299,6 +299,7 @@ export default {
         total: 0,
         opts: [20, 50, 100, 200]
       },
+      amountType:1,//本店待认领款 amountType  预付款2 预付款收回认领1
       loading: false,
       currRow: null,
       serviceId: "",
@@ -543,6 +544,7 @@ export default {
       if (name == "预付款认领" && this.currRow.paymentNo != null) {
         return this.$Message.error("预付款付款已认领");
       }
+      name=="预付款认领"?this.amountType=2:this.amountType=1
       this.claimedButtonType = name;
       this.amount = null;
       this.reciprocalAccountName = "";
