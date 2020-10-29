@@ -270,12 +270,13 @@ export default {
       }
     },
     filterOrderNo({ value, row, column }){
+      console.log(value)
       let {property} = column;
       if(!value){
         return !row[property]
       }
       if(row[property]){
-        return row[property].indexOf(value) > -1;
+        return row[property] == value;
       }else{
         return false
       }
