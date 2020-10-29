@@ -363,6 +363,9 @@
 <!--              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>-->
               <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0" :controls="false"></vxe-input>
             </template>
+            <template v-slot="{ row }">
+             {{row.orderPrice|priceFilters}}
+            </template>
           </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" title="金额" width="110">
             <template v-slot="{ row }">

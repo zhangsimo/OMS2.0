@@ -27,7 +27,7 @@
   export default{
     props:['tableData','loading'],
     data(){
-
+      return {}
     },
     methods:{
       currEvent(row){

@@ -396,8 +396,8 @@
                   that.claimedAmt = Number(that.claimedAmt.toFixed(2))
                 }
               });
-              that.difference = that.currentAccount.actualCollectionOrPayment
-                ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
+              that.difference = that.currentAccount.row.actualCollectionOrPayment
+                ? that.currentAccount.row.actualCollectionOrPayment - that.claimedAmt
                 : 0 - that.claimedAmt;
             }
           }

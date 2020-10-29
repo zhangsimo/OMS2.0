@@ -14,7 +14,7 @@
             <span>对账单勾选金额</span>
           </Col>
           <Col span="3">
-            <span>{{currentAccount.actualCollectionOrPayment}}</span>
+            <span>{{ currentAccount.row ? currentAccount.row.actualCollectionOrPayment : ''}}</span>   
           </Col>
           <Col span="6">
             <span>认领款勾选金额</span>
@@ -26,7 +26,7 @@
             <span>差异</span>
           </Col>
           <Col span="2">
-            <span>{{difference}}</span>
+            <span>{{difference ? difference.toFixed(2) : ''}}</span>
           </Col>
         </Row>
       </div>
@@ -799,7 +799,7 @@
             item.incomeMoney = ""
           }
         })
-        if (this.currentAccount.actualCollectionOrPayment>0) {
+        if (this.currentAccount.row.actualCollectionOrPayment>0) {
           this.$refs.claim.currentClaimed.map(item=>{
             if(item.incomeMoney>0){
               this.$refs.settlement.Settlement = true;
@@ -1007,7 +1007,7 @@
       //未核销选中的数据
       accountNoWriteChange(currentRow) {
         this.currentAccount = currentRow;
-        this.difference = currentRow.actualCollectionOrPayment - this.claimedAmt;
+        this.difference = currentRow.row.actualCollectionOrPayment - this.claimedAmt;
       },
       //连锁待分配款项选中的数据
       distributionSelection(selection) {
@@ -1028,7 +1028,7 @@
           endDate: '',     //结束时间参数
           // createTime:this.applyDate //日期查询时间发生日期
         };
-        this.accountNoWriteLoading=ture;
+        this.accountNoWriteLoading=true;
         accountNoSelete(obj).then(res => {
           if (res.code === 0) {
             this.accountNoWriteData = res.data.content;
