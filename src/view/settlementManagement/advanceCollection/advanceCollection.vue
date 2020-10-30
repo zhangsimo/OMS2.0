@@ -26,7 +26,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -37,7 +37,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="companyId" />
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -533,7 +534,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         orgid: this.BranchstoreId=="0"?"":this.BranchstoreId,
-        guestId: this.companyId,
+        guestName: this.companyId.trim(),
         size: this.page.size,
         page: this.page.num - 1
       };
@@ -564,7 +565,7 @@ export default {
             ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",
           orgid: this.BranchstoreId=="0"?"":this.BranchstoreId,
-          guestId: this.companyId,
+          guestName: this.companyId,
           pagesize: this.page.total,
         };
         let params="";

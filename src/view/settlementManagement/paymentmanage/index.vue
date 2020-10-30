@@ -31,13 +31,14 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="guestId" filterable clearable class="w150"
+            <!-- <Select v-model="guestId" filterable clearable class="w150"
                     :loading="searchLoading"
                     :remote-method="getAllClient"
                     @on-change="getAccountNameListFun"
             >
               <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="guestId">
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -2132,7 +2133,7 @@
           endDate: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          guestId: this.guestId
+          guestName: this.guestId.trim()
         };
         this.getGeneral(obj);
       },
@@ -2301,7 +2302,7 @@
             endDate: this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : "",
-            guestId: this.guestId
+            guestName: this.guestId
           };
           let params = ""
           for (var i in obj) {
