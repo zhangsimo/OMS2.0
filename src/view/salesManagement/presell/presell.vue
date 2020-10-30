@@ -545,13 +545,15 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
+            width: 50,
             type: "index",
-            align: "center"
+            align: "center",
+            resizable:true
           },
           {
             title: "状态",
-            minWidth: 70,
+            width: 70,
+            resizable:true,
             render: (h, params) => {
               let tex = params.row.status.name;
               return h("span", {}, tex);
@@ -560,38 +562,45 @@ export default {
           {
             title: "客户",
             key: "guestName",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "创建人",
             key: "createUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "预售单单号",
             key: "serviceId",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "printTime",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "提交人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "提交日期",
             align: "center",
             key: "commitTime",
-            minWidth: 170
+            width: 170,
+            resizable:true
           }
         ],
         tbData: []

@@ -444,18 +444,21 @@ export default {
           //key要修改
           {
             title: "序号",
-            minWidth: 50,
-            type: "index"
+            width: 50,
+            type: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70
+            width: 70,
+            resizable:true
           },
           {
             title: "盘点日期",
             key: "checkDate",
-            minWidth: 120,
+            width: 120,
+            resizable:true,
             render(h, params) {
               return h("span", {}, moment(params.row.checkDate).format("YYYY-MM-DD HH:mm:ss"));
             }
@@ -463,37 +466,44 @@ export default {
           {
             title: "盘点员",
             key: "orderMan",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "盘点单号",
             key: "serviceId",
-            minWidth: 140
+            width: 140,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "print",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "创建人",
             key: "createUname",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "提交人",
             key: "subMan",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "提交日期",
             key: "subDate",
-            minWidth: 200
+            width: 200,
+            resizable:true
           }
         ],
         tbdata: []
