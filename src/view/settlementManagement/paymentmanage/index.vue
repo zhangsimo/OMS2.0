@@ -52,8 +52,8 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'" @click="exportSummary">导出
-            </button>
+            <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'" @click="exportSummary">导出-->
+            <!--</button>-->
             <!--            <Poptip placement="bottom">-->
             <!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
             <!--              <div slot="content">-->
