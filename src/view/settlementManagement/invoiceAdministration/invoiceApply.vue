@@ -201,7 +201,7 @@
       return {
         btnTestDir: false,
 
-        proTypeList: [],//分店
+        proTypeList: [{id: '0', shortName: '全部'}],//分店
         columns: [
           {
             title: "选择",
@@ -1465,7 +1465,7 @@
         }
         let params = "";
         let obj = {
-          orgId: this.form.orgId,
+          orgId: this.form.orgId == '0' ? '' : this.form.orgId,
           guestName: this.form.guestName,
           pagesize: this.pagetotal,
           startDate: this.form.startDate,
@@ -1613,6 +1613,9 @@
           size: this.form.size
         }
         this.form.guestName = this.form.guestName.trim()
+        if(this.form.orgId == '0'){
+          this.form.orgId = ''
+        }
         getInvoiceList(params, this.form).then(res => {
           if (res.code === 0) {
             this.data = res.data.content.map((item, index) => {
