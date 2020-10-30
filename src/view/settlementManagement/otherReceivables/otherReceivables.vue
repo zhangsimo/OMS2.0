@@ -282,45 +282,45 @@
       </div>
     </section>
     <!-- 认领弹框 -->
-    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
-      <span>往来单位：</span>
-      <Select
-              v-model="companyId"
-              class="w150"
-              clearable
-              filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne"
-              @on-change="query"
-            >
-              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
-      <span class="ml10">对方户名：</span>
-      <Input v-model="bankNameO" class="w100" />
-      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
-        <i class="iconfont iconchaxunicon"></i>
-        <span>查询</span>
-      </button>
-      <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>
-      <Button class="ml10" v-else @click="claimCollection">认领</Button>
-      <div v-if="otherPayCus" style="display: inline-block;" class="ml20">
-        <span><i style="color: red" class="mr5">*</i>款项分类：</span>
-        <Select v-model="fund" class="w150" placeholder="请选择">
-          <Option
-            v-for="item in fundList"
-            :value="item.itemName"
-            :key="item.id"
-          >{{ item.itemName }}</Option>
-        </Select>
-      </div>
-
-      <claim ref="claim" @selection="selection" />
-      <!--<claimGuest ref="claimGuest" />-->
-      <div slot="footer"></div>
-    </Modal>
+<!--    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">-->
+<!--      <span>往来单位：</span>-->
+<!--      <Select-->
+<!--              v-model="companyId"-->
+<!--              class="w150"-->
+<!--              clearable-->
+<!--              filterable-->
+<!--              remote-->
+<!--              :loading="remoteloading"-->
+<!--              :remote-method="getOne"-->
+<!--              @on-change="query"-->
+<!--            >-->
+<!--              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+<!--            </Select>-->
+<!--      <span class="ml10">金额：</span>-->
+<!--      <InputNumber v-model="amt" class="w50" />-->
+<!--      <span class="ml10">对方户名：</span>-->
+<!--      <Input v-model="bankNameO" class="w100" />-->
+<!--      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">-->
+<!--        <i class="iconfont iconchaxunicon"></i>-->
+<!--        <span>查询</span>-->
+<!--      </button>-->
+<!--      <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>-->
+<!--      <Button class="ml10" v-else @click="claimCollection">认领</Button>-->
+<!--      <div v-if="otherPayCus" style="display: inline-block;" class="ml20">-->
+<!--        <span><i style="color: red" class="mr5">*</i>款项分类：</span>-->
+<!--        <Select v-model="fund" class="w150" placeholder="请选择">-->
+<!--          <Option-->
+<!--            v-for="item in fundList"-->
+<!--            :value="item.itemName"-->
+<!--            :key="item.id"-->
+<!--          >{{ item.itemName }}</Option>-->
+<!--        </Select>-->
+<!--      </div>-->
+<!--      <claim ref="claim" @selection="selection" />-->
+<!--      &lt;!&ndash;<claimGuest ref="claimGuest" />&ndash;&gt;-->
+<!--      <div slot="footer"></div>-->
+<!--    </Modal>-->
+    <ClaimModal ref="claimModal" :titleName="claimTit" :amountType="amountType"></ClaimModal>
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -344,7 +344,6 @@ import { creat } from "./../components";
 import Record from "./components/Record";
 // import Record from "../components/Record";
 import {
-
   findAdvance,
   revoke,
   findGuest
@@ -361,14 +360,17 @@ import moment from "moment";
 import {showLoading, hideLoading} from "@/utils/loading"
 import {
   kmType
-} from "@/api/settlementManagement/VoucherInput"
+} from "@/api/settlementManagement/VoucherInput";
+import ClaimModal from "./components/ClaimModal";
+
 export default {
   name: "settlementManagementOtherReceivables",
   components: {
     quickDate,
     claim,
     settlement,
-    Record
+    Record,
+    ClaimModal
     // claimGuest
   },
   data() {
@@ -385,6 +387,7 @@ export default {
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
       claimTit: "", //认领弹框标题
+      amountType:1,
       revokeTit: "", //撤回弹框标题
       amt: null, //认领弹框金额
       bankNameO: "", //认领弹框对方户名
@@ -432,14 +435,16 @@ export default {
     query() {
       this.getQuery();
     },
-    //其他付款认领/其他收款收回
+    //其他付款认领 1/其他收款收回 2
     claimCollect(type) {
       if (Object.keys(this.currRow).length !== 0) {
         if (type === 1) {
-          this.claimModal = true;
-          this.otherPayCus = true;
+          // this.claimModal = true;
+          // this.otherPayCus = true;
           this.claimTit = "其他付款认领";
-          this.claimedList(2);
+          this.amountType=2;
+          this.$refs.claimModal.open()
+          // this.claimedList(2);
         } else {
           if (
             this.currRow.paymentBalance == 0 ||
@@ -448,8 +453,10 @@ export default {
             this.$Message.error("其他收款余额为0无法收回!");
           } else {
             this.claimTit = "其他收款收回";
-            this.claimModal = true;
-            this.claimedList(1);
+            // this.claimModal = true;
+            this.amountType=1;
+            this.$refs.claimModal.open()
+            // this.claimedList(1);
           }
         }
       } else {
@@ -628,9 +635,9 @@ export default {
           Reflect.deleteProperty(obj, key);
         }
       }
-      
+
       let params = {}
-      params.page = this.page.num - 1 
+      params.page = this.page.num - 1
       params.size = this.page.size
       showLoading(".loadingClass", "数据加载中，请勿操作")
       findByDynamicQuery(params,obj).then(res => {
