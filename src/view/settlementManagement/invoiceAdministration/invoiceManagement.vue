@@ -409,16 +409,11 @@
           },
           {
             title: "序号",
+            type: 'index',
             width: 50,
             fixed: "left",
             className: "tc",
             resizable: true,
-            render: (h, params) => {
-              return h(
-                "span",
-                params.index + this.form.page * this.form.size + 1
-              );
-            }
           },
           {
             title: "往来单位",
@@ -1369,7 +1364,7 @@
       chooseTable(num) {
         this.allTablist = [];
         this.isActive = num;
-        this.form.page = 0;
+        this.form.page = 1;
         this.form.canceled = num;
         this.getTabList(this.form);
       },
@@ -1475,6 +1470,7 @@
       getTabList(data) {
         showLoading(".loadingClass", "数据加载中，请勿操作")
         data.guestName = data.guestName.trim()
+        data.page = data.page - 1
         getManageList(data)
           .then(res => {
             if (res.code === 0) {
@@ -1492,7 +1488,7 @@
         this.getTabList(this.form);
       },
       pageSizeChange(pageSize) {
-        this.form.page = 0;
+        this.form.page = 1;
         this.form.size = pageSize;
         this.getTabList(this.form);
       },

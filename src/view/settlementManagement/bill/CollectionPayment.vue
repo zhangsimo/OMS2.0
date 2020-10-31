@@ -818,16 +818,18 @@
       query() {
         this.data1 = [];
         this.data2 = [];
+        this.page.num = 1
         this.getGeneral();
       },
       changePage(p) {
+        console.log(p)
         this.page.num = p;
-        this.query();
+        this.getGeneral();
       },
       changeSize(size) {
         this.page.num = 1;
         this.page.size = size;
-        this.query();
+        this.getGeneral();
       },
       // 往来单位选择
       // async getOne() {

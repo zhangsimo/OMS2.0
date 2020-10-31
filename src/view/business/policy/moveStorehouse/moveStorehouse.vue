@@ -442,52 +442,62 @@ export default {
           {
             title: "序号",
             type: "index",
-            minWidth: 50
+            width: 50,
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70
+            width: 70,
+            resizable:true
           },
           {
             title: "移仓日期",
             key: "auditDate",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "业务员",
             key: "orderMan",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "移仓单号",
             key: "serviceId",
-            minWidth: 140
+            width: 140,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "printing",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "创建人",
             key: "createUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "提交人",
             key: "commitUname",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "提交日期",
             key: "commitDate",
-            minWidth: 170
+            width: 170,
+            resizable:true
           }
         ],
         tbdata: []

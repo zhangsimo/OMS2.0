@@ -1063,7 +1063,6 @@
           }
         }
         obj.page = this.page.num - 1
-        obj.size = this.page.size
         showLoading(".loadingClass", "数据加载中，请勿操作")
         AccountStatement(obj).then(res => {
           this.pagetotal = res.data.totalElements;
@@ -1091,6 +1090,7 @@
       },
       // 查询
       query() {
+        this.page.num = 1
         this.getAccountStatement();
       },
 

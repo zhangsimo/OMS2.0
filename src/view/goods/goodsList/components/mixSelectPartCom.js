@@ -193,7 +193,7 @@ export const mixSelectPartCom = {
       data.name = this.partName
       data.partInnerId = this.partId
       data.partCode = this.partCode
-      data.oeCode = this.oemCode.replace(/[\W]/g,'');
+      data.oeCode = this.oemCode.replace(/\s+/g,'');
       if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
         boolParams=true
       }
