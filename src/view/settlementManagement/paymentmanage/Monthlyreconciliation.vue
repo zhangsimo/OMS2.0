@@ -1729,7 +1729,7 @@
               buttonStatus: num,
               incomeType: this.totalvalue,
               remark: this.remark,
-              collectionName: this.collectionObj.label,
+              collectionName: this.collectionObj ? this.collectionObj.label : '',
               collectionId: this.collectionUname || "",
               bankName: this.openingBank,
               collectionAccount: this.collectionAccount,
