@@ -4,11 +4,11 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
+            <!--<span>快速查询：</span>-->
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
-            <!--<span>制单日期：</span>-->
+            <span>制单日期：</span>
             <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"
                          @on-change="dateChange"></Date-picker>
           </div>
