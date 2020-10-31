@@ -86,6 +86,7 @@
     data() {
       return {
         visibal: false,
+        fund:"",
         fundList:[],//款项分类数组
         tableData: [],
         outFlag: false,
