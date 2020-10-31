@@ -1,5 +1,12 @@
 <template>
   <Modal v-model="modal1" title="进项登记及修改" width="1200" @on-visible-change="visChange">
+    <button
+      class="ivu-btn ivu-btn-default mr10"
+      type="button"
+      @click="makeSure"
+      v-noresub
+    >保存并提交
+    </button>
     <vxe-table
       class="mt10"
       height="300"
@@ -127,16 +134,9 @@
       <vxe-table-column field="registrationTypeName" title="登记类型" width="100"></vxe-table-column>
     </vxe-table>
     <div slot="footer">
-      <Button type="primary" @click="makeSure">确定</Button>
-      <Button type="default" @click="cancelMo">取消</Button>
+   
     </div>
-    <!--    <Modal v-model="newInoiceShow" title="新增开票">-->
-    <!--      <AddInoice :data="addInoiceOne" ref="AddInoice" me-tit="新增开票"></AddInoice>-->
-    <!--      <div slot="footer">-->
-    <!--        <Button type="primary" @click="addNewBank">确定</Button>-->
-    <!--        <Button type="default" @click="cancelNewBank">取消</Button>-->
-    <!--      </div>-->
-    <!--    </Modal>-->
+
   </Modal>
 </template>
 <script>
@@ -168,14 +168,14 @@
         arrId: [], //选中数据的id，guestId，orgId
         orgName: "", //分店名称
         validRules: {
-          invoiceSort: [{required: true, message: "发票分类必填"}],
+          // invoiceSort: [{required: true, message: "发票分类必填"}],
           invoiceCode: [
             {required: true, message: "必须是10位数字", min: 10, max: 10}
           ],
           invoiceNo: [
             {required: true, message: "必须是8位数字", min: 8, max: 8}
           ],
-          invoicePurchaserId: [{required: true, message: "发票采购方名称必填"}],
+          // invoicePurchaserId: [{required: true, message: "发票采购方名称必填"}],
           // invoiceSellerName: [{required: true, message: "发票销售方名称必填"}],
           billingDate: [{required: true, message: "开票日期必填"}],
           totalAmt: [{required: true, message: "价税合计金额必填"}],
@@ -381,10 +381,6 @@
         //   }
         // });
       },
-      totalAmtChange($event) {
-        // let value = v.target.value||0
-        // console.log($event)
-      },
 
       // 数据字典
       getDictionary(dictCode) {
@@ -485,8 +481,11 @@
             item.invoiceAmt = ((item.totalAmt || 0) / (1 + item.taxRate)).toFixed(2);
             return item
           });
-          if (pei > pay)
-            return this.$message.error("价税合计金额不能大于应付合计");
+          this.accountData.map(item => {
+            pay += item.totalAmt * 1;
+          });
+          if (pei !== pay)
+            return this.$message.error("进项发票金额与费用报销金额不一致，请重新输入");
           let data = {
             details: newTableData,
             masterList: this.accountData
