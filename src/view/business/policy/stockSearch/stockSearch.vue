@@ -974,7 +974,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1057,7 +1057,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1076,7 +1076,7 @@
         }
         if (
           (data.partName == "" || data.partName.trim() == "") && //名称
-          (data.oemCode == "" || data.oemCode.replace(/[\W]/g,'') == "") && //oem码
+          (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
           (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
           (data.partId == "" || data.partId.trim() == "") && //内码
           (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
@@ -1226,7 +1226,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1259,7 +1259,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
