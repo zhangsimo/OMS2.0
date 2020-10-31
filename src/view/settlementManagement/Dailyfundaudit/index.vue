@@ -271,6 +271,7 @@
       },
       // 查询
       async query() {
+        this.page.num = 1
         this.oneList = [];
         this.getPageList(this.tabName)
         //

@@ -361,11 +361,13 @@ export default {
     },
     // 快速查询
     quickDate(data) {
+      this.page.num = 1;
       this.value = data;
       this.getQuery();
     },
     //查询
     query() {
+      this.page.num = 1;
       this.getQuery();
     },
     //查询接口
