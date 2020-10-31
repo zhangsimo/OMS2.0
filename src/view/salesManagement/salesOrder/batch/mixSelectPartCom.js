@@ -232,17 +232,18 @@ export const mixSelectPartCom  = {
     //获取配件品牌
     getPartBrandAll(){
       getAllBrand({page: 1,pageSize: 1000}).then(res => {
-        console.log(res)
-        let filterData = res.data.content.filter(item => item.qualityCode=='000071')
+        let filterData = res.data.content.filter(item => item.qualityCode=='000071'||item.qualityCode=='000070').map(item => item.children)
         if(filterData.length>0){
-          if(filterData[0].children&&filterData[0].children.length>0){
-            filterData[0].children.map(item => {
-              let objData = {}
-              objData.label = item.name
-              objData.value = item.code
-              this.partBrandData.push(objData)
-            })
-          }
+          filterData.map(iv => {
+            if(iv.length>0){
+              iv.map(item => {
+                let objData = {}
+                objData.label = item.name
+                objData.value = item.code
+                this.partBrandData.push(objData)
+              })
+            }
+          })
         }
       })
     },
