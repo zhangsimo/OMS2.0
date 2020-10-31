@@ -823,38 +823,45 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
+            width: 50,
             key: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70,
+            width: 70,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140,
+            width: 140,
+            resizable:true
           },
           {
             title: "操作员",
             key: "orderMan",
-            minWidth: 120,
+            width: 120,
+            resizable:true
           },
           {
             title: "配件组装单号",
             key: "serviceId",
-            minWidth: 160,
+            width: 160,
+            resizable:true
           },
           {
             title: "提交人",
             key: "auditor",
-            minWidth: 120,
+            width: 120,
+            resizable:true
           },
           {
             title: "提交时间",
             key: "auditDate",
-            minWidth: 200,
+            width: 200,
+            resizable:true
           },
         ],
         tbdata: [],

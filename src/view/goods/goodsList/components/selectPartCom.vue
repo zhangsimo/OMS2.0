@@ -5,6 +5,7 @@
       title="配件选择"
       width="1100"
       @on-cancel="CancelModal"
+      draggable
     >
       <div class="partCheck-hd">
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10">-->
@@ -20,19 +21,19 @@
 
         <div class="db mr5 fl">
           <span class="mr5">编码:</span>
-          <Input ref="Input" style="width: 120px" placeholder="编码" v-model="partCode" @on-enter="search"/>
+          <el-input @focus="focus($event)" ref="Input" style="width: 120px" placeholder="编码" v-model="partCode" @change="search"></el-input>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">内码:</span>
-          <Input placeholder="内码" style="width: 120px" v-model="partId" @on-enter="search"/>
+          <el-input @focus="focus($event)" ref="elinputpartId" placeholder="内码" style="width: 120px" v-model="partId" @change="search"></el-input>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">名称:</span>
-          <Input placeholder="名称" style="width: 120px" v-model="partName" @on-enter="search"/>
+          <el-input @focus="focus($event)" ref="elinputpartName" placeholder="名称" style="width: 120px" v-model="partName" @change="search"></el-input>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">OE:</span>
-          <Input placeholder="OE码" style="width: 120px" v-model="oemCode" @on-enter="search"/>
+          <el-input @focus="focus($event)" ref="elinputoemCode" placeholder="OE码" style="width: 120px" v-model="oemCode" @change="search"></el-input>
         </div>
         <div class="db mr5 fl">
           <div class="mt5"><Checkbox v-model="showDisabled" @on-change="getList">显示禁用</Checkbox></div>

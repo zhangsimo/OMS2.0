@@ -204,16 +204,133 @@
           :disabled="ifRecallHedge"
         >撤回发票对冲
         </button>
-        <Table
+        <vxe-table
           border
-          :columns="columns1"
+          auto-resize
+          resizable
+          highlight-current-row
+          show-overflow="title"
           :data="data1"
+          align="center"
+          size="mini"
           class="mt10 accountStateCla"
           max-height="400"
-          @on-row-click="morevis"
-          highlight-row
           ref="accountStatement"
-        ></Table>
+          @current-change="morevis"
+        >
+          <vxe-table-column title="序号" type="seq" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column title="申请时间" field="createTime" width="140"></vxe-table-column>
+          <vxe-table-column title="公司名称" field="orgName" width="120"></vxe-table-column>
+          <vxe-table-column title="对账单号" field="accountNo" width="120"></vxe-table-column>
+          <vxe-table-column title="往来单位" field="guestName" width="120" fixed="left"></vxe-table-column>
+          <vxe-table-column title="收付类型" field="paymentTypeName" width="120"></vxe-table-column>
+          <vxe-table-column title="对账应收" field="accountsReceivable" width="120">
+            <template v-slot="{row}">
+              <span>{{row.accountsReceivable.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="应收返利" field="receivableRebate" width="120">
+            <template v-slot="{row}">
+              <span>{{row.receivableRebate.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="应收坏账" field="badDebtReceivable" width="120">
+            <template v-slot="{row}">
+              <span>{{row.badDebtReceivable.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="对账应付" field="reconciliation" width="120">
+            <template v-slot="{row}">
+              <span>{{row.reconciliation.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="应付返利" field="dealingRebates" width="120">
+            <template v-slot="{row}">
+              <span>{{row.dealingRebates.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="应付坏账" field="payingBadDebts" width="120">
+            <template v-slot="{row}">
+              <span>{{row.payingBadDebts.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="运费" field="transportExpenses" width="120">
+            <template v-slot="{row}">
+              <span>{{row.transportExpenses.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="保险费" field="insuranceExpenses" width="120">
+            <template v-slot="{row}">
+              <span>{{row.insuranceExpenses.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="手续费" field="serviceCharge" width="120">
+            <template v-slot="{row}">
+              <span>{{row.serviceCharge.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="配件管理费" field="partsManagementFee" width="120">
+            <template v-slot="{row}">
+              <span>{{row.partsManagementFee.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="其他费用" field="otherFees" width="120">
+            <template v-slot="{row}">
+              <span>{{row.otherFees.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="实际收款/付款" field="receiptPayment" width="120">
+            <template v-slot="{row}">
+              <span>{{row.receiptPayment.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="已收金额" field="amountReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.amountReceived.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="未收金额" field="noCharOffAmt" width="120">
+            <template v-slot="{row}">
+              <span>{{row.noCharOffAmt.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="已付金额" field="amountPaid" width="120">
+            <template v-slot="{row}">
+              <span>{{row.amountPaid.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="未付金额" field="unpaidAmount" width="120">
+            <template v-slot="{row}">
+              <span>{{row.unpaidAmount.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="对账单状态" field="statementStatusName" width="120" fixed="left">
+          </vxe-table-column>
+          <vxe-table-column title="计算结算类型" field="billingTypeName" width="120" fixed="left">
+          </vxe-table-column>
+          <vxe-table-column title="最近一次回款时间" field="lastPaymentDate" width="120">
+          </vxe-table-column>
+          <vxe-table-column title="备注" field="remark" width="100">
+          </vxe-table-column>
+          <vxe-table-column title="流程是否通过" field="passName" width="120"></vxe-table-column>
+          <vxe-table-column title="最近一次开票申请人" field="recentApplier" width="140"></vxe-table-column>
+          <vxe-table-column title="最近一次开票申请时间" field="recentTime" width="140"></vxe-table-column>
+          <vxe-table-column title="含税配件金额" field="taxAmountOfPart" width="120"></vxe-table-column>
+          <vxe-table-column title="含税油品" field="taxAmountOfOil" width="120"></vxe-table-column>
+          <vxe-table-column title="不含税金额" field="noTaxAmount" width="120"></vxe-table-column>
+          <vxe-table-column title="含税配件已开" field="taxAmountOfPartOpened" width="120"></vxe-table-column>
+          <vxe-table-column title="含税油品已开" field="taxAmountOfOilOpened" width="120"></vxe-table-column>
+          <vxe-table-column title="不含税增加税点" field="increasePointExcludingTax" width="120"></vxe-table-column>
+          <vxe-table-column title="收到配件进项发票" field="receiveInputInvoiceAmount" width="120"></vxe-table-column>
+          <vxe-table-column title="收到含税油品金额" field="receiveTaxOfOilAmount" width="120"></vxe-table-column>
+          <vxe-table-column title="对冲配件发票" field="hedgingInvoiceOfPart" width="120"></vxe-table-column>
+          <vxe-table-column title="对冲油品发票" field="hedgingInvoiceOfOil" width="120"></vxe-table-column>
+          <vxe-table-column title="含税配件欠票" field="taxArrearsOfPart" width="120"></vxe-table-column>
+          <vxe-table-column title="含税油品欠票" field="taxArrearsOfOil" width="120"></vxe-table-column>
+          <vxe-table-column title="不含税未开" field="taxNotIncluded" width="120"></vxe-table-column>
+          <vxe-table-column title="最近一次开票公司" field="recentInvoiceCompany" width="120"></vxe-table-column>
+          <vxe-table-column title="最近一次开票名称" field="recentInvoiceName" width="120"></vxe-table-column>
+        </vxe-table>
         <Page
           :total="pagetotal"
           show-elevator
@@ -227,39 +344,130 @@
         <div class="flex mt20">
           <div class="db" style="flex:1;">
             <button class="ivu-btn ivu-btn-default" type="button">收/付款单记录</button>
-            <Table
-              class="mt15"
+            <vxe-table
               border
-              :columns="columns2"
+              auto-resize
+              resizable
+              size="mini"
+              align="center"
+              show-overflow="title"
+              class="mt15"
               :data="data2"
               max-height="400"
               style="width:100%;"
-              show-summary
-              :summary-method="summary"
-            ></Table>
+              show-footer="true"
+              :footer-method="summary"
+            >
+              <vxe-table-column title="序号" width="50" type="seq"></vxe-table-column>
+              <vxe-table-column title="收/付款单号" width="100" field="fno"></vxe-table-column>
+              <vxe-table-column title="收/付款时间" width="100" field="rpDate"></vxe-table-column>
+              <vxe-table-column title="收/付款方式" width="100" field="sortName"></vxe-table-column>
+              <vxe-table-column title="收/付款账户" width="100" field="account"></vxe-table-column>
+              <vxe-table-column title="收/付款金额" width="100" field="checkAmt">
+                <template v-slot="{row}">
+                  <span>{{row.checkAmt.toFixed(2)}}</span>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column title="审核状态" field="startStatus" width="100"></vxe-table-column>
+              <vxe-table-column title="审核人" field="auditor" width="100"></vxe-table-column>
+              <vxe-table-column title="审核日期" field="auditorDate" width="100"></vxe-table-column>
+              <vxe-table-column title="备注" field="remark" width="100"></vxe-table-column>
+            </vxe-table>
           </div>
           <Tabs v-model="tab" class="ml20" style="flex:1" :animated="false" @click="tabName">
             <TabPane label="应收单据明细" name="name1">
-              <Table
+              <vxe-table
                 border
-                :columns="columns3"
+                auto-resize
+                resizable
+                size="mini"
+                show-overflow="title"
                 :data="data3"
                 max-height="400"
-                show-summary
-                :summary-method="handleSummary"
+                style="width:100%"
                 ref="collectBill"
-              ></Table>
+                align="center"
+                show-footer
+                :footer-method="handleSummary"
+              >
+                <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+                <vxe-table-column field="orgName" title="门店" width="80"></vxe-table-column>
+                <vxe-table-column field="guestName" title="客户" width="80"></vxe-table-column>
+                <vxe-table-column field="orderNo" title="销售单号" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceId" title="出库单号" width="100"></vxe-table-column>
+                <vxe-table-column field="rpAmt" title="应收金额" width="100">
+                  <template v-slot="{row}">
+                    <span>{{row.rpAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="accountAmt" title="前期已对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.accountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="noAccountAmt" title="前期未对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.noAccountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="thisNoAccountAmt" title="本次对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.thisNoAccountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="thisAccountAmt" title="本次对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.thisAccountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+              </vxe-table>
             </TabPane>
             <TabPane label="应付单据明细" name="name2">
-              <Table
+              <vxe-table
                 border
-                :columns="columns4"
+                auto-resize
+                resizable
+                size="mini"
+                show-overflow="title"
                 :data="data4"
                 max-height="400"
-                show-summary
-                :summary-method="handleSummary"
+                style="width:100%"
                 ref="payBill"
-              ></Table>
+                align="center"
+                show-footer
+                :footer-method="handleSummary"
+              >
+                <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+                <vxe-table-column field="orgName" title="门店" width="80"></vxe-table-column>
+                <vxe-table-column field="guestName" title="客户" width="80"></vxe-table-column>
+                <vxe-table-column field="orderNo" title="采购单号" width="100"></vxe-table-column>
+                <vxe-table-column field="serviceId" title="入库单号" width="100"></vxe-table-column>
+                <vxe-table-column field="rpAmt" title="应付金额" width="100">
+                  <template v-slot="{row}">
+                    <span>{{row.rpAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="accountAmt" title="前期已对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.accountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="noAccountAmt" title="前期未对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.noAccountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="thisNoAccountAmt" title="本次对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.thisNoAccountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="thisAccountAmt" title="本次对账金额" width="120">
+                  <template v-slot="{row}">
+                    <span>{{row.thisAccountAmt.toFixed(2)}}</span>
+                  </template>
+                </vxe-table-column>
+              </vxe-table>
             </TabPane>
           </Tabs>
         </div>
@@ -487,777 +695,6 @@
             label: "结算完成"
           }
         ],
-        columns1: [
-          {
-            title: "序号",
-            key: "index",
-            width: 40,
-            className: "tc",
-            fixed: "left",
-            resizable: true,
-          },
-          {
-            title: "申请时间",
-            key: 'createTime',
-            className: 'tc',
-            width: 140,
-            resizable: true,
-          },
-          {
-            title: "公司名称",
-            key: "orgName",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.orgName
-                  }
-                }, params.row.orgName)
-              ])
-            }
-          },
-          {
-            title: "对账单号",
-            key: "accountNo",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.accountNo
-                  }
-                }, params.row.accountNo)
-              ])
-            }
-          },
-          {
-            title: "往来单位",
-            key: "guestName",
-            className: "tc",
-            width: 120,
-            fixed: "left",
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.guestName
-                  }
-                }, params.row.guestName)
-              ])
-            }
-          },
-          {
-            title: "收付类型",
-            key: "paymentTypeName",
-            className: "tc",
-            width: 120,
-            resizable: true,
-          },
-          {
-            title: "对账应收",
-            key: "accountsReceivable",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.accountsReceivable.toFixed(2));
-            }
-          },
-          {
-            title: "应收返利",
-            key: "receivableRebate",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.receivableRebate.toFixed(2));
-            }
-          },
-          {
-            title: "应收坏账",
-            key: "badDebtReceivable",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.badDebtReceivable.toFixed(2));
-            }
-          },
-          {
-            title: "对账应付",
-            key: "reconciliation",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.reconciliation.toFixed(2));
-            }
-          },
-          {
-            title: "应付返利",
-            key: "dealingRebates",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.dealingRebates.toFixed(2));
-            }
-          },
-          {
-            title: "应付坏账",
-            key: "payingBadDebts",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.payingBadDebts.toFixed(2));
-            }
-          },
-          {
-            title: "运费",
-            key: "transportExpenses",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.transportExpenses.toFixed(2));
-            }
-          },
-          {
-            title: "保险费",
-            key: "insuranceExpenses",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.insuranceExpenses.toFixed(2));
-            }
-          },
-          {
-            title: "手续费",
-            key: "serviceCharge",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.serviceCharge.toFixed(2));
-            }
-          },
-          {
-            title: "配件管理费",
-            key: "partsManagementFee",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.partsManagementFee.toFixed(2));
-            }
-          },
-          {
-            title: "其他费用",
-            key: "otherFees",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.otherFees.toFixed(2));
-            }
-          },
-          {
-            title: "实际收款/付款",
-            key: "receiptPayment",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.receiptPayment.toFixed(2));
-            }
-          },
-          {
-            title: "已收金额",
-            key: "amountReceived",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.amountReceived.toFixed(2));
-            }
-          },
-          {
-            title: "未收金额",
-            key: "noCharOffAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.noCharOffAmt.toFixed(2));
-            }
-          },
-          {
-            title: "已付金额",
-            key: "amountPaid",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.amountPaid.toFixed(2));
-            }
-          },
-          {
-            title: "未付金额",
-            key: "unpaidAmount",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.unpaidAmount.toFixed(2));
-            }
-          },
-          {
-            title: "对账单状态",
-            key: "statementStatusName",
-            className: "tc",
-            resizable: true,
-            width: 120,
-            fixed: "left"
-          },
-          {
-            title: "计算结算类型",
-            key: "billingTypeName",
-            className: "tc",
-            resizable: true,
-            width: 120,
-            fixed: "left"
-          },
-
-          {
-            title: "对账人",
-            key: "createUname",
-            className: "tc",
-            width: 120,
-            resizable: true,
-          },
-          {
-            title: "最近一次回款时间",
-            key: "lastPaymentDate",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.lastPaymentDate
-                  }
-                }, params.row.lastPaymentDate)
-              ])
-            }
-          },
-          {
-            title: "备注",
-            key: "remark",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.remark
-                  }
-                }, params.row.remark)
-              ])
-            }
-          },
-          {
-            title: "流程是否通过",
-            key: "passName",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "最近一次开票申请人",
-            key: "recentApplier",
-            className: "tc",
-            resizable: true,
-            width: 140
-          },
-          {
-            title: "最近一次开票申请时间",
-            key: "recentTime",
-            className: "tc",
-            resizable: true,
-            width: 140,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.recentTime
-                  }
-                }, params.row.recentTime)
-              ])
-            }
-          },
-          {
-            title: "含税配件金额",
-            key: "taxAmountOfPart",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "含税油品",
-            key: "taxAmountOfOil",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "不含税金额",
-            key: "noTaxAmount",
-            className: "tc",
-            resizable: true,
-            width: 120
-
-          },
-          {
-            title: "含税配件已开",
-            key: "taxAmountOfPartOpened",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "含税油品已开",
-            key: "taxAmountOfOilOpened",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "不含税增加税点",
-            key: "increasePointExcludingTax",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "收到配件进项发票",
-            key: "receiveInputInvoiceAmount",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "收到含税油品金额",
-            key: "receiveTaxOfOilAmount",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "对冲配件发票",
-            key: "hedgingInvoiceOfPart",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "对冲油品发票",
-            key: "hedgingInvoiceOfOil",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "含税配件欠票",
-            key: "taxArrearsOfPart",
-            className: "tc",
-            resizable: true,
-            width: 120,
-            // render:(h, params) => {
-            //   let tax = this.$utils.subtract(params.row.taxAmountOfPart , params.row.taxAmountOfPartOpend)
-            //   return h("span" , tax)
-            // }
-          },
-          {
-            title: "含税油品欠票",
-            key: "taxArrearsOfOil",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "不含税未开",
-            key: "taxNotIncluded",
-            className: "tc",
-            resizable: true,
-            width: 120
-          },
-          {
-            title: "最近一次开票公司",
-            key: "recentInvoiceCompany",
-            className: "tc",
-            resizable: true,
-            width: 120,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.recentInvoiceCompany
-                  }
-                }, params.row.recentInvoiceCompany)
-              ])
-            }
-          },
-          {
-            title: "最近一次开票名称",
-            key: "recentInvoiceName",
-            className: "tc",
-            resizable: true,
-            width: 120,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.recentInvoiceName
-                  }
-                }, params.row.recentInvoiceName)
-              ])
-            }
-          }
-        ],
-        columns2: [
-          {
-            title: "序号",
-            type: "index",
-            width: 40,
-            className: "tc",
-            tooltip: true,
-            resizable: true,
-          },
-          {
-            title: "收/付款单号",
-            key: "fno",
-            className: "tc",
-            tooltip: true,
-            width: 100,
-            resizable: true,
-          },
-          {
-            title: "收/付款时间",
-            key: "rpDate",
-            tooltip: true,
-            className: "tc",
-            width: 100,
-            resizable: true,
-          },
-          {
-            title: "收/付款方式",
-            key: "sortName",
-            tooltip: true,
-            className: "tc",
-            width: 100,
-            resizable: true,
-          },
-          {
-            title: "收/付款账户",
-            key: "account",
-            tooltip: true,
-            width: 100,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "收/付款金额",
-            key: "checkAmt",
-            className: "tc",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.checkAmt.toFixed(2));
-            }
-          },
-          {
-            title: "审核状态",
-            key: "startStatus",
-            tooltip: true,
-            className: "tc",
-            width: 100,
-            resizable: true,
-          },
-          {
-            title: "审核人",
-            key: "auditor",
-            tooltip: true,
-            className: "tc",
-            width: 100,
-            resizable: true,
-          },
-          {
-            title: "审核日期",
-            key: "auditorDate",
-            tooltip: true,
-            className: "tc",
-            width: 100,
-            resizable: true,
-          },
-          {
-            title: "备注",
-            key: "remark",
-            tooltip: true,
-            className: "tc",
-            width: 100,
-            resizable: true,
-          }
-        ],
-        columns3: [
-          {
-            title: "序号",
-            key: "index",
-            width: 40,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "门店",
-            key: "orgName",
-            className: "tc",
-            tooltip: true,
-            width: 80,
-            resizable: true,
-          },
-          {
-            title: "客户",
-            key: "guestName",
-            tooltip: true,
-            width: 80,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "销售单号",
-            key: "orderNo",
-            width: 80,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "出库单号",
-            key: "serviceId",
-            width: 80,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "应收金额",
-            key: "rpAmt",
-            className: "tc",
-            width: 80,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.rpAmt.toFixed(2));
-            }
-          },
-          {
-            title: "前期已对账金额",
-            key: "accountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.accountAmt.toFixed(2));
-            }
-          },
-          {
-            title: "前期未对账金额",
-            key: "noAccountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.noAccountAmt.toFixed(2));
-            }
-          },
-          {
-            title: "本次不对账金额",
-            key: "thisNoAccountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.thisNoAccountAmt.toFixed(2));
-            }
-          },
-          {
-            title: "本次对账金额",
-            key: "thisAccountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.thisAccountAmt.toFixed(2));
-            }
-          }
-        ],
-        columns4: [
-          {
-            title: "序号",
-            key: "index",
-            tooltip: true,
-            width: 40,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "门店",
-            key: "orgName",
-            width: 80,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "客户",
-            key: "guestName",
-            width: 80,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "采购单号",
-            key: "orderNo",
-            width: 80,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "入库单号",
-            key: "serviceId",
-            width: 80,
-            tooltip: true,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "应付金额",
-            key: "rpAmt",
-            className: "tc",
-            width: 80,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.rpAmt.toFixed(2));
-            }
-          },
-          {
-            title: "前期已对账金额",
-            key: "accountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.accountAmt.toFixed(2));
-            }
-          },
-          {
-            title: "前期未对账金额",
-            key: "noAccountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.noAccountAmt.toFixed(2));
-            }
-          },
-          {
-            title: "本次不对账金额",
-            key: "thisNoAccountAmt",
-            className: "tc",
-            width: 120,
-            resizable: true,
-            render: (h, params) => {
-              return h("span", params.row.thisNoAccountAmt.toFixed(2));
-            }
-          },
-          {
-            title: "本次对账金额",
-            key: "thisAccountAmt",
-            className: "tc",
-            resizable: true,
-            width: 120,
-            render: (h, params) => {
-              return h("span", params.row.thisAccountAmt.toFixed(2));
-            }
-          }
-        ],
         data1: [],
         data2: [],
         data3: [],
@@ -1357,7 +794,7 @@
             this.$Message.success('撤回成功')
             this.getAccountStatement();
           }
-          }
+        }
         //撤回发票对冲
         if (!this.ifRecallHedge) {
           let data = {}
@@ -1484,123 +921,83 @@
       },
       // 销售开票申请
       saleApplication() {
-          if (Object.keys(this.reconciliationStatement).length == 0) return this.$Message.error('请选择一条对账单')
-          if (this.reconciliationStatement.statementStatus.value == 1) return  this.$Message.error('审核中不能进行销售开票申请')
-          if (this.reconciliationStatement.ownSellOutList === 0) {
-            return this.$Message.error('该对账单不包含销售出库单据，不能开票！')
-          }
-          if (0 >= this.reconciliationStatement.statementAmtOwed) return this.$Message.error('剩余欠票金额为0不能继续开票')
-          if (this.reconciliationStatement.taxSign === 1) {
-            this.$refs.salepopup.parameter = this.reconciliationStatement;
-            this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
-            this.reconciliationStatement.code = this.$refs.salepopup.information.code;
-            this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
-            this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
-            this.$refs.salepopup.information.applicationDate = moment(
-              new Date()
-            ).format("YYYY-MM-DD HH:mm:ss");
-            if (this.reconciliationStatement.owned === 0) {
-              // 申请单号
-              applyNo({orgid: this.reconciliationStatement.orgId}).then(res => {
-                if (res.code === 0) {
-                  this.$refs.salepopup.information.applyNo = res.data.applyNo;
-                  this.$refs.salepopup.information.code = res.data.orgCode;
-                  if (this.reconciliationStatement.statementType.value == 1) {
-                    this.$refs.salepopup.information.oilsListOrder = ""
-                    this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
-                  } else if (this.reconciliationStatement.statementType.value == 2) {
-                    this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
-                    this.$refs.salepopup.information.partsListOrder = ""
-                  }
+        if (Object.keys(this.reconciliationStatement).length == 0) return this.$Message.error('请选择一条对账单')
+        if (this.reconciliationStatement.statementStatus.value == 1) return  this.$Message.error('审核中不能进行销售开票申请')
+        if (this.reconciliationStatement.ownSellOutList === 0) {
+          return this.$Message.error('该对账单不包含销售出库单据，不能开票！')
+        }
+        if (0 >= this.reconciliationStatement.statementAmtOwed) return this.$Message.error('剩余欠票金额为0不能继续开票')
+        if (this.reconciliationStatement.taxSign === 1) {
+          this.$refs.salepopup.parameter = this.reconciliationStatement;
+          this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
+          this.reconciliationStatement.code = this.$refs.salepopup.information.code;
+          this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
+          this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
+          this.$refs.salepopup.information.applicationDate = moment(
+            new Date()
+          ).format("YYYY-MM-DD HH:mm:ss");
+          if (this.reconciliationStatement.owned === 0) {
+            // 申请单号
+            applyNo({orgid: this.reconciliationStatement.orgId}).then(res => {
+              if (res.code === 0) {
+                this.$refs.salepopup.information.applyNo = res.data.applyNo;
+                this.$refs.salepopup.information.code = res.data.orgCode;
+                if (this.reconciliationStatement.statementType.value == 1) {
+                  this.$refs.salepopup.information.oilsListOrder = ""
+                  this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
+                } else if (this.reconciliationStatement.statementType.value == 2) {
+                  this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
+                  this.$refs.salepopup.information.partsListOrder = ""
                 }
-              });
-            }
-
-            this.$refs.salepopup.accessoriesBillingData1 = []
-            this.$refs.salepopup.accessoriesBillingData2 = []
-            setTimeout(() => {
-              this.$refs.salepopup.modal1 = true;
-            }, 500);
-          } else {
-            this.$refs.noTax.init();
+              }
+            });
           }
+
+          this.$refs.salepopup.accessoriesBillingData1 = []
+          this.$refs.salepopup.accessoriesBillingData2 = []
+          setTimeout(() => {
+            this.$refs.salepopup.modal1 = true;
+          }, 500);
+        } else {
+          this.$refs.noTax.init();
+        }
 
       },
       // 单据合计方式
       handleSummary({columns, data}) {
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            sums[key] = {
-              key,
-              value: "合计"
-            };
-            return;
-          }
-          const values = data.map(item => Number(item[key]));
-          if (index > 4) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return prev + curr;
-                } else {
-                  return prev;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
             }
-          } else {
-            sums[key] = {
-              key,
-              value: " "
-            };
-          }
-        });
-        return sums;
-        //
+            if (
+              [
+                "rpAmt",'accountAmt','noAccountAmt','thisNoAccountAmt','thisAccountAmt'
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            return null;
+          })
+        ]
       },
       // 收付款单合计方式
       summary({columns, data}) {
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            sums[key] = {
-              key,
-              value: "合计"
-            };
-            return;
-          }
-          const values = data.map(item => Number(item[key]));
-          if (index === 5) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return prev + curr;
-                } else {
-                  return prev;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
             }
-          } else {
-            sums[key] = {
-              key,
-              value: " "
-            };
-          }
-        });
-        return sums;
-        //
+            if (
+              [
+                "checkAmt",
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            return null;
+          })
+        ]
       },
       // 快速查询日期
       quickDate(data) {
@@ -1666,7 +1063,6 @@
           }
         }
         obj.page = this.page.num - 1
-        obj.size = this.page.size
         showLoading(".loadingClass", "数据加载中，请勿操作")
         AccountStatement(obj).then(res => {
           this.pagetotal = res.data.totalElements;
@@ -1694,11 +1090,12 @@
       },
       // 查询
       query() {
+        this.page.num = 1
         this.getAccountStatement();
       },
 
       // 点击总表查询明细
-      morevis(row, index) {
+      morevis({row, index}) {
         this.taxArrearsfalg = false
         this.statementStatusflag = false
         this.hedgingfalg = false
@@ -1885,7 +1282,8 @@
               orgId: this.model1,
               statementStatus: this.Reconciliationtype,
               guestId: this.receiveGuestId,
-              pagesize:this.pagetotal
+              pagesize:this.pagetotal,
+              accountNo:this.accountNo
             };
             let params=""
             for(var i in obj){

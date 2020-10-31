@@ -143,7 +143,7 @@
                     <Row class="w160">
                       <Col span="19"
                       >
-                      <Tooltip :content="formPlanmain.guestName">
+                      <Tooltip :content="formPlanmain.guestName" placement="top">
                         <GoodCus style="width: 120px"
                             :title="formPlanmain.guestName"
                             placeholder="请输入供应商"

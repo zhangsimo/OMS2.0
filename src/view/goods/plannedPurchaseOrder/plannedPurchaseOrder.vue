@@ -131,7 +131,7 @@
                   <FormItem class="form-Item" label="供应商：" prop="guestId">
                     <Row class="w160">
                       <Col span="19">
-                        <Tooltip :content="formPlanmain.guestName">
+                        <Tooltip :content="formPlanmain.guestName" placement="top">
                           <!-- <Input
                             v-model="formPlanmain.guestName"
                             placeholder="请选择供应商"

@@ -137,7 +137,7 @@
                   <FormItem label="供应商：" prop="supplyName">
                     <Row class="w160">
                       <Col span="19">
-                        <Tooltip :content="formPlan.supplyName">
+                        <Tooltip :content="formPlan.supplyName" placement="top">
                           <GoodCus
                             style="width: 120px"
                             :title="formPlan.supplyName"
@@ -746,14 +746,16 @@ export default {
       columns: [
         {
           title: "序号",
-          minWidth: 50,
+          width: 50,
           type: "index",
           key: "id",
+          resizable:true
         },
         {
           title: "状态",
           key: "billStatusId",
-          minWidth: 70,
+          width: 70,
+          resizable:true,
           render: (h, params) => {
             let val = params.row.billStatusId.name || "";
             return h("span", val);
@@ -762,17 +764,20 @@ export default {
         {
           title: "供应商",
           key: "guestName",
-          minWidth: 170,
+          width: 170,
+          resizable:true
         },
         {
           title: "创建日期",
           key: "createTime",
-          minWidth: 120,
+          width: 120,
+          resizable:true
         },
         {
           title: "创建人",
           key: "createUname",
-          minWidth: 140,
+          width: 140,
+          resizable:true
         },
         // {
         //   title: "计划员",
@@ -782,17 +787,20 @@ export default {
         {
           title: "计划单号",
           key: "serviceId",
-          minWidth: 200,
+          width: 200,
+          resizable:true
         },
         {
           title: "提交人",
           key: "auditor",
-          minWidth: 100,
+          width: 100,
+          resizable:true
         },
         {
           title: "提交日期",
           key: "auditDate",
-          minWidth: 170,
+          width: 170,
+          resizable:true
         },
       ],
       tbdata: [],

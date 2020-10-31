@@ -357,7 +357,7 @@
             field="orderPrice"
             title="单价"
             width="100"
-            :edit-render="{name: 'input' ,attrs: {disabled: false}}"
+            :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
           >
             <template v-slot:edit="{ row }">
 <!--              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>-->
@@ -1146,7 +1146,7 @@
           return
         }
         this.$refs.formPlan.validate(async valid => {
-          let zero = tools.isZero1(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+          let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
           if (valid) {
             try {
@@ -1282,7 +1282,7 @@
           return
         }
         this.$refs.formPlan.validate(async valid => {
-          let zero = tools.isZero1(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
+          let zero = tools.isZero(this.formPlan.detailList, {qty: "orderQty", price: "orderPrice"});
           if (zero) return;
           this.formPlan.detailList.map(item => {
             item.orderAmt = this.$utils.toNumber(item.orderQty) * this.$utils.toNumber(item.orderPrice)

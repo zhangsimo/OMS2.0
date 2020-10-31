@@ -38,7 +38,7 @@
             v-for="option in guseData.lists"
             :value="option.id"
             :key="option.id"
-          >{{ option.fullName }}</Option>
+          >{{ option.shortName }}</Option>
         </Select>
       </FormItem>
       <FormItem v-if="type != 4" label="申请单号:">
@@ -275,7 +275,7 @@ export default class MoreSearch extends Vue {
     const res: any = await transferringFindForAllot(data);
     this.guseData.loading = false;
     if (res.code == 0) {
-      this.guseData.lists = res.data;
+      this.guseData.lists = res.data.content||[];
     }
   }
 

@@ -139,7 +139,7 @@ export default {
       model1: 0, //区域
       Branchstore: [{ id: 0, companyName: "全部" }], //区域数组
       shopCode: "", //门店1265535798180593664
-      shopListArr: [], //门店数组
+      shopListArr: [{ id: 0, shortName: "全部" }], //门店数组
       accountName: "", //账户
       bankName: "", //开户行
       subjectCode: 0, //对应科目
@@ -176,7 +176,7 @@ export default {
       })
       let res = await goshop(data);
       if (res.code === 0) {
-        this.shopListArr = [ ...res.data];
+        this.shopListArr = [...this.shopListArr, ...res.data];
         this.shopCode = this.$store.state.user.userData.currentShopId ||"";
         this.getList(); //查询
       }

@@ -408,13 +408,15 @@
             columns: [
               {
                 title: '序号',
-                minWidth: 50,
-                type:'index'
+                width: 50,
+                type:'index',
+                resizable:true
               },
               {
                 title: '状态',
                 key: 'status',
-                minWidth: 70,
+                width: 70,
+                resizable:true,
                 render:(h,params) => {
                   // let Identity = JSON.parse(params.row.status ||{})
                   let name = params.row.status.name
@@ -424,38 +426,45 @@
               {
                 title: '调出方',
                 key: 'guestName',
-                minWidth: 80
+                width: 170,
+                resizable:true
               },
               {
                 title: '创建日期',
                 key: 'createTime',
-                minWidth: 120
+                width: 120,
+                resizable:true
               },
               {
                 title: '申请人',
                 key: 'createUname',
-                minWidth: 100
+                width: 100,
+                resizable:true
               },
               {
                 title: '申请单号',
                 key: 'serviceId',
-                minWidth: 120
+                width: 120,
+                resizable:true
               },
               {
                 title: '提交人',
                 key: 'commitUname',
-                minWidth: 100
+                width: 100,
+                resizable:true
               },
               {
                 title: '提交日期',
                 align:'center',
                 key: 'commitDate',
-                minWidth: 170
+                width: 170,
+                resizable:true
               },
               {
                 title: '打印次数',
                 key: 'printing',
-                minWidth: 70
+                width: 70,
+                resizable:true
               }
             ],
             tbdata: []

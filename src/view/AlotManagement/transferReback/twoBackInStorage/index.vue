@@ -331,13 +331,15 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
-            type: "index"
+            width: 50,
+            type: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "name",
-            minWidth: 70,
+            width: 70,
+            resizable:true,
             render: (h, params) => {
               let name = params.row.status.name;
               return h("span", name);
@@ -346,39 +348,46 @@ export default {
           {
             title: "申请方",
             key: "guestName",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "受理日期",
             key: "createTime",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "受理人",
             key: "createUname",
-            minWidth: 140
+            width: 140,
+            resizable:true
           },
 
           {
             title: "退回单号",
             key: "serviceId",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "入库人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "调出退回日期",
             align: "center",
             key: "finishDate",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "printing",
-            minWidth: 170
+            width: 170,
+            resizable:true
           }
         ],
         tbdata: []

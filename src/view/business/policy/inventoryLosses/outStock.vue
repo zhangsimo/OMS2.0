@@ -412,48 +412,57 @@
             //key要修改
             {
               title: "序号",
-              minWidth: 50,
-              type: "index"
+              width: 50,
+              type: "index",
+              resizable:true
             },
             {
               title: "状态",
               key: "statuName",
-              minWidth: 70
+              width: 70,
+              resizable:true
             },
             {
               title: "客户",
               key: "orderMan",
-              minWidth: 120
+              width: 120,
+              resizable:true
             },
             {
               title: "出库单号",
               key: "serviceId",
-              minWidth: 170
+              width: 170,
+              resizable:true
             },
             {
               title: "关联单号",
               key: "code",
-              minWidth: 140
+              width: 140,
+              resizable:true
             },
             {
               title: "创建人",
               key: "createUname",
-              minWidth: 200
+              width: 200,
+              resizable:true
             },
             {
               title: "创建日期",
               key: "createTime",
-              minWidth: 200
+              width: 200,
+              resizable:true
             },
             {
               title: "提交人",
               key: "subMan",
-              minWidth: 200
+              width: 200,
+              resizable:true
             },
             {
               title: "提交日期",
               key: "subDate",
-              minWidth: 200
+              width: 200,
+              resizable:true
             }
           ],
           tbdata: []

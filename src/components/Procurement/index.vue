@@ -432,7 +432,7 @@
         partId: this.partId,
         partName: this.partName,
         partCode: this.partCode,
-        oemCode: this.oemCode,
+        oemCode: this.oemCode.replace(/\s+/g,''),
         startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
         endEnterDate: this.auditDate[1] ? this.auditDate[1] : "",
       };

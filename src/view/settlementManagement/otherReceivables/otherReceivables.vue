@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -40,7 +40,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="companyId" />
           </div>
           <div class="db ml20">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -95,7 +96,7 @@
           >
             <vxe-table-column type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
             <vxe-table-column field="businessType" width="100" title="业务类型" fixed="left">
-              <template v-slot="{row}">{{row.businessType.name}}</template>
+              <template v-slot="{row}">{{row.businessType ? row.businessType.name : ''}}</template>
             </vxe-table-column>
             <vxe-table-column field="guestName" width="100" title="往来单位" fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
@@ -430,6 +431,7 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
     //其他付款认领/其他收款收回
@@ -620,8 +622,8 @@ export default {
         endDate: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
-        orgid: this.BranchstoreId,
-        guestId: this.companyId,
+        orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
+        guestName: this.companyId.trim(),
       };
       for (let key in obj) {
         if (!obj[key]) {
@@ -632,6 +634,7 @@ export default {
       let params = {}
       params.page = this.page.num - 1
       params.size = this.page.size
+      obj.guestName = this.companyId.trim()
       showLoading(".loadingClass", "数据加载中，请勿操作")
       findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
