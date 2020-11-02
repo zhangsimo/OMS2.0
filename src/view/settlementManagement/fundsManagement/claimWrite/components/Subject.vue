@@ -127,6 +127,7 @@ export default {
       if(this.oneSubject.auxiliaryAccountingName) {
         this.oneSubject.mateAccountCoding=this.oneSubject.titleCode;
         this.$refs.voucherInput.voucherItem = {};
+        this.$refs.voucherInput.groundIds=[];
         this.$refs.voucherInput.subjectModelShowassist = true;
       }
     },
