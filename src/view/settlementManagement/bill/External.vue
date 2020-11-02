@@ -53,7 +53,7 @@
             />
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="changePage(1)">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
