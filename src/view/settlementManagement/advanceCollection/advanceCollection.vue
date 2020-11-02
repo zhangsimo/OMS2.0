@@ -202,7 +202,7 @@
       </div>
     </section>
     <!-- 认领弹框 -->
-    <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
+    <!-- <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select
         v-model="companyId"
@@ -228,9 +228,9 @@
       <claim ref="claim" @selection="selection" />
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
-    </Modal>
+    </Modal> -->
     <!-- 认领支付弹框11 -->
-    <!-- <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal> -->
+    <ClaimModal ref="claimModal" :titleName="claimTit" :amountType="amountType"></ClaimModal>
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -246,7 +246,6 @@
   </div>
 </template>
 <script>
-// import ClaimModal from "./components/ClaimModal"
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -259,6 +258,7 @@ import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrit
 import settlement from "../bill/components/settlement";
 import { creat } from "./../components";
 import claim from "./components/claimed";
+import ClaimModal from "./components/ClaimModal"
 import Record from "../components/Record";
 // import Record from "../otherReceivables/components/Record";
 import claimGuest from "./components/claimGuest";
@@ -286,11 +286,11 @@ export default {
     settlement,
     payApply,
     CreditSpending,
-    // ClaimModal
+    ClaimModal
   },
   data() {
     return {
-      // amountType: null,
+      amountType: null,
       // claimType: null,
       // claimTitle: "",
       // condition: undefined,
@@ -324,7 +324,7 @@ export default {
       modelType: {
         type: 5,
         id: ""
-      }
+      },
     };
   },
   async mounted() {
@@ -474,28 +474,9 @@ export default {
     },
     //认领弹框
     claimCollect(type) {
-      if (type === 1) {
-        this.claimModal = true;
-        this.claimTit = "预收款认领";
-        this.claimedList(1);
-      } else {
-        this.claimTit = "预收款支出认领";
-        if (
-          Object.keys(this.currRow).length !== 0 &&
-          this.currRow.expenditureNo &&
-          !this.currRow.expenditureClaimAmt
-        ) {
-          this.claimModal = true;
-          this.claimedList(2);
-        } else {
-          this.$message.error("请选择有预收款支出单号且未支出认领的数据");
-        }
-      }
-
       // if (type === 1) {
       //   this.claimModal = true;
-      //   this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
-      //
+      //   this.claimTit = "预收款认领";
       //   this.claimedList(1);
       // } else {
       //   this.claimTit = "预收款支出认领";
@@ -510,6 +491,26 @@ export default {
       //     this.$message.error("请选择有预收款支出单号且未支出认领的数据");
       //   }
       // }
+
+      if (type === 1) {
+        this.$refs.claimModal.open();
+        this.amountType = 1
+        this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
+        // this.claimedList(1);
+
+      } else {
+        this.claimTit = "预收款支出认领";
+        if (
+          Object.keys(this.currRow).length !== 0 &&
+          this.currRow.expenditureNo &&
+          !this.currRow.expenditureClaimAmt
+        ) {
+          this.$refs.claimModal.open();
+          this.amountType = 2
+        } else {
+          this.$message.error("请选择有预收款支出单号且未支出认领的数据");
+        }
+      }
 
 
     },
