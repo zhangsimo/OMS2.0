@@ -415,7 +415,8 @@ export default {
         // 开票配件
         partsInvoice({
           accountNo: this.information.accountNo,
-          taxSign: 0
+          taxSign: 0,
+          //settmentType:this.information.settlementType.value
         }).then(res => {
           if (res.code === 0) {
             // this.invoice = { ...this.invoice, ...this.information };

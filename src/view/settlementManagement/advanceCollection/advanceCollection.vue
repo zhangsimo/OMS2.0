@@ -67,7 +67,7 @@
           v-has="'revoke'"
           class="ml10"
           @click="revokeCollection(0)"
-          :disabled="currRow.writeOffReceiptNo || currRow.expenditureNo"
+          :disabled="currRow.writeOffReceiptNo!=null || currRow.expenditureNo!=null"
         >预收款撤回</Button>
         <Button
           class="ml10"
