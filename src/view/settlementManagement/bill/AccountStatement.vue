@@ -40,6 +40,10 @@
               </Option>
             </Select>
           </div>
+          <div class="db ml20">
+            <span>对账单号：</span>
+            <Input v-model="accountNo" type="text" class="w150" clearable></Input>
+          </div>
           <div class="db ml10">
             <span>往来单位:</span>
             <Select
@@ -334,7 +338,9 @@
         <Page
           :total="pagetotal"
           show-elevator
+          show-sizer
           class="mt10 tr"
+          :page-size-opts="[10,20,50,100,200]"
           :page-size="page.size"
           :current="page.num"
           @on-change="pageCode"
@@ -667,6 +673,7 @@
         model2: "",
         model3: "",
         Reconciliationtype: "",
+        accountNo:"",//对账单号
         Branchstore: [
           {id: '0', name: '全部',shortName:"全部"}
         ],
@@ -1055,7 +1062,8 @@
             : "",
           orgId: this.model1,
           statementStatus: this.Reconciliationtype,
-          guestId: this.receiveGuestId
+          guestId: this.receiveGuestId,
+          accountNo:this.accountNo//对账单号
         };
         for (let key in obj) {
           if (!obj[key]) {
