@@ -130,6 +130,7 @@
             :sort-config="{trigger: 'cell', orders: ['desc', 'asc', null]}"
             :data="tableData"
           >
+            <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" fixed="left" title="导入时间" sortable width="150"></vxe-table-column>
               <vxe-table-column field="createTime" fixed="left" title="发生日期" sortable width="150"></vxe-table-column>
@@ -201,6 +202,7 @@
               :sort-config="{trigger: 'cell', orders: ['desc', 'asc', null]}"
               :data="tableData1"
             >
+              <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
               <vxe-table-column type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" fixed="left" title="导入时间" sortable width="150"></vxe-table-column>
               <vxe-table-column field="createTime" fixed="left" title="发生日期" sortable width="150"></vxe-table-column>
@@ -416,7 +418,7 @@
         // console.log(this.store,this.Branchstore,111)
         this.oneList = [];
         let params = {
-          shopNumber: this.store,
+          shopNumber: this.store=="0"?"":this.store,
           mateAccountCode: this.mateAccountCode ? this.mateAccountCode : "",
         };
         // console.log(this.date[0]!="",1111)

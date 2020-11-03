@@ -433,23 +433,27 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
-            key: "index"
+            width: 50,
+            key: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70
+            width: 70,
+            resizable:true
           },
           {
             title: "调出方",
             key: "guestName",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140,
+            width: 140,
+            resizable:true,
             render(h, params) {
               return h("span", {}, moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss"));
             }
@@ -457,27 +461,32 @@ export default {
           {
             title: "创建人",
             key: "createUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "入库单号",
             key: "serviceId",
-            minWidth: 240
+            width: 240,
+            resizable:true
           },
           {
             title: "入库人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "入库日期",
             key: "commitDate",
-            minWidth: 160
+            width: 160,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "printing",
-            minWidth: 100
+            width: 100,
+            resizable:true
           }
         ],
         tbdata: []

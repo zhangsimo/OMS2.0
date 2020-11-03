@@ -1,53 +1,53 @@
 <template>
-  <div>
-    <Modal v-model="searchPartLayer" title="配件名称查询" width="1000">
-      <div class="partCheck-hd">
-        <Input class="w200 mr10" v-model="partName" placeholder="请输入配件名称"/>
-        <Button @click="search" class="mr10" type="primary">
-          <Icon type="ios-search" size="14" />查询
-        </Button>
-        <Button class="mr10" type="default" @click="throwData">
-          <Icon type="md-checkmark" />选择
-        </Button>
-        <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
-      </div>
-      <div class="partCheck-main clearfix">
-        <!-- <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">系统分类</div>
-          <div class="partCheck-left-tree">
-            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
-          </div>
-        </div> -->
-        <div>
-          <Table
-            height="389"
-            @on-current-change="selectTabelData"
-            highlight-row
-            :loading="loading"
-            border
-            :stripe="true"
-            :columns="columnsPart"
-            :data="partData"
-          ></Table>
-          <Page
-            size="small"
-            class-name="page-con fr pt10"
-            :current="page.num"
-            :total="page.total"
-            :page-size="page.size"
-            @on-change="changePage"
-            @on-page-size-change="changeSize"
-            show-sizer
-            show-total
-          ></Page>
-        </div>
-      </div>
-      <div slot="footer">
-        <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
-        <!--<Button type='default' @click='proModal = false'>取消</Button>-->
-      </div>
-    </Modal>
-  </div>
+    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer mask-closable :zIndex="9999">
+      <template v-slot>
+            <vxe-grid
+              border
+              resizable
+              show-overflow
+              auto-resize
+              height="auto"
+              :loading="loading"
+              :sync-resize="searchPartLayer"
+              highlight-current-row
+              size="mini"
+              stripe
+              :columns="tableColumn"
+              @current-change="selectTabelData"
+              @cell-dblclick="dblclickData"
+              :data="partData">
+
+              <template v-slot:top>
+                <div class="partCheck-hd" style="height: 40px">
+                  <vxe-input v-model="partName" class="w200 mr10" style="vertical-align: middle;height: 30px" placeholder="请输入配件名称" @keyup="keyupEvent"></vxe-input>
+                  <Button @click="search" class="mr10" type="primary">
+                    <Icon type="ios-search" size="14" />查询
+                  </Button>
+                  <Button class="mr10" type="default" @click="throwData">
+                    <Icon type="md-checkmark" />选择
+                  </Button>
+                  <span style="color: #888;margin-left: 10px">（提示：双击即可选入）</span>
+                  <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
+                </div>
+              </template>
+              <template v-slot:bottom>
+                <div style="height: 50px;">
+                  <div class="pt10">
+                    <vxe-pager
+                      background
+                      :current-page.sync="page.num"
+                      :page-size.sync="page.size"
+                      :total="page.total"
+                      :page-sizes="[100,200,300]"
+                      @page-change="changePage"
+                      :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+                    </vxe-pager>
+                  </div>
+                </div>
+              </template>
+            </vxe-grid>
+      </template>
+    </vxe-modal>
 </template>
 
 <script>
@@ -68,6 +68,18 @@ export default {
       partName: "", //配件名称查询名字
       treeData: [], //系统分类树形数据
       //配件名称查询层表头
+      tableColumn: [
+        { type: 'seq', width: 50,title:'序号' },
+        {
+          title: '配件名称',
+          align:'center',
+          children: [
+            { field: 'name', title: '标准名称' },
+            { field: 'direction', title: '方向' },
+            { field: 'groupName', title: '别名' }
+          ]
+        }
+      ],
       columnsPart: [
         {
           title: "序号",
@@ -106,7 +118,7 @@ export default {
       //分页obj
       page: {
         num: 1,
-        size: 20,
+        size: 100,
         total: 0
       }
     };
@@ -115,6 +127,12 @@ export default {
     this.getList();
   },
   methods: {
+    keyupEvent({ $event }){
+      if($event.keyCode==13){
+        this.search();
+      }
+    },
+
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
@@ -170,16 +188,21 @@ export default {
       // this.getCarClassifysFun();
     },
     //配件表格点击的行
-    selectTabelData(v) {
-      this.selectTableItem = v;
+    selectTabelData({row}) {
+      this.selectTableItem = row;
+    },
+    dblclickData({row}){
+      this.selectTableItem = row;
+      this.throwData();
     },
     throwData() {
       this.$emit("selectSearchName", this.selectTableItem);
       this.searchPartLayer = false;
     },
     //分页
-    changePage(p) {
-      this.page.num = p;
+    changePage({currentPage, pageSize}) {
+      this.page.num = currentPage;
+      this.page.size = pageSize;
       this.getList();
     },
     changeSize(size) {

@@ -71,6 +71,7 @@
                   style="width: 1000px"
                   height="593"
                   :data="legtTableData"
+                  resizable
                 >
                   <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="billStatusName" title="状态"></vxe-table-column>

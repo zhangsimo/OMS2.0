@@ -8,7 +8,7 @@
       <div class="tools-bar mb10">
         <div class="db mr5">
           <span class="mr5">快速查询:</span>
-          <getDate class="mr5" v-on:quickDate="getDataQuick"></getDate>
+          <getDate class="mr5" ref="quickDate" v-on:quickDate="getDataQuick"></getDate>
         </div>
 
         <div class="db mr5">
@@ -72,6 +72,7 @@
       <vxe-table
         border
         stripe
+        resizable
         align="center"
         ref="xTable1"
         height="500"
@@ -180,9 +181,12 @@
 
     private init() {
       this.reset();
-      this.getPchsPlanList();
+      // this.getPchsPlanList();
       this.shows = true;
       this.$nextTick(() => (this.$refs.elinput as any).focus());
+      let refDate:any = this.$refs.quickDate;
+      refDate.searchQuick = '7';
+      refDate.getval('7');
     }
 
     @Emit('getPlanOrder')
@@ -348,7 +352,7 @@
         partId: this.partId,
         partName: this.partName,
         partCode: this.partCode,
-        oemCode: this.oemCode.replace(/[\W]/g,''),
+        oemCode: this.oemCode.replace(/\s+/g,''),
         partBrand: this.partBrand,
         startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
         endEnterDate: this.auditDate[1] ? this.auditDate[1] : "",

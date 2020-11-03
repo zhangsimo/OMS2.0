@@ -134,7 +134,7 @@
            async getList(){
                 let data ={}
                 if(this.Outform.partCode.trim()){
-                  data.partName = this.Outform.partCode.replace(/[\W]/g,'');
+                  data.partName = this.Outform.partCode.replace(/\s+/g,'');
                 }
                 if(this.Outform.activityName.trim()){
                   data.activityName = this.Outform.activityName.trim()

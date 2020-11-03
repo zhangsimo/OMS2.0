@@ -8,7 +8,7 @@
       <div class="tools-bar mb10">
         <div class="db mr5">
           <span class="mr5">快速查询:</span>
-          <getDate class="mr10" @quickDate="getDataQuick"></getDate>
+          <getDate class="mr10" ref="quickDate" @quickDate="getDataQuick"></getDate>
         </div>
         <!-- <div class="db mr5">
           <el-input autofocus ref="input" placeholder="配件内码/编码/名称/OE码" v-model="partId" @change="query"/>
@@ -72,6 +72,7 @@
         v-if="type == 'good'"
         border
         stripe
+        resizable
         align="center"
         ref="xTable1"
         height="500"
@@ -113,6 +114,7 @@
         v-if="type == 'sale'"
         border
         stripe
+        resizable
         align="center"
         ref="xTable1"
         height="300"
@@ -240,10 +242,15 @@
       tableRef.refreshColumn();
       // tableRef.recalculate(true)
       this.$nextTick(() => (this.$refs.input as any).focus());
+      let refDate:any = this.$refs.quickDate;
+      refDate.searchQuick = '7';
+      refDate.getval('7');
       this.reset();
       // this.getPchsPlanList();
 
       this.shows = true;
+
+
     }
 
     // computed
@@ -432,7 +439,7 @@
         partId: this.partId,
         partName: this.partName,
         partCode: this.partCode,
-        oemCode: this.oemCode.replace(/[\W]/g,''),
+        oemCode: this.oemCode.replace(/\s+/g,''),
         startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
         endEnterDate: this.auditDate[1] ? this.auditDate[1] : "",
       };

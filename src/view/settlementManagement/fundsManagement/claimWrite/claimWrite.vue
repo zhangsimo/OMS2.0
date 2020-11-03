@@ -1006,7 +1006,7 @@
       //未核销选中的数据
       accountNoWriteChange(currentRow) {
         this.currentAccount = currentRow;
-        this.difference = currentRow.row.actualCollectionOrPayment - this.claimedAmt;
+        this.difference = Math.abs(currentRow.row.actualCollectionOrPayment) - Math.abs(this.claimedAmt);
       },
       //连锁待分配款项选中的数据
       distributionSelection(selection) {

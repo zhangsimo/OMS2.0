@@ -117,9 +117,9 @@
               <Icon type="ios-search" size="14"/>
               查询
             </Button>
-            <!--<Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">-->
-            <!--  <i class="iconfont mr5 icondaochuicon"></i> 导出-->
-            <!--</Button>-->
+<!--            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
+<!--            </Button>-->
             <Poptip v-model="visible" placement="bottom">
               <Button class="mr10 w90">
                 仓库设置
@@ -974,7 +974,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1045,9 +1045,11 @@
         this.getAllStocks();
       },
       //汇总查看
-      showList(val) {
-        this.selectTableData = val;
-        this.$refs.look.getEnters();
+      showList(row) {
+        this.selectTableData = row;
+        setTimeout(()=>{
+          this.$refs.look.getEnters();
+        },1)
       },
       // 批次库存请求
       async getLotStocks() {
@@ -1057,7 +1059,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1076,7 +1078,7 @@
         }
         if (
           (data.partName == "" || data.partName.trim() == "") && //名称
-          (data.oemCode == "" || data.oemCode.replace(/[\W]/g,'') == "") && //oem码
+          (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
           (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
           (data.partId == "" || data.partId.trim() == "") && //内码
           (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
@@ -1226,7 +1228,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1259,7 +1261,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/[\W]/g,'');
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();

@@ -267,7 +267,7 @@ export const mixSelectPartCom = {
         req.partCode = this.partCode
         req.partInnerId = this.partId
         req.name = this.partName
-        req.oeCode = this.oemCode.replace(/[\W]/g,'');
+        req.oeCode = this.oemCode.replace(/\s+/g,'');
         let formData = {};
         for (let k in req) {
           if (req[k] && req[k].trim()) {
@@ -296,7 +296,7 @@ export const mixSelectPartCom = {
         req.partCode = this.partCode
         req.partId = this.partId
         req.partName = this.partName
-        req.oemCode = this.oemCode.replace(/[\W]/g,'');
+        req.oemCode = this.oemCode.replace(/\s+/g,'');
         let formData = {};
         for (let k in req) {
           if (req[k] && req[k].trim()) {

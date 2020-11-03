@@ -50,7 +50,7 @@
           <div class="db ml10" v-if="headquarters == 0">
             <span>门店：</span>
             <Select v-model="shopCode" class="w150" filterable clearable @on-change="SelectChange">
-              <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml10">
@@ -435,7 +435,7 @@ export default {
       searchTypeValue: "", //申请类型的值
       placeholderValue: "请输入申请单号", //动态改变placeholder
       shopCode: 0, //门店
-      shopListArr: [{ id: 0, name: "全部" }], //门店数组
+      shopListArr: [{ id: 0, shortName: "全部" }], //门店数组
       //打开模态框状态 type 1 新增 2修改 3查看 4审核
       modelType: {
         type: 1,
