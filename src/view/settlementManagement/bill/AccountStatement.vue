@@ -343,7 +343,8 @@
           :page-size-opts="[10,20,50,100,200]"
           :page-size="page.size"
           :current="page.num"
-          @on-change="pageCode"
+          @on-change="changePage"
+          @on-page-size-change="changeSize"
           show-total
           size="small"
         />
@@ -1071,6 +1072,7 @@
           }
         }
         obj.page = this.page.num - 1
+        obj.size = this.page.size;
         showLoading(".loadingClass", "数据加载中，请勿操作")
         AccountStatement(obj).then(res => {
           this.pagetotal = res.data.totalElements;
@@ -1092,13 +1094,17 @@
         });
       },
       // 页码
-      pageCode(page) {
-        this.page.num = page
-        this.getAccountStatement();
+      changePage(p) {
+        this.page.num = p;
+        this.query();
+      },
+      changeSize(size) {
+        this.page.num = 1;
+        this.page.size = size;
+        this.query();
       },
       // 查询
       query() {
-        this.page.num = 1
         this.getAccountStatement();
       },
 
