@@ -1,13 +1,6 @@
 <template>
-  <div class="content-oper">
-    <Modal
-      title="库存查询"
-      closable
-      v-model="modal1"
-      @on-visible-change="hander"
-      width="1100"
-      :loading="loading"
-    >
+  <vxe-modal className="vxe-modal-table" v-model="modal1" title="库存查询" id="myModal1" width="1000" height="450" min-width="900" min-height="320" resize remember transfer :zIndex="9999" @show="hander">
+    <template v-solt>
       <section class="oper-box">
         <!--      主菜单导航-->
         <div class="db pl10 tabs-ulwarp">
@@ -61,16 +54,19 @@
           </ul>
         </div>
         <!--本店库存-->
-        <div class="tabs-warp pt10" v-show="tIndex == 6">
+        <div class="tabs-warp tabs-warp2 mt10" v-show="tIndex == 6">
           <vxe-table
             border
+            stripe
             ref="hsOrder"
-            height="350"
+            height="auto"
             highlight-hover-row
             show-overflow="title"
             resizable
             auto-resize
             align="left"
+            show-footer
+            :footer-method="handleSummary4"
             :loading="outLoading"
             size="mini"
             :data="selfShopStock">
@@ -109,11 +105,11 @@
           </vxe-table>
         </div>
         <!--      入库明细-->
-        <div class="tabs-warp" v-show="tIndex == 1">
+        <div class="tabs-warp tabs-warp3" v-show="tIndex == 1">
           <!--      搜索工具栏-->
-          <div class="oper-top flex mb20">
+          <div class="oper-top flex">
             <div class="wlf">
-              <div class="db mr10">
+              <div class="db mr10" style="padding-top: 10px">
                 <span>快速查询：</span>
                 <quick-date
                   class="mr10"
@@ -121,7 +117,7 @@
                   @quickDate="getDataQuick1"
                 ></quick-date>
               </div>
-              <div class="db">
+              <div class="db pt10" style="padding-top: 10px">
                 <span>入库日期：</span>
                 <DatePicker
                   @on-change="selectDate"
@@ -133,14 +129,14 @@
                 >
                 </DatePicker>
               </div>
-              <div class="db">
+              <div class="db pt10" style="padding-top: 10px">
                 <span>供应商: </span>
                 <Input
                   v-model="searchForm2.guestName"
                   class="w200 mr10"
                 ></Input>
               </div>
-              <div class="db">
+              <div class="db pt10" style="padding-top: 10px">
                 <Button type="warning" class="mr10 w90" @click="search">
                   <Icon type="ios-search" size="14"/>
                   查询
@@ -150,84 +146,87 @@
           </div>
           <!--      表-->
           <!--<Table-->
-            <!--class="table-highlight-row"-->
-            <!--highlight-row-->
-            <!--size="small"-->
-            <!--@on-current-change="selectTable"-->
-            <!--border-->
-            <!--:stripe="true"-->
-            <!--:columns="enterInfo"-->
-            <!--:data="contentOne.dataOne"-->
-            <!--height="450"-->
-            <!--show-summary-->
-            <!--:summary-method="handleSummary1"-->
+          <!--class="table-highlight-row"-->
+          <!--highlight-row-->
+          <!--size="small"-->
+          <!--@on-current-change="selectTable"-->
+          <!--border-->
+          <!--:stripe="true"-->
+          <!--:columns="enterInfo"-->
+          <!--:data="contentOne.dataOne"-->
+          <!--height="450"-->
+          <!--show-summary-->
+          <!--:summary-method="handleSummary1"-->
           <!--&gt;</Table>-->
-          <vxe-table
-            border
-            ref="hsOrder"
-            height="350"
-            highlight-hover-row
-            show-overflow="title"
-            resizable
-            auto-resize
-            align="left"
-            :loading="enterLoading"
-            size="mini"
-            :data="contentOne.dataOne"
-            show-footer
-            :footer-method="handleSummary">
-            <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-            <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
-            <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
-            <vxe-table-column field="systemUnitId" title="单位" width="50"></vxe-table-column>
-            <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
-            <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
-            <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
-            <vxe-table-column field="guestName" title="供应商" width="120"></vxe-table-column>
-            <vxe-table-column field="createTime" title="入库日期" width="120">
-            </vxe-table-column>
-            <vxe-table-column field="enterMan" title="入库人" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="enterQty" title="入库数量" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="enterPrice" title="入库单价" width="70">
-              <template v-slot="{row}">
-                {{(row.enterPrice||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="enterAmt" title="金额" width="80">
-              <template v-slot="{row}">
-                {{(row.enterAmt||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="taxRate" title="税率" width="50">
-            </vxe-table-column>
-            <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
-              <template v-slot="{row}">
-                {{(row.noTaxPrice||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="noTaxAmt" title="不含税金额" width="80">
-              <template v-slot="{row}">
-                {{(row.noTaxAmt||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="code" title="入库单号" width="160">
-            </vxe-table-column>
-            <vxe-table-column field="createUname" title="创建人" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="enterTypeId" title="入库类型" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="remark" title="备注" width="140">
-            </vxe-table-column>
-          </vxe-table>
+          <div class="table-wrap-auto-height2">
+            <vxe-table
+              border
+              stripe
+              ref="hsOrder"
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              auto-resize
+              align="left"
+              :loading="enterLoading"
+              size="mini"
+              :data="contentOne.dataOne"
+              show-footer
+              :footer-method="handleSummary">
+              <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
+              <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
+              <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
+              <vxe-table-column field="guestName" title="供应商" width="120"></vxe-table-column>
+              <vxe-table-column field="createTime" title="入库日期" width="120">
+              </vxe-table-column>
+              <vxe-table-column field="enterMan" title="入库人" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="enterQty" title="入库数量" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="enterPrice" title="入库单价" width="70">
+                <template v-slot="{row}">
+                  {{(row.enterPrice||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="enterAmt" title="金额" width="80">
+                <template v-slot="{row}">
+                  {{(row.enterAmt||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="taxRate" title="税率" width="50">
+              </vxe-table-column>
+              <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
+                <template v-slot="{row}">
+                  {{(row.noTaxPrice||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="noTaxAmt" title="不含税金额" width="80">
+                <template v-slot="{row}">
+                  {{(row.noTaxAmt||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="code" title="入库单号" width="160">
+              </vxe-table-column>
+              <vxe-table-column field="createUname" title="创建人" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="enterTypeId" title="入库类型" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="remark" title="备注" width="140">
+              </vxe-table-column>
+            </vxe-table>
+          </div>
         </div>
         <!--      出库明细-->
-        <div class="tabs-warp" v-show="tIndex == 2">
+        <div class="tabs-warp tabs-warp3" v-show="tIndex == 2">
           <!--      搜索工具栏-->
-          <div class="oper-top flex mb20">
+          <div class="oper-top flex">
             <div class="wlf">
-              <div class="db mr10">
+              <div class="db mr10" style="padding-top: 10px">
                 <span>快速查询：</span>
                 <quick-date
                   class="mr10"
@@ -235,7 +234,7 @@
                   @quickDate="getDataQuick2"
                 ></quick-date>
               </div>
-              <div class="db">
+              <div class="db" style="padding-top: 10px">
                 <span>出库日期：</span>
                 <DatePicker
                   v-model="twoTime"
@@ -247,14 +246,14 @@
                 >
                 </DatePicker>
               </div>
-              <div class="db">
+              <div class="db" style="padding-top: 10px">
                 <span>客户: </span>
                 <Input
                   v-model="searchForm3.guestName"
                   class="w200 mr10"
                 ></Input>
               </div>
-              <div class="db">
+              <div class="db" style="padding-top: 10px">
                 <Button type="warning" class="mr10 w90" @click="search">
                   <Icon type="ios-search" size="14"/>
                   查询
@@ -264,149 +263,204 @@
           </div>
           <!--      表-->
           <!--<Table-->
+          <!--class="table-highlight-row"-->
+          <!--highlight-row-->
+          <!--size="small"-->
+          <!--@on-current-change="selectTable"-->
+          <!--border-->
+          <!--:stripe="true"-->
+          <!--:columns="outInfo"-->
+          <!--:data="contentTwo.dataTwo"-->
+          <!--height="450"-->
+          <!--show-summary-->
+          <!--:summary-method="handleSummary2"-->
+          <!--&gt;</Table>-->
+          <div class="table-wrap-auto-height2">
+            <vxe-table
+              border
+              stripe
+              ref="hsOrder"
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              auto-resize
+              align="left"
+              :loading="outLoading"
+              size="mini"
+              :data="contentTwo.dataTwo"
+              show-footer
+              :footer-method="handleSummary">
+              <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
+              <vxe-table-column field="systemUnitId" title="单位" width="50"></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
+              <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
+              <vxe-table-column field="guestName" title="客户" width="120"></vxe-table-column>
+              <vxe-table-column field="outDate" title="出库日期" width="120">
+              </vxe-table-column>
+              <vxe-table-column field="outMan" title="出库人" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="sellQty" title="出库数量" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="sellPrice" title="出库单价" width="70">
+                <template v-slot="{row}">
+                  {{(row.sellPrice||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="sellAmt" title="出库金额" min-width="100">
+                <template v-slot="{row}">
+                  {{(row.sellAmt||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="taxRate" title="含税标记" width="70">
+                <template v-slot="{row}">
+                  <vxe-checkbox :disabled="true" v-model="row.taxSign == 0 ? false : true" size="small"></vxe-checkbox>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="taxRate" title="税率" width="50">
+              </vxe-table-column>
+              <vxe-table-column field="taxPrice" title="含税单价" width="70">
+                <template v-slot="{row}">
+                  {{(row.taxPrice||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="taxAmt" title="含税金额" width="80">
+                <template v-slot="{row}">
+                  {{(row.taxAmt||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
+                <template v-slot="{row}">
+                  {{(row.noTaxPrice||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="noTaxAmt" title="不含税金额" width="80">
+                <template v-slot="{row}">
+                  {{(row.noTaxAmt||0).toFixed(2)}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="serviceId" title="出库单号" width="160">
+              </vxe-table-column>
+              <vxe-table-column field="createUname" title="创建人" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="enterTypeId" title="出库类型" width="70">
+              </vxe-table-column>
+              <vxe-table-column field="remark" title="备注" width="140">
+              </vxe-table-column>
+            </vxe-table>
+          </div>
+        </div>
+        <!--      占用订单-->
+        <div class="tabs-warp tabs-warp2 mt10" v-show="tIndex == 3">
+          <!--      表-->
+          <!--<Table-->
             <!--class="table-highlight-row"-->
             <!--highlight-row-->
             <!--size="small"-->
             <!--@on-current-change="selectTable"-->
             <!--border-->
             <!--:stripe="true"-->
-            <!--:columns="outInfo"-->
-            <!--:data="contentTwo.dataTwo"-->
-            <!--height="450"-->
+            <!--:columns="occupy"-->
+            <!--align="left"-->
+            <!--:data="contentThree.dataThree"-->
             <!--show-summary-->
-            <!--:summary-method="handleSummary2"-->
+            <!--:summary-method="handleSummary4"-->
+            <!--height="405"-->
           <!--&gt;</Table>-->
           <vxe-table
             border
-            ref="hsOrder"
-            height="350"
+            stripe
+            height="auto"
             highlight-hover-row
             show-overflow="title"
             resizable
             auto-resize
             align="left"
-            :loading="outLoading"
             size="mini"
-            :data="contentTwo.dataTwo"
             show-footer
-            :footer-method="handleSummary">
-            <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-            <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
-            <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
-            <vxe-table-column field="systemUnitId" title="单位" width="50"></vxe-table-column>
-            <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
-            <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
-            <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
-            <vxe-table-column field="guestName" title="客户" width="120"></vxe-table-column>
-            <vxe-table-column field="outDate" title="出库日期" width="120">
-            </vxe-table-column>
-            <vxe-table-column field="outMan" title="出库人" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="sellQty" title="出库数量" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="sellPrice" title="出库单价" width="70">
-              <template v-slot="{row}">
-                {{(row.sellPrice||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="sellAmt" title="出库金额" width="80">
-              <template v-slot="{row}">
-                {{(row.sellAmt||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="taxRate" title="含税标记" width="70">
-              <template v-slot="{row}">
-                <vxe-checkbox :disabled="true" v-model="row.taxSign == 0 ? false : true" size="small"></vxe-checkbox>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="taxRate" title="税率" width="50">
-            </vxe-table-column>
-            <vxe-table-column field="taxPrice" title="含税单价" width="70">
-              <template v-slot="{row}">
-                {{(row.taxPrice||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="taxAmt" title="含税金额" width="80">
-              <template v-slot="{row}">
-                {{(row.taxAmt||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
-              <template v-slot="{row}">
-                {{(row.noTaxPrice||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="noTaxAmt" title="不含税金额" width="80">
-              <template v-slot="{row}">
-                {{(row.noTaxAmt||0).toFixed(2)}}
-              </template>
-            </vxe-table-column>
-            <vxe-table-column field="serviceId" title="出库单号" width="160">
-            </vxe-table-column>
-            <vxe-table-column field="createUname" title="创建人" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="enterTypeId" title="出库类型" width="70">
-            </vxe-table-column>
-            <vxe-table-column field="remark" title="备注" width="140">
-            </vxe-table-column>
+            :footer-method="handleSummary4"
+            :data="contentThree.dataThree">
+            <vxe-table-column type="seq" width="60" title="序号" ></vxe-table-column>
+            <vxe-table-column field="serviceId" title="业务单号" min-width="180"></vxe-table-column>
+            <vxe-table-column field="guestName" title="客户" min-width="150"></vxe-table-column>
+            <vxe-table-column field="partCode" title="配件编码" min-width="120"></vxe-table-column>
+            <vxe-table-column field="partName" title="配件名称" min-width="120"></vxe-table-column>
+            <vxe-table-column field="orderQty" title="订单数量" min-width="80"></vxe-table-column>
+            <vxe-table-column field="lockStockQty" title="占用数量" min-width="80"></vxe-table-column>
+            <vxe-table-column field="storeName" title="仓库" min-width="80"></vxe-table-column>
+            <vxe-table-column field="createUname" title="创建人" min-width="70"></vxe-table-column>
+            <vxe-table-column field="createDate" title="创建日期" min-width="80"></vxe-table-column>
+            <vxe-table-column field="remark" title="备注" min-width="120"></vxe-table-column>
           </vxe-table>
-        </div>
-        <!--      占用订单-->
-        <div class="tabs-warp p10" v-show="tIndex == 3">
-          <!--      表-->
-          <Table
-            class="table-highlight-row"
-            highlight-row
-            size="small"
-            @on-current-change="selectTable"
-            border
-            :stripe="true"
-            :columns="occupy"
-            align="left"
-            :data="contentThree.dataThree"
-            show-summary
-            :summary-method="handleSummary4"
-            height="405"
-          ></Table>
+
+
+
+
         </div>
         <!--      级别销价-->
-        <div class="tabs-warp p10" v-show="tIndex == 4">
+        <div class="tabs-warp" v-show="tIndex == 4">
           <p style="line-height: 30px">
             本店可售库存: <span class="ml5">{{mainData.outableQty}}</span>
           </p>
           <!--      表-->
-          <Table
-            class="table-highlight-row"
-            highlight-row
-            size="small"
-            @on-current-change="selectTable"
-            border
-            align="left"
-            :loading="levelLoading"
-            :stripe="true"
-            :columns="levelType"
-            :data="levelList"
-            height="416"
-          ></Table>
+          <div class="table-wrap-auto-height">
+            <vxe-table
+              border
+              stripe
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              auto-resize
+              align="left"
+              :loading="levelLoading"
+              size="mini"
+              :data="levelList">
+              <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" ></vxe-table-column>
+              <vxe-table-column field="strategyName" title="级别"></vxe-table-column>
+              <vxe-table-column field="sellPrice" title="销售价" >
+                <template v-slot="{row}">
+                  {{row.strategyName=='最低售价'?(row.sellPrice - row.minRequiredQty):row.sellPrice}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="updateUname" title="更新人"></vxe-table-column>
+              <vxe-table-column field="updateTime" title="更新日期"></vxe-table-column>
+            </vxe-table>
+          </div>
         </div>
         <!--      滞销信息-->
-        <div class="tabs-warp p10" v-show="tIndex == 5">
+        <div class="tabs-warp" v-show="tIndex == 5">
           <p style="line-height: 30px">
             连锁库龄: <span class="ml5">{{branchAge}}</span>天
           </p>
           <!--      表-->
-          <Table
-            class="table-highlight-row"
-            highlight-row
-            align="left"
-            size="small"
-            @on-current-change="selectTable"
-            border
-            :stripe="true"
-            :columns="unsalableType"
-            :data="unsalableList"
-            height="416"
-          ></Table>
+          <div class="table-wrap-auto-height">
+            <vxe-table
+              border
+              stripe
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              auto-resize
+              align="left"
+              size="mini"
+              show-footer
+              :footer-method="handleSummary4"
+              :data="unsalableList">
+              <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" ></vxe-table-column>
+              <vxe-table-column field="orgName" title="分店名称"></vxe-table-column>
+              <vxe-table-column field="enterQty" title="滞销数量" ></vxe-table-column>
+            </vxe-table>
+          </div>
+
         </div>
         <!--      分页-->
         <div class="page-warp clearfix">
@@ -465,9 +519,477 @@
         </div>
         <!--      点击查看显示-->
       </section>
-      <div slot="footer"></div>
-    </Modal>
-  </div>
+    </template>
+  </vxe-modal>
+  <!--<div class="content-oper">-->
+    <!--<Modal-->
+      <!--title="库存查询"-->
+      <!--closable-->
+      <!--v-model="modal1"-->
+      <!--@on-visible-change="hander"-->
+      <!--width="1100"-->
+      <!--:loading="loading"-->
+    <!--&gt;-->
+      <!--<section class="oper-box">-->
+        <!--&lt;!&ndash;      主菜单导航&ndash;&gt;-->
+        <!--<div class="db pl10 tabs-ulwarp">-->
+          <!--<ul class="tabs">-->
+            <!--<li-->
+              <!--v-if="!curronly"-->
+              <!--class="center lis"-->
+              <!--:class="{ 'tab-active': tIndex == 4 }"-->
+              <!--@click="setTab(4)"-->
+            <!--&gt;-->
+              <!--级别销价-->
+            <!--</li>-->
+            <!--<li-->
+              <!--v-if="!curronly"-->
+              <!--class="center lis"-->
+              <!--:class="{ 'tab-active': tIndex == 6 }"-->
+              <!--@click="setTab(6)"-->
+            <!--&gt;-->
+              <!--本店库存-->
+            <!--</li>-->
+            <!--<li-->
+              <!--v-if="!curronly"-->
+              <!--class="center lis"-->
+              <!--:class="{ 'tab-active': tIndex == 5 }"-->
+              <!--@click="setTab(5)"-->
+            <!--&gt;-->
+              <!--滞销信息-->
+            <!--</li>-->
+            <!--<li-->
+              <!--v-if="!curronly"-->
+              <!--class="center lis"-->
+              <!--:class="{ 'tab-active': tIndex == 1 }"-->
+              <!--@click="setTab(1)"-->
+            <!--&gt;-->
+              <!--入库明细-->
+            <!--</li>-->
+            <!--<li-->
+              <!--class="center lis"-->
+              <!--:class="{ 'tab-active': tIndex == 2 }"-->
+              <!--@click="setTab(2)"-->
+            <!--&gt;-->
+              <!--出库明细-->
+            <!--</li>-->
+            <!--<li-->
+              <!--class="center lis"-->
+              <!--:class="{ 'tab-active': tIndex == 3 }"-->
+              <!--@click="setTab(3)"-->
+            <!--&gt;-->
+              <!--订单占用-->
+            <!--</li>-->
+          <!--</ul>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;本店库存&ndash;&gt;-->
+        <!--<div class="tabs-warp pt10" v-show="tIndex == 6">-->
+          <!--<vxe-table-->
+            <!--border-->
+            <!--ref="hsOrder"-->
+            <!--height="350"-->
+            <!--highlight-hover-row-->
+            <!--show-overflow="title"-->
+            <!--resizable-->
+            <!--auto-resize-->
+            <!--align="left"-->
+            <!--:loading="outLoading"-->
+            <!--size="mini"-->
+            <!--:data="selfShopStock">-->
+            <!--<vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>-->
+            <!--<vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>-->
+            <!--<vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>-->
+            <!--<vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>-->
+            <!--<vxe-table-column field="storeName" title="仓库" width="120"></vxe-table-column>-->
+            <!--<vxe-table-column field="enterQty" title="入库数量" width="90"></vxe-table-column>-->
+            <!--<vxe-table-column field="outableQty" title="可出库数量" width="90"></vxe-table-column>-->
+            <!--<vxe-table-column field="enterPrice" title="入库单价" width="120">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.enterPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxRate" title="税率" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxPrice" title="含税单价" width="70">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.taxPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="noTaxPrice" title="不含税单价" width="90">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.noTaxPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="guestName" title="供应商" width="120">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="createTime" title="入库日期" width="120">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="branchStockAge" title="本店库龄" width="80">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="chainStockAge" title="连锁库龄" width="80">-->
+            <!--</vxe-table-column>-->
+          <!--</vxe-table>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      入库明细&ndash;&gt;-->
+        <!--<div class="tabs-warp" v-show="tIndex == 1">-->
+          <!--&lt;!&ndash;      搜索工具栏&ndash;&gt;-->
+          <!--<div class="oper-top flex mb20">-->
+            <!--<div class="wlf">-->
+              <!--<div class="db mr10">-->
+                <!--<span>快速查询：</span>-->
+                <!--<quick-date-->
+                  <!--class="mr10"-->
+                  <!--ref="quickDate1"-->
+                  <!--@quickDate="getDataQuick1"-->
+                <!--&gt;</quick-date>-->
+              <!--</div>-->
+              <!--<div class="db">-->
+                <!--<span>入库日期：</span>-->
+                <!--<DatePicker-->
+                  <!--@on-change="selectDate"-->
+                  <!--type="daterange"-->
+                  <!--v-model="oneTime"-->
+                  <!--placement="bottom-start"-->
+                  <!--placeholder="选择日期"-->
+                  <!--class="w200 mr20"-->
+                <!--&gt;-->
+                <!--</DatePicker>-->
+              <!--</div>-->
+              <!--<div class="db">-->
+                <!--<span>供应商: </span>-->
+                <!--<Input-->
+                  <!--v-model="searchForm2.guestName"-->
+                  <!--class="w200 mr10"-->
+                <!--&gt;</Input>-->
+              <!--</div>-->
+              <!--<div class="db">-->
+                <!--<Button type="warning" class="mr10 w90" @click="search">-->
+                  <!--<Icon type="ios-search" size="14"/>-->
+                  <!--查询-->
+                <!--</Button>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;      表&ndash;&gt;-->
+          <!--&lt;!&ndash;<Table&ndash;&gt;-->
+            <!--&lt;!&ndash;class="table-highlight-row"&ndash;&gt;-->
+            <!--&lt;!&ndash;highlight-row&ndash;&gt;-->
+            <!--&lt;!&ndash;size="small"&ndash;&gt;-->
+            <!--&lt;!&ndash;@on-current-change="selectTable"&ndash;&gt;-->
+            <!--&lt;!&ndash;border&ndash;&gt;-->
+            <!--&lt;!&ndash;:stripe="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;:columns="enterInfo"&ndash;&gt;-->
+            <!--&lt;!&ndash;:data="contentOne.dataOne"&ndash;&gt;-->
+            <!--&lt;!&ndash;height="450"&ndash;&gt;-->
+            <!--&lt;!&ndash;show-summary&ndash;&gt;-->
+            <!--&lt;!&ndash;:summary-method="handleSummary1"&ndash;&gt;-->
+          <!--&lt;!&ndash;&gt;</Table>&ndash;&gt;-->
+          <!--<vxe-table-->
+            <!--border-->
+            <!--ref="hsOrder"-->
+            <!--height="350"-->
+            <!--highlight-hover-row-->
+            <!--show-overflow="title"-->
+            <!--resizable-->
+            <!--auto-resize-->
+            <!--align="left"-->
+            <!--:loading="enterLoading"-->
+            <!--size="mini"-->
+            <!--:data="contentOne.dataOne"-->
+            <!--show-footer-->
+            <!--:footer-method="handleSummary">-->
+            <!--<vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>-->
+            <!--<vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>-->
+            <!--<vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>-->
+            <!--<vxe-table-column field="systemUnitId" title="单位" width="50"></vxe-table-column>-->
+            <!--<vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>-->
+            <!--<vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>-->
+            <!--<vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>-->
+            <!--<vxe-table-column field="guestName" title="供应商" width="120"></vxe-table-column>-->
+            <!--<vxe-table-column field="createTime" title="入库日期" width="120">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="enterMan" title="入库人" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="enterQty" title="入库数量" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="enterPrice" title="入库单价" width="70">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.enterPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="enterAmt" title="金额" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.enterAmt||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxRate" title="税率" width="50">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="noTaxPrice" title="不含税单价" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.noTaxPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="noTaxAmt" title="不含税金额" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.noTaxAmt||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="code" title="入库单号" width="160">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="createUname" title="创建人" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="enterTypeId" title="入库类型" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="remark" title="备注" width="140">-->
+            <!--</vxe-table-column>-->
+          <!--</vxe-table>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      出库明细&ndash;&gt;-->
+        <!--<div class="tabs-warp" v-show="tIndex == 2">-->
+          <!--&lt;!&ndash;      搜索工具栏&ndash;&gt;-->
+          <!--<div class="oper-top flex mb20">-->
+            <!--<div class="wlf">-->
+              <!--<div class="db mr10">-->
+                <!--<span>快速查询：</span>-->
+                <!--<quick-date-->
+                  <!--class="mr10"-->
+                  <!--ref="quickDate2"-->
+                  <!--@quickDate="getDataQuick2"-->
+                <!--&gt;</quick-date>-->
+              <!--</div>-->
+              <!--<div class="db">-->
+                <!--<span>出库日期：</span>-->
+                <!--<DatePicker-->
+                  <!--v-model="twoTime"-->
+                  <!--@on-change="selectDate"-->
+                  <!--type="daterange"-->
+                  <!--placement="bottom-start"-->
+                  <!--placeholder="选择日期"-->
+                  <!--class="w200 mr20"-->
+                <!--&gt;-->
+                <!--</DatePicker>-->
+              <!--</div>-->
+              <!--<div class="db">-->
+                <!--<span>客户: </span>-->
+                <!--<Input-->
+                  <!--v-model="searchForm3.guestName"-->
+                  <!--class="w200 mr10"-->
+                <!--&gt;</Input>-->
+              <!--</div>-->
+              <!--<div class="db">-->
+                <!--<Button type="warning" class="mr10 w90" @click="search">-->
+                  <!--<Icon type="ios-search" size="14"/>-->
+                  <!--查询-->
+                <!--</Button>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;      表&ndash;&gt;-->
+          <!--&lt;!&ndash;<Table&ndash;&gt;-->
+            <!--&lt;!&ndash;class="table-highlight-row"&ndash;&gt;-->
+            <!--&lt;!&ndash;highlight-row&ndash;&gt;-->
+            <!--&lt;!&ndash;size="small"&ndash;&gt;-->
+            <!--&lt;!&ndash;@on-current-change="selectTable"&ndash;&gt;-->
+            <!--&lt;!&ndash;border&ndash;&gt;-->
+            <!--&lt;!&ndash;:stripe="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;:columns="outInfo"&ndash;&gt;-->
+            <!--&lt;!&ndash;:data="contentTwo.dataTwo"&ndash;&gt;-->
+            <!--&lt;!&ndash;height="450"&ndash;&gt;-->
+            <!--&lt;!&ndash;show-summary&ndash;&gt;-->
+            <!--&lt;!&ndash;:summary-method="handleSummary2"&ndash;&gt;-->
+          <!--&lt;!&ndash;&gt;</Table>&ndash;&gt;-->
+          <!--<vxe-table-->
+            <!--border-->
+            <!--ref="hsOrder"-->
+            <!--height="350"-->
+            <!--highlight-hover-row-->
+            <!--show-overflow="title"-->
+            <!--resizable-->
+            <!--auto-resize-->
+            <!--align="left"-->
+            <!--:loading="outLoading"-->
+            <!--size="mini"-->
+            <!--:data="contentTwo.dataTwo"-->
+            <!--show-footer-->
+            <!--:footer-method="handleSummary">-->
+            <!--<vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>-->
+            <!--<vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>-->
+            <!--<vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>-->
+            <!--<vxe-table-column field="systemUnitId" title="单位" width="50"></vxe-table-column>-->
+            <!--<vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>-->
+            <!--<vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>-->
+            <!--<vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>-->
+            <!--<vxe-table-column field="guestName" title="客户" width="120"></vxe-table-column>-->
+            <!--<vxe-table-column field="outDate" title="出库日期" width="120">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="outMan" title="出库人" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="sellQty" title="出库数量" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="sellPrice" title="出库单价" width="70">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.sellPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="sellAmt" title="出库金额" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.sellAmt||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxRate" title="含税标记" width="70">-->
+              <!--<template v-slot="{row}">-->
+                <!--<vxe-checkbox :disabled="true" v-model="row.taxSign == 0 ? false : true" size="small"></vxe-checkbox>-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxRate" title="税率" width="50">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxPrice" title="含税单价" width="70">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.taxPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="taxAmt" title="含税金额" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.taxAmt||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="noTaxPrice" title="不含税单价" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.noTaxPrice||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="noTaxAmt" title="不含税金额" width="80">-->
+              <!--<template v-slot="{row}">-->
+                <!--{{(row.noTaxAmt||0).toFixed(2)}}-->
+              <!--</template>-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="serviceId" title="出库单号" width="160">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="createUname" title="创建人" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="enterTypeId" title="出库类型" width="70">-->
+            <!--</vxe-table-column>-->
+            <!--<vxe-table-column field="remark" title="备注" width="140">-->
+            <!--</vxe-table-column>-->
+          <!--</vxe-table>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      占用订单&ndash;&gt;-->
+        <!--<div class="tabs-warp p10" v-show="tIndex == 3">-->
+          <!--&lt;!&ndash;      表&ndash;&gt;-->
+          <!--<Table-->
+            <!--class="table-highlight-row"-->
+            <!--highlight-row-->
+            <!--size="small"-->
+            <!--@on-current-change="selectTable"-->
+            <!--border-->
+            <!--:stripe="true"-->
+            <!--:columns="occupy"-->
+            <!--align="left"-->
+            <!--:data="contentThree.dataThree"-->
+            <!--show-summary-->
+            <!--:summary-method="handleSummary4"-->
+            <!--height="405"-->
+          <!--&gt;</Table>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      级别销价&ndash;&gt;-->
+        <!--<div class="tabs-warp p10" v-show="tIndex == 4">-->
+          <!--<p style="line-height: 30px">-->
+            <!--本店可售库存: <span class="ml5">{{mainData.outableQty}}</span>-->
+          <!--</p>-->
+          <!--&lt;!&ndash;      表&ndash;&gt;-->
+          <!--<Table-->
+            <!--class="table-highlight-row"-->
+            <!--highlight-row-->
+            <!--size="small"-->
+            <!--@on-current-change="selectTable"-->
+            <!--border-->
+            <!--align="left"-->
+            <!--:loading="levelLoading"-->
+            <!--:stripe="true"-->
+            <!--:columns="levelType"-->
+            <!--:data="levelList"-->
+            <!--height="416"-->
+          <!--&gt;</Table>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      滞销信息&ndash;&gt;-->
+        <!--<div class="tabs-warp p10" v-show="tIndex == 5">-->
+          <!--<p style="line-height: 30px">-->
+            <!--连锁库龄: <span class="ml5">{{branchAge}}</span>天-->
+          <!--</p>-->
+          <!--&lt;!&ndash;      表&ndash;&gt;-->
+          <!--<Table-->
+            <!--class="table-highlight-row"-->
+            <!--highlight-row-->
+            <!--align="left"-->
+            <!--size="small"-->
+            <!--@on-current-change="selectTable"-->
+            <!--border-->
+            <!--:stripe="true"-->
+            <!--:columns="unsalableType"-->
+            <!--:data="unsalableList"-->
+            <!--height="416"-->
+          <!--&gt;</Table>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      分页&ndash;&gt;-->
+        <!--<div class="page-warp clearfix">-->
+          <!--<Page-->
+            <!--class="fr mr10 mt10"-->
+            <!--v-show="tIndex == 1"-->
+            <!--class-name="page-con"-->
+            <!--:page-size-opts="[10,20,30,40,50]"-->
+            <!--:current="contentOne.page.num"-->
+            <!--:total="contentOne.page.total"-->
+            <!--:page-size="contentOne.page.size"-->
+            <!--@on-change="changePageCus"-->
+            <!--@on-page-size-change="changeSizeCus"-->
+            <!--show-sizer-->
+            <!--show-total-->
+          <!--&gt;</Page>-->
+          <!--<Page-->
+            <!--class="fr mr10 mt10"-->
+            <!--v-show="tIndex == 2"-->
+            <!--class-name="page-con"-->
+            <!--:page-size-opts="[10,20,30,40,50]"-->
+            <!--:current="contentTwo.page.num"-->
+            <!--:total="contentTwo.page.total"-->
+            <!--:page-size="contentTwo.page.size"-->
+            <!--@on-change="changePageCus"-->
+            <!--@on-page-size-change="changeSizeCus"-->
+            <!--show-sizer-->
+            <!--show-total-->
+          <!--&gt;</Page>-->
+          <!--<Page-->
+            <!--class="fr mr10 mt10"-->
+            <!--v-show="tIndex == 3"-->
+            <!--class-name="page-con"-->
+            <!--:page-size-opts="[10,20,30,40,50]"-->
+            <!--:current="contentThree.page.num"-->
+            <!--:total="contentThree.page.total"-->
+            <!--:page-size="contentThree.page.size"-->
+            <!--@on-change="changePageCus"-->
+            <!--@on-page-size-change="changeSizeCus"-->
+            <!--show-sizer-->
+            <!--show-total-->
+          <!--&gt;</Page>-->
+          <!--<Page-->
+            <!--class="fr mr10 mt10"-->
+            <!--v-show="tIndex == 6"-->
+            <!--class-name="page-con"-->
+            <!--:page-size-opts="[10,20,30,40,50]"-->
+            <!--:current="selfShopStockPage.num"-->
+            <!--:total="selfShopStockPage.total"-->
+            <!--:page-size="selfShopStockPage.size"-->
+            <!--@on-change="changePageCus"-->
+            <!--@on-page-size-change="changeSizeCus"-->
+            <!--show-sizer-->
+            <!--show-total-->
+          <!--&gt;</Page>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;      点击查看显示&ndash;&gt;-->
+      <!--</section>-->
+      <!--<div slot="footer"></div>-->
+    <!--</Modal>-->
+  <!--</div>-->
 </template>
 
 <script>
@@ -1028,9 +1550,12 @@
         this.modal1 = true;
         this.tIndex = 4;
         this.levelList =[];
-        this.getLevelList();
+        setTimeout(()=>{
+          this.getLevelList();
+        },0)
+
       },
-      hander(type) {
+      hander({type}) {
         // this.modal1 = true
         if (type) {
           this.searchForm3.startEnterDate=ThisYearStr()[0]
@@ -1042,7 +1567,7 @@
           if (this.$refs.quickDate2) {
             this.$refs.quickDate2.searchQuick = "7";
           }
-          this.getEnters();
+          // this.getEnters();
         }
       },
 
@@ -1286,46 +1811,30 @@
         return sums;
       },
       handleSummary4({columns, data}) {
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            sums[key] = {
-              key,
-              value: "合值"
-            };
-            return;
-          }
-          if (["lockStockQty","orderQty"].includes(key)) {
-            const values = data.map(item => Number(item[key]));
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return '合值'
+            }
+            if ([
+              "orderQty",
+              "lockStockQty",
+              "outableQty",
+              "enterQty"
+            ].includes(column.property)) {
+              const v = data.reduce((prev, curr) => {
+                const value = Number(curr[column.property]);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return prev + curr[column.property];
                 } else {
                   return prev;
                 }
               }, 0);
-              sums[key] = {
-                key,
-                value: v
-              };
-            } else {
-              sums[key] = {
-                key,
-                value: 'N/A'
-              };
+              return v
             }
-          } else {
-            sums[key] = {
-              key,
-              value: ""
-            };
-          }
-        });
-
-        return sums;
+            return null
+          })
+        ]
       },
 
       handleSummary({ columns, data }) {
@@ -1397,15 +1906,36 @@
 </script>
 
 <style scoped xml:lang="less">
+  .oper-box{
+    height: 100%;
+  }
+  .tabs-warp{
+    height: calc(100% - 33px);
+  }
+  .tabs-warp2{
+    height: calc(100% - 90px);
+  }
+  .tabs-warp3{
+    height: calc(100% - 80px);
+  }
+  .table-wrap-auto-height{
+    height: calc(100% - 33px);
+  }
+  .table-wrap-auto-height2{
+    height: calc(100% - 50px);
+  }
+
   .tabs-ulwarp {
-    padding-top: 17px;
     border-bottom: solid 1px #ddd;
+    height: 32px;
+    overflow: hidden;
   }
 
   .tabs {
     list-style: none;
     display: flex;
   }
+
 
   .lis {
     margin: 0;
