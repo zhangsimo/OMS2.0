@@ -341,7 +341,8 @@
           class="mt10 tr"
           :page-size="page.size"
           :current="page.num"
-          @on-change="pageCode"
+          @on-change = "changePage"
+          @on-page-size-change = "changeSize"
           show-total
           size="small"
         />
@@ -1092,13 +1093,13 @@
       },
       // 页码
       changePage(p) {
-        this.page.num = p;
-        this.query();
+        this.page.num = p
+        this.query()
       },
       changeSize(size) {
-        this.page.num = 1;
-        this.page.size = size;
-        this.query();
+        this.page.num = 1
+        this.page.size = size
+        this.query()
       },
       // 查询
       query() {
