@@ -130,6 +130,7 @@ export default {
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         orgId: this.information.orgId,
+        statementTypeValue:this.information.statementType.value,
         guestId:this.companyId
       };
       obj.page = 0
