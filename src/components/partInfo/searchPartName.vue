@@ -1,5 +1,5 @@
 <template>
-    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer :zIndex="9999">
+    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer mask-closable :zIndex="9999">
       <template v-slot>
             <vxe-grid
               border
@@ -18,7 +18,7 @@
               :data="partData">
 
               <template v-slot:top>
-                <div class="partCheck-hd">
+                <div class="partCheck-hd" style="height: 40px">
                   <vxe-input v-model="partName" class="w200 mr10" style="vertical-align: middle;height: 30px" placeholder="请输入配件名称" @keyup="keyupEvent"></vxe-input>
                   <Button @click="search" class="mr10" type="primary">
                     <Icon type="ios-search" size="14" />查询

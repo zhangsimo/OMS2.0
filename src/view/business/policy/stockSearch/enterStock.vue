@@ -1,5 +1,5 @@
 <template>
-  <vxe-modal className="vxe-modal-table" v-model="modal1" title="库存查询" id="myModal1" width="1000" height="450" min-width="900" min-height="320" resize remember transfer :zIndex="9999" @show="hander">
+  <vxe-modal className="vxe-modal-table" v-model="modal1" title="库存查询" id="myModal1" width="1000" height="450" min-width="900" min-height="320" resize remember transfer mask-closable :zIndex="9999" @show="hander">
     <template v-solt>
       <section class="oper-box">
         <!--      主菜单导航-->
