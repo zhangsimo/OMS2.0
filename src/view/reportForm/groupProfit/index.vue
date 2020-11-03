@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -21,6 +21,8 @@
 <script>
 import queryCriteria from "../components/queryCriteria";
 import { groupProfitSheet } from "_api/financialStatements/index.js";
+import {showLoading, hideLoading} from "@/utils/loading"
+
 export default {
   components: { queryCriteria },
   data() {
@@ -512,11 +514,17 @@ export default {
       if(this.$refs.queryCriteria.shopId != "") {
         obj.shopNumber = this.$refs.queryCriteria.shopId
       }
+      showLoading(".loadingClass", "数据查询中,请稍后")
+
       groupProfitSheet(obj).then(res => {
         if (res.code === 0) {
           this.profitData = res.data;
         }
-      });
+        hideLoading()
+      }).catch( e => {
+          hideLoading()
+        }
+      );
     },
     //查询
     query() {

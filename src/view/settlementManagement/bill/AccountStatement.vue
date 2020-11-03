@@ -66,19 +66,19 @@
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
-              </div>
-            </Poptip>
+          <!--<div class="db ml10">-->
+          <!--  <Poptip placement="bottom">-->
+          <!--    <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+          <!--    <div slot="content">-->
+          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>-->
+          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>-->
+          <!--    </div>-->
+          <!--  </Poptip>-->
             <!-- <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
             </button>-->
-          </div>
+          <!--</div>-->
         </div>
       </div>
     </section>
