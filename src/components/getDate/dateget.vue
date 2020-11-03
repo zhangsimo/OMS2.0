@@ -12,8 +12,10 @@ import {
   ThisWeekStr,
   LastWeekStr,
   ThisMonthStr,
-  prevMonthStr
-} from "./index";
+  prevMonthStr,
+  prevYearStr,
+  ThisYearStr
+} from "./index_bill";
 export default {
   name: "quickDate",
   components: {},
@@ -28,7 +30,9 @@ export default {
         { value: "3", label: "本周" },
         { value: "4", label: "上周" },
         { value: "5", label: "本月" },
-        { value: "6", label: "上月" }
+        { value: "6", label: "上月" },
+        { value: "7", label: "本年" },
+        { value: "8", label: "上年" }
       ]
     };
   },
@@ -78,6 +82,14 @@ export default {
         case 6:
         case "6":
           this.val = prevMonthStr();
+          break;
+        case 7:
+        case "7":
+          this.val = ThisYearStr();
+          break;
+        case 8:
+        case "8":
+          this.val = prevYearStr();
           break;
         default:
           this.val = ToDayStr();
