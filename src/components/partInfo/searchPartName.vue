@@ -1,5 +1,5 @@
 <template>
-    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer :zIndex="9999">
+    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer mask-closable :zIndex="9999">
       <template v-slot>
             <vxe-grid
               border
@@ -7,6 +7,7 @@
               show-overflow
               auto-resize
               height="auto"
+              :loading="loading"
               :sync-resize="searchPartLayer"
               highlight-current-row
               size="mini"
@@ -17,7 +18,7 @@
               :data="partData">
 
               <template v-slot:top>
-                <div class="partCheck-hd">
+                <div class="partCheck-hd" style="height: 40px">
                   <vxe-input v-model="partName" class="w200 mr10" style="vertical-align: middle;height: 30px" placeholder="请输入配件名称" @keyup="keyupEvent"></vxe-input>
                   <Button @click="search" class="mr10" type="primary">
                     <Icon type="ios-search" size="14" />查询
@@ -30,19 +31,18 @@
                 </div>
               </template>
               <template v-slot:bottom>
-                <div style="height: 40px">
-                  <Page
-                    size="small"
-                    class-name="page-con fr pt10"
-                    :current="page.num"
-                    :total="page.total"
-                    :loading="loading"
-                    :page-size="page.size"
-                    @on-change="changePage"
-                    @on-page-size-change="changeSize"
-                    show-sizer
-                    show-total
-                  ></Page>
+                <div style="height: 50px;">
+                  <div class="pt10">
+                    <vxe-pager
+                      background
+                      :current-page.sync="page.num"
+                      :page-size.sync="page.size"
+                      :total="page.total"
+                      :page-sizes="[100,200,300]"
+                      @page-change="changePage"
+                      :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+                    </vxe-pager>
+                  </div>
                 </div>
               </template>
             </vxe-grid>
@@ -118,7 +118,7 @@ export default {
       //分页obj
       page: {
         num: 1,
-        size: 20,
+        size: 100,
         total: 0
       }
     };
@@ -200,8 +200,9 @@ export default {
       this.searchPartLayer = false;
     },
     //分页
-    changePage(p) {
-      this.page.num = p;
+    changePage({currentPage, pageSize}) {
+      this.page.num = currentPage;
+      this.page.size = pageSize;
       this.getList();
     },
     changeSize(size) {
