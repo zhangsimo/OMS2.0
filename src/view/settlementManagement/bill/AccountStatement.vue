@@ -341,9 +341,11 @@
           class="mt10 tr"
           :page-size="page.size"
           :current="page.num"
-          @on-change = "changePage"
+          :page-size-opts="[10, 30, 50, 100 ,200]"
+          @on-change="changePage"
           @on-page-size-change = "changeSize"
           show-total
+          show-sizer
           size="small"
         />
         <div class="flex mt20">
