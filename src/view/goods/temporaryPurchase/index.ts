@@ -93,13 +93,15 @@ export default class TemporaryPurchase extends Vue {
     columns: [
       {
         title: '序号',
-        minWidth: 50,
+        width: 50,
         type: 'index',
+        resizable:true
       },
       {
         title: '状态',
         key: 'billStatusId',
-        minWidth: 80,
+        width: 80,
+        resizable:true,
         render: (h, p) => {
           let val: string = p.row.billStatusId.name; // orderState[p.row.billStatusId];
           return h('span', val);
@@ -108,7 +110,8 @@ export default class TemporaryPurchase extends Vue {
       {
         title: '供应商',
         key: 'guestName',
-        minWidth: 170
+        width: 170,
+        resizable:true
       },
       // {
       //   title: '采购员',
@@ -118,33 +121,39 @@ export default class TemporaryPurchase extends Vue {
       {
         title: '订单单号',
         key: 'serviceId',
-        minWidth: 140
+        width: 140,
+        resizable:true
       },
       {
         title: '创建人',
         key: 'createUname',
-        minWidth: 120
+        width: 120,
+        resizable:true
       },
       {
         title: '创建日期',
         key: 'createTime',
-        minWidth: 200
+        width: 200,
+        resizable:true
       },
       {
         title: '打印次数',
         key: 'printCount',
-        minWidth: 100
+        width: 100,
+        resizable:true
       },
       {
         title: '提交人',
         key: 'auditor',
-        minWidth: 100
+        width: 100,
+        resizable:true
       },
       {
         title: '提交日期',
         align: 'center',
         key: 'auditDate',
-        minWidth: 140
+        width: 140,
+        resizable:true
       },
     ],
     tbdata: new Array(),

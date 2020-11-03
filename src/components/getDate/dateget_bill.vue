@@ -1,5 +1,5 @@
 <template>
-    <Select v-model="searchQuick" class="w90" @on-change="getval" transfer>
+    <Select :size="sizeString" v-model="searchQuick" class="w90" @on-change="getval" transfer>
       <Option v-for="item in dateQiuck" :value="item.value" :key="item.value">{{ item.label }}</Option>
       <slot></slot>
     </Select>
@@ -36,7 +36,9 @@ export default {
       ]
     };
   },
-  props: {},
+  props: {
+    sizeString:""
+  },
   created() {},
   mounted() {
     this.getval(this.searchQuick)

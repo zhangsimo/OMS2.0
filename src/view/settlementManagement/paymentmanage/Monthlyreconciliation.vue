@@ -41,6 +41,7 @@
               <div class="db ml10">
                 <span>往来单位：</span>
                 <Select
+                  disabled
                   ref="companyGuset"
                   v-model="companyInfoGuestname"
                   filterable
@@ -1604,6 +1605,10 @@
             this.Actualtotalpayment = sum3
           }
           this.Reconciliation = false;
+          this.getSettlementComputed();
+          this.getAccountNameList();
+          this.getPaymentNameList();
+          this.totalvalueFun();
         } else {
           this.$message.error("信息填写错误");
           return
@@ -1729,7 +1734,7 @@
               buttonStatus: num,
               incomeType: this.totalvalue,
               remark: this.remark,
-              collectionName: this.collectionObj.label,
+              collectionName: this.collectionObj ? this.collectionObj.label : '',
               collectionId: this.collectionUname || "",
               bankName: this.openingBank,
               collectionAccount: this.collectionAccount,

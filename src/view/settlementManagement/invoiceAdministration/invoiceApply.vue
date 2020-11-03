@@ -74,20 +74,20 @@
         </div>
       </div>
       <div>
-        <!--<button-->
-        <!--  class="ivu-btn ivu-btn-default mr10"-->
-        <!--  type="button"-->
-        <!--  @click="operation(1)"-->
-        <!--  v-has="'exportAll'"-->
-        <!-->导出汇总-->
-        <!--</button>-->
-        <!--<button-->
-        <!--  class="ivu-btn ivu-btn-default mr10"-->
-        <!--  type="button"-->
-        <!--  @click="operation(2)"-->
-        <!--  v-has="'exportList'"-->
-        <!-->导出明细-->
-        <!--</button>-->
+<!--        <button-->
+<!--          class="ivu-btn ivu-btn-default mr10"-->
+<!--          type="button"-->
+<!--          @click="operation(1)"-->
+<!--          v-has="'exportAll'"-->
+<!--        >导出汇总-->
+<!--        </button>-->
+<!--        <button-->
+<!--          class="ivu-btn ivu-btn-default mr10"-->
+<!--          type="button"-->
+<!--          @click="operation(2)"-->
+<!--          v-has="'exportList'"-->
+<!--        >导出明细-->
+<!--        </button>-->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -140,6 +140,8 @@
           show-elevator
           class="mt10 fr"
           show-sizer
+          :page-size="form.size"
+          :current="form.page"
           @on-change="changePage"
           :page-size-opts="pageSizeOpts"
           @on-page-size-change="changeSize"
@@ -213,7 +215,8 @@
           },
           {
             title: "序号",
-            key: "seq",
+            // key: "seq",
+            type: "index",
             className: "tc",
             resizable: true,
             width: 40,
@@ -1354,7 +1357,7 @@
         form: {
           orgId: '',
           guestName: '',
-          page: 0,
+          page: 1,
           size: 10,
           startDate: "",
           endDate: "",
@@ -1436,7 +1439,7 @@
       //选择查询条件
       chooseTable(num) {
         this.isActive = num;
-        this.form.page = 0;
+        this.form.page = 1;
         this.form.cancalStatus = num;
         this.getDataList();
       },
@@ -1447,9 +1450,11 @@
         }
         this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : ""
         this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
+        this.form.page = 1
           this.getDataList();
       },
       query() {
+        this.form.page = 1
         this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "";
         this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "";
         this.getDataList();
@@ -1490,13 +1495,13 @@
       },
       //分页
       changePage(p) {
-        this.form.page = p - 1;
-        this.query();
+        this.form.page = p;
+        this.getDataList();
       },
       changeSize(s) {
-        this.form.page = 0;
+        this.form.page = 1;
         this.form.size = s;
-        this.query();
+        this.getDataList();
       },
       operation(num) {
         switch (num) {
@@ -1609,7 +1614,7 @@
       getDataList() {
         showLoading(".loadingClass", "数据加载中，请勿操作")
         let params = {
-          page: this.form.page,
+          page: this.form.page-1,
           size: this.form.size
         }
         this.form.guestName = this.form.guestName.trim()

@@ -151,9 +151,13 @@ export default {
     // 确认按钮
     determine() {
       if (Object.keys(this.seleteData).length !== 0) {
-        this.seleteData.statementMasterId = this.seleteData.id
-        bus.$emit("accountHedNo", this.seleteData);
-        this.modal1 = false;
+        if (this.$parent.$options.parent.accessoriesBillingData.length> 0 && this.$parent.$options.parent.accessoriesBillingData.find(item => item.accountNo ===this.seleteData.accountNo)){
+          this.$message.error("对账单已存在请选择其他对账单");
+        }else {
+          this.seleteData.statementMasterId = this.seleteData.id
+          bus.$emit("accountHedNo", this.seleteData);
+          this.modal1 = false;
+        }
       } else {
         this.$message.error("请选择一条对账单");
       }

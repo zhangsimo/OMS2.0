@@ -431,6 +431,7 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
     //其他付款认领/其他收款收回

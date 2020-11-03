@@ -351,6 +351,7 @@ export default {
     addSave() {
       this.$refs.formValidate.validate(async valid => {
         if (valid) {
+          this.formData.auxiliaryAccountingCode=this.formData.auxiliaryAccountingCode=="null"?"":this.formData.auxiliaryAccountingCode;
           let res = await getSave(this.formData);
           if (res.code == 0) {
             this.getTreeList();
@@ -373,6 +374,7 @@ export default {
           this.ChangeData.titleTypeCode = this.ChangeData.titleTypeCode.split(
             " - "
           )[0];
+          this.ChangeData.auxiliaryAccountingCode=this.ChangeData.auxiliaryAccountingCode=="null"?"":this.ChangeData.auxiliaryAccountingCode;
           let res = await getSave(this.ChangeData);
           if (res.code == 0) {
             let data = {};

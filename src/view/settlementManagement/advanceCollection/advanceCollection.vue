@@ -410,6 +410,7 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
     // 选中行

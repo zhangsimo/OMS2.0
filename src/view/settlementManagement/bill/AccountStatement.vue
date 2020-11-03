@@ -66,19 +66,19 @@
               <span>查询</span>
             </button>
           </div>
-          <!--<div class="db ml10">-->
-          <!--  <Poptip placement="bottom">-->
-          <!--    <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
-          <!--    <div slot="content">-->
-          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>-->
-          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>-->
-          <!--    </div>-->
-          <!--  </Poptip>-->
+<!--          <div class="db ml10">-->
+<!--            <Poptip placement="bottom">-->
+<!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+<!--              <div slot="content">-->
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>-->
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>-->
+<!--              </div>-->
+<!--            </Poptip>-->
             <!-- <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
             </button>-->
-          <!--</div>-->
+<!--          </div>-->
         </div>
       </div>
     </section>
@@ -1055,7 +1055,8 @@
             : "",
           orgId: this.model1,
           statementStatus: this.Reconciliationtype,
-          guestId: this.receiveGuestId
+          guestId: this.receiveGuestId,
+          accountNo:this.accountNo//对账单号
         };
         for (let key in obj) {
           if (!obj[key]) {
@@ -1063,7 +1064,7 @@
           }
         }
         obj.page = this.page.num - 1
-        obj.size = this.page.size
+        obj.size = this.page.size;
         showLoading(".loadingClass", "数据加载中，请勿操作")
         AccountStatement(obj).then(res => {
           this.pagetotal = res.data.totalElements;
@@ -1085,9 +1086,14 @@
         });
       },
       // 页码
-      pageCode(page) {
-        this.page.num = page
-        this.getAccountStatement();
+      changePage(p) {
+        this.page.num = p;
+        this.query();
+      },
+      changeSize(size) {
+        this.page.num = 1;
+        this.page.size = size;
+        this.query();
       },
       // 查询
       query() {

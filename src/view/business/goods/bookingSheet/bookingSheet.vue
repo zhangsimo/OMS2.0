@@ -446,13 +446,15 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
-            type: "index"
+            width: 50,
+            type: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "status",
-            minWidth: 70,
+            width: 70,
+            resizable:true,
             render: (h, params) => {
               let name = params.row.status.name;
               return h("span", name);
@@ -461,33 +463,39 @@ export default {
           {
             title: "公司",
             key: "company",
-            minWidth: 80
+            width: 80,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "业务员",
             key: "salesman",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "预定单号",
             key: "orderNo",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "提交人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "提交日期",
             align: "center",
             key: "commitTime",
-            minWidth: 170
+            width: 170,
+            resizable:true
           }
         ],
         tbdata: []

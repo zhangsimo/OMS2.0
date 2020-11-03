@@ -461,6 +461,7 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
     //日期组件改变时值

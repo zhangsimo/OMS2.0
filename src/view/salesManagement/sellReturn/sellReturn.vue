@@ -529,9 +529,10 @@
           columns: [
             {
               title: "序号",
-              minWidth: 50,
+              width: 50,
               type: "index",
-              align: "center"
+              align: "center",
+              resizable:true
             },
             {
               title: "状态",
@@ -539,17 +540,20 @@
                 let tex = params.row.billStatusName;
                 return h("span", {}, tex);
               },
-              minWidth: 70
+              width: 70,
+              resizable:true
             },
             {
               title: "客户",
               key: "guestName",
-              minWidth: 170
+              width: 170,
+              resizable:true
             },
             {
               title: "退货日期",
               key: "orderDate",
-              minWidth: 120,
+              width: 120,
+              resizable:true,
               render: (h, params) => {
                 let date = moment(params.row.orderDate).format("YYYY-MM-DD")
                 return h('span', {}, date)
@@ -558,40 +562,47 @@
             {
               title: "退货员",
               key: "orderMan",
-              minWidth: 120
+              width: 120,
+              resizable:true
             },
 
             {
               title: "退货单号",
               key: "serviceId",
-              minWidth: 200
+              width: 200,
+              resizable:true
             },
             {
               title: "打印次数",
               key: "printCount",
-              minWidth: 120
+              width: 120,
+              resizable:true
             },
             {
               title: "创建人",
               key: "createUname",
-              minWidth: 100
+              width: 100,
+              resizable:true
             },
             {
               title: "创建日期",
               align: "center",
               key: "createTime",
-              minWidth: 170
+              width: 170,
+              resizable:true
             },
             {
               title: "提交人",
               key: "auditor",
-              minWidth: 100
+              width: 100,
+              resizable:true
             },
             {
               title: "提交日期",
               align: "center",
               key: "auditDate",
-              minWidth: 170
+              width: 170,
+              resizable:true
             }
           ],
           tbdata: []
