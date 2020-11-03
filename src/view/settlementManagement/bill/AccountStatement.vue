@@ -343,8 +343,8 @@
           :page-size-opts="[10,20,50,100,200]"
           :page-size="page.size"
           :current="page.num"
-          @on-change="changePage"
-          @on-page-size-change="changeSize"
+          @on-change = "changePage"
+          @on-page-size-change = "changeSize"
           show-total
           size="small"
         />
@@ -1095,13 +1095,13 @@
       },
       // 页码
       changePage(p) {
-        this.page.num = p;
-        this.query();
+        this.page.num = p
+        this.query()
       },
       changeSize(size) {
-        this.page.num = 1;
-        this.page.size = size;
-        this.query();
+        this.page.num = 1
+        this.page.size = size
+        this.query()
       },
       // 查询
       query() {
