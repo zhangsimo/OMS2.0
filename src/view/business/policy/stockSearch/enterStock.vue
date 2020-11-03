@@ -1,5 +1,5 @@
 <template>
-  <vxe-modal className="vxe-modal-table" v-model="modal1" title="库存查询" id="myModal1" width="1000" height="450" min-width="900" min-height="320" resize remember transfer :zIndex="9999" @show="hander">
+  <vxe-modal className="vxe-modal-table" v-model="modal1" title="库存查询" id="myModal1" width="1000" height="450" min-width="900" min-height="320" resize remember transfer mask-closable :zIndex="9999" @show="hander">
     <template v-solt>
       <section class="oper-box">
         <!--      主菜单导航-->
@@ -419,59 +419,53 @@
 
         </div>
         <!--      分页-->
-        <div class="page-warp clearfix">
-          <Page
-            class="fr mr10 mt10"
-            v-show="tIndex == 1"
-            class-name="page-con"
-            :page-size-opts="[10,20,30,40,50]"
-            :current="contentOne.page.num"
-            :total="contentOne.page.total"
-            :page-size="contentOne.page.size"
-            @on-change="changePageCus"
-            @on-page-size-change="changeSizeCus"
-            show-sizer
-            show-total
-          ></Page>
-          <Page
-            class="fr mr10 mt10"
-            v-show="tIndex == 2"
-            class-name="page-con"
-            :page-size-opts="[10,20,30,40,50]"
-            :current="contentTwo.page.num"
-            :total="contentTwo.page.total"
-            :page-size="contentTwo.page.size"
-            @on-change="changePageCus"
-            @on-page-size-change="changeSizeCus"
-            show-sizer
-            show-total
-          ></Page>
-          <Page
-            class="fr mr10 mt10"
-            v-show="tIndex == 3"
-            class-name="page-con"
-            :page-size-opts="[10,20,30,40,50]"
-            :current="contentThree.page.num"
-            :total="contentThree.page.total"
-            :page-size="contentThree.page.size"
-            @on-change="changePageCus"
-            @on-page-size-change="changeSizeCus"
-            show-sizer
-            show-total
-          ></Page>
-          <Page
-            class="fr mr10 mt10"
-            v-show="tIndex == 6"
-            class-name="page-con"
-            :page-size-opts="[10,20,30,40,50]"
-            :current="selfShopStockPage.num"
-            :total="selfShopStockPage.total"
-            :page-size="selfShopStockPage.size"
-            @on-change="changePageCus"
-            @on-page-size-change="changeSizeCus"
-            show-sizer
-            show-total
-          ></Page>
+        <div class="page-warp clearfix" v-show="tIndex == 1||tIndex == 2||tIndex == 3||tIndex == 6">
+          <div class="pt5">
+            <vxe-pager
+              background
+              size="mini"
+              v-show="tIndex == 1"
+              :current-page.sync="contentOne.page.num"
+              :page-size.sync="contentOne.page.size"
+              :total="contentOne.page.total"
+              :page-sizes="[10,20,30,40,50]"
+              @page-change="changePageCus"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            </vxe-pager>
+            <vxe-pager
+              background
+              size="mini"
+              v-show="tIndex == 2"
+              :current-page.sync="contentTwo.page.num"
+              :page-size.sync="contentTwo.page.size"
+              :total="contentTwo.page.total"
+              :page-sizes="[10,20,30,40,50]"
+              @page-change="changePageCus"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            </vxe-pager>
+            <vxe-pager
+              background
+              size="mini"
+              v-show="tIndex == 3"
+              :current-page.sync="contentThree.page.num"
+              :page-size.sync="contentThree.page.size"
+              :total="contentThree.page.total"
+              :page-sizes="[10,20,30,40,50]"
+              @page-change="changePageCus"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            </vxe-pager>
+            <vxe-pager
+              background
+              size="mini"
+              v-show="tIndex == 6"
+              :current-page.sync="selfShopStockPage.num"
+              :page-size.sync="selfShopStockPage.size"
+              :total="selfShopStockPage.total"
+              :page-sizes="[10,20,30,40,50]"
+              @page-change="changePageCus"
+              :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            </vxe-pager>
+          </div>
         </div>
         <!--      点击查看显示-->
       </section>
@@ -718,6 +712,10 @@
       },
       // tab切换
       setTab(index) {
+        this.contentOne.page.num = 1;
+        this.contentTwo.page.num = 1;
+        this.selfShopStockPage.num=1;
+        this.contentThree.page.num = 1;
         this.tIndex = index;
         if (this.tIndex == 2) {
           //这里是因为tab切换时quickDate的searchQuick没有清空转回到7
@@ -768,18 +766,22 @@
         }
       },
       // // 页数变动事件
-      changePageCus(currentPage) {
+      changePageCus({currentPage, pageSize}) {
         if (this.tIndex == 1) {
           this.contentOne.page.num = currentPage;
+          this.contentOne.page.size = pageSize;
           this.getList();
         } else if (this.tIndex == 2) {
+          this.contentTwo.page.size = pageSize;
           this.contentTwo.page.num = currentPage;
           this.getOuts();
         } else if (this.tIndex == 6){
           this.selfShopStockPage.num=currentPage;
+          this.selfShopStockPage.size = pageSize;
           this.getLotList()
         } else {
           this.contentThree.page.num = currentPage;
+          this.contentThree.page.size = pageSize;
           this.getHold();
         }
       },
