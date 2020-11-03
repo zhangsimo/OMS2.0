@@ -6,7 +6,7 @@
           <queryCriteria ref="queryCriteria" :flag="flag" :store="true"/>
           <div>
             <Button class="mr10" type="warning" @click="query">查询</Button>
-            <Button type="warning" @click="exportData">导出</Button>
+<!--            <Button type="warning" @click="exportData">导出</Button>-->
           </div>
         </div>
       </div>
