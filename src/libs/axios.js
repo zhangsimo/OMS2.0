@@ -51,7 +51,7 @@ class httpRequest {
       if(Cookies.get(TOKEN_KEY) && !config.url.includes('/token')){
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
-            if(localStorage.getItem("oms2-userList") != null) {
+            if(localStorage.getItem("oms2-userList") != null && !config.url.includes('/groupBalanceSheet') ) {
               let res = JSON.parse(localStorage.getItem('oms2-userList'))
               config.params.tenantId = res.tenantId || 0
               config.params.shopId = res.shopId || 0
