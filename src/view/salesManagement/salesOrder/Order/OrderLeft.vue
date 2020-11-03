@@ -158,7 +158,7 @@ export default {
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
         //筛选出当前操作的是第几条并选中
-        if(this.selectItemId){
+        if(this.selectItemId&&this.tableData.length>0){
           let num = 0
           this.tableData.forEach( (item,index) =>{
             if(item.id == this.selectItemId){
