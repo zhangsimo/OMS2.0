@@ -42,7 +42,7 @@
           </div>
           <div class="db ml20">
             <span>对账单号：</span>
-            <Input v-model="accountNo" type="text" class="w150" clearable></Input>
+            <Input v-model="accountNo" type="text" class="w150" clearable/>
           </div>
           <div class="db ml10">
             <span>往来单位:</span>
@@ -674,7 +674,7 @@
         model2: "",
         model3: "",
         Reconciliationtype: "",
-        accountNo:"",//对账单号
+        accountNo:"", // 对账单号
         Branchstore: [
           {id: '0', name: '全部',shortName:"全部"}
         ],
@@ -1064,7 +1064,7 @@
           orgId: this.model1,
           statementStatus: this.Reconciliationtype,
           guestId: this.receiveGuestId,
-          accountNo:this.accountNo//对账单号
+          accountNo: this.accountNo//对账单号
         };
         for (let key in obj) {
           if (!obj[key]) {
@@ -1176,7 +1176,7 @@
             ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
             : "",
           guestId: row.guestId,
-          accountNo: row.accountNo,
+          accountNo:  row.accountNo,
           serviceId: row.serviceId
         };
         this.getRecord(obj);
