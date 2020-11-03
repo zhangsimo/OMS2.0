@@ -1,12 +1,12 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex loadingClass">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
           <queryCriteria ref="queryCriteria" :flag="flag" :store="true"/>
           <div>
             <Button class="mr10" type="warning" @click="query">查询</Button>
-            <Button type="warning" @click="exportData">导出</Button>
+<!--            <Button type="warning" @click="exportData">导出</Button>-->
           </div>
         </div>
       </div>
@@ -99,6 +99,8 @@
 <script>
 import queryCriteria from "../components/queryCriteria";
 import { groupBalanceSheet } from "_api/financialStatements/index.js";
+import {showLoading, hideLoading} from "@/utils/loading"
+
 export default {
   components: { queryCriteria },
   data() {
@@ -117,11 +119,16 @@ export default {
       if(this.$refs.queryCriteria.shopId != "") {
         obj.shopNumber = this.$refs.queryCriteria.shopId
       }
+      showLoading(".loadingClass", "数据查询中,请稍后")
       groupBalanceSheet(obj).then(res => {
         if (res.code === 0) {
           this.liablitiesData = res.data.groupBalanceSheetVoList;
         }
-      });
+        hideLoading()
+      }).catch( e => {
+          hideLoading()
+        }
+      );
     },
     //查询
     query() {

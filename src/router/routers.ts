@@ -1191,7 +1191,7 @@ export default [
             meta: {
               keepAlive: true,
               // hideInMenu: true,
-              title: "集团资产表",
+              title: "集团资产负债表",
 
             },
             component: () =>
