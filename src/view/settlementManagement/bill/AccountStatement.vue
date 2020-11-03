@@ -334,10 +334,13 @@
         <Page
           :total="pagetotal"
           show-elevator
+          show-sizer
           class="mt10 tr"
           :page-size="page.size"
           :current="page.num"
-          @on-change="pageCode"
+          :page-size-opts="[10, 30, 50, 100 ,200]"
+          @on-change="changePage"
+          @on-page-size-change = "changeSize"
           show-total
           size="small"
         />
