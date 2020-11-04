@@ -1603,9 +1603,11 @@
               }
             }
             //退货原因
+            let arrData = [];
             for (let el in rtnReasonMap) {
               this.purchaseTypeArr.push({value: rtnReasonMap[el], label: el});
             }
+            this.purchaseTypeArr = this.purchaseTypeArr.sort((a,b) =>a.value-b.value)
             // userMap 用户
             for (let el in userMap) {
               this.userMap.push({value: userMap[el], label: el});
