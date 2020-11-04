@@ -262,6 +262,14 @@
                       <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlanmain.remark||"").trim()}}</div>
                     </Tooltip>
                   </FormItem>
+                  <FormItem class="form-Item" label="手工单号：">
+                    <Input
+                      placeholder="请输入手工单号"
+                      class="w160"
+                      v-model="formPlanmain.versionNo"
+                      type="number"
+                    />
+                  </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
