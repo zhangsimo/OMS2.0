@@ -1628,7 +1628,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
-            // mark: '59',
+            mark: '9403',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初库存",
@@ -1643,7 +1643,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
-            // mark: '59',
+            mark: '9401',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "备货级别设置",
@@ -1658,7 +1658,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/CustomClassification/CustomClassification",
             name: "CustomClassification",
-            // mark: '59',
+            mark: '9209',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "自定义分类设置",
@@ -1703,7 +1703,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
             name: "brandCarModel",
-            // mark: '59',
+            mark: '9208',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "品牌车型",
@@ -1749,7 +1749,7 @@ export default [
             path:
               "/systemSetting/InitialNavigation/storeManagement/storeManagement",
             name: "storeManagement",
-            // mark: '59',
+            mark: '9207',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "门店设置",
@@ -1763,7 +1763,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
             name: "setWarehouse",
-            // mark: '59',
+            mark: '9402',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "仓库设置",
@@ -1777,7 +1777,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setBank",
             name: "setBank",
-            // mark: '59',
+            mark: '9404',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初现金银行",
