@@ -121,7 +121,7 @@
                     <FormItem label="调入仓库：" prop="storeId" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select v-model="Leftcurrentrow.storeId" :disabled="true">
+                          <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -148,7 +148,7 @@
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Tooltip :content="Leftcurrentrow.remark">
-                      <Input disabled v-model="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input v-model="Leftcurrentrow.remark" class="w160" :disabled="Leftcurrentrow.status.value !== 0"></Input>
                       </Tooltip>
                     </FormItem>
                     <FormItem label="创建人：" prop="createUname">
@@ -748,7 +748,7 @@ export default {
       if (errMap) {
         return
       }
-
+      console.log(this.Leftcurrentrow)
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -1000,7 +1000,7 @@ export default {
     //左边列表选中当前行
     async selectTabelData(row) {
       this.dayinCureen = row;
-      this.Leftcurrentrow = row;
+      this.Leftcurrentrow = {...row};
       this.Status = row.status.value;
       this.Leftcurrentrow.storeId = row.storeId;
       if (row.id == undefined) {
