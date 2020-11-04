@@ -303,6 +303,7 @@
         <vxe-table
           class="setPadding"
           border
+          stripe
           resizable
           show-footer
           ref="xTable"

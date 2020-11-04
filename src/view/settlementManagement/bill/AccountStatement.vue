@@ -363,7 +363,7 @@
               :data="data2"
               max-height="400"
               style="width:100%;"
-              show-footer="true"
+              show-footer
               :footer-method="summary"
             >
               <vxe-table-column title="序号" width="50" type="seq"></vxe-table-column>

@@ -321,6 +321,7 @@ export default class OutsidePurchase extends Vue {
     settleTypeId: "",  // 结算方式
     storeId: "", // 入库仓
     remark: "", // 备注
+    versionNo:'',//手工单号
     serviceId: "", // 订单号
     processInstanceId: "",
   }
@@ -446,6 +447,7 @@ export default class OutsidePurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           remark: this.formPlanmain.remark,
+          versionNo:this.formPlanmain.versionNo,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt:this.formPlanmain.advanceAmt,
           processInstanceId: this.formPlanmain.processInstanceId,
