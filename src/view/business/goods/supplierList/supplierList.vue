@@ -1603,6 +1603,7 @@
               }
             }
             //退货原因
+            let arrData = [];
             for (let el in rtnReasonMap) {
               this.purchaseTypeArr.push({value: rtnReasonMap[el], label: el});
             }
