@@ -1676,7 +1676,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
-            // mark: '59',
+            mark: '9403',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初库存",
