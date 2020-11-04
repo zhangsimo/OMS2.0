@@ -6,6 +6,8 @@
       v-model="isLayerValue"
       :placeholder="placeholder"
       @on-search="onSearch"
+      @keydown.native.down.stop.prevent="navigateOptions('next')"
+      @keydown.native.up.stop.prevent="navigateOptions('prev')"
     />
     <transition name="el-zoom-in-top">
       <div ref="popper" class="el-select-menu-wrap w200 fs12"  v-show="isLayer">
@@ -20,7 +22,8 @@
           <p
             class="el-select-menu-item"
             @click="selectItem(item)"
-            v-for="item in options"
+            :class="{'hoverSelect':hoverIndex==index+1}"
+            v-for="(item,index) in options"
             :key="item.id"
             :title="item.fullName"
           >
@@ -56,7 +59,8 @@ export default {
       isLayerValue: "",
       isLayer: false,
       options: [],
-      loading: false
+      loading: false,
+      hoverIndex:0,
     };
   },
   mounted() {
@@ -111,6 +115,31 @@ export default {
       if (classN.length == 0) {
         this.onBlur();
       }
+    },
+    navigateOptions(direction) {
+      // if (!this.visible) {
+      //   this.visible = true;
+      //   return;
+      // }
+      if (this.options.length === 0) return;
+      if (direction === 'next') {
+        this.hoverIndex++;
+        if (this.hoverIndex === this.options.length) {
+          this.hoverIndex = 0;
+        }
+      } else if (direction === 'prev') {
+        this.hoverIndex--;
+        if (this.hoverIndex < 0) {
+          this.hoverIndex = this.options.length - 1;
+        }
+      }
+      // const option = this.options[this.hoverIndex];
+      // if (option.disabled === true ||
+      //   option.groupDisabled === true ||
+      //   !option.visible) {
+      //   this.navigateOptions(direction);
+      // }
+      // this.$nextTick(() => this.scrollToOption(this.hoverOption));
     }
   },
   watch: {
@@ -137,7 +166,7 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-      &:hover {
+      &:hover,&.hoverSelect {
         cursor: pointer;
         background: #f8f8f8;
         color: #e82f2f;
