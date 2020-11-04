@@ -1811,7 +1811,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
             name: "setWarehouse",
-            // mark: '59',
+            mark: '9402',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "仓库设置",

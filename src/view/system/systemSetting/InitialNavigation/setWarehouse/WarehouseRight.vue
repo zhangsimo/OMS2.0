@@ -2,22 +2,22 @@
   <div>
     <div class="warehouseHeader">
       <span class="mr10">仓位定义:</span>
-      <Button class="mr10" @click="openNewWarehouse">
+      <Button class="mr10" @click="openNewWarehouse" v-has="'openNewWarehouse'">
         <span class="center">
           <Icon custom="iconfont iconxinzengicon icons" />新增仓位
         </span>
       </Button>
-      <Button class="mr10 w90" @click="save">
+      <Button class="mr10 w90" @click="save" v-has="'save'">
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons" />保存
         </span>
       </Button>
-      <Button class="mr10" @click="changeType" v-if="oneWarehouse.isDisabled">
+      <Button class="mr10" @click="changeType" v-if="oneWarehouse.isDisabled" v-has="'enable'">
         <span class="center">
           <Icon custom="iconfont iconqiyongicon icons" />启用
         </span>
       </Button>
-      <Button class="mr15" @click="changeType" v-else>
+      <Button class="mr15" @click="changeType" v-else v-has="'enable'">
         <span class="center">
           <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
         </span>
@@ -58,12 +58,12 @@
     </div>
     <div class="warehouseHeader">
       <span class="mr10">员工配置:</span>
-      <Button class="mr10 w130" @click="openNewSaffect">
+      <Button class="mr10 w130" @click="openNewSaffect" v-has="'openNewSaffect'">
         <span class="center">
           <Icon custom="iconfont iconxinzengicon icons" />添加员工
         </span>
       </Button>
-      <Button class="mr10 w90" @click="deleSaffectList">
+      <Button class="mr10 w90" @click="deleSaffectList" v-has="'deleSaffectList'">
         <span class="center">
           <Icon custom="iconfont iconlajitongicon icons" />删除
         </span>
