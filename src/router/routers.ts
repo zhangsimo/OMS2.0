@@ -1691,7 +1691,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
-            // mark: '59',
+            mark: '9401',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "备货级别设置",
