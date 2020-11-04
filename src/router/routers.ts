@@ -1706,7 +1706,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/CustomClassification/CustomClassification",
             name: "CustomClassification",
-            // mark: '59',
+            mark: '9209',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "自定义分类设置",
