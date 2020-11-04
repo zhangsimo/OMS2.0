@@ -586,10 +586,12 @@ export default {
     ListChange(val, selectedData) {
       // console.log(selectedData);
       if (selectedData.length == 1) {
-        this.AssistAccounting = selectedData[0].label;
+        this.AssistAccounting.auxiliaryTypeCode = '3'
+        this.AssistAccounting.fullName = selectedData[0].label;  
         this.auxiliaryTypeCode = "3";
       } else {
-        this.AssistAccounting = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.auxiliaryTypeCode = '3'
         this.auxiliaryTypeCode = "3";
       }
     },
