@@ -1,17 +1,17 @@
 <template>
   <div class="bank-box">
     <div class="bank-header">
-      <Button class="mr20 w90" @click="validEvent">
+      <Button class="mr20 w90" @click="validEvent" v-has="'validEvent'">
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons" />保存
         </span>
       </Button>
-      <Button class="mr10 w90" @click="setAuit" v-if="oneBankList.isInit == 0">
+      <Button class="mr10 w90" @click="setAuit" v-if="oneBankList.isInit == 0" v-has="'setAuit'">
         <span class="center">
           <Icon custom="iconfont iconshenheicon icons" />审核
         </span>
       </Button>
-      <Button class="mr10 w90" @click="refresh">
+      <Button class="mr10 w90" @click="refresh" v-has="'refresh'">
         <span class="center">
           <Icon custom="iconfont iconshuaxinicon icons" />刷新
         </span>
