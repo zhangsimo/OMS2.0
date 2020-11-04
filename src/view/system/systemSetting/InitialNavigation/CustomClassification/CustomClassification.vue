@@ -7,8 +7,8 @@
               <div class="oper-top flex">
                 <div class="wlf">
                   <div class="db">
-                    <Button class="mr10 w90" @click="addProduct"><span class="center"><Icon type="md-add" />新增</span></Button>
-                    <Button class="mr10 w90" @click="saveProduct"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
+                    <Button class="mr10 w90" @click="addProduct" v-has="'addProduct'"><span class="center"><Icon type="md-add" />新增</span></Button>
+                    <Button class="mr10 w90" @click="saveProduct" v-has="'saveProduct'"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
                   </div>
                 </div>
               </div>
@@ -22,8 +22,8 @@
               <div class="oper-top flex">
                 <div class="wlf">
                   <div class="db">
-                    <Button class="mr10 w90" @click="addNature"><span class="center"><Icon type="md-add" />新增</span></Button>
-                    <Button class="mr10 w90" @click="saveNature"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
+                    <Button class="mr10 w90" @click="addNature" v-has="'addNature'"><span class="center"><Icon type="md-add" />新增</span></Button>
+                    <Button class="mr10 w90" @click="saveNature" v-has="'saveNature'"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
                   </div>
                 </div>
               </div>
