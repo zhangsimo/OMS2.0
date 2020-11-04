@@ -1751,7 +1751,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
             name: "brandCarModel",
-            // mark: '59',
+            mark: '9208',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "品牌车型",
