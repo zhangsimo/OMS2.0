@@ -420,7 +420,9 @@ export const mixSelectPartCom = {
       savePartInfo(obj).then(res => {
         if(res.code===0){
           this.$Message.success("保存成功！")
-          this.reload();
+          // this.reload();
+          this.$refs.partInfo.proModal = false;
+          this.$refs.partInfo.btnIsLoadding = false;
         }
         this.$refs.partInfo.saveFlag = false
         // this.$Message.success("保存成功！");

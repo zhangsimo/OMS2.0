@@ -702,7 +702,6 @@ export const mixPartInfo = {
               objReq.partRelevanceList= partRelevanceList || []
               this.saveFlag = true
               this.$emit('throwData', objReq)
-              this.btnIsLoadding = false
             } else {
               //this.$message.error('带*必填')
               this.tabsActive = 'active2'
