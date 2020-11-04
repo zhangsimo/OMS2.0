@@ -1797,7 +1797,7 @@ export default [
             path:
               "/systemSetting/InitialNavigation/storeManagement/storeManagement",
             name: "storeManagement",
-            // mark: '59',
+            mark: '9207',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "门店设置",
