@@ -42,7 +42,7 @@
           </div>
           <div class="db ml20">
             <span>对账单号：</span>
-            <Input v-model="accountNo" type="text" class="w150" clearable/>
+            <Input v-model="accountNo" type="text" class="w150" clearable></Input>
           </div>
           <div class="db ml10">
             <span>往来单位:</span>
@@ -338,14 +338,14 @@
         <Page
           :total="pagetotal"
           show-elevator
-          show-sizer
           class="mt10 tr"
-          :page-size-opts="[10,20,50,100,200]"
           :page-size="page.size"
           :current="page.num"
-          @on-change = "changePage"
+          :page-size-opts="[10, 30, 50, 100 ,200]"
+          @on-change="changePage"
           @on-page-size-change = "changeSize"
           show-total
+          show-sizer
           size="small"
         />
         <div class="flex mt20">
@@ -674,7 +674,7 @@
         model2: "",
         model3: "",
         Reconciliationtype: "",
-        accountNo:"", //对账单号
+        accountNo:"",//对账单号
         Branchstore: [
           {id: '0', name: '全部',shortName:"全部"}
         ],
@@ -1095,13 +1095,13 @@
       },
       // 页码
       changePage(p) {
-        this.page.num = p
-        this.query()
+        this.page.num = p;
+        this.query();
       },
       changeSize(size) {
-        this.page.num = 1
-        this.page.size = size
-        this.query()
+        this.page.num = 1;
+        this.page.size = size;
+        this.query();
       },
       // 查询
       query() {
@@ -1176,7 +1176,7 @@
             ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
             : "",
           guestId: row.guestId,
-          accountNo: row.accountNo,
+          accountNo:  row.accountNo,
           serviceId: row.serviceId
         };
         this.getRecord(obj);

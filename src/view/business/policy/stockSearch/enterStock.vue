@@ -381,7 +381,7 @@
               <vxe-table-column field="strategyName" title="级别"></vxe-table-column>
               <vxe-table-column field="sellPrice" title="销售价" >
                 <template v-slot="{row}">
-                  {{row.strategyName=='最低售价'?(row.sellPrice - row.minRequiredQty):row.sellPrice}}
+                  {{row.strategyName=='最低售价'?`${row.sellPrice} - ${row.minRequiredQty}`:row.sellPrice}}
                 </template>
               </vxe-table-column>
               <vxe-table-column field="updateUname" title="更新人"></vxe-table-column>
