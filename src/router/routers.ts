@@ -1825,7 +1825,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setBank",
             name: "setBank",
-            // mark: '59',
+            mark: '9404',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初现金银行",
