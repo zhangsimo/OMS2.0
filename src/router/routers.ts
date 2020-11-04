@@ -1152,54 +1152,6 @@ export default [
     component: Main,
     children: [
       {
-        path: "/navigator",
-        redirect: "",
-        mark: "7200",
-        meta: { keepAlive: true,
-          title: "领航者驾驶舱",
-        },
-        component: parentView,
-        children: [
-          {
-            path: "balance",
-            name: "balance",
-            mark: "7201",
-            meta: { keepAlive: true,
-              // hideInMenu: true,
-              title: "经营情况表",
-            },
-            component: () =>
-              import("@/view/reportForm/navigator/balance.vue")
-          },
-          {
-            path: "income",
-            name: "income",
-            mark: "7202",
-            meta: {
-              keepAlive: true,
-              // hideInMenu: true,
-              title: "集团利润表",
-
-            },
-            component: () =>
-              import("@/view/reportForm/groupProfit/index.vue")
-          },
-          {
-            path: "property",
-            name: "property",
-            mark: "7203",
-            meta: {
-              keepAlive: true,
-              // hideInMenu: true,
-              title: "集团资产表",
-
-            },
-            component: () =>
-              import("@/view/reportForm/groupLiabilities/index.vue")
-          }
-      ]
-      },
-      {
         path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
         name: "dailySalesStatistics",
         redirect: "",

@@ -61,25 +61,232 @@
       </Button>
     </section>
 
-    <section class="con-box">
-      <div class="inner-box">
+    <section class="con-box" style="padding: 0px">
+      <div class="inner-box hs-index-table">
         <Tabs v-model="tabsName" :animated="false" @on-click="changeTab">
           <TabPane label="可处理信息" name="name1">
-            <Table size="small" height="389" ref="hsOrder" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
+            <!--<Table size="small" height="389" ref="hsOrder" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>-->
+
+
+            <vxe-table
+              ref="hsOrder"
+              :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
+              @checkbox-all="selectTabelData"
+              @checkbox-change="selectTabelData"
+              border
+              stripe
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              :loading="loading"
+              auto-resize
+              align="left"
+              size="mini"
+              @sort-change="sortEnterDateMethod"
+              :sort-config="{trigger: 'cell', defaultSort: {field: 'headquartersStock', order: 'desc'}, orders: ['desc', 'asc']}"
+              :data="hsOrderList1">
+              <vxe-table-column type="seq" width="50" title="序号" ></vxe-table-column>
+              <vxe-table-column type="checkbox" width="40"></vxe-table-column>
+              <vxe-table-column field="ordersNo" title="订单单号" min-width="150"></vxe-table-column>
+              <vxe-table-column field="companyName" title="下单门店" min-width="120"></vxe-table-column>
+              <vxe-table-column field="remark" title="备注" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partInnerId" title="配件内码" min-width="70"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" min-width="100"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" min-width="110"></vxe-table-column>
+              <vxe-table-column field="spec" title="规格" min-width="60"></vxe-table-column>
+              <vxe-table-column field="oemCode" title="OEM码" min-width="100"></vxe-table-column>
+              <!--<vxe-table-column field="inkindNo" title="实物码" min-width="80"></vxe-table-column>-->
+              <vxe-table-column field="orderQty" title="订单数量" min-width="76"></vxe-table-column>
+              <vxe-table-column field="sellOrderQty" title="转销售订单数" min-width="100"></vxe-table-column>
+              <vxe-table-column field="allotOrderQty" title="转调拨单数" min-width="80"></vxe-table-column>
+              <vxe-table-column field="shopStock" title="本店库存" min-width="100" sortable></vxe-table-column>
+              <vxe-table-column field="headquartersStock" title="总部可售库存" min-width="120" sortable></vxe-table-column>
+              <vxe-table-column field="partQuality" title="配件品质" min-width="80"></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carBrandName" title="厂牌" min-width="70"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" min-width="120"></vxe-table-column>
+              <vxe-table-column field="unit" title="单位" min-width="60"></vxe-table-column>
+              <vxe-table-column field="carTypef" title="一级分类" min-width="140"></vxe-table-column>
+              <vxe-table-column field="carTypes" title="二级分类" min-width="140"></vxe-table-column>
+              <vxe-table-column field="orderSource" title="订单来源" min-width="120"></vxe-table-column>
+              <vxe-table-column field="createUname" title="订单人" min-width="90"></vxe-table-column>
+              <vxe-table-column field="createTime" title="订单日期" min-width="160"></vxe-table-column>
+            </vxe-table>
+
+
           </TabPane>
           <TabPane label="待处理" name="name2">
-            <Table size="small" ref="hsOrder" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>
+            <!--<Table size="small" ref="hsOrder" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="hsOrderList1"></Table>-->
+            <vxe-table
+              @checkbox-all="selectTabelData"
+              @checkbox-change="selectTabelData"
+              :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
+              border
+              stripe
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              :loading="loading"
+              auto-resize
+              align="left"
+              size="mini"
+              @sort-change="sortEnterDateMethod"
+              :sort-config="{trigger: 'cell', defaultSort: {field: 'headquartersStock', order: 'desc'}, orders: ['desc', 'asc']}"
+              :data="hsOrderList1">
+              <vxe-table-column type="seq" width="50" title="序号" ></vxe-table-column>
+              <vxe-table-column type="checkbox" width="40"></vxe-table-column>
+              <vxe-table-column field="ordersNo" title="订单单号" min-width="150"></vxe-table-column>
+              <vxe-table-column field="companyName" title="下单门店" min-width="120"></vxe-table-column>
+              <vxe-table-column field="remark" title="备注" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partInnerId" title="配件内码" min-width="70"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" min-width="100"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" min-width="110"></vxe-table-column>
+              <vxe-table-column field="spec" title="规格" min-width="60"></vxe-table-column>
+              <vxe-table-column field="oemCode" title="OEM码" min-width="100"></vxe-table-column>
+              <!--<vxe-table-column field="inkindNo" title="实物码" min-width="80"></vxe-table-column>-->
+              <vxe-table-column field="orderQty" title="订单数量" min-width="76"></vxe-table-column>
+              <vxe-table-column field="sellOrderQty" title="转销售订单数" min-width="90"></vxe-table-column>
+              <vxe-table-column field="allotOrderQty" title="转调拨单数" min-width="80"></vxe-table-column>
+              <vxe-table-column field="shopStock" title="本店库存" min-width="100" sortable></vxe-table-column>
+              <vxe-table-column field="headquartersStock" title="总部可售库存" min-width="120" sortable></vxe-table-column>
+              <vxe-table-column field="partQuality" title="配件品质" min-width="80"></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carBrandName" title="厂牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" min-width="120"></vxe-table-column>
+              <vxe-table-column field="unit" title="单位" min-width="60"></vxe-table-column>
+              <vxe-table-column field="carTypef" title="一级分类" min-width="180"></vxe-table-column>
+              <vxe-table-column field="carTypes" title="二级分类" min-width="180"></vxe-table-column>
+              <vxe-table-column field="orderSource" title="订单来源" min-width="180"></vxe-table-column>
+              <vxe-table-column field="createUname" title="订单人" min-width="180"></vxe-table-column>
+              <vxe-table-column field="createTime" title="订单日期" min-width="180"></vxe-table-column>
+            </vxe-table>
+
           </TabPane>
           <TabPane label="已处理配件查询" name="name3">
-            <Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
+            <!--<Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>-->
+
+            <vxe-table
+              border
+              stripe
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              :loading="loading"
+              auto-resize
+              align="left"
+              size="mini"
+              :data="hsOrderList1">
+              <vxe-table-column type="seq" width="50" title="序号" ></vxe-table-column>
+              <vxe-table-column field="ordersNo" title="订单单号" min-width="150"></vxe-table-column>
+              <vxe-table-column field="companyName" title="下单门店" min-width="120"></vxe-table-column>
+              <vxe-table-column field="remark" title="备注" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partInnerId" title="配件内码" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" min-width="120"></vxe-table-column>
+              <vxe-table-column field="spec" title="规格" min-width="60"></vxe-table-column>
+              <vxe-table-column field="oemCode" title="OEM码" min-width="120"></vxe-table-column>
+              <vxe-table-column field="inkindNo" title="实物码" min-width="80"></vxe-table-column>
+              <vxe-table-column field="orderQty" title="订单数量" min-width="80"></vxe-table-column>
+              <vxe-table-column field="sellOrderQty" title="转销售订单数" min-width="100"></vxe-table-column>
+              <vxe-table-column field="allotOrderQty" title="转调拨单数" min-width="100"></vxe-table-column>
+              <vxe-table-column field="setOrderNum" title="处理数量" min-width="100">
+                <template v-slot="{row}">
+                  {{row.sellOrderQty||row.allotOrderQty}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="headquartersStock" title="处理类型" min-width="100">
+                <template v-slot="{row}">
+                  {{row.state===1?"转销售订单":"转调拨订单"}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="serviceId" title="生成单号" min-width="200"></vxe-table-column>
+              <vxe-table-column field="updateUname" title="处理人" min-width="100"></vxe-table-column>
+              <vxe-table-column field="updateTime" title="处理日期" min-width="150"></vxe-table-column>
+              <vxe-table-column field="shopStock" title="本店库存" min-width="80"></vxe-table-column>
+              <vxe-table-column field="headquartersStock" title="总部库存" min-width="80"></vxe-table-column>
+              <vxe-table-column field="partQuality" title="配件品质" min-width="80"></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carBrandName" title="厂牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" min-width="120"></vxe-table-column>
+              <vxe-table-column field="unit" title="单位" min-width="60"></vxe-table-column>
+              <vxe-table-column field="carTypef" title="一级分类" min-width="180"></vxe-table-column>
+              <vxe-table-column field="carTypes" title="二级分类" min-width="180"></vxe-table-column>
+              <vxe-table-column field="orderSource" title="订单来源" min-width="180"></vxe-table-column>
+              <vxe-table-column field="createUname" title="订单人" min-width="180"></vxe-table-column>
+              <vxe-table-column field="createTime" title="订单日期" min-width="180"></vxe-table-column>
+            </vxe-table>
+
+
           </TabPane>
           <TabPane label="历史订单" name="name4">
-            <Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>
+            <!--<Table size="small" height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart2" :data="hsOrderList1"></Table>-->
+            <vxe-table
+              border
+              stripe
+              height="auto"
+              highlight-hover-row
+              show-overflow="title"
+              resizable
+              :loading="loading"
+              auto-resize
+              align="left"
+              size="mini"
+              :data="hsOrderList1">
+              <vxe-table-column type="seq" width="50" title="序号" ></vxe-table-column>
+              <vxe-table-column field="ordersNo" title="订单单号" min-width="150"></vxe-table-column>
+              <vxe-table-column field="companyName" title="下单门店" min-width="120"></vxe-table-column>
+              <vxe-table-column field="remark" title="备注" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partInnerId" title="配件内码" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" min-width="120"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" min-width="120"></vxe-table-column>
+              <vxe-table-column field="spec" title="规格" min-width="60"></vxe-table-column>
+              <vxe-table-column field="oemCode" title="OEM码" min-width="120"></vxe-table-column>
+              <vxe-table-column field="inkindNo" title="实物码" min-width="80"></vxe-table-column>
+              <vxe-table-column field="orderQty" title="订单数量" min-width="80"></vxe-table-column>
+              <vxe-table-column field="sellOrderQty" title="转销售订单数" min-width="100"></vxe-table-column>
+              <vxe-table-column field="allotOrderQty" title="转调拨单数" min-width="100"></vxe-table-column>
+              <vxe-table-column field="setOrderNum" title="处理数量" min-width="100">
+                <template v-slot="{row}">
+                  {{row.sellOrderQty||row.allotOrderQty}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="headquartersStock" title="处理类型" min-width="100">
+                <template v-slot="{row}">
+                  {{row.state===1?"转销售订单":"转调拨订单"}}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="serviceId" title="生成单号" min-width="200"></vxe-table-column>
+              <vxe-table-column field="updateUname" title="处理人" min-width="100"></vxe-table-column>
+              <vxe-table-column field="updateTime" title="处理日期" min-width="150"></vxe-table-column>
+              <vxe-table-column field="shopStock" title="本店库存" min-width="80"></vxe-table-column>
+              <vxe-table-column field="headquartersStock" title="总部库存" min-width="80"></vxe-table-column>
+              <vxe-table-column field="partQuality" title="配件品质" min-width="80"></vxe-table-column>
+              <vxe-table-column field="partBrand" title="品牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carBrandName" title="厂牌" min-width="80"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" min-width="120"></vxe-table-column>
+              <vxe-table-column field="unit" title="单位" min-width="60"></vxe-table-column>
+              <vxe-table-column field="carTypef" title="一级分类" min-width="180"></vxe-table-column>
+              <vxe-table-column field="carTypes" title="二级分类" min-width="180"></vxe-table-column>
+              <vxe-table-column field="orderSource" title="订单来源" min-width="180"></vxe-table-column>
+              <vxe-table-column field="createUname" title="订单人" min-width="180"></vxe-table-column>
+              <vxe-table-column field="createTime" title="订单日期" min-width="180"></vxe-table-column>
+            </vxe-table>
           </TabPane>
         </Tabs>
-        <div ref="planPage">
-        <Page size="small" class-name="page-con tr" :current="page.num" :total="page.total" :page-size="page.size" @on-change="selectNum"
-        @on-page-size-change="selectPage" show-sizer show-total></Page>
+        <div class="p10">
+          <vxe-pager
+            background
+            size="mini"
+            :current-page.sync="page.num"
+            :page-size.sync="page.size"
+            :total="page.total"
+            :page-sizes="[100,200]"
+            @page-change="selectNum"
+            :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          </vxe-pager>
         </div>
       </div>
     </section>
@@ -276,7 +483,7 @@
         //分页
         page: {
           total: 0,
-          size:10,
+          size:100,
           num: 1
         },
         totalMoney: '',//总价
@@ -286,353 +493,7 @@
         danhao:'',//生成单号
         modal3:false,
         modal3Text:'生成销售订单成功',
-        //配件名称查询层表头
-        columnsPart: [
-          {
-            title: "序号",
-            width: 50,
-            type: "index",
-            tooltip: true,
-          },
-          {
-            title: "序号",
-            type: "selection",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "订单单号",
-            key: "ordersNo",
-            minWidth: 150,
-            tooltip: true,
-          },
-          {
-            title: "下单门店",
-            key: "companyName",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "备注",
-            key: "remark",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "配件内码",
-            key: "partInnerId",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "配件编码",
-            key: "partCode",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "配件名称",
-            key: "partName",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "规格",
-            key: "spec",
-            minWidth: 60,
-            tooltip: true,
-          },
-          {
-            title: "OEM码",
-            key: "oemCode",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "实物码",
-            key: "inkindNo",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "订单数量",
-            key: "orderQty",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "转销售订单数",
-            key: "sellOrderQty",
-            minWidth: 100,
-            tooltip: true,
-          },
-          {
-            title: "转调拨单数",
-            key: "allotOrderQty",
-            minWidth: 100,
-            tooltip: true,
-          },
-          {
-            title: "本店库存",
-            key: "shopStock",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "总部库存",
-            key: "headquartersStock",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "配件品质",
-            key: "partQuality",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "品牌",
-            key: "partBrand",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "厂牌",
-            key: "carBrandName",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "品牌车型",
-            key: "carModelName",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "单位",
-            key: "unit",
-            minWidth: 60,
-            tooltip: true,
-          },
-          {
-            title: "一级分类",
-            key: "carTypef",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "二级分类",
-            key: "carTypes",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "订单来源",
-            key: "orderSource",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "订单人",
-            key: "createUname",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "订单日期",
-            key: "createTime",
-            minWidth: 180,
-            tooltip: true,
-          },
-        ],
-        columnsPart2: [
-          {
-            title: "序号",
-            width: 50,
-            type: "index",
-            tooltip: true,
-          },
-          {
-            title: "订单单号",
-            key: "ordersNo",
-            minWidth: 150,
-            tooltip: true,
-          },
-          {
-            title: "下单门店",
-            key: "companyName",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "备注",
-            key: "remark",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "配件内码",
-            key: "partInnerId",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "配件编码",
-            key: "partCode",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "配件名称",
-            key: "partName",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "规格",
-            key: "spec",
-            minWidth: 60,
-            tooltip: true,
-          },
-          {
-            title: "OEM码",
-            key: "oemCode",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "实物码",
-            key: "inkindNo",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "订单数量",
-            key: "orderQty",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "转销售订单数",
-            key: "sellOrderQty",
-            minWidth: 100,
-            tooltip: true,
-          },
-          {
-            title: "转调拨单数",
-            key: "allotOrderQty",
-            minWidth: 100,
-            tooltip: true,
-          },
-          {
-            title: "处理数量",
-            key: "setOrderNum",
-            minWidth: 100,
-            tooltip: true,
-            render:(h,p) => {
-              return h('span',p.row.sellOrderQty||p.row.allotOrderQty)
-            }
-          },
-          {
-            title: "处理类型",
-            key: "state",
-            minWidth: 100,
-            render:(h,p) => {
-              return h('span',p.row.state===1?"转销售订单":"转调拨订单")
-            },
-            tooltip: true,
-          },
-          {
-            title: "生成单号",
-            key: "serviceId",
-            minWidth: 200,
-            tooltip: true,
-          },
-          {
-            title: "处理人",
-            key: "updateUname",
-            minWidth: 100,
-            tooltip: true,
-          },
-          {
-            title: "处理日期",
-            key: "updateTime",
-            minWidth: 150,
-            tooltip: true,
-          },
-          {
-            title: "本店库存",
-            key: "shopStock",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "总部库存",
-            key: "headquartersStock",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "配件品质",
-            key: "partQuality",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "品牌",
-            key: "partBrand",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "厂牌",
-            key: "carBrandName",
-            minWidth: 80,
-            tooltip: true,
-          },
-          {
-            title: "品牌车型",
-            key: "carModelName",
-            minWidth: 120,
-            tooltip: true,
-          },
-          {
-            title: "单位",
-            key: "unit",
-            minWidth: 60,
-            tooltip: true,
-          },
-          {
-            title: "一级分类",
-            key: "carTypef",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "二级分类",
-            key: "carTypes",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "订单来源",
-            key: "orderSource",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "订单人",
-            key: "createUname",
-            minWidth: 180,
-            tooltip: true,
-          },
-          {
-            title: "订单日期",
-            key: "createTime",
-            minWidth: 180,
-            tooltip: true,
-          },
-        ],
+        defaultSort:'desc',
         loading:false,
         //tabs切换标签
         tabsName:'name1',
@@ -717,6 +578,7 @@
         let params = {};
         let data = {};
         data.status = this.searchData.status;
+        data.sort = this.defaultSort;
         if(this.searchData.partName.trim()){
           data.partName = this.searchData.partName.trim();
         }
@@ -772,8 +634,10 @@
       },
       resetData(){
         this.page.num = 1;
-        this.page.size = 10;
+        this.page.size = 100;
+        this.page.total = 0;
         this.selectTableDataArr = [];
+        this.hsOrderList1 = [];
         this.showModel1 = false;
         this.showModel2 = false;
         this.getListData();
@@ -1193,8 +1057,9 @@
         this.selectvalue = date.value
       },
       //切换页面
-      selectNum(val) {
-        this.page.num = val
+      selectNum({currentPage, pageSize}) {
+        this.page.num = currentPage;
+        this.page.size = pageSize;
         this.getListData()
       },
       //切换页数
@@ -1234,8 +1099,9 @@
 
       },
       //获取下侧表格一行选中的数据
-      selectTabelData(v) {
-        this.selectTableDataArr = v;
+      selectTabelData({records }) {
+        console.log(records)
+        this.selectTableDataArr = records;
       },
       //计算表格数据
       countAmount(row) {
@@ -1269,6 +1135,10 @@
             return null
           })
         ]
+      },
+      sortEnterDateMethod({order}) {
+        // this.defaultSort = order;
+        // this.getListData();
       },
     },
     watch: {
@@ -1350,6 +1220,31 @@
       &:hover{
         background: #eee;
       }
+    }
+  }
+</style>
+<style lang="less">
+  .hs-index-table{
+    display: flex;
+    flex-flow: column;
+    .ivu-tabs{
+      flex: 1;
+      display: flex;
+      flex-flow: column;
+      .ivu-tabs-content{
+        flex: 1;
+        display: flex;
+        flex-flow: column;
+        .ivu-tabs-tabpane{
+          flex: 1;
+        }
+      }
+    }
+    .ivu-tabs-bar{
+      margin-bottom:0px;
+    }
+    .vxe-table.size--mini .vxe-body--column.col--ellipsis, .vxe-table.size--mini .vxe-footer--column.col--ellipsis, .vxe-table.size--mini .vxe-header--column.col--ellipsis, .vxe-table.vxe-editable.size--mini .vxe-body--column{
+      height: 30px;
     }
   }
 </style>

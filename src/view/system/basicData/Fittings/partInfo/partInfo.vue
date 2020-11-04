@@ -393,7 +393,7 @@
 
 <script>
 import { mixPartInfo } from "./mixPartInfo";
-import SearchPartName from "./searchPartName";
+import SearchPartName from "_c/partInfo/searchPartName";
 
 export default {
   name: "partInfo",

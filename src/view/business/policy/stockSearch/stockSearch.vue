@@ -117,9 +117,9 @@
               <Icon type="ios-search" size="14"/>
               查询
             </Button>
-            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">
-              <i class="iconfont mr5 icondaochuicon"></i> 导出
-            </Button>
+<!--            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
+<!--            </Button>-->
             <Poptip v-model="visible" placement="bottom">
               <Button class="mr10 w90">
                 仓库设置
@@ -1045,9 +1045,11 @@
         this.getAllStocks();
       },
       //汇总查看
-      showList(val) {
-        this.selectTableData = val;
-        this.$refs.look.getEnters();
+      showList(row) {
+        this.selectTableData = row;
+        setTimeout(()=>{
+          this.$refs.look.getEnters();
+        },1)
       },
       // 批次库存请求
       async getLotStocks() {

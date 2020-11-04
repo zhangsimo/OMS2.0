@@ -70,19 +70,19 @@
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
-              </div>
-            </Poptip>
+<!--          <div class="db ml10">-->
+<!--            <Poptip placement="bottom">-->
+<!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+<!--              <div slot="content">-->
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>-->
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>-->
+<!--              </div>-->
+<!--            </Poptip>-->
             <!-- <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
             </button>-->
-          </div>
+<!--          </div>-->
         </div>
       </div>
     </section>
@@ -346,6 +346,7 @@
           @on-change="changePage"
           @on-page-size-change="changeSize"
           show-total
+          show-sizer
           size="small"
         />
         <div class="flex mt20">
@@ -1176,7 +1177,7 @@
             ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
             : "",
           guestId: row.guestId,
-          accountNo: row.accountNo,
+          accountNo:  row.accountNo,
           serviceId: row.serviceId
         };
         this.getRecord(obj);
