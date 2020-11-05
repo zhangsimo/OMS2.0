@@ -1265,13 +1265,13 @@
         params.page = this.Left.page.num - 1;
         params.size = this.Left.page.size;
         //创建日期
-        if (this.moreArr.createData != null) {
+        if (this.moreArr.createData != null && this.moreArr.createData[0] != "") {
           // console.log(this.moreArr.createData);
           data.startTime = this.moreArr.createData[0] + " 00:00:00";
           data.endTime = this.moreArr.createData[1] + " 23:59:59";
         }
         //提交日期
-        if (this.moreArr.submitData != null) {
+        if (this.moreArr.submitData != null && this.moreArr.submitData[0] != "") {
           data.auditStartTime = this.moreArr.submitData[0] + " 00:00:00";
           data.auditEndTime = this.moreArr.submitData[1] + " 23:59:59";
         }
@@ -1317,6 +1317,7 @@
           if (res.code === 0) {
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
+            this.selection(this.Left.tbdata[0])
           }
         });
       },
