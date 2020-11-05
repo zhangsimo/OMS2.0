@@ -267,7 +267,7 @@
                       placeholder="请输入手工单号"
                       class="w160"
                       v-model="formPlanmain.versionNo"
-                      type="number"
+                      @on-keyup="versionNoFun"
                     />
                   </FormItem>
                 </Form>
