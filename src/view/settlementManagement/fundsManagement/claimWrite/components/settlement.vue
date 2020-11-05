@@ -366,7 +366,7 @@
           var bool = true;
           this.tableData.map(row => {
             let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
-            let reg = /^([1-9]\d*(\.\d+)?)$/
+            let reg = /^([0-9]\d*(\.\d+)?)$/
             if (row.thisClaimedAmt && row.thisClaimedAmt > Money) {
               this.$message.error("本次认领金额录入有误，请重新录入")
               bool = false
