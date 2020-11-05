@@ -340,7 +340,6 @@ export default {
         this.taxRate = res.data["TaxRate"] || [];
         //票据类型
         this.invoiceMap = res.data["CS00107"] || [];
-        console.log(this.invoiceMap)
       }
     },
 

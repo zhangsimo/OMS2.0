@@ -63,21 +63,57 @@
             switch (type) {
               case "FY001":
                 data.parentCode = 6602
+                data.titleTypeCode="601"
                 break;
               case "FY002":
                 data.parentCode = 6603
+                data.titleTypeCode="601"
                 break;
               case "FY003":
                 data.parentCode = 6601
+                data.titleTypeCode="601"
                 break;
               case "FY004":
                 data.parentCode = 6403
+                data.titleTypeCode="601"
                 break;
               case "FY005":
                 data.parentCode = 6711
+                data.titleTypeCode="601"
+                break;
+              case "FY006":
+                data.parentCode = 6401
+                data.titleTypeCode="601"
+                break;
+              case "FY007":
+                data.parentCode = 6402.01
+                data.titleTypeCode="601"
+                break;
+              case "FY008":
+                data.parentCode = 1701
+                data.titleTypeCode="101"
+                break;
+              case "FY009":
+                data.parentCode = 1601
+                data.titleTypeCode="101"
+                break;
+              case "FY010":
+                data.parentCode = 1604
+                data.titleTypeCode="101"
+                break;
+              case "FY011":
+                data.parentCode = 1405
+                data.titleTypeCode="101"
+                break;
+              case "FY012":
+                data.parentCode = 1532
+                data.titleTypeCode="101"
+                break;
+              case "FY013":
+                data.parentCode = 1801
+                data.titleTypeCode="101"
                 break;
             }
-          data.titleTypeCode="601"
           data.titleCode=this.subjectModel
             let res = await getSubjectMsg(data)
           if (res.code === 0){
