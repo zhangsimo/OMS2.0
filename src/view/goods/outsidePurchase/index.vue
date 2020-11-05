@@ -437,7 +437,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -454,7 +454,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="orderPrice"
                   title="采购单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

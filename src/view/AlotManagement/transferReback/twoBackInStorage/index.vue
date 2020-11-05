@@ -211,7 +211,7 @@
                   width="120"
                   field="storeShelf"
                   title="仓位"
-                  :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
+                  :edit-render="{name: 'input',autoselect: true,immediate: true, events: {blur: checkSelf}}"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="unit"

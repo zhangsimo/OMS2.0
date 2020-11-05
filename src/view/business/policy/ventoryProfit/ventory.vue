@@ -596,7 +596,7 @@
       getDataQuick(v) {
         this.queryTime = v;
         this.Left.page.num = 1;
-        this.Left.page.size = 10;
+        // this.Left.page.size = 20;
         this.getList();
       },
       // //盘点仓库

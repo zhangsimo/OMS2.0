@@ -2,7 +2,8 @@
   <Modal
     title="添加配件"
     v-model="shows"
-    :styles="{ top: '50px', width: '1200px' }"
+    draggable
+    width="1200"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
@@ -16,19 +17,23 @@
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <Input ref="input" style="width: 100px" placeholder="编码" v-model="partCode" @on-enter="query"/>
+          <!--<Input ref="input" style="width: 100px" placeholder="编码" v-model="partCode" @on-enter="query"/>-->
+          <el-input @focus="focus($event)" ref="Input" style="width: 100px" placeholder="编码" v-model="partCode" @change="query"></el-input>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <Input placeholder="内码" style="width: 100px" v-model="partId" @on-enter="query"/>
+          <!--<Input placeholder="内码" style="width: 100px" v-model="partId" @on-enter="query"/>-->
+          <el-input @focus="focus($event)" ref="InputpartId" style="width: 100px" placeholder="内码" v-model="partId" @change="query"></el-input>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <Input placeholder="名称" style="width: 100px" v-model="partName" @on-enter="query"/>
+          <!--<Input placeholder="名称" style="width: 100px" v-model="partName" @on-enter="query"/>-->
+          <el-input @focus="focus($event)" ref="InputpartName" style="width: 100px" placeholder="名称" v-model="partName" @change="query"></el-input>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <Input placeholder="OE码" style="width: 100px" v-model="oemCode" @on-enter="query"/>
+          <!--<Input placeholder="OE码" style="width: 100px" v-model="oemCode" @on-enter="query"/>-->
+          <el-input @focus="focus($event)" ref="InputoemCode" style="width: 100px" placeholder="OE码" v-model="oemCode" @change="query"></el-input>
         </div>
 
         <!-- <div class="db mr5">
@@ -75,7 +80,7 @@
         resizable
         align="center"
         ref="xTable1"
-        height="500"
+        height="400"
         column-min-width="100px"
         size="mini"
         :data="tableData"
@@ -241,7 +246,7 @@
       let tableRef: any = this.$refs.xTable1;
       tableRef.refreshColumn();
       // tableRef.recalculate(true)
-      this.$nextTick(() => (this.$refs.input as any).focus());
+      this.$nextTick(() => (this.$refs.Input as any).focus());
       let refDate:any = this.$refs.quickDate;
       refDate.searchQuick = '7';
       refDate.getval('7');
@@ -266,6 +271,7 @@
       ;
       row.row.sourceDetailId = row.row.id;
       Reflect.deleteProperty(row.row, 'id');
+      this.focusInput();
       this.$emit("dblclickfun", [row.row])
     }
 
@@ -283,6 +289,7 @@
         Reflect.deleteProperty(el, 'id');
         return el
       })
+      this.focusInput();
       return throwSelectRow;
     }
 
@@ -326,6 +333,7 @@
         });
       }
       msg();
+      this.focusInput();
       return data;
     }
 
@@ -476,6 +484,27 @@
         xTable.updateData();
         this.loading=false
       }
+    }
+
+    private focus(event){
+      event.currentTarget.select();
+    }
+    private focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          let ref:any = this.$refs.Input;
+          ref.focus();
+        }else if(this.partId){
+          let ref:any = this.$refs.InputpartId;
+          ref.focus();
+        }else if(this.partName){
+          let ref:any = this.$refs.InputpartName;
+          ref.focus();
+        }else if(this.oemCode){
+          let ref:any = this.$refs.InputoemCode;
+          ref.focus();
+        }
+      })
     }
 
     private changePageToTable(p: number) {
