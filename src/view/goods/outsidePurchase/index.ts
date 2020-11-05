@@ -979,6 +979,11 @@ export default class OutsidePurchase extends Vue {
       }
     }
   }
+  private versionNoFun(event:any){
+    setTimeout(()=>{
+      this.formPlanmain.versionNo = this.formPlanmain.versionNo.replace(/[\W]/g,'')
+    },0);
+  }
 
   // 高级查询
   private moreData: any = {};
