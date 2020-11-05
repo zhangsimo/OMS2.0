@@ -222,13 +222,13 @@
                       ></Input>
                       </Tooltip>
                     </FormItem>
-                    <FormItem label="申请人：" prop="planDate">
-                      <Input
-                        disabled
-                        class="w160"
-                        :value="Leftcurrentrow.createUname"
-                      ></Input>
-                    </FormItem>
+                    <!--<FormItem label="申请人：" prop="planDate">-->
+                      <!--<Input-->
+                        <!--disabled-->
+                        <!--class="w160"-->
+                        <!--:value="Leftcurrentrow.createUname"-->
+                      <!--&gt;</Input>-->
+                    <!--</FormItem>-->
                     <FormItem label="退回申请号：" prop="planOrderNum">
                       <Tooltip :content="serviceId">
                       <Input disabled class="w160" :value="serviceId"></Input>
@@ -279,6 +279,7 @@
                   :data="Leftcurrentrow.detailVOS"
                   :stripe="true"
                   :footer-method="addFooter"
+                  show-footer
                   :edit-rules="validRules"
                   :edit-config="
                     Leftcurrentrow.status.value === 0
@@ -349,6 +350,7 @@
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 </vxe-table>
+                <div class="table-bottom-text flex"><span>创建人：{{Leftcurrentrow?Leftcurrentrow.createUname:""}}</span><span>创建日期：{{Leftcurrentrow?Leftcurrentrow.createTime:""}}</span><span>提交人：{{Leftcurrentrow?Leftcurrentrow.commitUname:""}}</span><span>提交日期：{{Leftcurrentrow?Leftcurrentrow.commitDate:""}}</span></div>
               </div>
             </Split>
           </div>
@@ -1087,9 +1089,9 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 144;
+        this.leftTableHeight = wrapH - 110;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
       });
     },
     //快速查询日期
@@ -1230,7 +1232,27 @@ export default {
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
     //footer计算
-    addFooter() {},
+    addFooter({columns, data}) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "和值";
+          }
+          if (columnIndex === 1) {
+            return `共 ${(data||[]).length} 条`;
+          }
+          if (
+            ["applyQty", "hasAcceptQty", "hasOutQty","hasInQty"].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property, columnIndex);
+          }
+          // if (column.property === "orderAmt") {
+          //   return ` ${this.countAllAmount(data)} `;
+          // }
+          return null;
+        }),
+      ];
+    },
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
@@ -1472,9 +1494,9 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+    // window.onresize = () => {
+    //   this.getDomHeight();
+    // };
 
     this.warehouse();
   }
@@ -1527,7 +1549,7 @@ export default {
   margin-top: 20px;
 }
 .con-box {
-  height: 600px;
+  /*height: 600px;*/
 }
 .w550 {
   width: 580px;

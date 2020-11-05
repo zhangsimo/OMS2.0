@@ -985,7 +985,7 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 100;
+        this.leftTableHeight = wrapH - 110;
         //获取右侧表格高度
         this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
       });
@@ -1313,9 +1313,9 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+    // window.onresize = () => {
+    //   this.getDomHeight();
+    // };
     this.warehouse();
   }
 };

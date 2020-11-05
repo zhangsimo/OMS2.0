@@ -1161,9 +1161,9 @@
             if (columnIndex === 0) {
               return "和值";
             }
-            // if (columnIndex === 9) {
-            //   return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
-            // }
+            if (columnIndex === 2) {
+              return `共${(data||[]).length}条`
+            }
             if (
               ["canReQty", "orderQty", "orderPrice"].includes(column.property)
             ) {
@@ -1622,9 +1622,9 @@
           let planBtnH = this.$refs.planBtn.offsetHeight;
           // let planPageH = this.$refs.planPage.offsetHeight;
           //获取左侧侧表格高度
-          this.leftTableHeight = wrapH - 70;
+          this.leftTableHeight = wrapH - 100;
           //获取右侧表格高度
-          this.rightTableHeight = wrapH - planFormH - planBtnH - 70;
+          this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
         });
       },
       showOwen() {

@@ -925,9 +925,9 @@ export default class PlannedPurchaseOrder extends Vue {
       let planBtnH = planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 70;
+      this.leftTableHeight = wrapH - 100;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 78;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
     });
   }
 
