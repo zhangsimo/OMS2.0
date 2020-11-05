@@ -338,7 +338,7 @@
             show-overflow="tooltip"
             field="orderQty"
             title="数量"
-            :edit-render="{name: 'input',attrs: {disabled: false}}"
+            :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
             width="100"
           >
             <template v-slot:edit="{ row }">

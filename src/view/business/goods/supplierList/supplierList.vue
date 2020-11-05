@@ -353,14 +353,14 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="退货数量"
-                  :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                  :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
                   field="orderPrice"
                   title="退货单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="orderAmt" title="退货金额" width="100">
