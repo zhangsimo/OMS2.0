@@ -244,9 +244,9 @@
                      <vxe-table-column  show-overflow="tooltip"
                        field="applyQty"
                        title="申请数量"
-                       :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
+                       :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}" width="100">
                     </vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="90"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="90"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="50"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
