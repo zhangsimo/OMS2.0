@@ -41,7 +41,7 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select> -->
-            <input type="text" class="h30" v-model="companyId" />    
+            <input type="text" class="h30" v-model="companyId" />
           </div>
           <div class="db ml20">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -536,14 +536,17 @@ export default {
         this.$refs.claimModal.open();
         // this.claimedList(1);
       } else {
-        if (Object.keys(this.currRow).length !== 0) {
+        if (
+          Object.keys(this.currRow).length !== 0 &&
+          this.currRow.paymentNo &&
+          !this.currRow.expenseClaimAmount) {
           // this.claimModal = true;
           this.claimTit = "其他付款支出认领";
           this.amountType=2;
           this.$refs.claimModal.open();
           // this.claimedList(2);
         } else {
-          this.$message.error("请选择数据！");
+          this.$message.error("请选择有其他收款支出单号且未支出认领的数据！");
         }
       }
     },

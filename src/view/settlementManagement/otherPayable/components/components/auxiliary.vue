@@ -25,6 +25,7 @@
                   resizable
                   :data="AssistTableDataKeHu"
                   stripe
+                  ref="AssistTableDataKeHu"
                   size="mini"
                   align="center"
                   :auto-resize="true"
@@ -76,6 +77,7 @@
                 <vxe-table
                   border
                   resizable
+                  ref="AssistTableDataGongYingShang"
                   :data="AssistTableDataGongYingShang"
                   stripe
                   size="mini"
@@ -110,7 +112,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department">
+          <TabPane label="部门" name="department" :disabled="$parent.titleName=='其他收款认领'">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -138,6 +140,7 @@
                 resizable
                 :data="AssistTableDataGeRen"
                 stripe
+                ref="AssistTableDataGeRen"
                 size="mini"
                 align="center"
                 :auto-resize="true"
@@ -200,6 +203,7 @@
                     border
                     resizable
                     :data="AssistTableDataOther"
+                    ref="AssistTableDataOther"
                     stripe
                     size="mini"
                     align="center"
@@ -665,6 +669,12 @@ export default {
     },
     showOrhideModel(v){
       if(v){
+        this.formDynamic.fund="";
+        this.AssistAccounting = "";
+        this.$refs.AssistTableDataKeHu.clearRadioRow()
+        this.$refs.AssistTableDataGongYingShang.clearRadioRow()
+        this.$refs.AssistTableDataGeRen.clearRadioRow()
+        this.$refs.AssistTableDataOther.clearRadioRow()
         if(this.list.length==0){
           this.getListCompany();
         }

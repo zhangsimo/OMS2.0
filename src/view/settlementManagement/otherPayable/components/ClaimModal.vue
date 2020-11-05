@@ -86,7 +86,7 @@
 <script>
 import PreClaimModal from "./PreClaimModal"
 import voucherInput from "./components/auxiliary";
-import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
+import { addClaim ,expenditureClaim} from "_api/settlementManagement/otherPayable/otherPayable";
 import {saveAccount} from "../../../../api/settlementManagement/seleteAccount";
 import {wirteAccount} from "../../../../api/settlementManagement/seleteAccount";
 
@@ -156,7 +156,7 @@ export default {
       this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
       if(this.titleName=='其他付款支出认领'){
-        wirteAccount({accountNo:this.$parent.serviceId,sign:11}).then(res=>{
+        wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
@@ -184,13 +184,6 @@ export default {
         this.$message.error('请点击选择单据按钮，选择数据')
         return
       }
-      // this.$refs.xTree.validate((err) => {
-      //   if(err){
-      //     this.$message.error('待认领金额输入不正确')
-      //   }else{
-      //     this.$message.success('认领成功')
-      //   }
-      // })
       let flag1 = this.tableData.some(v => {
         return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.unClaimedAmt
       })
@@ -206,7 +199,7 @@ export default {
         return
       }
 
-      if(!this.voucherItem.id && this.titleName!='其他收款认领'){
+      if(this.titleName!='其他付款支出认领' && this.calculation==""){
         this.$message.error('请选择辅助核算')
         return
       }
@@ -220,8 +213,9 @@ export default {
       if(this.titleName=='其他收款认领'){
         let obj = {
           financeAccountCashList: this.financeAccountCashList,
-          claimType: this.$parent.claimType,
-          guestId: this.voucherItem.id
+          claimType: 0,
+          guestId: this.voucherItem.id,
+          paymentTypeCode:  this.$refs.voucherInput.formDynamic.fund || ""
         }
         addClaim(obj).then(res => {
           if(res.code === 0){
@@ -243,7 +237,7 @@ export default {
           two:this.dataTwo,
           three:arr
         }
-        saveAccount(data).then(res=>{
+        expenditureClaim(data).then(res=>{
           if(res.code===0){
             this.$message.error("认领成功")
             this.visibal = false
@@ -270,7 +264,7 @@ export default {
 
     // 选择辅助计算弹框
     chooseAuxiliary(){
-      this.$refs.voucherInput.subjectModelShowassist = true
+      this.$refs.voucherInput.subjectModelShowassist = true;
     },
 
     // 选中的数据拼接去重
