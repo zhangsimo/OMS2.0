@@ -2,8 +2,8 @@
   <div>
     <div class='left'>
       <span class="mr10">仓库定义:</span>
-      <Button class="mr10" @click="addWarehouse"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增</span></Button>
-      <Button class="mr10" @click="changeWarehouse"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改</span></Button>
+      <Button class="mr10" @click="addWarehouse" v-has="'addWarehouse'"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增</span></Button>
+      <Button class="mr10" @click="changeWarehouse" v-has="'changeWarehouse'"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改</span></Button>
     </div>
     <div class="houseTitle">
       <ul ref="lists">

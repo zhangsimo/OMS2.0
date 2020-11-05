@@ -2,13 +2,13 @@
   <main class="inventory">
     <!-- z主表工具按钮 -->
     <div style="line-height:45px">
-      <Button class="mr10 w90" @click="insertEvent(-1)">
+      <Button class="mr10 w90" @click="insertEvent(-1)" v-has="'insertEvent'">
         <Icon type="md-add" />新增
       </Button>
-      <Button type="default" class="mr10 w90" @click="save">
+      <Button type="default" class="mr10 w90" @click="save" v-has="'save'">
         <i class="iconfont mr5 iconbaocunicon"></i>保存
       </Button>
-      <Button class="mr10 w90" type="default" @click="check" v-if="flag">
+      <Button class="mr10 w90" type="default" @click="check" v-if="flag" v-has="'check'">
         <Icon type="md-checkmark" />审核
       </Button>
     </div>
@@ -97,7 +97,7 @@
           :on-success="handleSuccess"
           :data="{mainId:mid}"
         >
-          <Button class="mr10 w90" v-show="oneWarehouse.auditSign == 0">
+          <Button class="mr10 w90" v-show="oneWarehouse.auditSign == 0" v-has="'upload'">
             <span class="center">
               <Icon custom="iconfont icondaoruicon icons" />导入
             </span>
@@ -105,7 +105,7 @@
         </Upload>
       </div>
       <div class="db">
-        <Button type="default" @click="downloadFormwork" class="w90 mr10">下载模板</Button>
+        <Button type="default" @click="downloadFormwork" class="w90 mr10" v-has="'download'">下载模板</Button>
       </div>
     </div>
     <!--  副表 -->

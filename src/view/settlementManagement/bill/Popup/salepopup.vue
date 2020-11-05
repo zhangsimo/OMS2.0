@@ -407,7 +407,7 @@ export default {
         applyAmt: "", //申请开票金额
         address: "", //收件地址
         remark: "", //备注
-        applyTaxAmt: "", //本次申请开票含税金额
+        applyTaxAmt: 0, //本次申请开票含税金额
         underTicketExplain: "", //欠票未全金额开具说明
         phone: "", //电话
         notTaxAmt: "", //不含税金额

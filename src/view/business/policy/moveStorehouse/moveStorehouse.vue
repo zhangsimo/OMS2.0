@@ -302,7 +302,7 @@
                   field="orderQty"
                   title="数量"
                   width="100"
-                  :edit-render="{name: 'input', attrs: {type: 'number',disabled: false},events: {change: numChangeEvent}}"
+                  :edit-render="{name: 'input',autoselect: true , attrs: {type: 'number',disabled: false},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="carModelName" title="品牌车型" width="100"></vxe-table-column>

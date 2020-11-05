@@ -1684,7 +1684,9 @@
       // })
       this.getShop()
       this.proTypeList.map(itm => {
+        if(this.$refs.registrationEntry){
         this.$refs.registrationEntry.orgName = itm.name;
+        }
       });
     },
 

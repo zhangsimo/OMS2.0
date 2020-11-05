@@ -371,6 +371,26 @@ export const mixSelectPartCom = {
       this.getCarClassifysFun();
       this.$nextTick(() => this.$refs.elinput.focus())
     },
+
+    focus(event){
+      event.currentTarget.select();
+    },
+    focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          this.$refs.elinput.focus();
+        }else if(this.partId){
+          this.$refs.elinputpartId.focus();
+        }else if(this.partName){
+          this.$refs.elinputpartName.focus();
+        }else if(this.oemCode){
+          this.$refs.elinputoemCode.focus();
+        }
+
+      })
+    },
+
+
     //配件表格点击的行
     selectTabelData(v) {
       this.selectTableItem = v;
@@ -379,17 +399,7 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
         this.$emit("selectPartName", item);
-        this.$nextTick(() => {
-          if(this.partCode){
-            this.$refs.elinput.focus();
-          }else if(this.partId){
-            this.$refs.elinputpartId.focus();
-          }else if(this.partName){
-            this.$refs.elinputpartName.focus();
-          }else if(this.oemCode){
-            this.$refs.elinputoemCode.focus();
-          }
-        })
+        this.focusInput();
       } else {
         this.$Message.error("请选择数据");
       }
@@ -420,7 +430,9 @@ export const mixSelectPartCom = {
       savePartInfo(obj).then(res => {
         if(res.code===0){
           this.$Message.success("保存成功！")
-          this.reload();
+          // this.reload();
+          this.$refs.partInfo.proModal = false;
+          this.$refs.partInfo.btnIsLoadding = false;
         }
         this.$refs.partInfo.saveFlag = false
         // this.$Message.success("保存成功！");
@@ -466,11 +478,13 @@ export const mixSelectPartCom = {
       } else {
         this.selectTableItem = [v];
         this.$emit("selectPartName", this.selectTableItem);
+        this.focusInput();
       }
     },
     //修改数量价格选中配件
     throwDataChangeNum(v){
-      this.$emit("throwPartNameList2",v)
+      this.$emit("throwPartNameList2",v);
+      this.focusInput();
     }
   }
 };
