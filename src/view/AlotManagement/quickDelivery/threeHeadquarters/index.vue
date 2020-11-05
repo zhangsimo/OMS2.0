@@ -178,6 +178,7 @@
             title="入库数量"
             :edit-render="{
               name: 'input',
+              autoselect: true,
               attrs: { type: 'number' },
               events: { change: numChangeEvent }
             }"
@@ -187,6 +188,7 @@
             title="仓位"
             :edit-render="{
               name: 'input',
+              autoselect: true,
               immediate: true,
               events: { blur: checkSelf }
             }"

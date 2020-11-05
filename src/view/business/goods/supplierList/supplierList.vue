@@ -353,14 +353,14 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="退货数量"
-                  :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                  :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
                   field="orderPrice"
                   title="退货单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="orderAmt" title="退货金额" width="100">
@@ -1265,13 +1265,13 @@
         params.page = this.Left.page.num - 1;
         params.size = this.Left.page.size;
         //创建日期
-        if (this.moreArr.createData != null) {
+        if (this.moreArr.createData != null && this.moreArr.createData[0] != "") {
           // console.log(this.moreArr.createData);
           data.startTime = this.moreArr.createData[0] + " 00:00:00";
           data.endTime = this.moreArr.createData[1] + " 23:59:59";
         }
         //提交日期
-        if (this.moreArr.submitData != null) {
+        if (this.moreArr.submitData != null && this.moreArr.submitData[0] != "") {
           data.auditStartTime = this.moreArr.submitData[0] + " 00:00:00";
           data.auditEndTime = this.moreArr.submitData[1] + " 23:59:59";
         }
@@ -1317,6 +1317,7 @@
           if (res.code === 0) {
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
+            this.selection(this.Left.tbdata[0])
           }
         });
       },
@@ -1606,6 +1607,7 @@
             for (let el in rtnReasonMap) {
               this.purchaseTypeArr.push({value: rtnReasonMap[el], label: el});
             }
+            this.purchaseTypeArr = this.purchaseTypeArr.sort((a,b) =>a.value-b.value)
             // userMap 用户
             for (let el in userMap) {
               this.userMap.push({value: userMap[el], label: el});

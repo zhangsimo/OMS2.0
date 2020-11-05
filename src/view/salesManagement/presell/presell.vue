@@ -398,13 +398,13 @@
                     field="orderQty"
                     title="数量"
                     width="100"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="orderPrice"
                     title="销价"
                     width="100"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" title="金额" width="100">
                     <template v-slot="{ row }">
@@ -415,7 +415,7 @@
                     field="remark"
                     title="备注"
                     width="160"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="storeName" title="仓库" disabled width="100">
                     <template v-slot:edit="{ row }">

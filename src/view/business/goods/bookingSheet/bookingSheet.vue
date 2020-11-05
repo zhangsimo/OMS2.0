@@ -293,7 +293,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="preQty"
                   title="预定数量"
-                  :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                  :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
                   width="100"
                 >
                 </vxe-table-column>

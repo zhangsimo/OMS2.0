@@ -259,6 +259,7 @@
             :edit-render="{
               name: 'input',
               immediate: true,
+              autoselect: true,
               attrs: { type: 'number',min:0 },
               events: { change: numChangeEvent }
             }"
@@ -270,6 +271,7 @@
             :edit-render="{
               name: 'input',
               immediate: true,
+              autoselect: true,
               events: { blur: checkSelf }
             }"
           ></vxe-table-column>

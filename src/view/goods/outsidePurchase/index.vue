@@ -262,6 +262,14 @@
                       <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlanmain.remark||"").trim()}}</div>
                     </Tooltip>
                   </FormItem>
+                  <FormItem class="form-Item" label="手工单号：">
+                    <Input
+                      placeholder="请输入手工单号"
+                      class="w160"
+                      v-model="formPlanmain.versionNo"
+                      @on-keyup="versionNoFun"
+                    />
+                  </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
@@ -429,7 +437,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -446,7 +454,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="orderPrice"
                   title="采购单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

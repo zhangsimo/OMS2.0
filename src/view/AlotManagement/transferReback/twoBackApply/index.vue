@@ -312,7 +312,7 @@
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="applyQty"
-                    :edit-render="{autofocus: '.vxe-input--inner'}"
+                    :edit-render="{autofocus: '.vxe-input--inner',autoselect: true}"
                     title="申请退回数量"
                     width="120"
                   >
@@ -322,7 +322,7 @@
                   </vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="remark"
-                    :edit-render="{ name: 'input' }"
+                    :edit-render="{ name: 'input',autoselect: true}"
                     title="备注"
                     width="100"
                   ></vxe-table-column>
