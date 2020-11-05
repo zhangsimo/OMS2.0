@@ -74,20 +74,20 @@
         </div>
       </div>
       <div>
-<!--        <button-->
-<!--          class="ivu-btn ivu-btn-default mr10"-->
-<!--          type="button"-->
-<!--          @click="operation(1)"-->
-<!--          v-has="'exportAll'"-->
-<!--        >导出汇总-->
-<!--        </button>-->
-<!--        <button-->
-<!--          class="ivu-btn ivu-btn-default mr10"-->
-<!--          type="button"-->
-<!--          @click="operation(2)"-->
-<!--          v-has="'exportList'"-->
-<!--        >导出明细-->
-<!--        </button>-->
+       <button
+         class="ivu-btn ivu-btn-default mr10"
+         type="button"
+         @click="operation(1)"
+         v-has="'exportAll'"
+       >导出汇总
+       </button>
+       <button
+         class="ivu-btn ivu-btn-default mr10"
+         type="button"
+         @click="operation(2)"
+         v-has="'exportList'"
+       >导出明细
+       </button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -1684,7 +1684,9 @@
       // })
       this.getShop()
       this.proTypeList.map(itm => {
+        if(this.$refs.registrationEntry){
         this.$refs.registrationEntry.orgName = itm.name;
+        }
       });
     },
 
