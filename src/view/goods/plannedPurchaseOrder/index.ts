@@ -848,6 +848,9 @@ export default class PlannedPurchaseOrder extends Vue {
         if (columnIndex === 0) {
           return "合计";
         }
+        if (columnIndex === 3) {
+          return `共${(data||[]).length}条`;
+        }
         if (
           [
             "orderQty",
