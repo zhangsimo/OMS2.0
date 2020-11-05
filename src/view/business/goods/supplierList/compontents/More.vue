@@ -199,7 +199,6 @@ export default {
     //创建日期是的取消
     ClearTime() {
       this.createData = null;
-      console.log(this.createData);
     },
     //更多弹框的确定按钮
     Determined() {
