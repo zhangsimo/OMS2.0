@@ -3,7 +3,7 @@
     <div class="bigbox">
       <Row :gutter="20">
         <Col span="6" v-for="(item,index) in Arr" :key="index">
-          <div class="items" v-has:[item.mark]="">
+          <div class="items" v-hass:[item.mark]="">
             <div class="item_header">{{ item.title }}</div>
             <div class="item_body">
               <div class="nav">{{ item.remake }}</div>
