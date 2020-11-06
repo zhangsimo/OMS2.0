@@ -107,7 +107,7 @@
               return '合计'
             }
             if (['thisClaimedAmt'].includes(column.property)) {
-              this.titleName=='预付款认领'?this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex):0
+              this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex);
               return this.sum(data, column.property, columnIndex)
             }
             return null
@@ -177,6 +177,9 @@
         }
         if(this.titleName=="预付款认领" && (this.thisClaimedAmtSum>this.$parent.currRow.payAmt)){
           return this.$Message.error("本次认领金额不可大于本次申请金额")
+        }
+        if(this.titleName=="预付款收回认领" && (this.thisClaimedAmtSum>this.$parent.currRow.claimAmt)){
+          return this.$Message.error("本次认领金额不可大于本次已认领金额")
         }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {
