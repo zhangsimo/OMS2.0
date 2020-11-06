@@ -155,24 +155,24 @@
                       </Button>
                     </Row>
                   </FormItem>
-                  <FormItem label="退货员：" prop="orderManId">
-                    <Select
-                      :value="formPlan.orderManId"
-                      @on-change="selectOrderMan"
-                      filterable
-                      style="width: 180px"
-                      :disabled="draftShow != 0 || isNew"
-                      label-in-value
-                    >
-                      <Option
-                        v-for="item in salesList"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.label }}
-                      </Option
-                      >
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem label="退货员：" prop="orderManId">-->
+                    <!--<Select-->
+                      <!--:value="formPlan.orderManId"-->
+                      <!--@on-change="selectOrderMan"-->
+                      <!--filterable-->
+                      <!--style="width: 180px"-->
+                      <!--:disabled="draftShow != 0 || isNew"-->
+                      <!--label-in-value-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in salesList"-->
+                        <!--:value="item.id"-->
+                        <!--:key="item.id"-->
+                      <!--&gt;{{ item.label }}-->
+                      <!--</Option-->
+                      <!--&gt;-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem label="退货日期：" prop="orderDate">
                     <DatePicker
                       style="width: 180px"
@@ -560,12 +560,12 @@
                 return h('span', {}, date)
               }
             },
-            {
-              title: "退货员",
-              key: "orderMan",
-              width: 120,
-              resizable:true
-            },
+            // {
+            //   title: "退货员",
+            //   key: "orderMan",
+            //   width: 120,
+            //   resizable:true
+            // },
 
             {
               title: "退货单号",
@@ -623,9 +623,9 @@
           guestId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],
-          orderManId: [
-            {required: true, type: "string", message: "  ", trigger: "change"}
-          ],
+          // orderManId: [
+          //   {required: true, type: "string", message: "  ", trigger: "change"}
+          // ],
           rtnReasonId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],

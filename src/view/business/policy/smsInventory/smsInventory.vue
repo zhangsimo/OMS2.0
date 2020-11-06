@@ -113,7 +113,7 @@
                   <FormItem label="盘点仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
-                      style="width:100px"
+                      style="width:160px"
                       :disabled="draftShow != 0"
                     >
                       <Option
@@ -129,7 +129,7 @@
                       :value="formPlan.orderManId"
                       @on-change="selectOrderMan"
                       filterable
-                      style="width: 240px"
+                      style="width: 160px"
                       :disabled="draftShow != 0"
                       label-in-value
                     >
@@ -155,8 +155,7 @@
                     <Tooltip :content="formPlan.serviceId">
                     <Input
                       v-model="formPlan.serviceId"
-                      class="w160"
-                      value="YCSDFD839239320"
+                      class="w180"
                       disabled
                     />
                     </Tooltip>
@@ -265,6 +264,7 @@
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
+                show-footer
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
@@ -325,6 +325,7 @@
                 <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{currRow?currRow.createUname:""}}</span><span>创建日期：{{currRow?currRow.createTime:""}}</span><span>提交人：{{currRow?currRow.subMan:""}}</span><span>提交日期：{{currRow?currRow.subDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -751,9 +752,9 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 104;
+        this.leftTableHeight = wrapH - 110;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
       });
     },
     //快速查询日期
@@ -1188,7 +1189,26 @@ export default {
       // console.log( this.formPlan.checkDate)
     },
     //footer计算
-    addFooter() {},
+    addFooter ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (columnIndex === 2) {
+            return (data||[]).length+'条'
+          }
+          if (['sysQty','trueQty','exhibitQty','hasOutQty','exhibitAmt','truePrice'].includes(column.property)) {
+
+            if(['exhibitAmt'].includes(column.property)){
+              return this.$utils.sum(data, column.property).toFixed(2)
+            }
+            return this.$utils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+    },
     // 确定
     Determined() {},
     array_diff(a, b) {
@@ -1210,9 +1230,9 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+    // window.onresize = () => {
+    //   this.getDomHeight();
+    // };
   },
   watch: {
     purchaseType: {
@@ -1269,7 +1289,7 @@ export default {
   margin-top: 20px;
 }
 .con-box {
-  height: 600px;
+  /*height: 600px;*/
 }
 .w550 {
   width: 580px;
