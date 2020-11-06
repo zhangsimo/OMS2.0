@@ -32,13 +32,16 @@ export function authButton(Vue) {
       } else {
         return
       }
+      if(JSON.stringify(binding.arg)!=undefined){
+        binding.value=binding.arg
+      }
       auth = JSON.parse(auth)
       let show: any = false
       auth.forEach(item => {
         if (item == binding.value) {
           show = true
         }
-      })
+      });
       if (!show) {
         el.parentNode.removeChild(el)
       }
