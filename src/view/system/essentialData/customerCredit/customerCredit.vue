@@ -545,7 +545,8 @@
         if (this.researchStatus === 1) {
           return this.$Message.warning("信用调查正在审批中");
         }
-        if (this.creaditList.isGuestResearch === 0) {
+        let jsonStatus=JSON.parse(this.creaditList.researchStatus)
+        if (this.creaditList.isGuestResearch === 0 && jsonStatus.value!=4) {
           this.$refs.SurveyList.$refs.formInline.resetFields();
         }
         this.creaditList.rollingDate = this.creaditList.rollingDate || 1;
