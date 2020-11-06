@@ -1,6 +1,5 @@
 import Main from "@/view/base/main";
 import parentView from "@/components/parent-view";
-
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
  * meta: {
@@ -31,7 +30,7 @@ export default [
       title: "Print - 打印",
       hideInMenu: true
     },
-    component: () => import("@/view/base/print/print.vue")
+    component: () => import("@/components/print/print.vue")
   },
   {
     path: "/register",

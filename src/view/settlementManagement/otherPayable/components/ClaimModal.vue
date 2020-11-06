@@ -111,7 +111,8 @@ export default {
           { type: 'number', message: '请输入数字' }
         ]
       },
-      dataOne:[],//预收款支出认领 one 对账单
+      thisClaimedAmtSum:0,//其他付款支出认领 本次认领金额 合计  this.$parent.currRow.expenditureAmt
+      dataOne:[],//其他付款支出认领 one 对账单
       dataTwo:[],//会计科目
       dataThree:[],//数组
       accruedList:[{mateAccountCoding:""}],
@@ -131,6 +132,7 @@ export default {
             return '合计'
           }
           if (['thisClaimedAmt'].includes(column.property)) {
+            this.titleName=='其他付款支出认领'?this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex):0
             return this.sum(data, column.property, columnIndex)
           }
           return null
@@ -202,6 +204,9 @@ export default {
       if(this.titleName!='其他付款支出认领' && this.calculation==""){
         this.$message.error('请选择辅助核算')
         return
+      }
+      if(this.titleName=="其他付款支出认领" && (this.thisClaimedAmtSum>this.$parent.currRow.paymentApplicationAmount)){
+        return this.$Message.error("本次认领金额不可大于本次支出申请金额")
       }
       this.financeAccountCashList = []
       this.tableData.forEach(v => {

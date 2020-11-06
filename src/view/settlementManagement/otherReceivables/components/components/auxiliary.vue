@@ -680,6 +680,7 @@ export default {
 }
 .OtherLeft {
   flex: 1;
+  width: 103px;
   border-right: 1px solid gray;
 }
 .OtherLeft > ul > li {
@@ -693,6 +694,7 @@ export default {
   border-bottom: 1px solid gray;
 }
 .OtherRight {
+  width: 615px;
   flex: 6;
 }
 .changeDiv {
@@ -702,7 +704,7 @@ export default {
 .xuan {
   background: #e8eaec;
   color: gray;
-  font-size: 15px;
+  /* font-size: 15px; */
 }
 </style>
 <style scoped>
