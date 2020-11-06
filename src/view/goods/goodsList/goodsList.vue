@@ -487,7 +487,7 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="计划采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                   size="mini"
                 >
@@ -505,7 +505,7 @@
                 <vxe-table-column
                   field="orderPrice"
                   title="计划采购单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                   size="mini"
                   show-overflow="tooltip"

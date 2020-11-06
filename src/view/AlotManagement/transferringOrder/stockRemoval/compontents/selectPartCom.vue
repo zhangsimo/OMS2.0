@@ -7,23 +7,24 @@
         <!--</Select>-->
 
         <!-- <el-input class="w250 mr10" v-model="partName" placeholder="请输入配件内码/编码/名称/OE码" ref="elinput" @change="search"></el-input> -->
-        
+
         <div class="db mr5 fl">
           <span class="mr5">编码:</span>
-          <el-input class="w120 mr10" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" ref="elinput" placeholder="请输入编码" v-model="partCode" @change="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">内码:</span>
-          <el-input class="w120 mr10" placeholder="内码" v-model="partId" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" placeholder="请输入内码" ref="elinputpartId" v-model="partId" @change="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">名称:</span>
-          <el-input class="w120 mr10" placeholder="名称" v-model="partName" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" placeholder="请输入名称" ref="elinputpartName" v-model="partName" @change="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">OE:</span>
-          <el-input class="w120 mr10" placeholder="OE码" v-model="oemCode" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" placeholder="请输入OE码" ref="elinputoemCode" v-model="oemCode" @change="search"/>
         </div>
+
 
         <!-- <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>

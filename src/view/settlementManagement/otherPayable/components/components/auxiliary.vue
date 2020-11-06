@@ -25,6 +25,7 @@
                   resizable
                   :data="AssistTableDataKeHu"
                   stripe
+                  ref="AssistTableDataKeHu"
                   size="mini"
                   align="center"
                   :auto-resize="true"
@@ -76,6 +77,7 @@
                 <vxe-table
                   border
                   resizable
+                  ref="AssistTableDataGongYingShang"
                   :data="AssistTableDataGongYingShang"
                   stripe
                   size="mini"
@@ -110,7 +112,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department">
+          <TabPane label="部门" name="department" :disabled="$parent.titleName=='其他收款认领'">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -138,6 +140,7 @@
                 resizable
                 :data="AssistTableDataGeRen"
                 stripe
+                ref="AssistTableDataGeRen"
                 size="mini"
                 align="center"
                 :auto-resize="true"
@@ -200,6 +203,7 @@
                     border
                     resizable
                     :data="AssistTableDataOther"
+                    ref="AssistTableDataOther"
                     stripe
                     size="mini"
                     align="center"
@@ -249,6 +253,25 @@
             </div>
           </TabPane>
         </Tabs>
+        <div class="fund" v-if="Classification">
+          <Form
+            ref="formDynamic"
+            :model="formDynamic"
+            :rules="ruleValidateTwo"
+            :label-width="80"
+            style="width: 300px"
+          >
+            <FormItem label="款项分类:" prop="fund">
+              <Select v-model="formDynamic.fund" placeholder="请选择">
+                <Option
+                  v-for="item in fundListZanshi"
+                  :value="item.itemName"
+                  :key="item.id"
+                >{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Form>
+        </div>
       </Form>
       <div slot="footer">
         <Button type="primary" @click="confirmFuzhu" class="mr10">保存</Button>
@@ -278,6 +301,7 @@ import {
 import bus from "../../../bill/Popup/Bus";
 export default {
   name: "AssistAccounting",
+  props:['oneAccountent'],
   data() {
     return {
       //其他辅助弹框表单验证
@@ -291,6 +315,21 @@ export default {
           }
         ]
       },
+      Classification: false, //款项分类是否需校验
+      formDynamic: {
+        fund: "" //款项分类
+      },
+      ruleValidateTwo: {
+        fund: [
+          {
+            required: true,
+            type: "string",
+            message: "请选择",
+            trigger: "change"
+          }
+        ]
+      },
+      fundListZanshi:[],//款项分类数组
       AssistTableDataKeHu: [], //辅助弹框客户
       AssistTableDataGongYingShang: [], //辅助弹框供应商
       AssistTableDataGeRen: [], //辅助弹框个人
@@ -518,7 +557,7 @@ export default {
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row;
-      this.auxiliaryTypeCode = "CW0011X";
+      this.auxiliaryTypeCode = row.dictCode;
       // this.auxiliaryCode = row.itemCode;
       // console.log(row)
     },
@@ -527,10 +566,13 @@ export default {
       if (!this.AssistAccounting) {
         this.$message.error("请选择辅助核算");
         this.subjectModelShowassist = true;
+      }else if(this.Classification && this.formDynamic.fund==""){
+        this.$message.error("款项分类必选")
       } else {
         // console.log(this.AssistAccounting);
         this.$emit("ChildContent", this.AssistAccounting);
         bus.$emit("ChildContent", this.AssistAccounting);
+        this.$emit("callBackFun")
         this.subjectModelShowassist = false;
       }
     },
@@ -580,12 +622,16 @@ export default {
     },
     //部门改变
     ListChange(val, selectedData) {
-      // console.log(selectedData);
+      this.AssistAccounting = {}
       if (selectedData.length == 1) {
-        this.AssistAccounting = selectedData[0].label;
+        this.AssistAccounting.auxiliaryTypeCode = '3'
+        this.AssistAccounting.fullName = selectedData[0].label;  
+        this.AssistAccounting.code = selectedData[0].value; 
         this.auxiliaryTypeCode = "3";
       } else {
-        this.AssistAccounting = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.code = selectedData[selectedData.length - 1].value; 
+        this.AssistAccounting.auxiliaryTypeCode = '3'
         this.auxiliaryTypeCode = "3";
       }
     },
@@ -613,12 +659,26 @@ export default {
         }
       });
     },
+    //其他辅助核算款项分类
+    fundGetList() {
+      let params = {};
+      params.dictCode = "CW00131";
+      kmType(params).then(res => {
+        this.fundListZanshi=res.data.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
+      });
+    },
     //其他新增
     ShowOtherAdd() {
       this.OtherModalAdd = true;
     },
     showOrhideModel(v){
       if(v){
+        this.formDynamic.fund="";
+        this.AssistAccounting = "";
+        this.$refs.AssistTableDataKeHu.clearRadioRow()
+        this.$refs.AssistTableDataGongYingShang.clearRadioRow()
+        this.$refs.AssistTableDataGeRen.clearRadioRow()
+        this.$refs.AssistTableDataOther.clearRadioRow()
         if(this.list.length==0){
           this.getListCompany();
         }
@@ -634,7 +694,9 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-
+        if(this.fundListZanshi.length==0){
+          this.fundGetList();
+        }
       }
     }
   },
@@ -716,9 +778,11 @@ export default {
   color: red;
 }
 .fund {
-  position: relative;
-  top: -625px;
-  left: 400px;
+  position: absolute;
+  top: 4pc;
+  right: 1pc;
+  z-index: 9999;
+/*1pc=12pt=16px;**/
 }
 .LiClass {
 }

@@ -38,14 +38,38 @@ export function authButton(Vue) {
         if (item == binding.value) {
           show = true
         }
-      })
+      });
       if (!show) {
         el.parentNode.removeChild(el)
       }
     }
   })
 }
-
+export function authButton2(Vue) {
+  Vue.directive('hass', {
+    inserted: function (el, binding) {
+      let auth: any = []
+      if (sessionStorage.getItem('btnContext') != null) {
+        auth = sessionStorage.getItem('btnContext') || []
+      } else {
+        return
+      }
+      if(JSON.stringify(binding.arg)!=undefined){
+        binding.value=binding.arg
+      }
+      auth = JSON.parse(auth)
+      let show: any = false
+      auth.forEach(item => {
+        if (item == binding.value) {
+          show = true
+        }
+      });
+      if (!show) {
+        el.parentNode.removeChild(el)
+      }
+    }
+  })
+}
 //防止按钮重复点击1000ms内，也可以自设时间
 export function resubmitNotButton(Vue) {
   Vue.directive("noresub", {

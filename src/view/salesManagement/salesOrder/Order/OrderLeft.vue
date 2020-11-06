@@ -36,7 +36,7 @@
         <vxe-table-column show-overflow field="createTime" title="创建日期" min-width="120"></vxe-table-column>
         <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="auditor" title="提交人" min-width="80" show-overflow></vxe-table-column>
         <vxe-table-column show-overflow field="auditDate" title="提交日期" min-width="120"></vxe-table-column>
-        <vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>
+        <!--<vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>-->
       </vxe-table>
     </div>
     <Page
@@ -59,6 +59,7 @@
 <script>
 import * as tools from "_utils/tools";
 import { getLeftList } from "@/api/salesManagment/salesOrder";
+import {pinyin} from "../../../../utils/py";
 
 export default {
   name: "OrderLeft",
@@ -86,6 +87,7 @@ export default {
         num: 1
       },
       tableData: [],
+      filterList:[],
       Flaga: true,
       selectItemId:'',
       leftTableHeight:0,
@@ -151,7 +153,6 @@ export default {
       let res = await getLeftList(page, size, data);
       if (res.code === 0) {
         this.tableData = res.data.content;
-
         this.setFilterArr(res.data.content||[])
 
         this.page.total = res.data.totalElements;
@@ -184,6 +185,9 @@ export default {
     returnData(rData,cos){
       let arrData = [];
       let arr = rData.map(el => el[cos]);
+      if(cos=="guestName"){
+        arr=arr.sort((a,b) => (pinyin.getCamelChars(a) > pinyin.getCamelChars(b)) ? 1 : ((pinyin.getCamelChars(b) > pinyin.getCamelChars(a)) ? -1 : 0));
+      }
       let set = new Set(arr);
       set.forEach(el => {
         let filterData = this.filterCheckObj[cos]||[]

@@ -46,19 +46,19 @@
               </Button>
             </div>
           </FormItem>
-          <FormItem label="销售员：" prop="orderManId">
-            <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
-            <Select
-              :value="formPlan.orderManId"
-              @on-change="selectOrderMan"
-              filterable
-              style="width: 200px"
-              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-              label-in-value
-            >
-              <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
-            </Select>
-          </FormItem>
+          <!--<FormItem label="销售员：" prop="orderManId">-->
+            <!--&lt;!&ndash;          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />&ndash;&gt;-->
+            <!--<Select-->
+              <!--:value="formPlan.orderManId"-->
+              <!--@on-change="selectOrderMan"-->
+              <!--filterable-->
+              <!--style="width: 200px"-->
+              <!--:disabled="draftShow != 0|| this.$parent.$parent.ispart"-->
+              <!--label-in-value-->
+            <!--&gt;-->
+              <!--<Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>-->
+            <!--</Select>-->
+          <!--</FormItem>-->
           <FormItem label="订单类型：">
             <Select v-model="formPlan.orderTypeValue" style="width:200px" disabled>
               <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -303,6 +303,7 @@
         <vxe-table
           class="setPadding"
           border
+          stripe
           resizable
           show-footer
           ref="xTable"
@@ -337,7 +338,7 @@
             show-overflow="tooltip"
             field="orderQty"
             title="数量"
-            :edit-render="{name: 'input',attrs: {disabled: false}}"
+            :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
             width="100"
           >
             <template v-slot:edit="{ row }">
@@ -579,9 +580,9 @@
           guestId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],
-          orderManId: [
-            {required: true, type: "string", message: "  ", trigger: "change"}
-          ],
+          // orderManId: [
+          //   {required: true, type: "string", message: "  ", trigger: "change"}
+          // ],
           billTypeId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],

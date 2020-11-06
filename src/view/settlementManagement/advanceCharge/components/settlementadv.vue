@@ -362,6 +362,7 @@ export default {
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
             rpAmt: el.rpAmt,
+            thisClaimedAmt:el.rpAmt,
             unAmtLeft: el.unAmtLeft,
             mateAccountName:el.mateAccountName,
             mateAccountCode:el.mateAccountCode,

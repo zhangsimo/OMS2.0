@@ -284,9 +284,16 @@ export const mixSelectPartCom  = {
       if(this.partBrandData.length==1){
         this.getPartBrandAll();
       }
+      this.$nextTick(()=>{
+        this.$refs.elinput.focus();
+      })
 
       // this.getCarClassifysFun();
     },
+    focus(event){
+      event.currentTarget.select();
+    },
+
     //配件表格点击的行
     selectTabelData({selection}){
       this.selectTableItem = selection
@@ -295,6 +302,7 @@ export const mixSelectPartCom  = {
       if(this.selectTableItem.length>0){
         this.$emit('selectPartName',this.selectTableItem);
         this.searchPartLayer = false;
+        this.$refs.elinput.focus();
       }else{
         this.$Message.error("请选择数据")
       }
@@ -365,11 +373,13 @@ export const mixSelectPartCom  = {
       } else {
         this.selectTableItem = [row];
         this.$emit("selectPartName", this.selectTableItem);
+        this.$refs.elinput.focus();
       }
     },
     //修改数量价格选中配件
     throwDataChangeNum(v){
-      this.$emit("throwPartNameList2",v)
+      this.$emit("throwPartNameList2",v);
+      this.$refs.elinput.focus();
     }
   }
 }

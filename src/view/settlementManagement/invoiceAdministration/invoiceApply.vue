@@ -57,7 +57,7 @@
               </Option
               >
             </Select> -->
-            <input type="text" class="h30" v-model="form.guestName">
+            <Input type="text" class="h30 w200" v-model="form.guestName"/>
           </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" v-noresub="1000" @click="query" type="button">
@@ -74,20 +74,20 @@
         </div>
       </div>
       <div>
-<!--        <button-->
-<!--          class="ivu-btn ivu-btn-default mr10"-->
-<!--          type="button"-->
-<!--          @click="operation(1)"-->
-<!--          v-has="'exportAll'"-->
-<!--        >导出汇总-->
-<!--        </button>-->
-<!--        <button-->
-<!--          class="ivu-btn ivu-btn-default mr10"-->
-<!--          type="button"-->
-<!--          @click="operation(2)"-->
-<!--          v-has="'exportList'"-->
-<!--        >导出明细-->
-<!--        </button>-->
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="operation(1)"
+          v-has="'exportAll'"
+        >导出汇总
+        </button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="operation(2)"
+          v-has="'exportList'"
+        >导出明细
+        </button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -1350,7 +1350,7 @@
         Branchstore: [1, 2, 3, 4, 5],
         Reconciliationlist: [],
         pagetotal: 0,
-        pageSizeOpts:[10,50,100,200],
+        pageSizeOpts: [10, 50, 100, 200],
         Reconciliationtype: "",
         isActive: "",
         guestNameList: [],
@@ -1400,8 +1400,8 @@
         if (this.allTablist.length < 1) {
           return this.$message.error("请选择要保存的快递单号")
         }
-        let arr=[];
-        this.allTablist.map(el=>{
+        let arr = [];
+        this.allTablist.map(el => {
           let form = {
             id: el.id,
             sendingNumber: el.sendingNumber
@@ -1417,7 +1417,7 @@
             this.$refs.summary.selectAll(false);
             hideLoading()
           }
-        }).catch(err=>{
+        }).catch(err => {
           hideLoading()
         })
       },
@@ -1445,13 +1445,11 @@
       },
       quickDate(data) {
         this.value = data;
-        if (this.selectShopList == true) {
-          this.form.orgId = this.$store.state.user.userData.currentCompany != null ? this.$store.state.user.userData.currentCompany.id : ""
-        }
+        this.form.orgId = this.$store.state.user.userData.currentCompany != null ? this.$store.state.user.userData.currentCompany.id : ""
         this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : ""
-        this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
+        this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : ""
         this.form.page = 1
-          this.getDataList();
+        this.getDataList();
       },
       query() {
         this.form.page = 1
@@ -1460,11 +1458,6 @@
         this.getDataList();
       },
       exportSummary() {
-        // this.$refs.summary.exportCsv({
-        //   filename:"开票申请查询与核销汇总表",
-        //   data:this.data,
-        //   columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
-        // })
         if (this.data.length < 1) {
           return this.$message.error("暂无数据可导出")
         }
@@ -1483,11 +1476,6 @@
         location.href = exportAll(params)
       },
       modifyData() {
-        // this.$refs.parts.exportCsv({
-        //   filename:"开票申请配件明细表",
-        //   data:this.data1,
-        //   columns:this.columns1
-        // })
         if (this.allTablist.length < 1) {
           return this.$Message.error("请选择需要导出的数据")
         }
@@ -1614,11 +1602,11 @@
       getDataList() {
         showLoading(".loadingClass", "数据加载中，请勿操作")
         let params = {
-          page: this.form.page-1,
+          page: this.form.page - 1,
           size: this.form.size
         }
         this.form.guestName = this.form.guestName.trim()
-        if(this.form.orgId == '0'){
+        if (this.form.orgId == '0') {
           this.form.orgId = ''
         }
         getInvoiceList(params, this.form).then(res => {
@@ -1628,7 +1616,7 @@
               return item
             });
             this.pagetotal = res.data.totalElements;
-            this.allTablist=[]
+            this.allTablist = []
             hideLoading();
           }
           hideLoading()
@@ -1684,7 +1672,9 @@
       // })
       this.getShop()
       this.proTypeList.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
+        if (this.$refs.registrationEntry) {
+          this.$refs.registrationEntry.orgName = itm.name;
+        }
       });
     },
 

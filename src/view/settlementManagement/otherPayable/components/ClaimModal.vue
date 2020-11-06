@@ -3,7 +3,7 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <div class="fr" v-show="titleName!='预收款支出认领'">
+        <div class="fr" v-show="titleName!='其他付款支出认领'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
           <Input class="w180 mr10" readonly v-model="calculation"/>
@@ -85,8 +85,8 @@
 
 <script>
 import PreClaimModal from "./PreClaimModal"
-import voucherInput from "./voucherInput";
-import { addClaim } from "_api/settlementManagement/advanceCollection.js";
+import voucherInput from "./components/auxiliary";
+import { addClaim ,expenditureClaim} from "_api/settlementManagement/otherPayable/otherPayable";
 import {saveAccount} from "../../../../api/settlementManagement/seleteAccount";
 import {wirteAccount} from "../../../../api/settlementManagement/seleteAccount";
 
@@ -152,15 +152,12 @@ export default {
     //弹框打开
     open(){
       this.tableData = []
-      this.amountType == 1 ?this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
-      this.$refs.voucherInput.Classification = 0
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
-      if(this.titleName!='预收款认领'){
-        wirteAccount({accountNo:this.$parent.serviceId,sign:3}).then(res=>{
+      if(this.titleName=='其他付款支出认领'){
+        wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
-            // this.dataOne=
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.dataOne = res.data.one;
@@ -170,6 +167,9 @@ export default {
             this.dataTwo = res.data.two;
           }
         })
+      }else{
+        this.accruedList[0].mateAccountCoding = "1221"
+        this.$refs.voucherInput.Classification = true;
       }
     },
 
@@ -184,13 +184,6 @@ export default {
         this.$message.error('请点击选择单据按钮，选择数据')
         return
       }
-      // this.$refs.xTree.validate((err) => {
-      //   if(err){
-      //     this.$message.error('待认领金额输入不正确')
-      //   }else{
-      //     this.$message.success('认领成功')
-      //   }
-      // })
       let flag1 = this.tableData.some(v => {
         return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.unClaimedAmt
       })
@@ -206,7 +199,7 @@ export default {
         return
       }
 
-      if(!this.voucherItem.id && this.titleName!='预收款支出认领'){
+      if(this.titleName!='其他付款支出认领' && this.calculation==""){
         this.$message.error('请选择辅助核算')
         return
       }
@@ -217,11 +210,12 @@ export default {
         o.thisClaimedAmt = v.thisClaimedAmt + ''
         this.financeAccountCashList.push(o)
       })
-      if(this.titleName=='预收款认领'){
+      if(this.titleName=='其他收款认领'){
         let obj = {
           financeAccountCashList: this.financeAccountCashList,
-          claimType: this.$parent.claimType,
-          guestId: this.voucherItem.id
+          claimType: 0,
+          guestId: this.voucherItem.id,
+          paymentTypeCode:  this.$refs.voucherInput.formDynamic.fund || ""
         }
         addClaim(obj).then(res => {
           if(res.code === 0){
@@ -230,7 +224,7 @@ export default {
             this.$parent.getQuery()
           }
         })
-      }else if(this.titleName=='预收款支出认领'){
+      }else if(this.titleName=='其他付款支出认领'){
         let arr=[];
         this.tableData.map(el=>{
           let data={};
@@ -243,7 +237,7 @@ export default {
           two:this.dataTwo,
           three:arr
         }
-        saveAccount(data).then(res=>{
+        expenditureClaim(data).then(res=>{
           if(res.code===0){
             this.$message.error("认领成功")
             this.visibal = false
@@ -270,7 +264,7 @@ export default {
 
     // 选择辅助计算弹框
     chooseAuxiliary(){
-      this.$refs.voucherInput.subjectModelShowassist = true
+      this.$refs.voucherInput.subjectModelShowassist = true;
     },
 
     // 选中的数据拼接去重
@@ -299,8 +293,8 @@ export default {
       this.getMessage();
     },
     getMessage() {
-      this.calculation = this.$refs.voucherInput.AssistAccounting;
-      this.voucherItem = this.$refs.voucherInput.voucherItem
+      this.calculation = this.$refs.voucherInput.AssistAccounting.fullName || this.$refs.voucherInput.AssistAccounting[0].name || this.$refs.voucherInput.AssistAccounting.userName || this.$refs.voucherInput.AssistAccounting.itemName  ;
+      this.voucherItem = this.$refs.voucherInput.AssistAccounting
     },
   },
 }
