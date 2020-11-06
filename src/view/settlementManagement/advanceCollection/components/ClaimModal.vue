@@ -7,7 +7,7 @@
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
           <Input class="w180 mr10" readonly v-model="calculation"/>
-          <Button @click="chooseAuxiliary">辅助计算</Button>
+          <Button @click="chooseAuxiliary">辅助核算</Button>
         </div>
       </div>
 
@@ -114,6 +114,7 @@ export default {
       dataOne:[],//预收款支出认领 one 对账单
       dataTwo:[],//会计科目
       dataThree:[],//数组
+      thisClaimedAmtSum:0,//预收款支出认领 本次认领金额 合计  this.$parent.currRow.expenditureAmt
       accruedList:[{mateAccountCoding:""}],
       voucherItem:{}, //获取辅助计算选中的数据
     }
@@ -131,6 +132,7 @@ export default {
             return '合计'
           }
           if (['thisClaimedAmt'].includes(column.property)) {
+            this.titleName=='预收款支出认领'?this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex):0
             return this.sum(data, column.property, columnIndex)
           }
           return null
@@ -209,6 +211,9 @@ export default {
       if(!this.voucherItem.id && this.titleName!='预收款支出认领'){
         this.$message.error('请选择辅助核算')
         return
+      }
+      if(this.titleName=="预收款支出认领" && (this.thisClaimedAmtSum>this.$parent.currRow.expenditureAmt)){
+        return this.$Message.error("本次认领金额不可大于本次支出申请金额")
       }
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
