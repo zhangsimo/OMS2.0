@@ -114,17 +114,17 @@
                   :rules="ruleValidate"
                   :label-width="100"
                 >
-                  <FormItem label="业务员：" prop="salesman">
+                  <FormItem label="创建人：" prop="salesman">
                     <Input
                       class="w160"
                       :disabled="true"
                       v-model="formPlan.salesman"
                     ></Input>
                   </FormItem>
-                  <FormItem label="预订单号:" prop="Reservation" class="ml50">
+                  <FormItem label="预订单号:" prop="Reservation">
                     <Tooltip :content="formPlan.Reservation">
                     <Input
-                      class="w160"
+                      class="w180"
                       :disabled="true"
                       v-model="formPlan.Reservation"
                     />
@@ -133,7 +133,7 @@
                   <FormItem
                     label="期望到货日期："
                     prop="orderDate"
-                    class="fs12 ml50"
+                    class="fs12"
                   >
                     <DatePicker
                       @on-change="changedate"
@@ -324,7 +324,9 @@
                 ></vxe-table-column>
                 <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
               </vxe-table>
-              <div ref="planPage"></div>
+              <div class="table-bottom-text flex">
+                <span>创建人：{{datadata?datadata.salesman:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.commitUname:""}}</span><span>提交日期：{{datadata?datadata.commitTime:""}}</span>
+              </div>
             </div>
           </Split>
         </div>
@@ -473,7 +475,7 @@ export default {
             resizable:true
           },
           {
-            title: "业务员",
+            title: "创建人",
             key: "salesman",
             width: 100,
             resizable:true
@@ -949,6 +951,9 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
+          if (columnIndex === 2) {
+            return `共${(data||[]).length}条`;
+          }
           if (["preQty"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
           }
@@ -1263,9 +1268,9 @@ export default {
       let planBtnH = this.$refs.planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 70;
+      this.leftTableHeight = wrapH - 100;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 98;
     });
     this.leftgetList();
   },
@@ -1274,7 +1279,7 @@ export default {
 
 <style scoped>
 .con-box {
-  height: 700px;
+  /*height: 700px;*/
 }
 .w550 {
   width: 580px;

@@ -460,7 +460,9 @@ export const mixSelectPartCom = {
         this.loading1 = false;
         if (res.code === 0) {
           this.allList = res.data;
+          console.log(this.allList.priceLever)
           this.allList.priceLever.forEach(element => {
+
             element.sellPrice = parseFloat(element.sellPrice).toFixed(2);
           });
         }
