@@ -88,6 +88,7 @@
             {type: 'number', message: '请输入数字'}
           ]
         },
+        thisClaimedAmtSum:0,//预付款认领 本次认领金额 合计  this.$parent.currRow.expenditureAmt
         dataOne: [],//预收款支出认领 one 对账单
         dataTwo: [],//会计科目
         dataThree: [],//数组
@@ -106,6 +107,7 @@
               return '合计'
             }
             if (['thisClaimedAmt'].includes(column.property)) {
+              this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex);
               return this.sum(data, column.property, columnIndex)
             }
             return null
@@ -172,6 +174,12 @@
         if (flag) {
           this.$message.error('认领金额输入错误，不可为空')
           return
+        }
+        if(this.titleName=="预付款认领" && (this.thisClaimedAmtSum>this.$parent.currRow.payAmt)){
+          return this.$Message.error("本次认领金额不可大于本次申请金额")
+        }
+        if(this.titleName=="预付款收回认领" && (this.thisClaimedAmtSum>this.$parent.currRow.claimAmt)){
+          return this.$Message.error("本次认领金额不可大于本次已认领金额")
         }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {
