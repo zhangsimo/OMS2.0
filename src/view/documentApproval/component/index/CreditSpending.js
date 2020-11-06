@@ -79,7 +79,7 @@ export default {
 
   methods: {
     //模态框打开111
-    open() {
+    async open() {
 
       this.company = [];
       this.getpayList()
@@ -124,6 +124,9 @@ export default {
         this.formInline.paymentOrgName = getPost();
         delete this.list.rowMessage.id
         this.$set(this.formInline, 'details', [this.list.rowMessage])
+        await this.remoteMethod("",this.list.rowMessage.guestId)
+        this.formInline.receiveGuestId = this.company[0].value
+        this.getCompany(this.company[0])
       }
     },
 
