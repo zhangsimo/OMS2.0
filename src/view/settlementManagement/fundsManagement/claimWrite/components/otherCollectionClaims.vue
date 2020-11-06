@@ -434,17 +434,18 @@
           data.financeAccountCashList = this.accrued
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
-            if(data.claimMoney==null || data.claimMoney<=0){
-              this.$Message.error("本次认领金额不可为零或小于零")
-              return
-            }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
-              this.$Message.error("本次认领金额不可大于支付金额")
-              return
-            }
-            if(data.claimMoney > this.accrued[0].unClaimedAmt){
-              this.$Message.error('本次认领金额不可大于未认领金额')
-              return
-            }
+            this.accrued.map(el=>{
+              el.thisClaimedAmt=el.rpAmt;
+              if(el.thisClaimedAmt==null || el.thisClaimedAmt<=0){
+                this.$Message.error("本次认领金额不可为零或小于零")
+                return
+              }
+              if(el.thisClaimedAmt > el.unClaimedAmt){
+                this.$Message.error('本次认领金额不可大于未认领金额')
+                return
+              }
+              return el;
+            })
             showLoading('body',"保存中，请勿操作。。。")
             addClaim2(data).then(res => {
               if (res.code === 0) {
