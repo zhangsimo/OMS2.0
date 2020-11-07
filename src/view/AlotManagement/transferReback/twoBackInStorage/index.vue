@@ -85,11 +85,12 @@
                   :model="formPlan"
                 >
                   <FormItem label="申请方：" class="fs12">
-                    <Row class="w500">
+                    <Row class="w180">
                       <Col span="22">
                       <Tooltip :content="formPlan.guestName">
                         <Input
                           disabled
+                          class="w180"
                           readonly
                           v-model="formPlan.guestName"
                           placeholder
@@ -99,7 +100,7 @@
                     </Row>
                   </FormItem>
                   <FormItem label="入库仓库：">
-                    <Select disabled v-model="formPlan.storeId" class="w150">
+                    <Select disabled v-model="formPlan.storeId" class="w180">
                       <Option
                         :disabled="item.isDisabled"
                         v-for="item in List"
@@ -110,53 +111,53 @@
                     </Select>
                     <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
                   </FormItem>
-                  <FormItem label="调出退回日期：" class="fs12 ml50">
+                  <FormItem label="调出退回日期：" class="fs12">
                     <Date-picker
                       disabled
                       readonly
                       v-model="formPlan.finishDate"
                       type="date"
                       placeholder
-                      class="w160"
+                      class="w180"
                     ></Date-picker>
                   </FormItem>
                   <FormItem label="备注：">
                     <Tooltip :content="formPlan.remark">
                     <Input
                       :disabled="this.flag"
-                      class="w500"
+                      class="w180"
                       v-model="formPlan.remark"
                       placeholder="选填"
                       maxlength="100"
                     ></Input>
                     </Tooltip>
                   </FormItem>
-                  <FormItem label="处理人：">
-                    <Input
-                      disabled
-                      readonly
-                      class="w160"
-                      v-model="formPlan.createUname"
-                      placeholder
-                    ></Input>
-                  </FormItem>
-                  <FormItem label="申请单号：" class="ml50">
+                  <!--<FormItem label="处理人：">-->
+                    <!--<Input-->
+                      <!--disabled-->
+                      <!--readonly-->
+                      <!--class="w180"-->
+                      <!--v-model="formPlan.createUname"-->
+                      <!--placeholder-->
+                    <!--&gt;</Input>-->
+                  <!--</FormItem>-->
+                  <FormItem label="申请单号：">
                     <Tooltip :content="formPlan.code">
                     <Input
                       disabled
                       readonly
-                      class="w160"
+                      class="w180"
                       v-model="formPlan.code"
                       placeholder
                     ></Input>
                     </Tooltip>
                   </FormItem>
-                  <FormItem label="退回单号：" class="ml50">
+                  <FormItem label="退回单号：">
                     <Tooltip :content="formPlan.serviceId">
                     <Input
                       disabled
                       readonly
-                      class="w160"
+                      class="w180"
                       v-model="formPlan.serviceId"
                       placeholder
                     ></Input>
@@ -172,6 +173,7 @@
                 border
                 resizable
                 show-footer
+                :footer-method="addFooter"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
@@ -211,7 +213,7 @@
                   width="120"
                   field="storeShelf"
                   title="仓位"
-                  :edit-render="{name: 'input',immediate: true, events: {blur: checkSelf}}"
+                  :edit-render="{name: 'input',autoselect: true,immediate: true, events: {blur: checkSelf}}"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="unit"
@@ -240,6 +242,7 @@
                   width="100"
                 ></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{Leftcurrentrow?Leftcurrentrow.createUname:""}}</span><span>创建日期：{{Leftcurrentrow?Leftcurrentrow.createTime:""}}</span><span>提交人：{{Leftcurrentrow?Leftcurrentrow.commitUname:""}}</span><span>提交日期：{{Leftcurrentrow?Leftcurrentrow.commitDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -331,13 +334,15 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
-            type: "index"
+            width: 50,
+            type: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "name",
-            minWidth: 70,
+            width: 70,
+            resizable:true,
             render: (h, params) => {
               let name = params.row.status.name;
               return h("span", name);
@@ -346,39 +351,46 @@ export default {
           {
             title: "申请方",
             key: "guestName",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "受理日期",
             key: "createTime",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "受理人",
             key: "createUname",
-            minWidth: 140
+            width: 140,
+            resizable:true
           },
 
           {
             title: "退回单号",
             key: "serviceId",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "入库人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "调出退回日期",
             align: "center",
             key: "finishDate",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "printing",
-            minWidth: 170
+            width: 170,
+            resizable:true
           }
         ],
         tbdata: []
@@ -560,6 +572,28 @@ export default {
       this.params = { ...this.params, ...val };
       this.getinfo();
     },
+    //footer计算
+    addFooter({columns, data}) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "和值";
+          }
+          if (columnIndex === 1) {
+            return `共 ${(data||[]).length} 条`;
+          }
+          if (
+            ["applyQty", "hasAcceptQty", "hasOutQty","hasInQty"].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property, columnIndex);
+          }
+          // if (column.property === "orderAmt") {
+          //   return ` ${this.countAllAmount(data)} `;
+          // }
+          return null;
+        }),
+      ];
+    },
     //
     // 仓库下拉框
     warehouse() {
@@ -681,9 +715,9 @@ export default {
       let planBtnH = this.$refs.planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 104;
+      this.leftTableHeight = wrapH - 110;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
     });
     this.warehouse();
   }
@@ -692,7 +726,7 @@ export default {
 
 <style scoped>
 .con-box {
-  height: 600px;
+  /*height: 600px;*/
 }
 .w550 {
   width: 580px;

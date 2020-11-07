@@ -385,6 +385,7 @@
             if (this.$parent.$parent.$parent.$parent.difference !== undefined) {
               const that = this.$parent.$parent.$parent.$parent
               that.claimedAmt = 0;
+              let amt=0;
               val.map(item => {
                 // if (item.paidMoney) {
                 //   that.claimedAmt += item.paidMoney * 1;
@@ -392,12 +393,17 @@
                 //   that.claimedAmt += item.incomeMoney * 1;
                 // }
                 if(item.unClaimedAmt){
-                  that.claimedAmt += item.unClaimedAmt * 1
-                  that.claimedAmt = Number(that.claimedAmt.toFixed(2))
+                  amt += item.unClaimedAmt * 1
+                  amt = Number(amt.toFixed(2))
+                  if(Math.abs(Number(item.paidMoney))>0){
+                    that.claimedAmt = '-'+amt
+                  }else{
+                    that.claimedAmt = amt
+                  }
                 }
               });
-              that.difference = that.currentAccount.actualCollectionOrPayment
-                ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
+              that.difference = Math.abs(that.currentAccount.row.actualCollectionOrPayment)
+                ? Math.abs(that.currentAccount.row.actualCollectionOrPayment )- Math.abs(that.claimedAmt)
                 : 0 - that.claimedAmt;
             }
           }

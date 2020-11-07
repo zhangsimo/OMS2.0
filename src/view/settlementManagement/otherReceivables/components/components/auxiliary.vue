@@ -580,12 +580,16 @@ export default {
     },
     //部门改变
     ListChange(val, selectedData) {
-      // console.log(selectedData);
+      this.AssistAccounting = {}
       if (selectedData.length == 1) {
-        this.AssistAccounting = selectedData[0].label;
+        this.AssistAccounting.auxiliaryTypeCode = '3'
+        this.AssistAccounting.fullName = selectedData[0].label;  
+        this.AssistAccounting.code = selectedData[0].value; 
         this.auxiliaryTypeCode = "3";
       } else {
-        this.AssistAccounting = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.code = selectedData[selectedData.length - 1].value; 
+        this.AssistAccounting.auxiliaryTypeCode = '3'
         this.auxiliaryTypeCode = "3";
       }
     },
@@ -676,6 +680,7 @@ export default {
 }
 .OtherLeft {
   flex: 1;
+  width: 103px;
   border-right: 1px solid gray;
 }
 .OtherLeft > ul > li {
@@ -689,6 +694,7 @@ export default {
   border-bottom: 1px solid gray;
 }
 .OtherRight {
+  width: 615px;
   flex: 6;
 }
 .changeDiv {
@@ -698,7 +704,7 @@ export default {
 .xuan {
   background: #e8eaec;
   color: gray;
-  font-size: 15px;
+  /* font-size: 15px; */
 }
 </style>
 <style scoped>

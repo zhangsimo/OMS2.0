@@ -169,6 +169,7 @@
   import {getDigitalDictionary, impUrl} from "@/api/system/essentialData/clientManagement";
   import * as tools from "../../../../utils/tools";
   import moment from "moment";
+  import {showLoading, hideLoading} from "../../../../utils/loading";
 
   export default {
     name: "clientCredit",
@@ -207,8 +208,8 @@
                 render: (h, params) => {
                   let state = params.row.isGuestResearch;
                   let zi = "";
-                  let jsonStatus=JSON.parse(params.row.researchStatus)
-                  jsonStatus.value ==2?(state==0?zi = "否":zi = "是"):(jsonStatus.value == 1 ? zi = "审批中":(jsonStatus.value == 4?zi="审批拒绝":(state==0?zi = "否":zi = "是")))
+                  let jsonStatus = JSON.parse(params.row.researchStatus)
+                  jsonStatus.value == 2 ? (state == 0 ? zi = "否" : zi = "是") : (jsonStatus.value == 1 ? zi = "审批中" : (jsonStatus.value == 4 ? zi = "审批拒绝" : (state == 0 ? zi = "否" : zi = "是")))
                   return h("span", zi);
                 }
               },
@@ -544,7 +545,8 @@
         if (this.researchStatus === 1) {
           return this.$Message.warning("信用调查正在审批中");
         }
-        if (this.creaditList.isGuestResearch === 0) {
+        let jsonStatus=JSON.parse(this.creaditList.researchStatus)
+        if (this.creaditList.isGuestResearch === 0 && jsonStatus.value!=4) {
           this.$refs.SurveyList.$refs.formInline.resetFields();
         }
         this.creaditList.rollingDate = this.creaditList.rollingDate || 1;
@@ -624,6 +626,7 @@
       confirm() {
         this.$refs["SurveyList"].$refs["formInline"].validate(valid => {
           if (valid) {
+            showLoading()
             let data = JSON.parse(JSON.stringify(this.creaditList));
             if (this.creaditList.registerDate) {
               data.registerDate = tools.transTime(this.creaditList.registerDate);
@@ -647,7 +650,10 @@
                 this.surveyShow = false;
                 this.$Message.warning("成功！");
               }
-            });
+              hideLoading()
+            }).catch(err=>{
+              hideLoading()
+            })
           } else {
             this.$message.warning("* 为必填！");
           }
@@ -681,6 +687,7 @@
       adjustmentconfirm() {
         this.$refs["formRule"].$refs["formRule"].validate(valid => {
           if (valid) {
+            showLoading()
             this.creaditList.operationStart = moment(this.creaditList.operationStart).format("YYYY-MM-DD")
             this.creaditList.operationEnd = moment(this.creaditList.operationEnd).format("YYYY-MM-DD")
             this.creaditList.registerDate = moment(this.creaditList.registerDate).format("YYYY-MM-DD")
@@ -716,7 +723,10 @@
                 this.$Message.warning("保存成功");
                 this.getListTop();
               }
-            });
+              hideLoading()
+            }).catch(err=>{
+              hideLoading()
+            })
           } else {
             this.$message.warning("* 为必填！");
           }
@@ -791,6 +801,7 @@
         this.CreditLineApplicationShow = false;
       },
       confirmFn() {
+        showLoading()
         let data = {};
         data.guestId = this.rowMessage.guestId;
         data.orgId = this.rowMessage.orgid;
@@ -842,7 +853,10 @@
             this.$Message.warning("保存成功");
             this.getListTop();
           }
-        });
+          hideLoading()
+        }).catch(err=>{
+          hideLoading()
+        })
       }
     },
     mounted() {

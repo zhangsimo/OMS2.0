@@ -117,9 +117,9 @@
               <Icon type="ios-search" size="14"/>
               查询
             </Button>
-            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">
-              <i class="iconfont mr5 icondaochuicon"></i> 导出
-            </Button>
+<!--            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
+<!--            </Button>-->
             <Poptip v-model="visible" placement="bottom">
               <Button class="mr10 w90">
                 仓库设置
@@ -288,22 +288,6 @@
             <!--<Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>-->
           </div>
         </div>
-        <!--        表-->
-        <!--<Table-->
-        <!--class="table-highlight-row"-->
-        <!--highlight-row-->
-        <!--size="small"-->
-        <!--ref="table2"-->
-        <!--align="left"-->
-        <!--border-->
-        <!--:loading="loading2"-->
-        <!--:stripe="true"-->
-        <!--:columns="columns2"-->
-        <!--:data="contentTwo.dataTwo"-->
-        <!--height="400"-->
-        <!--show-summary-->
-        <!--:summary-method="handleSummary"-->
-        <!--&gt;</Table>-->
         <vxe-table
           border
           ref="xTable3"
@@ -329,9 +313,8 @@
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
           <vxe-table-column field="carBrandName" title="厂牌" width="70"></vxe-table-column>
-          <vxe-table-column field="enterQty" title="入库数量" width="70">
-          </vxe-table-column>
-          <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
+          <vxe-table-column field="outableQty" title="库存数量" width="70"></vxe-table-column>
+          <vxe-table-column field="enableSellQty" title="可售数量" width="70"></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
@@ -376,6 +359,8 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="serviceId" title="入库单号" width="124"></vxe-table-column>
+          <vxe-table-column field="enterQty" title="入库数量" width="70">
+          </vxe-table-column>
           <vxe-table-column field="originGuestName" title="第一供应商" width="150"></vxe-table-column>
           <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
@@ -551,7 +536,6 @@
       :styles="{ top: '50px', width: '700px' }"
       :footer-hide="true"
     >
-      <div class="positionDom">
       <vxe-form
         ref="xForm"
         class="my-form2"
@@ -609,7 +593,7 @@
         <Button type="primary" class="w80" @click="handleSubmit()">确定</Button>
         <Button class="w80" @click="positionModel=false" style="margin-left: 8px">取消</Button>
       </div>
-      </div>
+
     </Modal>
   </div>
 </template>
@@ -990,7 +974,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1075,7 +1059,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1094,7 +1078,7 @@
         }
         if (
           (data.partName == "" || data.partName.trim() == "") && //名称
-          (data.oemCode == "" || data.oemCode.trim() == "") && //oem码
+          (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
           (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
           (data.partId == "" || data.partId.trim() == "") && //内码
           (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
@@ -1244,7 +1228,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1277,7 +1261,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1418,10 +1402,8 @@
         if (value == "") {
           this.isSelfOk = true;
         } else {
-          showLoading('.positionDom','仓位验证中...');
           checkStore({storeId: this.formPlan2.storeId, name: value}).then(
             res => {
-              hideLoading();
               if (res.code == 0 && res.data != null) {
                 this.isSelfOk = true;
               } else {
@@ -1433,12 +1415,12 @@
       },
       async handleSubmit() {
         if (!this.isSelfOk) {
-          return this.$Message.error("请填写正确的仓位!");
+          return this.$message.error("请填写正确的仓位!");
         }
         let rep = await setPosition(this.formPlan2)
         if (rep.code == 0) {
           this.positionModel = false;
-          this.$Message.success("仓位设置成功!");
+          this.$message.success("仓位设置成功!");
           this.formPlan2 = {};
           this.getAllStocks();
 

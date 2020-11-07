@@ -4,7 +4,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
+            <!--<span>快速查询：</span>-->
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
@@ -29,7 +29,7 @@
             <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
-          <div class="db">
+          <div class="db mr10">
             <span>类型：</span>
             <Select v-model="type" style="width:200px" @on-change="getTransferWarehousing">
               <Option
@@ -40,21 +40,30 @@
               </Option>
             </Select>
           </div>
+          <div class="db mr10">
+            <Input
+              v-model="partCodeOrName"
+              placeholder="配件编码/名称"
+              class="w200"
+              clearable
+            />
+          </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="changePage(1)">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
-              </div>
-            </Poptip>
-          </div>
+          <!-- 导出导致卡顿-->
+          <!--<div class="db ml10">-->
+          <!--  <Poptip placement="bottom">-->
+          <!--    <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+          <!--    <div slot="content">-->
+          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
+          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
+          <!--    </div>-->
+          <!--  </Poptip>-->
+          <!--</div>-->
         </div>
       </div>
     </section>
@@ -110,6 +119,7 @@
         ], //分店名称
         model1: "",
         modal1: false,
+        partCodeOrName:'',
         page: {
           total: 0,
           sizeArr: [10, 20, 30, 40, 50],
@@ -697,6 +707,9 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
+        }
         showLoading(".loadingClass", "数据加载中，请勿操作")
         transferWarehousing(params, obj).then(res => {
           if (res.data.vos.length !== 0) {
@@ -709,7 +722,7 @@
             this.data = res.data.vos;
             this.page.total = res.data.TotalElements;
             this.total = res.data.AllotOutMainVO
-            this.selectTabArr = []
+            this.selectTabArr = [];
             hideLoading()
           } else {
             hideLoading()

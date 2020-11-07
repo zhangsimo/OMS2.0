@@ -41,6 +41,7 @@
               <div class="db ml10">
                 <span>往来单位：</span>
                 <Select
+                  disabled
                   ref="companyGuset"
                   v-model="companyInfoGuestname"
                   filterable
@@ -595,6 +596,7 @@
         serviceCharge: 0, //手续费
         partsManagementFee: 0, //配件管理费
         otherFees: 0, //其他费用
+        noPayTotal: 0,  //本次不对账合计
         totalvalue: "1",
         Reconciliation: false,
         modifyAccountAmt: 0,
@@ -1565,8 +1567,12 @@
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
             this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
-            this.totalcollect = sum1
-            this.Actualtotalcollect = sum1
+            let sum3 = 0
+            this.data1.forEach(item => {
+              sum3 += parseFloat(item.thisAccountAmt)
+            })
+            this.totalcollect = sum3
+            this.Actualtotalcollect = sum3
           } else {
             let sum1 = 0
             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1591,12 +1597,21 @@
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
             this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
-            this.totalpayment = sum1
-            this.Actualtotalpayment = sum1
+            let sum3 = 0
+            this.data2.forEach(item => {
+              sum3 += parseFloat(item.thisAccountAmt)
+            })
+            this.totalpayment = sum3
+            this.Actualtotalpayment = sum3
           }
           this.Reconciliation = false;
+          this.getSettlementComputed();
+          this.getAccountNameList();
+          this.getPaymentNameList();
+          this.totalvalueFun();
         } else {
           this.$message.error("信息填写错误");
+          return
         }
       },
       // 保存接口
@@ -1719,7 +1734,7 @@
               buttonStatus: num,
               incomeType: this.totalvalue,
               remark: this.remark,
-              collectionName: this.collectionObj.label,
+              collectionName: this.collectionObj ? this.collectionObj.label : '',
               collectionId: this.collectionUname || "",
               bankName: this.openingBank,
               collectionAccount: this.collectionAccount,

@@ -14,7 +14,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select v-model="model1" filterable class="w150" :disabled="selectShopList" @on-change='changeArea'>
+            <Select v-model="model1" filterable class="w150" disabled @on-change='changeArea'>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -57,6 +57,7 @@
           <div class="db ml15">
             <span>对应科目：</span>
             <el-cascader
+              class="h30"
               ref="casecader"
               size="small"
               :options="options"
@@ -65,7 +66,7 @@
               collapse-tags
               clearable></el-cascader>
           </div>
-          <div class="db mr10">
+          <div class="db mr10 ml15">
             <span>金额：</span>
             <vxe-input type="float" class="w100 h30" v-model="accountMoney" digits="2"></vxe-input>
           </div>
@@ -559,7 +560,8 @@
     computed: {
       selectShopList() {
         if (this.$store.state.user.userData.currentCompany != null) {
-          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+          // return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+          return true
         } else {
           return true
         }

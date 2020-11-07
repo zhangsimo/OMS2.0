@@ -1,32 +1,31 @@
 <template>
   <div class="content-oper content-oper-flex">
-    <section class="oper-box">
-      <div class="oper-top flex">
-        <div class="db mt20">
-          <span>门店：</span>
-          <Input v-model="orgName" readonly class="w100"/>
-          <Button class="ml10" @click="write">核销对账单</Button>
-        </div>
-      </div>
-      <div class="ml20 mb10">
-        <Row>
-          <Col span="6">
-            <span>对账单勾选金额</span>
+    <section class="oper-box headerTitle">
+      <div class="headerbox">
+      <Row>
+          <Col span="20">
+            <Row class="db">
+              <Col span="6">
+                <span class="title">门店：</span>
+                <span class="pl10">{{orgName}}</span>
+              </Col>
+              <Col span="6">
+                <span class="title">对账单金额:</span>
+                <span>{{ currentAccount.row ? currentAccount.row.actualCollectionOrPayment : ''}}</span>
+
+              </Col>
+              <Col span="6">
+                <span class="title">认领款金额:</span>
+                <span>{{claimedAmt}}</span>
+              </Col>
+              <Col span="6">
+                <span class="title">差异</span>
+                <span>{{difference ? difference.toFixed(2) : ''}}</span>
+              </Col>
+            </Row>
           </Col>
-          <Col span="3">
-            <span>{{currentAccount.actualCollectionOrPayment}}</span>
-          </Col>
-          <Col span="6">
-            <span>认领款勾选金额</span>
-          </Col>
-          <Col span="3">
-            <span>{{claimedAmt}}</span>
-          </Col>
-          <Col span="2">
-            <span>差异</span>
-          </Col>
-          <Col span="2">
-            <span>{{difference}}</span>
+          <Col span="4">
+            <Button class="ml10" @click="write">核销对账单</Button>
           </Col>
         </Row>
       </div>
@@ -88,15 +87,7 @@
               <Icon @click.native="handleChangeLeft" :custom="leftValue ? 'iconfont iconsuoxiaoicon icons' : 'iconfont iconkuodaicon icons'" style="cursor: pointer;"></Icon>
             </Tooltip>
             </div>
-            <Table
-              border
-              class="mt10"
-              :columns="accountNoWrite"
-              :data="accountNoWriteData"
-              max-height="550"
-              highlight-row
-              @on-current-change="accountNoWriteChange"
-            ></Table>
+            <accountNoWriteTable :table-data="accountNoWriteData" :loading="accountNoWriteLoading" @currEvent="accountNoWriteChange"></accountNoWriteTable>
             <Page
               show-sizer
               show-total
@@ -283,6 +274,7 @@
   import expenditure from "./components/expenditure";
   import settlement from "./components/settlement";
   import claim from "../../components/claimed";
+  import accountNoWriteTable from "./components/accountNoWriteTable";
   import {getDataDictionaryTable} from "@/api/system/dataDictionary/dataDictionaryApi";
   import {
     accountNoSelete,
@@ -309,6 +301,7 @@
       advance,
       expenditure,
       settlement,
+      accountNoWriteTable,
       claim,
       chargeAdvance,
       subject,
@@ -359,199 +352,7 @@
           size: 10
         }, //未核销分页
         currentAccount: {}, //未核销选中的数据
-        accountNoWrite: [
-          {
-            title: "序号",
-            type: "index",
-            align: "center",
-            width: 40,
-            resizable: true,
-          },
-          {
-            title: "门店名称",
-            key: "orgName",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.orgName
-                  }
-                }, params.row.orgName)
-              ])
-            }
-          },
-          {
-            title: "对账单号",
-            key: "accountNo",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.accountNo
-                  }
-                }, params.row.accountNo)
-              ])
-            }
-          },
-          {
-            title: "实际收款/付款",
-            key: "actualCollectionOrPayment",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.actualCollectionOrPayment
-                  }
-                }, params.row.actualCollectionOrPayment)
-              ])
-            }
-          },
-          {
-            title: "已收/已付金额",
-            key: "amountReceivedOrPaid",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.amountReceivedOrPaid
-                  }
-                }, params.row.amountReceivedOrPaid)
-              ])
-            }
-          },
-          {
-            title: "未收/未付金额",
-            key: "amountNoCharOffOrUnpaid",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.amountNoCharOffOrUnpaid
-                  }
-                }, params.row.amountNoCharOffOrUnpaid)
-              ])
-            }
-          },
-          {
-            title: "往来单位",
-            key: "guestName",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.guestName
-                  }
-                }, params.row.guestName)
-              ])
-            }
-          },
-          {
-            title: "发生日期",
-            key: "createTime",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.createTime
-                  }
-                }, params.row.createTime)
-              ])
-            }
-          },
-          {
-            title: "收付类型",
-            key: "receivePaymentTypeName",
-            align: "center",
-            width: 100,
-            resizable: true,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.receivePaymentTypeName
-                  }
-                }, params.row.receivePaymentTypeName)
-              ])
-            }
-          },
-        ], //未核销对账单表格数据
+        accountNoWriteLoading:false,//为核销对账单 loading
         accountNoWriteData: [], //未核销对账单表格数据
         distribution: [
           {
@@ -997,7 +798,7 @@
             item.incomeMoney = ""
           }
         })
-        if (this.currentAccount.actualCollectionOrPayment>0) {
+        if (this.currentAccount.row.actualCollectionOrPayment>0) {
           this.$refs.claim.currentClaimed.map(item=>{
             if(item.incomeMoney>0){
               this.$refs.settlement.Settlement = true;
@@ -1205,7 +1006,7 @@
       //未核销选中的数据
       accountNoWriteChange(currentRow) {
         this.currentAccount = currentRow;
-        this.difference = currentRow.actualCollectionOrPayment - this.claimedAmt;
+        this.difference = Math.abs(currentRow.row.actualCollectionOrPayment) - Math.abs(this.claimedAmt);
       },
       //连锁待分配款项选中的数据
       distributionSelection(selection) {
@@ -1226,12 +1027,16 @@
           endDate: '',     //结束时间参数
           // createTime:this.applyDate //日期查询时间发生日期
         };
+        this.accountNoWriteLoading=true;
         accountNoSelete(obj).then(res => {
           if (res.code === 0) {
             this.accountNoWriteData = res.data.content;
             this.accountPage.total = res.data.totalElements;
           }
-        });
+          this.accountNoWriteLoading=false;
+        }).catch(err=>{
+          this.accountNoWriteLoading=false;
+        })
       },
       //未核销对账单查询接口
       noWrite() {
@@ -1250,12 +1055,16 @@
             : "",     //结束时间参数
           // createTime:this.applyDate //日期查询时间发生日期
         };
+        this.accountNoWriteLoading=true;
         accountNoSelete(obj).then(res => {
           if (res.code === 0) {
             this.accountNoWriteData = res.data.content;
             this.accountPage.total = res.data.totalElements;
           }
-        });
+          this.accountNoWriteLoading=false
+        }).catch(err=>{
+          this.accountNoWriteLoading=false;
+        })
       },
       //本店待认领款查询接口
       claimedList() {
@@ -1346,7 +1155,7 @@
     }
   };
 </script>
-<style>
+<style scoped lang="less">
   .top-pane,
   .bottom-pane {
     overflow: auto;
@@ -1354,4 +1163,31 @@
  .card {
    padding-left: 10px;
  }
+  .headerTitle {
+    padding-left: 10px;
+    width: 100%;
+    height: 46px;
+    position: relative;
+    .headerbox {
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      box-sizing: border-box;
+      span {
+        display: inline-block;
+        line-height: 30px;
+      }
+    }
+    .db {
+      border: 1px #ddd solid;
+      border-left: none;
+    }
+    .title {
+      width: 100px;
+      text-align: center;
+      border-right: 1px #ddd solid;
+      border-left: 1px #ddd solid;
+    }
+  }
 </style>

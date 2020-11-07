@@ -7,22 +7,22 @@
           <Icon custom="iconfont iconchaxunicon icons" />查询
         </span>
       </Button>
-      <Button class="w90 mr10" @click="addClient">
+      <Button class="w90 mr10" @click="addClient" v-has="'addClient'">
         <span class="center">
           <Icon type="md-add" />新增
         </span>
       </Button>
-      <Button class="w90 mr10" @click="changeClient">
+      <Button class="w90 mr10" @click="changeClient" v-has="'changeClient'">
         <span class="center">
           <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
         </span>
       </Button>
-      <Button class="mr15" v-if="pitchSupplierOne.isDisabled == 1" @click="changeDisabled">
+      <Button class="mr15" v-if="pitchSupplierOne.isDisabled == 1" @click="changeDisabled" v-has="'enable'">
         <span class="center">
           <Icon custom="iconfont iconqiyongicon icons" />启用
         </span>
       </Button>
-      <Button class="mr15" v-else @click="changeDisabled">
+      <Button class="mr15" v-else @click="changeDisabled" v-has="'enable'">
         <span class="center">
           <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
         </span>

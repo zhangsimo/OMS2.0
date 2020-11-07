@@ -131,7 +131,7 @@
                   <FormItem class="form-Item" label="供应商：" prop="guestId">
                     <Row class="w160">
                       <Col span="19">
-                        <Tooltip :content="formPlanmain.guestName">
+                        <Tooltip :content="formPlanmain.guestName" placement="top">
                           <!-- <Input
                             v-model="formPlanmain.guestName"
                             placeholder="请选择供应商"
@@ -397,7 +397,7 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input'}"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -415,7 +415,7 @@
                   show-overflow="tooltip"
                   field="orderPrice"
                   title="采购单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

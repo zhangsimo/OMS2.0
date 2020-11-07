@@ -201,7 +201,7 @@ export const mixSelectPartCom  = {
       }
 
       if(this.partName.trim()){
-        req.partCode = this.partName.trim()
+        req.partCode = this.partName.replace(/\s+/g,'');
       }
       req.page = this.page.num -1;
       req.size = this.page.size;
@@ -232,17 +232,18 @@ export const mixSelectPartCom  = {
     //获取配件品牌
     getPartBrandAll(){
       getAllBrand({page: 1,pageSize: 1000}).then(res => {
-        console.log(res)
-        let filterData = res.data.content.filter(item => item.qualityCode=='000071')
+        let filterData = res.data.content.filter(item => item.qualityCode=='000071'||item.qualityCode=='000070').map(item => item.children)
         if(filterData.length>0){
-          if(filterData[0].children&&filterData[0].children.length>0){
-            filterData[0].children.map(item => {
-              let objData = {}
-              objData.label = item.name
-              objData.value = item.code
-              this.partBrandData.push(objData)
-            })
-          }
+          filterData.map(iv => {
+            if(iv.length>0){
+              iv.map(item => {
+                let objData = {}
+                objData.label = item.name
+                objData.value = item.code
+                this.partBrandData.push(objData)
+              })
+            }
+          })
         }
       })
     },
@@ -283,9 +284,16 @@ export const mixSelectPartCom  = {
       if(this.partBrandData.length==1){
         this.getPartBrandAll();
       }
+      this.$nextTick(()=>{
+        this.$refs.elinput.focus();
+      })
 
       // this.getCarClassifysFun();
     },
+    focus(event){
+      event.currentTarget.select();
+    },
+
     //配件表格点击的行
     selectTabelData({selection}){
       this.selectTableItem = selection
@@ -294,6 +302,7 @@ export const mixSelectPartCom  = {
       if(this.selectTableItem.length>0){
         this.$emit('selectPartName',this.selectTableItem);
         this.searchPartLayer = false;
+        this.$refs.elinput.focus();
       }else{
         this.$Message.error("请选择数据")
       }
@@ -364,11 +373,13 @@ export const mixSelectPartCom  = {
       } else {
         this.selectTableItem = [row];
         this.$emit("selectPartName", this.selectTableItem);
+        this.$refs.elinput.focus();
       }
     },
     //修改数量价格选中配件
     throwDataChangeNum(v){
-      this.$emit("throwPartNameList2",v)
+      this.$emit("throwPartNameList2",v);
+      this.$refs.elinput.focus();
     }
   }
 }

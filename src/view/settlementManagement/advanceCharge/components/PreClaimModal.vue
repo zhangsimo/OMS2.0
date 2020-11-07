@@ -22,7 +22,7 @@
       </div>
       <div class="mr10 fl">
         <span>业务类别：</span>
-        <Select 
+        <Select
           class="w100"
           clearable
           v-model="category"
@@ -95,7 +95,7 @@ export default {
       account: '',  // 账户搜索条件
       category: '', // 业务分类搜索条件
       options: [], // 获取业务分类数组
-      tableData: [],  
+      tableData: [],
       claimedPage: {
         page: 1,
         total: 0,
@@ -191,7 +191,7 @@ export default {
         this.options = res.data || []
       })
     }
-    
+
   }
 }
 </script>

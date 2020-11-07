@@ -15,6 +15,7 @@
         highlight-current-row
         :height="leftTableHeight"
         :data="tableData"
+        @filter-change="filterChange"
         resizable
       >
         <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
@@ -35,7 +36,7 @@
         <vxe-table-column show-overflow field="createTime" title="创建日期" min-width="120"></vxe-table-column>
         <vxe-table-column :filters="[]" :filter-method="filterOrderNo" field="auditor" title="提交人" min-width="80" show-overflow></vxe-table-column>
         <vxe-table-column show-overflow field="auditDate" title="提交日期" min-width="120"></vxe-table-column>
-        <vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>
+        <!--<vxe-table-column show-overflow field="orderMan" title="销售员" min-width="70"></vxe-table-column>-->
       </vxe-table>
     </div>
     <Page
@@ -58,6 +59,7 @@
 <script>
 import * as tools from "_utils/tools";
 import { getLeftList } from "@/api/salesManagment/salesOrder";
+import {pinyin} from "../../../../utils/py";
 
 export default {
   name: "OrderLeft",
@@ -85,9 +87,11 @@ export default {
         num: 1
       },
       tableData: [],
+      filterList:[],
       Flaga: true,
       selectItemId:'',
       leftTableHeight:0,
+      filterCheckObj:this.$store.state.dataList.filterList||{}//记录筛选的数据
     };
   },
   mounted() {
@@ -149,13 +153,12 @@ export default {
       let res = await getLeftList(page, size, data);
       if (res.code === 0) {
         this.tableData = res.data.content;
-
         this.setFilterArr(res.data.content||[])
 
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
         //筛选出当前操作的是第几条并选中
-        if(this.selectItemId){
+        if(this.selectItemId&&this.tableData.length>0){
           let num = 0
           this.tableData.forEach( (item,index) =>{
             if(item.id == this.selectItemId){
@@ -182,9 +185,18 @@ export default {
     returnData(rData,cos){
       let arrData = [];
       let arr = rData.map(el => el[cos]);
+      if(cos=="guestName"){
+        arr=arr.sort((a,b) => (pinyin.getCamelChars(a) > pinyin.getCamelChars(b)) ? 1 : ((pinyin.getCamelChars(b) > pinyin.getCamelChars(a)) ? -1 : 0));
+      }
       let set = new Set(arr);
       set.forEach(el => {
-        arrData.push({ label: el, value: el });
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
       });
       this.$nextTick(()=>{
         const xtable = this.$refs.currentRowTable;
@@ -267,11 +279,16 @@ export default {
         return !row[property]
       }
       if(row[property]){
-        return row[property].indexOf(value) > -1;
+        return row[property] == value;
       }else{
         return false
       }
     },
+    filterChange({property, values}){
+      this.filterCheckObj = this.$store.state.dataList.filterList;
+      this.filterCheckObj[property] = values;
+      this.$store.dispatch('setGuestName',this.filterCheckObj);
+    }
   },
   watch: {
     //监听时间

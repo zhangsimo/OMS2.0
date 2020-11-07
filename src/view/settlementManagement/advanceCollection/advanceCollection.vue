@@ -26,7 +26,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -37,7 +37,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <input type="text" class="h30" v-model="companyId" />
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -66,7 +67,7 @@
           v-has="'revoke'"
           class="ml10"
           @click="revokeCollection(0)"
-          :disabled="currRow.writeOffReceiptNo || currRow.expenditureNo"
+          :disabled="currRow.writeOffReceiptNo!=null || currRow.expenditureNo!=null"
         >预收款撤回</Button>
         <Button
           class="ml10"
@@ -201,7 +202,7 @@
       </div>
     </section>
     <!-- 认领弹框 -->
-    <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
+    <!-- <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select
         v-model="companyId"
@@ -227,9 +228,9 @@
       <claim ref="claim" @selection="selection" />
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
-    </Modal>
+    </Modal> -->
     <!-- 认领支付弹框11 -->
-    <!-- <ClaimModal ref="claimModal" :titleName="claimTitle"></ClaimModal> -->
+    <ClaimModal ref="claimModal" :titleName="claimTit" :amountType="amountType"></ClaimModal>
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -245,7 +246,6 @@
   </div>
 </template>
 <script>
-// import ClaimModal from "./components/ClaimModal"
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -258,6 +258,7 @@ import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrit
 import settlement from "../bill/components/settlement";
 import { creat } from "./../components";
 import claim from "./components/claimed";
+import ClaimModal from "./components/ClaimModal"
 import Record from "../components/Record";
 // import Record from "../otherReceivables/components/Record";
 import claimGuest from "./components/claimGuest";
@@ -285,11 +286,11 @@ export default {
     settlement,
     payApply,
     CreditSpending,
-    // ClaimModal
+    ClaimModal
   },
   data() {
     return {
-      // amountType: null,
+      amountType: null,
       // claimType: null,
       // claimTitle: "",
       // condition: undefined,
@@ -323,7 +324,7 @@ export default {
       modelType: {
         type: 5,
         id: ""
-      }
+      },
     };
   },
   async mounted() {
@@ -409,6 +410,7 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
     // 选中行
@@ -472,28 +474,9 @@ export default {
     },
     //认领弹框
     claimCollect(type) {
-      if (type === 1) {
-        this.claimModal = true;
-        this.claimTit = "预收款认领";
-        this.claimedList(1);
-      } else {
-        this.claimTit = "预收款支出认领";
-        if (
-          Object.keys(this.currRow).length !== 0 &&
-          this.currRow.expenditureNo &&
-          !this.currRow.expenditureClaimAmt
-        ) {
-          this.claimModal = true;
-          this.claimedList(2);
-        } else {
-          this.$message.error("请选择有预收款支出单号且未支出认领的数据");
-        }
-      }
-
       // if (type === 1) {
       //   this.claimModal = true;
-      //   this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
-      //
+      //   this.claimTit = "预收款认领";
       //   this.claimedList(1);
       // } else {
       //   this.claimTit = "预收款支出认领";
@@ -508,6 +491,26 @@ export default {
       //     this.$message.error("请选择有预收款支出单号且未支出认领的数据");
       //   }
       // }
+
+      if (type === 1) {
+        this.$refs.claimModal.open();
+        this.amountType = 1
+        this.claimTit = "预收款认领";    // 预收款管理 amountType = 1
+        // this.claimedList(1);
+
+      } else {
+        this.claimTit = "预收款支出认领";
+        if (
+          Object.keys(this.currRow).length !== 0 &&
+          this.currRow.expenditureNo &&
+          !this.currRow.expenditureClaimAmt
+        ) {
+          this.$refs.claimModal.open();
+          this.amountType = 2
+        } else {
+          this.$message.error("请选择有预收款支出单号且未支出认领的数据");
+        }
+      }
 
 
     },
@@ -533,7 +536,7 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
           : "",
         orgid: this.BranchstoreId=="0"?"":this.BranchstoreId,
-        guestId: this.companyId,
+        guestName: this.companyId.trim(),
         size: this.page.size,
         page: this.page.num - 1
       };
@@ -564,7 +567,7 @@ export default {
             ? moment(this.value[1]).format("YYYY-MM-DD")+" 23:59:59"
             : "",
           orgid: this.BranchstoreId=="0"?"":this.BranchstoreId,
-          guestId: this.companyId,
+          guestName: this.companyId,
           pagesize: this.page.total,
         };
         let params="";

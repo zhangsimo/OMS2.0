@@ -1,6 +1,5 @@
 import Main from "@/view/base/main";
 import parentView from "@/components/parent-view";
-
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
  * meta: {
@@ -31,7 +30,7 @@ export default [
       title: "Print - 打印",
       hideInMenu: true
     },
-    component: () => import("@/view/base/print/print.vue")
+    component: () => import("@/components/print/print.vue")
   },
   {
     path: "/register",
@@ -1152,54 +1151,6 @@ export default [
     component: Main,
     children: [
       {
-        path: "/navigator",
-        redirect: "",
-        mark: "7200",
-        meta: { keepAlive: true,
-          title: "领航者驾驶舱",
-        },
-        component: parentView,
-        children: [
-          {
-            path: "balance",
-            name: "balance",
-            mark: "7201",
-            meta: { keepAlive: true,
-              // hideInMenu: true,
-              title: "经营情况表",
-            },
-            component: () =>
-              import("@/view/reportForm/navigator/balance.vue")
-          },
-          {
-            path: "income",
-            name: "income",
-            mark: "7202",
-            meta: {
-              keepAlive: true,
-              // hideInMenu: true,
-              title: "集团利润表",
-
-            },
-            component: () =>
-              import("@/view/reportForm/groupProfit/index.vue")
-          },
-          {
-            path: "property",
-            name: "property",
-            mark: "7203",
-            meta: {
-              keepAlive: true,
-              // hideInMenu: true,
-              title: "集团资产表",
-
-            },
-            component: () =>
-              import("@/view/reportForm/groupLiabilities/index.vue")
-          }
-      ]
-      },
-      {
         path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
         name: "dailySalesStatistics",
         redirect: "",
@@ -1676,7 +1627,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
-            // mark: '59',
+            mark: '9403',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初库存",
@@ -1691,7 +1642,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
-            // mark: '59',
+            mark: '9401',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "备货级别设置",
@@ -1706,7 +1657,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/CustomClassification/CustomClassification",
             name: "CustomClassification",
-            // mark: '59',
+            mark: '9209',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "自定义分类设置",
@@ -1751,7 +1702,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
             name: "brandCarModel",
-            // mark: '59',
+            mark: '9208',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "品牌车型",
@@ -1797,7 +1748,7 @@ export default [
             path:
               "/systemSetting/InitialNavigation/storeManagement/storeManagement",
             name: "storeManagement",
-            // mark: '59',
+            mark: '9207',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "门店设置",
@@ -1811,7 +1762,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
             name: "setWarehouse",
-            // mark: '59',
+            mark: '9402',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "仓库设置",
@@ -1825,7 +1776,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setBank",
             name: "setBank",
-            // mark: '59',
+            mark: '9404',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初现金银行",

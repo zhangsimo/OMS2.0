@@ -31,7 +31,7 @@
             <Button type="warning" @click="query" class="mr10">查询</Button>
             <Poptip placement="bottom-start" v-model="moreModel">
               <Button class="mr10" @click="moreOpen">更多查询</Button>
-              <div slot="content" class="h300">
+              <div slot="content">
                 <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
                   <FormItem label="出库日期: " class="h20">
                     <DatePicker
@@ -123,7 +123,7 @@
                     </Select>
                   </FormItem>
                 </Form>
-                <Row style="background-color: #ffffff;position:fixed;top:44vh;" class="pb5 pt10 mt10 pr30 w400">
+                <Row style="background-color: #ffffff;" class="pb5 pt10 mt10 pr30 w400">
                   <Col span="20">
                     <Row>
                       <Col span="7" class="ml5">

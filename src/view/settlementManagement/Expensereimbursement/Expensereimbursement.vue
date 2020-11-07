@@ -605,7 +605,7 @@
             endTime: this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : "",
-            orgid: this.BranchstoreId,
+            orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
             serviceId: this.requestCode,
             pagesize:this.page.total,
           };
@@ -629,7 +629,7 @@
           endTime: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          orgid: this.BranchstoreId,
+          orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
           serviceId: this.requestCode
           // guestId: this.companyId,
         };

@@ -128,7 +128,7 @@
                   <FormItem class="form-Item" label="供应商：" prop="guestName">
                     <Row class="w160">
                       <Col span="19">
-                        <Tooltip :content="formPlanmain.guestName">
+                        <Tooltip :content="formPlanmain.guestName" placement="top">
                           <!-- <Input
                           v-model="formPlanmain.guestName"
                           placeholder="请选择供应商"
@@ -391,7 +391,7 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -412,14 +412,14 @@
                   width="120"
                 >
                   <template
-                    v-slot:edit="{ row }"
+                    v-slot="{ row }"
                   >{{feeform.exchangeRate == 0 ? '0.00' : (row.rmbPrice / feeform.exchangeRate) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
                   field="rmbPrice"
                   title="采购裸价(人民币)"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

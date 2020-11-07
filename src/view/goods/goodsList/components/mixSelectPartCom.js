@@ -23,6 +23,7 @@ export const mixSelectPartCom = {
       partId: "",
       partCode: "",
       oemCode: "",
+      showDisabled:false,//显示禁用
       treeData: [], //系统分类树形数据
 
       //查询选择
@@ -192,7 +193,7 @@ export const mixSelectPartCom = {
       data.name = this.partName
       data.partInnerId = this.partId
       data.partCode = this.partCode
-      data.oeCode = this.oemCode
+      data.oeCode = this.oemCode.replace(/\s+/g,'');
       if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
         boolParams=true
       }
@@ -207,7 +208,7 @@ export const mixSelectPartCom = {
           formData[k] = data[k];
         }
       }
-
+      formData.isDisabled=this.showDisabled==false?0:1;
       if(this.formPlanmain && this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
       }
@@ -279,7 +280,7 @@ export const mixSelectPartCom = {
       this.partCode = "";
       // this.getPartBrandAll();
       this.getCarClassifysFun();
-      // this.getList();
+      this.getList();
       this.$nextTick(() => this.$refs.Input.focus());
     },
     //配件表格点击的行
@@ -292,9 +293,27 @@ export const mixSelectPartCom = {
         this.$emit("selectPartName", this.selectTableItem);
         // this.searchPartLayer = false;
         this.$Message.success("已添加");
+        this.focusInput();
       } else {
         this.$Message.error("请选择数据");
       }
+    },
+    focus(event){
+      event.currentTarget.select();
+    },
+    focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          this.$refs.Input.focus();
+        }else if(this.partId){
+          this.$refs.elinputpartId.focus();
+        }else if(this.partName){
+          this.$refs.elinputpartName.focus();
+        }else if(this.oemCode){
+          this.$refs.elinputoemCode.focus();
+        }
+
+      })
     },
     cancel() {
       this.searchPartLayer = false;
@@ -326,7 +345,9 @@ export const mixSelectPartCom = {
       savePartInfo(obj).then(res => {
         if(res.code == 0) {
           this.$Message.success("保存成功！");
-          this.reload();
+          // this.reload();
+          this.$refs.partInfo.proModal = false;
+          this.$refs.partInfo.btnIsLoadding = false;
         }
       });
     },
@@ -342,6 +363,7 @@ export const mixSelectPartCom = {
 
     throwDataChangeNum(v){
       this.$emit("selectPartName2", v);
+      this.focusInput();
     }
   }
 };

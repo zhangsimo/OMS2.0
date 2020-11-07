@@ -236,6 +236,8 @@ export default {
     //打开进项发票登记弹框
     registrationEntryOpen(row){
       this.$refs.registrationEntry.modal1=true;
+      this.$refs.registrationEntry.accountData = [];
+      this.$refs.registrationEntry.accountData.push(...this.formInline.expenseDetails)
     },
     //收款人账号搜索触发
     remoteMethod1(query) {
