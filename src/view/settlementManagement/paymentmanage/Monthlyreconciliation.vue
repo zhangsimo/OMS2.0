@@ -1573,6 +1573,11 @@
             })
             this.totalcollect = sum3
             this.Actualtotalcollect = sum3
+            this.setTempCollectlist(this.collectlist);
+            this.getSettlementComputed();
+            this.getAccountNameList();
+            this.getPaymentNameList();
+            this.totalvalueFun();
           } else {
             let sum1 = 0
             // this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
@@ -1603,12 +1608,13 @@
             })
             this.totalpayment = sum3
             this.Actualtotalpayment = sum3
+            this.setTempPaymentList(this.paymentlist);
+            this.getSettlementComputed();
+            this.getAccountNameList();
+            this.getPaymentNameList();
+            this.totalvalueFun();
           }
           this.Reconciliation = false;
-          this.getSettlementComputed();
-          this.getAccountNameList();
-          this.getPaymentNameList();
-          this.totalvalueFun();
         } else {
           this.$message.error("信息填写错误");
           return
