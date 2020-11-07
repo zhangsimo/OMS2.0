@@ -77,7 +77,6 @@ export default {
     //模态框打开111
     async open() {
       this.getpayList()
-      console.log(this.list.type)
       this.$refs.documentTable.recalculate(true)
       this.company = []
       this.payUserList = []
@@ -102,7 +101,6 @@ export default {
         this.formInline.paymentOrgName = getPost()
       }
       if (this.list.type == 5) {
-        console.log(this.list)
         this.modelType = false
         // let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         let  user = this.$store.state.user.userData
@@ -163,7 +161,6 @@ export default {
     getPay(value) {
       if (!value) return;
       let list = this.payUserList.filter(item => item.id == value)[0];
-      console.log(list)
       this.$set(this.formInline , 'paymentBank' , list.bankName)
       this.$set(this.formInline , 'paymentBankNo' , list.accountCode)
     },
@@ -195,7 +192,6 @@ export default {
           });
           let arrJson = new Set(arr)
           this.company = Array.from(arrJson)
-          console.log('往来单位：', this.company)
         }
       } else {
         this.company = [];
@@ -204,7 +200,7 @@ export default {
 
     //获取收款户名
     async getAccountNameList(row) {
-      if(row.value){
+      if(row){
         let rep = await getAccountName({"guestId": row.value});
         if (rep.code == 0) {
           this.receiverArr = rep.data;
@@ -262,7 +258,6 @@ export default {
       this.formInline.receiveGuestId = row.guestId;
       this.getAccountNameList({value: row.guestId})
       await this.getOrignCompany(row.guestName)
-      // console.log(this.company,1111)
       // this.formInline.receiveGuestId=this.company[0].value
       // this.getCompany(this.company[0])
     },
@@ -279,7 +274,6 @@ export default {
 
     //保存提交
     save(type) {
-      console.log(111111)
       this.$refs.formInline.validate(async (valid) => {
         if (valid) {
           let valg = false
