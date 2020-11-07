@@ -292,8 +292,8 @@ export default {
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
             valg = parseFloat(this.formInline.details[0].amountCollected) < parseFloat(this.formInline.applyAmt) ? true : false
           }
-          this.formInline.paymentTerm = moment(this.formInline.paymentTerm).format("YYYY-MM-DD") + " 23:59:59"
           if (valg) return this.$Message.error('申请金额不能大于单据金额')
+          this.formInline.paymentTerm = moment(this.formInline.paymentTerm).format("YYYY-MM-DD") + " 23:59:59"
           this.formInline.step = type
           let req = {...this.formInline}
           // req.paymentTerm = moment.utc(req.paymentTerm).day(1);
