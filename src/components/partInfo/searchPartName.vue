@@ -1,5 +1,5 @@
 <template>
-    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer mask-closable :zIndex="9999">
+    <vxe-modal className="vxe-modal-table" v-model="searchPartLayer" title="配件名称查询" id="myModal6" width="1000" height="450" min-width="460" min-height="320" resize remember transfer mask-closable :zIndex="999999999">
       <template v-slot>
             <vxe-grid
               border

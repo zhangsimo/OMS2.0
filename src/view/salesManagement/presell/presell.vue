@@ -123,7 +123,7 @@
                 :show-message="false"
                 ref="formPlan"
                 :model="formPlan"
-                :label-width="120"
+                :label-width="110"
                 :rules="ruleValidate"
               >
                 <div class="clearfix purchase" ref="planForm">
@@ -132,7 +132,7 @@
                       <!--<Tooltip :content="formPlan.fullName">-->
                       <!--<Input placeholder="请选择客户" v-model="formPlan.fullName" readonly disabled style="width:200px;" />-->
                       <!--</Tooltip>-->
-                      <sales-cus style="width:200px; display: inline-block" :disabled-prop="draftShow != 0||isNew" :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
+                      <sales-cus style="width:146px; display: inline-block" :disabled-prop="draftShow != 0||isNew" :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName" @throwName="throwNameFun"></sales-cus>
                       <!-- <Select
                         v-model="formPlan.guestId"
                         filterable
@@ -157,28 +157,28 @@
                       </Button>
                     </Row>
                   </FormItem>
-                  <FormItem label="业务员：" prop="orderManId">
-                    <!--                    <Input-->
-                    <!--                      class="w160"-->
-                    <!--                      placeholder="请输入业务员"-->
-                    <!--                      v-model="formPlan.orderMan"-->
-                    <!--                      :disabled="draftShow != 0||isNew"-->
-                    <!--                    />-->
-                    <Select
-                      v-model="formPlan.orderManId"
-                      @on-change="selectOrderMan"
-                      filterable
-                      style="width: 180px"
-                      :disabled="draftShow != 0||isNew"
-                      label-in-value
-                    >
-                      <Option
-                        v-for="item in salesList"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.label }}</Option>
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem label="业务员：" prop="orderManId">-->
+                    <!--&lt;!&ndash;                    <Input&ndash;&gt;-->
+                    <!--&lt;!&ndash;                      class="w160"&ndash;&gt;-->
+                    <!--&lt;!&ndash;                      placeholder="请输入业务员"&ndash;&gt;-->
+                    <!--&lt;!&ndash;                      v-model="formPlan.orderMan"&ndash;&gt;-->
+                    <!--&lt;!&ndash;                      :disabled="draftShow != 0||isNew"&ndash;&gt;-->
+                    <!--&lt;!&ndash;                    />&ndash;&gt;-->
+                    <!--<Select-->
+                      <!--v-model="formPlan.orderManId"-->
+                      <!--@on-change="selectOrderMan"-->
+                      <!--filterable-->
+                      <!--style="width: 180px"-->
+                      <!--:disabled="draftShow != 0||isNew"-->
+                      <!--label-in-value-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in salesList"-->
+                        <!--:value="item.id"-->
+                        <!--:key="item.id"-->
+                      <!--&gt;{{ item.label }}</Option>-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem label="交货仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
@@ -197,7 +197,7 @@
                   <FormItem label="票据类型:" prop="billTypeId">
                     <Select
                       v-model="formPlan.billTypeId"
-                      style="width:100px"
+                      style="width:140px"
                       :disabled="draftShow != 0||isNew"
                     >
                       <Option
@@ -209,9 +209,6 @@
                         item.itemName }}
                       </Option>
                     </Select>
-                  </FormItem>
-                  <FormItem label="预售单号：">
-                    <Input class="w230" style="margin-right: 3px" v-model="formPlan.serviceId" disabled />
                   </FormItem>
                   <FormItem label="预计发货日期:">
                     <DatePicker
@@ -240,7 +237,7 @@
                   <FormItem label="结算方式：" prop="settleTypeId">
                     <Select
                       v-model="formPlan.settleTypeId"
-                      style="width:100px"
+                      style="width:140px"
                       :disabled="draftShow != 0||isNew"
                     >
                       <Option
@@ -252,6 +249,9 @@
                         item.itemName }}
                       </Option>
                     </Select>
+                  </FormItem>
+                  <FormItem label="预售单号：">
+                    <Input class="w230" style="margin-right: 3px" v-model="formPlan.serviceId" disabled />
                   </FormItem>
                   <FormItem label="备注：">
                     <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
@@ -398,13 +398,13 @@
                     field="orderQty"
                     title="数量"
                     width="100"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="orderPrice"
                     title="销价"
                     width="100"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" title="金额" width="100">
                     <template v-slot="{ row }">
@@ -415,7 +415,7 @@
                     field="remark"
                     title="备注"
                     width="160"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" field="storeName" title="仓库" disabled width="100">
                     <template v-slot:edit="{ row }">
@@ -441,6 +441,7 @@
                   <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
                 </vxe-table>
               </Form>
+              <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.auditor:""}}</span><span>提交日期：{{formPlan?formPlan.auditDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -634,9 +635,9 @@ export default {
         guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderManId: [
-          { required: true, type: "string", message: "  ", trigger: "change" }
-        ],
+        // orderManId: [
+        //   { required: true, type: "string", message: "  ", trigger: "change" }
+        // ],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
@@ -750,7 +751,7 @@ export default {
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 90;
+        this.leftTableHeight = wrapH - 110;
         this.rightTableHeight = wrapH - planFormH  - 120;
       });
     },

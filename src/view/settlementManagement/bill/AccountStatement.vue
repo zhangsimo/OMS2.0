@@ -362,7 +362,7 @@
               :data="data2"
               max-height="400"
               style="width:100%;"
-              show-footer="true"
+              show-footer
               :footer-method="summary"
             >
               <vxe-table-column title="序号" width="50" type="seq"></vxe-table-column>
@@ -417,7 +417,7 @@
                     <span>{{row.noAccountAmt.toFixed(2)}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="thisNoAccountAmt" title="本次对账金额" width="120">
+                <vxe-table-column field="thisNoAccountAmt" title="本次不对账金额" width="120">
                   <template v-slot="{row}">
                     <span>{{row.thisNoAccountAmt.toFixed(2)}}</span>
                   </template>
@@ -464,7 +464,7 @@
                     <span>{{row.noAccountAmt.toFixed(2)}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="thisNoAccountAmt" title="本次对账金额" width="120">
+                <vxe-table-column field="thisNoAccountAmt" title="本次不对账金额" width="120">
                   <template v-slot="{row}">
                     <span>{{row.thisNoAccountAmt.toFixed(2)}}</span>
                   </template>

@@ -1794,7 +1794,7 @@
   import * as twoBackApply from "@/api/AlotManagement/twoBackApply.js";//调入退回申请 getprintList
   import * as smsInventory from '@/api/inventory/salesList' //盘点单  getprintList
   import {Printing} from "@/api/bill/saleOrder"; //应收应付
-  import * as tools from "../../../utils/tools";
+  import * as tools from "../../utils/tools";
 
   export default {
     name: "PrintShow",

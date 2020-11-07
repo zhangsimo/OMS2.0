@@ -261,6 +261,7 @@
                 <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.subMan:""}}</span><span>提交日期：{{formPlan?formPlan.subDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -587,16 +588,16 @@
           let planBtnH = this.$refs.planBtn.offsetHeight;
           // let planPageH = this.$refs.planPage.offsetHeight;
           //获取左侧侧表格高度
-          this.leftTableHeight = wrapH - 104;
+          this.leftTableHeight = wrapH - 110;
           //获取右侧表格高度
-          this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+          this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
         });
       },
       //快速查询日期
       getDataQuick(v) {
         this.queryTime = v;
         this.Left.page.num = 1;
-        this.Left.page.size = 10;
+        // this.Left.page.size = 20;
         this.getList();
       },
       // //盘点仓库
@@ -956,6 +957,9 @@
             if (columnIndex === 0) {
               return "合计";
             }
+            if (columnIndex === 1) {
+              return `共${(data||[]).length}条`;
+            }
             if (
               [
                 "exhibitQty",
@@ -1009,9 +1013,9 @@
         this.getDomHeight();
       }, 0);
 
-      window.onresize = () => {
-        this.getDomHeight();
-      };
+      // window.onresize = () => {
+      //   this.getDomHeight();
+      // };
     },
     watch: {
       purchaseType: {
@@ -1068,7 +1072,7 @@
     margin-top: 20px;
   }
   .con-box {
-    height: 600px;
+    /*height: 600px;*/
   }
   .w550 {
     width: 580px;

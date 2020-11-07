@@ -391,7 +391,7 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -412,14 +412,14 @@
                   width="120"
                 >
                   <template
-                    v-slot:edit="{ row }"
+                    v-slot="{ row }"
                   >{{feeform.exchangeRate == 0 ? '0.00' : (row.rmbPrice / feeform.exchangeRate) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
                   field="rmbPrice"
                   title="采购裸价(人民币)"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

@@ -13,19 +13,19 @@
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <el-input class="w100" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="query"/>
+          <el-input class="w100" @focus="focus($event)" ref="elinput" placeholder="编码" v-model="partCode" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <el-input class="w100" placeholder="内码" v-model="partId" @change="query"/>
+          <el-input class="w100" @focus="focus($event)" ref="elinputpartId" placeholder="内码" v-model="partId" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <el-input class="w100" placeholder="名称" v-model="partName" @change="query"/>
+          <el-input class="w100" @focus="focus($event)" ref="elinputpartName" placeholder="名称" v-model="partName" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <el-input class="w100" placeholder="OE" v-model="oemCode" @change="query"/>
+          <el-input class="w100" placeholder="OE" @focus="focus($event)" ref="elinputoemCode" v-model="oemCode" @change="query"/>
         </div>
 
         <!-- <div class="db mr5">
@@ -189,6 +189,29 @@
       refDate.getval('7');
     }
 
+    private focus(event){
+      event.currentTarget.select();
+    }
+    private focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          let ref:any = this.$refs.elinput;
+          ref.focus();
+        }else if(this.partId){
+          let ref:any = this.$refs.elinputpartId;
+          ref.focus();
+        }else if(this.partName){
+          let ref:any = this.$refs.elinputpartName;
+          ref.focus();
+        }else if(this.oemCode){
+          let ref:any = this.$refs.elinputoemCode;
+          ref.focus();
+        }
+
+      })
+    }
+
+
     @Emit('getPlanOrder')
     private ok() {
       let selectRow = JSON.parse(JSON.stringify(this.selectRow));
@@ -205,6 +228,7 @@
         }
         return el;
       })
+      this.focusInput();
       return selectRow;
     }
 
@@ -242,6 +266,7 @@
         });
       }
       msg();
+      this.focusInput();
       return data;
     }
 

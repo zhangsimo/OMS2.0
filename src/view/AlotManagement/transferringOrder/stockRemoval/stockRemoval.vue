@@ -141,7 +141,7 @@
                   >
                     <FormItem label="调入方：" prop="guestName" class="redIT">
                       <Row>
-                        <Col span="22">
+                        <Col span="18">
                           <!--<Tooltip :content="Leftcurrentrow.guestName">-->
                             <!--<Input-->
                               <!--readonly-->
@@ -149,7 +149,7 @@
                               <!--placeholder="请选择调入方"-->
                             <!--/>-->
                           <!--</Tooltip>-->
-                          <allocation-cus style="width: 160px" :title="Leftcurrentrow.guestName" placeholder="请输入调入方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="buttonShow || this.flagValue1 !== 0"></allocation-cus>
+                          <allocation-cus :title="Leftcurrentrow.guestName" placeholder="请输入调入方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="buttonShow || this.flagValue1 !== 0"></allocation-cus>
                           <!-- <Select
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
@@ -159,7 +159,7 @@
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select> -->
                         </Col>
-                        <Col span="2">
+                        <Col span="6">
                           <Button
                             :disabled="this.flagValue != 0"
                             @click="showModel"
@@ -179,7 +179,7 @@
                       prop="supplyName"
                       class="redIT"
                     >
-                      <Row class="w160">
+                      <Row class="w140">
                         <Col span="24">
                           <Select
                             :disabled="buttonShow || this.flagValue1 !== 0"
@@ -211,7 +211,7 @@
                         disabled
                         @on-change="changeDate"
                         v-model="Leftcurrentrow.createTime"
-                        class="w160"
+                        class="w140"
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
@@ -354,7 +354,7 @@
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="hasAcceptQty"
-                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
@@ -418,6 +418,7 @@
                     width="80"
                   ></vxe-table-column>
                 </vxe-table>
+                <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.commitUname:""}}</span><span>提交日期：{{datadata?datadata.commitDate:""}}</span></div>
               </div>
             </Split>
           </div>
@@ -1354,9 +1355,9 @@
           let planBtnH = this.$refs.planBtn.offsetHeight;
           // let planPageH = this.$refs.planPage.offsetHeight;
           //获取左侧侧表格高度
-          this.leftTableHeight = wrapH - 144;
+          this.leftTableHeight = wrapH - 110;
           //获取右侧表格高度
-          this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+          this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
         });
       },
       getDataQuick(v) {
@@ -1721,9 +1722,9 @@
       setTimeout(() => {
         this.getDomHeight();
       }, 0);
-      window.onresize = () => {
-        this.getDomHeight();
-      };
+      // window.onresize = () => {
+      //   this.getDomHeight();
+      // };
       // this.getArrayParams();
       this.warehouse();
       this.getList();
@@ -1781,9 +1782,9 @@
     margin-top: 20px;
   }
 
-  .con-box {
-    height: 600px;
-  }
+  /*.con-box {*/
+    /*height: 600px;*/
+  /*}*/
 
   .w550 {
     width: 580px;
