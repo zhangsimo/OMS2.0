@@ -21,7 +21,7 @@
       <!--<Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
     <!--</Select>-->
     <span class="ml10">收付款类型：</span>
-    <Select v-model="paymentId" class="w150" filterable :disabled="paymentId == 'YJDZ'">
+    <Select v-model="paymentId" class="w150" filterable disabled>
       <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
     <Button @click="query" class="ml10">查询</Button>
