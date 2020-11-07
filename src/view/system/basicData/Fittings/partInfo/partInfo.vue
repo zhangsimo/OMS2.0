@@ -14,7 +14,7 @@
         ref="tabs"
       >
         <TabPane label="基本信息" tab="partInfoTab" name="active1">
-          <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="110">
+          <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="120">
             <Row>
               <Col span="11">
                 <FormItem label="配件品质：" prop="qualityTypeId">
@@ -73,6 +73,24 @@
                       :key="item.typeId"
                     >{{item.name}}</Option>
                   </Select>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="税收分类名称：" prop="taxCalssName">
+                  <Select v-model="formValidate.taxCalssName" @on-change="changeclass" filterable>
+                    <Option
+                      v-for="item in settleTypeList.CW00104"
+                      :value="item.itemCode"
+                      :key="item.itemCode"
+                    >{{item.itemName}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="税收分类编码：" prop="taxCalssCode">
+                  <Input v-model="formValidate.taxCalssCode" disabled></Input>
                 </FormItem>
               </Col>
             </Row>
