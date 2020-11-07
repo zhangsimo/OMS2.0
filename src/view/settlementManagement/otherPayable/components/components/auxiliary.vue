@@ -738,6 +738,7 @@ export default {
 }
 .OtherLeft {
   flex: 1;
+  width: 103px;
   border-right: 1px solid gray;
 }
 .OtherLeft > ul > li {
@@ -751,6 +752,7 @@ export default {
   border-bottom: 1px solid gray;
 }
 .OtherRight {
+  width: 615px;
   flex: 6;
 }
 .changeDiv {

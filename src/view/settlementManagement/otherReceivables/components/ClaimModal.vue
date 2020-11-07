@@ -76,7 +76,7 @@
   import PreClaimModal from "./PreClaimModal";
   import {
     wirteAccount,
-    saveAccount} from "_api/settlementManagement/otherReceivables/otherReceivables";
+    saveAccount,paymentRegain} from "_api/settlementManagement/otherReceivables/otherReceivables";
   import {kmType} from "@/api/settlementManagement/VoucherInput";
   export default {
     components: {
@@ -99,6 +99,7 @@
             {type: 'number', message: '请输入数字'}
           ]
         },
+        thisClaimedAmtSum:0,
         dataOne: [],//预收款支出认领 one 对账单
         dataTwo: [],//会计科目
         dataThree: [],//数组
@@ -128,6 +129,7 @@
               return '合计'
             }
             if (['thisClaimedAmt'].includes(column.property)) {
+              this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex)
               return this.sum(data, column.property, columnIndex)
             }
             return null
@@ -151,10 +153,11 @@
       open() {
         this.tableData = [];
         this.visibal = true;
+        this.fund="";
         setTimeout(()=>{
           let params={
             accountNo: this.$parent.serviceId,
-            sign: this.titleName == '其它付款认领' ? 1 : 2
+            sign: this.titleName !='其他收款收回' ? 1 : 2
           }
           wirteAccount(params).then(res => {
             if (res.code === 0) {
@@ -192,6 +195,12 @@
         let flag = this.tableData.some(v => {
           return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0
         })
+        if(this.titleName=="其他付款认领" && (this.thisClaimedAmtSum>this.$parent.currRow.applyAmt)){
+          return this.$Message.error("本次认领金额不可大于本次申请金额")
+        }
+        if(this.titleName=="其他收款收回" && (this.thisClaimedAmtSum>this.$parent.currRow.paymentClaimAmt)){
+          return this.$Message.error("本次认领金额不可大于本次申请单认领金额")
+        }
         if (flag) {
           this.$message.error('认领金额输入错误，不可为空')
           return
@@ -213,18 +222,33 @@
         if(this.titleName!='其他收款收回'){
           this.dataOne.paymentTypeCode = this.fund;
         }
-        let data = {
-          one: this.dataOne,
-          two: this.dataTwo,
-          three: arr
-        }
-        saveAccount(data).then(res => {
-          if (res.code === 0) {
-            this.$message.error("认领成功")
-            this.visibal = false
-            this.$parent.getQuery()
+        if(this.titleName!='其他收款收回'){
+          let data = {
+            one: this.dataOne,
+            two: this.dataTwo,
+            three: arr
           }
-        })
+          saveAccount(data).then(res => {
+            if (res.code === 0) {
+              this.$message.success("认领成功")
+              this.visibal = false
+              this.$parent.getQuery()
+            }
+          })
+        }else{
+          let data = {
+            one: this.dataOne,
+            two: this.dataTwo,
+            three: arr
+          }
+          paymentRegain(data).then(res => {
+            if (res.code === 0) {
+              this.$message.success("认领成功")
+              this.visibal = false
+              this.$parent.getQuery()
+            }
+          })
+        }
 
       },
 

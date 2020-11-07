@@ -41,7 +41,7 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select> -->
-            <input type="text" class="h30" v-model="companyId" />
+            <Input type="text" class="h30 w200 mr10" v-model="companyId" />
           </div>
           <div class="db ml20">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">

@@ -70,37 +70,37 @@
             :loading="outLoading"
             size="mini"
             :data="selfShopStock">
-            <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-            <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
-            <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
-            <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
-            <vxe-table-column field="storeName" title="仓库" width="120"></vxe-table-column>
-            <vxe-table-column field="enterQty" title="入库数量" width="90"></vxe-table-column>
-            <vxe-table-column field="outableQty" title="可出库数量" width="90"></vxe-table-column>
-            <vxe-table-column field="enterPrice" title="入库单价" width="120">
+            <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
+            <vxe-table-column field="partCode" title="配件编码" width="90"></vxe-table-column>
+            <vxe-table-column field="partName" title="配件名称" width="90"></vxe-table-column>
+            <vxe-table-column field="partBrand" title="品牌" width="70"></vxe-table-column>
+            <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
+            <vxe-table-column field="enterQty" title="入库数量" width="70"></vxe-table-column>
+            <vxe-table-column field="outableQty" title="可出库数量" width="80"></vxe-table-column>
+            <vxe-table-column field="enterPrice" title="入库单价" width="70">
               <template v-slot="{row}">
                 {{(row.enterPrice||0).toFixed(2)}}
               </template>
             </vxe-table-column>
-            <vxe-table-column field="taxRate" title="税率" width="70">
+            <vxe-table-column field="taxRate" title="税率" width="50">
             </vxe-table-column>
             <vxe-table-column field="taxPrice" title="含税单价" width="70">
               <template v-slot="{row}">
                 {{(row.taxPrice||0).toFixed(2)}}
               </template>
             </vxe-table-column>
-            <vxe-table-column field="noTaxPrice" title="不含税单价" width="90">
+            <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
               <template v-slot="{row}">
                 {{(row.noTaxPrice||0).toFixed(2)}}
               </template>
             </vxe-table-column>
             <vxe-table-column field="guestName" title="供应商" width="120">
             </vxe-table-column>
-            <vxe-table-column field="createTime" title="入库日期" width="120">
+            <vxe-table-column field="createTime" title="入库日期" width="110">
             </vxe-table-column>
-            <vxe-table-column field="branchStockAge" title="本店库龄" width="80">
+            <vxe-table-column field="branchStockAge" title="本店库龄" width="70">
             </vxe-table-column>
-            <vxe-table-column field="chainStockAge" title="连锁库龄" width="80">
+            <vxe-table-column field="chainStockAge" title="连锁库龄" width="70">
             </vxe-table-column>
           </vxe-table>
         </div>
@@ -161,31 +161,32 @@
               :data="contentOne.dataOne"
               show-footer
               :footer-method="handleSummary">
-              <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-              <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
-              <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
-              <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
-              <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
-              <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
-              <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
-              <vxe-table-column field="guestName" title="供应商" width="120"></vxe-table-column>
-              <vxe-table-column field="createTime" title="入库日期" width="120">
+              <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
+              <vxe-table-column field="enterTypeId" title="入库类型" width="66"></vxe-table-column>
+              <vxe-table-column field="partCode" title="配件编码" width="90"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" width="90"></vxe-table-column>
+
+              <vxe-table-column field="partBrand" title="品牌" width="60"></vxe-table-column>
+
+              <vxe-table-column field="storeName" title="仓库" width="60"></vxe-table-column>
+              <vxe-table-column field="guestName" title="供应商" width="110"></vxe-table-column>
+              <vxe-table-column field="createTime" title="入库日期" width="100">
               </vxe-table-column>
-              <vxe-table-column field="enterMan" title="入库人" width="70">
+              <vxe-table-column field="enterMan" title="入库人" width="60">
               </vxe-table-column>
-              <vxe-table-column field="enterQty" title="入库数量" width="70">
+              <vxe-table-column field="enterQty" title="入库数量" width="60">
               </vxe-table-column>
-              <vxe-table-column field="enterPrice" title="入库单价" width="70">
+              <vxe-table-column field="enterPrice" title="入库单价" width="60">
                 <template v-slot="{row}">
                   {{(row.enterPrice||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="enterAmt" title="金额" width="80">
+              <vxe-table-column field="enterAmt" title="金额" width="70">
                 <template v-slot="{row}">
                   {{(row.enterAmt||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="taxRate" title="税率" width="50">
+              <vxe-table-column field="taxRate" title="税率" width="40">
               </vxe-table-column>
               <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
                 <template v-slot="{row}">
@@ -197,12 +198,14 @@
                   {{(row.noTaxAmt||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
+              <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" width="80"></vxe-table-column>
               <vxe-table-column field="code" title="入库单号" width="160">
               </vxe-table-column>
               <vxe-table-column field="createUname" title="创建人" width="70">
               </vxe-table-column>
-              <vxe-table-column field="enterTypeId" title="入库类型" width="70">
-              </vxe-table-column>
+
+
               <vxe-table-column field="remark" title="备注" width="140">
               </vxe-table-column>
             </vxe-table>
@@ -265,38 +268,40 @@
               :data="contentTwo.dataTwo"
               show-footer
               :footer-method="handleSummary">
-              <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-              <vxe-table-column field="partCode" title="配件编码" width="110"></vxe-table-column>
-              <vxe-table-column field="partName" title="配件名称" width="110"></vxe-table-column>
-              <vxe-table-column field="systemUnitId" title="单位" width="50"></vxe-table-column>
-              <vxe-table-column field="partBrand" title="品牌" width="80"></vxe-table-column>
-              <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
-              <vxe-table-column field="storeName" title="仓库" width="70"></vxe-table-column>
-              <vxe-table-column field="guestName" title="客户" width="120"></vxe-table-column>
-              <vxe-table-column field="outDate" title="出库日期" width="120">
+              <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
+              <vxe-table-column field="enterTypeId" title="出库类型" width="60">
               </vxe-table-column>
-              <vxe-table-column field="outMan" title="出库人" width="70">
+              <vxe-table-column field="partCode" title="配件编码" width="90"></vxe-table-column>
+              <vxe-table-column field="partName" title="配件名称" width="90"></vxe-table-column>
+
+              <vxe-table-column field="partBrand" title="品牌" width="60"></vxe-table-column>
+
+              <vxe-table-column field="storeName" title="仓库" width="60"></vxe-table-column>
+              <vxe-table-column field="guestName" title="客户" width="110"></vxe-table-column>
+              <vxe-table-column field="outDate" title="出库日期" width="100">
               </vxe-table-column>
-              <vxe-table-column field="sellQty" title="出库数量" width="70">
+              <vxe-table-column field="outMan" title="出库人" width="60">
               </vxe-table-column>
-              <vxe-table-column field="sellPrice" title="出库单价" width="70">
+              <vxe-table-column field="sellQty" title="出库数量" width="60">
+              </vxe-table-column>
+              <vxe-table-column field="sellPrice" title="出库单价" width="60">
                 <template v-slot="{row}">
                   {{(row.sellPrice||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="sellAmt" title="出库金额" min-width="100">
+              <vxe-table-column field="sellAmt" title="出库金额" min-width="80">
                 <template v-slot="{row}">
                   {{(row.sellAmt||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="taxRate" title="含税标记" width="70">
+              <vxe-table-column field="taxRate" title="含税标记" width="60">
                 <template v-slot="{row}">
                   <vxe-checkbox :disabled="true" v-model="row.taxSign == 0 ? false : true" size="small"></vxe-checkbox>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="taxRate" title="税率" width="50">
+              <vxe-table-column field="taxRate" title="税率" width="40">
               </vxe-table-column>
-              <vxe-table-column field="taxPrice" title="含税单价" width="70">
+              <vxe-table-column field="taxPrice" title="含税单价" width="60">
                 <template v-slot="{row}">
                   {{(row.taxPrice||0).toFixed(2)}}
                 </template>
@@ -316,12 +321,13 @@
                   {{(row.noTaxAmt||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
+              <vxe-table-column field="systemUnitId" title="单位" width="40"></vxe-table-column>
+              <vxe-table-column field="carModelName" title="品牌车型" width="80"></vxe-table-column>
               <vxe-table-column field="serviceId" title="出库单号" width="160">
               </vxe-table-column>
-              <vxe-table-column field="createUname" title="创建人" width="70">
+              <vxe-table-column field="createUname" title="创建人" width="60">
               </vxe-table-column>
-              <vxe-table-column field="enterTypeId" title="出库类型" width="70">
-              </vxe-table-column>
+
               <vxe-table-column field="remark" title="备注" width="140">
               </vxe-table-column>
             </vxe-table>

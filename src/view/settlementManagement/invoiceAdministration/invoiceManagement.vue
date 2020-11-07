@@ -48,7 +48,7 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select> -->
-            <input type="text" class="h30" v-model="form.guestName">
+            <Input type="text" class="h30 w200 mr10" v-model="form.guestName"/>
           </div>
           <button class="ivu-btn ivu-btn-default" @click="query" type="button">
             <i class="iconfont iconchaxunicon"></i>

@@ -684,6 +684,7 @@ export default {
 }
 .OtherLeft {
   flex: 1;
+  width: 103px;
   border-right: 1px solid gray;
 }
 .OtherLeft > ul > li {
@@ -698,6 +699,7 @@ export default {
 }
 .OtherRight {
   flex: 6;
+  width: 615px;
 }
 .changeDiv {
   display: inline-block;
