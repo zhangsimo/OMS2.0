@@ -282,6 +282,7 @@ export const mixPartInfo = {
     if(this.typepf.length==0){
       this.treeInit();
     }
+    this.getType();
   },
   methods: {
     async treeInit() {
@@ -398,6 +399,10 @@ export const mixPartInfo = {
       this.formValidate.customType = ""
       if (setData) {
         this.formValidate = setData;
+        this.formValidate.taxCalssName = this.formValidate.taxType || '';
+        if (this.formValidate.taxCalssName) {
+          this.changeclass(this.formValidate.taxCalssName)
+        }
         //赋值适用车型
         let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
         let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
@@ -451,7 +456,6 @@ export const mixPartInfo = {
           this.formValidate.customClassName = newArrFilter[0].itemName
         }
       }
-      this.getType();
     },
 
     //获取所有车型品牌
@@ -652,9 +656,9 @@ export const mixPartInfo = {
       }
     },
     changeclass(v){
-      let objStr = (this.settleTypeList.CW00104||[]).filter(item => item.itemCode==v);
+      let objStr = (this.settleTypeList.CW00104 || []).filter(item => item.itemCode==v);
       if(objStr.length>0){
-        this.formValidate.taxCalssCode = objStr[0].itemValueOne;
+        this.$set(this.formValidate ,'taxCalssCode' , objStr[0].itemValueOne)
       }
     },
 

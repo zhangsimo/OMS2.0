@@ -554,6 +554,8 @@ export default class Fittings extends Vue {
     ref.init(res.data || {});
     ref.getAlreadyPartsData(this.currRow.code)
   }
+
+
   private async submitSave(row) {
     const ref: any = this.$refs.partInfo;
     if (!this.isAdd) {
