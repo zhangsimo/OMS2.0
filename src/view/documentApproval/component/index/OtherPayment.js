@@ -22,7 +22,11 @@ export default {
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
       saveDis:false,//保存接口返回之前按钮不可点击
-      formInline: {},//所有数据对象
+      formInline: {
+        receiveGuestId: '',
+        receiveBank: '',
+        receiveBankNo: ''
+      },//所有数据对象
       //表单校验
       ruleValidate: {
         topic: [
@@ -71,13 +75,13 @@ export default {
 
   methods: {
     //模态框打开111
-    open() {
+    async open() {
       this.getpayList()
-      // console.log(this.list.type)
       this.$refs.documentTable.recalculate(true)
       this.company = []
       this.payUserList = []
       this.formInline = {}
+      this.receiverArr = []
       this.$refs.upImg.uploadListModal = []
       this.$refs.upImg.uploadList = []
       this.$refs['formInline'].resetFields();
@@ -98,8 +102,9 @@ export default {
       }
       if (this.list.type == 5) {
         this.modelType = false
-        let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-          user = this.$store.state.user.userData
+        // let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+        let  user = this.$store.state.user.userData
+        let date = this.list.rowMessage.collectionTime
         this.formInline.applicant = user.staffName
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
@@ -108,6 +113,9 @@ export default {
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = getPost()
         delete this.list.rowMessage.id
+        await this.getOrignCompany(this.list.rowMessage.guestName,this.list.rowMessage.guestId)
+        this.setReceiverInfo111(this.company[0])
+       
         this.$set(this.formInline, 'details', [this.list.rowMessage])
       }
       if (this.list.type == 2) {
@@ -134,7 +142,6 @@ export default {
         }
       }
     },
-
 
     //获取本点下的付款账号
     async getpayList(){
@@ -163,7 +170,6 @@ export default {
     getCompany(row) {
       this.getAccountNameList(row)
     },
-
     //获取往来单位
     async getOrignCompany(query,id) {
       if (query.trim() !== '' || id) {
@@ -194,15 +200,17 @@ export default {
 
     //获取收款户名
     async getAccountNameList(row) {
-      let rep = await getAccountName({"guestId": row.value});
-      if (rep.code == 0) {
-        this.receiverArr = rep.data;
-        if (rep.data.length >= 1) {
-          this.setReceiverInfo(rep.data[0])
-        } else {
-          this.formInline.receiverId = ''
-          this.formInline.receiveBank = ''
-          this.formInline.receiveBankNo = '';
+      if(row){
+        let rep = await getAccountName({"guestId": row.value});
+        if (rep.code == 0) {
+          this.receiverArr = rep.data;
+          if (rep.data.length >= 1) {
+            this.setReceiverInfo(rep.data[0])
+          } else {
+            this.formInline.receiverId = ''
+            this.formInline.receiveBank = ''
+            this.formInline.receiveBankNo = '';
+          }
         }
       }
     },
@@ -212,6 +220,15 @@ export default {
         this.formInline.receiverId = row.id;
         this.formInline.receiveBank = row.accountBank;
         this.formInline.receiveBankNo = row.accountBankNo;
+      }
+    },
+
+    setReceiverInfo111(row) {
+      if (row) {
+        this.formInline.receiverId = row.receiver;
+        this.formInline.receiveBank = row.accountBank;
+        this.formInline.receiveBankNo = row.accountBankNo;
+        this.formInline.receiveGuestId = row.value
       }
     },
 
@@ -241,7 +258,6 @@ export default {
       this.formInline.receiveGuestId = row.guestId;
       this.getAccountNameList({value: row.guestId})
       await this.getOrignCompany(row.guestName)
-      // console.log(this.company,1111)
       // this.formInline.receiveGuestId=this.company[0].value
       // this.getCompany(this.company[0])
     },
@@ -261,8 +277,15 @@ export default {
       this.$refs.formInline.validate(async (valid) => {
         if (valid) {
           let valg = false
-          if(this.formInline.receiveBank == '') return this.$Message.error("开户行名称必填")
-          if(this.formInline.receiveBankNo == '') return this.$Message.error("银行账号必填")
+          if(this.formInline.receiverId == ''){
+            return this.$Message.error("收款人账号必填")
+          }
+          if(this.formInline.receiveBank == ''){
+            return this.$Message.error("开户行名称必填")
+          } 
+          if(this.formInline.receiveBankNo == ''){
+            return this.$Message.error("银行账号必填")
+          } 
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
             valg = parseFloat(this.formInline.details[0].amountCollected) < parseFloat(this.formInline.applyAmt) ? true : false
           }
@@ -272,13 +295,17 @@ export default {
           let req = {...this.formInline}
           // req.paymentTerm = moment.utc(req.paymentTerm).day(1);
           this.saveDis=true;
-          let res = await getOtherSve(req)
-          if (res.code == 0) {
-            this.saveDis=false;
-            this.$Message.success('操作成功')
-            this.model = false
-            this.$emit("updateD")
-          }else{
+          try {
+            let res = await getOtherSve(req)
+            if (res.code == 0) {
+              this.saveDis=false;
+              this.$Message.success('操作成功')
+              this.model = false
+              this.$emit("updateD")
+            }else{
+              this.saveDis=false
+            }
+          } catch (error) {
             this.saveDis=false
           }
         } else {
