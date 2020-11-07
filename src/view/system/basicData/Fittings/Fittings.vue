@@ -55,9 +55,9 @@
       <Split v-model="split" min="200" max="570">
         <div slot="left" class="tree-warp">
           <div class="title">配件分类
-            <Button class="ml20" @click="showChangeType">
-              修改
-            </Button>
+            <!--<Button class="ml20" @click="showChangeType">-->
+              <!--修改-->
+            <!--</Button>-->
           </div>
           <Tree
             class="tree"
