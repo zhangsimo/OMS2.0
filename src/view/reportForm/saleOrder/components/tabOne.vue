@@ -8,6 +8,8 @@
       ref="xTable"
       max-height="700"
       show-footer
+      auto-resize
+      resizable
       :footer-method="footerMethod"
       :data="tableData"
     >
