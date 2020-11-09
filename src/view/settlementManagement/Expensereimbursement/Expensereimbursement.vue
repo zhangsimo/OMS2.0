@@ -812,12 +812,12 @@
     padding: 0;
     margin: 0;
   }
-
   .listChild {
     display: inline-block;
     border: 1px solid #e8eaec;
     flex: 1;
-    padding: 5px;
+    line-height: 24px;
+    padding:0 5px;
   }
 
   .vxe-table .vxe-cell {
