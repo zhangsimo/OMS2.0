@@ -133,6 +133,7 @@
         </div>
         <vxe-table
           border
+          class="stock-wrap-table"
           ref="xTable2"
           :height="tableHeight"
           highlight-hover-row
@@ -145,28 +146,28 @@
           show-footer
           :footer-method="handleSummary"
           :data="contentOne.dataOne">
-          <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
-          <vxe-table-column field="cz" title="操作" width="50" fixed="left">
+          <vxe-table-column type="seq" title="序号" width="40" fixed="left"></vxe-table-column>
+          <vxe-table-column field="cz" title="操作" width="40" fixed="left">
             <template v-slot="{row}">
               <vxe-button type="text" @click="showList(row);">查看</vxe-button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="orgName" title="机构名称" width="130" fixed="left"></vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="106" fixed="left"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
-          <vxe-table-column field="carBrandName" title="厂牌" width="80" fixed="left"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]"
+          <vxe-table-column field="oemCode" title="OE码" width="96" fixed="left"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="厂牌" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="70" fixed="left" :filters="[]"
                             :filter-method="filterNameMethod1"></vxe-table-column>
-          <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
+          <vxe-table-column field="carModelName" title="品牌车型" width="106"></vxe-table-column>
           <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70">
             <template v-slot="{row}">
               {{row.sellSign ? 0 : row.outableQty}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
-          <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" width="76"></vxe-table-column>
+          <vxe-table-column field="shelf" title="仓位" width="90"></vxe-table-column>
           <vxe-table-column field="costPrice" title="库存单价" width="80">
             <template v-slot="{row}">
               {{row.costPrice.toFixed(2)}}
@@ -291,6 +292,7 @@
         <vxe-table
           border
           ref="xTable3"
+          class="stock-wrap-table"
           :height="tableHeight"
           highlight-hover-row
           highlight-current-row
