@@ -7,7 +7,7 @@
           >保存草稿
           </Button
           >
-          <Button class="mr10" :loading="saveDis" v-noresub v-if="!modelType" @click="save(1)"
+          <Button class="mr10" :loading="saveDis" v-if="!modelType" @click="save(1)"
           >提交申请
           </Button
           >
@@ -189,7 +189,7 @@
              </Button>
            </template>
          </vxe-table-column>
-          
+
         </vxe-table>
 
         <h5 class="mt20 mb10" style="font-size: 18px">借支核销</h5>
