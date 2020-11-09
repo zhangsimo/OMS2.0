@@ -100,11 +100,10 @@
         this.page.size = size;
         this.getList();
       },
-      sortMethod({data, column, property, order}) {
+      sortMethod({ column, property, order}) {
         //order:asc 升序 desc 降序
         //property:多个排序时所点击的头部
         //column:本列
-        //data:数据
         switch (property) {
           case "enterQty":
             this.body.enterQty=order == "asc" ? 0 : 1;
