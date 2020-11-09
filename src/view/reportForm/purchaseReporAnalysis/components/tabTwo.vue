@@ -9,7 +9,7 @@
       show-footer
       auto-resize
       resizable
-      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc'],multiple: false}"
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
       @sort-change="sortMethod"
       :footer-method="footerMethod"
       :data="tableData"
@@ -105,11 +105,58 @@
         //property:多个排序时所点击的头部
         //column:本列
         //data:数据
-        let propertySort=property+"Sort"
-        this.body[property] = order == "asc" ? 0 : 1
+        switch (property) {
+          case "enterQty":
+            this.body.enterQty=order == "asc" ? 0 : 1;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "enterAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=order == "asc" ? 0 : 1;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "rtnableQty":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=order == "asc" ? 0 : 1;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "rtAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=order == "asc" ? 0 : 1;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "trueQty":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=order == "asc" ? 0 : 1;
+            this.body.trueAmt=undefined;
+            break;
+          case "trueAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=order == "asc" ? 0 : 1;
+            break;
+        }
         this.body.sort = order == "asc" ? 0 : 1
         this.getList();
-        console.log(this.body)
       },
       exportXls() {
         let params = "";

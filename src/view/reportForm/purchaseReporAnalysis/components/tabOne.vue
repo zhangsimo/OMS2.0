@@ -9,7 +9,7 @@
       show-footer
       auto-resize
       resizable
-      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc'],multiple: false}"
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
       @sort-change="sortMethod"
       :footer-method="footerMethod"
       :data="tableData"
@@ -21,12 +21,17 @@
       <vxe-table-column show-overflow="tooltip" field="guestType" title="供应商分类" width="100"></vxe-table-column>
       <!--      <vxe-table-column show-overflow="tooltip" field="guestClassfily" title="供应商等级" width="80"></vxe-table-column>-->
       <vxe-table-column show-overflow="tooltip" field="guestName" title="供应商名称" width="140"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="enterQty" remote-sort title="入库数量" width="100" ></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="enterAmt" remote-sort title="入库金额" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="rtnableQty" remote-sort title="退货数量" width="90"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="enterQty" remote-sort title="入库数量"
+                        width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="enterAmt" remote-sort title="入库金额"
+                        width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="rtnableQty" remote-sort title="退货数量"
+                        width="90"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="rtAmt" remote-sort title="退货金额" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="trueQty" remote-sort title="实际入库数量" width="110"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="trueAmt" remote-sort title="实际入库金额" width="110"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="trueQty" remote-sort title="实际入库数量"
+                        width="110"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="trueAmt" remote-sort title="实际入库金额"
+                        width="110"></vxe-table-column>
     </vxe-table>
     <Page
       class-name="page-con"
@@ -100,10 +105,58 @@
         //property:多个排序时所点击的头部
         //column:本列
         //data:数据
-        this.body[property] = order == "asc" ? 0 : 1
+        switch (property) {
+          case "enterQty":
+            this.body.enterQty=order == "asc" ? 0 : 1;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "enterAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=order == "asc" ? 0 : 1;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "rtnableQty":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=order == "asc" ? 0 : 1;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "rtAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=order == "asc" ? 0 : 1;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "trueQty":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=order == "asc" ? 0 : 1;
+            this.body.trueAmt=undefined;
+            break;
+          case "trueAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=order == "asc" ? 0 : 1;
+            break;
+        }
         this.body.sort = order == "asc" ? 0 : 1
         this.getList();
-        console.log(this.body)
       },
       exportXls() {
         let params = "";
