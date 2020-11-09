@@ -9,7 +9,7 @@
       show-footer
       auto-resize
       resizable
-      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc'],multiple: true}"
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc'],multiple: false}"
       @sort-change="sortMethod"
       :footer-method="footerMethod"
       :data="tableData"
@@ -106,7 +106,8 @@
         //column:本列
         //data:数据
         let propertySort=property+"Sort"
-        this.body[propertySort] = order == "asc" ? 0 : 1
+        this.body[property] = order == "asc" ? 0 : 1
+        this.body.sort = order == "asc" ? 0 : 1
         this.getList();
         console.log(this.body)
       },
