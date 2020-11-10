@@ -157,7 +157,12 @@ export default {
         {
           title: "规格",
           align: "center",
-          key: "spec:"
+          key: "spec"
+        },
+        {
+          title: "仓库",
+          align: "center",
+          key: "storeName"
         },
         {
           title: "可售数量",
