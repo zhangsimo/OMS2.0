@@ -369,6 +369,9 @@ export const mixSelectPartCom  = {
     //双击显示
     dblclick({row}){
       if(this.$route.name=="salesOrder"){
+        // console.log(row,111)
+        row.minUnit=row.enterUnitId
+        // row.quality=row.enterUnitId
         this.$refs.selectPartInfo.init(row);
       } else {
         this.selectTableItem = [row];

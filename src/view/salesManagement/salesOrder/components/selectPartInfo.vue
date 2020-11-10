@@ -11,7 +11,7 @@
           <FormItem label="配件名称：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
             <Input disabled v-model="formItemData.fullName" class="w200" placeholder="配件名称"></Input>
           </FormItem>
-          <FormItem label="配件名称：" v-else-if="$route.name == 'bookingSheet'">
+          <FormItem label="配件名称：" v-else-if="$route.name == 'bookingSheet' || $route.name=='salesOrder'">
             <Input disabled v-model="formItemData.partName" class="w200" placeholder="配件名称"></Input>
           </FormItem>
           <FormItem label="配件名称：" v-else>
@@ -33,7 +33,7 @@
       </Row>
       <Row>
         <Col span="12">
-          <FormItem label="厂牌：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
+          <FormItem label="厂牌：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase' || $route.name=='salesOrder'">
             <Input disabled v-model="formItemData.carBrandName" class="w200" placeholder="厂牌"></Input>
           </FormItem>
           <FormItem label="厂牌：" v-else>
@@ -41,7 +41,7 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="品牌车型：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase'">
+          <FormItem label="品牌车型：" v-if="$route.name=='OutsidePurchase' ||　$route.name=='goodsList' || $route.name=='TemporaryPurchase' || $route.name=='salesOrder'">
             <Input disabled v-model="formItemData.carModelName" class="w200" placeholder="品牌车型"></Input>
           </FormItem>
           <FormItem label="品牌车型：" v-else>

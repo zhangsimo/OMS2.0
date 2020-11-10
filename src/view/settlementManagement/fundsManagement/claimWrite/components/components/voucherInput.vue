@@ -123,8 +123,11 @@
           </TabPane>
           <TabPane label="个人" name="personage">
             <Form :label-width="50" ref="form" inline>
-              <FormItem label="部门:" prop="groundIds">
-                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>
+              <!--              <FormItem label="部门:" prop="groundIds">-->
+              <!--                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>-->
+              <!--              </FormItem>-->
+              <FormItem label="姓名:">
+                <Input v-model="personageName" placeholder="姓名" clearable style="width: 150px" />
               </FormItem>
               <FormItem>
                 <Button type="warning" class="mr10" @click="SearchPersonal">查询</Button>
@@ -320,6 +323,7 @@ export default {
       },
       list: [], //部门列表
       groundIds: [], //部门
+      personageName:"",//个人 查询 input框
       AssistTableDataGeRen: [], //辅助弹框个人
       personage: {
         page: {
@@ -622,7 +626,8 @@ export default {
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
       // console.log(this.$store.state.user.userData.shopId);
-      data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
+      // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
+      data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
         .then(res => {
           stop();
