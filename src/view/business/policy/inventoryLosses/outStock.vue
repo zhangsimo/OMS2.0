@@ -275,12 +275,12 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
-                  field="exhibitPrice"
+                  field="exhibitAmt"
                   title="出库金额"
                   width="100"
                 >
                   <template v-slot="{ row, seq }">
-                    <span>{{(Math.abs(row.exhibitPrice * row.exhibitQty))||0 }}</span>
+                    <span>{{(Math.abs(row.exhibitPrice * row.exhibitQty).toFixed(2))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
@@ -989,7 +989,7 @@
             }
             if (
               [
-                "exhibitQty",
+                "exhibitQty", "sysQty", "trueQty", "exhibitAmt"
               ].includes(column.property)||columnIndex==10
             ) {
               return this.$utils.sum(data, column.property);

@@ -144,7 +144,7 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="业务员：" prop="orderManId">
+                  <!-- <FormItem label="业务员：" prop="orderManId">
                     <Select
                       :value="Leftcurrentrow.orderManId"
                       @on-change="selectOrderMan"
@@ -164,7 +164,7 @@
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     />-->
-                  </FormItem>
+                  
                   <FormItem label="移仓日期" prop="auditDate">
                     <DatePicker
                       :value="Leftcurrentrow.auditDate"
@@ -461,12 +461,6 @@ export default {
             resizable:true
           },
           {
-            title: "业务员",
-            key: "orderMan",
-            width: 120,
-            resizable:true
-          },
-          {
             title: "移仓单号",
             key: "serviceId",
             width: 140,
@@ -590,9 +584,6 @@ export default {
         receiveStoreId: [
           { required: true, message: "请选择移入仓库", trigger: "change" }
         ],
-        orderManId: [
-          { required: true, message: "业务员不能为空", trigger: "blur" }
-        ],
         auditDate: [
           { required: true, message: "移仓时间不为空", trigger: "change" }
         ]
@@ -697,20 +688,20 @@ export default {
 
     //------------------------------------------------------------------------//
     //获取销售员
-    selectOrderMan(val) {
-      this.Leftcurrentrow.orderMan = val ? val.label ? val.label : '':'';
-      this.Leftcurrentrow.orderManId = val ? val.value ? val.value : '':'';
-    },
+    // selectOrderMan(val) {
+    //   this.Leftcurrentrow.orderMan = val ? val.label ? val.label : '':'';
+    //   this.Leftcurrentrow.orderManId = val ? val.value ? val.value : '':'';
+    // },
     //获取销售员
-    async getAllSales() {
-      let res = await getSales();
-      if (res.code === 0) {
-        this.salesList = res.data.content;
-        this.salesList.map(item => {
-          item.label = item.userName;
-        });
-      }
-    },
+    // async getAllSales() {
+    //   let res = await getSales();
+    //   if (res.code === 0) {
+    //     this.salesList = res.data.content;
+    //     this.salesList.map(item => {
+    //       item.label = item.userName;
+    //     });
+    //   }
+    // },
     // 禁用选中
     checkMethod({ row }) {
       if (this.Leftcurrentrow.status.value === 0) {
@@ -1223,7 +1214,7 @@ export default {
           if (columnIndex === 2) {
             return (data||[]).length+'条'
           }
-          if (['applyQty','hasAcceptQty','hasCancelQty','hasOutQty','hasInQty'].includes(column.property)) {
+          if (['applyQty','hasAcceptQty','hasCancelQty','hasOutQty','hasInQty','orderQty','stockOutQty'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
           return null
