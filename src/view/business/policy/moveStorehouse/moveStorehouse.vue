@@ -119,7 +119,7 @@
                   <FormItem label="移出仓库" prop="storeId">
                     <Select
                       v-model="Leftcurrentrow.storeId"
-                      style="width:100px"
+                      style="width:160px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
                       <Option
@@ -133,7 +133,7 @@
                   <FormItem label="移入仓库" prop="receiveStoreId">
                     <Select
                       v-model="Leftcurrentrow.receiveStoreId"
-                      style="width:100px"
+                      style="width:160px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
                       <Option
@@ -149,7 +149,7 @@
                       :value="Leftcurrentrow.orderManId"
                       @on-change="selectOrderMan"
                       filterable
-                      style="width: 180px"
+                      style="width: 160px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                       label-in-value
                     >
@@ -175,22 +175,22 @@
                       :disabled="Leftcurrentrow.status.value !== 0"
                     ></DatePicker>
                   </FormItem>
+                  <FormItem label="备注" prop="remark">
+                    <Tooltip :content="Leftcurrentrow.remark">
+                      <Input
+                        :disabled="Leftcurrentrow.status.value !== 0"
+                        class="w160"
+                        v-model="Leftcurrentrow.remark"
+                      />
+                    </Tooltip>
+                  </FormItem>
                   <FormItem label="移仓单号" prop="planOrderNum">
                     <Tooltip :content="Leftcurrentrow.serviceId">
                     <Input
                       disabled="disabled"
-                      class="w160"
+                      class="w180"
                       v-model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
-                    />
-                    </Tooltip>
-                  </FormItem>
-                  <FormItem label="备注" :label-width="80" prop="remark">
-                    <Tooltip :content="Leftcurrentrow.remark">
-                    <Input
-                      :disabled="Leftcurrentrow.status.value !== 0"
-                      class="w160"
-                      v-model="Leftcurrentrow.remark"
                     />
                     </Tooltip>
                   </FormItem>
@@ -283,12 +283,14 @@
                 border
                 resizable
                 auto-resize
+                size="mini"
                 show-overflow
                 :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
                 @keydown="keydown"
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
+                show-footer
                 :edit-config="{trigger: 'click', mode: 'cell',showStatus: true}"
                 :edit-rules="validRules"
                 @edit-actived="editActivedEvent">
@@ -312,6 +314,7 @@
                 <vxe-table-column  show-overflow="tooltip" field="date12" title="方向" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{Leftcurrentrow?Leftcurrentrow.createUname:""}}</span><span>创建日期：{{Leftcurrentrow?Leftcurrentrow.createTime:""}}</span><span>提交人：{{Leftcurrentrow?Leftcurrentrow.commitUname:""}}</span><span>提交日期：{{Leftcurrentrow?Leftcurrentrow.commitDate:""}}</span></div>
             </div>
           </Split>
         </div>
@@ -779,9 +782,9 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 104;
+        this.leftTableHeight = wrapH - 110;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
       });
     },
     //判断表格能不能编辑
@@ -1211,7 +1214,22 @@ export default {
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
     //footer计算
-    addFooter() {},
+    addFooter ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (columnIndex === 2) {
+            return (data||[]).length+'条'
+          }
+          if (['applyQty','hasAcceptQty','hasCancelQty','hasOutQty','hasInQty'].includes(column.property)) {
+            return this.$utils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+    },
     // 确定
     Determined() {},
     array_diff(a, b) {
@@ -1306,9 +1324,9 @@ export default {
       this.getDomHeight();
     }, 0);
     // this.getList();
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+    // window.onresize = () => {
+    //   this.getDomHeight();
+    // };
   }
 };
 </script>

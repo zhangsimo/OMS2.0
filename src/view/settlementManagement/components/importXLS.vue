@@ -24,6 +24,7 @@
 import { down } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
+import {showLoading,hideLoading} from "../../../utils/loading";
 
 export default {
   name: "importXLS",
@@ -51,12 +52,14 @@ export default {
 
     //导入失败
     onFormatError(file) {
+      hideLoading()
       // console.log(file)
       this.$Message.error("只支持xls xlsx后缀的文件");
     },
 
     // 上传成功函数
     onSuccess(response) {
+      hideLoading()
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
@@ -78,6 +81,7 @@ export default {
     //上传之前清空
     beforeUpload() {
       this.$refs.upload.clearFiles();
+      showLoading()
     }
   }
 };

@@ -67,8 +67,6 @@
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="orgName" title="门店" width="120"></vxe-table-column>
-            <vxe-table-column field="accountNo" title="对账单号" width="120"></vxe-table-column>
             <vxe-table-column field="guestName" title="往来单位" width="120"></vxe-table-column>
             <vxe-table-column field="businessTypeName" title="业务类型" width="80"></vxe-table-column>
             <vxe-table-column field="reconciliationAmt" title="对账金额" width="80"></vxe-table-column>
@@ -81,6 +79,8 @@
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
             ></vxe-table-column>
             <vxe-table-column field="unAmtLeft" title="剩余未收/未付" width="100"></vxe-table-column>
+            <vxe-table-column field="accountNo" title="对账单号" width="120"></vxe-table-column>
+            <vxe-table-column field="orgName" title="门店" width="120"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
