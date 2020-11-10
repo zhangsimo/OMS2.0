@@ -325,7 +325,10 @@ export default {
       this.pitchOn.forEach(item => {
         data.push(item.codeId);
       });
-      getDeleteTight(data).then(res => {
+      let params = {
+        storeId:this.storeId||""
+      }
+      getDeleteTight(data,params).then(res => {
         if (res.code == 0) {
           this.getList();
         }

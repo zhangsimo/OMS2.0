@@ -72,7 +72,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "内码",
-          key: "partId",
+          key: "code",
           minWidth: 120
         },
         {
@@ -87,12 +87,12 @@ export default class Fittings extends Vue {
         },
         {
           title: "品牌车型",
-          key: "carModelName",
+          key: "adapterCarModel",
           minWidth: 120
         },
         {
           title: "规格",
-          key: "spec",
+          key: "specifications",
           minWidth: 120
         },
         {
@@ -102,12 +102,12 @@ export default class Fittings extends Vue {
         },
         {
           title: "品质",
-          key: "qualityName",
+          key: "quality",
           minWidth: 120
         },
         {
           title: "品牌",
-          key: "partBrandName",
+          key: "partBrand",
           minWidth: 120
         },
         {
@@ -117,21 +117,29 @@ export default class Fittings extends Vue {
         },
         {
           title: "单位",
-          key: "unitld",
+          key: "minUnit",
           minWidth: 120
         },
         {
           title: "一级分类",
           minWidth: 120,
           render: (h, params) => {
-            return h("span", params.row.carTypefName||"");
+            let text: string = "";
+            try {
+              text = params.row.baseType.firstType.typeName;
+            } catch (e) {}
+            return h("span", text);
           }
         },
         {
           title: "二级分类",
           minWidth: 120,
           render: (h, params) => {
-            return h("span", params.row.carTypesName||"");
+            let text: string = "";
+            try {
+              text = params.row.baseType.secondType.typeName;
+            } catch (e) {}
+            return h("span", text);
           }
         },
         {
@@ -390,6 +398,10 @@ export default class Fittings extends Vue {
   // 选择数据
   private async changeDisable() {
     let self: any = this;
+    let ref:any = this.$parent.$parent;
+    let params = {
+      storeId:ref.storeId||""
+    }
     if (!self.expireDate) {
       self.$Message.error("请先选中结束日期");
       return false;
@@ -404,7 +416,7 @@ export default class Fittings extends Vue {
       item.passTime = pastTime;
       data.push(item);
     });
-    let res: any = await getSaveNewTight(data);
+    let res: any = await getSaveNewTight(data,params);
     if (res.code == 0) {
       this.$emit("getNewList", res);
       if (this.isSys) {
