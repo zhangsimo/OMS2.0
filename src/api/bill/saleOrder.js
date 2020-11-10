@@ -430,3 +430,14 @@ export function backHedging(data, modelType) {
     data
   })
 }
+
+
+//查询全部
+export function getAllList(params,data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/outMain/findOutEnterMainAll`,
+    method: 'post',
+    params,
+    data
+  })
+}
