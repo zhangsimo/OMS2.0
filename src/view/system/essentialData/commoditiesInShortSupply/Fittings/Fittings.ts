@@ -72,7 +72,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "内码",
-          key: "code",
+          key: "partId",
           minWidth: 120
         },
         {
@@ -87,12 +87,12 @@ export default class Fittings extends Vue {
         },
         {
           title: "品牌车型",
-          key: "adapterCarModel",
+          key: "carModelName",
           minWidth: 120
         },
         {
           title: "规格",
-          key: "specifications",
+          key: "spec",
           minWidth: 120
         },
         {
@@ -102,12 +102,12 @@ export default class Fittings extends Vue {
         },
         {
           title: "品质",
-          key: "quality",
+          key: "qualityName",
           minWidth: 120
         },
         {
           title: "品牌",
-          key: "partBrand",
+          key: "partBrandName",
           minWidth: 120
         },
         {
@@ -117,29 +117,21 @@ export default class Fittings extends Vue {
         },
         {
           title: "单位",
-          key: "minUnit",
+          key: "unitld",
           minWidth: 120
         },
         {
           title: "一级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text: string = "";
-            try {
-              text = params.row.baseType.firstType.typeName;
-            } catch (e) {}
-            return h("span", text);
+            return h("span", params.row.carTypefName||"");
           }
         },
         {
           title: "二级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text: string = "";
-            try {
-              text = params.row.baseType.secondType.typeName;
-            } catch (e) {}
-            return h("span", text);
+            return h("span", params.row.carTypesName||"");
           }
         },
         {
@@ -248,7 +240,7 @@ export default class Fittings extends Vue {
     this.getBand();
     this.treeInit();
     // this.initLocalPartInfo();
-    this.initCloudPartInfo();
+    // this.initCloudPartInfo();
   }
 
   /**===================Methods======================== */
@@ -294,6 +286,7 @@ export default class Fittings extends Vue {
   // 初始化本地配件资料 - 维保
   private async initLocalPartInfo() {
     this.local.loading = true;
+    let ref:any = this.$parent.$parent;
     let params: Kv = {};
     let data: Kv = {};
     params.page = this.local.page.num - 1;
@@ -309,6 +302,7 @@ export default class Fittings extends Vue {
       // data.carTypeIdThr = this.selectTreeId;
       data.typeId = this.selectTreeId;
     }
+    data.stockId = ref.storeId||"";
     let res: any = await api.attrQueryAllPage(params, data);
     if (res.code == 0) {
       this.local.tbdata = res.data.content;
@@ -319,6 +313,7 @@ export default class Fittings extends Vue {
   // 初始化平台配件资料 - wb 维保
   private async initCloudPartInfo() {
     this.cloud.loading = true;
+    let ref:any = this.$parent.$parent;
     let params: Kv = {};
     let data: Kv = {};
     params.tenantId = 0;
@@ -337,6 +332,7 @@ export default class Fittings extends Vue {
       // data.carTypeIdThr = this.selectTreeId;
       data.typeId = this.selectTreeId;
     }
+    data.stockId = ref.storeId||"";
     // console.log(params,data)
     let res: any = await getLocalList({ ...params, ...data });
     if (res.code == 0) {

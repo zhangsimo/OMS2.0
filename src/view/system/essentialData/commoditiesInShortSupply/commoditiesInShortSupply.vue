@@ -223,11 +223,7 @@ export default {
         //   label: "拼音"
         // }
       ],
-      List: [
-        { name: "zs", value: 18 },
-        { name: "zs", value: 18 },
-        { name: "zs", value: 18 }
-      ],
+      List: [],
       searchType: "",
       upurl: getup, //批量导入地址
       addCommodShow: false,
