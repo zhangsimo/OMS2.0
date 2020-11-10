@@ -1164,6 +1164,7 @@ export default {
        datas.map(item=>{
            delete item.id;
            item.trueQty = undefined;
+          item.partName = item.partStandardName||"";
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
