@@ -530,7 +530,11 @@
             this.$Message.warning("禁止额度申请中，请联系管理员!");
             return
           }
-
+          let staVal=JSON.parse(this.creaditList.researchStatus).value
+          if(this.creaditList.researchStatus && (staVal==1)){
+            this.$Message.warning("该客户正在申请信用调查，不可申请信用额度");
+            return
+          }
           this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
           this.CreditLineApplicationShow = true;
           // this.creaditList.tempStart='';
