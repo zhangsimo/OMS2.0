@@ -38,7 +38,7 @@
             >
               <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select> -->
-            <input type="text" class="h30" v-model="guestId">
+            <Input type="text" class="h30 w200" clearable v-model="guestId"/>
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">

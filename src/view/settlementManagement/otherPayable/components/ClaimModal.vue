@@ -244,7 +244,7 @@ export default {
         }
         expenditureClaim(data).then(res=>{
           if(res.code===0){
-            this.$message.error("认领成功")
+            this.$message.success("认领成功")
             this.visibal = false
             this.$parent.getQuery()
           }

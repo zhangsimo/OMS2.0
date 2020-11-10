@@ -7,6 +7,8 @@
       size="mini"
       ref="xTable"
       height="400"
+      auto-resize
+      resizable
       show-footer
       :footer-method="footerMethod"
       :data="tableData"

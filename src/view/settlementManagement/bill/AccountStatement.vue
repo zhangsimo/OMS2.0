@@ -345,7 +345,6 @@
           @on-change="changePage"
           @on-page-size-change = "changeSize"
           show-total
-          show-sizer
           size="small"
         />
         <div class="flex mt20">

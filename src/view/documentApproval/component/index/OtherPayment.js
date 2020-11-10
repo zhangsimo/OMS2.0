@@ -113,10 +113,11 @@ export default {
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = getPost()
         delete this.list.rowMessage.id
-        await this.getOrignCompany(this.list.rowMessage.guestName,this.list.rowMessage.guestId)
-        this.setReceiverInfo111(this.company[0])
-       
         this.$set(this.formInline, 'details', [this.list.rowMessage])
+        await this.getOrignCompany('',this.list.rowMessage.guestId)
+        this.formInline.receiveGuestId = this.company[0].value
+        this.getCompany(this.company[0])
+       
       }
       if (this.list.type == 2) {
         this.getList()
@@ -135,7 +136,9 @@ export default {
         this.formInline = res.data
         this.formInline.receiverId = res.data.receiverId
         await this.getOrignCompany(res.data.receiveGuestName,res.data.receiveGuestId)
-        this.getCompany(this.company[0])
+        setTimeout(()=>{
+          this.getCompany(this.company[0])
+        },1000)
         this.Pictures = {
           voucherPictures: res.data.voucherPictures || [],
           billStatus: res.data.billStatus
@@ -289,8 +292,8 @@ export default {
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
             valg = parseFloat(this.formInline.details[0].amountCollected) < parseFloat(this.formInline.applyAmt) ? true : false
           }
-          this.formInline.paymentTerm = moment(this.formInline.paymentTerm).format("YYYY-MM-DD") + " 23:59:59"
           if (valg) return this.$Message.error('申请金额不能大于单据金额')
+          this.formInline.paymentTerm = moment(this.formInline.paymentTerm).format("YYYY-MM-DD") + " 23:59:59"
           this.formInline.step = type
           let req = {...this.formInline}
           // req.paymentTerm = moment.utc(req.paymentTerm).day(1);

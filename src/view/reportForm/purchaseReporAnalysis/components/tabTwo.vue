@@ -9,25 +9,30 @@
       show-footer
       auto-resize
       resizable
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
+      @sort-change="sortMethod"
       :footer-method="footerMethod"
       :data="tableData"
     >
       <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130" fixed="left"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130"
+                        fixed="left"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="partId" title="配件内码" width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="partCode" title="配件编码" width="100"
+                        fixed="left"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="partName" title="配件名称" width="100"
+                        fixed="left"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="partBrand" title="品牌" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="carModelName" title="品牌车型" width="100"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="oemCode" title="OEM码" width="100"></vxe-table-column>
-<!--      <vxe-table-column show-overflow="tooltip" field="" title="实物码" width="100"></vxe-table-column>-->
-      <vxe-table-column show-overflow="tooltip" field="enterQty" title="入库数量" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="enterAmt" title="入库金额" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="rtnableQty" title="退货数量" width="90"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="rtAmt" title="退货金额" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="trueQty" title="实际入库数量" width="110"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="trueAmt" title="实际入库金额" width="110"></vxe-table-column>
+      <!--      <vxe-table-column show-overflow="tooltip" field="" title="实物码" width="100"></vxe-table-column>-->
+      <vxe-table-column show-overflow="tooltip" field="enterQty" remote-sort title="入库数量" width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="enterAmt" remote-sort title="入库金额" width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="rtnableQty" remote-sort title="退货数量" width="90"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="rtAmt" remote-sort title="退货金额" width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="trueQty" remote-sort title="实际入库数量" width="110"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="trueAmt" remote-sort title="实际入库金额" width="110"></vxe-table-column>
     </vxe-table>
     <Page
       class-name="page-con"
@@ -46,7 +51,7 @@
 
 <script>
   import * as api from "_api/reportForm/index.js";
-  import {showLoading,hideLoading} from "../../../../utils/loading";
+  import {showLoading, hideLoading} from "../../../../utils/loading";
 
   export default {
     data() {
@@ -95,12 +100,69 @@
         this.page.size = size;
         this.getList();
       },
-      exportXls(){
-        let params="";
-        for(var i in this.body){
-          params+=`${i}=${this.body[i]}&`
+      sortMethod({ column, property, order}) {
+        //order:asc 升序 desc 降序
+        //property:多个排序时所点击的头部
+        //column:本列
+        switch (property) {
+          case "enterQty":
+            this.body.enterQty=order == "asc" ? 0 : 1;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "enterAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=order == "asc" ? 0 : 1;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "rtnableQty":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=order == "asc" ? 0 : 1;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "rtAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=order == "asc" ? 0 : 1;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            break;
+          case "trueQty":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=order == "asc" ? 0 : 1;
+            this.body.trueAmt=undefined;
+            break;
+          case "trueAmt":
+            this.body.enterQty=undefined;
+            this.body.enterAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=order == "asc" ? 0 : 1;
+            break;
         }
-        location.href=api.purchaseReporAnalysisExport(`${params}page=0&size=${this.page.total}`)
+        this.body.sort = order == "asc" ? 0 : 1
+        this.getList();
+      },
+      exportXls() {
+        let params = "";
+        for (var i in this.body) {
+          params += `${i}=${this.body[i]}&`
+        }
+        location.href = api.purchaseReporAnalysisExport(`${params}page=0&size=${this.page.total}`)
       },
       //表尾合计
       footerMethod({columns, data}) {
