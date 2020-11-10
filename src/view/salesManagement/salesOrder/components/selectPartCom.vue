@@ -214,7 +214,12 @@
                 <vxe-table-column
                   field="outableQty"
                   min-width="160"
-                  title="供应商（取最近供应商）"
+                  title="供应商"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="160"
+                  title="起始供应商"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="outableQty"
@@ -378,7 +383,7 @@
                 height="200"
                 highlight-hover-row
                 :loading="loading1"
-                :data="allList.chainStock"
+                :data="allList.localStoreSellHistory"
               >
                 <vxe-table-column
                   type="seq"
@@ -391,19 +396,34 @@
                   width="120"
                 ></vxe-table-column>
                 <vxe-table-column
+                  field="partName"
+                  title="配件名称"
+                  width="120"
+                ></vxe-table-column>
+                <vxe-table-column
                   field="companyName"
-                  title="公司名称"
-                  width="120"
+                  title="公司"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="storeName"
-                  title="仓库"
-                  width="120"
+                  field="guestName"
+                  title="客户"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
-                  title="可售数量"
-                  min-width="120"
+                  field="finishDate"
+                  title="销售日期"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="sellQty"
+                  title="数量"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="sellPrice"
+                  title="销价"
+                  width="100"
                 ></vxe-table-column>
               </vxe-table>
             </div>
