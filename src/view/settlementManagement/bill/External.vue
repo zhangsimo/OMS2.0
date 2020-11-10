@@ -132,7 +132,8 @@
     getWarehousingList,
     getWarehousingPart,
     getOutStockList,
-    getOutStockPart
+    getOutStockPart,
+    getAllList
   } from "@/api/bill/saleOrder";
   import {goshop} from '@/api/settlementManagement/shopList';
   import {
@@ -583,6 +584,10 @@
         data1: [],
         typelist: [
           {
+            value:'1',
+            label:'全部'
+          },
+          {
             value: "050101",
             label: "采购入库"
           },
@@ -819,6 +824,7 @@
           obj.partCode = this.partCodeOrName;
         }
         // console.log(this.value)
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         if (this.type === "050101") {
           (obj.enterDateStart = this.value[0]
             ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -826,7 +832,6 @@
             (obj.enterDateEnd = this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : ""),
-            showLoading(".loadingClass", "数据加载中，请勿操作")
           getWarehousingList(params, obj).then(res => {
             if (res.data.vos) {
               res.data.vos.map((item, index) => {
@@ -861,15 +866,46 @@
                   item.taxSign = item.taxSign ? "是" : "否";
                   item.auditSign = item.billStatusId ? "已入库" : "草稿";
                 });
+                hideLoading()
                 this.data = res.data.vos;
                 this.page.total = res.data.TotalElements;
                 // this.total = res.data.AllotOutMainVO
                 this.selectTabArr = []
               } else {
+                hideLoading()
                 this.data = [];
                 this.selectTabArr = []
               }
-            });
+            }).catch( e => {
+              hideLoading()
+            })
+        }else if (this.type === "1") {
+          (obj.outDateStart = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : ""),
+            (obj.outDateEnd = this.value[1]
+              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : ""),
+            params.orderTypeId = this.type
+          getAllList(params, obj).then(res => {
+              if (res.data.vos.length !== 0) {
+                res.data.vos.map((item, index) => {
+                  item.index = index + 1;
+                  item.taxSign = item.taxSign ? "是" : "否";
+                  item.auditSign = item.billStatusId ? "已入库" : "草稿";
+                });
+                this.data = res.data.vos;
+                this.page.total = res.data.TotalElements;
+                this.selectTabArr = []
+                hideLoading()
+              } else {
+                this.data = [];
+                this.selectTabArr = []
+                hideLoading()
+              }
+            }).catch( e => {
+            hideLoading()
+          })
         }
       },
       // 总表查询

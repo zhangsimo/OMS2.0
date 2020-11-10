@@ -375,6 +375,9 @@ export const mixGoodsData = {
           if (columnIndex === 0) {
             return "合计";
           }
+          if (columnIndex === 2) {
+            return `共${(data||[]).length}条`;
+          }
           if (
             [
               "totalStockQty",

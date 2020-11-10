@@ -1,6 +1,5 @@
 import Main from "@/view/base/main";
 import parentView from "@/components/parent-view";
-
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
  * meta: {
@@ -31,7 +30,7 @@ export default [
       title: "Print - 打印",
       hideInMenu: true
     },
-    component: () => import("@/view/base/print/print.vue")
+    component: () => import("@/components/print/print.vue")
   },
   {
     path: "/register",
@@ -1628,7 +1627,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
-            //mark: '9403',
+            mark: '9403',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初库存",
@@ -1643,7 +1642,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
-            //mark: '9401',
+            mark: '9401',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "备货级别设置",
@@ -1658,7 +1657,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/CustomClassification/CustomClassification",
             name: "CustomClassification",
-            //mark: '9209',
+            mark: '9209',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "自定义分类设置",
@@ -1703,7 +1702,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
             name: "brandCarModel",
-            //mark: '9208',
+            mark: '9208',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "品牌车型",
@@ -1749,7 +1748,7 @@ export default [
             path:
               "/systemSetting/InitialNavigation/storeManagement/storeManagement",
             name: "storeManagement",
-            //mark: '9207',
+            mark: '9207',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "门店设置",
@@ -1763,7 +1762,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
             name: "setWarehouse",
-            //mark: '9402',
+            mark: '9402',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "仓库设置",
@@ -1777,7 +1776,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setBank",
             name: "setBank",
-            //mark: '9404',
+            mark: '9404',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初现金银行",

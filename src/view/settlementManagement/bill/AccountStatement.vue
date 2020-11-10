@@ -338,15 +338,13 @@
         <Page
           :total="pagetotal"
           show-elevator
-          show-sizer
           class="mt10 tr"
-          :page-size-opts="[10,20,50,100,200]"
           :page-size="page.size"
           :current="page.num"
+          :page-size-opts="[10, 30, 50, 100 ,200]"
           @on-change="changePage"
-          @on-page-size-change="changeSize"
+          @on-page-size-change = "changeSize"
           show-total
-          show-sizer
           size="small"
         />
         <div class="flex mt20">
@@ -418,7 +416,7 @@
                     <span>{{row.noAccountAmt.toFixed(2)}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="thisNoAccountAmt" title="本次对账金额" width="120">
+                <vxe-table-column field="thisNoAccountAmt" title="本次不对账金额" width="120">
                   <template v-slot="{row}">
                     <span>{{row.thisNoAccountAmt.toFixed(2)}}</span>
                   </template>
@@ -465,7 +463,7 @@
                     <span>{{row.noAccountAmt.toFixed(2)}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="thisNoAccountAmt" title="本次对账金额" width="120">
+                <vxe-table-column field="thisNoAccountAmt" title="本次不对账金额" width="120">
                   <template v-slot="{row}">
                     <span>{{row.thisNoAccountAmt.toFixed(2)}}</span>
                   </template>

@@ -8,6 +8,8 @@
       ref="xTable"
       height="400"
       show-footer
+      auto-resize
+      resizable
       :footer-method="footerMethod"
       :data="tableData"
     >

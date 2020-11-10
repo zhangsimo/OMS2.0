@@ -89,7 +89,7 @@
         </div>
       </div>
     </section>
-    <section class="con-box">
+    <section class="con-box" style="padding-bottom: 0">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
@@ -178,17 +178,17 @@
                       :disabled="isInput"
                     />
                   </FormItem>
-                  <FormItem class="form-Item" label="采购员：" prop="orderManId">
-                    <Select v-model="formPlanmain.orderManId"
-                      class="w160"
-                      :disabled="isInput"
-                      label-in-value
-                      @on-change="selectOrderMan"
-                      filterable
-                    >
-                      <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem class="form-Item" label="采购员：" prop="orderManId">-->
+                    <!--<Select v-model="formPlanmain.orderManId"-->
+                      <!--class="w160"-->
+                      <!--:disabled="isInput"-->
+                      <!--label-in-value-->
+                      <!--@on-change="selectOrderMan"-->
+                      <!--filterable-->
+                    <!--&gt;-->
+                      <!--<Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem
                     class="form-Item"
                     label="票据类型："

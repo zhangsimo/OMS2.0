@@ -125,8 +125,11 @@
           </TabPane>
           <TabPane label="个人" name="personage">
             <Form :label-width="50" ref="form" inline>
-              <FormItem label="部门:" prop="groundIds">
-                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>
+              <!--              <FormItem label="部门:" prop="groundIds">-->
+              <!--                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>-->
+              <!--              </FormItem>-->
+              <FormItem label="姓名:">
+                <Input v-model="personageName" placeholder="姓名" clearable class="w200" />
               </FormItem>
               <FormItem>
                 <Button type="warning" class="mr10" @click="SearchPersonal">查询</Button>
@@ -297,6 +300,7 @@ export default {
       AssistTableDataOther: [], //辅助弹框其他
       list: [], //部门列表
       groundIds: [], //部门
+      personageName:"",//个人 查询 input框
       AssistAccounting: "", //辅助核算弹框绑定值
       FullNameOrCode: "", //客户编码或名称、全称
       SupperlierNameOrCode: "", //供应商名称、全称
@@ -436,7 +440,8 @@ export default {
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
       // console.log(this.$store.state.user.userData.shopId);
-      data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
+      // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
+      data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
         .then(res => {
           stop();
@@ -583,12 +588,12 @@ export default {
       this.AssistAccounting = {}
       if (selectedData.length == 1) {
         this.AssistAccounting.auxiliaryTypeCode = '3'
-        this.AssistAccounting.fullName = selectedData[0].label;  
-        this.AssistAccounting.code = selectedData[0].value; 
+        this.AssistAccounting.fullName = selectedData[0].label;
+        this.AssistAccounting.code = selectedData[0].value;
         this.auxiliaryTypeCode = "3";
       } else {
         this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
-        this.AssistAccounting.code = selectedData[selectedData.length - 1].value; 
+        this.AssistAccounting.code = selectedData[selectedData.length - 1].value;
         this.AssistAccounting.auxiliaryTypeCode = '3'
         this.auxiliaryTypeCode = "3";
       }
@@ -680,6 +685,7 @@ export default {
 }
 .OtherLeft {
   flex: 1;
+  width: 103px;
   border-right: 1px solid gray;
 }
 .OtherLeft > ul > li {
@@ -693,6 +699,7 @@ export default {
   border-bottom: 1px solid gray;
 }
 .OtherRight {
+  width: 615px;
   flex: 6;
 }
 .changeDiv {
@@ -702,7 +709,7 @@ export default {
 .xuan {
   background: #e8eaec;
   color: gray;
-  font-size: 15px;
+  /* font-size: 15px; */
 }
 </style>
 <style scoped>

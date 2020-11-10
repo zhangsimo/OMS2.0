@@ -461,6 +461,7 @@ export const mixSelectPartCom = {
         if (res.code === 0) {
           this.allList = res.data;
           this.allList.priceLever.forEach(element => {
+
             element.sellPrice = parseFloat(element.sellPrice).toFixed(2);
           });
         }
@@ -474,6 +475,8 @@ export const mixSelectPartCom = {
     //双击显示
     dblclick(v){
       if(this.$route.name=="salesOrder"){
+        v.partName=v.partStandardName
+        v.carBrandName=v.adapterCarBrand
         this.$refs.selectPartInfo.init(v);
       } else {
         this.selectTableItem = [v];

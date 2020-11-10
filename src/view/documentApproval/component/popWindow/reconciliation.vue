@@ -565,7 +565,7 @@
           },
           {
             title: "适用车型",
-            key: "Detailedstatistics",
+            key: "partModel",
             className: "tc"
           },
           {

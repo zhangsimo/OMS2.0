@@ -37,7 +37,7 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select> -->
-            <input type="text" class="h30" v-model="companyId" />
+            <Input type="text" class="h30 w200 mr10" v-model="companyId" />
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -222,30 +222,31 @@
         </Col>
       </Row>
     </Modal>
-    <Modal v-model="modal" :title="claimedButtonType" width="800">
-      <span>往来单位：</span>
-      <Select
-        v-model="suppliers"
-        class="w150"
-        filterable
-        remote
-        :loading="remoteloading"
-        :remote-method="getOne"
-      >
-        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-      <span class="ml10">对方户名：</span>
-      <Input v-model="reciprocalAccountName" class="w100" />
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amount" class="w50" />
-      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
-        <i class="iconfont iconchaxunicon"></i>
-        <span>查询</span>
-      </button>
-      <Button class="ml10" @click="claimOk">认领</Button>
-      <claim ref="claim" @selection="selection" />
-      <div slot="footer"></div>
-    </Modal>
+<!--    <Modal v-model="modal" :title="claimedButtonType" width="800">-->
+<!--      <span>往来单位：</span>-->
+<!--      <Select-->
+<!--        v-model="suppliers"-->
+<!--        class="w150"-->
+<!--        filterable-->
+<!--        remote-->
+<!--        :loading="remoteloading"-->
+<!--        :remote-method="getOne"-->
+<!--      >-->
+<!--        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+<!--      </Select>-->
+<!--      <span class="ml10">对方户名：</span>-->
+<!--      <Input v-model="reciprocalAccountName" class="w100" />-->
+<!--      <span class="ml10">金额：</span>-->
+<!--      <InputNumber v-model="amount" class="w50" />-->
+<!--      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">-->
+<!--        <i class="iconfont iconchaxunicon"></i>-->
+<!--        <span>查询</span>-->
+<!--      </button>-->
+<!--      <Button class="ml10" @click="claimOk">认领</Button>-->
+<!--      <claim ref="claim" @selection="selection" />-->
+<!--      <div slot="footer"></div>-->
+<!--    </Modal>-->
+    <ClaimModal ref="ClaimModal" :title-name="titleName"></ClaimModal>
     <settlementadv ref="settlementadv" @getNewList="getNewQuery" />
   </div>
 </template>
@@ -263,13 +264,15 @@ import settlementadv from "./components/settlementadv";
 import moment from "moment";
 import { mapMutations } from "vuex";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
-import {showLoading, hideLoading} from "@/utils/loading"
+import {showLoading, hideLoading} from "@/utils/loading";
+import ClaimModal from "./components/ClaimModal";
 export default {
   name: "settlementManagementAdvanceCharge",
   components: {
     quickDate,
     claim,
     Record,
+    ClaimModal,//预付款认领
     settlementadv
   },
   data() {
@@ -285,6 +288,7 @@ export default {
       claimedButtonType: "预付款认领", // claimed 用以判断弹窗按钮坐用
       claimedSelectData: [], // 认领弹窗选择的数据
       value: [], //日期
+      titleName:"预付款认领",
       company: [], //往来单位
       companyId: '', //往来单位
       Branchstore: [{ id: "0", name: "全部",shortName:"全部" }], //分店名称
@@ -296,6 +300,7 @@ export default {
         total: 0,
         opts: [20, 50, 100, 200]
       },
+      amountType:1,//本店待认领款 amountType  预付款2 预付款收回认领1
       loading: false,
       currRow: null,
       serviceId: "",
@@ -523,12 +528,15 @@ export default {
       if (name == "预付款认领" && this.currRow.paymentNo != null) {
         return this.$Message.error("预付款付款已认领");
       }
+      name=="预付款认领"?this.amountType=2:this.amountType=1
       this.claimedButtonType = name;
       this.amount = null;
       this.reciprocalAccountName = "";
       this.suppliers = "";
-      this.queryClaimed();
-      this.modal = true;
+      // this.queryClaimed();
+      // this.modal = true;
+      this.titleName=name;
+      this.$refs.ClaimModal.open();
     },
     // 预收款认领查询
     queryClaimed() {
@@ -658,7 +666,8 @@ export default {
   display: inline-block;
   border: 1px solid #e8eaec;
   flex: 1;
-  padding: 5px;
+  line-height: 24px;
+  padding:0 5px;
 }
 .vxe-table .vxe-cell {
   padding: 0;
