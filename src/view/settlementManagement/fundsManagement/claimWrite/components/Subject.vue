@@ -127,6 +127,7 @@ export default {
       if(this.oneSubject.auxiliaryAccountingName) {
         this.oneSubject.mateAccountCoding=this.oneSubject.titleCode;
         this.$refs.voucherInput.voucherItem = {};
+        this.$refs.voucherInput.groundIds=[];
         this.$refs.voucherInput.subjectModelShowassist = true;
       }
     },
@@ -146,7 +147,7 @@ export default {
       data.claimType=8;
       data.claimMoney = this.clime[0].unClaimedAmt
       if(this.oneSubject.auxiliaryAccountingName){
-        data.auxiliaryTypeCode=this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+        data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2?1:this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
           data.isAuxiliaryAccounting=0 //是否辅助核算类
         }else{
@@ -169,16 +170,20 @@ export default {
           return;
         }
       }
-      showLoading()
-      let res = await TurnToTheProfitAndLoss(data);
-      if (res.code === 0) {
-        hideLoading()
-        this.subjectModelShow = false;
-        this.$refs.voucherInput.subjectModelShowassist = false;
-        this.$Message.success("转益成功");
-        //刷新本店待认领款 列表
-        this.$parent.$parent.queryClaimed()
-      }else{
+      try {
+        showLoading('body',"保存中，请勿操作。。。")
+        let res = await TurnToTheProfitAndLoss(data);
+        if (res.code === 0) {
+          this.subjectModelShow = false;
+          hideLoading()
+          this.$refs.voucherInput.subjectModelShowassist = false;
+          this.$Message.success("转益成功");
+          //刷新本店待认领款 列表
+          this.$parent.$parent.queryClaimed()
+        }else{
+          hideLoading()
+        }
+      } catch (error) {
         hideLoading()
       }
     }

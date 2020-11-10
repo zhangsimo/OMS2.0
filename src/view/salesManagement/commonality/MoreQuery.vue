@@ -24,13 +24,16 @@
           </Select>
         </FormItem>
         <FormItem label="订单号:">
-          <Input v-model="formData.serviceId" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
+          <Input v-model="formData.serviceId" type="text" placeholder="请输入单号" style="width: 350px" />
+        </FormItem>
+        <FormItem label="往来单号:">
+          <Input v-model="formData.guestId" type="text" placeholder="请输入往来单号" style="width: 350px" />
         </FormItem>
         <FormItem label="配件编码:">
-          <Input v-model="formData.partCode" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
+          <Input v-model="formData.partCode" type="text" placeholder="请输入配件编码" style="width: 350px" />
         </FormItem>
         <FormItem label="配件名称:">
-          <Input v-model="formData.partName"    placeholder="请输入配件名称" style="width: 350px" />
+          <Input v-model="formData.partName"  type="text"  placeholder="请输入配件名称" style="width: 350px" />
         </FormItem>
         <FormItem label="品牌:">
           <Select v-model="formData.partBrandCode" filterable style="width: 350px">
@@ -92,7 +95,6 @@
             },
             //获取创建时间
             getCreatDate(date){
-              console.log(date , 778)
                 this.formData.startTime = date[0] +  " " + "00:00:00"
                 this.formData.endTime = date[1] +' '+ '23:59:59'
             },

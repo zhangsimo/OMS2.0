@@ -69,6 +69,12 @@
             >
           </div>
           <div class="db">
+            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
+              <i class="iconfont mr5 icondaochuicon"></i>
+              导出
+            </Button>
+          </div>
+          <div class="db">
             <Button @click="abandoned" class="mr10"
                     :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
                     v-has="'invalidate'"
@@ -155,7 +161,7 @@
                     <Row class="w160">
                       <Col span="19"
                       >
-                        <Tooltip :content="formPlanmain.guestName">
+                        <Tooltip :content="formPlanmain.guestName" placement="top">
                           <!-- <Input
                             v-model="formPlanmain.guestName"
                             placeholder="请选择供应商"
@@ -500,7 +506,7 @@
                 <vxe-table-column show-overflow="tooltip"
                                   field="orderQty"
                                   title="采购数量"
-                                  :edit-render="{ name: 'input' }"
+                                  :edit-render="{ name: 'input',autoselect: true }"
                                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -517,7 +523,7 @@
                 <vxe-table-column show-overflow="tooltip"
                                   field="orderPrice"
                                   title="采购单价"
-                                  :edit-render="{ name: 'input' }"
+                                  :edit-render="{ name: 'input',autoselect: true }"
                                   width="160"
                 >
                   <template v-slot:edit="{ row }">

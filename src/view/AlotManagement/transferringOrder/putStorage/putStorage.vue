@@ -62,13 +62,13 @@
         <div class="inner-box">
           <div class="con-split" ref="paneLeft">
             <Split v-model="split1" min="200" @on-moving="getDomHeight">
-              <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+              <div slot="left" class="con-split-pane-left">
                 <div class="pane-made-hd">调拨入库列表</div>
                 <Table
                   ref="tableref"
-                  :height="leftTableHeight"
                   @on-current-change="selectTabelData"
                   size="small"
+                  :height="leftTableHeight"
                   highlight-row
                   border
                   :stripe="true"
@@ -89,7 +89,7 @@
                   class="mr10"
                 ></Page>
               </div>
-              <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+              <div slot="right" class="con-split-pane-right pl5 goods-list-form flex-c" style="height: 100%">
                 <div class="pane-made-hd">调拨入库信息</div>
                 <div v-if="showit" class="clearfix purchase" ref="planForm">
                   <Form inline :show-message="false" ref="formPlan" :label-width="120">
@@ -121,7 +121,7 @@
                     <FormItem label="调入仓库：" prop="storeId" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select v-model="Leftcurrentrow.storeId" :disabled="true">
+                          <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -148,12 +148,12 @@
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Tooltip :content="Leftcurrentrow.remark">
-                      <Input disabled v-model="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input v-model="Leftcurrentrow.remark" class="w160" :disabled="Leftcurrentrow.status.value !== 0"></Input>
                       </Tooltip>
                     </FormItem>
-                    <FormItem label="创建人：" prop="createUname">
-                      <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
-                    </FormItem>
+                    <!--<FormItem label="创建人：" prop="createUname">-->
+                      <!--<Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>-->
+                    <!--</FormItem>-->
                     <FormItem label="申请单号：" prop="code">
                       <Tooltip :content="Leftcurrentrow.code">
                       <Input disabled :value="Leftcurrentrow.code" class="w160"></Input>
@@ -180,53 +180,60 @@
                     </div>
                   </div>
                 </div>
-                <vxe-table
-                  v-if="showit"
-                  border
-                  resizable
-                  ref="xTable1"
-                  size="mini"
-                  highlight-current-row
-                  highlight-hover-row
-                  @select-all="selectAllEvent"
-                  @select-change="selectChangeEvent"
-                  :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
-                  @keydown="keydown"
-                  :height="rightTableHeight"
-                  :data="ArrayValue"
-                  :edit-rules="validRules"
-                  :edit-config="{trigger: 'click', mode: 'cell'}"
-                >
-                  <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip"
-                    field="hasInQty"
-                    title="入库数量"
-                    :edit-render="{name: 'input',attrs:{disabled:'disabled'}}"
-                    width="100"
-                  ></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip"
-                    field="storeShelf"
-                    :edit-render="{name: 'input'}"
-                    title="入库仓位"
-                    width="100"
+                <div style="flex:1;">
+                  <vxe-table
+                    v-if="showit"
+                    border
+                    resizable
+                    auto-resize
+                    sync-resize
+                    ref="xTable1"
+                    size="mini"
+                    :height="rightTableHeight"
+                    highlight-current-row
+                    highlight-hover-row
+                    @select-all="selectAllEvent"
+                    @select-change="selectChangeEvent"
+                    :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+                    @keydown="keydown"
+                    :data="ArrayValue"
+                    :edit-rules="validRules"
+                    :footer-method="addFooter"
+                    show-footer
+                    :edit-config="{trigger: 'click', mode: 'cell'}"
                   >
-                    <template v-slot:edit="{ row,rowIndex }">
-                      <vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>
-                    </template>
-                    <template v-slot="{ row }">{{ row.storeShelf }}</template>
-                  </vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" ></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
-                </vxe-table>
+                    <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip"
+                                       field="hasInQty"
+                                       title="入库数量"
+                                       :edit-render="{name: 'input',autoselect: true ,attrs:{disabled:'disabled'}}"
+                                       width="100"
+                    ></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip"
+                                       field="storeShelf"
+                                       :edit-render="{name: 'input',autoselect: true }"
+                                       title="入库仓位"
+                                       width="100"
+                    >
+                      <template v-slot:edit="{ row,rowIndex }">
+                        <vxe-input type="text" v-model="row.storeShelf" @blur="blurFun(row.storeShelf,rowIndex)"></vxe-input>
+                      </template>
+                      <template v-slot="{ row }">{{ row.storeShelf }}</template>
+                    </vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" ></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
+                  </vxe-table>
+                </div>
+                <div class="table-bottom-text flex"><span>创建人：{{Leftcurrentrow?Leftcurrentrow.createUname:""}}</span><span>创建日期：{{Leftcurrentrow?Leftcurrentrow.createTime:""}}</span><span>提交人：{{Leftcurrentrow?Leftcurrentrow.commitUname:""}}</span><span>提交日期：{{Leftcurrentrow?Leftcurrentrow.commitDate:""}}</span></div>
               </div>
             </Split>
           </div>
@@ -433,23 +440,27 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
-            key: "index"
+            width: 50,
+            key: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70
+            width: 70,
+            resizable:true
           },
           {
             title: "调出方",
             key: "guestName",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140,
+            width: 140,
+            resizable:true,
             render(h, params) {
               return h("span", {}, moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss"));
             }
@@ -457,27 +468,32 @@ export default {
           {
             title: "创建人",
             key: "createUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "入库单号",
             key: "serviceId",
-            minWidth: 240
+            width: 240,
+            resizable:true
           },
           {
             title: "入库人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "入库日期",
             key: "commitDate",
-            minWidth: 160
+            width: 160,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "printing",
-            minWidth: 100
+            width: 100,
+            resizable:true
           }
         ],
         tbdata: []
@@ -739,7 +755,7 @@ export default {
       if (errMap) {
         return
       }
-
+      console.log(this.Leftcurrentrow)
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -969,9 +985,9 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 144;
+        this.leftTableHeight = wrapH - 110;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
       });
     },
     getDataQuick(v) {
@@ -991,7 +1007,7 @@ export default {
     //左边列表选中当前行
     async selectTabelData(row) {
       this.dayinCureen = row;
-      this.Leftcurrentrow = row;
+      this.Leftcurrentrow = {...row};
       this.Status = row.status.value;
       this.Leftcurrentrow.storeId = row.storeId;
       if (row.id == undefined) {
@@ -1054,7 +1070,27 @@ export default {
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
     //footer计算
-    addFooter() {},
+    addFooter({columns, data}) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "和值";
+          }
+          if (columnIndex === 1) {
+            return `共 ${(data||[]).length} 条`;
+          }
+          if (
+            ["applyQty", "hasAcceptQty", "hasOutQty","hasInQty"].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property, columnIndex);
+          }
+          // if (column.property === "orderAmt") {
+          //   return ` ${this.countAllAmount(data)} `;
+          // }
+          return null;
+        }),
+      ];
+    },
     // 确定
     Determined() {
       // this.$refs.naform.getSupplierNamea();
@@ -1277,9 +1313,9 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+    // window.onresize = () => {
+    //   this.getDomHeight();
+    // };
     this.warehouse();
   }
 };
@@ -1331,7 +1367,7 @@ export default {
   margin-top: 20px;
 }
 .con-box {
-  height: 600px;
+  /*height: 600px;*/
 }
 .w550 {
   width: 580px;

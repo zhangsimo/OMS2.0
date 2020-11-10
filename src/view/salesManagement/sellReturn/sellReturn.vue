@@ -125,7 +125,7 @@
                 inline
                 ref="formPlan"
                 :model="formPlan"
-                :label-width="120"
+                :label-width="90"
                 :rules="ruleValidate"
                 :show-message="false"
               >
@@ -141,7 +141,7 @@
                       <!--style="width:200px;"-->
                       <!--/>-->
                       <!--</Tooltip>-->
-                      <sales-cus style="width:200px; display: inline-block" :disabled-prop="draftShow != 0 || isNew"
+                      <sales-cus style="width:147px; display: inline-block" :disabled-prop="draftShow != 0 || isNew"
                                  :title="formPlan.fullName" placeholder="请输入客户" :search-value="formPlan.fullName"
                                  @throwName="throwNameFun"></sales-cus>
                       <Button
@@ -155,27 +155,27 @@
                       </Button>
                     </Row>
                   </FormItem>
-                  <FormItem label="退货员：" prop="orderManId">
-                    <Select
-                      :value="formPlan.orderManId"
-                      @on-change="selectOrderMan"
-                      filterable
-                      style="width: 200px"
-                      :disabled="draftShow != 0 || isNew"
-                      label-in-value
-                    >
-                      <Option
-                        v-for="item in salesList"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.label }}
-                      </Option
-                      >
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem label="退货员：" prop="orderManId">-->
+                    <!--<Select-->
+                      <!--:value="formPlan.orderManId"-->
+                      <!--@on-change="selectOrderMan"-->
+                      <!--filterable-->
+                      <!--style="width: 180px"-->
+                      <!--:disabled="draftShow != 0 || isNew"-->
+                      <!--label-in-value-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in salesList"-->
+                        <!--:value="item.id"-->
+                        <!--:key="item.id"-->
+                      <!--&gt;{{ item.label }}-->
+                      <!--</Option-->
+                      <!--&gt;-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem label="退货日期：" prop="orderDate">
                     <DatePicker
-                      style="width: 160px"
+                      style="width: 180px"
                       type="date"
                       placeholder="请选择退货日期"
                       @quickDate="setDataFun"
@@ -185,13 +185,13 @@
                   </FormItem>
                   <FormItem label="往来单号：">
                     <Tooltip :content="formPlan.code">
-                      <Input class="w160" v-model="formPlan.code" disabled/>
+                      <Input class="w180" v-model="formPlan.code" disabled/>
                     </Tooltip>
                   </FormItem>
                   <FormItem label="入库仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
-                      style="width:233px"
+                      style="width:180px"
                       :disabled="draftShow != 0 || isNew"
                       @on-change="getStore"
                     >
@@ -207,7 +207,7 @@
                   </FormItem>
                   <FormItem label="退货原因：" prop="rtnReasonId">
                     <Select
-                      class="w200"
+                      class="w180"
                       v-model="formPlan.rtnReasonId"
                       :disabled="draftShow != 0 || isNew"
                     >
@@ -223,7 +223,7 @@
                   <FormItem label="结算方式：" prop="settleTypeId">
                     <Select
                       v-model="formPlan.settleTypeId"
-                      style="width:160px"
+                      style="width:180px"
                       :disabled="draftShow != 0 || isNew"
                     >
                       <Option
@@ -239,7 +239,7 @@
                     <Tooltip :content="formPlan.remark">
                       <Input
                         placeholder="请输入备注"
-                        class="w160"
+                        class="w180"
                         v-model="formPlan.remark"
                         :disabled="draftShow != 0 || isNew"
                         :edit-render="{
@@ -252,7 +252,7 @@
 
                   <FormItem label="退货单号：">
                     <Tooltip :content="formPlan.serviceId">
-                      <Input class="w160" v-model="formPlan.serviceId" disabled/>
+                      <Input class="w200" v-model="formPlan.serviceId" disabled/>
                     </Tooltip>
                   </FormItem>
                 </div>
@@ -332,13 +332,13 @@
                                     field="orderQty"
                                     title="数量"
                                     width="80"
-                                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
                                     field="orderPrice"
                                     title="销价"
                                     width="80"
-                                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" title="金额" width="100">
                     <template v-slot="{ row }">
@@ -349,7 +349,7 @@
                                     field="remark"
                                     title="备注"
                                     width="100"
-                                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <!--<vxe-table-column show-overflow="tooltip" field="storeName" title="仓库" disabled>-->
                     <!--<template v-slot:edit="{ row }">-->
@@ -371,6 +371,7 @@
                                     :edit-render="{
                       name: 'input',
                       immediate: true,
+                      autoselect: true ,
                       events: { blur: checkSelf }
                     }"
                   ></vxe-table-column>
@@ -529,9 +530,10 @@
           columns: [
             {
               title: "序号",
-              minWidth: 50,
+              width: 50,
               type: "index",
-              align: "center"
+              align: "center",
+              resizable:true
             },
             {
               title: "状态",
@@ -539,59 +541,69 @@
                 let tex = params.row.billStatusName;
                 return h("span", {}, tex);
               },
-              minWidth: 70
+              width: 70,
+              resizable:true
             },
             {
               title: "客户",
               key: "guestName",
-              minWidth: 170
+              width: 170,
+              resizable:true
             },
             {
               title: "退货日期",
               key: "orderDate",
-              minWidth: 120,
+              width: 120,
+              resizable:true,
               render: (h, params) => {
                 let date = moment(params.row.orderDate).format("YYYY-MM-DD")
                 return h('span', {}, date)
               }
             },
-            {
-              title: "退货员",
-              key: "orderMan",
-              minWidth: 120
-            },
+            // {
+            //   title: "退货员",
+            //   key: "orderMan",
+            //   width: 120,
+            //   resizable:true
+            // },
 
             {
               title: "退货单号",
               key: "serviceId",
-              minWidth: 200
+              width: 200,
+              resizable:true
             },
             {
               title: "打印次数",
               key: "printCount",
-              minWidth: 120
+              width: 120,
+              resizable:true
             },
             {
               title: "创建人",
               key: "createUname",
-              minWidth: 100
+              width: 100,
+              resizable:true
             },
             {
               title: "创建日期",
               align: "center",
               key: "createTime",
-              minWidth: 170
+              width: 170,
+              resizable:true
             },
             {
               title: "提交人",
               key: "auditor",
-              minWidth: 100
+              width: 100,
+              resizable:true
             },
             {
               title: "提交日期",
               align: "center",
               key: "auditDate",
-              minWidth: 170
+              width: 170,
+              resizable:true
             }
           ],
           tbdata: []
@@ -611,9 +623,9 @@
           guestId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],
-          orderManId: [
-            {required: true, type: "string", message: "  ", trigger: "change"}
-          ],
+          // orderManId: [
+          //   {required: true, type: "string", message: "  ", trigger: "change"}
+          // ],
           rtnReasonId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],
@@ -717,8 +729,8 @@
           let wrapH = this.$refs.paneLeft.offsetHeight;
           let planFormH = this.$refs.planForm.offsetHeight;
           //获取左侧侧表格高度
-          this.leftTableHeight = wrapH - 90;
-          this.rightTableHeight = wrapH - planFormH - 150;
+          this.leftTableHeight = wrapH - 110;
+          this.rightTableHeight = wrapH - planFormH - 120;
         });
       },
       //检验仓位（参照采购入库）

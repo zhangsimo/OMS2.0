@@ -114,17 +114,17 @@
                   :rules="ruleValidate"
                   :label-width="100"
                 >
-                  <FormItem label="业务员：" prop="salesman">
+                  <FormItem label="创建人：" prop="salesman">
                     <Input
                       class="w160"
                       :disabled="true"
                       v-model="formPlan.salesman"
                     ></Input>
                   </FormItem>
-                  <FormItem label="预订单号:" prop="Reservation" class="ml50">
+                  <FormItem label="预订单号:" prop="Reservation">
                     <Tooltip :content="formPlan.Reservation">
                     <Input
-                      class="w160"
+                      class="w180"
                       :disabled="true"
                       v-model="formPlan.Reservation"
                     />
@@ -133,7 +133,7 @@
                   <FormItem
                     label="期望到货日期："
                     prop="orderDate"
-                    class="fs12 ml50"
+                    class="fs12"
                   >
                     <DatePicker
                       @on-change="changedate"
@@ -293,7 +293,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="preQty"
                   title="预定数量"
-                  :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                  :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
                   width="100"
                 >
                 </vxe-table-column>
@@ -324,7 +324,9 @@
                 ></vxe-table-column>
                 <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
               </vxe-table>
-              <div ref="planPage"></div>
+              <div class="table-bottom-text flex">
+                <span>创建人：{{datadata?datadata.salesman:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.commitUname:""}}</span><span>提交日期：{{datadata?datadata.commitTime:""}}</span>
+              </div>
             </div>
           </Split>
         </div>
@@ -446,13 +448,15 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
-            type: "index"
+            width: 50,
+            type: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "status",
-            minWidth: 70,
+            width: 70,
+            resizable:true,
             render: (h, params) => {
               let name = params.row.status.name;
               return h("span", name);
@@ -461,33 +465,39 @@ export default {
           {
             title: "公司",
             key: "company",
-            minWidth: 80
+            width: 80,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
-            title: "业务员",
+            title: "创建人",
             key: "salesman",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "预定单号",
             key: "orderNo",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "提交人",
             key: "commitUname",
-            minWidth: 100
+            width: 100,
+            resizable:true
           },
           {
             title: "提交日期",
             align: "center",
             key: "commitTime",
-            minWidth: 170
+            width: 170,
+            resizable:true
           }
         ],
         tbdata: []
@@ -941,6 +951,9 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
+          if (columnIndex === 2) {
+            return `共${(data||[]).length}条`;
+          }
           if (["preQty"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
           }
@@ -1255,9 +1268,9 @@ export default {
       let planBtnH = this.$refs.planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 70;
+      this.leftTableHeight = wrapH - 100;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 98;
     });
     this.leftgetList();
   },
@@ -1266,7 +1279,7 @@ export default {
 
 <style scoped>
 .con-box {
-  height: 700px;
+  /*height: 700px;*/
 }
 .w550 {
   width: 580px;

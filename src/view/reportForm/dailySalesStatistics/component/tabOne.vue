@@ -7,6 +7,8 @@
       ref="xTable"
       height="400"
       show-footer
+      auto-resize
+      resizable
       :data="tableData"
     >
 <!--      :footer-method="footerMethod"-->
@@ -18,36 +20,36 @@
         <vxe-table-column  show-overflow="tooltip" field="sellAmt" title="销售金额" width="100"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="grossSales" title="销售毛利" width="100"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="grossMargin" title="毛利率(%)" width="80"></vxe-table-column>
-<!--        <vxe-table-column  show-overflow="tooltip" field="grossProfit" title="税点毛利" width="100"></vxe-table-column>-->
-<!--        <vxe-table-column  show-overflow="tooltip" field="NonTaxPointGrossProfit" title="非税点毛利" width="100"></vxe-table-column>-->
-<!--        <vxe-table-column  show-overflow="tooltip" field="NonTaxPointGrossMargin" title="非税点毛利率(%)" width="120"></vxe-table-column>-->
+        <vxe-table-column  show-overflow="tooltip" field="grossProfit" title="税点毛利" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nonGrossProfit" title="非税点毛利" width="100"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nonGrossMargin" title="非税点毛利率(%)" width="120"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group1" title="外部销售数据">
         <vxe-table-column  show-overflow="tooltip" field="sellOut" title="外部销售" width="70"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="grossSalesOut" title="外部毛利" width="70"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="grossMarginOut" title="外部毛利率(%)" width="110"></vxe-table-column>
-<!--        <vxe-table-column  show-overflow="tooltip" field="grossProfitOut" title="外部税点毛利" width="110"></vxe-table-column>-->
-<!--        <vxe-table-column  show-overflow="tooltip" field="NonTaxPointGrossProfitOut" title="外部非税点毛利" width="120"></vxe-table-column>-->
-<!--        <vxe-table-column  show-overflow="tooltip" field="NonTaxPointGrossMarginOut" title="外部非税点毛利率(%)" width="140"></vxe-table-column>-->
+        <vxe-table-column  show-overflow="tooltip" field="grossProfitOut" title="外部税点毛利" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nonGrossProfitOut" title="外部非税点毛利" width="120"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nonGrossMarginOut" title="外部非税点毛利率(%)" width="140"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group2" title="HS销售数据">
-        <vxe-table-column  show-overflow="tooltip" field="sellHS" title="HS销售" width="70"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="grossSalesHS" title="HS毛利" width="70"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="grossMarginHS" title="HS毛利率(%)" width="110"></vxe-table-column>
-<!--        <vxe-table-column  show-overflow="tooltip" field="grossProfitHS" title="HS税点毛利" width="110"></vxe-table-column>-->
-<!--        <vxe-table-column  show-overflow="tooltip" field="NonTaxPointGrossProfitHS" title="HS非税点毛利" width="120"></vxe-table-column>-->
-<!--        <vxe-table-column  show-overflow="tooltip" field="NonTaxPointGrossMarginHS" title="HS非税点毛利率(%)" width="130"></vxe-table-column>-->
+        <vxe-table-column  show-overflow="tooltip" field="sellHs" title="HS销售" width="70"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="grossSalesHs" title="HS毛利" width="70"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="grossMarginHs" title="HS毛利率(%)" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="grossProfitHs" title="HS税点毛利" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nonProfitHs" title="HS非税点毛利" width="120"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nonGrossMarginHs" title="HS非税点毛利率(%)" width="130"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="内部销售数据">
         <vxe-table-column  show-overflow="tooltip" field="sellInternal" title="内部销售" width="70"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="grossSalesInternal" title="内部毛利" width="70"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="salesInternal" title="内部毛利" width="70"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="grossMarginInternal" title="内部毛利率(%)" width="110"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="未审销售数据">
         <vxe-table-column  show-overflow="tooltip" field="outUnreviewedNumber" title="外部未审单数" width="110"></vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="outUnreviewedAmt" title="外部未审金额" width="110"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="InternalUnreviewedNumber" title="内部未审单数" width="110"></vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="InternalUnreviewedAmt" title="内部未审金额" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="internalUnreviewedNumber" title="内部未审单数" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="internalUnreviewedAmt" title="内部未审金额" width="110"></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page

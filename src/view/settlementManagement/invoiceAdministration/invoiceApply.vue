@@ -31,16 +31,16 @@
           <div class="ml20 flexd">
             <span>分店名称：</span>
             <Select v-model="form.orgId" style="width:180px" :disabled="selectShopList">
-              <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+              <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.shortName}}</Option>
             </Select>
             <!-- <i class="iconfont iconcaidan input" @click="Dealings(1)"></i> -->
           </div>
           <div class="db ml20">
-            <span>客户：</span>
+            <span>往来单位：</span>
             <!--              <Select v-model="form.guestId" style="width:180px">-->
             <!--                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>-->
             <!--              </Select>-->
-            <Select
+            <!-- <Select
               v-model="form.guestId"
               clearable
               filterable
@@ -56,7 +56,8 @@
               >{{ item.label }}
               </Option
               >
-            </Select>
+            </Select> -->
+            <Input type="text" class="h30 w200" v-model="form.guestName"/>
           </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" v-noresub="1000" @click="query" type="button">
@@ -115,6 +116,7 @@
           @click="backCancel"
         >撤回申请
         </button>
+        <Button class="ml10" @click="saveSendingNumber" v-has="'saveSendingNumber'">保存</Button>
       </div>
       <div class="mt20">
         <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
@@ -138,7 +140,10 @@
           show-elevator
           class="mt10 fr"
           show-sizer
+          :page-size="form.size"
+          :current="form.page"
           @on-change="changePage"
+          :page-size-opts="pageSizeOpts"
           @on-page-size-change="changeSize"
           show-total
           size="small"
@@ -173,7 +178,7 @@
     getDetailsList,
     getDetailsListApply,
     IntelligenceList,
-    updateNumber,
+    updateNumberList,
     writeData,
     exportModifyData/**导出配件明细*/,
     exportAll/**导出汇总*/,
@@ -198,7 +203,7 @@
       return {
         btnTestDir: false,
 
-        proTypeList: [],//分店
+        proTypeList: [{id: '0', shortName: '全部'}],//分店
         columns: [
           {
             title: "选择",
@@ -210,7 +215,8 @@
           },
           {
             title: "序号",
-            key: "seq",
+            // key: "seq",
+            type: "index",
             className: "tc",
             resizable: true,
             width: 40,
@@ -475,34 +481,41 @@
             resizable: true,
             width: 100,
             render: (h, params) => {
-              return h("Input", {
+              return h("el-input", {
                 style: {
-                  width: "60px",
                   display: 'inline-block',
+                  width: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
                 },
                 props: {
                   type: "text",
-                  // value:this.data1[params.index].sort
                   value: params.row.sendingNumber
                 },
+                domProps: {
+                  title: params.row.sendingNumber
+                },
                 on: {
-                  "on-blur": event => {
-                    // this.data1[params.index].sort =event.target.value
-                    let form = {
-                      id: params.row.id,
-                      sendingNumber: event.target.value
-                    };
-                    updateNumber(form).then(res => {
-                      if (res.code === 0) {
-                        this.$Message.success(res.data);
-                        this.getDataList();
-                      }
-                    });
+                  input: val => {
+                    this.data[params.index].sendingNumber = val;
                   }
                 }
+                // on: {
+                //   "on-blur": event => {
+                //     // this.data1[params.index].sort =event.target.value
+                //     let form = {
+                //       id: params.row.id,
+                //       sendingNumber: event.target.value
+                //     };
+                //     updateNumber(form).then(res => {
+                //       if (res.code === 0) {
+                //         this.$Message.success(res.data);
+                //         this.getDataList();
+                //       }
+                //     });
+                //   }
+                // }
               });
             }
           },
@@ -819,19 +832,19 @@
             className: "tc",
             resizable: true,
             render: (h, params) => {
-              let text=null;
+              let text = null;
               switch (params.row.invoiceKind) {
                 case "010101":
-                  text=null//收据
+                  text = null//收据
                   break;
                 case "010102":
-                  text="c";//普票
+                  text = "c";//普票
                   break;
                 case "010103":
-                  text="s";//专票
+                  text = "s";//专票
                   break;
                 default:
-                  text=null;
+                  text = null;
                   break;
               }
               return h('span', text)
@@ -1337,13 +1350,14 @@
         Branchstore: [1, 2, 3, 4, 5],
         Reconciliationlist: [],
         pagetotal: 0,
+        pageSizeOpts: [10, 50, 100, 200],
         Reconciliationtype: "",
         isActive: "",
         guestNameList: [],
         form: {
           orgId: '',
-          guestId: '',
-          page: 0,
+          guestName: '',
+          page: 1,
           size: 10,
           startDate: "",
           endDate: "",
@@ -1381,7 +1395,32 @@
         this.revokeReason = ''
         this.modalShow = true;
       },
-
+      //批量保存快递单号
+      saveSendingNumber() {
+        if (this.allTablist.length < 1) {
+          return this.$message.error("请选择要保存的快递单号")
+        }
+        let arr = [];
+        this.allTablist.map(el => {
+          let form = {
+            id: el.id,
+            sendingNumber: el.sendingNumber
+          };
+          arr.push(form)
+        })
+        showLoading()
+        updateNumberList(arr).then(res => {
+          if (res.code === 0) {
+            this.$Message.success(res.data);
+            this.getDataList();
+            //清空选中
+            this.$refs.summary.selectAll(false);
+            hideLoading()
+          }
+        }).catch(err => {
+          hideLoading()
+        })
+      },
       //确定撤销
       async reClose() {
         if (!this.revokeReason.trim()) return this.$Message.error('撤回原因必须')
@@ -1400,37 +1439,32 @@
       //选择查询条件
       chooseTable(num) {
         this.isActive = num;
-        this.form.page = 0;
+        this.form.page = 1;
         this.form.cancalStatus = num;
         this.getDataList();
       },
       quickDate(data) {
         this.value = data;
-        if (this.selectShopList == true) {
-          this.form.orgId = this.$store.state.user.userData.currentCompany != null ? this.$store.state.user.userData.currentCompany.id : ""
-        }
+        this.form.orgId = this.$store.state.user.userData.currentCompany != null ? this.$store.state.user.userData.currentCompany.id : ""
         this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : ""
-        this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
-          this.getDataList();
+        this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : ""
+        this.form.page = 1
+        this.getDataList();
       },
       query() {
+        this.form.page = 1
         this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "";
         this.form.endDate = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "";
         this.getDataList();
       },
       exportSummary() {
-        // this.$refs.summary.exportCsv({
-        //   filename:"开票申请查询与核销汇总表",
-        //   data:this.data,
-        //   columns:this.columns.filter((item)=>{if(item.title!="选择"){return item}})
-        // })
-        if(this.data.length<1){
+        if (this.data.length < 1) {
           return this.$message.error("暂无数据可导出")
         }
         let params = "";
         let obj = {
-          orgId: this.form.orgId,
-          guestId: this.form.guestId,
+          orgId: this.form.orgId == '0' ? '' : this.form.orgId,
+          guestName: this.form.guestName,
           pagesize: this.pagetotal,
           startDate: this.form.startDate,
           endDate: this.form.endDate,
@@ -1442,11 +1476,6 @@
         location.href = exportAll(params)
       },
       modifyData() {
-        // this.$refs.parts.exportCsv({
-        //   filename:"开票申请配件明细表",
-        //   data:this.data1,
-        //   columns:this.columns1
-        // })
         if (this.allTablist.length < 1) {
           return this.$Message.error("请选择需要导出的数据")
         }
@@ -1454,13 +1483,13 @@
       },
       //分页
       changePage(p) {
-        this.form.page = p - 1;
-        this.query();
+        this.form.page = p;
+        this.getDataList();
       },
       changeSize(s) {
-        this.form.page = 0;
+        this.form.page = 1;
         this.form.size = s;
-        this.query();
+        this.getDataList();
       },
       operation(num) {
         switch (num) {
@@ -1573,8 +1602,12 @@
       getDataList() {
         showLoading(".loadingClass", "数据加载中，请勿操作")
         let params = {
-          page: this.form.page,
+          page: this.form.page - 1,
           size: this.form.size
+        }
+        this.form.guestName = this.form.guestName.trim()
+        if (this.form.orgId == '0') {
+          this.form.orgId = ''
         }
         getInvoiceList(params, this.form).then(res => {
           if (res.code === 0) {
@@ -1582,8 +1615,9 @@
               item.seq = index + this.form.page * this.form.size + 1
               return item
             });
-            hideLoading()
             this.pagetotal = res.data.totalElements;
+            this.allTablist = []
+            hideLoading();
           }
           hideLoading()
         }).catch(e => {
@@ -1638,7 +1672,9 @@
       // })
       this.getShop()
       this.proTypeList.map(itm => {
-        this.$refs.registrationEntry.orgName = itm.name;
+        if (this.$refs.registrationEntry) {
+          this.$refs.registrationEntry.orgName = itm.name;
+        }
       });
     },
 

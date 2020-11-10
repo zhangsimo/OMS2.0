@@ -19,63 +19,86 @@
         <section class="con-box">
           <div class="inner-box">
             <Row>
-              <Col span="6">
+              <Col span="4">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
+                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账申请单</div>
+              </Col>
+              <Col span="5">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
               </Col>
             </Row>
             <Row>
-              <Col span="6">
+              <Col span="4">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[0].accountNo}}</div>
+                >{{accountData[3].accountNo}}
+                </div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[1].accountNo}}</div>
+                >{{accountData[2].accountNo}}
+                </div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[2].accountNo}}</div>
+                >{{accountData[0].accountNo }}
+                </div>
+              </Col>
+              <Col span="5">
+                <div
+                  style="border:1px solid #dddddd;line-height:40px"
+                  class="tc h40"
+                >{{accountData[1].accountNo}}
+                </div>
               </Col>
             </Row>
             <Row>
-              <Col span="6">
+              <Col span="4">
                 <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[0].accountSumAmt}}</div>
+                >{{accountData[3].accountSumAmt}}
+                </div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[1].accountSumAmt}}</div>
+                >{{accountData[2].accountSumAmt}}
+                </div>
               </Col>
-              <Col span="6">
+              <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[2].accountSumAmt}}</div>
+                >{{accountData[0].accountSumAmt}}
+                </div>
+              </Col>
+              <Col span="5">
+                <div
+                  style="border:1px solid #dddddd;line-height:40px"
+                  class="tc h40"
+                >{{accountData[1].accountSumAmt}}
+                </div>
               </Col>
             </Row>
             <div class="db mt10 info" v-if="infoBase.billingType.value==0">
@@ -222,7 +245,8 @@ export default {
       accountData: [
         { accountNo: "", accountSumAmt: "" },
         { accountNo: "", accountSumAmt: "" },
-        { accountNo: "", accountSumAmt: "" }
+        { accountNo: "", accountSumAmt: "" },
+        { accountNo: "", accountSumAmt: "" },
       ], //对账单号
       store: "", //弹框门店
       bill: "", //单据编号
@@ -391,7 +415,7 @@ export default {
         },
         {
           title: "适用车型",
-          key: "Detailedstatistics",
+          key: "partModel",
           className: "tc"
         },
         {
@@ -455,9 +479,9 @@ export default {
           this.accountData = [
             {accountNo: "", accountSumAmt: ""},
             {accountNo: "", accountSumAmt: ""},
-            {accountNo: "", accountSumAmt: ""}
+            {accountNo: "", accountSumAmt: ""},
+            { accountNo: "", accountSumAmt: "" },
           ]
-        }
         res.data.one.map(item => {
           if (item.number === 1) {
             this.accountData[0] = {
@@ -471,6 +495,11 @@ export default {
             };
           } else if (item.number === 3) {
             this.accountData[2] = {
+              accountNo: item.accountNo,
+              accountSumAmt: item.accountSumAmt
+            };
+          }else{
+            this.accountData[3] = {
               accountNo: item.accountNo,
               accountSumAmt: item.accountSumAmt
             };
@@ -489,6 +518,7 @@ export default {
         });
         this.data2 = res.data.three;
         this.infoBase = res.data.four[0];
+        }
       });
     }
   }

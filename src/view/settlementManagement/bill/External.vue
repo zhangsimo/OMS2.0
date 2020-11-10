@@ -4,7 +4,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
+            <!--<span>快速查询：</span>-->
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
@@ -33,7 +33,7 @@
             <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
-          <div class="db">
+          <div class="db mr10">
             <span>类型：</span>
             <Select v-model="type" style="width:200px" @on-change="getGeneral">
               <Option
@@ -44,21 +44,29 @@
               </Option>
             </Select>
           </div>
+          <div class="db mr10">
+            <Input
+              v-model="partCodeOrName"
+              placeholder="配件编码/名称"
+              class="w200"
+              clearable
+            />
+          </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="changePage(1)">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
-              </div>
-            </Poptip>
-          </div>
+          <!--<div class="db ml10">-->
+            <!--<Poptip placement="bottom">-->
+              <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+              <!--<div slot="content">-->
+                <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
+                <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
+              <!--</div>-->
+            <!--</Poptip>-->
+          <!--</div>-->
         </div>
       </div>
     </section>
@@ -104,19 +112,28 @@
         ></Table>
       </div>
     </section>
+    <!--采购入库打印-->
+    <enternalPrint ref="enternalPrint"></enternalPrint>
+    <!--采购退货打印-->
+    <enternalReturnPrint ref="enternalReturnPrint"></enternalReturnPrint>
     <selectDealings ref="selectDealings" @selectSearchName="getOne"/>
   </div>
 </template>
 
 <script>
   import quickDate from "@/components/getDate/dateget_noEmit.vue";
+  //采购入库打印
+  import enternalPrint from "./components/printShow/enternalPrint";
+  //采购退货打印
+  import enternalReturnPrint from "./components/printShow/enternalReturnPrint";
   import selectDealings from "./components/selectCompany";
   import {creat} from "./../components";
   import {
     getWarehousingList,
     getWarehousingPart,
     getOutStockList,
-    getOutStockPart
+    getOutStockPart,
+    getAllList
   } from "@/api/bill/saleOrder";
   import {goshop} from '@/api/settlementManagement/shopList';
   import {
@@ -130,7 +147,9 @@
     name: "billExternal",
     components: {
       quickDate,
-      selectDealings
+      selectDealings,
+      enternalPrint,//采购入库  打印
+      enternalReturnPrint //采购退货 打印
     },
     data() {
       return {
@@ -147,6 +166,7 @@
         total: {},//总合计对象
         model1: "",
         modal1: false,
+        partCodeOrName:'',
         columns: [
           {
             type: 'selection',
@@ -160,6 +180,34 @@
             width: 40,
             className: "tc",
             resizable: true,
+          },
+          {
+            title: "操作",
+            width: 60,
+            className: "tc",
+            resizable: true,
+            render:(h,params)=>{
+              return h('div', [
+                h('span', {
+                  style: {
+                    color: "#40a6ff",
+                    cursor: "pointer"
+                  },
+                  domProps: {
+                    title: "打印"
+                  },
+                  on:{
+                    click:async ()=>{
+                      if(params.row.enterTypeIdName=="采购入库"){
+                        this.$refs.enternalPrint.openModal(params.row)
+                      }else if(params.row.enterTypeIdName=="采购退货"){
+                        this.$refs.enternalReturnPrint.openModal(params.row)
+                      }
+                    }
+                  }
+                }, "打印")
+              ])
+            }
           },
           {
             title: "分店名称",
@@ -467,7 +515,7 @@
             width: 150,
             resizable: true,
             render: (h, params) => {
-              return h("span", params.row.noTaxPrice.toFixed(2));
+              return h("span", params.row.noTaxPrice);
             }
           },
           {
@@ -535,6 +583,10 @@
         data: [],
         data1: [],
         typelist: [
+          {
+            value:'1',
+            label:'全部'
+          },
           {
             value: "050101",
             label: "采购入库"
@@ -620,19 +672,19 @@
             return;
           }
           const values = data.map(item => Number(item[key]));
-          if (index > 6 && index !== 11) {
+          if (index > 6 && index !== 11 && index != 7) {
             if (!values.every(value => isNaN(value))) {
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               sums[key] = {
                 key,
-                value: v.toFixed(2)
+                value: v
               };
             }
           } else if (index === 11) {
@@ -640,7 +692,22 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
+                } else {
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
+          } else if (index === 7) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr
                 } else {
                   return prev;
                 }
@@ -753,7 +820,11 @@
           size: this.page.size,
           page: this.page.num - 1
         }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
+        }
         // console.log(this.value)
+        showLoading(".loadingClass", "数据加载中，请勿操作")
         if (this.type === "050101") {
           (obj.enterDateStart = this.value[0]
             ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -761,7 +832,6 @@
             (obj.enterDateEnd = this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : ""),
-            showLoading(".loadingClass", "数据加载中，请勿操作")
           getWarehousingList(params, obj).then(res => {
             if (res.data.vos) {
               res.data.vos.map((item, index) => {
@@ -796,15 +866,46 @@
                   item.taxSign = item.taxSign ? "是" : "否";
                   item.auditSign = item.billStatusId ? "已入库" : "草稿";
                 });
+                hideLoading()
                 this.data = res.data.vos;
                 this.page.total = res.data.TotalElements;
                 // this.total = res.data.AllotOutMainVO
                 this.selectTabArr = []
               } else {
+                hideLoading()
                 this.data = [];
                 this.selectTabArr = []
               }
-            });
+            }).catch( e => {
+              hideLoading()
+            })
+        }else if (this.type === "1") {
+          (obj.outDateStart = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : ""),
+            (obj.outDateEnd = this.value[1]
+              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : ""),
+            params.orderTypeId = this.type
+          getAllList(params, obj).then(res => {
+              if (res.data.vos.length !== 0) {
+                res.data.vos.map((item, index) => {
+                  item.index = index + 1;
+                  item.taxSign = item.taxSign ? "是" : "否";
+                  item.auditSign = item.billStatusId ? "已入库" : "草稿";
+                });
+                this.data = res.data.vos;
+                this.page.total = res.data.TotalElements;
+                this.selectTabArr = []
+                hideLoading()
+              } else {
+                this.data = [];
+                this.selectTabArr = []
+                hideLoading()
+              }
+            }).catch( e => {
+            hideLoading()
+          })
         }
       },
       // 总表查询

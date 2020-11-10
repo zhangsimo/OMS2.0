@@ -39,9 +39,6 @@
     mounted() {},
     methods: {
       tabName() {
-        if(this.$refs.panne.search.enterDate[0]==""){
-          return this.$message.error("日期必须选择！")
-        }
         let data={}
         for (let key in this.$refs.panne.search) {
           if (this.$refs.panne.search[key]) {
@@ -54,12 +51,12 @@
                   moment(this.$refs.panne.search["enterDate"][1]).format("YYYY-MM-DD") +
                   " 23:59:59";
               }
-              this.$refs.panne.search.guestPart == true ? this.$refs.panne.search.showPerson = 1 : this.$refs.panne.search.showPerson = 0
             } else {
               data[key] = this.$refs.panne.search[key];
             }
           }
         }
+        data.guestPart == true ? data.showPerson = 1 : data.showPerson = 0;
         switch (this.tabNameKey) {
           case "tabOne":
             this.search1(data);
@@ -74,7 +71,7 @@
             this.search4(data);
             break;
           case "tabFive":
-            this.search4(data);
+            this.search5(data);
             break;
         }
       },

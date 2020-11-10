@@ -279,7 +279,7 @@ export const mixSelectPartCom = {
       data.name = this.partName
       data.partInnerId = this.partId
       data.partCode = this.partCode
-      data.oeCode = this.oemCode
+      data.oeCode = this.oemCode.replace(/\s+/g,'');
       let formData = {};
       for (let k in data) {
         if (data[k] && data[k].trim()) {
@@ -357,6 +357,26 @@ export const mixSelectPartCom = {
       //this.getCarClassifysFun();
       this.$nextTick(() => this.$refs.elinput.focus())
     },
+
+    focus(event){
+      event.currentTarget.select();
+    },
+    focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          this.$refs.elinput.focus();
+        }else if(this.partId){
+          this.$refs.elinputpartId.focus();
+        }else if(this.partName){
+          this.$refs.elinputpartName.focus();
+        }else if(this.oemCode){
+          this.$refs.elinputoemCode.focus();
+        }
+
+      })
+    },
+
+
     //配件表格点击的行
     selectTabelData(v) {
       this.selectTableItem = v;
@@ -365,6 +385,7 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         let item = this.selectTableItem;
         this.$emit("selectPartName", item);
+        this.focusInput();
       } else {
         this.$Message.error("请选择数据");
       }
@@ -440,6 +461,7 @@ export const mixSelectPartCom = {
     },
     throwChangeData(v){
       this.$emit("selectPartName2", v);
+      this.focusInput();
     }
   }
 };

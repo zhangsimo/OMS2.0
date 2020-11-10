@@ -141,7 +141,7 @@
                   >
                     <FormItem label="调入方：" prop="guestName" class="redIT">
                       <Row>
-                        <Col span="22">
+                        <Col span="18">
                           <!--<Tooltip :content="Leftcurrentrow.guestName">-->
                             <!--<Input-->
                               <!--readonly-->
@@ -149,7 +149,7 @@
                               <!--placeholder="请选择调入方"-->
                             <!--/>-->
                           <!--</Tooltip>-->
-                          <allocation-cus style="width: 160px" :title="Leftcurrentrow.guestName" placeholder="请输入调入方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="buttonShow || this.flagValue1 !== 0"></allocation-cus>
+                          <allocation-cus :title="Leftcurrentrow.guestName" placeholder="请输入调入方" :search-value="Leftcurrentrow.guestName" @throwName="throwNameFun" :disabled-prop="buttonShow || this.flagValue1 !== 0"></allocation-cus>
                           <!-- <Select
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
@@ -159,7 +159,7 @@
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select> -->
                         </Col>
-                        <Col span="2">
+                        <Col span="6">
                           <Button
                             :disabled="this.flagValue != 0"
                             @click="showModel"
@@ -179,7 +179,7 @@
                       prop="supplyName"
                       class="redIT"
                     >
-                      <Row class="w160">
+                      <Row class="w140">
                         <Col span="24">
                           <Select
                             :disabled="buttonShow || this.flagValue1 !== 0"
@@ -211,7 +211,7 @@
                         disabled
                         @on-change="changeDate"
                         v-model="Leftcurrentrow.createTime"
-                        class="w160"
+                        class="w140"
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
@@ -354,7 +354,7 @@
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="hasAcceptQty"
-                    :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
@@ -418,6 +418,7 @@
                     width="80"
                   ></vxe-table-column>
                 </vxe-table>
+                <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.commitUname:""}}</span><span>提交日期：{{datadata?datadata.commitDate:""}}</span></div>
               </div>
             </Split>
           </div>
@@ -651,23 +652,27 @@
           columns: [
             {
               title: "序号",
-              minWidth: 50,
-              key: "index"
+              width: 50,
+              key: "index",
+              resizable:true
             },
             {
               title: "状态",
               key: "statuName",
-              minWidth: 70
+              width: 70,
+              resizable:true
             },
             {
               title: "调入方",
               key: "guestName",
-              minWidth: 120
+              width: 120,
+              resizable:true
             },
             {
               title: "创建日期",
               key: "createTime",
-              minWidth: 140,
+              width: 140,
+              resizable:true,
               render(h, params) {
                 let time = moment(params.row.createTime).format("YYYY-MM-DD HH:mm:ss");
                 return h("span", {}, time);
@@ -676,27 +681,32 @@
             {
               title: "受理人",
               key: "createUname",
-              minWidth: 100
+              width: 100,
+              resizable:true
             },
             {
               title: "受理单号",
               key: "serviceId",
-              minWidth: 240
+              width: 240,
+              resizable:true
             },
             {
               title: "提交人",
               key: "commitUname",
-              minWidth: 100
+              width: 100,
+              resizable:true
             },
             {
               title: "提交日期",
               key: "commitDate",
-              minWidth: 160
+              width: 160,
+              resizable:true
             },
             {
               title: "打印次数",
               key: "printing",
-              minWidth: 100
+              width: 100,
+              resizable:true
             }
           ],
           tbdata: []
@@ -976,7 +986,7 @@
         this.getList();
       },
       async baocun1() {
-        let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {
+        let zero = tools.isZero1(this.Leftcurrentrow.detailVOS, {
           qty: "hasAcceptQty"
         });
         if (zero) return;
@@ -1116,7 +1126,7 @@
               this.$Message.info("请先保存新增出库单");
               return;
             }
-            let zero = tools.isZero(this.Leftcurrentrow.detailVOS, {
+            let zero = tools.isZero1(this.Leftcurrentrow.detailVOS, {
               qty: "hasAcceptQty"
             });
             if (zero) return;
@@ -1345,9 +1355,9 @@
           let planBtnH = this.$refs.planBtn.offsetHeight;
           // let planPageH = this.$refs.planPage.offsetHeight;
           //获取左侧侧表格高度
-          this.leftTableHeight = wrapH - 144;
+          this.leftTableHeight = wrapH - 110;
           //获取右侧表格高度
-          this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+          this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
         });
       },
       getDataQuick(v) {
@@ -1712,9 +1722,9 @@
       setTimeout(() => {
         this.getDomHeight();
       }, 0);
-      window.onresize = () => {
-        this.getDomHeight();
-      };
+      // window.onresize = () => {
+      //   this.getDomHeight();
+      // };
       // this.getArrayParams();
       this.warehouse();
       this.getList();
@@ -1772,9 +1782,9 @@
     margin-top: 20px;
   }
 
-  .con-box {
-    height: 600px;
-  }
+  /*.con-box {*/
+    /*height: 600px;*/
+  /*}*/
 
   .w550 {
     width: 580px;

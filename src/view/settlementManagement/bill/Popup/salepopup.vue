@@ -147,7 +147,7 @@
             <Input v-model="invoice.statementAmtOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" prop="applyTaxAmt" >
-            <Input-number :max="999999" :min="0" v-model="invoice.applyTaxAmt" class="ml5 w200" @on-blur="confirmTheAmount " />
+            <Input-number :max="1000000000" :min="0" v-model="invoice.applyTaxAmt" class="ml5 w200" @on-blur="confirmTheAmount " />
           </FormItem>
           <!--<FormItem label="不含税金额" prop="notTaxAmt">-->
             <!--<Input v-model="invoice.notTaxAmt" class="ml5 w200" disabled />-->
@@ -407,7 +407,7 @@ export default {
         applyAmt: "", //申请开票金额
         address: "", //收件地址
         remark: "", //备注
-        applyTaxAmt: "", //本次申请开票含税金额
+        applyTaxAmt: 0, //本次申请开票含税金额
         underTicketExplain: "", //欠票未全金额开具说明
         phone: "", //电话
         notTaxAmt: "", //不含税金额

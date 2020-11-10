@@ -7,7 +7,7 @@
           >保存草稿
           </Button
           >
-          <Button class="mr10" :loading="saveDis" v-noresub v-if="!modelType" @click="save(1)"
+          <Button class="mr10" :loading="saveDis" v-if="!modelType" @click="save(1)"
           >提交申请
           </Button
           >
@@ -178,6 +178,18 @@
             }"
             width="200"
           ></vxe-table-column>
+         <vxe-table-column
+           field=""
+           title="进项发票登记"
+           width="100"
+         >
+           <template v-slot="{row}">
+             <Button size="small" type="primary" @click="registrationEntryOpen(row)"
+                     :disabled="row.billTypeId!='010103'" style="font-size: 10px;">进项发票登记
+             </Button>
+           </template>
+         </vxe-table-column>
+
         </vxe-table>
 
         <h5 class="mt20 mb10" style="font-size: 18px">借支核销</h5>
@@ -380,6 +392,7 @@
       ref="documnets"
       @backList="getBusinessList"
     ></selectTheDocuments>
+    <registrationEntry ref="registrationEntry"></registrationEntry>
     <div slot="footer"></div>
   </Modal>
 </template>

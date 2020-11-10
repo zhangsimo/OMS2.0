@@ -18,6 +18,14 @@ export function getSupplierList(data) {
     data
   })
 }
+//采购退货返单接口
+export function returnBack(data){
+  return axios.request({
+    url:`${api.omsOrder}/sellOrderReturn/reorder`,
+    method:"post",
+    data
+  })
+}
 // 获取供应商列表
 // /guest/findForAllot
 export function findForAllot(data) {
@@ -181,14 +189,16 @@ export const upxlxs = `${api.omsOrder}/pchsPlanMain/importExcel?id=`;
 export const upxlxsInnerId=`${api.omsOrder}/pchsPlanMain/importExcel/partId?id=`;
 
 //调拨申请导入 按照编码品牌导入
-export const upxlxsDBo = `${api.omsOrder}/allotApplyMain/importExcel
-?id=`;
+export const upxlxsDBo = `${api.omsOrder}/allotApplyMain/importExcel?id=`;
 //调拨申请导入 按照内码导入配件
 export const upxlxsDBoInnerId=`${api.omsOrder}/allotApplyMain/importExcel/partId?id=`
-
+//调拨申请导出
+export function applyForExport(params){
+  let token = Cookies.get('token');
+  return `${api.omsOrder}/allotApplyMain/export?id=${params}&access_token=${token}`
+}
 
 //移仓单导入  按照编码品牌导入
-export const upxlxsMoveStore = `${api.omsOrder}/stockShiftMain/importExcel
-?id=`;
+export const upxlxsMoveStore = `${api.omsOrder}/stockShiftMain/importExcel?id=`;
 //移仓单导入  按照内码导入配件
 export const upxlxsInnerIdMoveStore=`${api.omsOrder}/stockShiftMain/importExcel/partId?id=`

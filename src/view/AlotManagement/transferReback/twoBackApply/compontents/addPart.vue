@@ -8,24 +8,24 @@
       <div class="tools-bar mb10">
         <div class="db mr5">
           <span class="mr5">快速查询:</span>
-          <getDate class="mr5" v-on:quickDate="getDataQuick"></getDate>
+          <getDate class="mr5" ref="quickDate" v-on:quickDate="getDataQuick"></getDate>
         </div>
 
         <div class="db mr5">
           <span class="mr5">编码:</span>
-          <el-input class="w100" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="query"/>
+          <el-input class="w100" @focus="focus($event)" ref="elinput" placeholder="编码" v-model="partCode" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">内码:</span>
-          <el-input class="w100" placeholder="内码" v-model="partId" @change="query"/>
+          <el-input class="w100" @focus="focus($event)" ref="elinputpartId" placeholder="内码" v-model="partId" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">名称:</span>
-          <el-input class="w100" placeholder="名称" v-model="partName" @change="query"/>
+          <el-input class="w100" @focus="focus($event)" ref="elinputpartName" placeholder="名称" v-model="partName" @change="query"/>
         </div>
         <div class="db mr5">
           <span class="mr5">OE:</span>
-          <el-input class="w100" placeholder="OE" v-model="oemCode" @change="query"/>
+          <el-input class="w100" placeholder="OE" @focus="focus($event)" ref="elinputoemCode" v-model="oemCode" @change="query"/>
         </div>
 
         <!-- <div class="db mr5">
@@ -72,6 +72,7 @@
       <vxe-table
         border
         stripe
+        resizable
         align="center"
         ref="xTable1"
         height="500"
@@ -180,10 +181,36 @@
 
     private init() {
       this.reset();
-      this.getPchsPlanList();
+      // this.getPchsPlanList();
       this.shows = true;
       this.$nextTick(() => (this.$refs.elinput as any).focus());
+      let refDate:any = this.$refs.quickDate;
+      refDate.searchQuick = '7';
+      refDate.getval('7');
     }
+
+    private focus(event){
+      event.currentTarget.select();
+    }
+    private focusInput(){
+      this.$nextTick(() => {
+        if(this.partCode){
+          let ref:any = this.$refs.elinput;
+          ref.focus();
+        }else if(this.partId){
+          let ref:any = this.$refs.elinputpartId;
+          ref.focus();
+        }else if(this.partName){
+          let ref:any = this.$refs.elinputpartName;
+          ref.focus();
+        }else if(this.oemCode){
+          let ref:any = this.$refs.elinputoemCode;
+          ref.focus();
+        }
+
+      })
+    }
+
 
     @Emit('getPlanOrder')
     private ok() {
@@ -201,6 +228,7 @@
         }
         return el;
       })
+      this.focusInput();
       return selectRow;
     }
 
@@ -238,6 +266,7 @@
         });
       }
       msg();
+      this.focusInput();
       return data;
     }
 
@@ -348,7 +377,7 @@
         partId: this.partId,
         partName: this.partName,
         partCode: this.partCode,
-        oemCode: this.oemCode,
+        oemCode: this.oemCode.replace(/\s+/g,''),
         partBrand: this.partBrand,
         startEnterDate: this.auditDate[0] ? this.auditDate[0] : "",
         endEnterDate: this.auditDate[1] ? this.auditDate[1] : "",

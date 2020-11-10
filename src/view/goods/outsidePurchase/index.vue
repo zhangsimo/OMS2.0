@@ -59,6 +59,12 @@
             >
           </div>
           <div class="db">
+            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
+              <i class="iconfont mr5 icondaochuicon"></i>
+              导出
+            </Button>
+          </div>
+          <div class="db">
             <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
             v-has="'invalidate'"
             :loading="cancelLoading"
@@ -83,7 +89,7 @@
         </div>
       </div>
     </section>
-    <section class="con-box">
+    <section class="con-box" style="padding-bottom: 0">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
@@ -137,7 +143,7 @@
                     <Row class="w160">
                       <Col span="19"
                       >
-                      <Tooltip :content="formPlanmain.guestName">
+                      <Tooltip :content="formPlanmain.guestName" placement="top">
                         <GoodCus style="width: 120px"
                             :title="formPlanmain.guestName"
                             placeholder="请输入供应商"
@@ -172,17 +178,17 @@
                       :disabled="isInput"
                     />
                   </FormItem>
-                  <FormItem class="form-Item" label="采购员：" prop="orderManId">
-                    <Select v-model="formPlanmain.orderManId"
-                      class="w160"
-                      :disabled="isInput"
-                      label-in-value
-                      @on-change="selectOrderMan"
-                      filterable
-                    >
-                      <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                  </FormItem>
+                  <!--<FormItem class="form-Item" label="采购员：" prop="orderManId">-->
+                    <!--<Select v-model="formPlanmain.orderManId"-->
+                      <!--class="w160"-->
+                      <!--:disabled="isInput"-->
+                      <!--label-in-value-->
+                      <!--@on-change="selectOrderMan"-->
+                      <!--filterable-->
+                    <!--&gt;-->
+                      <!--<Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+                    <!--</Select>-->
+                  <!--</FormItem>-->
                   <FormItem
                     class="form-Item"
                     label="票据类型："
@@ -255,6 +261,14 @@
                       />
                       <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlanmain.remark||"").trim()}}</div>
                     </Tooltip>
+                  </FormItem>
+                  <FormItem class="form-Item" label="手工单号：">
+                    <Input
+                      placeholder="请输入手工单号"
+                      class="w160"
+                      v-model="formPlanmain.versionNo"
+                      @on-keyup="versionNoFun"
+                    />
                   </FormItem>
                 </Form>
               </div>
@@ -423,7 +437,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">
@@ -440,7 +454,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="orderPrice"
                   title="采购单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

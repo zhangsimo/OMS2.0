@@ -7,12 +7,12 @@
               <div class="leftnav">
                 <div class="db btn-title">
                   <p class="mr10">备货级别定义:</p>
-                  <Button class="mr10 w90" @click="add">
+                  <Button class="mr10 w90" @click="add" v-has="'add'">
               <span class="center">
                 <Icon type="md-add" />新增
               </span>
                   </Button>
-                  <Button class="mr10 w90" @click="save">
+                  <Button class="mr10 w90" @click="save" v-has="'save'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
@@ -47,12 +47,12 @@
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
                   </Button>
-                  <Button class="mr10 w90" @click="addCustomer">
+                  <Button class="mr10 w90" @click="addCustomer" v-has="'addCustomer'">
                 <span class="center">
                   <Icon type="md-add" />添加配件
                 </span>
                   </Button>
-                  <Button class="mr10 w90" @click="removeCustomer">
+                  <Button class="mr10 w90" @click="removeCustomer" v-has="'removeCustomer'">
                 <span class="center">
                   <Icon custom="iconfont iconlajitongicon icons" />删除配件
                 </span>

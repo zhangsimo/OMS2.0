@@ -5,7 +5,7 @@
       class="mt10"
       :columns="claimed"
       :data="claimedData"
-      max-height="400"
+      max-height="550"
       @on-selection-change="claimedSelection"
     ></Table>
     <Page
@@ -355,11 +355,13 @@
           });
           if (!s && n || s && !n) {
             this.currentClaimed = selection;
+            // this.$emit('selection1', selection)
           } else {
             this.$message.error("不能同时选中收入和支出");
           }
         } else {
           this.currentClaimed = selection;
+          // this.$emit('selection1', selection)
         }
         bus.$emit("paymentInfo", selection);
         this.$emit('selection', selection)
@@ -367,31 +369,41 @@
       //本店待认领款页码
       pageChangeAmt(val) {
         this.claimedPage.page = val;
-        this.$parent.$parent.$parent.claimedList()
+        this.$parent.$parent.$parent.$parent.claimedList()
       },
       //本店待认领款每页条数
       sizeChangeAmt(val) {
         this.claimedPage.page = 1;
         this.claimedPage.size = val;
-        this.$parent.$parent.$parent.claimedList()
+        this.$parent.$parent.$parent.$parent.claimedList()
       }
     },
     watch: {
       currentClaimed: {
         handler(val, od) {
           if (val !== od) {
-            if (this.$parent.$parent.$parent.difference !== undefined) {
-              const that = this.$parent.$parent.$parent
+            if (this.$parent.$parent.$parent.$parent.difference !== undefined) {
+              const that = this.$parent.$parent.$parent.$parent
               that.claimedAmt = 0;
+              let amt=0;
               val.map(item => {
-                if (item.paidMoney) {
-                  that.claimedAmt += item.paidMoney * 1;
-                } else {
-                  that.claimedAmt += item.incomeMoney * 1;
+                // if (item.paidMoney) {
+                //   that.claimedAmt += item.paidMoney * 1;
+                // } else {
+                //   that.claimedAmt += item.incomeMoney * 1;
+                // }
+                if(item.unClaimedAmt){
+                  amt += item.unClaimedAmt * 1
+                  amt = Number(amt.toFixed(2))
+                  if(Math.abs(Number(item.paidMoney))>0){
+                    that.claimedAmt = '-'+amt
+                  }else{
+                    that.claimedAmt = amt
+                  }
                 }
               });
-              that.difference = that.currentAccount.actualCollectionOrPayment
-                ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
+              that.difference = Math.abs(that.currentAccount.row.actualCollectionOrPayment)
+                ? Math.abs(that.currentAccount.row.actualCollectionOrPayment )- Math.abs(that.claimedAmt)
                 : 0 - that.claimedAmt;
             }
           }

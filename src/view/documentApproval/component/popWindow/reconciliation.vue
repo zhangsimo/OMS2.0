@@ -36,38 +36,48 @@
       <section class="con-box">
         <div class="inner-box">
           <Row>
-            <Col span="6">
+            <Col span="4">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
             </Col>
-            <Col span="6">
+            <Col span="5">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账申请单</div>
+            </Col>
+            <Col span="5">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
             </Col>
           </Row>
           <Row>
-            <Col span="6">
+            <Col span="4">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div>
             </Col>
-            <Col span="6">
+            <Col span="5">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[3].accountNo}}
+              </div>
+            </Col>
+            <Col span="5">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
               >{{accountData[2].accountNo}}
               </div>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
               >{{accountData[0].accountNo }}
               </div>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
@@ -76,24 +86,31 @@
             </Col>
           </Row>
           <Row>
-            <Col span="6">
+            <Col span="4">
               <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
             </Col>
-            <Col span="6">
+            <Col span="5">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[3].accountSumAmt}}
+              </div>
+            </Col>
+            <Col span="5">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
               >{{accountData[2].accountSumAmt}}
               </div>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
               >{{accountData[0].accountSumAmt}}
               </div>
             </Col>
-            <Col span="6">
+            <Col span="5">
               <div
                 style="border:1px solid #dddddd;line-height:40px"
                 class="tc h40"
@@ -104,15 +121,6 @@
           <div class="db mt10 info" v-if="infoBase.billingType.value==0">
             <h5 class="p10">付款信息</h5>
             <div class="flex p10">
-              <!--              <span>收款户名：</span>-->
-              <!--              <Input type="text" class="w140 mr10" v-model="infoBase.collectionName" readonly />-->
-              <!--              <span>开户行：</span>-->
-              <!--              <Input v-model="infoBase.bankName" class="w140 mr10" readonly />-->
-              <!--              <span>收款账号：</span>-->
-              <!--              <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly />-->
-              <!--              <span>本次申请付款账户：</span>-->
-              <!--              <Input v-model="infoBase.thisPaymentAccount" class="w140 mr10" />-->
-
               <span>收款户名：</span>
               <Select
                 filterable
@@ -136,7 +144,6 @@
               <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly/>
               <span style="color:red">*</span>
               <span>本次申请付款账户：</span>
-              <!--<Input v-model="thisApplyAccount" class="w140 mr10" />-->
               <Select
                 filterable
                 v-model="infoBase.thisPaymentAccountId"
@@ -380,6 +387,7 @@
         accountData: [
           {accountNo: "", accountSumAmt: ""},
           {accountNo: "", accountSumAmt: ""},
+          {accountNo: "", accountSumAmt: ""},
           {accountNo: "", accountSumAmt: ""}
         ], //对账单号
         store: "", //弹框门店
@@ -411,7 +419,7 @@
           collectionName: "", //收款户名
           bankName: "", //开户行
           collectionAccount: "", //收款账号
-          thisPaymentAccount: "", //本次申请付款账户
+          thisPaymentAccountId: "", //本次申请付款账户
           billingType: {value: 0} //计划结算类型
         },
         arrId:[],
@@ -557,7 +565,7 @@
           },
           {
             title: "适用车型",
-            key: "Detailedstatistics",
+            key: "partModel",
             className: "tc"
           },
           {
@@ -658,7 +666,8 @@
         this.accountData = [
           {accountNo: "", accountSumAmt: ""},
           {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""}
+          {accountNo: "", accountSumAmt: ""},
+          {accountNo: "", accountSumAmt: ""},
         ]
         if (this.modelType.type == 3) {
           this.disabletype = true
@@ -686,8 +695,13 @@
                 this.accountData[2] = {
                   accountNo: item.accountNo,
                   accountSumAmt: item.accountSumAmt
-                };
-              }
+                }
+              }else{
+                this.accountData[3] = {
+                  accountNo: item.accountNo,
+                  accountSumAmt: item.accountSumAmt
+                }
+              };
             });
             res.data.two.map((item, index) => {
               item.index = index + 1;
@@ -736,7 +750,12 @@
                 this.accountData[2] = {
                   accountNo: item.accountNo,
                   accountSumAmt: item.accountSumAmt
-                };
+                }
+              }else{
+                this.accountData[3] = {
+                  accountNo: item.accountNo,
+                  accountSumAmt: item.accountSumAmt
+                }
               }
             });
             res.data.two.map((item, index) => {
@@ -879,6 +898,7 @@
       },
       //获取付款户名
       async getPaymentNameList() {
+          if(!this.model1)return
         let rep = await getPaymentName({"orgId": this.model1});
         if (rep.code == 0) {
           this.paymentUnameList = rep.data;
@@ -1106,13 +1126,13 @@
       },
       // 保存接口
       async getPreservation(num) {
-        if (this.infoBase.billingType.value === "0") {
+        if (this.infoBase.billingType.value == "0" && num == 1) {
           if (!this.infoBase.collectionName)
             return this.$message.error("收款户名不能为空");
           if (!this.infoBase.bankName) return this.$message.error("开户行不能为空");
           if (!this.infoBase.collectionAccount)
             return this.$message.error("银行账号不能为空");
-          if (!this.infoBase.thisPaymentAccount)
+          if (!this.infoBase.thisPaymentAccountId)
             return this.$message.error("付款账户不能为空");
         }
         if (this.infoBase.badDebtReceivable - this.infoBase.payingBadDebts > 100) {

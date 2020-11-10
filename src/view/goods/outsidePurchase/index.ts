@@ -90,58 +90,68 @@ export default class OutsidePurchase extends Vue {
     columns: [
       {
         title: '序号',
-        minWidth: 50,
+        width: 50,
         type: 'index',
+        resizable:true
       },
       {
         title: '状态',
         key: 'billStatusId',
-        minWidth: 80,
+        width: 80,
         render: (h, p) => {
           let val: string = p.row.billStatusId.name; // orderState[p.row.billStatusId];
           return h('span', val);
-        }
+        },
+        resizable:true
       },
       {
         title: '供应商',
         key: 'guestName',
-        minWidth: 170
+        width: 170,
+        resizable:true
       },
-      {
-        title: '采购员',
-        key: 'orderMan',
-        minWidth: 140
-      },
+      // {
+      //   title: '采购员',
+      //   key: 'orderMan',
+      //   width: 140,
+      //   resizable:true
+      // },
       {
         title: '订单单号',
         key: 'serviceId',
-        minWidth: 140
+        width: 140,
+        resizable:true
       },
       {
         title: '创建人',
         key: 'createUname',
-        minWidth: 120
+        width: 120,
+        resizable:true
       },
       {
         title: '创建日期',
         key: 'createTime',
-        minWidth: 200
+        width: 200,
+        resizable:true
       },
       {
         title: '打印次数',
         key: 'printCount',
-        minWidth: 100
+        width: 100,
+        resizable:true
       },
       {
         title: '提交人',
         key: 'auditor',
-        minWidth: 100
+        width: 100,
+        resizable:true
       },
       {
         title: '提交日期',
         align: 'center',
         key: 'auditDate',
-        minWidth: 140
+        width: 140,
+        resizable:true
       },
     ],
     tbdata: new Array(),
@@ -311,12 +321,13 @@ export default class OutsidePurchase extends Vue {
     settleTypeId: "",  // 结算方式
     storeId: "", // 入库仓
     remark: "", // 备注
+    versionNo:'',//手工单号
     serviceId: "", // 订单号
     processInstanceId: "",
   }
   private ruleValidate: ruleValidate = {
     guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
-    orderManId: [{ required: true, message: '采购员不能为空', trigger: 'change' }],
+    // orderManId: [{ required: true, message: '采购员不能为空', trigger: 'change' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
     storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
@@ -436,6 +447,7 @@ export default class OutsidePurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           remark: this.formPlanmain.remark,
+          versionNo:this.formPlanmain.versionNo,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt:this.formPlanmain.advanceAmt,
           processInstanceId: this.formPlanmain.processInstanceId,
@@ -708,7 +720,10 @@ export default class OutsidePurchase extends Vue {
     this.openwin(routeUrl.href)
     this.getListData()
   }
-
+  //导出
+  private exportForm(){
+    location.href=api.outsidePurchaseExport(this.mainId)
+  }
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
@@ -813,6 +828,9 @@ export default class OutsidePurchase extends Vue {
       columns.map((column, columnIndex) => {
         if (columnIndex === 0) {
           return '合计'
+        }
+        if (columnIndex === 3) {
+          return `共${(data||[]).length}条`
         }
         if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt','orderAmt'].includes(column.property)) {
           return this.sum(data, column.property, columnIndex)
@@ -927,9 +945,9 @@ export default class OutsidePurchase extends Vue {
       let planBtnH = planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 70;
+      this.leftTableHeight = wrapH - 100;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 78;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
     })
   }
 
@@ -963,6 +981,11 @@ export default class OutsidePurchase extends Vue {
         this.formPlanmain.storeId = defaultStore;
       }
     }
+  }
+  private versionNoFun(event:any){
+    setTimeout(()=>{
+      this.formPlanmain.versionNo = this.formPlanmain.versionNo.replace(/[\W]/g,'')
+    },0);
   }
 
   // 高级查询

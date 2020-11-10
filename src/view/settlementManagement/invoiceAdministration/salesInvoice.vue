@@ -41,7 +41,7 @@
                 v-for="item in proTypeList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option
               >
             </Select>
@@ -277,7 +277,7 @@
                   v-for="item in proTypeList"
                   :value="item.id"
                   :key="item.id"
-                >{{ item.name }}
+                >{{ item.shortName }}
                 </Option
                 >
               </Select>
@@ -386,7 +386,7 @@
       return {
         invoiceUnitName: "",
         value: [],
-        proTypeList: [], //分店
+        proTypeList: [{id: '0', shortName: '全部'}], //分店
         exportData: false,
         upurl: getup,
         headers: {
@@ -1648,6 +1648,9 @@
       //获取列表数据
       getTabList() {
         this.form.page = this.form.page;
+        if(this.form.orgId == '0'){
+          this.form.orgId = ''
+        }
         showLoading(".loadingClass", "数据加载中，请勿操作")
         getSalesList(this.form).then(res => {
           if (res.code === 0) {
@@ -1691,11 +1694,11 @@
         //     this.invoiceServiceOption = res.data;
         //   }
         // });
-        await getOptionFdList().then(res => {
-          if (res.code === 0) {
-            this.proTypeList = res.data;
-          }
-        });
+        // await getOptionFdList().then(res => {
+        //   if (res.code === 0) {
+        //     this.proTypeList = res.data;
+        //   }
+        // });
         await getOptionSalesList("KPDW").then(res => {
           if (res.code === 0) {
             this.invoiceUnitOption = res.data;

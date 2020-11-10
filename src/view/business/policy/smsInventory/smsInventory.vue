@@ -113,7 +113,7 @@
                   <FormItem label="盘点仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
-                      style="width:100px"
+                      style="width:160px"
                       :disabled="draftShow != 0"
                     >
                       <Option
@@ -129,7 +129,7 @@
                       :value="formPlan.orderManId"
                       @on-change="selectOrderMan"
                       filterable
-                      style="width: 240px"
+                      style="width: 160px"
                       :disabled="draftShow != 0"
                       label-in-value
                     >
@@ -155,8 +155,7 @@
                     <Tooltip :content="formPlan.serviceId">
                     <Input
                       v-model="formPlan.serviceId"
-                      class="w160"
-                      value="YCSDFD839239320"
+                      class="w180"
                       disabled
                     />
                     </Tooltip>
@@ -265,6 +264,7 @@
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
+                show-footer
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
@@ -280,7 +280,7 @@
                   field="trueQty"
                   title="实盘数量"
                   width="160"
-                  :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
+                  :edit-render="{name: 'input',autoselect: true ,attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -325,13 +325,14 @@
                 <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
+              <div class="table-bottom-text flex"><span>创建人：{{currRow?currRow.createUname:""}}</span><span>创建日期：{{currRow?currRow.createTime:""}}</span><span>提交人：{{currRow?currRow.subMan:""}}</span><span>提交日期：{{currRow?currRow.subDate:""}}</span></div>
             </div>
           </Split>
         </div>
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId" ></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="2" :storeId="formPlan.storeId" ></Select-part-com>
     <!--更多弹框-->
     <More
       :getShowMore="showMore"
@@ -444,18 +445,21 @@ export default {
           //key要修改
           {
             title: "序号",
-            minWidth: 50,
-            type: "index"
+            width: 50,
+            type: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70
+            width: 70,
+            resizable:true
           },
           {
             title: "盘点日期",
             key: "checkDate",
-            minWidth: 120,
+            width: 120,
+            resizable:true,
             render(h, params) {
               return h("span", {}, moment(params.row.checkDate).format("YYYY-MM-DD HH:mm:ss"));
             }
@@ -463,37 +467,44 @@ export default {
           {
             title: "盘点员",
             key: "orderMan",
-            minWidth: 170
+            width: 170,
+            resizable:true
           },
           {
             title: "盘点单号",
             key: "serviceId",
-            minWidth: 140
+            width: 140,
+            resizable:true
           },
           {
             title: "打印次数",
             key: "print",
-            minWidth: 120
+            width: 120,
+            resizable:true
           },
           {
             title: "创建人",
             key: "createUname",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "提交人",
             key: "subMan",
-            minWidth: 200
+            width: 200,
+            resizable:true
           },
           {
             title: "提交日期",
             key: "subDate",
-            minWidth: 200
+            width: 200,
+            resizable:true
           }
         ],
         tbdata: []
@@ -741,16 +752,15 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 104;
+        this.leftTableHeight = wrapH - 110;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
       });
     },
     //快速查询日期
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
       this.getList();
     },
     // //盘点仓库
@@ -1154,6 +1164,7 @@ export default {
        datas.map(item=>{
            delete item.id;
            item.trueQty = undefined;
+          item.partName = item.partStandardName||"";
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
@@ -1179,7 +1190,26 @@ export default {
       // console.log( this.formPlan.checkDate)
     },
     //footer计算
-    addFooter() {},
+    addFooter ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (columnIndex === 2) {
+            return (data||[]).length+'条'
+          }
+          if (['sysQty','trueQty','exhibitQty','hasOutQty','exhibitAmt','truePrice'].includes(column.property)) {
+
+            if(['exhibitAmt'].includes(column.property)){
+              return this.$utils.sum(data, column.property).toFixed(2)
+            }
+            return this.$utils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+    },
     // 确定
     Determined() {},
     array_diff(a, b) {
@@ -1201,9 +1231,9 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+    // window.onresize = () => {
+    //   this.getDomHeight();
+    // };
   },
   watch: {
     purchaseType: {
@@ -1260,7 +1290,7 @@ export default {
   margin-top: 20px;
 }
 .con-box {
-  height: 600px;
+  /*height: 600px;*/
 }
 .w550 {
   width: 580px;

@@ -153,11 +153,11 @@
                 return '核对'
               }
               if (['incomeMoney'].includes(column.property)) {
-                 this.checkTheIncome =  this.list.incomeMoney - this.$utils.sum(data, column.property)
+                 this.checkTheIncome =  parseFloat(this.list.incomeMoney - this.$utils.sum(data, column.property)).toFixed(2)
                 return this.checkTheIncome
               }
               if (['paidMoney'].includes(column.property)) {
-                 this.checkTheSpending = this.list.paidMoney - this.$utils.sum(data, column.property)
+                 this.checkTheSpending = parseFloat(this.list.paidMoney - this.$utils.sum(data, column.property)).toFixed(2)
                 return this.checkTheSpending
               }
               return null
@@ -214,7 +214,7 @@
          const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
          if(errMap){
          }else{
-           if(this.list.incomeMoney-this.list.paidMoney!=this.incomeMoneyTotal-this.paidMoneyTotal){
+           if(this.checkTheIncome!=this.checkTheSpending){
              return this.$Message.error('需分配金额与分配金额不符')
            }
            let data = []

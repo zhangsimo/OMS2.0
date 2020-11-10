@@ -67,8 +67,6 @@
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="orgName" title="门店" width="120"></vxe-table-column>
-            <vxe-table-column field="accountNo" title="对账单号" width="120"></vxe-table-column>
             <vxe-table-column field="guestName" title="往来单位" width="120"></vxe-table-column>
             <vxe-table-column field="businessTypeName" title="业务类型" width="80"></vxe-table-column>
             <vxe-table-column field="reconciliationAmt" title="对账金额" width="80"></vxe-table-column>
@@ -81,6 +79,8 @@
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
             ></vxe-table-column>
             <vxe-table-column field="unAmtLeft" title="剩余未收/未付" width="100"></vxe-table-column>
+            <vxe-table-column field="accountNo" title="对账单号" width="120"></vxe-table-column>
+            <vxe-table-column field="orgName" title="门店" width="120"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -129,6 +129,7 @@
             <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额" width="80"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额" width="80"></vxe-table-column>
+            <vxe-table-column field="unClaimedAmt" title="未认领金额" width="80"></vxe-table-column>
             <vxe-table-column
               field="thisClaimedAmt"
               title="本次认领金额"
@@ -158,6 +159,7 @@
   import subjexts from "../../../bill/components/subjects";
   import bus from "../../../bill/Popup/Bus";
   import moment from "moment";
+  import {showLoading, hideLoading} from "../../../../../utils/loading";
 
   export default {
     components: {
@@ -225,10 +227,10 @@
         this.obj = val;
       });
       bus.$on("ChildContent", value => {
-        if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
-          value.isAuxiliaryAccounting=0 //是否辅助核算类
-        }else{
-          value.isAuxiliaryAccounting=1
+        if (value.auxiliaryTypeCode == "1" || value.auxiliaryTypeCode == "2" || value.auxiliaryTypeCode == "3" || value.auxiliaryTypeCode == "4") {
+          value.isAuxiliaryAccounting = 0 //是否辅助核算类
+        } else {
+          value.isAuxiliaryAccounting = 1
         }
         if (value.fullName) {
           this.BusinessType.push({
@@ -240,10 +242,10 @@
             unAmtLeft: 0,
             mateAccountCode: this.obj.titleCode,
             mateAccountName: this.obj.titleName,
-            auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
-            isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName:value.fullName, //辅助核算名称
-            auxiliaryCode:value.code //辅助核算项目编码
+            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName: value.fullName, //辅助核算名称
+            auxiliaryCode: value.code //辅助核算项目编码
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -255,12 +257,12 @@
             unAmtLeft: 0,
             mateAccountCode: this.obj.titleCode,
             mateAccountName: this.obj.titleName,
-            auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
-            isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName:value.fullName, //辅助核算名称
-            auxiliaryCode:value.code //辅助核算项目编码
+            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName: value.fullName, //辅助核算名称
+            auxiliaryCode: value.code //辅助核算项目编码
           });
-        }else if(value.itemName){
+        } else if (value.itemName) {
           this.BusinessType.push({
             businessTypeName: this.obj.fullName + "-" + value.itemName,
             reconciliationAmt: 0,
@@ -270,10 +272,10 @@
             unAmtLeft: 0,
             mateAccountCode: this.obj.titleCode,
             mateAccountName: this.obj.titleName,
-            auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
-            isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName:value.fullName, //辅助核算名称
-            auxiliaryCode:value.code //辅助核算项目编码
+            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName: value.fullName, //辅助核算名称
+            auxiliaryCode: value.code //辅助核算项目编码
           });
         }
       });
@@ -330,7 +332,7 @@
           }
           let accountNo = this.$parent.reconciliationStatement
             ? this.$parent.reconciliationStatement.accountNo
-            : this.$parent.currentAccount.accountNo;
+            : this.$parent.currentAccount.row.accountNo;
           wirteAccount({
             accountNo,
             sign
@@ -361,21 +363,26 @@
       //保存
       async conserve() {
         if (!Number(this.check)) {
-          var bool=true;
+          var bool = true;
           this.tableData.map(row => {
             let Money = row.incomeMoney ? Math.abs(row.incomeMoney) : (row.paidMoney ? Math.abs(row.paidMoney) : 0)
-            let reg = /^([1-9]\d*(\.\d+)?)$/
+            let reg = /^([0-9]\d*(\.\d+)?)$/
             if (row.thisClaimedAmt && row.thisClaimedAmt > Money) {
               this.$message.error("本次认领金额录入有误，请重新录入")
-              bool=false
+              bool = false
               return
             } else if (row.thisClaimedAmt && !reg.test(row.thisClaimedAmt)) {
               this.$message.error("本次认领金额不可小于0")
-              bool=false;
+              bool = false;
+              return
+            }
+            if (row.thisClaimedAmt <= 0 || row.thisClaimedAmt > row.unClaimedAmt) {
+              this.$message.error('本次认领金额不可大于未认领金额')
+              bool = false
               return
             }
           })
-          if(bool){
+          if (bool) {
             this.$refs.vxeTable.validate((errMap) => {
               if (errMap) {
                 errMap && errMap()
@@ -386,6 +393,7 @@
                   three: this.tableData
                 };
                 this.conserveDis = true;
+                showLoading()
                 saveAccount(obj).then(res => {
                   if (res.code === 0) {
                     this.$parent.queryNoWrite()
@@ -397,8 +405,11 @@
                     this.$parent.difference = null;
                     this.$parent.currentAccount = {};
                     this.$message.success("保存成功");
+                    hideLoading()
                   }
-                });
+                }).catch(err=>{
+                  hideLoading()
+                })
               }
             })
           }

@@ -3,7 +3,7 @@
     <div class="header-box">
       <span>客户编码:</span>
       <Input v-model="coding" style="width: 150px" class="mr10" />
-      <span>客户全称:</span>
+      <span>客户简称:</span>
       <Input v-model="customerName" style="width: 150px" class="mr10" />
       <span>联系人电话:</span>
       <Input v-model="tel" style="width: 150px" class="mr20" />

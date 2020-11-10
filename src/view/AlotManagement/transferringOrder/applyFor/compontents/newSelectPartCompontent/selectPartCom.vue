@@ -16,19 +16,19 @@
 
       <div class="db mr5 fl">
           <span class="mr5">编码:</span>
-          <el-input autofocus ref="elinput" style="width: 160px" placeholder="请输入编码" v-model="partCode" @change="search"/>
-        </div>
+        <el-input @focus="focus($event)" style="width: 160px" ref="elinput" placeholder="请输入编码" v-model="partCode" @change="search"/>
+      </div>
         <div class="db mr5 fl">
           <span class="mr5">内码:</span>
-          <el-input placeholder="请输入内码" style="width: 160px" v-model="partId" @change="search"/>
+          <el-input @focus="focus($event)" style="width: 160px" placeholder="请输入内码" ref="elinputpartId" v-model="partId" @change="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">名称:</span>
-          <el-input placeholder="请输入名称" style="width: 160px" v-model="partName" @change="search"/>
+          <el-input @focus="focus($event)" style="width: 160px" placeholder="请输入名称" ref="elinputpartName" v-model="partName" @change="search"/>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">OE:</span>
-          <el-input placeholder="请输入OE码" style="width: 160px" v-model="oemCode" @change="search"/>
+          <el-input @focus="focus($event)" style="width: 160px" placeholder="请输入OE码" ref="elinputoemCode" v-model="oemCode" @change="search"/>
         </div>
 
         <!-- <Select

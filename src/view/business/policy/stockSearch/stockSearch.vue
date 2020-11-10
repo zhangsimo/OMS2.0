@@ -117,9 +117,9 @@
               <Icon type="ios-search" size="14"/>
               查询
             </Button>
-            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">
-              <i class="iconfont mr5 icondaochuicon"></i> 导出
-            </Button>
+<!--            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
+<!--            </Button>-->
             <Poptip v-model="visible" placement="bottom">
               <Button class="mr10 w90">
                 仓库设置
@@ -133,6 +133,7 @@
         </div>
         <vxe-table
           border
+          class="stock-wrap-table"
           ref="xTable2"
           :height="tableHeight"
           highlight-hover-row
@@ -145,28 +146,28 @@
           show-footer
           :footer-method="handleSummary"
           :data="contentOne.dataOne">
-          <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
-          <vxe-table-column field="cz" title="操作" width="50" fixed="left">
+          <vxe-table-column type="seq" title="序号" width="40" fixed="left"></vxe-table-column>
+          <vxe-table-column field="cz" title="操作" width="40" fixed="left">
             <template v-slot="{row}">
               <vxe-button type="text" @click="showList(row);">查看</vxe-button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="orgName" title="机构名称" width="130" fixed="left"></vxe-table-column>
+          <vxe-table-column field="orgName" title="机构名称" width="106" fixed="left"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码" width="110" fixed="left"></vxe-table-column>
-          <vxe-table-column field="carBrandName" title="厂牌" width="80" fixed="left"></vxe-table-column>
-          <vxe-table-column field="partBrand" title="品牌" width="80" fixed="left" :filters="[]"
+          <vxe-table-column field="oemCode" title="OE码" width="96" fixed="left"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="厂牌" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌" width="70" fixed="left" :filters="[]"
                             :filter-method="filterNameMethod1"></vxe-table-column>
-          <vxe-table-column field="carModelName" title="品牌车型" width="110"></vxe-table-column>
+          <vxe-table-column field="carModelName" title="品牌车型" width="106"></vxe-table-column>
           <vxe-table-column field="stockQty" title="库存数量" width="70"></vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量" width="70">
             <template v-slot="{row}">
               {{row.sellSign ? 0 : row.outableQty}}
             </template>
           </vxe-table-column>
-          <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
-          <vxe-table-column field="shelf" title="仓位" width="100"></vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" width="76"></vxe-table-column>
+          <vxe-table-column field="shelf" title="仓位" width="90"></vxe-table-column>
           <vxe-table-column field="costPrice" title="库存单价" width="80">
             <template v-slot="{row}">
               {{row.costPrice.toFixed(2)}}
@@ -288,25 +289,10 @@
             <!--<Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>-->
           </div>
         </div>
-        <!--        表-->
-        <!--<Table-->
-        <!--class="table-highlight-row"-->
-        <!--highlight-row-->
-        <!--size="small"-->
-        <!--ref="table2"-->
-        <!--align="left"-->
-        <!--border-->
-        <!--:loading="loading2"-->
-        <!--:stripe="true"-->
-        <!--:columns="columns2"-->
-        <!--:data="contentTwo.dataTwo"-->
-        <!--height="400"-->
-        <!--show-summary-->
-        <!--:summary-method="handleSummary"-->
-        <!--&gt;</Table>-->
         <vxe-table
           border
           ref="xTable3"
+          class="stock-wrap-table"
           :height="tableHeight"
           highlight-hover-row
           highlight-current-row
@@ -329,9 +315,8 @@
           <vxe-table-column field="carModelName" title="品牌车型" width="90"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
           <vxe-table-column field="carBrandName" title="厂牌" width="70"></vxe-table-column>
-          <vxe-table-column field="enterQty" title="入库数量" width="70">
-          </vxe-table-column>
-          <vxe-table-column field="outableQty" title="可售数量" width="70"></vxe-table-column>
+          <vxe-table-column field="outableQty" title="库存数量" width="70"></vxe-table-column>
+          <vxe-table-column field="enableSellQty" title="可售数量" width="70"></vxe-table-column>
           <vxe-table-column field="storeName" title="仓库" width="80"></vxe-table-column>
           <vxe-table-column field="enterPrice" title="成本单价" width="80">
             <template v-slot="{row}">
@@ -376,6 +361,8 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="serviceId" title="入库单号" width="124"></vxe-table-column>
+          <vxe-table-column field="enterQty" title="入库数量" width="70">
+          </vxe-table-column>
           <vxe-table-column field="originGuestName" title="第一供应商" width="150"></vxe-table-column>
           <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
           <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
@@ -989,7 +976,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1060,9 +1047,11 @@
         this.getAllStocks();
       },
       //汇总查看
-      showList(val) {
-        this.selectTableData = val;
-        this.$refs.look.getEnters();
+      showList(row) {
+        this.selectTableData = row;
+        setTimeout(()=>{
+          this.$refs.look.getEnters();
+        },1)
       },
       // 批次库存请求
       async getLotStocks() {
@@ -1072,7 +1061,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1091,7 +1080,7 @@
         }
         if (
           (data.partName == "" || data.partName.trim() == "") && //名称
-          (data.oemCode == "" || data.oemCode.trim() == "") && //oem码
+          (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
           (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
           (data.partId == "" || data.partId.trim() == "") && //内码
           (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
@@ -1241,7 +1230,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();
@@ -1274,7 +1263,7 @@
           data.partName = data.partName.trim();
         }
         if (data.oemCode) {
-          data.oemCode = data.oemCode.trim();
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
         }
         if (data.partCode) {
           data.partCode = data.partCode.trim();

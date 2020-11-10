@@ -77,6 +77,16 @@
             </Button>
           </div>
           <div class="db">
+            <Button
+              class="mr10"
+              @click="returnBack"
+              :disabled="presentrowMsg!=1"
+              v-has="'returnBack'"
+            >
+              <i class="iconfont mr5 iconziyuan14"></i>返单
+            </Button>
+          </div>
+          <div class="db">
             <div class="mt5">
               <Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox>
             </div>
@@ -129,7 +139,7 @@
                   <FormItem label="供应商：" prop="guestName" class="fs12">
                     <Row>
                       <Col span="22">
-                        <Tooltip :content="formPlan.guestName">
+                        <Tooltip :content="formPlan.guestName" placement="top">
                           <GoodCus
                             style="width: 120px"
                             :title="formPlan.guestName"
@@ -163,21 +173,21 @@
                     </Row>
                   </FormItem>
                   <!--<FormItem label="退货员：" prop="storeId">-->
-                    <!--<Select-->
-                      <!--class="w160"-->
-                      <!--:disabled="presentrowMsg !== 0 || buttonDisable"-->
-                      <!--v-model="formPlan.storeId"-->
-                      <!--filterable-->
-                      <!--label-in-value-->
-                      <!--@on-change="selectOrderMan"-->
-                    <!--&gt;-->
-                      <!--<Option-->
-                        <!--v-for="item in userMap"-->
-                        <!--:value="item.id"-->
-                        <!--:key="item.id"-->
-                      <!--&gt;{{ item.label }}-->
-                      <!--</Option>-->
-                    <!--</Select>-->
+                  <!--<Select-->
+                  <!--class="w160"-->
+                  <!--:disabled="presentrowMsg !== 0 || buttonDisable"-->
+                  <!--v-model="formPlan.storeId"-->
+                  <!--filterable-->
+                  <!--label-in-value-->
+                  <!--@on-change="selectOrderMan"-->
+                  <!--&gt;-->
+                  <!--<Option-->
+                  <!--v-for="item in userMap"-->
+                  <!--:value="item.id"-->
+                  <!--:key="item.id"-->
+                  <!--&gt;{{ item.label }}-->
+                  <!--</Option>-->
+                  <!--</Select>-->
                   <!--</FormItem>-->
                   <FormItem label="退货日期：" prop="orderDate" class="fs12">
                     <DatePicker
@@ -343,14 +353,14 @@
                   show-overflow="tooltip"
                   field="orderQty"
                   title="退货数量"
-                  :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                  :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
                   field="orderPrice"
                   title="退货单价"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input',autoselect: true }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip" field="orderAmt" title="退货金额" width="100">
@@ -392,7 +402,8 @@
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
               <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
               <!--</div>-->
-              <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.auditor:""}}</span><span>提交日期：{{datadata?datadata.auditDate:""}}</span></div>
+              <div class="table-bottom-text flex"><span>创建人：{{datadata?datadata.createUname:""}}</span><span>创建日期：{{datadata?datadata.createTime:""}}</span><span>提交人：{{datadata?datadata.auditor:""}}</span><span>提交日期：{{datadata?datadata.auditDate:""}}</span>
+              </div>
             </div>
           </Split>
         </div>
@@ -434,7 +445,7 @@
     saveObsolete,
     queryByConditions,
   } from "../../../../api/business/supplierListApi";
-  import {getSupplierList} from "_api/purchasing/purchasePlan";
+  import {getSupplierList, returnBack} from "_api/purchasing/purchasePlan";
   import {getSales} from "@/api/salesManagment/salesOrder";
   import {v4} from "uuid";
   import GoodCus from "_c/allocation/GoodCus.vue";
@@ -566,53 +577,62 @@
           columns: [
             {
               title: "序号",
-              minWidth: 50,
+              width: 50,
               type: "index",
+              resizable:true
             },
             {
               title: "状态",
               key: "billStatusId",
-              minWidth: 70,
+              width: 70,
               render: (h, params) => {
                 let name = params.row.billStatusId.name;
                 return h("span", name);
               },
+              resizable:true,
             },
             {
               title: "供应商",
               key: "guestName",
-              minWidth: 80,
+              width: 170,
+              resizable:true
             },
             {
               title: "创建日期",
               key: "createTime",
-              minWidth: 120,
+              width: 120,
+              resizable:true
             },
             {
               title: "创建人",
               key: "createUname",
-              minWidth: 100,
+              width: 100,
+              resizable:true
             },
             {
               title: "采退单号",
               key: "serviceId",
-              minWidth: 120,
+              width: 120,
+              resizable:true
             },
             {
               title: "打印次数",
               key: "printTimes",
-              minWidth: 70,
+              width: 70,
+              resizable:true
             },
             {
               title: "提交人",
               key: "auditor",
-              minWidth: 100,
+              width: 100,
+              resizable:true
             },
             {
               title: "提交日期",
               align: "center",
               key: "auditDate",
-              minWidth: 170,
+              width: 170,
+              resizable:true
             },
           ],
           tbdata: [],
@@ -1078,6 +1098,30 @@
         this.openwin(routeUrl.href)
         this.leftgetList();
       },
+      //返单
+      returnBack() {
+        this.$Modal.confirm({
+          title: "是否返单",
+          onOk: async () => {
+            let params = {};
+            params.id = this.mainId;
+            try {
+              this.cancelLoading = true;
+              let res = await returnBack(params);
+              if (res.code == 0) {
+                this.$Message.success("返单成功");
+                this.leftgetList();
+              }
+              this.cancelLoading = false;
+            } catch (error) {
+              this.cancelLoading = false;
+            }
+          },
+          onCancel: () => {
+            this.$Message.info("取消返单");
+          },
+        });香蕉
+      },
       //右侧表格复选框选中
       selectChange(msg) {
         // console.log(msg.selection)
@@ -1117,9 +1161,9 @@
             if (columnIndex === 0) {
               return "和值";
             }
-            // if (columnIndex === 9) {
-            //   return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
-            // }
+            if (columnIndex === 2) {
+              return `共${(data||[]).length}条`
+            }
             if (
               ["canReQty", "orderQty", "orderPrice"].includes(column.property)
             ) {
@@ -1164,6 +1208,7 @@
         // console.log(a)
         this.formPlan.guestName = a.fullName;
         this.guestidId = a.id;
+        this.Right.tbdata = []
       },
       leftgetList() {
         let data = {};
@@ -1220,13 +1265,13 @@
         params.page = this.Left.page.num - 1;
         params.size = this.Left.page.size;
         //创建日期
-        if (this.moreArr.createData != null) {
+        if (this.moreArr.createData != null && this.moreArr.createData[0] != "") {
           // console.log(this.moreArr.createData);
           data.startTime = this.moreArr.createData[0] + " 00:00:00";
           data.endTime = this.moreArr.createData[1] + " 23:59:59";
         }
         //提交日期
-        if (this.moreArr.submitData != null) {
+        if (this.moreArr.submitData != null && this.moreArr.submitData[0] != "") {
           data.auditStartTime = this.moreArr.submitData[0] + " 00:00:00";
           data.auditEndTime = this.moreArr.submitData[1] + " 23:59:59";
         }
@@ -1272,6 +1317,7 @@
           if (res.code === 0) {
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
+            this.selection(this.Left.tbdata[0])
           }
         });
       },
@@ -1414,6 +1460,8 @@
             el.orginOrderQty = el.orderQty;
             return el;
           });
+        }else{
+          this.Right.tbdata=[];
         }
         this.presentrowMsg = row.billStatusId.value;
         // console.log(this.presentrowMsg)
@@ -1559,6 +1607,7 @@
             for (let el in rtnReasonMap) {
               this.purchaseTypeArr.push({value: rtnReasonMap[el], label: el});
             }
+            this.purchaseTypeArr = this.purchaseTypeArr.sort((a,b) =>a.value-b.value)
             // userMap 用户
             for (let el in userMap) {
               this.userMap.push({value: userMap[el], label: el});
@@ -1573,9 +1622,9 @@
           let planBtnH = this.$refs.planBtn.offsetHeight;
           // let planPageH = this.$refs.planPage.offsetHeight;
           //获取左侧侧表格高度
-          this.leftTableHeight = wrapH - 70;
+          this.leftTableHeight = wrapH - 100;
           //获取右侧表格高度
-          this.rightTableHeight = wrapH - planFormH - planBtnH - 70;
+          this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
         });
       },
       showOwen() {

@@ -5,7 +5,8 @@
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10">-->
           <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
         <!--</Select>-->
-        <Input class="w250 mr10" v-model="partName" placeholder="配件编码/名称/车型" @on-enter="search"></Input>
+        <!--<Input class="w250 mr10" v-model="partName" placeholder="配件编码/名称/车型/OEM" @on-enter="search"></Input>-->
+        <el-input @focus="focus($event)" class="w250 mr10" autofocus ref="elinput" placeholder="配件编码/名称/车型/OEM" v-model="partName" @change="search"/>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.label" :key="item.value">{{item.label}}</Option>

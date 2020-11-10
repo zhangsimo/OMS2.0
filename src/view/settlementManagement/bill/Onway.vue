@@ -19,7 +19,7 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -38,9 +38,9 @@
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report" v-has="'export'">导出</button>
-          </div>
+          <!--<div class="db ml10">-->
+          <!--  <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report" v-has="'export'">导出</button>-->
+          <!--</div>-->
         </div>
       </div>
     </section>
@@ -89,7 +89,7 @@
         fno: '',//调拨单号
         value: [],
         Branchstore: [
-          {id: 0, name: '全部'}
+          {id: 0, name: '全部',shortName:"全部"}
         ], //分店名称
         model1: "",
         columns: [
@@ -397,7 +397,7 @@
             resizable: true,
             width: 100,
             render: (h, params) => {
-              return h('span', params.row.taxPrice ? (params.row.taxPrice).toFixed(2) : '')
+              return h('span', params.row.taxPrice ? (params.row.taxPrice) : '')
             }
           },
           {
@@ -430,7 +430,7 @@
             resizable: true,
             width: 100,
             render: (h, params) => {
-              return h('span', (params.row.taxPrice).toFixed(2))
+              return h('span', (params.row.taxPrice))
             }
           },
           {
@@ -598,9 +598,9 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               if (index === 19 || index === 21) {
@@ -655,7 +655,7 @@
             pagesize: this.page.total,
             startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
             endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0] + " 23:59:59" : '',
-            orgid: this.model1,
+            orgid: this.model1==0?"":this.model1,
             code: this.fno,
             guestId: this.company ? this.companyId : ""
           }
@@ -674,7 +674,7 @@
           page: this.page.num - 1,
           startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
           endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0] + " 23:59:59" : '',
-          orgid: this.model1,
+          orgid: this.model1==0?"":this.model1,
           code: this.fno,
           guestId: this.company ? this.companyId : ""
         }

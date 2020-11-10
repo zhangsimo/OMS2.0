@@ -83,7 +83,7 @@
                       highlight-row
                       border
                       :stripe="true"
-                      :columns="Left.columns"
+                      :columns="Left.columns2"
                       :data="Left.tbdata"
                     ></Table>
                     <Page
@@ -219,7 +219,7 @@
                       <vxe-table-column
                         show-overflow="tooltip"
                         field="orderQty"
-                        :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
+                        :edit-render="{name: 'input',autoselect: true , attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="组装数量"
                         width="100"
                       ></vxe-table-column>
@@ -549,7 +549,7 @@
                       <vxe-table-column
                         show-overflow="tooltip"
                         field="orderQty"
-                        :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
+                        :edit-render="{name: 'input',autoselect: true , attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="数量"
                         width="100"
                       ></vxe-table-column>
@@ -558,7 +558,7 @@
                         field="remark"
                         title="备注"
                         width="100"
-                        :edit-render="{name: 'input'}"
+                        :edit-render="{name: 'input',autoselect: true}"
                       ></vxe-table-column>
                       <vxe-table-column
                         show-overflow="tooltip"
@@ -823,38 +823,89 @@ export default {
         columns: [
           {
             title: "序号",
-            minWidth: 50,
+            width: 50,
             key: "index",
+            resizable:true
           },
           {
             title: "状态",
             key: "statuName",
-            minWidth: 70,
+            width: 70,
+            resizable:true
           },
           {
             title: "创建日期",
             key: "createTime",
-            minWidth: 140,
+            width: 140,
+            resizable:true
           },
           {
             title: "操作员",
             key: "orderMan",
-            minWidth: 120,
+            width: 120,
+            resizable:true
           },
           {
             title: "配件组装单号",
             key: "serviceId",
-            minWidth: 160,
+            width: 160,
+            resizable:true
           },
           {
             title: "提交人",
             key: "auditor",
-            minWidth: 120,
+            width: 120,
+            resizable:true
           },
           {
             title: "提交时间",
             key: "auditDate",
-            minWidth: 200,
+            width: 200,
+            resizable:true
+          },
+        ],
+        columns2: [
+          {
+            title: "序号",
+            width: 50,
+            key: "index",
+            resizable:true
+          },
+          {
+            title: "状态",
+            key: "statuName",
+            width: 70,
+            resizable:true
+          },
+          {
+            title: "创建日期",
+            key: "createTime",
+            width: 140,
+            resizable:true
+          },
+          {
+            title: "操作员",
+            key: "orderMan",
+            width: 120,
+            resizable:true
+          },
+          {
+            title: "配件组装单号",
+            key: "serviceId",
+            width: 160,
+            resizable:true
+          },
+          {
+            title: "提交人",
+            key: "auditor",
+            width: 120,
+            resizable:true
+          },
+          {
+            title: "提交时间",
+            key: "auditDate",
+            width: 200,
+            resizable:true
           },
         ],
         tbdata: [],

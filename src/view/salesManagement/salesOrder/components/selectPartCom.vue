@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1100" class="sales-part-model">
+    <Modal v-model="searchPartLayer" draggable title="配件选择" width="1100" class="sales-part-model">
       <div class="partCheck-hd">
         <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
         <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
@@ -8,19 +8,19 @@
 
         <div class="db mr5 item">
           <span class="mr5">编码:</span>
-          <el-input class="w120 mr10" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" autofocus ref="elinput" placeholder="编码" v-model="partCode" @change="search"/>
         </div>
         <div class="db mr5 item">
           <span class="mr5">内码:</span>
-          <el-input class="w120 mr10" placeholder="内码" v-model="partId" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" placeholder="内码" ref="elinputpartId" v-model="partId" @change="search"/>
         </div>
         <div class="db mr5 item">
           <span class="mr5">名称:</span>
-          <el-input class="w120 mr10" placeholder="名称" v-model="partName" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" placeholder="名称" ref="elinputpartName" v-model="partName" @change="search"/>
         </div>
         <div class="db mr5 item">
           <span class="mr5">OE:</span>
-          <el-input class="w120 mr10" placeholder="OE" v-model="oemCode" @change="search"/>
+          <el-input @focus="focus($event)" class="w120 mr10" placeholder="OE" ref="elinputoemCode" v-model="oemCode" @change="search"/>
         </div>
 
         <!-- <el-input

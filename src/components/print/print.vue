@@ -541,6 +541,10 @@
             <span>{{ onelist.receiver }}</span>
           </Col>
         </Row>
+        <p style="border: 1px #000000 solid;border-top: none;color:#000;padding:2px;font-size: 14px;font-weight: 600;">
+          备 注：
+          <span>{{onelist.remark}}</span>
+        </p>
       </div>
       <div class="titler" v-if="onelist.name.startsWith('预售单')">
         <Row style="border: 1px #000000 solid;color:#000;border-bottom: none;padding: 0px 2px;">
@@ -1790,7 +1794,7 @@
   import * as twoBackApply from "@/api/AlotManagement/twoBackApply.js";//调入退回申请 getprintList
   import * as smsInventory from '@/api/inventory/salesList' //盘点单  getprintList
   import {Printing} from "@/api/bill/saleOrder"; //应收应付
-  import * as tools from "../../../utils/tools";
+  import * as tools from "../../utils/tools";
 
   export default {
     name: "PrintShow",

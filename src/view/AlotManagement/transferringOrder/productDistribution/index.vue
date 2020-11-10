@@ -11,6 +11,12 @@
               style="width: 160px"
               class="mr10"
             />
+            <Input
+              v-model="form.partInnerId"
+              placeholder="配件内码"
+              style="width: 120px"
+              class="mr10"
+            />
             <Select
               v-model="form.partBrandCode"
               class="w200 mr10"
@@ -108,9 +114,12 @@
               </div>
             </Modal>
           </div>
-          <!-- <div class="db mr10">
-            <Button class="mr20" >导出</Button>
-          </div>-->
+          <div class="db mr10">
+            <Checkbox @on-change="queryFun" v-model="stockBoolean">显示有库存</Checkbox>
+          </div>
+          <div class="db mr10">
+            <Checkbox @on-change="queryFun" v-model="ArrivalBoolean">今日到货产品</Checkbox>
+          </div>
         </div>
       </div>
     </section>
@@ -130,11 +139,15 @@
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
-          <vxe-table-column type="seq" title="序号"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
 
           <vxe-table-column
             field="partCode"
             title="配件编码"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="partInnerId"
+            title="配件内码"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
@@ -211,14 +224,15 @@
           highlight-hover-row
           :data="BottomTableData"
           keep-source
+          show-overflow
           :edit-rules="validRules"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
           show-footer
           :footer-method="footerMethod"
         >
-          <vxe-table-column type="seq" title="序号"></vxe-table-column>
+          <vxe-table-column width="50" type="seq" title="序号"></vxe-table-column>
 
-          <vxe-table-column title="操作" width="180">
+          <vxe-table-column title="操作" width="160">
             <template v-slot="{ row }">
               <Button type="text" @click="sureBaocunsave(row)">保存</Button>
               <Button type="text" @click="sureBaocunfenpei(row)"
@@ -227,22 +241,25 @@
             </template>
           </vxe-table-column>
 
-          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
+          <vxe-table-column field="guestName" title="申请方" width="120"></vxe-table-column>
           <vxe-table-column
             field="serviceId"
             title="调拨申请单号"
-            width="100"
+            width="170"
           ></vxe-table-column>
           <vxe-table-column
             field="partCode"
+            width="120"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
+            width="120"
             title="配件名称"
           ></vxe-table-column>
           <vxe-table-column
             field="auditDate"
+            width="170"
             title="提交日期"
           ></vxe-table-column>
           <vxe-table-column
@@ -309,6 +326,7 @@ export default {
       },
       //搜索
       form: {
+        partInnerId:'',
         pageNumber: 0,
         size: 10,
         queryCode: "",
@@ -344,7 +362,12 @@ export default {
         ]
       },
       //一键分配loading
-      oneLoading:false
+      oneLoading:false,
+
+      //是否有库存，是否今日到货
+      stockBoolean:false,
+      ArrivalBoolean:false,
+
     };
   },
   created() {
@@ -430,6 +453,8 @@ export default {
     search(params) {
       let req = {...params, ...this.pageList};
       req.page = req.page-1;
+      req.stockBoolean = this.stockBoolean;
+      req.ArrivalBoolean = this.ArrivalBoolean;
       // params.storeId = this.idValue;
       jinqiaopinliebiao(req)
         .then(res => {
@@ -581,7 +606,7 @@ export default {
     },
     getList() {
       const params = {
-        partCode: this.rowStatus.partCode
+        partId: this.rowStatus.partId
       };
       shenqingdanliebiao(params)
         .then(res => {

@@ -22,12 +22,12 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" :disabled="selectShopList" class="w150" filterable clearable>
+            <Select v-model="BranchstoreId" :disabled="selectShopList" @on-change="query" class="w150" filterable clearable>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
+              >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -407,7 +407,7 @@
         BranchstoreId: "", //分店名称
         company: [], //往来单位数组
         Branchstore: [
-          {id: '0', name: '全部'}
+          {id: '0', name: '全部',shortName:"全部"}
         ], //分店名称
         requestCode: "", //费用报销申请单号
         currRow: null, //选中行
@@ -605,7 +605,7 @@
             endTime: this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : "",
-            orgid: this.BranchstoreId,
+            orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
             serviceId: this.requestCode,
             pagesize:this.page.total,
           };
@@ -629,7 +629,7 @@
           endTime: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          orgid: this.BranchstoreId,
+          orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
           serviceId: this.requestCode
           // guestId: this.companyId,
         };
@@ -740,7 +740,6 @@
       },
       // 选中行
       currentChangeEvent({row}) {
-        console.log(row.id)
         this.currRow = row;
         this.loanId = row.id
         this.$store.commit("setLoanId", row.id)
@@ -813,12 +812,12 @@
     padding: 0;
     margin: 0;
   }
-
   .listChild {
     display: inline-block;
     border: 1px solid #e8eaec;
     flex: 1;
-    padding: 5px;
+    line-height: 24px;
+    padding:0 5px;
   }
 
   .vxe-table .vxe-cell {

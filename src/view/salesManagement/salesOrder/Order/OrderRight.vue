@@ -60,7 +60,7 @@
             <!--</Select>-->
           <!--</FormItem>-->
           <FormItem label="订单类型：">
-            <Select v-model="formPlan.orderTypeValue" style="width:200px">
+            <Select v-model="formPlan.orderTypeValue" style="width:200px" disabled>
               <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
@@ -303,6 +303,7 @@
         <vxe-table
           class="setPadding"
           border
+          stripe
           resizable
           show-footer
           ref="xTable"
@@ -320,14 +321,13 @@
           @keydown="keydown"
           :footer-method="footerMethod"
         >
-          <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="40" title="序号"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="40"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="40">
+          <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="50" title="序号"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="60">
             <template v-slot="{ row,rowIndex }">
               <a class="blue" @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" fixed="left" field="partCode" title="配件编码"
                             width="100"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" fixed="left" width="110" field="partName"
@@ -338,12 +338,12 @@
             show-overflow="tooltip"
             field="orderQty"
             title="数量"
-            :edit-render="{name: 'input',attrs: {disabled: false}}"
-            width="70"
+            :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
+            width="100"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
-                style="width:60px;"
+                style="width:80px;"
                 :min="row.isMarkActivity==1?row.showQty:0"
                 :max="row.isMarkBatch == 1 ? row.adjustQty : 999999"
                 v-model="row.orderQty"
@@ -357,34 +357,41 @@
             show-overflow="tooltip"
             field="orderPrice"
             title="单价"
-            width="80"
-            :edit-render="{name: 'input' ,attrs: {disabled: false}}"
+            width="100"
+            :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
           >
             <template v-slot:edit="{ row }">
-              <vxe-input v-model="row.orderPrice" style="width:60px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>
+<!--              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0"></vxe-input>-->
+              <vxe-input v-model="row.orderPrice" style="width:80px;"  type="float" :min="row.isMarkActivity==1?row.showPrice:0" :controls="false"></vxe-input>
+            </template>
+            <template v-slot="{ row }">
+             {{row.orderPrice|priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" title="金额" width="90">
+          <vxe-table-column show-overflow="tooltip" title="金额" width="110">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
           <!-- <vxe-table-column  show-overflow="tooltip" field="averagePrice" title="参考价" width="70"></vxe-table-column> -->
-          <vxe-table-column show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="70">
+          <vxe-table-column show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="80">
             <template v-slot="{row}">
               <span style="color:#ed4014" v-if="row.stockOutQty*1>0">{{row.stockOutQty}}</span>
               <span v-else>{{row.stockOutQty}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field="oemCode" title="OEM码" width="90"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" title="品牌车型" width="90">
+          <vxe-table-column show-overflow="tooltip" field="oemCode" title="OEM码" width="100"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" title="品牌车型" width="100">
             <template v-slot="{row,rowIndex}">
               <span>{{row.carBrandName}} {{row.carModelName}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="90"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="50"></vxe-table-column>
-
+          <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="60"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" field title="批次" width="50">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" title="活动" width="50">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
@@ -395,11 +402,6 @@
               <Checkbox disabled :value="row.isGift == 1"></Checkbox>
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field title="批次" width="50">
-            <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
-            </template>
-          </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" field="storeShelf" title="仓位" width="100"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip"
                             field="remark"
@@ -407,9 +409,9 @@
                             min-width="120"
                             :edit-render="{name: 'input',attrs: {disabled: false}}"
           ></vxe-table-column>
-
+          <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" field="showDirection" title="方向" width="100"></vxe-table-column>
-
+          <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
         </vxe-table>
       </Form>
       <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.auditor:""}}</span><span>提交日期：{{formPlan?formPlan.auditDate:""}}</span></div>
@@ -446,7 +448,6 @@
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
     <alot-model ref="AlotModel"></alot-model>
-    <print ref="printModel"></print>
   </div>
 </template>
 
@@ -488,13 +489,11 @@
   import AlotModel from "../components/AlotModel"
   import SalesCus from "../../../../components/allocation/salesCus";
   import {showLoading, hideLoading} from "@/utils/loading"
-  import Print from "../components/print";
 
   export default {
     name: "OrderRight",
     inject: ["reload"],
     components: {
-      Print,
       SalesCus,
       ClientData,
       goodsInfo,
@@ -561,10 +560,6 @@
           {
             value: 2,
             label: "代付订单"
-          },
-          {
-            value: 3,
-            label: "铺货销售"
           }
         ], //订单类型
         clientList: {}, //新增客户资料
@@ -890,14 +885,14 @@
             // if (["orderPrice"].includes(column.property)) {
             //     return this.$utils.sum(data, column.property).toFixed(2);
             // }
-            if (columnIndex === 7||["stockOutQty"].includes(column.property)) {
+            if (columnIndex === 6||["stockOutQty"].includes(column.property)) {
               return this.$utils.sum(data, column.property);
             }
 
             // if (columnIndex === 7) {
             //     return ` ${this.countAllPrice(data)} `;
             // }
-            if (columnIndex === 9) {
+            if (columnIndex === 8) {
               return ` ${this.countAllAmount(data)} `;
             }
             return null;
@@ -1196,10 +1191,6 @@
             this.$Message.error("*为必填项");
           }
         });
-      },
-      //打印发货申请
-      printModelShow(){
-        this.$refs.printModel.openModal();
       },
       //获取搜索框内的数据
       setOneClient(val) {

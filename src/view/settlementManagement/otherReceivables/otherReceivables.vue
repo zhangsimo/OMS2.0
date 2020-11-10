@@ -24,12 +24,12 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -40,7 +40,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <Input type="text" class="h30 w200" v-model="companyId" />
           </div>
           <div class="db ml20">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -95,7 +96,7 @@
           >
             <vxe-table-column type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
             <vxe-table-column field="businessType" width="100" title="业务类型" fixed="left">
-              <template v-slot="{row}">{{row.businessType.name}}</template>
+              <template v-slot="{row}">{{row.businessType ? row.businessType.name : ''}}</template>
             </vxe-table-column>
             <vxe-table-column field="guestName" width="100" title="往来单位" fixed="left"></vxe-table-column>
             <vxe-table-column title="基本信息">
@@ -282,45 +283,45 @@
       </div>
     </section>
     <!-- 认领弹框 -->
-    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
-      <span>往来单位：</span>
-      <Select
-              v-model="companyId"
-              class="w150"
-              clearable
-              filterable
-              remote
-              :loading="remoteloading"
-              :remote-method="getOne"
-              @on-change="query"
-            >
-              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
-      <span class="ml10">对方户名：</span>
-      <Input v-model="bankNameO" class="w100" />
-      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
-        <i class="iconfont iconchaxunicon"></i>
-        <span>查询</span>
-      </button>
-      <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>
-      <Button class="ml10" v-else @click="claimCollection">认领</Button>
-      <div v-if="otherPayCus" style="display: inline-block;" class="ml20">
-        <span><i style="color: red" class="mr5">*</i>款项分类：</span>
-        <Select v-model="fund" class="w150" placeholder="请选择">
-          <Option
-            v-for="item in fundList"
-            :value="item.itemName"
-            :key="item.id"
-          >{{ item.itemName }}</Option>
-        </Select>
-      </div>
-
-      <claim ref="claim" @selection="selection" />
-      <!--<claimGuest ref="claimGuest" />-->
-      <div slot="footer"></div>
-    </Modal>
+<!--    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">-->
+<!--      <span>往来单位：</span>-->
+<!--      <Select-->
+<!--              v-model="companyId"-->
+<!--              class="w150"-->
+<!--              clearable-->
+<!--              filterable-->
+<!--              remote-->
+<!--              :loading="remoteloading"-->
+<!--              :remote-method="getOne"-->
+<!--              @on-change="query"-->
+<!--            >-->
+<!--              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+<!--            </Select>-->
+<!--      <span class="ml10">金额：</span>-->
+<!--      <InputNumber v-model="amt" class="w50" />-->
+<!--      <span class="ml10">对方户名：</span>-->
+<!--      <Input v-model="bankNameO" class="w100" />-->
+<!--      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">-->
+<!--        <i class="iconfont iconchaxunicon"></i>-->
+<!--        <span>查询</span>-->
+<!--      </button>-->
+<!--      <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>-->
+<!--      <Button class="ml10" v-else @click="claimCollection">认领</Button>-->
+<!--      <div v-if="otherPayCus" style="display: inline-block;" class="ml20">-->
+<!--        <span><i style="color: red" class="mr5">*</i>款项分类：</span>-->
+<!--        <Select v-model="fund" class="w150" placeholder="请选择">-->
+<!--          <Option-->
+<!--            v-for="item in fundList"-->
+<!--            :value="item.itemName"-->
+<!--            :key="item.id"-->
+<!--          >{{ item.itemName }}</Option>-->
+<!--        </Select>-->
+<!--      </div>-->
+<!--      <claim ref="claim" @selection="selection" />-->
+<!--      &lt;!&ndash;<claimGuest ref="claimGuest" />&ndash;&gt;-->
+<!--      <div slot="footer"></div>-->
+<!--    </Modal>-->
+    <ClaimModal ref="claimModal" :titleName="claimTit" :amountType="amountType"></ClaimModal>
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -344,7 +345,6 @@ import { creat } from "./../components";
 import Record from "./components/Record";
 // import Record from "../components/Record";
 import {
-
   findAdvance,
   revoke,
   findGuest
@@ -361,14 +361,17 @@ import moment from "moment";
 import {showLoading, hideLoading} from "@/utils/loading"
 import {
   kmType
-} from "@/api/settlementManagement/VoucherInput"
+} from "@/api/settlementManagement/VoucherInput";
+import ClaimModal from "./components/ClaimModal";
+
 export default {
   name: "settlementManagementOtherReceivables",
   components: {
     quickDate,
     claim,
     settlement,
-    Record
+    Record,
+    ClaimModal
     // claimGuest
   },
   data() {
@@ -379,12 +382,13 @@ export default {
       company: [], //往来单位数组
       companyId: "", //往来单位
       Branchstore: [
-        {id:'0' ,name:'全部'}
+        {id:'0' ,name:'全部',shortName:"全部"}
       ], //分店名称
       currRow: {}, //选中行
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
       claimTit: "", //认领弹框标题
+      amountType:1,
       revokeTit: "", //撤回弹框标题
       amt: null, //认领弹框金额
       bankNameO: "", //认领弹框对方户名
@@ -430,16 +434,19 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
-    //其他付款认领/其他收款收回
+    //其他付款认领 1/其他收款收回 2
     claimCollect(type) {
       if (Object.keys(this.currRow).length !== 0) {
         if (type === 1) {
-          this.claimModal = true;
-          this.otherPayCus = true;
+          // this.claimModal = true;
+          // this.otherPayCus = true;
           this.claimTit = "其他付款认领";
-          this.claimedList(2);
+          this.amountType=2;
+          this.$refs.claimModal.open()
+          // this.claimedList(2);
         } else {
           if (
             this.currRow.paymentBalance == 0 ||
@@ -448,8 +455,10 @@ export default {
             this.$Message.error("其他收款余额为0无法收回!");
           } else {
             this.claimTit = "其他收款收回";
-            this.claimModal = true;
-            this.claimedList(1);
+            // this.claimModal = true;
+            this.amountType=1;
+            this.$refs.claimModal.open()
+            // this.claimedList(1);
           }
         }
       } else {
@@ -620,13 +629,21 @@ export default {
         endDate: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
-        orgid: this.BranchstoreId,
-        guestId: this.companyId,
-        size: this.page.size,
-        page: this.page.num - 1
+        orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
+        guestName: this.companyId.trim(),
       };
+      for (let key in obj) {
+        if (!obj[key]) {
+          Reflect.deleteProperty(obj, key);
+        }
+      }
+
+      let params = {}
+      params.page = this.page.num - 1
+      params.size = this.page.size
+      obj.guestName = this.companyId.trim()
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      findByDynamicQuery(obj).then(res => {
+      findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
@@ -802,7 +819,8 @@ export default {
   display: inline-block;
   border: 1px solid #e8eaec;
   flex: 1;
-  padding: 5px;
+  line-height: 24px;
+  padding:0 5px;
 }
 .vxe-table .vxe-cell {
   padding: 0;

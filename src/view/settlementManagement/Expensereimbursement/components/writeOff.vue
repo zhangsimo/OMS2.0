@@ -368,35 +368,43 @@
         //     );
         //   }
         // }
+        let enbleAjax=true;
         this.selectArr.map((row, index) => {
           let ygjzwhxye = row.paymentReturnBalance <= 0.01 ? row.payAmt : row.paymentReturnBalance
           if (ygjzwhxye < row.writeOffAmount) {
+            enbleAjax=false;
             return this.$Message.error(`第${index + 1}个单据因公借支核销金额大于因公借支未核销金额,不符合条件！`)
+          }
+          if(row.writeOffAmount<=0){
+            enbleAjax=false;
+            return this.$Message.error(`第${index + 1}个单据因公借支核销金额为零,不符合条件！`)
           }
         })
         const errMap = await this.$refs.vxtable.validate().catch(errMap => errMap)
         if (errMap) {
         } else {
-          let data = {
-            sourceDto: {
-              id: this.tableData[0].id,
-              rpAmt: this.totalfooter
-            },
-            wrtiteOffDtos: this.selectArr.map(el => {
-              return {id: el.id, rpAmt: el.writeOffAmount};
-            })
-          };
-          this.submitDis = true;
-          api.orderWriteOff2(data).then(res => {
-            if (res.code == 0) {
-              this.submitDis = false;
-              this.$message.success(res.data);
-              this.$parent.getQuery();
-              this.cancel();
-            } else {
-              this.submitDis = false;
-            }
-          });
+          if(enbleAjax){
+            let data = {
+              sourceDto: {
+                id: this.tableData[0].id,
+                rpAmt: this.totalfooter
+              },
+              wrtiteOffDtos: this.selectArr.map(el => {
+                return {id: el.id, rpAmt: el.writeOffAmount};
+              })
+            };
+            this.submitDis = true;
+            api.orderWriteOff2(data).then(res => {
+              if (res.code == 0) {
+                this.submitDis = false;
+                this.$message.success(res.data);
+                this.$parent.getQuery();
+                this.cancel();
+              } else {
+                this.submitDis = false;
+              }
+            });
+          }
         }
         // this.$refs.vxtable.validate(valid => {
         //   if (valid == true || valid === undefined) {

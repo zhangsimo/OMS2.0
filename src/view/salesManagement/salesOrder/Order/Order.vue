@@ -245,7 +245,13 @@ export default {
     saveLoadingF(a){
       this.saveLoading = a
     },
-    showOwen() {
+    showOwen(v) {
+      if (this.isAdd) {
+        this.$nextTick(()=>{
+          this.showSelf = !v;
+        })
+        return this.$Message.error("请先保存数据");
+      }
       tools.setSession("self", { salesOrder: this.showSelf });
       this.reset();
     },
@@ -254,8 +260,8 @@ export default {
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.right.$refs.planForm.offsetHeight;
         //获取左侧侧表格高度
-        this.$refs.OrderLeft.leftTableHeight = wrapH - 120;
-        this.$refs.right.rightTableHeight = wrapH - planFormH - 140;
+        this.$refs.OrderLeft.leftTableHeight = wrapH - 110;
+        this.$refs.right.rightTableHeight = wrapH - planFormH - 110;
       });
     },
     gitlistValue(){
@@ -300,6 +306,9 @@ export default {
     },
     //打开更多搜索
     openQueryModal() {
+      if (this.isAdd) {
+        return this.$Message.error("请先保存数据");
+      }
       // this.queryList = { showPerson: true };
       this.$refs.morequeryModal.openModal();
     },

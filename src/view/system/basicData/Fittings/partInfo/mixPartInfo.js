@@ -4,6 +4,7 @@ import { getCarBrandAll, getCarModel } from "_api/system/systemSetting/Initializ
 import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamineApi'
 
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
+import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
 
 import { getCarPartClass,getAllParts,getByManyCode,getAlreadyParts,savePartChange } from "_api/parts";
 import {pinyin} from "../../../../../utils/py";
@@ -78,6 +79,8 @@ export const mixPartInfo = {
         carTypesName: '',
         carTypetName: '',
         specVOS: [],//规格list
+        taxCalssName:'',//税收分类名称
+        taxCalssCode:'',//税收分类编码
       },
       ruleValidate: {
         qualityTypeId: [
@@ -103,6 +106,12 @@ export const mixPartInfo = {
         ],
         oemCode: [
           { required: true, validator: NumberA, trigger: 'blur' }
+        ],
+        taxCalssName: [
+          { required: true, message: '收税分类名称不能为空', trigger: 'change' }
+        ],
+        taxCalssCode: [
+          { required: true, message: '收税分类编码不能为空', trigger: 'change' }
         ]
       },
       qualityArr: [],//所有品质
@@ -225,8 +234,10 @@ export const mixPartInfo = {
         manyCode:[
           {required:true,message:"请输入多个配件编码",trigger:"blur"}
         ]
-      }
-    }
+      },
+      settleTypeList:{}
+
+  }
   },
   computed:{
     spellCode(){
@@ -271,6 +282,7 @@ export const mixPartInfo = {
     if(this.typepf.length==0){
       this.treeInit();
     }
+    this.getType();
   },
   methods: {
     async treeInit() {
@@ -387,6 +399,10 @@ export const mixPartInfo = {
       this.formValidate.customType = ""
       if (setData) {
         this.formValidate = setData;
+        this.formValidate.taxCalssName = this.formValidate.taxType || '';
+        if (this.formValidate.taxCalssName) {
+          this.changeclass(this.formValidate.taxCalssName)
+        }
         //赋值适用车型
         let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
         let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
@@ -628,6 +644,23 @@ export const mixPartInfo = {
     changeTab() {
       this.$refs.vxeTable.refreshColumn()
     },
+    //获取客户属性
+    async getType() {
+      let data = {};
+      //107票据类型
+      //106结算方式
+      data = ['CW00104'];
+      let res = await getDigitalDictionary(data);
+      if (res.code == 0) {
+        this.settleTypeList = res.data;
+      }
+    },
+    changeclass(v){
+      let objStr = (this.settleTypeList.CW00104 || []).filter(item => item.itemCode==v);
+      if(objStr.length>0){
+        this.$set(this.formValidate ,'taxCalssCode' , objStr[0].itemValueOne)
+      }
+    },
 
     //提交审批
     submit(name, auditSign) {
@@ -742,6 +775,9 @@ export const mixPartInfo = {
                 partRelevanceList.push(data)
               })
               objReq.partRelevanceList= partRelevanceList || []
+              //税收分类
+              objReq.taxType = this.formValidate.taxCalssName||"";
+
               this.saveFlag = true
               this.$emit('throwData', objReq)
               this.btnIsLoadding = false

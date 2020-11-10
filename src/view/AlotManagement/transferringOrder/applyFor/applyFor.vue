@@ -30,6 +30,9 @@
                 <Button @click="stamp" :disabled="(presentrowMsg === 0 && resId)||presentrowMsg === 7||presentrowMsg === 8 " class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
               </div>
               <div class="db">
+                <Button @click="exportForm" :disabled="(presentrowMsg === 0 && resId)||presentrowMsg === 7||presentrowMsg === 8 " class="mr10" v-has="'export'"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
+              </div>
+              <div class="db">
                 <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
               </div>
             </div>
@@ -87,17 +90,17 @@
                           :model="formPlan"
                           ref="formPlan"
                           :rules="ruleValidate"
-                          :label-width="120">
-                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem w400">
+                          :label-width="100">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
                         <Row >
-                          <Col span="22">
+                          <Col span="18">
                             <!--<Input placeholder="请选择调出方" v-model="formPlan.guestName" readonly disabled />-->
                             <allocation-cus placeholder="请选择调出方" :search-value="formPlan.guestName" @throwName="throwNameFun" :disabledProp="presentrowMsg !== 0 || buttonDisable"></allocation-cus>
                             <!-- <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
                               <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> -->
                           </Col>
-                          <Col span="2">
+                          <Col span="6">
                             <Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
                           </Col>
                         </Row>
@@ -107,16 +110,19 @@
                           <Option :disabled="item.isDisabled" v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
-                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
+                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem">
                         <DatePicker
                           type="datetime"
                           format="yyyy-MM-dd HH:mm:ss"
-                          style="width: 200px"
+                          style="width: 160px"
                           placeholder="请选择调拨申请日期"
                           :options="options1"
                           v-model="formPlan.orderDate"
                           :disabled="presentrowMsg !== 0 || buttonDisable"
                         ></DatePicker>
+                      </FormItem>
+                      <FormItem label="申请人：" prop="planner">
+                        <Input style="width: 184px" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
                       </FormItem>
                       <FormItem class="formItem" label="备注：" prop="remark">
                         <Tooltip :content="formPlan.remark" :disabled="(formPlan.remark||'').trim()==''">
@@ -129,10 +135,7 @@
                           <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(formPlan.remark||"").trim()}}</div>
                         </Tooltip>
                       </FormItem>
-                      <FormItem label="申请人：" prop="planner">
-                        <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
-                      </FormItem>
-                      <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
+                      <FormItem label="申请单号:" prop="planOrderNum">
                         <Tooltip :content="formPlan.serviceId">
                         <Input class="w200" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
                         </Tooltip>
@@ -241,9 +244,9 @@
                      <vxe-table-column  show-overflow="tooltip"
                        field="applyQty"
                        title="申请数量"
-                       :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
+                       :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}" width="100">
                     </vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="90"></vxe-table-column>
+                    <vxe-table-column  show-overflow="tooltip" field="remark" title="备注" :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="90"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="50"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -303,7 +306,7 @@
   } from "_api/purchasing/purchasePlan";
   import { TOKEN_KEY } from "@/libs/util";
   import Cookies from "js-cookie";
-  import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/} from "@/api/purchasing/purchasePlan";
+  import {upxlxsDBo/**编码品牌导入配件*/,upxlxsDBoInnerId/**内码导入配件*/,applyForExport/**导出*/} from "@/api/purchasing/purchasePlan";
   import AllocationCus from "../../../../components/allocation/allocationCus";
   import ChangeOrder from "./compontents/changeOrder";
   import { hideLoading, showLoading } from "@/utils/loading";
@@ -405,13 +408,15 @@
             columns: [
               {
                 title: '序号',
-                minWidth: 50,
-                type:'index'
+                width: 50,
+                type:'index',
+                resizable:true
               },
               {
                 title: '状态',
                 key: 'status',
-                minWidth: 70,
+                width: 70,
+                resizable:true,
                 render:(h,params) => {
                   // let Identity = JSON.parse(params.row.status ||{})
                   let name = params.row.status.name
@@ -421,38 +426,45 @@
               {
                 title: '调出方',
                 key: 'guestName',
-                minWidth: 80
+                width: 170,
+                resizable:true
               },
               {
                 title: '创建日期',
                 key: 'createTime',
-                minWidth: 120
+                width: 120,
+                resizable:true
               },
               {
                 title: '申请人',
                 key: 'createUname',
-                minWidth: 100
+                width: 100,
+                resizable:true
               },
               {
                 title: '申请单号',
                 key: 'serviceId',
-                minWidth: 120
+                width: 120,
+                resizable:true
               },
               {
                 title: '提交人',
                 key: 'commitUname',
-                minWidth: 100
+                width: 100,
+                resizable:true
               },
               {
                 title: '提交日期',
                 align:'center',
                 key: 'commitDate',
-                minWidth: 170
+                width: 170,
+                resizable:true
               },
               {
                 title: '打印次数',
                 key: 'printing',
-                minWidth: 70
+                width: 70,
+                resizable:true
               }
             ],
             tbdata: []
@@ -825,6 +837,12 @@
           this.openwin(routeUrl.href)
           this.leftgetList()
         },
+        exportForm(){
+          if(!this.mainId){
+            return this.$Message.error("请选择需要导出的信息")
+          }
+          location.href=applyForExport(this.rowId)
+        },
         //右侧表格复选框选中
         selectChange(msg){
           this.checkboxArr = msg.selection
@@ -985,14 +1003,14 @@
             params.startTime = this.selectArr[0]
             params.endTime = this.selectArr[1]
           }
-          if(this.moreArr.createData){
+          if(this.moreArr.createData&&this.moreArr.createData[0]){
             params.startTime = this.moreArr.createData[0] + " 00:00:00"
             params.endTime = this.moreArr.createData[1] + " 23:59:59"
           }
           if(this.purchaseType !== '9999'){
             params.status = this.purchaseType
           }
-          if(this.moreArr.submitData){
+          if(this.moreArr.submitData&&this.moreArr.submitData[0]){
             params.commitDateStart = this.moreArr.submitData[0] + " 00:00:00"
             params.commitDateEnd = this.moreArr.submitData[1] + " 23:59:59"
           }
@@ -1260,9 +1278,9 @@
             let planBtnH = this.$refs.planBtn.offsetHeight;
             // let planPageH = this.$refs.planPage.offsetHeight;
             //获取左侧侧表格高度
-            this.leftTableHeight = wrapH - 144;
+            this.leftTableHeight = wrapH - 104;
             //获取右侧表格高度
-            this.rightTableHeight = wrapH - planFormH - planBtnH - 38 - 64;
+            this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
           });
         },
 
@@ -1344,9 +1362,9 @@
           this.getDomHeight();
         }, 0);
 
-        window.onresize = () => {
-          this.getDomHeight();
-        };
+        // window.onresize = () => {
+        //   this.getDomHeight();
+        // };
           // this.leftgetList();
           this.warehouse();
           // this.getArrayParams();
@@ -1362,7 +1380,7 @@
 </style>
 <style scoped>
   .con-box{
-    height: 700px;
+    /*height: 700px;*/
   }
   .w640{
     width: 620px;

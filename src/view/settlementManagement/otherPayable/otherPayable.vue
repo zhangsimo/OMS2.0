@@ -24,12 +24,12 @@
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}</Option>
+              >{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select
+            <!-- <Select
               v-model="companyId"
               class="w150"
               clearable
@@ -40,7 +40,8 @@
               @on-change="query"
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select> -->
+            <Input type="text" class="h30 w200 mr10" v-model="companyId" />
           </div>
           <div class="db ml20">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -278,34 +279,35 @@
       </div>
     </section>
     <!-- 认领弹框 -->
-    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
-      <span>往来单位：</span>
-      <Select
-          v-model="companyId"
-          class="w150"
-          clearable
-          filterable
-          remote
-          :loading="remoteloading"
-          :remote-method="getOne"
-          @on-change="query"
-            >
-              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
-      <span class="ml10">对方户名：</span>
-      <Input v-model="bankNameO" class="w100" />
-      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
-        <i class="iconfont iconchaxunicon"></i>
-        <span>查询</span>
-      </button>
-      <Button class="ml10" v-if="claimTit == '其他收款认领'" @click="claimPay">认领</Button>
-      <Button class="ml10" v-else @click="claimCollection">支出认领</Button>
-      <claim ref="claim" @selection="selection" />
-      <!--<claimGuest ref="claimGuest" />-->
-      <div slot="footer"></div>
-    </Modal>
+<!--    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">-->
+<!--      <span>往来单位：</span>-->
+<!--      <Select-->
+<!--          v-model="companyId"-->
+<!--          class="w150"-->
+<!--          clearable-->
+<!--          filterable-->
+<!--          remote-->
+<!--          :loading="remoteloading"-->
+<!--          :remote-method="getOne"-->
+<!--          @on-change="query"-->
+<!--            >-->
+<!--              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+<!--            </Select>-->
+<!--      <span class="ml10">金额：</span>-->
+<!--      <InputNumber v-model="amt" class="w50" />-->
+<!--      <span class="ml10">对方户名：</span>-->
+<!--      <Input v-model="bankNameO" class="w100" />-->
+<!--      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">-->
+<!--        <i class="iconfont iconchaxunicon"></i>-->
+<!--        <span>查询</span>-->
+<!--      </button>-->
+<!--      <Button class="ml10" v-if="claimTit == '其他收款认领'" @click="claimPay">认领</Button>-->
+<!--      <Button class="ml10" v-else @click="claimCollection">支出认领</Button>-->
+<!--      <claim ref="claim" @selection="selection" />-->
+<!--      &lt;!&ndash;<claimGuest ref="claimGuest" />&ndash;&gt;-->
+<!--      <div slot="footer"></div>-->
+<!--    </Modal>-->
+    <ClaimModal ref="claimModal" :titleName="claimTit" :amountType="amountType"></ClaimModal>
     <!--点击认领后弹框-->
     <claimGuest ref="claimGuest" />
     <!-- 撤回弹框 -->
@@ -357,6 +359,7 @@ import {
 
 import moment from "moment";
 import VoucherInput from "../fundsManagement/claimWrite/components/components/voucherInput";
+import ClaimModal from "./components/ClaimModal";
 export default {
   name: "settlementManagementOtherPayable",
   components: {
@@ -366,7 +369,8 @@ export default {
     settlement,
     Record,
     claimGuest,
-    OtherPayment
+    OtherPayment,
+    ClaimModal
   },
   data() {
     return {
@@ -378,7 +382,7 @@ export default {
       },
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
-      Branchstore: [{ id: 0, name: "全部" }], //分店名称
+      Branchstore: [{ id: 0, name: "全部",shortName:"全部" }], //分店名称
       company: [], //往来单位数组
       companyId: "", //往来单位
       currRow: {}, //选中行
@@ -388,6 +392,7 @@ export default {
       revokeTit: "", //撤回弹框标题
       amt: null, //认领弹框金额
       bankNameO: null, //认领弹框对方户名
+      amountType:1,
       reason: "", //撤销原因
       tableData: [], //表格信息
       page: {
@@ -460,6 +465,7 @@ export default {
     },
     //查询
     query() {
+      this.page.num = 1
       this.getQuery();
     },
     //日期组件改变时值
@@ -478,12 +484,14 @@ export default {
           ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
         orgid: this.BranchstoreId==0?"":this.BranchstoreId,
-        guestId: this.companyId,
-        size: this.page.size,
-        page: this.page.num - 1
+        guestName: this.companyId.trim()
       };
+      let params = {
+        page: this.page.num - 1,
+        size: this.page.size
+      }
       showLoading(".loadingClass", "数据加载中，请勿操作")
-      findByDynamicQuery(obj).then(res => {
+      findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
           // console.log(res.data.content)
@@ -509,7 +517,7 @@ export default {
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
           orgid: this.BranchstoreId==0?"":this.BranchstoreId,
-          guestId: this.companyId,
+          guestName: this.companyId,
           pagesize: this.page.total,
         };
         let params="";
@@ -522,16 +530,23 @@ export default {
     //其他收款认领/其他付款支出认领
     claimCollect(type) {
       if (type === 1) {
-        this.claimModal = true;
+        // this.claimModal = true;
         this.claimTit = "其他收款认领";
-        this.claimedList(1);
+        this.amountType=1;
+        this.$refs.claimModal.open();
+        // this.claimedList(1);
       } else {
-        if (Object.keys(this.currRow).length !== 0) {
-          this.claimModal = true;
+        if (
+          Object.keys(this.currRow).length !== 0 &&
+          this.currRow.paymentNo &&
+          !this.currRow.expenseClaimAmount) {
+          // this.claimModal = true;
           this.claimTit = "其他付款支出认领";
-          this.claimedList(2);
+          this.amountType=2;
+          this.$refs.claimModal.open();
+          // this.claimedList(2);
         } else {
-          this.$message.error("请选择数据！");
+          this.$message.error("请选择有其他收款支出单号且未支出认领的数据！");
         }
       }
     },
@@ -840,7 +855,8 @@ export default {
   display: inline-block;
   border: 1px solid #e8eaec;
   flex: 1;
-  padding: 5px;
+  line-height: 24px;
+  padding:0 5px;
 }
 .vxe-table .vxe-cell {
   padding: 0;

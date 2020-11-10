@@ -54,8 +54,6 @@
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="orgName" width="100" title="门店"></vxe-table-column>
-            <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
             <vxe-table-column field="guestName" width="100" title="往来单位"></vxe-table-column>
             <vxe-table-column field="serviceTypeName" width="80" title="业务类型"></vxe-table-column>
             <vxe-table-column field="reconciliationAmt" width="80" title="对账金额"></vxe-table-column>
@@ -68,6 +66,8 @@
               :edit-render="{ name: 'input', attrs: { type: 'number' } }"
             ></vxe-table-column>
             <vxe-table-column field="unAmtLeft" title="剩余未收/未付" width="140"></vxe-table-column>
+            <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
+            <vxe-table-column field="orgName" width="100" title="门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -189,6 +189,7 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
+      value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2?1:value.auxiliaryTypeCode //辅助核算选中哪一个
       if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
         value.isAuxiliaryAccounting=0 //是否辅助核算类
       }else{
@@ -361,6 +362,7 @@ export default {
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
             rpAmt: el.rpAmt,
+            thisClaimedAmt:el.rpAmt,
             unAmtLeft: el.unAmtLeft,
             mateAccountName:el.mateAccountName,
             mateAccountCode:el.mateAccountCode,

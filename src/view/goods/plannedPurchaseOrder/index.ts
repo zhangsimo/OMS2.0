@@ -15,7 +15,6 @@ import FeeRegistration from "./components/FeeRegistration.vue";
 import ProcurementModal from "./components/ProcurementModal.vue";
 import AdjustModel from "./components/AdjustModel.vue";
 import TabsModel from "./components/TabsModel.vue";
-import PrintModel from "./components/print.vue";
 import StatusModal from "./components/checkApprovalModal.vue";
 import GoodCus from "_c/allocation/GoodCus.vue";
 
@@ -82,13 +81,15 @@ export default class PlannedPurchaseOrder extends Vue {
     columns: [
       {
         title: "序号",
-        minWidth: 50,
-        type: "index"
+        width: 50,
+        type: "index",
+        resizable:true
       },
       {
         title: "状态",
         key: "billStatusId",
-        minWidth: 80,
+        width: 80,
+        resizable:true,
         render: (h, p) => {
           let val: string = p.row.billStatusId.name; // orderState[p.row.billStatusId];
           return h("span", val);
@@ -97,7 +98,8 @@ export default class PlannedPurchaseOrder extends Vue {
       {
         title: "供应商",
         key: "guestName",
-        minWidth: 170
+        width: 170,
+        resizable:true
       },
       // {
       //   title: "采购员",
@@ -107,33 +109,39 @@ export default class PlannedPurchaseOrder extends Vue {
       {
         title: "订单单号",
         key: "serviceId",
-        minWidth: 140
+        width: 140,
+        resizable:true
       },
       {
         title: "创建人",
         key: "createUname",
-        minWidth: 120
+        width: 120,
+        resizable:true
       },
       {
         title: "创建日期",
         key: "createTime",
-        minWidth: 200
+        width: 200,
+        resizable:true
       },
       {
         title: "打印次数",
         key: "printCount",
-        minWidth: 100
+        width: 100,
+        resizable:true
       },
       {
         title: "提交人",
         key: "auditor",
-        minWidth: 100
+        width: 100,
+        resizable:true
       },
       {
         title: "提交日期",
         align: "center",
         key: "auditDate",
-        minWidth: 140
+        width: 140,
+        resizable:true
       }
     ],
     tbdata: new Array(),
@@ -714,6 +722,13 @@ export default class PlannedPurchaseOrder extends Vue {
     a.click(); //执行当前对象
     document.body.removeChild(a)
   }
+  //导出
+  private exportForm(){
+    if(this.selectLeftItemId=="" || this.selectLeftItemId==undefined){
+      return this.$Message.error("请选择要导出的数据")
+    }
+    location.href=api.plannedPurchaseExport(this.selectLeftItemId)
+  }
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
@@ -833,6 +848,9 @@ export default class PlannedPurchaseOrder extends Vue {
         if (columnIndex === 0) {
           return "合计";
         }
+        if (columnIndex === 3) {
+          return `共${(data||[]).length}条`;
+        }
         if (
           [
             "orderQty",
@@ -910,9 +928,9 @@ export default class PlannedPurchaseOrder extends Vue {
       let planBtnH = planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 70;
+      this.leftTableHeight = wrapH - 100;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 78;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
     });
   }
 

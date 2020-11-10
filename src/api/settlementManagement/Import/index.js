@@ -71,9 +71,13 @@ export function stockExport(params){
 export function stockReturnExport(params){
   return `${api.omsOrder}/enterMain/export/findEnterMain?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
-//应收应付 导出汇总
+//应收应付 导出汇总/导出全部
 export function payColExportAll(params){
   return `${api.omsSettle}/receivable/payable/export/getPage?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//应收应付 导出勾选
+export function payColExportSelect(params){
+  return `${api.omsSettle}/receivable/payable/export/getdto?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
 //应收应付 导出单据明细
 export function payColExportDetail(params){
@@ -110,4 +114,18 @@ export function otherPayableExport(params){
 //费用报销 导出
 export function expensereimbursementExport(params){
   return `${api.omsSettle}/omsFinanceCostReimbursement/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//每日资金审核 导出
+export function exportDailyFundAudit(params){
+  return `${api.omsSettle}/omsFinanceAccountEverydayAudit/export/AllAudit?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+
+//价格管理 最低销价  导出
+export function priceExport(data){
+  return `${api.wmsApi}/sellPricePart/export/findPartPrice?${data}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+
+//价格管理 非最低销价  导出
+export function priceExport2(data){
+  return `${api.wmsApi}/sellPricePart/export/findPartPriceList?${data}access_token=${Cookies.get(TOKEN_KEY)}`
 }

@@ -38,7 +38,7 @@
             v-for="option in guseData.lists"
             :value="option.id"
             :key="option.id"
-          >{{ option.fullName }}</Option>
+          >{{ option.shortName }}</Option>
         </Select>
       </FormItem>
       <FormItem v-if="type != 4" label="申请单号:">
@@ -146,6 +146,8 @@ import { getSales } from "@/api/salesManagment/salesOrder";
 import { creat } from "@/view/settlementManagement/components";
 // @ts-ignore
 import {getBrandList,getWares} from "@/view/reportForm/until";
+// @ts-ignore
+import { transferringFindForAllot } from "_api/purchasing/purchasePlan";
 
 @Component({
   components: {
@@ -266,10 +268,14 @@ export default class MoreSearch extends Vue {
       return;
     }
     this.guseData.loading = true;
-    const res: any = await api.getMoteSupplier(query);
+    let data:any={};
+    data.page=0;
+    data.size=1000;
+    data.name=query;
+    const res: any = await transferringFindForAllot(data);
     this.guseData.loading = false;
     if (res.code == 0) {
-      this.guseData.lists = res.data;
+      this.guseData.lists = res.data.content||[];
     }
   }
 

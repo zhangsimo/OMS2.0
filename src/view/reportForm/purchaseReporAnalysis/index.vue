@@ -36,9 +36,6 @@
     },
     methods: {
       tabName() {
-        if(this.$refs.panne.search.enterDate[0]==""){
-          return this.$message.error("出库日期必须选择！")
-        }
         let data={}
         for (let key in this.$refs.panne.search) {
           if (this.$refs.panne.search[key]) {
@@ -51,12 +48,15 @@
                   moment(this.$refs.panne.search["enterDate"][1]).format("YYYY-MM-DD") +
                   " 23:59:59";
               }
-              this.$refs.panne.search.guestPart == true ? this.$refs.panne.search.showPerson = 1 : this.$refs.panne.search.showPerson = 0
+            }else if(key == "supplierTypes"){
+              data.supplierTypes=Array.from(new Set(this.$refs.panne.search.supplierTypes.flat()));
             } else {
               data[key] = this.$refs.panne.search[key];
             }
           }
         }
+        data.guestPart == true ? data.showPerson = 1 : data.showPerson = 0
+        // console.log(data.supplierTypes,11111)
         switch (this.tabNameKey) {
           case "tabOne":
             this.search1(data);

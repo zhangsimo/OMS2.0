@@ -4,7 +4,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
+            <!--<span>快速查询：</span>-->
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
@@ -33,7 +33,7 @@
             <Input type="text" class="w200" v-model="company" readonly clearable/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
-          <div class="db">
+          <div class="db mr10">
             <span>类型：</span>
             <Select v-model="typeName" style="width:200px" @on-change="type">
               <Option
@@ -44,21 +44,29 @@
               </Option>
             </Select>
           </div>
+          <div class="db mr10">
+            <Input
+              v-model="partCodeOrName"
+              placeholder="配件编码/名称"
+              class="w200"
+              clearable
+            />
+          </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="changePage(1)">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>
-              </div>
-            </Poptip>
-          </div>
+          <!--<div class="db ml10">-->
+            <!--<Poptip placement="bottom">-->
+              <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+              <!--<div slot="content">-->
+                <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
+                <!--<button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
+              <!--</div>-->
+            <!--</Poptip>-->
+          <!--</div>-->
         </div>
       </div>
     </section>
@@ -104,6 +112,10 @@
         ></Table>
       </div>
     </section>
+    <!--打印 销售出库-->
+    <stockPrint ref="stockPrint"></stockPrint>
+    <!--打印 销售退货-->
+    <stockReturnPrint ref="stockReturnPrint"></stockReturnPrint>
     <selectDealings ref="selectDealings" @getOne="getOne"/>
   </div>
 </template>
@@ -111,12 +123,16 @@
 <script>
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import selectDealings from "./components/SelectTheCustomer";
+  //打印 销售出库
+  import stockPrint from "./components/printShow/stockPrint";
+  import stockReturnPrint from "./components/printShow/stockReturnPrint";
   import {creat} from "./../components";
   import {
     getWarehousingList,
     getWarehousingPart,
     getOutStockList,
-    getOutStockPart
+    getOutStockPart,
+    getAllList
   } from "@/api/bill/saleOrder";
   import {
     stockExport/**销售出库 导出全部及导出勾选*/,
@@ -130,7 +146,9 @@
     name: "billStock",
     components: {
       quickDate,
-      selectDealings
+      selectDealings,
+      stockPrint,//打印 销售出库
+      stockReturnPrint,//打印 销售退货
     },
     data() {
       return {
@@ -147,6 +165,7 @@
         total: {},//合计数据对象
         model1: "",
         modal1: false,
+        partCodeOrName:'',
         columns: [
           {
             type: 'selection',
@@ -160,6 +179,34 @@
             width: 40,
             className: "tc",
             resizable: true,
+          },
+          {
+            title: "操作",
+            width: 60,
+            className: "tc",
+            resizable: true,
+            render:(h,params)=>{
+              return h('div', [
+                h('span', {
+                  style: {
+                    color: "#40a6ff",
+                    cursor: "pointer"
+                  },
+                  domProps: {
+                    title: "打印"
+                  },
+                  on:{
+                    click:async ()=>{
+                      if(params.row.enterTypeIdName=="销售出库"){
+                        this.$refs.stockPrint.openModal(params.row)
+                      }else if(params.row.enterTypeIdName=="销售退货"){
+                        this.$refs.stockReturnPrint.openModal(params.row)
+                      }
+                    }
+                  }
+                }, "打印")
+              ])
+            }
           },
           {
             title: "分店名称",
@@ -478,7 +525,7 @@
             resizable: true,
             width: 150,
             render: (h, params) => {
-              return h("span", params.row.noTaxPrice.toFixed(2));
+              return h("span", params.row.noTaxPrice);
             }
           },
           {
@@ -558,13 +605,17 @@
         data1: [],
         typelist: [
           {
+            value:'0',
+            label:'全部'
+          },
+          {
             value: "050202",
             label: "销售出库"
           },
           {
             value: "050102",
             label: "销售退货"
-          }
+          },
         ],
         typeName: "050202",
         company: "", //往来单位
@@ -658,9 +709,9 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return parseFloat(prev.toFixed(2)) + parseFloat(curr.toFixed(2))
+                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
                 } else {
-                  return prev;
+                  return Math.round((prev + Number.EPSILON) * 100) / 100;
                 }
               }, 0);
               sums[key] = {
@@ -780,87 +831,6 @@
         this.getGeneral()
       },
       // 总表查询
-      getGeneralAll(param) {
-        this.data1 = [];
-        let obj = {
-          orgid: this.model1 == "0" ? "" : this.model1,
-          guestId: this.company ? this.companyId : "",
-          enterTypeId: this.typeName
-        };
-        let params = {
-          size: param.size,
-          page: param.num - 1
-        }
-        if (this.typeName === "050202") {
-          obj.outDateStart = this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : ""
-          obj.outDateEnd = this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : ""
-          if (obj.outDateEnd) {
-            obj.outDateEnd = obj.outDateEnd.split(' ')[0] + " 23:59:59"
-          }
-          getOutStockList(params, obj).then(res => {
-            if (res.data.vos.length !== 0) {
-              res.data.vos.map((item, index) => {
-                item.index = index + 1;
-                item.accountSign = item.billStatusId ? "已出库" : "草稿";
-                item.orderType = item.orderType
-                  ? item.orderType === 1
-                    ? "电商订单"
-                    : "华胜订单"
-                  : "销售开单";
-              });
-              this.data = res.data.vos;
-              if (this.data.length == params.size) {
-                this.data = res.data.vos;
-                this.$refs.summary.exportCsv({
-                  types: ["csv"],
-                  filename: "销售出库汇总",
-                  columns: this.columns,
-                  data: res.data.vos,
-                });
-              }
-            } else {
-              this.data = [];
-            }
-          });
-        } else if (this.typeName === "050102") {
-          (obj.enterDateStart = this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : ""),
-            (obj.enterDateEnd = this.value[1]
-              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
-              : ""),
-            getWarehousingList(params, obj).then(res => {
-              if (res.data.vos.length !== 0) {
-                res.data.vos.map((item, index) => {
-                  item.index = index + 1;
-                  item.accountSign = item.billStatusId ? "已入库" : "草稿";
-                  item.orderType = item.orderType
-                    ? item.orderType === 1
-                      ? "电商订单"
-                      : "华胜订单"
-                    : "销售开单";
-                });
-                this.data = res.data.vos;
-                if (this.data.length == params.size) {
-                  this.data = res.data.vos;
-                  this.$refs.summary.exportCsv({
-                    types: ["csv"],
-                    filename: "销售出库汇总",
-                    columns: this.columns,
-                    data: res.data.vos,
-                  });
-                }
-              } else {
-                this.data = [];
-              }
-            });
-        }
-      },
-      // 总表查询
       getGeneral() {
         this.data1 = [];
         let obj = {
@@ -871,6 +841,9 @@
         let params = {
           size: this.page.size,
           page: this.page.num - 1
+        }
+        if(this.partCodeOrName){
+          obj.partCode = this.partCodeOrName;
         }
         if (this.typeName === "050202") {
           obj.outDateStart = this.value[0]
@@ -925,11 +898,44 @@
                 });
                 this.data = res.data.vos;
                 this.page.total = res.data.TotalElements;
-                // this.total=res.data.AllotOutMainVO
               } else {
                 this.data = [];
               }
             });
+        }else if (this.typeName === "0"){
+          obj.outDateStart = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          obj.outDateEnd = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          if (obj.outDateEnd) {
+            obj.outDateEnd = obj.outDateEnd.split(' ')[0] + " 23:59:59"
+          }
+          params.orderTypeId = this.typeName
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          getAllList(params, obj).then(res => {
+            if (res.data.vos.length !== 0) {
+              res.data.vos.map((item, index) => {
+                item.index = index + 1;
+                item.accountSign = item.billStatusId ? "已出库" : "草稿";
+                item.orderType = item.orderType
+                  ? item.orderType === 1
+                    ? "电商订单"
+                    : "华胜订单"
+                  : "销售开单";
+              });
+              this.data = res.data.vos;
+              this.page.total = res.data.TotalElements;
+              // this.total=res.data.AllotOutMainVO
+              hideLoading()
+            } else {
+              hideLoading()
+              this.data = [];
+            }
+          }).catch(e => {
+            hideLoading()
+          });
         }
       },
       // 选中总表查询明细
