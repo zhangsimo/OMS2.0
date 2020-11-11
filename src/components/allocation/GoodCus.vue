@@ -13,8 +13,6 @@
       clearable
       @on-clear="clearFun"
     />
-    <!--@focus="handleFocus"-->
-    <!--@blur="handleBlur"-->
     <transition name="el-zoom-in-top">
       <div ref="popper" class="el-select-menu-wrap w200 fs12"  v-show="isLayer">
         <el-scrollbar
