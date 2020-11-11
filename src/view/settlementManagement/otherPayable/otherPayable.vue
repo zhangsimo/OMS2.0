@@ -278,35 +278,6 @@
         <Record ref="Record" :serviceId="serviceId" :currRow="currRow" @Message="getMessage" />
       </div>
     </section>
-    <!-- 认领弹框 -->
-<!--    <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">-->
-<!--      <span>往来单位：</span>-->
-<!--      <Select-->
-<!--          v-model="companyId"-->
-<!--          class="w150"-->
-<!--          clearable-->
-<!--          filterable-->
-<!--          remote-->
-<!--          :loading="remoteloading"-->
-<!--          :remote-method="getOne"-->
-<!--          @on-change="query"-->
-<!--            >-->
-<!--              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-<!--            </Select>-->
-<!--      <span class="ml10">金额：</span>-->
-<!--      <InputNumber v-model="amt" class="w50" />-->
-<!--      <span class="ml10">对方户名：</span>-->
-<!--      <Input v-model="bankNameO" class="w100" />-->
-<!--      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">-->
-<!--        <i class="iconfont iconchaxunicon"></i>-->
-<!--        <span>查询</span>-->
-<!--      </button>-->
-<!--      <Button class="ml10" v-if="claimTit == '其他收款认领'" @click="claimPay">认领</Button>-->
-<!--      <Button class="ml10" v-else @click="claimCollection">支出认领</Button>-->
-<!--      <claim ref="claim" @selection="selection" />-->
-<!--      &lt;!&ndash;<claimGuest ref="claimGuest" />&ndash;&gt;-->
-<!--      <div slot="footer"></div>-->
-<!--    </Modal>-->
     <ClaimModal ref="claimModal" :titleName="claimTit" :amountType="amountType"></ClaimModal>
     <!--点击认领后弹框-->
     <claimGuest ref="claimGuest" />

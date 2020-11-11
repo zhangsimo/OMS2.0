@@ -754,9 +754,12 @@ export default {
       data.name=this.accountingName
       //参数
       let res=await getOutStaff(params,data)
-      console.log(res)
       if(res.code===0){
         this.AssistTableDataOther=res.data.content
+        this.AssistTableDataOther.map(v => {
+          v.itemCode = v.code
+          v.itemName = v.name
+        })
         this.outStaff.page.total=res.data.totalElements
       }
     },
@@ -822,10 +825,13 @@ export default {
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row.itemName;
-      this.auxiliaryTypeCode = row.dictCode;
+      if(this.dictName == '外部员工'){
+        this.auxiliaryTypeCode = "CW00118";
+      }else{
+        this.auxiliaryTypeCode = row.dictCode;
+      }
       this.auxiliaryCode=row.itemCode;
-      this.voucherItem = {};
-      // console.log(row)
+      this.voucherItem = row;
     },
     //新增辅助核算名称保存
     addAuxiliary() {
