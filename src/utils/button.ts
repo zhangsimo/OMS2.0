@@ -8,7 +8,7 @@ export function rightButtonShow() {
     sessionStorage.removeItem('btnContext')
     return
   }
-  VOSID = VOSID.filter(el => el.name.length == 4)
+  VOSID = VOSID.filter(el => el.name.length <=6)
   buttons = VOSList.filter(item => item.parentId == VOSID[0].id)
   let arr: any = []
   if (buttons.length > 0) {
