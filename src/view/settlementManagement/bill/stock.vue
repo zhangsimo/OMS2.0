@@ -940,7 +940,7 @@
       },
       // 选中总表查询明细
       election(row) {
-        if (this.typeName === "050102") {
+        if (this.typeName === "050102" || row.enterTypeId=="050102") {
           getWarehousingPart({mainId: row.id}).then(res => {
             // console.log(res);
             if (res.data.length !== 0) {

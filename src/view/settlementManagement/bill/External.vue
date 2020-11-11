@@ -980,7 +980,8 @@
       },
       // 选中总表查询明细
       election(row) {
-        if (this.type === "050201") {
+        //console.log(row,11111)
+        if (this.type === "050201" || row.enterTypeId=="050201") {
           getOutStockPart({mainId: row.id}).then(res => {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {

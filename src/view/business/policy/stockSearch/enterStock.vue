@@ -70,7 +70,7 @@
             :loading="outLoading"
             size="mini"
             :data="selfShopStock">
-            <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
+            <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
             <vxe-table-column field="partCode" title="配件编码" width="90"></vxe-table-column>
             <vxe-table-column field="partName" title="配件名称" width="90"></vxe-table-column>
             <vxe-table-column field="partBrand" title="品牌" width="70"></vxe-table-column>
@@ -161,8 +161,8 @@
               :data="contentOne.dataOne"
               show-footer
               :footer-method="handleSummary">
-              <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
-              <vxe-table-column field="enterTypeId" title="入库类型" width="66"></vxe-table-column>
+              <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+              <vxe-table-column field="enterTypeId" title="入库类型" width="70"></vxe-table-column>
               <vxe-table-column field="partCode" title="配件编码" width="90"></vxe-table-column>
               <vxe-table-column field="partName" title="配件名称" width="90"></vxe-table-column>
 
@@ -174,9 +174,9 @@
               </vxe-table-column>
               <vxe-table-column field="enterMan" title="入库人" width="60">
               </vxe-table-column>
-              <vxe-table-column field="enterQty" title="入库数量" width="60">
+              <vxe-table-column field="enterQty" title="入库数量" width="68">
               </vxe-table-column>
-              <vxe-table-column field="enterPrice" title="入库单价" width="60">
+              <vxe-table-column field="enterPrice" title="入库单价" width="70">
                 <template v-slot="{row}">
                   {{(row.enterPrice||0).toFixed(2)}}
                 </template>
@@ -186,7 +186,7 @@
                   {{(row.enterAmt||0).toFixed(2)}}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="taxRate" title="税率" width="40">
+              <vxe-table-column field="taxRate" title="税率" width="50">
               </vxe-table-column>
               <vxe-table-column field="noTaxPrice" title="不含税单价" width="80">
                 <template v-slot="{row}">
