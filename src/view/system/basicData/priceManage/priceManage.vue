@@ -24,6 +24,11 @@
             <Button class="mr10 w90" :disabled="priceEnableBool" @click="priceEnableFun">
               <span class="center">{{priceEnable}}</span>
             </Button>
+            <Button class="mr10 w90" @click="importModule(1)" v-has="'importMore'">
+                <span class="center">
+                  <Icon type="md-add" />导入
+                </span>
+            </Button>
           </div>
           <vxe-table
             class="level"
@@ -161,7 +166,7 @@
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="importModule">
+              <Button :disabled="disabled" class="mr10 w90" @click="importModule(0)">
                 <span class="center">
                   <Icon type="md-add" />导入
                 </span>
@@ -821,10 +826,15 @@ export default {
       }
     },
     // 导入模板
-    importModule() {
-      this.rowPriceManege.name == "最低售价"
-        ? (this.impirtUrl.downId = "2600000000")
-        : (this.impirtUrl.downId = "2700000000");
+    importModule(type) {
+      if(type){
+        this.impirtUrl.downId = "3700000000"
+        this.impirtUrl.upUrl = api.morePriceUrl
+      }else{
+        this.rowPriceManege.name == "最低售价"
+          ? (this.impirtUrl.downId = "2600000000")
+          : (this.impirtUrl.downId = "2700000000");
+      }
       this.$refs.imp.openModal();
     },
     // 翻页-配件价格
