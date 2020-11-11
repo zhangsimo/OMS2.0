@@ -43,25 +43,29 @@
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[3].accountNo}}</div>
+                >{{accountData[3].accountNo}}
+                </div>
               </Col>
               <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[0].accountNo}}</div>
+                >{{accountData[2].accountNo}}
+                </div>
               </Col>
               <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[1].accountNo}}</div>
+                >{{accountData[0].accountNo }}
+                </div>
               </Col>
               <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[2].accountNo}}</div>
+                >{{accountData[1].accountNo}}
+                </div>
               </Col>
             </Row>
             <Row>
@@ -72,25 +76,29 @@
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[3].accountSumAmt}}</div>
+                >{{accountData[3].accountSumAmt}}
+                </div>
               </Col>
               <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[0].accountSumAmt}}</div>
+                >{{accountData[2].accountSumAmt}}
+                </div>
               </Col>
               <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[1].accountSumAmt}}</div>
+                >{{accountData[0].accountSumAmt}}
+                </div>
               </Col>
               <Col span="5">
                 <div
                   style="border:1px solid #dddddd;line-height:40px"
                   class="tc h40"
-                >{{accountData[2].accountSumAmt}}</div>
+                >{{accountData[1].accountSumAmt}}
+                </div>
               </Col>
             </Row>
             <div class="db mt10 info" v-if="infoBase.billingType.value==0">
@@ -197,16 +205,36 @@
     </Modal>
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
-        <span class="mr5">门店</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="store" />
-        <span class="mr5">单据编号</span>
-        <Input type="text" readonly class="w180 mr15 tc" :value="bill" />
-        <span class="mr5">业务类型</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="business" />
-        <span class="mr5">往来单位信息</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo" />
-        <span class="mr5">单据日期</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="billDate" />
+        <div class="db h20">
+          <span class="mr5">门店</span>
+          <Tooltip :content="store" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="store"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">单据编号</span>
+          <Tooltip :content="bill" max-width="200">
+            <Input type="text" readonly class="w180 mr15 tc" :value="bill"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">业务类型</span>
+          <Tooltip :content="business" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="business"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">往来单位信息</span>
+          <Tooltip :content="thiscompanyInfo" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">单据日期</span>
+          <Tooltip :content="billDate" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="billDate"/>
+          </Tooltip>
+        </div>
       </div>
       <Table
         :columns="Reconciliationlist"
@@ -433,6 +461,11 @@ export default {
         {
           title: "前期未对账金额",
           key: "noAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "本次不对账数量",
+          key: "thisNoAccountQty",
           className: "tc"
         },
         {

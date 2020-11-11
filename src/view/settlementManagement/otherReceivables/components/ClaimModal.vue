@@ -201,6 +201,10 @@
         if(this.titleName=="其他收款收回" && (this.thisClaimedAmtSum>this.$parent.currRow.paymentClaimAmt)){
           return this.$Message.error("本次认领金额不可大于本次申请单认领金额")
         }
+        if(this.titleName=="其他付款认领" && this.fund==""){
+          this.$message.error('款项分类不可为空')
+          return
+        }
         if (flag) {
           this.$message.error('认领金额输入错误，不可为空')
           return

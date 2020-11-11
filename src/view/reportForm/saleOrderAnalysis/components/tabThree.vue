@@ -9,6 +9,8 @@
       show-footer
       auto-resize
       resizable
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
+      @sort-change="sortMethod"
       :footer-method="footerMethod"
       :data="tableData"
     >
@@ -16,12 +18,12 @@
       <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="partBrandCode" title="品牌编码" width="90"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="partBrand" title="品牌名称" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="sellQty" title="销售数量" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="sellAmt" title="销售金额" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="rtnableQty" title="退货数量" width="90"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="rtAmt" title="退货金额" width="100"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="trueQty" title="实销数量" width="110"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="trueAmt" title="实销金额" width="110"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="sellQty" remote-sort title="销售数量" width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="sellAmt" remote-sort title="销售金额" width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="rtnableQty" remote-sort title="退货数量" width="90"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="rtAmt" remote-sort title="退货金额" width="100"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="trueQty" remote-sort title="实销数量" width="110"></vxe-table-column>
+      <vxe-table-column show-overflow="tooltip" field="trueAmt" remote-sort title="实销金额" width="110"></vxe-table-column>
     </vxe-table>
     <Page
       class-name="page-con"
@@ -96,6 +98,78 @@
           params+=`${i}=${this.body[i]}&`
         }
         location.href=api.purchaseReporAnalysisExport(`${params}page=0&size=${this.page.total}`)
+      },
+      sortMethod({ column, property, order}) {
+        //order:asc 升序 desc 降序
+        //property:多个排序时所点击的头部
+        //column:本列
+        switch (property) {
+          case "sellQty":
+            this.body.sellQty=order == "asc" ? 0 : 1;
+            this.body.sellAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            this.body.enterAmt=undefined;
+            break;
+          case "sellAmt":
+            this.body.sellQty=undefined;
+            this.body.sellAmt=order == "asc" ? 0 : 1;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            this.body.enterAmt=undefined;
+            break;
+          case "rtnableQty":
+            this.body.sellQty=undefined;
+            this.body.sellAmt=undefined;
+            this.body.rtnableQty=order == "asc" ? 0 : 1;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            this.body.enterAmt=undefined;
+            break;
+          case "rtAmt":
+            this.body.sellQty=undefined;
+            this.body.sellAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=order == "asc" ? 0 : 1;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            this.body.enterAmt=undefined;
+            break;
+          case "trueQty":
+            this.body.sellQty=undefined;
+            this.body.sellAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=order == "asc" ? 0 : 1;
+            this.body.trueAmt=undefined;
+            this.body.enterAmt=undefined;
+            break;
+          case "trueAmt":
+            this.body.sellQty=undefined;
+            this.body.sellAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=order == "asc" ? 0 : 1;
+            this.body.enterAmt=undefined;
+            break;
+          case "enterAmt":
+            this.body.sellQty=undefined;
+            this.body.sellAmt=undefined;
+            this.body.rtnableQty=undefined;
+            this.body.rtAmt=undefined;
+            this.body.trueQty=undefined;
+            this.body.trueAmt=undefined;
+            this.body.enterAmt=order == "asc" ? 0 : 1;
+            break;
+        }
+        this.body.sort = order == "asc" ? 0 : 1
+        this.getList();
       },
       //表尾合计
       footerMethod({columns, data}) {

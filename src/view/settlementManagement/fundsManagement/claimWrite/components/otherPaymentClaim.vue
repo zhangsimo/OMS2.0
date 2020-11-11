@@ -96,9 +96,10 @@
         <Row class="mb20 mt20">
           <Col span="8">
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+            <Input class="mr10 w200" v-model="shopName" disabled/>
           </Col>
           <Col span="16">
-            <Date-picker v-model="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker v-model="value" type="daterange" placeholder="选择日期11" class="w200"></Date-picker>
             <button class="ivu-btn ivu-btn-default ml10" type="button" @click="getQuery">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -261,7 +262,8 @@
         Branchstore: [{id: 0, name: "全部"}],
         currentAccount: {},
         currentAccountItem: {},
-        accruedList: [{mateAccountCoding: ""}]
+        accruedList: [{mateAccountCoding: ""}],
+        shopName: '',
       };
     },
     async mounted() {
@@ -375,8 +377,14 @@
       async getShop() {
         let data = {};
         let res = await goshop(data);
-        if (res.code === 0)
+        if (res.code === 0){
+          res.data.forEach(v => {
+            if(v.id == this.BranchstoreId){
+              this.shopName = v.shortName
+            }
+          })
           return (this.Branchstore = [...this.Branchstore, ...res.data]);
+        }
       },
       // 快速查询
       quickDate(data) {

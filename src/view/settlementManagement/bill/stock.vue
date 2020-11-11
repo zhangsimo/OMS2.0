@@ -131,7 +131,8 @@
     getWarehousingList,
     getWarehousingPart,
     getOutStockList,
-    getOutStockPart
+    getOutStockPart,
+    getAllList
   } from "@/api/bill/saleOrder";
   import {
     stockExport/**销售出库 导出全部及导出勾选*/,
@@ -604,13 +605,17 @@
         data1: [],
         typelist: [
           {
+            value:'0',
+            label:'全部'
+          },
+          {
             value: "050202",
             label: "销售出库"
           },
           {
             value: "050102",
             label: "销售退货"
-          }
+          },
         ],
         typeName: "050202",
         company: "", //往来单位
@@ -826,87 +831,6 @@
         this.getGeneral()
       },
       // 总表查询
-      getGeneralAll(param) {
-        this.data1 = [];
-        let obj = {
-          orgid: this.model1 == "0" ? "" : this.model1,
-          guestId: this.company ? this.companyId : "",
-          enterTypeId: this.typeName
-        };
-        let params = {
-          size: param.size,
-          page: param.num - 1
-        }
-        if (this.typeName === "050202") {
-          obj.outDateStart = this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : ""
-          obj.outDateEnd = this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : ""
-          if (obj.outDateEnd) {
-            obj.outDateEnd = obj.outDateEnd.split(' ')[0] + " 23:59:59"
-          }
-          getOutStockList(params, obj).then(res => {
-            if (res.data.vos.length !== 0) {
-              res.data.vos.map((item, index) => {
-                item.index = index + 1;
-                item.accountSign = item.billStatusId ? "已出库" : "草稿";
-                item.orderType = item.orderType
-                  ? item.orderType === 1
-                    ? "电商订单"
-                    : "华胜订单"
-                  : "销售开单";
-              });
-              this.data = res.data.vos;
-              if (this.data.length == params.size) {
-                this.data = res.data.vos;
-                this.$refs.summary.exportCsv({
-                  types: ["csv"],
-                  filename: "销售出库汇总",
-                  columns: this.columns,
-                  data: res.data.vos,
-                });
-              }
-            } else {
-              this.data = [];
-            }
-          });
-        } else if (this.typeName === "050102") {
-          (obj.enterDateStart = this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : ""),
-            (obj.enterDateEnd = this.value[1]
-              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
-              : ""),
-            getWarehousingList(params, obj).then(res => {
-              if (res.data.vos.length !== 0) {
-                res.data.vos.map((item, index) => {
-                  item.index = index + 1;
-                  item.accountSign = item.billStatusId ? "已入库" : "草稿";
-                  item.orderType = item.orderType
-                    ? item.orderType === 1
-                      ? "电商订单"
-                      : "华胜订单"
-                    : "销售开单";
-                });
-                this.data = res.data.vos;
-                if (this.data.length == params.size) {
-                  this.data = res.data.vos;
-                  this.$refs.summary.exportCsv({
-                    types: ["csv"],
-                    filename: "销售出库汇总",
-                    columns: this.columns,
-                    data: res.data.vos,
-                  });
-                }
-              } else {
-                this.data = [];
-              }
-            });
-        }
-      },
-      // 总表查询
       getGeneral() {
         this.data1 = [];
         let obj = {
@@ -974,16 +898,49 @@
                 });
                 this.data = res.data.vos;
                 this.page.total = res.data.TotalElements;
-                // this.total=res.data.AllotOutMainVO
               } else {
                 this.data = [];
               }
             });
+        }else if (this.typeName === "0"){
+          obj.outDateStart = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          obj.outDateEnd = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          if (obj.outDateEnd) {
+            obj.outDateEnd = obj.outDateEnd.split(' ')[0] + " 23:59:59"
+          }
+          params.orderTypeId = this.typeName
+          showLoading(".loadingClass", "数据加载中，请勿操作")
+          getAllList(params, obj).then(res => {
+            if (res.data.vos.length !== 0) {
+              res.data.vos.map((item, index) => {
+                item.index = index + 1;
+                item.accountSign = item.billStatusId ? "已出库" : "草稿";
+                item.orderType = item.orderType
+                  ? item.orderType === 1
+                    ? "电商订单"
+                    : "华胜订单"
+                  : "销售开单";
+              });
+              this.data = res.data.vos;
+              this.page.total = res.data.TotalElements;
+              // this.total=res.data.AllotOutMainVO
+              hideLoading()
+            } else {
+              hideLoading()
+              this.data = [];
+            }
+          }).catch(e => {
+            hideLoading()
+          });
         }
       },
       // 选中总表查询明细
       election(row) {
-        if (this.typeName === "050102") {
+        if (this.typeName === "050102" || row.enterTypeId=="050102") {
           getWarehousingPart({mainId: row.id}).then(res => {
             // console.log(res);
             if (res.data.length !== 0) {

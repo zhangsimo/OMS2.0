@@ -248,7 +248,7 @@ export default class Fittings extends Vue {
     this.getBand();
     this.treeInit();
     // this.initLocalPartInfo();
-    this.initCloudPartInfo();
+    // this.initCloudPartInfo();
   }
 
   /**===================Methods======================== */
@@ -294,6 +294,7 @@ export default class Fittings extends Vue {
   // 初始化本地配件资料 - 维保
   private async initLocalPartInfo() {
     this.local.loading = true;
+    let ref:any = this.$parent.$parent;
     let params: Kv = {};
     let data: Kv = {};
     params.page = this.local.page.num - 1;
@@ -309,6 +310,7 @@ export default class Fittings extends Vue {
       // data.carTypeIdThr = this.selectTreeId;
       data.typeId = this.selectTreeId;
     }
+    data.stockId = ref.storeId||"";
     let res: any = await api.attrQueryAllPage(params, data);
     if (res.code == 0) {
       this.local.tbdata = res.data.content;
@@ -319,6 +321,7 @@ export default class Fittings extends Vue {
   // 初始化平台配件资料 - wb 维保
   private async initCloudPartInfo() {
     this.cloud.loading = true;
+    let ref:any = this.$parent.$parent;
     let params: Kv = {};
     let data: Kv = {};
     params.tenantId = 0;
@@ -337,6 +340,7 @@ export default class Fittings extends Vue {
       // data.carTypeIdThr = this.selectTreeId;
       data.typeId = this.selectTreeId;
     }
+    data.stockId = ref.storeId||"";
     // console.log(params,data)
     let res: any = await getLocalList({ ...params, ...data });
     if (res.code == 0) {
@@ -394,6 +398,10 @@ export default class Fittings extends Vue {
   // 选择数据
   private async changeDisable() {
     let self: any = this;
+    let ref:any = this.$parent.$parent;
+    let params = {
+      storeId:ref.storeId||""
+    }
     if (!self.expireDate) {
       self.$Message.error("请先选中结束日期");
       return false;
@@ -408,7 +416,7 @@ export default class Fittings extends Vue {
       item.passTime = pastTime;
       data.push(item);
     });
-    let res: any = await getSaveNewTight(data);
+    let res: any = await getSaveNewTight(data,params);
     if (res.code == 0) {
       this.$emit("getNewList", res);
       if (this.isSys) {

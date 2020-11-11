@@ -124,23 +124,7 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="盘点员：" prop="orderMan">
-                    <Select
-                      :value="formPlan.orderManId"
-                      @on-change="selectOrderMan"
-                      filterable
-                      style="width: 160px"
-                      :disabled="draftShow != 0"
-                      label-in-value
-                    >
-                      <Option
-                        v-for="item in salesList"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.label }}</Option>
-                    </Select>
-                    <!-- <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" /> -->
-                  </FormItem>
+                  
                   <FormItem label="盘点日期：" prop="checkDate">
                     <DatePicker
                       :disabled="draftShow != 0"
@@ -465,12 +449,6 @@ export default {
             }
           },
           {
-            title: "盘点员",
-            key: "orderMan",
-            width: 170,
-            resizable:true
-          },
-          {
             title: "盘点单号",
             key: "serviceId",
             width: 140,
@@ -553,13 +531,6 @@ export default {
             required: true,
             message: "盘点仓库必选",
             type: "string",
-            trigger: "change"
-          }
-        ],
-        orderMan: [
-          {
-            required: true,
-            message: "盘点员必填",
             trigger: "change"
           }
         ],
@@ -1164,6 +1135,7 @@ export default {
        datas.map(item=>{
            delete item.id;
            item.trueQty = undefined;
+          item.partName = item.partStandardName||"";
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);

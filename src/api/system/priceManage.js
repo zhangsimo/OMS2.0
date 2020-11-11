@@ -93,7 +93,8 @@ export function area(params) {
 // }
 // export const impUrl = `${api.wmsApi}/sellPricePart/import`
 export const impUrl = `${api.wmsApi}/sellPricePart/import`
-
+//多级别价格导入
+export const morePriceUrl=`${api.wmsApi}/sellPriceStrategy/import/SellPrice`
 // 添加配件
 export function getwbParts(data) {
   return axios.request({

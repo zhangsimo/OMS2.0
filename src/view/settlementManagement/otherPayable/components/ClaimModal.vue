@@ -157,9 +157,10 @@ export default {
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
-      if(this.titleName=='其他付款支出认领'){
+      if(this.titleName!='其他收款认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
+            // console.log(res.data)
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.dataOne = res.data.one;
@@ -197,12 +198,12 @@ export default {
         return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0
       })
       if(flag){
-        this.$message.error('认领金额输入错误，不可为空')
+        this.$Message.error('认领金额输入错误，不可为空')
         return
       }
 
       if(this.titleName!='其他付款支出认领' && this.calculation==""){
-        this.$message.error('请选择辅助核算')
+        this.$Message.error('请选择辅助核算')
         return
       }
       if(this.titleName=="其他付款支出认领" && (this.thisClaimedAmtSum>this.$parent.currRow.paymentApplicationAmount)){
@@ -244,7 +245,7 @@ export default {
         }
         expenditureClaim(data).then(res=>{
           if(res.code===0){
-            this.$message.error("认领成功")
+            this.$message.success("认领成功")
             this.visibal = false
             this.$parent.getQuery()
           }

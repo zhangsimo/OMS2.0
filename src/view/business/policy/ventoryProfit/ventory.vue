@@ -962,7 +962,7 @@
             }
             if (
               [
-                "exhibitQty",
+                "exhibitQty","trueQty","sysQty"
               ].includes(column.property)||columnIndex==10
             ) {
               return this.sum(data, column.property, columnIndex);
