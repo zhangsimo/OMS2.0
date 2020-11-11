@@ -131,9 +131,6 @@
                             class="w160"
                           ></DatePicker>
                         </FormItem>
-                        <FormItem label="操作员：" prop="planDate">
-                          <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
-                        </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Tooltip :content="Leftcurrentrow.remark">
                             <Input
@@ -473,9 +470,6 @@
                             type="date"
                             class="w160"
                           ></DatePicker>
-                        </FormItem>
-                        <FormItem label="操作员：" prop="planDate">
-                          <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Tooltip :content="Leftcurrentrow.remark">
@@ -840,12 +834,6 @@ export default {
             resizable:true
           },
           {
-            title: "操作员",
-            key: "orderMan",
-            width: 120,
-            resizable:true
-          },
-          {
             title: "配件组装单号",
             key: "serviceId",
             width: 160,
@@ -881,12 +869,6 @@ export default {
             title: "创建日期",
             key: "createTime",
             width: 140,
-            resizable:true
-          },
-          {
-            title: "操作员",
-            key: "orderMan",
-            width: 120,
             resizable:true
           },
           {
@@ -1576,7 +1558,7 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
-          if (["orderQty"].includes(column.property)) {
+          if (["orderQty","noTaxAmt"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
           }
           return null;
