@@ -8,7 +8,12 @@ export function rightButtonShow() {
     sessionStorage.removeItem('btnContext')
     return
   }
-  buttons = VOSList.filter(item => item.parentId == VOSID[0].id)
+  let title=["业务参数","结算账户"]
+  if(sessionStorage.getItem("route")=="navigationFater" && !title.includes(windows.globalVue.$route.meta.title)){
+    buttons = VOSList.filter(item => item.parentId == VOSID[1].id)
+  }else{
+    buttons = VOSList.filter(item => item.parentId == VOSID[0].id)
+  }
   let arr: any = []
   if (buttons.length > 0) {
     buttons.forEach(item => {
@@ -31,6 +36,9 @@ export function authButton(Vue) {
         auth = sessionStorage.getItem('btnContext') || []
       } else {
         return
+      }
+      if(JSON.stringify(binding.arg)!=undefined){
+        binding.value=binding.arg
       }
       auth = JSON.parse(auth)
       let show: any = false
