@@ -157,7 +157,7 @@ export default {
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
-      if(this.titleName=='其他付款支出认领'){
+      if(this.titleName.trim()=='其他付款支出认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
             // console.log(res.data)
