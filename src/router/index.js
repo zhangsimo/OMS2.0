@@ -22,7 +22,9 @@ router.beforeEach((to, from, next) => {
      // @ts-ignore
     window._hmt && window._hmt.push(['_trackPageview', to.fullPath])
   }
-
+  if(from){
+    sessionStorage.setItem("route",from.name);
+  }
   LoadingBar.start()
   const token = getToken()
   if (!token && to.name != LOGIN_PAGE_NAME&& to.name != REGISTER_PAGE_NAME ) {

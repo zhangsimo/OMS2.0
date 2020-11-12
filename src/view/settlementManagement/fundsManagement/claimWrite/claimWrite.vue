@@ -913,6 +913,7 @@
       },
       // 本店待认领款查询
       queryClaimed() {
+        this.$refs.claim.claimedPage.page=1;
         this.claimedList();
       },
       //连锁待分配款项
