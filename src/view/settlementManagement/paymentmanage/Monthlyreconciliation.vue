@@ -578,7 +578,7 @@
         summer: null, //计算费用合计
         validRules: {
           thisNoAccountQty: [
-            {required: true, message: '不对账数量必填'},
+            // {required: true, message: '不对账数量必填'},
             {validator: roleValid}
           ]
         },
@@ -1562,9 +1562,12 @@
           if(this.$utils.toNumber(item.thisNoAccountQty)>item.quantity || this.$utils.toNumber(item.thisNoAccountQty)<0){
             boolShow=false;
           }
-          if(!reg.test(item.thisNoAccountQty)){
-            boolShow=false;
-          }
+          // if(!reg.test(item.thisNoAccountQty)){
+          //   boolShow=false;
+          // }
+          // if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
+          //   boolShow=false;
+          // }
         });
         if (!errMap && boolShow) {
           const index = this.Reconciliationcontent[0].index;
