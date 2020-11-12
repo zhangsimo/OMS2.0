@@ -107,7 +107,11 @@
           field="orderQty"
           title="数量"
           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.orderQty || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="orderPrice"
@@ -119,7 +123,11 @@
           field="orderAmt"
           title="金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.orderAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="detailRemark"
@@ -139,7 +147,11 @@
           field="enterAmt"
           title="成本金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.enterAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="80">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
@@ -162,7 +174,11 @@
           field="taxAmt"
           title="含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="noTaxPrice"
@@ -174,7 +190,11 @@
           field="noTaxAmt"
           title="不含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.noTaxAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxQuota"
@@ -182,68 +202,6 @@
           width="70"
         ></vxe-table-column>
       </vxe-table-column>
-
-      <!--      <vxe-table-column show-overflow="tooltip" field="group4" title="国际采购各项费用">-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="currency"-->
-      <!--          title="币种"-->
-      <!--          width="60"-->
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="exchangeRate"-->
-      <!--          title="汇率"-->
-      <!--          width="50"-->
-
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="fcPrice"-->
-      <!--          title="裸价外币"-->
-      <!--          width="70"-->
-
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="rmbPrice"-->
-      <!--          title="裸价人民币"-->
-      <!--          width="80"-->
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="rmbAmt"-->
-      <!--          title="裸价金额"-->
-      <!--          width="80"-->
-
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="tariffAmt"-->
-      <!--          title="关税费"-->
-      <!--          width="70"-->
-
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="transportAmt"-->
-      <!--          title="运杂费"-->
-      <!--          width="70"-->
-
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="vatAmt"-->
-      <!--          title="增值税费"-->
-      <!--          width="70"-->
-      <!--        ></vxe-table-column>-->
-      <!--        <vxe-table-column-->
-      <!--          show-overflow="tooltip"-->
-      <!--          field="otherAmt"-->
-      <!--          title="其他费用"-->
-      <!--          width="70"-->
-      <!--        ></vxe-table-column>-->
-      <!--      </vxe-table-column>-->
       <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
         <vxe-table-column
           show-overflow="tooltip"
@@ -324,7 +282,8 @@
         pageOpts: [10, 20, 30, 50],
         body: {},
         tableData: [],
-        total: {}
+        total: {},
+        allMoneyList:{}
       };
     },
     mounted() {
@@ -337,6 +296,10 @@
           page: this.page.num - 1,
           size: this.page.size
         };
+        let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
+        if (obj.code === 0){
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
         let res = await api.getPjPchsEnterMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -362,6 +325,10 @@
           page: 0,
           size: this.page.total
         };
+        let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
+        if (obj.code === 0){
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
         let res = await api.getPjPchsEnterMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           tableDataAll = (res.data.content || []).map(el => {
@@ -396,17 +363,7 @@
               return "合计";
             }
             if (
-              [
-                "orderQty",
-                "orderPrice",
-                "orderAmt",
-                "enterPrice",
-                "enterAmt",
-                "taxPrice",
-                "taxAmt",
-                "taxQuota",
-                "noTaxPrice",
-                "noTaxAmt"
+              ["six"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);

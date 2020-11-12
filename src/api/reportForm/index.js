@@ -102,6 +102,16 @@ export function getPjPchsEnterMainDetails(data = {}, params) {
   })
 }
 
+// 采购报表_采购入库金额总和
+export function getPjPchsEnterMainDetailsCount(data = {}, params) {
+  return axios.request({
+    url: `${api.omsBatch}/batchEdi/getPjPchsEnterMainDetailsCount`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
 // 采购报表_采购退货明细
 export function getPjPchsRtnMainDetails(data = {}, params) {
   return axios.request({
@@ -111,6 +121,17 @@ export function getPjPchsRtnMainDetails(data = {}, params) {
       params,
   })
 }
+
+// 采购报表_采购退货明细价格总表
+export function findPjPchsRtnMainDetailsCount(data = {}, params) {
+  return axios.request({
+    url: `${api.omsBatch}/batchEdi/findPjPchsRtnMainDetailsCount`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
 
 // 采购报表_采购计划明细
 export function getPjPchsPlanDetailList(data = {}, params) {
@@ -168,6 +189,17 @@ export function getPjSellOutRtnMainDetails(data = {}, params) {
       params,
   })
 }
+
+// 销售报表_销售退货明细表金额统计
+export function getPjSellOutRtnMainDetailsCount(data = {}, params) {
+  return axios.request({
+    url: `${api.omsBatch}/batchEdi/getPjSellOutRtnMainDetailsCount`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
 //销售排行分析
 export function getPjSellAnalyze(data = {}, params){
   return axios.request({
