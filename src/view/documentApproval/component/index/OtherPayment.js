@@ -283,13 +283,13 @@ export default {
       this.$refs.formInline.validate(async (valid) => {
         if (valid) {
           let valg = false
-          if(this.formInline.receiverId == ''){
+          if(!this.formInline.receiverId){
             return this.$Message.error("收款人账号必填")
           }
-          if(this.formInline.receiveBank == ''){
+          if(!this.formInline.receiveBank){
             return this.$Message.error("开户行名称必填")
           } 
-          if(this.formInline.receiveBankNo == ''){
+          if(!this.formInline.receiveBankNo){
             return this.$Message.error("银行账号必填")
           } 
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0) {
