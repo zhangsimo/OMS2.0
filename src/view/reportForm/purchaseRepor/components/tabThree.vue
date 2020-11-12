@@ -215,7 +215,7 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="成本信息">
+      <vxe-table-column show-overflow="tooltip"  title="成本信息">
         <vxe-table-column
           show-overflow="tooltip"
           field="enterPrice"
@@ -282,7 +282,7 @@
           width="70"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column show-overflow="tooltip"  title="其他">
         <vxe-table-column
           show-overflow="tooltip"
           field="code"

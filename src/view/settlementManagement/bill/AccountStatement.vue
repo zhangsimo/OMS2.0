@@ -590,8 +590,8 @@
       </div>
     </Modal>
     <salepopup ref="salepopup"/>
-    <hedgingInvoice ref="hedgingInvoice"/>
-    <registrationEntry ref="registrationEntry"/>
+    <hedgingInvoice ref="hedgingInvoice"  @getNewList="getNeWlist"/>
+    <registrationEntry ref="registrationEntry" @getNewList="getNeWlist"/>
     <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>
     <no-tax ref="noTax" :information="reconciliationStatement" :parameter="{}"></no-tax>
     <!--    //人工对账-->

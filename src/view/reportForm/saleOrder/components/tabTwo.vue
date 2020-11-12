@@ -135,7 +135,7 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="销售税率信息">
+      <vxe-table-column show-overflow="tooltip"  title="销售税率信息">
         <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
@@ -191,7 +191,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="成本信息">
+      <vxe-table-column show-overflow="tooltip"  title="成本信息">
         <vxe-table-column
           show-overflow="tooltip"
           field="enterPrice"
@@ -270,7 +270,7 @@
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="利润信息">
+      <vxe-table-column show-overflow="tooltip" title="利润信息">
         <vxe-table-column show-overflow="tooltip"
                           field="profit"
                           title="损益"
@@ -325,7 +325,7 @@
 
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column show-overflow="tooltip"  title="其他">
         <vxe-table-column
           show-overflow="tooltip"
           field="code"
