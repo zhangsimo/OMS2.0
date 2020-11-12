@@ -65,12 +65,12 @@
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
-              <i class="iconfont iconcaidan"></i>
-              <span>更多</span>
-            </button>
-          </div>
+<!--          <div class="db ml10">-->
+<!--            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal = true">-->
+<!--              <i class="iconfont iconcaidan"></i>-->
+<!--              <span>更多</span>-->
+<!--            </button>-->
+<!--          </div>-->
         </div>
       </div>
       <div>

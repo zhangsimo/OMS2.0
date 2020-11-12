@@ -139,7 +139,7 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="销售税率信息">
+      <vxe-table-column show-overflow="tooltip"  title="销售税率信息">
         <vxe-table-column show-overflow="tooltip" field="taxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
