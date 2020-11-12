@@ -128,7 +128,7 @@
 
       ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="不含税信息">
+      <vxe-table-column show-overflow="tooltip"  title="不含税信息">
         <vxe-table-column show-overflow="tooltip"
                           field="noTaxPrice"
                           title="不含税单价"
@@ -141,7 +141,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column show-overflow="tooltip" title="其他">
         <vxe-table-column show-overflow="tooltip"
                           field="code"
                           title="移仓单号"

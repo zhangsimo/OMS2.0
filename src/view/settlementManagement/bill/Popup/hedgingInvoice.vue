@@ -199,6 +199,7 @@
             this.preservationDis=false
             this.$message.success("保存成功");
             this.modal1 = false;
+            this.$emit('getNewList' ,{})
           }else{
             this.preservationDis=false;
           }
@@ -234,6 +235,7 @@
             this.preservationDis=false
             this.$message.success("提交成功");
             this.modal1 = false;
+            this.$emit('getNewList' ,{})
           }else{
             this.preservationDis=false
           }
