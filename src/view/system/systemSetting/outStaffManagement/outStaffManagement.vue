@@ -51,6 +51,7 @@
       >
         <vxe-table-column title="选择" type="radio" width="50"></vxe-table-column>
         <vxe-table-column title="人员名称" field="name" min-width="80"></vxe-table-column>
+        <vxe-table-column title="员工编号" field="code" min-width="80"></vxe-table-column>
         <vxe-table-column title="收款户名" field="accountName" min-width="80"></vxe-table-column>
         <vxe-table-column title="开户银行" field="accountBank" min-width="80"></vxe-table-column>
         <vxe-table-column title="银行卡号" field="accountNumber" min-width="80"></vxe-table-column>

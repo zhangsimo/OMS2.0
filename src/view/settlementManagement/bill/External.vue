@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150" filterable @on-change="getGeneral" :disabled="selectShopList">
+            <Select v-model="model1" class="w150" filterable @on-change="changePage(1)" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -35,7 +35,7 @@
           </div>
           <div class="db mr10">
             <span>类型：</span>
-            <Select v-model="type" style="width:200px" @on-change="getGeneral">
+            <Select v-model="type" style="width:200px" @on-change="changePage(1)">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -753,7 +753,7 @@
       // 快速查询
       quickDate(data) {
         this.value = data;
-        this.getGeneral();
+        this.changePage(1)
       },
       // 往来单位
       Dealings() {
@@ -906,76 +906,6 @@
             }).catch( e => {
             hideLoading()
           })
-        }
-      },
-      // 总表查询
-      getGeneralAll(param) {
-        let obj = {
-          orgid: this.model1 == 0 ? "" : this.model1,
-          guestId: this.company ? this.companyId : "",
-          enterTypeId: this.type
-        };
-        let params = {
-          size: param.size,
-          page: param.num - 1
-        }
-        // console.log(this.value)
-        if (this.type === "050101") {
-          (obj.enterDateStart = this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : ""),
-            (obj.enterDateEnd = this.value[1]
-              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
-              : ""),
-            getWarehousingList(params, obj).then(res => {
-              if (res.data.vos) {
-                res.data.vos.map((item, index) => {
-                  item.index = index + 1;
-                  item.taxSign = item.taxSign ? "是" : "否";
-                  item.auditSign = item.billStatusId ? "已入库" : "草稿";
-                });
-                this.data = res.data.vos;
-                if (this.data.length == params.size) {
-                  this.data = res.data.vos;
-                  this.$refs.summary.exportCsv({
-                    types: ["csv"],
-                    filename: "采购入库单汇总",
-                    columns: this.columns,
-                    data: res.data.vos,
-                  });
-                }
-              } else {
-                this.data = [];
-              }
-            });
-        } else if (this.type === "050201") {
-          (obj.outDateStart = this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : ""),
-            (obj.outDateEnd = this.value[1]
-              ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
-              : ""),
-            getOutStockList(params, obj).then(res => {
-              if (res.data.vos.length !== 0) {
-                res.data.vos.map((item, index) => {
-                  item.index = index + 1;
-                  item.taxSign = item.taxSign ? "是" : "否";
-                  item.auditSign = item.billStatusId ? "已入库" : "草稿";
-                });
-                this.data = res.data.vos;
-                if (this.data.length == params.size) {
-                  this.data = res.data.vos;
-                  this.$refs.summary.exportCsv({
-                    types: ["csv"],
-                    filename: "采购退货单汇总",
-                    columns: this.columns,
-                    data: res.data.vos,
-                  });
-                }
-              } else {
-                this.data = [];
-              }
-            });
         }
       },
       // 选中总表查询明细
