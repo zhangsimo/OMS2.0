@@ -187,7 +187,11 @@
           field="orderQty"
           title="数量"
           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.orderQty || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="orderPrice"
@@ -199,7 +203,11 @@
           field="orderAmt"
           title="金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.orderAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="detailRemark"
@@ -219,7 +227,11 @@
           field="enterAmt"
           title="成本金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.enterAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="taxSign" title="是否含税" width="80">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
@@ -242,7 +254,11 @@
           field="taxAmt"
           title="含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="noTaxPrice"
@@ -254,7 +270,11 @@
           field="noTaxAmt"
           title="不含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.noTaxAmt || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxQuota"
@@ -342,7 +362,8 @@ export default {
       body: {},
       pageOpts: [10, 20, 30, 50],
       tableData: [],
-      total: {}
+      total: {},
+      allMoneyList:{}
     };
   },
   mounted() {
@@ -355,6 +376,10 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
+      let obj = await api.findPjPchsRtnMainDetailsCount(this.body, params)
+      if (obj.code === 0){
+        this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+      }
       let res = await api.getPjPchsRtnMainDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
@@ -381,6 +406,10 @@ export default {
         page: 0,
         size: this.page.total,
       };
+      let obj = await api.findPjPchsRtnMainDetailsCount(this.body, params)
+      if (obj.code === 0){
+        this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+      }
       let res = await api.getPjPchsRtnMainDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
         // this.total = res.data.sellOutBean
