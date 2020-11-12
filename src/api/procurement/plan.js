@@ -411,3 +411,13 @@ export function printTableZF(params){
     data: {},
   });
 }
+
+//打印
+export function printTableFHSQ(params){
+  return  axios.request({
+    url: `${api.omsOrder}/logisticsRecord/findByParam`,
+    method: "get",
+    params
+  });
+}
+

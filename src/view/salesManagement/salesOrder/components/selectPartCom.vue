@@ -164,25 +164,25 @@
                 size="mini"
                 height="200"
                 highlight-hover-row
-                :data="allList.relearnedPart"
+                :data="allList.batchStock"
               >
                 <vxe-table-column
-                  field="code"
+                  field="partCode"
                   title="配件编码"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="partBrandName"
+                  field="partBrand"
                   width="80"
                   title="品牌"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="partBrandName"
+                  field="storeName"
                   width="70"
                   title="仓库"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="enterQty"
                   min-width="70"
                   title="入库数量"
                 ></vxe-table-column>
@@ -192,37 +192,37 @@
                   title="可出库数量"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="enterPrice"
                   min-width="70"
                   title="入库单价"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="taxRate"
                   min-width="50"
                   title="税率"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="taxPrice"
                   min-width="70"
                   title="含税单价"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="noTaxPrice"
                   min-width="80"
                   title="不含税单价"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="guestName"
                   min-width="160"
                   title="供应商"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="originGuestName"
                   min-width="160"
                   title="起始供应商"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="outableQty"
+                  field="enterDate"
                   min-width="130"
                   title="入库日期"
                 ></vxe-table-column>

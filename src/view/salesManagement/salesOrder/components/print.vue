@@ -17,33 +17,33 @@
           <tbody>
           <tr>
             <td width="14%" style="font-size: 12px; line-height: 26px; border-bottom: 1px solid #000;border-left: 1px solid #000;border-top: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">收货单位</td>
-            <td width="86%" colspan="3" style="border-bottom: 1px solid #000; text-align: left; border-top: 1px solid #000;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td width="86%" colspan="3" style="border-bottom: 1px solid #000; text-align: left; border-top: 1px solid #000;border-right: 1px solid #000;padding:0 4px;">{{onelist.receiveComp}}</td>
           </tr>
           <tr>
             <td width="14%" style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">收货人</td>
-            <td width="36%" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td width="36%" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.receiver}}</td>
             <td width="14%" style="font-size: 12px; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">联系电话</td>
-            <td width="36%" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td width="36%" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.receiverMobile}}</td>
           </tr>
           <tr>
             <td style="font-size: 12px;line-height: 26px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">收货地址</td>
-            <td colspan="3" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td colspan="3" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.receiveAddress}}</td>
           </tr>
           <tr>
             <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">配送方式</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.deliveryType==0?'自配':onelist.deliveryType==1?'客户自提':onelist.deliveryType==2?'快递':'物流'}}</td>
             <td style="font-size: 12px; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">发货物流</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.LogisticsName}}</td>
           </tr>
           <tr>
             <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">结算方式</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.settleType==2?'月结':onelist.settleType==0?'到付':'现结'}}</td>
             <td style="font-size: 12px; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">发货备注</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.remark}}</td>
           </tr>
           <tr>
             <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">业务单号</td>
-            <td colspan="3" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td colspan="3" style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.businessNum}}</td>
           </tr>
           <tr>
             <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">件数</td>
@@ -53,15 +53,15 @@
           </tr>
           <tr>
             <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">申请人</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.createUname}}</td>
             <td style="font-size: 12px; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">打印人</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.printUname}}</td>
           </tr>
           <tr>
-            <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">申请部门</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="line-height: 26px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">申请时间</td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.createTime}}</td>
             <td style="font-size: 12px; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;">打印日期</td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;"></td>
+            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding:0 4px;">{{onelist.printDate}}</td>
           </tr>
           <tr>
             <td style="height:32px;font-size: 12px;border-left: 1px solid #000; border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 4px;"></td>
@@ -80,6 +80,7 @@
 <script>
   import * as api from "_api/procurement/plan";
   import * as tools from "../../../../utils/tools";
+  import {logistics } from "_api/business/goodsInfos"
 
   export default {
     name: "print",
@@ -90,7 +91,8 @@
         onelist: {}, //打印数据
         details: [],
         num: "0",
-        num2: 0
+        num2: 0,
+        logisArr:[]//发货物流
       };
     },
     methods: {
@@ -135,13 +137,22 @@
         // document.body.innerHTML = oldstr;
       },
       async openModal() {
-        this.printShow = true;
-        if (this.orderId) {
-          let res = await api.print(this.orderId);
+        // this.printShow = true;
+        let selectItemId = this.$parent.$parent.$parent.selectItemId||"";
+        if (selectItemId) {
+          let res = await api.printTableFHSQ({id:selectItemId});
+          let log = await logistics()
+          this.logisArr = log.data
           if (res.code === 0) {
             this.printShow = true;
             this.onelist = res.data;
             this.onelist.printDate = tools.transTime(new Date());
+            this.onelist.printUname = this.$store.state.user.userData.staffName;
+            this.onelist.LogisticsName = "";
+            let wlFilter = this.logisArr.filter(item => this.onelist.deliveryLogistics==item.id)
+            if(wlFilter.length>0){
+              this.onelist.LogisticsName = wlFilter[0].shortName;
+            }
             this.details = res.data.details;
             if(this.details==[] || this.details==undefined){
               this.onelist.storeName=""
