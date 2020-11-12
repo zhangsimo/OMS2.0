@@ -14,7 +14,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150" filterable @on-change="getGeneral" :disabled="selectShopList">
+            <Select v-model="model1" class="w150" filterable @on-change="changePage(1)" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -30,7 +30,7 @@
           </div>
           <div class="db mr10">
             <span>往来类型：</span>
-            <Select v-model="type" style="width:200px" @on-change="getGeneral">
+            <Select v-model="type" style="width:200px" @on-change="changePage(1)">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -486,7 +486,7 @@
       // 日期选择
       dateChange(data) {
         this.value = data
-        this.getGeneral()
+        this.changePage(1);
       },
       // 配件表格合计方式
       summary({columns, data}) {
@@ -573,8 +573,8 @@
       },
       //查询
       query() {
-        this.data1 = []
-        this.getGeneral();
+        this.data1 = [];
+        this.getGeneral()
       },
       changePage(p) {
         this.page.num = p;
@@ -589,12 +589,12 @@
       getOne(data) {
         this.company = data.fullName;
         this.companyId = data.id;
-        this.getGeneral()
+        this.changePage(1);
       },
       // 快速查询
       quickDate(data) {
         this.value = data;
-        this.getGeneral()
+        this.changePage(1);
       },
       Dealings() {
         this.$refs.selectDealings.addressShow = true;

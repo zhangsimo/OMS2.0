@@ -580,9 +580,6 @@
           thisNoAccountQty: [
             {required: true, message: '不对账数量必填'},
             {validator: roleValid}
-          ],
-          diffeReason: [
-            {required: true, message: '原因必填'},
           ]
         },
         arrId: [],
@@ -1566,9 +1563,6 @@
             boolShow=false;
           }
           if(!reg.test(item.thisNoAccountQty)){
-            boolShow=false;
-          }
-          if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
             boolShow=false;
           }
         });

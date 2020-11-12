@@ -7,7 +7,7 @@
             <getDate class="mr5" sizeString="small" @quickDate="getvalue"></getDate>
           </div>
           <div class="db">
-            <Select size="small" v-model="orderType" style="width:100px" class="mr5">
+            <Select size="small" v-model="orderType" style="width:80px" class="mr5">
               <Option
                 v-for="item in typeList"
                 :value="item.value"
@@ -25,7 +25,7 @@
             <Button
               type="default"
               @click="addNew"
-              class="mr5 w90"
+              class="mr5"
               v-has="'add'"
               size="small"
             >
@@ -34,7 +34,7 @@
           </div>
           <div class="db">
             <Button
-              class="mr5 w90"
+              class="mr5"
               @click="setSave"
               size="small"
               :disabled="orderlistType.value != 0"
@@ -80,6 +80,17 @@
               v-has="'print'"
             >
               <i class="iconfont mr5 icondayinicon"></i> 打印
+            </Button>
+          </div>
+          <div class="db">
+            <Button
+              class="mr5"
+              size="small"
+              @click="printModelOpen"
+              :disabled="orderlistType.value == 5"
+              v-has="'print'"
+            >
+              <i class="iconfont mr5 icondayinicon"></i> 打印发货申请
             </Button>
           </div>
           <div class="db">
@@ -288,6 +299,10 @@ export default {
       // window.open(routeUrl.href,"_blank");
       this.openwin(routeUrl.href)
       this.$refs.OrderLeft.gitlistValue()
+    },
+    //打印发货申请
+    printModelOpen(){
+      this.$refs.right.printModelShow();
     },
     //打开更多搜索
     openQueryModal() {
