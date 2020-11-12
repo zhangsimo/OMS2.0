@@ -112,9 +112,10 @@ export default {
         this.formInline.applyTypeName = '其他付款'
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = getPost()
-        delete this.list.rowMessage.id
-        this.$set(this.formInline, 'details', [this.list.rowMessage])
-        await this.getOrignCompany('',this.list.rowMessage.guestId)
+        let temp = JSON.parse(JSON.stringify(this.list))
+        delete temp.rowMessage.id
+        this.$set(this.formInline, 'details', [temp.rowMessage])
+        await this.getOrignCompany('',temp.rowMessage.guestId)
         this.formInline.receiveGuestId = this.company[0].value
         this.getCompany(this.company[0])
        
@@ -237,8 +238,10 @@ export default {
 
     changeCollectionUname(v) {
       let arr = this.receiverArr.filter(item => item.id == v.value);
-      this.getOrignCompany("",arr[0].guestId)
-      this.setReceiverInfo(arr[0]);
+      if(arr[0]){
+        this.getOrignCompany("",arr[0].guestId)
+        this.setReceiverInfo(arr[0]);
+      }
     },
 
     //打开选择模态框
