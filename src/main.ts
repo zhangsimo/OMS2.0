@@ -24,7 +24,7 @@ import VXEUtils from 'vxe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 // @ts-ignore
-import {rightButtonShow , authButton,authButton2,resubmitNotButton} from './utils/button'
+import {rightButtonShow , authButton,resubmitNotButton} from './utils/button'
 
 import loadmore from "./directive/loadmore";
 import VueQriously from 'vue-qriously'
@@ -46,7 +46,6 @@ Vue.use(iView, { locale })
 Vue.config.productionTip = false
 Vue.use(VXEUtils, XEUtils)
 Vue.use(authButton)
-Vue.use(authButton2)
 Vue.use(resubmitNotButton)//防止按钮重复点击1000ms内，也可以自设时间
 /**
  * @description 全局注册应用配置

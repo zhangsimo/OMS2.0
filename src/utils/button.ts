@@ -8,6 +8,7 @@ export function rightButtonShow() {
     sessionStorage.removeItem('btnContext')
     return
   }
+  VOSID = VOSID.filter(el => el.name.length <=6)
   buttons = VOSList.filter(item => item.parentId == VOSID[0].id)
   let arr: any = []
   if (buttons.length > 0) {
@@ -32,6 +33,9 @@ export function authButton(Vue) {
       } else {
         return
       }
+      if (JSON.stringify(binding.arg) != undefined) {
+        binding.value = binding.arg
+      }
       auth = JSON.parse(auth)
       let show: any = false
       auth.forEach(item => {
@@ -45,6 +49,7 @@ export function authButton(Vue) {
     }
   })
 }
+
 export function authButton2(Vue) {
   Vue.directive('hass', {
     inserted: function (el, binding) {
@@ -54,8 +59,8 @@ export function authButton2(Vue) {
       } else {
         return
       }
-      if(JSON.stringify(binding.arg)!=undefined){
-        binding.value=binding.arg
+      if (JSON.stringify(binding.arg) != undefined) {
+        binding.value = binding.arg
       }
       auth = JSON.parse(auth)
       let show: any = false
@@ -70,6 +75,7 @@ export function authButton2(Vue) {
     }
   })
 }
+
 //防止按钮重复点击1000ms内，也可以自设时间
 export function resubmitNotButton(Vue) {
   Vue.directive("noresub", {
@@ -88,14 +94,14 @@ export function resubmitNotButton(Vue) {
           });
         }, binding.value || 1000);
       });
-      el.unbindEventListener=()=>{
+      el.unbindEventListener = () => {
         el.removeEventListener('click')
         el.clearTimeout(0)
       }
     },
-    unbind(el){
+    unbind(el) {
       //阻止内存泄漏
-      if(el.unbindEventListener){
+      if (el.unbindEventListener) {
         el.unbindEventListener()
       }
     }

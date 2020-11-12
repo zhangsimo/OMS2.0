@@ -338,6 +338,7 @@
         <Page
           :total="pagetotal"
           show-elevator
+          show-sizer
           class="mt10 tr"
           :page-size="page.size"
           :current="page.num"

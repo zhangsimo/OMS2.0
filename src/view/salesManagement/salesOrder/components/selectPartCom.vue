@@ -153,6 +153,82 @@
                 </vxe-table>
               </div></div
           ></TabPane> -->
+          <TabPane label="批次库存" tab="search">
+            <div class="marketBox">
+              <vxe-table
+                border
+                auto-resize
+                resizable
+                align="center"
+                :loading="loading1"
+                size="mini"
+                height="200"
+                highlight-hover-row
+                :data="allList.batchStock"
+              >
+                <vxe-table-column
+                  field="partCode"
+                  title="配件编码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partBrand"
+                  width="80"
+                  title="品牌"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="storeName"
+                  width="70"
+                  title="仓库"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="enterQty"
+                  min-width="70"
+                  title="入库数量"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="outableQty"
+                  min-width="80"
+                  title="可出库数量"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="enterPrice"
+                  min-width="70"
+                  title="入库单价"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="taxRate"
+                  min-width="50"
+                  title="税率"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="taxPrice"
+                  min-width="70"
+                  title="含税单价"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="noTaxPrice"
+                  min-width="80"
+                  title="不含税单价"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="guestName"
+                  min-width="160"
+                  title="供应商"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="originGuestName"
+                  min-width="160"
+                  title="起始供应商"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="enterDate"
+                  min-width="130"
+                  title="入库日期"
+                ></vxe-table-column>
+              </vxe-table>
+            </div>
+          </TabPane>
           <TabPane label="关联配件" tab="search">
             <div class="marketBox">
               <vxe-table
@@ -240,7 +316,7 @@
               </vxe-table>
             </div>
           </TabPane>
-          <TabPane label="销售记录" tab="search">
+          <TabPane label="连锁销售记录" tab="search">
             <div class="marketBox">
               <vxe-table
                 border
@@ -252,6 +328,62 @@
                 highlight-hover-row
                 :loading="loading1"
                 :data="allList.sellHistory"
+              >
+                <vxe-table-column
+                  type="seq"
+                  title="序号"
+                  width="50"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partCode"
+                  title="配件编码"
+                  width="120"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partName"
+                  title="配件名称"
+                  width="120"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="companyName"
+                  title="公司"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="guestName"
+                  title="客户"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="finishDate"
+                  title="销售日期"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="sellQty"
+                  title="数量"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="sellPrice"
+                  title="销价"
+                  width="100"
+                ></vxe-table-column>
+              </vxe-table>
+            </div>
+          </TabPane>
+          <TabPane label="本店销售记录" tab="search">
+            <div class="marketBox">
+              <vxe-table
+                border
+                auto-resize
+                resizable
+                size="mini"
+                align="center"
+                height="200"
+                highlight-hover-row
+                :loading="loading1"
+                :data="allList.localStoreSellHistory"
               >
                 <vxe-table-column
                   type="seq"

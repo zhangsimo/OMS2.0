@@ -471,7 +471,6 @@ export default {
       params.size = this.part.page.size;
       let res = await api.queryPart(params, data);
       if (res.code == 0) {
-        console.log(res)
         this.part.loading = false;
         this.part.tbdata = res.data.content.map(el => {
           let data = {};
