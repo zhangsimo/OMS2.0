@@ -412,6 +412,7 @@
         <vxe-table-column field="amount" title="金额" align="center" width="80"></vxe-table-column>
         <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="120"></vxe-table-column>
         <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="120"></vxe-table-column>
+        <vxe-table-column field="noAccountQty" title="前期未对账数量" align="center" width="120"></vxe-table-column>
         <vxe-table-column
           field="thisNoAccountQty"
           title="本次不对账数量"
@@ -566,9 +567,9 @@
           } else if(cellValue<0){
             row.thisNoAccountQty = 0;
             reject(new Error("本次不对账数量不可小于零"));
-          }else if(cellValue>row.quantity){
+          }else if(cellValue>row.noAccountQty){
             row.thisNoAccountQty=0;
-            reject(new Error("本次不对账数量不可大于数量"));
+            reject(new Error("本次不对账数量不可大于前期未对账数量"));
           }
         })
       };
@@ -578,7 +579,7 @@
         summer: null, //计算费用合计
         validRules: {
           thisNoAccountQty: [
-            {required: true, message: '不对账数量必填'},
+            // {required: true, message: '不对账数量必填'},
             {validator: roleValid}
           ]
         },
@@ -1559,12 +1560,15 @@
         this.Reconciliationcontent.map(item => {
           item.thisNoAccountAmt=this.$utils.toNumber(item.thisNoAccountQty)*item.price
           sum += item.thisNoAccountAmt * 1;
-          if(this.$utils.toNumber(item.thisNoAccountQty)>item.quantity || this.$utils.toNumber(item.thisNoAccountQty)<0){
+          if(this.$utils.toNumber(item.thisNoAccountQty)>item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty)<0){
             boolShow=false;
           }
           if(!reg.test(item.thisNoAccountQty)){
             boolShow=false;
           }
+          // if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
+          //   boolShow=false;
+          // }
         });
         if (!errMap && boolShow) {
           const index = this.Reconciliationcontent[0].index;

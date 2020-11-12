@@ -554,6 +554,11 @@
             className: "tc"
           },
           {
+            title: "前期未对账数量",
+            key: "noAccountQty",
+            className: "tc"
+          },
+          {
             title: "本次不对账数量",
             key: "thisNoAccountQty",
             className: "tc"
