@@ -1424,6 +1424,7 @@
         }
         if (row.id) {
           this.datadata = row;
+          let timeCreate=row.createTime;
           this.MainID = row.id;
           const params = {
             mainId: row.id
@@ -1431,6 +1432,7 @@
           const res = await getListDetail(params);
           this.Leftcurrentrow.detailVOS = res.data;
           this.isSaveClick = false;
+          this.datadata.createTime=timeCreate;
         } else {
           this.datadata = null;
           this.isSaveClick = false;
