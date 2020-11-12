@@ -69,7 +69,7 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-       <vxe-table-column  show-overflow="tooltip" field="group4" title="基本信息">
+       <vxe-table-column  show-overflow="tooltip"  title="基本信息">
         <vxe-table-column  show-overflow="tooltip"
           field="groupName"
           title="公司名称"
@@ -98,7 +98,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="税率信息">
+      <vxe-table-column  show-overflow="tooltip"  title="税率信息">
         <vxe-table-column  show-overflow="tooltip" field="taxSign" title="是否含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
@@ -111,7 +111,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="成本信息">
+      <vxe-table-column  show-overflow="tooltip"  title="成本信息">
         <vxe-table-column  show-overflow="tooltip"
           field="taxPrice"
           title="成本单价"
@@ -124,7 +124,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column  show-overflow="tooltip"  title="其他">
         <vxe-table-column  show-overflow="tooltip"
           field="hasAcceptUname"
           title="受理人"

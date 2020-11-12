@@ -1,6 +1,6 @@
 <template>
   <div class="content-oper content-oper-flex">
-    <section class="oper-box headerTitle">
+    <section class="oper-box headerTitlefen">
       <div class="headerbox">
       <Row>
           <Col span="20">
@@ -1164,7 +1164,7 @@
  .card {
    padding-left: 10px;
  }
-  .headerTitle {
+  .headerTitlefen {
     padding-left: 10px;
     width: 100%;
     height: 46px;
