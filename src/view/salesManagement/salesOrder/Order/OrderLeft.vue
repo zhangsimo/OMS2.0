@@ -121,7 +121,6 @@ export default {
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
       this.$parent.$parent.isNew=false
-
     },
     change(){
       this.Flaga = false

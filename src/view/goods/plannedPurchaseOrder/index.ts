@@ -75,8 +75,8 @@ export default class PlannedPurchaseOrder extends Vue {
   private saveLoading: boolean = false;
   private cancelLoading: boolean = false;
 
-  private filterCheckObj: any = null
-  private filterList: any = null
+  private filterCheckObj: object = {}
+  private filterList: object = {}
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -754,7 +754,7 @@ export default class PlannedPurchaseOrder extends Vue {
           this.saveHandle("formplanref");
           this.mainId = row.id || "";
           this.tableData = row.details || [];
-          this.setFilterArr(row.details || [])
+          this.setFilterArr(this.tableData || [])
           this.selectRowState = null;
           this.serviceId = row.serviceId || "";
           this.isInput = false;
@@ -802,7 +802,6 @@ export default class PlannedPurchaseOrder extends Vue {
         typeof v.billStatusId == "object" ? v.billStatusId.value : 0;
       this.mainId = v.id;
       this.tableData = v.details || [];
-      
       this.tableData.map(item => {
         item.orderPrice = parseFloat(item.orderPrice || 0).toFixed(2);
       });
@@ -1156,10 +1155,10 @@ export default class PlannedPurchaseOrder extends Vue {
   }
   private returnData(rData,cos){
     let arrData = [];
-    let arr = rData.map(el => el[cos])
-    let set = new Set(arr);
+    let arr: any = rData.map(el => el[cos])
+    let set: any = new Set(arr);
     set.forEach(el => {
-      let filterData = this.filterCheckObj[cos]||[]
+      let filterData: any = this.filterCheckObj[cos]||[]
       if(filterData.includes(el)){
         arrData.push({ label: el, value: el ,checked:true});
       }else{
@@ -1168,7 +1167,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
     });
     this.$nextTick(()=>{
-      const xtable: any = this.$refs.vxeTable;
+      const xtable:any = this.$refs.vxeTable;
       const column = xtable.getColumnByField(cos);
       xtable.setFilter(column, arrData);
       xtable.updateData();
