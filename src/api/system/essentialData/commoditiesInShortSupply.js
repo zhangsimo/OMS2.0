@@ -13,20 +13,22 @@ export function getTightProductList (params) {
 }
 
 //删除紧俏品
-export function getDeleteTight (data) {
+export function getDeleteTight (data,params) {
   return axios.request({
     url: `${api.wmsApi}/tightPart/delete`,
     method: 'post',
-    data
+    data,
+    params
   })
 }
 
 // 新增紧俏品
-export function getSaveNewTight (data) {
+export function getSaveNewTight (data,params) {
   return axios.request({
     url: `${api.wmsApi}/tightPart/save`,
     method: 'post',
-    data
+    data,
+    params
   })
 }
 

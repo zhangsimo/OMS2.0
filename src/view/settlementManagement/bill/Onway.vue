@@ -628,9 +628,10 @@
       // 日期选择
       dateChange(data) {
         this.value = data;
-        this.getGeneral()
+        this.select()
       },
       select() {
+        this.page.num=1;
         this.getGeneral()
       },
       // 往来单位选择

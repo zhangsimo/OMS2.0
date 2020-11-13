@@ -448,6 +448,7 @@
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
     <alot-model ref="AlotModel"></alot-model>
+    <print ref="printFH"></print>
   </div>
 </template>
 
@@ -489,11 +490,13 @@
   import AlotModel from "../components/AlotModel"
   import SalesCus from "../../../../components/allocation/salesCus";
   import {showLoading, hideLoading} from "@/utils/loading"
+  import Print from "../components/print";
 
   export default {
     name: "OrderRight",
     inject: ["reload"],
     components: {
+      Print,
       SalesCus,
       ClientData,
       goodsInfo,
@@ -628,6 +631,10 @@
       throwNameFun(v) {
         this.setOneClient(v);
       },
+      printModelShow(){
+        this.$refs.printFH.openModal();
+      },
+
 
       //------------------------------------------------------------------------//
       //表格tab切换可编辑部位

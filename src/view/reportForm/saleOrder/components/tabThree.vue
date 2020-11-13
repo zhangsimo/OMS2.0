@@ -111,7 +111,11 @@
           field="orderQty"
           title="销退数量"
           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.orderQtyCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="orderPrice"
@@ -123,7 +127,11 @@
           field="orderAmt"
           title="金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.orderAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="detailRemark"
@@ -131,7 +139,7 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="销售税率信息">
+      <vxe-table-column show-overflow="tooltip"  title="销售税率信息">
         <vxe-table-column show-overflow="tooltip" field="taxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
@@ -154,7 +162,11 @@
           field="taxAmt"
           title="含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="noTaxPrice"
@@ -166,13 +178,21 @@
           field="noTaxAmt"
           title="不含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.noTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxQuota"
           title="销售税额"
           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxQuotaCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group5" title="成本信息">
         <vxe-table-column
@@ -186,7 +206,11 @@
           field="enterAmt"
           title="成本金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.enterAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="成本含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
@@ -209,7 +233,11 @@
           field="sellTaxAmt"
           title="含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="sellNoTaxPrice"
@@ -221,7 +249,11 @@
           field="sellNoTaxAmt"
           title="不含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellNoTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxDiff"
@@ -246,22 +278,38 @@
                           field="profit"
                           title="损益"
                           width="60"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.profitCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="maoLi"
                           title="毛利"
                           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.maoLiCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="taxMaoLi"
                           title="税金毛利"
                           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxMaoLiCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="noTaxMaoLi"
                           title="非税金毛利"
                           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.noTaxMaoLiCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="costRate"
                           title="成本率"
@@ -359,7 +407,8 @@
         tableDataAll: [],
         body: {},
         tableData: [],
-        total: {}
+        total: {},
+        allMoneyList:{},//全部数据总和来自数据库后端
       };
     },
     mounted() {
@@ -372,6 +421,10 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
+        let obj = await api.getPjSellOutRtnMainDetailsCount(this.body, params)
+        if (obj.code === 0){
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
         let res = await api.getPjSellOutRtnMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -407,7 +460,11 @@
         let params = {
           page: 0,
           size: this.page.total,
-        };
+        }
+        let obj = await api.getPjSellOutRtnMainDetailsCount(this.body, params)
+        if (obj.code === 0){
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
         let res = await api.getPjSellOutRtnMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           // this.total = res.data.purchaseEnterBean
@@ -444,32 +501,7 @@
             }
             if (
               [
-                "enterQty",
-                "rtnPrice",
-                "rtnAmt",
-                "taxPrice",
-                "taxAmt",
-                "taxQuota",
-                "noTaxPrice",
-                "noTaxAmt",
-                "enterPrice",
-                "enterAmt",
-                "sellTaxPrice",
-                "sellTaxAmt",
-                "sellNoTaxPrice",
-                "sellNoTaxAmt",
-                "taxDiff",
-                "orderQty",
-                "orderPrice",
-                "orderAmt",
-                "taxMaoLi",
-                "noTaxMaoLi",
-                "cbTaxPrice",
-                "cbTaxAmt",
-                "cbNoTaxPrice",
-                "cbNoTaxAmt",
-                "maoLi",
-                "profit"
+                "six",
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);

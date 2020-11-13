@@ -19,7 +19,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150" @on-change="getGeneral" :disabled="selectShopList">
+            <Select v-model="model1" class="w150" @on-change="changePage(1)" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -35,7 +35,7 @@
           </div>
           <div class="db mr10">
             <span>类型：</span>
-            <Select v-model="typeName" style="width:200px" @on-change="type">
+            <Select v-model="typeName" style="width:200px" @on-change="changePage(1)">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -644,7 +644,7 @@
       // 日期选择
       dateChange(data) {
         this.value = data;
-        this.getGeneral()
+        this.changePage(1)
       },
       // 表格合计方式
       handleSummary({columns, data}) {
@@ -756,7 +756,7 @@
       getOne(data) {
         this.company = data.fullName;
         this.companyId = data.id;
-        this.getGeneral()
+        this.changePage(1)
       },
       // 快速查询
       async quickDate(data) {
@@ -764,10 +764,10 @@
           let arr = await creat(this.$refs.quickDate.val, this.$store);
           this.model1 = arr[1];
           this.value = arr[0];
-          this.getGeneral();
+          this.changePage(1)
         } else {
           this.value = data;
-          this.getGeneral();
+          this.changePage(1)
         }
       },
       changePage(p) {
@@ -940,7 +940,7 @@
       },
       // 选中总表查询明细
       election(row) {
-        if (this.typeName === "050102") {
+        if (this.typeName === "050102" || row.enterTypeId=="050102") {
           getWarehousingPart({mainId: row.id}).then(res => {
             // console.log(res);
             if (res.data.length !== 0) {

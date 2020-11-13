@@ -35,89 +35,7 @@
       </section>
       <section class="con-box">
         <div class="inner-box">
-          <Row>
-            <Col span="4">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
-            </Col>
-            <Col span="5">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账申请单</div>
-            </Col>
-            <Col span="5">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
-            </Col>
-            <Col span="5">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
-            </Col>
-            <Col span="5">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
-            </Col>
-          </Row>
-          <Row>
-            <Col span="4">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[3].accountNo}}
-              </div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[2].accountNo}}
-              </div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[0].accountNo }}
-              </div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[1].accountNo}}
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col span="4">
-              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[3].accountSumAmt}}
-              </div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[2].accountSumAmt}}
-              </div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[0].accountSumAmt}}
-              </div>
-            </Col>
-            <Col span="5">
-              <div
-                style="border:1px solid #dddddd;line-height:40px"
-                class="tc h40"
-              >{{accountData[1].accountSumAmt}}
-              </div>
-            </Col>
-          </Row>
+          <Table :columns="columns" :data="accountData" border max-height="400"></Table>
           <div class="db mt10 info" v-if="infoBase.billingType.value==0">
             <h5 class="p10">付款信息</h5>
             <div class="flex p10">
@@ -298,16 +216,36 @@
     </div>
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
-        <span class="mr5">门店</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="store"/>
-        <span class="mr5">单据编号</span>
-        <Input type="text" readonly class="w180 mr15 tc" :value="bill"/>
-        <span class="mr5">业务类型</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="business"/>
-        <span class="mr5">往来单位信息</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo"/>
-        <span class="mr5">单据日期</span>
-        <Input type="text" readonly class="w140 mr15 tc" :value="billDate"/>
+        <div class="db h20">
+          <span class="mr5">门店</span>
+          <Tooltip :content="store" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="store"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">单据编号</span>
+          <Tooltip :content="bill" max-width="200">
+            <Input type="text" readonly class="w180 mr15 tc" :value="bill"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">业务类型</span>
+          <Tooltip :content="business" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="business"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">往来单位信息</span>
+          <Tooltip :content="thiscompanyInfo" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">单据日期</span>
+          <Tooltip :content="billDate" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="billDate"/>
+          </Tooltip>
+        </div>
       </div>
       <Table
         :columns="Reconciliationlist"
@@ -384,12 +322,7 @@
     props: ["modelType", 'list'],
     data() {
       return {
-        accountData: [
-          {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""}
-        ], //对账单号
+        accountData: [], //对账单号
         store: "", //弹框门店
         bill: "", //单据编号
         business: "", //业务类型
@@ -426,6 +359,33 @@
         billDate: "", //单据日期
         Reconciliation: false, //本次不对账弹窗
         accountModal: false, //对账单弹窗
+        columns: [
+          {
+            title: "已勾选明细统计",
+            key: "Detailedstatistics",
+            className: "tc"
+          },
+          {
+            title: '对账单申请',
+            key: 'information',
+            className: "tc"
+          },
+          {
+            title: "不含税对账单",
+            key: "Statementexcludingtax",
+            className: "tc"
+          },
+          {
+            title: "含税配件对账单",
+            key: "Taxincludedpartsstatement",
+            className: "tc"
+          },
+          {
+            title: "含税油品对账单",
+            key: "Statementoilincludingtax",
+            className: "tc"
+          }
+        ],
         columns1: [
           {
             type: "selection",
@@ -594,6 +554,16 @@
             className: "tc"
           },
           {
+            title: "前期未对账数量",
+            key: "noAccountQty",
+            className: "tc"
+          },
+          {
+            title: "本次不对账数量",
+            key: "thisNoAccountQty",
+            className: "tc"
+          },
+          {
             title: "本次不对账金额",
             key: "thisNoAccountAmt",
             className: "tc"
@@ -663,12 +633,7 @@
     methods: {
       // 获取数据
       async Initialization() {
-        this.accountData = [
-          {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""},
-          {accountNo: "", accountSumAmt: ""},
-        ]
+        this.accountData = []
         if (this.modelType.type == 3) {
           this.disabletype = true
         } else {
@@ -680,6 +645,17 @@
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data)
           if (res.code == 0) {
+            for (let i of res.data.one) {
+              if (i.number === 3) {
+                this.arrId[0] = i.accountNo;
+              } else if (i.number === 1) {
+                this.arrId[1] = i.accountNo;
+              } else if (i.number === 2) {
+                this.arrId[2] = i.accountNo;
+              } else {
+                this.arrId[3] = i.accountNo;
+              }
+            }
             res.data.one.map(item => {
               if (item.number === 1) {
                 this.accountData[0] = {
@@ -735,6 +711,17 @@
           this.getAccountNameList("0");
         } else {
           getReconciliationNo({id: this.id}).then(res => {
+            for (let i of res.data.one) {
+              if (i.number === 3) {
+                this.arrId[0] = i.accountNo;
+              } else if (i.number === 1) {
+                this.arrId[1] = i.accountNo;
+              } else if (i.number === 2) {
+                this.arrId[2] = i.accountNo;
+              } else {
+                this.arrId[3] = i.accountNo;
+              }
+            }
             res.data.one.map(item => {
               if (item.number === 1) {
                 this.accountData[0] = {
@@ -833,9 +820,10 @@
         };
         getSettlement(obj).then(res => {
           this.handervis = true;
-          this.data = [
+          this.accountData = [
             {
               Detailedstatistics: "对账单号",
+              information: this.collectlist.length > 0 || this.paymentlist.length > 0 ? this.arrId[3] : "",
               Statementexcludingtax: res.data.hasOwnProperty("one")
                 ? this.arrId[0]
                 : "",
@@ -848,6 +836,7 @@
             },
             {
               Detailedstatistics: "对账金额",
+              information: this.collectlist.length > 0 || this.paymentlist.length > 0 ? this.Reconciliationtotal : 0,
               Statementexcludingtax: res.data.hasOwnProperty("one")
                 ? res.data.one
                 : "",
@@ -953,7 +942,7 @@
         // selection.map(item => {
         //   this.totalcollect += parseFloat(item.thisAccountAmt);
         // });
-        // this.getSettlementComputed();
+        this.getSettlementComputed();
 
         // this.tipText(this.collectlist);
       },

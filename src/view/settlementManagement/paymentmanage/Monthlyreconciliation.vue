@@ -106,11 +106,11 @@
             </div>
           </div>
         </section>
-<!--        对账单单号明细-->
+        <!--        对账单单号明细-->
 
         <section class="con-box">
           <div class="inner-box">
-<!--            对账单单号-->
+            <!--            对账单单号-->
             <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
             <div class="db mt10 info" v-show="info">
               <h5 class="p10">付款信息</h5>
@@ -357,16 +357,36 @@
     <!-- 本次不对帐 -->
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
-        <span class="mr5">门店</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="store"/>
-        <span class="mr5">单据编号</span>
-        <input type="text" readonly class="w180 mr15 tc" :value="bill"/>
-        <span class="mr5">业务类型</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="business"/>
-        <span class="mr5">往来单位信息</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo"/>
-        <span class="mr5">单据日期</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="billDate"/>
+        <div class="db h20">
+          <span class="mr5">门店</span>
+          <Tooltip :content="store" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="store"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">单据编号</span>
+          <Tooltip :content="bill" max-width="200">
+            <Input type="text" readonly class="w180 mr15 tc" :value="bill"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">业务类型</span>
+          <Tooltip :content="business" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="business"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">往来单位信息</span>
+          <Tooltip :content="thiscompanyInfo" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo"/>
+          </Tooltip>
+        </div>
+        <div class="db h20">
+          <span class="mr5">单据日期</span>
+          <Tooltip :content="billDate" max-width="140">
+            <Input type="text" readonly class="w140 mr15 tc" :value="billDate"/>
+          </Tooltip>
+        </div>
       </div>
       <vxe-table
         border
@@ -392,13 +412,24 @@
         <vxe-table-column field="amount" title="金额" align="center" width="80"></vxe-table-column>
         <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="120"></vxe-table-column>
         <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="120"></vxe-table-column>
+        <vxe-table-column field="noAccountQty" title="前期未对账数量" align="center" width="120"></vxe-table-column>
         <vxe-table-column
-          field="thisNoAccountAmt"
-          title="本次不对账金额"
-          :edit-render="{name: 'input',immediate:true,events: {input: updateFooterEvent}}"
+          field="thisNoAccountQty"
+          title="本次不对账数量"
+          :edit-render="{name: 'input', attrs: {type: 'number'},immediate:true,events: {input: updateFooterEvent},defaultValue:0}"
           align="center"
           width="140"
         ></vxe-table-column>
+        <vxe-table-column
+          field="thisNoAccountAmt"
+          title="本次不对账金额"
+          align="center"
+          width="140"
+        >
+          <template v-slot="{ row }">
+            <span>{{ row.thisNoAccountQty*row.price | priceFilters }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column width="120" title="本次对账金额" align="center">
           <template v-slot="{ row }">
             <span>{{ countAmount(row) | priceFilters }}</span>
@@ -498,7 +529,11 @@
     getClientTreeList
   } from "@/api/system/essentialData/clientManagement";
   import {getSupplierTreeList, getNewSupplier} from "@/api/system/essentialData/supplierManagement";
-  import {payColMonthExportAcSta/**导出对账清单*/,payColMonthExportParts/**导出配件明细勾选*/,payColMonthExportPartsAll/**导出配件明细全部*/} from "@/api/settlementManagement/Import/index.js"
+  import {
+    payColMonthExportAcSta/**导出对账清单*/,
+    payColMonthExportParts/**导出配件明细勾选*/,
+    payColMonthExportPartsAll/**导出配件明细全部*/
+  } from "@/api/settlementManagement/Import/index.js"
   import {creat} from "./../components";
   import {area} from "../../../api/lease/registerApi";
   import {
@@ -524,44 +559,28 @@
     },
     data() {
       const roleValid = ({cellValue, row}) => {
+        let reg = /^[1-9]\d*$/
         return new Promise((resolve, reject) => {
-          if (cellValue >= 0) {
-            //如果金额是负数，说明是退货活
-            if (row.amount < 0) {
-              if (parseFloat(cellValue) + parseFloat(row.amount + row.accountAmt) > 0) {
-                reject(
-                  new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
-                );
-                return;
-              } else {
-                resolve();
-              }
-            } else {
-              if (cellValue > row.amount - row.accountAmt) {
-                reject(
-                  new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
-                );
-              } else {
-                resolve();
-              }
-            }
-          } else {
-            reject(new Error("不能小于0"));
+          if (!reg.test(cellValue)) {
+            row.thisNoAccountQty = 0;
+            reject(new Error("请输入正整数!"));
+          } else if(cellValue<0){
+            row.thisNoAccountQty = 0;
+            reject(new Error("本次不对账数量不可小于零"));
+          }else if(cellValue>row.noAccountQty){
+            row.thisNoAccountQty=0;
+            reject(new Error("本次不对账数量不可大于前期未对账数量"));
           }
         })
-
       };
       return {
         value: [],
         disabledBtn: false,
         summer: null, //计算费用合计
         validRules: {
-          thisNoAccountAmt: [
-            {required: true, message: '不对账金额必填'},
+          thisNoAccountQty: [
+            // {required: true, message: '不对账数量必填'},
             {validator: roleValid}
-          ],
-          diffeReason: [
-            {required: true, message: '原因必填'},
           ]
         },
         arrId: [],
@@ -610,8 +629,8 @@
             className: "tc"
           },
           {
-            title:'对账单申请',
-            key:'information',
+            title: '对账单申请',
+            key: 'information',
             className: "tc"
           },
           {
@@ -888,9 +907,9 @@
         copyData: [],
         copyData1: [],
         //临时存储应付业务采购入库/退货对账勾选数据
-        tempPaymentlist:{},
+        tempPaymentlist: {},
         //临时存储应收业务销售出库/退货对账
-        tempCollectlist:{},
+        tempCollectlist: {},
       };
     },
     async mounted() {
@@ -938,7 +957,7 @@
       //本次对账结算合计
       Reconciliationtotal() {
         return parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
-      }
+      },
     },
     methods: {
       //计划结算类型
@@ -970,8 +989,8 @@
         this.pageObj.num = currentPage;
         this.pageObj.size = pageSize;
         this.data1 = this.changePageList(currentPage, pageSize, this.copyData);
-        let currentPageArr = this.tempCollectlist['page'+currentPage];
-        if(currentPageArr&&currentPageArr.length&&currentPageArr.length>0){
+        let currentPageArr = this.tempCollectlist['page' + currentPage];
+        if (currentPageArr && currentPageArr.length && currentPageArr.length > 0) {
           this.$refs.receivable.setCheckboxRow(currentPageArr, true)
         }
       },
@@ -979,8 +998,8 @@
         this.pageObj1.num = currentPage;
         this.pageObj1.size = pageSize;
         this.data2 = this.changePageList(currentPage, pageSize, this.copyData1);
-        let currentPageArr = this.tempPaymentlist['page'+currentPage];
-        if(currentPageArr&&currentPageArr.length&&currentPageArr.length>0){
+        let currentPageArr = this.tempPaymentlist['page' + currentPage];
+        if (currentPageArr && currentPageArr.length && currentPageArr.length > 0) {
           this.$refs.payable.setCheckboxRow(currentPageArr, true)
         }
       },
@@ -1016,13 +1035,13 @@
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
-            this.$utils.toNumber(row.thisNoAccountAmt)
+            this.$utils.toNumber(row.thisNoAccountQty)*row.price
           );
         } else {
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) +
-            this.$utils.toNumber(row.thisNoAccountAmt)
+            this.$utils.toNumber(row.thisNoAccountQty)*row.price
           );
         }
       },
@@ -1048,6 +1067,7 @@
                 "amount",
                 "accountAmt",
                 "noAccountAmt",
+                "thisNoAccountQty",
                 "thisNoAccountAmt"
               ].includes(column.property)
             ) {
@@ -1220,9 +1240,9 @@
               this.arrId[0] = i.accountNo;
             } else if (i.number === 1) {
               this.arrId[1] = i.accountNo;
-            } else if (i.number === 2){
+            } else if (i.number === 2) {
               this.arrId[2] = i.accountNo;
-            }else{
+            } else {
               this.arrId[3] = i.accountNo;
             }
           }
@@ -1304,7 +1324,7 @@
           this.data = [
             {
               Detailedstatistics: "对账单号",
-              information: this.collectlist.length> 0 || this.paymentlist.length > 0 ? this.arrId[3] : "",
+              information: this.collectlist.length > 0 || this.paymentlist.length > 0 ? this.arrId[3] : "",
               Statementexcludingtax: res.data.hasOwnProperty("one")
                 ? this.arrId[0]
                 : "",
@@ -1424,20 +1444,20 @@
         this.totalvalueFun();
       },
 
-      setTempCollectlist(selection){
-        this.tempCollectlist['page'+this.pageObj.num] = selection;
+      setTempCollectlist(selection) {
+        this.tempCollectlist['page' + this.pageObj.num] = selection;
         this.totalcollect = 0;
         // this.Actualtotalcollect = 0;
         this.collectlist = [];
-        for(let k in this.tempCollectlist){
+        for (let k in this.tempCollectlist) {
           let total = 0;
-          this.collectlist = [...this.collectlist,...this.tempCollectlist[k]];
-          total = this.tempCollectlist[k].reduce((pre,curr) => {
-            if(!isNaN(Number(curr.thisAccountAmt))){
-              return pre+parseFloat(curr.thisAccountAmt);
+          this.collectlist = [...this.collectlist, ...this.tempCollectlist[k]];
+          total = this.tempCollectlist[k].reduce((pre, curr) => {
+            if (!isNaN(Number(curr.thisAccountAmt))) {
+              return pre + parseFloat(curr.thisAccountAmt);
             }
-          },0);
-          this.totalcollect  += total;
+          }, 0);
+          this.totalcollect += total;
         }
         this.totalcollect = this.totalcollect.toFixed(2);
 
@@ -1477,17 +1497,17 @@
         this.totalvalueFun();
       },
 
-      setTempPaymentList(selection){
-        this.tempPaymentlist['page'+this.pageObj1.num] = selection;
+      setTempPaymentList(selection) {
+        this.tempPaymentlist['page' + this.pageObj1.num] = selection;
         this.totalpayment = 0;
         this.paymentlist = [];
-        for(let k in this.tempPaymentlist){
-          this.paymentlist = [...this.paymentlist,...this.tempPaymentlist[k]];
-          let total = this.tempPaymentlist[k].reduce((pre,curr) => {
-            if(!isNaN(Number(curr.thisAccountAmt))){
-              return pre+parseFloat(curr.thisAccountAmt);
+        for (let k in this.tempPaymentlist) {
+          this.paymentlist = [...this.paymentlist, ...this.tempPaymentlist[k]];
+          let total = this.tempPaymentlist[k].reduce((pre, curr) => {
+            if (!isNaN(Number(curr.thisAccountAmt))) {
+              return pre + parseFloat(curr.thisAccountAmt);
             }
-          },0);
+          }, 0);
           this.totalpayment += total;
         }
         this.totalpayment = this.totalpayment.toFixed(2);
@@ -1534,11 +1554,23 @@
       // 本次不对帐金额弹窗
       async noReconciliation() {
         const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
-        if (!errMap) {
-          let sum = 0;
-          this.Reconciliationcontent.map(item => {
-            sum += item.thisNoAccountAmt * 1;
-          });
+        let sum = 0;
+        let boolShow=true;
+        let reg = /^[1-9]\d*$/
+        this.Reconciliationcontent.map(item => {
+          item.thisNoAccountAmt=this.$utils.toNumber(item.thisNoAccountQty)*item.price
+          sum += item.thisNoAccountAmt * 1;
+          if(this.$utils.toNumber(item.thisNoAccountQty)>item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty)<0){
+            boolShow=false;
+          }
+          // if(!reg.test(item.thisNoAccountQty)){
+          //   boolShow=false;
+          // }
+          // if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
+          //   boolShow=false;
+          // }
+        });
+        if (!errMap && boolShow) {
           const index = this.Reconciliationcontent[0].index;
           if (this.business === "销售退货" || this.business === "销售出库") {
 
@@ -1871,7 +1903,7 @@
           if (this.moreSearch.taxMark) {
             obj.taxSign = this.moreSearch.taxMark;
           }
-          location.href=payColMonthExportPartsAll(obj)
+          location.href = payColMonthExportPartsAll(obj)
         }
       },
       //更多查询
@@ -2091,7 +2123,7 @@
             this.getSettlementComputed(val);
           }
         }
-      }
+      },
     }
   };
 </script>

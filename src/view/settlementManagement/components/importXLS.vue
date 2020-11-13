@@ -59,7 +59,6 @@ export default {
 
     // 上传成功函数
     onSuccess(response) {
-      hideLoading()
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
@@ -76,6 +75,7 @@ export default {
         this.importShow = false;
         this.$emit("getNewList", response);
       }
+      hideLoading()
     },
 
     //上传之前清空

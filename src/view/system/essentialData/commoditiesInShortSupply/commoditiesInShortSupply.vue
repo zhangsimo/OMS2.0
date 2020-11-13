@@ -157,7 +157,12 @@ export default {
         {
           title: "规格",
           align: "center",
-          key: "spec:"
+          key: "spec"
+        },
+        {
+          title: "仓库",
+          align: "center",
+          key: "storeName"
         },
         {
           title: "可售数量",
@@ -223,11 +228,7 @@ export default {
         //   label: "拼音"
         // }
       ],
-      List: [
-        { name: "zs", value: 18 },
-        { name: "zs", value: 18 },
-        { name: "zs", value: 18 }
-      ],
+      List: [],
       searchType: "",
       upurl: getup, //批量导入地址
       addCommodShow: false,
@@ -329,7 +330,10 @@ export default {
       this.pitchOn.forEach(item => {
         data.push(item.codeId);
       });
-      getDeleteTight(data).then(res => {
+      let params = {
+        storeId:this.storeId||""
+      }
+      getDeleteTight(data,params).then(res => {
         if (res.code == 0) {
           this.getList();
         }
