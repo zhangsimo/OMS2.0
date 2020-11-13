@@ -75,6 +75,9 @@ export default class PlannedPurchaseOrder extends Vue {
   private saveLoading: boolean = false;
   private cancelLoading: boolean = false;
 
+  private filterCheckObj: any = null
+  private filterList: any = null
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -751,6 +754,7 @@ export default class PlannedPurchaseOrder extends Vue {
           this.saveHandle("formplanref");
           this.mainId = row.id || "";
           this.tableData = row.details || [];
+          this.setFilterArr(row.details || [])
           this.selectRowState = null;
           this.serviceId = row.serviceId || "";
           this.isInput = false;
@@ -798,9 +802,11 @@ export default class PlannedPurchaseOrder extends Vue {
         typeof v.billStatusId == "object" ? v.billStatusId.value : 0;
       this.mainId = v.id;
       this.tableData = v.details || [];
+      
       this.tableData.map(item => {
         item.orderPrice = parseFloat(item.orderPrice || 0).toFixed(2);
       });
+      this.setFilterArr(this.tableData || [])
       this.selectRowState =
         typeof v.billStatusId == "object" ? v.billStatusId.name : "";
       this.serviceId = v.serviceId;
@@ -1097,6 +1103,7 @@ export default class PlannedPurchaseOrder extends Vue {
     this.tableData.map(item => {
       item.orderQty = item.canQty;
     });
+    this.setFilterArr(this.tableData || [])
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
@@ -1146,5 +1153,47 @@ export default class PlannedPurchaseOrder extends Vue {
       return false;
     }
     return true;
+  }
+  private returnData(rData,cos){
+    let arrData = [];
+    let arr = rData.map(el => el[cos])
+    let set = new Set(arr);
+    set.forEach(el => {
+      let filterData = this.filterCheckObj[cos]||[]
+      if(filterData.includes(el)){
+        arrData.push({ label: el, value: el ,checked:true});
+      }else{
+        arrData.push({ label: el, value: el });
+      }
+
+    });
+    this.$nextTick(()=>{
+      const xtable: any = this.$refs.vxeTable;
+      const column = xtable.getColumnByField(cos);
+      xtable.setFilter(column, arrData);
+      xtable.updateData();
+    });
+  }
+
+  private setFilterArr(rData){
+    this.returnData(rData,'partCode');
+    this.returnData(rData,'partName');
+    this.returnData(rData,'partBrand');
+  }
+
+  private filterOrderNo({ value, row, column }){
+    let {property} = column;
+    if(!value){
+      return !row[property]
+    }
+    if(row[property]){
+      return row[property] == value;
+    }else{
+      return false
+    }
+  }
+  private filterChange({property, values}){
+    this.filterCheckObj = this.filterList;
+    this.filterCheckObj[property] = values;
   }
 }
