@@ -35,18 +35,35 @@
       <a class="mr10" @click="changeEnable" v-has="'outStaffEnable'">{{enAble}}</a>
     </div>
     <div class="staffList">
-      <Table
-        class="table-highlight-row"
-        :loading="loading"
-        size="small"
-        highlight-row
+      <vxe-table
         border
+        auto-resize
+        resizable
+        size="mini"
+        align="center"
+        :loading="loading"
         :stripe="true"
-        :columns="columns"
         :data="staffList"
         ref="currentRowTable"
-        @on-current-change="selection"
-      ></Table>
+        @current-change="selection"
+        @radio-change="selection"
+        :radio-config="{highlight: true,trigger: 'row'}"
+      >
+        <vxe-table-column title="选择" type="radio" width="50"></vxe-table-column>
+        <vxe-table-column title="人员名称" field="name" min-width="80"></vxe-table-column>
+        <vxe-table-column title="员工编号" field="code" min-width="80"></vxe-table-column>
+        <vxe-table-column title="收款户名" field="accountName" min-width="80"></vxe-table-column>
+        <vxe-table-column title="开户银行" field="accountBank" min-width="80"></vxe-table-column>
+        <vxe-table-column title="银行卡号" field="accountNumber" min-width="80"></vxe-table-column>
+        <vxe-table-column title="公司名称" field="shorName" min-width="80"></vxe-table-column>
+        <vxe-table-column title="状态" field="sign" min-width="80">
+          <template v-slot="{row}">
+            <span>{{row.sign == true? "启用" : "禁用"}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="建档人" field="createUname" min-width="80"></vxe-table-column>
+        <vxe-table-column title="建档日期" field="createTime" min-width="80"></vxe-table-column>
+      </vxe-table>
       <Page
         :total="page.total"
         :page-size="page.size"
@@ -92,63 +109,6 @@
         },
         enAble:"启用",
         loading:false,
-        columns: [
-          {
-            title: "选择",
-            key: "id",
-            width: 70,
-            align: "center",
-            render: (h, params) => {
-              return h("span", { class: "table-radio" });
-            }
-          },
-          {
-            title: "人员名称",
-            align: "center",
-            key: "name"
-          },
-          {
-            title: "收款户名",
-            align: "center",
-            key: "accountName",
-            minWidth: 80
-          },
-          {
-            title: "开户银行",
-            align: "center",
-            key: "accountBank",
-            minWidth: 80
-          },
-          {
-            title: "银行卡号",
-            align: "center",
-            key: "accountNumber"
-          },
-          {
-            title: "公司名称",
-            align: "center",
-            key: "shorName"
-          },
-          {
-            title: "状态",
-            align: "center",
-            key: "sign",
-            render: (h, params) => {
-              let text = params.row.sign == true? "启用" : "禁用";
-              return h("span", {}, text);
-            }
-          },
-          {
-            title: "建档人",
-            align: "center",
-            key: "createUname"
-          },
-          {
-            title: "建档日期",
-            align: "center",
-            key: "createTime"
-          }
-        ],
         stores:[{id:"",name:"全部"}],
         oneStaffChange:{},
         modalShow:false,
@@ -212,7 +172,8 @@
       //弹出 新增外部员工 弹框
       addStaff(){
         this.title="新增外部人员"
-        this.modalShow=true
+        this.modalShow=true;
+        this.$refs.addOutStaff.showCode=false;
         this.$refs.addOutStaff.data={}
       },
       //弹出 修改外部员工 弹框
@@ -222,7 +183,8 @@
           return
         }else{
           this.title="修改外部人员"
-          this.modalShow=true
+          this.modalShow=true;
+          this.$refs.addOutStaff.showCode=true;
           this.$refs.addOutStaff.data=this.oneStaffChange
         }
       },
@@ -241,9 +203,9 @@
       },
       //选一个
       selection(currentRow){
-        this.oneStaffChange = currentRow;
+        this.oneStaffChange = currentRow.row;
         //判断选中项的状态  启用时否则禁用时
-        if(currentRow.sign){
+        if(currentRow.row.sign){
           this.enAble="禁用"
         }else{
           this.enAble="启用"

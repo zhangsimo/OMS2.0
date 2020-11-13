@@ -99,7 +99,7 @@
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="税率信息">
+      <vxe-table-column  show-overflow="tooltip" title="税率信息">
         <vxe-table-column  show-overflow="tooltip" field="taxSign" title="是否含税" width="140">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.taxSign"></Checkbox>
@@ -112,7 +112,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="含税信息">
+      <vxe-table-column  show-overflow="tooltip"  title="含税信息">
         <vxe-table-column  show-overflow="tooltip"
           field="taxPrice"
           title="含税单价"
@@ -125,7 +125,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="不含税信息">
+      <vxe-table-column  show-overflow="tooltip"  title="不含税信息">
         <vxe-table-column  show-overflow="tooltip"
           field="noTaxPrice"
           title="不含税单价"
@@ -138,7 +138,7 @@
 
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column  show-overflow="tooltip"  title="其他">
         <vxe-table-column  show-overflow="tooltip"
           field="createUname"
           title="创建人"

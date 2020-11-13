@@ -107,12 +107,11 @@
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="group3" title="数量/单价">
-        <vxe-table-column
-          show-overflow="tooltip"
-          field="sellQty"
-          title="数量"
-          width="70"
-        ></vxe-table-column>
+        <vxe-table-column show-overflow="tooltip" field="sellQty" title="数量" width="100">
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellQtyCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="sellPrice"
@@ -124,7 +123,11 @@
           field="sellAmt"
           title="金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="detailRemark"
@@ -132,11 +135,12 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="销售税率信息">
+      <vxe-table-column show-overflow="tooltip"  title="销售税率信息">
         <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
           </template>
+
         </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
@@ -155,13 +159,21 @@
           field="sellTaxAmt"
           title="含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="sellNoTaxPrice"
           title="不含税销价"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellNoTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="sellNoTaxAmt"
@@ -173,9 +185,13 @@
           field="taxQuota"
           title="销售税额"
           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxQuotaCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="成本信息">
+      <vxe-table-column show-overflow="tooltip"  title="成本信息">
         <vxe-table-column
           show-overflow="tooltip"
           field="enterPrice"
@@ -187,7 +203,11 @@
           field="enterAmt"
           title="成本金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.enterAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="cbTaxSign" title="成本含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.cbTaxSign"></Checkbox>
@@ -210,7 +230,11 @@
           field="cbTaxAmt"
           title="含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.cbTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="cbNoTaxPrice"
@@ -222,7 +246,11 @@
           field="cbNoTaxAmt"
           title="不含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.cbNoTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxDiff"
@@ -242,27 +270,43 @@
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="利润信息">
+      <vxe-table-column show-overflow="tooltip" title="利润信息">
         <vxe-table-column show-overflow="tooltip"
                           field="profit"
                           title="损益"
                           width="60"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.profitCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="maoLi"
                           title="毛利"
                           width="70"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.maoLiCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="taxMaoLi"
                           title="税金毛利"
                           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.taxMaoLiCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="noTaxMaoLi"
                           title="非税金毛利"
                           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.noTaxMaoLiCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="costRate"
                           title="成本率"
@@ -277,9 +321,11 @@
                           field="noTaxMaoLiRate"
                           title="非税金毛利率"
                           width="100"
-        ></vxe-table-column>
+        >
+
+        </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column show-overflow="tooltip"  title="其他">
         <vxe-table-column
           show-overflow="tooltip"
           field="code"
@@ -347,7 +393,7 @@
 
 <script>
   import * as api from "_api/reportForm/index.js";
-
+  import {getAllMoneyMun} from "@/api/bill/saleOrder";
   export default {
     data() {
       return {
@@ -359,7 +405,8 @@
         pageOpts: [10, 20, 30, 50],
         body: {},
         tableData: [],
-        total: {}
+        total: {},
+        allMoneyList:{},//全部数据总和来自数据库后端
       };
     },
     mounted() {
@@ -372,6 +419,10 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
+        let obj = await getAllMoneyMun(params, this.body)
+        if (obj.code == 0) {
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
         let res = await api.getPjSellOutMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -408,6 +459,7 @@
           this.page.total = 0;
           this.tableData = [];
         }
+
       },
       async getAll() {
         let tableDataAll = [];
@@ -415,6 +467,10 @@
           page: 0,
           size: this.page.total,
         };
+        let obj = await getAllMoneyMun(params, this.body)
+        if (obj.code === 0) {
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
         let res = await api.getPjSellOutMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           // this.total = res.data.sellOutBean
@@ -438,6 +494,7 @@
         }
       },
 
+
       //分页
       changePage(p) {
         this.page.num = p;
@@ -456,32 +513,7 @@
               return "合计";
             }
             if (
-              [
-                "orderQty",
-                "orderPrice",
-                "orderAmt",
-                "sellTaxPrice",
-                "sellTaxAmt",
-                "sellNoTaxPrice",
-                "sellNoTaxAmt",
-                "enterPrice",
-                "enterAmt",
-                "taxPrice",
-                "taxAmt",
-                "taxQuota",
-                "noTaxPrice",
-                "noTaxAmt",
-                "taxDiff",
-                "profit",
-                "maori",
-                "taxMaoLi",
-                "noTaxMaoLi",
-                "cbTaxPrice",
-                "cbTaxAmt",
-                "cbNoTaxPrice",
-                "cbNoTaxAmt",
-                "maoLi"
-              ].includes(column.property)
+              ["six"].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);
             }

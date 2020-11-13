@@ -104,7 +104,7 @@
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="成本信息">
+      <vxe-table-column  show-overflow="tooltip"  title="成本信息">
         <vxe-table-column  show-overflow="tooltip"
           field="enterPrice"
           title="成本单价"
@@ -146,7 +146,7 @@
           width="140"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column  show-overflow="tooltip"  title="其他">
         <vxe-table-column  show-overflow="tooltip"
           field="applyServiceId"
           title="退回申请单号"

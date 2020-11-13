@@ -3,6 +3,9 @@
     <FormItem label="人员名称:" prop="name">
       <Input v-model="data.name" style="width: 300px" />
     </FormItem>
+    <FormItem label="员工编号:" v-if="showCode">
+      <Input v-model="data.code" style="width: 300px" disabled/>
+    </FormItem>
     <FormItem label="收款户名:" prop="accountName">
       <Input v-model="data.accountName" style="width: 300px" />
     </FormItem>
@@ -32,6 +35,7 @@
       };
       return {
         data: {},
+        showCode:false,//新增时不显示员工编号
         rules: {
           name: [{ required: true, message: "人员名称不能为空", trigger: "blur" }],
           accountName: [{ required: true, message: "收款户名不能为空", trigger: "blur" }],

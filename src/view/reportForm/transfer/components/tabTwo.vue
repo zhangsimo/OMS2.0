@@ -146,7 +146,7 @@
           width="140"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column  show-overflow="tooltip" field="group4" title="其他">
+      <vxe-table-column  show-overflow="tooltip" field="group5" title="其他">
         <vxe-table-column  show-overflow="tooltip"
           field="code"
           title="受理单号"
