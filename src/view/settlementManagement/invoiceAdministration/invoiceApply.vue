@@ -1462,7 +1462,7 @@
           return this.$message.error("暂无数据可导出")
         }
         this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "";
-        this.form.endDate = this.value[1] ? moment(this.value[1]).endOf("day").format("YYYY-MM-DD") : "";
+        this.form.endDate = this.value[1] ? moment(this.value[1]).endOf("day").format("YYYY-MM-DD HH:mm:ss") : "";
         let params = "";
         let obj = {
           orgId: this.form.orgId=="0"?"/n":this.form.orgId,
