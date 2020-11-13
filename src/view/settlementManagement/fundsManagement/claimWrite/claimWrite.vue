@@ -1,6 +1,6 @@
 <template>
   <div class="content-oper content-oper-flex">
-    <section class="oper-box headerTitle">
+    <section class="oper-box headerTitlefen">
       <div class="headerbox">
       <Row>
           <Col span="20">
@@ -913,6 +913,7 @@
       },
       // 本店待认领款查询
       queryClaimed() {
+        this.$refs.claim.claimedPage.page=1;
         this.claimedList();
       },
       //连锁待分配款项
@@ -1163,7 +1164,7 @@
  .card {
    padding-left: 10px;
  }
-  .headerTitle {
+  .headerTitlefen {
     padding-left: 10px;
     width: 100%;
     height: 46px;

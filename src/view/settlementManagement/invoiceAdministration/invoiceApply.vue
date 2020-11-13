@@ -65,12 +65,12 @@
               <span>查询</span>
             </button>
           </div>
-          <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
-              <i class="iconfont iconcaidan"></i>
-              <span>更多</span>
-            </button>
-          </div>
+<!--          <div class="db ml10">-->
+<!--            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal = true">-->
+<!--              <i class="iconfont iconcaidan"></i>-->
+<!--              <span>更多</span>-->
+<!--            </button>-->
+<!--          </div>-->
         </div>
       </div>
       <div>
@@ -1461,15 +1461,18 @@
         if (this.data.length < 1) {
           return this.$message.error("暂无数据可导出")
         }
+        this.form.startDate = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "";
+        this.form.endDate = this.value[1] ? moment(this.value[1]).endOf("day").format("YYYY-MM-DD HH:mm:ss") : "";
         let params = "";
         let obj = {
-          orgId: this.form.orgId == '0' ? '' : this.form.orgId,
+          orgId: this.form.orgId=="0"?"/n":this.form.orgId,
           guestName: this.form.guestName,
           pagesize: this.pagetotal,
           startDate: this.form.startDate,
           endDate: this.form.endDate,
           cancalStatus: this.form.cancalStatus,
         };
+        obj.orgId==undefined?delete obj.orgId:"";
         for (var i in obj) {
           params += `${i}=${obj[i]}&`
         }

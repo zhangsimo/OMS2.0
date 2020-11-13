@@ -441,3 +441,13 @@ export function getAllList(params,data = {}) {
     data
   })
 }
+
+//查询接口返回全部数据总和
+export function getAllMoneyMun(params,data = {}) {
+  return axios.request({
+    url: `${api.omsBatch}/batchEdi/getPjSellOutMainDetailsCount`,
+    method: 'post',
+    params,
+    data
+  })
+}
