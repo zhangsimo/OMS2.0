@@ -1469,7 +1469,7 @@ export default {
               this.isSaveClick = false;
               this.isCommitClick = false;
             }
-            this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
+            // this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
           }else{
             this.isSaveClick = false;
             this.isCommitClick = false;
