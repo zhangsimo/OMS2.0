@@ -1813,6 +1813,8 @@
               }
 
               this.modal = false;
+            }else if(res.code===1){
+              this.$Message.error( res.message)
             }
           }).catch(err => {
             setTimeout(() => {

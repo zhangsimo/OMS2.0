@@ -1177,8 +1177,8 @@
           if (res.code === 0) {
             this.preDis=false;
             this.$emit('closeModal', {})
-          }else{
-            this.preDis=false;
+          }else if(res.code===1){
+            this.$Message.error( res.message)
           }
         }
         // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
