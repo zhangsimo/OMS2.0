@@ -302,43 +302,50 @@
                   :height="rightTableHeight"
                   :data="formPlan.details"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
+                  @filter-change="filterChange"
                 >
                   <vxe-table-column show-overflow="tooltip"
-                                    type="seq"
-                                    title="序号"
-                                    fixed="left"
-                                    width="50"
+                    type="seq"
+                    title="序号"
+                    fixed="left"
+                    width="50"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" type="checkbox" fixed="left" width="50"></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
-                                    field="partCode"
-                                    title="配件编码"
-                                    fixed="left"
-                                    width="110"
+                    field="partCode"
+                    title="配件编码"
+                    fixed="left"
+                    width="110"
+                    :filters="[]" 
+                    :filter-method="filterOrderNo"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
-                                    field="partName"
-                                    title="配件名称"
-                                    fixed="left"
-                                    width="110"
+                    field="partName"
+                    title="配件名称"
+                    fixed="left"
+                    width="110"
+                    :filters="[]" 
+                    :filter-method="filterOrderNo"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
-                                    field="partBrand"
-                                    title="品牌"
-                                    fixed="left"
-                                    width="80"
+                    field="partBrand"
+                    title="品牌"
+                    fixed="left"
+                    width="80"
+                    :filters="[]" 
+                    :filter-method="filterOrderNo"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
-                                    field="orderQty"
-                                    title="数量"
-                                    width="80"
-                                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
+                    field="orderQty"
+                    title="数量"
+                    width="80"
+                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
-                                    field="orderPrice"
-                                    title="销价"
-                                    width="80"
-                                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
+                      field="orderPrice"
+                      title="销价"
+                      width="80"
+                      :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" title="金额" width="100">
                     <template v-slot="{ row }">
@@ -346,10 +353,10 @@
                     </template>
                   </vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
-                                    field="remark"
-                                    title="备注"
-                                    width="100"
-                                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
+                    field="remark"
+                    title="备注"
+                    width="100"
+                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
                   ></vxe-table-column>
                   <!--<vxe-table-column show-overflow="tooltip" field="storeName" title="仓库" disabled>-->
                     <!--<template v-slot:edit="{ row }">-->
@@ -650,6 +657,7 @@
         submitloading:false,
         saveLoading: false,
         commitLoading: false,
+        filterCheckObj: {},
       };
     },
     mounted() {
@@ -831,6 +839,7 @@
               }
             }
           });
+          this.setFilterArr(this.formPlan.details || [])
         } else {
           if (v.id) {
             v.fullName = v.guestName;
@@ -842,6 +851,7 @@
             this.formPlan = v;
             this.draftShow = v.billStatusId.value;
             this.selectTableList = [];
+            this.setFilterArr(this.formPlan.details || [])
           }
         }
         // console.log(v.orderDate,tools.transTime(v.orderDate),new Date(v.orderDate),111111)
@@ -872,6 +882,7 @@
         this.sellOrderTable.tbdata[0]._highlight = true;
         this.isAdd = false;
         this.id = undefined;
+        this.setFilterArr(this.formPlan.details || [])
       },
       //获取客户属性
       async getType() {
@@ -953,6 +964,7 @@
           this.formPlan.details.map(val => {
             val.storeName = house[0].name;
           });
+          this.setFilterArr(this.formPlan.details || [])
         }
       },
       //切换页面
@@ -1190,6 +1202,7 @@
           this.formPlan.details = [];
         }
         this.formPlan.details = this.formPlan.details.concat(arr);
+        this.setFilterArr(this.formPlan.details || [])
         if (!flag) {
           this.$message.success("已添加");
         }
@@ -1263,6 +1276,7 @@
           item.uuid = v4();
           this.formPlan.details.push(item);
         });
+        this.setFilterArr(this.formPlan.details || [])
         // console.log('我是formplan',this.formPlan.details)
       },
 
@@ -1298,7 +1312,7 @@
             this.formPlan.details = this.formPlan.details.filter(el => {
               return !ids.includes(el.uuid);
             })
-
+            this.setFilterArr(this.formPlan.details || [])
             this.$refs.xTable.clearCheckboxRow();
 
             this.selectTableList = [];
@@ -1329,7 +1343,49 @@
             return null;
           })
         ];
+      },
+
+      returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
       }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
+    }
     },
     watch: {
       //监听时间
