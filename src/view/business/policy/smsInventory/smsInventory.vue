@@ -124,7 +124,7 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  
+
                   <FormItem label="盘点日期：" prop="checkDate">
                     <DatePicker
                       :disabled="draftShow != 0"
@@ -832,7 +832,7 @@ export default {
         this.$Message.error("只有草稿状态才能提交");
         return;
       }
-      let zero = tools.isZero(this.Right.tbdata, {qty: "trueQty"});
+      let zero = tools.isZero1(this.Right.tbdata, {qty: "trueQty"});
       if(zero) return;
       this.$Modal.confirm({
         title: "是否确定提交订单",
@@ -870,7 +870,7 @@ export default {
     baocun() {
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
-        let zero = tools.isZero(this.Right.tbdata, {qty: "trueQty"});
+        let zero = tools.isZero1(this.Right.tbdata, {qty: "trueQty"});
         if(zero) return;
         this.formPlan.checkDate = new Date(this.formPlan.checkDate);
         this.$refs.form.validate(valid => {

@@ -1144,15 +1144,17 @@ export default class OutsidePurchase extends Vue {
   }
 
   private returnData(rData,cos){
-    let arrData = [];
+    let arrData: any = [];
     let arr: any = rData.map(el => el[cos])
     let set: any = new Set(arr);
     set.forEach(el => {
       let filterData: any = this.filterCheckObj[cos]||[]
       if(filterData.includes(el)){
-        arrData.push({ label: el, value: el ,checked:true});
+        let a: any = { label: el, value: el ,checked:true}
+        arrData.push(a);
       }else{
-        arrData.push({ label: el, value: el });
+        let b: any = { label: el, value: el}
+        arrData.push(b);
       }
 
     });

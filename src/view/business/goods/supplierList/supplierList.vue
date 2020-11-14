@@ -378,9 +378,9 @@
                   <template v-slot="{ row }">
                     <div v-if="presentrowMsg !== 1">
                       {{
-                      row.stockOutQty - (row.orginOrderQty - row.orderQty) >=
+                      row.stockOutQty - (row.canReQty - row.orderQty) >=
                       0
-                      ? row.stockOutQty - (row.orginOrderQty - row.orderQty)
+                      ? row.stockOutQty - (row.canReQty - row.orderQty)
                       : 0
                       }}
                     </div>
@@ -934,7 +934,7 @@
           item.outUnitId = item.enterUnitId;
           item.unit = item.enterUnitId;
           item.systemUnitId = item.enterUnitId;
-          item.canReQty = item.rtnableQty;
+          item.canReQty = item.enterQty;
           item.orginOrderQty = item.orderQty;
           item.orderQty = item.rtnableQty;
           item.orderPrice = item.enterPrice;
@@ -984,9 +984,10 @@
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata;
               let noBack = data.details.filter((item) => {
-                return (
-                  item.stockOutQty - (item.orginOrderQty - item.orderQty) > 0
-                );
+                // return (
+                //   item.stockOutQty - (item.canReQty - item.orderQty) > 0
+                // );
+                return item.canReQty - item.stockOutQty < item.orderQty
               });
               if (noBack.length > 0) {
                 this.$message.error("明细中存在缺货数量，请调整");
@@ -1116,7 +1117,7 @@
           onCancel: () => {
             this.$Message.info("取消返单");
           },
-        });香蕉
+        });
       },
       //右侧表格复选框选中
       selectChange(msg) {

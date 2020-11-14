@@ -464,6 +464,7 @@
             data.subjectCode = "2241";
             data.claimType = 0;
             data.claimMoney = this.accrued[0].balanceMoney
+            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
             if(data.claimMoney==null || data.claimMoney<=0){
               this.$Message.error("本次认领金额不可为零或小于零")
               return
