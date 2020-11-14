@@ -11,8 +11,15 @@ export function getAllStock (data) {
   });
 }
 //汇总库存数据导出
-export function exportAll(params){
-  return `${api.omsSotck}/partStoreStock/export/PartStoreStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+// export function exportAll(params){
+//   return `${api.omsSotck}/partStoreStock/export/PartStoreStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+// }
+export function exportAll (params) {
+  return axios.request({
+    url: `${api.omsSotck}/partStoreStock/export/PartStoreStock`,
+    method: 'get',
+    params
+  });
 }
 //   批次库存查询
 export function getLotStock (data) {
@@ -23,8 +30,15 @@ export function getLotStock (data) {
   });
 }
 // 批次库存导出
-export function exportPart(params){
-  return `${api.omsOrder}/enterMain/export/BatchStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+// export function exportPart(params){
+//   return `${api.omsOrder}/enterMain/export/BatchStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+// }
+export function exportPart (params) {
+  return axios.request({
+    url: `${api.omsOrder}/enterMain/export/BatchStock`,
+    method: 'get',
+    params
+  });
 }
 // 获取入库明细数据
 export function getEnter (data) {
