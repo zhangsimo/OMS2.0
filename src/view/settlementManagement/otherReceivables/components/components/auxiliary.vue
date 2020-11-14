@@ -219,12 +219,21 @@
                     <vxe-table-column field="itemName" title="核算全称"></vxe-table-column>
                   </vxe-table>
                 </div>
-                <!--<div>-->
-                <!--<Page size="small" :total="Other.page.total" :page-size="Other.page.size" :current="Other.page.num"   :page-size-opts="Other.page.sizeOpts"-->
-                <!--show-sizer show-total  show-elevator  @on-change="selectNumOther" @on-page-size-change="selectPageOther"-->
-                <!--style="float: right;margin-top: 10px;margin-right: 10px"/>-->
-                <!--</div>-->
-                <div></div>
+                <div v-show="this.dictName == '外部员工'">
+                  <Page
+                    size="small"
+                    :total="outStaff.page.total"
+                    :page-size="outStaff.page.size"
+                    :current="outStaff.page.num"
+                    :page-size-opts="outStaff.page.sizeOpts"
+                    show-sizer
+                    show-total
+                    show-elevator
+                    @on-change="selectoutStaffPage"
+                    @on-page-size-change="selectoutStaffSize"
+                    style="float: right;margin-top: 10px;margin-right: 10px"
+                  />
+                </div>
               </div>
               <div>
                 <!--其他辅助核算弹框里新增弹框-->
@@ -249,6 +258,16 @@
                   </div>
                 </Modal>
               </div>
+              <div>
+                  <!--新增/修改外部员工-->
+                  <Modal v-model="modalShow" title="新增外部员工" width="460px" :closable="false">
+                    <addOutStaff ref="addOutStaff"></addOutStaff>
+                    <div slot="footer" style="padding: 10px 0">
+                      <Button type="primary" @click="submit">确认</Button>
+                      <Button type="default" @click="cancel">退出</Button>
+                    </div>
+                  </Modal>
+                </div>
             </div>
           </TabPane>
         </Tabs>
@@ -279,8 +298,13 @@ import {
 } from "@/api/settlementManagement/VoucherInput";
 // import * as tools from "../../utils/tools";
 import bus from "../../../bill/Popup/Bus";
+import addOutStaff from "@/view/system/systemSetting/outStaffManagement/components/addOutStaff.vue"
+import {getOutStaff/**获取全部外部员工*/,addOutStaffe/**添加外部员工*/,changeOutStaffEn/**修改启用禁用*/} from "@/api/system/systemSetting/staffManagenebt"
 export default {
   name: "AssistAccounting",
+  components: {
+    addOutStaff
+  },
   data() {
     return {
       //其他辅助弹框表单验证
@@ -336,6 +360,14 @@ export default {
           sizeOpts: [100, 200, 300, 400, 500]
         } //分页
       }, //其他辅助核算分页
+      outStaff: {
+        page: {
+          num: 1,
+          size: 10,
+          total: 0,
+          sizeOpts: [10, 20, 50, 80, 100]
+        } //分页
+      },
       subjectModelShowassist: false, //先隐藏弹框
       categoryArr: [], //类别数组
       dictCode: "CW00111", //用于保存dictCode
@@ -347,7 +379,7 @@ export default {
       },
       auxiliaryTypeCode: "", //辅助弹框选的哪一个
       selectClass: 0 ,//用于判断class
-      // obj:{}
+      modalShow: false,
     };
   },
   methods: {
@@ -462,14 +494,19 @@ export default {
         if (res.code === 0) {
           let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
           this.categoryArr = NewArr[0].children;
+          this.categoryArr.push({dictName: '外部员工'})
         }
       });
     },
     // 其他辅助核算左侧列表点击事件
     LiClick(item, index) {
       this.selectClass = index;
-      this.dictCode = item.dictCode;
       this.dictName = item.dictName;
+      if(this.dictName == "外部员工"){
+        this.getAllStaffList()
+        return 
+      }
+      this.dictCode = item.dictCode;
       let params = {};
       if (this.accountingName) {
         params.itemName = this.accountingName;
@@ -483,6 +520,52 @@ export default {
         }
       });
     },
+    // 查询外部员工
+    async getAllStaffList(){
+      let params={
+        page:this.outStaff.page.num-1,
+        size:this.outStaff.page.size,
+      }
+      let data={}
+      data.orgid=this.$store.state.user.userData.shopId;
+      data.name=this.accountingName
+      //参数
+      let res=await getOutStaff(params,data)
+      if(res.code===0){
+        this.AssistTableDataOther=res.data.content
+        this.AssistTableDataOther.map(v => {
+          v.itemCode = v.code
+          v.itemName = v.name
+        })
+        this.outStaff.page.total=res.data.totalElements
+      }
+    },
+    //添加外部员工
+    submit(){
+      this.$refs.addOutStaff.handleSubmit(()=>{
+        let data = {}
+        data=this.$refs.addOutStaff.data
+        data.id=""
+        data.sign=true
+        this.addOutStaffTrue(data);
+        this.modalShow=false;
+        this.$refs.addOutStaff.data={};
+      })
+    },
+    //取消
+    cancel(){
+      this.$refs.addOutStaff.data={}
+      this.modalShow=false
+    },
+
+    //添加外部员工接口
+    async addOutStaffTrue(data){
+      let res=await addOutStaffe(data)
+      if(res.code===0){
+        this.$Message.success("新增外部人员成功")
+        this.getAllStaffList()
+      }
+    },
     //其他辅助核算查询
     OtherClick() {
       this.OtherClickTable();
@@ -490,6 +573,11 @@ export default {
     //其他辅助核算表格初始化
     OtherClickTable() {
       let params = {};
+      if(this.dictName == '外部员工'){
+        this.outStaff.page.num = 1
+        this.getAllStaffList()
+        return
+      }
       if (this.accountingName) {
         params.itemName = this.accountingName;
       }
@@ -523,7 +611,11 @@ export default {
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row;
-      this.auxiliaryTypeCode = "CW0011X";
+      if(this.dictName == '外部员工'){
+        this.auxiliaryTypeCode = "CW00118";
+      }else{
+        this.auxiliaryTypeCode = "CW0011X";
+      }
       // this.auxiliaryCode = row.itemCode;
       // console.log(row)
     },
@@ -572,16 +664,15 @@ export default {
       this.personage.page.size = size;
       this.SearchPersonal();
     },
-    //其他分页切换页数
-    selectNumOther(page) {
-      this.Other.page.num = page;
-      // this.getList()
+    //外部员工的分页
+    selectoutStaffPage(page) {
+      this.outStaff.page.num = page;
+      this.getAllStaffList()
     },
-    //其他切换分页条数
-    selectPageOther(size) {
-      this.Other.page.num = 1;
-      this.Other.page.size = size;
-      // this.getList()
+    selectoutStaffSize(size) {
+      this.outStaff.page.num = 1;
+      this.outStaff.page.size = size;
+      this.getAllStaffList()
     },
     //部门改变
     ListChange(val, selectedData) {
@@ -624,7 +715,11 @@ export default {
     },
     //其他新增
     ShowOtherAdd() {
-      this.OtherModalAdd = true;
+      if(this.dictName == '外部员工'){
+        this.modalShow = true
+      }else{
+        this.OtherModalAdd = true;
+      }
     },
     showOrhideModel(v){
       if(v){

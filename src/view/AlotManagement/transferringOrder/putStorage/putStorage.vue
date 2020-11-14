@@ -920,7 +920,8 @@ export default {
             const params = {
               id: this.Leftcurrentrow.id,
               voList: this.ArrayValue,
-              storeId:this.Leftcurrentrow.storeId
+              storeId:this.Leftcurrentrow.storeId,
+              remark:this.Leftcurrentrow.remark
             };
             // 配件组装作废
             if(this.isOutClick){
