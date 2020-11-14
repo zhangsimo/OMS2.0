@@ -1178,6 +1178,7 @@
             this.preDis=false;
             this.$emit('closeModal', {})
           }else if(res.code===1){
+            this.preDis=false;
             this.$Message.error( res.message)
           }
         }
