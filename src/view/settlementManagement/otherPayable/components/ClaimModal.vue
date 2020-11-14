@@ -299,7 +299,7 @@ export default {
       this.getMessage();
     },
     getMessage() {
-      this.calculation = this.$refs.voucherInput.AssistAccounting.fullName || this.$refs.voucherInput.AssistAccounting[0].name || this.$refs.voucherInput.AssistAccounting.userName || this.$refs.voucherInput.AssistAccounting.itemName  ;
+      this.calculation = this.$refs.voucherInput.AssistAccounting.fullName || this.$refs.voucherInput.AssistAccounting.itemName || this.$refs.voucherInput.AssistAccounting[0].name || this.$refs.voucherInput.AssistAccounting.userName;
       this.voucherItem = this.$refs.voucherInput.AssistAccounting
     },
   },

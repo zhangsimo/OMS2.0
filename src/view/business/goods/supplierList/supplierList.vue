@@ -309,78 +309,71 @@
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 @edit-actived="editActivedEvent"
+                show-overflow
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
+                @filter-change="filterChange"
               >
                 <vxe-table-column
-                  show-overflow="tooltip"
                   type="seq"
                   fixed="left"
-                  width="50"
                   title="序号"
+                  width="50"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" type="checkbox" fixed="left" width="50"></vxe-table-column>
+                <vxe-table-column type="checkbox" fixed="left" width="50"></vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   field="partCode"
                   fixed="left"
                   title="配件编码"
-                  width="100"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   field="partName"
                   fixed="left"
                   title="配件名称"
-                  width="100"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   fixed="left"
                   field="partInnerId"
                   title="配件内码"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   fixed="left"
-                  show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
-                  width="100"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="outUnitId" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="canReQty" title="入库数量" width="100"></vxe-table-column>
+                <vxe-table-column field="outUnitId" title="单位"></vxe-table-column>
+                <vxe-table-column field="canReQty" title="入库数量"></vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   field="orderQty"
                   title="退货数量"
                   :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   field="orderPrice"
                   title="退货单价"
                   :edit-render="{ name: 'input',autoselect: true }"
-                  width="100"
                 ></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="orderAmt" title="退货金额" width="100">
+                <vxe-table-column field="orderAmt" title="退货金额">
                   <template v-slot="{ row }">{{ countAmount(row) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   field="remark"
                   title="备注"
                   :edit-render="{
                     name: 'input',
                     attrs: { disabled: presentrowMsg !== 0 }
                   }"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  show-overflow="tooltip"
                   field="stockOutQty"
                   title="缺货数量"
-                  width="100"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 >
                   <template v-slot="{ row }">
                     <div v-if="presentrowMsg !== 1">
@@ -394,9 +387,9 @@
                     <div v-else>{{ row.stockOutQty || 0 }}</div>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="storeShelf" title="仓位" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
+                <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+                <vxe-table-column field="spec" title="规格"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
@@ -680,6 +673,7 @@
         successHaveId: "", //有id,
         selectLeftItemId: "", //左侧点击的id
         leftCurrentItem: null, //记录左侧点击的数据
+        filterCheckObj: {}, //筛选条件
       };
     },
     methods: {
@@ -794,7 +788,7 @@
             this.Right.tbdata = this.Right.tbdata.filter((el) => {
               return !ids.includes(el.uuid);
             });
-
+            this.setFilterArr(this.Right.tbdata || [])
             this.Left.tbdata.forEach((el) => {
               if (el._highlight == true) {
                 el.details = this.Right.tbdata;
@@ -847,6 +841,7 @@
           (this.formPlan.serviceId = ""), //采购单号
           (this.formPlan.numbers = ""), //采退单号
           (this.Right.tbdata = []);
+        this.setFilterArr(this.Right.tbdata || [])
         this.isAdd = false;
         this.Left.tbdata.unshift(this.PTrow);
         this.datadata = this.PTrow;
@@ -948,6 +943,7 @@
         });
 
         this.Right.tbdata = this.Right.tbdata.concat(arr);
+        this.setFilterArr(this.Right.tbdata || [])
 
         if (!flag) {
           this.$message.success("已添加");
@@ -1461,6 +1457,7 @@
             el.orginOrderQty = el.orderQty;
             return el;
           });
+          this.setFilterArr(this.Right.tbdata || [])
         }else{
           this.Right.tbdata=[];
         }
@@ -1632,6 +1629,48 @@
         tools.setSession("self", {supplierList: this.showSelf});
         this.leftgetList();
       },
+      returnData(rData,cos){
+        let arrData = [];
+        let arr = rData.map(el => el[cos])
+        let set = new Set(arr);
+        set.forEach(el => {
+          let filterData = this.filterCheckObj[cos]||[]
+          if(filterData.includes(el)){
+            arrData.push({ label: el, value: el ,checked:true});
+          }else{
+            arrData.push({ label: el, value: el });
+          }
+
+        });
+        this.$nextTick(()=>{
+          const xtable = this.$refs.xTable;
+          const column = xtable.getColumnByField(cos);
+          xtable.setFilter(column, arrData);
+          xtable.updateData();
+        });
+      },
+
+      setFilterArr(rData){
+        this.returnData(rData,'partCode');
+        this.returnData(rData,'partName');
+        this.returnData(rData,'partBrand');
+        this.returnData(rData,'stockOutQty');
+      },
+
+      filterOrderNo({ value, row, column }){
+        let {property} = column;
+        if(!value){
+          return !row[property]
+        }
+        if(row[property]){
+          return row[property] == value;
+        }else{
+          return false
+        }
+      },
+      filterChange({property, values}){
+        this.filterCheckObj[property] = values;
+      }
     },
     mounted() {
       let self = tools.getSession("self");

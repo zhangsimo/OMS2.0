@@ -262,39 +262,40 @@
                 showOverflow="true"
                 @edit-actived="editActivedEvent"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
+                @filter-change="filterChange"
               >
-                <vxe-table-column show-overflow="tooltip" type="seq" title="序号"></vxe-table-column>
-                <vxe-table-column show-overflow="tooltip" type="checkbox"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" width="80" type="seq" title="序号"></vxe-table-column>
+                <vxe-table-column show-overflow="tooltip" width="80" type="checkbox"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
-                  width="100"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
-                  width="150"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                                   field="partInnerId"
                                   title="配件内码"
-                                  width="150"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
-                  width="100"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="unit"
                   title="单位"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="preQty"
                   title="预定数量"
                   :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
-                  width="100"
                 >
                 </vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
@@ -305,22 +306,18 @@
                     attrs: { disabled: presentrowMsg !== 0 },
                     maxlength: 100
                   }"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="acceptQty"
                   title="受理数量"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="oemCode"
                   title="OE码"
-                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="spec"
                   title="规格"
-                  width="100"
                 ></vxe-table-column>
                 <!--<vxe-table-column show-overflow="tooltip" field="direction" title="方向" width="100"></vxe-table-column>-->
               </vxe-table>
@@ -544,6 +541,7 @@ export default {
       saveLoading: false,
       commitLoading: false,
       cancelLoading: false,
+      filterCheckObj: {},
     };
   },
   methods: {
@@ -634,6 +632,7 @@ export default {
               this.Right.tbdata = this.Right.tbdata.filter(
                 (item) => !checkBoxArr.includes(item.id)
               );
+              this.setFilterArr(this.Right.tbdata || [])
               this.checkboxArr = [];
             }
           });
@@ -678,6 +677,7 @@ export default {
                 this.Right.tbdata = this.Right.tbdata.filter(
                   (item) => !checkBoxArr.includes(item.id)
                 );
+                this.setFilterArr(this.Right.tbdata || [])
                 this.checkboxArr = [];
               }
             });
@@ -703,6 +703,7 @@ export default {
           this.Right.tbdata = this.Right.tbdata.filter(
             (item) => !checkBoxArr.includes(item.partCode)
           );
+          this.setFilterArr(this.Right.tbdata || [])
           this.$Message.warning("删除成功！");
         }
       } else {
@@ -741,6 +742,7 @@ export default {
         (this.formPlan.orderDate = tools.transTime(new Date())), //期望到货日期
         (this.formPlan.remark = ""); //备注
       this.Right.tbdata = [];
+      this.setFilterArr(this.Right.tbdata || [])
     },
     //添加配件按钮
     addPro() {
@@ -995,6 +997,7 @@ export default {
       } else {
         this.Right.tbdata = parts;
       }
+      this.setFilterArr(this.Right.tbdata || [])
 
       // this.Right.tbdata.map(
       //   item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
@@ -1025,6 +1028,7 @@ export default {
       } else {
         this.Right.tbdata = parts;
       }
+      this.setFilterArr(this.Right.tbdata || [])
       this.$Message.success("已添加");
 
       // this.Right.tbdata.map(
@@ -1181,9 +1185,8 @@ export default {
         this.formPlan.orderDate = this.datadata.expectedArrivalDate;
         this.formPlan.remark = this.datadata.remark;
         this.Right.tbdata = this.datadata.detailVOList;
-        console.log(this.datadata.detailVOList, "13456");
+        this.setFilterArr(this.Right.tbdata || [])
         this.presentrowMsg = row.status.value;
-        // console.log(this.presentrowMsg)
         this.rowId = row.id;
         this.buttonDisable = false;
       } else {
@@ -1193,6 +1196,7 @@ export default {
         this.formPlan.remark = "";
         this.rowId = "";
         this.Right.tbdata = [];
+        this.Right.tbdata = this.datadata.detailVOList;
       }
     },
     // 提交按钮
@@ -1255,11 +1259,47 @@ export default {
         this.$Message.warning("请添加配件或完善订单信息后再提交!");
       }
     },
-    // unique(arr) { // 根据唯一标识Id来对数组进行过滤
-    //   const res = new Map();  //定义常量 res,值为一个Map对象实例
-    //   //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
-    //   return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
-    // }
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
+    }
   },
   mounted() {
     this.$nextTick(() => {

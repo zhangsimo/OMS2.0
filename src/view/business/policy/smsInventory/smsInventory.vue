@@ -250,12 +250,13 @@
                 :footer-method="addFooter"
                 show-footer
                 :edit-config="{trigger: 'click', mode: 'cell'}"
+                @filter-change="filterChange"
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
@@ -525,6 +526,7 @@ export default {
       isAddRight: true, //判断右侧是有数据
       showBayer: false, //出库方弹窗
       rightTableStatus: "", //右侧表格状态
+      filterCheckObj: {},
       ruleValidate: {
         storeId: [
           {
@@ -704,7 +706,7 @@ export default {
               firstData._highlight = true
             }
           }
-
+          this.setFilterArr(this.Right.tbdata || [])
         })
         .catch(err => {
           this.$Message.info("获取盘点列表失败");
@@ -807,6 +809,7 @@ export default {
       this.draftShow = 0;
       this.formPlan = item;
       this.Right.tbdata = [];
+      this.setFilterArr(this.Right.tbdata || [])
       let newItem = JSON.parse(JSON.stringify(item));
       this.Left.tbdata.unshift(newItem);
       this.flag = 1;
@@ -887,6 +890,7 @@ export default {
                 this.flag = 0;
                 this.isAddRight = true;
                 this.Right.tbdata = [];
+                this.setFilterArr(this.Right.tbdata || [])
                 this.$Message.success("保存成功");
                 this.handleReset();
                 this.getList();
@@ -1007,6 +1011,7 @@ export default {
       this.currRow = data;
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;
+      this.setFilterArr(this.Right.tbdata || [])
       this.draftShow = data.billStatusId.value;
     },
     shanchu() {
@@ -1027,6 +1032,7 @@ export default {
       this.Right.tbdata = this.Right.tbdata.filter(
         item => !seleList.includes(item)
       );
+      this.setFilterArr(this.Right.tbdata || [])
       if (!ids[0]) return;
       // this.array_diff(this.Right.tbdata, seleList);
       this.Left.tbdata.map((item, index) => {
@@ -1139,6 +1145,7 @@ export default {
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       this.formPlan.detailVOList = this.Right.tbdata.filter(({ id }) => !id);
+      this.setFilterArr(this.Right.tbdata || [])
       // this.$refs.SelectPartRef.searchPartLayer = false;
       this.$Message.success("已添加");
     },
@@ -1194,6 +1201,47 @@ export default {
       }
       return a;
     },
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable1;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
+    }
   },
   mounted() {
     this.getList();

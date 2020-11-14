@@ -383,6 +383,7 @@
                   @keydown="keydown"
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
+                  @filter-change="filterChange"
                 >
                   <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip" type="checkbox" fixed="left" width="60"></vxe-table-column>
@@ -391,9 +392,9 @@
                       <a @click="openFileModal(row)">查看</a>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                  <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partCode" :filters="[]" :filter-method="filterOrderNo" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partName" :filters="[]" :filter-method="filterOrderNo" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                  <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" :filters="[]" :filter-method="filterOrderNo" fixed="left" width="100"></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="orderQty"
                     title="数量"
@@ -676,6 +677,7 @@ export default {
       },
       planArriveDatePicker: {},
       submitloading:false,
+      filterCheckObj: {},
     };
   },
   mounted() {
@@ -974,6 +976,7 @@ export default {
             }
             this.formPlan.detailVOList.push(item);
           });
+          this.setFilterArr(this.formPlan.detailVOList || [])
           this.$Message.success("已添加");
         } else {
           this.$Message.error("*为必填项");
@@ -1056,6 +1059,7 @@ export default {
           this.id = v.id;
           this.tableData = v.detailVOList;
           this.formPlan = v;
+          this.setFilterArr(this.formPlan.detailVOList || [])
           this.draftShow = v.status.value;
           this.selectTableList = [];
           this.limitList = {};
@@ -1130,6 +1134,7 @@ export default {
       this.isNew = false;
       this.tableData = [];
       this.formPlan.detailVOList=[];
+      this.setFilterArr([])
       this.formPlan = {
         detailVOList: [],
         orderMan: this.PTrow.orderMan,
@@ -1316,6 +1321,7 @@ export default {
         });
         const arr = this.formPlan.detailVOList.filter(v => !checkedData.includes(v));
         this.$set(this.formPlan, "detailVOList", arr);
+        this.setFilterArr(this.formPlan.detailVOList || [])
         if(!data[0].id) return
         this.preSellOrderTable.tbData.map((item, index) => {
           if (item.id === this.formPlan.id) {
@@ -1414,6 +1420,48 @@ export default {
     },
     downInnerId(){
       down("3300000000")
+    },
+    // 表格帅选
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
     }
   },
   watch: {
