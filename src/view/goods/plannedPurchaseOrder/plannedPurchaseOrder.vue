@@ -351,6 +351,7 @@
                 :data="tableData"
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell',activeMethod: activeMethodFun }"
+                @filter-change="filterChange"
               >
                 <vxe-table-column
                   show-overflow="tooltip"
@@ -371,6 +372,8 @@
                   title="配件编码"
                   width="100"
                   fixed="left"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"
@@ -378,6 +381,8 @@
                   title="配件名称"
                   width="100"
                   fixed="left"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
                   fixed="left"
@@ -392,6 +397,8 @@
                   title="品牌"
                   width="100"
                   fixed="left"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
                   show-overflow="tooltip"

@@ -97,15 +97,74 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table
+<!--        <Table-->
+<!--          border-->
+<!--          :columns="columns"-->
+<!--          :data="data"-->
+<!--          ref="summary"-->
+<!--          highlight-row-->
+<!--          @on-selection-change="requires"-->
+<!--          max-height="500"-->
+<!--        ></Table>-->
+        <vxe-table
           border
-          :columns="columns"
+          auto-resize
+          resizable
+          show-overflow="title"
+          align="center"
           :data="data"
+          size="mini"
           ref="summary"
-          highlight-row
-          @on-selection-change="requires"
+          highlight-hover-row
           max-height="500"
-        ></Table>
+          @select-change="requires"
+          @select-all="requires"
+          @select-cancel="requires"
+        >
+          <vxe-table-column type="selection" width="50"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column title="开票申请单号" field="requestCode" width="100"></vxe-table-column>
+          <vxe-table-column title="创建时间" field="createTime" width="100"></vxe-table-column>
+          <vxe-table-column title="开票时间" field="invoiceDate" width="100"></vxe-table-column>
+          <vxe-table-column title="开票名称" field="speciesName" width="100"></vxe-table-column>
+          <vxe-table-column title="开票类型" field="invoiceTypeName" width="100"></vxe-table-column>
+          <vxe-table-column title="发票种类" field="invoiceCode" width="100"></vxe-table-column>
+          <vxe-table-column title="发票号码" field="invoiceNo" width="100"></vxe-table-column>
+          <vxe-table-column title="购方名称" field="receiptUnitName" width="100"></vxe-table-column>
+          <vxe-table-column title="购方税号" field="customDuty" width="100"></vxe-table-column>
+          <vxe-table-column title="购方手机号" field="customPhone" width="100"></vxe-table-column>
+          <vxe-table-column title="购方邮箱" field="customMail" width="100"></vxe-table-column>
+          <vxe-table-column title="购方开户行及账号" field="customAccount" width="130"></vxe-table-column>
+          <vxe-table-column title="购方地址、电话" field="customAddress" width="130"></vxe-table-column>
+          <vxe-table-column title="合计含税金额" field="priceTaxTotal" width="110"></vxe-table-column>
+          <vxe-table-column title="合计不含税金额" field="invoiceAmount" width="110"></vxe-table-column>
+          <vxe-table-column title="合计税额" field="invoiceTaxAmount" width="100"></vxe-table-column>
+          <vxe-table-column title="备注信息" field="remark" width="100"></vxe-table-column>
+          <vxe-table-column title="部门门店" field="orgName" width="100"></vxe-table-column>
+          <vxe-table-column title="开票方式" field="invoiceWay" width="100"></vxe-table-column>
+          <vxe-table-column title="开票员" field="invoiceName" width="100"></vxe-table-column>
+          <vxe-table-column title="收款人" field="payeeName" width="100"></vxe-table-column>
+          <vxe-table-column title="复核人" field="reviewerName" width="100"></vxe-table-column>
+          <vxe-table-column title="开票公司" field="invoiceUnitName" width="100"></vxe-table-column>
+          <vxe-table-column title="分店" field="orgName" width="80"></vxe-table-column>
+          <vxe-table-column title="店号" field="orgCode" width="80"></vxe-table-column>
+          <vxe-table-column title="收款方式" field="collectionType" width="100"></vxe-table-column>
+          <vxe-table-column title="往来单位" field="guestName" width="100"></vxe-table-column>
+          <vxe-table-column title="开票清单类型（配件/油品）" field="writeOffStatus" width="200"></vxe-table-column>
+          <vxe-table-column title="开票业务（销售、房租、会议费、推广费）" field="writeOffStatus" width="250"></vxe-table-column>
+          <vxe-table-column title="导入人/修改人" field="createUname" width="120"></vxe-table-column>
+          <vxe-table-column title="导入/修改时间" field="importTime" width="120"></vxe-table-column>
+          <vxe-table-column title="是否作废" field="statusName" width="100"></vxe-table-column>
+          <vxe-table-column title="作废经办人" field="nullifyId" width="120"></vxe-table-column>
+          <vxe-table-column title="作废时间" field="nullifyDate" width="100"></vxe-table-column>
+          <vxe-table-column title="是否红冲核销" field="redRushStatusName" width="120"></vxe-table-column>
+          <vxe-table-column title="红冲经办人" field="redRushId" width="120"></vxe-table-column>
+          <vxe-table-column title="红冲时间" field="redRushDate" width="100"></vxe-table-column>
+          <vxe-table-column title="核销开票申请单号" field="writeOffNo" width="130"></vxe-table-column>
+          <vxe-table-column title="所属对账单号" field="writeOffStatus" width="130"></vxe-table-column>
+          <vxe-table-column title="核销人" field="writeOff" width="130"></vxe-table-column>
+          <vxe-table-column title="核销时间" field="writeOffDate" width="130"></vxe-table-column>
+        </vxe-table>
         <Page
           :total="pagetotal"
           show-elevator
@@ -1642,8 +1701,8 @@
         // }
       },
       //表格全选的时候
-      requires(val) {
-        this.allTablist = val;
+      requires({selection}) {
+        this.allTablist = selection;
       },
       //获取列表数据
       getTabList() {
@@ -1654,7 +1713,11 @@
         showLoading(".loadingClass", "数据加载中，请勿操作")
         getSalesList(this.form).then(res => {
           if (res.code === 0) {
-            this.data = res.data.content;
+            this.data = res.data.content.map(el=>{
+              el.statusName= el.status === 0?"否":"是";
+              el.redRushStatusName=el.redRushStatus === 0?"否":"是"
+              return el;
+            });
             this.pagetotal = res.data.totalElements;
           }
           hideLoading()

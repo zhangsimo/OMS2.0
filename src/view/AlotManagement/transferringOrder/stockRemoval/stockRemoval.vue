@@ -310,6 +310,7 @@
                   :edit-config="{ trigger: 'click', mode: 'cell' }"
                   :footer-method="footerMethod"
                   show-footer
+                  @filter-change="filterChange"
                 >
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -328,6 +329,8 @@
                     show-overflow="tooltip"
                     field="partCode"
                     title="配件编码"
+                    :filters="[]"
+                    :filter-method="filterOrderNo"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
@@ -335,6 +338,8 @@
                     show-overflow="tooltip"
                     field="partName"
                     title="配件名称"
+                    :filters="[]"
+                    :filter-method="filterOrderNo"
                     width="100"
                     fixed="left"
                   ></vxe-table-column>
@@ -342,7 +347,9 @@
                     show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
-                    width="80"
+                    :filters="[]"
+                    :filter-method="filterOrderNo"
+                    width="100"
                     fixed="left"
                   ></vxe-table-column>
                   <vxe-table-column
@@ -361,8 +368,10 @@
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="stockOutQty"
+                    :filters="[]"
+                    :filter-method="filterOrderNo"
                     title="缺货数量"
-                    width="70"
+                    width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -800,6 +809,7 @@
         isCommitClick: false,
         isCancelClick: false,
         isOutClick: false,
+        filterCheckObj: {},
       };
     },
     // watch: {
@@ -958,6 +968,7 @@
           }
         }
         this.Leftcurrentrow.detailVOS = allArr;
+        this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
         // this.Leftcurrentrow.detailVOS=this.Leftcurrentrow.detailVOS.map(item=>{item.hasAcceptQty=parseInt(item.hasAcceptQty)})
         // console.log(this.Leftcurrentrow.detailVOS)
         this.$Message.success("已添加");
@@ -1116,6 +1127,7 @@
           item.index = index + 1;
         });
         this.Leftcurrentrow = this.Left.tbdata[0];
+        this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
       },
       tijiao1() {
         this.$Modal.confirm({
@@ -1430,6 +1442,7 @@
           };
           const res = await getListDetail(params);
           this.Leftcurrentrow.detailVOS = res.data;
+          this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
           this.isSaveClick = false;
           this.datadata = row;
           this.datadata.createTime=timeCreate;
@@ -1499,6 +1512,7 @@
           );
           setTimeout(() => {
             this.Leftcurrentrow.detailVOS = NoRepeat;
+            this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
             this.$Message.success("删除成功");
           }, 1000);
 
@@ -1653,6 +1667,7 @@
                   };
                   const res = await getListDetail(params);
                   this.Leftcurrentrow.detailVOS = res.data || [];
+                  this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
                   this.isSaveClick = false;
                   return;
                 }
@@ -1689,6 +1704,7 @@
                 };
                 const res = await getListDetail(params);
                 this.Leftcurrentrow.detailVOS = res.data || [];
+                this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
                 this.isSaveClick = false;
                 return;
               }
@@ -1718,6 +1734,48 @@
           }
         }
         return a;
+      },
+      returnData(rData,cos){
+        let arrData = [];
+        let arr = rData.map(el => el[cos])
+        let set = new Set(arr);
+        set.forEach(el => {
+          let filterData = this.filterCheckObj[cos]||[]
+          if(filterData.includes(el)){
+            arrData.push({ label: el, value: el ,checked:true});
+          }else{
+            arrData.push({ label: el, value: el });
+          }
+
+        });
+        this.$nextTick(()=>{
+          const xtable = this.$refs.xTable1;
+          const column = xtable.getColumnByField(cos);
+          xtable.setFilter(column, arrData);
+          xtable.updateData();
+        });
+      },
+
+      setFilterArr(rData){
+        this.returnData(rData,'partCode');
+        this.returnData(rData,'partName');
+        this.returnData(rData,'partBrand');
+        this.returnData(rData,'stockOutQty');
+      },
+
+      filterOrderNo({ value, row, column }){
+        let {property} = column;
+        if(!value){
+          return !row[property]
+        }
+        if(row[property]){
+          return row[property] == value;
+        }else{
+          return false
+        }
+      },
+      filterChange({property, values}){
+        this.filterCheckObj[property] = values;
       }
     },
     mounted() {

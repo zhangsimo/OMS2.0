@@ -113,17 +113,82 @@
     </section>
     <section class="con-box">
       <div class>
-        <Table
+<!--        <Table-->
+<!--          border-->
+<!--          :columns="columns"-->
+<!--          :data="data"-->
+<!--          ref="summaryss"-->
+<!--          show-summary-->
+<!--          :summary-method="handleSummary"-->
+<!--          highlight-row-->
+<!--          @on-selection-change="requires"-->
+<!--          align="center"-->
+<!--        ></Table>-->
+        <vxe-table
           border
-          :columns="columns"
+          stripe
+          auto-resize
+          resizable
           :data="data"
+          size="mini"
           ref="summaryss"
-          show-summary
-          :summary-method="handleSummary"
-          highlight-row
-          @on-selection-change="requires"
+          show-footer
+          :footer-method="handleSummary"
+          highlight-hover-row
+          highlight-current-row
+          show-overflow="title"
           align="center"
-        ></Table>
+          @select-all="requires"
+          @select-change="requires"
+          @select-cancel="requires"
+        >
+          <vxe-table-column type="selection" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column title="往来单位" width="100" field="guestName" fixed="left"></vxe-table-column>
+          <vxe-table-column title="导入勾选数据时间" width="120" field="registrationDate"></vxe-table-column>
+          <vxe-table-column title="发票采购方名称" width="120" field="invoicePurchaserName"></vxe-table-column>
+          <vxe-table-column title="店号" width="80" field="shopNo"></vxe-table-column>
+          <vxe-table-column title="发票代码" width="100" field="invoiceCode"></vxe-table-column>
+          <vxe-table-column title="发票号" width="70" field="invoiceNo"></vxe-table-column>
+          <vxe-table-column title="发票销售方名称" width="120" field="invoiceSellerName"></vxe-table-column>
+          <vxe-table-column title="开票日期" width="100" field="billingDate"></vxe-table-column>
+          <vxe-table-column title="价税合计金额" width="100" field="totalAmt"></vxe-table-column>
+          <vxe-table-column title="金额" width="70" field="invoiceAmt"></vxe-table-column>
+          <vxe-table-column title="税额" width="70" field="taxAmt"></vxe-table-column>
+          <vxe-table-column title="税率" width="70" field="taxRate"></vxe-table-column>
+          <vxe-table-column title="付款方式" width="100" field="payTypeName"></vxe-table-column>
+          <vxe-table-column title="发票分类" width="100" field="invoiceSortName"></vxe-table-column>
+          <vxe-table-column title="开票清单类型" width="100" field="billingTypeName"></vxe-table-column>
+          <vxe-table-column title="增加类型" width="80" field="addTypeName"></vxe-table-column>
+          <vxe-table-column title="导入进项经办人" width="120" field="importUname"></vxe-table-column>
+          <vxe-table-column title="登记时间" width="80" field="registrationTime"></vxe-table-column>
+          <vxe-table-column title="勾选认证时间" width="100" field="checkCertificationTime"></vxe-table-column>
+          <vxe-table-column title="认证所属期间" width="100" field=""></vxe-table-column>
+          <vxe-table-column title="导入勾选经办人" width="110" field="importUname"></vxe-table-column>
+          <vxe-table-column title="是否退回" width="100">
+            <template v-slot="{row}">
+              <span>{{row.returned ? "是" : "否"}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="退回经办人" width="100" field="returnUname"></vxe-table-column>
+          <vxe-table-column title="退回时间" width="100" field="returnTime"></vxe-table-column>
+          <vxe-table-column title="是否红字转出" width="100">
+            <template v-slot="{row}">
+              <span>{{row.redHedged ? "是" : "否"}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="红冲经办人" width="100" field="hedgeUname"></vxe-table-column>
+          <vxe-table-column title="红冲时间" width="100" field="hedgeTime"></vxe-table-column>
+          <vxe-table-column title="对号账单" width="100" field="accountNo">
+            <template v-slot="{row}">
+              <div v-for="(item,index) in (row.accountNo || [])" :key="index">
+                <span style="color: red;" @click="accountNoCli(row)">{{item}}</span>
+              </div>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="核销人" width="70" field="cancelUname"></vxe-table-column>
+          <vxe-table-column title="核销时间" width="100" field="cancelTime"></vxe-table-column>
+        </vxe-table>
         <Page
           :total="pagetotal"
           show-elevator
@@ -1144,45 +1209,34 @@
       },
       // 表格合计方式
       handleSummary({columns, data}) {
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            const type = column.type;
-            sums[type] = {
-              title: "合计",
-              value: "合计"
-            };
-            return;
-          }
-          const values = data.map(item => Number(item[key]));
-          if (index > 8 && index < 12) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return prev + curr;
-                } else {
-                  return prev;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
             }
-          } else {
-            sums[key] = {
-              key,
-              value: " "
-            };
-          }
-        });
-        return sums;
-        //
+            if (
+              [
+                "totalAmt",
+                "invoiceAmt",
+                "taxAmt"
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property);
+            }
+            return null;
+          })
+        ]
       },
       beginTimeChange(dataTime) {
         this.formValidate.billingDate = dataTime;
+      },
+      accountNoCli(row){
+        if (row.addTypeName == '导入') {
+          return this.$message.error("本发票信息无进项登记信息");
+        }
+        this.$refs.Toast.modal6 = true;
+        this.$refs.Toast.accountNo = item;
+        this.$refs.Toast.getToastData();
       },
       //操作
       operation(num) {
@@ -1207,6 +1261,7 @@
             break;
           case 7:
             this.exportTime = true;
+            break;
           case 8:
             this.deleteTabList("toast");
             break;
@@ -1463,8 +1518,8 @@
         }
       },
       //表格全选
-      requires(val) {
-        this.allTablist = val;
+      requires({selection}) {
+        this.allTablist = selection;
       },
       //获取列表
       getTabList(data) {
@@ -1474,7 +1529,11 @@
         getManageList(data)
           .then(res => {
             if (res.code === 0) {
-              this.data = res.data.content;
+              this.data = res.data.content.map(el=>{
+                el.registrationDate=this.dateFormat(el.registrationDate);
+                el.billingDate=this.dateFormat(el.billingDate);
+                return el;
+              });
               this.pagetotal = res.data.totalElements;
             }
             hideLoading()

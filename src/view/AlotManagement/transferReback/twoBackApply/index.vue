@@ -280,6 +280,7 @@
                   :stripe="true"
                   :footer-method="addFooter"
                   show-footer
+                  @filter-change="filterChange"
                   :edit-rules="validRules"
                   :edit-config="
                     Leftcurrentrow.status.value === 0
@@ -299,16 +300,22 @@
                   <vxe-table-column  show-overflow="tooltip"
                     field="partCode"
                     title="配件编码"
+                    :filters="[]" 
+                    :filter-method="filterOrderNo"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="partName"
                     title="配件名称"
+                    :filters="[]" 
+                    :filter-method="filterOrderNo"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
+                    :filters="[]" 
+                    :filter-method="filterOrderNo"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
@@ -708,7 +715,8 @@ export default {
       isSaveClick:false,
       isCommitClick: false,
       isOutClick: false,
-      isCancelClick: false
+      isCancelClick: false,
+      filterCheckObj: {},
     };
   },
   watch: {
@@ -907,6 +915,7 @@ export default {
       this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.storeId = this.defaultStoreId;
       this.Leftcurrentrow.detailVOS = [];
+      this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
       this.Left.tbdata.unshift(item);
       this.Leftcurrentrow.status.value = 0;
       this.Left.tbdata.map((item, index) => {
@@ -1159,6 +1168,7 @@ export default {
       const that = this;
       setTimeout(() => {
         that.showit = true;
+        that.setFilterArr(this.Leftcurrentrow.detailVOS || [])
       }, 100);
 
       cangkulist2(this.$store.state.user.userData.groupId)
@@ -1214,6 +1224,7 @@ export default {
       });
 
       this.Leftcurrentrow.detailVOS  = this.Leftcurrentrow.detailVOS.concat(arr);
+      this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
       if(!flag) {
         this.$message.success("已添加");
       }
@@ -1299,6 +1310,7 @@ export default {
                   }
                 });
               });
+              this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
               this.$Message.success("删除成功");
               // this.getList();
             }
@@ -1315,6 +1327,7 @@ export default {
             }
           });
         });
+        this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
       }
     },
     //展示方
@@ -1383,6 +1396,7 @@ export default {
       const tata = this;
       setTimeout(() => {
         tata.showit = true;
+        tata.setFilterArr(this.Leftcurrentrow.detailVOS || [])
       }, 200);
       this.$refs.addInCom.init1();
     },
@@ -1455,6 +1469,7 @@ export default {
               this.isSaveClick = false;
               this.isCommitClick = false;
             }
+            // this.setFilterArr(this.Leftcurrentrow.detailVOS || [])
           }else{
             this.isSaveClick = false;
             this.isCommitClick = false;
@@ -1486,6 +1501,47 @@ export default {
         }
       }
       return a;
+    },
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable1;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
     }
   },
   mounted() {
