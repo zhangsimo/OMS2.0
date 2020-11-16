@@ -776,6 +776,13 @@
           });
           this.getAccountNameList()
         }
+        this.defaultSelectAll(this.data1)
+        this.defaultSelectAll(this.data2)
+        this.collectCheckoutAll(this.data1)
+        this.paymentCheckoutAll(this.data2)
+      },
+      defaultSelectAll(data){
+        data.map(item => item._checked = true)
       },
       async getAccountNameList(type) {
         this.infoBase.collectionName = "";

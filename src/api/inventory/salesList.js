@@ -1,5 +1,7 @@
 import axios from '@/libs/api.request'
 import api from '_conf/url'
+import {TOKEN_KEY} from '@/libs/util'
+import Cookies from 'js-cookie'
 var url = "http://192.168.30.221:9210"
 //获取左侧数据
 export function getLeftList (data, num , size,) {
@@ -45,6 +47,11 @@ export const importAccessories = `${api.omsOrder}/StockCheckMain/import`
 
 //导入 按照配件内码导入配件
 export const importInnerIdAccessories=`${api.omsOrder}/StockCheckMain/import/partId`
+
+//导出  盘盈sign 0  盘亏sign 1
+export function exportVentory(params){
+  return `${api.omsOrder}/StockCheckMain/export?${params}&access_token=${Cookies.get(TOKEN_KEY)}`
+}
 
 //获取品牌
 export function getBrandList (data) {

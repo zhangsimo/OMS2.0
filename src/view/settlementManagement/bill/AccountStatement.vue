@@ -1114,6 +1114,9 @@
         this.statementStatusflag = false
         this.hedgingfalg = false
         this.receivefalg = false
+        if(row.statementStatusName == '审核中'){
+          this.ifRecallApply = true
+        }
         if (row.statementStatus.value == 4) {
           this.statementStatusflag = true
         }
@@ -1147,7 +1150,11 @@
         setCanwithdraw({id: row.id}).then(
           res => {
             if (res.code === 0) {
+              if(row.statementStatusName == '审核中'){
+                this.ifRecallApply = true
+              }else{
               this.ifRecallApply = !res.data.ifRecallApply
+              }
               this.ifRecallWriteOff = !res.data.ifRecallWriteOff
               this.ifRecallHedge = !res.data.ifRecallHedge
             }

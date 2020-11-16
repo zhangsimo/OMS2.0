@@ -43,6 +43,14 @@
               :disabled="this.formPlan.statuName!== '草稿'"
             >提交</Button>
           </div>
+          <div class="db">
+            <Button
+              @click="exportAll"
+              type="default"
+              class="mr10"
+              v-has="'export'"
+            >导出</Button>
+          </div>
           <!--<div class="db">-->
           <!--<Button-->
           <!--class="mr10"-->
@@ -340,7 +348,8 @@
     //outDataList,
     removeDataList,
     stampDataList,
-    stampApplyDataList
+    stampApplyDataList,
+    exportVentory
   } from "../../../../api/inventory/salesList";
 
   import {getDigitalDictionary} from "../../../../api/system/essentialData/clientManagement";
@@ -780,15 +789,13 @@
         });
       },
       //导出
-      //  setDerive(){
-      //   let list = this.$store.state.dataList.oneOrder
-      //   if(!list.id){
-      //       this.$message.error('请选择一条有效数据')
-      //       return false
-      //   }else {
-      //       location.href = baseUrl.omsOrder + '/sellOrderMain/export?id='+ list.id +'&access_token=' + Cookies.get(TOKEN_KEY)
-      //   }
-      //  },
+      exportAll(){
+        if(this.selectLeftItemId == '' || this.selectLeftItemId == null){
+          return this.$message.error('请选择需要导出的数据')
+        }
+        let params = `id=${this.selectLeftItemId}&sign=1`
+        location.href = exportVentory(params)
+      },
 
       //作废
       //作废提示

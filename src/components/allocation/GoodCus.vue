@@ -5,7 +5,13 @@
       :disabled="disabledProp"
       v-model="isLayerValue"
       :placeholder="placeholder"
-      @on-search="onSearch"
+      @keydown.native.enter.prevent="onSearch"
+      @keydown.native.down.stop.prevent="navigateOptions('next')"
+      @keydown.native.up.stop.prevent="navigateOptions('prev')"
+      @on-focus="handleFocus"
+      @keyup.native="changeValue"
+      clearable
+      @on-clear="clearFun"
     />
     <transition name="el-zoom-in-top">
       <div ref="popper" class="el-select-menu-wrap w200 fs12"  v-show="isLayer">
@@ -13,25 +19,26 @@
           tag="ul"
           wrap-class="el-select-dropdown__wrap"
           view-class="el-select-dropdown__list"
-          ref="scrollbar"
+          ref="scrollbar2"
           v-show="options.length > 0"
           class="w200 fs12"
         >
           <p
             class="el-select-menu-item"
             @click="selectItem(item)"
-            v-for="item in options"
+            :class="{'hoverSelect':hoverIndex==index+1}"
+            v-for="(item,index) in options"
             :key="item.id"
             :title="item.fullName"
           >
             {{ item.fullName }}
           </p>
-          <p></p>
         </el-scrollbar>
         <template v-show="options.length == 0">
           <div v-show="loading" style="text-align: center">
             <i class="el-icon-loading"></i>
           </div>
+          <span v-show="!loading&&options.length == 0">暂无数据</span>
         </template>
       </div>
     </transition>
@@ -56,7 +63,8 @@ export default {
       isLayerValue: "",
       isLayer: false,
       options: [],
-      loading: false
+      loading: false,
+      hoverIndex:0,
     };
   },
   mounted() {
@@ -64,13 +72,67 @@ export default {
     document.addEventListener("click", this.clickDom);
   },
   methods: {
-    onSearch(v) {
-      this.isLayer = true;
-      this.getList(v);
+    onSearch(event) {
+      if(event.keyCode=='13'){
+        if(this.hoverIndex==0){
+          this.isLayer = true;
+          this.getList(event.target.value);
+        }else{
+          this.selectItem(this.options[this.hoverIndex-1])
+        }
+      }
     },
     onBlur() {
       this.isLayer = false;
     },
+    handleFocus(){
+      if(this.options.length>0){
+        this.isLayer = true;
+      }
+    },
+    changeValue(event){
+      if(event.key!='Enter'&&event.key!='ArrowUp'&&event.key!='ArrowDown'){
+        this.onBlur();
+        this.hoverIndex = 0;
+        this.options = [];
+        if(event.target.value==''){
+          this.$emit("throwName", {});
+        }
+      }
+    },
+    clearFun(){
+      this.$emit("throwName", {});
+    },
+    navigateOptions(direction) {
+      // if (!this.visible) {
+      //   this.visible = true;
+      //   return;
+      // }
+      if (this.options.length === 0) return;
+      if (direction === 'next') {
+        this.hoverIndex++;
+        if (this.hoverIndex > this.options.length) {
+          this.hoverIndex = 1;
+        }
+      } else if (direction === 'prev') {
+        this.hoverIndex--;
+        if (this.hoverIndex < 1) {
+          this.hoverIndex = this.options.length;
+        }
+      }
+
+      this.$nextTick(()=>{
+        let wrapH = this.$refs.scrollbar2.$el.querySelector('.el-select-dropdown__wrap').clientHeight-32;
+        let itemTop = this.$refs.scrollbar2.$el.querySelector('.hoverSelect').offsetTop;
+        if(itemTop>wrapH){
+          this.$refs.scrollbar2.$el.querySelector('.el-select-dropdown__wrap').scrollTop = itemTop-wrapH
+        }else{
+          this.$refs.scrollbar2.$el.querySelector('.el-select-dropdown__wrap').scrollTop = 0;
+        }
+      })
+    },
+
+
     getList(v) {
       if (!v) {
         return this.$Message.error("请输入内容");
@@ -96,6 +158,7 @@ export default {
     },
     selectItem(v) {
       this.isLayerValue = v.fullName || "";
+      this.hoverIndex = 0;
       this.onBlur();
       this.$emit("throwName", v);
     },
@@ -103,7 +166,7 @@ export default {
       let classN = v.path.filter(item => {
         if (
           item.className &&
-          item.className.indexOf("el-select-menu-wrap") > -1
+          item.className.indexOf("el-select-menu-layer") > -1
         ) {
           return item.className;
         }
@@ -137,7 +200,7 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-      &:hover {
+      &:hover,&.hoverSelect {
         cursor: pointer;
         background: #f8f8f8;
         color: #e82f2f;

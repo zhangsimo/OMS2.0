@@ -158,8 +158,11 @@ export default {
       ListTwo: [
         { label: "所有", value: "9999" },
         { label: "待受理", value: "UNACCEPTED" },
+        { label: "部分受理", value: "SECTION_ACCEPT" },
         { label: "已受理", value: "ACCEPTED" },
-        { label: "已拒绝", value: "REJECTED" }
+        { label: "已拒绝", value: "REJECTED" },
+        { label: "已完成", value: "STOCKING" },
+        { label: "已作废", value: "INVALID" }
       ],
       productName: "9999",
       topRight: {
