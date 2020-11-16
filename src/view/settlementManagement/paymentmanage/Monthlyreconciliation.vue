@@ -1040,7 +1040,7 @@
         } else {
           return (
             this.$utils.toNumber(row.amount) -
-            this.$utils.toNumber(row.accountAmt) +
+            this.$utils.toNumber(row.accountAmt) -
             this.$utils.toNumber(row.thisNoAccountQty)*row.price
           );
         }
@@ -1337,6 +1337,7 @@
             },
             {
               Detailedstatistics: "对账金额",
+              information: this.collectlist.length > 0 || this.paymentlist.length > 0 ? this.Reconciliationtotal : "",
               Statementexcludingtax: res.data.hasOwnProperty("one")
                 ? res.data.one
                 : "",
