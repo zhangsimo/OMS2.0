@@ -169,7 +169,6 @@ export default {
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
             this.paymentList = [];
-            // console.log(res)
             res.data.map(item => {
               this.paymentList.push({
                 value: item.itemCode,
