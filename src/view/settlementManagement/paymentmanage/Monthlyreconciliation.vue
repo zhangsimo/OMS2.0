@@ -1563,9 +1563,9 @@
           if(this.$utils.toNumber(item.thisNoAccountQty)>item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty)<0){
             boolShow=false;
           }
-          if(!reg.test(item.thisNoAccountQty)){
-            boolShow=false;
-          }
+          // if(item.thisNoAccountQty && !reg.test(item.thisNoAccountQty)){
+          //   boolShow=false;
+          // }
           // if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
           //   boolShow=false;
           // }
@@ -1813,6 +1813,8 @@
               }
 
               this.modal = false;
+            }else if(res.code===1){
+              this.$Message.error( res.message)
             }
           }).catch(err => {
             setTimeout(() => {

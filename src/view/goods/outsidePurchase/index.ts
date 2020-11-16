@@ -84,6 +84,8 @@ export default class OutsidePurchase extends Vue {
   private saveLoading: boolean = false;
   private cancelLoading: boolean = false;
 
+  private filterCheckObj: object = {}
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -244,6 +246,7 @@ export default class OutsidePurchase extends Vue {
         return el;
       })
       this.tableData.push();
+      this.setFilterArr(this.tableData || [])
     } else {
       this.$Message.error(response.message)
     }
@@ -664,6 +667,7 @@ export default class OutsidePurchase extends Vue {
           this.tableData = this.tableData.filter(item => {
             return !arr.includes(item.uuid);
           })
+          this.setFilterArr(this.tableData || [])
           this.tmpDeletePartArr = [];
           this.deletePartArr = [];
           this.$Message.success('删除成功');
@@ -746,6 +750,7 @@ export default class OutsidePurchase extends Vue {
             el.uuid = v4();
             return el;
           });
+          this.setFilterArr(this.tableData || [])
           this.selectRowState = null;
           this.serviceId = row.serviceId || "";
           this.isInput = false;
@@ -788,6 +793,7 @@ export default class OutsidePurchase extends Vue {
         el.uuid = v4();
         return el;
       });
+      this.setFilterArr(this.tableData || [])
       this.selectRowState = v.billStatusId.name;
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
@@ -904,6 +910,7 @@ export default class OutsidePurchase extends Vue {
       el.uuid = v4();
       return el;
     });
+    this.setFilterArr(this.tableData || [])
     // this.tableData = tools.arrRemoval(this.tableData, 'partCode');
   }
 
@@ -914,6 +921,7 @@ export default class OutsidePurchase extends Vue {
       el.uuid = v4();
       return el;
     });
+    this.setFilterArr(this.tableData || [])
     this.$Message.success("已添加");
   }
 
@@ -1093,6 +1101,7 @@ export default class OutsidePurchase extends Vue {
       el.uuid = v4();
       return el;
     });
+    this.setFilterArr(this.tableData || [])
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
@@ -1132,5 +1141,49 @@ export default class OutsidePurchase extends Vue {
     this.init();
     this.getListData();
     this.getAllSales();
+  }
+
+  private returnData(rData,cos){
+    let arrData: any = [];
+    let arr: any = rData.map(el => el[cos])
+    let set: any = new Set(arr);
+    set.forEach(el => {
+      let filterData: any = this.filterCheckObj[cos]||[]
+      if(filterData.includes(el)){
+        let a: any = { label: el, value: el ,checked:true}
+        arrData.push(a);
+      }else{
+        let b: any = { label: el, value: el}
+        arrData.push(b);
+      }
+
+    });
+    this.$nextTick(()=>{
+      const xtable:any = this.$refs.xTable;
+      const column = xtable.getColumnByField(cos);
+      xtable.setFilter(column, arrData);
+      xtable.updateData();
+    });
+  }
+
+  private setFilterArr(rData){
+    this.returnData(rData,'partCode');
+    this.returnData(rData,'partName');
+    this.returnData(rData,'partBrand');
+  }
+
+  private filterOrderNo({ value, row, column }){
+    let {property} = column;
+    if(!value){
+      return !row[property]
+    }
+    if(row[property]){
+      return row[property] == value;
+    }else{
+      return false
+    }
+  }
+  private filterChange({property, values}){
+    this.filterCheckObj[property] = values;
   }
 }

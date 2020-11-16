@@ -117,9 +117,9 @@
               <Icon type="ios-search" size="14"/>
               查询
             </Button>
-<!--            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">-->
-<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
-<!--            </Button>-->
+            <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'">
+              <i class="iconfont mr5 icondaochuicon"></i> 导出
+            </Button>
             <Poptip v-model="visible" placement="bottom">
               <Button class="mr10 w90">
                 仓库设置
@@ -1220,7 +1220,7 @@
       },
 
       //汇总导出
-      exportTheSummary() {
+      async exportTheSummary() {
         if(this.contentOne.dataOne.length<1){
           return this.$Message.error("暂无汇总数据可导出")
         }
@@ -1246,14 +1246,19 @@
         }
         data.pagesize = this.contentOne.page.total;
         data.noStock = data.noStock ? 1 : 0;
-        let str = ""
-        for (var key in data) {
-          str += `${key}=${data[key]}&`
+        // let str = ""
+        // for (var key in data) {
+        //   str += `${key}=${data[key]}&`
+        // }
+        let res= await  exportAll(data)
+        if(res.code===0){
+          this.$message.success(res.data)
+        }else{
+          this.$message.warning(res.data)
         }
-        location.href = exportAll(str)
       },
       //导出批次
-      exportBatch() {
+      async exportBatch() {
         if(this.contentTwo.dataTwo.length<1){
           return this.$Message.error("暂无批次数据可导出")
         }
@@ -1287,11 +1292,17 @@
           this.$Message.error("这个公司暂时没有库存")
           return
         }
-        let str = ""
-        for (let key in data) {
-          str += `${key}=${data[key]}&`
+        // let str = ""
+        // for (let key in data) {
+        //   str += `${key}=${data[key]}&`
+        // }
+        // location.href = exportPart(str)
+        let res=await exportPart(data);
+        if(res.code===0){
+          this.$message.success(res.data)
+        }else{
+          this.$message.warning(res.data)
         }
-        location.href = exportPart(str)
       },
 
       /////////////////////// hs

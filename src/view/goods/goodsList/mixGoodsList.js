@@ -326,6 +326,7 @@ export const mixGoodsData = {
               this.tableData = this.tableData.filter(item => {
                 return !arr.includes(item.uuid);
               })
+              this.setFilterArr(this.tableData || []) //更新筛选条件
               this.delArr = [];
               this.$Message.success("删除成功");
               // this.getList();
@@ -470,6 +471,7 @@ export const mixGoodsData = {
         return item;
       })
       this.tableData = allArr;
+      this.setFilterArr(allArr||[]) //更新筛选条件
     },
 
     //添加配件修改数量的数据
@@ -482,6 +484,7 @@ export const mixGoodsData = {
         return item;
       })
       this.tableData = allArr;
+      this.setFilterArr(allArr||[]) //更新筛选条件
       this.$Message.success("已添加")
     },
 
@@ -613,6 +616,7 @@ export const mixGoodsData = {
           label: this.formPlan.supplyName,
           value: this.formPlan.guestId,
         }]
+        this.setFilterArr(v.details||[])  //更新筛选条件
       }
     },
     getArray(data) {

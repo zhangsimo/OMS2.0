@@ -402,6 +402,8 @@
                 :data="tableData"
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
+                ref="xTable"
+                @filter-change="filterChange"
               >
                 <vxe-table-column show-overflow="tooltip"
                   type="seq"
@@ -420,12 +422,16 @@
                   title="配件编码"
                   width="100"
                   fixed="left"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
                   width="100"
                   fixed="left"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column fixed="left" show-overflow="tooltip" field="partInnerId" title="配件内码" width="100"></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
@@ -433,6 +439,8 @@
                   title="品牌"
                   width="100"
                   fixed="left"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="orderQty"
@@ -570,7 +578,7 @@
     <!-- 查看 -->
     <tabs-model ref="tabsModel" type="外采" :partId="partId"></tabs-model>
     <!-- 打印 -->
-    <print-model ref="PrintModel" :orderId="mainId"></print-model>
+    <!-- <print-model ref="PrintModel" :orderId="mainId"></print-model> -->
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectTableRow"></status-model>
     <!--添加配件-->

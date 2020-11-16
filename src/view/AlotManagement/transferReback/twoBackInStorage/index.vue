@@ -177,6 +177,8 @@
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
+                @filter-change="filterChange"
+                ref="xTable"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
                 <vxe-table-column  show-overflow="tooltip"
@@ -187,16 +189,22 @@
                 <vxe-table-column  show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
@@ -468,7 +476,8 @@ export default {
       showMore: false, //更多模块的弹框
       showIn: false, //是否确定入库弹框
       inStatus: "", //单据状态
-      isSaveClick:false
+      isSaveClick:false,
+      filterCheckObj: {},
     };
   },
   created() {
@@ -542,6 +551,7 @@ export default {
               return;
             }
           }
+          this.setFilterArr(this.tableData || [])
 
         })
         .catch(err => {
@@ -685,6 +695,7 @@ export default {
       };
       const res = await getListDetail(params);
       this.tableData = res.data;
+      this.setFilterArr(this.tableData || [])
       if (currentRow.status === 0) {
         this.inStatus = "未入库";
         this.btnIn = false;
@@ -706,6 +717,47 @@ export default {
     changeSize(s) {
       this.Left.page.size = s;
       this.getinfo();
+    },
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
     }
   },
   mounted() {
@@ -715,7 +767,7 @@ export default {
       let planBtnH = this.$refs.planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 110;
+      this.leftTableHeight = wrapH - 104;
       //获取右侧表格高度
       this.rightTableHeight = wrapH - planFormH - planBtnH - 68;
     });
