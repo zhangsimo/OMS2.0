@@ -306,7 +306,7 @@ export default {
     accountNoClick() {
       this.$refs.accountSelette.isCanChange = this.showchange
       this.$refs.accountSelette.modal1 = true;
-      if (this.$parent.paymentId == "YJDZ") {
+      if (this.$parent.paymentId == "YSK") {
         this.$refs.accountSelette.paymentId = "YJDZ";
         this.$refs.accountSelette.sort = "SK";
       }
