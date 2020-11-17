@@ -60,7 +60,7 @@
             <!--</Select>-->
           <!--</FormItem>-->
           <FormItem label="订单类型：">
-            <Select v-model="formPlan.orderTypeValue" style="width:200px" disabled>
+            <Select v-model="formPlan.orderTypeValue" label-in-value @on-change="orderTypeChange" style="width:200px">
               <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
@@ -553,6 +553,10 @@
         options2: {
           disabledDate: options2DisabledDate
         },
+        orderTypeTemp:{
+          value:0,
+          name:"销售订单"
+        },
         formPlan: {
           detailList: [],
           storeId: '',
@@ -577,6 +581,10 @@
           {
             value: 2,
             label: "代付订单"
+          },
+          {
+            value: 3,
+            label: "铺货销售"
           }
         ], //订单类型
         clientList: {}, //新增客户资料
@@ -643,6 +651,9 @@
       }
     },
     methods: {
+      orderTypeChange(e){
+        this.orderTypeTemp = e;
+      },
       throwNameFun(v) {
         this.setOneClient(v);
       },
@@ -1187,8 +1198,12 @@
                 return this.$Message.error("请稍后订单处理中...");
               }
               this.isClickSave = true;
+              if(this.orderTypeTemp.hasOwnProperty('value')){
+                data.orderType = {value:this.orderTypeTemp.value,name:this.orderTypeTemp.label}
+              }
               this.$parent.$parent.submitloading = true;
               this.$parent.$parent.saveLoading = true;
+              console.log(data)
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
