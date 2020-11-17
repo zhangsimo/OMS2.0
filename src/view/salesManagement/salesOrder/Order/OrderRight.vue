@@ -60,7 +60,7 @@
             <!--</Select>-->
           <!--</FormItem>-->
           <FormItem label="订单类型：">
-            <Select v-model="formPlan.orderTypeValue" style="width:200px" disabled>
+            <Select v-model="formPlan.orderTypeValue" label-in-value @on-change="orderTypeChange" style="width:200px">
               <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
@@ -320,26 +320,33 @@
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           @keydown="keydown"
           :footer-method="footerMethod"
+          @filter-change="filterChange"
         >
-          <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="50" title="序号"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="50"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="60">
+          <vxe-table-column show-overflow="tooltip" fixed="left" type="seq" width="40" title="序号"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" fixed="left" type="checkbox" width="40"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" fixed="left" title="操作" width="40">
             <template v-slot="{ row,rowIndex }">
               <a class="blue" @click="openFileModal(row)">查看</a>
             </template>
           </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" fixed="left" field="partCode" title="配件编码"
-                            width="100"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" fixed="left" width="110" field="partName"
-                            title="配件名称"></vxe-table-column>
+            :filters="[]"
+            :filter-method="filterOrderNo"
+            width="96"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" fixed="left" width="96" field="partName"
+            :filters="[]"
+            :filter-method="filterOrderNo"
+            title="配件名称"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" fixed="left" field="partBrand" title="品牌"
-                            width="80"></vxe-table-column>
+            :filters="[]"
+            :filter-method="filterOrderNo"
+            width="70"></vxe-table-column>
           <vxe-table-column
             show-overflow="tooltip"
             field="orderQty"
             title="数量"
             :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
-            width="100"
+            width="80"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
@@ -357,7 +364,7 @@
             show-overflow="tooltip"
             field="orderPrice"
             title="单价"
-            width="100"
+            width="80"
             :edit-render="{name: 'input',autoselect: true ,attrs: {disabled: false}}"
           >
             <template v-slot:edit="{ row }">
@@ -368,13 +375,19 @@
              {{row.orderPrice|priceFilters}}
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" title="金额" width="110">
+          <vxe-table-column show-overflow="tooltip" title="金额" width="100">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
           <!-- <vxe-table-column  show-overflow="tooltip" field="averagePrice" title="参考价" width="70"></vxe-table-column> -->
-          <vxe-table-column show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="80">
+          <vxe-table-column
+            show-overflow="tooltip"
+            field="stockOutQty"
+            title="缺货数量"
+            :filters="[]"
+            :filter-method="filterOrderNo"
+            width="80">
             <template v-slot="{row}">
               <span style="color:#ed4014" v-if="row.stockOutQty*1>0">{{row.stockOutQty}}</span>
               <span v-else>{{row.stockOutQty}}</span>
@@ -386,32 +399,33 @@
               <span>{{row.carBrandName}} {{row.carModelName}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="60"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field title="批次" width="50">
-            <template v-slot="{ row,rowIndex }">
-              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" title="活动" width="50">
+          <vxe-table-column show-overflow="tooltip" field="unit" title="单位" width="40"></vxe-table-column>
+
+          <vxe-table-column show-overflow="tooltip" title="活动" width="40">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isMarkActivity == 1"></Checkbox>
             </template>
           </vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" title="赠送" width="50">
+          <vxe-table-column show-overflow="tooltip" title="赠送" width="40">
             <template v-slot="{ row,rowIndex }">
               <Checkbox disabled :value="row.isGift == 1"></Checkbox>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" field title="批次" width="40">
+            <template v-slot="{ row,rowIndex }">
+              <Checkbox disabled :value="row.isMarkBatch == 1"></Checkbox>
             </template>
           </vxe-table-column>
           <vxe-table-column show-overflow="tooltip" field="storeShelf" title="仓位" width="100"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip"
                             field="remark"
                             title="备注"
-                            min-width="120"
+                            min-width="100"
                             :edit-render="{name: 'input',attrs: {disabled: false}}"
           ></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
           <vxe-table-column show-overflow="tooltip" field="showDirection" title="方向" width="100"></vxe-table-column>
-          <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+          <vxe-table-column show-overflow="tooltip" field="partInnerId" title="配件内码" width="70"></vxe-table-column>
         </vxe-table>
       </Form>
       <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.auditor:""}}</span><span>提交日期：{{formPlan?formPlan.auditDate:""}}</span></div>
@@ -539,6 +553,10 @@
         options2: {
           disabledDate: options2DisabledDate
         },
+        orderTypeTemp:{
+          value:0,
+          name:"销售订单"
+        },
         formPlan: {
           detailList: [],
           storeId: '',
@@ -563,6 +581,10 @@
           {
             value: 2,
             label: "代付订单"
+          },
+          {
+            value: 3,
+            label: "铺货销售"
           }
         ], //订单类型
         clientList: {}, //新增客户资料
@@ -611,6 +633,7 @@
         ispart: true, //添加配件状态
         rightTableHeight: 0,
         isClickSave: false,
+        filterCheckObj: {},
       };
     },
     mounted() {
@@ -628,6 +651,9 @@
       }
     },
     methods: {
+      orderTypeChange(e){
+        this.orderTypeTemp = e;
+      },
       throwNameFun(v) {
         this.setOneClient(v);
       },
@@ -724,7 +750,7 @@
           this.formPlan = res.data;
           this.formPlan.fullName = this.formPlan.guestName;
           this.draftShow = this.draftShow.value;
-
+          this.setFilterArr(this.formPlan.detailList || [])
         }
         if (res.code !== 0) {
           stop();
@@ -751,7 +777,6 @@
         if (!value) {
           return false;
         }
-        // console.log(this.client)
         let oneClient = [];
         oneClient = this.client.filter(item => {
           return item.id === value;
@@ -1000,6 +1025,7 @@
             item => !this.selectTableList.includes(item)
           );
           this.formPlan.detailList = arr;
+          this.setFilterArr(this.formPlan.detailList || [])
           if (!data[0].id) return;
           getDeleteList(data).then(res => {
             if (res.code === 0) {
@@ -1050,6 +1076,7 @@
             el.orderPrice = undefined;
           }
         });
+        this.setFilterArr(this.formPlan.detailList || [])
         this.$Message.success("已添加");
       },
 
@@ -1067,6 +1094,7 @@
             el.orderPrice = undefined;
           }
         });
+        this.setFilterArr(this.formPlan.detailList || [])
         this.$Message.success("已添加");
       },
 
@@ -1093,6 +1121,7 @@
           ...this.formPlan.detailList,
           ...val
         ];
+        this.setFilterArr(this.formPlan.detailList || [])
         this.$Message.success("已添加");
       },
       //打开客户选择
@@ -1169,8 +1198,12 @@
                 return this.$Message.error("请稍后订单处理中...");
               }
               this.isClickSave = true;
+              if(this.orderTypeTemp.hasOwnProperty('value')){
+                data.orderType = {value:this.orderTypeTemp.value,name:this.orderTypeTemp.label}
+              }
               this.$parent.$parent.submitloading = true;
               this.$parent.$parent.saveLoading = true;
+              console.log(data)
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
@@ -1427,7 +1460,49 @@
           this.$parent.$parent.$refs.OrderLeft.gitlistValue();
           this.limitList = {};
         }
+      },
+      returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+      this.returnData(rData,'stockOutQty');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
       }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
+    }
     },
     watch: {
       getOneOrder: {

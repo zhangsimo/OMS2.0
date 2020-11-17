@@ -776,6 +776,13 @@
           });
           this.getAccountNameList()
         }
+        this.defaultSelectAll(this.data1)
+        this.defaultSelectAll(this.data2)
+        this.collectCheckoutAll(this.data1)
+        this.paymentCheckoutAll(this.data2)
+      },
+      defaultSelectAll(data){
+        data.map(item => item._checked = true)
       },
       async getAccountNameList(type) {
         this.infoBase.collectionName = "";
@@ -1177,8 +1184,9 @@
           if (res.code === 0) {
             this.preDis=false;
             this.$emit('closeModal', {})
-          }else{
+          }else if(res.code===1){
             this.preDis=false;
+            this.$Message.error( res.message)
           }
         }
         // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {

@@ -44,6 +44,14 @@
               :disabled="this.formPlan.statuName!== '草稿'"
             >提交</Button>
           </div>
+          <div class="db">
+            <Button
+              @click="exportAll"
+              type="default"
+              class="mr10"
+              v-has="'export'"
+            >导出</Button>
+          </div>
           <!--<div class="db">-->
             <!--<Button-->
               <!--class="mr10"-->
@@ -308,7 +316,8 @@
     //outDataList,
     removeDataList,
     stampDataList,
-    stampApplyDataList
+    stampApplyDataList,
+    exportVentory
   } from "../../../../api/inventory/salesList";
 
   import {getDigitalDictionary} from "../../../../api/system/essentialData/clientManagement";
@@ -883,6 +892,16 @@
       //     self.$Message.error(res.message);
       //   }
       // },
+      
+
+      //导出
+      exportAll(){
+        if(this.selectLeftItemId == '' || this.selectLeftItemId == null){
+          return this.$message.error('请选择需要导出的数据')
+        }
+        let params = `id=${this.selectLeftItemId}&sign=0`
+        location.href = exportVentory(params)
+      },
       onFormatError(file) {
         this.$Message.error("只支持xls xlsx后缀的文件");
       },

@@ -27,6 +27,7 @@
       <vxe-table
         border
         resizable
+        keep-source
         align="center"
         size="mini"
         ref="xTable"
@@ -38,7 +39,7 @@
         @current-change="clOnewList"
         height="330"
         :data="warehouseList"
-        :edit-config="{trigger: 'click', mode: 'cell'}"
+        :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
       >
         <vxe-table-column type="seq" title="序号"></vxe-table-column>
         <vxe-table-column field="name" title="仓位" :edit-render="{name: 'input'}" :filters="[{ data: '' }]" :filter-method="filterPositionMethod">
@@ -136,9 +137,8 @@ export default {
     //自定义校验方法
     const validatePass = ({cellValue}) => {
       return  new Promise((resolve, reject) => {
-        let reg = /^[A-Za-z0-9\-]+$/;
-        if (!reg.test(cellValue )) {
-          reject(new Error("编码不能输入汉字、字符且不能为空!"));
+        if (cellValue && (cellValue.length < 1 || cellValue.length > 30)) {
+          reject(new Error("长度不能超过30字符"));
         } else {
           resolve();
         }
@@ -199,7 +199,7 @@ export default {
         total: 0
       },
       validRules: {
-        name: [{ required: true, message: "不能为空", validator: validatePass }]
+        name: [{ required: true, message: "不能为空"},{max:30,message:'不能超过30字符'}]
       },
       storeId: "",
       oneWarehouse: "",
@@ -244,7 +244,7 @@ export default {
     //保存
     async save() {
 
-     let valid = await this.$refs.xTable.validate()
+     let valid = await this.$refs.xTable.validate().catch(errMap => errMap)
         if (!valid) {
           getSaveWarehouse(this.warehouseList).then(res => {
             if (res.code == 0) {

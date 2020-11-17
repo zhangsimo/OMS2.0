@@ -1040,7 +1040,7 @@
         } else {
           return (
             this.$utils.toNumber(row.amount) -
-            this.$utils.toNumber(row.accountAmt) +
+            this.$utils.toNumber(row.accountAmt) -
             this.$utils.toNumber(row.thisNoAccountQty)*row.price
           );
         }
@@ -1337,6 +1337,7 @@
             },
             {
               Detailedstatistics: "对账金额",
+              information: this.collectlist.length > 0 || this.paymentlist.length > 0 ? this.Reconciliationtotal : "",
               Statementexcludingtax: res.data.hasOwnProperty("one")
                 ? res.data.one
                 : "",
@@ -1563,7 +1564,7 @@
           if(this.$utils.toNumber(item.thisNoAccountQty)>item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty)<0){
             boolShow=false;
           }
-          // if(!reg.test(item.thisNoAccountQty)){
+          // if(item.thisNoAccountQty && !reg.test(item.thisNoAccountQty)){
           //   boolShow=false;
           // }
           // if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
@@ -1813,6 +1814,8 @@
               }
 
               this.modal = false;
+            }else if(res.code===1){
+              this.$Message.error( res.message)
             }
           }).catch(err => {
             setTimeout(() => {

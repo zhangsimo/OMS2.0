@@ -407,6 +407,7 @@
                 border
                 resizable
                 show-footer
+                ref="xTable"
                 @select-all="selectAll"
                 @select-change="selectVxeData"
                 :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
@@ -416,6 +417,7 @@
                 :data="tableData"
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
+                @filter-change="filterChange"
               >
                 <vxe-table-column
                   show-overflow="tooltip"
@@ -430,6 +432,8 @@
                   fixed="left"
                   field="partCode"
                   title="配件编码"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -437,6 +441,8 @@
                   fixed="left"
                   field="partName"
                   title="配件名称"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -451,6 +457,8 @@
                   fixed="left"
                   field="partBrand"
                   title="品牌"
+                  :filters="[]" 
+                  :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -810,6 +818,8 @@ export default {
       //右侧表格高度
       rightTableHeight: 0,
       salesList: [],
+      filterList: {},
+      filterCheckObj: {},
     };
   },
   mounted() {
@@ -955,7 +965,50 @@ export default {
     //下载模板 配件内码模板
     downInnerId(){
       down('2800000000')
+    },
+
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj = this.filterList;
+      this.filterCheckObj[property] = values;
     }
-  }
+  },
 };
 </script>

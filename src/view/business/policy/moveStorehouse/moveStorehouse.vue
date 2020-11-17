@@ -293,20 +293,21 @@
                 show-footer
                 :edit-config="{trigger: 'click', mode: 'cell',showStatus: true}"
                 :edit-rules="validRules"
+                @filter-change="filterChange"
                 @edit-actived="editActivedEvent">
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" type="checkbox" fixed="left"  width="60"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="orderQty"
                   title="数量"
                   width="100"
                   :edit-render="{name: 'input',autoselect: true , attrs: {type: 'number',disabled: false},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="carModelName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -606,6 +607,7 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
+      filterCheckObj: {},
     };
   },
   watch: {
@@ -621,9 +623,6 @@ export default {
       },
       deep: true
     }
-  },
-  created() {
-    this.getAllSales();
   },
   methods: {
 
@@ -685,23 +684,6 @@ export default {
         this.editNextCell($event.$table)
       }
     },
-
-    //------------------------------------------------------------------------//
-    //获取销售员
-    // selectOrderMan(val) {
-    //   this.Leftcurrentrow.orderMan = val ? val.label ? val.label : '':'';
-    //   this.Leftcurrentrow.orderManId = val ? val.value ? val.value : '':'';
-    // },
-    //获取销售员
-    // async getAllSales() {
-    //   let res = await getSales();
-    //   if (res.code === 0) {
-    //     this.salesList = res.data.content;
-    //     this.salesList.map(item => {
-    //       item.label = item.userName;
-    //     });
-    //   }
-    // },
     // 禁用选中
     checkMethod({ row }) {
       if (this.Leftcurrentrow.status.value === 0) {
@@ -864,6 +846,7 @@ export default {
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
+      this.setFilterArr(this.Right.tbdata || [])
       // let TrowLeft = {} //新增左侧
       // this.isAddRight = false
       // this.Left.tbdata.unshift(TrowLeft)
@@ -1107,10 +1090,12 @@ export default {
       } else {
         this.Right.tbdata = [];
       }
+      this.setFilterArr(this.Right.tbdata || [])
       if (this.Leftcurrentrow.id != undefined) {
         getRightDatas(this.Leftcurrentrow.id).then(res => {
           // console.log(res, "res=>728");
           this.Right.tbdata = res.data;
+          this.setFilterArr(this.Right.tbdata || [])
           this.Leftcurrentrow.detailVOList = res.data;
         });
       }
@@ -1143,6 +1128,7 @@ export default {
         delete item.id;
         this.Right.tbdata.unshift(item);
       });
+      this.setFilterArr(this.Right.tbdata || [])
       if(arr.length != datas.length) {
         this.$Message.success("配件已存在请勿重复添加");
       } else {
@@ -1171,6 +1157,7 @@ export default {
       this.Right.tbdata = this.Right.tbdata.filter(
         item => !seleList.includes(item)
       );
+      this.setFilterArr(this.Right.tbdata || [])
       this.array_diff(this.Leftcurrentrow.detailVOList, seleList);
       const flag = ids.some(item => !item);
       if (flag) return this.$message.success("删除成功");
@@ -1296,6 +1283,48 @@ export default {
     //下载模板 配件内码模板
     downInnerId(){
       down('3500000000')
+    },
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable1;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+      this.returnData(rData,'stockOutQty');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
     }
   },
   mounted() {

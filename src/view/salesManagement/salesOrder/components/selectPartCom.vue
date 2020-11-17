@@ -325,6 +325,7 @@
                 size="mini"
                 align="center"
                 height="200"
+                show-overflow="title"
                 highlight-hover-row
                 :loading="loading1"
                 :data="allList.sellHistory"
@@ -381,6 +382,7 @@
                 size="mini"
                 align="center"
                 height="200"
+                show-overflow="title"
                 highlight-hover-row
                 :loading="loading1"
                 :data="allList.localStoreSellHistory"

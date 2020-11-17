@@ -215,6 +215,21 @@
                     <vxe-table-column field="itemName" title="核算全称"></vxe-table-column>
                   </vxe-table>
                 </div>
+                <div v-show="this.dictName == '外部员工'">
+                  <Page
+                    size="small"
+                    :total="outStaff.page.total"
+                    :page-size="outStaff.page.size"
+                    :current="outStaff.page.num"
+                    :page-size-opts="outStaff.page.sizeOpts"
+                    show-sizer
+                    show-total
+                    show-elevator
+                    @on-change="selectoutStaffPage"
+                    @on-page-size-change="selectoutStaffSize"
+                    style="float: right;margin-top: 10px;margin-right: 10px"
+                  />
+                </div>
                 <div>
                   <!--其他辅助核算弹框里新增弹框-->
                   <Modal v-model="OtherModalAdd" title="新增辅助核算名称" width="400">
@@ -235,6 +250,16 @@
                     <div slot="footer">
                       <Button type="primary" @click="addAuxiliary" class="mr10">保存</Button>
                       <Button type="default" @click="OtherModalAdd = false">取消</Button>
+                    </div>
+                  </Modal>
+                </div>
+                <div>
+                  <!--新增/修改外部员工-->
+                  <Modal v-model="modalShow" title="新增外部员工" width="460px" :closable="false">
+                    <addOutStaff ref="addOutStaff"></addOutStaff>
+                    <div slot="footer" style="padding: 10px 0">
+                      <Button type="primary" @click="submit">确认</Button>
+                      <Button type="default" @click="cancel">退出</Button>
                     </div>
                   </Modal>
                 </div>
@@ -288,10 +313,15 @@ import {
   getDataDictionaryType,
   getcompany,
   kmType,
-  saveTreeDetailItem
+  saveTreeDetailItem,
 } from "@/api/settlementManagement/VoucherInput"
+import addOutStaff from "@/view/system/systemSetting/outStaffManagement/components/addOutStaff.vue"
+import {getOutStaff/**获取全部外部员工*/,addOutStaffe/**添加外部员工*/,changeOutStaffEn/**修改启用禁用*/} from "@/api/system/systemSetting/staffManagenebt"
 export default {
   name:'voucherInput',
+  components: {
+    addOutStaff
+  },
   props:['oneAccountent'],
   data(){
     return {
@@ -333,6 +363,14 @@ export default {
           sizeOpts: [100, 200, 300, 400, 500]
         } //分页
       },
+      outStaff: {
+        page: {
+          num: 1,
+          size: 10,
+          total: 0,
+          sizeOpts: [10, 20, 50, 80, 100]
+        } //分页
+      },
       categoryArr: [], //类别数组
       selectClass: 0,
       accountingName: "", //核算名称
@@ -372,6 +410,8 @@ export default {
       fundListZanshi: [], //款项分类数组
       voucherList:[],//选中内容
       voucherItem:{},
+      modalShow: false,
+      isOutStaff: false,
     }
   },
   mounted() {
@@ -459,7 +499,7 @@ export default {
               //   this.oneAccountent.auxiliaryCode = this.departmentVal;
               // }
             }
-          this.$emit("callBackFun");
+          this.$emit("callBackFun", this.voucherItem,this.isOutStaff);
         } else {
             this.$Message.error("请选择款项分类!");
             this.subjectModelShowassist = true;
@@ -473,7 +513,7 @@ export default {
         // if (this.oneAccountent.auxiliaryTypeCode == "3") {
         //   this.oneAccountent.auxiliaryCode = this.departmentVal;
         // }
-        this.$emit("callBackFun");
+        this.$emit("callBackFun", this.voucherItem,this.isOutStaff);
       }
     },
     //获取公司
@@ -659,6 +699,16 @@ export default {
       this.personage.page.size = size;
       this.SearchPersonal();
     },
+    //外部员工的分页
+    selectoutStaffPage(page) {
+      this.outStaff.page.num = page;
+      this.getAllStaffList()
+    },
+    selectoutStaffSize(size) {
+      this.outStaff.page.num = 1;
+      this.outStaff.page.size = size;
+      this.getAllStaffList()
+    },
     //其他辅助核算初始化
     OtherGetlist() {
       let params = {};
@@ -666,15 +716,21 @@ export default {
         if (res.code === 0) {
           let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
           this.categoryArr = NewArr[0].children;
+          // this.categoryArr.push({dictName: '外部员工'})
         }
       });
     },
     // 其他辅助核算左侧列表点击事件
     LiClick(item, index) {
+      this.accountingName = ''
+      this.isOutStaff = false
       this.selectClass = index;
-      // console.log(item)
-      this.dictCode = item.dictCode;
       this.dictName = item.dictName;
+      if(this.dictName == "外部员工"){
+        this.getAllStaffList()
+        return 
+      }
+      this.dictCode = item.dictCode;
       let params = {};
       params.searchType = 1;
       if (this.accountingName) {
@@ -689,6 +745,52 @@ export default {
         }
       });
     },
+    // 查询外部员工
+    async getAllStaffList(){
+      let params={
+        page:this.outStaff.page.num-1,
+        size:this.outStaff.page.size,
+      }
+      let data={}
+      data.orgid=this.$store.state.user.userData.shopId;
+      data.name=this.accountingName
+      //参数
+      let res=await getOutStaff(params,data)
+      if(res.code===0){
+        this.AssistTableDataOther=res.data.content
+        this.AssistTableDataOther.map(v => {
+          v.itemCode = v.code
+          v.itemName = v.name
+        })
+        this.outStaff.page.total=res.data.totalElements
+      }
+    },
+    //添加外部员工
+    submit(){
+      this.$refs.addOutStaff.handleSubmit(()=>{
+        let data = {}
+        data=this.$refs.addOutStaff.data
+        data.id=""
+        data.sign=true
+        this.addOutStaffTrue(data);
+        this.modalShow=false;
+        this.$refs.addOutStaff.data={};
+      })
+    },
+    //取消
+    cancel(){
+      this.$refs.addOutStaff.data={}
+      this.modalShow=false
+    },
+
+    //添加外部员工接口
+    async addOutStaffTrue(data){
+      let res=await addOutStaffe(data)
+      if(res.code===0){
+        this.$Message.success("新增外部人员成功")
+        this.getAllStaffList()
+      }
+    },
     //其他辅助核算查询
     OtherClick() {
       this.OtherClickTable();
@@ -697,6 +799,11 @@ export default {
     OtherClickTable() {
       let params = {};
       params.searchType = 1;
+      if(this.dictName == '外部员工'){
+        this.outStaff.page.num = 1
+        this.getAllStaffList()
+        return
+      }
       if (this.accountingName) {
         params.itemName = this.accountingName;
       }
@@ -711,15 +818,23 @@ export default {
     },
     //其他新增
     ShowOtherAdd() {
-      this.OtherModalAdd = true;
+      if(this.dictName == '外部员工'){
+        this.modalShow = true
+      }else{
+        this.OtherModalAdd = true;
+      }
     },
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row.itemName;
-      this.auxiliaryTypeCode = row.dictCode;
+      if(this.dictName == '外部员工'){
+        this.auxiliaryTypeCode = "CW00118";
+        this.isOutStaff = true;
+      }else{
+        this.auxiliaryTypeCode = row.dictCode;
+      }
       this.auxiliaryCode=row.itemCode;
-      this.voucherItem = {};
-      // console.log(row)
+      this.voucherItem = row;
     },
     //新增辅助核算名称保存
     addAuxiliary() {
@@ -766,7 +881,7 @@ export default {
   height: 550px;
 }
 .OtherLeft {
-  width: 100px;
+  width: 103px;
   border-right: 1px solid #dddddd;
 }
 .OtherLeft > ul > li {
@@ -780,7 +895,7 @@ export default {
   border-bottom: 1px solid #dddddd;
 }
 .OtherRight {
-  width: 100%;
+  width: 615px;
 }
 .xuan {
   background: #e8eaec;

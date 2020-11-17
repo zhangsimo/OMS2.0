@@ -212,7 +212,7 @@
                         <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'deleteAccessories'" @click="Delete"><i class="iconfont mr5 iconlaji调拨申请信息tongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'EditAddress'"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                        <Button size="small" class="mr10" @click="GoodsInfoModal" v-has="'EditAddress'"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
                       <div class="fl mb5">
                         <Button size="small" :disabled="changeOrderBtn" class="mr10" @click="changeOrderFun" v-has="'addAccessories'">订单调整</Button>
@@ -235,12 +235,13 @@
                     @edit-actived="editActivedEvent"
                     :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
                     @keydown="keydown"
+                    @filter-change="filterChange"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
-                    <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
+                    <vxe-table-column show-overflow="tooltip" type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" type="checkbox" width="40" fixed="left"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="80"></vxe-table-column>
+                    <vxe-table-column :filters="[]" :filter-method="filterOrderNo"  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column :filters="[]" :filter-method="filterOrderNo"  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column :filters="[]" :filter-method="filterOrderNo"  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="80"></vxe-table-column>
                      <vxe-table-column  show-overflow="tooltip"
                        field="applyQty"
                        title="申请数量"
@@ -510,8 +511,8 @@
           isSaveClick:false,
           isCommitClick: false,
           isCancelClick: false,
-
-          isSaveOk: true
+          isSaveOk: true,
+          filterCheckObj: {},
         }
       },
       methods: {
@@ -608,6 +609,7 @@
           var set = this.checkboxArr.map(item=>item.partId)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
           this.Right.tbdata = resArr
+          this.setFilterArr(this.Right.tbdata || [])
           let data = {}
            data.id = this.rowId
                     data.orgid = this.rowOrgId
@@ -665,6 +667,7 @@
             this.formPlan.createUname =  '', //申请人
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
+            this.setFilterArr(this.Right.tbdata || [])
             this.rowId = ''
         },
         // 调入仓库下拉改变事件
@@ -939,6 +942,7 @@
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
           this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'partInnerId')
+          this.setFilterArr(this.Right.tbdata || [])
           this.$Message.success("已添加");
         },
 
@@ -972,6 +976,7 @@
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
           this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'partInnerId')
+          this.setFilterArr(this.Right.tbdata || [])
           this.$Message.success("已添加");
         },
 
@@ -1193,6 +1198,7 @@
             if(res.code === 0){
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
+              this.setFilterArr(this.Right.tbdata || [])
             }
           })
         },
@@ -1352,6 +1358,47 @@
         },
         changeOrderFun(){
           this.$refs.changeOrder.init(this.selectRowId);
+        },
+        returnData(rData,cos){
+          let arrData = [];
+          let arr = rData.map(el => el[cos])
+          let set = new Set(arr);
+          set.forEach(el => {
+            let filterData = this.filterCheckObj[cos]||[]
+            if(filterData.includes(el)){
+              arrData.push({ label: el, value: el ,checked:true});
+            }else{
+              arrData.push({ label: el, value: el });
+            }
+
+          });
+          this.$nextTick(()=>{
+            const xtable = this.$refs.xTable;
+            const column = xtable.getColumnByField(cos);
+            xtable.setFilter(column, arrData);
+            xtable.updateData();
+          });
+        },
+
+        setFilterArr(rData){
+          this.returnData(rData,'partCode');
+          this.returnData(rData,'partName');
+          this.returnData(rData,'partBrand');
+        },
+
+        filterOrderNo({ value, row, column }){
+          let {property} = column;
+          if(!value){
+            return !row[property]
+          }
+          if(row[property]){
+            return row[property] == value;
+          }else{
+            return false
+          }
+        },
+        filterChange({property, values}){
+          this.filterCheckObj[property] = values;
         }
       },
       mounted(){
