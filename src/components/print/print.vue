@@ -1014,7 +1014,7 @@
             <th style="width:40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>
             <th style="width:30px;overflow: hidden;white-space:nowrap;">单位</th>
-            <th style="width:40px !important;">数量</th>
+            <th style="width:40px !important;">出库数量</th>
             <!--            <th style="width:60px !important;">单价</th>-->
             <!--            <th style="width:65px !important;">金额</th>-->
             <th style="width:80px !important;">仓位</th>
@@ -1030,7 +1030,7 @@
             <td style="width:40px;overflow:hidden;white-space:nowrap;">{{item.carModelName}}</td>
             <td style="width:40px;overflow: hidden;white-space:nowrap;">{{item.spec}}</td>
             <td style="width:30px;overflow: hidden;white-space:nowrap;">{{item.unit}}</td>
-            <td style="width:40px !important;">{{item.applyQty}}</td>
+            <td style="width:40px !important;">{{item.hasOutQty}}</td>
             <!--            <td style="width:60px !important;">{{item.orderPrice}}</td>-->
             <!--            <td style="width:65px !important;">{{item.orderAmt}}</td>-->
             <td style="width:80px !important;">{{item.storeShelf}}</td>
@@ -1040,7 +1040,7 @@
         <Row style="border: 1px #000000 solid;color:#000;font-size: 12px;padding: 2px;">
           <Col span="24">
             <span>总数:</span>
-            <span>{{onelist.orderQty}}</span>
+            <span>{{outKu}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none;color:#000;color:#000;font-size: 12px;">
@@ -1805,6 +1805,15 @@
         num2: 78723,
         routeN:""
       };
+    },
+    computed: {
+      outKu(){
+        let sum = 0
+        this.onelist.detailList.forEach(item => {
+          sum += Number(item.hasOutQty)
+        })
+        return sum
+      }
     },
     beforeCreate() {
       this.onelist.name=null;

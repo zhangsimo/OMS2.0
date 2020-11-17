@@ -494,7 +494,7 @@ export default {
         if (res.code === 0) {
           let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
           this.categoryArr = NewArr[0].children;
-          this.categoryArr.push({dictName: '外部员工'})
+          // this.categoryArr.push({dictName: '外部员工'})
         }
       });
     },
