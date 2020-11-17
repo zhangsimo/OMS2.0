@@ -162,6 +162,8 @@ export default class InterPurchase extends Vue {
   // 外币种类
   private currencyMap: Array<Option> = [];
 
+  private filterCheckObj: object = {}
+
   // 采购订单信息——表单
   private formPlanmain: any = {
     createUid: "",
@@ -701,6 +703,7 @@ export default class InterPurchase extends Vue {
           this.saveHandle("formplanref");
           this.mainId = row.id || "";
           this.tableData = row.details || [];
+          this.setFilterArr(row.details || [])
           this.selectRowState = null;
           this.serviceId = row.serviceId || "";
           this.isInput = false;
@@ -745,6 +748,7 @@ export default class InterPurchase extends Vue {
       this.selectTableRow = v;
       this.mainId = v.id;
       this.tableData = v.details || [];
+      this.setFilterArr(this.tableData || [])
       this.selectRowState = v.billStatusId.name;
       this.serviceId = v.serviceId;
       // orderState['草稿'], orderState['退回']
@@ -1074,6 +1078,7 @@ export default class InterPurchase extends Vue {
     this.tableData.map(item => {
       item.orderQty = item.canQty;
     });
+    this.setFilterArr(this.tableData || [])
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
@@ -1120,6 +1125,7 @@ export default class InterPurchase extends Vue {
     let res: any = await api.calculatAmt(data);
     if (res.code == 0) {
       this.tableData = res.data || [];
+      this.setFilterArr(this.tableData || [])
     }
   }
 
@@ -1140,5 +1146,49 @@ export default class InterPurchase extends Vue {
     this.init();
     this.getListData();
     this.getAllSales();
+  }
+
+  private returnData(rData,cos){
+    let arrData: any = [];
+    let arr: any = rData.map(el => el[cos])
+    let set: any = new Set(arr);
+    set.forEach(el => {
+      let filterData: any = this.filterCheckObj[cos]||[]
+      if(filterData.includes(el)){
+        let a: any = { label: el, value: el ,checked:true}
+        arrData.push(a);
+      }else{
+        let b: any = { label: el, value: el}
+        arrData.push(b);
+      }
+
+    });
+    this.$nextTick(()=>{
+      const xtable:any = this.$refs.xTable;
+      const column = xtable.getColumnByField(cos);
+      xtable.setFilter(column, arrData);
+      xtable.updateData();
+    });
+  }
+
+  private setFilterArr(rData){
+    this.returnData(rData,'partCode');
+    this.returnData(rData,'partName');
+    this.returnData(rData,'partBrand');
+  }
+
+  private filterOrderNo({ value, row, column }){
+    let {property} = column;
+    if(!value){
+      return !row[property]
+    }
+    if(row[property]){
+      return row[property] == value;
+    }else{
+      return false
+    }
+  }
+  private filterChange({property, values}){
+    this.filterCheckObj[property] = values;
   }
 }

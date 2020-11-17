@@ -461,9 +461,16 @@ export const mixSelectPartCom = {
         if (res.code === 0) {
           this.allList = res.data;
           this.allList.priceLever.forEach(element => {
-
             element.sellPrice = parseFloat(element.sellPrice).toFixed(2);
           });
+
+          this.allList.localStoreSellHistory = this.allList.localStoreSellHistory.sort((a,b) => {
+            return Date.parse(b.finishDate)-Date.parse(a.finishDate);
+          });
+
+          this.allList.sellHistory = this.allList.sellHistory.sort((a,b) => {
+            return Date.parse(b.finishDate)-Date.parse(a.finishDate);
+          })
         }
       });
     },

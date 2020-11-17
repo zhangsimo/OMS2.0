@@ -215,6 +215,7 @@
     @Prop({default: "good"}) private readonly type!: string;
     @Prop(String) private readonly guestId;
     @Prop(String) private readonly storeId;
+    @Prop(String) private readonly billType;
 
     private auditDate: Array<Date> = [];
     // private guestname:string = "";
@@ -432,6 +433,7 @@
       let params: any = {
         guestId: this.guestId,
         storeId: this.storeId,
+        billTypeId:this.billType,
       };
       let boolParams=false;//四个判断条件最少有一个
       params.size = this.page.size;

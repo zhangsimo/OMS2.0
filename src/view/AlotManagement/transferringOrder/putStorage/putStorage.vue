@@ -201,11 +201,12 @@
                     :footer-method="addFooter"
                     show-footer
                     :edit-config="{trigger: 'click', mode: 'cell'}"
+                    @filter-change="filterChange"
                   >
                     <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
-                    <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column :filters="[]" :filter-method="filterOrderNo" show-overflow="tooltip" field="partCode" title="配件编码" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column :filters="[]" :filter-method="filterOrderNo" show-overflow="tooltip" field="partName" title="配件名称" fixed="left" width="100"></vxe-table-column>
+                    <vxe-table-column :filters="[]" :filter-method="filterOrderNo" show-overflow="tooltip" field="partBrand" title="品牌" fixed="left" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="applyQty" title="申请数量" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
                     <vxe-table-column  show-overflow="tooltip" field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
@@ -589,7 +590,8 @@ export default {
       },
       isSaveClick:false,
       isOutClick: false,
-      isCancelClick: false
+      isCancelClick: false,
+      filterCheckObj: {},
     };
   },
   // watch: {
@@ -614,7 +616,6 @@ export default {
       // @ts-ignore
       const { row, column, $rowIndex, $columnIndex, columnIndex, rowIndex } = await $table.getActiveRecord() || {}
       if (row) { // 当前为编辑状态
-        // console.log('row', row)
         // 当前列属性
         const nowField = column.property
         // 获取展示的列
@@ -629,7 +630,6 @@ export default {
         const nowIndex = columnsField.findIndex(v => v === nowField)
         // 判断当前是否是可编辑倒数地二行
         const isLastColumn = nowIndex === columnsField.length - 1
-        // console.log('isLastColumn', isLastColumn)
         if (isLastColumn) {
           // 插入数据
 
@@ -690,6 +690,7 @@ export default {
     },
     getArrayFun(data) {
       this.ArrayValue = data;
+      this.setFilterArr(this.ArrayValue || [])
       // this.Leftcurrentrow.detailVOS = data;
     },
     warehouse() {
@@ -723,7 +724,6 @@ export default {
       this.getList();
     },
     selectChangeEvent({ checked, row }) {
-      //console.log(checked ? "勾选事件" : "取消事件");
     },
     async baocun1() {
       if (this.ArrayValue != []) {
@@ -755,7 +755,6 @@ export default {
       if (errMap) {
         return
       }
-      console.log(this.Leftcurrentrow)
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -920,7 +919,8 @@ export default {
             const params = {
               id: this.Leftcurrentrow.id,
               voList: this.ArrayValue,
-              storeId:this.Leftcurrentrow.storeId
+              storeId:this.Leftcurrentrow.storeId,
+              remark:this.Leftcurrentrow.remark
             };
             // 配件组装作废
             if(this.isOutClick){
@@ -933,7 +933,6 @@ export default {
               if(!res){
                 this.isOutClick = false;
               }
-              // console.log("res", res);
               if (res.code == 0) {
                 this.getList();
                 this.$Message.success("入库成功");
@@ -1019,11 +1018,12 @@ export default {
         const res = await getListDetail(params);
         this.ArrayValue = res.data;
       }
-
+      
       this.showit = false;
       const that = this;
       setTimeout(() => {
         that.showit = true;
+        that.setFilterArr(that.ArrayValue || [])
       }, 100);
       cangkulist2(this.$store.state.user.userData.groupId)
         .then(res => {
@@ -1197,6 +1197,7 @@ export default {
         _highlight: true
       };
       this.ArrayValue = list.detailVOS;
+      this.setFilterArr(this.ArrayValue || [])
       for (var i = 0; i < this.ArrayValue.length; i++) {
         this.ArrayValue[i].hasInQty = this.ArrayValue[i].hasOutQty;
       }
@@ -1275,6 +1276,47 @@ export default {
             this.isSaveClick = false;
           }
         })
+    },
+    returnData(rData,cos){
+      let arrData = [];
+      let arr = rData.map(el => el[cos])
+      let set = new Set(arr);
+      set.forEach(el => {
+        let filterData = this.filterCheckObj[cos]||[]
+        if(filterData.includes(el)){
+          arrData.push({ label: el, value: el ,checked:true});
+        }else{
+          arrData.push({ label: el, value: el });
+        }
+
+      });
+      this.$nextTick(()=>{
+        const xtable = this.$refs.xTable1;
+        const column = xtable.getColumnByField(cos);
+        xtable.setFilter(column, arrData);
+        xtable.updateData();
+      });
+    },
+
+    setFilterArr(rData){
+      this.returnData(rData,'partCode');
+      this.returnData(rData,'partName');
+      this.returnData(rData,'partBrand');
+    },
+
+    filterOrderNo({ value, row, column }){
+      let {property} = column;
+      if(!value){
+        return !row[property]
+      }
+      if(row[property]){
+        return row[property] == value;
+      }else{
+        return false
+      }
+    },
+    filterChange({property, values}){
+      this.filterCheckObj[property] = values;
     },
     getListPro() {
       let showSelf = this.$refs.addInCom.showSelf

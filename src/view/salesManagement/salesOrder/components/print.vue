@@ -145,7 +145,7 @@
           this.logisArr = log.data
           if (res.code === 0) {
             this.printShow = true;
-            this.onelist = res.data;
+            this.onelist = res.data||{};
             this.onelist.printDate = tools.transTime(new Date());
             this.onelist.printUname = this.$store.state.user.userData.staffName;
             this.onelist.LogisticsName = "";
@@ -153,7 +153,7 @@
             if(wlFilter.length>0){
               this.onelist.LogisticsName = wlFilter[0].shortName;
             }
-            this.details = res.data.details;
+            this.details = res.data?res.data.details:[];
             if(this.details==[] || this.details==undefined){
               this.onelist.storeName=""
             }else{

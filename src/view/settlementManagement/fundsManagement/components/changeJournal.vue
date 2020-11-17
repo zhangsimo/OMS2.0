@@ -90,7 +90,7 @@
         </Col>
         <Col span="12">
           <FormItem label="认领店号">
-            <Select v-model="formCustom.claimShopCode" style="width:150px">
+            <Select v-model="formCustom.claimShopCode" style="width:150px" :disabled="$route.name=='shopJournal'||$route.name=='cashJournal'">
               <Option v-for="item in claimShopList" :value="item.code" :key="item.id">{{ item.code }}</Option>
             </Select>
           </FormItem>

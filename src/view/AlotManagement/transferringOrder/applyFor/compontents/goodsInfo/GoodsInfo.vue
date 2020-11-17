@@ -174,7 +174,8 @@ let checkPhone = (rule, value, callback) => {
 export default class GoodsInfo extends Vue {
   private showInfo: boolean = false;
 
-  private disabled: boolean = true;
+  private disabled: boolean = false;
+
 
   @Prop(String) readonly mainId;
   @Prop(Object) readonly row;
@@ -251,6 +252,13 @@ export default class GoodsInfo extends Vue {
     this.searchInfo();
     const ref: any = this.$refs["formTwo"];
     ref.resetFields();
+
+    const refCurrent:any = this.$parent;
+    if(refCurrent.datadata.status.value!=0){
+      this.disabled = true;
+    }else{
+      this.disabled = false;
+    }
   }
 
   private async getLists() {
@@ -537,7 +545,6 @@ export default class GoodsInfo extends Vue {
     // this.reset();
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
-    this.disabled = false;
     this.formDateRight = {};
     this.formDateRight.businessNum = this.row.serviceId;
     if (row.logisticsRecordVO) {
