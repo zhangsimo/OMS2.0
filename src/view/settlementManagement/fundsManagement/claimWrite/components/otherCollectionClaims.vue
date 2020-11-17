@@ -191,7 +191,8 @@
         MessageValue: "",
         claimSelection: [],
         //this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
-        accruedList:[{mateAccountCoding:""}]
+        accruedList:[{mateAccountCoding:""}],
+        outStaffSelect: {}, //辅助核算选择的外部员工对象
       };
     },
     mounted() {
@@ -301,7 +302,10 @@
         }
       },
       //子组件的数据
-      getMessage() {
+      getMessage(item, flag) {
+        if(flag){
+          this.outStaffSelect = item
+        }
         this.MessageValue = this.$refs.voucherInput.AssistAccounting;
       },
       //认领弹框认领
@@ -416,6 +420,10 @@
             this.$Message.error('本次认领金额不可大于未认领金额')
             return
           }
+          if(this.outStaffSelect){
+            data.externalEmployeeCode = this.outStaffSelect.itemCode
+            data.externalEmployeeName = this.outStaffSelect.itemName
+          }
           showLoading('body',"保存中，请勿操作。。。")
           let res = await TurnToTheProfitAndLoss(data);
           if (res.code === 0) {
@@ -446,6 +454,10 @@
               }
               return el;
             })
+            if(this.outStaffSelect){
+              data.externalEmployeeCode = this.outStaffSelect.itemCode
+              data.externalEmployeeName = this.outStaffSelect.itemName
+            }
             showLoading('body',"保存中，请勿操作。。。")
             addClaim2(data).then(res => {
               if (res.code === 0) {
@@ -476,6 +488,10 @@
               this.$Message.error('本次认领金额不可大于未认领金额')
               return
             }
+            if(this.outStaffSelect){
+              data.externalEmployeeCode = this.outStaffSelect.itemCode
+              data.externalEmployeeName = this.outStaffSelect.itemName
+            }
             showLoading('body',"保存中，请勿操作。。。")
             addClaim(data).then(res => {
               if (res.code === 0) {
@@ -494,8 +510,8 @@
         }
       },
       //选择辅助核算回调
-      getCallBack() {
-        this.getMessage();
+      getCallBack(item, flag) {
+        this.getMessage(item, flag);
       }
     }
   };

@@ -280,7 +280,7 @@
       headerTit="配件成品选择"
       :pageDataObj="propPageObj"
     ></add-in-com>
-    <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
+    <!-- <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show> -->
   </main>
   <!-- 配件组装 -->
 </template>
@@ -291,7 +291,7 @@ import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplie
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
-import PrintShow from "./compontents/PrintShow";
+// import PrintShow from "./compontents/PrintShow";
 import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
@@ -322,7 +322,7 @@ export default {
     QuickDate,
     AddInCom,
     SelectSupplier,
-    PrintShow,
+    // PrintShow,
     selectPartCom
   },
   data() {

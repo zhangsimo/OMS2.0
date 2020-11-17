@@ -411,6 +411,7 @@ export default {
       voucherList:[],//选中内容
       voucherItem:{},
       modalShow: false,
+      isOutStaff: false,
     }
   },
   mounted() {
@@ -498,7 +499,7 @@ export default {
               //   this.oneAccountent.auxiliaryCode = this.departmentVal;
               // }
             }
-          this.$emit("callBackFun");
+          this.$emit("callBackFun", this.voucherItem,this.isOutStaff);
         } else {
             this.$Message.error("请选择款项分类!");
             this.subjectModelShowassist = true;
@@ -512,7 +513,7 @@ export default {
         // if (this.oneAccountent.auxiliaryTypeCode == "3") {
         //   this.oneAccountent.auxiliaryCode = this.departmentVal;
         // }
-        this.$emit("callBackFun");
+        this.$emit("callBackFun", this.voucherItem,this.isOutStaff);
       }
     },
     //获取公司
@@ -715,13 +716,14 @@ export default {
         if (res.code === 0) {
           let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
           this.categoryArr = NewArr[0].children;
-          this.categoryArr.push({dictName: '外部员工'})
+          // this.categoryArr.push({dictName: '外部员工'})
         }
       });
     },
     // 其他辅助核算左侧列表点击事件
     LiClick(item, index) {
       this.accountingName = ''
+      this.isOutStaff = false
       this.selectClass = index;
       this.dictName = item.dictName;
       if(this.dictName == "外部员工"){
@@ -827,6 +829,7 @@ export default {
       this.AssistAccounting = row.itemName;
       if(this.dictName == '外部员工'){
         this.auxiliaryTypeCode = "CW00118";
+        this.isOutStaff = true;
       }else{
         this.auxiliaryTypeCode = row.dictCode;
       }
