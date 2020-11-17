@@ -1216,7 +1216,7 @@
             (this.reconciliationStatement.statementStatusName === "审批通过" ||
               this.reconciliationStatement.statementStatusName === "结算中")
           ) {
-            this.paymentId = "YJDZ"
+            this.paymentId = "DYD"
             this.$refs.settlementMoadl.showchange = false
             if (type == 1) {
               this.paymentId = 'YS'
