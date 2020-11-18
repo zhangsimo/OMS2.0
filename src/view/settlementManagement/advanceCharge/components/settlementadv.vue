@@ -244,7 +244,7 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
-      this.tableData = val;
+      // this.tableData = val;
     });
   },
   methods: {
