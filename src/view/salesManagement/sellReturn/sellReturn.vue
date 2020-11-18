@@ -235,6 +235,19 @@
                       </Option>
                     </Select>
                   </FormItem>
+                  <FormItem label="票据类型：" prop="billType">
+                    <Select
+                      class="w160"
+                      :disabled="draftShow != 0 || isNew"
+                      v-model="formPlan.billTypeId"
+                    >
+                      <Option
+                        v-for="item in settleTypeList.CS00107"
+                        :value="item.itemCode"
+                        :key="item.itemCode"
+                      >{{ item.itemName }}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="备注：">
                     <Tooltip :content="formPlan.remark">
                       <Input
@@ -316,7 +329,7 @@
                     title="配件编码"
                     fixed="left"
                     width="110"
-                    :filters="[]" 
+                    :filters="[]"
                     :filter-method="filterOrderNo"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
@@ -324,7 +337,7 @@
                     title="配件名称"
                     fixed="left"
                     width="110"
-                    :filters="[]" 
+                    :filters="[]"
                     :filter-method="filterOrderNo"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
@@ -332,7 +345,7 @@
                     title="品牌"
                     fixed="left"
                     width="80"
-                    :filters="[]" 
+                    :filters="[]"
                     :filter-method="filterOrderNo"
                   ></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip"
@@ -433,6 +446,7 @@
       :type="'sale'"
       :guestId="formPlan.guestId"
       :storeId="formPlan.storeId"
+      :billType="formPlan.billTypeId"
       @getPlanOrder="getPlanOrder"
       @dblclickfun="getPlanOrder"
     ></procurement>
@@ -623,6 +637,8 @@
         split1: 0.2, //左右框
         WareHouseList: [], // 入库仓
         settleTypeList: {}, //结账类型
+        //票据类型
+        invoiceMap: [],
         tableData: [], //右侧表格list
         thTypes: [], //退货类型
         ruleValidate: {
@@ -643,6 +659,9 @@
             {required: true, type: "date", message: "采购退货日期不能为空", trigger: "change"}
           ],
           settleTypeId: [
+            {required: true, type: "string", message: " ", trigger: "change"}
+          ],
+          billTypeId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ]
         },
@@ -868,7 +887,8 @@
           orderDate: tools.transTime(new Date()),
           orderMan: this.PTrow.orderMan,
           storeId: this.StoreId, //调入仓库
-          settleTypeId: '020502'
+          settleTypeId: '020502',
+          billTypeId:''
         };
         this.draftShow = 0;
         if (!this.isAdd) {
