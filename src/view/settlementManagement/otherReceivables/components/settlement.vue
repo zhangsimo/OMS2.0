@@ -266,7 +266,7 @@ export default {
         item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
         delete item.businessType;
       });
-      this.tableData = val;
+      // this.tableData = val;
     });
   },
   methods: {
@@ -274,7 +274,7 @@ export default {
       d.map(item=>{
         item.paidMoney=Math.abs(item.paidMoney)
       })
-      this.tableData = d;
+      // this.tableData = d;
     },
     // 选择科目弹框
     subject() {
@@ -357,7 +357,7 @@ export default {
           let obj = {
             one: this.reconciliationStatement,
             two: this.BusinessType,
-            three: this.tableData
+            // three: this.tableData
           };
           this.conserveDis=true;
           paymentRegain(obj).then(res => {
@@ -380,7 +380,7 @@ export default {
               let obj3 = {}
               obj3.one = this.reconciliationStatement;
               obj3.two = this.BusinessType;
-              obj3.three = this.tableData;
+              // obj3.three = this.tableData;
               obj3.type= 2
               this.conserveDis=true;
               orderWriteOff(obj3).then(res => {
@@ -402,7 +402,7 @@ export default {
           let obj2 = {
             one: this.reconciliationStatement,
             two: this.BusinessType,
-            three: this.tableData
+            // three: this.tableData
           };
           if(this.$parent.otherPayCus){
             obj2.one.paymentTypeCode = this.$parent.fund

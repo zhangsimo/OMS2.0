@@ -255,15 +255,13 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
-      // console.log(val);
       val.map(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
         item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
         delete item.businessType;
       });
-      this.tableData = val;
-      // console.log(this.tableData);
+      // this.tableData = val;
     });
   },
   methods: {
@@ -383,7 +381,7 @@ export default {
               let obj = {
                 one: this.reconciliationStatement,
                 two: this.BusinessType,
-                three: this.tableData,
+                // three: this.tableData,
                 type: 1
               };
               this.conserveDis=true;
@@ -409,7 +407,7 @@ export default {
           let obj = {
             one: this.reconciliationStatement,
             two: this.BusinessType,
-            three: this.tableData
+            // three: this.tableData
           };
           this.conserveDis=true;
           showLoading()
