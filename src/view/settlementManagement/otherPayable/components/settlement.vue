@@ -187,7 +187,7 @@ export default {
     };
   },
   mounted() {
-    // 对账单号
+    //对账单号
     // bus.$on("accountHedNo", val => {
     //   this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
     //   // val.two.map(item => {
@@ -255,32 +255,30 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
-      // console.log(val);
       val.map(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
         item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
         delete item.businessType;
       });
-      this.tableData = val;
-      // console.log(this.tableData);
+      // this.tableData = val;
     });
   },
   methods: {
     accountHedNo2(val){
-      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
+      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
       // val.two.map(item => {
       //   item.businessTypeName = item.businessType.name;
       // });
       // this.BusinessType = [...this.BusinessType, ...val.two];
       let jsonArr = [val]
+      console.log(val)
       if(jsonArr.length>=1){
         jsonArr.map(item => {
-          item.id=item.id
           item.orgName = this.reconciliationStatement.orgName;
           item.accountNo = item.serviceId;
           // item.guestName = item.guestName;
-          item.businessTypeName = item.businessType.name;
+          item.businessTypeName = item.businessType ? item.businessType.name : '';
           item.reconciliationAmt = item.paymentClaimAmt;
           item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
           item.unAmt = -item.paymentBalance;
@@ -348,15 +346,13 @@ export default {
           id
         }).then(res => {
           if (res.code === 0) {
-            // console.log(res.data)
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.reconciliationStatement = res.data.one;
-            // console.log(this.reconciliationStatement);
-            // console.log(this.showModalOne)
             if(this.showModalOne !== 1){
               this.reconciliationStatement.accountNo = '';
             }
+            this.reconciliationStatement.accountNo = accountNo
             res.data.two.map(item => {
               item.businessTypeName = item.businessType.name;
             });
@@ -383,7 +379,7 @@ export default {
               let obj = {
                 one: this.reconciliationStatement,
                 two: this.BusinessType,
-                three: this.tableData,
+                // three: this.tableData,
                 type: 1
               };
               this.conserveDis=true;
@@ -409,7 +405,7 @@ export default {
           let obj = {
             one: this.reconciliationStatement,
             two: this.BusinessType,
-            three: this.tableData
+            // three: this.tableData
           };
           this.conserveDis=true;
           showLoading()

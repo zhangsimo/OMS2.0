@@ -291,12 +291,12 @@ export default {
           : -item.paidMoney;
         delete item.businessType;
       });
-      this.tableData = val;
+      // this.tableData = val;
     });
   },
   methods: {
     setData(d){
-      this.tableData = d;
+      // this.tableData = d;
     },
     // 选择科目弹框
     subject() {
@@ -384,7 +384,7 @@ export default {
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
-          three: this.tableData
+          // three: this.tableData
         };
         this.conserveDis=true;
         saveAccount(obj).then(res => {
