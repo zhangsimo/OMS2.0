@@ -225,7 +225,7 @@ export default {
     // 确认按钮
     determine() {
       if (Object.keys(this.seleteData).length !== 0) {
-        this.$emit("accountHedNo", this.seleteData);
+        this.$emit("accountHedNo2", this.seleteData);
         // bus.$emit("accountHedNo", this.seleteData);
         this.modal1 = false;
       } else {
