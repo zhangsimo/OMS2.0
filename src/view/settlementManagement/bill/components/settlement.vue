@@ -391,10 +391,10 @@ export default {
     //保存
     async conserve() {
       if (!Number(this.check)) {
-        const errMap = await this.$refs.xTable
-          .fullValidate()
-          .catch(errMap => errMap);
-        if (errMap) return this.$Message.error("表格校验错误");
+        // const errMap = await this.$refs.xTable
+        //   .fullValidate()
+        //   .catch(errMap => errMap);
+        // if (errMap) return this.$Message.error("表格校验错误");
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
