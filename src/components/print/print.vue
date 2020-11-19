@@ -1014,7 +1014,7 @@
             <th style="width:40px;overflow: hidden;white-space:nowrap;">车型</th>
             <th style="width:40px;overflow: hidden;white-space:nowrap;">规格</th>
             <th style="width:30px;overflow: hidden;white-space:nowrap;">单位</th>
-            <th style="width:40px !important;">出库数量</th>
+            <th style="width:40px !important;">数量</th>
             <!--            <th style="width:60px !important;">单价</th>-->
             <!--            <th style="width:65px !important;">金额</th>-->
             <th style="width:80px !important;">仓位</th>

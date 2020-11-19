@@ -23,7 +23,7 @@
           tag="ul"
           wrap-class="el-select-dropdown__wrap"
           view-class="el-select-dropdown__list"
-          ref="scrollbar"
+          ref="scrollbar2"
           class=" w200 fs12"
           v-show="options.length>0">
           <p class="el-select-menu-item" @click="selectItem(item)" :class="{'hoverSelect':hoverIndex==index+1}"
