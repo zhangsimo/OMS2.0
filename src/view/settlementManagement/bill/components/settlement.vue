@@ -279,6 +279,9 @@ export default {
         });
       }
     });
+
+
+
     //收付款信息
     bus.$on("paymentInfo", val => {
       val.map(item => {
@@ -374,13 +377,24 @@ export default {
         });
       }
     },
+
+
+    //清除表单内容
+    handleReset () {
+      this.remark = ""
+      this.reconciliationStatement = {}
+      this.BusinessType = []
+      this.tableData = []
+      this.collectPayId = ""
+    },
+
     //保存
     async conserve() {
       if (!Number(this.check)) {
-        const errMap = await this.$refs.xTable
-          .fullValidate()
-          .catch(errMap => errMap);
-        if (errMap) return this.$Message.error("表格校验错误");
+        // const errMap = await this.$refs.xTable
+        //   .fullValidate()
+        //   .catch(errMap => errMap);
+        // if (errMap) return this.$Message.error("表格校验错误");
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
@@ -402,21 +416,23 @@ export default {
                   }
                   this.conserveDis=false;
                   this.Settlement = false;
+                  this.handleReset()
                 },
                 onCancel: () => {
                   this.conserveDis=false;
                   this.Settlement = false;
+                  this.handleReset()
                   this.$message.success("对账单对冲成功");
                 }
               });
             }else{
               this.conserveDis=false;
               this.Settlement = false;
+              this.handleReset()
               this.$message.success("对账单对冲成功");
             }
           }else{
             this.conserveDis=false;
-            this.Settlement = false;
           }
         })
       } else {
