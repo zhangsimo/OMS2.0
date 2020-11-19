@@ -1587,7 +1587,7 @@
                 );
             } else {
               sum1 =
-                this.data1[index].rpAmt - this.data1[index].accountAmt + sum;
+                this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
 
               if (
                 sum + (this.data1[index].rpAmt - this.data1[index].accountAmt) >
@@ -1623,7 +1623,7 @@
                 );
             } else {
               sum1 =
-                this.data2[index].rpAmt - this.data2[index].accountAmt + sum;
+                this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
               if (
                 sum + (this.data2[index].rpAmt + this.data2[index].accountAmt) >
                 0
