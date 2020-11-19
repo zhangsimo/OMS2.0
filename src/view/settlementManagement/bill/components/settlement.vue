@@ -294,12 +294,12 @@ export default {
           : -item.paidMoney;
         delete item.businessType;
       });
-      this.tableData = val;
+      // this.tableData = val;
     });
   },
   methods: {
     setData(d){
-      this.tableData = d;
+      // this.tableData = d;
     },
     // 选择科目弹框
     subject() {
@@ -391,14 +391,14 @@ export default {
     //保存
     async conserve() {
       if (!Number(this.check)) {
-        const errMap = await this.$refs.xTable
-          .fullValidate()
-          .catch(errMap => errMap);
-        if (errMap) return this.$Message.error("表格校验错误");
+        // const errMap = await this.$refs.xTable
+        //   .fullValidate()
+        //   .catch(errMap => errMap);
+        // if (errMap) return this.$Message.error("表格校验错误");
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,
-          three: this.tableData
+          // three: this.tableData
         };
         this.conserveDis=true;
         saveAccount(obj).then(res => {

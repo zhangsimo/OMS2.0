@@ -603,7 +603,7 @@
         salesList: [], //销售员列表
         ruleValidate: {
           guestId: [
-            {required: true, type: "string", message: " ", trigger: "change"}
+            {required: true, type: "string", message: " ", trigger: "blur"}
           ],
           orderTypeValue: [
             {required: true,type: "number", message: "  ", trigger: "change"}
@@ -1203,7 +1203,6 @@
               }
               this.$parent.$parent.submitloading = true;
               this.$parent.$parent.saveLoading = true;
-              console.log(data)
               let res = await getSave(data);
               this.isClickSave = false;
               if (res.code === 0) {
@@ -1239,6 +1238,9 @@
         this.$set(this.formPlan, "billTypeId", val.billTypeId);
         this.$set(this.formPlan, "settleTypeId", val.settTypeId);
         this.leftOneOrder.guestId = val.id
+        if(val){
+          return
+        }
         this.getAllLimit()
       },
       //判断表格能不能编辑
