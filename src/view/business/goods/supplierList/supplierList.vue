@@ -217,19 +217,19 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <!--<FormItem label="票据类型：" prop="billType">-->
-                    <!--<Select-->
-                      <!--class="w160"-->
-                      <!--:disabled="presentrowMsg !== 0 || buttonDisable"-->
-                      <!--v-model="formPlan.billType"-->
-                    <!--&gt;-->
-                      <!--<Option-->
-                        <!--v-for="item in invoiceMap"-->
-                        <!--:value="item.value"-->
-                        <!--:key="item.value"-->
-                      <!--&gt;{{ item.label }}</Option>-->
-                    <!--</Select>-->
-                  <!--</FormItem>-->
+                  <FormItem label="票据类型：" prop="billType">
+                    <Select
+                      class="w160"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                      v-model="formPlan.billType"
+                    >
+                      <Option
+                        v-for="item in invoiceMap"
+                        :value="item.value"
+                        :key="item.value"
+                      >{{ item.label }}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="结算方式：" prop="clearing">
                     <Select
                       class="w120"
@@ -505,7 +505,7 @@
           serviceId: "", //采退单号
           rtnReasonId: "", //退货原因
           settleTypeId: "", //结算方式
-          //billTypeId :"",//票据类型
+          billTypeId :"",//票据类型
           remark: "", //备注
           storeId: "", //退货仓库
           code: "", //采购订单
@@ -538,13 +538,13 @@
               trigger: "change",
             },
           ],
-          // billType: [
-          //   {
-          //     required: true,
-          //     message: "票据类型不能为空",
-          //     trigger: "change"
-          //   },
-          // ],
+          billType: [
+            {
+              required: true,
+              message: "票据类型不能为空",
+              trigger: "change"
+            },
+          ],
           clearing: [
             {
               required: true,
@@ -679,7 +679,7 @@
         formPlan: {
           cause: "", //退货原因
           clearing: "020502", //结算方式
-          //billType:'',//票据类型
+          billType:'',//票据类型
           guestName: "", //供应商
           storeId: this.$store.state.user.userData.id, //退货员id
           storeName: "", //退货员名称
@@ -1004,7 +1004,7 @@
               data.serviceId = this.formPlan.numbers; //采退单号
               data.rtnReasonId = this.formPlan.cause; //退货原因
               data.settleTypeId = this.formPlan.clearing; //结算方式
-              //data.billTypeId = this.formPlan.billType;//票据类型
+              data.billTypeId = this.formPlan.billType;//票据类型
               data.remark = this.formPlan.remark; //备注
               data.storeId = this.formPlan.warehouse; //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
@@ -1039,7 +1039,7 @@
                   this.formPlan.numbers = ""; //采退单号
                   this.formPlan.cause = ""; //退货原因
                   this.formPlan.clearing = ""; //结算方式
-                  //this.formPlan.billType = "";//票据类型
+                  this.formPlan.billType = "";//票据类型
                   this.formPlan.remark = ""; //备注
                   this.formPlan.warehouse = ""; //退货仓库
                   this.formPlan.serviceId = ""; //采购订单
@@ -1233,7 +1233,7 @@
         this.formPlan.guestName = a.fullName;
         this.guestidId = a.id;
         //赋值票据类型id
-        //this.formPlan.billType = a.billTypeId || "";
+        this.formPlan.billType = a.billTypeId || "";
         this.Right.tbdata = []
       },
       leftgetList() {
@@ -1370,7 +1370,7 @@
                   data.serviceId = this.formPlan.numbers; //采退单号
                   data.rtnReasonId = this.formPlan.cause; //退货原因
                   data.settleTypeId = this.formPlan.clearing; //结算方式
-                  //data.billTypeId = this.formPlan.billType;//票据类型
+                  data.billTypeId = this.formPlan.billType;//票据类型
                   data.remark = this.formPlan.remark; //备注
                   data.storeId = this.formPlan.warehouse; //退货仓库
                   data.code = this.formPlan.serviceId; //采购订单
@@ -1399,7 +1399,7 @@
                       this.formPlan.numbers = ""; //采退单号
                       this.formPlan.cause = ""; //退货原因
                       this.formPlan.clearing = ""; //结算方式
-                      //this.formPlan.billType = '';//票据类型
+                      this.formPlan.billType = '';//票据类型
                       this.formPlan.remark = ""; //备注
                       this.formPlan.warehouse = ""; //退货仓库
                       this.formPlan.serviceId = ""; //采购订单
@@ -1423,7 +1423,7 @@
               this.formPlan.numbers = ""; //采退单号
               this.formPlan.cause = ""; //退货原因
               this.formPlan.clearing = ""; //结算方式
-              //this.formPlan.billType = "";//票据类型
+              this.formPlan.billType = "";//票据类型
               this.formPlan.remark = ""; //备注
               this.formPlan.warehouse = ""; //退货仓库
               this.formPlan.serviceId = ""; //采购订单
@@ -1454,7 +1454,7 @@
             this.formPlan.numbers = "";
             this.formPlan.cause = "";
             this.formPlan.clearing = "";
-            //this.formPlan.billType = "";//票据类型
+            this.formPlan.billType = "";//票据类型
             this.formPlan.remark = "";
             this.formPlan.warehouse = "";
             this.formPlan.serviceId = "";
@@ -1477,7 +1477,7 @@
         this.formPlan.numbers = this.datadata.serviceId;
         this.formPlan.cause = this.datadata.rtnReasonId;
         this.formPlan.clearing = this.datadata.settleTypeId;
-        //this.formPlan.billType = this.datadata.billTypeId;//票据类型
+        this.formPlan.billType = this.datadata.billTypeId;//票据类型
         this.formPlan.remark = this.datadata.remark;
         this.formPlan.warehouse = this.datadata.storeId;
         this.formPlan.serviceId = this.datadata.code;
@@ -1524,7 +1524,7 @@
               data.serviceId = this.formPlan.numbers; //采退单号
               data.rtnReasonId = this.formPlan.cause; //退货原因
               data.settleTypeId = this.formPlan.clearing; //结算方式
-              //data.billTypeId = this.formPlan.billType;//票据类型
+              data.billTypeId = this.formPlan.billType;//票据类型
               data.remark = this.formPlan.remark; //备注
               data.storeId = this.formPlan.warehouse; //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
@@ -1578,7 +1578,7 @@
             data.serviceId = this.formPlan.numbers; //采退单号
             data.rtnReasonId = this.formPlan.cause; //退货原因
             data.settleTypeId = this.formPlan.clearing; //结算方式
-            //data.billTypeId = this.formPlan.billType;//票据类型
+            data.billTypeId = this.formPlan.billType;//票据类型
             data.remark = this.formPlan.remark; //备注
             data.storeId = this.formPlan.warehouse; //退货仓库
             data.code = this.formPlan.serviceId; //采购订单

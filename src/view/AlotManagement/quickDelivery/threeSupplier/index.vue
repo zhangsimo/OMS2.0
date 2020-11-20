@@ -98,6 +98,7 @@
           @current-change="currentChangeEvent"
           size="mini"
           height="auto"
+          auto-resize
           :loading="loadingEnter"
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
@@ -211,6 +212,7 @@
           highlight-hover-row
           size="mini"
           height="auto"
+          auto-resize
           :loading="loadingEnter"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           @keydown="keydown"
