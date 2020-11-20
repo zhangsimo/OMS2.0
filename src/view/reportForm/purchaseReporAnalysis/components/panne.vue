@@ -48,7 +48,7 @@
                     <Input type="text" class="w300 ml10" v-model="search.guestName"/>
                   </FormItem>
                   <FormItem label="供应商体系: " class="h20">
-                    <Select v-model="search.belongSystem" class="ml10 mr10 w300">
+                    <Select v-model="search.belongSystem" transfer class="ml10 mr10 w300">
                       <Option
                         v-for="item in Subordinate"
                         :value="item.value"
@@ -62,6 +62,7 @@
                       ref="casecader"
                       class="ml10 mr10 w300"
                       size="small"
+                      transfer
                       :options="supplierTypes"
                       placeholder=""
                       v-model="search.supplierTypes"
@@ -276,14 +277,14 @@
         return this.treeFilterData(level1, content);
       },
       treeFilterData(treeData, content) {
-        treeData.map(item => {
-          let arrData = content.filter(item1 => item1.parentId == item.id);
-          if (arrData.length > 0) {
-            item.children = this.treeFilterData(arrData, content)
-          } else {
-            item.children = null
-          }
-        })
+        // treeData.map(item => {
+        //   let arrData = content.filter(item1 => item1.parentId == item.id);
+        //   if (arrData.length > 0) {
+        //     item.children = this.treeFilterData(arrData, content)
+        //   } else {
+        //     item.children = null
+        //   }
+        // })
         return treeData
       },
       //供应商分类 点击

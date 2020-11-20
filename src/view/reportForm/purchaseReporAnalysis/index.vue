@@ -38,7 +38,7 @@
       tabName() {
         let data={}
         for (let key in this.$refs.panne.search) {
-          if (this.$refs.panne.search[key]) {
+          if (this.$refs.panne.search[key]||this.$refs.panne.search[key]===0) {
             if (key == "enterDate") {
               if (this.$refs.panne.search["enterDate"][0]) {
                 data.enterDateStart =
