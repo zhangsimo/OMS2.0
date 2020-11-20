@@ -98,6 +98,11 @@
         let res = await api.getDailySalesStatistics(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
+            for(let i in el){
+              if(el[i]==null || el[i]==undefined){
+                el[i]="-";
+              }
+            }
             return el;
           });
           hideLoading()
