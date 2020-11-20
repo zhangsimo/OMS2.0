@@ -67,3 +67,12 @@ export function getOtherPeople (params) {
     params
   })
 }
+
+//新的  模糊匹配外部人员
+export function getOtherPeopleNew (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findOutsideAccount`,
+    method: 'get',
+    params
+  })
+}

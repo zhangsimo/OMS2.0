@@ -132,6 +132,15 @@ export function getOutStaff (params,data){
     data
   })
 }
+//外部员工新查询
+export function getOutStaffNew (params,data){
+  return axios.request({
+    url:`${api.wmsApi}/guest/queryAllOutsideStaff`,
+    method:"post",
+    params,
+    data
+  })
+}
 
 //外部员工管理 新增/修改确认、启用禁用
 export function addOutStaffe(data){
@@ -141,10 +150,26 @@ export function addOutStaffe(data){
     data
   })
 }
+//xinde 新的 外部员工管理 新增/修改确认、启用禁用
+export function addOutStaffeNew(data){
+  return axios.request({
+    url:`${api.wmsApi}/guest/saveOrUpdateOutsideStaff`,
+    method:"post",
+    data
+  })
+}
 //外部员工管理  启用禁用
 export function changeOutStaffEn(data){
   return axios.request({
     url:`${api.authApi}/authorityOutsideStaff/updateSign`,
+    method:"post",
+    data
+  })
+}
+//xinde 新的外部员工管理  启用禁用
+export function changeOutStaffEnNew(data){
+  return axios.request({
+    url:`${api.wmsApi}/guest/updateSignOutsideStaff`,
     method:"post",
     data
   })

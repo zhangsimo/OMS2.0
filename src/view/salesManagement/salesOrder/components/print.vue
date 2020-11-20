@@ -4,7 +4,7 @@
       <Button type="success" @click="print" class="mr10">打印</Button>
       <Button type="default" @click="printShow = false">取消</Button>
     </div>
-    <div id="printBox" style="height: 100%">
+    <div ref="printBox" style="height: 100%">
       <div class="titler">
         <table class="gridtable" width="100%" cellPadding="0" cellSpacing="0" style="text-align: left;">
           <thead>
@@ -102,11 +102,11 @@
         //判断iframe是否存在，不存在则创建iframe
         let iframe=document.getElementById("print-iframe");
         if(!iframe){
-          let el = document.getElementById("printBox");
+          let el = this.$refs.printBox;
           iframe = document.createElement('IFRAME');
           let doc = null;
           iframe.setAttribute("id", "print-iframe");
-          iframe.setAttribute('style', 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;');
+          //iframe.setAttribute('style', 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;');
           document.body.appendChild(iframe);
           doc = iframe.contentWindow.document;
           //这里可以自定义样式
