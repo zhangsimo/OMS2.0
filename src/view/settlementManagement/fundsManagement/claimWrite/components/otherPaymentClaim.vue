@@ -583,6 +583,7 @@
       },
       async ok() {
         if (this.voucherinputModel) {
+          let ajaxBool=true;
           let data = {};
           data.detailId = this.accrued[0].id;
           // if(this.accrued[0].balanceMoney==undefined){
@@ -601,13 +602,16 @@
             data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
           }
           if (data.claimMoney == null || data.claimMoney <= 0) {
+            ajaxBool=false;
             this.$Message.error("本次认领金额不可为零或小于零")
             return
           } else if (data.claimMoney > Math.abs(this.accrued[0].paidMoney)) {
+            ajaxBool=false;
             this.$Message.error("本次认领金额不可大于支付金额")
             return
           }
           if(data.claimMoney > this.accrued[0].unClaimedAmt){
+            ajaxBool=false;
             this.$Message.error('本次认领金额不可大于未认领金额')
             return
           }
@@ -627,22 +631,24 @@
               guestSourceId: objItem.id || ""
             }
           }
-          try {
-            showLoading('body',"保存中，请勿操作。。。")
-            let res = await TurnToTheProfitAndLoss(data);
-            if (res.code === 0) {
-              this.reloadParentList()
-              this.modal = false;
-              this.claimTit == "预付款认领"
-                ? this.$Message.success("预付款认领成功")
-                : this.$Message.success("其他付款认领成功");
-              this.formValidate.voucherInput = ""
-              hideLoading()
-            } else {
+          if(ajaxBool){
+            try {
+              showLoading('body',"保存中，请勿操作。。。")
+              let res = await TurnToTheProfitAndLoss(data);
+              if (res.code === 0) {
+                this.reloadParentList()
+                this.modal = false;
+                this.claimTit == "预付款认领"
+                  ? this.$Message.success("预付款认领成功")
+                  : this.$Message.success("其他付款认领成功");
+                this.formValidate.voucherInput = ""
+                hideLoading()
+              } else {
+                hideLoading()
+              }
+            } catch (error) {
               hideLoading()
             }
-          } catch (error) {
-            hideLoading()
           }
         }
       },
