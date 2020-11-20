@@ -50,15 +50,15 @@
         :radio-config="{highlight: true,trigger: 'row'}"
       >
         <vxe-table-column title="选择" type="radio" width="50"></vxe-table-column>
-        <vxe-table-column title="人员名称" field="name" min-width="80"></vxe-table-column>
+        <vxe-table-column title="人员名称" field="fullName" min-width="80"></vxe-table-column>
         <vxe-table-column title="员工编号" field="code" min-width="80"></vxe-table-column>
         <vxe-table-column title="收款户名" field="accountName" min-width="80"></vxe-table-column>
         <vxe-table-column title="开户银行" field="accountBank" min-width="80"></vxe-table-column>
-        <vxe-table-column title="银行卡号" field="accountNumber" min-width="80"></vxe-table-column>
-        <vxe-table-column title="公司名称" field="shorName" min-width="80"></vxe-table-column>
-        <vxe-table-column title="状态" field="sign" min-width="80">
+        <vxe-table-column title="银行卡号" field="accountBankNo" min-width="80"></vxe-table-column>
+        <vxe-table-column title="公司名称" field="compName" min-width="80"></vxe-table-column>
+        <vxe-table-column title="状态" field="isDisabled" min-width="80">
           <template v-slot="{row}">
-            <span>{{row.sign == true? "启用" : "禁用"}}</span>
+            <span>{{row.isDisabled == 1? "启用" : "禁用"}}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column title="建档人" field="createUname" min-width="80"></vxe-table-column>
@@ -89,7 +89,8 @@
 <script>
   import {transTime} from "../utils";
   import addOutStaff from "./components/addOutStaff";
-  import {getOutStaff/**获取全部外部员工*/,addOutStaffe/**添加外部员工*/,changeOutStaffEn/**修改启用禁用*/} from "@/api/system/systemSetting/staffManagenebt"
+  import {addOutStaffeNew, changeOutStaffEnNew,/**修改启用禁用*/getOutStaffNew} from "@/api/system/systemSetting/staffManagenebt"
+  
   import {getStorelist/**获取机构*/} from "_api/reportForm/index.js";
   import { creat } from "@/view/settlementManagement/components";
   export default {
@@ -149,9 +150,9 @@
         }
         let data={}
         data.orgid=this.orgid;
-        data.name=this.staffName
+        data.fullName=this.staffName
         //参数
-        let res=await getOutStaff(params,data)
+        let res=await getOutStaffNew(params,data)
         if(res.code===0){
           this.staffList=res.data.content
           this.page.total=res.data.totalElements
@@ -163,7 +164,7 @@
       },
       //添加外部员工接口
       async addOutStaffTrue(data){
-        let res=await addOutStaffe(data)
+        let res=await addOutStaffeNew(data)
         if(res.code===0){
           this.title=="新增外部人员"?this.$Message.success("新增外部人员成功"):this.$Message.success("修改外部人员信息成功")
           this.getAllStaffList()
@@ -196,8 +197,8 @@
         }else{
           let data={}
           data.id=this.oneStaffChange.id
-          data.sign=!this.oneStaffChange.sign
-          await changeOutStaffEn(data);
+          data.isDisabled=this.oneStaffChange.isDisabled == 1 ? 0 : 1
+          await changeOutStaffEnNew(data);
           this.getAllStaffList()
         }
       },
@@ -205,7 +206,7 @@
       selection(currentRow){
         this.oneStaffChange = currentRow.row;
         //判断选中项的状态  启用时否则禁用时
-        if(currentRow.row.sign){
+        if(currentRow.row.isDisabled == 1){
           this.enAble="禁用"
         }else{
           this.enAble="启用"
@@ -226,7 +227,7 @@
           if(this.title=="新增外部人员"){
             data=this.$refs.addOutStaff.data
             data.id=""
-            data.sign=true
+            data.isDisabled=1
             this.addOutStaffTrue(data);
           }else{
             data=this.$refs.addOutStaff.data

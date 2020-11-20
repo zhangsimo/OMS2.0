@@ -1,7 +1,7 @@
 <template>
   <Form ref="form" :label-width="100" :model="data" :rules="rules">
-    <FormItem label="人员名称:" prop="name">
-      <Input v-model="data.name" style="width: 300px" />
+    <FormItem label="人员名称:" prop="fullName">
+      <Input v-model="data.fullName" style="width: 300px" />
     </FormItem>
     <FormItem label="员工编号:" v-if="showCode">
       <Input v-model="data.code" style="width: 300px" disabled/>
@@ -9,8 +9,8 @@
     <FormItem label="收款户名:" prop="accountName">
       <Input v-model="data.accountName" style="width: 300px" />
     </FormItem>
-    <FormItem label="银行卡号:" prop="accountNumber">
-      <Input v-model="data.accountNumber" style="width: 300px" />
+    <FormItem label="银行卡号:" prop="accountBankNo">
+      <Input v-model="data.accountBankNo" style="width: 300px" />
     </FormItem>
     <FormItem label="开户银行:" prop="accountBank">
       <Input v-model="data.accountBank" style="width: 300px" />
@@ -37,9 +37,9 @@
         data: {},
         showCode:false,//新增时不显示员工编号
         rules: {
-          name: [{ required: true, message: "人员名称不能为空", trigger: "blur" }],
+          fullName: [{ required: true, message: "人员名称不能为空", trigger: "blur" }],
           accountName: [{ required: true, message: "收款户名不能为空", trigger: "blur" }],
-          accountNumber: [{ required: true, validator: paragraph, trigger: "blur" }],
+          accountBankNo: [{ required: true, validator: paragraph, trigger: "blur" }],
           accountBank: [{ required: true, message: "开户银行不能为空", trigger: "blur" }]
         }
       };

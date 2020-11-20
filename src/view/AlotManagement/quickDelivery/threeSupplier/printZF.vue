@@ -213,7 +213,7 @@
           iframe = document.createElement('IFRAME');
           let doc = null;
           iframe.setAttribute("id", "print-iframe");
-          iframe.setAttribute('style', 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;');
+          //iframe.setAttribute('style', 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;');
           document.body.appendChild(iframe);
           doc = iframe.contentWindow.document;
           doc.write('<div>' + el.innerHTML + '</div>');

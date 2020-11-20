@@ -430,7 +430,7 @@
             <span>{{ row.thisNoAccountQty*row.price | priceFilters }}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column width="120" title="本次对账金额" align="center">
+        <vxe-table-column width="120" title="本次对账金额" align="center" field="thisAccountAmt">
           <template v-slot="{ row }">
             <span>{{ countAmount(row) | priceFilters }}</span>
           </template>
@@ -564,11 +564,11 @@
           if (!reg.test(cellValue)) {
             row.thisNoAccountQty = 0;
             reject(new Error("请输入正整数!"));
-          } else if(cellValue<0){
+          } else if (cellValue < 0) {
             row.thisNoAccountQty = 0;
             reject(new Error("本次不对账数量不可小于零"));
-          }else if(cellValue>row.noAccountQty){
-            row.thisNoAccountQty=0;
+          } else if (cellValue > row.noAccountQty) {
+            row.thisNoAccountQty = 0;
             reject(new Error("本次不对账数量不可大于前期未对账数量"));
           }
         })
@@ -1027,6 +1027,18 @@
       },
       // 在值发生改变时更新表尾合计
       updateFooterEvent(params) {
+        params.row.thisNoAccountAmt = params.row.thisNoAccountQty * params.row.price;
+        if (params.row.amount > 0) {
+          params.row.thisAccountAmt =
+            this.$utils.toNumber(params.row.amount) -
+            this.$utils.toNumber(params.row.accountAmt) -
+            this.$utils.toNumber(params.row.thisNoAccountQty) * params.row.price
+        } else {
+          params.row.thisAccountAmt =
+            this.$utils.toNumber(params.row.amount) -
+            this.$utils.toNumber(params.row.accountAmt) -
+            this.$utils.toNumber(params.row.thisNoAccountQty) * params.row.price
+        }
         let xTable = this.$refs.xTable;
         xTable.updateFooter();
       },
@@ -1035,13 +1047,13 @@
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
-            this.$utils.toNumber(row.thisNoAccountQty)*row.price
+            this.$utils.toNumber(row.thisNoAccountQty) * row.price
           );
         } else {
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
-            this.$utils.toNumber(row.thisNoAccountQty)*row.price
+            this.$utils.toNumber(row.thisNoAccountQty) * row.price
           );
         }
       },
@@ -1067,8 +1079,11 @@
                 "amount",
                 "accountAmt",
                 "noAccountAmt",
+                "noAccountAmt",
+                "noAccountQty",
                 "thisNoAccountQty",
-                "thisNoAccountAmt"
+                "thisNoAccountAmt",
+                "thisAccountAmt"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);
@@ -1556,13 +1571,13 @@
       async noReconciliation() {
         const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
         let sum = 0;
-        let boolShow=true;
+        let boolShow = true;
         let reg = /^[1-9]\d*$/
         this.Reconciliationcontent.map(item => {
-          item.thisNoAccountAmt=this.$utils.toNumber(item.thisNoAccountQty)*item.price
+          item.thisNoAccountAmt = this.$utils.toNumber(item.thisNoAccountQty) * item.price
           sum += item.thisNoAccountAmt * 1;
-          if(this.$utils.toNumber(item.thisNoAccountQty)>item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty)<0){
-            boolShow=false;
+          if (this.$utils.toNumber(item.thisNoAccountQty) > item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty) < 0) {
+            boolShow = false;
           }
           // if(item.thisNoAccountQty && !reg.test(item.thisNoAccountQty)){
           //   boolShow=false;
@@ -1814,8 +1829,8 @@
               }
 
               this.modal = false;
-            }else if(res.code===1){
-              this.$Message.error( res.message)
+            } else if (res.code === 1) {
+              this.$Message.error(res.message)
             }
           }).catch(err => {
             setTimeout(() => {
