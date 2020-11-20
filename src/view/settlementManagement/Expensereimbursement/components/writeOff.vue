@@ -70,7 +70,7 @@
         <vxe-table-column field="writeOffAmount" title="因公借支核销金额" :edit-render="{ name: 'input' }">
           <template v-slot:edit="{ row }">
             <el-input-number
-              :min="0.01"
+              :min="0" 
               v-model="row.writeOffAmount"
               :controls="false"
               size="mini"
