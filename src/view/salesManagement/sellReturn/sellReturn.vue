@@ -1030,6 +1030,7 @@
         this.$set(this.formPlan, "fullName", val.fullName);
         this.$set(this.formPlan, "billTypeId", val.billTypeId);
         // this.$set(this.formPlan, "settleTypeId", val.settTypeId);
+        this.formPlan.details = [];
       },
       //获取左侧表格数据
       getLeftList() {
