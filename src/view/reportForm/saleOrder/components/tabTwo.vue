@@ -309,17 +309,17 @@
         </vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="costRate"
-                          title="成本率"
+                          title="成本率%"
                           width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="maoLiRate"
-                          title="毛利率"
+                          title="毛利率%"
                           width="70"
         ></vxe-table-column>
         <vxe-table-column show-overflow="tooltip"
                           field="noTaxMaoLiRate"
-                          title="非税金毛利率"
+                          title="非税金毛利率%"
                           width="100"
         >
 
