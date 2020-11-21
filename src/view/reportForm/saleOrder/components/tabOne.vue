@@ -1,6 +1,6 @@
 <template>
   <section>
-<!--    class="con-box"-->
+    <!--    class="con-box"-->
     <vxe-table
       border
       align="left"
