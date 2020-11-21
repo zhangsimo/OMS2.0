@@ -1145,7 +1145,7 @@
 
             let outStockFilter = this.Leftcurrentrow.detailVOS.filter(item => item.stockOutQty>0);
             if(outStockFilter.length>0){
-              this.$Message.info("配件明细存在缺货，请修改受理数量！");
+              this.$Message.info("配件明细存在缺货，请修改受理数量并保存后提交！");
               return
             }
 
