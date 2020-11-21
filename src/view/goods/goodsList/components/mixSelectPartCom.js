@@ -281,7 +281,7 @@ export const mixSelectPartCom = {
       // this.getPartBrandAll();
       this.getCarClassifysFun();
       this.getList();
-      this.$nextTick(() => this.$refs.Input.focus());
+      this.$nextTick(() => {this.$refs.Input.focus()});
     },
     //配件表格点击的行
     selectTabelData(v) {
@@ -317,10 +317,12 @@ export const mixSelectPartCom = {
     },
     cancel() {
       this.searchPartLayer = false;
+      this.CancelModal();
     },
     //modal 关闭事件
     CancelModal(){
-      this.selectTableItem = []
+      this.selectTableItem = [];
+      this.$refs.tableParts.selectAll(false);
     },
     //分页
     changePage(p) {
