@@ -55,7 +55,7 @@
                       remote
                       :remote-method="getAllClient"
                       :loading="loading">
-                      <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.fullName}}</Option>
+                      <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.shortName}}</Option>
                     </Select>
                   </FormItem>
 <!--                  <FormItem label="客户分类: " class="h20">-->
