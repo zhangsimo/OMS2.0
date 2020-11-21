@@ -1142,6 +1142,13 @@
               qty: "hasAcceptQty"
             });
             if (zero) return;
+
+            let outStockFilter = this.Leftcurrentrow.detailVOS.filter(item => item.stockOutQty>0);
+            if(outStockFilter.length>0){
+              this.$Message.info("配件明细存在缺货，请修改受理数量！");
+              return
+            }
+
             const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
             if (params.status.value != undefined) {
               params.status = params.status.value;
