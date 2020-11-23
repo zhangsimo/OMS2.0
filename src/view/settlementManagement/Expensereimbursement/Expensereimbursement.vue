@@ -788,12 +788,12 @@
           })
         ];
       },
-      // tableRowStyle({row}){
-      //   if(row.applicant == "徐冬"){
-      //     return 'row_height'
-      //   }
-      //   return ''
-      // }
+      tableRowStyle({row}){
+        // if(row.applicant == "徐冬"){
+        //   return 'row_height'
+        // }
+        return ''
+      }
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
