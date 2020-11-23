@@ -85,6 +85,7 @@
             align="center"
             show-footer
             :footer-method="footerMethod"
+            :row-class-name="tableRowStyle"
           >
             <vxe-table-column
               type="seq"
@@ -129,7 +130,7 @@
               ></vxe-table-column>
               <vxe-table-column
                 title="因公借支核销单号"
-                width="140"
+                width="150"
               >
                 <template v-slot="{ row }">
                   <ul class="list">
@@ -138,7 +139,7 @@
                       :key="index"
                       class="flex"
                     >
-                      <span class="listChild">{{ item }}</span>
+                      <span class="listChild">{{ item.replace(/\"/g, "") }}</span>
                     </li>
                   </ul>
                 </template>
@@ -641,6 +642,15 @@
         showLoading(".loadingClass", "数据加载中，请勿操作")
         restful.findByDynamicQuery(params, data).then(res => {
           if (res.code == 0) {
+            res.data.content.map(v => {
+              if(v.writeOffReceiptNos){
+                v.writeOffReceiptNos = Array.from(v.writeOffReceiptNos)
+                v.writeOffReceiptNos.map(v2 => {
+                  return v2.trim()
+                })
+              }
+              return v
+            })
             this.tableData = res.data.content;
             this.page.total = res.data.totalElements;
           }
@@ -777,7 +787,13 @@
             return null;
           })
         ];
-      }
+      },
+      // tableRowStyle({row}){
+      //   if(row.applicant == "徐冬"){
+      //     return 'row_height'
+      //   }
+      //   return ''
+      // }
     },
     async mounted() {
       let arr = await creat(this.$refs.quickDate.val, this.$store);
@@ -792,7 +808,7 @@
   };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .main .content-oper {
     min-height: 100%;
     height: auto;
@@ -816,8 +832,9 @@
     display: inline-block;
     border: 1px solid #e8eaec;
     flex: 1;
-    line-height: 24px;
+    // line-height: 24px;
     padding:0 5px;
+    margin: 2px 0;
   }
 
   .vxe-table .vxe-cell {
@@ -826,5 +843,10 @@
 
   .vxe-table .vxe-body--column:not(.col--ellipsis) {
     padding: 0;
+  }
+
+  /deep/.vxe-table .row_height{
+    height: 150px !important;
+    // max-height: 200px !important;
   }
 </style>
