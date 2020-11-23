@@ -235,7 +235,7 @@
                       </Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="票据类型：" prop="billType">
+                  <FormItem label="票据类型：" prop="billTypeId">
                     <Select
                       class="w160"
                       :disabled="draftShow != 0 || isNew"
