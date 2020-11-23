@@ -403,8 +403,16 @@
             let ids = this.oneList.map(el => el.id)
             let res = await api.dailyFundAudit({ids})
             if (res.code == 0) {
-              this.$message.success(res.data)
-              this.query();
+              if(res.data instanceof Array){
+                if(res.data[0]){
+                  this.$message.error(res.data[0])
+                  this.query();
+                  return
+                }else{
+                  this.$message.success('审核成功！')
+                  this.query();
+                }
+              }
             }
           },
           onCancel: () => {

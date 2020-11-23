@@ -829,12 +829,14 @@ export default {
       this.AssistAccounting = row.itemName;
       if(this.dictName == '外部员工'){
         this.auxiliaryTypeCode = "CW00118";
+        row.auxiliaryTypeCode = "CW00118"
         this.isOutStaff = true;
       }else{
         this.auxiliaryTypeCode = row.dictCode;
       }
       this.auxiliaryCode=row.itemCode;
       this.voucherItem = row;
+      console.log(row)
     },
     //新增辅助核算名称保存
     addAuxiliary() {

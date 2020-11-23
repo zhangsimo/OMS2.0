@@ -3,14 +3,15 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20 ">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <div class="fr" v-show="titleName!='其他收款收回'">
+        <div class="fr">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
           <Select v-model="fund" placeholder="请选择" class="w200" clearable>
             <Option
               v-for="item in fundList"
               :value="item.itemName"
               :key="item.id"
-            >{{ item.itemName }}</Option>
+            >{{ item.itemName }}
+            </Option>
           </Select>
         </div>
       </div>
@@ -76,8 +77,10 @@
   import PreClaimModal from "./PreClaimModal";
   import {
     wirteAccount,
-    saveAccount,paymentRegain} from "_api/settlementManagement/otherReceivables/otherReceivables";
+    saveAccount, paymentRegain
+  } from "_api/settlementManagement/otherReceivables/otherReceivables";
   import {kmType} from "@/api/settlementManagement/VoucherInput";
+
   export default {
     components: {
       PreClaimModal
@@ -86,8 +89,8 @@
     data() {
       return {
         visibal: false,
-        fund:"",
-        fundList:[],//款项分类数组
+        fund: "",
+        fundList: [],//款项分类数组
         tableData: [],
         outFlag: false,
         type: this.amountType,
@@ -99,7 +102,7 @@
             {type: 'number', message: '请输入数字'}
           ]
         },
-        thisClaimedAmtSum:0,
+        thisClaimedAmtSum: 0,
         dataOne: [],//预收款支出认领 one 对账单
         dataTwo: [],//会计科目
         dataThree: [],//数组
@@ -109,7 +112,7 @@
     },
     computed: {},
     mounted() {
-      if(this.fundList.length<1){
+      if (this.fundList.length < 1) {
         this.fundGetList();
       }
     },
@@ -118,7 +121,14 @@
         let params = {};
         params.dictCode = "CW00131";
         kmType(params).then(res => {
-          this.fundList = res.data.filter(vb=>['2241'].includes(vb.itemValueOne))
+          this.fundList = res.data.filter(vb => ['2241'].includes(vb.itemValueOne))
+        });
+      },
+      fundGetList2() {
+        let params = {};
+        params.dictCode = "CW00131";
+        kmType(params).then(res => {
+          this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
       },
       // 弹框底部的合计
@@ -129,7 +139,7 @@
               return '合计'
             }
             if (['thisClaimedAmt'].includes(column.property)) {
-              this.thisClaimedAmtSum=this.sum(data, column.property, columnIndex)
+              this.thisClaimedAmtSum = this.sum(data, column.property, columnIndex)
               return this.sum(data, column.property, columnIndex)
             }
             return null
@@ -153,11 +163,12 @@
       open() {
         this.tableData = [];
         this.visibal = true;
-        this.fund="";
-        setTimeout(()=>{
-          let params={
+        this.fund = "";
+        setTimeout(() => {
+          this.titleName != '其他收款收回' ? this.fundGetList() : this.fundGetList2();
+          let params = {
             accountNo: this.$parent.serviceId,
-            sign: this.titleName !='其他收款收回' ? 1 : 2
+            sign: this.titleName != '其他收款收回' ? 1 : 2
           }
           wirteAccount(params).then(res => {
             if (res.code === 0) {
@@ -195,13 +206,13 @@
         let flag = this.tableData.some(v => {
           return v.thisClaimedAmt === undefined || v.thisClaimedAmt === null || v.thisClaimedAmt == 0
         })
-        if(this.titleName=="其他付款认领" && (this.thisClaimedAmtSum>this.$parent.currRow.applyAmt)){
+        if (this.titleName == "其他付款认领" && (this.thisClaimedAmtSum > this.$parent.currRow.applyAmt)) {
           return this.$Message.error("本次认领金额不可大于本次申请金额")
         }
-        if(this.titleName=="其他收款收回" && (this.thisClaimedAmtSum>this.$parent.currRow.paymentClaimAmt)){
+        if (this.titleName == "其他收款收回" && (this.thisClaimedAmtSum > this.$parent.currRow.paymentClaimAmt)) {
           return this.$Message.error("本次认领金额不可大于本次申请单认领金额")
         }
-        if(this.titleName=="其他付款认领" && this.fund==""){
+        if (this.titleName == "其他付款认领" && this.fund == "") {
           this.$message.error('款项分类不可为空')
           return
         }
@@ -223,14 +234,12 @@
           data.thisClaimedAmt = el.thisClaimedAmt;
           arr.push(data)
         })
-        if(this.titleName!='其他收款收回'){
-          this.dataOne.paymentTypeCode = this.fund;
-        }
-        if(this.titleName!='其他收款收回'){
+        if (this.titleName != '其他收款收回') {
           let data = {
             one: this.dataOne,
             two: this.dataTwo,
-            three: arr
+            three: arr,
+            paymentTypeCode:this.fund
           }
           saveAccount(data).then(res => {
             if (res.code === 0) {
@@ -239,11 +248,12 @@
               this.$parent.getQuery()
             }
           })
-        }else{
+        } else {
           let data = {
             one: this.dataOne,
             two: this.dataTwo,
-            three: arr
+            three: arr,
+            paymentTypeCode:this.fund
           }
           paymentRegain(data).then(res => {
             if (res.code === 0) {

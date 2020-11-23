@@ -193,6 +193,7 @@
         //this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
         accruedList: [{mateAccountCoding: ""}],
         outStaffSelect: {}, //辅助核算选择的外部员工对象
+        isOutStaff: false, //是否是外部员工
       };
     },
     mounted() {
@@ -421,9 +422,10 @@
             ajaxBool = false;
             return this.$Message.error('本次认领金额不可大于未认领金额')
           }
-          if (this.outStaffSelect) {
+          if (this.isOutStaff) {
             data.externalEmployeeCode = this.outStaffSelect.itemCode
             data.externalEmployeeName = this.outStaffSelect.itemName
+            data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
           }
           showLoading('body', "保存中，请勿操作。。。")
           if (ajaxBool) {
@@ -458,9 +460,10 @@
               }
               return el;
             })
-            if (this.outStaffSelect) {
+            if (this.isOutStaff) {
               data.externalEmployeeCode = this.outStaffSelect.itemCode
               data.externalEmployeeName = this.outStaffSelect.itemName
+              data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")
@@ -480,6 +483,7 @@
             }
           } else {
             data.subjectCode = "2241";
+            data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2 ? 1 : this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
             data.claimType = 0;
             data.claimMoney = this.accrued[0].balanceMoney
             data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
@@ -494,9 +498,10 @@
               ajaxBool = false;
               return this.$Message.error('本次认领金额不可大于未认领金额')
             }
-            if (this.outStaffSelect) {
+            if (this.isOutStaff) {
               data.externalEmployeeCode = this.outStaffSelect.itemCode
               data.externalEmployeeName = this.outStaffSelect.itemName
+              data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")

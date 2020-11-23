@@ -161,6 +161,7 @@
       accountSelette,
       subjexts
     },
+    props:['paymentTypeCode'],
     data() {
       const amtValid = ({row}) => {
         return new Promise((resolve, reject) => {
@@ -438,6 +439,9 @@
             };
             if (this.$parent.otherPayCus) {
               obj2.one.paymentTypeCode = this.$parent.fund
+            }
+            if(this.paymentTypeCode){
+              obj2.paymentTypeCode = this.paymentTypeCode
             }
             this.conserveDis = true;
             saveAccount(obj2).then(res => {

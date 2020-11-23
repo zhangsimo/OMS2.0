@@ -259,15 +259,15 @@
                 </Modal>
               </div>
               <div>
-                  <!--新增/修改外部员工-->
-                  <Modal v-model="modalShow" title="新增外部员工" width="460px" :closable="false">
-                    <addOutStaff ref="addOutStaff"></addOutStaff>
-                    <div slot="footer" style="padding: 10px 0">
-                      <Button type="primary" @click="submit">确认</Button>
-                      <Button type="default" @click="cancel">退出</Button>
-                    </div>
-                  </Modal>
-                </div>
+                <!--新增/修改外部员工-->
+                <Modal v-model="modalShow" title="新增外部员工" width="460px" :closable="false">
+                  <addOutStaff ref="addOutStaff"></addOutStaff>
+                  <div slot="footer" style="padding: 10px 0">
+                    <Button type="primary" @click="submit">确认</Button>
+                    <Button type="default" @click="cancel">退出</Button>
+                  </div>
+                </Modal>
+              </div>
             </div>
           </TabPane>
         </Tabs>
@@ -594,18 +594,21 @@ export default {
     radioChangeEventClient({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "1";
+      this.AssistAccounting.auxiliaryTypeCode = '1'
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算供应商
     radioChangeEventSupplier({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "2";
+      this.AssistAccounting.auxiliaryTypeCode = '2'
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算个人
     radioChangeEventPersonage({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
+      this.AssistAccounting.auxiliaryTypeCode = '4'
       // this.auxiliaryCode = row.userName;
     },
     //点击单选框获取辅助核算其他
@@ -613,8 +616,10 @@ export default {
       this.AssistAccounting = row;
       if(this.dictName == '外部员工'){
         this.auxiliaryTypeCode = "CW00118";
+        this.AssistAccounting.auxiliaryTypeCode = 'CW00118'
       }else{
         this.auxiliaryTypeCode = "CW0011X";
+        this.AssistAccounting.auxiliaryTypeCode = 'CW0011X'
       }
       // this.auxiliaryCode = row.itemCode;
       // console.log(row)
