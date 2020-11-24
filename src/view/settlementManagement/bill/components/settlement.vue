@@ -253,6 +253,7 @@ export default {
           auxiliaryName:value.fullName, //辅助核算名称
           auxiliaryCode:value.code ,//辅助核算项目编码
           isSubject:1,//与原本对账单作出区分
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -269,6 +270,7 @@ export default {
           auxiliaryName:value.userName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
           isSubject:1,//与原本对账单作出区分
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -285,6 +287,7 @@ export default {
           auxiliaryName:value.itemName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
           isSubject:1,//与原本对账单作出区分
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
         });
       }
     });

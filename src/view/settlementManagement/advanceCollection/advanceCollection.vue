@@ -474,24 +474,6 @@ export default {
     },
     //认领弹框
     claimCollect(type) {
-      // if (type === 1) {
-      //   this.claimModal = true;
-      //   this.claimTit = "预收款认领";
-      //   this.claimedList(1);
-      // } else {
-      //   this.claimTit = "预收款支出认领";
-      //   if (
-      //     Object.keys(this.currRow).length !== 0 &&
-      //     this.currRow.expenditureNo &&
-      //     !this.currRow.expenditureClaimAmt
-      //   ) {
-      //     this.claimModal = true;
-      //     this.claimedList(2);
-      //   } else {
-      //     this.$message.error("请选择有预收款支出单号且未支出认领的数据");
-      //   }
-      // }
-
       if (type === 1) {
         this.$refs.claimModal.open();
         this.amountType = 1

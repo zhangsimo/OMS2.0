@@ -449,6 +449,7 @@
           data.financeAccountCashList = this.accrued
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
+            data.subjectCode = "1123";
             this.accrued.map(el => {
               el.thisClaimedAmt = el.rpAmt;
               if (el.thisClaimedAmt == null || el.thisClaimedAmt <= 0) {

@@ -252,7 +252,8 @@
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.fullName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
-            isSubject: 1
+            isSubject: 1,
+            paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'',//辅助核算的款项分类
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -268,7 +269,8 @@
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.fullName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
-            isSubject: 1
+            isSubject: 1,
+            paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'',//辅助核算的款项分类
           });
         } else if (value.itemName) {
           this.BusinessType.push({
@@ -284,7 +286,9 @@
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.fullName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
-            isSubject: 1
+            isSubject: 1,
+            paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'',//辅助核算的款项分类
+
           });
         }
       });
