@@ -40,6 +40,25 @@
             <Option v-for="item in brandList" :value="item.code" :key="item.code">{{ item.name }}</Option>
           </Select>
         </FormItem>
+        <FormItem label="订单金额:">
+          <Select v-model="formData.orderPriceType" style="width: 350px">
+            <Option v-for="item in orderPriceArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Row v-if="formData.orderPriceType=='qj'">
+            <Col span="4">
+              <InputNumber :min="0" v-model="formDataPriceMin" style="width: 100%"></InputNumber>
+            </Col>
+            <Col span="2" class="tc" style="color: #999">—</Col>
+            <Col span="4">
+              <InputNumber :min="0" v-model="formDataPriceMax" style="width: 100%"></InputNumber>
+            </Col>
+          </Row>
+          <Row v-if="formData.orderPriceType&&formData.orderPriceType!='qj'">
+            <Col span="10">
+              <InputNumber :min="0" v-model="value1" style="width: 100%"></InputNumber>
+            </Col>
+          </Row>
+        </FormItem>
         <FormItem label="销售人员:">
           <Select v-model="formData.orderMan" label-in-value filterable style="width: 350px">
             <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
@@ -76,6 +95,24 @@
                 formData:this.data,
                 salesList:[],
                 loading:false, //模糊查询框
+                orderPriceArr:[
+                  {
+                    label:'等于',
+                    value:'dy'
+                  },
+                  {
+                    label:'小于等于',
+                    value:'xydy'
+                  },
+                  {
+                    label:'大于等于',
+                    value:'dydy'
+                  },
+                  {
+                    label:'区间',
+                    value:'qj'
+                  }
+                ]
             }
         },
         mounted(){
