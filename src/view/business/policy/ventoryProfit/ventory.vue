@@ -556,6 +556,11 @@
             ?false
             :true
           : false;
+        return this.formPlan.billStatusId
+          ? this.formPlan.billStatusId.value === 0
+            ?true
+            :false
+          : false;
       },
       //获取左侧列表
       getList() {
@@ -839,6 +844,9 @@
 
       //添加配件
       addPro() {
+        if(!this.formPlan.storeId){
+          return this.$message.warning("请选择入库仓库")
+        }
         this.$refs.SelectPartRef.init();
       },
       //左边列表选中当前行
@@ -1029,7 +1037,7 @@
           total += parseFloat(value);
         });
         if(columnIndex===10){
-          return total.toFixed(2);
+          //return total.toFixed(2);
         }else{
           return total;
         }
