@@ -19,11 +19,11 @@
               <i class="iconfont mr5 iconchaxunicon"></i>更多
             </Button>
           </div>
-          <!--<div class="db">-->
-            <!--<Button class="mr10" @click="addProoo" v-has="'add'">-->
-              <!--<Icon type="md-add" />新增-->
-            <!--</Button>-->
-          <!--</div>-->
+          <div class="db">
+            <Button class="mr10" @click="addProoo">
+              <Icon type="md-add" />新增
+            </Button>
+          </div>
           <div class="db">
             <Button
               @click="baocun"
@@ -52,16 +52,15 @@
               v-has="'export'"
             >导出</Button>
           </div>
-          <!--<div class="db">-->
-            <!--<Button-->
-              <!--class="mr10"-->
-              <!--v-has="'cancellation'"-->
-              <!--@click="cancellation"-->
-              <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-            <!--&gt;-->
-              <!--<Icon type="md-close" size="14" />作废-->
-            <!--</Button>-->
-          <!--</div>-->
+          <div class="db">
+            <Button
+              class="mr10"
+              @click="cancellation"
+              :disabled="this.formPlan.statuName!== '草稿'"
+            >
+              <Icon type="md-close" size="14" />作废
+            </Button>
+          </div>
           <!--<div class="db">-->
             <!--<Button-->
               <!--class="mr10"-->
@@ -122,7 +121,7 @@
                       v-model="formPlan.serviceId"
                       class="w160"
                       value="YCSDFD839239320"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     />
                     </Tooltip>
                   </FormItem>
@@ -132,7 +131,7 @@
                       v-model="formPlan.code"
                       class="w160"
                       value="YCSDFD839239320"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     />
                     </Tooltip>
                   </FormItem>
@@ -141,14 +140,14 @@
                       v-model="formPlan.createTime"
                       class="w160"
                       value="YCSDFD839239320"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     />
                   </FormItem>
                   <FormItem label="入库仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
                       style="width:100px"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     >
                       <Option
                         v-for="item in warehouseList"
@@ -162,7 +161,7 @@
                     <Select
                       v-model="formPlan.billTypeId"
                       style="width:100px"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     >
                       <Option
                         v-for="item in settleTypeList.CS00107"
@@ -177,7 +176,7 @@
                       v-model="formPlan.orderMan"
                       class="w160"
                       value="YCSDFD839239320"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     />
                     </Tooltip>
                   </FormItem>
@@ -186,6 +185,7 @@
                     <Input
                       v-model="formPlan.remark"
                       class="w160"
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     />
                     </Tooltip>
                   </FormItem>
@@ -193,46 +193,72 @@
                     <Input
                       class="w160"
                       :value="formPlan.source===0?'OMS盘点':formPlan.source?formPlan.source===1||formPlan.source===2?'WMS盘点':'OMS盘点':''"
-                      disabled
+                      :disabled="this.formPlan.statuName!== '草稿'"
                     />
                   </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
+                <div class="clearfix">
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="addPro"
+                    >
+                      <Icon type="md-add" />添加配件
+                    </Button>
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="shanchu"
+                      :disabled="draftShow != 0"
+                    >
+                      <i class="iconfont mr5 iconlajitongicon"></i> 删除
+                    </Button>
+                  </div>
+                </div>
               </div>
               <vxe-table
                 ref="xTable1"
                 border
                 resizable
                 auto-resize
-                @edit-closed="editClosedEvent"
-                @edit-actived="editActivedEvent"
                 size="mini"
                 show-footer
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
-                :edit-config="{trigger: 'click', mode: 'cell'}"
+                :edit-config="{trigger: 'click', mode: 'cell',activeMethod:editActivedEvent}"
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100" v-if="formPlan.source != 1"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip"
-                  v-if="formPlan.source != 1"
-                  field="trueQty"
-                  title="实盘数量"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="100">
-                </vxe-table-column>
+                <!--<vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100" v-if="formPlan.source != 1"></vxe-table-column>-->
+                <!--<vxe-table-column  show-overflow="tooltip"-->
+                  <!--v-if="formPlan.source != 1"-->
+                  <!--field="trueQty"-->
+                  <!--title="实盘数量"-->
+                  <!--width="100"-->
+                <!--&gt;</vxe-table-column>-->
+                <!--<vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="100">-->
+                <!--</vxe-table-column>-->
                 <vxe-table-column  show-overflow="tooltip"
                   field="exhibitQty"
                   title="入库数量"
                   width="100"
-                ></vxe-table-column>
+                  :edit-render="{autofocus: '.vxe-input--inner'}"
+                >
+                  <template v-slot:edit="{ row }">
+                    <vxe-input type="number" v-model="row.exhibitQty"></vxe-input>
+                  </template>
+                  <template v-slot="{ row }">{{ row.exhibitQty}}</template>
+                </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="exhibitPrice"
                   title="入库单价"
@@ -892,7 +918,7 @@
       //     self.$Message.error(res.message);
       //   }
       // },
-      
+
 
       //导出
       exportAll(){
