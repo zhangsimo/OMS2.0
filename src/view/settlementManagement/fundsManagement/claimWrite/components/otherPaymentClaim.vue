@@ -25,7 +25,7 @@
           </Form>
         </i-col>
       </Row>
-      <Row class="dbd" v-else>
+      <Row v-else>
         <i-col span="14">
           <Form :model="formValidate" :rules="ruleValidate" v-show="voucherinputModel">
             <FormItem label="选择辅助核算">
@@ -40,9 +40,10 @@
             </FormItem>
           </Form>
           <Form v-show="!voucherinputModel">
-            <FormItem label="款项分类: ">
+            <FormItem label="款项分类">
               <Row>
-                <i-col span="10">
+                <Col span="1"><span style="color:red">*</span>:</Col>
+                <Col span="10">
                   <Select v-model="fund" placeholder="请选择" class="w200" clearable>
                     <Option
                       v-for="item in fundList"
@@ -51,7 +52,7 @@
                     >{{ item.itemName }}
                     </Option>
                   </Select>
-                </i-col>
+                </Col>
               </Row>
             </FormItem>
           </Form>
