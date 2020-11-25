@@ -26,6 +26,7 @@
               <Option value="2" label="待入库"></Option>
               <Option value="4" label="已入库"></Option>
               <Option value="3" label="部分入库"></Option>
+              <Option value="7" label="已完成"></Option>
             </Select>
           </div>
           <div class="db mr10">

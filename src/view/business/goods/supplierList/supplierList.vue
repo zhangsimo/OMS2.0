@@ -222,6 +222,7 @@
                       class="w160"
                       :disabled="presentrowMsg !== 0 || buttonDisable"
                       v-model="formPlan.billType"
+                      @on-change="resetRightDetail"
                     >
                       <Option
                         v-for="item in invoiceMap"
@@ -260,6 +261,7 @@
                       class="w160"
                       :disabled="presentrowMsg !== 0 || buttonDisable"
                       v-model="formPlan.warehouse"
+                      @on-change="resetRightDetail"
                     >
                       <Option
                         v-for="item in inStores"
@@ -702,6 +704,9 @@
       };
     },
     methods: {
+      resetRightDetail(){
+        this.Right.tbdata = []
+      },
       //------------------------------------------------------------------------//
       //表格tab切换可编辑部位
       async editNextCell($table) {
