@@ -555,7 +555,7 @@
         },
         orderTypeTemp:{
           value:0,
-          name:"销售订单"
+          label:"销售订单"
         },
         formPlan: {
           detailList: [],
@@ -1160,6 +1160,9 @@
         data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
         data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
         data.detailList = arr;
+        if(this.orderTypeTemp.hasOwnProperty('value')){
+          data.orderType = {value:this.orderTypeTemp.value,name:this.orderTypeTemp.label}
+        }
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();
@@ -1431,6 +1434,10 @@
           item.adjustQty = item.outableQty;
         });
         data.detailList = val.details;
+
+        if(this.orderTypeTemp.hasOwnProperty('value')){
+          data.orderType = {value:this.orderTypeTemp.value,name:this.orderTypeTemp.label}
+        }
         data.sign = b;
         // data.orderTypeId = val.orderTypeId||1;
         data.isImportSales = val.orderType==7?true:false;
@@ -1527,6 +1534,10 @@
             return false;
           }
           this.leftOneOrder = old;
+          this.orderTypeTemp.value = this.leftOneOrder.orderType.value;
+          this.orderTypeTemp.label = this.leftOneOrder.orderType.name;
+
+
           this.getList();
           this.getAllLimit();
         },
