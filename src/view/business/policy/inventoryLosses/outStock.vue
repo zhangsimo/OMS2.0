@@ -19,20 +19,19 @@
               <i class="iconfont mr5 iconchaxunicon"></i>更多
             </Button>
           </div>
-          <!--<div class="db">-->
-          <!--<Button class="mr10" @click="addProoo" v-has="'add'">-->
-          <!--<Icon type="md-add" />新增-->
-          <!--</Button>-->
-          <!--</div>-->
-          <!--<div class="db">-->
-            <!--<Button-->
-              <!--@click="baocun"-->
-              <!--v-has="'save'"-->
-              <!--type="default"-->
-              <!--class="mr10"-->
-              <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-            <!--&gt;保存</Button>-->
-          <!--</div>-->
+          <div class="db">
+          <Button class="mr10" @click="addProoo">
+          <Icon type="md-add" />新增
+          </Button>
+          </div>
+          <div class="db">
+            <Button
+              @click="baocun"
+              type="default"
+              class="mr10"
+              :disabled="this.formPlan.statuName!== '草稿'"
+            >保存</Button>
+          </div>
           <div class="db">
             <Button
               @click="editPro"
@@ -51,16 +50,15 @@
               v-has="'export'"
             >导出</Button>
           </div>
-          <!--<div class="db">-->
-          <!--<Button-->
-          <!--class="mr10"-->
-          <!--v-has="'cancellation'"-->
-          <!--@click="cancellation"-->
-          <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-          <!--&gt;-->
-          <!--<Icon type="md-close" size="14" />作废-->
-          <!--</Button>-->
-          <!--</div>-->
+          <div class="db">
+          <Button
+          class="mr10"
+          @click="cancellation"
+          :disabled="this.formPlan.statuName!== '草稿'"
+          >
+          <Icon type="md-close" size="14" />作废
+          </Button>
+          </div>
           <!--<div class="db">-->
           <!--<Button-->
           <!--class="mr10"-->
@@ -147,7 +145,6 @@
                     <Select
                       v-model="formPlan.storeId"
                       style="width:100px"
-                      disabled
                     >
                       <Option
                         v-for="item in warehouseList"
@@ -198,29 +195,27 @@
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
-                <!--<div class="clearfix">-->
-                <!--<div class="fl mb5">-->
-                <!--<Button-->
-                <!--size="small"-->
-                <!--class="mr10"-->
-                <!--@click="addPro"-->
-                <!--v-has="'addPro'"-->
-                <!--:disabled="draftShow != 0||!formPlan.storeId"-->
-                <!--&gt;-->
-                <!--<Icon type="md-add" />添加配件-->
-                <!--</Button>-->
-                <!--</div>-->
-                <!--<div class="fl mb5">-->
-                <!--<Button-->
-                <!--size="small"-->
-                <!--class="mr10"-->
-                <!--@click="shanchu"-->
-                <!--v-has="'delete'"-->
-                <!--:disabled="draftShow != 0"-->
-                <!--&gt;-->
-                <!--<i class="iconfont mr5 iconlajitongicon"></i> 删除-->
-                <!--</Button>-->
-                <!--</div>-->
+                <div class="clearfix">
+                <div class="fl mb5">
+                <Button
+                size="small"
+                class="mr10"
+                @click="addPro"
+                :disabled="!formPlan.storeId"
+                >
+                <Icon type="md-add" />添加配件
+                </Button>
+                </div>
+                <div class="fl mb5">
+                <Button
+                size="small"
+                class="mr10"
+                @click="shanchu"
+                :disabled="draftShow != 0"
+                >
+                <i class="iconfont mr5 iconlajitongicon"></i> 删除
+                </Button>
+                </div>
                 <!--<div class="fl mb5">-->
                 <!--<Upload-->
                 <!--ref="upload"-->
@@ -245,7 +240,7 @@
                 <!--<i class="iconfont mr5 iconlajitongicon"></i> 导入-->
                 <!--</Button>&ndash;&gt;-->
                 <!--</div>-->
-                <!--</div>-->
+                </div>
               </div>
               <vxe-table
                 ref="xTable1"
@@ -358,7 +353,7 @@
   import { conversionList } from "@/components/changeWbList/changewblist";
   import QuickDate from "../../../../components/getDate/dateget";
   import "../../../lease/product/lease.less";
-  import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
+  import SelectPartCom from "../../../salesManagement/salesOrder/batch/selectPartCom";
   import PrintShow from "./components/PrintShow";
   import More from "./components/More";
   import moment, { months } from "moment";

@@ -121,7 +121,7 @@
                       v-model="formPlan.serviceId"
                       class="w160"
                       value="YCSDFD839239320"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      disabled
                     />
                     </Tooltip>
                   </FormItem>
@@ -131,7 +131,7 @@
                       v-model="formPlan.code"
                       class="w160"
                       value="YCSDFD839239320"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      disabled
                     />
                     </Tooltip>
                   </FormItem>
@@ -140,7 +140,7 @@
                       v-model="formPlan.createTime"
                       class="w160"
                       value="YCSDFD839239320"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      disabled
                     />
                   </FormItem>
                   <FormItem label="入库仓库：" prop="storeId">
@@ -161,7 +161,7 @@
                     <Select
                       v-model="formPlan.billTypeId"
                       style="width:100px"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      disabled
                     >
                       <Option
                         v-for="item in settleTypeList.CS00107"
@@ -176,7 +176,7 @@
                       v-model="formPlan.orderMan"
                       class="w160"
                       value="YCSDFD839239320"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      disabled
                     />
                     </Tooltip>
                   </FormItem>
@@ -193,7 +193,7 @@
                     <Input
                       class="w160"
                       :value="formPlan.source===0?'OMS盘点':formPlan.source?formPlan.source===1||formPlan.source===2?'WMS盘点':'OMS盘点':''"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      disabled
                     />
                   </FormItem>
                 </Form>
@@ -696,12 +696,13 @@
           checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           orderMan: this.$store.state.user.userData.staffName || "", //盘点人
           orderManId: this.$store.state.user.userData.id || "", //盘点人id
+          billTypeId:'010103',//新增初始票据类型
           serviceId: "",
           print: "",
           createUname: "",
           createTime: "",
           commitUname: "",
-          createTime: "",
+          createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           //commitDate:"",
           //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           //createUname: this.$store.state.user.userData.staffName,
@@ -1016,7 +1017,7 @@
             if (
               [
                 "exhibitQty","trueQty","sysQty"
-              ].includes(column.property)||columnIndex==10
+              ].includes(column.property)||columnIndex === 8
             ) {
               return this.sum(data, column.property, columnIndex);
             }
@@ -1029,15 +1030,15 @@
         let total = 0;
         data.map(item => {
           let value = 0
-          if(columnIndex===10){
+          if(columnIndex===8){
             value = item['exhibitQty']*item['exhibitPrice'];
           }else{
             value = item[type];
           }
           total += parseFloat(value);
         });
-        if(columnIndex===10){
-          //return total.toFixed(2);
+        if(columnIndex===8){
+          return total.toFixed(2);
         }else{
           return total;
         }
