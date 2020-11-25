@@ -670,7 +670,6 @@ export default {
     },
     showOrhideModel(v){
       if(v){
-        console.log(this.subjectChoose,123123)
         if(this.list.length==0){
           this.getListCompany();
         }

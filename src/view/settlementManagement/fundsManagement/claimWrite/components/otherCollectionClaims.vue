@@ -118,7 +118,7 @@
     </Modal>
     <claimGuest ref="claimGuest"></claimGuest>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" :assistTypeCode="assistTypeCode"  @callBackFun="getCallBack"></voucherInput>
     <!--其他收款核销-->
     <settlement ref="settlement"></settlement>
   </div>
@@ -194,6 +194,7 @@
         accruedList: [{mateAccountCoding: ""}],
         outStaffSelect: {}, //辅助核算选择的外部员工对象
         isOutStaff: false, //是否是外部员工
+        assistTypeCode: '', //能够选择辅助核算的类型
       };
     },
     mounted() {
@@ -203,6 +204,7 @@
       // 打开模态框
       open() {
         this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "2241"
+        this.claimTit == '预收款认领' ? this.assistTypeCode = '1' : this.assistTypeCode = '4'
         if (this.company.length == 0) {
           this.getOne();
         }

@@ -163,7 +163,7 @@
         </Row>
       </div>
       <div slot="footer">
-        <Button type="primary" @click="openClimed()" class="mr10">确定</Button>
+        <Button type="primary" @click="openClimed()" :loading="comLoading" class="mr10">确定</Button>
         <Button type="default" @click="modal = false">取消</Button>
       </div>
     </Modal>
@@ -187,7 +187,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" :assistTypeCode="assistTypeCode" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
     <settlement2 ref="settlement2" @reloadParList="reloadParentList" :paymentTypeCode="fundCode" :paymentTypeName="fund"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
@@ -285,6 +285,7 @@
         currentAccountItem: {},
         accruedList: [{mateAccountCoding: ""}],
         shopName: '',
+        assistTypeCode: '', //能够选择辅助核算的类型
         dataOne: {},
         dataTwo: [],
         comLoading: false,
@@ -330,6 +331,7 @@
           this.getOne();
         }
         this.claimTit == '预付款认领' ? this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "1221"
+        this.claimTit == '预付款认领' ? this.assistTypeCode = '1' : this.assistTypeCode = '4'
         this.oneSubject = {};
         this.modal = true;
 
@@ -532,6 +534,7 @@
             this.ok();
           }
         }
+        
       },
       //预收款弹框是否打开
       visChangeClaim(type) {
@@ -722,6 +725,7 @@
                   ? this.$Message.success("预付款认领成功")
                   : this.$Message.success("其他付款认领成功");
                 this.formValidate.voucherInput = ""
+                this.getQuery()
                 hideLoading()
               } else {
                 hideLoading()
