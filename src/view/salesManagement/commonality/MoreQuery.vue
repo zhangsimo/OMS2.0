@@ -41,23 +41,23 @@
           </Select>
         </FormItem>
         <FormItem label="订单金额:">
-          <Select v-model="formData.orderPriceType" style="width: 350px">
+          <Select v-model="formData.amtType" style="width: 350px">
             <Option v-for="item in orderPriceArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Row v-if="formData.orderPriceType=='qj'">
-            <Col span="4">
-              <InputNumber :min="0" v-model="formDataPriceMin" style="width: 100%"></InputNumber>
+          <Row>
+            <Col span="6" v-if="formData.amtType">
+              <vxe-input @change="amtMinChange" size="mini" v-model="amtMin" style="width: 100%" type="float"></vxe-input>
             </Col>
-            <Col span="2" class="tc" style="color: #999">—</Col>
-            <Col span="4">
-              <InputNumber :min="0" v-model="formDataPriceMax" style="width: 100%"></InputNumber>
-            </Col>
-          </Row>
-          <Row v-if="formData.orderPriceType&&formData.orderPriceType!='qj'">
-            <Col span="10">
-              <InputNumber :min="0" v-model="value1" style="width: 100%"></InputNumber>
+            <Col v-if="formData.amtType=='4'" span="2" class="tc" style="color: #999">—</Col>
+            <Col v-if="formData.amtType=='4'" span="6">
+              <vxe-input size="mini"  :min="amtMin" v-model="amtMax" style="width: 100%" type="float"></vxe-input>
             </Col>
           </Row>
+          <!--<Row v-if="formData.orderPriceType&&formData.orderPriceType!='qj'">-->
+            <!--<Col span="10">-->
+              <!--<InputNumber :min="0" v-model="amtMax" style="width: 100%"></InputNumber>-->
+            <!--</Col>-->
+          <!--</Row>-->
         </FormItem>
         <FormItem label="销售人员:">
           <Select v-model="formData.orderMan" label-in-value filterable style="width: 350px">
@@ -98,24 +98,27 @@
                 orderPriceArr:[
                   {
                     label:'等于',
-                    value:'dy'
+                    value:'1'
                   },
                   {
                     label:'小于等于',
-                    value:'xydy'
+                    value:'2'
                   },
                   {
                     label:'大于等于',
-                    value:'dydy'
+                    value:'3'
                   },
                   {
                     label:'区间',
-                    value:'qj'
+                    value:'4'
                   }
-                ]
+                ],
+              amtMin : 0,
+              amtMax : 0,
             }
         },
         mounted(){
+
         },
         methods:{
             //清空更多弹框的条件
@@ -192,8 +195,21 @@
                     });
                 }
             },
+          amtMinChange({value}){
+              if(parseFloat(this.amtMax)<parseFloat(value)){
+                this.amtMax = value
+              }
+          },
             //确定
             emit(){
+              if(this.formData.amtType){
+                if(this.formData.amtType=='4'){
+                  this.formData.amtMin = this.amtMin;
+                  this.formData.amtMax = this.amtMax;
+                }else{
+                  this.formData.amtMin = this.amtMin;
+                }
+              }
               this.$emit('resetData', this.formData);
               this.$store.commit('setOrederQuery' , this.formData)
               this.moreQueryShow = false
