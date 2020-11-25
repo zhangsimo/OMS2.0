@@ -240,6 +240,7 @@
                       class="w160"
                       :disabled="draftShow != 0 || isNew"
                       v-model="formPlan.billTypeId"
+                      @on-change="resetRightDetail"
                     >
                       <Option
                         v-for="item in settleTypeList.CS00107"
@@ -688,7 +689,9 @@
       this.getDomHeight();
     },
     methods: {
-
+      resetRightDetail(){
+        this.formPlan.details = [];
+      },
       //------------------------------------------------------------------------//
       //表格tab切换可编辑部位
       async editNextCell($table) {
@@ -979,6 +982,7 @@
       },
       //仓库改变右侧表格改变
       getStore(data) {
+        this.resetRightDetail();
         if (this.formPlan.details > 0) {
           let house = this.WareHouseList.filter(item => item.id == data);
           this.formPlan.details.map(val => {

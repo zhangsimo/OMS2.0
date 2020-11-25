@@ -1169,6 +1169,8 @@
           this.otherFees = 0;
           this.collectlist = [];
           this.paymentlist = [];
+          this.tempCollectlist = [];
+          this.tempPaymentlist = [];
           // this.storeAccount(this.parameter.orgId);
           // this.Initialization();
 
