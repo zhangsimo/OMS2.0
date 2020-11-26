@@ -2,7 +2,7 @@
   <Modal v-model="modal1" title="对账单查询" width="1000" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
     <DatePicker v-model="dateQuery" class="mr10" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
-    <!-- <Checkbox v-model="checkSingle" @on-change="canShopList" :disabled="paymentId != 'YJDZ'" >是否跨店搜索</Checkbox> -->
+    <Checkbox v-model="checkSingle" @on-change="canShopList" :disabled="paymentId != 'YJDZ'" >是否跨店搜索</Checkbox>
     <span class="ml10">往来单位：</span>
     <Select
       ref="companyGuset"

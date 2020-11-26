@@ -301,7 +301,7 @@
         let params = {};
         params.dictCode = "CW00131";
         kmType(params).then(res => {
-          this.fundList = res.data.filter(vb => ['2241'].includes(vb.itemValueOne))
+          this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
       },
       reloadParentList() {
@@ -315,7 +315,7 @@
         if (this.company.length == 0) {
           this.getOne();
         }
-        this.claimTit == '预付款认领' ? this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
+        this.claimTit == '预付款认领' ? this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "1221"
         this.oneSubject = {};
         this.modal = true;
 
