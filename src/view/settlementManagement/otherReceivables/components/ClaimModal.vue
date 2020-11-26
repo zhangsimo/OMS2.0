@@ -121,13 +121,6 @@
         let params = {};
         params.dictCode = "CW00131";
         kmType(params).then(res => {
-          this.fundList = res.data.filter(vb => ['2241'].includes(vb.itemValueOne))
-        });
-      },
-      fundGetList2() {
-        let params = {};
-        params.dictCode = "CW00131";
-        kmType(params).then(res => {
           this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
       },
@@ -165,7 +158,6 @@
         this.visibal = true;
         this.fund = "";
         setTimeout(() => {
-          this.titleName != '其他收款收回' ? this.fundGetList() : this.fundGetList2();
           let params = {
             accountNo: this.$parent.serviceId,
             sign: this.titleName != '其他收款收回' ? 1 : 2

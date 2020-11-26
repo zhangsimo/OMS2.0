@@ -195,7 +195,7 @@ export default {
           }
         })
       }else{
-        this.accruedList[0].mateAccountCoding = "1221"
+        this.accruedList[0].mateAccountCoding = "2241"
         this.$refs.voucherInput.Classification = true;
       }
     },
