@@ -169,7 +169,7 @@
               />
             </div>
           </TabPane>
-          <TabPane label="其他辅助核算" name="Other"  :disabled="['1','2','3','4'].includes(assistTypeCode)">
+          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3','4'].includes(assistTypeCode)">
             <div class="Other">
               <div class="OtherLeft">
                 <ul>
@@ -432,7 +432,6 @@ export default {
 
     showOrhideModel(v){
       if(v){
-        console.log(this.assistTypeCode)
         this.SupperlierNameOrCode = ''
         this.FullNameOrCode = ''
         this.formDynamic.fund = ''
@@ -663,7 +662,6 @@ export default {
       this.auxiliaryTypeCode = "2";
       this.auxiliaryCode = row.code;
       this.voucherItem = row;
-      // console.log(row)
     },
     //供应商切换页数
     selectNumsupplier(page) {
@@ -701,7 +699,6 @@ export default {
       data.phone = "";
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
-      // console.log(this.$store.state.user.userData.shopId);
       // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
       data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
@@ -872,7 +869,6 @@ export default {
       }
       this.auxiliaryCode=row.itemCode;
       this.voucherItem = row;
-      console.log(row)
     },
     //新增辅助核算名称保存
     addAuxiliary() {
