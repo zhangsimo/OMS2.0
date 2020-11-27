@@ -1073,7 +1073,7 @@
             el.orderQty = 1;
           }
           if (!(el.orderPrice * 1)) {
-            el.orderPrice = undefined;
+            el.orderPrice = 0;
           }
         });
         this.setFilterArr(this.formPlan.detailList || [])
@@ -1091,7 +1091,7 @@
             el.orderQty = 1;
           }
           if (!(el.orderPrice * 1)) {
-            el.orderPrice = undefined;
+            el.orderPrice = 0;
           }
         });
         this.setFilterArr(this.formPlan.detailList || [])
