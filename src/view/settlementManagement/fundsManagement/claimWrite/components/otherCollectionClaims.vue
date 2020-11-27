@@ -202,7 +202,7 @@
     methods: {
       // 打开模态框
       open() {
-        this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
+        this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "2241"
         if (this.company.length == 0) {
           this.getOne();
         }

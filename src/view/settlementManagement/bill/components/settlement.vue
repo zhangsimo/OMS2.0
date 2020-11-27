@@ -313,15 +313,19 @@ export default {
     accountNoClick() {
       this.$refs.accountSelette.isCanChange = this.showchange
       this.$refs.accountSelette.modal1 = true;
-      if (this.$parent.paymentId == "YSK") {
+      if (this.$parent.paymentId == "DYD") {
         this.$refs.accountSelette.paymentId = "YJDZ";
-        this.$refs.accountSelette.sort = "SK";
+        // this.$refs.accountSelette.sort = "SK";
       }
       if (this.$parent.paymentId == "YS") {
         this.$refs.accountSelette.paymentId = "YSK";
       }
       if (this.$parent.paymentId == "YF") {
         this.$refs.accountSelette.paymentId = "YFK";
+      }
+      if (this.$parent.paymentId == "YSK") {
+        this.$refs.accountSelette.paymentId = "YJDZ";
+        this.$refs.accountSelette.sort = "SK";
       }
     },
     //弹框打开
