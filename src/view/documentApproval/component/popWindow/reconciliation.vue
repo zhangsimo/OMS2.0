@@ -42,7 +42,7 @@
               <span>收款户名：</span>
               <Select
                 filterable
-                v-model="infoBase.collectionName"
+                v-model="infoBase.collectionId"
                 label-in-value
                 style="width:150px;margin-right: 10px"
                 @on-change="changeCollectionUname"
@@ -349,7 +349,8 @@
           serviceCharge: 0, //手续费
           partsManagementFee: 0, //配件管理费
           otherFees: 0, //其他费用
-          collectionName: "", //收款户名
+          collectionName: "", //收款户名;
+          collectionId:"",
           bankName: "", //开户行
           collectionAccount: "", //收款账号
           thisPaymentAccountId: "", //本次申请付款账户
@@ -786,6 +787,7 @@
       },
       async getAccountNameList(type) {
         this.infoBase.collectionName = "";
+        this.infoBase.collectionId = "";
         this.infoBase.bankName = "";
         this.infoBase.collectionAccount = "";
         let rep = await getAccountName({"guestId": this.companyInfo});
@@ -799,7 +801,8 @@
             if (type) {
               if(this.collectionList){
                 let jsonAcction=this.collectionList.filter(item=>(item.id==this.infoBase.collectionId))
-                this.infoBase.collectionName = jsonAcction[0].id;
+                this.infoBase.collectionName = jsonAcction[0].accountName;
+                this.infoBase.collectionId = jsonAcction[0].id;
                 this.infoBase.bankName = jsonAcction[0].accountBank;
                 this.infoBase.collectionAccount = jsonAcction[0].accountBankNo;
               }
@@ -902,7 +905,9 @@
       },
       changeCollectionUname(v) {
         this.collectionObj = v;
-        let arrData = this.collectionList.filter(item => item.id == this.infoBase.collectionName);
+        this.infoBase.collectionId=v.value?v.value.trim():"";
+        this.infoBase.collectionName=v.label?v.label.trim():"";
+        let arrData = this.collectionList.filter(item => item.id == this.infoBase.collectionId);
         if (arrData.length > 0) {
           this.infoBase.bankName = arrData[0].accountBank;
           this.infoBase.collectionAccount = arrData[0].accountBankNo;
@@ -920,10 +925,7 @@
       // 应付选中
       paymentCheckout(selection, row) {
         this.paymentlist = selection;
-        this.infoBase.reconciliation = 0;
-        selection.map(item => {
-          this.infoBase.reconciliation += parseFloat(item.thisAccountAmt);
-        });
+        this.infoBase.reconciliation  = this.collectSum(selection).toFixed(2)
         this.getSettlementComputed();
 
         // this.tipText(this.paymentlist);
@@ -933,7 +935,7 @@
         this.collectlist = selection;
         this.infoBase.accountReceivable = 0;
         // this.Actualtotalcollect = 0;
-        this.infoBase.accountReceivable = this.collectSum(selection)
+        this.infoBase.accountReceivable = this.collectSum(selection).toFixed(2)
         // selection.map(item => {
         //   this.totalcollect += parseFloat(item.thisAccountAmt);
         // });
@@ -945,7 +947,7 @@
       collectCheckoutAll(selection) {
         this.collectlist = selection;
         // console.log(selection,1111)
-        this.infoBase.accountReceivable = this.collectSum(selection)
+        this.infoBase.accountReceivable = this.collectSum(selection).toFixed(2)
         // selection.map(item => {
         //   this.totalcollect += parseFloat(item.thisAccountAmt);
         // });
@@ -980,23 +982,23 @@
       // 应付全选
       paymentCheckoutAll(selection) {
         this.paymentlist = selection;
-        this.infoBase.reconciliation = 0
-        selection.map(item => {
-          this.infoBase.reconciliation += parseFloat(item.thisAccountAmt);
-        });
+        this.infoBase.reconciliation = this.collectSum(selection).toFixed(2)
+        // selection.map(item => {
+        //   this.infoBase.reconciliation += parseFloat(item.thisAccountAmt);
+        // });
         this.getSettlementComputed();
         // this.tipText(this.paymentlist);
       },
       // 应付取消选中
       paymentNoCheckout(selection, row) {
         this.paymentlist = selection;
-        this.infoBase.reconciliation -= parseFloat(row.thisAccountAmt);
+        this.infoBase.reconciliation = this.collectSum(selection).toFixed(2)
         this.getSettlementComputed();
       },
       // 应收取消选中
       collectNoCheckout(selection, row) {
         this.collectlist = selection;
-        this.infoBase.accountReceivable -= parseFloat(row.thisAccountAmt);
+        this.infoBase.accountReceivable = this.collectSum(selection).toFixed(2)
         this.getSettlementComputed();
       },
       // 应付取消全选
@@ -1123,7 +1125,7 @@
       // 保存接口
       async getPreservation(num) {
         if (this.infoBase.billingType.value == "0" && num == 1) {
-          if (!this.infoBase.collectionName)
+          if (!this.infoBase.collectionId)
             return this.$message.error("收款户名不能为空");
           if (!this.infoBase.bankName) return this.$message.error("开户行不能为空");
           if (!this.infoBase.collectionAccount)

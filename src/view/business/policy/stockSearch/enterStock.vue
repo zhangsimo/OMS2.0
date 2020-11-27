@@ -636,7 +636,9 @@
         let res = await getUnsalable(data)
         if (res.code === 0) {
           this.levelLoading=false;
-          this.levelList = res.data
+          this.levelList = res.data;
+          this.levelList = this.levelList.filter(item => item.strategyName!='最低售价'||(item.strategyName=='最低售价'&&item.removeLimit!=1))
+
         }else{
           this.levelLoading=false;
         }

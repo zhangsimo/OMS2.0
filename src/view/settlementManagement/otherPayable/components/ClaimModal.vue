@@ -9,6 +9,16 @@
           <Input class="w180 mr10" readonly v-model="calculation"/>
           <Button @click="chooseAuxiliary">辅助计算</Button>
         </div>
+        <div class="fr" v-show="titleName=='其他付款支出认领'">
+          <span><i style="color: red" class="mr5">*</i>款项分类：</span>
+          <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+            <Option
+              v-for="item in fundList"
+              :value="item.itemName"
+              :key="item.id"
+            >{{ item.itemName }}</Option>
+          </Select>
+        </div>
       </div>
 
       <vxe-table
@@ -89,6 +99,7 @@ import voucherInput from "./components/auxiliary";
 import { addClaim ,expenditureClaim} from "_api/settlementManagement/otherPayable/otherPayable";
 import {saveAccount} from "../../../../api/settlementManagement/seleteAccount";
 import {wirteAccount} from "../../../../api/settlementManagement/seleteAccount";
+import {kmType} from "@/api/settlementManagement/VoucherInput";
 
 export default {
   components: {
@@ -111,6 +122,8 @@ export default {
           { type: 'number', message: '请输入数字' }
         ]
       },
+      fund:"",
+      fundList:[],//款项分类数组
       thisClaimedAmtSum:0,//其他付款支出认领 本次认领金额 合计  this.$parent.currRow.expenditureAmt
       dataOne:[],//其他付款支出认领 one 对账单
       dataTwo:[],//会计科目
@@ -122,8 +135,19 @@ export default {
   computed: {
 
   },
+  mounted() {
+    if(this.fundList.length<1){
+      this.fundGetList();
+    }
+  },
   methods: {
-
+    fundGetList() {
+      let params = {};
+      params.dictCode = "CW00131";
+      kmType(params).then(res => {
+        this.fundList = res.data.filter(vb=>['2241'].includes(vb.itemValueOne))
+      });
+    },
     // 弹框底部的合计
     addFooter({ columns, data }) {
       return [
@@ -171,7 +195,7 @@ export default {
           }
         })
       }else{
-        this.accruedList[0].mateAccountCoding = "1221"
+        this.accruedList[0].mateAccountCoding = "2241"
         this.$refs.voucherInput.Classification = true;
       }
     },
@@ -241,7 +265,8 @@ export default {
         let data={
           one:this.dataOne,
           two:this.dataTwo,
-          three:arr
+          three:arr,
+          paymentTypeCode:this.fund
         }
         expenditureClaim(data).then(res=>{
           if(res.code===0){

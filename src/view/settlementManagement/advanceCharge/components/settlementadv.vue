@@ -45,10 +45,12 @@
           resizable
           align="center"
           size="mini"
+          ref="xTable"
           show-overflow="title"
           auto-resize
           show-footer
           :data="BusinessType"
+          :edit-rules="validRules"
           :footer-method="offWrite"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
           @edit-closed="editClosedEvent"
@@ -140,6 +142,19 @@ export default {
     subjexts
   },
   data() {
+    const rpAmtValid = ({ cellValue, row }) => {
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          if (row.isSubject!=1 && Math.abs(cellValue) > Math.abs(row.unAmt)) {
+            reject(new Error("本次核销金额不能大于未收/付金额"));
+          } else {
+            resolve();
+          }
+        } else {
+          resolve();
+        }
+      });
+    };
     return {
       Settlement: false, //弹框显示
       conserveDis:false,//保存接口返回之前按钮不可点击
@@ -152,7 +167,11 @@ export default {
       BusinessType: [],
       collectPayId: "",
       obj: {},
-      accountDisabeld: true //对账单号是否可选
+      accountDisabeld: true, //对账单号是否可选
+      //表格校验
+      validRules: {
+        rpAmt: [{ validator: rpAmtValid }]
+      }
     };
   },
   computed: {
@@ -183,6 +202,7 @@ export default {
         unAmtLeft: 0,
         mateAccountName:val.titleName,
         mateAccountCode:val.titleCode,
+        isSubject:1,
       });
     });
     bus.$on("content", val => {
@@ -208,7 +228,8 @@ export default {
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code //辅助核算项目编码
+          auxiliaryCode:value.code, //辅助核算项目编码
+          isSubject:1
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -223,7 +244,8 @@ export default {
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code //辅助核算项目编码
+          auxiliaryCode:value.code, //辅助核算项目编码
+          isSubject:1
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -238,7 +260,8 @@ export default {
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code //辅助核算项目编码
+          auxiliaryCode:value.code, //辅助核算项目编码
+          isSubject:1
         });
       }
     });
@@ -332,6 +355,10 @@ export default {
     // },
     //保存
     async conserve() {
+      const errMap = await this.$refs.xTable
+        .fullValidate()
+        .catch(errMap => errMap);
+      if (errMap) return this.$Message.error("表格校验错误");
       if (!this.check) {
         if (this.reconciliationStatement.receivePaymentType == "") {
           return this.$message.error("请先选择对账单");

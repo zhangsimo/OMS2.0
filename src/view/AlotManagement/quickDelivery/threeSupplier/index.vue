@@ -26,6 +26,7 @@
               <Option value="2" label="待入库"></Option>
               <Option value="4" label="已入库"></Option>
               <Option value="3" label="部分入库"></Option>
+              <Option value="7" label="已完成"></Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -98,6 +99,7 @@
           @current-change="currentChangeEvent"
           size="mini"
           height="auto"
+          auto-resize
           :loading="loadingEnter"
           :data="TopTableData"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
@@ -211,6 +213,7 @@
           highlight-hover-row
           size="mini"
           height="auto"
+          auto-resize
           :loading="loadingEnter"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           @keydown="keydown"

@@ -44,7 +44,7 @@
               size="small"
               :options="options"
               @change="getKemuList"
-              :props="{ multiple: true, children: 'children',label:'titleName',value:'id' }"
+              :props="{ multiple: true, children: 'children',label:'titleName',value:'titleCode' }"
               collapse-tags
               clearable></el-cascader>
           </div>

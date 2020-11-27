@@ -534,7 +534,8 @@
         if (!occurTime) {
           return this.$message.error("发生日期必须选择！")
         }
-        showLoading()
+        showLoading(".loadingClass")
+        this.shenhe = false
         let ids = this.oneList.map(el => el.id);
         let res = await api.certificationAudit({
           ids,
@@ -543,9 +544,14 @@
           mateAccountCode,
         });
         if (res.code == 0) {
-          this.$message.success(res.data);
-          this.query();
-          this.shenhe = false
+          if(res.data instanceof Array){
+            if(res.data[0]){
+              this.$message.error(res.data[0])
+            }else{
+              this.$message.success('审核成功！')
+              this.query();
+            }
+          }
           hideLoading()
         }else{
           hideLoading()

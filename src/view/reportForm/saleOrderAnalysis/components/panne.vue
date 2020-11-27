@@ -45,7 +45,18 @@
                     <Input type="text" class="w300 ml5" v-model="search.guestCode"/>
                   </FormItem>
                   <FormItem label="客户名称: " class="h20">
-                    <Input type="text" class="w300 ml5" v-model="search.guestName"/>
+                    <!--<Input type="text" class="w300 ml5" v-model="search.guestName"/>-->
+                    <Select
+                      v-model="search.guestId"
+                      filterable
+                      class="ml5"
+                      style="width: 300px"
+                      placeholder="客户名称"
+                      remote
+                      :remote-method="getAllClient"
+                      :loading="loading">
+                      <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.shortName}}</Option>
+                    </Select>
                   </FormItem>
 <!--                  <FormItem label="客户分类: " class="h20">-->
 <!--                    <el-cascader-->
@@ -67,7 +78,7 @@
                     <Input type="text" class="w300 ml5" v-model="search.partName"/>
                   </FormItem>
                   <FormItem label="配件一级: " class="h20">
-                    <Select v-model="search.partTypeF" @on-change="changetype" class="w300 ml5" filterable>
+                    <Select v-model="search.partTypeF" @on-change="changetype" class="w300 ml5" filterable transfer>
                       <Option
                         v-for="item in typepf"
                         :value="item.typeId"
@@ -77,7 +88,7 @@
                     </Select>
                   </FormItem>
                   <FormItem label="配件二级: " class="h20">
-                    <Select v-model="search.partTypeS" @on-change="changetypeS" class="w300 ml5" filterable>
+                    <Select :disabled="!search.partTypeF" v-model="search.partTypeS" @on-change="changetypeS" class="w300 ml5" filterable transfer>
                       <Option
                         v-for="item in typeps"
                         :value="item.typeId"
@@ -87,29 +98,29 @@
                     </Select>
                   </FormItem>
                   <FormItem label="品牌车型: " class="h20">
-                    <Select
-                      @on-change="getSelectCarBrand"
-                      class="w300 ml5"
-                      v-model="search.carModelName"
-                      filterable
-                    >
-                      <Option
-                        v-for="item in carObj.carBrandData"
-                        :value="item.erpCarBrandId"
-                        :key="item.erpCarBrandId"
-                      >{{item.nameCn}}
-                      </Option>
-                    </Select>
+                    <!--<Select-->
+                      <!--@on-change="getSelectCarBrand"-->
+                      <!--class="w300 ml5"-->
+                      <!--v-model="search.carModelName"-->
+                      <!--filterable-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in carObj.carBrandData"-->
+                        <!--:value="item.erpCarBrandId"-->
+                        <!--:key="item.erpCarBrandId"-->
+                      <!--&gt;{{item.nameCn}}-->
+                      <!--</Option>-->
+                    <!--</Select>-->
+                    <Input type="text" class="w300 ml5" v-model="search.carModelName"/>
                   </FormItem>
                   <FormItem label="品牌: " class="h20 pb30">
                     <Select
                       class="w300 ml5"
                       clearable
-                      label-in-value
                       filterable
                       remote
+                      transfer
                       :remote-method="partBrandRemote"
-                      @on-change="select1"
                       v-model="search.partBrand"
                       placeholder="请选择品牌"
                     >
@@ -160,6 +171,7 @@
   import {getCarPartClass} from "_api/parts";
   import {getCarBrandAll} from "_api/system/systemSetting/Initialization";
   import {ThisMonthStr} from "_c/getDate/index_bill.js"
+  import {getTreeClient} from '@/api/salesManagment/salesOrder'
 
   export default {
     components: {QuickDate},
@@ -203,6 +215,7 @@
           showPerson: 1,
           guestCode: "",//客户编码
           guestName: "",//客户名称
+          guestId:"",
           belongSystem: "",//客户体系
           treeDiagramList: [],//客户分类
           partTypeF: "",//配件一级分类
@@ -215,6 +228,8 @@
           orgid: "" // 门店
         },
         moreModel:false,//更多查询是否开启
+        clientList:[],//客户下拉框
+        loading:false, //模糊查询框
       };
     },
     watch: {
@@ -331,8 +346,30 @@
       getSelectCarBrand() {
 
       },
+
+      //获取公司
+      async getAllClient(query){
+        if (query && query.trim()) {
+          this.loading = true;
+          let data ={}
+          data.fullName = query
+          data.page = 0
+          data.size = 30
+          let res = await getTreeClient(data)
+          if(res.code === 0 ){
+            this.loading = false;
+            this.clientList = res.data.content;
+          }else{
+            this.loading = false;
+          }
+        }else {
+          this.clientList = []
+        }
+
+      },
+
       select1(option) {
-        this.search.partBrand = option.label;
+        // this.search.partBrand = option.value;
       },
       //品牌模糊搜索
       async partBrandRemote(query) {

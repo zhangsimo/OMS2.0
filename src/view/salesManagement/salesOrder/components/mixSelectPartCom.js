@@ -464,6 +464,8 @@ export const mixSelectPartCom = {
             element.sellPrice = parseFloat(element.sellPrice).toFixed(2);
           });
 
+          this.allList.priceLever = this.allList.priceLever.filter(item => item.strategyName!='最低售价'||(item.strategyName=='最低售价'&&item.removeLimit!=1))
+
           this.allList.localStoreSellHistory = this.allList.localStoreSellHistory.sort((a,b) => {
             return Date.parse(b.finishDate)-Date.parse(a.finishDate);
           });

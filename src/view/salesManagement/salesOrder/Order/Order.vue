@@ -473,7 +473,12 @@ export default {
       this.$refs.right.limitList.tempQuota = "00.00";
       this.$refs.right.limitList.sumAmt = "00.00";
       this.isAdd = true;
-      this.$set(this.formPlan, "billTypeId", "020502");
+      this.$refs.right.orderTypeTemp = {
+        value:0,
+        label:"销售订单"
+      }
+      // this.$set(this.formPlan, "billTypeId", "020502");
+
       this.$refs.right.WarehouseList.map(item => {
         if (item.isDefault) {
           this.$refs.right.formPlan = Object.assign({}, { storeId: item.id });

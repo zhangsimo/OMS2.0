@@ -529,6 +529,10 @@ export default class OutsidePurchase extends Vue {
       return this.$message.error("请填写正确的仓位!");
     }
 
+    if(this.tableData.length==0){
+      return this.$message.error("请添加明细!");
+    }
+
     let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
     if(zero) return;
 

@@ -173,7 +173,15 @@
                 :data="allList.priceLever"
               >
                 <vxe-table-column field="strategyName" title="级别" width="110"></vxe-table-column>
-                <vxe-table-column field="sellPrice" title="销售价" width="70"></vxe-table-column>
+                <vxe-table-column field="sellPrice" title="销售价" width="70">
+                  <template v-slot="{row}">
+                    <span v-if="row.strategyName == '最低售价'"
+                    >{{ row.sellPrice | priceFilters }} -
+                      {{ row.minRequiredQty }}</span
+                    >
+                    <span v-else>{{ row.sellPrice | priceFilters }}</span>
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column field="updateUname" title="更新人" width="70"></vxe-table-column>
                 <vxe-table-column field="updateTime" title="更新日期"></vxe-table-column>
               </vxe-table>
