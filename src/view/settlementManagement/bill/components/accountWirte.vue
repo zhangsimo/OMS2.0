@@ -165,6 +165,8 @@ export default {
       if (flag) {
         this.companyId = this.$parent.$parent.reconciliationStatement.guestId||"";
         this.$refs.companyGuset.query = this.$parent.$parent.reconciliationStatement.guestName||""
+        // this.paymentId = this.$parent.paymentId
+        console.log(this.paymentId)
         //收付类型数据字典
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
