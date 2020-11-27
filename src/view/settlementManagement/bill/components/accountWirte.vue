@@ -165,8 +165,6 @@ export default {
       if (flag) {
         this.companyId = this.$parent.$parent.reconciliationStatement.guestId||"";
         this.$refs.companyGuset.query = this.$parent.$parent.reconciliationStatement.guestName||""
-        // this.paymentId = this.$parent.paymentId
-        console.log(this.paymentId)
         //收付类型数据字典
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
@@ -215,9 +213,6 @@ export default {
     // 确认按钮
     determine() {
       if (this.seleteData&&Object.keys(this.seleteData).length !== 0) {
-        console.log(this.seleteData ,456)
-        console.log(        this.$parent
-        )
         bus.$emit("accountHedNo", this.seleteData,this.seleteData.accountNo);
         this.modal1 = false;
       } else {

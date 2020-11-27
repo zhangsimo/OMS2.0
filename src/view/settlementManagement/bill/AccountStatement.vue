@@ -1227,7 +1227,6 @@
             }
             this.$refs.settlementMoadl.Settlement = true;
             this.type = !type ? 0 : type === 1 ? 1 : 2
-            console.log(this.paymentId)
           } else {
             this.$message({
               message: "请勾选流程通过且对账单状态为审核通过或结算中的数据",
@@ -1267,7 +1266,6 @@
       // // 收付款单元格关闭
       // collectPay({row}) {
       //   this.total += row.checkAmt * 1;
-      //   // console.log(this.total)
       // },
       // 导出对账单/单据明细
       report(type) {
