@@ -79,6 +79,7 @@
             @on-row-dblclick="dblclick"
             :loading="loading"
             border
+            ref="tableParts"
             :stripe="true"
             :columns="columnsPart"
             :data="partData"

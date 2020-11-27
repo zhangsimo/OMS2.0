@@ -125,7 +125,9 @@
                 }
                 getDetails(data).then( res => {
                     if(res.code  === 0){
-                       this.allList = res.data
+                       this.allList = res.data;
+                       this.allList.priceLever = this.allList.priceLever.filter(item => item.strategyName!='最低售价'||(item.strategyName=='最低售价'&&item.removeLimit!=1))
+
                     }
 
                 })

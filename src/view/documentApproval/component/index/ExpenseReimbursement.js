@@ -8,7 +8,7 @@ import flowbox from "../Flow";
 import {
   getDictionary,
   getExpSve,
-  getOtherPeople
+  getOtherPeopleNew
 } from "_api/documentApproval/ExpenseReimbursement";
 import {getThisAllList, getBackList , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
@@ -275,7 +275,7 @@ export default {
         if (this.formInline.accountType) {
            res = await getBackList(data)
         }else {
-           res = await getOtherPeople(data)
+           res = await getOtherPeopleNew(data)
         }
         if (res.code == 0) {
           if (this.formInline.accountType) {

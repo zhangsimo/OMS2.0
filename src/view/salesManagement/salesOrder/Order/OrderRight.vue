@@ -59,7 +59,7 @@
               <!--<Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>-->
             <!--</Select>-->
           <!--</FormItem>-->
-          <FormItem label="订单类型：">
+          <FormItem label="订单类型：" prop="orderTypeValue">
             <Select v-model="formPlan.orderTypeValue" label-in-value @on-change="orderTypeChange" style="width:200px">
               <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -555,14 +555,14 @@
         },
         orderTypeTemp:{
           value:0,
-          name:"销售订单"
+          label:"销售订单"
         },
         formPlan: {
           detailList: [],
           storeId: '',
           orderManId: '',
-          planSendDate: ''
-          // orderTypeValue:'0'
+          planSendDate: '',
+          orderTypeValue:0
         }, //获取到数据
         headers: {
           Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -605,9 +605,9 @@
           guestId: [
             {required: true, type: "string", message: " ", trigger: "blur"}
           ],
-          // orderManId: [
-          //   {required: true, type: "string", message: "  ", trigger: "change"}
-          // ],
+          orderTypeValue: [
+            {required: true,type: "number", message: "  ", trigger: "change"}
+          ],
           billTypeId: [
             {required: true, type: "string", message: " ", trigger: "change"}
           ],
@@ -1160,6 +1160,9 @@
         data.planSendDate ? data.planSendDate = tools.transTime(data.planSendDate) : "";
         data.planArriveDate ? data.planArriveDate = tools.transTime(data.planArriveDate) : "";
         data.detailList = arr;
+        if(this.orderTypeTemp.hasOwnProperty('value')){
+          data.orderType = {value:this.orderTypeTemp.value,name:this.orderTypeTemp.label}
+        }
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();
@@ -1431,8 +1434,13 @@
           item.adjustQty = item.outableQty;
         });
         data.detailList = val.details;
+
+        if(this.orderTypeTemp.hasOwnProperty('value')){
+          data.orderType = {value:this.orderTypeTemp.value,name:this.orderTypeTemp.label}
+        }
         data.sign = b;
-        data.orderTypeId = val.orderTypeId||1;
+        // data.orderTypeId = val.orderTypeId||1;
+        data.isImportSales = val.orderType==7?true:false;
         let res = await getAccessories(data);
         if (res.code === 0) {
           // this.getList();
@@ -1526,6 +1534,10 @@
             return false;
           }
           this.leftOneOrder = old;
+          this.orderTypeTemp.value = this.leftOneOrder.orderType.value;
+          this.orderTypeTemp.label = this.leftOneOrder.orderType.name;
+
+
           this.getList();
           this.getAllLimit();
         },

@@ -259,15 +259,15 @@
                 </Modal>
               </div>
               <div>
-                  <!--新增/修改外部员工-->
-                  <Modal v-model="modalShow" title="新增外部员工" width="460px" :closable="false">
-                    <addOutStaff ref="addOutStaff"></addOutStaff>
-                    <div slot="footer" style="padding: 10px 0">
-                      <Button type="primary" @click="submit">确认</Button>
-                      <Button type="default" @click="cancel">退出</Button>
-                    </div>
-                  </Modal>
-                </div>
+                <!--新增/修改外部员工-->
+                <Modal v-model="modalShow" title="新增外部员工" width="460px" :closable="false">
+                  <addOutStaff ref="addOutStaff"></addOutStaff>
+                  <div slot="footer" style="padding: 10px 0">
+                    <Button type="primary" @click="submit">确认</Button>
+                    <Button type="default" @click="cancel">退出</Button>
+                  </div>
+                </Modal>
+              </div>
             </div>
           </TabPane>
         </Tabs>
@@ -299,7 +299,7 @@ import {
 // import * as tools from "../../utils/tools";
 import bus from "../../../bill/Popup/Bus";
 import addOutStaff from "@/view/system/systemSetting/outStaffManagement/components/addOutStaff.vue"
-import {getOutStaff/**获取全部外部员工*/,addOutStaffe/**添加外部员工*/,changeOutStaffEn/**修改启用禁用*/} from "@/api/system/systemSetting/staffManagenebt"
+import {/**获取全部外部员工*/getOutStaffNew,addOutStaffeNew/**添加外部员工*/} from "@/api/system/systemSetting/staffManagenebt"
 export default {
   name: "AssistAccounting",
   components: {
@@ -494,7 +494,7 @@ export default {
         if (res.code === 0) {
           let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
           this.categoryArr = NewArr[0].children;
-          // this.categoryArr.push({dictName: '外部员工'})
+          this.categoryArr.push({dictName: '外部员工'})
         }
       });
     },
@@ -528,14 +528,14 @@ export default {
       }
       let data={}
       data.orgid=this.$store.state.user.userData.shopId;
-      data.name=this.accountingName
+      data.fullName=this.accountingName
       //参数
-      let res=await getOutStaff(params,data)
+      let res=await getOutStaffNew(params,data)
       if(res.code===0){
         this.AssistTableDataOther=res.data.content
         this.AssistTableDataOther.map(v => {
           v.itemCode = v.code
-          v.itemName = v.name
+          v.itemName = v.fullName
         })
         this.outStaff.page.total=res.data.totalElements
       }
@@ -546,7 +546,7 @@ export default {
         let data = {}
         data=this.$refs.addOutStaff.data
         data.id=""
-        data.sign=true
+        data.isDisabled=1
         this.addOutStaffTrue(data);
         this.modalShow=false;
         this.$refs.addOutStaff.data={};
@@ -560,7 +560,7 @@ export default {
 
     //添加外部员工接口
     async addOutStaffTrue(data){
-      let res=await addOutStaffe(data)
+      let res=await addOutStaffeNew(data)
       if(res.code===0){
         this.$Message.success("新增外部人员成功")
         this.getAllStaffList()
@@ -594,18 +594,21 @@ export default {
     radioChangeEventClient({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "1";
+      this.AssistAccounting.auxiliaryTypeCode = '1'
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算供应商
     radioChangeEventSupplier({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "2";
+      this.AssistAccounting.auxiliaryTypeCode = '2'
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算个人
     radioChangeEventPersonage({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
+      this.AssistAccounting.auxiliaryTypeCode = '4'
       // this.auxiliaryCode = row.userName;
     },
     //点击单选框获取辅助核算其他
@@ -613,8 +616,10 @@ export default {
       this.AssistAccounting = row;
       if(this.dictName == '外部员工'){
         this.auxiliaryTypeCode = "CW00118";
+        this.AssistAccounting.auxiliaryTypeCode = 'CW00118'
       }else{
         this.auxiliaryTypeCode = "CW0011X";
+        this.AssistAccounting.auxiliaryTypeCode = 'CW0011X'
       }
       // this.auxiliaryCode = row.itemCode;
       // console.log(row)

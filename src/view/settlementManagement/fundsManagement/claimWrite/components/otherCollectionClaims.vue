@@ -191,8 +191,9 @@
         MessageValue: "",
         claimSelection: [],
         //this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
-        accruedList:[{mateAccountCoding:""}],
+        accruedList: [{mateAccountCoding: ""}],
         outStaffSelect: {}, //辅助核算选择的外部员工对象
+        isOutStaff: false, //是否是外部员工
       };
     },
     mounted() {
@@ -201,7 +202,7 @@
     methods: {
       // 打开模态框
       open() {
-        this.claimTit == '预收款认领' ?this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
+        this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "2241"
         if (this.company.length == 0) {
           this.getOne();
         }
@@ -303,7 +304,7 @@
       },
       //子组件的数据
       getMessage(item, flag) {
-        if(flag){
+        if (flag) {
           this.outStaffSelect = item
         }
         this.MessageValue = this.$refs.voucherInput.AssistAccounting;
@@ -372,7 +373,7 @@
         ];
       },
       changeModel() {
-        this.accruedList=this.accrued;
+        this.accruedList = this.accrued;
         this.$refs.voucherInput.modal = !this.$refs.voucherInput.modal
         if (this.voucherinputModel = true) {
           this.openVoucherInput()
@@ -385,6 +386,7 @@
         data.detailId = this.accrued[0].id;
         let objItem = this.$refs.voucherInput.voucherItem;
         if (this.voucherinputModel) {
+          let ajaxBool = true;
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
             data.subjectCode = "1123";
@@ -395,7 +397,7 @@
             data.claimType = 5;
             data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
           }
-          data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2?1:this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+          data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2 ? 1 : this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if (data.auxiliaryTypeCode == "1" || data.auxiliaryTypeCode == "2" || data.auxiliaryTypeCode == "3" || data.auxiliaryTypeCode == "4") {
             data.isAuxiliaryAccounting = 0 //是否辅助核算类
           } else {
@@ -409,103 +411,114 @@
               guestSourceId: objItem.id || ""
             }
           }
-          if(data.claimMoney==null || data.claimMoney<=0){
-            this.$Message.error("本次认领金额不可为零或小于零")
-            return
-          }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
-            this.$Message.error("本次认领金额不可大于支付金额")
-            return
+          if (data.claimMoney == null || data.claimMoney <= 0) {
+            ajaxBool = false;
+            return this.$Message.error("本次认领金额不可为零或小于零")
+          } else if (data.claimMoney > Math.abs(this.accrued[0].incomeMoney)) {
+            ajaxBool = false;
+            return this.$Message.error("本次认领金额不可大于支付金额")
           }
-          if(data.claimMoney > this.accrued[0].unClaimedAmt){
-            this.$Message.error('本次认领金额不可大于未认领金额')
-            return
+          if (data.claimMoney > this.accrued[0].unClaimedAmt) {
+            ajaxBool = false;
+            return this.$Message.error('本次认领金额不可大于未认领金额')
           }
-          if(this.outStaffSelect){
+          if (this.isOutStaff) {
             data.externalEmployeeCode = this.outStaffSelect.itemCode
             data.externalEmployeeName = this.outStaffSelect.itemName
+            data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
           }
-          showLoading('body',"保存中，请勿操作。。。")
-          let res = await TurnToTheProfitAndLoss(data);
-          if (res.code === 0) {
-            //刷新 列表
-            this.$parent.$parent.queryClaimed()
-            //清空选中
-            this.$parent.$parent.$refs.claim.currentClaimed = []
-            this.modal = false;
-            this.claimTit == "预收款认领" ? this.$Message.success("预收款认领成功") : this.$Message.success("其他收款认领成功")
-            hideLoading()
-          } else {
-            hideLoading()
+          showLoading('body', "保存中，请勿操作。。。")
+          if (ajaxBool) {
+            let res = await TurnToTheProfitAndLoss(data);
+            if (res.code === 0) {
+              //刷新 列表
+              this.$parent.$parent.queryClaimed()
+              //清空选中
+              this.$parent.$parent.$refs.claim.currentClaimed = []
+              this.modal = false;
+              this.claimTit == "预收款认领" ? this.$Message.success("预收款认领成功") : this.$Message.success("其他收款认领成功")
+              hideLoading()
+            } else {
+              hideLoading()
+            }
           }
         } else {
+          let ajaxBool = true;
           data.guestId = objItem.id || "";
           data.financeAccountCashList = this.accrued
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
-            this.accrued.map(el=>{
-              el.thisClaimedAmt=el.rpAmt;
-              if(el.thisClaimedAmt==null || el.thisClaimedAmt<=0){
-                this.$Message.error("本次认领金额不可为零或小于零")
-                return
+            this.accrued.map(el => {
+              el.thisClaimedAmt = el.rpAmt;
+              if (el.thisClaimedAmt == null || el.thisClaimedAmt <= 0) {
+                ajaxBool = false;
+                return this.$Message.error("本次认领金额不可为零或小于零")
               }
-              if(el.thisClaimedAmt > el.unClaimedAmt){
-                this.$Message.error('本次认领金额不可大于未认领金额')
-                return
+              if (el.thisClaimedAmt > el.unClaimedAmt) {
+                ajaxBool = false;
+                return this.$Message.error('本次认领金额不可大于未认领金额')
               }
               return el;
             })
-            if(this.outStaffSelect){
+            if (this.isOutStaff) {
               data.externalEmployeeCode = this.outStaffSelect.itemCode
               data.externalEmployeeName = this.outStaffSelect.itemName
+              data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
-            showLoading('body',"保存中，请勿操作。。。")
-            addClaim2(data).then(res => {
-              if (res.code === 0) {
-                this.$parent.$parent.queryClaimed()
-                this.$parent.$parent.$refs.claim.currentClaimed = []
-                this.$Message.success('认领成功')
-                this.modal = false;
+            if (ajaxBool) {
+              showLoading('body', "保存中，请勿操作。。。")
+              addClaim2(data).then(res => {
+                if (res.code === 0) {
+                  this.$parent.$parent.queryClaimed()
+                  this.$parent.$parent.$refs.claim.currentClaimed = []
+                  this.$Message.success('认领成功')
+                  this.modal = false;
+                  hideLoading()
+                } else {
+                  hideLoading()
+                }
+              }).catch(err => {
                 hideLoading()
-              } else {
-                hideLoading()
-              }
-            }).catch(err => {
-              hideLoading()
-            })
+              })
+            }
           } else {
             data.subjectCode = "2241";
+            data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2 ? 1 : this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
             data.claimType = 0;
             data.claimMoney = this.accrued[0].balanceMoney
             data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
-            if(data.claimMoney==null || data.claimMoney<=0){
-              this.$Message.error("本次认领金额不可为零或小于零")
-              return
-            }else if(data.claimMoney>Math.abs(this.accrued[0].incomeMoney)){
-              this.$Message.error("本次认领金额不可大于支付金额")
-              return
+            if (data.claimMoney == null || data.claimMoney <= 0) {
+              ajaxBool = false;
+              return this.$Message.error("本次认领金额不可为零或小于零")
+            } else if (data.claimMoney > Math.abs(this.accrued[0].incomeMoney)) {
+              ajaxBool = false;
+              return this.$Message.error("本次认领金额不可大于支付金额")
             }
-            if(data.claimMoney > this.accrued[0].unClaimedAmt){
-              this.$Message.error('本次认领金额不可大于未认领金额')
-              return
+            if (data.claimMoney > this.accrued[0].unClaimedAmt) {
+              ajaxBool = false;
+              return this.$Message.error('本次认领金额不可大于未认领金额')
             }
-            if(this.outStaffSelect){
+            if (this.isOutStaff) {
               data.externalEmployeeCode = this.outStaffSelect.itemCode
               data.externalEmployeeName = this.outStaffSelect.itemName
+              data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
-            showLoading('body',"保存中，请勿操作。。。")
-            addClaim(data).then(res => {
-              if (res.code === 0) {
-                this.$parent.$parent.queryClaimed()
-                this.$parent.$parent.$refs.claim.currentClaimed = []
-                this.$Message.success('认领成功')
-                this.modal = false;
+            if (ajaxBool) {
+              showLoading('body', "保存中，请勿操作。。。")
+              addClaim(data).then(res => {
+                if (res.code === 0) {
+                  this.$parent.$parent.queryClaimed()
+                  this.$parent.$parent.$refs.claim.currentClaimed = []
+                  this.$Message.success('认领成功')
+                  this.modal = false;
+                  hideLoading()
+                } else {
+                  hideLoading()
+                }
+              }).catch(err => {
                 hideLoading()
-              } else {
-                hideLoading()
-              }
-            }).catch(err => {
-              hideLoading()
-            })
+              })
+            }
           }
         }
       },

@@ -25,9 +25,8 @@
           </Form>
         </i-col>
       </Row>
-      <Row class="dbd" v-else>
+      <Row v-else>
         <i-col span="14">
-          <div v-show="!voucherinputModel" style="text-indent:-9999px;overflow: hidden">1</div>
           <Form :model="formValidate" :rules="ruleValidate" v-show="voucherinputModel">
             <FormItem label="选择辅助核算">
               <Row>
@@ -37,6 +36,23 @@
                 <i-col span="2" style="paddingLeft:20px">
                   <Button type="default" @click="openVoucherInput">辅助核算</Button>
                 </i-col>
+              </Row>
+            </FormItem>
+          </Form>
+          <Form v-show="!voucherinputModel">
+            <FormItem label="款项分类">
+              <Row>
+                <Col span="1"><span style="color:red">*</span>:</Col>
+                <Col span="10">
+                  <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+                    <Option
+                      v-for="item in fundList"
+                      :value="item.itemName"
+                      :key="item.id"
+                    >{{ item.itemName }}
+                    </Option>
+                  </Select>
+                </Col>
               </Row>
             </FormItem>
           </Form>
@@ -173,7 +189,7 @@
     <!-- 辅助核销计算 -->
     <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
-    <settlement2 ref="settlement2" @reloadParList="reloadParentList"></settlement2>
+    <settlement2 ref="settlement2" @reloadParList="reloadParentList" :paymentTypeCode="fund"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
 </template>
@@ -197,6 +213,7 @@
   import claimGuest from "@/view/settlementManagement/advanceCollection/components/claimGuest";
   import {showLoading, hideLoading} from "@/utils/loading"
   import bus from "@/view/settlementManagement/bill/Popup/Bus";
+  import {kmType} from "@/api/settlementManagement/VoucherInput";
 
   export default {
     props: {
@@ -240,6 +257,8 @@
         },
         type: 3,
         modal: false, //模态框展示
+        fundList: [],//款项分类数组
+        fund:"",//款项分类选择项
         oneSubject: {}, //单选获取到的数据
         company: [], //往来单位数组
         companyId: "", //往来单位
@@ -273,8 +292,18 @@
         this.BranchstoreId = arr[1];
       });
       this.getShop();
+      if (this.fundList.length < 1) {
+        this.fundGetList();
+      }
     },
     methods: {
+      fundGetList() {
+        let params = {};
+        params.dictCode = "CW00131";
+        kmType(params).then(res => {
+          this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
+        });
+      },
       reloadParentList() {
         //刷新 列表
         this.$parent.$parent.queryClaimed()
@@ -286,7 +315,7 @@
         if (this.company.length == 0) {
           this.getOne();
         }
-        this.claimTit == '预付款认领' ? this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "2241"
+        this.claimTit == '预付款认领' ? this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "1221"
         this.oneSubject = {};
         this.modal = true;
 
@@ -314,11 +343,11 @@
             guestId: this.companyId,
             claimAmt: 0
           };
-          let obj={
+          let obj = {
             size: this.page.size,
             page: this.page.num - 1,
           }
-          findByDynamicQuery(obj,data).then(res => {
+          findByDynamicQuery(obj, data).then(res => {
             if (res.code === 0) {
               this.tableData = res.data.content;
               this.page.total = res.data.totalElements;
@@ -377,9 +406,9 @@
       async getShop() {
         let data = {};
         let res = await goshop(data);
-        if (res.code === 0){
+        if (res.code === 0) {
           res.data.forEach(v => {
-            if(v.id == this.BranchstoreId){
+            if (v.id == this.BranchstoreId) {
               this.shopName = v.shortName
             }
           })
@@ -435,9 +464,13 @@
               this.changeAmt();
               this.$refs.settlement.Settlement = true;
             } else {
-              this.changeAmt();
-              this.paymentId = "YJDZ";
-              this.$refs.settlement2.Settlement = true;
+              if(this.fund==""){
+                return this.$Message.error("款项分类必填")
+              }else{
+                this.changeAmt();
+                this.paymentId = "YJDZ";
+                this.$refs.settlement2.Settlement = true;
+              }
             }
           } else {
             this.$Message.error("请先选择预付款申请单")
@@ -583,6 +616,7 @@
       },
       async ok() {
         if (this.voucherinputModel) {
+          let ajaxBool = true;
           let data = {};
           data.detailId = this.accrued[0].id;
           // if(this.accrued[0].balanceMoney==undefined){
@@ -601,17 +635,20 @@
             data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
           }
           if (data.claimMoney == null || data.claimMoney <= 0) {
+            ajaxBool = false;
             this.$Message.error("本次认领金额不可为零或小于零")
             return
           } else if (data.claimMoney > Math.abs(this.accrued[0].paidMoney)) {
+            ajaxBool = false;
             this.$Message.error("本次认领金额不可大于支付金额")
             return
           }
-          if(data.claimMoney > this.accrued[0].unClaimedAmt){
+          if (data.claimMoney > this.accrued[0].unClaimedAmt) {
+            ajaxBool = false;
             this.$Message.error('本次认领金额不可大于未认领金额')
             return
           }
-          data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2?1:this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
+          data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2 ? 1 : this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if (data.auxiliaryTypeCode == "1" || data.auxiliaryTypeCode == "2" || data.auxiliaryTypeCode == "3" || data.auxiliaryTypeCode == "4") {
             data.isAuxiliaryAccounting = 0 //是否辅助核算类
           } else {
@@ -627,22 +664,24 @@
               guestSourceId: objItem.id || ""
             }
           }
-          try {
-            showLoading('body',"保存中，请勿操作。。。")
-            let res = await TurnToTheProfitAndLoss(data);
-            if (res.code === 0) {
-              this.reloadParentList()
-              this.modal = false;
-              this.claimTit == "预付款认领"
-                ? this.$Message.success("预付款认领成功")
-                : this.$Message.success("其他付款认领成功");
-              this.formValidate.voucherInput = ""
-              hideLoading()
-            } else {
+          if (ajaxBool) {
+            try {
+              showLoading('body', "保存中，请勿操作。。。")
+              let res = await TurnToTheProfitAndLoss(data);
+              if (res.code === 0) {
+                this.reloadParentList()
+                this.modal = false;
+                this.claimTit == "预付款认领"
+                  ? this.$Message.success("预付款认领成功")
+                  : this.$Message.success("其他付款认领成功");
+                this.formValidate.voucherInput = ""
+                hideLoading()
+              } else {
+                hideLoading()
+              }
+            } catch (error) {
               hideLoading()
             }
-          } catch (error) {
-            hideLoading()
           }
         }
       },

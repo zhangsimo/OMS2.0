@@ -169,7 +169,7 @@ export default {
     const rpAmtValid = ({ cellValue, row }) => {
       return new Promise((resolve, reject) => {
         if (cellValue) {
-          if (Math.abs(cellValue) > Math.abs(row.unAmt)) {
+          if (row.isSubject!=1 && Math.abs(cellValue) > Math.abs(row.unAmt)) {
             reject(new Error("本次核销金额不能大于未收/付金额"));
           } else {
             resolve();
@@ -218,7 +218,8 @@ export default {
         hasAmt: 0,
         unAmt: 0,
         rpAmt: 0,
-        unAmtLeft: 0
+        unAmtLeft: 0,
+        isSubject:1,//与原本对账单作出区分
       });
 
     });
@@ -245,7 +246,8 @@ export default {
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code //辅助核算项目编码
+          auxiliaryCode:value.code ,//辅助核算项目编码
+          isSubject:1,//与原本对账单作出区分
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -260,7 +262,8 @@ export default {
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.userName, //辅助核算名称
-          auxiliaryCode:value.code //辅助核算项目编码
+          auxiliaryCode:value.code, //辅助核算项目编码
+          isSubject:1,//与原本对账单作出区分
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -275,7 +278,8 @@ export default {
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.itemName, //辅助核算名称
-          auxiliaryCode:value.code //辅助核算项目编码
+          auxiliaryCode:value.code, //辅助核算项目编码
+          isSubject:1,//与原本对账单作出区分
         });
       }
     });
@@ -309,9 +313,9 @@ export default {
     accountNoClick() {
       this.$refs.accountSelette.isCanChange = this.showchange
       this.$refs.accountSelette.modal1 = true;
-      if (this.$parent.paymentId == "YSK") {
+      if (this.$parent.paymentId == "DYD") {
         this.$refs.accountSelette.paymentId = "YJDZ";
-        this.$refs.accountSelette.sort = "SK";
+        // this.$refs.accountSelette.sort = "SK";
       }
       if (this.$parent.paymentId == "YS") {
         this.$refs.accountSelette.paymentId = "YSK";
@@ -391,10 +395,10 @@ export default {
     //保存
     async conserve() {
       if (!Number(this.check)) {
-        // const errMap = await this.$refs.xTable
-        //   .fullValidate()
-        //   .catch(errMap => errMap);
-        // if (errMap) return this.$Message.error("表格校验错误");
+        const errMap = await this.$refs.xTable
+          .fullValidate()
+          .catch(errMap => errMap);
+        if (errMap) return this.$Message.error("表格校验错误");
         let obj = {
           one: this.reconciliationStatement,
           two: this.BusinessType,

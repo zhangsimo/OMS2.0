@@ -316,6 +316,7 @@
       }
       params.size = 9999;
       params.page = 0;
+      params.billTypeId = this.billType;
 
       let res: any;
       if (this.type === "good") {

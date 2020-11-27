@@ -707,9 +707,9 @@
               const v = values.reduce((prev, curr) => {
                 const value = Number(curr);
                 if (!isNaN(value)) {
-                  return prev + curr
+                  return (Number(prev) + Number(curr)).toFixed(4)
                 } else {
-                  return prev;
+                  return Number(prev).toFixed(4);
                 }
               }, 0);
               sums[key] = {
