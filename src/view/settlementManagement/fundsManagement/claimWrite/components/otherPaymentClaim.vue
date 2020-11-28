@@ -44,7 +44,7 @@
               <Row>
                 <Col span="1"><span style="color:red">*</span>:</Col>
                 <Col span="10">
-                  <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+                  <Select v-model="fund" placeholder="请选择" class="w200" @on-change="fundChange" clearable>
                     <Option
                       v-for="item in fundList"
                       :value="item.itemName"
@@ -189,7 +189,7 @@
     <!-- 辅助核销计算 -->
     <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
-    <settlement2 ref="settlement2" @reloadParList="reloadParentList" :paymentTypeCode="fund"></settlement2>
+    <settlement2 ref="settlement2" @reloadParList="reloadParentList" :paymentTypeCode="fundCode" :paymentTypeName="fund"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
 </template>
@@ -259,6 +259,7 @@
         modal: false, //模态框展示
         fundList: [],//款项分类数组
         fund:"",//款项分类选择项
+        fundCode:'',//款项分类选择项的code
         oneSubject: {}, //单选获取到的数据
         company: [], //往来单位数组
         companyId: "", //往来单位
@@ -303,6 +304,13 @@
         kmType(params).then(res => {
           this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
+      },
+      fundChange(v){
+        this.fundList.forEach(it => {
+          if(it.itemName == v){
+            this.fundCode = it.itemCode
+          }
+        })
       },
       reloadParentList() {
         //刷新 列表
@@ -467,6 +475,7 @@
               if(this.fund==""){
                 return this.$Message.error("款项分类必填")
               }else{
+                console.log(this.fundCode,this.fund)
                 this.changeAmt();
                 this.paymentId = "YJDZ";
                 this.$refs.settlement2.Settlement = true;
@@ -632,7 +641,8 @@
             data.claimMoney = this.accrued[0].rpAmt;
             data.subjectCode = "1221";
             data.claimType = 6;
-            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
+            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.code
+            data.paymentTypeName = this.$refs.voucherInput.formDynamic.fund
           }
           if (data.claimMoney == null || data.claimMoney <= 0) {
             ajaxBool = false;

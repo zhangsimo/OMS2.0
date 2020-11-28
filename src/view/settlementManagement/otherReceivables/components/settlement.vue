@@ -161,7 +161,7 @@
       accountSelette,
       subjexts
     },
-    props:['paymentTypeCode'],
+    props:['paymentTypeCode','paymentTypeName'],
     data() {
       const amtValid = ({row}) => {
         return new Promise((resolve, reject) => {
@@ -442,6 +442,7 @@
             }
             if(this.paymentTypeCode){
               obj2.paymentTypeCode = this.paymentTypeCode
+              obj2.paymentTypeName = this.paymentTypeName
             }
             this.conserveDis = true;
             saveAccount(obj2).then(res => {
