@@ -207,7 +207,7 @@
         if (!this.table) return
         let pay = 0;
         if (this.table != null) {
-          pay = this.table.paymentBalance - this.totalPrice;
+          pay = (this.table.paymentBalance - this.totalPrice).toFixed(2);
         }
         if (pay > 0) {
           this.compay = pay;

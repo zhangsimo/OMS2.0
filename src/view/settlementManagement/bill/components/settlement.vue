@@ -323,6 +323,10 @@ export default {
       if (this.$parent.paymentId == "YF") {
         this.$refs.accountSelette.paymentId = "YFK";
       }
+      if (this.$parent.paymentId == "YSK") {
+        this.$refs.accountSelette.paymentId = "YJDZ";
+        this.$refs.accountSelette.sort = "SK";
+      }
     },
     //弹框打开
     hander(type) {
