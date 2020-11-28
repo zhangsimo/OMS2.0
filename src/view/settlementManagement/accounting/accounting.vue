@@ -575,6 +575,7 @@
         <Button @click="shenheCancel">取消</Button>
       </div>
     </Modal>
+    <CredentChange ref="credent"></CredentChange>
   </div>
 </template>
 
