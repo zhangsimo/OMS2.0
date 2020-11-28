@@ -1266,7 +1266,6 @@
       // // 收付款单元格关闭
       // collectPay({row}) {
       //   this.total += row.checkAmt * 1;
-      //   // console.log(this.total)
       // },
       // 导出对账单/单据明细
       report(type) {
