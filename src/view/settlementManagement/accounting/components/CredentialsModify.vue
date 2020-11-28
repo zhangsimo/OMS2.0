@@ -1,26 +1,25 @@
 <template>
-<Modal v-model="credentShow">
+<Modal v-model="credentShow" width="1200" title="修改凭证">
   <div class="bigBox">
     <section class="oper-box">
-      <div class="oper-top flex">
+      <div class="oper-top flex mt10">
         <div class="wlf">
           <div class="db">
-            <Button type="warning" class="mr10" @click="Save" v-has="'save'">
+            <!-- <Button type="warning" class="mr10" @click="Save" v-has="'save'">
               <Icon custom="iconfont icons"/>
               保存
-            </Button>
-            <Button type="warning" class="mr10" @click="Audit" v-has="'audit'">
+            </Button> -->
+            <!-- <Button type="warning" class="mr10" @click="Audit" v-has="'audit'">
               <Icon custom="iconfont icons"/>
               审核
             </Button>
             <Button type="warning" class="mr10" @click="cancellation" v-has="'cancellation'">
               <Icon custom="iconfont icons"/>
               作废
-            </Button>
+            </Button> -->
             <!--<Button type="warning" class="mr10" @click="template"><Icon custom="iconfont icons"/>保存成模板</Button>-->
           </div>
         </div>
-        <div></div>
       </div>
       <div class="flex header">
         <Form
@@ -121,8 +120,9 @@
         </Form>
       </Modal>
     </section>
-    <section class="con-box">
+    <section class="con-box mt10">
       <Button type="warning" class="w90" @click="insertEventLast()" style="margin-left: 5px">添加行</Button>
+      <Button type="warning" class="w90 ml10" @click="Save">保存</Button>
       <div class="mt10">
         <vxe-table
           border
@@ -671,16 +671,19 @@
       </div>
     </Modal>
   </div>
+  <div slot="footer">
+
+  </div>
 </Modal>
 </template>
 
 <script>
-  import {currency} from "../../../utils/currency";
-  import * as tools from "../../../utils/tools";
-  import * as api from "_api/lease/customerSM";
+  import {currency} from "@/utils/currency";
+  import * as tools from "@/utils/tools";
+  import * as api from "@/api/lease/customerSM";
   import Cookies from "js-cookie";
   import {TOKEN_KEY} from "@/libs/util";
-  import addOutStaff from "_c/addoutstaff/addOutStaff.vue"
+  import addOutStaff from "@/view/system/systemSetting/outStaffManagement/components/addOutStaff.vue"
   import {
     queryGuestList,
     queryCreditLike,
@@ -699,9 +702,9 @@
     getOutStaffNew,
     addOutStaffeNew,
     addOutStaffe
-  } from "../../../api/transaction/VoucherInput";
+  } from "@/api/voucherInput/voucherInput";
 import { hideLoading, showLoading } from '@/utils/loading';
-import {getSubjectMsg} from '../../../api/lease/customerSM'
+import {getSubjectMsg} from '@/api/lease/customerSM'
 
   export default {
     name: "CredentialsModify",
