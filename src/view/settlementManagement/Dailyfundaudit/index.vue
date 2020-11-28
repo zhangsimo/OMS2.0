@@ -406,14 +406,12 @@
               if(res.data instanceof Array){
                 if(res.data[0]){
                   this.$message.error(res.data[0])
-                  this.query();
-                  return
                 }else{
                   this.$message.success('审核成功！')
-                  this.query();
                 }
               }
             }
+            this.query()
           },
           onCancel: () => {
           }

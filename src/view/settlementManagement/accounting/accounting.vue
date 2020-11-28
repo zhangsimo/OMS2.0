@@ -556,6 +556,7 @@
         }else{
           hideLoading()
         }
+        this.query();
       },
       // 取消审核
       shenheCancel() {
