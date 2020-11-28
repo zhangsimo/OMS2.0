@@ -551,11 +551,11 @@
               this.$message.success('审核成功！')
             }
           }
-          this.query();
           hideLoading()
         }else{
           hideLoading()
         }
+        this.query();
       },
       // 取消审核
       shenheCancel() {
