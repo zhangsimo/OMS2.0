@@ -68,12 +68,12 @@
             </Button
             >
           </div>
-          <div class="db">
-            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
-              <i class="iconfont mr5 icondaochuicon"></i>
-              导出
-            </Button>
-          </div>
+<!--          <div class="db">-->
+<!--            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i>-->
+<!--              导出-->
+<!--            </Button>-->
+<!--          </div>-->
           <div class="db">
             <Button @click="abandoned" class="mr10"
                     :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
@@ -490,7 +490,7 @@
                                   title="配件编码"
                                   width="100"
                                   fixed="left"
-                                  :filters="[]" 
+                                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
@@ -498,7 +498,7 @@
                                   title="配件名称"
                                   width="100"
                                   fixed="left"
-                                  :filters="[]" 
+                                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column fixed="left" show-overflow="tooltip" field="partInnerId" title="配件内码"
@@ -508,7 +508,7 @@
                                   title="品牌"
                                   width="100"
                                   fixed="left"
-                                  :filters="[]" 
+                                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"

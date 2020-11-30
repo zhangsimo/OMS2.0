@@ -59,11 +59,11 @@
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
-          <div class="db">
-            <Button @click="derive" v-has="'export'" class="mr10"
-              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button
-            >
-          </div>
+<!--          <div class="db">-->
+<!--            <Button @click="derive" v-has="'export'" class="mr10"-->
+<!--              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button-->
+<!--            >-->
+<!--          </div>-->
         </div>
       </div>
     </section>
@@ -269,13 +269,13 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
@@ -285,7 +285,7 @@
                 <vxe-table-column show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column show-overflow="tooltip"
