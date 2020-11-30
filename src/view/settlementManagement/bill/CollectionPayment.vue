@@ -57,34 +57,26 @@
               <span>更多</span>
             </button>
           </div>
-          <!--          <div class="db ml10">-->
-          <!--            <button-->
-          <!--              class="mr10 ivu-btn ivu-btn-default"-->
-          <!--              type="button"-->
-          <!--              @click="report"-->
-          <!--              v-has="'export'"-->
-          <!--            >导出</button>-->
-          <!--          </div>-->
-          <div class="db ml10">
-            <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出
-              </button>
-              <div slot="content">
-                <button
-                  class="mr8 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="reportPayment(2,'all')"
-                >导出全部
-                </button>
-                <button
-                  class="mr8 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="reportPayment(2,'parts')"
-                >导出勾选
-                </button>
-              </div>
-            </Poptip>
-          </div>
+<!--          <div class="db ml10">-->
+<!--            <Poptip placement="bottom">-->
+<!--              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出-->
+<!--              </button>-->
+<!--              <div slot="content">-->
+<!--                <button-->
+<!--                  class="mr8 ivu-btn ivu-btn-default"-->
+<!--                  type="button"-->
+<!--                  @click="reportPayment(2,'all')"-->
+<!--                >导出全部-->
+<!--                </button>-->
+<!--                <button-->
+<!--                  class="mr8 ivu-btn ivu-btn-default"-->
+<!--                  type="button"-->
+<!--                  @click="reportPayment(2,'parts')"-->
+<!--                >导出勾选-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </Poptip>-->
+<!--          </div>-->
           <!--          <div class="db ml10">-->
           <!--            <Poptip placement="bottom">-->
           <!--              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出收付款单-->

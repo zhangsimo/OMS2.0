@@ -53,12 +53,12 @@
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
-          <div class="db">
-            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
-              <i class="iconfont mr5 icondaochuicon"></i>
-              导出
-            </Button>
-          </div>
+<!--          <div class="db">-->
+<!--            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i>-->
+<!--              导出-->
+<!--            </Button>-->
+<!--          </div>-->
           <div class="db">
             <Button
               @click="abandoned"
@@ -367,7 +367,7 @@
                   title="配件编码"
                   width="100"
                   fixed="left"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -376,7 +376,7 @@
                   title="配件名称"
                   width="100"
                   fixed="left"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -392,7 +392,7 @@
                   title="品牌"
                   width="100"
                   fixed="left"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
