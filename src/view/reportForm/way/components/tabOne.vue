@@ -206,25 +206,12 @@ export default {
       }
     },
     async getAll() {
-      let tableDataAll = [];
-      let params = {
-        page: 0,
-        size: 10000,
-      };
-      let res = await api.getOnOrderStock(this.body, params);
-      if (res.code == 0 && res.data != null) {
-        tableDataAll = (res.data.content || []).map(el => {
-          if ([1, "1", "是"].includes(el.taxSign)) {
-            el.taxSign = "是";
-          }
-          if ([0, "0", "否"].includes(el.taxSign)) {
-            el.taxSign = "否";
-          }
-          return el;
-        });
-
-        return tableDataAll;
+      let params="";
+      let data=this.body;
+      for(let i in data){
+        params+=`${i}=${data[i]}&`
       }
+      location.href=api.onWayExport(`${params}pageSize=${this.page.total}&`)
     },
     //分页
     changePage(p) {
