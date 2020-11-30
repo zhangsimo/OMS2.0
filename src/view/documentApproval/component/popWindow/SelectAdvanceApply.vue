@@ -31,10 +31,12 @@
         :data="tableData">
         <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="订单单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-        <vxe-table-column field="payAmt" title="预收款金额"></vxe-table-column>
-        <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
+        <vxe-table-column field="orderDate" title="订单日期"></vxe-table-column>
+        <vxe-table-column field="payAmt" title="计划预付款"></vxe-table-column>
+        <vxe-table-column field="payAmt" title="订单金额"></vxe-table-column>
+        <vxe-table-column field="payAmt" title="已申请金额"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
@@ -113,6 +115,7 @@
 
       //选择
       selectChangeEvent({row}){
+        console.log(row)
         this.checkedList = row
       },
 

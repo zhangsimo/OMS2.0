@@ -70,6 +70,7 @@
                 v-model="formInline.applyAmt"
                 style="width: 100%"
                 :disabled="modelType"
+                readonly
               >
               </Input>
             </FormItem>
@@ -101,17 +102,22 @@
           </vxe-table-column>
           <vxe-table-column
             field="serviceId"
-            title="预收款收款单号"
+            title="预收款单号"
           ></vxe-table-column>
           <vxe-table-column
             field="guestName"
             title="往来单位"
           ></vxe-table-column>
-          <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
+          <vxe-table-column field="orderDate" title="订单日期"></vxe-table-column>
           <vxe-table-column
             field="payAmt"
-            title="预付款金额"
+            title="计划预付款"
           ></vxe-table-column>
+          <vxe-table-column field="orderDate" title="订单金额"></vxe-table-column>
+          <vxe-table-column field="orderDate" title="已申请金额"></vxe-table-column>
+          <vxe-table-column field="orderDate" title="申请前剩余金额"></vxe-table-column>
+          <vxe-table-column field="orderDate" title="本次申请金额"></vxe-table-column>
+
         </vxe-table>
 
         <h5 class="mt20 mb10" style="font-size: 18px">收款人信息</h5>
