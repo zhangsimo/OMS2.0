@@ -115,7 +115,7 @@
             <Input class="mr10 w200" v-model="shopName" disabled/>
           </Col>
           <Col span="16">
-            <Date-picker v-model="value" type="daterange" placeholder="选择日期11" class="w200"></Date-picker>
+            <Date-picker v-model="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
             <button class="ivu-btn ivu-btn-default ml10" type="button" @click="getQuery">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -214,11 +214,12 @@
   import {showLoading, hideLoading} from "@/utils/loading"
   import bus from "@/view/settlementManagement/bill/Popup/Bus";
   import {kmType} from "@/api/settlementManagement/VoucherInput";
+  import {saveAccount,wirteAccount} from "@/api/settlementManagement/otherReceivables/otherReceivables";
+  import * as api from "_api/settlementManagement/seleteAccount";
+
 
   export default {
-    props: {
-      accrued: ""
-    },
+    props: ['accrued','selectItem'],
     components: {
       voucherInput,
       claim,
@@ -284,6 +285,9 @@
         currentAccountItem: {},
         accruedList: [{mateAccountCoding: ""}],
         shopName: '',
+        dataOne: {},
+        dataTwo: [],
+        comLoading: false,
       };
     },
     async mounted() {
@@ -320,6 +324,8 @@
       },
       // 打开模态框
       open() {
+        this.fund = ''
+        this.currentAccountItem = []
         if (this.company.length == 0) {
           this.getOne();
         }
@@ -402,13 +408,26 @@
         this.currRow = {};
       },
       // 选中
-      selected({row}) {
+      async selected({row}) {
         this.currentAccountItem = row;
         this.claimTit == "其他付款认领"
           ? (this.currentAccount.accountNo =
             row.serviceId)
           : (this.currentAccount.accountNo =
             row.serviceId);
+        if(this.claimTit == "其他付款认领"){
+          let {code,data:{one,two}} = await wirteAccount({accountNo: this.currentAccountItem.serviceId,sign:1,id:this.currentAccountItem.id})
+          if(code === 0){
+            this.dataOne = one
+            this.dataTwo = two
+          }
+        }else{
+          let {code,data:{one,two}} = await api.wirteAccount({accountNo: this.currentAccountItem.serviceId,sign:9,id:this.currentAccountItem.id})
+          if(code === 0){
+            this.dataOne = one
+            this.dataTwo = two
+          }
+        }
       },
       //获取门店
       async getShop() {
@@ -460,30 +479,48 @@
           return
         }
         if (!this.voucherinputModel) {
-          if (this.currentAccount.accountNo) {
-            if (this.accrued[0].rpAmt == null || this.accrued[0].rpAmt <= 0) {
-              this.$Message.error("本次认领金额不可为零或小于零")
-              return
-            } else if (this.accrued[0].rpAmt > Math.abs(this.accrued[0].paidMoney)) {
-              this.$Message.error("本次认领金额不可大于支付金额")
-              return
-            }
-            if (this.claimTit == "预付款认领") {
-              this.changeAmt();
-              this.$refs.settlement.Settlement = true;
-            } else {
-              if(this.fund==""){
-                return this.$Message.error("款项分类必填")
-              }else{
-                console.log(this.fundCode,this.fund)
-                this.changeAmt();
-                this.paymentId = "YJDZ";
-                this.$refs.settlement2.Settlement = true;
+          if(!this.fund && this.claimTit == "其他付款认领"){
+            return this.$Message.error("款项分类必填")
+          }
+          if(!this.currentAccountItem.id){
+            return this.$Message.error("请选中一条表格中的数据")
+          }
+          let arr = [];
+          this.selectItem.map(el => {
+            let obj = {};
+            obj.id = el.id;
+            obj.thisClaimedAmt = el.rpAmt;
+            arr.push(obj)
+          })
+          if(!this.dataOne || !this.dataTwo){
+            return this.$Message.error("没有对冲数据")
+          }
+          let data = {
+            one: this.dataOne,
+            two: this.dataTwo,
+            three: arr,
+            // paymentTypeCode:this.fund
+          }
+          try {
+            this.comLoading = true
+            if(this.claimTit == '其他付款认领'){
+              data.paymentTypeCode = this.fund
+              let {code} = await saveAccount(data)
+              if(code == 0){
+                this.$message.success("其他付款认领成功")
+              }
+            }else{
+              let {code} = await api.saveAccount(data)
+              if(code == 0){
+                this.$message.success("预付款认领成功")
               }
             }
-          } else {
-            this.$Message.error("请先选择预付款申请单")
+            this.comLoading = false
+          } catch (error) {
+            this.comLoading = false
           }
+          this.modal = false
+          this.$parent.$parent.queryClaimed()
         } else {
           //勾选框选中时
           this.getMessage()
