@@ -61,12 +61,21 @@
             <vxe-table-column field="reconciliationAmt" width="80" title="对账金额"></vxe-table-column>
             <vxe-table-column field="hasAmt" title="已收/付金额" width="140"></vxe-table-column>
             <vxe-table-column field="unAmt" title="未收/付金额" width="140"></vxe-table-column>
+<!--            <vxe-table-column-->
+<!--              field="rpAmt"-->
+<!--              title="本次核销金额"-->
+<!--              width="140"-->
+<!--              :edit-render="{ name: 'input', attrs: { type: 'number' } }"-->
+<!--            ></vxe-table-column>-->
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
               width="140"
-              :edit-render="{ name: 'input', attrs: { type: 'number' } }"
-            ></vxe-table-column>
+            >
+              <template v-slot="{row}">
+                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="unAmtLeft" title="剩余未收/未付" width="140"></vxe-table-column>
             <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
             <vxe-table-column field="orgName" width="100" title="门店"></vxe-table-column>
@@ -353,6 +362,21 @@ export default {
     // getChildContent(row) {
     //   console.log("2", row);
     // },
+    rpAmtChange(row) {
+      let arr=this.$refs.xTable.footerData[0];
+      let unAmtSumIdx;
+      arr.map((item,index)=>{
+        if(item=="合计"){
+          return unAmtSumIdx=index+1;
+        }
+      })
+      let sumUnAmt = row.isSubject==1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
+      this.$refs.xTable.updateFooter();
+      this.checkComputed();
+      if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject==undefined && Math.abs(row.rpAmt)>Math.abs(row.unClaimedAmt))) {
+        return this.$Message.error("金额录入错误，请重新录入！")
+      }
+    },
     //保存
     async conserve() {
       const errMap = await this.$refs.xTable
@@ -402,18 +426,36 @@ export default {
         });
         if (this.gettlementData.sign == 4) {
           // 预付款核销
-          this.conserveDis=true;
-          showLoading()
-          let res = await api.addAll(data);
-          if (res.code == 0) {
-            hideLoading()
-            this.conserveDis=false;
-            this.Settlement = false;
-            this.$emit("getNewList", {});
-            return this.$message.success("核销成功");
-          }else{
-            hideLoading()
-            this.conserveDis=false;
+          let bool = true;
+          let arr=this.$refs.xTable.footerData[0];
+          let unAmtSumIdx;
+          arr.map((item,index)=>{
+            if(item=="合计"){
+              return unAmtSumIdx=index+1;
+            }
+          })
+          this.BusinessType.map(row=>{
+            let sumUnAmt = row.isSubject==1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
+            if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject!=1 && Math.abs(row.rpAmt)>Math.abs(row.unClaimedAmt))) {
+              this.$Message.error("金额录入错误，请重新录入！")
+              bool = false
+              return
+            }
+          })
+          if(bool){
+            this.conserveDis=true;
+            showLoading()
+            let res = await api.addAll(data);
+            if (res.code == 0) {
+              hideLoading()
+              this.conserveDis=false;
+              this.Settlement = false;
+              this.$emit("getNewList", {});
+              return this.$message.success("核销成功");
+            }else{
+              hideLoading()
+              this.conserveDis=false;
+            }
           }
         }
         if (this.gettlementData.sign == 5) {

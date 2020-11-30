@@ -23,14 +23,56 @@
       <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
     <Button @click="query" class="ml10">查询</Button>
-    <Table
-      class="mt10"
-      :columns="account"
+<!--    <Table-->
+<!--      class="mt10"-->
+<!--      :columns="account"-->
+<!--      :data="accountData"-->
+<!--      ref="table"-->
+<!--      highlight-row-->
+<!--      @on-current-change="seleteDate"-->
+<!--    ></Table>-->
+    <vxe-table
+      border
+      auto-resize
+      resizable
+      stripe
+      align="center"
+      show-overflow="title"
+      size="mini"
       :data="accountData"
+      highlight-hover-row
+      highlight-current-row
+      :loading="detailLoading"
+      class="mt10"
+      max-hight="450"
       ref="table"
-      highlight-row
-      @on-current-change="seleteDate"
-    ></Table>
+      @current-change="seleteDate"
+    >
+      <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+      <vxe-table-column field="payTime" title="对账日期" min-width="100"></vxe-table-column>
+      <vxe-table-column title="对账单号" min-width="100">
+        <template v-slot="{row}">
+          <span style="cursor:pointer;color:#87CEFA" @click="accountNoClick(row)">{{row.serviceId}}</span>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="guestName" title="往来单位" min-width="80"></vxe-table-column>
+      <vxe-table-column field="orderTypeName" title="收付类型" min-width="100"></vxe-table-column>
+      <vxe-table-column field="applyAmt" title="实际收付款金额" min-width="180"></vxe-table-column>
+    </vxe-table>
+    <div class="clearfix">
+      <Page
+        class-name="fr mb10 mt10"
+        size="small"
+        :current="page.num"
+        :total="page.total"
+        :page-size="page.size"
+        :page-size-opts="page.sizeArr"
+        @on-change="changePage"
+        @on-page-size-change="changeSize"
+        show-sizer
+        show-total
+      ></Page>
+    </div>
     <div slot="footer">
       <Button type="primary" @click="determine">确定</Button>
       <Button @click="modal1=false">取消</Button>
@@ -59,6 +101,13 @@ export default {
       company: [], //往来单位
       companyId: "", //往来单位id
       modal1: false, //弹窗展示
+      page:{
+        num:1,
+        size:10,
+        total:0,
+        sizeArr:[10,20,30,50,100]
+      },
+      detailLoading:false,//loading
       account: [
         {
           title: "序号",
@@ -155,7 +204,15 @@ export default {
         this.company = [];
       }
     },
-
+    changePage(p) {
+      this.page.num = p;
+      this.query();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.query();
+    },
     // 对话框是否显示
     async visChange(flag) {
       if (flag) {
@@ -180,6 +237,7 @@ export default {
       }
     },
     seleteQuery() {
+      this.detailLoading=true;
       let data = {
         startDate: this.dateQuery[0]
           ? moment(this.dateQuery[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -191,17 +249,33 @@ export default {
         guestId: this.companyId,
         paymentBalance:0
       };
-      let obj={
-
-      }
+      let obj={}
+      obj.size = this.page.size;
+      obj.page = this.page.num-1;
       findByDynamicQuery(obj,data).then(res => {
         if (res.code === 0) {
-          this.accountData = res.data.content;
+          this.accountData = res.data.content.map(el=>{
+            el.orderTypeName=el.businessType==null?"":el.businessType.name
+            return el;
+          });
+          this.page.total=res.data.totalElements;
+          this.detailLoading=false;
         }
-      });
+      }).catch(err=>{
+        this.detailLoading=false;
+      })
+    },
+    accountNoClick(row){
+      this.$refs.idDetailed.modal1 = true;
+      this.$refs.idDetailed.infoData = {
+        orgId:row.orgId,
+        guestId:row.guestId,
+        accountNo:row.accountNo
+      }
     },
     // 日期查询
     query() {
+      this.page.num=1;
       this.seleteQuery();
     },
     // 确认按钮
@@ -216,12 +290,13 @@ export default {
     },
     // 单选数据
     seleteDate(currentRow) {
+      let row=currentRow.row;
       let account = this.$parent.$parent.$parent.reconciliationStatement;
-      if (currentRow&&account && account.accountNo === currentRow.accountNo) {
+      if (row&&account && account.accountNo === row.accountNo) {
         this.$refs.table.clearCurrentRow()
         return this.$message.error("对账单号已存在");
       } else {
-        this.seleteData = currentRow;
+        this.seleteData = row;
       }
     },
     init() {
