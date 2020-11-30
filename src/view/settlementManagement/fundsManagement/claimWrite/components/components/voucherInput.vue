@@ -276,7 +276,7 @@
             style="width: 300px"
           >
             <FormItem label="款项分类:" prop="fund">
-              <Select v-model="formDynamic.fund" placeholder="请选择">
+              <Select v-model="formDynamic.fund" placeholder="请选择" @on-change="dynamicChange">
                 <Option
                   v-for="item in fundListZanshi"
                   :value="item.itemName"
@@ -383,7 +383,8 @@ export default {
       },
       Classification: false, //款项分类是否需校验
       formDynamic: {
-        fund: "" //款项分类
+        fund: "", //款项分类
+        code: ""
       },
       ruleValidateTwo: {
         fund: [
@@ -431,6 +432,7 @@ export default {
         this.SupperlierNameOrCode = ''
         this.FullNameOrCode = ''
         this.formDynamic.fund = ''
+        this.formDynamic.code = ''
         this.dealings = false
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
@@ -460,6 +462,14 @@ export default {
           this.getListCompany(); // 公司
         }
       }
+    },
+
+    dynamicChange(v){
+      this.fundListZanshi.forEach(item => {
+        if(item.itemName === v){
+          this.formDynamic.code = item.itemCode
+        }
+      })
     },
 
     // 计、收、付、转下拉框
@@ -752,8 +762,8 @@ export default {
         size:this.outStaff.page.size,
       }
       let data={}
-      data.orgid=this.$store.state.user.userData.shopId;
-      data.fullName=this.accountingName
+      data.orgid=this.$store.state.user.userData.currentShopId;
+      data.fullName=this.accountingName?this.accountingName.trim():''
       //参数
       let res=await getOutStaffNew(params,data)
       if(res.code===0){

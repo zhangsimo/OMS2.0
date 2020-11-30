@@ -27,7 +27,7 @@
           <Input v-model="formData.serviceId" type="text" placeholder="请输入单号" style="width: 350px" />
         </FormItem>
         <FormItem label="往来单号:">
-          <Input v-model="formData.guestId" type="text" placeholder="请输入往来单号" style="width: 350px" />
+          <Input v-model="formData.code" type="text" placeholder="请输入往来单号" style="width: 350px" />
         </FormItem>
         <FormItem label="配件编码:">
           <Input v-model="formData.partCode" type="text" placeholder="请输入配件编码" style="width: 350px" />

@@ -268,7 +268,7 @@ export default {
     async getOptionsList(query) {
       if (query.trim() !== "") {
         let data = {}
-        data.accountName = query
+        data.accountName = query.trim()
         data.page = 0
         data.size = 50
         let res = {}
@@ -280,9 +280,10 @@ export default {
         if (res.code == 0) {
           if (this.formInline.accountType) {
             this.options1 = res.data.content || []
+            this.options1.map( item =>  item.accountBankNo = item.accountBankNo )
           }else {
             this.options1 = res.data.content || []
-            this.options1.map( item =>  item.accountBankNo = item.accountNumber )
+            this.options1.map( item =>  item.accountBankNo = item.accountBankNo )
           }
         }
       } else {
