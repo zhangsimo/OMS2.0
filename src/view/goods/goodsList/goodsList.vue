@@ -70,11 +70,11 @@
               <i class="iconfont mr5 iconfanhuiicon"></i> 反作废
             </Button>
           </div>
-          <div class="db">
-            <Button class="mr10" @click="exportHandle" v-has="'invalid'">
-              <i class="iconfont mr5 icondaochuicon"></i> 导出
-            </Button>
-          </div>
+<!--          <div class="db">-->
+<!--            <Button class="mr10" @click="exportHandle" v-has="'invalid'">-->
+<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
+<!--            </Button>-->
+<!--          </div>-->
           <div class="db">
             <Button class="mr10" :disabled="hideSp" @click="showStatus" v-has="'check'">
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
@@ -432,7 +432,7 @@
                   fixed="left"
                   field="partCode"
                   title="配件编码"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
@@ -441,7 +441,7 @@
                   fixed="left"
                   field="partName"
                   title="配件名称"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
@@ -457,7 +457,7 @@
                   fixed="left"
                   field="partBrand"
                   title="品牌"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
