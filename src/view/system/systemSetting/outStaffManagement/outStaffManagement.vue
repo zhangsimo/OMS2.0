@@ -150,7 +150,7 @@
         }
         let data={}
         data.orgid=this.orgid;
-        data.fullName=this.staffName
+        data.fullName=this.staffName?this.staffName.trim():''
         //参数
         let res=await getOutStaffNew(params,data)
         if(res.code===0){
