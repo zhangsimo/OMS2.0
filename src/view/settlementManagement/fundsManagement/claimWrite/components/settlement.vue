@@ -108,7 +108,7 @@
               size="large"
               class="w700"
               style="border:1px solid #ddd;border-top:none;text-indent:5px"
-              v-model="remark"
+              v-model="reconciliationStatement.remark"
             />
           </section>
         </div>
@@ -320,7 +320,7 @@
         })
         if (!type) {
           this.check = 0;
-          this.remark = "";
+          this.reconciliationStatement.remark = "";
           this.reconciliationStatement = {};
           this.BusinessType = [];
           // this.tableData = [];
