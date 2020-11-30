@@ -762,8 +762,8 @@ export default {
         size:this.outStaff.page.size,
       }
       let data={}
-      data.orgid=this.$store.state.user.userData.shopId;
-      data.fullName=this.accountingName
+      // data.orgid=this.$store.state.user.userData.currentShopId;
+      data.fullName=this.accountingName?this.accountingName.trim():''
       //参数
       let res=await getOutStaffNew(params,data)
       if(res.code===0){

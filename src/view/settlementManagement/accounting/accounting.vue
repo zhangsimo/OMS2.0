@@ -549,13 +549,14 @@
               this.$message.error(res.data[0])
             }else{
               this.$message.success('审核成功！')
-              this.query();
             }
           }
+          this.query();
           hideLoading()
         }else{
           hideLoading()
         }
+        this.query();
       },
       // 取消审核
       shenheCancel() {
