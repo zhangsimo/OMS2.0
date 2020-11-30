@@ -9,7 +9,7 @@
         <span>申请时间:</span>
         <span class="mr20">{{ localTime }}</span>
         <span>最高授信固定额度:</span>
-        <span>100W</span>
+        <span>1000W</span>
       </div>
       <Row>
         <Col span="8">
@@ -476,8 +476,8 @@ export default {
         this.$Message.error("请输入大于0的正整数!");
         this.data.applyQuota = 0;
       }
-      if (+this.data.applyQuota + +this.data.creditLimit > 1000000) {
-        this.$Message.error("不能超过最高授信额度100万!");
+      if (+this.data.applyQuota + +this.data.creditLimit > 10000000) {
+        this.$Message.error("不能超过最高授信额度1000万!");
         this.data.applyQuota = 0;
       }
     },
@@ -488,8 +488,8 @@ export default {
         this.$Message.error("请输入大于0的正整数!");
         this.data.tempQuota = 0;
       }
-      if (+this.data.tempQuota + this.data.tempCreditLimit > 1000000) {
-        this.$Message.error("不能超过最高授信额度100万!");
+      if (+this.data.tempQuota + this.data.tempCreditLimit > 10000000) {
+        this.$Message.error("不能超过最高授信额度1000万!");
         this.data.tempQuota = 0;
       }
     },
