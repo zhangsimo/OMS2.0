@@ -124,7 +124,14 @@ export function wouseParts(params) {
     params
   })
 }
-
+//对账与结算 调拨入库配件明细查询
+export function wouseDetails(params) {
+  return axios.request({
+    url: `${api.omsOrder}/allotEnterDetail/findEnterDetailVO`,
+    method: 'get',
+    params
+  })
+}
 // 分店名称
 export function getStorelist() {
   return axios.request({
@@ -186,7 +193,14 @@ export function getSettlement(data) {
     data
   })
 }
-
+//月结对账 应收应付数据 排序借口
+export function colOrPaySort(params){
+  return axios.request({
+    url: `${api.omsSettle}/accounts/receivable/findReconciliationSort`,
+    method: 'get',
+    params
+  })
+}
 // 月结对账保存草稿/保存并提交
 export function Preservation(data) {
   return axios.request({
