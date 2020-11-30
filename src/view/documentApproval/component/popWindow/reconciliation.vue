@@ -122,9 +122,9 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc"/>
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype" :readonly="infoBase.accountReceivable==0" class="w60 tc"/>
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype" :readonly="infoBase.accountReceivable==0" class="w60 tc"/>
               <span class="mr5 ml10">运费</span>
               <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">保险费</span>
@@ -143,11 +143,12 @@
               <InputNumber
                 v-model="infoBase.payingBadDebts"
                 :disabled="disabletype"
+                :readonly="infoBase.reconciliation==0"
                 type="text"
                 class="w60 tc"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" :readonly="infoBase.reconciliation==0" class="w60 tc"/>
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
               <Input v-model="Actualtotalcollect" type="text" class="w60 tc" :disabled="disabletype"/>
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
@@ -162,6 +163,7 @@
                   v-for="item in SettlementType"
                   :value="item.value"
                   :key="item.value"
+                  :disabled="item.disabled"
                 >{{ item.label }}
                 </Option>
               </Select>
@@ -354,7 +356,7 @@
           bankName: "", //开户行
           collectionAccount: "", //收款账号
           thisPaymentAccountId: "", //本次申请付款账户
-          billingType: {value: 0} //计划结算类型
+          billingType: {value: 2} //计划结算类型
         },
         arrId:[],
         billDate: "", //单据日期
@@ -491,15 +493,18 @@
         SettlementType: [
           {
             value: 0,
-            label: "付款"
+            label: "付款",
+            disabled:false
           },
           {
             value: 1,
-            label: "收款"
+            label: "收款",
+            disabled:false
           },
           {
             value: 2,
-            label: "对冲"
+            label: "对冲",
+            disabled:false
           }
         ], //计划结算类型
         Reconciliationlist: [
@@ -628,7 +633,33 @@
       },
       //本次对账结算合计
       Reconciliationtotal() {
-        return parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
+        let sumAmt=parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
+        if(sumAmt>0){
+          this.SettlementType.map(el=>{
+            if(el.value==0){ //大于零时付款不可选
+              el.disabled=true;
+            }else{
+              el.disabled=false;
+            }
+          })
+        }else if(sumAmt<0){
+          this.SettlementType.map(el=>{
+            if(el.value==1){ //小于零时收款不可选
+              el.disabled=true;
+            }else{
+              el.disabled=false;
+            }
+          })
+        } if(sumAmt==0){
+          this.SettlementType.map(el=>{
+            if(el.value==2){ //等于零时收款、付款均不可选
+              el.disabled=false;
+            }else{
+              el.disabled=true;
+            }
+          })
+        }
+        return sumAmt
       },
     },
     methods: {
