@@ -298,12 +298,12 @@
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="100">
                   <template v-slot="{ row, seq }">
-                    <span>{{(Math.abs(row.sysQty - row.trueQty))||0 }}</span>
+                    <span>{{row.sysQty - row.trueQty>0?((row.sysQty - row.trueQty)*(-1)):Math.abs(row.sysQty - row.trueQty) }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="exhibitAmt" title="盈亏金额" width="120">
                   <template v-slot="{ row, seq }">
-                    <span>{{(Math.abs(row.exhibitQty * row.truePrice))||0 }}</span>
+                    <span>{{(((row.sysQty - row.trueQty>0?((-1)*(row.sysQty - row.trueQty)):Math.abs(row.sysQty - row.trueQty)) * row.truePrice).toFixed(2))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="100"></vxe-table-column>
@@ -1179,6 +1179,10 @@ export default {
           }
           if (['sysQty','trueQty','exhibitQty','hasOutQty','exhibitAmt','truePrice'].includes(column.property)) {
 
+            if(['exhibitQty','exhibitAmt'].includes(column.property)){
+              return this.qtyFun(data,column.property);
+            }
+
             if(['exhibitAmt'].includes(column.property)){
               return this.$utils.sum(data, column.property).toFixed(2)
             }
@@ -1187,6 +1191,29 @@ export default {
           return null
         })
       ]
+    },
+    qtyFun(data,property){
+
+        let aa = data.reduce((pr,cur)=>{
+            if(property=='exhibitQty'){
+              return pr+(cur.sysQty - cur.trueQty>0?((cur.sysQty - cur.trueQty)*(-1)):Math.abs(cur.sysQty - cur.trueQty));
+            }
+            if(property=='exhibitAmt'){
+              return pr+(cur.sysQty - cur.trueQty>0?((-1)*(cur.sysQty - cur.trueQty)):Math.abs(cur.sysQty - cur.trueQty)) * cur.truePrice
+            }
+          },0)
+      if(property=='exhibitQty'){
+        return aa
+      }
+      if(property=='exhibitAmt'){
+        return aa.toFixed(2)
+      }
+
+
+
+
+
+
     },
     // 确定
     Determined() {},

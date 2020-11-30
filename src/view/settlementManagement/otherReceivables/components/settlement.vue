@@ -1,8 +1,24 @@
 <template>
-  <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
+  <Modal
+    v-model="Settlement"
+    title="收付款结算"
+    width="1200"
+    @on-visible-change="hander"
+  >
     <div class="db">
-      <Button class="ivu-btn ivu-btn-default mr10" @click="conserve" :loading="conserveDis">保存</Button>
-      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
+      <Button
+        class="ivu-btn ivu-btn-default mr10"
+        @click="conserve"
+        :loading="conserveDis"
+        >保存</Button
+      >
+      <button
+        class="ivu-btn ivu-btn-default mr10"
+        type="button"
+        @click="Settlement = false"
+      >
+        关闭
+      </button>
     </div>
     <div class="db p15 mt10 mb10">
       <h4 class="mb10">基本信息</h4>
@@ -11,19 +27,31 @@
           <span>门店：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.orgName" readonly/>
+          <Input
+            class="w260"
+            v-model="reconciliationStatement.orgName"
+            readonly
+          />
         </Col>
         <Col span="2" class="tr">
           <span>往来单位：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.guestName" readonly/>
+          <Input
+            class="w260"
+            v-model="reconciliationStatement.guestName"
+            readonly
+          />
         </Col>
         <Col span="2" class="tr">
           <span>收付类型：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.sortName" readonly/>
+          <Input
+            class="w260"
+            v-model="reconciliationStatement.sortName"
+            readonly
+          />
         </Col>
       </Row>
       <Row class="mt10">
@@ -31,20 +59,36 @@
           <span>对账单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly/>
-          <i class="iconfont iconcaidan input" v-if="showModalOne !== 1" @click="accountNoClick"></i>
+          <Input
+            class="w260"
+            v-model="reconciliationStatement.accountNo"
+            readonly
+          />
+          <i
+            class="iconfont iconcaidan input"
+            v-if="showModalOne !== 1"
+            @click="accountNoClick"
+          ></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly/>
+          <Input
+            class="w260"
+            v-model="reconciliationStatement.serviceId"
+            readonly
+          />
         </Col>
         <Col span="2" class="tr">
           <span>核销方式：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly/>
+          <Input
+            class="w260"
+            v-model="reconciliationStatement.furposeName"
+            readonly
+          />
         </Col>
       </Row>
     </div>
@@ -52,7 +96,7 @@
     <Row class="mt10">
       <Col span="16">
         <vxe-table
-          style="flex:6"
+          style="flex: 6"
           border
           resizable
           ref="xTree"
@@ -65,15 +109,35 @@
           align="center"
           :data="BusinessType"
           :footer-method="offWrite"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
           @edit-closed="editClosedEvent"
         >
           <vxe-table-column title="核销信息">
-            <vxe-table-column field="guestName" width="100" title="往来单位"></vxe-table-column>
-            <vxe-table-column field="businessTypeName" width="80" title="业务类型"></vxe-table-column>
-            <vxe-table-column field="reconciliationAmt" width="80" title="对账金额"></vxe-table-column>
-            <vxe-table-column field="hasAmt" width="120" title="已收/付金额"></vxe-table-column>
-            <vxe-table-column field="unAmt" width="120" title="未收/付金额"></vxe-table-column>
+            <vxe-table-column
+              field="guestName"
+              width="100"
+              title="往来单位"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="businessTypeName"
+              width="80"
+              title="业务类型"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="reconciliationAmt"
+              width="80"
+              title="对账金额"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="hasAmt"
+              width="120"
+              title="已收/付金额"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="unAmt"
+              width="120"
+              title="未收/付金额"
+            ></vxe-table-column>
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
@@ -92,23 +156,43 @@
           <section class="flex">
             <p
               class="w80 pl5 pr10"
-              style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
-            >核对</p>
+              style="
+                border: 1px solid #ddd;
+                border-top: 0;
+                border-right: 0;
+                line-height: 40px;
+              "
+            >
+              核对
+            </p>
             <span
               class="w700 tc"
-              style="display:inline-block;border:1px solid #ddd;border-top:none;line-height:40px"
-            >{{check}}</span>
+              style="
+                display: inline-block;
+                border: 1px solid #ddd;
+                border-top: none;
+                line-height: 40px;
+              "
+              >{{ check }}</span
+            >
           </section>
           <section class="flex">
             <p
               class="w80 pl5 pr10"
-              style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
-            >备注</p>
+              style="
+                border: 1px solid #ddd;
+                border-top: 0;
+                border-right: 0;
+                line-height: 40px;
+              "
+            >
+              备注
+            </p>
             <input
               type="text"
               size="large"
               class="w700"
-              style="border:1px solid #ddd;border-top:none;text-indent:5px"
+              style="border: 1px solid #ddd; border-top: none; text-indent: 5px"
               v-model="remark"
             />
           </section>
@@ -117,7 +201,7 @@
       <Col span="8">
         <vxe-table
           class="ml10"
-          style="flex:4"
+          style="flex: 4"
           border
           resizable
           size="mini"
@@ -128,443 +212,447 @@
           align="center"
           :footer-method="payCollection"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column title="收/付款信息">
-            <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="accountName" width="120" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="mateAccountName" width="120" title="科目代码"></vxe-table-column>
-            <vxe-table-column field="createTime" width="120" title="发生日期"></vxe-table-column>
-            <vxe-table-column field="incomeMoney" width="80" title="收入金额"></vxe-table-column>
-            <vxe-table-column field="paidMoney" width="80" title="支出金额"></vxe-table-column>
-            <vxe-table-column field="orgName" width="120" title="所属门店"></vxe-table-column>
+            <vxe-table-column
+              type="seq"
+              title="序号"
+              width="60"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="accountName"
+              width="120"
+              title="收/付款账户"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="mateAccountName"
+              width="120"
+              title="科目代码"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="createTime"
+              width="120"
+              title="发生日期"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="incomeMoney"
+              width="80"
+              title="收入金额"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="paidMoney"
+              width="80"
+              title="支出金额"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="orgName"
+              width="120"
+              title="所属门店"
+            ></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette"/>
-    <subjexts ref="subjexts"/>
+    <accountSelette ref="accountSelette" />
+    <subjexts ref="subjexts" />
   </Modal>
 </template>
 <script>
-  import accountSelette from "./components/accountWirte";
-  import {
-    wirteAccount,
-    saveAccount,
-    paymentRegain
-  } from "_api/settlementManagement/otherReceivables/otherReceivables";
-  import {orderWriteOff} from "_api/settlementManagement/otherPayable/otherPayable";
-  import subjexts from "./components/subjects";
-  import bus from "../../bill/Popup/Bus";
-  import moment from "moment";
-  import {showLoading, hideLoading} from "../../../../utils/loading";
+import accountSelette from "./components/accountWirte";
+import {
+  wirteAccount,
+  saveAccount,
+  paymentRegain,
+} from "_api/settlementManagement/otherReceivables/otherReceivables";
+import { orderWriteOff } from "_api/settlementManagement/otherPayable/otherPayable";
+import subjexts from "./components/subjects";
+import bus from "../../bill/Popup/Bus";
+import moment from "moment";
 
-  export default {
-    components: {
-      accountSelette,
-      subjexts
-    },
-    props: ['paymentTypeCode'],
-    data() {
-      const amtValid = ({row}) => {
-        return new Promise((resolve, reject) => {
-          let trueValue = Math.abs(row.rpAmt) > Math.abs(row.unAmt);
-          if (row.isSubject != 1 && trueValue) {
-            reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
-          } else {
-            resolve(true);
-          }
-        });
-      };
-      return {
-        validRules: {
-          rpAmt: [{required: true, validator: amtValid}]
-        },
-        Settlement: false, //弹框显示
-        conserveDis: false,//保存接口返回之前按钮不可点击
-        check: 0,
-        remark: "",
-        reconciliationStatement: {accountNo: 123, receiptPayment: 456},
-        BusinessType: [],
-        tableData: [],
-        collectPayId: "",
-        obj: {},
-        showModalOne: '',
-      };
-    },
-    mounted() {
-      // 对账单号
-      bus.$on("accountHedNo", val => {
-        // console.log(val , 7879);
-        this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
-        // val.map(item => {
-        //   item.businessTypeName = item.businessType.name;
-        // });
-        // this.BusinessType = [...this.BusinessType, ...val];
-        // console.log(val)
-        let jsonArr = [val]
-        jsonArr.map(item => {
-          item.orgName = this.reconciliationStatement.orgName;
-          item.accountNo = item.serviceId;
-          // item.guestName = item.guestName;
-          item.businessTypeName = item.orderTypeName;
-          item.reconciliationAmt = -item.amountCollected; //对账金额
-          item.hasAmt = +item.amountCollected - +item.paymentBalance; //已收/付金额
-          item.unAmt = -item.paymentBalance; //未收/付金额
-          item.rpAmt = -item.paymentBalance;
-          item.unAmtLeft = item.unAmt - item.rpAmt;
-        })
-        // console.log(jsonArr)
-        this.BusinessType.push(...jsonArr)
-        // console.log(this.BusinessType)
-        this.checkComputed()
+export default {
+  components: {
+    accountSelette,
+    subjexts,
+  },
+  props: ["paymentTypeCode"],
+  data() {
+    const amtValid = ({ row }) => {
+      return new Promise((resolve, reject) => {
+        let trueValue = Math.abs(row.rpAmt) > Math.abs(row.unAmt);
+        if (row.isSubject != 1 && trueValue) {
+          reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+        } else {
+          resolve(true);
+        }
       });
-      //选择科目
-      bus.$on("hedInfo", val => {
+    };
+    return {
+      validRules: {
+        rpAmt: [{ required: true, validator: amtValid }],
+      },
+      Settlement: false, //弹框显示
+      conserveDis: false, //保存接口返回之前按钮不可点击
+      check: 0,
+      remark: "",
+      reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
+      BusinessType: [],
+      tableData: [],
+      collectPayId: "",
+      obj: {},
+      showModalOne: "",
+    };
+  },
+  mounted() {
+    // 对账单号
+    bus.$on("accountHedNo", (val) => {
+      // console.log(val , 7879);
+      this.reconciliationStatement.accountNo =
+        this.reconciliationStatement.accountNo + ";" + val.serviceId;
+      // val.map(item => {
+      //   item.businessTypeName = item.businessType.name;
+      // });
+      // this.BusinessType = [...this.BusinessType, ...val];
+      // console.log(val)
+      let jsonArr = [val];
+      jsonArr.map((item) => {
+        item.orgName = this.reconciliationStatement.orgName;
+        item.accountNo = item.serviceId;
+        // item.guestName = item.guestName;
+        item.businessTypeName = item.orderTypeName;
+        item.reconciliationAmt = -item.amountCollected; //对账金额
+        item.hasAmt = +item.amountCollected - +item.paymentBalance; //已收/付金额
+        item.unAmt = -item.paymentBalance; //未收/付金额
+        item.rpAmt = -item.paymentBalance;
+        item.unAmtLeft = item.unAmt - item.rpAmt;
+      });
+      // console.log(jsonArr)
+      this.BusinessType.push(...jsonArr);
+      // console.log(this.BusinessType)
+      this.checkComputed();
+    });
+    //选择科目
+    bus.$on("hedInfo", (val) => {
+      this.BusinessType.push({
+        businessTypeName: val.titleName,
+        reconciliationAmt: 0,
+        hasAmt: 0,
+        unAmt: 0,
+        rpAmt: 0,
+        unAmtLeft: 0,
+        isSubject: 1,
+      });
+    });
+    bus.$on("content", (val) => {
+      this.obj = val;
+    });
+    bus.$on("ChildContent", (value) => {
+      value.auxiliaryTypeCode =
+        value.auxiliaryTypeCode == 2 ? 1 : value.auxiliaryTypeCode; //辅助核算选中哪一个
+      if (
+        value.auxiliaryTypeCode == "1" ||
+        value.auxiliaryTypeCode == "2" ||
+        value.auxiliaryTypeCode == "3" ||
+        value.auxiliaryTypeCode == "4"
+      ) {
+        value.isAuxiliaryAccounting = 0; //是否辅助核算类
+      } else {
+        value.isAuxiliaryAccounting = 1;
+      }
+      if (value.fullName) {
         this.BusinessType.push({
-          businessTypeName: val.titleName,
+          serviceTypeName: this.obj.fullName + "-" + value.fullName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          isSubject: 1
+          mateAccountName: this.obj.titleName,
+          mateAccountCode: this.obj.titleCode,
+          auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
+          auxiliaryName: value.fullName, //辅助核算名称
+          auxiliaryCode: value.code, //辅助核算项目编码
+          isSubject: 1,
+          paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
         });
-      });
-      bus.$on("content", val => {
-        this.obj = val;
-      });
-      bus.$on("ChildContent", value => {
-        value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2 ? 1 : value.auxiliaryTypeCode //辅助核算选中哪一个
-        if (value.auxiliaryTypeCode == "1" || value.auxiliaryTypeCode == "2" || value.auxiliaryTypeCode == "3" || value.auxiliaryTypeCode == "4") {
-          value.isAuxiliaryAccounting = 0 //是否辅助核算类
-        } else {
-          value.isAuxiliaryAccounting = 1
-        }
-        if (value.fullName) {
-          this.BusinessType.push({
-            serviceTypeName: this.obj.fullName + "-" + value.fullName,
-            reconciliationAmt: 0,
-            hasAmt: 0,
-            unAmt: 0,
-            rpAmt: 0,
-            unAmtLeft: 0,
-            mateAccountName: this.obj.titleName,
-            mateAccountCode: this.obj.titleCode,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
-            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
-            isSubject: 1
-          });
-        } else if (value.userName) {
-          this.BusinessType.push({
-            serviceTypeName: this.obj.fullName + "-" + value.userName,
-            reconciliationAmt: 0,
-            hasAmt: 0,
-            unAmt: 0,
-            rpAmt: 0,
-            unAmtLeft: 0,
-            mateAccountName: this.obj.titleName,
-            mateAccountCode: this.obj.titleCode,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
-            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
-            isSubject: 1
-          });
-        } else if (value.itemName) {
-          this.BusinessType.push({
-            serviceTypeName: this.obj.fullName + "-" + value.itemName,
-            reconciliationAmt: 0,
-            hasAmt: 0,
-            unAmt: 0,
-            rpAmt: 0,
-            unAmtLeft: 0,
-            mateAccountName: this.obj.titleName,
-            mateAccountCode: this.obj.titleCode,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
-            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
-            isSubject: 1
-          });
-        }
-      });
-      //收付款信息
-      bus.$on("paymentInfo", val => {
-        val.map(item => {
-          item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
-          item.orgName = item.shopName;
-          item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
-          delete item.businessType;
+      } else if (value.userName) {
+        this.BusinessType.push({
+          serviceTypeName: this.obj.fullName + "-" + value.userName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAmt: 0,
+          unAmtLeft: 0,
+          mateAccountName: this.obj.titleName,
+          mateAccountCode: this.obj.titleCode,
+          auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
+          auxiliaryName: value.fullName, //辅助核算名称
+          auxiliaryCode: value.code, //辅助核算项目编码
+          isSubject: 1,
+          paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
         });
-        // this.tableData = val;
-      });
-    },
-    methods: {
-      setData(d) {
-        d.map(item => {
-          item.paidMoney = Math.abs(item.paidMoney)
-        })
-        // this.tableData = d;
-      },
-      // 选择科目弹框
-      subject() {
-        this.$refs.subjexts.subjectModelShow = true;
-      },
-      // 对账单号选择
-      accountNoClick() {
-        this.$refs.accountSelette.modal1 = true;
-      },
-      //弹框打开
-      hander(type) {
-        if (!type) {
-          this.check = 0;
-          this.remark = "";
-          this.reconciliationStatement = {};
-          this.BusinessType = [];
-          this.tableData = [];
-          this.collectPayId = "";
-          if (this.$parent.paymentId === "YSKZC") {
-            this.$parent.claimModal = false
-          }
-        } else {
-          let sign = 0;
-          if (this.$parent.paymentId === "YSK") {
-            sign = 2;
-            this.showModalOne = 1;
-          } else if (this.$parent.paymentId === "YFK") {
-            this.showModalOne = 0;
-            sign = 4;
-            this.showModalOne = 0;
-          } else if (this.$parent.paymentId === "YJDZ") {
-            sign = 1;
-            this.showModalOne = 1;
-          } else if (this.$parent.paymentId === "YSKZC") {
-            this.showModalOne = 0;
-            sign = 3;
-          } else if (this.$parent.type === 0) {
-            sign = 6;
-          } else if (this.$parent.type === 1) {
-            sign = 7;
-          } else if (this.$parent.type === 2) {
-            sign = 8;
-          } else if (this.$parent.paymentId === 'QTYSK') {
-            sign = 11;
-            this.showModalOne = 0;
-          }
-          let accountNo = this.$parent.reconciliationStatement
-            ? this.$parent.reconciliationStatement.accountNo
-            : this.$parent.currentAccount.accountNo;
-          wirteAccount({
-            accountNo,
-            sign
-          }).then(res => {
-            if (res.code === 0) {
-              res.data.one.furposeName = res.data.one.furpose.name;
-              res.data.one.sortName = res.data.one.sort.name;
-              this.reconciliationStatement = res.data.one;
-              // console.log(this.reconciliationStatement);
-              // console.log(this.showModalOne)
-              if (this.showModalOne !== 1) {
-                this.reconciliationStatement.accountNo = '';
-              }
-              this.reconciliationStatement.accountNo = accountNo
-              res.data.two.map(item => {
-                item.businessTypeName = item.businessType.name;
-              });
-              this.BusinessType = res.data.two;
-              // if(this.tableData){
-              //   this.BusinessType[0].rpAmt = this.tableData[0].paidMoney;
-              //   this.BusinessType[0].unAmtLeft = this.BusinessType[0].unAmt - this.BusinessType[0].rpAmt;
-              // }
-              this.checkComputed();
-            }
-          });
-        }
-      },
-      rpAmtChange(row) {
-        let arr = this.$refs.xTree.footerData[0];
-        let unAmtSumIdx;
-        arr.map((item, index) => {
-          if (item == "合计") {
-            return unAmtSumIdx = index + 1;
-          }
-        })
-        let sumUnAmt = row.isSubject == 1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
-        this.$refs.xTree.updateFooter();
-        this.checkComputed();
-        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject == undefined && Math.abs(row.rpAmt) > Math.abs(row.unClaimedAmt))) {
-          return this.$Message.error("金额录入错误，请重新录入！")
-        }
-      },
-      //保存
-      async conserve() {
-        if (!Number(this.check)) {
-          if (this.$parent.typeA === '收回') {
-            let obj = {
-              one: this.reconciliationStatement,
-              two: this.BusinessType,
-              // three: this.tableData
-            };
-            this.conserveDis = true;
-            paymentRegain(obj).then(res => {
-              if (res.code === 0) {
-                this.conserveDis = false;
-                this.Settlement = false;
-                this.$parent.claimModal = false;
-                this.$message.success("其他收款收回成功!");
-                this.$parent.getQuery();
-                this.$parent.typeA = '';
-              } else {
-                this.conserveDis = false;
-              }
-            });
-          } else if (this.$parent.Types === '其他收款核销') {
-            const errMap = await this.$refs.xTree
-              .fullValidate()
-              .catch(errMap => errMap);
-            if (errMap) return this.$Message.error("表格校验错误");
-            if (errMap) {
-              this.$XModal.Message({status: 'error', message: '校验不通过！'})
-            } else {
-              let bool = true;
-              let arr = this.$refs.xTree.footerData[0];
-              let unAmtSumIdx;
-              arr.map((item, index) => {
-                if (item == "合计") {
-                  return unAmtSumIdx = index + 1;
-                }
-              })
-              this.BusinessType.map(row => {
-                let sumUnAmt = row.isSubject == 1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
-                if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject != 1 && Math.abs(row.rpAmt) > Math.abs(row.unClaimedAmt))) {
-                  this.$Message.error("金额录入错误，请重新录入！")
-                  bool = false
-                  return
-                }
-              })
-              if (bool) {
-                let obj3 = {}
-                obj3.one = this.reconciliationStatement;
-                obj3.two = this.BusinessType;
-                // obj3.three = this.tableData;
-                obj3.type = 2
-                showLoading()
-                orderWriteOff(obj3).then(res => {
-                  if (res.code === 0) {
-                    this.conserveDis = false;
-                    this.Settlement = false;
-                    this.$parent.claimModal = false;
-                    this.$message.success("其他收款核销成功!");
-                    this.$parent.Types = '';
-                    this.$parent.getQuery();
-                    hideLoading()
-                  } else {
-                    this.conserveDis = false;
-                    hideLoading()
-                  }
-                }).catch(err=>{
-                  hideLoading()
-                })
-              }
-              // this.$XModal.message({ status: 'success', message: '校验成功！' })
-            }
-          } else {
-            let obj2 = {
-              one: this.reconciliationStatement,
-              two: this.BusinessType,
-              // three: this.tableData
-            };
-            if (this.$parent.otherPayCus) {
-              obj2.one.paymentTypeCode = this.$parent.fund
-            }
-            if (this.paymentTypeCode) {
-              obj2.paymentTypeCode = this.paymentTypeCode
-            }
-            this.conserveDis = true;
-            saveAccount(obj2).then(res => {
-              if (res.code === 0) {
-                this.$emit("reloadParList")
-                this.conserveDis = false;
-                this.Settlement = false;
-                this.$parent.claimModal = false;
-                this.$message.success("其他付款认领成功！");
-                this.$parent.getQuery();
-              } else {
-                this.conserveDis = false;
-              }
-            });
-          }
-        } else {
-          this.$message.error("核对金额为0才能保存");
-        }
-      },
-      // 核销单元格编辑状态下被关闭时
-      editClosedEvent({row, rowIndex}) {
-        row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
-        this.$set(this.BusinessType, rowIndex, row);
-        this.checkComputed();
-      },
-      // 核销信息合计
-      offWrite({columns, data}) {
-        return [
-          columns.map((column, columnIndex) => {
-            if (columnIndex === 3) {
-              return "合计";
-            }
-            if (
-              [
-                "reconciliationAmt",
-                "hasAmt",
-                "unAmt",
-                "rpAmt",
-                "unAmtLeft"
-              ].includes(column.property)
-            ) {
-              return this.$utils.sum(data, column.property).toFixed(2);
-            }
-            return null;
-          })
-        ];
-      },
-      // 收款信息合计
-      payCollection({columns, data}) {
-        return [
-          columns.map((column, columnIndex) => {
-            if (columnIndex === 0) {
-              return "合计";
-            }
-            if (["incomeMoney", "paidMoney"].includes(column.property)) {
-              return this.$utils.sum(data, column.property).toFixed(2);
-            }
-            return null;
-          })
-        ];
-      },
-      // 核对计算
-      checkComputed() {
-        let sum1 = 0;
-        let sum2 = 0;
-        let sum3 = 0;
-        this.BusinessType.map(item => {
-          sum1 += item.rpAmt * 1;
+      } else if (value.itemName) {
+        this.BusinessType.push({
+          serviceTypeName: this.obj.fullName + "-" + value.itemName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAmt: 0,
+          unAmtLeft: 0,
+          mateAccountName: this.obj.titleName,
+          mateAccountCode: this.obj.titleCode,
+          auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+          isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
+          auxiliaryName: value.fullName, //辅助核算名称
+          auxiliaryCode: value.code, //辅助核算项目编码
+          isSubject: 1,
+          paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
         });
-        this.tableData.map(item => {
-          sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
-          sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
-        });
-        this.check = (sum1 - sum2 - sum3).toFixed(2);
       }
-    }
-  };
+    });
+    //收付款信息
+    bus.$on("paymentInfo", (val) => {
+      val.map((item) => {
+        item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+        item.orgName = item.shopName;
+        item.paidMoney = !item.paidMoney
+          ? 0
+          : item.paidMoney < 0
+          ? -item.paidMoney
+          : item.paidMoney;
+        delete item.businessType;
+      });
+      // this.tableData = val;
+    });
+  },
+  methods: {
+    setData(d) {
+      d.map((item) => {
+        item.paidMoney = Math.abs(item.paidMoney);
+      });
+      // this.tableData = d;
+    },
+    // 选择科目弹框
+    subject() {
+      this.$refs.subjexts.subjectModelShow = true;
+    },
+    // 对账单号选择
+    accountNoClick() {
+      this.$refs.accountSelette.modal1 = true;
+    },
+    //弹框打开
+    hander(type) {
+      if (!type) {
+        this.check = 0;
+        this.remark = "";
+        this.reconciliationStatement = {};
+        this.BusinessType = [];
+        this.tableData = [];
+        this.collectPayId = "";
+        if (this.$parent.paymentId === "YSKZC") {
+          this.$parent.claimModal = false;
+        }
+      } else {
+        let sign = 0;
+        if (this.$parent.paymentId === "YSK") {
+          sign = 2;
+          this.showModalOne = 1;
+        } else if (this.$parent.paymentId === "YFK") {
+          this.showModalOne = 0;
+          sign = 4;
+          this.showModalOne = 0;
+        } else if (this.$parent.paymentId === "YJDZ") {
+          sign = 1;
+          this.showModalOne = 1;
+        } else if (this.$parent.paymentId === "YSKZC") {
+          this.showModalOne = 0;
+          sign = 3;
+        } else if (this.$parent.type === 0) {
+          sign = 6;
+        } else if (this.$parent.type === 1) {
+          sign = 7;
+        } else if (this.$parent.type === 2) {
+          sign = 8;
+        } else if (this.$parent.paymentId === "QTYSK") {
+          sign = 11;
+          this.showModalOne = 0;
+        }
+        let accountNo = this.$parent.reconciliationStatement
+          ? this.$parent.reconciliationStatement.accountNo
+          : this.$parent.currentAccount.accountNo;
+        wirteAccount({
+          accountNo,
+          sign,
+        }).then((res) => {
+          if (res.code === 0) {
+            res.data.one.furposeName = res.data.one.furpose.name;
+            res.data.one.sortName = res.data.one.sort.name;
+            this.reconciliationStatement = res.data.one;
+            // console.log(this.reconciliationStatement);
+            // console.log(this.showModalOne)
+            if (this.showModalOne !== 1) {
+              this.reconciliationStatement.accountNo = "";
+            }
+            this.reconciliationStatement.accountNo = accountNo;
+            res.data.two.map((item) => {
+              item.businessTypeName = item.businessType.name;
+            });
+            this.BusinessType = res.data.two;
+            // if(this.tableData){
+            //   this.BusinessType[0].rpAmt = this.tableData[0].paidMoney;
+            //   this.BusinessType[0].unAmtLeft = this.BusinessType[0].unAmt - this.BusinessType[0].rpAmt;
+            // }
+            this.checkComputed();
+          }
+        });
+      }
+    },
+    //保存
+    async conserve() {
+      if (!Number(this.check)) {
+        if (this.$parent.typeA === "收回") {
+          let obj = {
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            // three: this.tableData
+          };
+          this.conserveDis = true;
+          paymentRegain(obj).then((res) => {
+            if (res.code === 0) {
+              this.conserveDis = false;
+              this.Settlement = false;
+              this.$parent.claimModal = false;
+              this.$message.success("其他收款收回成功!");
+              this.$parent.getQuery();
+              this.$parent.typeA = "";
+            } else {
+              this.conserveDis = false;
+            }
+          });
+        } else if (this.$parent.Types === "其他收款核销") {
+          const errMap = await this.$refs.xTree
+            .fullValidate()
+            .catch((errMap) => errMap);
+          if (errMap) return this.$Message.error("表格校验错误");
+          if (errMap) {
+            this.$XModal.Message({ status: "error", message: "校验不通过！" });
+          } else {
+            let obj3 = {};
+            obj3.one = this.reconciliationStatement;
+            obj3.two = this.BusinessType;
+            // obj3.three = this.tableData;
+            obj3.type = 2;
+            this.conserveDis = true;
+            orderWriteOff(obj3).then((res) => {
+              if (res.code === 0) {
+                this.conserveDis = false;
+                this.Settlement = false;
+                this.$parent.claimModal = false;
+                this.$message.success("其他收款核销成功!");
+                this.$parent.Types = "";
+                this.$parent.getQuery();
+              } else {
+                this.conserveDis = false;
+              }
+            });
+            // this.$XModal.message({ status: 'success', message: '校验成功！' })
+          }
+        } else {
+          let obj2 = {
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            // three: this.tableData
+          };
+          if (this.$parent.otherPayCus) {
+            obj2.one.paymentTypeCode = this.$parent.fund;
+          }
+          if (this.paymentTypeCode) {
+            obj2.paymentTypeCode = this.paymentTypeCode;
+          }
+          this.conserveDis = true;
+          saveAccount(obj2).then((res) => {
+            if (res.code === 0) {
+              this.$emit("reloadParList");
+              this.conserveDis = false;
+              this.Settlement = false;
+              this.$parent.claimModal = false;
+              this.$message.success("其他付款认领成功！");
+              this.$parent.getQuery();
+            } else {
+              this.conserveDis = false;
+            }
+          });
+        }
+      } else {
+        this.$message.error("核对金额为0才能保存");
+      }
+    },
+    // 核销单元格编辑状态下被关闭时
+    editClosedEvent({ row, rowIndex }) {
+      row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
+      this.$set(this.BusinessType, rowIndex, row);
+      this.checkComputed();
+    },
+    // 核销信息合计
+    offWrite({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 3) {
+            return "合计";
+          }
+          if (
+            [
+              "reconciliationAmt",
+              "hasAmt",
+              "unAmt",
+              "rpAmt",
+              "unAmtLeft",
+            ].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property).toFixed(2);
+          }
+          return null;
+        }),
+      ];
+    },
+    // 收款信息合计
+    payCollection({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "合计";
+          }
+          if (["incomeMoney", "paidMoney"].includes(column.property)) {
+            return this.$utils.sum(data, column.property).toFixed(2);
+          }
+          return null;
+        }),
+      ];
+    },
+    // 核对计算
+    checkComputed() {
+      let sum1 = 0;
+      let sum2 = 0;
+      let sum3 = 0;
+      this.BusinessType.map((item) => {
+        sum1 += item.rpAmt * 1;
+      });
+      this.tableData.map((item) => {
+        sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
+        sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
+      });
+      this.check = (sum1 - sum2 - sum3).toFixed(2);
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
-  .input {
-    position: relative;
-    left: -26px;
-    bottom: -5px;
-  }
+.input {
+  position: relative;
+  left: -26px;
+  bottom: -5px;
+}
 </style>

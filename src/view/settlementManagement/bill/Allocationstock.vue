@@ -30,7 +30,7 @@
           </div>
           <div class="db mr10">
             <span>类型：</span>
-            <Select v-model="type" style="width:200px" @on-change="getTransferStock(page)">
+            <Select v-model="type" style="width:200px" @on-change="changePage(1)">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -53,15 +53,15 @@
               <span>查询</span>
             </button>
           </div>
-<!--          <div class="db ml10">-->
-<!--            <Poptip placement="bottom">-->
-<!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
-<!--              <div slot="content">-->
-<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
-<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
-<!--              </div>-->
-<!--            </Poptip>-->
-<!--          </div>-->
+          <!--          <div class="db ml10">-->
+          <!--            <Poptip placement="bottom">-->
+          <!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+          <!--              <div slot="content">-->
+          <!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
+          <!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
+          <!--              </div>-->
+          <!--            </Poptip>-->
+          <!--          </div>-->
         </div>
       </div>
     </section>
@@ -95,16 +95,46 @@
           ></Page>
         </div>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table
+        <vxe-table
           border
-          :columns="columns1"
+          auto-resize
+          resizable
+          stripe
+          align="center"
+          show-overflow="title"
+          size="mini"
           :data="data1"
+          :loading="detailLoading"
           class="mt10"
           max-hight="400"
-          :summary-method="summary"
+          :footer-method="summary"
           ref="parts"
-          show-summary
-        ></Table>
+          show-footer
+        >
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column title="分店名称" field="shortName" width="60"></vxe-table-column>
+          <vxe-table-column title="店号" field="orgCode" width="60"></vxe-table-column>
+          <vxe-table-column title="出库/入库单号" field="serviceId" width="100"></vxe-table-column>
+          <vxe-table-column title="出库/入库日期" field="outDate" width="100"></vxe-table-column>
+          <vxe-table-column title="客户名称" field="guestName" width="100"></vxe-table-column>
+          <vxe-table-column title="申请人" field="orderMan" width="80"></vxe-table-column>
+          <vxe-table-column title="仓库" field="storeName" width="80"></vxe-table-column>
+          <vxe-table-column title="配件编码" field="partCode" width="80"></vxe-table-column>
+          <vxe-table-column title="配件名称" field="partName" width="80"></vxe-table-column>
+          <vxe-table-column title="OE码" field="oemCode" width="80"></vxe-table-column>
+          <vxe-table-column title="配件品牌" field="partBrand" width="100"></vxe-table-column>
+          <vxe-table-column title="品牌车型" field="carModelName" width="100"></vxe-table-column>
+          <vxe-table-column title="规格" field="spec" width="60"></vxe-table-column>
+          <vxe-table-column title="单位" field="unit" width="60"></vxe-table-column>
+          <vxe-table-column title="数量" field="orderQty" width="60"></vxe-table-column>
+          <vxe-table-column title="单价" field="orderPrice" width="60"></vxe-table-column>
+          <vxe-table-column title="金额" field="orderAmt" width="60"></vxe-table-column>
+          <vxe-table-column title="配件明细备注" field="detailRemark" width="100"></vxe-table-column>
+          <vxe-table-column title="订单号" field="code" width="100"></vxe-table-column>
+          <vxe-table-column title="提交人" field="createUname" width="100"></vxe-table-column>
+          <vxe-table-column title="提交日期" field="createTime" width="100"></vxe-table-column>
+          <vxe-table-column title="订单备注" field="remark" width="100"></vxe-table-column>
+        </vxe-table>
       </div>
     </section>
     <selectDealings ref="selectDealings" @getOne="getOne"/>
@@ -380,140 +410,9 @@
           }
         ],
         selectTabArr: [],//选中数组
-        columns1: [
-          {
-            key: 'index',
-            title: "序号",
-            width: 40,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "配件编码",
-            key: "partCode",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "配件名称",
-            key: "partName",
-            tooltip: true,
-            width: 120,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "品牌",
-            key: "partBrand",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "车型",
-            key: "carModelName",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "OEM码",
-            key: "oemCode",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "是否含税",
-            key: "taxSign",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              let val = params.row.taxSign;
-              if (val == 1) {
-                val = "是";
-              } else if (val == 0) {
-                val = "否";
-              }
-              return h('span', val);
-            }
-          },
-          {
-            title: "不含税单价",
-            key: "noTaxPrice",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.noTaxPrice))
-            }
-          },
-          {
-            title: "不含税金额",
-            key: "noTaxAmt",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.noTaxAmt))
-            }
-          },
-          {
-            title: "含税单价",
-            key: "taxPrice",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.taxPrice).toFixed(2))
-            }
-          },
-          {
-            title: "含税金额",
-            key: "taxAmt",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.taxAmt).toFixed(2))
-            }
-          },
-          {
-            title: "数量",
-            key: "sellQty",
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "销售单价",
-            key: "sellPrice",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.sellPrice).toFixed(2))
-            }
-          },
-          {
-            title: "金额",
-            key: "sellAmt",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.sellAmt).toFixed(2))
-            }
-          }
-        ],
         data: [],
         data1: [],
+        detailLoading:false,
         typelist: [
           {
             value: "1",
@@ -590,72 +489,22 @@
       },
       // 配件表格合计方式
       summary({columns, data}) {
-        //   console.log(columns,data)
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            sums[key] = {
-              key,
-              value: "合计"
-            };
-            return;
-          }
-          const values = data.map(item => Number(item[key]));
-          if (index > 8 && index !== 11) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
-                } else {
-                  return Math.round((prev + Number.EPSILON) * 100) / 100;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
             }
-          } else if (index===7 || index===8) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return Math.round((prev + Number.EPSILON) * 10000) / 10000 + Math.round((curr + Number.EPSILON) * 10000) / 10000;
-                } else {
-                  return Math.round((prev + Number.EPSILON) * 10000) / 10000;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(4)
-              };
+            if (
+              [
+                "orderQty",
+                "orderPrice",
+                "orderAmt",
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property);
             }
-          }  else if (index === 11) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return prev + curr;
-                } else {
-                  return prev;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v
-              };
-            }
-          } else {
-            sums[key] = {
-              key,
-              value: " "
-            };
-          }
-        });
-        return sums;
-        //
+            return null;
+          }),]
       },
       query() {
         this.data1 = []
@@ -679,6 +528,7 @@
       // 快速查询
       quickDate(data) {
         this.value = data;
+        this.page.num=1;
         // this.model1 = this.$store.state.user.userData.shopId
         this.getTransferStock(this.page)
       },
@@ -718,6 +568,7 @@
             hideLoading()
             this.data = [];
             this.selectTabArr = []
+            this.page.total = res.data.TotalElements;
           }
         }).catch(e => {
           hideLoading()
@@ -751,6 +602,9 @@
           data.orgid = this.model1 == 0 ? "" : this.model1;
           data.guestId = this.company ? this.companyId : "";
           data.orderTypeId = this.type
+          for(let i in data){
+            data[i]==undefined?delete data[i]:""
+          }
           params = "parts"
           location.href = allocationStockExport(params, data)
           // console.log( allocationStockExport(params, data))
@@ -768,6 +622,7 @@
       },
       // 选中数据
       election(row) {
+        this.detailLoading=true;
         stockParts({serviceId: row.serviceId}).then(res => {
           if (res.data.length !== 0) {
             res.data.map((item, index) => {
@@ -776,10 +631,14 @@
               item.taxSign = item.taxSign ? "是" : "否  ";
             });
             this.data1 = res.data;
+            this.detailLoading=false;
           } else {
             this.data1 = [];
+            this.detailLoading=false;
           }
-        });
+        }).catch(err=>{
+          this.detailLoading=false;
+        })
       }
     }
   };

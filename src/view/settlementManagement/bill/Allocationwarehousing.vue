@@ -31,7 +31,7 @@
           </div>
           <div class="db mr10">
             <span>类型：</span>
-            <Select v-model="type" style="width:200px" @on-change="getTransferWarehousing">
+            <Select v-model="type" style="width:200px" @on-change="changePage(1)">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -55,15 +55,15 @@
             </button>
           </div>
           <!-- 导出导致卡顿-->
-          <!--<div class="db ml10">-->
-          <!--  <Poptip placement="bottom">-->
-          <!--    <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
-          <!--    <div slot="content">-->
-          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
-          <!--      <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
-          <!--    </div>-->
-          <!--  </Poptip>-->
-          <!--</div>-->
+<!--          <div class="db ml10">-->
+<!--            <Poptip placement="bottom">-->
+<!--              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>-->
+<!--              <div slot="content">-->
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出全部</button>-->
+<!--                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出勾选</button>-->
+<!--              </div>-->
+<!--            </Poptip>-->
+<!--          </div>-->
         </div>
       </div>
     </section>
@@ -87,8 +87,46 @@
           ></Page>
         </div>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary
-               :summary-method="summary"></Table>
+        <vxe-table
+          border
+          auto-resize
+          resizable
+          stripe
+          align="center"
+          show-overflow="title"
+          size="mini"
+          :data="data1"
+          :loading="detailLoading"
+          class="mt10"
+          max-hight="400"
+          :footer-method="summary"
+          ref="parts"
+          show-footer
+        >
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column title="分店名称" field="shortName" width="60"></vxe-table-column>
+          <vxe-table-column title="店号" field="orgCode" width="60"></vxe-table-column>
+          <vxe-table-column title="出库/入库单号" field="serviceId" width="100"></vxe-table-column>
+          <vxe-table-column title="出库/入库日期" field="enterDate" width="100"></vxe-table-column>
+          <vxe-table-column title="客户名称" field="guestName" width="100"></vxe-table-column>
+          <vxe-table-column title="申请人" field="orderMan" width="80"></vxe-table-column>
+          <vxe-table-column title="仓库" field="storeName" width="80"></vxe-table-column>
+          <vxe-table-column title="配件编码" field="partCode" width="80"></vxe-table-column>
+          <vxe-table-column title="配件名称" field="partName" width="80"></vxe-table-column>
+          <vxe-table-column title="OE码" field="oemCode" width="80"></vxe-table-column>
+          <vxe-table-column title="配件品牌" field="partBrand" width="100"></vxe-table-column>
+          <vxe-table-column title="品牌车型" field="carModelName" width="100"></vxe-table-column>
+          <vxe-table-column title="规格" field="spec" width="60"></vxe-table-column>
+          <vxe-table-column title="单位" field="unit" width="60"></vxe-table-column>
+          <vxe-table-column title="数量" field="orderQty" width="60"></vxe-table-column>
+          <vxe-table-column title="单价" field="orderPrice" width="60"></vxe-table-column>
+          <vxe-table-column title="金额" field="orderAmt" width="60"></vxe-table-column>
+          <vxe-table-column title="配件明细备注" field="detailRemark" width="100"></vxe-table-column>
+          <vxe-table-column title="订单号" field="code" width="100"></vxe-table-column>
+          <vxe-table-column title="提交人" field="createUname" width="100"></vxe-table-column>
+          <vxe-table-column title="提交日期" field="createTime" width="100"></vxe-table-column>
+          <vxe-table-column title="订单备注" field="remark" width="100"></vxe-table-column>
+        </vxe-table>
       </div>
     </section>
     <selectDealings ref="selectDealings" @selectSearchName="getOne"/>
@@ -100,7 +138,7 @@
   import selectDealings from "./components/selectCompany";
   import {creat} from "./../components";
   import {goshop} from '@/api/settlementManagement/shopList'
-  import {transferWarehousing, wouseParts} from "@/api/bill/saleOrder";
+  import {transferWarehousing, wouseDetails} from "@/api/bill/saleOrder";
   import moment from 'moment'
   import {showLoading, hideLoading} from "@/utils/loading"
   import {allocationWareHouseingExport/**导出全部及导出明细*/} from "@/api/settlementManagement/Import/index.js"
@@ -395,129 +433,9 @@
           }
         ],
         selectTabArr: [],//选中数组
-        columns1: [
-          {
-            key: 'index',
-            title: "序号",
-            width: 40,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "配件编码",
-            key: "partCode",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "配件名称",
-            key: "partName",
-            tooltip: true,
-            width: 120,
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "品牌",
-            key: "partBrand",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "车型",
-            key: "carModelName",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "OEM码",
-            key: "oemCode",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "是否含税",
-            key: "taxSign",
-            tooltip: true,
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "不含税单价",
-            key: "noTaxPrice",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.noTaxPrice))
-            }
-          },
-          {
-            title: "不含税金额",
-            key: "noTaxAmt",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.noTaxAmt).toFixed(2))
-            }
-          },
-          {
-            title: "含税单价",
-            key: "taxPrice",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.taxPrice).toFixed(2))
-            }
-          },
-          {
-            title: "含税金额",
-            key: "taxAmt",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.taxAmt).toFixed(2))
-            }
-          },
-          {
-            title: "数量",
-            key: "hasOutQty",
-            className: "tc",
-            width: 150,
-            resizable: true,
-          },
-          {
-            title: "单价",
-            key: "orderPrice",
-            className: "tc",
-            width: 150,
-            resizable: true,
-            render: (h, params) => {
-              return h('span', (params.row.orderPrice).toFixed(2))
-            }
-          },
-          {
-            title: "金额",
-            key: "orderAmt",
-            className: "tc",
-            width: 150,
-            resizable: true,
-          }
-        ],
         data: [],
         data1: [],
+        detailLoading:false,
         typelist: [
           {
             value: "0",
@@ -598,72 +516,22 @@
       },
       // 配件表格合计方式
       summary({columns, data}) {
-        //   console.log(columns,data)
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            sums[key] = {
-              key,
-              value: "合计"
-            };
-            return;
-          }
-          const values = data.map(item => Number(item[key]));
-          if (index > 7 && index !== 11) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
-                } else {
-                  return Math.round((prev + Number.EPSILON) * 100) / 100;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v
-              };
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
             }
-          } else if (index === 11) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return prev + curr;
-                } else {
-                  return prev;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v
-              };
+            if (
+              [
+                "orderQty",
+                "orderPrice",
+                "orderAmt",
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property);
             }
-          } else if (index===7) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return Math.round((prev + Number.EPSILON) * 10000) / 10000 + Math.round((curr + Number.EPSILON) * 10000) / 10000;
-                } else {
-                  return Math.round((prev + Number.EPSILON) * 10000) / 10000;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(4)
-              };
-            }
-          } else {
-            sums[key] = {
-              key,
-              value: " "
-            };
-          }
-        });
-        return sums;
-        //
+            return null;
+          }),]
       },
       query() {
         this.data1 = []
@@ -686,6 +554,7 @@
       },
       // 快速查询
       quickDate(data) {
+        this.page.num=1;
         this.value = data;
         // this.model1 = this.$store.state.user.userData.shopId
         this.getTransferWarehousing();
@@ -782,9 +651,12 @@
             orderTypeIdInt: this.type,
             pagesize: this.page.total,
           };
+          for(let i in obj){
+            obj[i]==undefined?delete obj[i]:"";
+          }
           let params = ""
-          for (var i in obj) {
-            params += `${i}=${obj[i]}&`
+          for (let j in obj) {
+            params += `${j}=${obj[j]}&`
           }
           location.href = allocationWareHouseingExport(params)
         } else {
@@ -805,15 +677,18 @@
       },
       // 选中数据
       election(row) {
-        wouseParts({mainId: row.id}).then(res => {
+        this.detailLoading=true;
+        wouseDetails({mainId: row.id}).then(res => {
           if (res.data.length !== 0) {
             res.data.map((item, index) => {
               item.index = index + 1
               item.taxSign = item.taxSign ? '是' : '否'
             })
             this.data1 = res.data
+            this.detailLoading=false;
           } else {
-            this.data1 = []
+            this.data1 = [];
+            this.detailLoading=false;
           }
         });
       }
