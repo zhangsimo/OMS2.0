@@ -59,9 +59,9 @@
             <!--</Col>-->
           <!--</Row>-->
         </FormItem>
-        <FormItem label="销售人员:">
-          <Select v-model="formData.orderMan" label-in-value filterable style="width: 350px">
-            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <FormItem label="创建人:">
+          <Select v-model="formData.createUid" label-in-value filterable style="width: 350px">
+            <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
           </Select>
         </FormItem>
         <FormItem label="提交人:">
@@ -125,6 +125,8 @@
             clearCondition(){
               // this.$refs.formInline.resetFields()
               this.formData = {}
+              this.amtMax = 0;
+              this.amtMin = 0;
             },
             //打开模态框框
             openModal(){
