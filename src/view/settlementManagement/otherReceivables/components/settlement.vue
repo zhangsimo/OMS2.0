@@ -78,8 +78,11 @@
               field="rpAmt"
               title="本次核销金额"
               width="140"
-              :edit-render="{name: 'input', attrs: {type: 'number'}}"
-            ></vxe-table-column>
+            >
+              <template v-slot="{row}">
+                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
             <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
             <vxe-table-column field="orgName" width="120" title="门店"></vxe-table-column>
@@ -155,13 +158,14 @@
   import subjexts from "./components/subjects";
   import bus from "../../bill/Popup/Bus";
   import moment from "moment";
+  import {showLoading, hideLoading} from "../../../../utils/loading";
 
   export default {
     components: {
       accountSelette,
       subjexts
     },
-    props:['paymentTypeCode','paymentTypeName'],
+    props: ['paymentTypeCode'],
     data() {
       const amtValid = ({row}) => {
         return new Promise((resolve, reject) => {
@@ -381,6 +385,21 @@
           });
         }
       },
+      rpAmtChange(row) {
+        let arr = this.$refs.xTree.footerData[0];
+        let unAmtSumIdx;
+        arr.map((item, index) => {
+          if (item == "合计") {
+            return unAmtSumIdx = index + 1;
+          }
+        })
+        let sumUnAmt = row.isSubject == 1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
+        this.$refs.xTree.updateFooter();
+        this.checkComputed();
+        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject == undefined && Math.abs(row.rpAmt) > Math.abs(row.unClaimedAmt))) {
+          return this.$Message.error("金额录入错误，请重新录入！")
+        }
+      },
       //保存
       async conserve() {
         if (!Number(this.check)) {
@@ -411,24 +430,46 @@
             if (errMap) {
               this.$XModal.Message({status: 'error', message: '校验不通过！'})
             } else {
-              let obj3 = {}
-              obj3.one = this.reconciliationStatement;
-              obj3.two = this.BusinessType;
-              // obj3.three = this.tableData;
-              obj3.type = 2
-              this.conserveDis = true;
-              orderWriteOff(obj3).then(res => {
-                if (res.code === 0) {
-                  this.conserveDis = false;
-                  this.Settlement = false;
-                  this.$parent.claimModal = false;
-                  this.$message.success("其他收款核销成功!");
-                  this.$parent.Types = '';
-                  this.$parent.getQuery();
-                } else {
-                  this.conserveDis = false;
+              let bool = true;
+              let arr = this.$refs.xTree.footerData[0];
+              let unAmtSumIdx;
+              arr.map((item, index) => {
+                if (item == "合计") {
+                  return unAmtSumIdx = index + 1;
                 }
-              });
+              })
+              this.BusinessType.map(row => {
+                let sumUnAmt = row.isSubject == 1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
+                if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject != 1 && Math.abs(row.rpAmt) > Math.abs(row.unClaimedAmt))) {
+                  this.$Message.error("金额录入错误，请重新录入！")
+                  bool = false
+                  return
+                }
+              })
+              if (bool) {
+                let obj3 = {}
+                obj3.one = this.reconciliationStatement;
+                obj3.two = this.BusinessType;
+                // obj3.three = this.tableData;
+                obj3.type = 2
+                showLoading()
+                orderWriteOff(obj3).then(res => {
+                  if (res.code === 0) {
+                    this.conserveDis = false;
+                    this.Settlement = false;
+                    this.$parent.claimModal = false;
+                    this.$message.success("其他收款核销成功!");
+                    this.$parent.Types = '';
+                    this.$parent.getQuery();
+                    hideLoading()
+                  } else {
+                    this.conserveDis = false;
+                    hideLoading()
+                  }
+                }).catch(err=>{
+                  hideLoading()
+                })
+              }
               // this.$XModal.message({ status: 'success', message: '校验成功！' })
             }
           } else {
@@ -440,9 +481,8 @@
             if (this.$parent.otherPayCus) {
               obj2.one.paymentTypeCode = this.$parent.fund
             }
-            if(this.paymentTypeCode){
+            if (this.paymentTypeCode) {
               obj2.paymentTypeCode = this.paymentTypeCode
-              obj2.paymentTypeName = this.paymentTypeName
             }
             this.conserveDis = true;
             saveAccount(obj2).then(res => {

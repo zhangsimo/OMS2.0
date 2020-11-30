@@ -258,7 +258,10 @@ export function getOnOrderStock(data = {}, params) {
       params,
   })
 }
-
+//调出在途信息 导出
+export function onWayExport(params){
+  return `${api.omsOrder}/allotOutMain/export/getOnOrderStock?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 // 加工报表_配件组装明细表_入库
 export function getPartAssemblyEnter(data = {}, params) {
   return axios.request({

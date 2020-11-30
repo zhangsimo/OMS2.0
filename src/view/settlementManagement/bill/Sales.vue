@@ -85,8 +85,50 @@
           ></Page>
         </div>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary
-               :summary-method="summary"></Table>
+<!--        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary-->
+<!--               :summary-method="summary"></Table>-->
+        <vxe-table
+          border
+          auto-resize
+          resizable
+          stripe
+          align="center"
+          show-overflow="title"
+          size="mini"
+          :data="data1"
+          :loading="detailLoading"
+          class="mt10"
+          max-hight="400"
+          :footer-method="summary"
+          ref="parts"
+          show-footer
+        >
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column title="分店名称" field="shortName" width="60"></vxe-table-column>
+          <vxe-table-column title="店号" field="orgCode" width="60"></vxe-table-column>
+          <vxe-table-column title="出库/入库单号" field="serviceId" width="100"></vxe-table-column>
+          <vxe-table-column title="出库/入库日期" field="outDate" width="100"></vxe-table-column>
+          <vxe-table-column title="客户/供应商" field="guestFullName" width="100"></vxe-table-column>
+          <vxe-table-column title="订单人" field="orderMan" width="80"></vxe-table-column>
+          <vxe-table-column title="票据类型" field="billTypeIdName" width="100"></vxe-table-column>
+          <vxe-table-column title="结算方式" field="settleTypeIdName" width="100"></vxe-table-column>
+          <vxe-table-column title="仓库" field="storeName" width="80"></vxe-table-column>
+          <vxe-table-column title="配件编码" field="partCode" width="80"></vxe-table-column>
+          <vxe-table-column title="配件名称" field="partName" width="80"></vxe-table-column>
+          <vxe-table-column title="OE码" field="oemCode" width="80"></vxe-table-column>
+          <vxe-table-column title="品牌" field="partBrand" width="100"></vxe-table-column>
+          <vxe-table-column title="品牌车型" field="carModelName" width="100"></vxe-table-column>
+          <vxe-table-column title="规格" field="spec" width="60"></vxe-table-column>
+          <vxe-table-column title="单位" field="unit" width="60"></vxe-table-column>
+          <vxe-table-column title="数量" field="orderQty" width="80"></vxe-table-column>
+          <vxe-table-column title="单价" field="orderPrice" width="60"></vxe-table-column>
+          <vxe-table-column title="金额" field="orderAmt" width="60"></vxe-table-column>
+          <vxe-table-column title="配件明细备注" field="detailRemark" width="100"></vxe-table-column>
+          <vxe-table-column title="订单号" field="code" width="100"></vxe-table-column>
+          <vxe-table-column title="提交人" field="createUname" width="100"></vxe-table-column>
+          <vxe-table-column title="提交日期" field="createTime" width="110"></vxe-table-column>
+          <vxe-table-column title="订单备注" field="remark" width="120"></vxe-table-column>
+        </vxe-table>
       </div>
     </section>
     <selectDealings ref="selectDealings" @getOne="getOne"/>
@@ -441,6 +483,7 @@
         ],
         data: [],
         data1: [],
+        detailLoading:false,
         typelist: [
           {
             value: 0,
@@ -490,57 +533,22 @@
       },
       // 配件表格合计方式
       summary({columns, data}) {
-        //   console.log(columns,data)
-        const sums = {};
-        columns.forEach((column, index) => {
-          const key = column.key;
-          if (index === 0) {
-            sums[key] = {
-              key,
-              value: "合计"
-            };
-            return;
-          }
-          const values = data.map(item => Number(item[key]));
-          if (index > 6 && index !== 11) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return Math.round((prev + Number.EPSILON) * 100) / 100 + Math.round((curr + Number.EPSILON) * 100) / 100;
-                } else {
-                  return Math.round((prev + Number.EPSILON) * 100) / 100;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
             }
-          } else if (index === 11 || index===6) {
-            if (!values.every(value => isNaN(value))) {
-              const v = values.reduce((prev, curr) => {
-                const value = Number(curr);
-                if (!isNaN(value)) {
-                  return prev + curr;
-                } else {
-                  return prev;
-                }
-              }, 0);
-              sums[key] = {
-                key,
-                value: v
-              };
+            if (
+              [
+                "orderQty",
+                "orderPrice",
+                "orderAmt",
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property);
             }
-          } else {
-            sums[key] = {
-              key,
-              value: " "
-            };
-          }
-        });
-        return sums;
-        //
+            return null;
+          }),]
       },
       // 总表格合计方式
       handleSummary({columns, data}) {
@@ -695,14 +703,18 @@
       },
       // 选中总表查询明细
       election(row) {
+        this.detailLoading=true;
         getPartList({mainId: row.id}).then(res => {
           if (res.code === 0) {
-            this.data1 = res.data.content
+            this.data1 = res.data
             this.data1.map((item, index) => {
               item.index = index + 1
             })
+            this.detailLoading=false;
           }
-        });
+        }).catch(err=>{
+          this.detailLoading=false;
+        })
       }
     }
   };

@@ -182,7 +182,7 @@
               </div>
               <div class="db">
                 <span class="mr5">计划结算类型</span>
-                <Select class="w100" v-model="infoBase.billingType.value" readonly>
+                <Select class="w100" v-model="infoBase.billingType.value" disabled>
                   <Option
                     v-for="item in SettlementType"
                     :value="item.value"
