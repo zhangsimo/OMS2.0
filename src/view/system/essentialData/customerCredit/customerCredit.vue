@@ -209,7 +209,21 @@
                   let state = params.row.isGuestResearch;
                   let zi = "";
                   let jsonStatus = JSON.parse(params.row.researchStatus)
-                  jsonStatus.value == 2 ? (state == 0 ? zi = "否" : zi = "是") : (jsonStatus.value == 1 ? zi = "审批中" : (jsonStatus.value == 4 ? zi = "审批拒绝" : (state == 0 ? zi = "否" : zi = "是")))
+                  switch(jsonStatus.value){
+                    case 2://审批通过
+                      state == 0 ? zi = "否" : zi = "是";
+                      break;
+                    case 1://提交申请
+                      zi = "审批中";
+                      break;
+                    case 4://审批拒绝
+                      zi = "审批拒绝";
+                      break;
+                    default:
+                      state == 0 ? zi = "否" : zi = "是";
+                      break;
+                  }
+                  // jsonStatus.value == 2 ? (state == 0 ? zi = "否" : zi = "是") : (jsonStatus.value == 1 ? zi = "审批中" : (jsonStatus.value == 4 ? zi = "审批拒绝" : (state == 0 ? zi = "否" : zi = "是")))
                   return h("span", zi);
                 }
               },
