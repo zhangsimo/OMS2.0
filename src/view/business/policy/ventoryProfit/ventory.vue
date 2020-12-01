@@ -192,7 +192,7 @@
                   <FormItem label="来源：">
                     <Input
                       class="w160"
-                      :value="formPlan.source===0?'OMS盘点':formPlan.source?formPlan.source===1||formPlan.source===2?'WMS盘点':'OMS盘点':''"
+                      :value="returnSource(formPlan.source)"
                       disabled
                     />
                   </FormItem>
@@ -279,12 +279,12 @@
                     <span>{{((Math.abs(row.exhibitPrice * row.exhibitQty))||0 )|priceFilters}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip"
-                  field="taxRate"
-                  title="税率"
-                  width="100"
-                >
-                </vxe-table-column>
+                <!--<vxe-table-column  show-overflow="tooltip"-->
+                  <!--field="taxRate"-->
+                  <!--title="税率"-->
+                  <!--width="100"-->
+                <!--&gt;-->
+                <!--</vxe-table-column>-->
                 <vxe-table-column  show-overflow="tooltip"
                   field="oemCode"
                   title="OE"
@@ -332,6 +332,7 @@
     getSubmitList, //提交
     saveVentory,
     submitVentory,
+    saveVentoryNewChange,
     getCancellation, //作废
     delectTable, //删除
     importAccessories, //导入
@@ -522,6 +523,25 @@
     //   this.getType();
     // },
     methods: {
+      //获取来源
+      returnSource(source){
+        let txt = "";
+        switch (source) {
+          case 0:
+            txt = "OMS盘点";
+          break;
+          case 1:case 2:
+            txt = "WMS盘点";
+            break;
+          case 3:
+            txt = "盘盈开单";
+            break;
+          case 4:
+            txt = "盘亏开单";
+            break;
+        }
+        return txt;
+      },
 
       //获取客户属性
       async getType() {
@@ -607,6 +627,11 @@
                       break
                     }
                   }
+                }else{
+                  if(this.Left.tbdata.length>0){
+                    this.selectTabelData(this.Left.tbdata[0]);
+                    this.Left.tbdata[0]._highlight = true
+                  }
                 }
               }
             }
@@ -676,6 +701,10 @@
       },
       //新增
       addProoo() {
+        this.selectLeftItemId = "";
+        for(let b of this.Left.tbdata){
+          b._highlight = false;
+        }
         if (this.Left.tbdata.length !== 0) {
           if (this.Left.tbdata[0]["xinzeng"] === "1") {
             this.$Message.info(
@@ -694,8 +723,8 @@
           },
           statuName: "草稿",
           checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-          orderMan: this.$store.state.user.userData.staffName || "", //盘点人
-          orderManId: this.$store.state.user.userData.id || "", //盘点人id
+          orderMan: this.$store.state.user.userData.currentShopName || "", //盘点人
+          orderManId: this.$store.state.user.userData.currentShopId || "",
           billTypeId:'010103',//新增初始票据类型
           serviceId: "",
           print: "",
@@ -703,6 +732,7 @@
           createTime: "",
           commitUname: "",
           createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          source:3,
           //commitDate:"",
           //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           //createUname: this.$store.state.user.userData.staffName,
@@ -775,7 +805,8 @@
       //保存
       baocun() {
         this.saveLoading = true;
-        saveVentory(this.formPlan).then(res => {
+        this.formPlan.inventoryOrderType = 1;
+        saveVentoryNewChange(this.formPlan).then(res => {
           if (res.code == 0) {
             this.flag = 0;
             this.isAddRight = true;
@@ -849,6 +880,8 @@
           return this.$message.warning("请选择入库仓库")
         }
         this.$refs.SelectPartRef.init();
+        this.$refs.SelectPartRef.partData = [];
+        this.$refs.SelectPartRef.selectTableItem = [];
       },
       //左边列表选中当前行
       selectTabelData(data, val) {
@@ -965,9 +998,12 @@
       },
       //配件返回的参数
       getPartNameList(val) {
-        var datas=val;
-        datas.map(item=>{
-          item.id=''
+        let datas = val.map(item=>{
+          let itemObj = {...item}
+          itemObj.id='';
+          itemObj.exhibitQty = 1;
+          itemObj.exhibitPrice = itemObj.lastEnterPrice||0;
+          return itemObj;
         })
         this.formPlan.detailVOList = datas;
         this.Right.tbdata = [...this.Right.tbdata, ...datas];
