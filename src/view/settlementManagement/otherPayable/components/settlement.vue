@@ -401,11 +401,22 @@
             return unAmtSumIdx=index+1;
           }
         })
-        let sumUnAmt = row.isSubject==1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
-        this.$refs.xTree.updateFooter();
-        this.checkComputed();
-        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject==undefined && Math.abs(row.rpAmt)>Math.abs(row.unClaimedAmt))) {
-          return this.$Message.error("金额录入错误，请重新录入！")
+        if(row.isSubject==1){
+          //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+          let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+          this.$refs.xTree.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        }else{
+          //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+          let sumUnAmt = row.unAmt
+          this.$refs.xTree.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
         }
       },
       //保存
@@ -429,11 +440,26 @@
                 }
               })
               this.BusinessType.map(row=>{
-                let sumUnAmt = row.isSubject==1 ? this.$utils.toNumber(arr[unAmtSumIdx]) : row.unAmt
-                if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (row.isSubject!=1 && Math.abs(row.rpAmt)>Math.abs(row.unClaimedAmt))) {
-                  this.$Message.error("金额录入错误，请重新录入！")
-                  bool = false
-                  return
+                if(row.isSubject==1){
+                  //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+                  let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+                  this.$refs.xTable.updateFooter();
+                  this.checkComputed();
+                  if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+                    this.$Message.error("金额录入错误，请重新录入！")
+                    bool = false
+                    return
+                  }
+                }else{
+                  //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+                  let sumUnAmt = row.unAmt;
+                  this.$refs.xTable.updateFooter();
+                  this.checkComputed();
+                  if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+                    this.$Message.error("金额录入错误，请重新录入！")
+                    bool = false
+                    return
+                  }
                 }
               })
               if(bool){

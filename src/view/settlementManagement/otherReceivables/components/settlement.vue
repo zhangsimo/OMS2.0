@@ -510,6 +510,33 @@ export default {
         });
       }
     },
+    //本次核销金额输入
+    rpAmtChange(row) {
+      let arr=this.$refs.xTree.footerData[0];
+      let unAmtSumIdx;
+      arr.map((item,index)=>{
+        if(item=="合计"){
+          return unAmtSumIdx=index+1;
+        }
+      })
+      if(row.isSubject==1){
+        //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+        let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+        this.$refs.xTree.updateFooter();
+        this.checkComputed();
+        if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+          return this.$Message.error("金额录入错误，请重新录入！")
+        }
+      }else{
+        //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+        let sumUnAmt = row.unAmt
+        this.$refs.xTree.updateFooter();
+        this.checkComputed();
+        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+          return this.$Message.error("金额录入错误，请重新录入！")
+        }
+      }
+    },
     //保存
     async conserve() {
       if (!Number(this.check)) {
@@ -540,25 +567,58 @@ export default {
           if (errMap) {
             this.$XModal.Message({ status: "error", message: "校验不通过！" });
           } else {
-            let obj3 = {};
-            obj3.one = this.reconciliationStatement;
-            obj3.two = this.BusinessType;
-            // obj3.three = this.tableData;
-            obj3.type = 2;
-            this.conserveDis = true;
-            orderWriteOff(obj3).then((res) => {
-              if (res.code === 0) {
-                this.conserveDis = false;
-                this.Settlement = false;
-                this.$parent.claimModal = false;
-                this.$message.success("其他收款核销成功!");
-                this.$parent.Types = "";
-                this.$parent.getQuery();
-              } else {
-                this.conserveDis = false;
+            let bool = true;
+            let arr=this.$refs.xTree.footerData[0];
+            let unAmtSumIdx;
+            arr.map((item,index)=>{
+              if(item=="合计"){
+                return unAmtSumIdx=index+1;
               }
-            });
-            // this.$XModal.message({ status: 'success', message: '校验成功！' })
+            })
+            this.BusinessType.map(row=>{
+              if(row.isSubject==1){
+                //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+                let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+                this.$refs.xTree.updateFooter();
+                this.checkComputed();
+                if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+                  this.$Message.error("金额录入错误，请重新录入！")
+                  bool = false
+                  return
+                }
+              }else{
+                //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+                let sumUnAmt = row.unAmt;
+                this.$refs.xTree.updateFooter();
+                this.checkComputed();
+                if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+                  this.$Message.error("金额录入错误，请重新录入！")
+                  bool = false
+                  return
+                }
+              }
+            })
+            if(bool){
+              let obj3 = {};
+              obj3.one = this.reconciliationStatement;
+              obj3.two = this.BusinessType;
+              // obj3.three = this.tableData;
+              obj3.type = 2;
+              this.conserveDis = true;
+              orderWriteOff(obj3).then((res) => {
+                if (res.code === 0) {
+                  this.conserveDis = false;
+                  this.Settlement = false;
+                  this.$parent.claimModal = false;
+                  this.$message.success("其他收款核销成功!");
+                  this.$parent.Types = "";
+                  this.$parent.getQuery();
+                } else {
+                  this.conserveDis = false;
+                }
+              });
+              // this.$XModal.message({ status: 'success', message: '校验成功！' })
+            }
           }
         } else {
           let obj2 = {
