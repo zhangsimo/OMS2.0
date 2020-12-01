@@ -139,7 +139,7 @@
               <vxe-table-column field="age" title="付款所属门店" width="120">
                 <template v-slot="{row}">
                   <ul class="list">
-                    <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                    <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
                       <span class="listChild">{{item.ownStoreName}}</span>
                     </li>
                   </ul>

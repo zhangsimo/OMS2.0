@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150" :disabled="selectShopList">
+            <Select v-model.trim="model1" filterable class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -31,14 +31,18 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <!-- <Select v-model="guestId" filterable clearable class="w150"
-                    :loading="searchLoading"
-                    :remote-method="getAllClient"
-                    @on-change="getAccountNameListFun"
-            >
-              <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select> -->
-            <Input type="text" class="h30 w200" clearable v-model="guestId"/>
+            <Input type="text" class="h30 w200" clearable v-model.trim="guestId"/>
+          </div>
+          <div class="db ml20">
+            <span>对账类型：</span>
+            <Select v-model.trim="accountType" filterable class="w150">
+              <Option
+                v-for="item in statementTypeList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}
+              </Option>
+            </Select>
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -80,15 +84,6 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <!--<Table-->
-        <!--max-height="400"-->
-        <!--highlight-row-->
-        <!--border-->
-        <!--:columns="columns"-->
-        <!--:data="data"-->
-        <!--@on-row-click="selete"-->
-        <!--ref="summary"-->
-        <!--&gt;</Table>-->
         <vxe-table
           border
           show-overflow="title"
@@ -101,34 +96,35 @@
           highlight-current-row
           @current-change="selete"
         >
-          <!--          @select-all="selectBox"-->
-          <!--          @select-change="selectBox"-->
-          <!--          <vxe-table-column width="50" type="selection" align="center"></vxe-table-column>-->
           <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
           <vxe-table-column field="code" title="店号" align="center" width="70"></vxe-table-column>
           <vxe-table-column field="area" title="区域" align="center" width="70"></vxe-table-column>
           <vxe-table-column field="orgName" title="门店" align="center" width="140"></vxe-table-column>
           <vxe-table-column field="guestName" title="客户/供应商名称" align="center" width="140"></vxe-table-column>
           <vxe-table-column field="guestTypeName" title="客户/供应商类别" align="center" width="120"></vxe-table-column>
-          <vxe-table-column field="paymentTypeName" title="对账类别" align="center" width="80"></vxe-table-column>
           <vxe-table-column field="stockAmtIn" title="采购入库" align="center" width="80"></vxe-table-column>
           <vxe-table-column field="stockAmtOut" title="采购退货" align="center" width="140"></vxe-table-column>
           <vxe-table-column field="salesAmtOut" title="销售出库" align="center" width="140"></vxe-table-column>
           <vxe-table-column field="salesAmtReturn" title="销售退货" align="center" width="140"></vxe-table-column>
           <vxe-table-column field="duePayableAmt" title="应收应付金额" align="center" width="140"></vxe-table-column>
-          <vxe-table-column field="receivedAmt" title="已对账未收金额" align="center" width="120"></vxe-table-column>
-          <vxe-table-column field="paidAmt" title="已对账未付金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="sellAmt" title="应收金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="sellReceivedAmt" title="已收金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="sellUnReceivedAmt" title="未收金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="pchsAmt" title="应付金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="pchsPaidAmt" title="已付金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="pchsUnPaidAmt" title="未付金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="sellAccountAmt" title="已对账应收金额" align="center" width="120"></vxe-table-column>
+          <vxe-table-column field="pchsAccountAmt" title="已对账应付金额" align="center" width="120"></vxe-table-column>
           <vxe-table-column
             field="reconciledSumAmt"
             title="已对账合计"
             align="center"
             width="100"
           >
-
           </vxe-table-column>
-          <vxe-table-column field="uncollectedAmt" title="未对账应收金额" align="center" width="120">
+          <vxe-table-column field="sellUnAccountAmt" title="未对账应收金额" align="center" width="120">
           </vxe-table-column>
-          <vxe-table-column field="unpaidAmt" title="未对账应付金额" align="center" width="120">
+          <vxe-table-column field="pchsUnAccountAmt" title="未对账应付金额" align="center" width="120">
           </vxe-table-column>
           <vxe-table-column field="unReconciledSumAmt" title="未对账合计" align="center" width="100">
           </vxe-table-column>
@@ -197,26 +193,26 @@
       </div>
       <div class="db pro mt20">
         <span>客户类型：</span>
-        <Select v-model="model2" style="width:200px">
+        <Select v-model.trim="model2" style="width:200px">
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
 
       <div class="db pro mt20">
         <span>分店名称：</span>
-        <Select v-model="model1" style="width:200px">
+        <Select v-model.trim="model1" style="width:200px">
           <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>业务类型：</span>
-        <Select v-model="model3" style="width:200px">
+        <Select v-model.trim="model3" style="width:200px">
           <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>业务单号：</span>
-        <input type="text" class="w200" v-model="text"/>
+        <input type="text" class="w200" v-model.trim="text"/>
       </div>
     </Modal>
     <Modal v-model="outStock" :title="title" width="1200">
@@ -320,6 +316,13 @@
         clientList: [],//客户下拉数据
         searchLoading: true,
         guestId: "",//客户选中id
+        accountType:1,//对账类型
+        statementTypeList:[
+          {value:0,label:"全部"},
+          {value:1,label:"未对账"},
+          {value:2,label:"已对账结算中"},
+          {value:3,label:"已对账结算完成"}
+        ],
         pageObj: {
           size: 10,
           total: 0,
@@ -960,6 +963,75 @@
                     title: params.row.guestTypeName
                   }
                 }, params.row.guestTypeName)
+              ])
+            }
+          },
+          {
+            title: "是否直发门店",
+            key: "ifDirect",
+            className: "tc",
+            resizable: true,
+            width: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.ifDirect
+                  }
+                },params.row.ifDirect)
+              ])
+            }
+          },
+          {
+            title: "直发门店",
+            key: "directShopCode",
+            className: "tc",
+            resizable: true,
+            width: 80,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.directShopCode
+                  }
+                },params.row.directShopCode)
+              ])
+            }
+          },
+          {
+            title: "入库门店",
+            key: "enterShopCode",
+            className: "tc",
+            resizable: true,
+            width: 80,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.enterShopCode
+                  }
+                },params.row.enterShopCode)
               ])
             }
           },
@@ -1922,16 +1994,6 @@
     async mounted() {
       this.parameter = [];
       let arr = await creat(this.$refs.quickDate.val, this.$store);
-      // let obj = {
-      //   orgId: arr[1],
-      //   startDate: this.value[0]
-      //     ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-      //     : "",
-      //   endDate: this.value[1]
-      //     ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-      //     : ""
-      // };
-      // this.getGeneral(obj);
       this.value = arr[0];
       this.model1 = arr[1];
       this.getShop();
@@ -2070,15 +2132,6 @@
         this.value = data ? data : ["", ""];
         this.data1 = [];
         this.data2 = [];
-        let obj = {
-          orgId: this.model1,
-          startDate: this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : "",
-          endDate: this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : ""
-        };
         this.query();
       },
       // 选择日期
@@ -2133,7 +2186,8 @@
           endDate: this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          guestName: this.guestId.trim()
+          guestName: this.guestId.trim(),
+          accountType:this.accountType
         };
         this.getGeneral(obj);
       },
@@ -2214,11 +2268,13 @@
           endDate: obj[1]
             ? moment(obj[1]).format("YYYY-MM-DD") + " 23:59:59"
             : "",
-          guestId: data.guestId
+          guestId: data.guestId,
+          accountType:this.accountType
         }).then(res => {
           if (res.data.one) {
 
-            let arrData = res.data.one.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0);
+            // let arrData = res.data.one.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0);
+            let arrData = res.data.one;
 
             arrData.map((item, index) => {
               item.num = index + 1;
@@ -2233,7 +2289,8 @@
             this.data1 = [];
           }
           if (res.data.two) {
-            let arrData2 = res.data.two.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0)
+            // let arrData2 = res.data.two.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0)
+            let arrData2 = res.data.two
             arrData2.map((item, index) => {
               item.num = index + 1;
               item.guestTypeName = item.guestType.name;
@@ -2302,7 +2359,8 @@
             endDate: this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : "",
-            guestName: this.guestId
+            guestName: this.guestId,
+            accountType:this.accountType
           };
           let params = ""
           for (var i in obj) {

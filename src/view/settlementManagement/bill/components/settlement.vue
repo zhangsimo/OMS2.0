@@ -77,9 +77,12 @@
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
-              width="120"
-              :edit-render="{name: 'input', attrs: {type: 'number'}}"
-            ></vxe-table-column>
+              width="140"
+            >
+              <template v-slot="{row}">
+                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="120" title="剩余未收/未付"></vxe-table-column>
             <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
             <vxe-table-column field="orgName" width="140" title="门店"></vxe-table-column>
@@ -146,7 +149,7 @@
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette" />
+    <accountSelette ref="accountSelette" :accountNo="accountNo" />
     <subjexts ref="subjexts" />
   </Modal>
 </template>
@@ -185,6 +188,7 @@ export default {
       check: 0,
       remark: "",
       reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
+      accountNo:"",
       BusinessType: [],
       tableData: [],
       collectPayId: "",
@@ -192,7 +196,7 @@ export default {
       obj: {},
       //表格校验
       validRules: {
-        rpAmt: [{ validator: rpAmtValid }]
+        // rpAmt: [{ validator: rpAmtValid }]
       }
     };
   },
@@ -201,6 +205,7 @@ export default {
     bus.$on("accountHedNo", val => {
       this.reconciliationStatement.accountNo =
         this.reconciliationStatement.accountNo + "," + val.accountNo;
+      // console.log(val,1111)
       val.two.map(item => {
         item.businessTypeName = item.businessType.name;
       });
@@ -248,6 +253,7 @@ export default {
           auxiliaryName:value.fullName, //辅助核算名称
           auxiliaryCode:value.code ,//辅助核算项目编码
           isSubject:1,//与原本对账单作出区分
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -264,6 +270,7 @@ export default {
           auxiliaryName:value.userName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
           isSubject:1,//与原本对账单作出区分
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -280,6 +287,7 @@ export default {
           auxiliaryName:value.itemName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
           isSubject:1,//与原本对账单作出区分
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
         });
       }
     });
@@ -313,19 +321,28 @@ export default {
     accountNoClick() {
       this.$refs.accountSelette.isCanChange = this.showchange
       this.$refs.accountSelette.modal1 = true;
-      if (this.$parent.paymentId == "DYD") {
-        this.$refs.accountSelette.paymentId = "YJDZ";
-        // this.$refs.accountSelette.sort = "SK";
+      if(this.$parent.paymentId == "DYD" && [","].includes(this.reconciliationStatement.accountNo)){
+        this.accountNo=this.reconciliationStatement.accountNo;
+      }else{
+        this.accountNo=this.reconciliationStatement.accountNo.split(",")[this.reconciliationStatement.accountNo.split(",").length-1]
       }
-      if (this.$parent.paymentId == "YS") {
-        this.$refs.accountSelette.paymentId = "YSK";
-      }
-      if (this.$parent.paymentId == "YF") {
-        this.$refs.accountSelette.paymentId = "YFK";
-      }
-      if (this.$parent.paymentId == "YSK") {
-        this.$refs.accountSelette.paymentId = "YJDZ";
-        this.$refs.accountSelette.sort = "SK";
+      switch (this.$parent.paymentId) {
+        case "YSK":
+          this.$refs.accountSelette.paymentId = "YJDZ";
+          this.$refs.accountSelette.sort = "SK";
+          break;
+        case "DYD":
+          this.$refs.accountSelette.paymentId = "YJDZ";
+          break;
+        case "YS":
+          this.$refs.accountSelette.paymentId = "YSK";
+          break;
+        case "YF":
+          this.$refs.accountSelette.paymentId = "YFK";
+          break;
+        default :
+          this.$refs.accountSelette.paymentId = "YJDZ";
+          break;
       }
     },
     //弹框打开
@@ -395,7 +412,33 @@ export default {
       this.tableData = []
       this.collectPayId = ""
     },
-
+    //本次核销金额输入
+    rpAmtChange(row) {
+      let arr=this.$refs.xTable.footerData[0];
+      let unAmtSumIdx;
+      arr.map((item,index)=>{
+        if(item=="合计"){
+          return unAmtSumIdx=index+1;
+        }
+      })
+      if(row.isSubject==1){
+        //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+        let sumUnAmt =this.$utils.toNumber(arr[unAmtSumIdx])
+        this.$refs.xTable.updateFooter();
+        this.checkComputed();
+        if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+          return this.$Message.error("金额录入错误，请重新录入！")
+        }
+      }else{
+        //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+        let sumUnAmt = row.unAmt;
+        this.$refs.xTable.updateFooter();
+        this.checkComputed();
+        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+          return this.$Message.error("金额录入错误，请重新录入！")
+        }
+      }
+    },
     //保存
     async conserve() {
       if (!Number(this.check)) {
@@ -403,46 +446,79 @@ export default {
           .fullValidate()
           .catch(errMap => errMap);
         if (errMap) return this.$Message.error("表格校验错误");
-        let obj = {
-          one: this.reconciliationStatement,
-          two: this.BusinessType,
-          // three: this.tableData
-        };
-        this.conserveDis=true;
-        saveAccount(obj).then(res => {
-          if (res.code === 0) {
-            this.$message.success("保存成功");
-            if(this.$parent.paymentId=="DYD"){
-              this.$Modal.confirm({
-                title: '提示',
-                content: '<p>是否同时发起发票对冲申请</p>',
-                onOk: async () => {
-                  let res = await getHedging(obj)
-                  if (res.code === 0){
-                    this.$message.success("发票对冲申请单");
-                    this.$emit('getNewList')
-                  }
-                  this.conserveDis=false;
-                  this.Settlement = false;
-                  this.handleReset()
-                },
-                onCancel: () => {
-                  this.conserveDis=false;
-                  this.Settlement = false;
-                  this.handleReset()
-                  this.$message.success("对账单对冲成功");
-                }
-              });
-            }else{
-              this.conserveDis=false;
-              this.Settlement = false;
-              this.handleReset()
-              this.$message.success("对账单对冲成功");
-            }
-          }else{
-            this.conserveDis=false;
+        let bool = true;
+        let arr=this.$refs.xTable.footerData[0];
+        let unAmtSumIdx;
+        arr.map((item,index)=>{
+          if(item=="合计"){
+            return unAmtSumIdx=index+1;
           }
         })
+        this.BusinessType.map(row=>{
+          if(row.isSubject==1){
+            let sumUnAmt =this.$utils.toNumber(arr[unAmtSumIdx])
+            this.$refs.xTable.updateFooter();
+            this.checkComputed();
+            if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+              this.$Message.error("金额录入错误，请重新录入！")
+              bool = false
+              return
+            }
+          }else{
+            let sumUnAmt = row.unAmt;
+            this.$refs.xTable.updateFooter();
+            this.checkComputed();
+            if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+              this.$Message.error("金额录入错误，请重新录入！")
+              bool = false
+              return
+            }
+          }
+        })
+        if(bool){
+          let obj = {
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            // three: this.tableData
+          };
+          this.conserveDis=true;
+          saveAccount(obj).then(res => {
+            if (res.code === 0) {
+              this.$message.success("保存成功");
+              if(this.$parent.paymentId=="DYD"){
+                this.$Modal.confirm({
+                  title: '提示',
+                  content: '<p>是否同时发起发票对冲申请</p>',
+                  onOk: async () => {
+                    let res = await getHedging(obj)
+                    if (res.code === 0){
+                      this.$message.success("发票对冲申请单");
+                      this.$emit('getNewList',{})
+                    }
+                    this.conserveDis=false;
+                    this.Settlement = false;
+                    this.handleReset()
+                  },
+                  onCancel: () => {
+                    this.conserveDis=false;
+                    this.Settlement = false;
+                    this.handleReset()
+                    this.$emit('getNewList',{})
+                    this.$message.success("对账单对冲成功");
+                  }
+                });
+              }else{
+                this.conserveDis=false;
+                this.Settlement = false;
+                this.handleReset()
+                this.$emit('getNewList',{})
+                this.$message.success("对账单对冲成功");
+              }
+            }else{
+              this.conserveDis=false;
+            }
+          })
+        }
       } else {
         this.$message.error("核对金额为0才能保存");
       }
@@ -499,7 +575,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        sum1 += item.rpAmt ? item.rpAmt * 1 : 0;
+        sum1 += (item.rpAmt ? this.$utils.toNumber(item.rpAmt * 1) : 0);
       });
       this.tableData.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;

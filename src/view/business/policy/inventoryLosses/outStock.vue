@@ -19,20 +19,19 @@
               <i class="iconfont mr5 iconchaxunicon"></i>更多
             </Button>
           </div>
-          <!--<div class="db">-->
-          <!--<Button class="mr10" @click="addProoo" v-has="'add'">-->
-          <!--<Icon type="md-add" />新增-->
-          <!--</Button>-->
-          <!--</div>-->
-          <!--<div class="db">-->
-            <!--<Button-->
-              <!--@click="baocun"-->
-              <!--v-has="'save'"-->
-              <!--type="default"-->
-              <!--class="mr10"-->
-              <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-            <!--&gt;保存</Button>-->
-          <!--</div>-->
+          <div class="db">
+          <Button class="mr10" @click="addProoo">
+          <Icon type="md-add" />新增
+          </Button>
+          </div>
+          <div class="db">
+            <Button
+              @click="baocun"
+              type="default"
+              class="mr10"
+              :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
+            >保存</Button>
+          </div>
           <div class="db">
             <Button
               @click="editPro"
@@ -40,7 +39,7 @@
               type="default"
               class="mr10"
               :loading="commitLoading"
-              :disabled="this.formPlan.statuName!== '草稿'"
+              :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
             >提交</Button>
           </div>
           <div class="db">
@@ -51,16 +50,15 @@
               v-has="'export'"
             >导出</Button>
           </div>
-          <!--<div class="db">-->
-          <!--<Button-->
-          <!--class="mr10"-->
-          <!--v-has="'cancellation'"-->
-          <!--@click="cancellation"-->
-          <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-          <!--&gt;-->
-          <!--<Icon type="md-close" size="14" />作废-->
-          <!--</Button>-->
-          <!--</div>-->
+          <div class="db">
+          <Button
+          class="mr10"
+          @click="cancellation"
+          :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
+          >
+          <Icon type="md-close" size="14" />作废
+          </Button>
+          </div>
           <!--<div class="db">-->
           <!--<Button-->
           <!--class="mr10"-->
@@ -147,7 +145,6 @@
                     <Select
                       v-model="formPlan.storeId"
                       style="width:100px"
-                      disabled
                     >
                       <Option
                         v-for="item in warehouseList"
@@ -191,36 +188,34 @@
                   <FormItem label="来源：">
                     <Input
                       class="w160"
-                      :value="formPlan.source===0?'OMS盘点':formPlan.source?formPlan.source===1||formPlan.source===2?'WMS盘点':'OMS盘点':''"
+                      :value="returnSource(formPlan.source)"
                       disabled
                     />
                   </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
-                <!--<div class="clearfix">-->
-                <!--<div class="fl mb5">-->
-                <!--<Button-->
-                <!--size="small"-->
-                <!--class="mr10"-->
-                <!--@click="addPro"-->
-                <!--v-has="'addPro'"-->
-                <!--:disabled="draftShow != 0||!formPlan.storeId"-->
-                <!--&gt;-->
-                <!--<Icon type="md-add" />添加配件-->
-                <!--</Button>-->
-                <!--</div>-->
-                <!--<div class="fl mb5">-->
-                <!--<Button-->
-                <!--size="small"-->
-                <!--class="mr10"-->
-                <!--@click="shanchu"-->
-                <!--v-has="'delete'"-->
-                <!--:disabled="draftShow != 0"-->
-                <!--&gt;-->
-                <!--<i class="iconfont mr5 iconlajitongicon"></i> 删除-->
-                <!--</Button>-->
-                <!--</div>-->
+                <div class="clearfix">
+                <div class="fl mb5">
+                <Button
+                size="small"
+                class="mr10"
+                @click="addPro"
+                :disabled="!formPlan.storeId"
+                >
+                <Icon type="md-add" />添加配件
+                </Button>
+                </div>
+                <div class="fl mb5">
+                <Button
+                size="small"
+                class="mr10"
+                @click="shanchu"
+                :disabled="draftShow != 0&&draftShow != 9"
+                >
+                <i class="iconfont mr5 iconlajitongicon"></i> 删除
+                </Button>
+                </div>
                 <!--<div class="fl mb5">-->
                 <!--<Upload-->
                 <!--ref="upload"-->
@@ -245,7 +240,7 @@
                 <!--<i class="iconfont mr5 iconlajitongicon"></i> 导入-->
                 <!--</Button>&ndash;&gt;-->
                 <!--</div>-->
-                <!--</div>-->
+                </div>
               </div>
               <vxe-table
                 ref="xTable1"
@@ -262,21 +257,30 @@
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="80" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+
                 <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="120" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="120" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip"
-                  field="trueQty"
-                  title="实盘数量"
-                  width="100"
-                ></vxe-table-column>
+                <!--<vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100"></vxe-table-column>-->
+                <!--<vxe-table-column  show-overflow="tooltip"-->
+                  <!--field="trueQty"-->
+                  <!--title="实盘数量"-->
+                  <!--width="100"-->
+                <!--&gt;</vxe-table-column>-->
                 <vxe-table-column  show-overflow="tooltip"
                   field="exhibitQty"
                   title="出库数量"
                   width="100"
-                ></vxe-table-column>
+                                   :edit-render="{autofocus: '.vxe-input--inner'}"
+                >
+                  <template v-slot:edit="{ row }">
+                    <vxe-input type="number" v-model="row.exhibitQty" :min="1" :max="formPlan.source==4?row.sysQty:'99999999'"></vxe-input>
+                  </template>
+                  <template v-slot="{ row }">{{ row.exhibitQty}}</template>
+                </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="exhibitPrice"
                   title="出库单价"
@@ -299,7 +303,7 @@
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+
               </vxe-table>
               <div class="table-bottom-text flex"><span>创建人：{{formPlan?formPlan.createUname:""}}</span><span>创建日期：{{formPlan?formPlan.createTime:""}}</span><span>提交人：{{formPlan?formPlan.subMan:""}}</span><span>提交日期：{{formPlan?formPlan.subDate:""}}</span></div>
             </div>
@@ -349,7 +353,8 @@
     removeDataList,
     stampDataList,
     stampApplyDataList,
-    exportVentory
+    exportVentory,
+    saveVentoryNewChange
   } from "../../../../api/inventory/salesList";
 
   import {getDigitalDictionary} from "../../../../api/system/essentialData/clientManagement";
@@ -358,7 +363,7 @@
   import { conversionList } from "@/components/changeWbList/changewblist";
   import QuickDate from "../../../../components/getDate/dateget";
   import "../../../lease/product/lease.less";
-  import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
+  import SelectPartCom from "../../../salesManagement/salesOrder/batch/selectPartCom";
   import PrintShow from "./components/PrintShow";
   import More from "./components/More";
   import moment, { months } from "moment";
@@ -407,6 +412,10 @@
           {
             label: "已作废",
             value: 5
+          },
+          {
+            label: "不通过",
+            value: 9
           }
         ],
         showMore: false, //更多模块的弹框
@@ -515,10 +524,12 @@
         showBayer: false, //出库方弹窗
         rightTableStatus: "", //右侧表格状态
         ruleValidate: {
+          storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
         },
         settleTypeList:{},//票据类型
         //左侧选中id
-        selectLeftItemId:''
+        selectLeftItemId:'',
+        defaultStore:''
       };
     },
     // created() {
@@ -527,6 +538,25 @@
     //   this.getType();
     // },
     methods: {
+      //获取来源
+      returnSource(source){
+        let txt = "";
+        switch (source) {
+          case 0:
+            txt = "OMS盘点";
+            break;
+          case 1:case 2:
+            txt = "WMS盘点";
+            break;
+          case 3:
+            txt = "盘盈开单";
+            break;
+          case 4:
+            txt = "盘亏开单";
+            break;
+        }
+        return txt;
+      },
 
       //获取客户属性
       async getType() {
@@ -569,6 +599,14 @@
           .then(res => {
             if (res.code === 0) {
               this.warehouseList = res.data;
+              let filter = this.warehouseList.filter(item => item.isDefault)
+              if(filter.length>0){
+                this.defaultStore = filter[0].id
+              }else{
+                if(this.warehouseList.length>0){
+                  this.defaultStore = this.warehouseList[0].id
+                }
+              }
             }
           })
           .catch(err => {
@@ -606,6 +644,11 @@
                       this.selectTabelData(b);
                       break
                     }
+                  }
+                }else{
+                  if(this.Left.tbdata.length>0){
+                    this.selectTabelData(this.Left.tbdata[0]);
+                    this.Left.tbdata[0]._highlight = true
                   }
                 }
               }
@@ -676,6 +719,12 @@
       },
       //新增
       addProoo() {
+        this.selectLeftItemId = "";
+        for(let b of this.Left.tbdata){
+          b._highlight = false;
+        }
+
+
         if (this.Left.tbdata.length !== 0) {
           if (this.Left.tbdata[0]["xinzeng"] === "1") {
             this.$Message.info(
@@ -694,14 +743,17 @@
           },
           statuName: "草稿",
           checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-          orderMan: this.$store.state.user.userData.staffName || "", //盘点人
-          orderManId: this.$store.state.user.userData.id || "", //盘点人id
+          orderMan: this.$store.state.user.userData.currentShopName || "", //盘点人
+          orderManId: this.$store.state.user.userData.currentShopId || "", //盘点人id
           serviceId: "",
+          billTypeId:'010103',//新增初始票据类型
           print: "",
           createUname: "",
           createTime: "",
           commitUname: "",
           createTime: "",
+          source:4,
+          storeId:this.defaultStore,
           //commitDate:"",
           //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           //createUname: this.$store.state.user.userData.staffName,
@@ -729,7 +781,7 @@
           this.$Message.error("请选择数据");
           return;
         }
-        if (this.formPlan.billStatusId.value !== 0) {
+        if (this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9) {
           this.$Message.error("只有草稿状态才能提交");
           return;
         }
@@ -773,20 +825,27 @@
       },
       //保存
       baocun() {
-        saveVentory(this.formPlan).then(res => {
-          if (res.code == 0) {
-            this.flag = 0;
-            this.isAddRight = true;
-            this.Right.tbdata = [];
-            this.formPlan = {};
-            this.$Message.success("保存成功");
-            this.getList();
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this.formPlan.inventoryOrderType = 2;
+            saveVentoryNewChange(this.formPlan).then(res => {
+              if (res.code == 0) {
+                this.flag = 0;
+                this.isAddRight = true;
+                this.Right.tbdata = [];
+                this.formPlan = {};
+                this.$Message.success("保存成功");
+                this.getList();
+              }
+              this.handleReset();
+              // else{
+              //   this.formPlan.checkDate = preTime;
+              // }
+            });
+          } else {
+            this.$Message.error("入库仓库必填");
           }
-          this.handleReset();
-          // else{
-          //   this.formPlan.checkDate = preTime;
-          // }
-        });
+        })
       },
       //导出
       exportAll(){
@@ -809,7 +868,7 @@
           return;
         }
         //判断是否为草稿状态
-        if (this.formPlan.billStatusId.value !== 0) {
+        if (this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9) {
           this.$Message.error("只有草稿状态才能作废");
           return;
         }
@@ -868,7 +927,7 @@
       shanchu() {
         if (
           this.formPlan.hasOwnProperty("billStatusId") &&
-          this.formPlan.billStatusId.value !== 0
+          this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9
         ) {
           this.$Message.info("只有草稿状态才能进行删除操作");
           return;
@@ -945,9 +1004,17 @@
       },
       //配件返回的参数
       getPartNameList(val) {
-        var datas=val;
-        datas.map(item=>{
-          item.id=''
+        console.log(val)
+        let datas = val.map(item=>{
+          let itemObj = {...item}
+          itemObj.sourceId = itemObj.id;
+          itemObj.id='';
+          itemObj.exhibitQty = 1;
+          itemObj.exhibitPrice = itemObj.enterPrice||0;
+          //判断盘亏开单只能输入的最大数量
+          itemObj.sysQty = itemObj.outableQty;
+          itemObj.unit = itemObj.enterUnitId;
+          return itemObj;
         })
         this.formPlan.detailVOList = datas;
         this.Right.tbdata = [...this.Right.tbdata, ...datas];
@@ -999,6 +1066,13 @@
                 "exhibitQty", "sysQty", "trueQty", "exhibitAmt"
               ].includes(column.property)
             ) {
+              if(["exhibitAmt"].includes(column.property)){
+                let total = data.reduce((pre,cur) => {
+                  return pre+(cur.exhibitPrice * cur.exhibitQty)
+                },0)
+                return total.toFixed(2);
+
+              }
               return this.$utils.sum(data, column.property);
             }
             return null;

@@ -3,8 +3,8 @@
     <!--选择辅助核算-->
     <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
-        <Tabs type="card">
-          <TabPane label="客户" name="client">
+        <Tabs type="card" v-model="TabsChoose">
+          <TabPane label="客户" name="client" :disabled="subjectChoose.auxiliaryAccountingCode!='1' && subjectChoose.auxiliaryAccountingCode!='2'">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -57,7 +57,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier">
+          <TabPane label="供应商" name="supplier" :disabled="subjectChoose.auxiliaryAccountingCode!='1' && subjectChoose.auxiliaryAccountingCode!='2'">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -110,7 +110,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department">
+          <TabPane label="部门" name="department" :disabled="subjectChoose.auxiliaryAccountingCode!='3'">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -123,7 +123,7 @@
               </FormItem>
             </Form>
           </TabPane>
-          <TabPane label="个人" name="personage">
+          <TabPane label="个人" name="personage" :disabled="subjectChoose.auxiliaryAccountingCode!='4'">
             <Form :label-width="50" ref="form" inline>
               <!--              <FormItem label="部门:" prop="groundIds">-->
               <!--                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>-->
@@ -172,7 +172,7 @@
               />
             </div>
           </TabPane>
-          <TabPane label="其他辅助核算" name="Other">
+          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3','4'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div class="Other">
               <div class="OtherLeft">
                 <ul>
@@ -219,12 +219,6 @@
                     <vxe-table-column field="itemName" title="核算全称"></vxe-table-column>
                   </vxe-table>
                 </div>
-                <!--<div>-->
-                <!--<Page size="small" :total="Other.page.total" :page-size="Other.page.size" :current="Other.page.num"   :page-size-opts="Other.page.sizeOpts"-->
-                <!--show-sizer show-total  show-elevator  @on-change="selectNumOther" @on-page-size-change="selectPageOther"-->
-                <!--style="float: right;margin-top: 10px;margin-right: 10px"/>-->
-                <!--</div>-->
-                <div></div>
               </div>
               <div>
                 <!--其他辅助核算弹框里新增弹框-->
@@ -252,6 +246,25 @@
             </div>
           </TabPane>
         </Tabs>
+        <div class="fund" v-show="Classification">
+          <Form
+            ref="formDynamic"
+            :model="formDynamic"
+            :rules="ruleValidateTwo"
+            :label-width="80"
+            style="width: 300px"
+          >
+            <FormItem label="款项分类:" prop="fund">
+              <Select v-model="formDynamic.fund" placeholder="请选择">
+                <Option
+                  v-for="item in fundList"
+                  :value="item.itemName"
+                  :key="item.id"
+                >{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Form>
+        </div>
       </Form>
       <div slot="footer">
         <Button type="primary" @click="confirmFuzhu" class="mr10">保存</Button>
@@ -281,6 +294,7 @@ import {
 import bus from "../Popup/Bus";
 export default {
   name: "AssistAccounting",
+  props: ["subjectChoose"],
   data() {
     return {
       //其他辅助弹框表单验证
@@ -347,6 +361,23 @@ export default {
       },
       auxiliaryTypeCode: "", //辅助弹框选的哪一个
       selectClass: 0 ,//用于判断class
+      TabsChoose: 'client', //默认的tab页
+      Classification: false, //款项分类下拉框是否显示
+      formDynamic: {
+        fund: "" //款项分类
+      },
+      ruleValidateTwo: {
+        fund: [
+          {
+            required: true,
+            type: "string",
+            message: "请选择",
+            trigger: "change"
+          }
+        ]
+      },
+      fundList: [], //款项分类数组
+      fundListZanshi: [], //款项分类数组
       // obj:{}
     };
   },
@@ -532,14 +563,33 @@ export default {
     },
     //辅助核算确定弹框
     confirmFuzhu() {
-      if (!this.AssistAccounting) {
-        this.$message.error("请选择辅助核算");
-        this.subjectModelShowassist = true;
-      } else {
-        // console.log(this.AssistAccounting);
-        this.$emit("ChildContent", this.AssistAccounting);
-        bus.$emit("ChildContent", this.AssistAccounting);
-        this.subjectModelShowassist = false;
+      if(this.Classification){
+        this.$refs.formDynamic.validate(valid => {
+          if (valid) {
+              if(!this.AssistAccounting){
+                this.$message.error('请选择辅助核算');
+                this.subjectModelShowassist = true
+              } else {
+                this.AssistAccounting.paymentTypeCode = this.formDynamic.fund;
+                this.$emit("ChildContent", this.AssistAccounting);
+                bus.$emit("ChildContent", this.AssistAccounting);
+                this.subjectModelShowassist = false;
+              }
+          } else {
+              this.$Message.error("请选择款项分类!");
+              this.subjectModelShowassist = true;
+          }
+        });
+      }else{
+        if (!this.AssistAccounting) {
+          this.$message.error("请选择辅助核算");
+          this.subjectModelShowassist = true;
+        } else {
+          // console.log(this.AssistAccounting);
+          this.$emit("ChildContent", this.AssistAccounting);
+          bus.$emit("ChildContent", this.AssistAccounting);
+          this.subjectModelShowassist = false;
+        }
       }
     },
     //客户分页切换页数
@@ -574,17 +624,6 @@ export default {
       this.personage.page.num = 1;
       this.personage.page.size = size;
       this.SearchPersonal();
-    },
-    //其他分页切换页数
-    selectNumOther(page) {
-      this.Other.page.num = page;
-      // this.getList()
-    },
-    //其他切换分页条数
-    selectPageOther(size) {
-      this.Other.page.num = 1;
-      this.Other.page.size = size;
-      // this.getList()
     },
     //部门改变
     ListChange(val, selectedData) {
@@ -646,9 +685,48 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
+        if(this.fundList.length == 0){
+          this.fundGetList()
+        }
 
+        if(this.subjectChoose.titleCode === "1221" || this.subjectChoose.titleCode === "2241" || this.subjectChoose.titleCode === "1532" || this.subjectChoose.titleCode === "1801"){
+          this.Classification = true
+        }else{
+          this.Classification = false
+        }
+
+        switch(this.subjectChoose.auxiliaryAccountingCode){
+          case '1':
+            this.TabsChoose = 'client'
+            break
+          case '2':
+            this.TabsChoose = 'supplier'
+            break
+          case '3':
+            this.TabsChoose = 'department'
+            break 
+          case '4':
+            this.TabsChoose = 'personage'
+            break 
+          default:
+            this.TabsChoose = 'Other'
+            break          
+        }
       }
-    }
+    },
+    //其他辅助核算款项分类
+    fundGetList() {
+      let params = {};
+      params.dictCode = "CW00131";
+      kmType(params).then(res => {
+        this.fundList = res.data;
+        console.log(this.fundList)
+        // this.fundListZanshi=this.fundList.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
+        // if(this.fundListZanshi.length<1){
+        //   this.Classification=false;
+        // }
+      });
+    },
   },
   mounted() {
     // this.getListCompany();
@@ -731,7 +809,7 @@ export default {
 }
 .fund {
   position: relative;
-  top: -625px;
+  top: -650px;
   left: 400px;
 }
 .LiClass {

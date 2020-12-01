@@ -402,9 +402,11 @@
                   }
                 }
               });
+              if(that.currentAccount.row){
               that.difference = Math.abs(that.currentAccount.row.actualCollectionOrPayment)
                 ? Math.abs(that.currentAccount.row.actualCollectionOrPayment )- Math.abs(that.claimedAmt)
                 : 0 - that.claimedAmt;
+              }
             }
           }
         },

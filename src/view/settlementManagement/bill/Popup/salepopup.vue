@@ -874,7 +874,7 @@ export default {
               this.$message.success("保存成功");
               this.proserDis=false;
               this.modal1 = false;
-              this.$parent.query();
+              this.$emit('getNewList',{})
             }else{
               this.proserDis=false;
             }
@@ -927,6 +927,7 @@ export default {
               this.$message.success("提交成功");
               this.modal1 = false;
               this.proserDis=false;
+              this.$emit('getNewList',1)
             }else{
               this.proserDis=false;
             }

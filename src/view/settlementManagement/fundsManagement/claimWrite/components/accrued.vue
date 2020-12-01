@@ -60,7 +60,7 @@
         <Button type="default" @click="modal = false">取消</Button>
       </div>
     </Modal>
-    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accrued" @callBackFun="getCallBack" :assistTypeCode="assistTypeCode"></voucherInput>
   </div>
 </template>
 <script>
@@ -97,7 +97,8 @@ export default {
       modal: false, //模态框展示
       oneSubject: {}, //单选获取到的数据
       bool:true,
-      MessageValue:''
+      MessageValue:'',
+      assistTypeCode: '1', //控制打开辅助核算类型，默认是客户和供应商往来
     };
   },
   methods: {
@@ -106,7 +107,6 @@ export default {
       this.oneSubject = {};
       this.modal = true;
       this.MessageValue = ""
-      this.$refs.voucherInput.AssistAccounting = ''
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"balanceMoney")
       })
@@ -120,6 +120,7 @@ export default {
       this.oneSubject = row;
     },
     openVoucherInput() {
+      this.$refs.voucherInput.AssistAccounting = ''
       this.$refs.voucherInput.subjectModelShowassist = true;
     },
 

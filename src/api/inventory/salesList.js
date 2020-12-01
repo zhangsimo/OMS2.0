@@ -135,6 +135,17 @@ export function saveVentory (data) {
   })
 }
 
+
+//保存
+export function saveVentoryNewChange (data) {
+  return axios.request({
+    url: `${api.omsOrder}/StockCheckMain/save`,
+    method: 'post',
+    data
+  })
+}
+
+
 //提交
 export function submitVentory (data) {
   return axios.request({

@@ -298,12 +298,12 @@
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="100">
                   <template v-slot="{ row, seq }">
-                    <span>{{(Math.abs(row.sysQty - row.trueQty))||0 }}</span>
+                    <span>{{row.sysQty - row.trueQty>0?((row.sysQty - row.trueQty)*(-1)):Math.abs(row.sysQty - row.trueQty) }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="exhibitAmt" title="盈亏金额" width="120">
                   <template v-slot="{ row, seq }">
-                    <span>{{(Math.abs(row.exhibitQty * row.truePrice))||0 }}</span>
+                    <span>{{(((row.sysQty - row.trueQty>0?((-1)*(row.sysQty - row.trueQty)):Math.abs(row.sysQty - row.trueQty)) * row.truePrice).toFixed(2))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="100"></vxe-table-column>
@@ -793,8 +793,8 @@ export default {
         },
         statuName: "草稿",
         checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-        orderMan: this.$store.state.user.userData.staffName || "", //盘点人
-        orderManId: this.$store.state.user.userData.id || "", //盘点人id
+        orderMan: this.$store.state.user.userData.currentShopName || "", //盘点人
+        orderManId: this.$store.state.user.userData.currentShopId || "", //盘点人id
         serviceId: "",
         print: "",
         createUname: "",
@@ -820,6 +820,7 @@ export default {
     // 提交
     editPro() {
       //判断是否是新增状态
+      let objForm = {...this.formPlan}
       if(this.flag){
         return this.$Message.error("提交前请先保存单据信息");
       }
@@ -828,7 +829,7 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
-      if (this.formPlan.billStatusId.value !== 0) {
+      if (objForm.billStatusId.value !== 0) {
         this.$Message.error("只有草稿状态才能提交");
         return;
       }
@@ -839,13 +840,13 @@ export default {
         onOk: async () => {
           this.$refs.form.validate(valid => {
             if (valid) {
-              this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
+              objForm.checkDate = moment(objForm.checkDate).format(
                 "YYYY-MM-DD HH:mm:ss"
               );
-              this.formPlan.billStatusId = 1;
+              objForm.billStatusId = 1;
               this.commitLoading = true;
               showLoading(".loadingClass", "数据加载中，请勿操作")
-              getSubmitList(this.formPlan).then(res => {
+              getSubmitList(objForm).then(res => {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getList();
@@ -1179,6 +1180,10 @@ export default {
           }
           if (['sysQty','trueQty','exhibitQty','hasOutQty','exhibitAmt','truePrice'].includes(column.property)) {
 
+            if(['exhibitQty','exhibitAmt'].includes(column.property)){
+              return this.qtyFun(data,column.property);
+            }
+
             if(['exhibitAmt'].includes(column.property)){
               return this.$utils.sum(data, column.property).toFixed(2)
             }
@@ -1187,6 +1192,29 @@ export default {
           return null
         })
       ]
+    },
+    qtyFun(data,property){
+
+        let aa = data.reduce((pr,cur)=>{
+            if(property=='exhibitQty'){
+              return pr+(cur.sysQty - cur.trueQty>0?((cur.sysQty - cur.trueQty)*(-1)):Math.abs(cur.sysQty - cur.trueQty));
+            }
+            if(property=='exhibitAmt'){
+              return pr+(cur.sysQty - cur.trueQty>0?((-1)*(cur.sysQty - cur.trueQty)):Math.abs(cur.sysQty - cur.trueQty)) * cur.truePrice
+            }
+          },0)
+      if(property=='exhibitQty'){
+        return aa
+      }
+      if(property=='exhibitAmt'){
+        return aa.toFixed(2)
+      }
+
+
+
+
+
+
     },
     // 确定
     Determined() {},

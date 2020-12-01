@@ -89,7 +89,7 @@
       </div>
     </Modal>
     <PreClaimModal ref="PClaimModal"></PreClaimModal>
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack" :assistTypeCode="assistTypeCode"></voucherInput>
   </div>
 </template>
 
@@ -130,6 +130,7 @@ export default {
       dataThree:[],//数组
       accruedList:[{mateAccountCoding:""}],
       voucherItem:{}, //获取辅助计算选中的数据
+      assistTypeCode: '4',
     }
   },
   computed: {
