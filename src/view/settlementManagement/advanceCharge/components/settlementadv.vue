@@ -50,23 +50,17 @@
           auto-resize
           show-footer
           :data="BusinessType"
-          :edit-rules="validRules"
           :footer-method="offWrite"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
           @edit-closed="editClosedEvent"
         >
+<!--          :edit-rules="validRules"-->
           <vxe-table-column title="核销信息">
             <vxe-table-column field="guestName" width="100" title="往来单位"></vxe-table-column>
             <vxe-table-column field="serviceTypeName" width="80" title="业务类型"></vxe-table-column>
             <vxe-table-column field="reconciliationAmt" width="80" title="对账金额"></vxe-table-column>
             <vxe-table-column field="hasAmt" title="已收/付金额" width="140"></vxe-table-column>
             <vxe-table-column field="unAmt" title="未收/付金额" width="140"></vxe-table-column>
-<!--            <vxe-table-column-->
-<!--              field="rpAmt"-->
-<!--              title="本次核销金额"-->
-<!--              width="140"-->
-<!--              :edit-render="{ name: 'input', attrs: { type: 'number' } }"-->
-<!--            ></vxe-table-column>-->
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
@@ -179,7 +173,7 @@ export default {
       accountDisabeld: true, //对账单号是否可选
       //表格校验
       validRules: {
-        // rpAmt: [{ validator: rpAmtValid }]
+        rpAmt: [{required: true}]
       }
     };
   },
@@ -387,7 +381,7 @@ export default {
         let sumUnAmt = row.unAmt;
         this.$refs.xTable.updateFooter();
         this.checkComputed();
-        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
           return this.$Message.error("金额录入错误，请重新录入！")
         }
       }
@@ -466,7 +460,7 @@ export default {
               let sumUnAmt = row.unAmt;
               this.$refs.xTable.updateFooter();
               this.checkComputed();
-              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
                 this.$Message.error("金额录入错误，请重新录入！")
                 bool = false
                 return
