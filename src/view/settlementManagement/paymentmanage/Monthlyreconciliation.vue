@@ -1743,8 +1743,8 @@
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
             }
-            this.$set(this.data1[index], "thisNoAccountAmt", sum);
-            this.$set(this.data1[index], "thisAccountAmt", sum1);
+            this.$set(this.data1[index], "thisNoAccountAmt",  parseFloat(sum).toFixed(2));
+            this.$set(this.data1[index], "thisAccountAmt",  parseFloat(sum1).toFixed(2));
             this.$set(this.data1[index], 'detailDtoList', this.Reconciliationcontent)
             let sum3 = 0
             this.data1.forEach(item => {
@@ -1778,8 +1778,8 @@
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
             }
-            this.$set(this.data2[index], "thisNoAccountAmt", sum);
-            this.$set(this.data2[index], "thisAccountAmt", sum1);
+            this.$set(this.data2[index], "thisNoAccountAmt",  parseFloat(sum).toFixed(2));
+            this.$set(this.data2[index], "thisAccountAmt",  parseFloat(sum1).toFixed(2));
             this.$set(this.data2[index], 'detailDtoList', this.Reconciliationcontent)
             let sum3 = 0
             this.data2.forEach(item => {
