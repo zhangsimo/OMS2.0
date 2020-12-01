@@ -122,9 +122,11 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc"/>
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.badDebtReceivable" :disabled="disabletype"
+                           :readonly="infoBase.accountReceivable==0" class="w60 tc"/>
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.receivableRebate" :disabled="disabletype"
+                           :readonly="infoBase.accountReceivable==0" class="w60 tc"/>
               <span class="mr5 ml10">运费</span>
               <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="disabletype" class="w60 tc"/>
               <span class="mr5 ml10">保险费</span>
@@ -143,11 +145,13 @@
               <InputNumber
                 v-model="infoBase.payingBadDebts"
                 :disabled="disabletype"
+                :readonly="infoBase.reconciliation==0"
                 type="text"
                 class="w60 tc"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc"/>
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype"
+                           :readonly="infoBase.reconciliation==0" class="w60 tc"/>
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
               <Input v-model="Actualtotalcollect" type="text" class="w60 tc" :disabled="disabletype"/>
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
@@ -162,6 +166,7 @@
                   v-for="item in SettlementType"
                   :value="item.value"
                   :key="item.value"
+                  :disabled="item.disabled"
                 >{{ item.label }}
                 </Option>
               </Select>
@@ -188,8 +193,12 @@
               <span class="ml10" style="color:red">*</span>
               <span class="mr5">备注</span>
               <Tooltip :content="infoBase.remark">
-                <Input type="text" v-model="infoBase.remark" style="width: 100%;white-space:normal;word-wrap:break-word;" class="w150 tc" :disabled="disabletype"/>
-                <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">{{(infoBase.remark||"").trim()}}</div>
+                <Input type="text" v-model="infoBase.remark"
+                       style="width: 100%;white-space:normal;word-wrap:break-word;" class="w150 tc"
+                       :disabled="disabletype"/>
+                <div slot="content" style="width: 100%;white-space:normal;word-wrap:break-word;">
+                  {{(infoBase.remark||"").trim()}}
+                </div>
               </Tooltip>
               <span class="mr5 ml10">应付返利请示单号</span>
               <Input type="text" v-model="infoBase.payingRebateNo" class="w200 tc" :disabled="disabletype"/>
@@ -326,7 +335,7 @@
         store: "", //弹框门店
         bill: "", //单据编号
         business: "", //业务类型
-        preDis:false,//保存草稿按钮接口没有返回不可点击
+        preDis: false,//保存草稿按钮接口没有返回不可点击
         companyInfo: "",
         thiscompanyInfo: "", //弹框往来单位
         infoBase: {
@@ -350,13 +359,13 @@
           partsManagementFee: 0, //配件管理费
           otherFees: 0, //其他费用
           collectionName: "", //收款户名;
-          collectionId:"",
+          collectionId: "",
           bankName: "", //开户行
           collectionAccount: "", //收款账号
           thisPaymentAccountId: "", //本次申请付款账户
-          billingType: {value: 0} //计划结算类型
+          billingType: {value: 2} //计划结算类型
         },
-        arrId:[],
+        arrId: [],
         billDate: "", //单据日期
         Reconciliation: false, //本次不对账弹窗
         accountModal: false, //对账单弹窗
@@ -491,15 +500,18 @@
         SettlementType: [
           {
             value: 0,
-            label: "付款"
+            label: "付款",
+            disabled: false
           },
           {
             value: 1,
-            label: "收款"
+            label: "收款",
+            disabled: false
           },
           {
             value: 2,
-            label: "对冲"
+            label: "对冲",
+            disabled: false
           }
         ], //计划结算类型
         Reconciliationlist: [
@@ -589,11 +601,11 @@
         paymentUnameList: [],
         provinceArr: [],
         clientDataShow2: false,
-        treeDiagramList:[],
+        treeDiagramList: [],
         treeDiagramList2: [],
         clientList2: {},
-        collectlist:[],
-        paymentlist:[]
+        collectlist: [],
+        paymentlist: []
       };
     },
     async mounted() {
@@ -611,8 +623,9 @@
       //实际应付合计
       Actualtotalpayment() {
         //对账应付-应付坏账-应付返利
-        this.infoBase.payingBadDebts = this.infoBase.payingBadDebts ? this.infoBase.payingBadDebts : 0;
-        this.infoBase.dealingRebates = this.infoBase.dealingRebates ? this.infoBase.dealingRebates : 0;
+        this.infoBase.payingBadDebts = this.infoBase.payingBadDebts ? (this.infoBase.reconciliation == 0 ? 0 : this.infoBase.payingBadDebts) : 0;
+        this.infoBase.dealingRebates = this.infoBase.dealingRebates ? (this.infoBase.reconciliation == 0 ? 0 : this.infoBase.dealingRebates) : 0;
+        this.infoBase.reconciliation = this.infoBase.reconciliation ? this.infoBase.reconciliation : 0;
         return parseFloat(
           this.infoBase.reconciliation * 1 - this.infoBase.payingBadDebts * 1 - this.infoBase.dealingRebates * 1
         ).toFixed(2);
@@ -620,7 +633,8 @@
       //实际应收合计
       Actualtotalcollect() {
         //对账应收-应收坏账-应收返利  +运费(infoBase.transportExpenses)+保险费(infoBase.insuranceExpenses)+手续费(infoBase.serviceCharge)+配件管理费(infoBase.partsManagementFee)+其他费用(infoBase.otherFees)
-        this.infoBase.badDebtReceivable = this.infoBase.badDebtReceivable ? this.infoBase.badDebtReceivable : 0;
+        this.infoBase.badDebtReceivable = this.infoBase.badDebtReceivable ? (this.infoBase.accountReceivable == 0 ? 0 : this.infoBase.badDebtReceivable) : 0;
+        this.infoBase.receivableRebate = this.infoBase.receivableRebate ? (this.infoBase.accountReceivable == 0 ? 0 : this.infoBase.receivableRebate) : 0;
         this.infoBase.accountReceivable = this.infoBase.accountReceivable ? this.infoBase.accountReceivable : 0;
         return parseFloat(
           this.infoBase.accountReceivable * 1 - this.infoBase.badDebtReceivable * 1 - this.infoBase.receivableRebate * 1 + this.infoBase.transportExpenses * 1 + this.infoBase.insuranceExpenses * 1 + this.infoBase.serviceCharge * 1 + this.infoBase.partsManagementFee * 1 + this.infoBase.otherFees * 1
@@ -628,7 +642,34 @@
       },
       //本次对账结算合计
       Reconciliationtotal() {
-        return parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
+        let sumAmt = parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
+        if (sumAmt > 0) {
+          this.SettlementType.map(el => {
+            if (el.value == 0) { //大于零时付款不可选
+              el.disabled = true;
+            } else {
+              el.disabled = false;
+            }
+          })
+        } else if (sumAmt < 0) {
+          this.SettlementType.map(el => {
+            if (el.value == 1) { //小于零时收款不可选
+              el.disabled = true;
+            } else {
+              el.disabled = false;
+            }
+          })
+        }
+        if (sumAmt == 0) {
+          this.SettlementType.map(el => {
+            if (el.value == 2) { //等于零时收款、付款均不可选
+              el.disabled = false;
+            } else {
+              el.disabled = true;
+            }
+          })
+        }
+        return sumAmt
       },
     },
     methods: {
@@ -673,12 +714,13 @@
                   accountNo: item.accountNo,
                   accountSumAmt: item.accountSumAmt
                 }
-              }else{
+              } else {
                 this.accountData[3] = {
                   accountNo: item.accountNo,
                   accountSumAmt: item.accountSumAmt
                 }
-              };
+              }
+              ;
             });
             res.data.two.map((item, index) => {
               item.index = index + 1;
@@ -693,20 +735,20 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-            this.companyInfo=res.data.four[0].guestId
-            if(!this.disabletype){
+            this.companyInfo = res.data.four[0].guestId
+            if (!this.disabletype) {
               /**进入 草稿状态 下面金额 应该没有值*/
-              this.infoBase.reconciliation=0;
-              this.infoBase.payingBadDebts=0;
-              this.infoBase.dealingRebates=0;
-              this.infoBase.accountReceivable=0;
-              this.infoBase.badDebtReceivable=0;
-              this.infoBase.receivableRebate=0;
-              this.infoBase.transportExpenses=0;
-              this.infoBase.insuranceExpenses=0;
-              this.infoBase.serviceCharge =0;
-              this.infoBase.partsManagementFee=0;
-              this.infoBase.otherFees=0;
+              this.infoBase.reconciliation = 0;
+              this.infoBase.payingBadDebts = 0;
+              this.infoBase.dealingRebates = 0;
+              this.infoBase.accountReceivable = 0;
+              this.infoBase.badDebtReceivable = 0;
+              this.infoBase.receivableRebate = 0;
+              this.infoBase.transportExpenses = 0;
+              this.infoBase.insuranceExpenses = 0;
+              this.infoBase.serviceCharge = 0;
+              this.infoBase.partsManagementFee = 0;
+              this.infoBase.otherFees = 0;
             }
           }
           this.getAccountNameList("0");
@@ -739,7 +781,7 @@
                   accountNo: item.accountNo,
                   accountSumAmt: item.accountSumAmt
                 }
-              }else{
+              } else {
                 this.accountData[3] = {
                   accountNo: item.accountNo,
                   accountSumAmt: item.accountSumAmt
@@ -759,20 +801,20 @@
             });
             this.data2 = res.data.three;
             this.infoBase = res.data.four[0];
-            this.companyInfo=res.data.four[0].guestId
-            if(!this.disabletype){
+            this.companyInfo = res.data.four[0].guestId
+            if (!this.disabletype) {
               /**进入 草稿状态 下面金额 应该没有值*/
-              this.infoBase.reconciliation=0;
-              this.infoBase.payingBadDebts=0;
-              this.infoBase.dealingRebates=0;
-              this.infoBase.accountReceivable=0;
-              this.infoBase.badDebtReceivable=0;
-              this.infoBase.receivableRebate=0;
-              this.infoBase.transportExpenses=0;
-              this.infoBase.insuranceExpenses=0;
-              this.infoBase.serviceCharge =0;
-              this.infoBase.partsManagementFee=0;
-              this.infoBase.otherFees=0;
+              this.infoBase.reconciliation = 0;
+              this.infoBase.payingBadDebts = 0;
+              this.infoBase.dealingRebates = 0;
+              this.infoBase.accountReceivable = 0;
+              this.infoBase.badDebtReceivable = 0;
+              this.infoBase.receivableRebate = 0;
+              this.infoBase.transportExpenses = 0;
+              this.infoBase.insuranceExpenses = 0;
+              this.infoBase.serviceCharge = 0;
+              this.infoBase.partsManagementFee = 0;
+              this.infoBase.otherFees = 0;
             }
           });
           this.getAccountNameList()
@@ -782,7 +824,7 @@
         this.collectCheckoutAll(this.data1)
         this.paymentCheckoutAll(this.data2)
       },
-      defaultSelectAll(data){
+      defaultSelectAll(data) {
         data.map(item => item._checked = true)
       },
       async getAccountNameList(type) {
@@ -799,8 +841,8 @@
             this.changeBtn = false;
             //修改收款户默认选中第一条
             if (type) {
-              if(this.collectionList){
-                let jsonAcction=this.collectionList.filter(item=>(item.id==this.infoBase.collectionId))
+              if (this.collectionList) {
+                let jsonAcction = this.collectionList.filter(item => (item.id == this.infoBase.collectionId))
                 this.infoBase.collectionName = jsonAcction[0].accountName;
                 this.infoBase.collectionId = jsonAcction[0].id;
                 this.infoBase.bankName = jsonAcction[0].accountBank;
@@ -897,7 +939,7 @@
       },
       //获取付款户名
       async getPaymentNameList() {
-          if(!this.model1)return
+        if (!this.model1) return
         let rep = await getPaymentName({"orgId": this.model1});
         if (rep.code == 0) {
           this.paymentUnameList = rep.data;
@@ -905,8 +947,8 @@
       },
       changeCollectionUname(v) {
         this.collectionObj = v;
-        this.infoBase.collectionId=v.value?v.value.trim():"";
-        this.infoBase.collectionName=v.label?v.label.trim():"";
+        this.infoBase.collectionId = v.value ? v.value.trim() : "";
+        this.infoBase.collectionName = v.label ? v.label.trim() : "";
         let arrData = this.collectionList.filter(item => item.id == this.infoBase.collectionId);
         if (arrData.length > 0) {
           this.infoBase.bankName = arrData[0].accountBank;
@@ -925,7 +967,7 @@
       // 应付选中
       paymentCheckout(selection, row) {
         this.paymentlist = selection;
-        this.infoBase.reconciliation  = this.collectSum(selection).toFixed(2)
+        this.infoBase.reconciliation = this.collectSum(selection).toFixed(2)
         this.getSettlementComputed();
 
         // this.tipText(this.paymentlist);
@@ -1171,24 +1213,24 @@
         this.list.four = [this.infoBase]
         // this.infoBase.reconciliation=0;
         // this.infoBase.reconciliation
-        this.preDis=true;
+        this.preDis = true;
         if (num == 0) {
           let res = await CheckForSave(this.list, this.modelType)
           if (res.code === 0) {
-            this.preDis=false;
+            this.preDis = false;
             this.$emit('closeModal', {})
-          }else{
-            this.preDis=false;
+          } else {
+            this.preDis = false;
           }
         }
         if (num == 1) {
           let res = await CheckForSubmit(this.list, this.modelType)
           if (res.code === 0) {
-            this.preDis=false;
+            this.preDis = false;
             this.$emit('closeModal', {})
-          }else if(res.code===1){
-            this.preDis=false;
-            this.$Message.error( res.message)
+          } else if (res.code === 1) {
+            this.preDis = false;
+            this.$Message.error(res.message)
           }
         }
         // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
@@ -1314,7 +1356,8 @@
     position: relative;
     left: -30px;
   }
-  .remark{
+
+  .remark {
     display: inline-block;
     width: 100%;
     overflow: hidden;

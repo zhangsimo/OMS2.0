@@ -174,18 +174,21 @@
                 size="mini"
                 :data="data1"
                 :loading="data1Loading"
+                :sort-config="{trigger: 'cell', defaultSort: {field: 'transferDate', order: 'asc'}, orders: ['desc', 'asc']}"
+                @sort-change="sortMethodCollect"
                 @checkbox-all="collectCheckoutAll"
                 @checkbox-change="collectCheckout"
               >
                 <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
                 <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
                 <vxe-table-column field="guestName" title="客户名称" align="center" width="100"></vxe-table-column>
-                <vxe-table-column field="transferDate" title="日期" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="transferDate" title="日期" align="center" width="100"
+                                  remote-sort></vxe-table-column>
                 <vxe-table-column field="serviceId" title="业务单据号" align="center" width="100"></vxe-table-column>
                 <vxe-table-column field="serviceSourceName" title="来源" align="center" width="100"></vxe-table-column>
                 <vxe-table-column field="serviceTypeName" title="业务类型" align="center" width="80"></vxe-table-column>
                 <vxe-table-column field="taxSignName" title="含税标志" align="center" width="80"></vxe-table-column>
-                <vxe-table-column field="rpAmt" title="单据金额" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="rpAmt" title="单据金额" align="center" width="80" remote-sort></vxe-table-column>
                 <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="140"></vxe-table-column>
                 <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="140"></vxe-table-column>
                 <vxe-table-column
@@ -226,19 +229,22 @@
                 size="mini"
                 :data="data2"
                 ref="payable"
-                :loading="data1Loading"
+                :loading="data2Loading"
+                :sort-config="{trigger: 'cell', defaultSort: {field: 'transferDate', order: 'asc'}, orders: ['desc', 'asc']}"
+                @sort-change="sortMethodPay"
                 @checkbox-all="paymentCheckoutAll"
                 @checkbox-change="paymentCheckout"
               >
                 <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
                 <vxe-table-column width="50" type="seq" title="序号" align="center"></vxe-table-column>
                 <vxe-table-column field="guestName" title="客户名称" align="center" width="100"></vxe-table-column>
-                <vxe-table-column field="transferDate" title="日期" align="center" width="100"></vxe-table-column>
+                <vxe-table-column field="transferDate" title="日期" align="center" width="100"
+                                  remote-sort></vxe-table-column>
                 <vxe-table-column field="serviceId" title="业务单据号" align="center" width="100"></vxe-table-column>
                 <vxe-table-column field="serviceSourceName" title="来源" align="center" width="100"></vxe-table-column>
                 <vxe-table-column field="serviceTypeName" title="业务类型" align="center" width="80"></vxe-table-column>
                 <vxe-table-column field="taxSignName" title="含税标志" align="center" width="80"></vxe-table-column>
-                <vxe-table-column field="rpAmt" title="单据金额" align="center" width="80"></vxe-table-column>
+                <vxe-table-column field="rpAmt" title="单据金额" align="center" width="80" remote-sort></vxe-table-column>
                 <vxe-table-column field="accountAmt" title="前期已对账金额" align="center" width="140"></vxe-table-column>
                 <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="140"></vxe-table-column>
                 <vxe-table-column
@@ -272,9 +278,9 @@
                 <span class="mr5">对账应收</span>
                 <Input type="text" v-model="totalcollect" readonly class="w80 tc"/>
                 <span class="mr5 ml10">应收坏账</span>
-                <InputNumber v-model="collectBaddebt" class="w80 tc"/>
+                <InputNumber v-model="collectBaddebt" class="w80 tc" :readonly="totalcollect==0"/>
                 <span class="mr5 ml10">应收返利</span>
-                <InputNumber v-model="collectRebate" class="w80 tc"/>
+                <InputNumber v-model="collectRebate" class="w80 tc" :readonly="totalcollect==0"/>
                 <span class="mr5 ml10">运费</span>
                 <InputNumber v-model="transportExpenses" class="w60 tc"/>
                 <span class="mr5 ml10">保险费</span>
@@ -290,9 +296,9 @@
                 <span class="mr5">对账应付</span>
                 <Input type="text" v-model="totalpayment" readonly class="w80 tc"/>
                 <span class="mr5 ml10">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w80 tc"/>
+                <InputNumber v-model="paymentBaddebt" type="text" class="w80 tc" :readonly="totalpayment==0"/>
                 <span class="mr5 ml10">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w80 tc"/>
+                <InputNumber v-model="paymentRebate" class="w80 tc" :readonly="totalpayment==0"/>
                 <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
                 <Input v-model="Actualtotalcollect" type="text" class="w80 tc" readonly/>
                 <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
@@ -307,6 +313,7 @@
                     v-for="item in SettlementType"
                     :value="item.value"
                     :key="item.value"
+                    :disabled="item.disabled"
                   >{{ item.label }}
                   </Option>
                 </Select>
@@ -542,7 +549,8 @@
     Preservation,
     getStore,
     getAccountName,
-    getPaymentName
+    getPaymentName,
+    colOrPaySort/**应收、应付数据*/
   } from "@/api/bill/saleOrder";
   import index from "../../admin/roles";
   import {findGuest} from "@/api/settlementManagement/advanceCollection";
@@ -616,7 +624,7 @@
         partsManagementFee: 0, //配件管理费
         otherFees: 0, //其他费用
         noPayTotal: 0,  //本次不对账合计
-        totalvalue: "1",
+        totalvalue: "2",
         Reconciliation: false,
         modifyAccountAmt: 0,
         modal: false,
@@ -818,21 +826,25 @@
         SettlementType: [
           {
             value: "0",
-            label: "付款"
+            label: "付款",
+            disabled: false
           },
           {
             value: "1",
-            label: "收款"
+            label: "收款",
+            disabled: false
           },
           {
             value: "2",
-            label: "对冲"
+            label: "对冲",
+            disabled: false
           }
         ],
         data: [],
         data1: [],
         data1Loading: false,
         data2: [],
+        data2Loading: false,
         Reconciliationcontent: [],
         parameter: {},
         paymentlist: [],
@@ -939,7 +951,8 @@
       //实际应付合计
       Actualtotalpayment() {
         //对账应付-应付坏账-应付返利
-        this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
+        this.paymentBaddebt = this.paymentBaddebt ? (this.totalpayment == 0 ? 0 : this.paymentBaddebt) : 0;
+        this.paymentRebate = this.paymentRebate ? (this.totalpayment == 0 ? 0 : this.paymentRebate) : 0;
         this.totalpayment = this.totalpayment ? this.totalpayment : 0;
         return parseFloat(
           this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
@@ -948,7 +961,8 @@
       //实际应收合计
       Actualtotalcollect() {
         //对账应收-应收坏账-应收返利  +运费(transportExpenses)+保险费(insuranceExpenses)+手续费(serviceCharge)+配件管理费(partsManagementFee)+其他费用(otherFees)
-        this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
+        this.collectBaddebt = this.collectBaddebt ? (this.totalcollect == 0 ? 0 : this.collectBaddebt) : 0;
+        this.collectRebate = this.collectRebate ? (this.totalcollect == 0 ? 0 : this.collectRebate) : 0;
         this.totalcollect = this.totalcollect ? this.totalcollect : 0;
         return parseFloat(
           this.totalcollect * 1 - this.collectBaddebt * 1 - this.collectRebate * 1 + this.transportExpenses * 1 + this.insuranceExpenses * 1 + this.serviceCharge * 1 + this.partsManagementFee * 1 + this.otherFees * 1
@@ -956,7 +970,34 @@
       },
       //本次对账结算合计
       Reconciliationtotal() {
-        return parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
+        let sumAmt = parseFloat(this.Actualtotalcollect - this.Actualtotalpayment).toFixed(2);
+        if (sumAmt > 0) {
+          this.SettlementType.map(el => {
+            if (el.value == 0) { //大于零时付款不可选
+              el.disabled = true;
+            } else {
+              el.disabled = false;
+            }
+          })
+        } else if (sumAmt < 0) {
+          this.SettlementType.map(el => {
+            if (el.value == 1) { //小于零时收款不可选
+              el.disabled = true;
+            } else {
+              el.disabled = false;
+            }
+          })
+        }
+        if (sumAmt == 0) {
+          this.SettlementType.map(el => {
+            if (el.value == 2) { //等于零时收款、付款均不可选
+              el.disabled = false;
+            } else {
+              el.disabled = true;
+            }
+          })
+        }
+        return sumAmt
       },
     },
     methods: {
@@ -975,7 +1016,7 @@
           }
         } else {
           this.info = false;
-          this.totalvalue = "1";
+          this.totalvalue = "2";
         }
       },
       changeTotal() {
@@ -1214,18 +1255,64 @@
         this.getAccountNameList();
         this.Initialization();
       },
-
+      //应收 / 应付数据 排序
+      async colOrPaySortMethod(data) {
+        let obj = {orgId: this.model1, guestId: this.companyInfo};
+        if (data) {
+          obj.type = data.type;//应收1应付-1
+          obj.dateSort = data.dateSort ? data.dateSort : 0;//日期排序 1升序 -1降序
+          obj.amtSort = data.amtSort ? data.amtSort : 0;//单据金额 1升序 -1降序
+        }
+        obj.startDate = this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "";
+        obj.endDate = this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
+        if (obj.endDate) {
+          obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
+        }
+        if (this.moreSearch.businessType) {
+          obj.serviceType = this.moreSearch.businessType;
+        }
+        if (this.moreSearch.orderNo) {
+          obj.serviceId = this.moreSearch.orderNo;
+        }
+        if (this.moreSearch.orderNo) {
+          obj.serviceId = this.moreSearch.orderNo;
+        }
+        if (this.moreSearch.taxMark) {
+          obj.taxSign = this.moreSearch.taxMark;
+        }
+        if (data.type == 1) {
+          this.data1Loading = true;
+          this.data1 = [];
+        } else if (data.type == -1) {
+          this.data2Loading = true;
+          this.data2 = []
+        }
+        let res = await colOrPaySort(obj);
+        if (res.code === 0) {
+          if (data.type == 1) {
+            this.data1Loading = false;
+            this.data1 = res.data;
+          } else if (data.type == -1) {
+            this.data2Loading = false;
+            this.data2 = res.data;
+          }
+        }
+      },
       // 获取数据
-      Initialization() {
+      Initialization(data) {
         // let { orgId, startDate, endDate, guestId } = this.parameter;
         let obj = {orgId: this.model1, guestId: this.companyInfo};
         // if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
         obj.startDate = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-          obj.endDate = this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : ""
+          : "";
+        obj.endDate = this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
         // }
         if (obj.endDate) {
           obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
@@ -1243,6 +1330,7 @@
           obj.taxSign = this.moreSearch.taxMark;
         }
         this.data1Loading = true;
+        this.data2Loading = true;
         this.data1 = [];
         this.data2 = [];
 
@@ -1252,6 +1340,7 @@
         this.pageObj1.num = 1;
         getReconciliation(obj).then(res => {
           this.data1Loading = false;
+          this.data2Loading = false;
           for (let i of res.data.one) {
             if (i.number === 3) {
               this.arrId[0] = i.accountNo;
@@ -1461,7 +1550,27 @@
         this.getPaymentNameList();
         this.totalvalueFun();
       },
-
+      //应收 排序
+      sortMethodCollect({column, property, order}) {
+        //order:asc 升序 desc 降序
+        //property:多个排序时所点击的头部
+        //column:本列
+        let data = {
+          type: 1
+        };
+        switch (property) {
+          case "transferDate":
+            data.dateSort = order == "asc" ? 1 : -1;
+            data.amtSort ? delete data.amtSort : "";
+            break;
+          case "rpAmt":
+            data.amtSort = order == "asc" ? 1 : -1;
+            data.dateSort ? delete data.dateSort : "";
+            break;
+        }
+        this.colOrPaySortMethod(data);
+        this.totalcollect = 0;
+      },
       setTempCollectlist(selection) {
         this.tempCollectlist['page' + this.pageObj.num] = selection;
         this.totalcollect = 0;
@@ -1514,7 +1623,27 @@
         this.getPaymentNameList();
         this.totalvalueFun();
       },
-
+      //应付 排序
+      sortMethodPay({column, property, order}) {
+        //order:asc 升序 desc 降序
+        //property:多个排序时所点击的头部
+        //column:本列
+        let data = {
+          type: -1
+        };
+        switch (property) {
+          case "transferDate":
+            data.dateSort = order == "asc" ? 1 : -1;
+            data.amtSort ? delete data.amtSort : "";
+            break;
+          case "rpAmt":
+            data.amtSort = order == "asc" ? 1 : -1;
+            data.dateSort ? delete data.dateSort : "";
+            break;
+        }
+        this.colOrPaySortMethod(data);
+        this.totalpayment = 0;
+      },
       setTempPaymentList(selection) {
         this.tempPaymentlist['page' + this.pageObj1.num] = selection;
         this.totalpayment = 0;

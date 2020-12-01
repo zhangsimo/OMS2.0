@@ -44,7 +44,7 @@
               <Row>
                 <Col span="1"><span style="color:red">*</span>:</Col>
                 <Col span="10">
-                  <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+                  <Select v-model="fund" placeholder="请选择" class="w200" @on-change="fundChange" clearable>
                     <Option
                       v-for="item in fundList"
                       :value="item.itemName"
@@ -115,7 +115,7 @@
             <Input class="mr10 w200" v-model="shopName" disabled/>
           </Col>
           <Col span="16">
-            <Date-picker v-model="value" type="daterange" placeholder="选择日期11" class="w200"></Date-picker>
+            <Date-picker v-model="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
             <button class="ivu-btn ivu-btn-default ml10" type="button" @click="getQuery">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -163,7 +163,7 @@
         </Row>
       </div>
       <div slot="footer">
-        <Button type="primary" @click="openClimed()" class="mr10">确定</Button>
+        <Button type="primary" @click="openClimed()" :loading="comLoading" class="mr10">确定</Button>
         <Button type="default" @click="modal = false">取消</Button>
       </div>
     </Modal>
@@ -187,9 +187,9 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" :assistTypeCode="assistTypeCode" @callBackFun="getCallBack"></voucherInput>
     <settlement ref="settlement" @reloadParList="reloadParentList"></settlement>
-    <settlement2 ref="settlement2" @reloadParList="reloadParentList" :paymentTypeCode="fund"></settlement2>
+    <settlement2 ref="settlement2" @reloadParList="reloadParentList" :paymentTypeCode="fundCode" :paymentTypeName="fund"></settlement2>
     <claimGuest ref="claimGuest"></claimGuest>
   </div>
 </template>
@@ -214,11 +214,12 @@
   import {showLoading, hideLoading} from "@/utils/loading"
   import bus from "@/view/settlementManagement/bill/Popup/Bus";
   import {kmType} from "@/api/settlementManagement/VoucherInput";
+  import {saveAccount,wirteAccount} from "@/api/settlementManagement/otherReceivables/otherReceivables";
+  import * as api from "_api/settlementManagement/seleteAccount";
+
 
   export default {
-    props: {
-      accrued: ""
-    },
+    props: ['accrued','selectItem'],
     components: {
       voucherInput,
       claim,
@@ -259,6 +260,7 @@
         modal: false, //模态框展示
         fundList: [],//款项分类数组
         fund:"",//款项分类选择项
+        fundCode:'',//款项分类选择项的code
         oneSubject: {}, //单选获取到的数据
         company: [], //往来单位数组
         companyId: "", //往来单位
@@ -283,6 +285,10 @@
         currentAccountItem: {},
         accruedList: [{mateAccountCoding: ""}],
         shopName: '',
+        assistTypeCode: '', //能够选择辅助核算的类型
+        dataOne: {},
+        dataTwo: [],
+        comLoading: false,
       };
     },
     async mounted() {
@@ -304,6 +310,13 @@
           this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
       },
+      fundChange(v){
+        this.fundList.forEach(it => {
+          if(it.itemName == v){
+            this.fundCode = it.itemCode
+          }
+        })
+      },
       reloadParentList() {
         //刷新 列表
         this.$parent.$parent.queryClaimed()
@@ -312,10 +325,13 @@
       },
       // 打开模态框
       open() {
+        this.fund = ''
+        this.currentAccountItem = []
         if (this.company.length == 0) {
           this.getOne();
         }
         this.claimTit == '预付款认领' ? this.accruedList[0].mateAccountCoding = "2203" : this.accruedList[0].mateAccountCoding = "1221"
+        this.claimTit == '预付款认领' ? this.assistTypeCode = '1' : this.assistTypeCode = '4'
         this.oneSubject = {};
         this.modal = true;
 
@@ -394,13 +410,26 @@
         this.currRow = {};
       },
       // 选中
-      selected({row}) {
+      async selected({row}) {
         this.currentAccountItem = row;
         this.claimTit == "其他付款认领"
           ? (this.currentAccount.accountNo =
             row.serviceId)
           : (this.currentAccount.accountNo =
             row.serviceId);
+        if(this.claimTit == "其他付款认领"){
+          let {code,data:{one,two}} = await wirteAccount({accountNo: this.currentAccountItem.serviceId,sign:1,id:this.currentAccountItem.id})
+          if(code === 0){
+            this.dataOne = one
+            this.dataTwo = two
+          }
+        }else{
+          let {code,data:{one,two}} = await api.wirteAccount({accountNo: this.currentAccountItem.serviceId,sign:9,id:this.currentAccountItem.id})
+          if(code === 0){
+            this.dataOne = one
+            this.dataTwo = two
+          }
+        }
       },
       //获取门店
       async getShop() {
@@ -452,29 +481,48 @@
           return
         }
         if (!this.voucherinputModel) {
-          if (this.currentAccount.accountNo) {
-            if (this.accrued[0].rpAmt == null || this.accrued[0].rpAmt <= 0) {
-              this.$Message.error("本次认领金额不可为零或小于零")
-              return
-            } else if (this.accrued[0].rpAmt > Math.abs(this.accrued[0].paidMoney)) {
-              this.$Message.error("本次认领金额不可大于支付金额")
-              return
-            }
-            if (this.claimTit == "预付款认领") {
-              this.changeAmt();
-              this.$refs.settlement.Settlement = true;
-            } else {
-              if(this.fund==""){
-                return this.$Message.error("款项分类必填")
-              }else{
-                this.changeAmt();
-                this.paymentId = "YJDZ";
-                this.$refs.settlement2.Settlement = true;
+          if(!this.fund && this.claimTit == "其他付款认领"){
+            return this.$Message.error("款项分类必填")
+          }
+          if(!this.currentAccountItem.id){
+            return this.$Message.error("请选中一条表格中的数据")
+          }
+          let arr = [];
+          this.selectItem.map(el => {
+            let obj = {};
+            obj.id = el.id;
+            obj.thisClaimedAmt = el.rpAmt;
+            arr.push(obj)
+          })
+          if(!this.dataOne || !this.dataTwo){
+            return this.$Message.error("没有对冲数据")
+          }
+          let data = {
+            one: this.dataOne,
+            two: this.dataTwo,
+            three: arr,
+            // paymentTypeCode:this.fund
+          }
+          try {
+            this.comLoading = true
+            if(this.claimTit == '其他付款认领'){
+              data.paymentTypeCode = this.fund
+              let {code} = await saveAccount(data)
+              if(code == 0){
+                this.$message.success("其他付款认领成功")
+              }
+            }else{
+              let {code} = await api.saveAccount(data)
+              if(code == 0){
+                this.$message.success("预付款认领成功")
               }
             }
-          } else {
-            this.$Message.error("请先选择预付款申请单")
+            this.comLoading = false
+          } catch (error) {
+            this.comLoading = false
           }
+          this.modal = false
+          this.$parent.$parent.queryClaimed()
         } else {
           //勾选框选中时
           this.getMessage()
@@ -486,6 +534,7 @@
             this.ok();
           }
         }
+        
       },
       //预收款弹框是否打开
       visChangeClaim(type) {
@@ -632,7 +681,8 @@
             data.claimMoney = this.accrued[0].rpAmt;
             data.subjectCode = "1221";
             data.claimType = 6;
-            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund
+            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.code
+            data.paymentTypeName = this.$refs.voucherInput.formDynamic.fund
           }
           if (data.claimMoney == null || data.claimMoney <= 0) {
             ajaxBool = false;
@@ -675,6 +725,7 @@
                   ? this.$Message.success("预付款认领成功")
                   : this.$Message.success("其他付款认领成功");
                 this.formValidate.voucherInput = ""
+                this.getQuery()
                 hideLoading()
               } else {
                 hideLoading()

@@ -118,7 +118,7 @@
     </Modal>
     <claimGuest ref="claimGuest"></claimGuest>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" :assistTypeCode="assistTypeCode"  @callBackFun="getCallBack"></voucherInput>
     <!--其他收款核销-->
     <settlement ref="settlement"></settlement>
   </div>
@@ -194,6 +194,7 @@
         accruedList: [{mateAccountCoding: ""}],
         outStaffSelect: {}, //辅助核算选择的外部员工对象
         isOutStaff: false, //是否是外部员工
+        assistTypeCode: '', //能够选择辅助核算的类型
       };
     },
     mounted() {
@@ -203,6 +204,7 @@
       // 打开模态框
       open() {
         this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "2241"
+        this.claimTit == '预收款认领' ? this.assistTypeCode = '1' : this.assistTypeCode = '4'
         if (this.company.length == 0) {
           this.getOne();
         }
@@ -395,7 +397,8 @@
             data.claimMoney = this.accrued[0].balanceMoney
             data.subjectCode = "2241";
             data.claimType = 5;
-            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
+            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.code;
+            data.paymentTypeName = this.$refs.voucherInput.formDynamic.fund;
           }
           data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2 ? 1 : this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
           if (data.auxiliaryTypeCode == "1" || data.auxiliaryTypeCode == "2" || data.auxiliaryTypeCode == "3" || data.auxiliaryTypeCode == "4") {
@@ -448,6 +451,7 @@
           data.financeAccountCashList = this.accrued
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
+            data.subjectCode = "1123";
             this.accrued.map(el => {
               el.thisClaimedAmt = el.rpAmt;
               if (el.thisClaimedAmt == null || el.thisClaimedAmt <= 0) {
@@ -486,7 +490,8 @@
             data.auxiliaryTypeCode = this.$refs.voucherInput.auxiliaryTypeCode == 2 ? 1 : this.$refs.voucherInput.auxiliaryTypeCode //辅助核算选中哪一个
             data.claimType = 0;
             data.claimMoney = this.accrued[0].balanceMoney
-            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.fund;
+            data.paymentTypeCode = this.$refs.voucherInput.formDynamic.code;
+            data.paymentTypeName = this.$refs.voucherInput.formDynamic.fund;
             if (data.claimMoney == null || data.claimMoney <= 0) {
               ajaxBool = false;
               return this.$Message.error("本次认领金额不可为零或小于零")
@@ -503,6 +508,7 @@
               data.externalEmployeeName = this.outStaffSelect.itemName
               data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
+            
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")
               addClaim(data).then(res => {
