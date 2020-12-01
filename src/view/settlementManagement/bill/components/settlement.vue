@@ -433,7 +433,7 @@
           let sumUnAmt = row.unAmt;
           this.$refs.xTable.updateFooter();
           this.checkComputed();
-          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
+          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (Math.abs(sumUnAmt) < Math.abs(row.rpAmt))) {
             return this.$Message.error("金额录入错误，请重新录入！")
           }
         }
@@ -467,7 +467,7 @@
               let sumUnAmt = row.unAmt;
               this.$refs.xTable.updateFooter();
               this.checkComputed();
-              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)||(sumUnAmt < row.rpAmt)) {
+              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)|| (Math.abs(sumUnAmt) < Math.abs(row.rpAmt))) {
                 this.$Message.error("金额录入错误，请重新录入！")
                 bool = false
                 return
