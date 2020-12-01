@@ -211,7 +211,7 @@
                 size="small"
                 class="mr10"
                 @click="shanchu"
-                :disabled="draftShow != 0"
+                :disabled="draftShow != 0&&draftShow != 9"
                 >
                 <i class="iconfont mr5 iconlajitongicon"></i> 删除
                 </Button>
@@ -277,7 +277,7 @@
                                    :edit-render="{autofocus: '.vxe-input--inner'}"
                 >
                   <template v-slot:edit="{ row }">
-                    <vxe-input type="number" v-model="row.exhibitQty" :min="1" :max="formPlan.source==4?row.sysQty:''"></vxe-input>
+                    <vxe-input type="number" v-model="row.exhibitQty" :min="1" :max="formPlan.source==4?row.sysQty:'99999999'"></vxe-input>
                   </template>
                   <template v-slot="{ row }">{{ row.exhibitQty}}</template>
                 </vxe-table-column>
@@ -781,7 +781,7 @@
           this.$Message.error("请选择数据");
           return;
         }
-        if (this.formPlan.billStatusId.value !== 0) {
+        if (this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9) {
           this.$Message.error("只有草稿状态才能提交");
           return;
         }
@@ -868,7 +868,7 @@
           return;
         }
         //判断是否为草稿状态
-        if (this.formPlan.billStatusId.value !== 0) {
+        if (this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9) {
           this.$Message.error("只有草稿状态才能作废");
           return;
         }
@@ -927,7 +927,7 @@
       shanchu() {
         if (
           this.formPlan.hasOwnProperty("billStatusId") &&
-          this.formPlan.billStatusId.value !== 0
+          this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9
         ) {
           this.$Message.info("只有草稿状态才能进行删除操作");
           return;
