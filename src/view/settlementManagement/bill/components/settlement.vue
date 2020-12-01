@@ -493,7 +493,7 @@ export default {
                     let res = await getHedging(obj)
                     if (res.code === 0){
                       this.$message.success("发票对冲申请单");
-                      this.$emit('getNewList')
+                      this.$emit('getNewList',{})
                     }
                     this.conserveDis=false;
                     this.Settlement = false;
@@ -503,6 +503,7 @@ export default {
                     this.conserveDis=false;
                     this.Settlement = false;
                     this.handleReset()
+                    this.$emit('getNewList',{})
                     this.$message.success("对账单对冲成功");
                   }
                 });
@@ -510,6 +511,7 @@ export default {
                 this.conserveDis=false;
                 this.Settlement = false;
                 this.handleReset()
+                this.$emit('getNewList',{})
                 this.$message.success("对账单对冲成功");
               }
             }else{

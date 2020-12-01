@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>查询日期：</span>
-            <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200"
+            <Date-picker :value="dates" type="daterange" placeholder="选择日期" class="w200"
                          @on-change="changedate"></Date-picker>
           </div>
           <div class="db ml15">
@@ -41,7 +41,7 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select> -->
-            <input type="text" class="h30" v-model="companyId" />    
+            <input type="text" class="h30" v-model="companyId" />
           </div>
           <div class="db ml15">
             <span>收付款单号：</span>

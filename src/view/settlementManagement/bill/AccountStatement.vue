@@ -634,7 +634,7 @@
         <Button type='default' @click='cancel'>取消</Button>
       </div>
     </Modal>
-    <salepopup ref="salepopup"/>
+    <salepopup ref="salepopup"  @getNewList="getNeWlist"/>
     <hedgingInvoice ref="hedgingInvoice"  @getNewList="getNeWlist"/>
     <registrationEntry ref="registrationEntry" @getNewList="getNeWlist"/>
     <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>
