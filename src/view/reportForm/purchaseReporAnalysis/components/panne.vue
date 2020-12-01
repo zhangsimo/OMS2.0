@@ -86,7 +86,8 @@
                       v-model="search.typeId"
                       @on-change="changetype"
                       class="ml10 mr10 w300"
-                      filterable>
+                      filterable
+                      transfer>
                       <Option
                         v-for="item in typepf"
                         :value="item.typeId"
@@ -96,19 +97,21 @@
                     </Select>
                   </FormItem>
                   <FormItem label="适用车款: " class="h20">
-                    <Select
-                      @on-change="getSelectCarBrand"
-                      class="w300 ml10"
-                      v-model="search.carModelName"
-                      filterable
-                    >
-                      <Option
-                        v-for="item in carObj.carBrandData"
-                        :value="item.erpCarBrandId"
-                        :key="item.erpCarBrandId"
-                      >{{item.nameCn}}
-                      </Option>
-                    </Select>
+                    <!--<Select-->
+                      <!--@on-change="getSelectCarBrand"-->
+                      <!--class="w300 ml10"-->
+                      <!--v-model="search.carModelName"-->
+                      <!--filterable-->
+                    <!--&gt;-->
+                      <!--<Option-->
+                        <!--v-for="item in carObj.carBrandData"-->
+                        <!--:value="item.erpCarBrandId"-->
+                        <!--:key="item.erpCarBrandId"-->
+                      <!--&gt;{{item.nameCn}}-->
+                      <!--</Option>-->
+                    <!--</Select>-->
+                    <Input type="text" class="w300 ml10" v-model="search.carModelName"/>
+
                   </FormItem>
                   <FormItem label="品牌: " class="h20 pb30">
                     <Select
@@ -117,6 +120,7 @@
                       label-in-value
                       filterable
                       remote
+                      transfer
                       :remote-method="partBrandRemote"
                       @on-change="select1"
                       v-model="search.partBrand"

@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" filterable class="w150" :disabled="selectShopList">
+            <Select v-model.trim="model1" filterable class="w150" :disabled="selectShopList">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -31,11 +31,11 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Input type="text" class="h30 w200" clearable v-model="guestId"/>
+            <Input type="text" class="h30 w200" clearable v-model.trim="guestId"/>
           </div>
           <div class="db ml20">
             <span>对账类型：</span>
-            <Select v-model="accountType" filterable class="w150">
+            <Select v-model.trim="accountType" filterable class="w150">
               <Option
                 v-for="item in statementTypeList"
                 :value="item.value"
@@ -193,26 +193,26 @@
       </div>
       <div class="db pro mt20">
         <span>客户类型：</span>
-        <Select v-model="model2" style="width:200px">
+        <Select v-model.trim="model2" style="width:200px">
           <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
 
       <div class="db pro mt20">
         <span>分店名称：</span>
-        <Select v-model="model1" style="width:200px">
+        <Select v-model.trim="model1" style="width:200px">
           <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>业务类型：</span>
-        <Select v-model="model3" style="width:200px">
+        <Select v-model.trim="model3" style="width:200px">
           <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
       <div class="db pro mt20">
         <span>业务单号：</span>
-        <input type="text" class="w200" v-model="text"/>
+        <input type="text" class="w200" v-model.trim="text"/>
       </div>
     </Modal>
     <Modal v-model="outStock" :title="title" width="1200">
@@ -2273,7 +2273,8 @@
         }).then(res => {
           if (res.data.one) {
 
-            let arrData = res.data.one.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0);
+            // let arrData = res.data.one.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0);
+            let arrData = res.data.one;
 
             arrData.map((item, index) => {
               item.num = index + 1;
@@ -2288,7 +2289,8 @@
             this.data1 = [];
           }
           if (res.data.two) {
-            let arrData2 = res.data.two.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0)
+            // let arrData2 = res.data.two.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0)
+            let arrData2 = res.data.two
             arrData2.map((item, index) => {
               item.num = index + 1;
               item.guestTypeName = item.guestType.name;

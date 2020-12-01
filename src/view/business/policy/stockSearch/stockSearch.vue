@@ -1750,9 +1750,10 @@
     flex-flow: column;
   }
   .tabs-warp .top-table{
-    flex: 1;
+    flex: 2;
   }
   .tabs-warp .bottom-table{
+    flex: 1;
     display: flex;
     flex-flow: row nowrap;
   }
