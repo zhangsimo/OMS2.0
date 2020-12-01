@@ -277,7 +277,7 @@
                                    :edit-render="{autofocus: '.vxe-input--inner'}"
                 >
                   <template v-slot:edit="{ row }">
-                    <vxe-input type="number" v-model="row.exhibitQty" :min="1" :max="formPlan.source==4?row.sysQty:''"></vxe-input>
+                    <vxe-input type="number" v-model="row.exhibitQty" :min="1" :max="formPlan.source==4?row.sysQty:'99999999'"></vxe-input>
                   </template>
                   <template v-slot="{ row }">{{ row.exhibitQty}}</template>
                 </vxe-table-column>
