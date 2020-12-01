@@ -290,7 +290,7 @@ export default {
     };
     return {
       validRules: {
-        rpAmt: [{ required: true, validator: amtValid }],
+        // rpAmt: [{ required: true, validator: amtValid }],
       },
       Settlement: false, //弹框显示
       conserveDis: false, //保存接口返回之前按钮不可点击
