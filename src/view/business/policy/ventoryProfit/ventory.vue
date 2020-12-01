@@ -31,7 +31,7 @@
               type="default"
               class="mr10"
               :loading="saveLoading"
-              :disabled="this.formPlan.statuName!== '草稿'"
+              :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
             >保存</Button>
           </div>
           <div class="db">
@@ -41,7 +41,7 @@
               type="default"
               class="mr10"
               :loading="commitLoading"
-              :disabled="this.formPlan.statuName!== '草稿'"
+              :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
             >提交</Button>
           </div>
           <div class="db">
@@ -56,7 +56,7 @@
             <Button
               class="mr10"
               @click="cancellation"
-              :disabled="this.formPlan.statuName!== '草稿'"
+              :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
             >
               <Icon type="md-close" size="14" />作废
             </Button>
@@ -147,7 +147,7 @@
                     <Select
                       v-model="formPlan.storeId"
                       style="width:100px"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
                     >
                       <Option
                         v-for="item in warehouseList"
@@ -185,7 +185,7 @@
                     <Input
                       v-model="formPlan.remark"
                       class="w160"
-                      :disabled="this.formPlan.statuName!== '草稿'"
+                      :disabled="this.formPlan.statuName!== '草稿'&&this.formPlan.statuName!== '不通过'"
                     />
                     </Tooltip>
                   </FormItem>
@@ -403,6 +403,10 @@
           {
             label: "已作废",
             value: 5
+          },
+          {
+            label: "不通过",
+            value: 9
           }
         ],
         showMore: false, //更多模块的弹框

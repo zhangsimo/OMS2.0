@@ -793,8 +793,8 @@ export default {
         },
         statuName: "草稿",
         checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-        orderMan: this.$store.state.user.userData.staffName || "", //盘点人
-        orderManId: this.$store.state.user.userData.id || "", //盘点人id
+        orderMan: this.$store.state.user.userData.currentShopName || "", //盘点人
+        orderManId: this.$store.state.user.userData.currentShopId || "", //盘点人id
         serviceId: "",
         print: "",
         createUname: "",
