@@ -196,7 +196,7 @@ export default {
       obj: {},
       //表格校验
       validRules: {
-        rpAmt: [{ validator: rpAmtValid }]
+        // rpAmt: [{ validator: rpAmtValid }]
       }
     };
   },

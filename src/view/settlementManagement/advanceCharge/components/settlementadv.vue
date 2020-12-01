@@ -179,7 +179,7 @@ export default {
       accountDisabeld: true, //对账单号是否可选
       //表格校验
       validRules: {
-        rpAmt: [{ validator: rpAmtValid }]
+        // rpAmt: [{ validator: rpAmtValid }]
       }
     };
   },
