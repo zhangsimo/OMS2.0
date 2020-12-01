@@ -127,6 +127,10 @@
             label:"WMS盘点",
           },
           {
+            value:4,
+            label:"盘亏开单",
+          },
+          {
             value:3,
             label:"全部",
           }

@@ -78,8 +78,11 @@
               field="rpAmt"
               title="本次核销金额"
               width="140"
-              :edit-render="{name: 'input', attrs: {type: 'number'}}"
-            ></vxe-table-column>
+            >
+              <template v-slot="{row}">
+                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
             <vxe-table-column field="accountNo" width="120" title="对账单号"></vxe-table-column>
             <vxe-table-column field="orgName" width="120" title="门店"></vxe-table-column>
@@ -172,7 +175,7 @@
       };
       return {
         validRules: {
-          rpAmt: [{required: true, validator: amtValid}]
+          // rpAmt: [{required: true, validator: amtValid}]
         },
         Settlement: false, //弹框显示
         conserveDis: false,//保存接口返回之前按钮不可点击
@@ -290,23 +293,16 @@
           item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
           delete item.businessType;
         });
-        // this.tableData = val;
       });
     },
     methods: {
       accountHedNo2(val) {
         this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
-        // val.two.map(item => {
-        //   item.businessTypeName = item.businessType.name;
-        // });
-        // this.BusinessType = [...this.BusinessType, ...val.two];
         let jsonArr = [val]
-        console.log(val)
         if (jsonArr.length >= 1) {
           jsonArr.map(item => {
             item.orgName = this.reconciliationStatement.orgName;
             item.accountNo = item.serviceId;
-            // item.guestName = item.guestName;
             item.businessTypeName = item.businessType ? item.businessType.name : '';
             item.reconciliationAmt = item.paymentClaimAmt;
             item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
@@ -396,6 +392,33 @@
           });
         }
       },
+      //本次核销金额输入
+      rpAmtChange(row) {
+        let arr=this.$refs.xTree.footerData[0];
+        let unAmtSumIdx;
+        arr.map((item,index)=>{
+          if(item=="合计"){
+            return unAmtSumIdx=index+1;
+          }
+        })
+        if(row.isSubject==1){
+          //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+          let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+          this.$refs.xTree.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        }else{
+          //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+          let sumUnAmt = row.unAmt
+          this.$refs.xTree.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        }
+      },
       //保存
       async conserve() {
         const errMap = await this.$refs.xTree
@@ -408,29 +431,62 @@
             if (errMap) {
               this.$XModal.Message({status: 'error', message: '校验不通过！'})
             } else {
-              let obj = {
-                one: this.reconciliationStatement,
-                two: this.BusinessType,
-                // three: this.tableData,
-                type: 1
-              };
-              this.conserveDis = true;
-              showLoading()
-              orderWriteOff(obj).then(res => {
-                if (res.code === 0) {
-                  hideLoading()
-                  this.conserveDis = false;
-                  this.Settlement = false;
-                  this.$message.success("其他付款核销成功");
-                  this.$parent.getQuery();
-                } else {
-                  this.conserveDis = false;
-                  hideLoading()
+              let bool = true;
+              let arr=this.$refs.xTree.footerData[0];
+              let unAmtSumIdx;
+              arr.map((item,index)=>{
+                if(item=="合计"){
+                  return unAmtSumIdx=index+1;
                 }
-              }).catch(err => {
-                hideLoading()
               })
-              this.$XModal.message({status: 'success', message: '校验成功！'})
+              this.BusinessType.map(row=>{
+                if(row.isSubject==1){
+                  //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+                  let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+                  this.$refs.xTable.updateFooter();
+                  this.checkComputed();
+                  if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+                    this.$Message.error("金额录入错误，请重新录入！")
+                    bool = false
+                    return
+                  }
+                }else{
+                  //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+                  let sumUnAmt = row.unAmt;
+                  this.$refs.xTable.updateFooter();
+                  this.checkComputed();
+                  if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+                    this.$Message.error("金额录入错误，请重新录入！")
+                    bool = false
+                    return
+                  }
+                }
+              })
+              if(bool){
+                let obj = {
+                  one: this.reconciliationStatement,
+                  two: this.BusinessType,
+                  // three: this.tableData,
+                  type: 1
+                };
+                this.conserveDis = true;
+                showLoading()
+                orderWriteOff(obj).then(res => {
+                  if (res.code === 0) {
+                    hideLoading()
+                    this.conserveDis = false;
+                    this.Settlement = false;
+                    this.$message.success("其他付款核销成功");
+                    this.$parent.getQuery();
+                  } else {
+                    this.conserveDis = false;
+                    hideLoading()
+                  }
+                }).catch(err => {
+                  hideLoading()
+                })
+                this.$XModal.message({status: 'success', message: '校验成功！'})
+              }
             }
           } else {
             let obj = {

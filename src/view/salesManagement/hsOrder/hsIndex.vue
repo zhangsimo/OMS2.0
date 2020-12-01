@@ -794,6 +794,7 @@
               item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty;
             });
             reqData.sign = 999;
+            reqData.orderType = 0;
             let res = await getSave(reqData);
             if (res.code === 0) {
               this.modal3 = true;

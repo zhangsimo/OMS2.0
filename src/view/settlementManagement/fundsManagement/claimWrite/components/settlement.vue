@@ -60,6 +60,7 @@
           max-height="400"
           align="center"
           size="mini"
+          ref="account"
           show-overflow="title"
           :data="BusinessType"
           :footer-method="offWrite"
@@ -76,8 +77,11 @@
               field="rpAmt"
               title="本次核销金额"
               width="140"
-              :edit-render="{name: 'input', attrs: {type: 'number'}}"
-            ></vxe-table-column>
+            >
+              <template v-slot="{row}">
+                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="unAmtLeft" title="剩余未收/未付" width="100"></vxe-table-column>
             <vxe-table-column field="accountNo" title="对账单号" width="120"></vxe-table-column>
             <vxe-table-column field="orgName" title="门店" width="120"></vxe-table-column>
@@ -146,7 +150,7 @@
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette"/>
+    <accountSelette ref="accountSelette" :accountNo="accountNo"/>
     <subjexts ref="subjexts"/>
   </Modal>
 </template>
@@ -184,6 +188,7 @@
         Settlement: false, //弹框显示
         check: 0,
         remark: "",
+        accountNo: "",
         conserveDis: false,//保存 接口返回前不可点击
         reconciliationStatement: {accountNo: 123, receiptPayment: 456},
         BusinessType: [],
@@ -220,7 +225,8 @@
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          thisClaimedAmt: 0
+          thisClaimedAmt: 0,
+          isSubject: 1//是否会计科目
         });
       });
       bus.$on("content", val => {
@@ -245,7 +251,9 @@
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code //辅助核算项目编码
+            auxiliaryCode: value.code, //辅助核算项目编码
+            isSubject: 1,
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -260,7 +268,9 @@
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code //辅助核算项目编码
+            auxiliaryCode: value.code, //辅助核算项目编码
+            isSubject: 1,
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
           });
         } else if (value.itemName) {
           this.BusinessType.push({
@@ -275,7 +285,10 @@
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code //辅助核算项目编码
+            auxiliaryCode: value.code, //辅助核算项目编码
+            isSubject: 1,
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
+
           });
         }
       });
@@ -302,6 +315,7 @@
       // 对账单号选择
       accountNoClick() {
         this.$refs.accountSelette.modal1 = true;
+        this.accountNo = this.reconciliationStatement.accountNo
       },
       //弹框打开
       hander(type) {
@@ -382,6 +396,36 @@
               return
             }
           })
+          let arr = this.$refs.account.footerData[0];
+          let unAmtSumIdx;
+          arr.map((item, index) => {
+            if (item == "合计") {
+              return unAmtSumIdx = index + 1;
+            }
+          })
+          this.BusinessType.map(row => {
+            if (row.isSubject == 1) {
+              //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+              let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+              this.$refs.account.updateFooter();
+              this.checkComputed();
+              if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+                this.$Message.error("金额录入错误，请重新录入！")
+                bool = false
+                return
+              }
+            } else {
+              //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+              let sumUnAmt = row.unAmt
+              this.$refs.account.updateFooter();
+              this.checkComputed();
+              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+                this.$Message.error("金额录入错误，请重新录入！")
+                bool = false
+                return
+              }
+            }
+          })
           if (bool) {
             this.$refs.vxeTable.validate((errMap) => {
               if (errMap) {
@@ -407,7 +451,7 @@
                     this.$message.success("保存成功");
                     hideLoading()
                   }
-                }).catch(err=>{
+                }).catch(err => {
                   hideLoading()
                 })
               }
@@ -422,6 +466,32 @@
         row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
         this.$set(this.BusinessType, rowIndex, row);
         this.checkComputed();
+      },
+      rpAmtChange(row) {
+        let arr = this.$refs.account.footerData[0];
+        let unAmtSumIdx;
+        arr.map((item, index) => {
+          if (item == "合计") {
+            return unAmtSumIdx = index + 1;
+          }
+        })
+        if (row.isSubject == 1) {
+          //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+          let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+          this.$refs.account.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        } else {
+          //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+          let sumUnAmt = row.unAmt
+          this.$refs.account.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        }
       },
       // 核销信息合计
       offWrite({columns, data}) {

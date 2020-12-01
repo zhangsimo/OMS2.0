@@ -21,13 +21,13 @@ export default {
       this.$refs.tabOne.getList();
     },
     async exportxls(refname) {
-      let table = await this.$refs[refname].getAll();
-      this.$refs[refname].$refs.xTable.exportData({
-        filename: '调出在途信息',
-        isHeader: true,
-        isFooter: true,
-        data: table,
-      })
+      await this.$refs[refname].getAll();
+      // this.$refs[refname].$refs.xTable.exportData({
+      //   filename: '调出在途信息',
+      //   isHeader: true,
+      //   isFooter: true,
+      //   data: table,
+      // })
     },
   }
 };

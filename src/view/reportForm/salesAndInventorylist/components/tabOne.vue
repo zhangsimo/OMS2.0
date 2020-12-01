@@ -2,6 +2,8 @@
   <section class="con-box">
     <vxe-table
       border
+      auto-resize
+      resizable
       align="center"
       size="mini"
       ref="xTable"

@@ -166,7 +166,7 @@
                       <Button class="mt10 ml10" @click="openOtherCollectionClaims('其他收款认领')">其他收款认领</Button>
                       <Button class="mt10 ml10" @click="openOtherPaymentClaims('其他付款认领')">其他付款认领</Button>
                       <Button class="mt10 ml10" @click="openAccrued">转应收应付</Button>
-                      <claim ref="claim"/>
+                      <claim ref="claim" @selection="selectionChange"/>
                     </div>
                   </TabPane>
                   <TabPane label="连锁待分配款项">
@@ -253,7 +253,7 @@
             <!-- 其他收款认领 otherCollectionClaims  预收款认领 collectionClaims-->
             <otherCollectionClaims ref="otherCollectionClaims" :accrued="claimedSubjectList"></otherCollectionClaims>
             <!-- 其他付款认领 otherPaymentClaim-->
-            <otherPaymentClaim ref="otherPaymentClaim" :accrued="claimedSubjectList"></otherPaymentClaim>
+            <otherPaymentClaim ref="otherPaymentClaim" :accrued="claimedSubjectList" :selectItem="selectItem"></otherPaymentClaim>
             <!-- 转应收应付 accrued-->
             <accrued ref="accrued" :accrued="claimedSubjectList"></accrued>
           </div>
@@ -618,6 +618,7 @@
         leftValue:false,//左侧方法判断
         rightValue:false,//右侧判断方法
         writeBool: false,//判断 是否可以打开核销对账单
+        selectItem: [],
       };
     },
     //keepalive 数据劫持是调用数据
@@ -661,6 +662,9 @@
       }
     },
     methods: {
+      selectionChange(row){
+        this.selectItem = row
+      },
       //左侧点击放大
       handleChangeLeft(){
         if (this.leftValue){
@@ -914,6 +918,8 @@
       // 本店待认领款查询
       queryClaimed() {
         this.$refs.claim.claimedPage.page=1;
+        this.$refs.claim.currentClaimed = []
+        this.selectItem = []
         this.claimedList();
       },
       //连锁待分配款项

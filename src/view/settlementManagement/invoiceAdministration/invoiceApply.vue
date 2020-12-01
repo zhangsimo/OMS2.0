@@ -37,26 +37,6 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <!--              <Select v-model="form.guestId" style="width:180px">-->
-            <!--                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>-->
-            <!--              </Select>-->
-            <!-- <Select
-              v-model="form.guestId"
-              clearable
-              filterable
-              :loading=loading1
-              remote
-              :remote-method="remoteMethod"
-              style="width:200px;padding-left: 5px"
-            >
-              <Option
-                v-for="item in company"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}
-              </Option
-              >
-            </Select> -->
             <Input type="text" class="h30 w200" v-model="form.guestName"/>
           </div>
           <div class="db ml10">
@@ -149,7 +129,71 @@
           size="small"
         />
         <button class="mt30 ivu-btn ivu-btn-default" type="button">开票申请配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" max-hight="400" ref="parts"></Table>
+        <vxe-table
+          border
+          auto-resize
+          resizable
+          align="center"
+          size="mini"
+          :data="data1"
+          show-overflow="title"
+          class="mt10"
+          max-height="400"
+          ref="parts"
+        >
+          <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
+          <vxe-table-column title="分店名称" field="orgName" width="100"></vxe-table-column>
+          <vxe-table-column title="店号" field="orgCode" width="60"></vxe-table-column>
+          <vxe-table-column title="往来单位" field="guestName" width="100"></vxe-table-column>
+          <vxe-table-column title="申请日期" field="applyDate" width="100"></vxe-table-column>
+          <vxe-table-column title="对账单号" field="accountNo" width="100"></vxe-table-column>
+          <vxe-table-column title="开票申请单号" field="applyNo" width="120"></vxe-table-column>
+          <vxe-table-column title="发票种类" field="invoiceKindName" width="100"></vxe-table-column>
+          <vxe-table-column title="发票单位" field="receiptUnitName" width="100"></vxe-table-column>
+          <vxe-table-column title="税号" field="customDuty" width="100"></vxe-table-column>
+          <vxe-table-column title="地址" field="tel" width="100"></vxe-table-column>
+          <vxe-table-column title="电话" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="开户行" field="customAccount" width="80"></vxe-table-column>
+          <vxe-table-column title="账号" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="发票性质" field="invoiceNature" width="100"></vxe-table-column>
+          <vxe-table-column title="推送手机" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="邮箱" field="customMail" width="100"></vxe-table-column>
+          <vxe-table-column title="备注" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="商品名称" field="partName" width="100"></vxe-table-column>
+          <vxe-table-column title="税率" field="taxRate" width="60"></vxe-table-column>
+          <vxe-table-column title="规格型号" field="partCode" width="100"></vxe-table-column>
+          <vxe-table-column title="计量单位" field="calculateUnit" width="100"></vxe-table-column>
+          <vxe-table-column title="数量" field="qty" width="60"></vxe-table-column>
+          <vxe-table-column title="含税单价" field="taxPrice" width="100"></vxe-table-column>
+          <vxe-table-column title="金额" field="applyAmtSell" width="60"></vxe-table-column>
+          <vxe-table-column title="税收分类编码" field="taxTypeCode" width="100"></vxe-table-column>
+          <vxe-table-column title="是否享受优惠政策" field="" width="120"></vxe-table-column>
+          <vxe-table-column title="优惠政策名称" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="零税率标识" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="扣除额" field="" width="80"></vxe-table-column>
+          <vxe-table-column title="折扣金额" field="" width="100"></vxe-table-column>
+          <vxe-table-column title="收款人" field="" width="80"></vxe-table-column>
+          <vxe-table-column title="复核人" field="" width="80"></vxe-table-column>
+          <vxe-table-column title="开票人" field="" width="80"></vxe-table-column>
+          <vxe-table-column title="出库单号" field="outNo" width="100"></vxe-table-column>
+          <vxe-table-column title="单位" field="unit" width="60"></vxe-table-column>
+          <vxe-table-column title="油品包装规格" field="oilsSpec" width="80"></vxe-table-column>
+          <vxe-table-column title="油品换算单位" field="oilsUnit" width="80"></vxe-table-column>
+          <vxe-table-column title="油品换算数量" field="oilsQty" width="80"></vxe-table-column>
+          <vxe-table-column title="数量" field="matchQty" width="60"></vxe-table-column>
+          <vxe-table-column title="销售单价" field="salePrice" width="100"></vxe-table-column>
+          <vxe-table-column title="销售金额" field="saleAmt" width="100"></vxe-table-column>
+          <vxe-table-column title="已开票金额" field="invoiceAmt" width="100"></vxe-table-column>
+          <vxe-table-column title="未开票金额" field="invoiceNotAmt" width="100"></vxe-table-column>
+          <vxe-table-column title="申请开票总金额" field="applyAmt" width="100"></vxe-table-column>
+          <vxe-table-column title="外加税点" field="additionalTaxPoint" width="80"></vxe-table-column>
+          <vxe-table-column title="开票清单类型" field="isOilPartText" width="120"></vxe-table-column>
+          <vxe-table-column title="开票单位" field="invoiceUnitName" width="80"></vxe-table-column>
+          <vxe-table-column title="收款方式" field="collectionTypeName" width="80"></vxe-table-column>
+          <vxe-table-column title="收件地址" field="address" width="80"></vxe-table-column>
+          <vxe-table-column title="快递方式" field="sendingWayName" width="80"></vxe-table-column>
+          <vxe-table-column title="备注" field="remark" width="100"></vxe-table-column>
+        </vxe-table>
       </div>
     </section>
     <invoiceApplyModelTost ref="Toast"></invoiceApplyModelTost>
@@ -202,7 +246,6 @@
     data() {
       return {
         btnTestDir: false,
-
         proTypeList: [{id: '0', shortName: '全部'}],//分店
         columns: [
           {
@@ -1088,7 +1131,7 @@
           {
             title: "税收分类编码",
             width: 100,
-            key: "",
+            key: "taxTypeCode",
             className: "tc",
             resizable: true,
           },
@@ -1593,9 +1636,24 @@
           if (res.code === 0) {
             this.data1 = res.data.map((item, index) => {
               item.isOilPart == 0 ? item.isOilPartText = "不含税" : (item.isOilPart == 1 ? item.isOilPartText = "含税油品" : item.isOilPartText = "含税配件")
+              item.isOilPart == 1 ? item.invoiceNature = 1 : item.invoiceNature = 0
               item.applyAmtSell = item.applyAmt
               item.applyAmt = this.details.applyAmt
-              // item.
+              item.invoiceKindName="";
+              switch (item.invoiceKind) {
+                case "010101":
+                  item.invoiceKindName = null//收据
+                  break;
+                case "010102":
+                  item.invoiceKindName = "c";//普票
+                  break;
+                case "010103":
+                  item.invoiceKindName = "s";//专票
+                  break;
+                default:
+                  item.invoiceKindName = null;
+                  break;
+              }
               item.seq = index + 1
               return item
             });

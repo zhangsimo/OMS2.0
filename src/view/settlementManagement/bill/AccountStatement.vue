@@ -101,7 +101,7 @@
           type="button"
           @click="statementSettlement(1)"
           v-has="'writeDown'"
-          :disabled="statementStatusflag"
+          :disabled="statementStatusflag || reconciliationStatement.receiptPayment<=0"
         >冲减预收
         </button>
         <button
@@ -109,7 +109,7 @@
           type="button"
           @click="statementSettlement(2)"
           v-has="'prepayment'"
-          :disabled="statementStatusflag"
+          :disabled="statementStatusflag || reconciliationStatement.receiptPayment>=0"
         >冲减预付
         </button>
         <!-- <button
@@ -238,9 +238,19 @@
               <span>{{row.receivableRebate.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column title="已收应收返利" field="rebateReceived" width="140">
+            <template v-slot="{row}">
+              <span>{{row.rebateReceived.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="应收坏账" field="badDebtReceivable" width="120">
             <template v-slot="{row}">
               <span>{{row.badDebtReceivable.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="已收应收坏账" field="badDebtReceived" width="140">
+            <template v-slot="{row}">
+              <span>{{row.badDebtReceived.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="对账应付" field="reconciliation" width="120">
@@ -253,9 +263,19 @@
               <span>{{row.dealingRebates.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column title="已收应付返利" field="rebatePaid" width="140">
+            <template v-slot="{row}">
+              <span>{{row.rebatePaid.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="应付坏账" field="payingBadDebts" width="120">
             <template v-slot="{row}">
               <span>{{row.payingBadDebts.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="已收应付坏账" field="badDebtPaid" width="120">
+            <template v-slot="{row}">
+              <span>{{row.badDebtPaid.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="运费" field="transportExpenses" width="120">
@@ -263,9 +283,19 @@
               <span>{{row.transportExpenses.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column title="已收运费" field="transportAmountReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.transportAmountReceived.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="保险费" field="insuranceExpenses" width="120">
             <template v-slot="{row}">
               <span>{{row.insuranceExpenses.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="已收保险费" field="insuranceReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.insuranceReceived.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="手续费" field="serviceCharge" width="120">
@@ -273,14 +303,29 @@
               <span>{{row.serviceCharge.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column title="已收手续费" field="serviceAmountReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.serviceAmountReceived.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="配件管理费" field="partsManagementFee" width="120">
             <template v-slot="{row}">
               <span>{{row.partsManagementFee.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column title="已收配件管理费" field="partAmountReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.partAmountReceived.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="其他费用" field="otherFees" width="120">
             <template v-slot="{row}">
               <span>{{row.otherFees.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="已收其他费用" field="otherAmountReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.otherAmountReceived.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="实际收款/付款" field="receiptPayment" width="120">
@@ -589,7 +634,7 @@
         <Button type='default' @click='cancel'>取消</Button>
       </div>
     </Modal>
-    <salepopup ref="salepopup"/>
+    <salepopup ref="salepopup"  @getNewList="getNeWlist"/>
     <hedgingInvoice ref="hedgingInvoice"  @getNewList="getNeWlist"/>
     <registrationEntry ref="registrationEntry" @getNewList="getNeWlist"/>
     <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>

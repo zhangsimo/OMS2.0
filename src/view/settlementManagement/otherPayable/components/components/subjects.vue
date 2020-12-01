@@ -142,7 +142,7 @@
       <Button type="primary" @click="SubjectConfirm" class="mr10">保存</Button>
       <Button type="default" @click="subjectModelShow = false">取消</Button>
     </div>
-    <auxiliary ref="auxiliary" />
+    <auxiliary ref="auxiliary" :assistTypeCode="assistTypeCode"/>
   </Modal>
 </template>
 
@@ -163,7 +163,8 @@ export default {
       subjectTableDataSunYi: [], //会计弹框损益
       subjectModelShow: false, //model弹框
       accountingSubject: "", //定义一个容器装选中的值
-      SendData: [] //给父组件发送的值
+      SendData: [], //给父组件发送的值
+      assistTypeCode: '',
     };
   },
   methods: {
@@ -272,6 +273,7 @@ export default {
         this.subjectModelShow = false;
         if (this.accountingSubject.auxiliaryAccountingName) {
           this.$refs.auxiliary.subjectModelShowassist = true;
+          this.assistTypeCode = this.accountingSubject.auxiliaryAccountingCode
           this.$emit("ChildContent", this.accountingSubject);
           bus.$emit("content", this.accountingSubject);
           this.$emit("SendArr", this.SendData);

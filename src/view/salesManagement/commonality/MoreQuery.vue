@@ -40,9 +40,28 @@
             <Option v-for="item in brandList" :value="item.code" :key="item.code">{{ item.name }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="销售人员:">
-          <Select v-model="formData.orderMan" label-in-value filterable style="width: 350px">
-            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <FormItem label="订单金额:">
+          <Select v-model="formData.amtType" style="width: 350px">
+            <Option v-for="item in orderPriceArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Row>
+            <Col span="6" v-if="formData.amtType">
+              <vxe-input @change="amtMinChange" size="mini" v-model="amtMin" style="width: 100%" type="float"></vxe-input>
+            </Col>
+            <Col v-if="formData.amtType=='4'" span="2" class="tc" style="color: #999">—</Col>
+            <Col v-if="formData.amtType=='4'" span="6">
+              <vxe-input size="mini"  :min="amtMin" v-model="amtMax" style="width: 100%" type="float"></vxe-input>
+            </Col>
+          </Row>
+          <!--<Row v-if="formData.orderPriceType&&formData.orderPriceType!='qj'">-->
+            <!--<Col span="10">-->
+              <!--<InputNumber :min="0" v-model="amtMax" style="width: 100%"></InputNumber>-->
+            <!--</Col>-->
+          <!--</Row>-->
+        </FormItem>
+        <FormItem label="创建人:">
+          <Select v-model="formData.createUid" label-in-value filterable style="width: 350px">
+            <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
           </Select>
         </FormItem>
         <FormItem label="提交人:">
@@ -76,15 +95,38 @@
                 formData:this.data,
                 salesList:[],
                 loading:false, //模糊查询框
+                orderPriceArr:[
+                  {
+                    label:'等于',
+                    value:'1'
+                  },
+                  {
+                    label:'小于等于',
+                    value:'2'
+                  },
+                  {
+                    label:'大于等于',
+                    value:'3'
+                  },
+                  {
+                    label:'区间',
+                    value:'4'
+                  }
+                ],
+              amtMin : 0,
+              amtMax : 0,
             }
         },
         mounted(){
+
         },
         methods:{
             //清空更多弹框的条件
             clearCondition(){
               // this.$refs.formInline.resetFields()
               this.formData = {}
+              this.amtMax = 0;
+              this.amtMin = 0;
             },
             //打开模态框框
             openModal(){
@@ -155,8 +197,21 @@
                     });
                 }
             },
+          amtMinChange({value}){
+              if(parseFloat(this.amtMax)<parseFloat(value)){
+                this.amtMax = value
+              }
+          },
             //确定
             emit(){
+              if(this.formData.amtType){
+                if(this.formData.amtType=='4'){
+                  this.formData.amtMin = this.amtMin;
+                  this.formData.amtMax = this.amtMax;
+                }else{
+                  this.formData.amtMin = this.amtMin;
+                }
+              }
               this.$emit('resetData', this.formData);
               this.$store.commit('setOrederQuery' , this.formData)
               this.moreQueryShow = false
