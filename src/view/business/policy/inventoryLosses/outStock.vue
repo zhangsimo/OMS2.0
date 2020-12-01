@@ -211,7 +211,7 @@
                 size="small"
                 class="mr10"
                 @click="shanchu"
-                :disabled="draftShow != 0"
+                :disabled="draftShow != 0&&draftShow != 9"
                 >
                 <i class="iconfont mr5 iconlajitongicon"></i> 删除
                 </Button>
