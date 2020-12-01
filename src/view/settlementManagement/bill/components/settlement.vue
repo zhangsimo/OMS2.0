@@ -433,9 +433,7 @@
           let sumUnAmt = row.unAmt;
           this.$refs.xTable.updateFooter();
           this.checkComputed();
-          console.log(111122,sumUnAmt,row.rpAmt)
           if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
-            console.log(1111,sumUnAmt,row.rpAmt)
             return this.$Message.error("金额录入错误，请重新录入！")
           }
         }
