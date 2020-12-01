@@ -42,7 +42,7 @@
       </div>
     </Modal>
     <!-- 辅助核销计算 -->
-    <voucherInput ref="voucherInput" :oneAccountent="[oneSubject]" @callBackFun="getCallBack"></voucherInput>
+    <voucherInput ref="voucherInput" :oneAccountent="[oneSubject]" @callBackFun="getCallBack" :assistTypeCode="assistTypeCode"></voucherInput>
   </div>
 
 </template>
@@ -67,7 +67,8 @@ export default {
       tableData: [], //表格数据
       maker: "", //备注
       subjectModel:"",
-      loadingTable:false
+      loadingTable:false,
+      assistTypeCode: '', //选中会计科目中辅助核算的值
     };
   },
   mounted() {},
@@ -126,6 +127,7 @@ export default {
       this.oneSubject = row;
       if(this.oneSubject.auxiliaryAccountingName) {
         this.oneSubject.mateAccountCoding=this.oneSubject.titleCode;
+        this.assistTypeCode = row.auxiliaryAccountingCode
         this.$refs.voucherInput.voucherItem = {};
         this.$refs.voucherInput.groundIds=[];
         this.$refs.voucherInput.subjectModelShowassist = true;

@@ -218,6 +218,7 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
+      console.log(value,'0000')
       value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2?1:value.auxiliaryTypeCode //辅助核算选中哪一个
       if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
         value.isAuxiliaryAccounting=0 //是否辅助核算类
@@ -238,7 +239,8 @@ export default {
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
-          isSubject:1
+          isSubject:1,
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'', //辅助核算的款项分类
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -254,7 +256,8 @@ export default {
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
-          isSubject:1
+          isSubject:1,
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'', //辅助核算的款项分类
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -270,7 +273,8 @@ export default {
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
           auxiliaryName:value.fullName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
-          isSubject:1
+          isSubject:1,
+          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'', //辅助核算的款项分类
         });
       }
     });
@@ -420,7 +424,8 @@ export default {
             auxiliaryTypeCode:el.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting:el.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName:el.auxiliaryName, //辅助核算名称
-            auxiliaryCode:el.auxiliaryCode //辅助核算项目编码
+            auxiliaryCode:el.auxiliaryCode, //辅助核算项目编码
+            paymentTypeCode: el.paymentTypeCode,
           };
           data.two.push(item);
         });

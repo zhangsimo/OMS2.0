@@ -18,7 +18,7 @@ const endLoading = () => {
   loading.close()
 }
 
-export const showLoading = (select, title="拼命加载中...") => {
+export const showLoading = (select, title="加载中...") => {
   if (loadingCount === 0){
     startLoading(select,title)
   }

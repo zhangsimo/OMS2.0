@@ -2,7 +2,7 @@
     <Modal v-model="subjectModelShowassist"  title="选择辅助核算" class="funtPa" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card" v-model="currTab">
-          <TabPane label="客户" name="client">
+          <TabPane label="客户" name="client" :disabled="assistTypeCode!='1' && assistTypeCode!='2'">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -55,7 +55,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier">
+          <TabPane label="供应商" name="supplier" :disabled="assistTypeCode!='1' && assistTypeCode!='2'">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -108,7 +108,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department">
+          <TabPane label="部门" name="department" :disabled="assistTypeCode!='3'">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -121,7 +121,7 @@
               </FormItem>
             </Form>
           </TabPane>
-          <TabPane label="个人" name="personage">
+          <TabPane label="个人" name="personage" :disabled="assistTypeCode!='4'">
             <Form :label-width="50" ref="form" inline>
               <!--              <FormItem label="部门:" prop="groundIds">-->
               <!--                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>-->
@@ -169,7 +169,7 @@
               />
             </div>
           </TabPane>
-          <TabPane label="其他辅助核算" name="Other">
+          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3','4'].includes(assistTypeCode)">
             <div class="Other">
               <div class="OtherLeft">
                 <ul>
@@ -322,7 +322,7 @@ export default {
   components: {
     addOutStaff
   },
-  props:['oneAccountent'],
+  props:['oneAccountent','assistTypeCode'],
   data(){
     return {
       currTab:'client',//当前tab页
@@ -425,6 +425,9 @@ export default {
     // this.SupperliergetList(); //供应商初始化
     // this.getListCompany(); // 公司
   },
+  created(){
+
+  },
   methods:{
 
     showOrhideModel(v){
@@ -460,6 +463,28 @@ export default {
         // }
         if(this.list.length==0){
           this.getListCompany(); // 公司
+        }
+
+        if(this.fundList.length == 0){
+          this.fundGetList()
+        }
+
+        switch(this.assistTypeCode){
+          case '1':
+            this.currTab = 'client'
+            break
+          case '2':
+            this.currTab = 'supplier'
+            break
+          case '3':
+            this.currTab = 'department'
+            break 
+          case '4':
+            this.currTab = 'personage'
+            break 
+          default:
+            this.currTab = 'Other'
+            break          
         }
       }
     },
@@ -637,7 +662,6 @@ export default {
       this.auxiliaryTypeCode = "2";
       this.auxiliaryCode = row.code;
       this.voucherItem = row;
-      // console.log(row)
     },
     //供应商切换页数
     selectNumsupplier(page) {
@@ -675,7 +699,6 @@ export default {
       data.phone = "";
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
-      // console.log(this.$store.state.user.userData.shopId);
       // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
       data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
@@ -762,7 +785,7 @@ export default {
         size:this.outStaff.page.size,
       }
       let data={}
-      data.orgid=this.$store.state.user.userData.currentShopId;
+      // data.orgid=this.$store.state.user.userData.currentShopId;
       data.fullName=this.accountingName?this.accountingName.trim():''
       //参数
       let res=await getOutStaffNew(params,data)
@@ -846,7 +869,6 @@ export default {
       }
       this.auxiliaryCode=row.itemCode;
       this.voucherItem = row;
-      console.log(row)
     },
     //新增辅助核算名称保存
     addAuxiliary() {

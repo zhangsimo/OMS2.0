@@ -3,8 +3,8 @@
     <!--选择辅助核算-->
     <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
-        <Tabs type="card">
-          <TabPane label="客户" name="client">
+        <Tabs type="card" v-model="currTab">
+          <TabPane label="客户" name="client" :disabled="assistTypeCode!='1' && assistTypeCode!='2'">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -58,7 +58,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier">
+          <TabPane label="供应商" name="supplier" :disabled="assistTypeCode!='1' && assistTypeCode!='2'">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -112,7 +112,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department" :disabled="$parent.titleName=='其他收款认领'">
+          <TabPane label="部门" name="department" :disabled="assistTypeCode!='3'">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -125,7 +125,7 @@
               </FormItem>
             </Form>
           </TabPane>
-          <TabPane label="个人" name="personage">
+          <TabPane label="个人" name="personage" :disabled="assistTypeCode!='4'">
             <Form :label-width="50" ref="form" inline>
 <!--              <FormItem label="部门:" prop="groundIds">-->
 <!--                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>-->
@@ -175,7 +175,7 @@
               />
             </div>
           </TabPane>
-          <TabPane label="其他辅助核算" name="Other">
+          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3','4'].includes(assistTypeCode)">
             <div class="Other">
               <div class="OtherLeft">
                 <ul>
@@ -325,7 +325,7 @@ import addOutStaff from "@/view/system/systemSetting/outStaffManagement/componen
 import bus from "../../../bill/Popup/Bus";
 export default {
   name: "AssistAccounting",
-  props:['oneAccountent'],
+  props:['oneAccountent','assistTypeCode'],
   components: {
     addOutStaff
   },
@@ -419,6 +419,7 @@ export default {
       auxiliaryTypeCode: "", //辅助弹框选的哪一个
       selectClass: 0 ,//用于判断class
       modalShow: false,
+      currTab:'client',//当前tab页
     };
   },
   methods: {
@@ -567,7 +568,7 @@ export default {
         size:this.outStaff.page.size,
       }
       let data={}
-      data.orgid=this.$store.state.user.userData.currentShopId;
+      // data.orgid=this.$store.state.user.userData.currentShopId;
       data.fullName=this.accountingName?this.accountingName.trim():''
       //参数
       let res=await getOutStaffNew(params,data)
@@ -797,6 +798,24 @@ export default {
         }
         if(this.fundListZanshi.length==0){
           this.fundGetList();
+        }
+
+        switch(this.assistTypeCode){
+          case '1':
+            this.currTab = 'client'
+            break
+          case '2':
+            this.currTab = 'supplier'
+            break
+          case '3':
+            this.currTab = 'department'
+            break 
+          case '4':
+            this.currTab = 'personage'
+            break 
+          default:
+            this.currTab = 'Other'
+            break          
         }
       }
     }
