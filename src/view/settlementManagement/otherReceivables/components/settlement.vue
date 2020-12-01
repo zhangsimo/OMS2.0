@@ -100,7 +100,6 @@
           border
           resizable
           ref="xTree"
-          :edit-rules="validRules"
           auto-resize
           show-footer
           size="mini"
@@ -112,6 +111,7 @@
           :edit-config="{ trigger: 'click', mode: 'cell' }"
           @edit-closed="editClosedEvent"
         >
+<!--          :edit-rules="validRules"-->
           <vxe-table-column title="核销信息">
             <vxe-table-column
               field="guestName"
@@ -532,7 +532,7 @@ export default {
         let sumUnAmt = row.unAmt
         this.$refs.xTree.updateFooter();
         this.checkComputed();
-        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
           return this.$Message.error("金额录入错误，请重新录入！")
         }
       }
@@ -591,7 +591,7 @@ export default {
                 let sumUnAmt = row.unAmt;
                 this.$refs.xTree.updateFooter();
                 this.checkComputed();
-                if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
+                if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
                   this.$Message.error("金额录入错误，请重新录入！")
                   bool = false
                   return

@@ -11,19 +11,19 @@
           <span>门店：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.orgName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.orgName" readonly/>
         </Col>
         <Col span="2" class="tr">
           <span>往来单位：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.guestName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.guestName" readonly/>
         </Col>
         <Col span="2" class="tr">
           <span>收付类型：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.sortName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.sortName" readonly/>
         </Col>
       </Row>
       <Row class="mt10">
@@ -31,20 +31,20 @@
           <span>对账单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
+          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly/>
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly />
+          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly/>
         </Col>
         <Col span="2" class="tr">
           <span>核销方式：</span>
         </Col>
         <Col span="6">
-          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly/>
         </Col>
       </Row>
     </div>
@@ -62,7 +62,6 @@
           show-footer
           max-height="400"
           align="center"
-          :edit-rules="validRules"
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -80,7 +79,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="number" size="mini" v-model.number="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="120" title="剩余未收/未付"></vxe-table-column>
@@ -149,448 +148,450 @@
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette" :accountNo="accountNo" />
-    <subjexts ref="subjexts" />
+    <accountSelette ref="accountSelette" :accountNo="accountNo"/>
+    <subjexts ref="subjexts"/>
   </Modal>
 </template>
 <script>
-import accountSelette from "./accountWirte";
-import {
-  wirteAccount,
-  saveAccount,
-  getHedging
-} from "_api/settlementManagement/seleteAccount.js";
-import subjexts from "./subjects";
-import bus from "../Popup/Bus";
-import moment from "moment";
-export default {
-  components: {
-    accountSelette,
-    subjexts
-  },
-  data() {
-    const rpAmtValid = ({ cellValue, row }) => {
-      return new Promise((resolve, reject) => {
-        if (cellValue) {
-          if (row.isSubject!=1 && Math.abs(cellValue) > Math.abs(row.unAmt)) {
-            reject(new Error("本次核销金额不能大于未收/付金额"));
+  import accountSelette from "./accountWirte";
+  import {
+    wirteAccount,
+    saveAccount,
+    getHedging
+  } from "_api/settlementManagement/seleteAccount.js";
+  import subjexts from "./subjects";
+  import bus from "../Popup/Bus";
+  import moment from "moment";
+
+  export default {
+    components: {
+      accountSelette,
+      subjexts
+    },
+    data() {
+      const rpAmtValid = ({cellValue, row}) => {
+        return new Promise((resolve, reject) => {
+          if (cellValue) {
+            if (row.isSubject != 1 && Math.abs(cellValue) > Math.abs(row.unAmt)) {
+              reject(new Error("本次核销金额不能大于未收/付金额"));
+            } else {
+              resolve();
+            }
           } else {
             resolve();
           }
+        });
+      };
+      return {
+        conserveDis: false,//保存点击后等待接口返回后再次点击
+        Settlement: false, //弹框显示
+        check: 0,
+        remark: "",
+        reconciliationStatement: {accountNo: 123, receiptPayment: 456},
+        accountNo: "",
+        BusinessType: [],
+        tableData: [],
+        collectPayId: "",
+        showchange: false,//控制子组件内部往来单位是否可以查询
+        obj: {},
+        //表格校验
+        validRules: {
+          rpAmt: [{required: true}]
+        }
+      };
+    },
+    mounted() {
+      // 对账单号
+      bus.$on("accountHedNo", val => {
+        this.reconciliationStatement.accountNo =
+          this.reconciliationStatement.accountNo + "," + val.accountNo;
+        // console.log(val,1111)
+        val.two.map(item => {
+          item.businessTypeName = item.businessType.name;
+        });
+        this.BusinessType = [...this.BusinessType, ...val.two];
+        this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+        this.checkComputed();
+      });
+      //选择科目
+      bus.$on("hedInfo", val => {
+        this.BusinessType.push({
+          businessTypeName: val.titleName,
+          reconciliationAmt: 0,
+          mateAccountCode: val.titleCode,
+          mateAccountName: val.titleName,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAmt: 0,
+          unAmtLeft: 0,
+          isSubject: 1,//与原本对账单作出区分
+        });
+
+      });
+      bus.$on("content", val => {
+        this.obj = val;
+      });
+      bus.$on("ChildContent", value => {
+        value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2 ? 1 : value.auxiliaryTypeCode //辅助核算选中哪一个
+        if (value.auxiliaryTypeCode == "1" || value.auxiliaryTypeCode == "2" || value.auxiliaryTypeCode == "3" || value.auxiliaryTypeCode == "4") {
+          value.isAuxiliaryAccounting = 0 //是否辅助核算类
         } else {
-          resolve();
+          value.isAuxiliaryAccounting = 1
+        }
+        if (value.fullName) {
+          this.BusinessType.push({
+            businessTypeName: this.obj.fullName + "-" + value.fullName,
+            mateAccountCode: this.obj.titleCode,
+            mateAccountName: this.obj.titleName,
+            reconciliationAmt: 0,
+            hasAmt: 0,
+            unAmt: 0,
+            rpAmt: 0,
+            unAmtLeft: 0,
+            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName: value.fullName, //辅助核算名称
+            auxiliaryCode: value.code,//辅助核算项目编码
+            isSubject: 1,//与原本对账单作出区分
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : ''
+          });
+        } else if (value.userName) {
+          this.BusinessType.push({
+            businessTypeName: this.obj.fullName + "-" + value.userName,
+            mateAccountCode: this.obj.titleCode,
+            mateAccountName: this.obj.titleName,
+            reconciliationAmt: 0,
+            hasAmt: 0,
+            unAmt: 0,
+            rpAmt: 0,
+            unAmtLeft: 0,
+            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName: value.userName, //辅助核算名称
+            auxiliaryCode: value.code, //辅助核算项目编码
+            isSubject: 1,//与原本对账单作出区分
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : ''
+          });
+        } else if (value.itemName) {
+          this.BusinessType.push({
+            businessTypeName: this.obj.fullName + "-" + value.itemName,
+            mateAccountCode: this.obj.titleCode,
+            mateAccountName: this.obj.titleName,
+            reconciliationAmt: 0,
+            hasAmt: 0,
+            unAmt: 0,
+            rpAmt: 0,
+            unAmtLeft: 0,
+            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
+            auxiliaryName: value.itemName, //辅助核算名称
+            auxiliaryCode: value.code, //辅助核算项目编码
+            isSubject: 1,//与原本对账单作出区分
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : ''
+          });
         }
       });
-    };
-    return {
-      conserveDis:false,//保存点击后等待接口返回后再次点击
-      Settlement: false, //弹框显示
-      check: 0,
-      remark: "",
-      reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
-      accountNo:"",
-      BusinessType: [],
-      tableData: [],
-      collectPayId: "",
-      showchange:false,//控制子组件内部往来单位是否可以查询
-      obj: {},
-      //表格校验
-      validRules: {
-        // rpAmt: [{ validator: rpAmtValid }]
-      }
-    };
-  },
-  mounted() {
-    // 对账单号
-    bus.$on("accountHedNo", val => {
-      this.reconciliationStatement.accountNo =
-        this.reconciliationStatement.accountNo + "," + val.accountNo;
-      // console.log(val,1111)
-      val.two.map(item => {
-        item.businessTypeName = item.businessType.name;
-      });
-      this.BusinessType = [...this.BusinessType, ...val.two];
-      this.BusinessType =  this.BusinessType.filter( item => item.reconciliationAmt != 0 )
-      this.checkComputed();
-    });
-    //选择科目
-    bus.$on("hedInfo", val => {
-      this.BusinessType.push({
-        businessTypeName: val.titleName,
-        reconciliationAmt: 0,
-        mateAccountCode: val.titleCode,
-        mateAccountName: val.titleName,
-        hasAmt: 0,
-        unAmt: 0,
-        rpAmt: 0,
-        unAmtLeft: 0,
-        isSubject:1,//与原本对账单作出区分
-      });
 
-    });
-    bus.$on("content", val => {
-      this.obj = val;
-    });
-    bus.$on("ChildContent", value => {
-      value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2?1:value.auxiliaryTypeCode //辅助核算选中哪一个
-      if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
-        value.isAuxiliaryAccounting=0 //是否辅助核算类
-      }else{
-        value.isAuxiliaryAccounting=1
-      }
-      if (value.fullName) {
-        this.BusinessType.push({
-          businessTypeName: this.obj.fullName + "-" + value.fullName,
-          mateAccountCode: this.obj.titleCode,
-          mateAccountName: this.obj.titleName,
-          reconciliationAmt: 0,
-          hasAmt: 0,
-          unAmt: 0,
-          rpAmt: 0,
-          unAmtLeft: 0,
-          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
-          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-          auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code ,//辅助核算项目编码
-          isSubject:1,//与原本对账单作出区分
-          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
+
+      //收付款信息
+      bus.$on("paymentInfo", val => {
+        val.map(item => {
+          item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
+          item.orgName = item.shopName;
+          item.paidMoney = !item.paidMoney
+            ? 0
+            : item.paidMoney < 0
+              ? item.paidMoney
+              : -item.paidMoney;
+          delete item.businessType;
         });
-      } else if (value.userName) {
-        this.BusinessType.push({
-          businessTypeName: this.obj.fullName + "-" + value.userName,
-          mateAccountCode: this.obj.titleCode,
-          mateAccountName: this.obj.titleName,
-          reconciliationAmt: 0,
-          hasAmt: 0,
-          unAmt: 0,
-          rpAmt: 0,
-          unAmtLeft: 0,
-          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
-          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-          auxiliaryName:value.userName, //辅助核算名称
-          auxiliaryCode:value.code, //辅助核算项目编码
-          isSubject:1,//与原本对账单作出区分
-          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
-        });
-      }else if(value.itemName){
-        this.BusinessType.push({
-          businessTypeName: this.obj.fullName + "-" + value.itemName,
-          mateAccountCode: this.obj.titleCode,
-          mateAccountName: this.obj.titleName,
-          reconciliationAmt: 0,
-          hasAmt: 0,
-          unAmt: 0,
-          rpAmt: 0,
-          unAmtLeft: 0,
-          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
-          isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-          auxiliaryName:value.itemName, //辅助核算名称
-          auxiliaryCode:value.code, //辅助核算项目编码
-          isSubject:1,//与原本对账单作出区分
-          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:''
-        });
-      }
-    });
-
-
-
-    //收付款信息
-    bus.$on("paymentInfo", val => {
-      val.map(item => {
-        item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
-        item.orgName = item.shopName;
-        item.paidMoney = !item.paidMoney
-          ? 0
-          : item.paidMoney < 0
-          ? item.paidMoney
-          : -item.paidMoney;
-        delete item.businessType;
+        // this.tableData = val;
       });
-      // this.tableData = val;
-    });
-  },
-  methods: {
-    setData(d){
-      // this.tableData = d;
     },
-    // 选择科目弹框
-    subject() {
-      this.$refs.subjexts.subjectModelShow = true;
-    },
-    // 对账单号选择
-    accountNoClick() {
-      this.$refs.accountSelette.isCanChange = this.showchange
-      this.$refs.accountSelette.modal1 = true;
-      if(this.$parent.paymentId == "DYD" && [","].includes(this.reconciliationStatement.accountNo)){
-        this.accountNo=this.reconciliationStatement.accountNo;
-      }else{
-        this.accountNo=this.reconciliationStatement.accountNo.split(",")[this.reconciliationStatement.accountNo.split(",").length-1]
-      }
-      switch (this.$parent.paymentId) {
-        case "YSK":
-          this.$refs.accountSelette.paymentId = "YJDZ";
-          this.$refs.accountSelette.sort = "SK";
-          break;
-        case "DYD":
-          this.$refs.accountSelette.paymentId = "YJDZ";
-          break;
-        case "YS":
-          this.$refs.accountSelette.paymentId = "YSK";
-          break;
-        case "YF":
-          this.$refs.accountSelette.paymentId = "YFK";
-          break;
-        default :
-          this.$refs.accountSelette.paymentId = "YJDZ";
-          break;
-      }
-    },
-    //弹框打开
-    hander(type) {
-      this.$refs.xTable.recalculate(true)
-      this.$refs.xTable2.recalculate(true)
-      if (!type) {
-        this.check = 0;
-        this.remark = "";
-        this.reconciliationStatement = {};
-        this.BusinessType = [];
-        this.tableData = [];
-        this.collectPayId = "";
-        if (this.$parent.paymentId === "YSKZC") {
-          this.$parent.claimModal = false;
+    methods: {
+      setData(d) {
+        // this.tableData = d;
+      },
+      // 选择科目弹框
+      subject() {
+        this.$refs.subjexts.subjectModelShow = true;
+      },
+      // 对账单号选择
+      accountNoClick() {
+        this.$refs.accountSelette.isCanChange = this.showchange
+        this.$refs.accountSelette.modal1 = true;
+        if (this.$parent.paymentId == "DYD" && [","].includes(this.reconciliationStatement.accountNo)) {
+          this.accountNo = this.reconciliationStatement.accountNo;
+        } else {
+          this.accountNo = this.reconciliationStatement.accountNo.split(",")[this.reconciliationStatement.accountNo.split(",").length - 1]
         }
-      } else {
-        if(this.$route.name=="accountStatement"){
+        switch (this.$parent.paymentId) {
+          case "YSK":
+            this.$refs.accountSelette.paymentId = "YJDZ";
+            this.$refs.accountSelette.sort = "SK";
+            break;
+          case "DYD":
+            this.$refs.accountSelette.paymentId = "YJDZ";
+            break;
+          case "YS":
+            this.$refs.accountSelette.paymentId = "YSK";
+            break;
+          case "YF":
+            this.$refs.accountSelette.paymentId = "YFK";
+            break;
+          default :
+            this.$refs.accountSelette.paymentId = "YJDZ";
+            break;
+        }
+      },
+      //弹框打开
+      hander(type) {
+        this.$refs.xTable.recalculate(true)
+        this.$refs.xTable2.recalculate(true)
+        if (!type) {
+          this.check = 0;
+          this.remark = "";
+          this.reconciliationStatement = {};
+          this.BusinessType = [];
           this.tableData = [];
-        }
-        let sign = 0;
-        if (this.$parent.paymentId === "YSK") {
-          sign = 2;
-        } else if (this.$parent.paymentId === "YFK") {
-          sign = 4;
-        } else if (this.$parent.paymentId === "YJDZ") {
-          sign = 1;
-        } else if (this.$parent.paymentId === "YSKZC") {
-          sign = 3;
-        } else if (this.$parent.type === 0) {
-          sign = 6;
-        } else if (this.$parent.type === 1) {
-          sign = 7;
-        } else if (this.$parent.type === 2) {
-          sign = 8;
-        } else if (this.$parent.type === 3) {
-          sign = 9;
-        }
-        let accountNo = this.$parent.reconciliationStatement
-          ? this.$parent.reconciliationStatement.accountNo
-          : this.$parent.currentAccount.accountNo;
-        wirteAccount({
-          accountNo,
-          sign
-        }).then(res => {
-          if (res.code === 0) {
-            res.data.one.furposeName = res.data.one.furpose.name;
-            res.data.one.sortName = res.data.one.sort.name;
-            this.reconciliationStatement = res.data.one;
-            res.data.two.map(item => {
-              item.businessTypeName = item.businessType.name;
-            });
-            this.BusinessType = res.data.two;
-            this.BusinessType =  this.BusinessType.filter( item => item.reconciliationAmt != 0 )
-            this.checkComputed();
+          this.collectPayId = "";
+          if (this.$parent.paymentId === "YSKZC") {
+            this.$parent.claimModal = false;
           }
-        });
-      }
-    },
-
-
-    //清除表单内容
-    handleReset () {
-      this.remark = ""
-      this.reconciliationStatement = {}
-      this.BusinessType = []
-      this.tableData = []
-      this.collectPayId = ""
-    },
-    //本次核销金额输入
-    rpAmtChange(row) {
-      let arr=this.$refs.xTable.footerData[0];
-      let unAmtSumIdx;
-      arr.map((item,index)=>{
-        if(item=="合计"){
-          return unAmtSumIdx=index+1;
-        }
-      })
-      if(row.isSubject==1){
-        //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
-        let sumUnAmt =this.$utils.toNumber(arr[unAmtSumIdx])
-        this.$refs.xTable.updateFooter();
-        this.checkComputed();
-        if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
-          return this.$Message.error("金额录入错误，请重新录入！")
-        }
-      }else{
-        //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
-        let sumUnAmt = row.unAmt;
-        this.$refs.xTable.updateFooter();
-        this.checkComputed();
-        if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
-          return this.$Message.error("金额录入错误，请重新录入！")
-        }
-      }
-    },
-    //保存
-    async conserve() {
-      if (!Number(this.check)) {
-        const errMap = await this.$refs.xTable
-          .fullValidate()
-          .catch(errMap => errMap);
-        if (errMap) return this.$Message.error("表格校验错误");
-        let bool = true;
-        let arr=this.$refs.xTable.footerData[0];
-        let unAmtSumIdx;
-        arr.map((item,index)=>{
-          if(item=="合计"){
-            return unAmtSumIdx=index+1;
+        } else {
+          if (this.$route.name == "accountStatement") {
+            this.tableData = [];
           }
-        })
-        this.BusinessType.map(row=>{
-          if(row.isSubject==1){
-            let sumUnAmt =this.$utils.toNumber(arr[unAmtSumIdx])
-            this.$refs.xTable.updateFooter();
-            this.checkComputed();
-            if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
-              this.$Message.error("金额录入错误，请重新录入！")
-              bool = false
-              return
-            }
-          }else{
-            let sumUnAmt = row.unAmt;
-            this.$refs.xTable.updateFooter();
-            this.checkComputed();
-            if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)) {
-              this.$Message.error("金额录入错误，请重新录入！")
-              bool = false
-              return
-            }
+          let sign = 0;
+          if (this.$parent.paymentId === "YSK") {
+            sign = 2;
+          } else if (this.$parent.paymentId === "YFK") {
+            sign = 4;
+          } else if (this.$parent.paymentId === "YJDZ") {
+            sign = 1;
+          } else if (this.$parent.paymentId === "YSKZC") {
+            sign = 3;
+          } else if (this.$parent.type === 0) {
+            sign = 6;
+          } else if (this.$parent.type === 1) {
+            sign = 7;
+          } else if (this.$parent.type === 2) {
+            sign = 8;
+          } else if (this.$parent.type === 3) {
+            sign = 9;
           }
-        })
-        if(bool){
-          let obj = {
-            one: this.reconciliationStatement,
-            two: this.BusinessType,
-            // three: this.tableData
-          };
-          this.conserveDis=true;
-          saveAccount(obj).then(res => {
+          let accountNo = this.$parent.reconciliationStatement
+            ? this.$parent.reconciliationStatement.accountNo
+            : this.$parent.currentAccount.accountNo;
+          wirteAccount({
+            accountNo,
+            sign
+          }).then(res => {
             if (res.code === 0) {
-              this.$message.success("保存成功");
-              if(this.$parent.paymentId=="DYD"){
-                this.$Modal.confirm({
-                  title: '提示',
-                  content: '<p>是否同时发起发票对冲申请</p>',
-                  onOk: async () => {
-                    let res = await getHedging(obj)
-                    if (res.code === 0){
-                      this.$message.success("发票对冲申请单");
-                      this.$emit('getNewList',{})
-                    }
-                    this.conserveDis=false;
-                    this.Settlement = false;
-                    this.handleReset()
-                  },
-                  onCancel: () => {
-                    this.conserveDis=false;
-                    this.Settlement = false;
-                    this.handleReset()
-                    this.$emit('getNewList',{})
-                    this.$message.success("对账单对冲成功");
-                  }
-                });
-              }else{
-                this.conserveDis=false;
-                this.Settlement = false;
-                this.handleReset()
-                this.$emit('getNewList',{})
-                this.$message.success("对账单对冲成功");
-              }
-            }else{
-              this.conserveDis=false;
+              res.data.one.furposeName = res.data.one.furpose.name;
+              res.data.one.sortName = res.data.one.sort.name;
+              this.reconciliationStatement = res.data.one;
+              res.data.two.map(item => {
+                item.businessTypeName = item.businessType.name;
+              });
+              this.BusinessType = res.data.two;
+              this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+              this.checkComputed();
+            }
+          });
+        }
+      },
+
+
+      //清除表单内容
+      handleReset() {
+        this.remark = ""
+        this.reconciliationStatement = {}
+        this.BusinessType = []
+        this.tableData = []
+        this.collectPayId = ""
+      },
+      //本次核销金额输入
+      rpAmtChange(row) {
+        let arr = this.$refs.xTable.footerData[0];
+        let unAmtSumIdx;
+        arr.map((item, index) => {
+          if (item == "合计") {
+            return unAmtSumIdx = index + 1;
+          }
+        })
+        if (row.isSubject == 1) {
+          //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
+          let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+          this.$refs.xTable.updateFooter();
+          this.checkComputed();
+          if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        } else {
+          //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
+          let sumUnAmt = row.unAmt;
+          this.$refs.xTable.updateFooter();
+          this.checkComputed();
+          console.log(111122,sumUnAmt,row.rpAmt)
+          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
+            console.log(1111,sumUnAmt,row.rpAmt)
+            return this.$Message.error("金额录入错误，请重新录入！")
+          }
+        }
+      },
+      //保存
+      async conserve() {
+        if (!Number(this.check)) {
+          const errMap = await this.$refs.xTable
+            .fullValidate()
+            .catch(errMap => errMap);
+          if (errMap) return this.$Message.error("表格校验错误");
+          let bool = true;
+          let arr = this.$refs.xTable.footerData[0];
+          let unAmtSumIdx;
+          arr.map((item, index) => {
+            if (item == "合计") {
+              return unAmtSumIdx = index + 1;
             }
           })
-        }
-      } else {
-        this.$message.error("核对金额为0才能保存");
-      }
-    },
-    // 核销单元格编辑状态下被关闭时
-    editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = this.$utils.subtract(row.unAmt, row.rpAmt).toFixed(2);
-      // row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAmt ? row.rpAmt * 1 : 0).toFixed(2) : 0;
-      this.$set(this.BusinessType, rowIndex, row);
-      this.checkComputed();
-    },
-    // 核销信息合计
-    offWrite({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 3) {
-            return "合计";
-          }
-          if (
-            [
-              "reconciliationAmt",
-              "hasAmt",
-              "unAmt",
-              "rpAmt",
-              "unAmtLeft"
-            ].includes(column.property)
-          ) {
-            return this.$utils.sum(data, column.property).toFixed(2);
-          }
-          return null;
-        })
-      ];
-    },
-    // 收款信息合计
-    payCollection({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return "合计";
-          }
-          if (["incomeMoney", "paidMoney"].includes(column.property)) {
-            if(["paidMoney"].includes(column.property)){
-              return Math.abs(this.$utils.sum(data, column.property)).toFixed(2);
+          this.BusinessType.map(row => {
+            if (row.isSubject == 1) {
+              let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+              this.$refs.xTable.updateFooter();
+              this.checkComputed();
+              if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+                this.$Message.error("金额录入错误，请重新录入！")
+                bool = false
+                return
+              }
+            } else {
+              let sumUnAmt = row.unAmt;
+              this.$refs.xTable.updateFooter();
+              this.checkComputed();
+              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0)||(sumUnAmt < row.rpAmt)) {
+                this.$Message.error("金额录入错误，请重新录入！")
+                bool = false
+                return
+              }
             }
-            return this.$utils.sum(data, column.property).toFixed(2);
+          })
+          if (bool) {
+            let obj = {
+              one: this.reconciliationStatement,
+              two: this.BusinessType,
+              // three: this.tableData
+            };
+            this.conserveDis = true;
+            saveAccount(obj).then(res => {
+              if (res.code === 0) {
+                this.$message.success("保存成功");
+                if (this.$parent.paymentId == "DYD") {
+                  this.$Modal.confirm({
+                    title: '提示',
+                    content: '<p>是否同时发起发票对冲申请</p>',
+                    onOk: async () => {
+                      let res = await getHedging(obj)
+                      if (res.code === 0) {
+                        this.$message.success("发票对冲申请单");
+                        this.$emit('getNewList', {})
+                      }
+                      this.conserveDis = false;
+                      this.Settlement = false;
+                      this.handleReset()
+                    },
+                    onCancel: () => {
+                      this.conserveDis = false;
+                      this.Settlement = false;
+                      this.handleReset()
+                      this.$emit('getNewList', {})
+                      this.$message.success("对账单对冲成功");
+                    }
+                  });
+                } else {
+                  this.conserveDis = false;
+                  this.Settlement = false;
+                  this.handleReset()
+                  this.$emit('getNewList', {})
+                  this.$message.success("对账单对冲成功");
+                }
+              } else {
+                this.conserveDis = false;
+              }
+            })
           }
-          return null;
-        })
-      ];
-    },
-    // 核对计算
-    checkComputed() {
-      let sum1 = 0;
-      let sum2 = 0;
-      let sum3 = 0;
-      this.BusinessType.map(item => {
-        sum1 += (item.rpAmt ? this.$utils.toNumber(item.rpAmt * 1) : 0);
-      });
-      this.tableData.map(item => {
-        sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
-        sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
-      });
-      //this.check = (sum1 - sum2 - sum3).toFixed(2);
-      this.check = (Math.abs(sum1) - Math.abs(sum3)).toFixed(2);
+        } else {
+          this.$message.error("核对金额为0才能保存");
+        }
+      },
+      // 核销单元格编辑状态下被关闭时
+      editClosedEvent({row, rowIndex}) {
+        row.unAmtLeft = this.$utils.subtract(row.unAmt, row.rpAmt).toFixed(2);
+        // row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAmt ? row.rpAmt * 1 : 0).toFixed(2) : 0;
+        this.$set(this.BusinessType, rowIndex, row);
+        this.checkComputed();
+      },
+      // 核销信息合计
+      offWrite({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 3) {
+              return "合计";
+            }
+            if (
+              [
+                "reconciliationAmt",
+                "hasAmt",
+                "unAmt",
+                "rpAmt",
+                "unAmtLeft"
+              ].includes(column.property)
+            ) {
+              return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            return null;
+          })
+        ];
+      },
+      // 收款信息合计
+      payCollection({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (["incomeMoney", "paidMoney"].includes(column.property)) {
+              if (["paidMoney"].includes(column.property)) {
+                return Math.abs(this.$utils.sum(data, column.property)).toFixed(2);
+              }
+              return this.$utils.sum(data, column.property).toFixed(2);
+            }
+            return null;
+          })
+        ];
+      },
+      // 核对计算
+      checkComputed() {
+        let sum1 = 0;
+        let sum2 = 0;
+        let sum3 = 0;
+        this.BusinessType.map(item => {
+          sum1 += (item.rpAmt ? this.$utils.toNumber(item.rpAmt * 1) : 0);
+        });
+        this.tableData.map(item => {
+          sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
+          sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
+        });
+        //this.check = (sum1 - sum2 - sum3).toFixed(2);
+        this.check = (Math.abs(sum1) - Math.abs(sum3)).toFixed(2);
+      }
     }
-  }
-};
+  };
 </script>
 <style lang="less" scoped>
-.input {
-  position: relative;
-  left: -26px;
-  bottom: -5px;
-}
+  .input {
+    position: relative;
+    left: -26px;
+    bottom: -5px;
+  }
 </style>
