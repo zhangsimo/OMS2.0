@@ -520,10 +520,12 @@
         showBayer: false, //出库方弹窗
         rightTableStatus: "", //右侧表格状态
         ruleValidate: {
+          storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
         },
         settleTypeList:{},//票据类型
         //左侧选中id
-        selectLeftItemId:''
+        selectLeftItemId:'',
+        defaultStore:''
       };
     },
     // created() {
@@ -593,6 +595,14 @@
           .then(res => {
             if (res.code === 0) {
               this.warehouseList = res.data;
+              let filter = this.warehouseList.filter(item => item.isDefault)
+              if(filter.length>0){
+                this.defaultStore = filter[0].id
+              }else{
+                if(this.warehouseList.length>0){
+                  this.defaultStore = this.warehouseList[0].id
+                }
+              }
             }
           })
           .catch(err => {
@@ -739,6 +749,7 @@
           commitUname: "",
           createTime: "",
           source:4,
+          storeId:this.defaultStore,
           //commitDate:"",
           //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           //createUname: this.$store.state.user.userData.staffName,
@@ -810,21 +821,27 @@
       },
       //保存
       baocun() {
-        this.formPlan.inventoryOrderType = 2;
-        saveVentoryNewChange(this.formPlan).then(res => {
-          if (res.code == 0) {
-            this.flag = 0;
-            this.isAddRight = true;
-            this.Right.tbdata = [];
-            this.formPlan = {};
-            this.$Message.success("保存成功");
-            this.getList();
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this.formPlan.inventoryOrderType = 2;
+            saveVentoryNewChange(this.formPlan).then(res => {
+              if (res.code == 0) {
+                this.flag = 0;
+                this.isAddRight = true;
+                this.Right.tbdata = [];
+                this.formPlan = {};
+                this.$Message.success("保存成功");
+                this.getList();
+              }
+              this.handleReset();
+              // else{
+              //   this.formPlan.checkDate = preTime;
+              // }
+            });
+          } else {
+            this.$Message.error("入库仓库必填");
           }
-          this.handleReset();
-          // else{
-          //   this.formPlan.checkDate = preTime;
-          // }
-        });
+        })
       },
       //导出
       exportAll(){
