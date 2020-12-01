@@ -820,6 +820,7 @@ export default {
     // 提交
     editPro() {
       //判断是否是新增状态
+      let objForm = {...this.formPlan}
       if(this.flag){
         return this.$Message.error("提交前请先保存单据信息");
       }
@@ -828,7 +829,7 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
-      if (this.formPlan.billStatusId.value !== 0) {
+      if (objForm.billStatusId.value !== 0) {
         this.$Message.error("只有草稿状态才能提交");
         return;
       }
@@ -839,13 +840,13 @@ export default {
         onOk: async () => {
           this.$refs.form.validate(valid => {
             if (valid) {
-              this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
+              objForm.checkDate = moment(objForm.checkDate).format(
                 "YYYY-MM-DD HH:mm:ss"
               );
-              this.formPlan.billStatusId = 1;
+              objForm.billStatusId = 1;
               this.commitLoading = true;
               showLoading(".loadingClass", "数据加载中，请勿操作")
-              getSubmitList(this.formPlan).then(res => {
+              getSubmitList(objForm).then(res => {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getList();
