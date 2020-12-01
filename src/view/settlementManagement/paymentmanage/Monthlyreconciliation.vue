@@ -951,7 +951,8 @@
       //实际应付合计
       Actualtotalpayment() {
         //对账应付-应付坏账-应付返利
-        this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
+        this.paymentBaddebt = this.paymentBaddebt ? (this.totalpayment == 0 ? 0 : this.paymentBaddebt) : 0;
+        this.paymentRebate = this.paymentRebate ? (this.totalpayment == 0 ? 0 : this.paymentRebate) : 0;
         this.totalpayment = this.totalpayment ? this.totalpayment : 0;
         return parseFloat(
           this.totalpayment * 1 - this.paymentBaddebt * 1 - this.paymentRebate * 1
@@ -960,7 +961,8 @@
       //实际应收合计
       Actualtotalcollect() {
         //对账应收-应收坏账-应收返利  +运费(transportExpenses)+保险费(insuranceExpenses)+手续费(serviceCharge)+配件管理费(partsManagementFee)+其他费用(otherFees)
-        this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
+        this.collectBaddebt = this.collectBaddebt ? (this.totalcollect == 0 ? 0 : this.collectBaddebt) : 0;
+        this.collectRebate = this.collectRebate ? (this.totalcollect == 0 ? 0 : this.collectRebate) : 0;
         this.totalcollect = this.totalcollect ? this.totalcollect : 0;
         return parseFloat(
           this.totalcollect * 1 - this.collectBaddebt * 1 - this.collectRebate * 1 + this.transportExpenses * 1 + this.insuranceExpenses * 1 + this.serviceCharge * 1 + this.partsManagementFee * 1 + this.otherFees * 1
@@ -1258,8 +1260,8 @@
         let obj = {orgId: this.model1, guestId: this.companyInfo};
         if (data) {
           obj.type = data.type;//应收1应付-1
-          obj.dateSort = data.dateSort?data.dateSort:0;//日期排序 1升序 -1降序
-          obj.amtSort = data.amtSort?data.amtSort:0;//单据金额 1升序 -1降序
+          obj.dateSort = data.dateSort ? data.dateSort : 0;//日期排序 1升序 -1降序
+          obj.amtSort = data.amtSort ? data.amtSort : 0;//单据金额 1升序 -1降序
         }
         obj.startDate = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -1285,7 +1287,7 @@
         if (data.type == 1) {
           this.data1Loading = true;
           this.data1 = [];
-        } else if(data.type == -1) {
+        } else if (data.type == -1) {
           this.data2Loading = true;
           this.data2 = []
         }
@@ -1294,7 +1296,7 @@
           if (data.type == 1) {
             this.data1Loading = false;
             this.data1 = res.data;
-          }  else if(data.type == -1)  {
+          } else if (data.type == -1) {
             this.data2Loading = false;
             this.data2 = res.data;
           }
@@ -1567,6 +1569,7 @@
             break;
         }
         this.colOrPaySortMethod(data);
+        this.totalcollect = 0;
       },
       setTempCollectlist(selection) {
         this.tempCollectlist['page' + this.pageObj.num] = selection;
@@ -1639,6 +1642,7 @@
             break;
         }
         this.colOrPaySortMethod(data);
+        this.totalpayment = 0;
       },
       setTempPaymentList(selection) {
         this.tempPaymentlist['page' + this.pageObj1.num] = selection;

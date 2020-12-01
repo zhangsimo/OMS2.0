@@ -5,7 +5,7 @@
       <Button type="success" @click="print" class="mr10">打印</Button>
       <Button type="default" @click="printShow = false">取消</Button>
     </div>
-    <div id="printBox" style="height: 100%">
+    <div ref="printBox" style="height: 100%">
       <div class="titler">
         <div class="detail-con">
           <table class="gridtable" width="100%" cellPadding="0" cellSpacing="0" style="text-align: left;">
@@ -283,7 +283,7 @@
       print() {
         let iframe = document.getElementById("print-iframe");
         if (!iframe) {
-          let el = document.getElementById("printBox");
+          let el = this.$refs.printBox;
           iframe = document.createElement('IFRAME');
           let doc = null;
           iframe.setAttribute("id", "print-iframe");

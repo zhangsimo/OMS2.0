@@ -111,7 +111,7 @@ export default {
         subMan:"",
         createUname:"",//创建人
         storeId:"",
-        source:3
+        source:99
       },
       brandLists:[],//品牌
       salesList:[],//提交人
@@ -128,6 +128,10 @@ export default {
         },
         {
           value:3,
+          label:"盘盈开单",
+        },
+        {
+          value:99,
           label:"全部",
         }
       ]
@@ -209,7 +213,7 @@ export default {
         subMan:this.moreData.subMan,
         createUname:this.moreData.createUname,
         storeId:this.moreData.storeId,
-        source:this.moreData.source==3?'':this.moreData.source,
+        source:this.moreData.source==99?'':this.moreData.source,
         inventoryOrderType:1,
       }
       if (this.billStatusId != '') {
