@@ -775,7 +775,7 @@
           this.$Message.error("请选择数据");
           return;
         }
-        if (this.formPlan.billStatusId.value !== 0) {
+        if (this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9) {
           this.$Message.error("只有草稿状态才能提交");
           return;
         }
@@ -869,7 +869,7 @@
           return;
         }
         //判断是否为草稿状态
-        if (this.formPlan.billStatusId.value !== 0) {
+        if (this.formPlan.billStatusId.value !== 0&&this.formPlan.billStatusId.value !== 9) {
           this.$Message.error("只有草稿状态才能作废");
           return;
         }
