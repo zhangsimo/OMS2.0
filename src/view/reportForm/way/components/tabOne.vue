@@ -178,7 +178,7 @@ export default {
     };
   },
   mounted() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     // 查询表
