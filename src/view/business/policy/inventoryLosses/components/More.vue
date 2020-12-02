@@ -146,7 +146,7 @@
     methods: {
       getWouse(){
         if(this.warehouseList.length > 0) return;
-        getstate()
+        getstate({shopCode: this.$store.state.user.userData.currentCompany.code})
           .then(res => {
             console.log(res)
             if (res.code === 0) {

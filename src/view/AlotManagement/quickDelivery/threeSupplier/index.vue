@@ -451,7 +451,7 @@ export default {
       }
     },
     log() {
-      getcangku().then(res => {
+      getcangku({shopCode: this.$store.state.user.userData.currentCompany.code}).then(res => {
         if (res.code === 0) {
           res.data.forEach(element => {
             this.storeArray.push({ value: element.id, label: element.name });

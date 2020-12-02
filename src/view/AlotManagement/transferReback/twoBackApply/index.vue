@@ -924,7 +924,7 @@ export default {
     },
     // 仓库下拉框
     warehouse() {
-      queryByOrgid().then(res => {
+      queryByOrgid({shopCode: this.$store.state.user.userData.currentCompany.code}).then(res => {
         if (res.code === 0) {
           this.cangkuListall = res.data;
           res.data.forEach(el => {

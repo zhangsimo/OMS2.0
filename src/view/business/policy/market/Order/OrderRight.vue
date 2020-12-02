@@ -531,7 +531,8 @@ export default {
     // 获取仓库
     async getWarehouse() {
       let res = await getWarehouseList({
-        groupId: this.$store.state.user.userData.groupId
+        groupId: this.$store.state.user.userData.groupId,
+        shopCode: this.$store.state.user.userData.currentCompany.code
       });
       if (res.code === 0) {
         this.WarehouseList = res.data;

@@ -694,7 +694,7 @@ export default {
       // this.Leftcurrentrow.detailVOS = data;
     },
     warehouse() {
-      queryByOrgid().then(res => {
+      queryByOrgid({shopCode: this.$store.state.user.userData.currentCompany.code}).then(res => {
         if (res.code === 0) {
           this.cangkuListall = res.data;
         }
