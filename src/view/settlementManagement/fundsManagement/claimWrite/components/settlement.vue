@@ -409,7 +409,7 @@
               let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
               this.$refs.account.updateFooter();
               this.checkComputed();
-              if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+              if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
                 this.$Message.error("金额录入错误，请重新录入！")
                 bool = false
                 return
@@ -419,7 +419,7 @@
               let sumUnAmt = row.unAmt
               this.$refs.account.updateFooter();
               this.checkComputed();
-              if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
+              if ((sumUnAmt > 0 && row.rpAmt < 0) || (sumUnAmt < 0 && row.rpAmt > 0) || (Math.abs(sumUnAmt) < Math.abs(row.rpAmt))) {
                 this.$Message.error("金额录入错误，请重新录入！")
                 bool = false
                 return
@@ -480,7 +480,7 @@
           let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
           this.$refs.account.updateFooter();
           this.checkComputed();
-          if ((sumUnAmt < 0 && row.rpAmt <= 0) || (sumUnAmt > 0 && row.rpAmt >= 0)) {
+          if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
             return this.$Message.error("金额录入错误，请重新录入！")
           }
         } else {
@@ -488,7 +488,7 @@
           let sumUnAmt = row.unAmt
           this.$refs.account.updateFooter();
           this.checkComputed();
-          if ((sumUnAmt > 0 && row.rpAmt <= 0) || (sumUnAmt < 0 && row.rpAmt >= 0) || (sumUnAmt < row.rpAmt)) {
+          if ((sumUnAmt > 0 && row.rpAmt < 0) || (sumUnAmt < 0 && row.rpAmt > 0) || (Math.abs(sumUnAmt) < Math.abs(row.rpAmt))) {
             return this.$Message.error("金额录入错误，请重新录入！")
           }
         }
