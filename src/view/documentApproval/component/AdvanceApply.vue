@@ -63,11 +63,11 @@
             <FormItem
               label="申请金额"
               style="margin-bottom: 0px"
-              prop="applyAmt"
+              prop="thisApplyAmt"
             >
               <Input
                 type="number"
-                v-model="formInline.applyAmt"
+                v-model="applyAmtTotal"
                 style="width: 100%"
                 :disabled="modelType"
                 readonly
@@ -92,6 +92,7 @@
           :footer-method="documentFooterMethod"
           size="mine"
           align="center"
+          :edit-rules="tableRules"
           :data="formInline.details"
           :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
         >
@@ -102,7 +103,7 @@
           </vxe-table-column>
           <vxe-table-column
             field="serviceId"
-            title="预收款单号"
+            title="订单单号"
           ></vxe-table-column>
           <vxe-table-column
             field="guestName"
@@ -113,10 +114,16 @@
             field="payAmt"
             title="计划预付款"
           ></vxe-table-column>
-          <vxe-table-column field="orderDate" title="订单金额"></vxe-table-column>
-          <vxe-table-column field="orderDate" title="已申请金额"></vxe-table-column>
-          <vxe-table-column field="orderDate" title="申请前剩余金额"></vxe-table-column>
-          <vxe-table-column field="orderDate" title="本次申请金额"></vxe-table-column>
+          <vxe-table-column field="orderAmt" title="订单金额"></vxe-table-column>
+          <vxe-table-column field="hasApplyAmt" title="已申请金额"></vxe-table-column>
+          <vxe-table-column title="申请前剩余金额">
+            <template v-slot="{row}">
+              <span>{{row.orderAmt - row.hasApplyAmt - row.adjustAmt}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="thisApplyAmt"  title="本次申请金额" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: changeThisA}}">
+    
+          </vxe-table-column>
 
         </vxe-table>
 
@@ -288,6 +295,7 @@
 
 <script>
 import index from "./index/AdvanceApply.js";
+import { Prop } from 'vue-property-decorator';
 export default index;
 </script>
 

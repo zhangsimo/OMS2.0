@@ -8,6 +8,7 @@ import { getThisAllList,getGuestShortName ,getPayAccount} from "@/api/documentAp
 import { getAccountName } from "../../../../api/bill/saleOrder";
 import { getPost } from "../utils";
 import fa from "element-ui/src/locale/lang/fa";
+import { valid } from "mockjs";
 export default {
   name: "AdvanceApply",
   components: {
@@ -24,7 +25,11 @@ export default {
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增 1-编辑 3-查看
       saveDis:false,//保存草稿按钮接口没有返回不可点击
-      formInline: {}, //所有数据对象
+      formInline: {
+        details: [],
+        applyAmt: 0,
+        applyAmtTotal: 0
+      }, //所有数据对象
       //表单校验
       ruleValidate: {
         topic: [{ required: true, message: "主题为必填", trigger: "blur" }],
@@ -58,7 +63,6 @@ export default {
         paymentAccount: [
           {
             required: true,
-            type: "string",
             message: "付款账户必选",
             trigger: "change"
           }
@@ -66,6 +70,11 @@ export default {
         // BankNo:[
         //   {required: true, message: '银行账号必填', trigger: 'blur'}
         // ]
+      },
+      tableRules: {
+        thisApplyAmt: [
+          { required: true, message: "申请金额必填", trigger: "blur" },
+        ],
       },
       //费用支出表格的数据校验
       documentTableData: [], //借支核销表格数据
@@ -78,6 +87,18 @@ export default {
       //收款账号
       receiverArr: []
     };
+  },
+  computed: {
+    applyAmtTotal(){
+      let total = 0
+      if(this.formInline.details){
+        this.formInline.details.forEach(v => {
+          total += Number(v.thisApplyAmt)
+        })
+      }
+      this.formInline.applyAmt = total.toFixed(2)
+      return total.toFixed(2)
+    }
   },
   mounted() {},
 
@@ -241,13 +262,22 @@ export default {
 
     //获取其他付款单据信息
     async otherPayList(row) {
-      delete row.id;
-      this.$set(this.formInline, "details", [row]);
-      await this.remoteMethod("",row.guestId)
+      
+      row.map(v => {
+        delete v.id
+        this.$set(v,'thisApplyAmt', 0)
+        return v
+      })
+      // console.log(row,'later')
+      this.$set(this.formInline, "details", row);
+      await this.remoteMethod("",row[0].guestId)
       this.formInline.receiveGuestId=this.company[0].value
       this.getCompany(this.company[0])
     },
 
+    changeThisA({row}){
+      console.log(row.thisApplyAmt)
+    },
     //选择单据
     SelectTheDocuments() {
       this.$refs.documnets.open();
@@ -260,7 +290,7 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (["payAmt"].includes(column.property)) {
+          if (["payAmt","applyAmt"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
           }
           return null;
@@ -273,14 +303,31 @@ export default {
     getImgList(row) {
       this.formInline.voucherPictures = row.list;
     },
+    DocValidate(){
+      let flag = false
+      this.$refs.documentTable.validate(valid => {
+        if(valid){
+          flag = true
+        }else{
+          this.$Message.error('本次申请金额不能为0')
+          flag = false
+        }
+      })
+      return flag
+    },
 
     //保存提交
-    save(type) {
+    async save(type) {
+      
       this.$refs.formInline.validate(async valid => {
         if (valid) {
           let valg = false
+          console.log(this.formInline.applyAmt)
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
             valg = parseFloat(this.formInline.details[0].payAmt) < parseFloat(this.formInline.applyAmt) ? true : false
+          }
+          if(this.formInline.applyAmt == 0){
+            return this.$Message.error("申请金额不能为0")
           }
           // console.log(this.formInline,valg,1111)
           if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
@@ -299,6 +346,7 @@ export default {
           this.$Message.error("带*必填");
         }
       });
+       
     }
   }
 };

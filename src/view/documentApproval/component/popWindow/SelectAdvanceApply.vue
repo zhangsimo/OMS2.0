@@ -27,16 +27,17 @@
         row-id="id"
         :radio-config="{trigger: 'row', highlight: true, range: true, reserve:true}"
         size="mini"
-        @radio-change="selectChangeEvent"
+        @checkbox-all="selectAllEvent"
+        @checkbox-change="selectChangeEvent"
         :data="tableData">
-        <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
+        <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column field="serviceId" title="订单单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
         <vxe-table-column field="orderDate" title="订单日期"></vxe-table-column>
         <vxe-table-column field="payAmt" title="计划预付款"></vxe-table-column>
-        <vxe-table-column field="payAmt" title="订单金额"></vxe-table-column>
-        <vxe-table-column field="payAmt" title="已申请金额"></vxe-table-column>
+        <vxe-table-column field="orderAmt" title="订单金额"></vxe-table-column>
+        <vxe-table-column field="hasApplyAmt" title="已申请金额"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
@@ -114,14 +115,23 @@
       },
 
       //选择
-      selectChangeEvent({row}){
-        console.log(row)
-        this.checkedList = row
+      selectChangeEvent({selection}){
+        console.log(selection)
+        this.checkedList = selection
+      },
+      //全选
+      selectAllEvent({selection}){
+        this.checkedList = selection
       },
 
       //确定
       submit(){
         if (Object.keys(this.checkedList).length < 1) return this.$Message.error('请选择一条信息')
+        for(let i = 1; i < this.checkedList.length; i++){
+          if(this.checkedList[0].guestId !== this.checkedList[i].guestId){
+            return this.$Message.error('请选择往来单位相同的单据！')
+          }
+        }
         this.$emit('backLists' ,this.checkedList)
         this.modelShow = false
       }
