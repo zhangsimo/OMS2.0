@@ -1,6 +1,6 @@
 <template>
   <div class="content-oper" style="background: #fff">
-    <panne @search="search" @export="exportxls('tabOne')" />
+    <panne ref="panne" @search="search" @export="exportxls('tabOne')" />
     <tabOne ref="tabOne" />
   </div>
 </template>
@@ -14,7 +14,9 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    this.$refs.panne.query()
+  },
   methods: {
     search(data) {
       this.$refs.tabOne.body = data;
