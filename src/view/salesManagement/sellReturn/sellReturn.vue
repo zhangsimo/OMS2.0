@@ -1236,6 +1236,9 @@
       //提交
       isSubmit() {
         if(this.submitloading){ return }
+        if(!this.formPlan.hasOwnProperty("id")){
+          return this.$message.error("请先保存再提交!");
+        }
         this.formPlan.orderDate = new Date(this.formPlan.orderDate)
         if (!this.isSelfOk) {
           return this.$message.error("请填写正确的仓位!");
