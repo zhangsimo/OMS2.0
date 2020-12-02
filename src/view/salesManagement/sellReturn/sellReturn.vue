@@ -967,9 +967,7 @@
       },
       // 获取仓库
       async getWarehouse() {
-        let res = await getWarehouseList({
-          groupId: this.$store.state.user.userData.groupId
-        });
+        let res = await getWarehouseList({shopCode: this.$store.state.user.userData.currentCompany.code});
         if (res.code === 0) {
           this.WareHouseList = res.data;
           res.data.map(item => {

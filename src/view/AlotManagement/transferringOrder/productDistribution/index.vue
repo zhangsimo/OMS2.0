@@ -421,7 +421,7 @@ export default {
         .catch(e => {
           this.$Message.info("获取配件品牌失败");
         });
-      getcangku()
+      getcangku({shopCode: this.$store.state.user.userData.currentCompany.code})
         .then(res => {
           if (res.code == 0) {
             res.data.forEach(element => {

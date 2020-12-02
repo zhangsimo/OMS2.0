@@ -286,7 +286,7 @@ export default {
         .catch(e => {
           this.$Message.info("拒绝失败");
         });
-      getcangku()
+      getcangku({shopCode: this.$store.state.user.userData.currentCompany.code})
         .then(res => {
           if (res.code == 0) {
             res.data.forEach(element => {

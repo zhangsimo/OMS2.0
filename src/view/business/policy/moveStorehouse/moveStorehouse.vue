@@ -1330,7 +1330,7 @@ export default {
   mounted() {
 
     //获取右边仓库数据
-    getstate()
+    getstate({shopCode: this.$store.state.user.userData.currentCompany.code})
       .then(res => {
         if (res.code === 0) {
           this.warehouseList = res.data;
