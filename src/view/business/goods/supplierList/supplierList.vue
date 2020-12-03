@@ -428,6 +428,8 @@
       @getPlanOrder="getPlanOrder"
       @dblclickfun="getPlanOrder"
     ></procurement>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
   </div>
@@ -442,7 +444,7 @@
   // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
   import Procurement from "@/components/Procurement";
   import {hideLoading, showLoading} from "@/utils/loading";
-
+  import printZF from "@/components/print/print.vue";
 
   import {
     optGroup,
@@ -467,6 +469,7 @@
       Procurement,
       SelectSupplier,
       GoodCus,
+      printZF
     },
     data() {
       let changeNumber = ({cellValue, row: {canReQty}}) => {
@@ -1106,25 +1109,15 @@
           },
         });
       },
-      //创建a标签
-      openwin(url) {
-        var a = document.createElement("a"); //创建a对象
-        a.setAttribute("href", url);
-        a.setAttribute("target", "_blank");
-        a.setAttribute("id", "camnpr");
-        document.body.appendChild(a);
-        a.click(); //执行当前对象
-        document.body.removeChild(a)
-      },
       // 打印
       stamp() {
         let order = {};
         order.name = "采购退货单";
         order.route = this.$route.name;
         order.id = this.mainId;
-        let routeUrl = this.$router.resolve({name: "print", query: order});
-        // window.open(routeUrl.href, "_blank");
-        this.openwin(routeUrl.href)
+        order.storeName=this.datadata.storeName;
+        let printZF=this.$refs.printZF;
+        printZF.openModal(order)
         this.leftgetList();
       },
       //返单

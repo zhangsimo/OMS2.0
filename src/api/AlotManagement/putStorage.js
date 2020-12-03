@@ -1,6 +1,7 @@
 import api from '_conf/url';
 import axios from '@/libs/api.request';
-
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 //获取调拨申请列表
 export function getList1(data, size, num) {
   return axios.request({
@@ -120,4 +121,8 @@ export function getDBSQlist(data, size, num) {
       ...data
     }
   });
+}
+//导出 调拨入库
+export function exportPutStorage(params){
+  return `${api.omsOrder}/allotEnterDetail/export?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }

@@ -170,16 +170,17 @@
           title="不含税销价"
           width="80"
         >
-          <template v-slot:footer>
-            <span style="color: red">{{allMoneyList.sellNoTaxAmtCount || 0 }}</span>
-          </template>
         </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="sellNoTaxAmt"
           title="不含税金额"
           width="80"
-        ></vxe-table-column>
+        >
+          <template v-slot:footer>
+            <span style="color: red">{{allMoneyList.sellNoTaxAmtCount || 0 }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           show-overflow="tooltip"
           field="taxQuota"

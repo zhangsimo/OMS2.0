@@ -164,7 +164,7 @@
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     />-->
-                  
+
                   <FormItem label="移仓日期" prop="auditDate">
                     <DatePicker
                       :value="Leftcurrentrow.auditDate"
@@ -333,8 +333,8 @@
     <!-- <Modal v-model="showAudit" title="提示" @on-ok="auditOK" @on-cancel="auditCancel">
       <p>是否确定审核</p>
     </Modal>-->
-    <!-- 打印 -->
-    <Print-show ref="printBox"></Print-show>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
   </div>
 </template>
 
@@ -343,6 +343,7 @@
     upxlxsMoveStore/**编码品牌导入配件*/,
     upxlxsInnerIdMoveStore/**内码导入配件*/
   } from "_api/purchasing/purchasePlan";
+  import printZF from "@/components/print/print.vue";
 import {
   getLeftList,
   getstate, //仓库数据
@@ -367,7 +368,6 @@ import "../../../lease/product/lease.less";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
-import PrintShow from "./components/PrintShow";
 import More from "./components/More";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
@@ -382,9 +382,9 @@ export default {
   name: "moveStorehouse",
   components: {
     QuickDate,
-    PrintShow,
     More,
-    SelectPartCom
+    SelectPartCom,
+    printZF
   },
   data() {
     const orderQtyVali = ({cellValue,row}) =>{
@@ -1024,26 +1024,14 @@ export default {
     removeCancel() {
       this.showRemove = false;
     },
-    //创建a标签
-    openwin(url) {
-      var a = document.createElement("a"); //创建a对象
-      a.setAttribute("href", url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("id", "camnpr");
-      document.body.appendChild(a);
-      a.click(); //执行当前对象
-      document.body.removeChild(a)
-    },
     // 打印
     printTable() {
-      // this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
       let order = {};
       order.name="移仓单"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
-      let routeUrl=this.$router.resolve({name:"print",query:order})
-      // window.open(routeUrl.href,"_blank");
-      this.openwin(routeUrl.href)
+      let printZF=this.$refs.printZF;
+      printZF.openModal(order)
       this.getList()
     },
     //添加配件

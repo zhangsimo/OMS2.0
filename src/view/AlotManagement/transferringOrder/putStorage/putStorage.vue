@@ -53,6 +53,11 @@
               </Button>
             </div>
             <div class="db">
+              <Button v-has="'export'" class="mr10" @click="exportForm">
+                <i class="iconfont mr5 icondaochuicon"></i> 导出
+              </Button>
+            </div>
+            <div class="db">
               <div class="mt5"><Checkbox v-model="showSelf" @on-change="showOwen">显示个人单据</Checkbox></div>
             </div>
           </div>
@@ -265,7 +270,8 @@
       header-tit="调出方资料"
       @selectSupplierName="selectSupplierName"
     ></select-supplier>
-
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
     <add-in-com
       @getArray="getArrayFun"
       :tbdata="tableData1"
@@ -296,9 +302,9 @@ import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 import { hideLoading, showLoading } from "@/utils/loading";
+import printZF from "@/components/print/print.vue";
 
 // import SelectSupplier from './compontents/selectSupplier'
-
 import {
   getList1,
   baocun,
@@ -309,7 +315,8 @@ import {
   cangkulist2,
   outDataList,
   getListDetail,
-  getDBSQlist
+  getDBSQlist,
+  exportPutStorage/**导出调拨入库*/
 } from "@/api/AlotManagement/putStorage.js";
 
 import { queryByOrgid,validityPosition } from "../../../../api/AlotManagement/transferringOrder";
@@ -323,7 +330,8 @@ export default {
     AddInCom,
     SelectSupplier,
     // PrintShow,
-    selectPartCom
+    selectPartCom,
+    printZF
   },
   data() {
     const posValid = ({ cellValue }) => {
@@ -878,26 +886,24 @@ export default {
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
-    //创建a标签
-    openwin(url) {
-      var a = document.createElement("a"); //创建a对象
-      a.setAttribute("href", url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("id", "camnpr");
-      document.body.appendChild(a);
-      a.click(); //执行当前对象
-      document.body.removeChild(a)
-    },
     //打印表格
     printTable() {
       let order = {};
       order.name="调拨入库"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
-      let routeUrl=this.$router.resolve({name:"print",query:order})
-      // window.open(routeUrl.href,"_blank");
-      this.openwin(routeUrl.href)
+      let printZF=this.$refs.printZF;
+      printZF.openModal(order)
       this.getList()
+    },
+    exportForm(){
+      if(!this.Leftcurrentrow.id){
+        return this.$Message.error("请选择需要导出的数据！")
+      }else{
+        let str=""
+        str=`id=${this.Leftcurrentrow.id}&`
+        location.href=exportPutStorage(str)
+      }
     },
     async chuku() {
       this.$Modal.confirm({
@@ -1018,7 +1024,7 @@ export default {
         const res = await getListDetail(params);
         this.ArrayValue = res.data;
       }
-      
+
       this.showit = false;
       const that = this;
       setTimeout(() => {

@@ -300,21 +300,21 @@
                   <vxe-table-column  show-overflow="tooltip"
                     field="partCode"
                     title="配件编码"
-                    :filters="[]" 
+                    :filters="[]"
                     :filter-method="filterOrderNo"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="partName"
                     title="配件名称"
-                    :filters="[]" 
+                    :filters="[]"
                     :filter-method="filterOrderNo"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column  show-overflow="tooltip"
                     field="partBrand"
                     title="品牌"
-                    :filters="[]" 
+                    :filters="[]"
                     :filter-method="filterOrderNo"
                     width="100"
                   ></vxe-table-column>
@@ -407,6 +407,8 @@
       @dblclickfun="getPlanOrder"
     >
     </add-part>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
   </main>
   <!-- 配件组装 -->
 </template>
@@ -421,6 +423,7 @@ import QuickDate from "../../../../components/getDate/dateget";
 import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier2";
 import { findForAllot } from "_api/purchasing/purchasePlan";
 import { hideLoading, showLoading } from "@/utils/loading";
+import printZF from "@/components/print/print.vue";
 
 
 import {
@@ -450,6 +453,7 @@ export default {
     QuickDate,
     AddInCom,
     SelectSupplier,
+    printZF
   },
   inject: ["reload"],
   data() {
@@ -1030,16 +1034,6 @@ export default {
         return this.$Message.error("请先选择调出方和调出仓库");
       this.$refs.addPart.init();
     },
-    //创建a标签
-    openwin(url) {
-      var a = document.createElement("a"); //创建a对象
-      a.setAttribute("href", url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("id", "camnpr");
-      document.body.appendChild(a);
-      a.click(); //执行当前对象
-      document.body.removeChild(a)
-    },
     //打印表格
     printTable() {
       if (!this.dayinCureen.id) {
@@ -1050,9 +1044,8 @@ export default {
       order.name="调入退回申请"
       order.route=this.$route.name
       order.id=this.dayinCureen.id
-      let routeUrl=this.$router.resolve({name:"print",query:order})
-      // window.open(routeUrl.href,"_blank");
-      this.openwin(routeUrl.href)
+      let printZF=this.$refs.printZF;
+      printZF.openModal(order)
       this.$refs.OrderLeft.getList()
     },
     chuku() {
