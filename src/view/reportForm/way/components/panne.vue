@@ -14,6 +14,7 @@
               placement="bottom-start"
               placeholder="选择日期"
               class="w200 mr10"
+              @on-change="changeDate"
             >
             </DatePicker>
           </div>
@@ -105,11 +106,12 @@ export default {
         submitDate: ToDayStr(), // 提交日期
         content: "", // 编码名称
         guestId: "", // 供应商
-        orgid: "" // 门店
+        orgid: this.$store.state.user.userData ? this.$store.state.user.userData.currentCompany.id : ''// 门店
       }
     };
   },
-  async mounted() {
+  async created() {
+    console.log(this.search.submitDate)
     let resS = await api.getClient();
     let resE = await api.getStorelist();
     if (resS.code == 0) {
@@ -134,19 +136,24 @@ export default {
     }
   },
   methods: {
+    changeDate(v){
+      this.search.submitDate = v
+    },
     // 快速日期查询
     async getDataQuick(v) {
       this.search.submitDate = v;
-      // this.search.auditDate = v;
+      this.search.auditDate = v;
       if(this.selectShopList){
         var arr = await creat("", this.$store);
         this.search.orgid = arr[1];
+        this.search.submitDate = arr[0]
       }
       this.query();
     },
     // 查询
     query() {
       let data = {};
+      console.log(this.search)
       for (let key in this.search) {
         if (this.search[key]) {
           if (key == "submitDate") {
@@ -164,7 +171,6 @@ export default {
       this.$emit("search", data);
     },
     getmoreData(data) {
-      //  console.log(data)
       if (data != null) {
         this.$emit("search", data);
       }

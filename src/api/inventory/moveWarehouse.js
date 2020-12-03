@@ -17,10 +17,11 @@ export function getRightDatas (data) {
 }
 
 //获取仓库
-export function getstate () {
+export function getstate (params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
     method: 'get',
+    params
   })
 }
 //保存

@@ -41,10 +41,11 @@ export function getStorelist(params = {}) {
 }
 
 //获取仓库
-export function getWarehouse() {
+export function getWarehouse(params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
     method: "get",
+    params
   });
 }
 

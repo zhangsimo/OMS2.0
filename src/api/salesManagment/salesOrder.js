@@ -67,7 +67,7 @@ export function getLimit  (params) {
 //交货仓库list
 export function getWarehouseList (params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
     method: 'get',
     params
   })

@@ -18,7 +18,7 @@ import TabsModel from "../plannedPurchaseOrder/components/TabsModel.vue";
 import ApportionmentExpenses from "../plannedPurchaseOrder/components/ApportionmentExpenses.vue";
 import { hideLoading, showLoading } from "../../../utils/loading";
 import GoodCus from "_c/allocation/GoodCus.vue";
-
+import printZF from "@/components/print/print.vue";
 @Component({
   components: {
     QuickDate,
@@ -31,7 +31,8 @@ import GoodCus from "_c/allocation/GoodCus.vue";
     AdjustModel,
     TabsModel,
     ApportionmentExpenses,
-    GoodCus
+    GoodCus,
+    printZF
   }
 })
 export default class InterPurchase extends Vue {
@@ -654,27 +655,14 @@ export default class InterPurchase extends Vue {
       }
     });
   }
-  //创建a标签
-  private openwin(url:any) {
-    var a = document.createElement("a"); //创建a对象
-    a.setAttribute("href", url);
-    a.setAttribute("target", "_blank");
-    a.setAttribute("id", "camnpr");
-    document.body.appendChild(a);
-    a.click(); //执行当前对象
-    document.body.removeChild(a)
-  }
   // 打印
   private print() {
-    // const ref: any = this.$refs.PrintModel;
-    // ref.openModal();
     let order: any = {};
     order.name = "采购订单";
     order.route = this.$route.name;
     order.id = this.mainId;
-    let routeUrl = this.$router.resolve({ name: "print", query: order });
-    // window.open(routeUrl.href, "_blank");
-    this.openwin(routeUrl.href)
+    let printZF:any=this.$refs.printZF;
+    printZF.openModal(order)
     this.getListData();
   }
   //导出

@@ -21,10 +21,9 @@ export function findById(params) {
 }
 
 // 仓库下拉框
-// comStore/stores/queryByOrgid
 export function queryByOrgid(params){
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
     method: 'get',
     params
   })

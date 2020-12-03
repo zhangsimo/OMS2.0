@@ -171,6 +171,8 @@
         ref="morequeryModal"
         @resetData="reset"
       ></More-query>
+      <!--打印弹框-->
+      <printZF ref="printZF" style="display: none"></printZF>
     </div>
   </div>
 </template>
@@ -191,14 +193,15 @@ import {
 } from "@/api/salesManagment/salesOrder";
 import {showLoading, hideLoading} from "@/utils/loading"
 import * as tools from "_utils/tools";
-
+import printZF from "@/components/print/print.vue";
 export default {
   name: "Order",
   components: {
     getDate,
     OrderLeft,
     OrderRight,
-    MoreQuery
+    MoreQuery,
+    printZF
   },
   data() {
     return {
@@ -279,25 +282,13 @@ export default {
     getvalue(date) {
       this.queryTime = date;
     },
-    //创建a标签
-    openwin(url) {
-      var a = document.createElement("a"); //创建a对象
-      a.setAttribute("href", url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("id", "camnpr");
-      document.body.appendChild(a);
-      a.click(); //执行当前对象
-      document.body.removeChild(a)
-    },
     //打印表格
     async printTable() {
       let order = {};
       order.name="销售订单"
       order.route=this.$route.name
       order.id=this.$store.state.dataList.oneOrder.id;
-      let routeUrl=this.$router.resolve({name:"print",query:order})
-      // window.open(routeUrl.href,"_blank");
-      this.openwin(routeUrl.href)
+      this.$refs.printZF.openModal(order)
       this.$refs.OrderLeft.gitlistValue()
     },
     //打印发货申请

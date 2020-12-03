@@ -363,7 +363,7 @@ export default {
       }
     },
     log() {
-      getcangku().then(res => {
+      getcangku({shopCode: this.$store.state.user.userData.currentCompany.code}).then(res => {
         if (res.code === 0) {
           //console.log(res.data, "res.data==>225");
           res.data.forEach(element => {
