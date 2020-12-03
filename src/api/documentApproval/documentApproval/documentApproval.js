@@ -69,10 +69,11 @@ export function findActivty (params) {
 
 
 //获取仓库
-export function findByStore(){
+export function findByStore(params){
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
     method: 'get',
+    params
   })
 }
 

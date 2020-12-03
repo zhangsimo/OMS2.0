@@ -89,6 +89,11 @@
                 <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
+            <div class="db">
+              <Button v-has="'export'" class="mr10" @click="exportForm">
+                <i class="iconfont mr5 icondaochuicon"></i> 导出
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -482,7 +487,8 @@
       header-tit="调入方资料"
       @selectSupplierName="selectSupplierName"
     ></select-supplier>
-
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
     <add-in-com
       :tbdata="tableData1"
       @getName="showModel3"
@@ -520,10 +526,12 @@
     chengping,
     cangkulist2,
     outDataList,
-    getListDetail
+    getListDetail,
+    exportStockRemoval/**导出调拨出库*/
   } from "@/api/AlotManagement/stockRemoval.js";
   import * as tools from "_utils/tools";
   import { hideLoading, showLoading } from "@/utils/loading";
+  import printZF from "@/components/print/print.vue";
 
 
   import {queryByOrgid} from "../../../../api/AlotManagement/transferringOrder";
@@ -538,7 +546,8 @@
       AddInCom,
       SelectSupplier,
       GoodsInfo,
-      selectPartCom
+      selectPartCom,
+      printZF
     },
     data() {
       let changeNumber = ({cellValue}) => {
@@ -1289,30 +1298,24 @@
           this.$refs.goodsInfo.init();
         }, 0);
       },
-      //创建a标签
-      openwin(url) {
-        var a = document.createElement("a"); //创建a对象
-        a.setAttribute("href", url);
-        a.setAttribute("target", "_blank");
-        a.setAttribute("id", "camnpr");
-        document.body.appendChild(a);
-        a.click(); //执行当前对象
-        document.body.removeChild(a)
-      },
       //打印表格
       printTable() {
-        // if(this.$refs.goodsInfo.formDateRight.streetAddress==""){
-        //   this.$Message.error("请先编辑地址信息")
-        //   return
-        // }
         let order = {};
         order.name="调拨出库"
         order.route=this.$route.name
         order.id=this.dayinCureen.id
-        let routeUrl=this.$router.resolve({name:"print",query:order})
-        // window.open(routeUrl.href,"_blank");
-        this.openwin(routeUrl.href)
+        let printZF=this.$refs.printZF;
+        printZF.openModal(order)
         this.getList()
+      },
+      exportForm(){
+        if(!this.Leftcurrentrow.id){
+          return this.$Message.error("请选择需要导出的数据！")
+        }else{
+          let str=""
+          str=`id=${this.Leftcurrentrow.id}&`
+          location.href=exportStockRemoval(str)
+        }
       },
       chuku() {
         this.$Modal.confirm({
@@ -1587,7 +1590,7 @@
       },
       // 仓库下拉框
       warehouse() {
-        queryByOrgid().then(res => {
+        queryByOrgid({shopCode: this.$store.state.user.userData.currentCompany.code}).then(res => {
           if (res.code === 0) {
             this.cangkuListall = res.data;
             res.data.map(item => {

@@ -1,10 +1,11 @@
 import api from '_conf/url';
 import axios from '@/libs/api.request';
 //获取仓库
-export function getcangku() {
+export function getcangku(params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
-    method: 'get'
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
+    method: 'get',
+    params
   });
 }
 //获取品牌

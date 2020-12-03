@@ -349,6 +349,8 @@
         :clientList="client"
         @getPlanOrder="getPlanOrder"
       ></procurement-modal>
+      <!--打印弹框-->
+      <printZF ref="printZF" style="display: none"></printZF>
       <!--选择供应商-->
       <select-supplier
         ref="selectSupplier"

@@ -499,7 +499,7 @@ export default {
     },
     //获取仓库
     async getStroe() {
-      let rep = await findByStore();
+      let rep = await findByStore({shopCode: this.$store.state.user.userData.currentCompany.code});
       if (rep.code == 0) {
         this.mainStore = rep.data || [];
       }

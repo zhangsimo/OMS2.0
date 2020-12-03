@@ -189,21 +189,21 @@
                 <vxe-table-column  show-overflow="tooltip"
                   field="partCode"
                   title="配件编码"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="partName"
                   title="配件名称"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="partBrand"
                   title="品牌"
-                  :filters="[]" 
+                  :filters="[]"
                   :filter-method="filterOrderNo"
                   width="100"
                 ></vxe-table-column>
@@ -267,6 +267,8 @@
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
       <p>是否确定入库</p>
     </Modal>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
   </div>
 </template>
 
@@ -284,6 +286,7 @@ import "../../../goods/goodsList/goodsList.less";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 import { checkStore } from '@/api/system/systemApi'
 import { hideLoading, showLoading } from "@/utils/loading";
+import printZF from "@/components/print/print.vue";
 
 
 export default {
@@ -292,6 +295,7 @@ export default {
   components: {
     More,
     QuickDate,
+    printZF
   },
   data() {
     return {
@@ -607,7 +611,7 @@ export default {
     //
     // 仓库下拉框
     warehouse() {
-      queryByOrgid().then(res => {
+      queryByOrgid({shopCode: this.$store.state.user.userData.currentCompany.code}).then(res => {
         if (res.code === 0) {
           this.List = res.data;
         }
@@ -648,16 +652,7 @@ export default {
     inCancel() {
       this.showIn = false;
     },
-    //创建a标签
-    openwin(url) {
-      var a = document.createElement("a"); //创建a对象
-      a.setAttribute("href", url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("id", "camnpr");
-      document.body.appendChild(a);
-      a.click(); //执行当前对象
-      document.body.removeChild(a)
-    },
+
     // 打印
     stamp() {
       if (!this.dayinCureen.id) {
@@ -668,9 +663,8 @@ export default {
       order.name="调出退回入库"
       order.route=this.$route.name
       order.id=this.Leftcurrentrow.id
-      let routeUrl=this.$router.resolve({name:"print",query:order})
-      // window.open(routeUrl.href,"_blank");
-      this.openwin(routeUrl.href)
+      let printZF=this.$refs.printZF;
+      printZF.openModal(order)
       this.getList()
     },
     //左边列表选中事件

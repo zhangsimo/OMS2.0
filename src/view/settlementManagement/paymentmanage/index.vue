@@ -270,6 +270,8 @@
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation"/>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
   </div>
 </template>
 
@@ -292,11 +294,14 @@
   import moment from "moment";
   import {findGuest} from "../../../api/settlementManagement/advanceCollection";
   import {showLoading, hideLoading} from "@/utils/loading"
+  import printZF from "@/components/print/print.vue";
+
   export default {
     name: 'payMentmanage',
     components: {
       quickDate,
       Monthlyreconciliation,
+      printZF
     },
     data() {
       return {
@@ -963,6 +968,75 @@
                     title: params.row.guestTypeName
                   }
                 }, params.row.guestTypeName)
+              ])
+            }
+          },
+          {
+            title: "是否直发门店",
+            key: "ifDirect",
+            className: "tc",
+            resizable: true,
+            width: 100,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.ifDirect
+                  }
+                },params.row.ifDirect)
+              ])
+            }
+          },
+          {
+            title: "直发门店",
+            key: "directShopCode",
+            className: "tc",
+            resizable: true,
+            width: 80,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.directShopCode
+                  }
+                },params.row.directShopCode)
+              ])
+            }
+          },
+          {
+            title: "入库门店",
+            key: "enterShopCode",
+            className: "tc",
+            resizable: true,
+            width: 80,
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  style: {
+                    display: 'inline-block',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                  domProps: {
+                    title: params.row.enterShopCode
+                  }
+                },params.row.enterShopCode)
               ])
             }
           },
@@ -2438,16 +2512,6 @@
           location.href = payColSelOrPurchaseExport(params)
         }
       },
-      //创建a标签
-      openwin(url) {
-        var a = document.createElement("a"); //创建a对象
-        a.setAttribute("href", url);
-        a.setAttribute("target", "_blank");
-        a.setAttribute("id", "camnpr");
-        document.body.appendChild(a);
-        a.click(); //执行当前对象
-        document.body.removeChild(a)
-      },
       // 打印
       print(type) {
         type ? (this.tit = "采购入库") : (this.tit = "销售出库");
@@ -2467,8 +2531,8 @@
             id: "0",
             route: this.$route.name
           };
-          let routeUrl = this.$router.resolve({name: "print", query: order})
-          this.openwin(routeUrl.href)
+          let printZF=this.$refs.printZF;
+          printZF.openModal(order)
         }, 0)
       },
       //获取公司
@@ -2490,7 +2554,6 @@
       },
       getAccountNameListFun(v) {
         this.guestId = v;
-
       },
     }
   };
