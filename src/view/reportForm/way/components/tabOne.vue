@@ -187,6 +187,9 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
+      if(this.body.auditDate){
+        delete this.body.auditDate;
+      }
       let res = await api.getOnOrderStock(this.body, params);
       if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {

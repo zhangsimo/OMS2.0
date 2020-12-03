@@ -137,6 +137,11 @@
             },
             //获取创建时间
             getCreatDate(date){
+              if(date[0] === ''){
+                this.$delete(this.formData, 'startTime')
+                this.$delete(this.formData, 'endTime')
+                return
+              }
                 this.formData.startTime = date[0] +  " " + "00:00:00"
                 this.formData.endTime = date[1] +' '+ '23:59:59'
             },
