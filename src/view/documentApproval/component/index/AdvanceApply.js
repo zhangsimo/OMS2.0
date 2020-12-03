@@ -266,6 +266,7 @@ export default {
       row.map(v => {
         delete v.id
         this.$set(v,'thisApplyAmt', 0)
+        this.$set(v,'lastAmt', 0)
         return v
       })
       // console.log(row,'later')
@@ -322,12 +323,15 @@ export default {
       this.$refs.formInline.validate(async valid => {
         if (valid) {
           let valg = false
-          console.log(this.formInline.applyAmt)
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
             valg = parseFloat(this.formInline.details[0].payAmt) < parseFloat(this.formInline.applyAmt) ? true : false
           }
-          if(this.formInline.applyAmt == 0){
-            return this.$Message.error("申请金额不能为0")
+          for(let i = 0; i < this.formInline.details.length; i++){
+            if(Number(this.formInline.details[i].thisApplyAmt) <= 0){
+              return this.$Message.error("本次申请金额不能小于等于零")
+            }else if(Number(this.formInline.details[i].thisApplyAmt) > Number(this.formInline.details[i].lastAmt)){
+              return this.$Message.error("本次申请金额不能大于剩余金额")
+            }
           }
           // console.log(this.formInline,valg,1111)
           if (valg) return  this.$Message.error('申请金额不能大于预付款金额')

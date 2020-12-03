@@ -116,7 +116,7 @@
           ></vxe-table-column>
           <vxe-table-column field="orderAmt" title="订单金额"></vxe-table-column>
           <vxe-table-column field="hasApplyAmt" title="已申请金额"></vxe-table-column>
-          <vxe-table-column title="申请前剩余金额">
+          <vxe-table-column title="申请前剩余金额" field="lastAmt">
             <template v-slot="{row}">
               <span>{{row.orderAmt - row.hasApplyAmt - row.adjustAmt}}</span>
             </template>
