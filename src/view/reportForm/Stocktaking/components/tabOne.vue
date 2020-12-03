@@ -228,12 +228,12 @@ export default {
     //分页
     changePage(p) {
       this.page.page = p-1;
-      this.getList();
+      this.getList(this.searchData);
     },
     changeSize(size) {
       this.page.page = 0;
       this.page.size = size;
-      this.getList();
+      this.getList(this.searchData);
     },
     //表尾合计
     footerMethod({ columns, data }) {
