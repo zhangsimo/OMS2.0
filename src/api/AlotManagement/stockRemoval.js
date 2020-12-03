@@ -1,6 +1,7 @@
 import api from "_conf/url";
 import axios from "@/libs/api.request";
-
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 //获取调拨申请列表
 export function getList1(data, size, num) {
   return axios.request({
@@ -107,4 +108,7 @@ export function chengping(data, size, num) {
       ...data
     }
   });
+}
+export function exportStockRemoval(params){
+  return `${api.omsOrder}/allotOutDetail/export?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }

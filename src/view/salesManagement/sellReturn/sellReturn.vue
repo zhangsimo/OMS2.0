@@ -451,6 +451,8 @@
       @getPlanOrder="getPlanOrder"
       @dblclickfun="getPlanOrder"
     ></procurement>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
   </div>
 </template>
 
@@ -479,6 +481,7 @@
   import SalesCus from "../../../components/allocation/salesCus";
   import moment from 'moment'
   import { hideLoading, showLoading } from "@/utils/loading";
+  import printZF from "@/components/print/print.vue";
 
 
 
@@ -491,7 +494,8 @@
       SalesOutbound,
       getDate,
       MoreSearch,
-      Procurement
+      Procurement,
+      printZF
     },
     data() {
       let changeNumber = ({cellValue, row: {rtnableQty}}) => {
@@ -1101,16 +1105,6 @@
           this.$Message.warning("请选择草稿状态下的一条有效数据");
         }
       },
-      //创建a标签
-      openwin(url) {
-        var a = document.createElement("a"); //创建a对象
-        a.setAttribute("href", url);
-        a.setAttribute("target", "_blank");
-        a.setAttribute("id", "camnpr");
-        document.body.appendChild(a);
-        a.click(); //执行当前对象
-        document.body.removeChild(a)
-      },
       //打印弹出框
       printTable() {
         // this.$refs.printBox.openModal()
@@ -1118,9 +1112,7 @@
         order.name="销售退货"
         order.id=this.id;
         order.route=this.$route.name
-        let routeUrl=this.$router.resolve({name:"print",query:order})
-        // window.open(routeUrl.href,"_blank");
-        this.openwin(routeUrl.href)
+        this.$refs.printZF.openModal(order)
         this.getLeftList()
       },
       // 计算尾部总和

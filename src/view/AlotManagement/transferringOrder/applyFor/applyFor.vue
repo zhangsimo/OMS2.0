@@ -278,6 +278,8 @@
               <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
         <supplier :guestId="guestidId" :storeId="formPlan.storeId" ref="SelectPartCom" @selectPartName="getPartNameList" @selectPartName2="getPartNameList2"></supplier>
+        <!--打印弹框-->
+        <printZF ref="printZF" style="display: none"></printZF>
         <!--编辑收货信息-->
           <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata" :guestId="guestidId"></goods-info>
       </div>
@@ -311,6 +313,7 @@
   import AllocationCus from "../../../../components/allocation/allocationCus";
   import ChangeOrder from "./compontents/changeOrder";
   import { hideLoading, showLoading } from "@/utils/loading";
+  import printZF from "@/components/print/print.vue";
 
 
   export default {
@@ -323,7 +326,8 @@
         supplier,
         // SelectPartCom,
         GoodsInfo,
-        SelectSupplier
+        SelectSupplier,
+        printZF
       },
       data() {
         let changeNumber = ({cellValue }) => {
@@ -819,25 +823,14 @@
             },
           })
         },
-        //创建a标签
-        openwin(url) {
-          var a = document.createElement("a"); //创建a对象
-          a.setAttribute("href", url);
-          a.setAttribute("target", "_blank");
-          a.setAttribute("id", "camnpr");
-          document.body.appendChild(a);
-          a.click(); //执行当前对象
-          document.body.removeChild(a)
-        },
         // 打印
         stamp(){
           let order = {};
           order.name="调拨申请"
           order.route=this.$route.name
           order.id=this.mainId
-          let routeUrl=this.$router.resolve({name:"print",query:order})
-          // window.open(routeUrl.href,"_blank");
-          this.openwin(routeUrl.href)
+          let printZF=this.$refs.printZF;
+          printZF.openModal(order)
           this.leftgetList()
         },
         exportForm(){
