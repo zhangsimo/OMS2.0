@@ -20,7 +20,7 @@ export function getClient () {
 //交货仓库list
 export function getWarehouseList (params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
+    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
     method: 'get',
     params
   })
