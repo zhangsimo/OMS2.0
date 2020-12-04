@@ -71,11 +71,6 @@ export default {
         //   {required: true, message: '银行账号必填', trigger: 'blur'}
         // ]
       },
-      tableRules: {
-        thisApplyAmt: [
-          { required: true, message: "申请金额必填", trigger: "blur" },
-        ],
-      },
       //费用支出表格的数据校验
       documentTableData: [], //借支核销表格数据
       payeeList: [], //收款人列表
@@ -93,7 +88,7 @@ export default {
       let total = 0
       if(this.formInline.details){
         this.formInline.details.forEach(v => {
-          total += Number(v.thisApplyAmt)
+          total += Number(v.applyAmt)
         })
       }
       this.formInline.applyAmt = total.toFixed(2)
@@ -262,14 +257,18 @@ export default {
 
     //获取其他付款单据信息
     async otherPayList(row) {
-      
       row.map(v => {
         delete v.id
-        this.$set(v,'thisApplyAmt', 0)
-        this.$set(v,'lastAmt', 0)
+        this.$set(v,'applyAmt', 0)
+        let last = Number(v.orderAmt) - Number(v.hasApplyAmt) - Number(v.adjustAmt)
+        this.$set(v,'lastAmt', last)
+        if(Number(v.hasApplyAmt) === 0){
+          v.applyAmt = v.orderAmt
+        }else{
+          v.applyAmt = v.lastAmt
+        }
         return v
       })
-      // console.log(row,'later')
       this.$set(this.formInline, "details", row);
       await this.remoteMethod("",row[0].guestId)
       this.formInline.receiveGuestId=this.company[0].value
@@ -277,7 +276,7 @@ export default {
     },
 
     changeThisA({row}){
-      console.log(row.thisApplyAmt)
+      // console.log(row.applyAmt)
     },
     //选择单据
     SelectTheDocuments() {
@@ -326,15 +325,16 @@ export default {
           if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
             valg = parseFloat(this.formInline.details[0].payAmt) < parseFloat(this.formInline.applyAmt) ? true : false
           }
-          for(let i = 0; i < this.formInline.details.length; i++){
-            if(Number(this.formInline.details[i].thisApplyAmt) <= 0){
-              return this.$Message.error("本次申请金额不能小于等于零")
-            }else if(Number(this.formInline.details[i].thisApplyAmt) > Number(this.formInline.details[i].lastAmt)){
-              return this.$Message.error("本次申请金额不能大于剩余金额")
-            }
-          }
           // console.log(this.formInline,valg,1111)
           if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
+          for(let i = 0; i < this.formInline.details.length; i++){
+            if(Number(this.formInline.details[i].applyAmt) <= 0){
+              return this.$Message.error("本次申请金额不能小于等于零")
+            }else if(Number(this.formInline.details[i].applyAmt) > Number(this.formInline.details[i].lastAmt)){
+              return this.$Message.error("本次申请金额不能大于剩余金额")
+            }
+            delete this.formInline.details[i].id
+          }
           this.formInline.step = type;
           this.saveDis=true;
           let res = await getAdvanceSave(this.formInline);

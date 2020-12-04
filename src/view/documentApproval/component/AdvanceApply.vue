@@ -63,7 +63,7 @@
             <FormItem
               label="申请金额"
               style="margin-bottom: 0px"
-              prop="thisApplyAmt"
+              prop="applyAmt"
             >
               <Input
                 type="number"
@@ -92,7 +92,6 @@
           :footer-method="documentFooterMethod"
           size="mine"
           align="center"
-          :edit-rules="tableRules"
           :data="formInline.details"
           :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
         >
@@ -118,10 +117,10 @@
           <vxe-table-column field="hasApplyAmt" title="已申请金额"></vxe-table-column>
           <vxe-table-column title="申请前剩余金额" field="lastAmt">
             <template v-slot="{row}">
-              <span>{{row.orderAmt - row.hasApplyAmt - row.adjustAmt}}</span>
+              <span>{{Number(row.orderAmt) - Number(row.hasApplyAmt) - Number(row.adjustAmt)}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="thisApplyAmt"  title="本次申请金额" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: changeThisA}}">
+          <vxe-table-column field="applyAmt"  title="本次申请金额" :edit-render="{name: 'input', attrs: {type: 'number', disabled: modelType},events: {change: changeThisA}}">
     
           </vxe-table-column>
 
