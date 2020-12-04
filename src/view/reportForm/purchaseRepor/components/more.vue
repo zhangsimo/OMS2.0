@@ -185,10 +185,6 @@
       }
     }
 
-    // private  async getwareHouseList(v){
-    //   this.ajaxAll.get()
-    // }
-
     private async getStoreId() {
       let arr: any = await creat("", this.$store);
       this.$nextTick(() => {

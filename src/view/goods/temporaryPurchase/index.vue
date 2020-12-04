@@ -640,8 +640,8 @@
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
     <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
-    <!-- 打印 -->
-    <print-model ref="PrintModel" :orderId="mainId"></print-model>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectTableRow"></status-model>
     <!--添加配件-->

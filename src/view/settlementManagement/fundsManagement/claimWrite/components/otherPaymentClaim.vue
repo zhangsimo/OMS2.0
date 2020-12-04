@@ -506,7 +506,8 @@
           try {
             this.comLoading = true
             if(this.claimTit == '其他付款认领'){
-              data.paymentTypeCode = this.fund
+              data.paymentTypeCode = this.fundCode
+              data.paymentTypeName = this.fund
               let {code} = await saveAccount(data)
               if(code == 0){
                 this.$message.success("其他付款认领成功")

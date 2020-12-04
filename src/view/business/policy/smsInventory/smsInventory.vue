@@ -308,7 +308,7 @@
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
               <div class="table-bottom-text flex"><span>创建人：{{currRow?currRow.createUname:""}}</span><span>创建日期：{{currRow?currRow.createTime:""}}</span><span>提交人：{{currRow?currRow.subMan:""}}</span><span>提交日期：{{currRow?currRow.subDate:""}}</span></div>
             </div>
@@ -330,6 +330,8 @@
     <Modal v-model="showRemove" title="提示" @on-ok="removeOk" @on-cancel="removeCancel">
       <p>是否确定作废</p>
     </Modal>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
     <!-- 审核提示 -->
     <!-- <Modal v-model="showAudit" title="提示" @on-ok="auditOK" @on-cancel="auditCancel">
       <p>是否确定审核</p>
@@ -370,6 +372,7 @@ import baseUrl from "_conf/url";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import * as tools from "_utils/tools";
 import { hideLoading, showLoading } from "@/utils/loading";
+import printZF from "@/components/print/print.vue";
 
 
 export default {
@@ -377,7 +380,8 @@ export default {
   components: {
     QuickDate,
     More,
-    SelectPartCom
+    SelectPartCom,
+    printZF
   },
   data() {
     return {
@@ -647,7 +651,7 @@ export default {
     //获取左侧列表
     getList() {
       //获取右边仓库数据
-      getstate()
+      getstate({shopCode: this.$store.state.user.userData.currentCompany.code})
         .then(res => {
           if (res.code === 0) {
             this.warehouseList = res.data;
@@ -961,27 +965,25 @@ export default {
     auditCancel() {
       this.showRemove = false;
     },
-    //创建a标签
-    openwin(url) {
-      var a = document.createElement("a"); //创建a对象
-      a.setAttribute("href", url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("id", "camnpr");
-      document.body.appendChild(a);
-      a.click(); //执行当前对象
-      document.body.removeChild(a)
-    },
     // 打印
     printTable() {
-      // this.$refs.printBox.openModal(this.formPlan.id,this.warehouseList);
-      let order = {};
+      if(!this.formPlan.id){
+        return this.$Message.error("请选择需要打印的数据")
+      }
+      let storeName="";
+      for(let i=0;i<this.warehouseList.length;i++){
+        if(this.warehouseList[i].id==this.currRow.storeId){
+          storeName=this.warehouseList[i].name;
+          break;
+        }
+      }
+      let order = {storeName:""};
       order.name="盘点单"
       order.route=this.$route.name
-      // order.warehouseList=this.warehouseList
-      order.id=this.formPlan.id
-      let routeUrl=this.$router.resolve({name:"print",query:order})
-      // window.open(routeUrl.href,"_blank");
-      this.openwin(routeUrl.href)
+      order.id=this.formPlan.id;
+      order.storeName=storeName;
+      let printZF=this.$refs.printZF;
+      printZF.openModal(order)
       this.getList()
     },
 

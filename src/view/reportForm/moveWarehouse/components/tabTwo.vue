@@ -197,6 +197,7 @@
     methods: {
       // 查询表
       async getList(data = {}) {
+        this.searchData = data;
         let res = await api.getStockShiftOut(data, this.page);
         if (res.code == 0) {
           this.tableDataAll = (res.data.content || []).map(el => {
@@ -240,12 +241,12 @@
       //分页
       changePage(p) {
         this.page.page = p - 1;
-        this.getList();
+        this.getList(this.searchData);
       },
       changeSize(size) {
         this.page.page = 0;
         this.page.size = size;
-        this.getList();
+        this.getList(this.searchData);
       },
       //表尾合计
       footerMethod({columns, data}) {

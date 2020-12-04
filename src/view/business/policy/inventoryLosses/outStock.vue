@@ -258,7 +258,7 @@
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="80" title="序号" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partId" title="配件内码" width="120"></vxe-table-column>
 
                 <vxe-table-column  show-overflow="tooltip" field="partCode" title="配件编码" width="120" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="partName" title="配件名称" width="120" fixed="left"></vxe-table-column>
@@ -595,7 +595,7 @@
       //获取左侧列表
       getList() {
         //获取右边仓库数据
-        getstate()
+        getstate({shopCode: this.$store.state.user.userData.currentCompany.code})
           .then(res => {
             if (res.code === 0) {
               this.warehouseList = res.data;

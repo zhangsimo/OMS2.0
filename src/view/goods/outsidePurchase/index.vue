@@ -573,6 +573,8 @@
     ></purchase-amount>
     <!-- 收货信息 -->
     <goods-info ref="goodsInfo" :mainId="mainId" :row="formPlanmain"></goods-info>
+    <!--打印弹框-->
+    <printZF ref="printZF" style="display: none"></printZF>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->

@@ -329,6 +329,7 @@ export default {
         groupId: this.$store.state.user.userData.groupId
       });
       if (res.code === 0) {
+        console.log(res,21312)
         this.WareHouseList = [...this.WareHouseList, ...res.data];
       }
     },
