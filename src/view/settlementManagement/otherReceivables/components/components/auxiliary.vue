@@ -4,7 +4,7 @@
     <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card"  v-model="TabsChoose">
-          <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(assistTypeCode)">
+          <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(subjectChoose.assistTypeCode)">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -57,7 +57,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(assistTypeCode)">
+          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(subjectChoose.assistTypeCode)">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">

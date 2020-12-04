@@ -17,10 +17,19 @@ export function getClient () {
   })
 }
 
-//交货仓库list
+// 会计科目仓库
 export function getWarehouseList (params) {
   return axios.request({
     url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    method: 'get',
+    params
+  })
+}
+
+//销售退货仓库
+export function getWarehouseList1 (params) {
+  return axios.request({
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
     method: 'get',
     params
   })

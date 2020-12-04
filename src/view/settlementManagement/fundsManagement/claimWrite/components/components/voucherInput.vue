@@ -719,7 +719,7 @@ export default {
       this.AssistAccounting = row.userName;
       this.auxiliaryTypeCode = "4";
       this.auxiliaryCode = row.id;
-      this.voucherItem = {};
+      this.voucherItem = row;
     },
     //个人分页切换页数
     selectNumpersonage(page) {
