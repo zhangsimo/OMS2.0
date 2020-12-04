@@ -197,6 +197,7 @@
     methods: {
       // 查询表
       async getList(data = {}) {
+        this.searchData = data;
         let res = await api.getStockShiftOut(data, this.page);
         if (res.code == 0) {
           this.tableDataAll = (res.data.content || []).map(el => {
