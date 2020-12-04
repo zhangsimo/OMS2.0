@@ -342,3 +342,23 @@ export function getStockCheckProfit(data = {}, params) {
       params,
   })
 }
+
+//采购排行统计
+export function pchsEnterMain(data = {}, params={}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsEnterMain/getPjPchsEnterAnalyzeTotal`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
+//销售排行统计
+export function sellOutMain(data = {}, params={}) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOutMain/getPjSellAnalyzeTotal`,
+    method: 'post',
+    data,
+    params,
+  })
+}
