@@ -1,6 +1,6 @@
 <template>
   <vxe-modal className="vxe-modal-table" v-model="modal1" title="库存查询" id="myModal1" width="1000" height="450" min-width="900" min-height="320" resize remember transfer mask-closable  @show="hander">
-    <template v-solt>
+    <template v-slot>
       <section class="oper-box">
         <!--      主菜单导航-->
         <div class="db pl10 tabs-ulwarp">
@@ -110,9 +110,7 @@
           <div class="oper-top flex">
             <div class="wlf">
               <div class="db mr10" style="padding-top: 10px">
-                <span>快速查询：</span>
                 <quick-date
-                  class="mr10"
                   ref="quickDate1"
                   @quickDate="getDataQuick1"
                 ></quick-date>
@@ -125,20 +123,50 @@
                   v-model="oneTime"
                   placement="bottom-start"
                   placeholder="选择日期"
-                  class="w200 mr20"
+                  class="w200 mr10"
                 >
                 </DatePicker>
+                <el-select
+                  v-model="storeIds"
+                  multiple
+                  collapse-tags
+                  class="w150 mr10"
+                  placeholder="仓库">
+                  <el-option
+                    v-show="item.orgid == searchForm.old || item.id == 1"
+                    v-for="item in storeArr"
+                    :value="item.id"
+                    :key="item.id"
+                    :label="item.name">
+                  </el-option>
+                </el-select>
+                <!--<Select-->
+                  <!--class="w120 mr10"-->
+                  <!--multiple-->
+                  <!--v-model="storeIds"-->
+                  <!--placeholder="入库类型"-->
+                <!--&gt;-->
+                  <!--<Option-->
+                    <!--:disabled="item.isDisabled"-->
+                    <!--v-show="item.orgid == searchForm.old || item.id == 1"-->
+                    <!--v-for="item in storeArr"-->
+                    <!--:value="item.id"-->
+                    <!--:key="item.id"-->
+                  <!--&gt;{{ item.name }}-->
+                  <!--</Option-->
+                  <!--&gt;-->
+                <!--</Select>-->
               </div>
               <div class="db pt10" style="padding-top: 10px">
                 <span>供应商: </span>
                 <Input
                   v-model="searchForm2.guestName"
-                  class="w200 mr10"
+                  class="w160 mr10"
                 ></Input>
               </div>
               <div class="db pt10" style="padding-top: 10px">
-                <Button type="warning" class="mr10 w90" @click="search">
-                  <Icon type="ios-search" size="14"/>
+                <Button type="warning" class="mr10" @click="search">
+                  <!--<Icon type="ios-search" size="14"/>-->
                   查询
                 </Button>
               </div>
@@ -495,10 +523,11 @@
 
   export default {
     name: "enterStock",
-    props: {mainData: ""},
+    props: {mainData: "",storeArr:"",searchForm:{}},
     components: {QuickDate},
     data() {
       return {
+        storeIds:[],
         oneTime: "", //出库时间
         twoTime: "", //出库时间
         //客户查询
@@ -604,10 +633,10 @@
         this.searchForm2.startEnterDate = ThisYearStr()[0];
         this.searchForm2.endEnterDate = ThisYearStr()[1];
         this.searchForm2.guestName = "";
-        this.modal1 = true;
         this.tIndex = 4;
         this.levelList =[];
         setTimeout(()=>{
+          this.modal1 = true;
           this.getLevelList();
         },0)
 
