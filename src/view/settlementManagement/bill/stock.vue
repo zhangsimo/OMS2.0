@@ -78,6 +78,7 @@
           :data="data"
           ref="summary"
           show-summary
+          :summary-method="summaryMethod"
           highlight-row
           @on-row-click="election"
           @on-selection-change="selectTab"
@@ -718,6 +719,42 @@
         });
         return sums;
         //
+      },
+      summaryMethod({columns,data}){
+        const sums = {};
+        columns.forEach((column, index) => {
+          const key = column.key;
+          if (index === 1) {
+            sums[key] = {
+              key,
+              value: "合计"
+            };
+            return;
+          }
+          const values = (data || []).map(item => Number(item[key]));
+          if (index === 13) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            }
+          } else {
+            sums[key] = {
+              key,
+              value: " "
+            };
+          }
+        });
+        return sums;
       },
       // 配件表格合计方式
       summary({columns, data}) {
