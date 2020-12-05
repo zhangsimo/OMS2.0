@@ -308,7 +308,7 @@
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="100"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partId" title="配件内码" width="120"></vxe-table-column>
               </vxe-table>
               <div class="table-bottom-text flex"><span>创建人：{{currRow?currRow.createUname:""}}</span><span>创建日期：{{currRow?currRow.createTime:""}}</span><span>提交人：{{currRow?currRow.subMan:""}}</span><span>提交日期：{{currRow?currRow.subDate:""}}</span></div>
             </div>

@@ -94,9 +94,10 @@ export function chengping(code, name, params) {
 }
 
 // 仓库接口
-export function cangkulist2(id) {
+export function cangkulist2(params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/findByOrgid?orgid=${id}`,
-    method: 'get'
+    url: `${api.wmsApi}/comStore/findStoreByShopCode`,
+    method: 'get',
+    params
   })
 }
