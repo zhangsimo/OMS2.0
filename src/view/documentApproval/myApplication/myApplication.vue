@@ -619,13 +619,13 @@ export default {
           this.$refs.statementApplication.init(row);
           break;
         case "销售开票":
-          this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
+          this.$refs.salesInvoiceApplication.$refs.salepopup.open(row);
           break;
         case "不含税开票":
-          this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
+          this.$refs.taxExclusiveApplication.$refs.noTax.open(row);
           break;
         case "发票对冲":
-          this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
+          this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.open(row);
           break;
         case "客户信用调查":
           this.$refs.clientApply.init(row);
