@@ -984,7 +984,7 @@
       },
       //仓库改变右侧表格改变
       getStore(data) {
-        this.resetRightDetail();
+        // this.resetRightDetail();
         if (this.formPlan.details > 0) {
           let house = this.WareHouseList.filter(item => item.id == data);
           this.formPlan.details.map(val => {
