@@ -151,7 +151,8 @@ export default {
       invoiceHedging: "", //对冲发票
       oilHedging: "", //对冲油品
       remarks: "", //对冲申请原因说明
-      accessoriesBillingData: [] //对账单列表数据
+      accessoriesBillingData: [], //对账单列表数据
+      row: {},//申请单标识的数据
     };
   },
   mounted() {
@@ -166,6 +167,10 @@ export default {
     });
   },
   methods: {
+    open(row){
+      this.row = row
+      this.modal1 = true
+    },
     // 单元格关闭出发事件
     editClosed({
       row,
@@ -221,7 +226,7 @@ export default {
         }else {
           this.accessoriesBillingData.push(this.information);
         }
-        if (this.modelType.type === 3) {
+        if (this.modelType.type === 1) {
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
           this.formInline.applicant = user.staffName;
@@ -232,6 +237,8 @@ export default {
           this.formInline.applyTypeName = "不含税开票申请";
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
+        }else{
+          this.formInline = this.row
         }
       }
     },

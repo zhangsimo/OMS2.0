@@ -625,7 +625,7 @@ export default {
           this.$refs.taxExclusiveApplication.$refs.noTax.open(row);
           break;
         case "发票对冲":
-          this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
+          this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.open(row);
           break;
         case "客户信用调查":
           this.$refs.clientApply.init(row);
