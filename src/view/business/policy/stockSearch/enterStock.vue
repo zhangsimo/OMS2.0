@@ -123,45 +123,43 @@
                   v-model="oneTime"
                   placement="bottom-start"
                   placeholder="选择日期"
-                  class="w200 mr10"
+                  class="w180 mr10"
                 >
                 </DatePicker>
                 <el-select
-                  v-model="storeIds"
+                  v-model="searchForm2.storeIds"
                   multiple
                   collapse-tags
-                  class="w150 mr10"
+                  class="w180 mr10 el-tag-text"
                   placeholder="仓库">
                   <el-option
-                    v-show="item.orgid == searchForm.old || item.id == 1"
+                    v-show="item.orgid == searchForm.old && item.id !== 1"
                     v-for="item in storeArr"
                     :value="item.id"
                     :key="item.id"
                     :label="item.name">
                   </el-option>
                 </el-select>
-                <!--<Select-->
-                  <!--class="w120 mr10"-->
-                  <!--multiple-->
-                  <!--v-model="storeIds"-->
-                  <!--placeholder="入库类型"-->
-                <!--&gt;-->
-                  <!--<Option-->
-                    <!--:disabled="item.isDisabled"-->
-                    <!--v-show="item.orgid == searchForm.old || item.id == 1"-->
-                    <!--v-for="item in storeArr"-->
-                    <!--:value="item.id"-->
-                    <!--:key="item.id"-->
-                  <!--&gt;{{ item.name }}-->
-                  <!--</Option-->
-                  <!--&gt;-->
-                <!--</Select>-->
+                <Select
+                  class="w120 mr10"
+                  v-model="searchForm2.enterType"
+                  clearable
+                  placeholder="入库类型"
+                >
+                  <Option
+                    v-for="item in enterStockType"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}
+                  </Option
+                  >
+                </Select>
               </div>
               <div class="db pt10" style="padding-top: 10px">
                 <span>供应商: </span>
                 <Input
                   v-model="searchForm2.guestName"
-                  class="w160 mr10"
+                  class="w140 mr10"
                 ></Input>
               </div>
               <div class="db pt10" style="padding-top: 10px">
@@ -197,7 +195,8 @@
               <vxe-table-column field="partBrand" title="品牌" width="60"></vxe-table-column>
 
               <vxe-table-column field="storeName" title="仓库" width="60"></vxe-table-column>
-              <vxe-table-column field="guestName" title="供应商" width="110"></vxe-table-column>
+              <vxe-table-column field="rtnGuestName" title="供应商/客户" width="110"></vxe-table-column>
+
               <vxe-table-column field="createTime" title="入库日期" width="100">
               </vxe-table-column>
               <vxe-table-column field="enterMan" title="入库人" width="60">
@@ -228,6 +227,7 @@
               </vxe-table-column>
               <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
               <vxe-table-column field="carModelName" title="品牌车型" width="80"></vxe-table-column>
+              <vxe-table-column field="guestName" title="供应商" width="110"></vxe-table-column>
               <vxe-table-column field="code" title="入库单号" width="160">
               </vxe-table-column>
               <vxe-table-column field="createUname" title="创建人" width="70">
@@ -245,35 +245,60 @@
           <div class="oper-top flex">
             <div class="wlf">
               <div class="db mr10" style="padding-top: 10px">
-                <span>快速查询：</span>
                 <quick-date
-                  class="mr10"
                   ref="quickDate2"
                   @quickDate="getDataQuick2"
                 ></quick-date>
               </div>
               <div class="db" style="padding-top: 10px">
-                <span>出库日期：</span>
                 <DatePicker
                   v-model="twoTime"
                   @on-change="selectDate"
                   type="daterange"
                   placement="bottom-start"
                   placeholder="选择日期"
-                  class="w200 mr20"
+                  class="w180 mr10"
                 >
                 </DatePicker>
+                <el-select
+                  v-model="searchForm3.storeIds"
+                  multiple
+                  collapse-tags
+                  class="w180 mr10 el-tag-text"
+                  placeholder="仓库">
+                  <el-option
+                    v-show="item.orgid == searchForm.old && item.id !== 1"
+                    v-for="item in storeArr"
+                    :value="item.id"
+                    :key="item.id"
+                    :label="item.name">
+                  </el-option>
+                </el-select>
+                <Select
+                  class="w120 mr10"
+                  v-model="searchForm3.enterType"
+                  clearable
+                  placeholder="出库类型"
+                >
+                  <Option
+                    v-for="item in outStockType"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}
+                  </Option
+                  >
+                </Select>
               </div>
               <div class="db" style="padding-top: 10px">
                 <span>客户: </span>
                 <Input
                   v-model="searchForm3.guestName"
-                  class="w200 mr10"
+                  class="w140 mr10"
                 ></Input>
               </div>
               <div class="db" style="padding-top: 10px">
-                <Button type="warning" class="mr10 w90" @click="search">
-                  <Icon type="ios-search" size="14"/>
+                <Button type="warning" class="mr10" @click="search">
+                  <!--<Icon type="ios-search" size="14"/>-->
                   查询
                 </Button>
               </div>
@@ -607,7 +632,78 @@
         total1: {},
         total2: {},
         enterLoading:false,
-        outLoading:false
+        outLoading:false,
+
+        //入库类型
+        enterStockType:[
+          {
+            label:'采购入库',
+            value:'050101'
+          },
+          {
+            label:'销售退货',
+            value:'050102'
+          },
+          {
+            label:'盘盈入库',
+            value:'050103'
+          },
+          {
+            label:'调拨入库',
+            value:'050104'
+          },
+          {
+            label:'移仓入库',
+            value:'050105'
+          },
+          {
+            label:'组装入库',
+            value:'050106'
+          },
+          {
+            label:'拆分入库',
+            value:'050107'
+          },
+          {
+            label:'调出退货',
+            value:'050108'
+          },
+        ],
+        //出库类型
+        outStockType:[
+          {
+            label:'采购退货',
+            value:'050201'
+          },
+          {
+            label:'销售出库',
+            value:'050202'
+          },
+          {
+            label:'盘亏出库',
+            value:'050203'
+          },
+          {
+            label:'调拨出库',
+            value:'050204'
+          },
+          {
+            label:'移仓出库',
+            value:'050205'
+          },
+          {
+            label:'组装出库',
+            value:'050206'
+          },
+          {
+            label:'拆分出库',
+            value:'050207'
+          },
+          {
+            label:'调入退货',
+            value:'050208'
+          },
+        ]
       };
     },
     methods: {
@@ -696,6 +792,7 @@
         data.orgid = this.mainData.orgid;
         data.page = this.contentOne.page.num - 1;
         data.size = this.contentOne.page.size;
+
         data.guestName = typeof data.guestName === "string" ? data.guestName.trim() : "";
         this.contentOne.dataOne = [];
         this.enterLoading = true;
@@ -1073,5 +1170,24 @@
 
   .ivu-modal .ivu-modal-content .ivu-modal-close .ivu-icon-ios-close {
     color: #000c17;
+  }
+</style>
+<style lang="less">
+  .tabs-warp .oper-top *{
+    font-size: 12px;
+  }
+  .el-tag-text{
+    vertical-align: middle;
+  }
+  .el-tag-text .el-select__tags-text{
+    max-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+    height: 24px;
+  }
+  .el-tag-text .el-input__icon{
+    line-height: 30px;
   }
 </style>

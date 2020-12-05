@@ -252,19 +252,19 @@
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 @filter-change="filterChange"
               >
-                <vxe-table-column  show-overflow="tooltip" type="seq" width="60" title="序号" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" type="checkbox" width="60" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" type="checkbox" width="40" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="80" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partBrand" title="品牌" width="100" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partBrand" title="品牌" width="80" fixed="left"></vxe-table-column>
+
+                <vxe-table-column  show-overflow="tooltip" field="unit" title="单位" width="50"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="sysQty" title="系统数量" width="80"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
                   field="trueQty"
                   title="实盘数量"
-                  width="160"
+                  width="90"
                   :edit-render="{name: 'input',autoselect: true ,attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
                 >
                   <template v-slot:edit="{ row }">
@@ -279,9 +279,16 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip"
+                                   field="stockOutQty"
+                                   title="缺货数量"
+                                   width="70"
+                >
+                  <template v-slot="{ row }">{{ row.stockOutQty||0}}</template>
+                </vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip"
                   field="truePrice"
                   title="成本单价"
-                  width="100"
+                  width="90"
                   :edit-render="{autofocus: '.vxe-input--inner'}"
                 >
                   <template v-slot:edit="{ row }">
@@ -289,26 +296,28 @@
                   </template>
                   <template v-slot="{ row }">{{ row.truePrice|priceFilters}}</template>
                 </vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="dc" title="盈亏状态" width="100">
+                <vxe-table-column  show-overflow="tooltip" field="dc" title="盈亏状态" width="70">
                   <template v-slot="{ row, seq }">
                     <span v-show="row.sysQty- row.trueQty < 0">{{ "盈利" }}</span>
                     <span v-show="row.sysQty- row.trueQty > 0">{{ "亏损" }}</span>
                     <span v-show="row.sysQty- row.trueQty == 0">{{ "无盈亏" }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="100">
+                <vxe-table-column  show-overflow="tooltip" field="exhibitQty" title="盈亏数量" width="80">
                   <template v-slot="{ row, seq }">
                     <span>{{row.sysQty - row.trueQty>0?((row.sysQty - row.trueQty)*(-1)):Math.abs(row.sysQty - row.trueQty) }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="exhibitAmt" title="盈亏金额" width="120">
+                <vxe-table-column  show-overflow="tooltip" field="exhibitAmt" title="盈亏金额" width="100">
                   <template v-slot="{ row, seq }">
                     <span>{{(((row.sysQty - row.trueQty>0?((-1)*(row.sysQty - row.trueQty)):Math.abs(row.sysQty - row.trueQty)) * row.truePrice).toFixed(2))||0 }}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="120"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="sysAmt" title="系统成本" width="80"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="oemCode" title="OEM码" width="100"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="spec" title="规格" width="80"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+
               </vxe-table>
               <div class="table-bottom-text flex"><span>创建人：{{currRow?currRow.createUname:""}}</span><span>创建日期：{{currRow?currRow.createTime:""}}</span><span>提交人：{{currRow?currRow.subMan:""}}</span><span>提交日期：{{currRow?currRow.subDate:""}}</span></div>
             </div>
