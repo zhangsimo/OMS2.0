@@ -54,7 +54,8 @@
         },
         pageOpts: [10, 20, 30, 50],
         body: {},
-        tableData: []
+        tableData: [],
+        totalObj:{}
       };
     },
     mounted() {
@@ -69,6 +70,10 @@
         };
         showLoading()
         let res = await api.getPjSellAnalyze(this.body, params);
+        let resp2 = await api.sellOutMain(this.body);
+        if(resp2.code==0){
+          this.totalObj = resp2.data||{};
+        }
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             return el;
@@ -188,7 +193,7 @@
                 "trueAmt"
               ].includes(column.property)
             ) {
-              return this.$utils.sum(data, column.property);
+              return this.totalObj[column.property]||0
             }
             return null;
           })
