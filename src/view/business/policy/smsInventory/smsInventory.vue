@@ -254,7 +254,7 @@
               >
                 <vxe-table-column  show-overflow="tooltip" type="seq" width="50" title="序号" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" type="checkbox" width="40" fixed="left"></vxe-table-column>
-                <vxe-table-column  show-overflow="tooltip" field="partInnerId" title="配件内码" width="80" fixed="left"></vxe-table-column>
+                <vxe-table-column  show-overflow="tooltip" field="partId" title="配件内码" width="80" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partCode" title="配件编码" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partName" title="配件名称" width="100" fixed="left"></vxe-table-column>
                 <vxe-table-column  show-overflow="tooltip" :filters="[]" :filter-method="filterOrderNo" field="partBrand" title="品牌" width="80" fixed="left"></vxe-table-column>

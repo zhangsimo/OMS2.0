@@ -35,14 +35,14 @@
                 </Col>
                 <Col span="12">
                   <FormItem label="供应商简称:" prop="shortName" class="h50">
-                    <Input v-model="data.shortName" style="width: 180px"/>
+                    <Input v-model="data.shortName" style="width: 180px" :disabled="dis"/>
                   </FormItem>
                 </Col>
               </Row>
             </div>
           </div>
           <FormItem class="h50" label="供应商全称:" prop="fullName">
-            <Input v-model="data.fullName" style="width: 480px"/>
+            <Input v-model="data.fullName" style="width: 480px" :disabled="dis"/>
           </FormItem>
           <FormItem class="h50" label="拼音码:">
             <Input v-model="spellCode" style="width: 480px" readonly/>
@@ -325,6 +325,7 @@
       data: "",
       provincearr: "",
       treelist: "",
+      dis:""
     },
     data() {
       // v-if="data.supplierTypeFirst == item.parentId"

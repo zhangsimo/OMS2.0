@@ -461,7 +461,7 @@
     getSales,
     getLeftList,
     getClient,
-    getWarehouseList,
+    getWarehouseList1,
     getDelete,
     returnWareHouse,
     getDeleteList,
@@ -971,7 +971,7 @@
       },
       // 获取仓库
       async getWarehouse() {
-        let res = await getWarehouseList({shopCode: this.$store.state.user.userData.currentCompany.code});
+        let res = await getWarehouseList1({shopCode: this.$store.state.user.userData.currentCompany.code});
         if (res.code === 0) {
           this.WareHouseList = res.data;
           res.data.map(item => {
@@ -984,7 +984,7 @@
       },
       //仓库改变右侧表格改变
       getStore(data) {
-        this.resetRightDetail();
+        // this.resetRightDetail();
         if (this.formPlan.details > 0) {
           let house = this.WareHouseList.filter(item => item.id == data);
           this.formPlan.details.map(val => {

@@ -650,7 +650,9 @@ export default {
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
       accessoriesBillingData2:[],//开票油品数据
-      copyData: [] //开票配件复制数据
+      copyData: [], //开票配件复制数据
+      row: {},//申请单页面的信息
+
     };
   },
   mounted() {
@@ -712,6 +714,10 @@ export default {
     });
   },
   methods: {
+    open(row){
+      this.modal1 = true
+      this.row = row
+    },
     // 引用上次申请信息
     quote() {
       informationCitation({ guestId: this.information.guestId }).then(res => {
@@ -800,16 +806,20 @@ export default {
               this.copyData = res.data;
             }
           });
-          let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-            user = this.$store.state.user.userData;
-          this.formInline.applicant = user.staffName;
-          this.formInline.deptName =
-            user.groups[user.groups.length - 1].name || " 　　";
-          this.formInline.shopCode = user.shopCode || " 　　";
-          this.formInline.orgName = user.shopName;
-          this.formInline.applyTypeName = "销售开票申请";
-          this.formInline.applyTime = date;
-          this.formInline.paymentOrgName = user.shopName;
+          if(this.modelType.type == 1){
+            let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+              user = this.$store.state.user.userData;
+            this.formInline.applicant = user.staffName;
+            this.formInline.deptName =
+              user.groups[user.groups.length - 1].name || " 　　";
+            this.formInline.shopCode = user.shopCode || " 　　";
+            this.formInline.orgName = user.shopName;
+            this.formInline.applyTypeName = "销售开票申请";
+            this.formInline.applyTime = date;
+            this.formInline.paymentOrgName = user.shopName;
+          }else{
+            this.formInline = this.row
+          }
           if(this.modelType.id) {
             let data = {}
             data.id = this.modelType.id || ''

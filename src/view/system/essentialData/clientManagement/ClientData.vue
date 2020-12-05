@@ -30,10 +30,10 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="30" />
+                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  :disabled="dis" />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
-                <Input v-model="data.fullName" style="width: 180px" />
+                <Input v-model="data.fullName" style="width: 180px"  :disabled="dis" />
               </FormItem>
               <FormItem label="拼音码:">
                 <Input v-model="spellCode" style="width: 180px" readonly/>
@@ -420,7 +420,8 @@ export default {
     treelist: {
       type: Array,
       default: ()=>[]
-    }
+    },
+    dis:""
   },
   data() {
     const contactorTel = (rule, value, callback) => {

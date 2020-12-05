@@ -1517,7 +1517,7 @@ export default {
       }
     },
     getWareHouse() {
-      cangkulist2(this.$store.state.user.userData.shopId)
+      cangkulist2({shopCode: this.$store.state.user.userData.currentCompany.code})
         .then((res) => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
