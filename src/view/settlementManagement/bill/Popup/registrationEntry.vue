@@ -668,7 +668,7 @@
             taxRate: 0.13,
             payType: "DG",
             invoiceSort: "CG",
-            invoicePurchaserId: this.$store.state.user.userData.currentShopId || "",
+            invoicePurchaserId:"",
             invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1] ? this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName : "",
             billingType: statementType === 1 ? "0" : "YP",
             taxAmt:'',
