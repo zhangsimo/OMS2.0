@@ -56,7 +56,7 @@
             <Button
               class="mr10"
               @click="submit('formplanref')"
-              :disabled="isInput"
+              :disabled="selectRowState!='待收货'||!selectTableRow.advanceAmt||selectTableRow.isWms"
               v-has="'submit'"
               :loading='commitLoading'
             ><i class="iconfont mr5 iconziyuan2"></i>预付款入库</Button

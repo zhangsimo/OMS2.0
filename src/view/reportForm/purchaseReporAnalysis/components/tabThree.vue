@@ -16,7 +16,7 @@
     >
       <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="50"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="partBrandCode" title="品牌编码" width="90"></vxe-table-column>
+      <!--<vxe-table-column show-overflow="tooltip" field="partBrandCode" title="品牌编码" width="90"></vxe-table-column>-->
       <vxe-table-column show-overflow="tooltip" field="partBrand" title="品牌名称" width="100"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="enterQty" remote-sort title="入库数量" width="100"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="enterAmt" remote-sort title="入库金额" width="100"></vxe-table-column>
