@@ -78,11 +78,11 @@
               序号
             </th>
             <th
-              style="width:15%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:13%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件编码
             </th>
             <th
-              style="width:10%;padding: 2px 0;font-size: 12px; font-weight: 400;border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:12%;padding: 2px 0;font-size: 12px; font-weight: 400;border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件名称
             </th>
             <th
@@ -94,7 +94,7 @@
               品牌
             </th>
             <th
-              style="width: 7%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 6%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               车型
             </th>
             <th
@@ -102,15 +102,15 @@
               规格
             </th>
             <th
-              style="width: 6%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 4%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               单位
             </th>
             <th
-              style="width: 6%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 5%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               数量
             </th>
             <th
-              style="width: 8%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 7%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               单价
             </th>
             <th
@@ -118,7 +118,7 @@
               金额
             </th>
             <th
-              style="width: 10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-bottom:1px solid #000;">
+              style="width: 15%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-bottom:1px solid #000;">
               仓位
             </th>
           </tr>
