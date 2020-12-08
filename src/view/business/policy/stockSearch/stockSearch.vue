@@ -1318,7 +1318,7 @@
       //获取仓库下拉选择信息
       async getStoreHoure() {
         // let res = await getwarehouse({});
-        let res = await getStoreAll();
+        let res = await getStoreAll({shopCode: this.$store.state.user.userData.currentCompany.code});
         if (res.code == 0) {
           // this.storeList = res.data;
           // console.log("222", res);
