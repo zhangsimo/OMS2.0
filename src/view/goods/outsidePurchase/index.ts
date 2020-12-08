@@ -523,7 +523,7 @@ export default class OutsidePurchase extends Vue {
   }
 
   // 提交
-  private submit(refname: string) {
+  private submit(refname: string,isType:string) {
     if(!this.selectTableRow.id) return this.$message.error("请先保存再提交");
 
     if (!this.isSelfOk) {
@@ -539,6 +539,9 @@ export default class OutsidePurchase extends Vue {
     let txt="是否提交";
     if(this.selectTableRow.advanceAmt&&this.selectTableRow.advanceAmt>0){
       txt = '该单有预付款，审批通过之后，需点击【预付款入库】来操作入库';
+    }
+    if(isType){
+      txt = '是否确定入库';
     }
     this.$Modal.confirm({
       title: '提示',
