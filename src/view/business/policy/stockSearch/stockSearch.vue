@@ -1114,11 +1114,11 @@
         //   data.partCode = data.partCode.trim();
         // }
         let boolAjax=true;
-        if(data.partName.length<3){
+        if(data.partName&&data.partName.length<3){
           boolAjax=false;
           return this.$Message.error("请输入不小于三位的配件名称/编码/OEM码!")
         }
-        if(data.partId.length<3){
+        if(data.partId&&data.partId.length<3){
           boolAjax=false;
           return this.$Message.error("请输入不小于三位的配件内码!")
         }
