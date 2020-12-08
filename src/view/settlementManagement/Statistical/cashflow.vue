@@ -48,6 +48,14 @@
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              v-has="'export'"
+              @click="getExport"
+            >
+              <span>导出</span>
+            </button>
           </div>
         </div>
       </div>
@@ -260,6 +268,37 @@ export default {
           this.getThisArea(); //获取当前门店地址
         }
       }
+    },
+    //导出
+      getExport() {
+      if(this.$refs.quickDate._data.searchQuick=="0"){
+       return this.$message.warning("请选择查询日期范围");
+      }
+       if(!this.dates[0]){
+        return this.$message.warning("请选择查询日期范围");
+      }
+         if (this.tableData <= 0) {
+        return this.$message.warning("暂无数据导出");
+      }
+      let data = {};
+      data.areaId = this.areaId == "0" ? "" : this.areaId
+      data.shopNumber = this.BranchstoreId == "0" ? "" : this.BranchstoreId
+      if (this.dates.length === 2 && this.dates[0]) {
+        data.startTime = moment(this.dates[0]).format("YYYY-MM-DD");
+        data.endTime = moment(this.dates[1]).format("YYYY-MM-DD");
+      }
+      data.mateAccountCode = this.mateAccountCode;
+      data.accountCode = this.accountCode;
+      let params = "";
+      for (let d in data) {
+        if (!data[d]) {
+          delete data[d];
+        }
+      }
+      for (var i in data) {
+        params += `${i}=${data[i]}&`;
+      }
+      location.href = api.getPayablesExportsix(params)
     },
     // 查询
     async query() {

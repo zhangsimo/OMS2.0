@@ -1,11 +1,18 @@
 <template>
-  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
+  <div
+    class="content-oper content-oper-flex loadingClass"
+    style="background-color: #fff"
+  >
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+            <quickDate
+              class="mr10"
+              ref="quickDate"
+              @quickDate="quickDate"
+            ></quickDate>
           </div>
           <div class="db ml15">
             <span>期间：</span>
@@ -19,19 +26,35 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select v-model="model1" filterable class="w150" @on-change="changeArea" :disabled="selectShopList">
+            <Select
+              v-model="model1"
+              filterable
+              class="w150"
+              @on-change="changeArea"
+              :disabled="selectShopList"
+            >
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.companyName }}
+                >{{ item.companyName }}
               </Option>
             </Select>
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="shopCode" filterable class="w150 mr15" :disabled="selectShopList">
-              <Option v-for="item in shopList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
+            <Select
+              v-model="shopCode"
+              filterable
+              class="w150 mr15"
+              :disabled="selectShopList"
+            >
+              <Option
+                v-for="item in shopList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.shortName }}</Option
+              >
             </Select>
           </div>
           <div class="db">
@@ -41,14 +64,26 @@
                 v-for="item in subJectList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.titleName }}
+                >{{ item.titleName }}
               </Option>
             </Select>
           </div>
           <div class="db ml15">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="query"
+            >
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
+            </button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              v-has="'export'"
+              @click="getExport"
+            >
+              <span>导出</span>
             </button>
           </div>
         </div>
@@ -60,7 +95,12 @@
         <!--          </button>-->
         <!--        </div>-->
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="dele" v-has="'delete'">
+          <button
+            class="mr10 ivu-btn ivu-btn-default"
+            type="button"
+            @click="dele"
+            v-has="'delete'"
+          >
             <span>删除导入</span>
           </button>
         </div>
@@ -140,10 +180,20 @@
     <add ref="addModel" @getAllList="allList" @update="getList"></add>
 
     <!--    修改-->
-    <changeJournal :list="oneList" ref="changeModal" @getAllList="allList"  @update="getList"></changeJournal>
+    <changeJournal
+      :list="oneList"
+      ref="changeModal"
+      @getAllList="allList"
+      @update="getList"
+    ></changeJournal>
 
     <div class="mt15">
-      <Tabs type="card" v-model="tabName"  value="capitalChain1" @on-click="clickTabs">
+      <Tabs
+        type="card"
+        v-model="tabName"
+        value="capitalChain1"
+        @on-click="clickTabs"
+      >
         <TabPane label="全部数据" name="capitalChain1">
           <div>
             <vxe-table
@@ -160,42 +210,176 @@
               size="mini"
               :data="tableData"
             >
-              <vxe-table-column type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" fixed="left" title="导入时间" sortable width="150"></vxe-table-column>
-              <vxe-table-column field="createTime" fixed="left" title="发生日期" sortable width="150"></vxe-table-column>
-              <vxe-table-column field="tradingNote" fixed="left" title="交易备注" width="150"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别" width="150"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号" width="180"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位" width="160"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号" width="180"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column
+                type="seq"
+                title="序号"
+                fixed="left"
+                width="60"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="importTime"
+                fixed="left"
+                title="导入时间"
+                sortable
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="createTime"
+                fixed="left"
+                title="发生日期"
+                sortable
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="tradingNote"
+                fixed="left"
+                title="交易备注"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="openingBalance"
+                title="期初余额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="incomeMoney"
+                title="收入金额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="paidMoney"
+                title="支出金额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="balanceMoney"
+                title="期末余额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="reciprocalAccountName"
+                title="对方户名"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="businessType"
+                title="业务类别"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimShopCode"
+                title="认领店号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="statementNumber"
+                title="核销对账单号"
+                width="180"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="suppliers"
+                title="往来单位"
+                width="160"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="proofCode"
+                title="凭证号"
+                width="180"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="accountName"
+                title="账户"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="mateAccountName"
+                title="对应科目"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="checkAccount"
+                title="对账账号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="reciprocalBankName"
+                title="对方开户行"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shopCode"
+                title="所属店号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="area"
+                title="所属区域"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shopName"
+                title="所属门店"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="accountCode"
+                title="账号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="bankName"
+                title="开户行"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="leadHandler"
+                title="导入经办人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimShopName"
+                title="认领门店"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="certificate"
+                title="凭证摘要"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="cancelPerson"
+                title="认领核销人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimNote"
+                title="认领备注"
+                width="100"
+              ></vxe-table-column>
               <vxe-table-column field="claimType" title="是否认领" width="100">
-                <template v-slot="{row}">
-                  {{row.claimType ? '是':'否'}}
+                <template v-slot="{ row }">
+                  {{ row.claimType ? "是" : "否" }}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间" width="150"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column
+                field="accountingExaminer"
+                title="会计审核人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="checkTime"
+                title="审核时间"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="proofWords"
+                title="凭证字"
+                width="100"
+              ></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -215,42 +399,176 @@
               size="mini"
               :data="tableData1"
             >
-              <vxe-table-column type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" fixed="left" title="导入时间" sortable width="150"></vxe-table-column>
-              <vxe-table-column field="createTime" fixed="left" title="发生日期" sortable width="150"></vxe-table-column>
-              <vxe-table-column field="tradingNote" fixed="left" title="交易备注" width="150"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别" width="150"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号" width="180"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位" width="160"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号" width="180"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column
+                type="seq"
+                title="序号"
+                fixed="left"
+                width="60"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="importTime"
+                fixed="left"
+                title="导入时间"
+                sortable
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="createTime"
+                fixed="left"
+                title="发生日期"
+                sortable
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="tradingNote"
+                fixed="left"
+                title="交易备注"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="openingBalance"
+                title="期初余额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="incomeMoney"
+                title="收入金额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="paidMoney"
+                title="支出金额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="balanceMoney"
+                title="期末余额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="reciprocalAccountName"
+                title="对方户名"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="businessType"
+                title="业务类别"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimShopCode"
+                title="认领店号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="statementNumber"
+                title="核销对账单号"
+                width="180"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="suppliers"
+                title="往来单位"
+                width="160"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="proofCode"
+                title="凭证号"
+                width="180"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="accountName"
+                title="账户"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="mateAccountName"
+                title="对应科目"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="checkAccount"
+                title="对账账号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="reciprocalBankName"
+                title="对方开户行"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shopCode"
+                title="所属店号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="area"
+                title="所属区域"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shopName"
+                title="所属门店"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="accountCode"
+                title="账号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="bankName"
+                title="开户行"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="leadHandler"
+                title="导入经办人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimShopName"
+                title="认领门店"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="certificate"
+                title="凭证摘要"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="cancelPerson"
+                title="认领核销人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimNote"
+                title="认领备注"
+                width="100"
+              ></vxe-table-column>
               <vxe-table-column field="claimType" title="是否认领" width="100">
-                <template v-slot="{row}">
-                  {{row.claimType ? '是':'否'}}
+                <template v-slot="{ row }">
+                  {{ row.claimType ? "是" : "否" }}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间" width="150"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column
+                field="accountingExaminer"
+                title="会计审核人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="checkTime"
+                title="审核时间"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="proofWords"
+                title="凭证字"
+                width="100"
+              ></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -270,42 +588,176 @@
               size="mini"
               :data="tableData2"
             >
-              <vxe-table-column type="seq" title="序号" fixed="left" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" fixed="left" title="导入时间" sortable width="150"></vxe-table-column>
-              <vxe-table-column field="createTime" fixed="left" title="发生日期" sortable width="150"></vxe-table-column>
-              <vxe-table-column field="tradingNote" fixed="left" title="交易备注" width="150"></vxe-table-column>
-              <vxe-table-column field="openingBalance" title="期初余额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="incomeMoney" title="收入金额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="paidMoney" title="支出金额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="balanceMoney" title="期末余额" sortable width="100"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
-              <vxe-table-column field="businessType" title="业务类别" width="150"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号" width="100"></vxe-table-column>
-              <vxe-table-column field="statementNumber" title="核销对账单号" width="180"></vxe-table-column>
-              <vxe-table-column field="suppliers" title="往来单位" width="160"></vxe-table-column>
-              <vxe-table-column field="proofCode" title="凭证号" width="180"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号" width="100"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行" width="100"></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
-              <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
-              <vxe-table-column field="leadHandler" title="导入经办人" width="100"></vxe-table-column>
-              <vxe-table-column field="claimShopName" title="认领门店" width="100"></vxe-table-column>
-              <vxe-table-column field="certificate" title="凭证摘要" width="100"></vxe-table-column>
-              <vxe-table-column field="cancelPerson" title="认领核销人" width="100"></vxe-table-column>
-              <vxe-table-column field="claimNote" title="认领备注" width="100"></vxe-table-column>
+              <vxe-table-column
+                type="seq"
+                title="序号"
+                fixed="left"
+                width="60"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="importTime"
+                fixed="left"
+                title="导入时间"
+                sortable
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="createTime"
+                fixed="left"
+                title="发生日期"
+                sortable
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="tradingNote"
+                fixed="left"
+                title="交易备注"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="openingBalance"
+                title="期初余额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="incomeMoney"
+                title="收入金额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="paidMoney"
+                title="支出金额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="balanceMoney"
+                title="期末余额"
+                sortable
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="reciprocalAccountName"
+                title="对方户名"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="businessType"
+                title="业务类别"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimShopCode"
+                title="认领店号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="statementNumber"
+                title="核销对账单号"
+                width="180"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="suppliers"
+                title="往来单位"
+                width="160"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="proofCode"
+                title="凭证号"
+                width="180"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="accountName"
+                title="账户"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="mateAccountName"
+                title="对应科目"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="checkAccount"
+                title="对账账号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="reciprocalBankName"
+                title="对方开户行"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shopCode"
+                title="所属店号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="area"
+                title="所属区域"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shopName"
+                title="所属门店"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="accountCode"
+                title="账号"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="bankName"
+                title="开户行"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="leadHandler"
+                title="导入经办人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimShopName"
+                title="认领门店"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="certificate"
+                title="凭证摘要"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="cancelPerson"
+                title="认领核销人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="claimNote"
+                title="认领备注"
+                width="100"
+              ></vxe-table-column>
               <vxe-table-column field="claimType" title="是否认领" width="100">
-                <template v-slot="{row}">
-                  {{row.claimType ? '是':'否'}}
+                <template v-slot="{ row }">
+                  {{ row.claimType ? "是" : "否" }}
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="accountingExaminer" title="会计审核人" width="100"></vxe-table-column>
-              <vxe-table-column field="checkTime" title="审核时间" width="150"></vxe-table-column>
-              <vxe-table-column field="proofWords" title="凭证字" width="100"></vxe-table-column>
+              <vxe-table-column
+                field="accountingExaminer"
+                title="会计审核人"
+                width="100"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="checkTime"
+                title="审核时间"
+                width="150"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="proofWords"
+                title="凭证字"
+                width="100"
+              ></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -329,366 +781,407 @@
 </template>
 
 <script>
-  import quickDate from "@/components/getDate/dateget_bill.vue";
-  import {creat} from "../../components";
-  import importXLS from "../../components/importXLS";
-  import artificial from "../../components/artificial";
-  import {
-    are,
-    impUrl,
-    goList,
-    deleList,
-    revocation,
-    ait,
-    getSubjectType
-  } from "@/api/settlementManagement/fundsManagement/capitalChain";
-  import {goshop} from "@/api/settlementManagement/shopList";
-  import changeJournal from "../components/changeJournal";
-  import add from "../components/addJournal";
-  import amtData from "../../components/amtData";
-  import {showLoading, hideLoading} from "@/utils/loading"
-  import moment from "moment";
+import quickDate from "@/components/getDate/dateget_bill.vue";
+import { creat } from "../../components";
+import importXLS from "../../components/importXLS";
+import artificial from "../../components/artificial";
+import {
+  are,
+  impUrl,
+  goList,
+  deleList,
+  revocation,
+  ait,
+  getSubjectType,
+} from "@/api/settlementManagement/fundsManagement/capitalChain";
+import { goshop } from "@/api/settlementManagement/shopList";
+import changeJournal from "../components/changeJournal";
+import add from "../components/addJournal";
+import amtData from "../../components/amtData";
+import { showLoading, hideLoading } from "@/utils/loading";
+import * as api from "_api/reportForm/index.js";
+import moment from "moment";
 
-  export default {
-    name: 'cashJournal',
-    components: {
-      quickDate,
-      importXLS,
-      artificial,
-      amtData,
-      changeJournal,
-      add
-    },
-    data() {
-      return {
-        value: [],
-        Branchstore: [{id: 0, companyName: "全部"}],
-        model1: 0, //获取到地址id
-        shopCode: 0, //获取到门店id
-        shopList: [{id: '0', name: "全部",shortName:"全部"}], //门店列表
-        subjectCode: new Array(), //科目id
-        tabName: "capitalChain1",
-        subJectList: [], //科目列表
-        company: "", //往来单位
-        companyId: "", //往来单位id
-        formInline: {}, //统计数据
-        tableData: [], //全部数据
-        tableData1: [], //已审核数据
-        tableData2: [], //未审核数据
-        page: {
-          total: 0,
-          sizeArr: [10, 20, 30, 40, 50],
-          size: 10,
-          num: 1
-        },
-        impirtUrl: {
-          downId: "1200000000",
-          upUrl: impUrl
-        }, //下载上传路径
-        oneList: {}, //点击获取到的信息
-        allMoneyList: {}, //获取到所有余额信息
-        canQuickDateList: false //判断是否可以查询
-      };
-    },
-    async mounted() {
-      let arr = await creat(this.$refs.quickDate.val, this.$store);
-      this.value = arr[0];
-      this.$nextTick(() => {
-        this.shopCode = arr[1]
-      })
-      this.getShop(); //获取门店
-      this.getAllAre(); //获取区域
-      this.getSubject(); //获取会计科目
-    },
-    computed: {
-      selectShopList() {
-        if (this.$store.state.user.userData.currentCompany != null) {
-          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-        } else {
-          return true
-        }
+export default {
+  name: "cashJournal",
+  components: {
+    quickDate,
+    importXLS,
+    artificial,
+    amtData,
+    changeJournal,
+    add,
+  },
+  data() {
+    return {
+      value: [],
+      Branchstore: [{ id: 0, companyName: "全部" }],
+      model1: 0, //获取到地址id
+      shopCode: 0, //获取到门店id
+      shopList: [{ id: "0", name: "全部", shortName: "全部" }], //门店列表
+      subjectCode: new Array(), //科目id
+      tabName: "capitalChain1",
+      subJectList: [], //科目列表
+      company: "", //往来单位
+      companyId: "", //往来单位id
+      formInline: {}, //统计数据
+      tableData: [], //全部数据
+      tableData1: [], //已审核数据
+      tableData2: [], //未审核数据
+      page: {
+        total: 0,
+        sizeArr: [10, 20, 30, 40, 50],
+        size: 10,
+        num: 1,
+      },
+      impirtUrl: {
+        downId: "1200000000",
+        upUrl: impUrl,
+      }, //下载上传路径
+      oneList: {}, //点击获取到的信息
+      allMoneyList: {}, //获取到所有余额信息
+      canQuickDateList: false, //判断是否可以查询
+    };
+  },
+  async mounted() {
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
+    this.value = arr[0];
+    this.$nextTick(() => {
+      this.shopCode = arr[1];
+    });
+    this.getShop(); //获取门店
+    this.getAllAre(); //获取区域
+    this.getSubject(); //获取会计科目
+  },
+  computed: {
+    selectShopList() {
+      if (this.$store.state.user.userData.currentCompany != null) {
+        return this.$store.state.user.userData.currentCompany.isMaster
+          ? true
+          : false;
+      } else {
+        return true;
       }
     },
-    methods: {
-      //获取全部地址
-      async getAllAre() {
-        let res = await are();
-        if (res.code === 0)
-          return (this.Branchstore = [...this.Branchstore, ...res.data]);
-      },
+  },
+  methods: {
+    //获取全部地址
+    async getAllAre() {
+      let res = await are();
+      if (res.code === 0)
+        return (this.Branchstore = [...this.Branchstore, ...res.data]);
+    },
 
-      // //切换地址重新调取门店接口
-      changeArea() {
-        if (this.$store.state.user.userData.shopkeeper == 0) {
-          this.shopCode = 0;
-          this.getShop();
-        }
-      },
+    // //切换地址重新调取门店接口
+    changeArea() {
+      if (this.$store.state.user.userData.shopkeeper == 0) {
+        this.shopCode = 0;
+        this.getShop();
+      }
+    },
 
-      //获取当前科目
-      async getSubject() {
-        let res = await getSubjectType()
-        if (res.code === 0) {
-          this.subJectList = res.data
-          if (res.data.length == 0) return
-          this.subjectCode.push(res.data[0].id)
-        }
-      },
+    //获取当前科目
+    async getSubject() {
+      let res = await getSubjectType();
+      if (res.code === 0) {
+        this.subJectList = res.data;
+        if (res.data.length == 0) return;
+        this.subjectCode.push(res.data[0].id);
+      }
+    },
 
-
-      setAreaDef() {
-        if (this.Branchstore.length > 0) {
-          this.Branchstore.map(item => {
-            this.shopList.map(item2 => {
-              if (this.selectShopList) {
-                if (item.parentId == item2.supplierTypeFirst && item.id == item2.supplierTypeSecond) {
-                  this.model1 = item.id
-                }
-              } else {
-                this.model1 = 0
+    setAreaDef() {
+      if (this.Branchstore.length > 0) {
+        this.Branchstore.map((item) => {
+          this.shopList.map((item2) => {
+            if (this.selectShopList) {
+              if (
+                item.parentId == item2.supplierTypeFirst &&
+                item.id == item2.supplierTypeSecond
+              ) {
+                this.model1 = item.id;
               }
-            })
-          })
-        }
-      },
-      //获取门店
-      async getShop() {
-        let data = {}
-        let res = await goshop(data)
-        if (res.code === 0) {
-          this.shopList = [...this.shopList, ...res.data]
-          this.setAreaDef()
-        }
-      },
+            } else {
+              this.model1 = 0;
+            }
+          });
+        });
+      }
+    },
+    //获取门店
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0) {
+        this.shopList = [...this.shopList, ...res.data];
+        this.setAreaDef();
+      }
+    },
 
-      // 日期选择
-      dateChange(data) {
-        this.value = data;
-      },
-      // 快速查询
-      quickDate(data) {
-        this.value = data;
-        if (this.canQuickDateList) {
-          this.getList();
-        } else {
-          this.canQuickDateList = !this.canQuickDateList;
-        }
-      },
-      changePage(p) {
-        this.page.num = p;
+    // 日期选择
+    dateChange(data) {
+      this.value = data;
+    },
+    // 快速查询
+    quickDate(data) {
+      this.value = data;
+      this.page.num =1;
+      if (this.canQuickDateList) {
         this.getList();
-      },
-      changeSize(size) {
-        this.page.num = 1;
-        this.page.size = size;
-        this.getList();
-      },
-      // 切换tabs
-      clickTabs(data) {
-        this.page.num = 1;
-        this.page.size = 10;
-        this.getList()
-      },
-      //获取表格信息
-      async getList() {
-        this.oneList = {};
-        let data = {};
-        let params = {}
-        data.signs=1;//区别现金日记账
-        params.page = this.page.num - 1
-        params.size = this.page.size
-        data.startTime = this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD")
-          : "";
-        data.endTime = this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD")
-          : "";
-        data.areaId = this.model1;
-        data.shopNumber = this.shopCode;
-        data.subjectId = [this.subjectCode];
-        //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
-        switch (this.tabName) {
-          case "capitalChain1":break;
-          case "capitalChain2":
-            data.collateState=1;
-            break;
-          case "capitalChain3":
-            data.collateState=0;
-            break;
+      } else {
+        this.canQuickDateList = !this.canQuickDateList;
+      }
+    },
+    changePage(p) {
+      this.page.num = p;
+      this.getList();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getList();
+    },
+    // 切换tabs
+    clickTabs(data) {
+      this.page.num = 1;
+      this.page.size = 10;
+      this.getList();
+    },
+    //导出
+    getExport() {
+      if(this.$refs.quickDate._data.searchQuick=="0"){
+        return this.$message.warning("请选择查询日期范围");
+      }
+       if(!this.value[0]){
+        return this.$message.warning("请选择查询日期范围");
+      }
+       if (this.tableData <= 0) {
+        return this.$message.warning("暂无数据导出");
+      }
+      let data = {};
+      let params = "";
+      data.signs = 1; //区别现金日记账
+      data.PageType = 2;
+      data.pagesize=this.page.total
+      data.startTime = this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD")
+        : "";
+      data.endTime = this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD")
+        : "";
+      data.areaId = this.model1;
+      data.shopNumber = this.shopCode;
+      data.subjectId = [this.subjectCode];
+      for (let d in data) {
+        if (!data[d]) {
+          delete data[d];
         }
-        this.allMoneyList = {};
-        let res = await goList(params,data);
-        // if (res.code === 0) {
-        //   //if (res.data.page.content.length > 0) {
-        //     this.allMoneyList = res.data.moneyList;
-        //   //}
-        //   this.tableData = res.data.page.content;
-        //   this.tableData1 = res.data.page.content;
-        //   this.tableData2 = res.data.page.content;
-        //   this.page.total=res.data.page.totalElements
-        try {
-          showLoading(".loadingClass", "数据加载中，请勿操作")
-          let res = await goList(params,data);
-          if (res.code === 0) {
-            //if (res.data.page.content.length > 0) {
-            this.allMoneyList = res.data.moneyList;
+      }
+      for (var i in data) {
+        params += `${i}=${data[i]}&`;
+      }
+      location.href = api.getPayablesExportnine(params);
+    },
+    //获取表格信息
+    async getList() {
+      this.oneList = {};
+      let data = {};
+      let params = {};
+      data.signs = 1; //区别现金日记账
+      params.page = this.page.num - 1;
+      params.size = this.page.size;
+      data.startTime = this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD")
+        : "";
+      data.endTime = this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD")
+        : "";
+      data.areaId = this.model1;
+      data.shopNumber = this.shopCode;
+      data.subjectId = [this.subjectCode];
+      //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
+      switch (this.tabName) {
+        case "capitalChain1":
+          break;
+        case "capitalChain2":
+          data.collateState = 1;
+          break;
+        case "capitalChain3":
+          data.collateState = 0;
+          break;
+      }
+      this.allMoneyList = {};
+      let res = await goList(params, data);
+      // if (res.code === 0) {
+      //   //if (res.data.page.content.length > 0) {
+      //     this.allMoneyList = res.data.moneyList;
+      //   //}
+      //   this.tableData = res.data.page.content;
+      //   this.tableData1 = res.data.page.content;
+      //   this.tableData2 = res.data.page.content;
+      //   this.page.total=res.data.page.totalElements
+      try {
+        showLoading(".loadingClass", "数据加载中，请勿操作");
+        let res = await goList(params, data);
+        if (res.code === 0) {
+          //if (res.data.page.content.length > 0) {
+          this.allMoneyList = res.data.moneyList;
           //}
           this.tableData = res.data.page.content;
           this.tableData1 = res.data.page.content;
           this.tableData2 = res.data.page.content;
-          this.page.total=res.data.page.totalElements
-          }
-          hideLoading()
-        } catch (error) {
-          hideLoading()
+          this.page.total = res.data.page.totalElements;
         }
-      },
-
-      //查询
-      query() {
-        this.getList();
-      },
-
-      //点击获取表格数据
-      getOneList(val) {
-        this.oneList = val.row;
-      },
-
-      //打开导入模板下载
-      importXSL() {
-        this.$refs.imp.openModal();
-      },
-
-      //导入成功后刷新页
-      getNew(data) {
-        this.getList();
-      },
-
-      //人工分配成功后刷新
-      getNew2() {
-        this.getList();
-      },
-
-      //删除导入
-      dele() {
-        if (Object.keys(this.oneList).length == 0)
-          return this.$Message.error("请至少选择一条数据");
-        if (this.oneList.collateState)
-          return this.$Message.error("已核销数据不能删除");
-        this.$Modal.confirm({
-          title: "提示",
-          content: "<p>是否删除该条数据</p>",
-          onOk: async () => {
-            let data = {};
-            data.id = this.oneList.id;
-            let res = await deleList(data);
-            if (res.code === 0) {
-              this.getList();
-              this.$Message.warning(res.message ||"删除成功");
-            }
-          },
-          onCancel: () => {
-          }
-        });
-      },
-
-      //智能匹配
-      async intellect() {
-        this.$Modal.confirm({
-          title: "提示",
-          content: "<p>是否执行智能匹配</p>",
-          onOk: async () => {
-            let res = await ait();
-            if (res.code === 0) {
-              this.$XModal.alert({
-                title: "提示",
-                message: res.data,
-                status: "success"
-              });
-              this.getList();
-            }
-          },
-          onCancel: () => {
-          }
-        });
-      },
-
-      //打开新增模态框
-      openAddModal() {
-        this.oneList = {};
-        this.$refs.addModel.open();
-      },
-
-      //修改模态框
-      openChangeModal() {
-        if (Object.keys(this.oneList).length < 1)
-          return this.$Message.error("请至少选择一条数据");
-        if (this.oneList.collateState == 1)
-          return this.$Message.error("只能修改未核销数据");
-        this.$refs.changeModal.open();
-      },
-
-      //修改成功后刷新页面
-      allList() {
-        this.getList();
-      },
-
-      //人工匹配
-      artificialChange() {
-        if (Object.keys(this.oneList).length == 0)
-          return this.$Message.error("请至少选择一条数据");
-        if (this.oneList.allocation) return this.$Message.error("数据已分配");
-        this.$refs.art.openModal();
-      },
-
-      //撤销分配
-      async revocation() {
-        if (Object.keys(this.oneList).length == 0)
-          return this.$Message.error("请至少选择一条数据");
-        if (!this.oneList.allocation)
-          return this.$Message.error("请选择已分配的数据");
-        this.$Modal.confirm({
-          title: "提示",
-          content: "<p>是否撤回分配</p>",
-          onOk: async () => {
-            let data = {};
-            data.id = this.oneList.id;
-            let res = await revocation([this.oneList.id]);
-            if (res.code === 0) {
-              this.$Message.success("撤销分配成功");
-              this.getList();
-            }
-          }
-        });
-      },
-
-      //资金认领核销
-      goMoney() {
-        this.$router.push({name: "claimWrite"});
+        hideLoading();
+      } catch (error) {
+        hideLoading();
       }
-    }
-  };
+    },
+
+    //查询
+    query() {
+      this.page.num =1;
+      this.getList();
+    },
+
+    //点击获取表格数据
+    getOneList(val) {
+      this.oneList = val.row;
+    },
+
+    //打开导入模板下载
+    importXSL() {
+      this.$refs.imp.openModal();
+    },
+
+    //导入成功后刷新页
+    getNew(data) {
+      this.getList();
+    },
+
+    //人工分配成功后刷新
+    getNew2() {
+      this.getList();
+    },
+
+    //删除导入
+    dele() {
+      if (Object.keys(this.oneList).length == 0)
+        return this.$Message.error("请至少选择一条数据");
+      if (this.oneList.collateState)
+        return this.$Message.error("已核销数据不能删除");
+      this.$Modal.confirm({
+        title: "提示",
+        content: "<p>是否删除该条数据</p>",
+        onOk: async () => {
+          let data = {};
+          data.id = this.oneList.id;
+          let res = await deleList(data);
+          if (res.code === 0) {
+            this.getList();
+            this.$Message.warning(res.message || "删除成功");
+          }
+        },
+        onCancel: () => {},
+      });
+    },
+
+    //智能匹配
+    async intellect() {
+      this.$Modal.confirm({
+        title: "提示",
+        content: "<p>是否执行智能匹配</p>",
+        onOk: async () => {
+          let res = await ait();
+          if (res.code === 0) {
+            this.$XModal.alert({
+              title: "提示",
+              message: res.data,
+              status: "success",
+            });
+            this.getList();
+          }
+        },
+        onCancel: () => {},
+      });
+    },
+
+    //打开新增模态框
+    openAddModal() {
+      this.oneList = {};
+      this.$refs.addModel.open();
+    },
+
+    //修改模态框
+    openChangeModal() {
+      if (Object.keys(this.oneList).length < 1)
+        return this.$Message.error("请至少选择一条数据");
+      if (this.oneList.collateState == 1)
+        return this.$Message.error("只能修改未核销数据");
+      this.$refs.changeModal.open();
+    },
+
+    //修改成功后刷新页面
+    allList() {
+      this.getList();
+    },
+
+    //人工匹配
+    artificialChange() {
+      if (Object.keys(this.oneList).length == 0)
+        return this.$Message.error("请至少选择一条数据");
+      if (this.oneList.allocation) return this.$Message.error("数据已分配");
+      this.$refs.art.openModal();
+    },
+
+    //撤销分配
+    async revocation() {
+      if (Object.keys(this.oneList).length == 0)
+        return this.$Message.error("请至少选择一条数据");
+      if (!this.oneList.allocation)
+        return this.$Message.error("请选择已分配的数据");
+      this.$Modal.confirm({
+        title: "提示",
+        content: "<p>是否撤回分配</p>",
+        onOk: async () => {
+          let data = {};
+          data.id = this.oneList.id;
+          let res = await revocation([this.oneList.id]);
+          if (res.code === 0) {
+            this.$Message.success("撤销分配成功");
+            this.getList();
+          }
+        },
+      });
+    },
+
+    //资金认领核销
+    goMoney() {
+      this.$router.push({ name: "claimWrite" });
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
-  .oper-top input {
-    border: 1px solid #dddddd;
-    text-indent: 4px;
-  }
+.oper-top input {
+  border: 1px solid #dddddd;
+  text-indent: 4px;
+}
 
-  .oper-top .input {
-    position: relative;
-    left: -26px;
-    bottom: -5px;
-  }
+.oper-top .input {
+  position: relative;
+  left: -26px;
+  bottom: -5px;
+}
 
-  .pro span {
-    display: inline-block;
-    width: 100px;
-    text-align: right;
-  }
+.pro span {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+}
 
-  .inner-box {
-    overflow-x: scroll;
-  }
+.inner-box {
+  overflow-x: scroll;
+}
 </style>

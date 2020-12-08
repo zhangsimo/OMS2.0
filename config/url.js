@@ -9,7 +9,7 @@ const dev = {
   omsEdit: 'http://192.168.30.21:9240', // 9220salesOrder
   // omsOrder:'http://192.168.30.11:9210', //陈舒
   // omsSettle: "http://192.168.30.11:9270",
-  omsSettle: "http://192.168.30.21:9270",
+  omsSettle: "http://192.168.30.21:9270",//9270
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
   // omsEdit: '', // 9220salesOrder
@@ -62,7 +62,7 @@ const test = {
   // omsBatch: 'http://192.168.21.59:9260', // 9260
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.30.21:9270",
-  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
+  omsSettle: "http://192.168.30.97:9270",//9270
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   // omsSotck: "http://192.168.21.59:9280", //9280
   uploadApi:

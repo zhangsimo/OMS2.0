@@ -73,6 +73,9 @@
               <i class="iconfont iconchaxunicon mr5"></i>
               <span>查询</span>
             </button>
+             <button class="ivu-btn ivu-btn-default mr10" type="button" @click="getExport" v-has="'export'">
+              <span>导出</span>
+            </button>
             <button class="ivu-btn ivu-btn-default" type="button" @click="deleteFun">
               <span>删除</span>
             </button>
@@ -240,7 +243,7 @@ import quickDate from "@/components/getDate/dateget_noEmit.vue";
 import approval from "@/view/settlementManagement/bill/Popup/approval";
 import { goshop } from "@/api/settlementManagement/fundsManagement/capitalChain";
 import { approvalStatus } from "_api/base/user";
-
+import * as all from "_api/reportForm/index.js";
 import ExpenseReimbursement from "../component/ExpenseReimbursement";
 import OtherPayment from "../component/OtherPayment";
 import PublicRequest from "../component/PublicRequest";
@@ -475,6 +478,7 @@ export default {
   methods: {
     // 快速查询日期
     quickDate(data) {
+      this.page.num = 1;
       this.value = data;
       let obj = {
         startDate: this.value[0]
@@ -495,6 +499,7 @@ export default {
     },
     // 查询按钮
     query() {
+      this.page.num = 1;
       this.getList();
     },
     //获取仓库
@@ -514,7 +519,48 @@ export default {
         this.settleTypeList = res.data;
       }
     },
-
+    //导出
+    getExport(){
+      if (this.tableData.length <= 0) {
+        return this.$message.warning("暂无数据导出");
+      }
+       let data = {};
+       data.pagesize=this.page.total;
+      if (this.value.length != 0) {
+        data.startTime = this.value[0]? moment(this.value[0])
+          .startOf("day")
+          .format("YYYY-MM-DD HH:mm:ss"):"";
+        data.endTime = this.value[1]?moment(this.value[1])
+          .endOf("day")
+          .format("YYYY-MM-DD HH:mm:ss"):"";
+      }
+      data.billStatus = this.Reconciliationtype;
+      data.applyType = this.ApplicationType;
+      data.orgid = this.shopCode;
+      this.apply ? data.applicant = this.$store.state.user.userData.staffName : data
+      this.approve ? data.approveUname = this.$store.state.user.userData.staffName : data
+      switch (this.searchType) {
+        case "0":
+          data.applyNo = this.searchTypeValue!=""?this.searchTypeValue.trim():"";
+          break;
+        case "1":
+          data.applicant = this.searchTypeValue!=""?this.searchTypeValue.trim():"";
+          break;
+        case "2":
+          data.approveUname = this.searchTypeValue!=""?this.searchTypeValue.trim():"";
+          break;
+      }
+      let params="";
+      for (let d in data) {
+        if (!data[d]) {
+          delete data[d];
+        }
+      }
+      for (var i in data) {
+        params += `${i}=${data[i]}&`;
+      }
+      location.href = all.getPayablesExportba(params)
+    },
     //初始化数据
     async getList() {
       let params = {};
