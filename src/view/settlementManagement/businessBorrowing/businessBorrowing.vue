@@ -22,7 +22,14 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId"  :disabled="selectShopList" @on-change="query" class="w150" filterable clearable>
+            <Select
+              v-model="BranchstoreId"
+              :disabled="selectShopList"
+              @on-change="query"
+              class="w150"
+              filterable
+              clearable
+            >
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -43,6 +50,14 @@
             >
               <i class="iconfont iconchaxunicon mr5"></i>
               <span>查询</span>
+            </button>
+            <button
+            v-has="'export'"
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="getExport"
+            >
+              <span>导出</span>
             </button>
           </div>
         </div>
@@ -256,11 +271,7 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="其他信息">
-              <vxe-table-column
-                field="receiver"
-                title="收款人"
-                width="90"
-              >
+              <vxe-table-column field="receiver" title="收款人" width="90">
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
@@ -476,7 +487,9 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimPay" :loading="claimPayDis">认领</Button>
+      <Button class="ml10" @click="claimPay" :loading="claimPayDis"
+        >认领</Button
+      >
       <!--<Button class="ml10" v-else @click="claimCollection">预收款认领</Button>-->
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
@@ -510,23 +523,24 @@ import { creat } from "./../components";
 import Record from "./components/Record";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
 import * as api from "_api/settlementManagement/businessBorrowing";
+import * as all from "_api/reportForm/index.js";
 import {
   findAdvance,
   revoke,
-  findGuest
+  findGuest,
 } from "_api/settlementManagement/advanceCollection.js";
 import {
   findByDynamicQuery,
-  withdraw
+  withdraw,
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
 import { goshop } from "@/api/settlementManagement/shopList";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
 import writeOff from "./components/writeOff";
-import {showLoading, hideLoading} from "@/utils/loading"
+import { showLoading, hideLoading } from "@/utils/loading";
 // otherReceivables
 import moment from "moment";
-import ClaimModal from "./components/ClaimModal"
+import ClaimModal from "./components/ClaimModal";
 
 export default {
   inject: ["reload"],
@@ -539,7 +553,7 @@ export default {
     verification,
     writeOff,
     claimGuest,
-    ClaimModal
+    ClaimModal,
   },
   data() {
     return {
@@ -551,13 +565,13 @@ export default {
       value: [], //查询日期数组
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
-      Branchstore: [{ id: "0", name: "全部",shortName:"全部" }], //分店名称
+      Branchstore: [{ id: "0", name: "全部", shortName: "全部" }], //分店名称
       requestCode: "", //申请单号
       currRow: null, //选中行
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
       claimTit: "", //认领弹框标题
-      claimPayDis:false,//认领接口返回之前按钮不可点击
+      claimPayDis: false, //认领接口返回之前按钮不可点击
       revokeTit: "", //撤回弹框标题
       amt: null, //认领弹框金额
       bankNameO: "", //认领弹框对方户名
@@ -572,34 +586,39 @@ export default {
         num: 1,
         size: 10,
         total: 0,
-        opts: [20, 50, 100, 200]
+        opts: [20, 50, 100, 200],
       }, //分页
-      serviceId: "" //给子组件传的值
+      serviceId: "", //给子组件传的值
     };
   },
-  computed:{
-    selectShopList(){
-      if(this.$store.state.user.userData.currentCompany!=null){
-        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      }else{
-        return true
+  computed: {
+    selectShopList() {
+      if (this.$store.state.user.userData.currentCompany != null) {
+        return this.$store.state.user.userData.currentCompany.isMaster
+          ? true
+          : false;
+      } else {
+        return true;
       }
-    }
+    },
   },
   methods: {
     //获取门店
-    async getShop(){
-      let data ={}
-      let res = await goshop(data)
-      if (res.code === 0) return this.Branchstore = [...this.Branchstore , ...res.data]
+    async getShop() {
+      let data = {};
+      let res = await goshop(data);
+      if (res.code === 0)
+        return (this.Branchstore = [...this.Branchstore, ...res.data]);
     },
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.page.num=1;
       this.getQuery();
     },
     //查询
     query() {
+      this.page.num=1;
       this.getQuery();
     },
     //其他付款认领/其他收款收回
@@ -627,15 +646,15 @@ export default {
       // }
 
       if (type == 1) {
-        this.$refs.claimModal.open()
-        this.claimTitle = "因公借支认领"
-        this.claimType = 2
-        this.amountType = 2
+        this.$refs.claimModal.open();
+        this.claimTitle = "因公借支认领";
+        this.claimType = 2;
+        this.amountType = 2;
       } else {
-        this.$refs.claimModal.open()
-        this.claimTitle = "因公借支收回认领"
-        this.claimType = 3
-        this.amountType = 1
+        this.$refs.claimModal.open();
+        this.claimTitle = "因公借支收回认领";
+        this.claimType = 3;
+        this.amountType = 1;
       }
     },
     //其他收款认领弹窗查询
@@ -647,12 +666,12 @@ export default {
         size: this.$refs.claim.claimedPage.size,
         amountType: type,
         suppliers: this.companyId,
-        claimShopCode:this.$store.state.user.userData.currentCompany.code
+        claimShopCode: this.$store.state.user.userData.currentCompany.code,
       };
       if (this.bankNameO) {
         obj.reciprocalAccountName = this.bankNameO;
       }
-      claimedFund(obj).then(res => {
+      claimedFund(obj).then((res) => {
         if (res.code === 0) {
           this.$refs.claim.claimedData = res.data.content;
           this.$refs.claim.claimedPage.total = res.data.totalElements;
@@ -727,11 +746,38 @@ export default {
       }
       this.claimedList(t);
     },
+    //导出
+    getExport() {
+      if (this.tableData.length <= 0) {
+        return this.$message.warning("暂无数据导出");
+      }
+      let params = "";
+      let obj = {};
+      obj.startTime = this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+        : "";
+      obj.endTime = this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD 23:59:59")
+        : "";
+      obj.orgid=this.BranchstoreId == "0" ? "" : this.BranchstoreId,
+      obj.serviceId = this.requestCode;
+      obj.searchval = this.$refs.quickDate.searchQuick;
+      obj.pagesize = this.page.total;
+      for (let d in obj) {
+        if (!obj[d]) {
+          delete obj[d];
+        }
+      }
+      for (var i in obj) {
+        params += `${i}=${obj[i]}&`;
+      }
+      location.href = all.getPayablesExporttwo(params);
+    },
     //初始化
     getQuery() {
       let params = {
         size: this.page.size,
-        page: this.page.num - 1
+        page: this.page.num - 1,
       };
       let data = {
         startTime: this.value[0]
@@ -740,8 +786,8 @@ export default {
         endTime: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
-        orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
-        serviceId: this.requestCode
+        orgid: this.BranchstoreId == "0" ? "" : this.BranchstoreId,
+        serviceId: this.requestCode,
         // guestId: this.companyId,
       };
       for (let d in data) {
@@ -749,16 +795,19 @@ export default {
           delete data[d];
         }
       }
-      showLoading(".loadingClass", "数据加载中，请勿操作")
-      api.findListPageAll(params, data).then(res => {
-        if (res.code == 0) {
-          this.tableData = res.data.content;
-          this.page.total = res.data.totalElements;
-        }
-        hideLoading()
-      }).catch(e => {
-        hideLoading()
-      });
+      showLoading(".loadingClass", "数据加载中，请勿操作");
+      api
+        .findListPageAll(params, data)
+        .then((res) => {
+          if (res.code == 0) {
+            this.tableData = res.data.content;
+            this.page.total = res.data.totalElements;
+          }
+          hideLoading();
+        })
+        .catch((e) => {
+          hideLoading();
+        });
       this.serviceId = "";
       this.$refs.Record.init();
       this.currRow = null;
@@ -780,22 +829,23 @@ export default {
           }
         }
         let obj = {
-          financeAccountCashList: this.$store.state.businessBorrowing.financeAccountCashList,
+          financeAccountCashList: this.$store.state.businessBorrowing
+            .financeAccountCashList,
           loanId: this.$store.state.businessBorrowing.loanId,
           claimType: this.$store.state.businessBorrowing.claimType,
-        }
-        this.claimPayDis=true;
-        api.addClaim(obj).then(res => {
+        };
+        this.claimPayDis = true;
+        api.addClaim(obj).then((res) => {
           if (res.code === 0) {
-            this.claimPayDis=false;
-            this.$message.success('认领成功')
-            this.modal = false
-            this.getQuery()
+            this.claimPayDis = false;
+            this.$message.success("认领成功");
+            this.modal = false;
+            this.getQuery();
             // this.$parent.reload();
-          }else{
-            this.claimPayDis=false;
+          } else {
+            this.claimPayDis = false;
           }
-        })
+        });
         this.claimModal = false;
       } else {
         this.$message.error("请选择因公借支数据");
@@ -824,9 +874,9 @@ export default {
       let data = {
         revokeReason: this.reason.trim(),
         id: this.currRow.id,
-        sign: this.signType
+        sign: this.signType,
       };
-      api.loanRevoke(data).then(res => {
+      api.loanRevoke(data).then((res) => {
         if (res.code == 0) {
           this.$message.success("撤销成功");
           this.revoke = false;
@@ -839,13 +889,13 @@ export default {
       this.company = [];
       if (query != "") {
         this.remoteloading = true;
-        findGuest({ fullName: query, size: 20 }).then(res => {
+        findGuest({ fullName: query, size: 20 }).then((res) => {
           if (res.code === 0) {
             this.company = [];
-            res.data.content.map(item => {
+            res.data.content.map((item) => {
               this.company.push({
                 value: item.id,
-                label: item.fullName
+                label: item.fullName,
               });
             });
             this.remoteloading = false;
@@ -886,15 +936,15 @@ export default {
               "payAmt",
               "writeOffAmt",
               "returnClaimAmt",
-              "remainingAmt"
+              "remainingAmt",
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
           }
           return null;
-        })
+        }),
       ];
-    }
+    },
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
@@ -905,7 +955,7 @@ export default {
     this.getShop();
     // this.getOne();
     this.getQuery();
-  }
+  },
 };
 </script>
 
@@ -931,7 +981,7 @@ export default {
   border: 1px solid #e8eaec;
   flex: 1;
   line-height: 24px;
-  padding:0 5px;
+  padding: 0 5px;
 }
 .vxe-table .vxe-cell {
   padding: 0;

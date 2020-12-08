@@ -1,6 +1,7 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 // 会计审核
 
 // 会计审核查询
@@ -38,6 +39,10 @@ export function findListPageAllReport(params) {
     params
   });
 }
+//资金统计表的导出
+export function getPayablesExportwu(params){
+  return `${api.omsSettle}/omsFinanceAccountStatistical/export/findCashStatisticalReportStatements?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 
 // 费用报销管理 查询
 export function findByDynamicQuery(params, data) {
@@ -66,7 +71,10 @@ export function addClaim(data) {
     data,
   });
 }
-
+//现金流量表导出 
+export function getPayablesExportsix(params){
+  return `${api.omsSettle}/omsFinanceAccountCashFlow/export/findCashFlowReportStatements?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 // 现金流量表 查询
 export function findListPageAllCashFlow(params) {
   return axios.request({

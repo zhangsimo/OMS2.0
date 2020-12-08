@@ -1,6 +1,7 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 //转当期损益tab切换查询
 export function getSubjectMsg(data) {
   return axios.request({
@@ -33,6 +34,19 @@ export function distributionSelete(params) {
     method: "get",
     params
   });
+}
+//资金认领款核销--左边 
+export function getPayablesExportqileft(params){
+  return `${api.omsSettle}/capital/claim/verification/export/findPageByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//资金认领款核销右边第一个 
+
+export function getPayablesExportqirightone(params){
+  return `${api.omsSettle}/capital/claim/verification/export/findPageToBeClaimedFund?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//资金认领款核销--右边第二个
+export function getPayablesExportqirighttwo(params){
+  return `${api.omsSettle}/capital/claim/verification/export/findPageByQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
 //分配至本店
 export function distributionShop(data) {

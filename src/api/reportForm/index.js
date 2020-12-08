@@ -72,7 +72,19 @@ export function getDailySalesStatistics(data = {}, params) {
 export function getDailySalesStatisticsExport(params){
   return `${api.omsBatch}/sellReport/export?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
-// 进销存排行
+//因公借支管理
+export function getPayablesExporttwo(params){
+  return `${api.omsSettle}/omsFinanceLoanForBusiness/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//申请单的接口 --cashAccountServer/export/findCashAccount
+export function getPayablesExportba(params){
+  return `${api.omsSettle}/financeApplyMain/export/findPageByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+//现金日记账 --cashAccountServer/export/findCashAccount
+export function getPayablesExportnine(params){
+  return `${api.omsSettle}/cashAccountServer/export/findCashAccount?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
+// 进销存排行 
 export function getSalesAndInventoryList(data = {}, params) {
   return axios.request({
     url: `${api.omsBatch}`,
@@ -81,7 +93,6 @@ export function getSalesAndInventoryList(data = {}, params) {
     params,
   })
 }
-
 
 // 采购报表_采购订单明细
 export function getPjPchsOrderMainDetailList(data = {}, params) {
