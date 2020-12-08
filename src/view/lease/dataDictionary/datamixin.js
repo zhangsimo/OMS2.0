@@ -58,7 +58,7 @@ let typeCode = (rule, value, callback) => {
   if (!value&&value!==0) {
     callback(new Error('类型编码不能为空'));
   } else {
-    let reg = /^[0-9a-zA-Z]*$/g;
+    let reg = /^[a-zA-Z0-9_]*$/g;
     if(!reg.test(value)){
       callback('只能输入数字、字母')
     }else{

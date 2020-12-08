@@ -2,7 +2,7 @@
     <Modal v-model="subjectModelShowassist"  title="选择辅助核算" class="funtPa" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card" v-model="currTab">
-          <TabPane label="客户" name="client" :disabled="['3'].includes(assistTypeCode)">
+          <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(assistTypeCode)">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -55,7 +55,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier" :disabled="['3'].includes(assistTypeCode)">
+          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(assistTypeCode)">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -108,7 +108,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department" :disabled="['1','2','3'].includes(assistTypeCode)">
+          <TabPane label="部门" name="department" :disabled="!['3'].includes(assistTypeCode)">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -719,7 +719,7 @@ export default {
       this.AssistAccounting = row.userName;
       this.auxiliaryTypeCode = "4";
       this.auxiliaryCode = row.id;
-      this.voucherItem = {};
+      this.voucherItem = row;
     },
     //个人分页切换页数
     selectNumpersonage(page) {

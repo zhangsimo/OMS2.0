@@ -37,16 +37,9 @@
       <div class="inner-box">
         <Split v-model="split1">
           <div slot="left" v-show="!rightValue">
-            <h4 class="mb10 p5 pl10" style="background: #f2f2f2">
-              未核销对账单
-            </h4>
-            <!--            <span>快速查询：</span>-->
+            <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
             <div style="line-height: 36px">
-              <quickDate
-                class="w60 mr10"
-                ref="quickDate"
-                @quickDate="quickDate"
-              ></quickDate>
+              <quickDate class="w60 mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
               <span>申请日期：</span>
               <Date-picker
                 format="yyyy-MM-dd"
@@ -347,32 +340,44 @@
                       type="button"
                       :disabled="distributionLoading"
                       @click="distributionShop"
-                    >
-                      分配至本店
+                    >分配至本店
                     </button>
-                    <Tooltip
-                      :content="rightValue ? '缩小' : '放大'"
-                      placement="bottom"
-                    >
-                      <Icon
-                        @click.native="handleChangeRight"
-                        :custom="
-                          leftValue
-                            ? 'iconfont iconsuoxiaoicon icons'
-                            : 'iconfont iconkuodaicon icons'
-                        "
-                        style="cursor: pointer"
-                      ></Icon>
+                    <Tooltip :content="rightValue ? '缩小' : '放大'" placement="bottom">
+                      <Icon @click.native="handleChangeRight"
+                            :custom="leftValue ? 'iconfont iconsuoxiaoicon icons' : 'iconfont iconkuodaicon icons'"
+                            style="cursor: pointer;"></Icon>
                     </Tooltip>
                   </div>
-                  <Table
+                  <vxe-table
                     border
                     class="mt10"
-                    :columns="distribution"
+                    auto-resize
+                    resizable
+                    align="center"
+                    size="mini"
+                    show-overflow="title"
                     :data="distributionData"
                     max-height="550"
-                    @on-selection-change="distributionSelection"
-                  ></Table>
+                    @select-change="distributionSelection"
+                    @select-all="distributionSelection"
+                    @select-cancel="distributionSelection"
+                  >
+                    <vxe-table-column type="selection" width="60"></vxe-table-column>
+                    <vxe-table-column type="seq" title="序号" width="40"></vxe-table-column>
+                    <vxe-table-column field="businessType" title="业务类别" width="100"></vxe-table-column>
+                    <vxe-table-column field="createTime" title="发生日期" width="100"></vxe-table-column>
+                    <vxe-table-column field="incomeMoney" title="收入金额" width="100"></vxe-table-column>
+                    <vxe-table-column field="paidMoney" title="支出金额" width="100"></vxe-table-column>
+                    <vxe-table-column field="reciprocalAccountName" title="对方户名" width="100"></vxe-table-column>
+                    <vxe-table-column field="area" title="所属区域" width="100"></vxe-table-column>
+                    <vxe-table-column field="shopName" title="所属门店" width="100"></vxe-table-column>
+                    <vxe-table-column field="shopCode" title="所属店号" width="100"></vxe-table-column>
+                    <vxe-table-column field="accountName" title="账户" width="100"></vxe-table-column>
+                    <vxe-table-column field="accountCode" title="账号" width="100"></vxe-table-column>
+                    <vxe-table-column field="bankName" title="开户行" width="100"></vxe-table-column>
+                    <vxe-table-column field="mateAccountName" title="对应科目" width="100"></vxe-table-column>
+                    <vxe-table-column field="tradingNote" title="交易备注" width="100"></vxe-table-column>
+                  </vxe-table>
                   <Page
                     show-sizer
                     show-total
@@ -1311,10 +1316,35 @@ export default {
             this.accountNoWriteData = res.data.content;
             this.accountPage.total = res.data.totalElements;
           }
+          this.accountNoWriteLoading = false
+        }).catch(err => {
           this.accountNoWriteLoading = false;
         })
-        .catch((err) => {
-          this.accountNoWriteLoading = false;
+      },
+      //本店待认领款查询接口
+      claimedList() {
+        let obj = {
+          amount: this.amtClaim,
+          suppliers: this.companyIdClaim,
+          reciprocalAccountName: this.bankNameOClaim,
+          page: this.$refs.claim.claimedPage.page - 1,
+          size: this.$refs.claim.claimedPage.size,
+          claimShopCode: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.code ? this.$store.state.user.userData.currentCompany.code : '' : '',
+          orgId: this.model2,//分店
+          startDate: this.value2[0]
+            ? moment(this.value2[0]).format("YYYY-MM-DD") + " 00:00:00"
+            : "",    //开始时间参数
+          endDate: this.value2[1]
+            ? moment(this.value2[1]).format("YYYY-MM-DD") + " 23:59:59"
+            : "",     //结束时间参数
+          businessType: this.businessType || ""
+          // createTime:this.applyDate2 //日期查询时间发生日期
+        };
+        claimedFund(obj).then(res => {
+          if (res.code === 0) {
+            this.$refs.claim.claimedData = res.data.content;
+            this.$refs.claim.claimedPage.total = res.data.totalElements;
+          }
         });
     },
     //本店待认领款导出接口

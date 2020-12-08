@@ -455,7 +455,6 @@ export default {
   async mounted() {
     // this.$refs.partInfo.init();
     this.getShop();
-    // console.log(this.$store.state.user.userData)
     this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;
     this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = false;
     this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = false;
@@ -663,16 +662,16 @@ export default {
           this.$refs.OtherPayment.open();
           break;
         case "对账单":
-          this.$refs.statementApplication.init();
+          this.$refs.statementApplication.init(row);
           break;
         case "销售开票":
-          this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
+          this.$refs.salesInvoiceApplication.$refs.salepopup.open(row);
           break;
         case "不含税开票":
-          this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
+          this.$refs.taxExclusiveApplication.$refs.noTax.open(row);
           break;
         case "发票对冲":
-          this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
+          this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.open(row);
           break;
         case "客户信用调查":
           this.$refs.clientApply.init(row);
@@ -728,7 +727,6 @@ export default {
 
     //点击主列表本行数据
     currentChangeEvent({ row }) {
-      // console.log(row.processInstance)
       if (row.processInstance) {
         approvalStatus({ instanceId: row.processInstance }).then(res => {
           if (res.code == 0) {

@@ -361,6 +361,24 @@
       </div>
 
     </Modal>
+
+    <Modal
+      title="注意"
+      v-model="hsSkuNoPrice"
+      :styles="{ top: '50px', width: '700px' }"
+      :footer-hide="true"
+    >
+      <p v-for="item in hsSkuNoPriceArr" style="line-height: 24px">
+        配件编码 <strong>{{item.partCode}}</strong> 无华胜集团签约价，单价默认为 0 ,<span style="color: #f00">注意调整</span>
+      </p>
+      <div class="tc pb20 pt20">
+        <Button type="primary" class="w80" @click="setSaleOrder('formPlan')">确定提交</Button>
+        <Button class="w80" @click="hsSkuNoPrice=false" style="margin-left: 8px">取消</Button>
+      </div>
+
+    </Modal>
+
+
     <!--生成调拨申请单-->
     <Modal
       title="生成调拨申请单"
@@ -461,6 +479,9 @@
     },
     data() {
       return {
+        defaultSelecteRows:[],
+        hsSkuNoPrice:false,
+        hsSkuNoPriceArr:[],
         conditionData: {
           character: "",  // 快速查询
           status: '1',  //受理状态
@@ -640,6 +661,8 @@
         this.hsOrderList1 = [];
         this.showModel1 = false;
         this.showModel2 = false;
+        this.hsSkuNoPrice = false;
+        this.hsSkuNoPriceArr = [];
         this.getListData();
       },
       //转待处理 //取消待处理
@@ -781,31 +804,43 @@
       handleSubmit (name) {
         this.$refs[name].validate(async (valid) => {
           if (valid) {
-            let reqData = {...this.formPlan};
-            let detailList = this.selectTableDataArr.map(item => {
-              let objData = {...item}
-              delete objData.id;
-              return objData
-            })
-            reqData.detailList = detailList;
-            reqData.detailList.map(item => {
-              item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty;
-            });
-            reqData.sign = 999;
-            reqData.orderType = 0;
-            let res = await getSave(reqData);
-            if (res.code === 0) {
-              this.modal3 = true;
-              let objData = res.data||{}
-              this.danhao = objData.serviceId;
-              this.modal3Text = "生成销售订单成功";
-              this.changeListStatus(2,1);
+            this.hsSkuNoPriceArr = this.selectTableDataArr.filter(item => item.orderPrice==null)
+            if(this.hsSkuNoPriceArr.length>0){
+              this.hsSkuNoPrice = true;
             }else{
-              this.$Message.error("操作失败，请重试");
+              this.setSaleOrder();
             }
           }
         })
       },
+      async setSaleOrder(v){
+        let reqData = {...this.formPlan};
+        let detailList = this.selectTableDataArr.map(item => {
+          let objData = {...item}
+          delete objData.id;
+          if(v&&objData.orderPrice==null){
+            objData.orderPrice = 0;
+          }
+          return objData
+        })
+        reqData.detailList = detailList;
+        reqData.detailList.map(item => {
+          item.orderQty = item.orderQty-item.allotOrderQty-item.sellOrderQty;
+        });
+        reqData.sign = 999;
+        reqData.orderType = 0;
+        let res = await getSave(reqData);
+        if (res.code === 0) {
+          this.modal3 = true;
+          let objData = res.data||{}
+          this.danhao = objData.serviceId;
+          this.modal3Text = "生成销售订单成功";
+          this.changeListStatus(2,1);
+        }else{
+          this.$Message.error("操作失败，请重试");
+        }
+      },
+
 
       //生成调拨申请单
       generateApplicationOrder(type){//1按本店缺货数量生成 2按订单数量生成

@@ -642,7 +642,7 @@
         ></Page>
       </div>
       <!--      点击查看显示-->
-      <enter-stock ref="look" :mainData="selectTableData"></enter-stock>
+      <enter-stock ref="look" :mainData="selectTableData" :storeArr="storeList" :searchForm="searchForm"></enter-stock>
     </section>
     <Modal
       title="仓位设置"
@@ -1022,7 +1022,7 @@
           })
           if (this.shopkeeper != 1 && this.shopId != this.searchForm.old) {
             this.$nextTick(() => {
-              //this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('cz'))
+              this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('cz'))
               this.$refs.xTable2.hideColumn(this.$refs.xTable2.getColumnByField('stockQty'))
             })
           } else {
