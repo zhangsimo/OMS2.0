@@ -1114,19 +1114,23 @@
         //   data.partCode = data.partCode.trim();
         // }
         let boolAjax=true;
-        if(data.partName&&data.partName.length<3){
-          boolAjax=false;
-          return this.$Message.error("请输入不小于三位的配件名称/编码/OEM码!")
-        }
-        if(data.partId&&data.partId.length<3){
-          boolAjax=false;
-          return this.$Message.error("请输入不小于三位的配件内码!")
-        }
         if (data.partName) {
-          data.partId = data.partId.trim();
+          data.partName = data.partName.trim();
         }
         if (data.partId) {
           data.partId = data.partId.trim();
+        }
+        if(!data.partName&&!data.partId){
+          boolAjax=false;
+          this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
+        }
+        if(data.partName&&data.partName.length<3){
+          boolAjax=false;
+          this.$Message.error("请输入不小于三位的配件名称/编码/OEM码!")
+        }
+        if(data.partId&&data.partId.length<3){
+          boolAjax=false;
+          this.$Message.error("请输入不小于三位的配件内码!")
         }
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
