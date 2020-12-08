@@ -1098,6 +1098,31 @@ export default [
     ]
   },
   {
+    path: "/aftersale",
+    name: "afterSale",
+    mark: "11",
+    redirect: "/reportForm",
+    meta: { keepAlive: true,
+      icon: "md-brush",
+      // icon: "ios-paper",
+      title: "售后模块"
+    },
+    component: Main,
+    children: [
+      {
+        path: '/draftingOfApplication',
+        name: 'documentApprovalDraftingOfApplication',
+        // redirect: "/multilevel/level_2_1",
+        mark: '11001',
+        meta: { keepAlive: true,
+          title: '售后一',
+
+        },
+        component: () =>
+          import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
+      }]
+  },
+  {
     path: "/documentApproval",
     name: "documentApproval",
     mark: "11",
