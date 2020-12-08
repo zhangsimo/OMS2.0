@@ -34,27 +34,34 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
-            <Input
-              v-model="searchForm.partCode"
-              placeholder="品牌编码"
-              class="w100 mr10"
-              @on-enter="serch"
-            />
+<!--            <Input-->
+<!--              v-model="searchForm.partCode"-->
+<!--              placeholder="品牌编码"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="serch"-->
+<!--            />-->
+<!--            <Input-->
+<!--              v-model="searchForm.partName"-->
+<!--              placeholder="名称"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="serch"-->
+<!--            />-->
+<!--            <Input-->
+<!--              v-model="searchForm.oemCode"-->
+<!--              placeholder="OEM码"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="serch"-->
+<!--            />-->
+
             <Input
               v-model="searchForm.partName"
-              placeholder="名称"
-              class="w100 mr10"
+              placeholder="请输入配件名称/编码/OEM码"
+              class="w200 mr10"
               @on-enter="serch"
             />
             <Input
               v-model="searchForm.partId"
               placeholder="内码"
-              class="w100 mr10"
-              @on-enter="serch"
-            />
-            <Input
-              v-model="searchForm.oemCode"
-              placeholder="OEM码"
               class="w100 mr10"
               @on-enter="serch"
             />
@@ -1097,14 +1104,26 @@
       async getAllStocks() {
         let data = {};
         data = JSON.parse(JSON.stringify(this.searchForm));
+        // if (data.partName) {
+        //   data.partName = data.partName.trim();
+        // }
+        // if (data.oemCode) {
+        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
+        // }
+        // if (data.partCode) {
+        //   data.partCode = data.partCode.trim();
+        // }
+        let boolAjax=true;
+        if(data.partName.length<3){
+          boolAjax=false;
+          return this.$Message.error("请输入不小于三位的配件名称/编码/OEM码!")
+        }
+        if(data.partId.length<3){
+          boolAjax=false;
+          return this.$Message.error("请输入不小于三位的配件内码!")
+        }
         if (data.partName) {
-          data.partName = data.partName.trim();
-        }
-        if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/\s+/g,'');
-        }
-        if (data.partCode) {
-          data.partCode = data.partCode.trim();
+          data.partId = data.partId.trim();
         }
         if (data.partId) {
           data.partId = data.partId.trim();
@@ -1120,42 +1139,44 @@
         data.noStock = data.noStock ? 1 : 0;
         this.loading1 = true;
         this.contentOne.dataOne = [];
-        try {
+        if(boolAjax){
+          try {
 
-          showLoading('.loadingClass');
-          let res = await getAllStock(data);
-          this.loading1 = false;
-          if (res.code == 0) {
-            this.contentOne.dataOne = res.data.content;
-            this.contentOne.page.total = res.data.totalElements;
-            let row = res.data.content[0];
-            if (row != undefined) {
-              this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+            showLoading('.loadingClass');
+            let res = await getAllStock(data);
+            this.loading1 = false;
+            if (res.code == 0) {
+              this.contentOne.dataOne = res.data.content;
+              this.contentOne.page.total = res.data.totalElements;
+              let row = res.data.content[0];
+              if (row != undefined) {
+                this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+              }
+              this.bands1 = [];
+              let arr = res.data.content.map(el => el.partBrand);
+              let set = new Set(arr);
+              set.forEach(el => {
+                this.bands1.push({label: el, value: el});
+              });
+              this.$nextTick(() => {
+                const xtable = this.$refs.xTable2;
+                const column = xtable.getColumnByField('partBrand');
+                xtable.setFilter(column, this.bands1);
+                xtable.updateData();
+              })
+
+              // this.columnsPart[6].filters = this.bands1;
+              this.getColumns();
             }
-            this.bands1 = [];
-            let arr = res.data.content.map(el => el.partBrand);
-            let set = new Set(arr);
-            set.forEach(el => {
-              this.bands1.push({label: el, value: el});
-            });
-            this.$nextTick(() => {
-              const xtable = this.$refs.xTable2;
-              const column = xtable.getColumnByField('partBrand');
-              xtable.setFilter(column, this.bands1);
-              xtable.updateData();
-            })
-
-            // this.columnsPart[6].filters = this.bands1;
-            this.getColumns();
+            hideLoading()
+          } catch (error) {
+            hideLoading()
           }
-          hideLoading()
-        } catch (error) {
-          hideLoading()
-        }
-        let res1 = await PtabulatData(data);
-        if (res1.code == 0) {
-          this.total1 = res1.data;
-          // console.log(res1.data);
+          let res1 = await PtabulatData(data);
+          if (res1.code == 0) {
+            this.total1 = res1.data;
+            // console.log(res1.data);
+          }
         }
       },
       //汇总分页
