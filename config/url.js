@@ -102,7 +102,7 @@ const audit = {
   tokenApi: "https://uatapi2.g-part.cn",
   wmsApi: "https://uatapi2.g-part.cn/oms-system-provider",
   omsProduct: "https://uatapi2.g-part.cn/oms-product-provider",
-  omsOrder: "https://uatapi2.g-art.cn/oms-order-provider",
+  omsOrder: "https://uatapi2.g-part.cn/oms-order-provider",
   passportApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
