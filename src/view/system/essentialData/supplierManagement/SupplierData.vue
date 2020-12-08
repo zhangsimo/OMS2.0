@@ -92,6 +92,7 @@
         :data="clientList"
         :provincearr="provinceArr"
         :treelist="treeDiagramList"
+        :dis="nameChange"
         ref="child"
       ></ClientData>
       <div class="footerMargin" slot="footer">
@@ -306,6 +307,7 @@ export default {
       managementList: [],
       clientDataShow: false,
       clientList: {},
+      nameChange:false,
       supplierTypeOne: "", //供应商类型
       pitchSupplierOne: "",
       supplier: "", //左侧id
@@ -399,6 +401,7 @@ export default {
     addClient() {
       this.clientList = {};
       this.clientDataShow = true;
+      this.nameChange=false;
       this.$refs.child.$refs.form.resetFields();
       this.$refs.child.financeList=[]
       this.$refs.child.invoice=[]
@@ -449,6 +452,7 @@ export default {
       this.clientList = this.pitchSupplierOne;
       this.$refs.child.financeList=this.clientList.guestAccountVoList
       this.$refs.child.invoice=this.clientList.guestTaxpayerVOList
+      this.nameChange=true;
     },
     //批量上传失败
     onFormatError(file) {

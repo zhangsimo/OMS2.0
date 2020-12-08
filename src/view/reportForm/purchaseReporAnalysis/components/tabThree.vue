@@ -16,7 +16,7 @@
     >
       <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="50"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130"></vxe-table-column>
-      <vxe-table-column show-overflow="tooltip" field="partBrandCode" title="品牌编码" width="90"></vxe-table-column>
+      <!--<vxe-table-column show-overflow="tooltip" field="partBrandCode" title="品牌编码" width="90"></vxe-table-column>-->
       <vxe-table-column show-overflow="tooltip" field="partBrand" title="品牌名称" width="100"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="enterQty" remote-sort title="入库数量" width="100"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="enterAmt" remote-sort title="入库金额" width="100"></vxe-table-column>
@@ -54,7 +54,8 @@
         },
         pageOpts: [10, 20, 30, 50],
         body: {},
-        tableData: []
+        tableData: [],
+        totalObj:{}
       };
     },
     mounted() {
@@ -69,6 +70,10 @@
         };
         showLoading()
         let res = await api.getPurchaseReporAnalysis(this.body, params);
+        let resp2 = await api.pchsEnterMain(this.body)
+        if(resp2.code==0){
+          this.totalObj = resp2.data||{};
+        }
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             return el;
@@ -173,7 +178,7 @@
                 "trueAmt",
               ].includes(column.property)
             ) {
-              return this.$utils.sum(data, column.property);
+              return this.totalObj[column.property]||0
             }
             return null;
           })

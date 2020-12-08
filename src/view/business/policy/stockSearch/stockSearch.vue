@@ -642,7 +642,7 @@
         ></Page>
       </div>
       <!--      点击查看显示-->
-      <enter-stock ref="look" :mainData="selectTableData"></enter-stock>
+      <enter-stock ref="look" :mainData="selectTableData" :storeArr="storeList" :searchForm="searchForm"></enter-stock>
     </section>
     <Modal
       title="仓位设置"

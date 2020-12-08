@@ -1,22 +1,42 @@
 <template>
-  <div class="content-oper content-oper-flex loadingClass" style="background-color: #fff;">
+  <div
+    class="content-oper content-oper-flex loadingClass"
+    style="background-color: #fff"
+  >
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db ml15">
             <span>区域：</span>
-            <Select v-model="model1" filterable class="w150" @on-change="changeArea" :disabled="selectShopList">
+            <Select
+              v-model="model1"
+              filterable
+              class="w150"
+              @on-change="changeArea"
+              :disabled="selectShopList"
+            >
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.companyName }}</Option>
+                >{{ item.companyName }}</Option
+              >
             </Select>
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="shopCode" filterable class="w150" :disabled="selectShopList">
-              <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
+            <Select
+              v-model="shopCode"
+              filterable
+              class="w150"
+              :disabled="selectShopList"
+            >
+              <Option
+                v-for="item in shopListArr"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.shortName }}</Option
+              >
             </Select>
           </div>
           <div class="db ml15">
@@ -27,16 +47,16 @@
             <span>开户行：</span>
             <input type="text" class="h30" v-model="bankName" />
           </div>
-<!--          <div class="db ml15">-->
-<!--            <span>对应科目：</span>-->
-<!--            <Select v-model="subjectCode" filterable class="w150">-->
-<!--              <Option-->
-<!--                v-for="item in subJectList"-->
-<!--                :value="item.id"-->
-<!--                :key="item.id"-->
-<!--              >{{ item.titleName }}</Option>-->
-<!--            </Select>-->
-<!--          </div>-->
+          <!--          <div class="db ml15">-->
+          <!--            <span>对应科目：</span>-->
+          <!--            <Select v-model="subjectCode" filterable class="w150">-->
+          <!--              <Option-->
+          <!--                v-for="item in subJectList"-->
+          <!--                :value="item.id"-->
+          <!--                :key="item.id"-->
+          <!--              >{{ item.titleName }}</Option>-->
+          <!--            </Select>-->
+          <!--          </div>-->
           <div class="db ml15">
             <span>对应科目：</span>
             <el-cascader
@@ -44,14 +64,32 @@
               size="small"
               :options="options"
               @change="getKemuList"
-              :props="{ multiple: true, children: 'children',label:'titleName',value:'titleCode' }"
+              :props="{
+                multiple: true,
+                children: 'children',
+                label: 'titleName',
+                value: 'titleCode',
+              }"
               collapse-tags
-              clearable></el-cascader>
+              clearable
+            ></el-cascader>
           </div>
           <div class="db ml15">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="query"
+            >
               <i class="iconfont iconchaxunicon mr5"></i>
               <span>查询</span>
+            </button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              v-has="'export'"
+              type="button"
+              @click="getExport"
+            >
+              <span>导出</span>
             </button>
           </div>
           <div class="db ml5">
@@ -68,7 +106,7 @@
       </div>
     </section>
     <section>
-      <div style="width: 98%;margin: 0 auto">
+      <div style="width: 98%; margin: 0 auto">
         <vxe-table
           border
           show-footer
@@ -84,14 +122,27 @@
           size="mini"
           :data="tableData"
         >
-          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column
+            type="seq"
+            title="序号"
+            width="60"
+          ></vxe-table-column>
           <vxe-table-column field="area" title="所属区域"></vxe-table-column>
-          <vxe-table-column field="shopName" title="所属门店"></vxe-table-column>
-          <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
+          <vxe-table-column
+            field="shopName"
+            title="所属门店"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="shopCode"
+            title="所属店号"
+          ></vxe-table-column>
           <vxe-table-column field="accountName" title="账户"></vxe-table-column>
           <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
           <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-          <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
+          <vxe-table-column
+            field="mateAccountName"
+            title="对应科目"
+          ></vxe-table-column>
           <vxe-table-column field="shopList" title="连锁待分配款项显示门店">
             <template v-slot="{ row }">
               <span v-for="item in row.shopList">{{ item.shopName }};</span>
@@ -110,29 +161,32 @@
     </section>
     <div>
       <!--新增/修改弹框-->
-      <information-registration ref="informationShow" :ChangeData="ChangeData"></information-registration>
+      <information-registration
+        ref="informationShow"
+        :ChangeData="ChangeData"
+      ></information-registration>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  are
-} from "@/api/settlementManagement/fundsManagement/capitalChain";
-import { goshop } from '@/api/settlementManagement/shopList';
+import { are } from "@/api/settlementManagement/fundsManagement/capitalChain";
+import { goshop } from "@/api/settlementManagement/shopList";
 import { getTableList } from "@/api/accountant/accountant";
 import informationRegistration from "./components/informationRegistration";
-import {showLoading, hideLoading} from "@/utils/loading"
+import { showLoading, hideLoading } from "@/utils/loading";
+import * as api from "_api/reportForm/index.js";
 import {
+  getPayablesExportsi,
   findListPageAll,
   addData,
   updateData,
-  deleterowData
+  deleterowData,
 } from "@/api/settlementManagement/fundsManagement/accountRegistration";
 export default {
   name: "accountRegistration",
   components: {
-    informationRegistration
+    informationRegistration,
   },
   data() {
     return {
@@ -147,18 +201,20 @@ export default {
       tableData: [], //表格数据
       oneList: [], //当前表格数据
       ChangeData: {}, //给子组件传的当前行的数据
-      mateAccountCode:'',//对应科目
-      options:[]
+      mateAccountCode: "", //对应科目
+      options: [],
     };
   },
-  computed:{
-    selectShopList(){
-      if(this.$store.state.user.userData.currentCompany!=null){
-        return this.$store.state.user.userData.currentCompany.isMaster ? true : false
-      }else{
-        return true
+  computed: {
+    selectShopList() {
+      if (this.$store.state.user.userData.currentCompany != null) {
+        return this.$store.state.user.userData.currentCompany.isMaster
+          ? true
+          : false;
+      } else {
+        return true;
       }
-    }
+    },
   },
   methods: {
     //获取全部地址
@@ -171,27 +227,30 @@ export default {
     //获取门店
     async getShop() {
       let data = {};
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         data.supplierTypeSecond = this.shopCode;
-      })
+      });
       let res = await goshop(data);
       if (res.code === 0) {
         this.shopListArr = [...this.shopListArr, ...res.data];
-        this.shopCode = this.$store.state.user.userData.currentShopId ||"";
+        this.shopCode = this.$store.state.user.userData.currentShopId || "";
         this.getList(); //查询
       }
-      if(this.Branchstore.length>0){
-        this.Branchstore.map(item=>{
-          this.shopListArr.map(item2=>{
-            if(this.selectShopList){
-              if(item.parentId==item2.supplierTypeFirst && item.id==item2.supplierTypeSecond){
-                this.model1=item.id
+      if (this.Branchstore.length > 0) {
+        this.Branchstore.map((item) => {
+          this.shopListArr.map((item2) => {
+            if (this.selectShopList) {
+              if (
+                item.parentId == item2.supplierTypeFirst &&
+                item.id == item2.supplierTypeSecond
+              ) {
+                this.model1 = item.id;
               }
-            }else{
-              this.model1=0
+            } else {
+              this.model1 = 0;
             }
-          })
-        })
+          });
+        });
       }
     },
 
@@ -205,39 +264,47 @@ export default {
     // },
     //获取科目
     async getTreeListFun() {
-      let rep2 = await getTableList({parentCode: 101})
+      let rep2 = await getTableList({ parentCode: 101 });
       if (rep2.code == 0) {
         let content = rep2.data || [];
-        this.options = this.treeDataFun(content)
+        this.options = this.treeDataFun(content);
       }
     },
     treeDataFun(content) {
-      let level1 = content.filter(item => item.titleLevel === 1 && (item.titleCode == '1001' || item.titleCode == '1002' || item.titleCode == '1012'));
+      let level1 = content.filter(
+        (item) =>
+          item.titleLevel === 1 &&
+          (item.titleCode == "1001" ||
+            item.titleCode == "1002" ||
+            item.titleCode == "1012")
+      );
       return this.treeFilterData(level1, content);
     },
     treeFilterData(treeData, content) {
-      treeData.map(item => {
-        let arrData = content.filter(item1 => item1.parentCode == item.titleCode);
+      treeData.map((item) => {
+        let arrData = content.filter(
+          (item1) => item1.parentCode == item.titleCode
+        );
         if (arrData.length > 0) {
-          item.children = this.treeFilterData(arrData, content)
+          item.children = this.treeFilterData(arrData, content);
         } else {
-          item.children = null
+          item.children = null;
         }
-      })
-      return treeData
+      });
+      return treeData;
     },
     getKemuList(v) {
       if (v.length == 0) {
-        return this.mateAccountCode = ""
+        return (this.mateAccountCode = "");
       }
-      let req = []
-      v.map(item => {
+      let req = [];
+      v.map((item) => {
         if (item.length > 0) {
-          let end = item.slice(-1)
-          req.push(end.join(''))
+          let end = item.slice(-1);
+          req.push(end.join(""));
         }
-      })
-      this.mateAccountCode = req.join(',')
+      });
+      this.mateAccountCode = req.join(",");
     },
     //切换地址重新调取门店接口
     changeArea() {
@@ -251,7 +318,33 @@ export default {
     query() {
       this.getList();
     },
-
+    //导出
+    getExport() {
+      if (this.tableData.length <= 0) {
+        return this.$message.warning("暂无数据导出");
+      }
+      let data = {};
+      data.areaId = this.model1 == "0" ? "" : this.model1
+      data.shopNumber = this.shopCode;
+      data.accountName = this.accountName;
+      data.bankName = this.bankName;
+      data.mateAccountCode =
+        this.mateAccountCode.toString().split(",").length <= 0
+          ? ""
+          : this.mateAccountCode;
+      data.sign = "账户登记";
+      let params = "";
+      for (let d in data) {
+        if (!data[d]) {
+          delete data[d];
+        }
+      }
+      for (var i in data) {
+        params += `${i}=${data[i]}&`;
+      }
+      console.log(params);
+      location.href =getPayablesExportsi(params)
+    },
     //初始化数据
     getList() {
       let params = {};
@@ -270,19 +363,21 @@ export default {
       if (this.mateAccountCode != 0) {
         params.mateAccountCode = this.mateAccountCode;
       }
-      params.sign="账户登记";
-      showLoading(".loadingClass", "数据加载中，请勿操作")
-      findListPageAll(params).then(res => {
-        if (res.code == 0) {
-          this.tableData = res.data.content;
-          this.tableData.map(item => {
-            item.shopList = JSON.parse(item.shopNameList);
-          });
-        }
-        hideLoading()
-      }).catch(e => {
-        hideLoading()
-      });
+      params.sign = "账户登记";
+      showLoading(".loadingClass", "数据加载中，请勿操作");
+      findListPageAll(params)
+        .then((res) => {
+          if (res.code == 0) {
+            this.tableData = res.data.content;
+            this.tableData.map((item) => {
+              item.shopList = JSON.parse(item.shopNameList);
+            });
+          }
+          hideLoading();
+        })
+        .catch((e) => {
+          hideLoading();
+        });
     },
 
     //新增
@@ -292,7 +387,7 @@ export default {
         shopNumber: "0",
         mateAccountName: "",
         shopListName: "",
-        shopCode: ""
+        shopCode: "",
       };
       this.$refs.informationShow.information = true;
       this.$refs.informationShow.$refs.ModelValidate.resetFields();
@@ -307,12 +402,12 @@ export default {
     compileEvent(row) {
       row.areaId = row.areaId.toString();
       row.shopNumber = row.shopNumber.toString();
-      let shoplist= row.shopList.map(item => {
+      let shoplist = row.shopList.map((item) => {
         return item.id;
       });
       // row.shopList
       if (JSON.parse(row.shopNameList).length > 0) {
-        row.shopListName = JSON.parse(row.shopNameList).map(item => {
+        row.shopListName = JSON.parse(row.shopNameList).map((item) => {
           return item.shopName;
         });
         row.shopListName = row.shopListName.toString();
@@ -332,7 +427,7 @@ export default {
         shopListName: row.shopListName,
         shopList: shoplist,
         area: row.area,
-        shopName: row.shopName
+        shopName: row.shopName,
       };
       this.$refs.informationShow.information = true;
     },
@@ -345,7 +440,7 @@ export default {
         onOk: async () => {
           let params = {};
           params.id = row.id;
-          deleterowData(params).then(res => {
+          deleterowData(params).then((res) => {
             if (res.code == 0) {
               this.$Message.success("删除成功！");
               this.getList();
@@ -354,15 +449,15 @@ export default {
         },
         onCancel: () => {
           this.$Message.warning("删除取消！");
-        }
+        },
       });
-    }
+    },
   },
   mounted() {
     this.getAllAre(); //获取区域
-    this.getShop()
+    this.getShop();
     this.getTreeListFun(); //获取科目
-  }
+  },
 };
 </script>
 

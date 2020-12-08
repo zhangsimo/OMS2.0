@@ -326,7 +326,8 @@ export default {
           }
         ]
       }, //发票数据表单验证规则
-      copyData: [] //深拷贝处理
+      copyData: [], //深拷贝处理
+      row: {},//申请单选中的数据
       // num: 0 //表格数量合计
     };
   },
@@ -375,6 +376,10 @@ export default {
     });
   },
   methods: {
+    open(row){
+      this.modal1 = true
+      this.row = row
+    },
     // 对话框是否显示
     async visChange(flag) {
       if (flag) {
@@ -393,7 +398,7 @@ export default {
             this.copyData = res.data;
           }
         });
-        if (this.modelType.type === 3) {
+        if (this.modelType.type === 1) {
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
           this.formInline.applicant = user.staffName;
@@ -404,6 +409,8 @@ export default {
           this.formInline.applyTypeName = "不含税开票申请";
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
+        }else{
+          this.formInline = this.row
         }
         if (this.modelType.id) {
           let data = {}

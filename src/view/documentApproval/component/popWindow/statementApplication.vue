@@ -52,36 +52,41 @@ export default {
       }, //所有数据对象
       modelShow: false,
       allList:{},//获取返回所有数据
+      row: {}, //申请单页面选择的数据
     };
   },
   methods: {
     // 对账单弹框出现加载数据
     async hander(type) {
       if (type) {
-          let data ={};
-          data.id = this.modelType.id || ''
-          let res = await getThisAllList(data);
-          if(res.code == 0){
-            this.allList = res.data
-            this.$set( this.formInline , 'applyNo' , res.data.one[0].accountNo )
-            // this.formInline.applyNo = res.data.one[0].accountNo;
+          if(this.modelType.type == 1){
+            let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+              user = this.$store.state.user.userData;
+            this.formInline.applicant = user.staffName;
+            this.formInline.deptName =
+              user.groups[user.groups.length - 1].name || " 　　";
+            this.formInline.shopCode = user.shopCode || " 　　";
+            this.formInline.orgName = user.shopName;
+            this.formInline.applyTypeName = "对账单申请";
+            this.formInline.applyTime = date;
+            this.formInline.paymentOrgName = user.shopName;
+          }else{
+            this.getList()
           }
 
-          let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-            user = this.$store.state.user.userData;
-          this.formInline.applicant = user.staffName;
-          this.formInline.deptName =
-            user.groups[user.groups.length - 1].name || " 　　";
-          this.formInline.shopCode = user.shopCode || " 　　";
-          this.formInline.orgName = user.shopName;
-          this.formInline.applyTypeName = "对账单申请";
-          this.formInline.applyTime = date;
-          this.formInline.paymentOrgName = user.shopName;
         }
         this.$nextTick( ()=> {
-          // console.log(this.$refs.reconcil)
           this.$refs.reconcil.Initialization();
         })
+      },
+      async getList(){
+        let data ={};
+        data.id = this.modelType.id || ''
+        let res = await getThisAllList(data);
+        if(res.code == 0){
+          this.allList = res.data
+          this.formInline = this.row
+        }
       },
 
     //保存提交关闭模态框
@@ -89,8 +94,9 @@ export default {
       this.modelShow = false
       this.$emit("updateD")
     },
-    init() {
+    init(row) {
       this.hander();
+      this.row = row
       this.modelShow = true
     },
   }

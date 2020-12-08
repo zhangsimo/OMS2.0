@@ -39,7 +39,8 @@ export default {
   props: {
     sizeString:""
   },
-  created() {},
+  created() {
+  },
   mounted() {
     this.getval(this.searchQuick)
   },
