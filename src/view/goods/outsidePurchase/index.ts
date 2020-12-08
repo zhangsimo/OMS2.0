@@ -536,9 +536,13 @@ export default class OutsidePurchase extends Vue {
 
     let zero = tools.isZero(this.tableData, {qty: "orderQty", price: "orderPrice"});
     if(zero) return;
-
+    let txt="是否提交";
+    if(this.selectTableRow.advanceAmt&&this.selectTableRow.advanceAmt>0){
+      txt = '该单有预付款，审批通过之后，需点击【预付款入库】来操作入库';
+    }
     this.$Modal.confirm({
-      title: '是否提交',
+      title: '提示',
+      content:txt,
       onOk: async () => {
         let data: any = this.formdata(refname);
         if (!data) return;
