@@ -414,6 +414,9 @@ export default {
     //确认添加一条信息
     addNewSupplier() {
       this.$refs.child.$refs.form.validate(async valid => {
+        if(this.clientList2.supplierTypeFirst=="0"){
+          valid=false;
+        }
         if (valid) {
           let data = this.clientList;
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
