@@ -78,11 +78,11 @@
               序号
             </th>
             <th
-              style="width:15%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:13%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件编码
             </th>
             <th
-              style="width:10%;padding: 2px 0;font-size: 12px; font-weight: 400;border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:12%;padding: 2px 0;font-size: 12px; font-weight: 400;border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件名称
             </th>
             <th
@@ -94,7 +94,7 @@
               品牌
             </th>
             <th
-              style="width: 7%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 6%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               车型
             </th>
             <th
@@ -102,15 +102,15 @@
               规格
             </th>
             <th
-              style="width: 6%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 4%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               单位
             </th>
             <th
-              style="width: 6%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 5%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               数量
             </th>
             <th
-              style="width: 8%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 7%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               单价
             </th>
             <th
@@ -118,7 +118,7 @@
               金额
             </th>
             <th
-              style="width: 10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-bottom:1px solid #000;">
+              style="width: 15%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-bottom:1px solid #000;">
               仓位
             </th>
           </tr>
@@ -226,10 +226,13 @@
               <span style="color:#000;font-size: 14px;font-weight: 600;">备注：{{onelist.remark}}</span>
             </td>
           </tr>
+          <tr>
+            <td colspan="12" style="padding: 0;margin: 0">
+              <span style="color:#000;font-size: 14px;">兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！</span>
+            </td>
+          </tr>
           </tbody>
         </table>
-        <p style="color:#000;font-size:14px;padding:0 2px;margin-top: 0px;">
-          兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！</p>
       </div>
       <div class="titler" v-if="onelist.name.startsWith('销售退货')">
         <table class="gridtable">
