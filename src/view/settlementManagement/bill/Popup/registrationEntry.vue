@@ -430,6 +430,13 @@
             if (res.code === 0) {
               this.$Message.success("新增开票成功")
               this.getInvoiceSellerList()
+              this.addInoiceOne={
+                taxpayerName: "",  //开票名称
+                taxpayerCode: "",  //税号
+                taxpayerTel: "",   //地址电话
+                accountBankNo: "", //开户银行
+                taxpayerSign: true //是否为一般纳税人
+              }
             }
           })
         })

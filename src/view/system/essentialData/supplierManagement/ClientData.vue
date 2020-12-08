@@ -619,15 +619,7 @@
                 {
                   on: {
                     click: () => {
-                      this.invoice.map(item => {
-                        if (item.id == params.row.id) {
-                          item.taxpayerSign = !item.taxpayerSign;
-                        } else {
-                          if (item.taxpayerSign) {
-                            item.taxpayerSign = false;
-                          }
-                        }
-                      });
+                      params.row.taxpayerSign = !params.row.taxpayerSign;
                       this.disposeTax();
                     }
                   }
@@ -648,6 +640,7 @@
         ],
         invoice: [],
         newInoiceShow: false, //开票
+        bankId:0,
         tit: "新增开票", //开票弹窗
         tableComData:[],//门店数组
       };
@@ -834,7 +827,7 @@
         this.addInoiceOne = {};
         this.tit = "新增开票";
         this.newInoiceShow = true;
-        this.$refs.AddInoice.data = {}
+        this.$refs.AddInoice.data = {taxpayerSign:false}
         this.$refs.AddInoice.resetFields();
       },
       //修改银行
@@ -849,8 +842,7 @@
       },
       deletBank() {
         this.invoice.map(item => {
-          if (this.addInoiceOne.id == undefined) {
-            // bankId
+          if (!this.addInoiceOne.id) {
             if (item.bankId == this.addInoiceOne.bankId) {
               item.taxpayerType = !item.taxpayerType;
             } else {
@@ -874,6 +866,7 @@
             newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
             newarr.bankId = this.bankId;
             newarr.taxpayerType = true
+            newarr.taxpayerSign = newarr.taxpayerSign || false;
             this.bankId++;
             this.invoice.push(newarr);
             this.data.guestTaxpayerVOList = this.invoice;
@@ -890,7 +883,7 @@
                   item.taxpayerCode = newarr.taxpayerCode;
                   item.taxpayerTel = newarr.taxpayerTel;
                   item.accountBankNo = newarr.accountBankNo;
-                  item.taxpayerSign = newarr.taxpayerSign || true;
+                  item.taxpayerSign = newarr.taxpayerSign;
                   item.taxpayerType = true
                 }
               } else {
@@ -901,7 +894,7 @@
                   item.taxpayerCode = newarr.taxpayerCode;
                   item.taxpayerTel = newarr.taxpayerTel;
                   item.accountBankNo = newarr.accountBankNo;
-                  item.taxpayerSign = newarr.taxpayerSign || true;
+                  item.taxpayerSign = newarr.taxpayerSign;
                   item.taxpayerType = true
                 }
               }
