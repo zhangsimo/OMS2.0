@@ -1135,13 +1135,13 @@
           boolAjax=false;
           this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
         }
-        if(data.partName&&data.partName.length<3){
+        if(data.partName&&data.partName.length<2){
           boolAjax=false;
-          this.$Message.error("请输入不小于三位的配件名称/编码/OEM码!")
+          this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
         }
-        if(data.partId&&data.partId.length<3){
+        if(data.partId&&data.partId.length<2){
           boolAjax=false;
-          this.$Message.error("请输入不小于三位的配件内码!")
+          this.$Message.error("请输入不小于两位的配件内码!")
         }
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
@@ -1242,13 +1242,13 @@
           boolAjax=false;
           this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
         }
-        if(data.partName&&data.partName.length<3){
+        if(data.partName&&data.partName.length<2){
           boolAjax=false;
-          this.$Message.error("请输入不小于三位的配件名称/编码/OEM码!")
+          this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
         }
-        if(data.partId&&data.partId.length<3){
+        if(data.partId&&data.partId.length<2){
           boolAjax=false;
-          this.$Message.error("请输入不小于三位的配件内码!")
+          this.$Message.error("请输入不小于两位的配件内码!")
         }
 
         if (data.storeIds[0] == 1) {
