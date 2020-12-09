@@ -55,7 +55,7 @@
           <div class="db">
             <Button
               class="mr10"
-              @click="submit('formplanref')"
+              @click="submit('formplanref','yfk')"
               :disabled="selectRowState!='待收货'||!selectTableRow.advanceAmt||selectTableRow.isWms"
               v-has="'submit'"
               :loading='commitLoading'
