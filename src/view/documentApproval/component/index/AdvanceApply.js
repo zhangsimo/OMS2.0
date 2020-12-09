@@ -276,7 +276,6 @@ export default {
     },
 
     changeThisA({row}){
-      // console.log(row.applyAmt)
     },
     //选择单据
     SelectTheDocuments() {
@@ -325,7 +324,6 @@ export default {
           // if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
           //   valg = parseFloat(this.formInline.details[0].payAmt) < parseFloat(this.formInline.applyAmt) ? true : false
           // }
-          // console.log(this.formInline,valg,1111)
           // if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
           for(let i = 0; i < this.formInline.details.length; i++){
             if(Number(this.formInline.details[i].applyAmt) <= 0){
