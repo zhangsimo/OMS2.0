@@ -253,7 +253,8 @@
             auxiliaryName: value.fullName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
             isSubject: 1,
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -267,10 +268,11 @@
             mateAccountName: this.obj.titleName,
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryName: value.userName, //辅助核算名称
+            auxiliaryCode: value.code || value.id, //辅助核算项目编码
             isSubject: 1,
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         } else if (value.itemName) {
           this.BusinessType.push({
@@ -282,13 +284,13 @@
             unAmtLeft: 0,
             mateAccountCode: this.obj.titleCode,
             mateAccountName: this.obj.titleName,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            auxiliaryTypeCode: value.dictCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryName: value.itemName, //辅助核算名称
+            auxiliaryCode: value.itemCode, //辅助核算项目编码
             isSubject: 1,
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
-
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         }
       });

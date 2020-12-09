@@ -161,7 +161,7 @@ export default {
         let objItem = this.$refs.voucherInput.voucherItem;
         if(objItem.hasOwnProperty("id")){
           data.suppliersBean = {
-            guestSourceName:objItem.fullName||"",
+            guestSourceName:objItem.name||"",
             guestSourceId:objItem.id||""
           }
         }else {

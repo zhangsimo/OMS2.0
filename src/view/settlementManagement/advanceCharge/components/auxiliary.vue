@@ -585,7 +585,8 @@ export default {
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
-                this.AssistAccounting.paymentTypeCode = this.formDynamic.fund;
+                this.AssistAccounting.paymentTypeCode = this.formDynamic.code;
+                this.AssistAccounting.paymentTypeName = this.formDynamic.fund;
                 this.$emit("ChildContent", this.AssistAccounting);
                 bus.$emit("ChildContent", this.AssistAccounting);
                 this.subjectModelShowassist = false;
