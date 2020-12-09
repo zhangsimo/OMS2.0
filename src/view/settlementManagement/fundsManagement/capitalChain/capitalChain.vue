@@ -752,7 +752,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import { creat } from "../../components";
 import importXLS from "../../components/importXLS";
 import artificial from "../../components/artificial";
-import * as api from "_api/reportForm/index.js";
+// import * as api from "_api/reportForm/index.js";
 import {
   are,
   impUrl,
@@ -969,35 +969,35 @@ export default {
       this.getList();
     },
     //导出
-    getExport() {
-      if (this.tableData.length <= 0||this.tableData1.length <= 0||this.tableData2.length <= 0) {
-        return this.$message.warning("暂无数据导出");
-      }
-      let data = {};
-      data.startTime = this.value[0]
-        ? moment(this.value[0]).format("YYYY-MM-DD")
-        : "";
-      data.endTime = this.value[1]
-        ? moment(this.value[1]).format("YYYY-MM-DD")
-        : "";
-      data.areaId = this.model1;
-      data.shopNumber = this.shopCode;
-      data.subjectId = this.subjectCode.length<=0?"": this.subjectCode;
-      data.accountName = this.accountName;
-      data.bankName = this.bankName;
-      data.pagesize = this.page.total
-      data.PageType=1
-      let params = '';
-      for (let d in data) {
-        if (!data[d]) {
-          delete data[d];
-        }
-      }
-      for (var i in data) {
-        params += `${i}=${data[i]}&`;
-      }
-      location.href = api.getPayablesExportsan(params);
-    },
+    // getExport() {
+    //   if (this.tableData.length <= 0||this.tableData1.length <= 0||this.tableData2.length <= 0) {
+    //     return this.$message.warning("暂无数据导出");
+    //   }
+    //   let data = {};
+    //   data.startTime = this.value[0]
+    //     ? moment(this.value[0]).format("YYYY-MM-DD")
+    //     : "";
+    //   data.endTime = this.value[1]
+    //     ? moment(this.value[1]).format("YYYY-MM-DD")
+    //     : "";
+    //   data.areaId = this.model1;
+    //   data.shopNumber = this.shopCode;
+    //   data.subjectId = this.subjectCode.length<=0?"": this.subjectCode;
+    //   data.accountName = this.accountName;
+    //   data.bankName = this.bankName;
+    //   data.pagesize = this.page.total
+    //   data.PageType=1
+    //   let params = '';
+    //   for (let d in data) {
+    //     if (!data[d]) {
+    //       delete data[d];
+    //     }
+    //   }
+    //   for (var i in data) {
+    //     params += `${i}=${data[i]}&`;
+    //   }
+    //   location.href = api.getPayablesExportsan(params);
+    // },
     //获取表格信息
     async getList() {
       let data = {};

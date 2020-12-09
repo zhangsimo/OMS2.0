@@ -112,12 +112,24 @@
           <vxe-table-column
             field="payAmt"
             title="计划预付款"
-          ></vxe-table-column>
-          <vxe-table-column field="orderAmt" title="订单金额"></vxe-table-column>
-          <vxe-table-column field="hasApplyAmt" title="已申请金额"></vxe-table-column>
+          >
+          <template v-slot="{row}">
+              <span>{{Number(row.payAmt).toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="orderAmt" title="订单金额">
+            <template v-slot="{row}">
+              <span>{{Number(row.orderAmt).toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="hasApplyAmt" title="已申请金额">
+            <template v-slot="{row}">
+              <span>{{Number(row.hasApplyAmt).toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="申请前剩余金额" field="lastAmt">
             <template v-slot="{row}">
-              <span>{{Number(row.orderAmt) - Number(row.hasApplyAmt) - Number(row.adjustAmt)}}</span>
+              <span>{{(Number(row.orderAmt) - Number(row.hasApplyAmt) - Number(row.adjustAmt)).toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="applyAmt"  title="本次申请金额" :edit-render="{name: 'input', attrs: {type: 'number', disabled: modelType},events: {change: changeThisA}}">
