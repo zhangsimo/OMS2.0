@@ -4,7 +4,7 @@
     <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card" v-model="TabsChoose">
-          <TabPane label="客户" name="client" :disabled="subjectChoose.auxiliaryAccountingCode!='1' && subjectChoose.auxiliaryAccountingCode!='2'">
+          <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -57,7 +57,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier" :disabled="subjectChoose.auxiliaryAccountingCode!='1' && subjectChoose.auxiliaryAccountingCode!='2'">
+          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -110,7 +110,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="部门" name="department" :disabled="subjectChoose.auxiliaryAccountingCode!='3'">
+          <TabPane label="部门" name="department" :disabled="!['3'].includes(subjectChoose.auxiliaryAccountingCode)">
             <Form :label-width="50" ref="form">
               <FormItem label="部门:" prop="groundIds">
                 <Cascader
@@ -172,7 +172,7 @@
               />
             </div>
           </TabPane>
-          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3','4'].includes(subjectChoose.auxiliaryAccountingCode)">
+          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div class="Other">
               <div class="OtherLeft">
                 <ul>
@@ -255,9 +255,9 @@
             style="width: 300px"
           >
             <FormItem label="款项分类:" prop="fund">
-              <Select v-model="formDynamic.fund" placeholder="请选择">
+              <Select v-model="formDynamic.fund" placeholder="请选择" @on-change="dynamicChange">
                 <Option
-                  v-for="item in fundList"
+                  v-for="item in fundListZanshi"
                   :value="item.itemName"
                   :key="item.id"
                 >{{ item.itemName }}</Option>
@@ -364,7 +364,8 @@ export default {
       TabsChoose: 'client', //默认的tab页
       Classification: false, //款项分类下拉框是否显示
       formDynamic: {
-        fund: "" //款项分类
+        fund: "", //款项分类,
+        code: ''
       },
       ruleValidateTwo: {
         fund: [
@@ -382,6 +383,15 @@ export default {
     };
   },
   methods: {
+    dynamicChange(v){
+      console.log(v)
+      this.fundListZanshi.forEach(item => {
+        if(item.itemName === v){
+          this.formDynamic.code = item.itemCode
+        }
+      })
+      console.log(this.formDynamic.code,'cccc')
+    },
     // 客户刷新初始化
     ClientgetList() {
       let params = {};
@@ -570,7 +580,10 @@ export default {
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
-                this.AssistAccounting.paymentTypeCode = this.formDynamic.fund;
+                console.log(this.AssistAccounting,'aaaaa')
+                this.AssistAccounting.paymentTypeCode = this.formDynamic.code;
+                this.AssistAccounting.paymentTypeName = this.formDynamic.fund;
+                console.log(this.AssistAccounting,'bbbbb')
                 this.$emit("ChildContent", this.AssistAccounting);
                 bus.$emit("ChildContent", this.AssistAccounting);
                 this.subjectModelShowassist = false;
@@ -721,10 +734,10 @@ export default {
       kmType(params).then(res => {
         this.fundList = res.data;
         console.log(this.fundList)
-        // this.fundListZanshi=this.fundList.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
-        // if(this.fundListZanshi.length<1){
-        //   this.Classification=false;
-        // }
+        this.fundListZanshi=this.fundList.filter(vb=>this.subjectChoose.titleCode.indexOf(vb.itemValueOne)!=-1)
+        if(this.fundListZanshi.length<1){
+          this.Classification=false;
+        }
       });
     },
   },
