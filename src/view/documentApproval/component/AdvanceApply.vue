@@ -133,7 +133,6 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="applyAmt"  title="本次申请金额" :edit-render="{name: 'input', attrs: {type: 'number', disabled: modelType},events: {change: changeThisA}}">
-    
           </vxe-table-column>
 
         </vxe-table>
