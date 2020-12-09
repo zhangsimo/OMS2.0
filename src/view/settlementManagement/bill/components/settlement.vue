@@ -205,7 +205,6 @@
       bus.$on("accountHedNo", val => {
         this.reconciliationStatement.accountNo =
           this.reconciliationStatement.accountNo + "," + val.accountNo;
-        // console.log(val,1111)
         val.two.map(item => {
           item.businessTypeName = item.businessType.name;
         });
@@ -253,7 +252,8 @@
             auxiliaryName: value.fullName, //辅助核算名称
             auxiliaryCode: value.code,//辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : ''
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -270,7 +270,8 @@
             auxiliaryName: value.userName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : ''
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         } else if (value.itemName) {
           this.BusinessType.push({
@@ -287,7 +288,8 @@
             auxiliaryName: value.itemName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : ''
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         }
       });
