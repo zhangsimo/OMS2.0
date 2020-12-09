@@ -58,12 +58,14 @@
               placeholder="请输入配件名称/编码/OEM码"
               class="w200 mr10"
               @on-enter="serch"
+              clearable
             />
             <Input
               v-model="searchForm.partId"
               placeholder="内码"
               class="w100 mr10"
               @on-enter="serch"
+              clearable
             />
             <Select
               filterable
@@ -359,12 +361,14 @@
               v-model="searchForm1.partName"
               placeholder="请输入配件名称/编码/OEM码"
               class="w200 mr10"
+              clearable
               @on-enter="queryBatch"
             ></Input>
             <Input
               v-model="searchForm1.partId"
               placeholder="内码"
               class="w100 mr10"
+              clearable
               @on-enter="queryBatch"
             ></Input>
             <Select
