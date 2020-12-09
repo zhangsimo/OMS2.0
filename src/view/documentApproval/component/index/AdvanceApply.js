@@ -263,9 +263,9 @@ export default {
         let last = Number(v.orderAmt) - Number(v.hasApplyAmt) - Number(v.adjustAmt)
         this.$set(v,'lastAmt', last)
         if(Number(v.hasApplyAmt) === 0){
-          v.applyAmt = v.orderAmt
+          v.applyAmt = Number(v.orderAmt).toFixed(2)
         }else{
-          v.applyAmt = v.lastAmt
+          v.applyAmt = Number(v.lastAmt).toFixed(2)
         }
         return v
       })
