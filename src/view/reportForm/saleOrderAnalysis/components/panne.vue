@@ -45,18 +45,18 @@
                     <Input type="text" class="w300 ml5" v-model="search.guestCode"/>
                   </FormItem>
                   <FormItem label="客户名称: " class="h20">
-                    <!--<Input type="text" class="w300 ml5" v-model="search.guestName"/>-->
-                    <Select
-                      v-model="search.guestId"
-                      filterable
-                      class="ml5"
-                      style="width: 300px"
-                      placeholder="客户名称"
-                      remote
-                      :remote-method="getAllClient"
-                      :loading="loading">
-                      <Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.shortName}}</Option>
-                    </Select>
+                    <Input type="text" class="w300 ml5" v-model="search.guestName"/>
+                    <!--<Select-->
+                      <!--v-model="search.guestId"-->
+                      <!--filterable-->
+                      <!--class="ml5"-->
+                      <!--style="width: 300px"-->
+                      <!--placeholder="客户名称"-->
+                      <!--remote-->
+                      <!--:remote-method="getAllClient"-->
+                      <!--:loading="loading">-->
+                      <!--<Option v-for="(item, index) in clientList" :value="item.id" :key="index">{{item.shortName}}</Option>-->
+                    <!--</Select>-->
                   </FormItem>
 <!--                  <FormItem label="客户分类: " class="h20">-->
 <!--                    <el-cascader-->
