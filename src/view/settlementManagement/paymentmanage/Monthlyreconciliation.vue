@@ -2142,6 +2142,9 @@
       //确认添加一条信息
       addNewSupplier() {
         this.$refs.child2.$refs.form.validate(async valid => {
+          if(this.clientList2.supplierTypeFirst=="0"){
+            valid=false;
+          }
           if (valid) {
             let data = this.clientList2;
             data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
