@@ -558,13 +558,13 @@ export default {
     radioChangeEventPersonage({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
+      this.AssistAccounting.auxiliaryTypeCode = "4"
       // this.auxiliaryCode = row.userName;
     },
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "CW0011X";
-      this.AssistAccounting.auxiliaryTypeCode = "CW0011X"
       // this.auxiliaryCode = row.itemCode;
     },
     //辅助核算确定弹框
