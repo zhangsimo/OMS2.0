@@ -250,6 +250,7 @@ export const mixSelectPartCom = {
       this.loading = true;
       let req = {};
       let params = {};
+      let boolParams=false;
       if (this.selectTreeItem.id) {
         req.typeId = this.selectTreeItem.typeId;
       }
@@ -258,6 +259,14 @@ export const mixSelectPartCom = {
       }
       params.page = this.page.num - 1;
       params.size = this.page.size;
+      if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
+        boolParams=true
+      }
+      if(boolParams){
+        this.$Message.error("最少有一个筛选条件")
+        this.loading = false;
+        return false
+      }
       if(this.keyType!=1){
         req.guestId=this.guestId;
         req.storeId=this.storeId;

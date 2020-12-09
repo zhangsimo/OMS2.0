@@ -53,6 +53,16 @@
             >
           </div>
           <div class="db">
+            <Button
+              class="mr10"
+              @click="submit('formplanref','yfk')"
+              :disabled="selectRowState!='待收货'||!selectTableRow.advanceAmt||selectTableRow.isWms"
+              v-has="'submit'"
+              :loading='commitLoading'
+            ><i class="iconfont mr5 iconziyuan2"></i>预付款入库</Button
+            >
+          </div>
+          <div class="db">
             <Button @click="print" class="mr10" :disabled="selectTableRow === null"
             v-has="'print'"
             ><i class="iconfont mr5 icondayinicon"></i> 打印</Button

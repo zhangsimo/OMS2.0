@@ -30,10 +30,10 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="30" />
+                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  :disabled="dis" />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
-                <Input v-model="data.fullName" style="width: 180px" />
+                <Input v-model="data.fullName" style="width: 180px"  :disabled="dis" />
               </FormItem>
               <FormItem label="拼音码:">
                 <Input v-model="spellCode" style="width: 180px" readonly/>
@@ -420,7 +420,8 @@ export default {
     treelist: {
       type: Array,
       default: ()=>[]
-    }
+    },
+    dis:""
   },
   data() {
     const contactorTel = (rule, value, callback) => {
@@ -668,15 +669,7 @@ export default {
               {
                 on: {
                   click: () => {
-                    this.invoice.map(item => {
-                      if (item.id == params.row.id) {
-                        item.taxpayerSign = !item.taxpayerSign;
-                      } else {
-                        if (item.taxpayerSign) {
-                          item.taxpayerSign = false;
-                        }
-                      }
-                    });
+                    params.row.taxpayerSign = !params.row.taxpayerSign;
                     this.disposeTax();
                   }
                 }
@@ -1269,7 +1262,7 @@ export default {
       this.addInoiceOne = {};
       this.tit = "新增开票";
       this.newInoiceShow = true;
-      this.$refs.AddInoice.data={}
+      this.$refs.AddInoice.data={taxpayerSign:false}
       this.$refs.AddInoice.resetFields();
     },
     // 确认新增
@@ -1280,6 +1273,7 @@ export default {
           newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
           newarr.bankId = this.bankId;
           newarr.taxpayerType=true
+          newarr.taxpayerSign = newarr.taxpayerSign || false;
           this.bankId++;
           this.invoice.push(newarr);
           this.data.guestTaxpayerVOList = this.invoice;
@@ -1296,7 +1290,7 @@ export default {
                 item.taxpayerCode = newarr.taxpayerCode;
                 item.taxpayerTel = newarr.taxpayerTel;
                 item.accountBankNo = newarr.accountBankNo;
-                item.taxpayerSign = newarr.taxpayerSign || true;
+                item.taxpayerSign = newarr.taxpayerSign;
                 item.taxpayerType=true
               }
             }else{
@@ -1307,7 +1301,7 @@ export default {
                 item.taxpayerCode = newarr.taxpayerCode;
                 item.taxpayerTel = newarr.taxpayerTel;
                 item.accountBankNo = newarr.accountBankNo;
-                item.taxpayerSign = newarr.taxpayerSign || true;
+                item.taxpayerSign = newarr.taxpayerSign;
                 item.taxpayerType=true
               }
             }

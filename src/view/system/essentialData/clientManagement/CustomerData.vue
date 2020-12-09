@@ -92,6 +92,7 @@
         :data="clientList"
         :provincearr="provinceArr"
         :treelist="treeDiagramList"
+        :dis="nameChange"
         ref="child"
       ></ClientData>
       <div slot="footer">
@@ -288,6 +289,7 @@ export default {
       moreQueryShow: false,
       clientDataShow: false,
       clientList: {},
+      nameChange:false,//客户供应商全称简称不可修改
       supplier: "", //客户信息
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -411,6 +413,7 @@ export default {
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
       this.clientDataShow = true;
+      this.nameChange=false;
       this.$refs.child.handleReset()
       this.$refs.child.getClienlist();
     },
@@ -467,6 +470,7 @@ export default {
           this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
           this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
           this.$refs.child.financeList=this.clientList.guestAccountVoList
+          this.nameChange=true;
         }
         // console.log(this.clientList);
         this.clientDataShow = true;

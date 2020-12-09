@@ -383,7 +383,7 @@
       cancelContent(type) {
         if (type == 0) {//更多点击取消 先清空再关闭
           this.resetMoreReseach()
-          this.search.enterDate = ThisMonthStr()
+          // this.search.enterDate = ThisMonthStr()
           this.moreModel = false;
         } else if (type == 1) {//更多查询点击清空查询
           this.resetMoreReseach();

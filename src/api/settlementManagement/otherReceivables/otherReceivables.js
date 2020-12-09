@@ -1,6 +1,8 @@
 //====================  其他应收款管理  ========================
 import axios from "@/libs/api.request";
 import api from "_conf/url";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 
 // 获取主表
 export function findByDynamicQuery(params,data) {
@@ -11,7 +13,10 @@ export function findByDynamicQuery(params,data) {
     data
   });
 }
-
+//其他应收款管理导出
+export function getPayablesExportone(params){
+  return `${api.omsSettle}/otherCollectAmt/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
+}
 //其它付款认领撤回、核销撤回、收款收回撤回
 export function withdraw(data) {
   return axios.request({

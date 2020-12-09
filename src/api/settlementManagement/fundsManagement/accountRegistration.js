@@ -1,6 +1,8 @@
 // 账户登记表
 import axios from "@/libs/api.request";
 import api from "_conf/url";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 //查询接口
 export function findListPageAll(params) {
   return axios.request({
@@ -9,6 +11,10 @@ export function findListPageAll(params) {
     method: "get",
     params
   });
+}
+//导出接口
+export function getPayablesExportsi(params){
+  return `${api.omsSettle}/omsFinanceAccountRegister/export/findListPageAll?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
 //新增接口
 export function addData(data) {

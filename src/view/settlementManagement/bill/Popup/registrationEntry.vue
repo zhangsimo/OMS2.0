@@ -430,6 +430,13 @@
             if (res.code === 0) {
               this.$Message.success("新增开票成功")
               this.getInvoiceSellerList()
+              this.addInoiceOne={
+                taxpayerName: "",  //开票名称
+                taxpayerCode: "",  //税号
+                taxpayerTel: "",   //地址电话
+                accountBankNo: "", //开户银行
+                taxpayerSign: true //是否为一般纳税人
+              }
             }
           })
         })
@@ -668,7 +675,7 @@
             taxRate: 0.13,
             payType: "DG",
             invoiceSort: "CG",
-            invoicePurchaserId: this.$store.state.user.userData.currentShopId || "",
+            invoicePurchaserId:"",
             invoiceSellerName: this.invoiceSellerList[this.invoiceSellerList.length-1] ? this.invoiceSellerList[this.invoiceSellerList.length-1].taxpayerName : "",
             billingType: statementType === 1 ? "0" : "YP",
             taxAmt:'',

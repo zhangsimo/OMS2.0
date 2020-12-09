@@ -111,7 +111,7 @@ export function advanceCollectionExport(params){
 export function otherPayableExport(params){
   return `${api.omsSettle}/otherAccountsPayment/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
-//费用报销 导出
+//费用报销 导出 omsFinanceCostReimbursement/export/findByDynamicQuery
 export function expensereimbursementExport(params){
   return `${api.omsSettle}/omsFinanceCostReimbursement/export/findByDynamicQuery?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }

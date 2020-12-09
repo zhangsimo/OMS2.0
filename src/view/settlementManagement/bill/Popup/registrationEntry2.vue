@@ -5,6 +5,7 @@
       type="button"
       @click="addAccount"
       v-has="'examine'"
+      disabled
     >增加核销对账单
     </button>
     <button

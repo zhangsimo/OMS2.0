@@ -34,29 +34,38 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
-            <Input
-              v-model="searchForm.partCode"
-              placeholder="品牌编码"
-              class="w100 mr10"
-              @on-enter="serch"
-            />
+<!--            <Input-->
+<!--              v-model="searchForm.partCode"-->
+<!--              placeholder="品牌编码"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="serch"-->
+<!--            />-->
+<!--            <Input-->
+<!--              v-model="searchForm.partName"-->
+<!--              placeholder="名称"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="serch"-->
+<!--            />-->
+<!--            <Input-->
+<!--              v-model="searchForm.oemCode"-->
+<!--              placeholder="OEM码"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="serch"-->
+<!--            />-->
+
             <Input
               v-model="searchForm.partName"
-              placeholder="名称"
-              class="w100 mr10"
+              placeholder="请输入配件名称/编码/OEM码"
+              class="w200 mr10"
               @on-enter="serch"
+              clearable
             />
             <Input
               v-model="searchForm.partId"
               placeholder="内码"
               class="w100 mr10"
               @on-enter="serch"
-            />
-            <Input
-              v-model="searchForm.oemCode"
-              placeholder="OEM码"
-              class="w100 mr10"
-              @on-enter="serch"
+              clearable
             />
             <Select
               filterable
@@ -329,28 +338,37 @@
         <div class="oper-top flex" ref="operTop1">
           <div class="pt10">
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
-            <Input
-              v-model="searchForm1.partCode"
-              placeholder="品牌编码"
-              class="w100 mr10"
-              @on-enter="queryBatch"
-            ></Input>
+<!--            <Input-->
+<!--              v-model="searchForm1.partCode"-->
+<!--              placeholder="品牌编码"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="queryBatch"-->
+<!--            ></Input>-->
+<!--            <Input-->
+<!--              v-model="searchForm1.partName"-->
+<!--              placeholder="名称"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="queryBatch"-->
+<!--            ></Input>-->
+<!--            <Input-->
+<!--              v-model="searchForm1.oemCode"-->
+<!--              placeholder="OEM码"-->
+<!--              class="w100 mr10"-->
+<!--              @on-enter="queryBatch"-->
+<!--            ></Input>-->
+
             <Input
               v-model="searchForm1.partName"
-              placeholder="名称"
-              class="w100 mr10"
+              placeholder="请输入配件名称/编码/OEM码"
+              class="w200 mr10"
+              clearable
               @on-enter="queryBatch"
             ></Input>
             <Input
               v-model="searchForm1.partId"
               placeholder="内码"
               class="w100 mr10"
-              @on-enter="queryBatch"
-            ></Input>
-            <Input
-              v-model="searchForm1.oemCode"
-              placeholder="OEM码"
-              class="w100 mr10"
+              clearable
               @on-enter="queryBatch"
             ></Input>
             <Select
@@ -642,7 +660,7 @@
         ></Page>
       </div>
       <!--      点击查看显示-->
-      <enter-stock ref="look" :mainData="selectTableData"></enter-stock>
+      <enter-stock ref="look" :mainData="selectTableData" :storeArr="storeList" :searchForm="searchForm"></enter-stock>
     </section>
     <Modal
       title="仓位设置"
@@ -1097,17 +1115,33 @@
       async getAllStocks() {
         let data = {};
         data = JSON.parse(JSON.stringify(this.searchForm));
+        // if (data.partName) {
+        //   data.partName = data.partName.trim();
+        // }
+        // if (data.oemCode) {
+        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
+        // }
+        // if (data.partCode) {
+        //   data.partCode = data.partCode.trim();
+        // }
+        let boolAjax=true;
         if (data.partName) {
           data.partName = data.partName.trim();
         }
-        if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/\s+/g,'');
-        }
-        if (data.partCode) {
-          data.partCode = data.partCode.trim();
-        }
         if (data.partId) {
           data.partId = data.partId.trim();
+        }
+        if(!data.partName&&!data.partId){
+          boolAjax=false;
+          this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
+        }
+        if(data.partName&&data.partName.length<2){
+          boolAjax=false;
+          this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
+        }
+        if(data.partId&&data.partId.length<2){
+          boolAjax=false;
+          this.$Message.error("请输入不小于两位的配件内码!")
         }
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
@@ -1120,42 +1154,44 @@
         data.noStock = data.noStock ? 1 : 0;
         this.loading1 = true;
         this.contentOne.dataOne = [];
-        try {
+        if(boolAjax){
+          try {
 
-          showLoading('.loadingClass');
-          let res = await getAllStock(data);
-          this.loading1 = false;
-          if (res.code == 0) {
-            this.contentOne.dataOne = res.data.content;
-            this.contentOne.page.total = res.data.totalElements;
-            let row = res.data.content[0];
-            if (row != undefined) {
-              this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+            showLoading('.loadingClass');
+            let res = await getAllStock(data);
+            this.loading1 = false;
+            if (res.code == 0) {
+              this.contentOne.dataOne = res.data.content;
+              this.contentOne.page.total = res.data.totalElements;
+              let row = res.data.content[0];
+              if (row != undefined) {
+                this.shopkeeper = Reflect.has(row, "isMaster") ? row.isMaster : 0;
+              }
+              this.bands1 = [];
+              let arr = res.data.content.map(el => el.partBrand);
+              let set = new Set(arr);
+              set.forEach(el => {
+                this.bands1.push({label: el, value: el});
+              });
+              this.$nextTick(() => {
+                const xtable = this.$refs.xTable2;
+                const column = xtable.getColumnByField('partBrand');
+                xtable.setFilter(column, this.bands1);
+                xtable.updateData();
+              })
+
+              // this.columnsPart[6].filters = this.bands1;
+              this.getColumns();
             }
-            this.bands1 = [];
-            let arr = res.data.content.map(el => el.partBrand);
-            let set = new Set(arr);
-            set.forEach(el => {
-              this.bands1.push({label: el, value: el});
-            });
-            this.$nextTick(() => {
-              const xtable = this.$refs.xTable2;
-              const column = xtable.getColumnByField('partBrand');
-              xtable.setFilter(column, this.bands1);
-              xtable.updateData();
-            })
-
-            // this.columnsPart[6].filters = this.bands1;
-            this.getColumns();
+            hideLoading()
+          } catch (error) {
+            hideLoading()
           }
-          hideLoading()
-        } catch (error) {
-          hideLoading()
-        }
-        let res1 = await PtabulatData(data);
-        if (res1.code == 0) {
-          this.total1 = res1.data;
-          // console.log(res1.data);
+          let res1 = await PtabulatData(data);
+          if (res1.code == 0) {
+            this.total1 = res1.data;
+            // console.log(res1.data);
+          }
         }
       },
       //汇总分页
@@ -1185,15 +1221,36 @@
         if (data.partName) {
           data.partName = data.partName.trim();
         }
-        if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/\s+/g,'');
+        // if (data.oemCode) {
+        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
+        // }
+        // if (data.partCode) {
+        //   data.partCode = data.partCode.trim();
+        // }
+        if (data.partId) {
+          data.partId = data.partId.trim();
         }
-        if (data.partCode) {
-          data.partCode = data.partCode.trim();
+
+        let boolAjax=true;
+        if (data.partName) {
+          data.partName = data.partName.trim();
         }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
+        if(!data.partName&&!data.partId){
+          boolAjax=false;
+          this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
+        }
+        if(data.partName&&data.partName.length<2){
+          boolAjax=false;
+          this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
+        }
+        if(data.partId&&data.partId.length<2){
+          boolAjax=false;
+          this.$Message.error("请输入不小于两位的配件内码!")
+        }
+
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
         }
@@ -1203,66 +1260,68 @@
         if (data.old === "all") {
           Reflect.deleteProperty(data, "old");
         }
-        if (
-          (data.partName == "" || data.partName.trim() == "") && //名称
-          (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
-          (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
-          (data.partId == "" || data.partId.trim() == "") && //内码
-          (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
-          ((data.old || ( data.old && data.old.trim() == "")) && this.showSearch == false)&& //公司
-          (this.searchForm1.storeIds.length<1)
-        ) {
-          return this.$message.error("至少有一个筛选条件")
-        }
+        // if (
+        //   (data.partName == "" || data.partName.trim() == "") && //名称
+        //   (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
+        //   (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
+        //   (data.partId == "" || data.partId.trim() == "") && //内码
+        //   (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
+        //   ((data.old || ( data.old && data.old.trim() == "")) && this.showSearch == false)&& //公司
+        //   (this.searchForm1.storeIds.length<1)
+        // ) {
+        //   return this.$message.error("至少有一个筛选条件")
+        // }
         data.page = this.contentTwo.page.num - 1;
         data.size = this.contentTwo.page.size;
         data.noStock = data.noStock ? 1 : 0;
         this.defaultSort == 'asc' ? data.enterTimeSort = 1 : "";
         this.loading2 = true;
         this.contentTwo.dataTwo = [];
-        try {
+        if(boolAjax){
+          try {
 
-          showLoading('.loadingClass');
-          let res = await getLotStock(data);
-          this.loading2 = false;
-          if (res.code == 0) {
-            this.contentTwo.dataTwo = res.data.content;
-            this.contentTwo.dataTwo.map((item, index) => {
-              item.index = index + 1;
-              item.outableQty = item.sellSign ? 0 : item.outableQty;
-              if (this.selectShopList && item.enterTypeId != '050101') {
-                item.enterPrice = '-';
-                item.enterAmt = '-';
-                item.taxRate = '-';
-                item.taxPrice = '-';
-                item.taxAmt = '-';
-                item.noTaxPrice = '-';
-                item.noTaxAmt = '-';
-              }
-            });
-            this.contentTwo.page.total = res.data.totalElements;
-            this.bands2 = [];
-            let arr = res.data.content.map(el => el.partBrand);
-            let set = new Set(arr);
-            set.forEach(el => {
-              this.bands2.push({label: el, value: el});
-            });
-            this.$nextTick(() => {
-              const xtable = this.$refs.xTable3;
-              const column = xtable.getColumnByField('partBrand');
-              xtable.setFilter(column, this.bands2);
-              xtable.updateData();
-            })
+            showLoading('.loadingClass');
+            let res = await getLotStock(data);
+            this.loading2 = false;
+            if (res.code == 0) {
+              this.contentTwo.dataTwo = res.data.content;
+              this.contentTwo.dataTwo.map((item, index) => {
+                item.index = index + 1;
+                item.outableQty = item.sellSign ? 0 : item.outableQty;
+                if (this.selectShopList && item.enterTypeId != '050101') {
+                  item.enterPrice = '-';
+                  item.enterAmt = '-';
+                  item.taxRate = '-';
+                  item.taxPrice = '-';
+                  item.taxAmt = '-';
+                  item.noTaxPrice = '-';
+                  item.noTaxAmt = '-';
+                }
+              });
+              this.contentTwo.page.total = res.data.totalElements;
+              this.bands2 = [];
+              let arr = res.data.content.map(el => el.partBrand);
+              let set = new Set(arr);
+              set.forEach(el => {
+                this.bands2.push({label: el, value: el});
+              });
+              this.$nextTick(() => {
+                const xtable = this.$refs.xTable3;
+                const column = xtable.getColumnByField('partBrand');
+                xtable.setFilter(column, this.bands2);
+                xtable.updateData();
+              })
+            }
+            hideLoading()
+          } catch (error) {
+            hideLoading()
           }
-          hideLoading()
-        } catch (error) {
-          hideLoading()
-        }
 
-        let res1 = await EtabulatData(data);
-        if (res1.code == 0) {
-          this.total2 = res1.data;
-          // console.log(res1.data);
+          let res1 = await EtabulatData(data);
+          if (res1.code == 0) {
+            this.total2 = res1.data;
+            // console.log(res1.data);
+          }
         }
       },
       // tab切换
@@ -1318,7 +1377,7 @@
       //获取仓库下拉选择信息
       async getStoreHoure() {
         // let res = await getwarehouse({});
-        let res = await getStoreAll();
+        let res = await getStoreAll({shopCode: this.$store.state.user.userData.currentCompany.code});
         if (res.code == 0) {
           // this.storeList = res.data;
           // console.log("222", res);
@@ -1359,12 +1418,12 @@
         if (data.partName) {
           data.partName = data.partName.trim();
         }
-        if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/\s+/g,'');
-        }
-        if (data.partCode) {
-          data.partCode = data.partCode.trim();
-        }
+        // if (data.oemCode) {
+        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
+        // }
+        // if (data.partCode) {
+        //   data.partCode = data.partCode.trim();
+        // }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
@@ -1397,12 +1456,12 @@
         if (data.partName) {
           data.partName = data.partName.trim();
         }
-        if (data.oemCode) {
-          data.oemCode = data.oemCode.replace(/\s+/g,'');
-        }
-        if (data.partCode) {
-          data.partCode = data.partCode.trim();
-        }
+        // if (data.oemCode) {
+        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
+        // }
+        // if (data.partCode) {
+        //   data.partCode = data.partCode.trim();
+        // }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
