@@ -195,7 +195,7 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          v-has="'revocation'"
+          v-has="'revocationClaim'"
           @click="backCancel"
           :disabled="ifRecallWriteOff"
         >撤回核销
@@ -203,7 +203,7 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          v-has="'revocation'"
+          v-has="'revocationHedg'"
           @click="backCancel"
           :disabled="ifRecallHedge"
         >撤回发票对冲
