@@ -368,8 +368,8 @@ export const mixPartInfo = {
       if (setData) {
         this.formValidate = setData;
         //赋值适用车型
-        let carModelName = setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
-        let carBrandName = setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
+        let carModelName = setData.carModelName&&setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
+        let carBrandName = setData.carBrandName&&setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
         let arrNew = carModelName.length>carBrandName.length?carModelName:carBrandName
         arrNew.map((vItem,vindex) => {
           this.carItemObj.carBrand = carBrandName[vindex];
