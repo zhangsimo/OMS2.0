@@ -1195,6 +1195,7 @@ export default {
     },
     //分配至本店
     distributionShop() {
+      console.log(this.currentDistribution,'asdf')
       if (this.currentDistribution.length !== 0) {
         let obj = [];
         this.currentDistribution.map((item) => {
@@ -1226,7 +1227,7 @@ export default {
         Math.abs(this.claimedAmt);
     },
     //连锁待分配款项选中的数据
-    distributionSelection(selection) {
+    distributionSelection({selection}) {
       this.currentDistribution = selection;
     },
     //未核销对账单导出接口
