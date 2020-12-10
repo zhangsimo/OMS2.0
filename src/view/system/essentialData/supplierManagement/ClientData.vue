@@ -278,6 +278,8 @@
             <div class="financeTab">
               <Table
                 @on-current-change="pitchOnBank"
+                @on-row-dblclick="pitchOnBank"
+                @on-row-click="pitchOnBank"
                 highlight-row
                 border
                 resizable
@@ -291,7 +293,6 @@
                 :columns="columnsTax"
                 :data="invoice"
                 props="row"
-                :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               ></Table>
             </div>
           </div>
@@ -620,7 +621,7 @@
                   on: {
                     click: () => {
                       params.row.taxpayerSign = !params.row.taxpayerSign;
-                      this.disposeTax();
+                      //this.disposeTax();
                     }
                   }
                 },
@@ -842,7 +843,7 @@
       },
       deletBank() {
         this.invoice.map(item => {
-          if (!this.addInoiceOne.id) {
+          if (this.addInoiceOne.id==undefined) {
             if (item.bankId == this.addInoiceOne.bankId) {
               item.taxpayerType = !item.taxpayerType;
             } else {
@@ -902,22 +903,22 @@
             this.data.guestTaxpayerVOList = this.invoice;
             this.newInoiceShow = false;
           }
-        });
+        })
       },
       cancelNewBank() {
         this.newInoiceShow = false
-        this.addInoiceOne = {}
+        //this.addInoiceOne = {}
       },
       disposeTax() {
         let defauDat = [];
         this.invoice.map(item => {
           if (item.taxpayerSign == true) {
-            defauDat.push(item);
+            defauDat.push(item.taxpayerSign);
           }
         });
         if (defauDat.length != 1) {
           this.invoice.map(item => {
-            if (item != defauDat[0]) {
+            if (item.taxpayerSign != defauDat[0]) {
               item.taxpayerSign = false;
             }
           });

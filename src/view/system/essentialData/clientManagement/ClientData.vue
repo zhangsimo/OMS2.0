@@ -358,6 +358,8 @@
             <div class="financeTab">
               <Table
                 @on-current-change="pitchOnBank"
+                @on-row-dblclick="pitchOnBank"
+                @on-row-click="pitchOnBank"
                 highlight-row
                 border
                 resizable
@@ -371,7 +373,6 @@
                 :columns="columnsTax"
                 :data="invoice"
                 props="row"
-                :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               ></Table>
             </div>
           </div>
@@ -670,7 +671,7 @@ export default {
                 on: {
                   click: () => {
                     params.row.taxpayerSign = !params.row.taxpayerSign;
-                    this.disposeTax();
+                    //this.disposeTax();
                   }
                 }
               },
@@ -1313,7 +1314,7 @@ export default {
     },
     cancelNewBank(){
       this.newInoiceShow = false
-      this.addInoiceOne={}
+      //this.addInoiceOne={}
     },
     disposeTax() {
       let defauDat = [];
