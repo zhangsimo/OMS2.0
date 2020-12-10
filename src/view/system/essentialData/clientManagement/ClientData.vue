@@ -671,7 +671,7 @@ export default {
                 on: {
                   click: () => {
                     params.row.taxpayerSign = !params.row.taxpayerSign;
-                    //this.disposeTax();
+                    this.disposeTax();
                   }
                 }
               },
