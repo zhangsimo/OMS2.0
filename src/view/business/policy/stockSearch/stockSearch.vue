@@ -34,34 +34,34 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
-<!--            <Input-->
-<!--              v-model="searchForm.partCode"-->
-<!--              placeholder="品牌编码"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="serch"-->
-<!--              clearable-->
-<!--            />-->
-<!--            <Input-->
-<!--              v-model="searchForm.partName"-->
-<!--              placeholder="名称"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="serch"-->
-<!--              clearable-->
-<!--            />-->
-<!--            <Input-->
-<!--              v-model="searchForm.oemCode"-->
-<!--              placeholder="OEM码"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="serch"-->
-<!--              clearable-->
-<!--            />-->
             <Input
-              v-model="searchForm.partName"
-              placeholder="请输入配件名称/编码/OEM码"
-              class="w200 mr10"
+              v-model="searchForm.partCode"
+              placeholder="品牌编码"
+              class="w100 mr10"
               @on-enter="serch"
               clearable
             />
+            <Input
+              v-model="searchForm.partName"
+              placeholder="名称"
+              class="w100 mr10"
+              @on-enter="serch"
+              clearable
+            />
+            <Input
+              v-model="searchForm.oemCode"
+              placeholder="OEM码"
+              class="w100 mr10"
+              @on-enter="serch"
+              clearable
+            />
+<!--            <Input-->
+<!--              v-model="searchForm.partName"-->
+<!--              placeholder="请输入配件名称/编码/OEM码"-->
+<!--              class="w200 mr10"-->
+<!--              @on-enter="serch"-->
+<!--              clearable-->
+<!--            />-->
             <Input
               v-model="searchForm.partId"
               placeholder="内码"
@@ -340,34 +340,34 @@
         <div class="oper-top flex" ref="operTop1">
           <div class="pt10">
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
-<!--            <Input-->
-<!--              v-model="searchForm1.partCode"-->
-<!--              placeholder="品牌编码"-->
-<!--              class="w100 mr10"-->
-<!--              clearable-->
-<!--              @on-enter="queryBatch"-->
-<!--            ></Input>-->
-<!--            <Input-->
-<!--              v-model="searchForm1.partName"-->
-<!--              placeholder="名称"-->
-<!--              class="w100 mr10"-->
-<!--              clearable-->
-<!--              @on-enter="queryBatch"-->
-<!--            ></Input>-->
-<!--            <Input-->
-<!--              v-model="searchForm1.oemCode"-->
-<!--              placeholder="OEM码"-->
-<!--              class="w100 mr10"-->
-<!--              clearable-->
-<!--              @on-enter="queryBatch"-->
-<!--            ></Input>-->
             <Input
-              v-model="searchForm1.partName"
-              placeholder="请输入配件名称/编码/OEM码"
-              class="w200 mr10"
+              v-model="searchForm1.partCode"
+              placeholder="品牌编码"
+              class="w100 mr10"
               clearable
               @on-enter="queryBatch"
             ></Input>
+            <Input
+              v-model="searchForm1.partName"
+              placeholder="名称"
+              class="w100 mr10"
+              clearable
+              @on-enter="queryBatch"
+            ></Input>
+            <Input
+              v-model="searchForm1.oemCode"
+              placeholder="OEM码"
+              class="w100 mr10"
+              clearable
+              @on-enter="queryBatch"
+            ></Input>
+<!--            <Input-->
+<!--              v-model="searchForm1.partName"-->
+<!--              placeholder="请输入配件名称/编码/OEM码"-->
+<!--              class="w200 mr10"-->
+<!--              clearable-->
+<!--              @on-enter="queryBatch"-->
+<!--            ></Input>-->
             <Input
               v-model="searchForm1.partId"
               placeholder="内码"
@@ -1119,19 +1119,19 @@
       async getAllStocks() {
         let data = {};
         data = JSON.parse(JSON.stringify(this.searchForm));
-        // if (data.partName) {
-        //   data.partName = data.partName.trim();
-        // }
-        // if (data.oemCode) {
-        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
-        // }
-        // if (data.partCode) {
-        //   data.partCode = data.partCode.trim();
-        // }
-        let boolAjax=true;
         if (data.partName) {
           data.partName = data.partName.trim();
         }
+        if (data.oemCode) {
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
+        }
+        if (data.partCode) {
+          data.partCode = data.partCode.trim();
+        }
+        // let boolAjax=true;
+        // if (data.partName) {
+        //   data.partName = data.partName.trim();
+        // }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
@@ -1139,14 +1139,14 @@
         //   boolAjax=false;
         //   this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
         // }
-        if(data.partName&&data.partName.length<2){
-          boolAjax=false;
-          this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
-        }
-        if(data.partId&&data.partId.length<2){
-          boolAjax=false;
-          this.$Message.error("请输入不小于两位的配件内码!")
-        }
+        // if(data.partName&&data.partName.length<2){
+        //   boolAjax=false;
+        //   this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
+        // }
+        // if(data.partId&&data.partId.length<2){
+        //   boolAjax=false;
+        //   this.$Message.error("请输入不小于两位的配件内码!")
+        // }
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
         }
@@ -1158,7 +1158,7 @@
         data.noStock = data.noStock ? 1 : 0;
         this.loading1 = true;
         this.contentOne.dataOne = [];
-        if(boolAjax){
+        // if(boolAjax){
           try {
 
             showLoading('.loadingClass');
@@ -1196,7 +1196,7 @@
             this.total1 = res1.data;
             // console.log(res1.data);
           }
-        }
+        // }
       },
       //汇总分页
       changePageAlways(val) {
@@ -1222,38 +1222,38 @@
       async getLotStocks() {
         let data = {};
         data = JSON.parse(JSON.stringify(this.searchForm1));
-        // if (data.partName) {
-        //   data.partName = data.partName.trim();
-        // }
-        // if (data.oemCode) {
-        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
-        // }
-        // if (data.partCode) {
-        //   data.partCode = data.partCode.trim();
-        // }
-        // if (data.partId) {
-        //   data.partId = data.partId.trim();
-        // }
-
-        let boolAjax=true;
         if (data.partName) {
           data.partName = data.partName.trim();
+        }
+        if (data.oemCode) {
+          data.oemCode = data.oemCode.replace(/\s+/g,'');
+        }
+        if (data.partCode) {
+          data.partCode = data.partCode.trim();
         }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
+
+        // let boolAjax=true;
+        // if (data.partName) {
+        //   data.partName = data.partName.trim();
+        // }
+        // if (data.partId) {
+        //   data.partId = data.partId.trim();
+        // }
         // if(!data.partName&&!data.partId){
         //   boolAjax=false;
         //   this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
         // }
-        if(data.partName&&data.partName.length<2){
-          boolAjax=false;
-          this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
-        }
-        if(data.partId&&data.partId.length<2){
-          boolAjax=false;
-          this.$Message.error("请输入不小于两位的配件内码!")
-        }
+        // if(data.partName&&data.partName.length<2){
+        //   boolAjax=false;
+        //   this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
+        // }
+        // if(data.partId&&data.partId.length<2){
+        //   boolAjax=false;
+        //   this.$Message.error("请输入不小于两位的配件内码!")
+        // }
 
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
@@ -1264,24 +1264,24 @@
         if (data.old === "all") {
           Reflect.deleteProperty(data, "old");
         }
-        // if (
-        //   (data.partName == "" || data.partName.trim() == "") && //名称
-        //   (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
-        //   (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
-        //   (data.partId == "" || data.partId.trim() == "") && //内码
-        //   (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
-        //   ((data.old || ( data.old && data.old.trim() == "")) && this.showSearch == false)&& //公司
-        //   (this.searchForm1.storeIds.length<1)
-        // ) {
-        //   return this.$message.error("至少有一个筛选条件")
-        // }
+        if (
+          (data.partName == "" || data.partName.trim() == "") && //名称
+          (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
+          (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
+          (data.partId == "" || data.partId.trim() == "") && //内码
+          (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
+          ((data.old || ( data.old && data.old.trim() == "")) && this.showSearch == false)&& //公司
+          (this.searchForm1.storeIds.length<1)
+        ) {
+          return this.$message.error("至少有一个筛选条件")
+        }
         data.page = this.contentTwo.page.num - 1;
         data.size = this.contentTwo.page.size;
         data.noStock = data.noStock ? 1 : 0;
         this.defaultSort == 'asc' ? data.enterTimeSort = 1 : "";
         this.loading2 = true;
         this.contentTwo.dataTwo = [];
-        if(boolAjax){
+        // if(boolAjax){
           try {
 
             showLoading('.loadingClass');
@@ -1326,7 +1326,7 @@
             this.total2 = res1.data;
             // console.log(res1.data);
           }
-        }
+        // }
       },
       // tab切换
       setTab(index) {
