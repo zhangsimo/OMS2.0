@@ -116,6 +116,8 @@ import { getDigitalDictionary } from "@/api/system/essentialData/clientManagemen
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
+import {showLoading , hideLoading } from "../../../../utils/loading";
+
 export default {
   name: "CustomerData",
   components: {
@@ -421,10 +423,14 @@ export default {
           let data = this.clientList;
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
           data.isClient ? (data.isClient = 1) : (data.isClient = 0);
+          showLoading()
           let res = await getNewSupplier(data);
           if (res.code === 0) {
             this.clientDataShow = false;
             this.getlist();
+            hideLoading()
+          }else{
+            hideLoading()
           }
         } else {
           this.$Message.error("信息填写错误");

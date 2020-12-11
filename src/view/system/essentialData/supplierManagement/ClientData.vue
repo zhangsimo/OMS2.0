@@ -278,6 +278,8 @@
             <div class="financeTab">
               <Table
                 @on-current-change="pitchOnBank"
+                @on-row-dblclick="pitchOnBank"
+                @on-row-click="pitchOnBank"
                 highlight-row
                 border
                 resizable
@@ -291,7 +293,6 @@
                 :columns="columnsTax"
                 :data="invoice"
                 props="row"
-                :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               ></Table>
             </div>
           </div>
@@ -620,6 +621,8 @@
                   on: {
                     click: () => {
                       params.row.taxpayerSign = !params.row.taxpayerSign;
+                      this.invoice[params.index].taxpayerSign=params.row.taxpayerSign;
+                      this.inoiceIndex=params.index;
                       this.disposeTax();
                     }
                   }
@@ -640,6 +643,7 @@
         ],
         invoice: [],
         newInoiceShow: false, //开票
+        inoiceIndex:0,//开票选中暂存
         bankId:0,
         tit: "新增开票", //开票弹窗
         tableComData:[],//门店数组
@@ -723,7 +727,7 @@
         this.bankAccountTit = "修改银行账户信息";
         this.bankAccount = true;
         this.$refs.bankAccount.data = this.selectFinTab;
-        // console.log(this.$refs.bankAccount.data, "????");
+        // //console.log(this.$refs.bankAccount.data, "????");
       },
       // 修改启用禁用
       changePlaceFin() {
@@ -812,9 +816,10 @@
           }
         });
       },
-      //选中银行
-      pitchOnBank(selection) {
+      //选中开票
+      pitchOnBank(selection,index) {
         this.addInoiceOne = selection;
+        this.inoiceIndex=index;
         if (selection.taxpayerType == true) {
           this.enAbleTax = "禁用";
         } else {
@@ -822,7 +827,7 @@
         }
         this.disposeTax();
       },
-      //新增银行
+      //新增开票
       addInoice() {
         this.addInoiceOne = {};
         this.tit = "新增开票";
@@ -830,19 +835,20 @@
         this.$refs.AddInoice.data = {taxpayerSign:false}
         this.$refs.AddInoice.resetFields();
       },
-      //修改银行
+      //修改开票
       changeBank() {
         if (Object.keys(this.addInoiceOne).length == 0) {
           this.$Message.error("请先选中需要修改的信息");
           return false;
         }
         this.tit = "修改开票信息";
-        this.newInoiceShow = true;
+        this.addInoiceOne=this.invoice[this.inoiceIndex];
         this.disposeTax();
+        this.newInoiceShow = true;
       },
       deletBank() {
         this.invoice.map(item => {
-          if (!this.addInoiceOne.id) {
+          if (this.addInoiceOne.id==undefined) {
             if (item.bankId == this.addInoiceOne.bankId) {
               item.taxpayerType = !item.taxpayerType;
             } else {
@@ -902,24 +908,33 @@
             this.data.guestTaxpayerVOList = this.invoice;
             this.newInoiceShow = false;
           }
-        });
+        })
       },
       cancelNewBank() {
         this.newInoiceShow = false
-        this.addInoiceOne = {}
+        //this.addInoiceOne = {}
       },
       disposeTax() {
         let defauDat = [];
+        //console.log(this.invoice[2],111222)
         this.invoice.map(item => {
           if (item.taxpayerSign == true) {
-            defauDat.push(item);
+            defauDat.push(item.taxpayerSign);
           }
         });
+        this.invoice.map((el,idx)=>{
+          if(idx==this.inoiceIndex){
+            el._highlight=true;
+          }else{
+            el._highlight=false;
+          }
+        })
         if (defauDat.length != 1) {
-          this.invoice.map(item => {
-            if (item != defauDat[0]) {
+          this.invoice=this.invoice.map(item => {
+            if (item.taxpayerSign != defauDat[0]) {
               item.taxpayerSign = false;
             }
+            return item;
           });
         }
       },
