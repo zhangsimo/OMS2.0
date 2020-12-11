@@ -183,7 +183,6 @@ export default {
       if(this.titleName.trim()=='其他付款支出认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
-            // console.log(res.data)
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.dataOne = res.data.one;
