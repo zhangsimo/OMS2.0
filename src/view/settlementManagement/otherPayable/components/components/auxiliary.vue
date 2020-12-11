@@ -645,7 +645,6 @@ export default {
     },
     //点击单选框获取辅助核算个人
     radioChangeEventPersonage({ row }) {
-      console.log(row)
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
       // this.auxiliaryCode = row.userName;
