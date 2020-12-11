@@ -101,14 +101,13 @@
           show-overflow="title"
           highlight-hover-row
           highlight-current-row
-          @checkbox-all="selectAllEvent"
-          @checkbox-change="selectChangeEvent"
+          @radio-change="selectChangeEvent"
           :data="tbdataChild"
           align="center"
           ref="xTableChild"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
         >
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+          <vxe-table-column type="radio" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
           <vxe-table-column field="payAmt" title="借支金额"></vxe-table-column>
@@ -304,11 +303,9 @@
           }
         });
       },
-      selectAllEvent({checked, records}) {
-        this.selectTmpArr = records || [];
-      },
-      selectChangeEvent({checked, records}) {
-        this.selectTmpArr = records || [];
+      
+      selectChangeEvent({row}) {
+        this.selectTmpArr = [row]
       },
       async ok() {
         this.showChild = false;

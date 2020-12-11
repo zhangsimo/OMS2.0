@@ -34,25 +34,27 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
-<!--            <Input-->
-<!--              v-model="searchForm.partCode"-->
-<!--              placeholder="品牌编码"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="serch"-->
-<!--            />-->
-<!--            <Input-->
-<!--              v-model="searchForm.partName"-->
-<!--              placeholder="名称"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="serch"-->
-<!--            />-->
-<!--            <Input-->
-<!--              v-model="searchForm.oemCode"-->
-<!--              placeholder="OEM码"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="serch"-->
-<!--            />-->
-
+            <!--            <Input-->
+            <!--              v-model="searchForm.partCode"-->
+            <!--              placeholder="品牌编码"-->
+            <!--              class="w100 mr10"-->
+            <!--              @on-enter="serch"-->
+            <!--              clearable-->
+            <!--            />-->
+            <!--            <Input-->
+            <!--              v-model="searchForm.partName"-->
+            <!--              placeholder="名称"-->
+            <!--              class="w100 mr10"-->
+            <!--              @on-enter="serch"-->
+            <!--              clearable-->
+            <!--            />-->
+            <!--            <Input-->
+            <!--              v-model="searchForm.oemCode"-->
+            <!--              placeholder="OEM码"-->
+            <!--              class="w100 mr10"-->
+            <!--              @on-enter="serch"-->
+            <!--              clearable-->
+            <!--            />-->
             <Input
               v-model="searchForm.partName"
               placeholder="请输入配件名称/编码/OEM码"
@@ -249,11 +251,11 @@
                 :loading="levelLoading"
                 size="mini"
                 :data="levelList">
-                <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" ></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
                 <vxe-table-column field="strategyName" title="级别"></vxe-table-column>
-                <vxe-table-column field="sellPrice" title="销售价" >
+                <vxe-table-column field="sellPrice" title="销售价">
                   <template v-slot="{row}">
                     {{row.strategyName=='最低售价'?`${row.sellPrice} - ${row.minRequiredQty}`:row.sellPrice}}
                   </template>
@@ -327,7 +329,7 @@
               :loading="unsalableloading"
               :data="unsalableList">
               <vxe-table-column width="130" field="orgName" title="机构名称(滞销库存)"></vxe-table-column>
-              <vxe-table-column width="70" field="enterQty" title="滞销数量" ></vxe-table-column>
+              <vxe-table-column width="70" field="enterQty" title="滞销数量"></vxe-table-column>
             </vxe-table>
           </div>
         </div>
@@ -338,25 +340,27 @@
         <div class="oper-top flex" ref="operTop1">
           <div class="pt10">
             <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
-<!--            <Input-->
-<!--              v-model="searchForm1.partCode"-->
-<!--              placeholder="品牌编码"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="queryBatch"-->
-<!--            ></Input>-->
-<!--            <Input-->
-<!--              v-model="searchForm1.partName"-->
-<!--              placeholder="名称"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="queryBatch"-->
-<!--            ></Input>-->
-<!--            <Input-->
-<!--              v-model="searchForm1.oemCode"-->
-<!--              placeholder="OEM码"-->
-<!--              class="w100 mr10"-->
-<!--              @on-enter="queryBatch"-->
-<!--            ></Input>-->
-
+            <!--            <Input-->
+            <!--              v-model="searchForm1.partCode"-->
+            <!--              placeholder="品牌编码"-->
+            <!--              class="w100 mr10"-->
+            <!--              clearable-->
+            <!--              @on-enter="queryBatch"-->
+            <!--            ></Input>-->
+            <!--            <Input-->
+            <!--              v-model="searchForm1.partName"-->
+            <!--              placeholder="名称"-->
+            <!--              class="w100 mr10"-->
+            <!--              clearable-->
+            <!--              @on-enter="queryBatch"-->
+            <!--            ></Input>-->
+            <!--            <Input-->
+            <!--              v-model="searchForm1.oemCode"-->
+            <!--              placeholder="OEM码"-->
+            <!--              class="w100 mr10"-->
+            <!--              clearable-->
+            <!--              @on-enter="queryBatch"-->
+            <!--            ></Input>-->
             <Input
               v-model="searchForm1.partName"
               placeholder="请输入配件名称/编码/OEM码"
@@ -980,15 +984,15 @@
         visible: false,
 
         //添加下表格
-        tabRightIndex:0,
-        levelLoading:false,
-        levelList:[],
+        tabRightIndex: 0,
+        levelLoading: false,
+        levelList: [],
         //滞销
-        unsalableloading:false,
-        unsalableList:[],
+        unsalableloading: false,
+        unsalableList: [],
         //本店库存
-        outLoading:false,
-        selfShopStock:[]
+        outLoading: false,
+        selfShopStock: []
       };
     },
     computed: {
@@ -1124,25 +1128,28 @@
         // if (data.partCode) {
         //   data.partCode = data.partCode.trim();
         // }
-        let boolAjax=true;
+        let boolAjax = true;
         if (data.partName) {
           data.partName = data.partName.trim();
         }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
-        // if(!data.partName&&!data.partId){
-        //   boolAjax=false;
+        // if (!data.partName && !data.partId) {
+        //   boolAjax = false;
         //   this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
         // }
-        if(data.partName&&data.partName.length<2){
-          boolAjax=false;
+        if (data.partName && data.partName.length < 2) {
+          boolAjax = false;
           this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
         }
-        if(data.partId&&data.partId.length<2){
-          boolAjax=false;
+        if (data.partId && data.partId.length < 2) {
+          boolAjax = false;
           this.$Message.error("请输入不小于两位的配件内码!")
         }
+        data.partName = data.partName.trim()
+        data.oemCode = data.partName.replace(/\s+/g, '');
+        data.partCode = data.partName.trim();
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
         }
@@ -1154,7 +1161,7 @@
         data.noStock = data.noStock ? 1 : 0;
         this.loading1 = true;
         this.contentOne.dataOne = [];
-        if(boolAjax){
+        if (boolAjax) {
           try {
 
             showLoading('.loadingClass');
@@ -1210,47 +1217,49 @@
       //汇总查看
       showList(row) {
         this.selectTableData = row;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$refs.look.getEnters();
-        },1)
+        }, 1)
       },
       // 批次库存请求
       async getLotStocks() {
         let data = {};
         data = JSON.parse(JSON.stringify(this.searchForm1));
-        if (data.partName) {
-          data.partName = data.partName.trim();
-        }
+        // if (data.partName) {
+        //   data.partName = data.partName.trim();
+        // }
         // if (data.oemCode) {
-        //   data.oemCode = data.oemCode.replace(/\s+/g,'');
+        //   data.oemCode = data.oemCode.replace(/\s+/g, '');
         // }
         // if (data.partCode) {
         //   data.partCode = data.partCode.trim();
         // }
-        if (data.partId) {
-          data.partId = data.partId.trim();
-        }
+        // if (data.partId) {
+        //   data.partId = data.partId.trim();
+        // }
 
-        let boolAjax=true;
+        let boolAjax = true;
         if (data.partName) {
           data.partName = data.partName.trim();
         }
         if (data.partId) {
           data.partId = data.partId.trim();
         }
-        // if(!data.partName&&!data.partId){
-        //   boolAjax=false;
-        //   this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
-        // }
-        if(data.partName&&data.partName.length<2){
-          boolAjax=false;
+        if (!data.partName && !data.partId) {
+          boolAjax = false;
+          this.$Message.error("请输入配件名称/编码/OEM码或者配件内码!")
+        }
+        if (data.partName && data.partName.length < 2) {
+          boolAjax = false;
           this.$Message.error("请输入不小于两位的配件名称/编码/OEM码!")
         }
-        if(data.partId&&data.partId.length<2){
-          boolAjax=false;
+        if (data.partId && data.partId.length < 2) {
+          boolAjax = false;
           this.$Message.error("请输入不小于两位的配件内码!")
         }
-
+        data.partName = data.partName.trim()
+        data.oemCode = data.partName.replace(/\s+/g, '');
+        data.partCode = data.partName.trim();
         if (data.storeIds[0] == 1) {
           data.storeIds = [];
         }
@@ -1262,12 +1271,12 @@
         }
         // if (
         //   (data.partName == "" || data.partName.trim() == "") && //名称
-        //   (data.oemCode == "" || data.oemCode.replace(/\s+/g,'') == "") && //oem码
+        //   (data.oemCode == "" || data.oemCode.replace(/\s+/g, '') == "") && //oem码
         //   (data.partCode == "" || data.partCode.trim() == "") && //品牌编码
         //   (data.partId == "" || data.partId.trim() == "") && //内码
-        //   (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand ==undefined) && //品牌
-        //   ((data.old || ( data.old && data.old.trim() == "")) && this.showSearch == false)&& //公司
-        //   (this.searchForm1.storeIds.length<1)
+        //   (data.partBrand == "" || (data.partBrand && data.partBrand.trim() == "") || data.partBrand == undefined) && //品牌
+        //   ((data.old || (data.old && data.old.trim() == "")) && this.showSearch == false) && //公司
+        //   (this.searchForm1.storeIds.length < 1)
         // ) {
         //   return this.$message.error("至少有一个筛选条件")
         // }
@@ -1277,7 +1286,7 @@
         this.defaultSort == 'asc' ? data.enterTimeSort = 1 : "";
         this.loading2 = true;
         this.contentTwo.dataTwo = [];
-        if(boolAjax){
+        if (boolAjax) {
           try {
 
             showLoading('.loadingClass');
@@ -1351,7 +1360,7 @@
       },
       currentChangeItem({row}) {
         this.currentItem = row;
-        if(this.tabIndex==0){
+        if (this.tabIndex == 0) {
           this.getLevelList()
           this.getUnsalableList();
           this.tabRightIndex = 0;
@@ -1410,7 +1419,7 @@
 
       //汇总导出
       async exportTheSummary() {
-        if(this.contentOne.dataOne.length<1){
+        if (this.contentOne.dataOne.length < 1) {
           return this.$Message.error("暂无汇总数据可导出")
         }
         let data = {};
@@ -1439,16 +1448,16 @@
         // for (var key in data) {
         //   str += `${key}=${data[key]}&`
         // }
-        let res= await  exportAll(data)
-        if(res.code===0){
+        let res = await exportAll(data)
+        if (res.code === 0) {
           this.$message.success(res.data)
-        }else{
+        } else {
           this.$message.warning(res.data)
         }
       },
       //导出批次
       async exportBatch() {
-        if(this.contentTwo.dataTwo.length<1){
+        if (this.contentTwo.dataTwo.length < 1) {
           return this.$Message.error("暂无批次数据可导出")
         }
         let data = {};
@@ -1486,10 +1495,10 @@
         //   str += `${key}=${data[key]}&`
         // }
         // location.href = exportPart(str)
-        let res=await exportPart(data);
-        if(res.code===0){
+        let res = await exportPart(data);
+        if (res.code === 0) {
           this.$message.success(res.data)
-        }else{
+        } else {
           this.$message.warning(res.data)
         }
       },
@@ -1583,7 +1592,7 @@
         return [
           columns.map((column, columnIndex) => {
             if (columnIndex === 0) {
-              return `共${(data||[]).length}条`
+              return `共${(data || []).length}条`
             }
             if ([
               "enterQty"
@@ -1651,12 +1660,12 @@
 
         }
       },
-      tabRightChange(n){
+      tabRightChange(n) {
         this.tabRightIndex = n;
-        if(n==0){
+        if (n == 0) {
           this.getLevelList();
         }
-        if(n==1){
+        if (n == 1) {
           this.getLotList();
         }
       },
@@ -1664,16 +1673,16 @@
       //级别销价请求
       async getLevelList() {
         let data = {}
-        this.levelLoading=true;
+        this.levelLoading = true;
         data.partId = this.currentItem.partId
         let res = await getUnsalable(data)
         if (res.code === 0) {
-          this.levelLoading=false;
+          this.levelLoading = false;
           this.levelList = res.data;
-          this.levelList = this.levelList.filter(item => item.strategyName!='最低售价'||(item.strategyName=='最低售价'&&item.removeLimit!=1))
+          this.levelList = this.levelList.filter(item => item.strategyName != '最低售价' || (item.strategyName == '最低售价' && item.removeLimit != 1))
 
-        }else{
-          this.levelLoading=false;
+        } else {
+          this.levelLoading = false;
         }
       },
       //滞销信息请求
@@ -1688,19 +1697,19 @@
         }
       },
       //本店库存
-      async getLotList(){
+      async getLotList() {
         let data = {};
         data.partCode = this.currentItem.partCode;
         data.old = this.currentItem.orgid;
         data.noStock = 0;
         data.page = 0;
-        data.size =1000;
+        data.size = 1000;
         this.outLoading = true;
         this.selfShopStock = [];
         const rep = await getLotStock(data);
         this.outLoading = false;
-        if(rep.code==0){
-          this.selfShopStock = rep.data.content||[];
+        if (rep.code == 0) {
+          this.selfShopStock = rep.data.content || [];
         }
       },
     }
@@ -1808,22 +1817,27 @@
     display: flex;
     flex-flow: column;
   }
-  .tabs-warp .top-table{
+
+  .tabs-warp .top-table {
     flex: 2;
   }
-  .tabs-warp .bottom-table{
+
+  .tabs-warp .bottom-table {
     flex: 1;
     display: flex;
     flex-flow: row nowrap;
   }
-  .bottom-table .bottom-table-left{
+
+  .bottom-table .bottom-table-left {
     width: 100px;
   }
-  .bottom-table .bottom-table-right-r{
+
+  .bottom-table .bottom-table-right-r {
     width: 200px;
     margin-left: 10px;
   }
-  .bottom-table .bottom-table-left span{
+
+  .bottom-table .bottom-table-left span {
     display: block;
     text-align: center;
     line-height: 26px;
@@ -1831,26 +1845,31 @@
     cursor: pointer;
     background: #eee;
   }
-  .bottom-table .bottom-table-left span:last-child{
+
+  .bottom-table .bottom-table-left span:last-child {
     border-bottom: 1px solid #ddd;
   }
-  .bottom-table .bottom-table-left span.active{
+
+  .bottom-table .bottom-table-left span.active {
     background: #fff;
     color: #fd5c5c;
   }
-  .bottom-table .bottom-table-right{
+
+  .bottom-table .bottom-table-right {
     flex: 1;
-    overflow:hidden;
+    overflow: hidden;
     width: 100%;
   }
-  .bottom-table .bottom-table-right .table-right-inner{
+
+  .bottom-table .bottom-table-right .table-right-inner {
     height: 100%;
   }
 
   .setStore .setStoreItem {
     cursor: pointer;
   }
-  .page-con2{
-    padding: 5px 0px!important;
+
+  .page-con2 {
+    padding: 5px 0px !important;
   }
 </style>
