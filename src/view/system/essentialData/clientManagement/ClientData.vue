@@ -1326,6 +1326,13 @@ export default {
           defauDat.push(item);
         }
       });
+      this.invoice.map((el,idx)=>{
+        if(idx==this.inoiceIndex){
+          el._highlight=true;
+        }else{
+          el._highlight=false;
+        }
+      })
       if (defauDat.length != 1) {
         this.invoice.map(item => {
           if (item != defauDat[0]) {

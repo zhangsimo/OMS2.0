@@ -843,15 +843,8 @@
         }
         this.tit = "修改开票信息";
         this.addInoiceOne=this.invoice[this.inoiceIndex];
-        this.invoice.map((el,idx)=>{
-          if(idx==this.inoiceIndex){
-            el._highlight=true;
-          }else{
-            el._highlight=false;
-          }
-        })
-        this.newInoiceShow = true;
         this.disposeTax();
+        this.newInoiceShow = true;
       },
       deletBank() {
         this.invoice.map(item => {
@@ -929,6 +922,13 @@
             defauDat.push(item.taxpayerSign);
           }
         });
+        this.invoice.map((el,idx)=>{
+          if(idx==this.inoiceIndex){
+            el._highlight=true;
+          }else{
+            el._highlight=false;
+          }
+        })
         if (defauDat.length != 1) {
           this.invoice=this.invoice.map(item => {
             if (item.taxpayerSign != defauDat[0]) {
