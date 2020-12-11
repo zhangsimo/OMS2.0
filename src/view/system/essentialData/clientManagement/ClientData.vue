@@ -671,6 +671,8 @@ export default {
                 on: {
                   click: () => {
                     params.row.taxpayerSign = !params.row.taxpayerSign;
+                    this.invoice[params.index].taxpayerSign=params.row.taxpayerSign;
+                    this.inoiceIndex=params.index;
                     this.disposeTax();
                   }
                 }
@@ -839,6 +841,7 @@ export default {
       oneNew: {},
       relevanceClient: [],
       addInoiceOne: {},// 开票信息 表格选中行的内容暂时性存储
+      inoiceIndex:0,//开票选中暂存
       rules: {
         belongSystem: [
           {
@@ -1332,9 +1335,9 @@ export default {
       }
     },
     //选中银行
-    pitchOnBank(selection) {
+    pitchOnBank(selection,index) {
       this.addInoiceOne = selection;
-      // this.selectTaxTab = selection;
+      this.inoiceIndex=index;
       if (selection.taxpayerType == true) {
         this.enAbleTax = "禁用";
       } else {
@@ -1349,6 +1352,12 @@ export default {
         return false;
       }
       this.tit = "修改开票信息";
+      this.addInoiceOne=this.invoice[this.inoiceIndex];
+      this.invoice.map((el,idx)=>{
+        if(idx==this.inoiceIndex){
+          el._highlight=true;
+        }
+      })
       this.newInoiceShow = true;
       this.disposeTax();
     },
