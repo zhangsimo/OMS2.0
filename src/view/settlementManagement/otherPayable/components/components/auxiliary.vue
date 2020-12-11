@@ -645,6 +645,7 @@ export default {
     },
     //点击单选框获取辅助核算个人
     radioChangeEventPersonage({ row }) {
+      console.log(row)
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
       // this.auxiliaryCode = row.userName;
@@ -662,18 +663,21 @@ export default {
     },
     //辅助核算确定弹框
     confirmFuzhu() {
+      console.log(this.formDynamic.fund)
       if (!this.AssistAccounting) {
         this.$message.error("请选择辅助核算");
         this.subjectModelShowassist = true;
-      }else if(this.Classification && this.formDynamic.fund==""){
+        return
+      }
+      if(!this.formDynamic.fund){
         this.$message.error("款项分类必选")
-      } else {
+        return
+      }
         // console.log(this.AssistAccounting);
         this.$emit("ChildContent", this.AssistAccounting);
         bus.$emit("ChildContent", this.AssistAccounting);
         this.$emit("callBackFun")
         this.subjectModelShowassist = false;
-      }
     },
     //客户分页切换页数
     selectNumClient(page) {
@@ -776,7 +780,8 @@ export default {
     showOrhideModel(v){
       if(v){
         this.formDynamic.fund="";
-        this.AssistAccounting = "";
+        this.formDynamic.code="";
+        this.AssistAccounting = {};
         this.$refs.AssistTableDataKeHu.clearRadioRow()
         this.$refs.AssistTableDataGongYingShang.clearRadioRow()
         this.$refs.AssistTableDataGeRen.clearRadioRow()
