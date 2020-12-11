@@ -1100,27 +1100,80 @@ export default [
   {
     path: "/aftersale",
     name: "afterSale",
-    mark: "11",
-    redirect: "/reportForm",
+    mark: "12",
     meta: { keepAlive: true,
       icon: "md-brush",
       // icon: "ios-paper",
       title: "售后模块"
     },
     component: Main,
-    children: [
-      {
-        path: '/draftingOfApplication',
-        name: 'documentApprovalDraftingOfApplication',
-        // redirect: "/multilevel/level_2_1",
-        mark: '11001',
-        meta: { keepAlive: true,
-          title: '售后一',
-
-        },
-        component: () =>
-          import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
-      }]
+    // children: [
+    //   {
+    //     path: '/claimSheet',
+    //     name: 'claimSheet',
+    //     mark: '12001',
+    //     meta: { keepAlive: true,
+    //       title: '理赔开单',
+    //     },
+    //     children: [
+    //       {
+    //         path: 'afterSale/CustomerClaimsRegistration',
+    //         name: 'CustomerClaimsRegistration',
+    //         // redirect: "/multilevel/level_2_1",
+    //         //mark: '11001',
+    //         meta: { keepAlive: true,
+    //           title: '客户理赔登记',
+    //
+    //         },
+    //         component: () =>
+    //           import("@/view/afterSale/CustomerClaimsRegistration/index.vue")
+    //       },
+    //       {
+    //         path: 'afterSale/CustomerclaimsHandling',
+    //         name: 'CustomerclaimsHandling',
+    //         // redirect: "/multilevel/level_2_1",
+    //         //mark: '11002',
+    //         meta: { keepAlive: true,
+    //           title: '客户理赔处理',
+    //         },
+    //         component: () =>
+    //           import("@/view/afterSale/CustomerclaimsHandling/index.vue")
+    //       },
+    //     ]
+    //   },
+    //   {
+    //     path: '/claimsTheQuery',
+    //     name: 'claimsTheQuery',
+    //     mark: '12002',
+    //     meta: { keepAlive: true,
+    //       title: '理赔查询',
+    //     },
+    //     children:[
+    //       {
+    //         path: 'afterSale/Customerclaimsregistrationenquiry',
+    //         name: 'Customerclaimsregistrationenquiry',
+    //         // redirect: "/multilevel/level_2_1",
+    //         // mark: '11001',
+    //         meta: { keepAlive: true,
+    //           title: '客户理赔登记查询',
+    //         },
+    //         component: () =>
+    //           import("@/view/afterSale/Customerclaimsregistrationenquiry/index.vue")
+    //       },
+    //       {
+    //         path: 'afterSale/Customerclaimshandlingenquiry',
+    //         name: 'Customerclaimshandlingenquiry',
+    //         // redirect: "/multilevel/level_2_1",
+    //         // mark: '11002',
+    //         meta: { keepAlive: true,
+    //           title: '客户理赔处理查询',
+    //         },
+    //         component: () =>
+    //           import("@/view/afterSale/Customerclaimshandlingenquiry/index.vue")
+    //       },
+    //     ]
+    //   },
+    // ]
   },
   {
     path: "/documentApproval",
@@ -2038,6 +2091,16 @@ export default [
 
         },
         component: () => import("@/view/lease/tenantres/tenantres.vue")
+      },
+      {
+        path: "/lease/dingTenantres",
+        name: "dingTenantres",
+        // mark: "8104",
+        meta: { keepAlive: true,
+          icon: "gear-b",
+          title: "租户配置"
+        },
+        component: () => import("@/view/lease/dingTenantres/index.vue")
       },
       {
         path: "/lease/FeedbackManagementOne",
