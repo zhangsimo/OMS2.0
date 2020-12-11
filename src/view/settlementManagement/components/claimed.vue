@@ -14,6 +14,7 @@
       show-elevator
       class="mt10 tr"
       size="small"
+      placement="top"
       :total="claimedPage.total"
       :current="claimedPage.page"
       :page-size="claimedPage.size"

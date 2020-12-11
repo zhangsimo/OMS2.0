@@ -137,10 +137,10 @@
               @on-page-size-change="sizeChangeNo"
             />
           </div>
-          <div slot="right" style="height: 100%" v-show="!leftValue">
+          <div slot="right" style="height: 100%;" v-show="!leftValue">
             <Tabs type="card">
-              <TabPane label="本店待认领款">
-                <div class="card">
+              <TabPane label="本店待认领款" style="height: 100%;">
+                <div class="card" style="height: 100%;">
                   <div style="line-height: 36px">
                     <quickDate
                       class="w80 mr10"
@@ -384,6 +384,7 @@
                     show-elevator
                     class="mt10 tr"
                     size="small"
+                    placement="top"
                     :total="distributionPage.total"
                     :current="distributionPage.page"
                     :page-size="distributionPage.size"
