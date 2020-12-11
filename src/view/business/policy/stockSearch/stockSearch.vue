@@ -39,20 +39,22 @@
 <!--              placeholder="品牌编码"-->
 <!--              class="w100 mr10"-->
 <!--              @on-enter="serch"-->
+<!--              clearable-->
 <!--            />-->
 <!--            <Input-->
 <!--              v-model="searchForm.partName"-->
 <!--              placeholder="名称"-->
 <!--              class="w100 mr10"-->
 <!--              @on-enter="serch"-->
+<!--              clearable-->
 <!--            />-->
 <!--            <Input-->
 <!--              v-model="searchForm.oemCode"-->
 <!--              placeholder="OEM码"-->
 <!--              class="w100 mr10"-->
 <!--              @on-enter="serch"-->
+<!--              clearable-->
 <!--            />-->
-
             <Input
               v-model="searchForm.partName"
               placeholder="请输入配件名称/编码/OEM码"
@@ -342,21 +344,23 @@
 <!--              v-model="searchForm1.partCode"-->
 <!--              placeholder="品牌编码"-->
 <!--              class="w100 mr10"-->
+<!--              clearable-->
 <!--              @on-enter="queryBatch"-->
 <!--            ></Input>-->
 <!--            <Input-->
 <!--              v-model="searchForm1.partName"-->
 <!--              placeholder="名称"-->
 <!--              class="w100 mr10"-->
+<!--              clearable-->
 <!--              @on-enter="queryBatch"-->
 <!--            ></Input>-->
 <!--            <Input-->
 <!--              v-model="searchForm1.oemCode"-->
 <!--              placeholder="OEM码"-->
 <!--              class="w100 mr10"-->
+<!--              clearable-->
 <!--              @on-enter="queryBatch"-->
 <!--            ></Input>-->
-
             <Input
               v-model="searchForm1.partName"
               placeholder="请输入配件名称/编码/OEM码"
@@ -1218,18 +1222,18 @@
       async getLotStocks() {
         let data = {};
         data = JSON.parse(JSON.stringify(this.searchForm1));
-        if (data.partName) {
-          data.partName = data.partName.trim();
-        }
+        // if (data.partName) {
+        //   data.partName = data.partName.trim();
+        // }
         // if (data.oemCode) {
         //   data.oemCode = data.oemCode.replace(/\s+/g,'');
         // }
         // if (data.partCode) {
         //   data.partCode = data.partCode.trim();
         // }
-        if (data.partId) {
-          data.partId = data.partId.trim();
-        }
+        // if (data.partId) {
+        //   data.partId = data.partId.trim();
+        // }
 
         let boolAjax=true;
         if (data.partName) {

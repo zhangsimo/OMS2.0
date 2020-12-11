@@ -1356,6 +1356,8 @@ export default {
       this.invoice.map((el,idx)=>{
         if(idx==this.inoiceIndex){
           el._highlight=true;
+        }else{
+          el._highlight=false;
         }
       })
       this.newInoiceShow = true;
