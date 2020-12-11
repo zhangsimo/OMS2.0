@@ -670,6 +670,7 @@ export default {
               {
                 on: {
                   click: () => {
+                    params.row.taxpayerSign = !params.row.taxpayerSign;
                     this.invoice[params.index].taxpayerSign=params.row.taxpayerSign;
                     this.inoiceIndex=params.index;
                     this.disposeTax();
