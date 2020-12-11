@@ -727,7 +727,7 @@
         this.bankAccountTit = "修改银行账户信息";
         this.bankAccount = true;
         this.$refs.bankAccount.data = this.selectFinTab;
-        // console.log(this.$refs.bankAccount.data, "????");
+        // //console.log(this.$refs.bankAccount.data, "????");
       },
       // 修改启用禁用
       changePlaceFin() {
@@ -921,7 +921,7 @@
       },
       disposeTax() {
         let defauDat = [];
-        console.log(this.invoice[2],111222)
+        //console.log(this.invoice[2],111222)
         this.invoice.map(item => {
           if (item.taxpayerSign == true) {
             defauDat.push(item.taxpayerSign);
