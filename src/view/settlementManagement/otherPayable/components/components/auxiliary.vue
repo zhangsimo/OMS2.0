@@ -663,7 +663,6 @@ export default {
     },
     //辅助核算确定弹框
     confirmFuzhu() {
-      console.log(this.formDynamic.fund)
       if (!this.AssistAccounting) {
         this.$message.error("请选择辅助核算");
         this.subjectModelShowassist = true;
