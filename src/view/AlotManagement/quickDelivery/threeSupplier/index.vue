@@ -189,7 +189,14 @@
       </Modal>
       <!--     分页-->
       <Row class="mt10 mb10">
-        <Col span="12" offset="12" style="text-align:right">
+        <Col span="12" >
+          <div>
+            <Button type="warning" class="mr20" @click="saveTemp">
+              保存
+            </Button>
+          </div>
+        </Col>
+        <Col span="12" style="text-align:right">
           <div>
             <Page
               :current="pageList.page"
@@ -298,7 +305,9 @@ import {
   getbayer,
   daohuoruku,
   getcangku,
-  getPartPos
+  getPartPos,
+  saveData,
+  changeStoreGetShelf
 } from "../../../../api/AlotManagement/threeSupplier.js";
 import { checkStore } from "@/api/system/systemApi";
 import GoodCus from "_c/allocation/GoodCus.vue";
@@ -510,7 +519,7 @@ export default {
           this.TopTableData = res.data.content || [];
           this.pageList.total = res.data.totalElements;
           for (var i = 0; i < this.TopTableData.length; i++) {
-            this.TopTableData[i].enterStoreId = this.storeArray[0].value;
+            this.TopTableData[i].enterStoreId = this.TopTableData[i].enterStoreId?this.TopTableData[i].enterStoreId:this.storeArray[0].value;
           }
           //console.log(this.TopTableData, "this.TopTableData ==>257");
 
@@ -567,12 +576,12 @@ export default {
 
     //获取仓位
     async getPartPosition(row){
-      let partIds = row.details.filter(item => item.partId).map(b => b.partId);
+      //let partIds = row.details.filter(item => item.partId).map(b => b.partId);
       let reqObj = {
-        storeId:row.enterStoreId,
-        partIds:partIds
+        id:row.id,
+        storeId:row.enterStoreId
       }
-      let rep = await getPartPos(reqObj);
+      let rep = await changeStoreGetShelf(reqObj);
       if(rep.code==0){
         this.BottomTableData.map(item => {
           let filterData = rep.data.filter(iv => iv.partId == item.partId);
@@ -608,6 +617,31 @@ export default {
           this.loadingEnter = false;
           msg();
           this.$Message.info("入库失败");
+        });
+    },
+    saveTemp(){
+      if(!this.isSelfOk) {
+        return this.$message.error("请填写正确的仓位!")
+      }
+      this.loadingEnter = true;
+      const msg = this.$Message.loading({
+        content: '数据处理中...',
+        duration: 0
+      });
+      saveData(this.currentrow)
+        .then(res => {
+          this.loadingEnter = false;
+          msg();
+          if (res.code === 0) {
+            //console.log(res);
+            this.search();
+            this.$Message.info("保存成功");
+          }
+        })
+        .catch(e => {
+          this.loadingEnter = false;
+          msg();
+          this.$Message.info("保存失败");
         });
     },
     cancel() {
