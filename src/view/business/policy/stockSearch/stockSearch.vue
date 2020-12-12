@@ -32,7 +32,7 @@
       <!--      汇总库存表-->
       <div class="tabs-warp" v-show="tabIndex == 0">
         <!--      搜索工具栏-->
-        <div class="oper-top flex" ref="operTop0">
+        <div class="oper-top flex" ref="operTop0" style="min-height: auto">
           <div class="pt10">
             <!--            <Input-->
             <!--              v-model="searchForm.partCode"-->
