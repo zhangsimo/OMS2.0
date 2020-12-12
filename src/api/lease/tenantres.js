@@ -1,6 +1,13 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
 
+import {TOKEN_KEY} from "@/libs/util";
+import Cookies from "js-cookie";
+
+
+import {v4} from "uuid";
+import Api from "_conf/url";
+import Axios from 'axios'
 export function getOmsAuth() {
   return axios.request({
     url: `${api.authApi}/resource/findRootRes?scope=oms`,
@@ -51,4 +58,12 @@ export function hasLessee(params) {
     method: "get",
     params
   });
+}
+//ding 租户http://192.168.15.65:5000/oms-lease-provider/tenantConfig/queryAll?tenantId=119&dictionariesConfigCode=TC_DINGTALK&configStatus=1
+export function getDingTenantres(data,params){
+  return axios.require({
+    url:`${api.omsApi}/tenantConfig/queryAll`,
+    method:"get",
+    params
+  })
 }
