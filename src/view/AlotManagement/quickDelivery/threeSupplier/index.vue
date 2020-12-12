@@ -620,6 +620,9 @@ export default {
         });
     },
     saveTemp(){
+      if(!this.currentrow.hasOwnProperty("id")){
+        return this.$message.error("请查看数据明细后再保存");
+      }
       if(!this.isSelfOk) {
         return this.$message.error("请填写正确的仓位!")
       }
