@@ -67,3 +67,18 @@ export function getDingTenantres(data,params){
     params
   })
 }
+//获取类型数组
+export function getTypeList(){
+  return axios.request({
+    url:`${api.omsApi}/tenantConfig/getTenantDintTalkBpmsCodes`,
+    method:"get",
+  })
+}
+//保存
+export function saveDing(data){
+  return axios.request({
+    url:`${api.omsApi}/tenantConfig/save`,
+    method:"put",
+    data
+  })
+}
