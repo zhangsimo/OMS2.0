@@ -41,7 +41,7 @@
 
 <script>
   import * as api from "_api/reportForm/index.js";
-
+  import {showLoading,hideLoading} from "../../../../utils/loading";
   export default {
     data() {
       return {
@@ -66,7 +66,11 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
+        showLoading();
+        this.tableData = [];
+        this.page.total = 0;
         let res = await api.getPjSellAnalyze(this.body, params);
+        hideLoading();
         // let resp2 = await api.sellOutMain(this.body);
         // if(resp2.code==0){
         //   this.totalObj = resp2.data||{};
