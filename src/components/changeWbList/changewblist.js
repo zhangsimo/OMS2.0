@@ -62,3 +62,23 @@ export function conversionListNoNum(val){
 
   }
 }
+//售后管理 配件添加
+export function claimSupplier(val){
+  if(val.length<1){
+    return
+  }else{
+    let arr=[];
+    val.forEach(data=>{
+      arr.push({
+        afterSaleQty:1,
+        afterSaleReason:"",
+        claimDemageCode:"",
+        processedQty:0,
+        untreatedQty:1,
+        unit:data.enterUnitId || "",
+        direction:"出"
+      })
+    })
+    return arr
+  }
+}

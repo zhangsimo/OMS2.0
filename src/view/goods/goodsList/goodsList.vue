@@ -70,11 +70,11 @@
               <i class="iconfont mr5 iconfanhuiicon"></i> 反作废
             </Button>
           </div>
-<!--          <div class="db">-->
-<!--            <Button class="mr10" @click="exportHandle" v-has="'invalid'">-->
-<!--              <i class="iconfont mr5 icondaochuicon"></i> 导出-->
-<!--            </Button>-->
-<!--          </div>-->
+          <div class="db">
+            <Button class="mr10" @click="exportHandle" v-has="'invalid'">
+              <i class="iconfont mr5 icondaochuicon"></i> 导出
+            </Button>
+          </div>
           <div class="db">
             <Button class="mr10" :disabled="hideSp" @click="showStatus" v-has="'check'">
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
