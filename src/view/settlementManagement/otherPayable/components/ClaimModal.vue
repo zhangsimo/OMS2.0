@@ -205,6 +205,7 @@ export default {
 
     //点击确认按钮后
     confirm(){
+      console.log(this.$refs.voucherInput)
       if(this.tableData.length === 0){
         this.$message.error('请点击选择单据按钮，选择数据')
         return
@@ -243,7 +244,11 @@ export default {
           financeAccountCashList: this.financeAccountCashList,
           claimType: 0,
           guestId: this.voucherItem.id,
-          paymentTypeCode:  this.$refs.voucherInput.formDynamic.fund || ""
+          paymentTypeCode:  this.$refs.voucherInput.formDynamic.code,
+          paymentTypeName:  this.$refs.voucherInput.formDynamic.fund,
+          auxiliaryCode: this.$refs.voucherInput.AssistAccounting.auxiliaryCode,
+          auxiliaryName: this.$refs.voucherInput.AssistAccounting.auxiliaryName,
+          auxiliaryTypeCode: this.$refs.voucherInput.AssistAccounting.auxiliaryTypeCode,
         }
         addClaim(obj).then(res => {
           if(res.code === 0){
