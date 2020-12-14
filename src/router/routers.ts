@@ -1268,28 +1268,28 @@ export default [
       //   },
       //   component: () => import("@/view/reportForm/salesAndInventorylist/index.vue"),
       // },
-      // {
-      //   path: "/reportForm/purchaseRepor/reporIndex",
-      //   name: "reportFormProcurement ",
-      //   redirect: "",
-      //   mark: "7100",
-      //   meta: { keepAlive: true,
-      //     title: "采购报表",
-      //
-      //   },
-      //   component: () => import("@/view/reportForm/purchaseRepor/index.vue"),
-      // },
-      // {
-      //   path: "/reportForm/purchaseRepor/saleOrder",
-      //   name: "procurementSaleOrder",
-      //   redirect: "",
-      //   mark: "7101",
-      //   meta: { keepAlive: true,
-      //     title: "销售报表",
-      //
-      //   },
-      //   component: () => import("@/view/reportForm/saleOrder/index.vue"),
-      // },
+      {
+        path: "/reportForm/purchaseRepor/reporIndex",
+        name: "reportFormProcurement ",
+        redirect: "",
+        mark: "7100",
+        meta: { keepAlive: true,
+          title: "采购报表",
+
+        },
+        component: () => import("@/view/reportForm/purchaseRepor/index.vue"),
+      },
+      {
+        path: "/reportForm/purchaseRepor/saleOrder",
+        name: "procurementSaleOrder",
+        redirect: "",
+        mark: "7101",
+        meta: { keepAlive: true,
+          title: "销售报表",
+
+        },
+        component: () => import("@/view/reportForm/saleOrder/index.vue"),
+      },
       {
         path: "/reportForm/purchaseReporAnalysis",
         name: "purchaseReporAnalysis ",
