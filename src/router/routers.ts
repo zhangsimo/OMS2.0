@@ -1192,27 +1192,27 @@ export default [
         },
         component: () => import("@/view/reportForm/saleOrder/index.vue"),
       },
-      {
-        path: "/reportForm/purchaseReporAnalysis",
-        name: "purchaseReporAnalysis ",
-        redirect: "",
-        mark: "7109",
-        meta: {
-          keepAlive: true,
-          title: "采购排行分析",
-        },
-        component: () => import("@/view/reportForm/purchaseReporAnalysis/index.vue"),
-      },
-      {
-        path: "/reportForm/saleOrderAnalysis",
-        name: "saleOrderAnalysis",
-        redirect: "",
-        mark: "7110",
-        meta: { keepAlive: true,
-          title: "销售排行分析",
-        },
-        component: () => import("@/view/reportForm/saleOrderAnalysis/index.vue"),
-      },
+      // {
+      //   path: "/reportForm/purchaseReporAnalysis",
+      //   name: "purchaseReporAnalysis ",
+      //   redirect: "",
+      //   mark: "7109",
+      //   meta: {
+      //     keepAlive: true,
+      //     title: "采购排行分析",
+      //   },
+      //   component: () => import("@/view/reportForm/purchaseReporAnalysis/index.vue"),
+      // },
+      // {
+      //   path: "/reportForm/saleOrderAnalysis",
+      //   name: "saleOrderAnalysis",
+      //   redirect: "",
+      //   mark: "7110",
+      //   meta: { keepAlive: true,
+      //     title: "销售排行分析",
+      //   },
+      //   component: () => import("@/view/reportForm/saleOrderAnalysis/index.vue"),
+      // },
       {
         path: "/reportForm/purchaseRepor/transfer",
         name: "procurementTransfer",
@@ -1971,16 +1971,6 @@ export default [
         },
         component: () => import("@/view/lease/lease/lessee.vue")
       },
-      // {
-      //   path: '/lease/Practice',
-      //   name: 'Practice',
-      //   // mark: '41',
-      //   meta: { keepAlive: true,
-      //     icon: '',
-      //     title: '练习'
-      //   },
-      //   component: () => import('@/view/lease/lease/Practice.vue')
-      // },
       {
         path: "/lease/product",
         name: "leaseProduct",
@@ -2003,17 +1993,37 @@ export default [
         },
         component: () => import("@/view/lease/order/orderlist.vue")
       },
-      {
-        path: "/lease/tenantres",
-        name: "tenantRes",
-        mark: "8104",
-        meta: { keepAlive: true,
-          icon: "gear-b",
-          title: "租户资源",
-
-        },
-        component: () => import("@/view/lease/tenantres/tenantres.vue")
-      },
+      // {
+      //   path: "/lease/tenantres",
+      //   name: "tenantRes",
+      //   mark: "8104",
+      //   meta: { keepAlive: true,
+      //     icon: "gear-b",
+      //     title: "租户资源",
+      //
+      //   },
+      //   component: () => import("@/view/lease/tenantres/tenantres.vue")
+      // },
+      // {
+      //   path: "/lease/dingTenantres",
+      //   name: "dingTenantres",
+      //   // mark: "8104",
+      //   meta: { keepAlive: true,
+      //     icon: "gear-b",
+      //     title: "租户配置"
+      //   },
+      //   component: () => import("@/view/lease/tenantres/tenantres.vue")
+      // },
+      // {
+      //   path: "/lease/dingTenantres",
+      //   name: "dingTenantres",
+      //   // mark: "8104",
+      //   meta: { keepAlive: true,
+      //     icon: "gear-b",
+      //     title: "租户配置"
+      //   },
+      //   component: () => import("@/view/lease/dingTenantres/index.vue")
+      // },
       {
         path: "/lease/FeedbackManagementOne",
         name: "FeedbackManagementOne",
