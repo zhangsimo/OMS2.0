@@ -297,7 +297,7 @@ export const mixGoodsData = {
     },
     filterOrderman() {
       let val = this.salesList.filter(el => el.value == this.formPlan.orderManId)[0]
-      return val.label
+      return val?val.label:""
     },
     //删除选中数据
     delTableData() {
