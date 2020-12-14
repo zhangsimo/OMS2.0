@@ -384,13 +384,11 @@ export default {
   },
   methods: {
     dynamicChange(v){
-      console.log(v)
       this.fundListZanshi.forEach(item => {
         if(item.itemName === v){
           this.formDynamic.code = item.itemCode
         }
       })
-      console.log(this.formDynamic.code,'cccc')
     },
     // 客户刷新初始化
     ClientgetList() {
@@ -698,9 +696,8 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        if(this.fundList.length == 0){
-          this.fundGetList()
-        }
+        
+        this.fundGetList()
 
         if(this.subjectChoose.titleCode === "1221" || this.subjectChoose.titleCode === "2241" || this.subjectChoose.titleCode === "1532" || this.subjectChoose.titleCode === "1801"){
           this.Classification = true

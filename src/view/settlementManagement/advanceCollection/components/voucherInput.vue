@@ -398,9 +398,8 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        if(this.fundListZanshi.length==0){
-          this.fundGetList();
-        }
+        
+        this.fundGetList();
 
         if(this.categoryArr.length==0){
           this.OtherGetlist(); //其他初始化

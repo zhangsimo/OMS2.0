@@ -107,7 +107,7 @@
               <Option
                 v-for="item in getAccShopList"
                 :value="item.shopName"
-                :key="item.shopCode"
+                :key="item.index"
                 class="w150"
                 >{{ item.shopName }}
               </Option>

@@ -6,23 +6,6 @@
           <div class="db mr10">
             <Input type="text" clearable v-model.trim="search.tenantId" placeholder="请输入租户ID"/>
           </div>
-<!--          <div class="db mr10">-->
-<!--            <Select-->
-<!--              v-model="search.orgid"-->
-<!--              class="w120"-->
-<!--              placeholder="请选择门店"-->
-<!--              filterable clearable-->
-<!--            >-->
-<!--&lt;!&ndash;              :disabled="selectShopList"&ndash;&gt;-->
-<!--              <Option-->
-<!--                v-for="item in stores"-->
-<!--                :value="item.id"-->
-<!--                :key="item.id"-->
-<!--              >{{ item.shortName}}-->
-<!--              </Option-->
-<!--              >-->
-<!--            </Select>-->
-<!--          </div>-->
           <div class="db mr10">
             <Select v-model="search.configStatus" class="w120" placeholder="请选择配置状态" filterable clearable>
               <Option v-for="item in configStatusList" :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -31,6 +14,12 @@
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
           </div>
+          <div class="db mr10">
+            <Button type="warning" @click="add">新增</Button>
+          </div>
+          <div class="db mr10">
+            <Button type="warning" @click="save">保存</Button>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +27,7 @@
 </template>
 
 <script>
+  import * as Api from "_api/lease/tenantres";
   import {goshop} from '@/api/settlementManagement/shopList'
   import {getUserAllCompany} from '@/api/base/user'
   import {creat} from "@/view/settlementManagement/components";
@@ -103,6 +93,35 @@
           this.stores = [...this.stores, ...res.data.content]
         }
       },
+      add(){
+        let item={
+          configContent:{
+            corpId:"",cropName:"",
+            enterpriseInsideConfig:{
+              agentId:"",appName:"",appKey:"",appSecret:""
+            },
+            thirdPartyConfig:{
+              appId:"",suiteId:"",suiteName:"",suiteKey:"",suiteSecret:""
+            },
+            tokenConfig:{
+              appId:"",appSecret:"",appName:""
+            },
+            dingTalkBpmsConfigs:[]
+          }
+        }
+        this.$parent.$refs.tabOne.tableData.push(item);
+      },
+      async save(){
+        let data=this.$parent.$refs.tabOne.selections;
+        data.configContent.dingTalkBpmsConfigs=this.$parent.$refs.tabOne.selectData;
+        let res=await Api.saveDing(data);
+        if(res.code===0){
+          this.$Message.success("保存成功")
+          this.$emit("search", {});
+        }else{
+          this.$Message.error("保存失败")
+        }
+      }
     }
   };
 </script>

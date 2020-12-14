@@ -298,9 +298,7 @@
         this.BranchstoreId = arr[1];
       });
       this.getShop();
-      if (this.fundList.length < 1) {
-        this.fundGetList();
-      }
+      this.fundGetList();
     },
     methods: {
       fundGetList() {

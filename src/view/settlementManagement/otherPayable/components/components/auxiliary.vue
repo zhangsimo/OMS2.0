@@ -799,9 +799,7 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        if(this.fundListZanshi.length==0){
           this.fundGetList();
-        }
 
         switch(this.assistTypeCode){
           case '1':
