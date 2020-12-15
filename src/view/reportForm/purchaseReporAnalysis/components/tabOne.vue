@@ -8,12 +8,12 @@
       height="400"
       auto-resize
       resizable
+      show-footer
+      :footer-method="footerMethod"
       :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
       @sort-change="sortMethod"
       :data="tableData"
     >
-<!--      show-footer-->
-<!--      :footer-method="footerMethod"-->
       <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="50"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="guestCode" title="供应商编码" width="90"></vxe-table-column>
@@ -78,10 +78,6 @@
         };
         showLoading()
         let res = await api.getPurchaseReporAnalysis(this.body, params);
-        // let resp2 = await api.pchsEnterMain(this.body)
-        // if(resp2.code==0){
-        //   this.totalObj = resp2.data||{};
-        // }
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             el.guestClassfily = "一级"
@@ -92,6 +88,16 @@
         } else {
           this.page.total = 0;
           this.tableData = [];
+          hideLoading()
+        }
+      },
+      async getAllMoney(){
+        showLoading()
+        let resp2 = await api.pchsEnterMain(this.body)
+        if(resp2.code==0){
+          hideLoading()
+          this.totalObj = resp2.data||{};
+        }else{
           hideLoading()
         }
       },

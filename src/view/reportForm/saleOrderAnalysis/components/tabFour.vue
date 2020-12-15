@@ -11,9 +11,9 @@
       :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
       @sort-change="sortMethod"
       :data="tableData"
+      show-footer
+      :footer-method="footerMethod"
     >
-<!--      show-footer-->
-<!--      :footer-method="footerMethod"-->
       <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="50"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130"></vxe-table-column>
       <!--<vxe-table-column show-overflow="tooltip" field="partTypeCode" title="类型编码" width="90"></vxe-table-column>-->
@@ -72,10 +72,6 @@
         this.page.total = 0;
         let res = await api.getPjSellAnalyze(this.body, params);
         hideLoading();
-        // let resp2 = await api.sellOutMain(this.body);
-        // if(resp2.code==0){
-        //   this.totalObj = resp2.data||{};
-        // }
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             return el;
@@ -85,6 +81,12 @@
         } else {
           this.page.total = 0;
           this.tableData = [];
+        }
+      },
+      async getAllMoney(){
+        let resp2 = await api.sellOutMain(this.body);
+        if(resp2.code==0){
+          this.totalObj = resp2.data||{};
         }
       },
       //分页

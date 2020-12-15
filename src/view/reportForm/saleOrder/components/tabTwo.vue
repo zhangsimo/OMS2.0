@@ -395,6 +395,7 @@
 <script>
   import * as api from "_api/reportForm/index.js";
   import {getAllMoneyMun} from "@/api/bill/saleOrder";
+  import {hideLoading, showLoading} from "../../../../utils/loading";
   export default {
     data() {
       return {
@@ -420,10 +421,6 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        let obj = await getAllMoneyMun(params, this.body)
-        if (obj.code == 0) {
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
-        }
         let res = await api.getPjSellOutMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -461,6 +458,20 @@
           this.tableData = [];
         }
 
+      },
+      async getAllMoney(){
+        let params = {
+          page: this.page.num - 1,
+          size: this.page.size
+        };
+        showLoading()
+        let obj = await getAllMoneyMun(params, this.body)
+        if (obj.code == 0) {
+          hideLoading()
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }else{
+          hideLoading()
+        }
       },
       async getAll() {
         let tableDataAll = [];
