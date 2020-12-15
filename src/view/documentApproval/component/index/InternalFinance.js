@@ -111,6 +111,7 @@ export default {
       if(res.code === 0){
         this.$nextTick( () => {
           this.formInline = res.data
+          this.accountList = res.data.allotInfo
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
             billStatus: res.data.billStatus
