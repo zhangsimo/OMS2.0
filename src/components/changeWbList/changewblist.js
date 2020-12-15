@@ -63,27 +63,42 @@ export function conversionListNoNum(val){
   }
 }
 //售后管理 配件添加
-export function claimSupplier(val){
+export function claimSupplier(val,dataList){
   if(val.length<1){
     return
   }else{
     let arr=[];
-    val.forEach(data=>{
-      arr.push({
-        partInnerId:data.partInnerId || "",
-        partCode : data.partCode || '',
-        partBrand:data.partBrand || "",
-        oemCode:data.oemCode || "",
-        spec:data.spec || "",
-        partName:data.partName || "",
-        carBrandName : data.carBrandName || '',
-        afterSaleQty:1,
-        afterSaleReason:"",
-        claimDemageCode:"",
-        processedQty:0,
-        untreatedQty:1,
-        unit:data.enterUnitId || "",
-        direction:"出"
+    dataList.forEach(el=>{
+      val.forEach(data=>{
+        if(el.partInnerId==data.code){
+          return this.$Message.error("该配件已存在！")
+        }else{
+          arr.push({
+            isAddPart:0,//从添加配件过来的
+            afterSaleReason:"",
+            claimDemageCode:"",
+            processedQty:0,
+            afterSaleQty:data.orderQty||1,
+            untreatedQty:data.orderQty||1,
+            partId: data.id || '',
+            partInnerId: data.code || '',
+            partCode : data.partCode || '',
+            fullName : data.fullName || '',
+            oemCode : data.oeCode || '',
+            partBrand : data.partBrand || '',
+            carBrandName : data.adapterCarBrand || '',
+            carModelName : data.adapterCarModel|| '',
+            spec : data.specifications || data.spec || '',
+            unit : data.minUnit || '',
+            carTypef : data.baseType ? data.baseType.firstType ? data.baseType.firstType.typeName ? data.baseType.firstType.typeName : '' : '' :'',
+            carTypes : data.baseType ? data.baseType.secondType ?data.baseType.secondType.typeName ? data.baseType.secondType.typeName : '':'':'',
+            carTypet : data.baseType ? data.baseType.thirdType ?data.baseType.thirdType.typeName ? data.baseType.thirdType.typeName : '' :'':'',
+            orderPrice:data.orderPrice,
+            averagePrice:data.averagePrice,
+            direction:"出",
+            partName:data.partStandardName
+          })
+        }
       })
     })
     return arr

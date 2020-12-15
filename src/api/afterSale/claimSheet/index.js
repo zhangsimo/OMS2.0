@@ -32,12 +32,11 @@ export function allCustomerClaim(data){
   })
 }
 //右侧 配件理赔 处理日志
-export function registerPartsProcesLog(params,data){
+export function registerPartsProcesLog(params){
   return axios.request({
-    url:`${api.omsOrder}`,
-    method:"post",
-    params,
-    data
+    url:`${api.omsOrder}/afterSaleRecord/findafterSaleRecordDetail`,
+    method:"get",
+    params
   })
 }
 //向供应商理赔登记保存
@@ -48,7 +47,14 @@ export function registerClaimSave(data){
     data
   })
 }
-
+//向供应商理赔登记 提交
+export function registerClaimSubmit(data){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleOutMain/preservationUpdate`,
+    method:"post",
+    data
+  })
+}
 
 
 

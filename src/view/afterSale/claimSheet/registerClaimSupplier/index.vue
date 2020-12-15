@@ -17,20 +17,17 @@
       <Button
         class="mr10 w90"
         @click="save"
-        :loading="saveLoading"
       >
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons"/>保存
         </span>
       </Button>
-<!--      <Button-->
-<!--        class="mr10"-->
-<!--        @click="submit"-->
-<!--        v-has="'submit'"-->
-<!--        :loading="submitLoading"-->
-<!--      >-->
-<!--        <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交-->
-<!--      </Button>-->
+      <Button
+        class="mr10"
+        @click="submit"
+      >
+        <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
+      </Button>
       <Button class="mr10" @click="setPrint" v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
@@ -104,9 +101,8 @@
                                placeholder="请输入供应商"
                                :search-value="formPlan.guestName"
                                @throwName="throwNameFun"
-                               :disabled-prop="!formPlan"
+                               :disabled-prop="formPlan.orderSign&&formPlan.orderSign!=0"
                       >
-                        <!--                        :disabled-prop="formPlan.orderSign&&formPlan.orderSign!=0"-->
                       </GoodCus>
                     </Tooltip>
                     <Button
@@ -114,6 +110,7 @@
                       size="small"
                       type="default"
                       @click="addSuppler"
+                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
                     >
                       <Icon type="md-checkmark"/>
                     </Button>
@@ -125,6 +122,7 @@
                     placeholder="选择日期"
                     format="yyyy-MM-dd"
                     v-model="formPlan.afterSaleDate"
+                    :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
                     style="width: 200px"
                   ></DatePicker>
                 </FormItem>
@@ -133,6 +131,7 @@
                     <Input
                       style="width: 340px"
                       v-model="formPlan.remark"
+                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
                     />
                   </Tooltip>
                 </FormItem>
@@ -150,7 +149,7 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix pt5 pb5">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addMountings">
+                    <Button size="small" class="mr10" @click="addMountings" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
@@ -160,6 +159,7 @@
                       @click="delect"
                       size="small"
                       class="mr10"
+                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
                     >
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                     </Button>
@@ -175,6 +175,7 @@
                       :on-format-error="onFormatError"
                       :on-success="onSuccess"
                       :before-upload='beforeUpload'
+                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
                     >
                       <Button size="small" class="mr10" :disabled="formPlan.billStatusValue != 0 "
                               type="default" @click="getRUl"><i class="iconfont icondaoruicon icons"/> 导入配件
@@ -182,7 +183,7 @@
                     </Upload>
                   </div>
                   <div class="fl mb5">
-                    <Button type="default" @click="openCustomer" size="small">选择客户理赔登记单</Button>
+                    <Button type="default" @click="openCustomer" size="small" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">选择客户理赔登记单</Button>
                   </div>
                 </div>
               </div>
@@ -192,14 +193,16 @@
                 size="mini"
                 resizable
                 stripe
+                highlight-current-row
+                highlight-hover-row
                 ref="xTable"
                 show-overflow="tooltip"
                 show-footer
                 :footer-method="footerMethod"
                 :edit-rules="validRules"
-                height="425"
                 @select-change="selectSameList"
                 @select-all="selectAllList"
+                @current-change="logDataMethod"
                 :data="formPlan.details"
                 class="ml15"
                 :edit-config="{trigger: 'click', mode: 'cell',method:updateFooterEvent}"
@@ -214,11 +217,12 @@
                   <template v-slot="{ row }">
                     <vxe-input
                       type="number"
-                      :max="row.untreatedQty"
+                      :max="row.isAddPart!=0?row.untreatedQty:100000000000"
                       :min="1"
                       v-model="row.afterSaleQty"
                       :controls="false"
                       :precision="0"
+                      @change="afterSaleQtyChange(row)"
                       size="mini"
                     />
                   </template>
@@ -249,7 +253,7 @@
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>
               </vxe-table>
-              <div class="ml15">处理日志</div>
+              <div class="ml15" v-show="!addNewBool">处理日志</div>
               <vxe-table
                 border
                 auto-resize
@@ -257,20 +261,22 @@
                 size="mini"
                 align="left"
                 :data="logData"
+                :loading="logDataLoading"
                 show-overflow="title"
                 class="ml15"
                 stripe
+                v-show="!addNewBool"
               >
                 <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-                <vxe-table-column title="操作日期" field="" width="100"></vxe-table-column>
+                <vxe-table-column title="操作日期" field="createTime" width="100"></vxe-table-column>
                 <vxe-table-column title="方向" field="direction" width="60"></vxe-table-column>
-                <vxe-table-column title="往来单位名称" field="" width="120"></vxe-table-column>
-                <vxe-table-column title="处理类型" field="" width="60"></vxe-table-column>
-                <vxe-table-column title="数量" field="" width="40"></vxe-table-column>
-                <vxe-table-column title="操作人" field="" width="60"></vxe-table-column>
-                <vxe-table-column title="处理单号" field=""></vxe-table-column>
-                <vxe-table-column title="备注" field=""></vxe-table-column>
-                <vxe-table-column title="返回单号" field=""></vxe-table-column>
+                <vxe-table-column title="往来单位名称" field="guestName" width="120"></vxe-table-column>
+                <vxe-table-column title="处理类型" field="recordTypeStatus" width="60"></vxe-table-column>
+                <vxe-table-column title="数量" field="recordQty" width="40"></vxe-table-column>
+                <vxe-table-column title="操作人" field="createUname" width="60"></vxe-table-column>
+                <vxe-table-column title="处理单号" field="afterSaleCode"></vxe-table-column>
+                <vxe-table-column title="备注" field="remark"></vxe-table-column>
+                <vxe-table-column title="返回单号" field="returnCode"></vxe-table-column>
               </vxe-table>
             </Form>
           </div>
@@ -279,7 +285,8 @@
       <!--        更多搜索-->
       <More-query ref="morequeryModal" @getSureQuery="moreQuery" :data="moreQueryList"></More-query>
       <!--      添加配件-->
-      <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+      <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="'1283301248685159192'"
+                       @selectPartName="getPartNameList" @throwPartNameList2="getPartNameList"></select-part-com>
       <!--打印弹框-->
       <printZF ref="printZF" style="display: none"></printZF>
       <!--选择供应商-->

@@ -13,7 +13,7 @@
           ></DatePicker>
           <span class="db mr10 ml10">理赔单位:</span>
           <Input type="text" v-model.trim="guestName" placeholder="请输入理赔单位" clearable class="w180"/>
-          <span class="db mr10 ml10">品牌</span>
+          <span class="db mr10 ml10">品牌:</span>
           <Select
             class="w120"
             clearable
@@ -46,13 +46,14 @@
         size="mini"
         :data="data"
         height="500"
+        ref="customerXtable"
         :loading="tableLoading"
         show-overflow="title"
         @checkbox-change="checkClaim"
         @checkbox-all="checkClaim"
         @checkbox-cancel="checkClaim"
       >
-        <vxe-table-column type="selection" width="30"></vxe-table-column>
+        <vxe-table-column type="selection" width="30" :selectable="checkboxInit"></vxe-table-column>
         <vxe-table-column type="seq" width="40" title="序号"></vxe-table-column>
         <vxe-table-column title="理赔入库单号" width="100" field="serviceId"></vxe-table-column>
         <vxe-table-column title="理赔单位" width="100" field="guestName"></vxe-table-column>
@@ -113,6 +114,12 @@
         this.data=[];
       }
     }
+    private checkboxInit(row,index){
+      if (row._disabled)//这个判断根据你的情况而定
+        return 0;//不可勾选
+      else
+        return 1;//可勾选
+    }
     //获取品牌数组
     private async getBrand(data: string) {
       this.partBrandBool=true
@@ -171,6 +178,7 @@
           return data;
         })
         par.formPlan.details=[...arr,...par.formPlan.details];
+        par.formPlan.partOrCustomerOnly=2;
       }
     }
     //整单选入
@@ -181,7 +189,21 @@
       })
       let res:any=await allCustomerClaim(mainIds);
       if(res.code===0){
-        console.log(res.data,1111)
+        let data:Array<any>=res.data;
+        let par:any=this.$parent;
+        par.formPlan.details=[...data,...par.formPlan.details];
+        this.data.map(el=>{
+          this.checkData.map(el2=>{
+            if(el.id==el2.id){
+              el._disabled=true;
+            }else{
+              el._disabled=false;
+            }
+          })
+        })
+        let xtable:any=this.$refs.customerXtable
+        xtable.clearCheckboxRow();
+        xtable.updateData();
       }
     }
   }

@@ -52,14 +52,14 @@ const test = {
   // omsApi:"http://192.168.21.59:9240",//徐老板
   tokenApi: "https://tsapi2.g-parts.cn",
   // tokenApi: "https://api2.g-part.cn",
-  wmsApi: "http://192.168.30.97:9250",//小冯同学
+  // wmsApi: "http://192.168.30.97:9250",//小冯同学
   // wmsApi: "http://192.168.30.179:9250",//琦哥
-  // wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
+  wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   // wmsApi: "http://192.168.21.59:9250", // 徐老板
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   // omsProduct: "http://192.168.30.97:9200",//小冯同学
-  // omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  omsOrder: "http://192.168.30.97:9210",//小冯同学
+  omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  // omsOrder: "http://192.168.30.97:9210",//小冯同学
   // omsOrder: "http://192.168.30.84:9210",//小毛同学
   // omsOrder: "http://192.168.30.179:9210",//琦哥
   // omsOrder: "http://192.168.30.21:9210",//玮琳呀
@@ -73,12 +73,12 @@ const test = {
   // omsBatch: 'http://192.168.30.97:9260', // 小冯同学
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.30.43:9270",//管老爷
-  omsSettle: "http://192.168.30.97:9270",//小冯同学
+  // omsSettle: "http://192.168.30.97:9270",//小冯同学
   // omsSettle: "http://192.168.30.21:9270",//玮琳呀
   // omsSettle: "http://192.168.21.59:9270",//徐老板
   // omsSettle: "http://192.168.21.162:9270",//吴老板
   // omsSettle: "http://192.168.30.179:9270",//琦哥
-  // omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//9270
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//9270
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   // omsSotck: "http://192.168.21.59:9280", //徐老板
   // omsSotck: "http://192.168.30.97:9280", //小冯同学
