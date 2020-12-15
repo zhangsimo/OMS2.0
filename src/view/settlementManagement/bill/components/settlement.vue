@@ -79,7 +79,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model.number="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="number" size="mini" v-model.number.trim="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="120" title="剩余未收/未付"></vxe-table-column>
@@ -456,7 +456,7 @@
             }
           })
           this.BusinessType.map(row => {
-            if(!Number(row.rpAmt)){
+            if(row.rpAmt === ''){
               bool = false
               return this.$Message.error('本次核销金额不可为空！')
             }
