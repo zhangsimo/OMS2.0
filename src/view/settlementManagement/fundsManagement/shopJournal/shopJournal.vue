@@ -103,13 +103,12 @@
           </div>
           <div class="db mr10">
             <span>认领门店：</span>
-            <Select v-model="claimShopName" filterable clearable class="w150">
+            <Select v-model="claimShopName" filterable clearable class="w200">
               <Option
-                v-for="item in getAccShopList"
-                :value="item.shopName"
-                :key="item.index"
-                class="w150"
-                >{{ item.shopName }}
+                v-for="(item,index) in getAccShopList"
+                :value="item.code"
+                :key="index"
+                >{{ item.shortName }}
               </Option>
             </Select>
           </div>
@@ -1393,13 +1392,14 @@ export default {
       let data = {};
       data.supplierTypeSecond = this.model1;
       this.shopList = [{ id: 0, name: "全部", shortName: "全部" }];
-      let rep = await getAccShopList();
-      if (rep.code == 0) {
-        this.getAccShopList = rep.data;
-      }
+      // let rep = await getAccShopList();
+      // if (rep.code == 0) {
+      //   this.getAccShopList = rep.data;
+      // }
       let res = await goshop(data);
       if (res.code === 0) {
         this.shopList = [...this.shopList, ...res.data];
+        this.getAccShopList = [...res.data]
         this.setAreaDef();
       }
     },

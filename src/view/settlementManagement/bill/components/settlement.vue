@@ -456,6 +456,10 @@
             }
           })
           this.BusinessType.map(row => {
+            if(!Number(row.rpAmt)){
+              bool = false
+              return this.$Message.error('本次核销金额不可为空！')
+            }
             if (row.isSubject == 1) {
               let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
               this.$refs.xTable.updateFooter();

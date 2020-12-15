@@ -53,12 +53,12 @@
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
-<!--          <div class="db">-->
-<!--            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">-->
-<!--              <i class="iconfont mr5 icondaochuicon"></i>-->
-<!--              导出-->
-<!--            </Button>-->
-<!--          </div>-->
+          <div class="db">
+            <Button @click="exportForm" class="mr10" :disabled="selectTableRow===null" v-has="'export'">
+              <i class="iconfont mr5 icondaochuicon"></i>
+              导出
+            </Button>
+          </div>
           <div class="db">
             <Button
               @click="abandoned"
