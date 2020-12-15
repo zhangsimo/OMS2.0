@@ -85,20 +85,14 @@
               </Option
               >
             </Select>
-            <Select
-              class="w200 mr10"
-              filterable
-              @on-change="changecompanyFun"
-              v-model="searchForm.old"
-              placeholder="公司"
-            >
-              <Option
+            <el-select class="w200 mr10" size="small" v-model="searchForm.old" @change="changecompanyFun" filterable placeholder="公司">
+              <el-option
                 v-for="item in Branchstore"
-                :value="item.value"
                 :key="item.value"
-              >{{ item.label }}
-              </Option>
-            </Select>
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <Select
               class="w150 mr10"
               multiple
