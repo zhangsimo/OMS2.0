@@ -84,6 +84,7 @@
           data2 = data;
         }
         this.$refs.tabOne.body = data2
+        this.$refs.tabOne.getAllMoney();
         this.$refs.tabOne.getList();
       },
       search2(data) {
@@ -95,6 +96,7 @@
           data2 = data;
         }
         this.$refs.tabTwo.body = data2
+        this.$refs.tabTwo.getAllMoney();
         this.$refs.tabTwo.getList();
       },
       search3(data) {
@@ -106,6 +108,7 @@
           data2 = data;
         }
         this.$refs.tabThree.body = data2
+        this.$refs.tabThree.getAllMoney();
         this.$refs.tabThree.getList();
       },
       search4(data) {
@@ -117,6 +120,7 @@
           data2 = data;
         }
         this.$refs.tabFour.body = data2
+        this.$refs.tabFour.getAllMoney()
         this.$refs.tabFour.getList();
       },
       search5(data) {
@@ -128,6 +132,7 @@
           data2 = data;
         }
         this.$refs.tabFive.body = data2
+        this.$refs.tabFive.getAllMoney();
         this.$refs.tabFive.getList();
       },
       exportxls(refname) {

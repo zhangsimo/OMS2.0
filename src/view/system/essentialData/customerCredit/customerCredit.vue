@@ -685,7 +685,11 @@
       adjustmenttt() {
         let params = {};
         params.guestId = this.rowMessage.guestId;
-        // params.orgId = this.rowMessage.orgid;
+        if(this.rowMessage.orgid==null){
+          delete params.orgId
+        }else{
+          params.orgId =this.rowMessage.orgid;
+        }
         adjustment(params).then(res => {
           if (res.code === 0) {
             this.adjustmentMsg = res.data;

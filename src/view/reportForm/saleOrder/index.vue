@@ -80,6 +80,7 @@ export default {
         data.orderman ? data2.orderManId = data.orderman : "";
       }
       this.$refs.tabTwo.body = data2
+      this.$refs.tabTwo.getAllMoney();
       this.$refs.tabTwo.getList();
     },
     search3(data) {
@@ -101,6 +102,7 @@ export default {
         data.orderman ? data2.orderManId = data.orderman : "";
       }
       this.$refs.tabThree.body = data2
+      this.$refs.tabThree.getAllMoney();
       this.$refs.tabThree.getList();
     },
     async exportxls(refname) {
