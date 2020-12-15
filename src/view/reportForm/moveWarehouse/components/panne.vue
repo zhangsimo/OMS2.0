@@ -39,9 +39,7 @@
                 v-for="item in stores"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
-              </Option
-              >
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -55,8 +53,7 @@
                 v-for="item in warehouse"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
-              </Option
+              >{{ item.name }}</Option
               >
             </Select>
           </div>

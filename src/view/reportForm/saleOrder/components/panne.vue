@@ -60,8 +60,7 @@
                 v-for="item in bandArr"
                 :value="item.label"
                 :key="item.id"
-              >{{ item.label }}
-              </Option>
+              >{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db mr10">
