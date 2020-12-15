@@ -10,14 +10,13 @@
         <Icon type="ios-more"/>
         更多
       </Button>
-      <Button type="default" class="mr10 w90" @click="addNew" v-has="'add'">
+      <Button type="default" class="mr10 w90" @click="addNew">
         <Icon type="md-add" size="14"/>
         新增
       </Button>
       <Button
         class="mr10 w90"
         @click="save"
-        v-has="'save'"
         :loading="saveLoading"
       >
         <span class="center">
@@ -105,6 +104,7 @@
                                placeholder="请输入供应商"
                                :search-value="formPlan.guestName"
                                @throwName="throwNameFun"
+                               :disabled-prop="!formPlan"
                       >
                         <!--                        :disabled-prop="formPlan.orderSign&&formPlan.orderSign!=0"-->
                       </GoodCus>
@@ -121,7 +121,7 @@
                 </FormItem>
                 <FormItem label="理赔日期：" prop="afterSaleDate">
                   <DatePicker
-                    type="datetime"
+                    type="date"
                     placeholder="选择日期"
                     format="yyyy-MM-dd"
                     v-model="formPlan.afterSaleDate"
@@ -138,12 +138,12 @@
                 </FormItem>
                 <FormItem label="理赔单号：">
                   <Tooltip :content="formPlan.serviceId">
-                    <Input class="w300 mr5" v-model="formPlan.serviceId" disabled/>
+                    <Input class="w200" v-model="formPlan.serviceId" disabled/>
                   </Tooltip>
                 </FormItem>
                 <FormItem label="手工单号：">
                   <Tooltip :content="formPlan.code">
-                    <Input class="w230" v-model="formPlan.code" disabled/>
+                    <Input class="w200" v-model="formPlan.code" disabled/>
                   </Tooltip>
                 </FormItem>
               </div>
@@ -268,9 +268,9 @@
                 <vxe-table-column title="处理类型" field="" width="60"></vxe-table-column>
                 <vxe-table-column title="数量" field="" width="40"></vxe-table-column>
                 <vxe-table-column title="操作人" field="" width="60"></vxe-table-column>
-                <vxe-table-column title="处理单号" field="" width="100"></vxe-table-column>
-                <vxe-table-column title="备注" field="" width="100"></vxe-table-column>
-                <vxe-table-column title="返回单号" field="" width="100"></vxe-table-column>
+                <vxe-table-column title="处理单号" field=""></vxe-table-column>
+                <vxe-table-column title="备注" field=""></vxe-table-column>
+                <vxe-table-column title="返回单号" field=""></vxe-table-column>
               </vxe-table>
             </Form>
           </div>

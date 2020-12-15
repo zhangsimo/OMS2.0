@@ -48,12 +48,6 @@ export default {
         return Promise.reject(new Error("数量输入不正确"));
       }
     }
-    let money = ({cellValue}) => {
-      const reg = /^\d+(\.\d{0,2})?$/i;
-      if (!reg.test(cellValue)) {
-        return Promise.reject(new Error("最多保留2位小数"));
-      }
-    };
     return {
       saveLoading: false,
       submitLoading: false,
@@ -79,6 +73,7 @@ export default {
         num: 1
       }, //左侧分页
       leftTableData: [], //左侧数组
+      logData:[],//处理日志
       queryDate: [], //快速查询时间
       moreQueryList: {}, //更多搜索信息
       formPlan: {
@@ -93,17 +88,12 @@ export default {
           {required: true, type: "string", message: " ", trigger: "change"}
         ],
         afterSaleDate: [
-          {required: true, type: "date", message: " ", trigger: "change"}
+          {required: true, type: "date",format:"YYYY-MM-DD", message: " ", trigger: "change"}
         ],
       }, //表单校验
       validRules: {
-        orderQty: [{required: true, validator: changeNumber}],
-        orderPrice: [{required: true, validator: money}]
-        // storeShelf: [
-        //   {
-        //     validator: checkStoreSelf
-        //   }
-        // ]
+        afterSaleQty: [{required: true, validator: changeNumber}],
+        afterSaleReason: [{required: true, message:" ",trigger:"change"}]
       }, //表格校验
       taxRate: {}, //税率
       selectRowState: "草稿", //费用需要的状态

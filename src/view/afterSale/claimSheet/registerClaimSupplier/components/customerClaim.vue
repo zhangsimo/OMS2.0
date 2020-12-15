@@ -78,7 +78,7 @@
   import { Vue, Component , Watch  } from "vue-property-decorator";
   import getDate from "@/components/getDate/dateget_bill.vue";
   import {getBrandList} from "@/view/reportForm/until";
-  import {customerClaimQuery} from "@/api/afterSale/claimSheet";
+  import {customerClaimQuery,allCustomerClaim} from "@/api/afterSale/claimSheet";
   import moment from "moment";
   // @ts-ignore
   @Component({
@@ -174,8 +174,15 @@
       }
     }
     //整单选入
-    private allSelAddPart(){
-
+    private async allSelAddPart(){
+      let mainIds=new Array<any>();
+      this.checkData.map(el=>{
+        mainIds.push(Number(el.mainId));
+      })
+      let res:any=await allCustomerClaim(mainIds);
+      if(res.code===0){
+        console.log(res.data,1111)
+      }
     }
   }
 </script>

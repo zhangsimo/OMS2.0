@@ -23,6 +23,14 @@ export function customerClaimQuery(params,data){
     data
   })
 }
+//客户理赔登记单 整单选入
+export function allCustomerClaim(data){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleOutMain/mainChoice`,
+    method:"post",
+    data
+  })
+}
 //右侧 配件理赔 处理日志
 export function registerPartsProcesLog(params,data){
   return axios.request({
