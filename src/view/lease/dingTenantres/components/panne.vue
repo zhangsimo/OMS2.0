@@ -17,18 +17,14 @@
           <div class="db mr10">
             <Button type="warning" @click="add">新增</Button>
           </div>
-          <div class="db mr10">
-            <Button type="warning" @click="save">保存</Button>
-          </div>
         </div>
       </div>
     </div>
-    <addDing :data="addDingList"></addDing>
+    <addDing ref="addDing" :data="addDingList"></addDing>
   </section>
 </template>
 
 <script>
-  import * as Api from "_api/lease/tenantres";
   import {goshop} from '@/api/settlementManagement/shopList'
   import {getUserAllCompany} from '@/api/base/user'
   import {creat} from "@/view/settlementManagement/components";
@@ -60,7 +56,21 @@
           dictionariesConfigCode:"TC_DINGTALK",
           configStatus:0
         },
-        addDingList:this.$parent.$refs.tabOne.selections
+        addDingList:{
+          configContent:{
+            corpId:"",cropName:"",
+            // enterpriseInsideConfig:{
+              agentId:"",appName:"",appKey:"",appSecret:"",
+            // },
+            // thirdPartyConfig:{
+              appId:"",suiteId:"",suiteName:"",suiteKey:"",suiteSecret:"",
+            // },
+            // tokenConfig:{
+              appId2:"",appSecret2:"",appName2:"",
+            // },
+            dingTalkBpmsConfigs:[]
+          }
+        }
       };
     },
     computed: {
@@ -100,6 +110,7 @@
         }
       },
       add(){
+        this.$refs.addDing.addDingBool=true;
         let item={
           configContent:{
             corpId:"",cropName:"",
@@ -115,7 +126,7 @@
             dingTalkBpmsConfigs:[]
           }
         }
-        this.$parent.$refs.tabOne.tableData.push(item);
+        //this.$parent.$refs.tabOne.selections=item;
       },
       async save(){
         let data=this.$parent.$refs.tabOne.selections;
