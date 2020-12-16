@@ -16,82 +16,26 @@
     >
       <vxe-table-column field="group0" title="基本信息">
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="corpId" title="企业编号" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.corpId" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="cropName" title="企业名称" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.cropName" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
+        <vxe-table-column field="corpId" title="企业编号" width="100"></vxe-table-column>
+        <vxe-table-column field="cropName" title="企业名称" width="100"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group1" title="内部应用">
-        <vxe-table-column title="agentId" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.enterpriseInsideConfig.agentId" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column title="app名称" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.enterpriseInsideConfig.appName" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column title="key" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.enterpriseInsideConfig.appKey" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column title="app秘钥" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.enterpriseInsideConfig.appSecret" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
+        <vxe-table-column title="agentId" width="100"></vxe-table-column>
+        <vxe-table-column title="app名称" width="100"></vxe-table-column>
+        <vxe-table-column title="key" width="100"></vxe-table-column>
+        <vxe-table-column title="app秘钥" width="100"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group2" title="三方应用">
-        <vxe-table-column field="id" title="appId" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.thirdPartyConfig.appId" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="id" title="suiteId" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.thirdPartyConfig.suiteId" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="appName" title="三方应用名称" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.thirdPartyConfig.suiteName" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="appKey" title="suiteKey" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.thirdPartyConfig.suiteKey" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="appSecret" title="三方应用秘钥" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.thirdPartyConfig.suiteSecret" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
+        <vxe-table-column field="id" title="appId" width="100"></vxe-table-column>
+        <vxe-table-column field="id" title="suiteId" width="100"></vxe-table-column>
+        <vxe-table-column field="appName" title="三方应用名称" width="100"></vxe-table-column>
+        <vxe-table-column field="appKey" title="suiteKey" width="100"></vxe-table-column>
+        <vxe-table-column field="appSecret" title="三方应用秘钥" width="100"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group3" title="token信息">
-        <vxe-table-column field="id" title="appId" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.tokenConfig.appId" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="id" title="秘钥" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.tokenConfig.appSecret" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="appName" title="token应用" width="100">
-          <template v-slot="{row}">
-            <vxe-input v-model="row.configContent.tokenConfig.appName" :disabled="row.id!=undefined"></vxe-input>
-          </template>
-        </vxe-table-column>
+        <vxe-table-column field="id" title="appId" width="100"></vxe-table-column>
+        <vxe-table-column field="id" title="秘钥" width="100"></vxe-table-column>
+        <vxe-table-column field="appName" title="token应用" width="100"></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -108,7 +52,6 @@
     ></Page>
     <div class="db mr10 flex">
       <Button type="default" class="ml20 mb20 mr20">DING信息</Button>
-      <Button type="warning" @click="add">新增DING信息</Button>
     </div>
     <vxe-table
       border
@@ -125,31 +68,9 @@
       :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
     >
       <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
-      <vxe-table-column title="名称" field="name" width="200">
-        <template v-slot="{row}">
-          <Select
-            v-model="row.name"
-            class="w100 mr10"
-            clearable
-            filterable
-            @on-change="changeDing"
-            :disabled="selections.id!=undefined"
-          >
-            <Option
-              v-for="item in dingList"
-              :value="item.name"
-              :key="item.value"
-            >{{item.name}}
-            </Option>
-          </Select>
-        </template>
-      </vxe-table-column>
+      <vxe-table-column title="名称" field="name" width="200"></vxe-table-column>
       <vxe-table-column title="类型" field="type" width="50"></vxe-table-column>
-      <vxe-table-column title="code" field="code">
-        <template v-slot="{row}">
-          <vxe-input v-model="row.code" :disabled="selections.id!=undefined"></vxe-input>
-        </template>
-      </vxe-table-column>
+      <vxe-table-column title="code" field="code"></vxe-table-column>
     </vxe-table>
   </section>
 </template>

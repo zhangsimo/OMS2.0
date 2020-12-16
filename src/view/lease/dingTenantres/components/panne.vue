@@ -23,6 +23,7 @@
         </div>
       </div>
     </div>
+    <addDing :data="addDingList"></addDing>
   </section>
 </template>
 
@@ -31,12 +32,16 @@
   import {goshop} from '@/api/settlementManagement/shopList'
   import {getUserAllCompany} from '@/api/base/user'
   import {creat} from "@/view/settlementManagement/components";
+  import addDing from "./addDing";
   export default {
     props: {
       type: {
         default: 0,
         type: Number,
       }
+    },
+    components:{
+      addDing
     },
     data() {
       return {
@@ -54,7 +59,8 @@
           // orgid: "", // 门店
           dictionariesConfigCode:"TC_DINGTALK",
           configStatus:0
-        }
+        },
+        addDingList:this.$parent.$refs.tabOne.selections
       };
     },
     computed: {
