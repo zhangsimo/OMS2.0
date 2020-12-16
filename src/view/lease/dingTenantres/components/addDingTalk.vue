@@ -1,7 +1,6 @@
 <template>
   <Form ref="form" :label-width="100" :model="data" :rules="rules">
     <FormItem label="名称:" prop="name">
-      <Input v-model="data.name" style="width: 300px"/>
       <Select v-model="data.name" style="width:180px" label-in-value class="mr10" @on-change="changeName">
         <Option
           v-for="item in typeList"
@@ -10,8 +9,8 @@
         >{{item.name}}</Option>
       </Select>
     </FormItem>
-    <FormItem label="类型:" prop="type">
-      <Input v-model="data.type" readonly style="width: 300px"/>
+    <FormItem label="类型:">
+      <Input v-model="data.type" style="width: 300px" readonly/>
     </FormItem>
     <FormItem label="code:" prop="code">
       <Input v-model="data.code" style="width: 300px"/>
@@ -35,7 +34,8 @@
         rules: {
           name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
           code: [{ required: true, message:"code不能为空",trigger: "blur" }]
-        }
+        },
+        typeList:[],
       };
     },
     mounted() {
@@ -46,12 +46,16 @@
       async getTypeList(){
         let res=await Api.getTypeList();
         if(res.code===0){
-          this.typeList=res.data;
+          this.typeList=res.data
         }
       },
       changeName(option){
-        this.data.name=option.name;
-        this.data.type=option.type;
+        this.data.name=option.value;
+        this.typeList.map(el=>{
+          if(el.name==option.value){
+            this.data.type=el.value;
+          }
+        })
       },
       resetFields() {
         this.$refs.form.resetFields();

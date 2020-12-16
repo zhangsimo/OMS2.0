@@ -16,26 +16,83 @@
     >
       <vxe-table-column field="group0" title="基本信息">
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="corpId" title="企业编号" width="100"></vxe-table-column>
-        <vxe-table-column field="cropName" title="企业名称" width="100"></vxe-table-column>
+        <vxe-table-column field="tenantId" title="租户ID" width="80"></vxe-table-column>
+        <vxe-table-column field="corpId" title="企业编号" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.corpId}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="cropName" title="企业名称" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.cropName}}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group1" title="内部应用">
-        <vxe-table-column title="agentId" width="100"></vxe-table-column>
-        <vxe-table-column title="app名称" width="100"></vxe-table-column>
-        <vxe-table-column title="key" width="100"></vxe-table-column>
-        <vxe-table-column title="app秘钥" width="100"></vxe-table-column>
+        <vxe-table-column title="agentId" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.enterpriseInsideConfig.agentId}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="app名称" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.enterpriseInsideConfig.appName}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="key" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.enterpriseInsideConfig.appKey}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="app秘钥" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.enterpriseInsideConfig.appSecret}}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group2" title="三方应用">
-        <vxe-table-column field="id" title="appId" width="100"></vxe-table-column>
-        <vxe-table-column field="id" title="suiteId" width="100"></vxe-table-column>
-        <vxe-table-column field="appName" title="三方应用名称" width="100"></vxe-table-column>
-        <vxe-table-column field="appKey" title="suiteKey" width="100"></vxe-table-column>
-        <vxe-table-column field="appSecret" title="三方应用秘钥" width="100"></vxe-table-column>
+        <vxe-table-column field="id" title="appId" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.thirdPartyConfig.appId}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="id" title="suiteId" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.thirdPartyConfig.suiteId}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="appName" title="三方应用名称" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.thirdPartyConfig.suiteName}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="appKey" title="suiteKey" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.thirdPartyConfig.suiteKey}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="appSecret" title="三方应用秘钥" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.thirdPartyConfig.suiteSecret}}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group3" title="token信息">
-        <vxe-table-column field="id" title="appId" width="100"></vxe-table-column>
-        <vxe-table-column field="id" title="秘钥" width="100"></vxe-table-column>
-        <vxe-table-column field="appName" title="token应用" width="100"></vxe-table-column>
+        <vxe-table-column field="id" title="appId" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.tokenConfig.appId}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="id" title="秘钥" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.tokenConfig.appSecret}}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="appName" title="token应用" width="100">
+          <template v-slot="{row}">
+            <span>{{row.configContent.tokenConfig.appName}}</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -104,7 +161,7 @@
       };
     },
     mounted() {
-      // this.getList();
+      // this.getList();  00000
       this.getTypeList()
     },
     methods: {

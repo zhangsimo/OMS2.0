@@ -11,28 +11,28 @@
               <Option v-for="item in configStatusList" :value="item.value" :key="item.value">{{item.label}}</Option>
             </Select>
           </div>
+          <div class="db mr10">
+            <Select v-model="search.dictionariesConfigCode" class="w120" placeholder="请选择" filterable clearable>
+              <Option v-for="item in dictionariesConfigCodeList" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
+            </Select>
+          </div>
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
           </div>
           <div class="db mr10">
             <Button type="warning" @click="add">新增</Button>
           </div>
-          <div class="db mr10">
-            <Button type="warning" @click="save">保存</Button>
-          </div>
         </div>
       </div>
     </div>
-    <addDing :data="addDingList"></addDing>
+    <addDing ref="addDing" :data="addDingList"></addDing>
   </section>
 </template>
 
 <script>
-  import * as Api from "_api/lease/tenantres";
-  import {goshop} from '@/api/settlementManagement/shopList'
   import {getUserAllCompany} from '@/api/base/user'
-  import {creat} from "@/view/settlementManagement/components";
   import addDing from "./addDing";
+  import {getDictionary} from "@/api/documentApproval/ExpenseReimbursement.js"
   export default {
     props: {
       type: {
@@ -40,27 +40,35 @@
         type: Number,
       }
     },
-    components:{
+    components: {
       addDing
     },
     data() {
       return {
-        company:this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName : '' : "",
-        stores: [{id: 0, name: "全部",shortName: "全部"}], // 门店
-        configStatusList:[
-          {value:-1,label:"失效"},
-          {value:1,label:"未生效"},
-          {value:0,label:"当前生效"}
+        company: this.$store.state.user.userData.currentCompany ? this.$store.state.user.userData.currentCompany.shortName ? this.$store.state.user.userData.currentCompany.shortName : '' : "",
+        stores: [{id: 0, name: "全部", shortName: "全部"}], // 门店
+        configStatusList: [
+          {value: -1, label: "失效"},
+          {value: 1, label: "未生效"},
+          {value: 0, label: "当前生效"}
         ],//配置状态数组
         quickDates: [], // 快速日期查询
         search: {
           isPanne: true,
           tenantId: this.$store.state.user.userData.tenantId,
-          // orgid: "", // 门店
-          dictionariesConfigCode:"TC_DINGTALK",
-          configStatus:0
+          dictionariesConfigCode: "",
+          configStatus: 0
         },
-        addDingList:this.$parent.$refs.tabOne.selections
+        dictionariesConfigCodeList:[],
+        addDingList: {
+          configContent: {
+            corpId: "", cropName: "",
+            agentId: "", appName: "", appKey: "", appSecret: "",
+            appId: "", suiteId: "", suiteName: "", suiteKey: "", suiteSecret: "",
+            appId2: "", appSecret2: "", appName2: "",
+            dingTalkBpmsConfigs: []
+          }
+        }
       };
     },
     computed: {
@@ -74,9 +82,8 @@
     },
     async mounted() {
       this.getShop()
-      // var arr = await creat("", this.$store);
-      // this.search.orgid = arr[1];
       this.query();
+      this.getdictionariesConfigCodeList()
     },
     methods: {
       // 查询
@@ -86,6 +93,12 @@
           data[key] = this.search[key];
         }
         this.$emit("search", data);
+      },
+      async getdictionariesConfigCodeList(){
+        let res=await getDictionary({dictCode:"TENANT_CONFIG"});
+        if(res.code===0){
+          this.dictionariesConfigCodeList=res.data;
+        }
       },
       //获取所有公司信息
       async getShop() {
@@ -99,35 +112,24 @@
           this.stores = [...this.stores, ...res.data.content]
         }
       },
-      add(){
-        let item={
-          configContent:{
-            corpId:"",cropName:"",
-            enterpriseInsideConfig:{
-              agentId:"",appName:"",appKey:"",appSecret:""
+      add() {
+        this.$refs.addDing.addDingBool = true;
+        let item = {
+          configContent: {
+            corpId: "", cropName: "",
+            enterpriseInsideConfig: {
+              agentId: "", appName: "", appKey: "", appSecret: ""
             },
-            thirdPartyConfig:{
-              appId:"",suiteId:"",suiteName:"",suiteKey:"",suiteSecret:""
+            thirdPartyConfig: {
+              appId: "", suiteId: "", suiteName: "", suiteKey: "", suiteSecret: ""
             },
-            tokenConfig:{
-              appId:"",appSecret:"",appName:""
+            tokenConfig: {
+              appId: "", appSecret: "", appName: ""
             },
-            dingTalkBpmsConfigs:[]
+            dingTalkBpmsConfigs: []
           }
         }
-        this.$parent.$refs.tabOne.tableData.push(item);
       },
-      async save(){
-        let data=this.$parent.$refs.tabOne.selections;
-        data.configContent.dingTalkBpmsConfigs=this.$parent.$refs.tabOne.selectData;
-        let res=await Api.saveDing(data);
-        if(res.code===0){
-          this.$Message.success("保存成功")
-          this.$emit("search", {});
-        }else{
-          this.$Message.error("保存失败")
-        }
-      }
     }
   };
 </script>
