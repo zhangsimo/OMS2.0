@@ -533,7 +533,6 @@ export default {
     this.dates = this.$refs.quickDate.val;
     this.getArea();
     this.getShop();
-    this.query();
     this.getTreeListFun();
   },
   computed: {
@@ -657,6 +656,7 @@ export default {
         if (this.$store.state.user.userData.shopkeeper != 0) {
           this.getThisArea(); //获取当前门店地址
         }
+        this.query();
       }
     },
     //导出
