@@ -1123,11 +1123,13 @@
                 "noAccountAmt",
                 "noAccountQty",
                 "thisNoAccountQty",
-                "thisNoAccountAmt",
                 "thisAccountAmt"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);
+            }
+            if (["thisNoAccountAmt"].includes(column.property)) {
+              return this.$utils.sum(data, column.property).toFixed(2);
             }
             if (columnIndex === 11) {
               return ` ${this.countAllAmount(data)} `;
