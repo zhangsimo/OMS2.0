@@ -1,11 +1,11 @@
 <template>
-  <section class="oper-top">
+  <section class="oper-box">
     <div class="flex">
       <div class="wlf">
-        <Button type="default" @click="claim(1)">原货退还</Button>
-        <Button type="default" @click="claim(2)">换货处理</Button>
-        <Button type="default" @click="claim(3)">退货处理</Button>
-        <Button type="default" @click="claim(4)">原物销毁</Button>
+        <Button type="default" class="mr10" @click="claim(1)">原货退还</Button>
+        <Button type="default" class="mr10" @click="claim(2)">换货处理</Button>
+        <Button type="default" class="mr10" @click="claim(3)">退货处理</Button>
+        <Button type="default" class="mr10" @click="claim(4)">原物销毁</Button>
       </div>
     </div>
     <vxe-table
@@ -15,6 +15,7 @@
       :data="claimSupplierData"
       size="mini"
       show-overflow="title"
+      class="mt20"
       @checkbox-all="claimSupplierSel"
       @checkbox-change="claimSupplierSel"
       @checkbox-cancel="claimSupplierSel"

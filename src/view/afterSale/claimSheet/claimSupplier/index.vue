@@ -1,5 +1,5 @@
 <template>
-  <div class="con-box">
+  <div  class="content-oper" style="background: #fff">
     <panne @search="search" @export="exportxls()"/>
     <tabOne ref="tabOne"/>
   </div>
@@ -11,7 +11,8 @@
   // @ts-ignore
   @Component({
     components: {
-      panne, tabOne
+      panne:panne,
+      tabOne:tabOne
     }
   })
   export default class claimSupplier extends Vue {
