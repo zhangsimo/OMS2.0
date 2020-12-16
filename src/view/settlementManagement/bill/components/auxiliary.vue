@@ -478,7 +478,6 @@ export default {
       data.phone = "";
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
-      // console.log(this.$store.state.user.userData.shopId);
       // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
       data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
@@ -559,15 +558,14 @@ export default {
     radioChangeEventPersonage({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
+      this.AssistAccounting.auxiliaryTypeCode = "4"
       // this.auxiliaryCode = row.userName;
     },
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "CW0011X";
-      this.AssistAccounting.auxiliaryTypeCode = "CW0011X"
       // this.auxiliaryCode = row.itemCode;
-      // console.log(row)
     },
     //辅助核算确定弹框
     confirmFuzhu() {
@@ -578,10 +576,8 @@ export default {
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
-                console.log(this.AssistAccounting,'aaaaa')
                 this.AssistAccounting.paymentTypeCode = this.formDynamic.code;
                 this.AssistAccounting.paymentTypeName = this.formDynamic.fund;
-                console.log(this.AssistAccounting,'bbbbb')
                 this.$emit("ChildContent", this.AssistAccounting);
                 bus.$emit("ChildContent", this.AssistAccounting);
                 this.subjectModelShowassist = false;
@@ -596,7 +592,6 @@ export default {
           this.$message.error("请选择辅助核算");
           this.subjectModelShowassist = true;
         } else {
-          // console.log(this.AssistAccounting);
           this.$emit("ChildContent", this.AssistAccounting);
           bus.$emit("ChildContent", this.AssistAccounting);
           this.subjectModelShowassist = false;
@@ -730,7 +725,6 @@ export default {
       params.dictCode = "CW00131";
       kmType(params).then(res => {
         this.fundList = res.data;
-        console.log(this.fundList)
         this.fundListZanshi=this.fundList.filter(vb=>this.subjectChoose.titleCode.indexOf(vb.itemValueOne)!=-1)
         if(this.fundListZanshi.length<1){
           this.Classification=false;
