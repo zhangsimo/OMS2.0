@@ -14,6 +14,7 @@
       :disabled="isCanChange"
       :remote-method="getOrignCompany"
       @on-change="getAccountNameListFun"
+      @on-query-change="queryChange"
       :loading="searchLoading">
       <Option v-for="(option, index) in company" :value="option.id" :key="index">{{option.fullName}}</Option>
     </Select>
@@ -246,6 +247,13 @@ export default {
         this.seleteQuery();
       }
     },
+    //往来单位搜索词改变触发
+    queryChange(v){
+      if(v.trim() === ''){
+        this.companyId = ''
+      }
+    },
+    //往来单位选中option改变触发
     getAccountNameListFun(v){
       this.companyId = v;
       this.seleteQuery();
