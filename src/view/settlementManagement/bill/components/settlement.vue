@@ -231,6 +231,7 @@
         this.obj = val;
       });
       bus.$on("ChildContent", value => {
+        console.log(value,'adsf')
         value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2 ? 1 : value.auxiliaryTypeCode //辅助核算选中哪一个
         if (value.auxiliaryTypeCode == "1" || value.auxiliaryTypeCode == "2" || value.auxiliaryTypeCode == "3" || value.auxiliaryTypeCode == "4") {
           value.isAuxiliaryAccounting = 0 //是否辅助核算类
@@ -268,7 +269,7 @@
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.userName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryCode: value.code || value.id, //辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
             paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
             paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
@@ -283,10 +284,10 @@
             unAmt: 0,
             rpAmt: 0,
             unAmtLeft: 0,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            auxiliaryTypeCode: value.dictCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.itemName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryCode: value.itemCode, //辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
             paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
             paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
