@@ -1151,6 +1151,17 @@ export default [
             component: () =>
               import("@/view/afterSale/claimSheet/registerClaimSupplier/index.vue")
           },
+          {
+            path: 'afterSale/claimSupplier',
+            name: 'claimSupplier',
+            //mark: '11002',
+            meta: {
+              keepAlive: true,
+              title: '供应商理赔处理',
+            },
+            component: () =>
+              import("@/view/afterSale/claimSheet/claimSupplier/index.vue")
+          },
         ]
       },
       {

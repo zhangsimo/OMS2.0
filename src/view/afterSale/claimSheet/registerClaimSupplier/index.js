@@ -46,7 +46,7 @@ export default {
       moment: moment,
       supplierData: {},//当前选中项查看供应商数据
       clientDataShow: false,//查看供应商弹框 bool
-      orderType: 99,
+      orderSign: 99,
       typeList: [ //单据状态
         {value: 99, name: "所有"},
         {value: 0, name: "草稿"},
@@ -212,11 +212,45 @@ export default {
       let params = {}
       params.page = this.leftPage.num - 1;
       params.size = this.leftPage.size;
-      data.orderType = this.orderType == 99 ? "" : this.orderType;
+      data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
       let res = await api.registerClaimsQuery(params, data);
       if (res.code === 0) {
-        this.leftTableData = res.data.content;
+        this.leftTableData = (res.data.content || []).map(el => {
+          switch (el.handleSign) {
+            case 0:
+              el.handleSignStatus = "待处理";
+              break;
+            case 1:
+              el.handleSignStatus = "处理中";
+              break;
+            case 2:
+              el.handleSignStatus = "已处理";
+              break;
+          }
+          switch (el.orderSign) {
+            case 0:
+              el.orderSignStatus = "草稿";
+              break;
+            case 1:
+              el.orderSignStatus = "已提交";
+              break;
+            case 2:
+              el.orderSignStatus = "已完成";
+              break;
+          }
+          return el;
+        });
         this.leftPage.total = res.data.totalElements;
+        if (this.selectLeftItemId) {
+          for (let b of this.leftTableData) {
+            if (b.id == this.selectLeftItemId) {
+              this.clickOnesList({row: b});
+              break;
+            }
+          }
+        }else{
+          this.clickOnesList(this.leftTableData[0]);
+        }
       }
     },
     // 左侧表格数据
@@ -230,7 +264,7 @@ export default {
         data.createendTime = "";
       }
       let params = {}
-      data.orderType = this.orderType == 99 ? "" : this.orderType;
+      data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
       params.page = this.leftPage.num - 1;
       params.size = this.leftPage.size;
       let res = await api.registerClaimsQuery(params, data);

@@ -3,7 +3,7 @@
     <div class="headerBox">
       <span>快速查询:</span>
       <quick-date class="ml5 mr10" v-on:quickDate="getDataQuick"></quick-date>
-      <Select v-model="orderType" style="width:100px" class="mr10" @on-change="selectTypetList">
+      <Select v-model="orderSign" style="width:100px" class="mr10" @on-change="selectTypetList">
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
       <Button type="default" @click="openQueryModal" class="mr10">
