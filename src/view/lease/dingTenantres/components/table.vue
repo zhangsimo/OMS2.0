@@ -161,7 +161,7 @@
       };
     },
     mounted() {
-      // this.getList();
+      // this.getList();  00000
       this.getTypeList()
     },
     methods: {
