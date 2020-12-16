@@ -1,11 +1,12 @@
 <template>
-  <section class="oper-box">
+  <section class="oper-box ml10">
     <div class="flex">
       <div class="wlf">
         <Button type="default" class="mr10" @click="claim(1)">原货退还</Button>
         <Button type="default" class="mr10" @click="claim(2)">换货处理</Button>
         <Button type="default" class="mr10" @click="claim(3)">退货处理</Button>
         <Button type="default" class="mr10" @click="claim(4)">原物销毁</Button>
+        <Button type="default" class="mr10" @click="exportData">导出</Button>
       </div>
     </div>
     <vxe-table
@@ -50,6 +51,7 @@
 <script lang="ts">
   import {Vue, Component, Watch} from "vue-property-decorator";
   import moment from "moment";
+  @Component
   export default class tabOne extends Vue{
     private claimSupplierData:Array<any>=new Array<any>();
     private body:any={};
@@ -58,6 +60,9 @@
 
     }
     private claim(type:number){
+
+    }
+    private exportData(){
 
     }
   }

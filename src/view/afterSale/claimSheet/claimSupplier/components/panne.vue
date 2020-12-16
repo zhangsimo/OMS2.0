@@ -2,7 +2,7 @@
   <section class="oper-top pb15">
     <div class="oper-top">
       <div class="oper-top flex">
-        <div class="wlf ">
+        <div class="wlf ml10">
           <div class="db mr10">
             <span class="mr10">提交日期：</span>
             <DatePicker
@@ -68,7 +68,6 @@
           </div>
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
-            <Button @click="exportxls">导出</Button>
           </div>
         </div>
       </div>
@@ -80,7 +79,7 @@
   import {getBrandList} from "@/view/reportForm/until.js"
   import {ToDayStr} from "@/components/getDate/index_bill.js"
   import moment from "moment";
-
+  @Component
   export default class panne extends Vue {
     private search: any = {
       orderDate: ToDayStr(),

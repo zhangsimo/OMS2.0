@@ -7,7 +7,7 @@
 <script lang="ts">
   import {Vue, Component, Watch} from "vue-property-decorator";
   import panne from "./components/panne.vue";
-  import tabOne from "./components/table.vue";
+  import tabOne from "./components/tabOne.vue";
   // @ts-ignore
   @Component({
     components: {
