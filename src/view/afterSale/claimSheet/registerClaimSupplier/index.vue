@@ -28,10 +28,10 @@
       >
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
       </Button>
-      <Button class="mr10" @click="setPrint" v-has="'print'">
+      <Button class="mr10" @click="setPrint">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button type="default" class="mr10" v-has="'supplierExamie'" @click="supplierExamie">查看供应商</Button>
+      <Button type="default" class="mr10" @click="supplierExamie">查看供应商</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -149,7 +149,8 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix pt5 pb5">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addMountings" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2">
+                    <Button size="small" class="mr10" @click="addMountings"
+                            :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
@@ -183,7 +184,10 @@
                     </Upload>
                   </div>
                   <div class="fl mb5">
-                    <Button type="default" @click="openCustomer" size="small" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">选择客户理赔登记单</Button>
+                    <Button type="default" @click="openCustomer" size="small"
+                            :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
+                      选择客户理赔登记单
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -284,9 +288,10 @@
       </div>
       <!--        更多搜索-->
       <More-query ref="morequeryModal" @getSureQuery="moreQuery" :data="moreQueryList"></More-query>
-      <!--      添加配件-->
-      <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="'1283301248685159192'"
-                       @selectPartName="getPartNameList" @throwPartNameList2="getPartNameList"></select-part-com>
+
+      <select-part-com ref="selectPartCom" :formPlanmain="formPlan" @selectPartName="getPartNameList"
+                       :is-show-add-part-btn="true" :noDBclick="true"></select-part-com>
+
       <!--打印弹框-->
       <printZF ref="printZF" style="display: none"></printZF>
       <!--选择供应商-->
@@ -296,21 +301,24 @@
         @selectSupplierName="getSupplierName"
       ></select-supplier>
       <!--查看供应商-->
-      <!--      <Modal-->
-      <!--        v-model="clientDataShow"-->
-      <!--        title="供应商资料"-->
-      <!--        @on-visible-change="openOrClose"-->
-      <!--        width="700"-->
-      <!--        height="2100"-->
-      <!--      >-->
-      <!--        <supplierExamie-->
-      <!--          :data="supplierData.clientList"-->
-      <!--          :provincearr="supplierData.provinceArr"-->
-      <!--          :treelist="supplierData.treeDiagramList"-->
-      <!--          :dis="supplierData.nameChange"-->
-      <!--          ref="child"-->
-      <!--        ></supplierExamie>-->
-      <!--      </Modal>-->
+      <Modal
+        v-model="clientDataShow"
+        title="供应商资料"
+        @on-visible-change="supplierExamie"
+        width="700"
+        height="2100"
+      >
+        <supplierExamie
+          :data="supplierData.clientList"
+          :provincearr="provinceArr"
+          :treelist="treeList"
+          :dis="supplierData.nameChange"
+          ref="child"
+        ></supplierExamie>
+        <div slot="footer">
+          <Button @click="clientDataShow=false">关闭</Button>
+        </div>
+      </Modal>
       <!--选择客户理赔登记单-->
       <customerClaim ref="customerClaim"></customerClaim>
     </div>

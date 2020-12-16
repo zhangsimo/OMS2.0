@@ -58,8 +58,8 @@ const test = {
   // wmsApi: "http://192.168.21.59:9250", // 徐老板
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   // omsProduct: "http://192.168.30.97:9200",//小冯同学
-  omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  // omsOrder: "http://192.168.30.97:9210",//小冯同学
+  // omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
+  omsOrder: "http://192.168.30.97:9210",//小冯同学
   // omsOrder: "http://192.168.30.84:9210",//小毛同学
   // omsOrder: "http://192.168.30.179:9210",//琦哥
   // omsOrder: "http://192.168.30.21:9210",//玮琳呀

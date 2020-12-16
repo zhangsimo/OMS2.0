@@ -8,15 +8,17 @@ import customerClaim from "./components/customerClaim"
 import moment from "moment";
 import {claimSupplier} from "@/components/changeWbList/changewblist";
 import {hideLoading, showLoading} from "@/utils/loading";
+import selectPartCom from "@/view/goods/goodsList/components/selectPartCom.vue";
+import { area } from "@/api/lease/registerApi";
+import {getSupplierTreeList} from '@/api/system/essentialData/supplierManagement'
 
 
 import {getup} from "@/api/business/procurementAndStorage";
-import selectPartCom from "@/view/salesManagement/salesOrder/components/selectPartCom";
-import FeeRegistration from "@/view/goods/plannedPurchaseOrder/components/FeeRegistration.vue";
 import Cookies from "js-cookie";
 import {TOKEN_KEY} from "@/libs/util";
 import SelectSupplier from "@/view/goods/goodsList/components/supplier/selectSupplier";
 import printZF from "./components/print.vue";
+import {v4} from "uuid";
 
 
 export default {
@@ -27,7 +29,6 @@ export default {
     GoodCus,
     MoreQuery,
     selectPartCom,
-    FeeRegistration,
     SelectSupplier,
     customerClaim,
     supplierExamie,
@@ -78,13 +79,16 @@ export default {
           {required: true, type: "string", message: " ", trigger: "change"}
         ],
         afterSaleDate: [
-          {required: true, message: " ", trigger: "change"}
+          {required: true,type:"date", message: "", trigger: "change"}
         ],
       }, //表单校验
       validRules: {
         afterSaleQty: [{required: true, validator: changeNumber}],
         afterSaleReason: [{required: true, message:" ",trigger:"change"}]
       }, //表格校验
+      list:[],//暂存 treeList
+      treeList:[],
+      provinceArr:[],
       rightList: [], //右侧点击数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -97,6 +101,10 @@ export default {
   },
   mounted() {
     this.getLeftLists();
+    this.getAdress();
+    this.getTreeList();
+    this.$refs.child.getList()
+    this.$refs.child.getComList()
   },
   methods: {
     //选择供应商
@@ -108,21 +116,63 @@ export default {
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "guestName", val.fullName);
     },
-    //查看供应商
-    supplierExamie() {
-      if (!this.dataChange.row.hasOwnProperty('guestId')) {
-        return this.$Message.error("请选择一条单据明细");
-      }
-      let data = {};
-      data.id = this.dataChange.row.guestId;
-      this.$refs.child.$refs.form.resetFields()
-      getCustomerDetails(data).then(res => {
+    //获取地址 查看供应商使用
+    getAdress() {
+      area().then(res => {
         if (res.code == 0) {
-          this.supplierData.clientList = res.data;
-          this.nameChange = true;
+          this.provinceArr = res.data;
         }
-        this.clientDataShow = true;
       });
+    },
+    //查看供应商 treelist
+    getTreeList(){
+      getSupplierTreeList().then( res => {
+        if (res.code == 0){
+          this.list = res.data
+          let leverOne = res.data.filter( item => item.lever ==1)
+          leverOne.map( item => {
+            item.children =[]
+            item.code = item.id
+            this.list.forEach( el => {
+              if (item.id == el.parentId){
+                item.children.push(el)
+              }
+            })
+          })
+          this.treeList = leverOne
+        }
+      })
+    },
+    //获取客户属性
+    async getList() {
+      let data = {};
+      data = ["CS00107", "CS00106", "CS00111", "CS00110"];
+      let res = await getDigitalDictionary(data);
+      if (res.code == 0) {
+        this.dataList = res.data;
+      }
+    },
+    //查看供应商
+    supplierExamie(type) {
+      if(type){
+        if (!this.dataChange.row.hasOwnProperty('guestId')) {
+          return this.$Message.error("请选择一条单据明细");
+        }
+        let data = {};
+        data.id = this.dataChange.row.guestId;
+        getCustomerDetails(data).then(res => {
+          if (res.code == 0) {
+            this.supplierData.clientList = res.data;
+            this.supplierData.clientList.belongSystem = JSON.parse(
+              this.supplierData.clientList.belongSystem
+            ).value;
+            this.$refs.child.financeList=res.data.guestAccountVoList
+            this.$refs.child.invoice=res.data.guestTaxpayerVOList
+            this.nameChange = true;
+          }
+          this.clientDataShow = true;
+        });
+      }
     },
     //快速查询获取日期
     getDataQuick(v) {
@@ -418,8 +468,7 @@ export default {
           this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
             ? moment(this.formPlan.afterSaleDate).format("YYYY-MM-DD")
             : "";
-          this.formPlan.details = [...claimSupplier(val,this.formPlan.details),...this.formPlan.details]
-          console.log(this.formPlan.details,1111)
+          this.formPlan.details = [...claimSupplier(val),...this.formPlan.details]
           this.formPlan.partOrCustomerOnly=1;
         } else {
           this.$Message.error("*为必填项");
