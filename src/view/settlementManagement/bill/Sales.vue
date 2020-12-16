@@ -350,7 +350,7 @@
           },
           {
             title: "制单日期",
-            key: "createTime",
+            key: "auditDate",
             className: "tc",
             resizable: true,
             width: 150,
@@ -365,9 +365,9 @@
                     whiteSpace: 'nowrap'
                   },
                   domProps: {
-                    title: params.row.createTime
+                    title: params.row.auditDate
                   }
-                }, params.row.createTime)
+                }, params.row.auditDate)
               ])
             }
           },
