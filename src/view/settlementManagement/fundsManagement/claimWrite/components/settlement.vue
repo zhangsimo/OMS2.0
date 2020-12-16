@@ -406,9 +406,9 @@
           this.BusinessType.map(row => {
             if (row.isSubject == 1) {
               //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
-              // let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
-              // this.$refs.account.updateFooter();
-              // this.checkComputed();
+              let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+              this.$refs.account.updateFooter();
+              this.checkComputed();
               // if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
               //   this.$Message.error("金额录入错误，请重新录入！")
               //   bool = false
@@ -477,9 +477,9 @@
         })
         if (row.isSubject == 1) {
           //若为会计科目项  则是若表格合计第一项为负则只可输入正数；表格合计第一项为正则只可输入负数
-          // let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
-          // this.$refs.account.updateFooter();
-          // this.checkComputed();
+          let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
+          this.$refs.account.updateFooter();
+          this.checkComputed();
           // if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
           //   return this.$Message.error("金额录入错误，请重新录入！")
           // }
