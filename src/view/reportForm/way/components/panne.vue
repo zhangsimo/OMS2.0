@@ -111,7 +111,6 @@ export default {
     };
   },
   async created() {
-    console.log(this.search.submitDate)
     let resS = await api.getClient();
     let resE = await api.getStorelist();
     if (resS.code == 0) {
@@ -153,7 +152,6 @@ export default {
     // 查询
     query() {
       let data = {};
-      console.log(this.search)
       for (let key in this.search) {
         if (this.search[key]) {
           if (key == "submitDate") {

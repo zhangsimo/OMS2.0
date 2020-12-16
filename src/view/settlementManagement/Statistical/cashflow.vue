@@ -167,7 +167,7 @@ export default {
       dates: [], // 查询日期
       areaId: "", // 区域id
       areas: [], // 区域
-      BranchstoreId: "", // 门店id
+      BranchstoreId: this.$store.state.user.userData.currentCompany.id, // 门店id
       Branchstore: [] // 门店
     };
   },
