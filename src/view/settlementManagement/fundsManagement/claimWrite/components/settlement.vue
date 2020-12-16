@@ -409,11 +409,11 @@
               let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
               this.$refs.account.updateFooter();
               this.checkComputed();
-              if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
-                this.$Message.error("金额录入错误，请重新录入！")
-                bool = false
-                return
-              }
+              // if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
+              //   this.$Message.error("金额录入错误，请重新录入！")
+              //   bool = false
+              //   return
+              // }
             } else {
               //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
               let sumUnAmt = row.unAmt
@@ -480,9 +480,9 @@
           let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
           this.$refs.account.updateFooter();
           this.checkComputed();
-          if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
-            return this.$Message.error("金额录入错误，请重新录入！")
-          }
+          // if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
+          //   return this.$Message.error("金额录入错误，请重新录入！")
+          // }
         } else {
           //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
           let sumUnAmt = row.unAmt

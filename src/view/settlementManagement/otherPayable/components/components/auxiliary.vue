@@ -284,7 +284,7 @@
             style="width: 300px"
           >
             <FormItem label="款项分类:" prop="fund">
-              <Select v-model="formDynamic.fund" placeholder="请选择">
+              <Select v-model="formDynamic.fund" placeholder="请选择" @on-change="dynamicChange">
                 <Option
                   v-for="item in fundListZanshi"
                   :value="item.itemName"
@@ -423,6 +423,13 @@ export default {
     };
   },
   methods: {
+    dynamicChange(v){
+      this.fundListZanshi.forEach(item => {
+        if(item.itemName === v){
+          this.formDynamic.code = item.itemCode
+        }
+      })
+    },
     // 客户刷新初始化
     ClientgetList() {
       let params = {};
@@ -511,7 +518,6 @@ export default {
       data.phone = "";
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
-      // console.log(this.$store.state.user.userData.shopId);
       // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
       data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
@@ -635,18 +641,28 @@ export default {
     radioChangeEventClient({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "1";
+      this.AssistAccounting.auxiliaryTypeCode = '1'
+      this.AssistAccounting.auxiliaryName = row.fullName
+      this.AssistAccounting.auxiliaryCode = row.code
+      // this.a
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算供应商
     radioChangeEventSupplier({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "2";
+      this.AssistAccounting.auxiliaryTypeCode = '2'
+      this.AssistAccounting.auxiliaryName = row.fullName
+      this.AssistAccounting.auxiliaryCode = row.code
       // this.auxiliaryCode = row.code;
     },
     //点击单选框获取辅助核算个人
     radioChangeEventPersonage({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
+      this.AssistAccounting.auxiliaryTypeCode = '4'
+      this.AssistAccounting.auxiliaryName = row.userName
+      this.AssistAccounting.auxiliaryCode = row.id
       // this.auxiliaryCode = row.userName;
     },
     //点击单选框获取辅助核算其他
@@ -654,11 +670,16 @@ export default {
       this.AssistAccounting = row;
       if(this.dictName == '外部员工'){
         this.auxiliaryTypeCode = "CW00118";
+        this.AssistAccounting.auxiliaryTypeCode = "CW00118"
+        this.AssistAccounting.auxiliaryName = row.itemName
+        this.AssistAccounting.auxiliaryCode = row.itemCode
       }else{
         this.auxiliaryTypeCode = row.dictCode;
+        this.AssistAccounting.auxiliaryTypeCode = row.dictCode
+        this.AssistAccounting.auxiliaryName = row.itemName
+        this.AssistAccounting.auxiliaryCode = row.itemCode
       }
       // this.auxiliaryCode = row.itemCode;
-      // console.log(row)
     },
     //辅助核算确定弹框
     confirmFuzhu() {
@@ -671,7 +692,8 @@ export default {
         this.$message.error("款项分类必选")
         return
       }
-        // console.log(this.AssistAccounting);
+        this.AssistAccounting.paymentName = this.formDynamic.fund
+        this.AssistAccounting.paymentCode = this.formDynamic.code
         this.$emit("ChildContent", this.AssistAccounting);
         bus.$emit("ChildContent", this.AssistAccounting);
         this.$emit("callBackFun")
