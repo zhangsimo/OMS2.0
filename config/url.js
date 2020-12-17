@@ -68,8 +68,8 @@ const test = {
   // passportApi: "http://192.168.30.97:5200",//
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
   // authApi: "http://192.168.30.97:5200",//
-  authApi: "http://192.168.15.87:5200",//
-  // authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
+  // authApi: "http://192.168.15.87:5200",//
+  authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   // omsBatch: 'http://192.168.21.59:9260', //
   // omsBatch: 'http://192.168.30.97:9260', //
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
