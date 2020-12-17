@@ -384,13 +384,11 @@ export default {
   },
   methods: {
     dynamicChange(v){
-      console.log(v)
       this.fundListZanshi.forEach(item => {
         if(item.itemName === v){
           this.formDynamic.code = item.itemCode
         }
       })
-      console.log(this.formDynamic.code,'cccc')
     },
     // 客户刷新初始化
     ClientgetList() {
@@ -480,7 +478,6 @@ export default {
       data.phone = "";
       data.office = 0;
       data.shopId = this.$store.state.user.userData.shopId;
-      // console.log(this.$store.state.user.userData.shopId);
       // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
       data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
       getStaffList(data)
@@ -561,29 +558,26 @@ export default {
     radioChangeEventPersonage({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "4";
+      this.AssistAccounting.auxiliaryTypeCode = "4"
       // this.auxiliaryCode = row.userName;
     },
     //点击单选框获取辅助核算其他
     radioChangeEventOther({ row }) {
       this.AssistAccounting = row;
       this.auxiliaryTypeCode = "CW0011X";
-      this.AssistAccounting.auxiliaryTypeCode = "CW0011X"
       // this.auxiliaryCode = row.itemCode;
-      // console.log(row)
     },
     //辅助核算确定弹框
     confirmFuzhu() {
       if(this.Classification){
         this.$refs.formDynamic.validate(valid => {
           if (valid) {
-              if(!this.AssistAccounting){
+              if(Object.keys(this.AssistAccounting).length === 0){
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
-                console.log(this.AssistAccounting,'aaaaa')
                 this.AssistAccounting.paymentTypeCode = this.formDynamic.code;
                 this.AssistAccounting.paymentTypeName = this.formDynamic.fund;
-                console.log(this.AssistAccounting,'bbbbb')
                 this.$emit("ChildContent", this.AssistAccounting);
                 bus.$emit("ChildContent", this.AssistAccounting);
                 this.subjectModelShowassist = false;
@@ -594,11 +588,10 @@ export default {
           }
         });
       }else{
-        if (!this.AssistAccounting) {
+        if (Object.keys(this.AssistAccounting).length === 0) {
           this.$message.error("请选择辅助核算");
           this.subjectModelShowassist = true;
         } else {
-          // console.log(this.AssistAccounting);
           this.$emit("ChildContent", this.AssistAccounting);
           bus.$emit("ChildContent", this.AssistAccounting);
           this.subjectModelShowassist = false;
@@ -683,24 +676,15 @@ export default {
     },
     showOrhideModel(v){
       if(v){
-        if(this.list.length==0){
+        this.AssistAccounting = {}
+        this.formDynamic = {fund: '',code: ''}
           this.getListCompany();
-        }
-        if(this.AssistTableDataKeHu.length==0){
           this.ClientgetList();
-        }
-        if(this.AssistTableDataGongYingShang.length==0){
           this.SupperliergetList();
-        }
-        if(this.categoryArr.length==0){
           this.OtherGetlist();
-        }
-        if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
-        }
-        if(this.fundList.length == 0){
-          this.fundGetList()
-        }
+        
+        this.fundGetList()
 
         if(this.subjectChoose.titleCode === "1221" || this.subjectChoose.titleCode === "2241" || this.subjectChoose.titleCode === "1532" || this.subjectChoose.titleCode === "1801"){
           this.Classification = true
@@ -733,7 +717,6 @@ export default {
       params.dictCode = "CW00131";
       kmType(params).then(res => {
         this.fundList = res.data;
-        console.log(this.fundList)
         this.fundListZanshi=this.fundList.filter(vb=>this.subjectChoose.titleCode.indexOf(vb.itemValueOne)!=-1)
         if(this.fundListZanshi.length<1){
           this.Classification=false;

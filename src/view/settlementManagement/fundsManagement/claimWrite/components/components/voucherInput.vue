@@ -440,9 +440,8 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        if(this.fundListZanshi.length==0){
+
           this.fundGetList();
-        }
 
         if(this.categoryArr.length==0){
           this.OtherGetlist(); //其他初始化
@@ -679,14 +678,17 @@ export default {
       if (selectedData.length == 1) {
         this.AssistAccounting = selectedData[0].label;
         this.departmentVal = selectedData[0].groupCode;
+        this.auxiliaryCode = selectedData[0].id
         this.auxiliaryTypeCode = "3";
       } else {
         this.AssistAccounting = selectedData[selectedData.length - 1].name;
         this.departmentVal = selectedData[selectedData.length - 1].groupCode;
+        this.auxiliaryCode = selectedData[selectedData.length - 1].id
         this.auxiliaryTypeCode = "3";
       }
       this.voucherItem = {
-        id: val[0]
+        id: selectedData[selectedData.length - 1].id,
+        name: selectedData[selectedData.length - 1].name
       };
     },
     // 辅助弹框个人搜索

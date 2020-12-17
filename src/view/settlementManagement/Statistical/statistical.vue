@@ -521,7 +521,7 @@ export default {
       dates: [], // 查询日期
       areaId: 0, // 区域id
       areas: [{ id: 0, companyName: "全部" }], // 区域
-      BranchstoreId: "", // 门店id
+      BranchstoreId: this.$store.state.user.userData.currentCompany.id, // 门店id
       Branchstore: [{ id: 0, name: "全部", shortName: "全部" }], // 门店
 
       accountCode: "", //账号
@@ -533,7 +533,6 @@ export default {
     this.dates = this.$refs.quickDate.val;
     this.getArea();
     this.getShop();
-    this.query();
     this.getTreeListFun();
   },
   computed: {
@@ -657,6 +656,7 @@ export default {
         if (this.$store.state.user.userData.shopkeeper != 0) {
           this.getThisArea(); //获取当前门店地址
         }
+        this.query();
       }
     },
     //导出

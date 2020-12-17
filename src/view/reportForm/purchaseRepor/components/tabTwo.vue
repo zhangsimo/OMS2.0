@@ -319,6 +319,16 @@
           this.tableData = [];
         }
       },
+      async getAllMoney(){
+        let params = {
+          page: this.page.num - 1,
+          size: this.page.size
+        };
+        let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
+        if (obj.code === 0){
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        }
+      },
       async getAll() {
         let tableDataAll = [];
         let params = {

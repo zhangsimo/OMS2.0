@@ -112,9 +112,7 @@
     },
     computed: {},
     mounted() {
-      if (this.fundList.length < 1) {
         this.fundGetList();
-      }
     },
     methods: {
       fundGetList() {

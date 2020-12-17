@@ -269,6 +269,7 @@ import ApplyModelView from "../component/viewApplyModel";
 import QuotaApplyModel from "../component/quotaApplyModel";
 import PartInfo from "../component/partInfo/partInfo";
 import ViewSupplerModel from "../component/viewSupplerModel";
+import * as Api from "_api/lease/tenantres";
 
 export default {
   name: "myApplication",
@@ -325,90 +326,90 @@ export default {
           value: "99",
           label: "全部"
         },
-        {
-          value: "0",
-          label: "费用报销"
-        },
-        {
-          value: "1",
-          label: "预收款支出"
-        },
-        {
-          value: "2",
-          label: "请示单申请"
-        },
-        {
-          value: "3",
-          label: "采购预付款"
-        },
-        {
-          value: "4",
-          label: "因公借支"
-        },
-        {
-          value: "5",
-          label: "内部资金调拨"
-        },
-        {
-          value: "6",
-          label: "其他付款"
-        },
-        {
-          value: "7",
-          label: "对账单"
-        },
-        {
-          value: "8",
-          label: "销售开票"
-        },
-        {
-          value: "9",
-          label: "不含税开票"
-        },
-        {
-          value: "10",
-          label: "发票对冲"
-        },
-        {
-          value: "11",
-          label: "采购计划单"
-        },
-        {
-          value: "12",
-          label: "临时采购订单"
-        },
-        {
-          value: "13",
-          label: "门店外采订单"
-        },
-        {
-          value: "14",
-          label: "盘亏出库"
-        },
-        {
-          value: "15",
-          label: "盘盈入库"
-        },
-        {
-          value: "16",
-          label: "客户信用调查"
-        },
-        {
-          value: "17",
-          label: "客户信用额度"
-        },
-        {
-          value:"18",
-          label:"活动申请"
-        },
-        {
-          value:"19",
-          label: "供应商资料"
-        },
-        {
-          value: "20",
-          label: "配件资料"
-        }
+        // {
+        //   value: "0",
+        //   label: "费用报销"
+        // },
+        // {
+        //   value: "1",
+        //   label: "预收款支出"
+        // },
+        // {
+        //   value: "2",
+        //   label: "请示单申请"
+        // },
+        // {
+        //   value: "3",
+        //   label: "采购预付款"
+        // },
+        // {
+        //   value: "4",
+        //   label: "因公借支"
+        // },
+        // {
+        //   value: "5",
+        //   label: "内部资金调拨"
+        // },
+        // {
+        //   value: "6",
+        //   label: "其他付款"
+        // },
+        // {
+        //   value: "7",
+        //   label: "对账单"
+        // },
+        // {
+        //   value: "8",
+        //   label: "销售开票"
+        // },
+        // {
+        //   value: "9",
+        //   label: "不含税开票"
+        // },
+        // {
+        //   value: "10",
+        //   label: "发票对冲"
+        // },
+        // {
+        //   value: "11",
+        //   label: "采购计划单"
+        // },
+        // {
+        //   value: "12",
+        //   label: "临时采购订单"
+        // },
+        // {
+        //   value: "13",
+        //   label: "门店外采订单"
+        // },
+        // {
+        //   value: "14",
+        //   label: "盘亏出库"
+        // },
+        // {
+        //   value: "15",
+        //   label: "盘盈入库"
+        // },
+        // {
+        //   value: "16",
+        //   label: "客户信用调查"
+        // },
+        // {
+        //   value: "17",
+        //   label: "客户信用额度"
+        // },
+        // {
+        //   value:"18",
+        //   label:"活动申请"
+        // },
+        // {
+        //   value:"19",
+        //   label: "供应商资料"
+        // },
+        // {
+        //   value: "20",
+        //   label: "配件资料"
+        // }
       ], //申请类型数组
       tableData: [], //表格内容
       falg: false, //判断审批进度是否显示
@@ -429,10 +430,10 @@ export default {
           value: "1",
           label: "申请人"
         },
-        {
-          value: "2",
-          label: "审批人"
-        }
+        // {
+        //   value: "2",
+        //   label: "审批人"
+        // }
       ], //申请类型数组
       searchType: "0", //申请类型
       searchTypeValue: "", //申请类型的值
@@ -473,8 +474,21 @@ export default {
     this.getUser();
     this.getStroe();
     this.getType();
+    this.getTypeList()
   },
   methods: {
+    //获取类型
+    async getTypeList(){
+      let res=await Api.getTypeList();
+      if(res.code===0){
+        let arr=[];
+        arr=res.data.map(el=>{
+          el.label=el.name;
+          return el;
+        });
+        this.ApplicationTypelist=[...this.ApplicationTypelist,...arr]
+      }
+    },
     // 快速查询日期
     quickDate(data) {
       this.page.num = 1;

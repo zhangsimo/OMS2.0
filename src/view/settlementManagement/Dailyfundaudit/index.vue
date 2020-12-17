@@ -245,7 +245,7 @@
         this.query();
       },
       changedate(daterange) {
-        this.value = daterange;
+        this.dates = daterange;
         this.query()
       },
       // 往来单位

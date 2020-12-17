@@ -2120,7 +2120,7 @@ export default [
       //     icon: "gear-b",
       //     title: "租户配置"
       //   },
-      //   component: () => import("@/view/lease/tenantres/tenantres.vue")
+      //   component: () => import("@/view/lease/dingTenantres/index.vue")
       // },
       {
         path: "/lease/FeedbackManagementOne",

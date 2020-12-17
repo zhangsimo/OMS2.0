@@ -1089,13 +1089,13 @@
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
             this.$utils.toNumber(row.thisNoAccountQty) * row.price
-          );
+          ).toFixed(2);
         } else {
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
             this.$utils.toNumber(row.thisNoAccountQty) * row.price
-          );
+          ).toFixed(2);
         }
       },
       // 计算尾部总和
@@ -1123,11 +1123,12 @@
                 "noAccountAmt",
                 "noAccountQty",
                 "thisNoAccountQty",
-                "thisNoAccountAmt",
-                "thisAccountAmt"
               ].includes(column.property)
             ) {
               return this.$utils.sum(data, column.property);
+            }
+            if (["thisNoAccountAmt","thisAccountAmt"].includes(column.property)) {
+              return this.$utils.sum(data, column.property).toFixed(2);
             }
             if (columnIndex === 11) {
               return ` ${this.countAllAmount(data)} `;
@@ -1705,7 +1706,7 @@
         let boolShow = true;
         let reg = /^[1-9]\d*$/
         this.Reconciliationcontent.map(item => {
-          item.thisNoAccountAmt = this.$utils.toNumber(item.thisNoAccountQty) * item.price
+          item.thisNoAccountAmt = (this.$utils.toNumber(item.thisNoAccountQty) * item.price).toFixed(2)
           sum += item.thisNoAccountAmt * 1;
           if (this.$utils.toNumber(item.thisNoAccountQty) > item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty) < 0) {
             boolShow = false;

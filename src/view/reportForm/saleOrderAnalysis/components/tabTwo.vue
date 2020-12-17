@@ -7,13 +7,13 @@
       ref="xTable"
       height="400"
       auto-resize
+      show-footer
+      :footer-method="footerMethod"
       resizable
       :sort-config="{trigger: 'cell', defaultSort: {field: 'createTime', order: 'asc'}, orders: ['desc', 'asc']}"
       @sort-change="sortMethod"
       :data="tableData"
     >
-<!--      show-footer-->
-<!--      :footer-method="footerMethod"-->
       <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="50" fixed="left"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="orgName" title="公司简称" width="130" fixed="left"></vxe-table-column>
       <vxe-table-column show-overflow="tooltip" field="partId" title="配件内码" width="80" fixed="left"></vxe-table-column>
@@ -81,10 +81,6 @@
         };
         showLoading()
         let res = await api.getPjSellAnalyze(this.body, params);
-        // let resp2 = await api.sellOutMain(this.body);
-        // if(resp2.code==0){
-        //   this.totalObj = resp2.data||{};
-        // }
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             return el;
@@ -95,6 +91,16 @@
         } else {
           this.page.total = 0;
           this.tableData = [];
+          hideLoading()
+        }
+      },
+      async getAllMoney(){
+        showLoading()
+        let resp2 = await api.sellOutMain(this.body);
+        if(resp2.code==0){
+          hideLoading()
+          this.totalObj = resp2.data||{};
+        }else{
           hideLoading()
         }
       },

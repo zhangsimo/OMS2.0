@@ -133,6 +133,7 @@ export default {
         this.getList();
         this.modelType = true;
       }
+      this.formInline.applyType = 3;
     },
 
     //获取当前信息
@@ -143,6 +144,7 @@ export default {
       if (res.code === 0) {
         this.$nextTick(() => {
           this.formInline = res.data;
+          // this.otherPayList(this.formInline.details)
           this.formInline.receiverId=res.data.receiverId
           this.remoteMethod("",res.data.receiveGuestId)
           //获取收款账户
@@ -276,7 +278,6 @@ export default {
     },
 
     changeThisA({row}){
-      // console.log(row.applyAmt)
     },
     //选择单据
     SelectTheDocuments() {
@@ -325,12 +326,12 @@ export default {
           // if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
           //   valg = parseFloat(this.formInline.details[0].payAmt) < parseFloat(this.formInline.applyAmt) ? true : false
           // }
-          // console.log(this.formInline,valg,1111)
           // if (valg) return  this.$Message.error('申请金额不能大于预付款金额')
           for(let i = 0; i < this.formInline.details.length; i++){
+            let last = Number(this.formInline.details[i].orderAmt) - Number(this.formInline.details[i].hasApplyAmt) - Number(this.formInline.details[i].adjustAmt)
             if(Number(this.formInline.details[i].applyAmt) <= 0){
               return this.$Message.error("本次申请金额不能小于等于零")
-            }else if(Number(this.formInline.details[i].applyAmt) > Number(this.formInline.details[i].lastAmt)){
+            }else if(Number(this.formInline.details[i].applyAmt) > last){
               return this.$Message.error("本次申请金额不能大于剩余金额")
             }
             delete this.formInline.details[i].id

@@ -19,9 +19,7 @@
                 v-for="item in shoppingList"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.shortName }}
-              </Option
-              >
+              >{{ item.shortName }}</Option>
             </Select>
             <Checkbox class="mr20 ml10" v-model="search.guestPart">
               包含内部客户

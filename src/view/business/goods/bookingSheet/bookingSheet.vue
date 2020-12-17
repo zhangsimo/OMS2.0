@@ -59,11 +59,11 @@
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
-<!--          <div class="db">-->
-<!--            <Button @click="derive" v-has="'export'" class="mr10"-->
-<!--              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button-->
-<!--            >-->
-<!--          </div>-->
+          <div class="db">
+            <Button @click="derive" v-has="'export'" class="mr10"
+              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button
+            >
+          </div>
         </div>
       </div>
     </section>

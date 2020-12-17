@@ -212,7 +212,7 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
-      console.log(value,'0000')
+      console.log(value,'asdf')
       value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2?1:value.auxiliaryTypeCode //辅助核算选中哪一个
       if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
         value.isAuxiliaryAccounting=0 //是否辅助核算类
@@ -234,7 +234,8 @@ export default {
           auxiliaryName:value.fullName, //辅助核算名称
           auxiliaryCode:value.code, //辅助核算项目编码
           isSubject:1,
-          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'', //辅助核算的款项分类
+          paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+          paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
         });
       } else if (value.userName) {
         this.BusinessType.push({
@@ -248,10 +249,11 @@ export default {
           mateAccountCode:this.obj.titleCode,
           auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-          auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code, //辅助核算项目编码
+          auxiliaryName:value.userName, //辅助核算名称
+          auxiliaryCode:value.code || value.id, //辅助核算项目编码
           isSubject:1,
-          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'', //辅助核算的款项分类
+          paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+          paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
         });
       }else if(value.itemName){
         this.BusinessType.push({
@@ -263,12 +265,13 @@ export default {
           unAmtLeft: 0,
           mateAccountName:this.obj.titleName,
           mateAccountCode:this.obj.titleCode,
-          auxiliaryTypeCode:value.auxiliaryTypeCode, //辅助核算选中哪一个
+          auxiliaryTypeCode:value.dictCode, //辅助核算选中哪一个
           isAuxiliaryAccounting:value.isAuxiliaryAccounting,//是否辅助核算类
-          auxiliaryName:value.fullName, //辅助核算名称
-          auxiliaryCode:value.code, //辅助核算项目编码
+          auxiliaryName:value.itemName, //辅助核算名称
+          auxiliaryCode:value.itemCode, //辅助核算项目编码
           isSubject:1,
-          paymentTypeCode: value.paymentTypeCode?value.paymentTypeCode:'', //辅助核算的款项分类
+          paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+          paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
         });
       }
     });
@@ -431,6 +434,7 @@ export default {
             auxiliaryName:el.auxiliaryName, //辅助核算名称
             auxiliaryCode:el.auxiliaryCode, //辅助核算项目编码
             paymentTypeCode: el.paymentTypeCode,
+            paymentTypeName: el.paymentTypeName,
           };
           data.two.push(item);
         });
