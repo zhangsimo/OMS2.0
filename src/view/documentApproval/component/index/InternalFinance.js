@@ -62,7 +62,8 @@ export default {
       Pictures:{},//请求回来的图片地址状态
       accountList: [],//调拨信息表格
       selAccountIdx: -1,
-      selAccount:{}
+      selAccount:{},
+      allEnterAcountList: [],
     }
   },
   mounted(){
@@ -74,6 +75,7 @@ export default {
       this.$refs.xTable.recalculate(true)
       this.payUserList = this.list.payList
       this.getShiftTo()
+      // this.getCompany()
       this.formInline = {}
       this.$refs.upImg.uploadListModal = []
       this.$refs.upImg.uploadList = []
@@ -88,6 +90,7 @@ export default {
         this.formInline.deptName = user.groups.length > 0 ?  user.groups[user.groups.length - 1].name :''
         this.formInline.shopCode = user.currentCompany?user.currentCompany.code : "";
         this.formInline.orgName = user.currentCompany?user.currentCompany.shortName : "";
+        this.formInline.orgid = user.currentCompany?user.currentCompany.id : "";
         this.formInline.applyTypeName = '内部资金调拨'
         this.formInline.applyTime = date
       }
@@ -112,6 +115,7 @@ export default {
         this.$nextTick( () => {
           this.formInline = res.data
           this.accountList = res.data.allotInfo
+          this.getAccount()
           this.Pictures = {
             voucherPictures :res.data.voucherPictures || [],
             billStatus: res.data.billStatus
@@ -132,6 +136,7 @@ export default {
     //选择转入门店
      getCompany(v) {
       let arr = this.company.filter( item => item.id == v)[0]
+      this.$set(this.selAccount, 'enterOrgName' , arr.name)
       this.selAccount.enterAccountNo = ''
       this.formInline.receiver = ''
       let  data = {
@@ -139,7 +144,22 @@ export default {
       }
       getPayAccount(data).then(res=>{
         if (res.code === 0) {
-          this.selAccount.enterAccount = res.data.content
+          this.$set(this.selAccount,'enterAccountList',res.data.content)
+        }
+      })
+    },
+    //初始化获取转入账号
+    getAccount(){
+      getPayAccount().then(res=>{
+        if (res.code === 0) {
+          this.allEnterAcountList = res.data.content
+          this.accountList.map(v => {
+            let arr = this.allEnterAcountList.filter(item => {
+              return item.shopNumber === v.enterOrgid
+            })
+            this.$set(v,'enterAccountList',arr)
+            return v
+          })
         }
       })
     },
@@ -148,9 +168,11 @@ export default {
     //获取转入账户
     getinto(v){
       if (!v) return
-      // // this.selAccount.enterAccount=this.IntoAccountList
-      // let arr = this.selAccount.enterAccount.filter( item => item.id == v)[0]
-      this.$set(this.selAccount, 'enterAccountNo' , v)
+      let arr = this.selAccount.enterAccountList.filter( item => item.id == v)[0]
+      this.$set(this.selAccount, 'enterAccountNo' , arr.accountCode)
+      this.$set(this.selAccount, 'enterAccount' , arr.id)
+      this.$set(this.selAccount, 'enterAccountName' , arr.accountName)
+      
     },
 
 
@@ -158,16 +180,19 @@ export default {
     getOutApply(row){
       let res = this.payUserList.filter(item=> item.value == row.outAccount)
       row.outAccountNo = res[0].accountCode
+      row.outAccountName = res[0].accountName
+      row.outAccount = res[0].id
     },
     //添加行
     addAccountRow(){
       let json={
         outOrgName: this.formInline.orgName || "",
+        outOrgid: this.formInline.orgid || '',
         outAccount: this.payUserList || [],
         outAccountNo:"",
         enterOrgid:this.company || [],
-        enterAccount:[],
-        enterAccountMo:"",
+        enterAccountList:[],
+        enterAccount:"",
         enterAccountNo:""
       }
       this.accountList.push(json)
@@ -189,7 +214,11 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
-          this.formInline.allotInfo=this.accountList[0].enterAccount
+          this.accountList.map(item => {
+            item.outOrgid = this.formInline.orgid
+            delete item.enterAccountList
+          })
+          this.formInline.allotInfo=this.accountList
           this.saveDis=true;
           let res = await getIFSave(this.formInline)
           if (res.code == 0) {

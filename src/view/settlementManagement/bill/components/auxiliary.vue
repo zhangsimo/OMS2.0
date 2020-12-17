@@ -572,7 +572,7 @@ export default {
       if(this.Classification){
         this.$refs.formDynamic.validate(valid => {
           if (valid) {
-              if(!this.AssistAccounting){
+              if(Object.keys(this.AssistAccounting).length === 0){
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
@@ -588,7 +588,7 @@ export default {
           }
         });
       }else{
-        if (!this.AssistAccounting) {
+        if (Object.keys(this.AssistAccounting).length === 0) {
           this.$message.error("请选择辅助核算");
           this.subjectModelShowassist = true;
         } else {
@@ -676,21 +676,13 @@ export default {
     },
     showOrhideModel(v){
       if(v){
-        if(this.list.length==0){
+        this.AssistAccounting = {}
+        this.formDynamic = {fund: '',code: ''}
           this.getListCompany();
-        }
-        if(this.AssistTableDataKeHu.length==0){
           this.ClientgetList();
-        }
-        if(this.AssistTableDataGongYingShang.length==0){
           this.SupperliergetList();
-        }
-        if(this.categoryArr.length==0){
           this.OtherGetlist();
-        }
-        if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
-        }
         
         this.fundGetList()
 

@@ -42,48 +42,18 @@ const dev = {
 const test = {
   omsTask: "https://tsapi2.g-parts.cn/oms-task-provider",
   omsEdit: "https://tsapi2.g-parts.cn/oms-edi-provider",
-  // omsEdit: "http://192.168.30.97:9220",//
-  // omsEdit: "http://192.168.15.87:9220",//
   omstaxset:'https://tsapi2.g-parts.cn/oms-tax-provider', //财务系统微服务
-  // omstaxset:'http://192.168.21.59:9400', //
-  // omstaxset: "http://192.168.30.43:9400",//
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
-  // omsApi:"http://192.168.30.21:9240",//
-  // omsApi:"http://192.168.21.59:9240",//
   tokenApi: "https://tsapi2.g-parts.cn",
-  // tokenApi: "https://api2.g-part.cn",
-  // wmsApi: "http://192.168.30.97:9250",//
-  // wmsApi: "http://192.168.30.179:9250",//
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
-  // wmsApi: "http://192.168.21.59:9250", //
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
-  // omsProduct: "http://192.168.30.97:9200",//
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  // omsOrder: "http://192.168.30.97:9210",//
-  // omsOrder: "http://192.168.30.84:9210",//
-  // omsOrder: "http://192.168.30.179:9210",//
-  // omsOrder: "http://192.168.30.21:9210",//
-  // omsOrder: "http://192.168.30.221:9210",//
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
-  // passportApi: "http://192.168.30.97:5200",//
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
-  // authApi: "http://192.168.30.97:5200",//
-  // authApi: "http://192.168.15.87:5200",//
   authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
-  // omsBatch: 'http://192.168.21.59:9260', //
-  // omsBatch: 'http://192.168.30.97:9260', //
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
-  // omsSettle: "http://192.168.30.43:9270",//
-  // omsSettle: "http://192.168.30.97:9270",//
-  // omsSettle: "http://192.168.30.21:9270",//
-  // omsSettle: "http://192.168.21.59:9270",//
-  // omsSettle: "http://192.168.15.87:9270",//
-  // omsSettle: "http://192.168.30.179:9270",//
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//9270
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
-  // omsSotck: "http://192.168.21.59:9280", //
-  // omsSotck: "http://192.168.30.97:9280", //
-  // omsSotck: "http://192.168.30.179:9280", //
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
