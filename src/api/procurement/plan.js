@@ -405,7 +405,7 @@ export function getMoteSupplier(name) {
 //打印
 export function printTableZF(params){
   return  axios.request({
-    url: `${api.omsOrder}/pchsOrderMain/directPrint`,
+    url: `${api.omsOrder}/pchsOrderMain/print`,
     method: "post",
     params: params,
     data: {},

@@ -240,7 +240,7 @@
         }
         if (value.fullName) {
           this.BusinessType.push({
-            businessTypeName: this.obj.fullName + "-" + value.fullName,
+            businessTypeName: this.obj.fullName + "-" + value.shortName,
             reconciliationAmt: 0,
             hasAmt: 0,
             unAmt: 0,
@@ -250,10 +250,11 @@
             mateAccountName: this.obj.titleName,
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
+            auxiliaryName: value.shortName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
             isSubject: 1,
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         } else if (value.userName) {
           this.BusinessType.push({
@@ -267,10 +268,11 @@
             mateAccountName: this.obj.titleName,
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryName: value.userName, //辅助核算名称
+            auxiliaryCode: value.code || value.id, //辅助核算项目编码
             isSubject: 1,
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         } else if (value.itemName) {
           this.BusinessType.push({
@@ -282,13 +284,13 @@
             unAmtLeft: 0,
             mateAccountCode: this.obj.titleCode,
             mateAccountName: this.obj.titleName,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            auxiliaryTypeCode: value.dictCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryName: value.itemName, //辅助核算名称
+            auxiliaryCode: value.itemCode, //辅助核算项目编码
             isSubject: 1,
-            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',//辅助核算的款项分类
-
+            paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
+            paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
           });
         }
       });
@@ -409,11 +411,11 @@
               let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
               this.$refs.account.updateFooter();
               this.checkComputed();
-              if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
-                this.$Message.error("金额录入错误，请重新录入！")
-                bool = false
-                return
-              }
+              // if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
+              //   this.$Message.error("金额录入错误，请重新录入！")
+              //   bool = false
+              //   return
+              // }
             } else {
               //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
               let sumUnAmt = row.unAmt
@@ -480,9 +482,9 @@
           let sumUnAmt = this.$utils.toNumber(arr[unAmtSumIdx])
           this.$refs.account.updateFooter();
           this.checkComputed();
-          if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
-            return this.$Message.error("金额录入错误，请重新录入！")
-          }
+          // if ((sumUnAmt < 0 && row.rpAmt < 0) || (sumUnAmt > 0 && row.rpAmt > 0)) {
+          //   return this.$Message.error("金额录入错误，请重新录入！")
+          // }
         } else {
           //若不为会计科目项  则是若表格当前行的未收/付款 为负则只可输入负数；为正则只可输入正数；
           let sumUnAmt = row.unAmt

@@ -79,7 +79,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model.number="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="number" size="mini" v-model.number.trim="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="120" title="剩余未收/未付"></vxe-table-column>
@@ -268,7 +268,7 @@
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.userName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryCode: value.code || value.id, //辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
             paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
             paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
@@ -283,10 +283,10 @@
             unAmt: 0,
             rpAmt: 0,
             unAmtLeft: 0,
-            auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
+            auxiliaryTypeCode: value.dictCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
             auxiliaryName: value.itemName, //辅助核算名称
-            auxiliaryCode: value.code, //辅助核算项目编码
+            auxiliaryCode: value.itemCode, //辅助核算项目编码
             isSubject: 1,//与原本对账单作出区分
             paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
             paymentTypeName: value.paymentTypeName ? value.paymentTypeName : '',
@@ -456,7 +456,7 @@
             }
           })
           this.BusinessType.map(row => {
-            if(!Number(row.rpAmt)){
+            if(row.rpAmt === ''){
               bool = false
               return this.$Message.error('本次核销金额不可为空！')
             }
@@ -481,6 +481,7 @@
             }
           })
           if (bool) {
+            this.reconciliationStatement.remark = this.remark
             let obj = {
               one: this.reconciliationStatement,
               two: this.BusinessType,

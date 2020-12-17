@@ -4,7 +4,7 @@
     <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card"  v-model="TabsChoose">
-          <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(subjectChoose.assistTypeCode)">
+          <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div>
               <div>
                 <Form inline :label-width="50" class="formBox">
@@ -57,7 +57,7 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(subjectChoose.assistTypeCode)">
+          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -282,7 +282,7 @@
             <FormItem label="款项分类:" prop="fund">
               <Select v-model="formDynamic.fund" placeholder="请选择">
                 <Option
-                  v-for="item in fundList"
+                  v-for="item in fundListZanshi"
                   :value="item.itemName"
                   :key="item.id"
                 >{{ item.itemName }}</Option>
@@ -800,9 +800,7 @@ export default {
           this.OtherClickTable();
         }
 
-        if(this.fundList.length == 0){
-          this.fundGetList()
-        }
+        this.fundGetList()
 
         if(this.subjectChoose.titleCode === "1221" || this.subjectChoose.titleCode === "2241" || this.subjectChoose.titleCode === "1532" || this.subjectChoose.titleCode === "1801"){
           this.Classification = true
@@ -835,11 +833,10 @@ export default {
       params.dictCode = "CW00131";
       kmType(params).then(res => {
         this.fundList = res.data;
-        console.log(this.fundList)
-        // this.fundListZanshi=this.fundList.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
-        // if(this.fundListZanshi.length<1){
-        //   this.Classification=false;
-        // }
+        this.fundListZanshi=this.fundList.filter(vb=>this.subjectChoose.titleCode.indexOf(vb.itemValueOne)!=-1)
+        if(this.fundListZanshi.length<1){
+          this.Classification=false;
+        }
       });
     },
   },

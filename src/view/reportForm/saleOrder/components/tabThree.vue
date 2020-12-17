@@ -394,6 +394,7 @@
 
 <script>
   import * as api from "_api/reportForm/index.js";
+  import {hideLoading, showLoading} from "../../../../utils/loading";
 
   export default {
     data() {
@@ -421,10 +422,6 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        let obj = await api.getPjSellOutRtnMainDetailsCount(this.body, params)
-        if (obj.code === 0){
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
-        }
         let res = await api.getPjSellOutRtnMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -453,6 +450,18 @@
         } else {
           this.page.total = 0;
           this.tableData = [];
+        }
+      },
+      async getAllMoney(){
+        let params = {
+          page: this.page.num - 1,
+          size: this.page.size
+        };
+        showLoading()
+        let obj = await api.getPjSellOutRtnMainDetailsCount(this.body, params)
+        if (obj.code === 0){
+          hideLoading()
+          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
         }
       },
       async getAll() {

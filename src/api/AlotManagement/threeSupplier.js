@@ -51,3 +51,26 @@ export function getPartPos(data) {
     data
   });
 }
+
+
+
+// 供应商直发临时保存
+export function saveData(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/saveOrUpdate`,
+    method: "post",
+    data
+  });
+}
+
+// 供应商直发临时保存
+export function changeStoreGetShelf(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/checkShelf`,
+    method: "post",
+    data
+  });
+}
+
+
+

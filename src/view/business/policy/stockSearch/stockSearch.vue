@@ -32,7 +32,7 @@
       <!--      汇总库存表-->
       <div class="tabs-warp" v-show="tabIndex == 0">
         <!--      搜索工具栏-->
-        <div class="oper-top flex" ref="operTop0">
+        <div class="oper-top flex" ref="operTop0" style="min-height: auto">
           <div class="pt10">
             <!--            <Input-->
             <!--              v-model="searchForm.partCode"-->
@@ -85,20 +85,14 @@
               </Option
               >
             </Select>
-            <Select
-              class="w200 mr10"
-              filterable
-              @on-change="changecompanyFun"
-              v-model="searchForm.old"
-              placeholder="公司"
-            >
-              <Option
+            <el-select class="w200 mr10" size="small" v-model="searchForm.old" @change="changecompanyFun" filterable placeholder="公司">
+              <el-option
                 v-for="item in Branchstore"
-                :value="item.value"
                 :key="item.value"
-              >{{ item.label }}
-              </Option>
-            </Select>
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <Select
               class="w150 mr10"
               multiple

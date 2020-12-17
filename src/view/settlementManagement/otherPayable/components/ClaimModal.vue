@@ -137,9 +137,7 @@ export default {
 
   },
   mounted() {
-    if(this.fundList.length<1){
       this.fundGetList();
-    }
   },
   methods: {
     fundGetList() {
@@ -185,7 +183,6 @@ export default {
       if(this.titleName.trim()=='其他付款支出认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
-            // console.log(res.data)
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.dataOne = res.data.one;
@@ -208,6 +205,7 @@ export default {
 
     //点击确认按钮后
     confirm(){
+      console.log(this.$refs.voucherInput)
       if(this.tableData.length === 0){
         this.$message.error('请点击选择单据按钮，选择数据')
         return
@@ -246,7 +244,11 @@ export default {
           financeAccountCashList: this.financeAccountCashList,
           claimType: 0,
           guestId: this.voucherItem.id,
-          paymentTypeCode:  this.$refs.voucherInput.formDynamic.fund || ""
+          paymentTypeCode:  this.$refs.voucherInput.formDynamic.code,
+          paymentTypeName:  this.$refs.voucherInput.formDynamic.fund,
+          auxiliaryCode: this.$refs.voucherInput.AssistAccounting.auxiliaryCode,
+          auxiliaryName: this.$refs.voucherInput.AssistAccounting.auxiliaryName,
+          auxiliaryTypeCode: this.$refs.voucherInput.AssistAccounting.auxiliaryTypeCode,
         }
         addClaim(obj).then(res => {
           if(res.code === 0){
