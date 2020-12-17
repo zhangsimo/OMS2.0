@@ -128,6 +128,11 @@
       <vxe-table-column title="名称" field="name" width="200"></vxe-table-column>
       <vxe-table-column title="类型" field="type" width="50"></vxe-table-column>
       <vxe-table-column title="code" field="code"></vxe-table-column>
+      <vxe-table-column title="状态" field="disabled">
+        <template v-slot="{row}">
+          <span>{{row.disabled?"启用":"禁用"}}</span>
+        </template>
+      </vxe-table-column>
     </vxe-table>
   </section>
 </template>

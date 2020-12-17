@@ -6,17 +6,18 @@
           v-for="item in typeList"
           :value="item.name"
           :key="item.value"
+          :disabled="item.disable"
         >{{item.name}}</Option>
       </Select>
     </FormItem>
     <FormItem label="类型:">
-      <Input v-model="data.type" style="width: 300px" readonly/>
+      <Input v-model="data.type" style="width: 180px" readonly/>
     </FormItem>
     <FormItem label="code:" prop="code">
-      <Input v-model="data.code" style="width: 300px"/>
+      <Input v-model="data.code" style="width: 180px"/>
     </FormItem>
     <div style="paddingLeft:100px">
-      <Checkbox v-model="data.disabled">是否disabled</Checkbox>
+      <Checkbox v-model="data.disabled">启用</Checkbox>
     </div>
   </Form>
 </template>
@@ -26,9 +27,7 @@
 
   export default {
     name: "AddDingTalk",
-    props: {
-      data: ""
-    },
+    props: ['data'],
     data() {
       return {
         rules: {
@@ -36,6 +35,7 @@
           code: [{ required: true, message:"code不能为空",trigger: "blur" }]
         },
         typeList:[],
+        typeListzanshi:[]
       };
     },
     mounted() {
@@ -46,18 +46,20 @@
       async getTypeList(){
         let res=await Api.getTypeList();
         if(res.code===0){
+          this.typeListzanshi=res.data
           this.typeList=res.data
         }
       },
       changeName(option){
-        this.data.name=option.value;
+        this.data.name=option.value?option.value:"";
         this.typeList.map(el=>{
-          if(el.name==option.value){
+          if(option.value&&el.name==option.value){
             this.data.type=el.value;
           }
         })
       },
       resetFields() {
+        this.data.type="";
         this.$refs.form.resetFields();
       },
       handleSubmit(callback) {
