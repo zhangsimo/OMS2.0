@@ -238,7 +238,6 @@
         } else {
           value.isAuxiliaryAccounting = 1
         }
-        console.log(value,'ksdjafjs')
         if (value.fullName) {
           this.BusinessType.push({
             businessTypeName: this.obj.fullName + "-" + value.shortName,
