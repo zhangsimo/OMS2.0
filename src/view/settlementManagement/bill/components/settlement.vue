@@ -481,6 +481,7 @@
             }
           })
           if (bool) {
+            this.reconciliationStatement.remark = this.remark
             let obj = {
               one: this.reconciliationStatement,
               two: this.BusinessType,

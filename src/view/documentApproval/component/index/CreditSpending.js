@@ -128,6 +128,7 @@ export default {
         this.formInline.receiveGuestId = this.company[0].value
         this.getCompany(this.company[0])
       }
+      this.formInline.applyType = 1
     },
 
     //获取当前信息

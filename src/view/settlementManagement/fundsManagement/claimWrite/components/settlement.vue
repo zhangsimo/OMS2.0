@@ -240,7 +240,7 @@
         }
         if (value.fullName) {
           this.BusinessType.push({
-            businessTypeName: this.obj.fullName + "-" + value.fullName,
+            businessTypeName: this.obj.fullName + "-" + value.shortName,
             reconciliationAmt: 0,
             hasAmt: 0,
             unAmt: 0,
@@ -250,7 +250,7 @@
             mateAccountName: this.obj.titleName,
             auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
             isAuxiliaryAccounting: value.isAuxiliaryAccounting,//是否辅助核算类
-            auxiliaryName: value.fullName, //辅助核算名称
+            auxiliaryName: value.shortName, //辅助核算名称
             auxiliaryCode: value.code, //辅助核算项目编码
             isSubject: 1,
             paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : '',
