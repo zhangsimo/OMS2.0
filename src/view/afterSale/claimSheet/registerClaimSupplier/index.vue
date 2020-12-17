@@ -220,11 +220,10 @@
                 <vxe-table-column field="afterSaleQty" title="理赔数量" width="100">
                   <template v-slot="{ row }">
                     <vxe-input
-                      type="number"
+                      type="integer"
                       :max="row.isAddPart!=0?row.untreatedQty:100000000000"
                       :min="1"
                       v-model="row.afterSaleQty"
-                      :controls="false"
                       :precision="0"
                       @change="afterSaleQtyChange(row)"
                       size="mini"
@@ -234,8 +233,9 @@
                 <vxe-table-column field="afterSaleReason" title="理赔原因" width="100">
                   <template v-slot="{ row }">
                     <vxe-input
+                      type="string"
+                      maxlength="60"
                       v-model="row.afterSaleReason"
-                      :controls="false"
                       size="mini"
                     />
                   </template>

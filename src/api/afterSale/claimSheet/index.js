@@ -23,6 +23,14 @@ export function customerClaimQuery(params,data){
     data
   })
 }
+//向供应商理赔登记 打印接口
+export function print(params){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleOutMain/print`,
+    method:"get",
+    params
+  })
+}
 //客户理赔登记单 整单选入
 export function allCustomerClaim(data){
   return axios.request({
@@ -62,7 +70,7 @@ export function registerClaimSubmit(data){
 //供应商理赔处理 查询接口
 export function supplierClaimSettlementQuery(params,data){
   return axios.request({
-    url:`${api.omsOrder}`,
+    url:`${api.omsOrder}/afterSaleOutDetail/findafterSaleOutDetail`,
     method:"post",
     params,
     data
@@ -71,7 +79,7 @@ export function supplierClaimSettlementQuery(params,data){
 //供应商理赔处理  原货退还/换货处理/退货处理/原物销毁
 export function supplierClaimSettlement(params,data){
   return axios.request({
-    url:`${api.omsOrder}`,
+    url:`${api.omsOrder}/afterSaleMain/claimSettlement`,
     method:"post",
     params,
     data

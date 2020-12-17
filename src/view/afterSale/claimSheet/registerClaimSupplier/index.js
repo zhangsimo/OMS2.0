@@ -36,7 +36,7 @@ export default {
   },
   data() {
     let changeNumber = ({cellValue}) => {
-      const reg = /^[1-9]\d{0,}$/;
+      const reg = /^[1-9]\d*$/;
       if (!reg.test(cellValue)) {
         return Promise.reject(new Error("数量输入不正确"));
       }
@@ -184,16 +184,11 @@ export default {
     //打印
     setPrint() {
       if (!this.formPlan.id) return this.$message.error("请至少选择一条数据");
-      let storeName;
-      // this.$refs.printBox.openModal(this.WarehouseList);
       let order = {};
-      order.name = "采购入库"
-      order.route = this.$route.name
       order.id = this.formPlan.id;
-      order.storeName = storeName;
       let printZF = this.$refs.printZF;
       printZF.openModal(order)
-      this.$refs.OrderLeft.gitlistValue()
+      this.$refs.getLeftLists()
     },
     // 打开更多搜索
     openQueryModal() {

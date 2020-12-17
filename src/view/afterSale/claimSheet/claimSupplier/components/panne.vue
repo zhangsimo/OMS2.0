@@ -28,7 +28,7 @@
           <div class="db mr10">
             <span class="mr10">配件编码/名称/内码:</span>
             <Input
-              v-model.trim="search.partName"
+              v-model.trim="search.partCode"
               placeholder="请输入配件编码/名称/内码"
               class="w120 mr10"
               clearable
@@ -84,7 +84,7 @@
     private search: any = {
       orderDate: ToDayStr(),
       guestName: "",
-      partName: "",
+      partCode: "",
       partBrand: "",
       serviceId: "",
       claimDemageCode: ""
