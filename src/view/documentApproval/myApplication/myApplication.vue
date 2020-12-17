@@ -430,10 +430,10 @@ export default {
           value: "1",
           label: "申请人"
         },
-        {
-          value: "2",
-          label: "审批人"
-        }
+        // {
+        //   value: "2",
+        //   label: "审批人"
+        // }
       ], //申请类型数组
       searchType: "0", //申请类型
       searchTypeValue: "", //申请类型的值
