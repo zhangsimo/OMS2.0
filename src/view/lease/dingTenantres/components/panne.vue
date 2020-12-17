@@ -13,7 +13,9 @@
           </div>
           <div class="db mr10">
             <Select v-model="search.dictionariesConfigCode" class="w120" placeholder="请选择" filterable clearable>
-              <Option v-for="item in dictionariesConfigCodeList" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
+              <Option v-for="item in dictionariesConfigCodeList" :value="item.itemCode" :key="item.itemCode">
+                {{item.itemName}}
+              </Option>
             </Select>
           </div>
           <div class="db">
@@ -22,10 +24,13 @@
           <div class="db mr10">
             <Button type="warning" @click="add">新增</Button>
           </div>
+<!--          <div class="db mr10">-->
+<!--            <Button type="warning" @click="change">修改</Button>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
-    <addDing ref="addDing" :data="addDingList"></addDing>
+    <addDing ref="addDing" :data="addDingList" :dictionariesConfigCodeList="dictionariesConfigCodeList"></addDing>
   </section>
 </template>
 
@@ -33,6 +38,7 @@
   import {getUserAllCompany} from '@/api/base/user'
   import addDing from "./addDing";
   import {getDictionary} from "@/api/documentApproval/ExpenseReimbursement.js"
+
   export default {
     props: {
       type: {
@@ -59,15 +65,15 @@
           dictionariesConfigCode: "",
           configStatus: 0
         },
-        dictionariesConfigCodeList:[],
+        dictionariesConfigCodeList: [],
         addDingList: {
-          configContent: {
-            corpId: "", cropName: "",
-            agentId: "", appName: "", appKey: "", appSecret: "",
-            appId: "", suiteId: "", suiteName: "", suiteKey: "", suiteSecret: "",
-            appId2: "", appSecret2: "", appName2: "",
-            dingTalkBpmsConfigs: []
-          }
+          tenantId: "",
+          dictionariesConfigCode: "",
+          corpId: "", cropName: "",
+          agentId: "", appName: "", appKey: "", appSecret: "",
+          appId: "", suiteId: "", suiteName: "", suiteKey: "", suiteSecret: "",
+          appId2: "", appSecret2: "", appName2: "",
+          dingTalkBpmsConfigs: []
         }
       };
     },
@@ -94,10 +100,10 @@
         }
         this.$emit("search", data);
       },
-      async getdictionariesConfigCodeList(){
-        let res=await getDictionary({dictCode:"TENANT_CONFIG"});
-        if(res.code===0){
-          this.dictionariesConfigCodeList=res.data;
+      async getdictionariesConfigCodeList() {
+        let res = await getDictionary({dictCode: "TENANT_CONFIG"});
+        if (res.code === 0) {
+          this.dictionariesConfigCodeList = res.data;
         }
       },
       //获取所有公司信息
@@ -114,22 +120,11 @@
       },
       add() {
         this.$refs.addDing.addDingBool = true;
-        let item = {
-          configContent: {
-            corpId: "", cropName: "",
-            enterpriseInsideConfig: {
-              agentId: "", appName: "", appKey: "", appSecret: ""
-            },
-            thirdPartyConfig: {
-              appId: "", suiteId: "", suiteName: "", suiteKey: "", suiteSecret: ""
-            },
-            tokenConfig: {
-              appId: "", appSecret: "", appName: ""
-            },
-            dingTalkBpmsConfigs: []
-          }
-        }
       },
+      change() {
+        let data=this.$parent.$refs.tabOne.selections
+        console.log(data,111)
+      }
     }
   };
 </script>

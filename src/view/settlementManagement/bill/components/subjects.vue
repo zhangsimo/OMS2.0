@@ -297,7 +297,6 @@ export default {
     },
     //点击单选框获取会计科目资产
     radioChangeEventAsset({row}){
-      // console.log(row)
       this.accountingSubject = row
       this.SendData = this.subjectTableDataZiChan
       this.$refs.two.clearRadioRow()
@@ -364,7 +363,7 @@ export default {
     },
     //会计科目确定弹框
     SubjectConfirm() {
-      if (!this.accountingSubject) {
+      if (Object.keys(this.accountingSubject).length === 0) {
         this.$Message.error("请选择会计科目");
       } else {
         this.subjectModelShow = false;
@@ -380,6 +379,13 @@ export default {
     },
     showOrhideModel(v){
       if(v){
+        this.$refs.one.clearRadioRow()
+        this.$refs.two.clearRadioRow()
+        this.$refs.three.clearRadioRow()
+        this.$refs.four.clearRadioRow()
+        this.$refs.five.clearRadioRow()
+        this.$refs.six.clearRadioRow()
+        this.accountingSubject = {}
         if(this.subjectTableDataZiChan.length==0){
           this.accountingGetListZiChan();
         }

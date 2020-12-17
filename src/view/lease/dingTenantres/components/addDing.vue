@@ -27,7 +27,11 @@
                   </Col>
                   <Col span="12">
                     <FormItem label="租户配置字典编码:" prop="dictionariesConfigCode" class="h50">
-                      <Input v-model.trim="data.dictionariesConfigCode" style="width: 180px"/>
+                      <Select v-model.trim="data.dictionariesConfigCode" class="w180" placeholder="请选择" filterable clearable>
+                        <Option v-for="item in dictionariesConfigCodeList" :value="item.itemCode" :key="item.itemCode">
+                          {{item.itemName}}
+                        </Option>
+                      </Select>
                     </FormItem>
                   </Col>
                 </Row>
@@ -58,7 +62,7 @@
                 </Row>
                 <Row>
                   <Col span="12">
-                    <Checkbox v-model.trim="data.isMultiple">门店是否单独配置</Checkbox>
+                    <Checkbox v-model.trim="data.isMultiple" disabled>门店是否单独配置</Checkbox>
                   </Col>
                   <Col span="12">
                     <Checkbox v-model.trim="data.disable">租户配置是否禁用</Checkbox>
@@ -66,8 +70,6 @@
                 </Row>
               </div>
             </div>
-          </TabPane>
-          <TabPane label="除Ding之外信息">
             <div style="display: flex">
               <div style="flex-flow: row nowrap;width: 100%">
                 <Row>
@@ -130,7 +132,7 @@
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="第三方应用秘钥" prop="suiteSecret" class="h50">
+                    <FormItem label="suiteSecret" prop="suiteSecret" class="h50">
                       <Input v-model.trim="data.suiteSecret" style="width: 180px"/>
                     </FormItem>
                   </Col>
@@ -172,10 +174,10 @@
                     <Icon custom="iconfont iconxinzengicon icons"/>
                     新增
                   </a>
-                  <!--                <a class="mr10" @click="changeDing">-->
-                  <!--                  <Icon custom="iconfont iconbianjixiugaiicon icons"/>-->
-                  <!--                  修改-->
-                  <!--                </a>-->
+                  <a class="mr10" @click="changeDing">
+                    <Icon custom="iconfont iconbianjixiugaiicon icons"/>
+                    修改
+                  </a>
                 </div>
                 <div class="financeTab">
                   <vxe-table
@@ -186,17 +188,23 @@
                     size="mini"
                     show-overflow="title"
                     :data="dingTalkBpmsConfigs"
+                    highlight-hover-row
+                    highlight-current-row
                     @current-change="dingSel"
                   >
                     <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
                     <vxe-table-column field="name" title="名称" width="60"></vxe-table-column>
                     <vxe-table-column field="type" title="类型" width="60"></vxe-table-column>
-                    <vxe-table-column field="disabled" title="disabled" width="60"></vxe-table-column>
+                    <vxe-table-column title="状态" field="disabled">
+                      <template v-slot="{row}">
+                        <span>{{row.disabled?"启用":"禁用"}}</span>
+                      </template>
+                    </vxe-table-column>
                     <vxe-table-column field="code" title="code"></vxe-table-column>
                   </vxe-table>
                 </div>
               </div>
-              <Modal v-model="dingBool" :title="dingTit" width="600">
+              <Modal v-model="dingBool" :title="dingTit" width="400">
                 <addDingTalk ref="addDingTalk" :data="addDingData"></addDingTalk>
                 <div slot="footer">
                   <Button type="primary" @click="addNewDing">保存</Button>
@@ -213,22 +221,23 @@
 <script>
   import * as api from "_api/reportForm/index.js";
   import addDingTalk from "./addDingTalk";
-  import {saveDing} from "_api/lease/tenantres";
-import moment from "moment"
+  import {saveDing,getTypeList} from "_api/lease/tenantres";
+  import moment from "moment"
   export default {
-    props: ["data"],
+    props: ["data","dictionariesConfigCodeList"],
     data() {
       return {
         addDingBool: false,//模态款boolean
         tit: "添加租户配置",
         storeList: [],
+        isMulDis:false,
         rules: {
           corpId: [{required: true, message: "企业编号不可为空", trigger: "change"}],
           corpName: [{required: true, message: "企业名称不可为空", trigger: "change"}],
           tenantId: [{required: true, message: "租户ID不可为空", trigger: "change"}],
           dictionariesConfigCode: [{required: true, message: "租户配置字典编码不可为空", trigger: "change"}],
           // date: [{required: true,  message: "日期不可为空", trigger: "change"}],
-          orgid: [{required: true, message: "门店ID不可为空", trigger: "change"}],
+          // orgid: [{required: true, message: "门店ID不可为空", trigger: "change"}],
           agentId: [{required: true, message: "agentId不可为空", trigger: "change"}],
           appName: [{required: true, message: "app名称不可为空", trigger: "change"}],
           appKey: [{required: true, message: "appKey不可为空", trigger: "change"}],
@@ -248,9 +257,39 @@ import moment from "moment"
           code: "",
           disabled: true
         },
+        accountAddId:0,
         dingTalkBpmsConfigs:[],
         dingBool: false,
         dingTit: "新增"
+      }
+    },
+    watch:{
+      data:{
+        handler(newValue,oldValue){
+          if(newValue.orgid==0){
+            newValue.isMultiple=true;
+          }else{
+            newValue.isMultiple=false;
+          }
+        },
+        deep:true
+      },
+      dingTalkBpmsConfigs:{
+        handler(newValue,oldValue){
+          this.$refs.addDingTalk.typeListzanshi.map(el=>{
+            newValue.map(el2=>{
+              if(el.value==el2.type){
+                this.$refs.addDingTalk.typeList.map((el3,idx3)=>{
+                  if(el2.type==el3.value){
+                    el3.disable=true;
+                  }
+                })
+              }
+            })
+          })
+        },
+        deep:true,
+        immediate:true
       }
     },
     components: {
@@ -298,7 +337,6 @@ import moment from "moment"
           appName:this.data.appName2,
         }
         data.configContent.dingTalkBpmsConfigs=this.dingTalkBpmsConfigs;
-        console.log(data,1111)
         let res=await saveDing(data);
         if(res.code===0){
           this.$Message.success("保存成功")
@@ -309,12 +347,26 @@ import moment from "moment"
       inCancel() {
 
       },
-      dingSel(row){
-
+      dingSel({row}){
+        this.addDingData=row;
       },
-      addDing() {
+      async addDing() {
+        this.addDingData={
+          name: "",
+          type: "",
+          code: "",
+          disabled: true
+        }
         this.dingBool = true;
-        // this.$refs.addDingTalk.getTypeList()
+      },
+      changeDing() {
+        if (Object.keys(this.addDingData).length == 0) {
+          this.$Message.error("请先选中需要修改的信息");
+          return false;
+        }
+        this.dingTit = "修改信息";
+        this.dingBool = true;
+        this.$refs.addDingTalk.data = this.addDingData;
       },
       addNewDing() {
         this.$refs.addDingTalk.handleSubmit(() => {
@@ -356,11 +408,12 @@ import moment from "moment"
               }
             });
             if (bool == true) {
-              this.accountAddId++;
+              newarr.accountAddId=this.accountAddId;
               this.dingTalkBpmsConfigs.push(newarr);
               this.data.dingTalkBpmsConfigs = this.dingTalkBpmsConfigs;
               this.dingBool = false;
               this.$Message.success("添加成功");
+              this.accountAddId++;
             } else {
               return this.$Message.error("该类型已添加过");
             }
