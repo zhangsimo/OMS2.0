@@ -1179,6 +1179,7 @@
                 const column = xtable.getColumnByField('partBrand');
                 xtable.setFilter(column, this.bands1);
                 xtable.updateData();
+                xtable.recalculate();
               })
 
               // this.columnsPart[6].filters = this.bands1;
