@@ -253,7 +253,7 @@ export default {
       if (this.price > 0) {
         data.reimbursementAmount = this.price;
       }
-
+      data.orgid = JSON.parse(localStorage.getItem('oms2-userList')).shopId
       let res = await api.findByDynamicQuery(params, data);
 
       if(res.code == 0) {
