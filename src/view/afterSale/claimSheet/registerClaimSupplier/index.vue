@@ -184,6 +184,11 @@
                     </Upload>
                   </div>
                   <div class="fl mb5">
+                    <Button class="mr10" size="small" @click="downModal">
+                      <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
+                    </Button>
+                  </div>
+                  <div class="fl mb5">
                     <Button type="default" @click="openCustomer" size="small"
                             :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
                       选择客户理赔登记单

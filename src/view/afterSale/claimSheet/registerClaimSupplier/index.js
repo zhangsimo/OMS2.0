@@ -11,6 +11,7 @@ import {hideLoading, showLoading} from "@/utils/loading";
 import selectPartCom from "@/view/goods/goodsList/components/selectPartCom.vue";
 import { area } from "@/api/lease/registerApi";
 import {getSupplierTreeList} from '@/api/system/essentialData/supplierManagement'
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 
 
 import {getup} from "@/api/business/procurementAndStorage";
@@ -420,7 +421,9 @@ export default {
       this.$refs.xTab.setCurrentRow(row);
       this.formPlan = row;
     },
-
+    downModal(){
+      down('3800000000')
+    },
     //保存
     save() {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
