@@ -237,6 +237,7 @@
                       maxlength="60"
                       v-model="row.afterSaleReason"
                       size="mini"
+                      @change="afterSaleReasonChange(row)"
                     />
                   </template>
                 </vxe-table-column>

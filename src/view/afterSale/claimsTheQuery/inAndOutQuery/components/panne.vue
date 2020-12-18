@@ -2,7 +2,7 @@
   <section class="oper-box">
     <div class="con-box  flex p15">
       <div class="con-box pt10 flex">
-        <div class="wlf">
+        <div class="wlf pt10">
           <div class="db mr10">
             <span>操作日期：</span>
             <DatePicker
@@ -27,18 +27,16 @@
                 v-for="item in stores"
                 :value="item.id"
                 :key="item.id"
-              >{{ item.name }}
-              </Option
-              >
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span>配件编码/名称/内码:</span>
-            <Input type="text" class="ml10 w150" v-model="search.partName" clearable></Input>
+            <Input type="text" class="ml10 w150" v-model="search.partCode" clearable></Input>
           </div>
           <div class="mr10 db">
             <span>操作人:</span>
-            <Input type="text" class="ml10 w150" v-model="search.name" clearable></Input>
+            <Input type="text" class="ml10 w150" v-model="search.createUname" clearable></Input>
           </div>
           <div class="db mr10">
             <span>方向:</span>
@@ -48,7 +46,7 @@
           </div>
           <div class="db mr10">
             <span>单号:</span>
-            <Input type="text" class="ml10 w150" v-model="search.orderNo" clearable></Input>
+            <Input type="text" class="ml10 w150" v-model="search.afterSaleCode" clearable></Input>
           </div>
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
@@ -80,9 +78,9 @@
           isPanne: true,
           auditDate: ToDayStr(), // 提交日期
           orgid:"",
-          partName:"",//配件编码/名称/内码
-          name:"",//操作人
-          orderNo:""//单号
+          partCode:"",//配件编码/名称/内码
+          createUname:"",//操作人
+          afterSaleCode:""//单号
         }
       };
     },
@@ -124,21 +122,15 @@
           if (this.search[key]) {
             if (key == "auditDate") {
               if (this.search["auditDate"][0]) {
-                data.auditStartTime =
-                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
-                  " 00:00:00";
-                data.auditEndTime =
-                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
-                  " 23:59:59";
+                data.createStartTime =this.search["auditDate"][0]!=""?
+                  moment(this.search["auditDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss"):""
+                data.createEndTime =this.search["auditDate"][1]!=""?
+                  moment(this.search["auditDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):""
               }
             }  else {
               data[key] = this.search[key];
             }
           }
-        }
-        if (this.quickDates.length >= 2 && this.quickDates[0]) {
-          data.startTime = this.quickDates[0];
-          data.endTime = this.quickDates[1];
         }
         this.$emit("search", data);
       },

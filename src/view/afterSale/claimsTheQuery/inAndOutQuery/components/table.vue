@@ -8,13 +8,29 @@
       height="400"
       auto-resize
       resizable
-      show-overflow="tooltip"
+      show-overflow="title"
       show-footer
       :footer-method="footerMethod"
       :data="tableData"
     >
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="shortName" title="分店名称" width="100"></vxe-table-column>
+      <vxe-table-column field="partInnerId" title="配件内码" width="100"></vxe-table-column>
+      <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+      <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+      <vxe-table-column field="oemCode" title="OEM码" width="100"></vxe-table-column>
+      <vxe-table-column field="partBrand" title="品牌" width="50"></vxe-table-column>
+      <vxe-table-column field="carModelName" title="车型" width="50"></vxe-table-column>
+      <vxe-table-column field="direction" title="方向" width="50"></vxe-table-column>
+      <vxe-table-column field="unit" title="单位" width="50"></vxe-table-column>
+      <vxe-table-column field="recordQty" title="本次操作数量" width="100"></vxe-table-column>
+      <vxe-table-column field="balanceQty" title="结存数量" width="100"></vxe-table-column>
+      <vxe-table-column field="recordTypeStatus" title="单据类型" width="100"></vxe-table-column>
+      <vxe-table-column field="operationType" title="操作类型" width="100"></vxe-table-column>
+      <vxe-table-column field="createUname" title="操作人" width="100"></vxe-table-column>
+      <vxe-table-column field="createTime" title="操作日期" width="100"></vxe-table-column>
+      <vxe-table-column field="guestName" title="客户/供应商" width="110"></vxe-table-column>
+      <vxe-table-column field="afterSaleCode" title="单号" width="110"></vxe-table-column>
     </vxe-table>
     <div class="page-warp fw">
       <Page
@@ -60,9 +76,17 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        let res = await api.inAndOutLogQuery(this.body, params);
+        let res = await api.inAndOutLogQuery(params,this.body);
         if (res.code == 0 && res.data != null) {
-          this.tableData = (res.data.content || [])
+          this.tableData = (res.data.content || []).map(el=>{
+            //单据类型  1 理赔出库 1；2 理赔入库
+            switch (el.recordType) {
+              case "1":el.recordTypeStatus="理赔出库";break;
+              case "2":el.recordTypeStatus="理赔入库";break;
+              default: "1";
+            }
+            return el;
+          })
           // this.total = res.data.purchaseOrderBean
           this.page.total = res.data.totalElements;
         } else {

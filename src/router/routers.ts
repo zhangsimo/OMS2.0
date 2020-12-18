@@ -1192,16 +1192,34 @@ export default [
           //   component: () =>
           //     import("@/view/afterSale/Customerclaimshandlingenquiry/index.vue")
           // },
-          // {
-          //   path: '/afterSale/claimsTheQuery/inAndOutQuery',
-          //   name: 'inAndOutQuery',
-          //   meta: {
-          //     keepAlive: true,
-          //     title: '出入记录查询',
-          //   },
-          //   component: () =>
-          //     import("@/view/afterSale/claimsTheQuery/inAndOutQuery/index.vue")
-          // },
+          {
+            path: '/afterSale/claimsTheQuery/registerClaimSupplierQuery',
+            name: 'registerClaimSupplierQuery',
+            meta: { keepAlive: true,
+              title: '向供应商理赔查询',
+            },
+            component: () =>
+              import("@/view/afterSale/claimsTheQuery/registerClaimSupplierQuery/index.vue")
+          },
+          {
+            path: '/afterSale/claimsTheQuery/claimsTheQuery',
+            name: 'supplierClaimQuery',
+            meta: { keepAlive: true,
+              title: '供应商处理查询',
+            },
+            component: () =>
+              import("@/view/afterSale/claimsTheQuery/supplierClaimQuery/index.vue")
+          },
+          {
+            path: '/afterSale/claimsTheQuery/inAndOutQuery',
+            name: 'inAndOutQuery',
+            meta: {
+              keepAlive: true,
+              title: '出入记录查询',
+            },
+            component: () =>
+              import("@/view/afterSale/claimsTheQuery/inAndOutQuery/index.vue")
+          },
         ]
       },
     ]

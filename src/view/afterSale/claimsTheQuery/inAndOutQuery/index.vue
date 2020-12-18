@@ -22,7 +22,7 @@
           delete data.isPanne;
           data2 = data;
         }
-        this.$refs.tabOne.searchData = data2
+        this.$refs.tabOne.body = data2
         this.$refs.tabOne.page.page = 0;
         this.$refs.tabOne.getList(data2);
       }

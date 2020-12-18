@@ -8,7 +8,7 @@ import api from '_conf/url'
 //向供应商理赔查询接口
 export function supplierSettlementQuery(params,data){
   return axios.request({
-    url:`${api.omsOrder}`,
+    url:`${api.omsOrder}/afterSaleOutDetail/findConditionAfterSaleOutDetail`,
     method:"post",
     params,
     data
@@ -20,7 +20,7 @@ export function supplierSettlementQuery(params,data){
 //======= 供应商处理查询
 export function supplierClaimQuery(params,data){
   return axios.request({
-    url:`${api.omsOrder}`,
+    url:`${api.omsOrder}/afterSaleDetail/findConditionAfterSaleOutDetail`,
     method:"post",
     params,
     data
@@ -32,7 +32,7 @@ export function supplierClaimQuery(params,data){
 //======= 出入记录查询
 export function inAndOutLogQuery(params,data){
   return axios.request({
-    url:`${api.omsOrder}`,
+    url:`${api.omsOrder}/afterSaleRecord/findAfterSaleRecord`,
     method:"post",
     params,
     data

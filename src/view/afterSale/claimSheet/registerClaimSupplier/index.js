@@ -84,7 +84,7 @@ export default {
       }, //表单校验
       validRules: {
         afterSaleQty: [{required: true, validator: changeNumber}],
-        afterSaleReason: [{required: true, message:" ",trigger:"change"}]
+        afterSaleReason: [{required: true, message:"理赔原因必填",trigger:"change"}]
       }, //表格校验
       list:[],//暂存 treeList
       treeList:[],
@@ -383,6 +383,12 @@ export default {
       }
       this.updateFooterEvent()
     },
+    //理赔原因录入
+    afterSaleReasonChange(row){
+      if(row.afterSaleReason==""){
+        return this.$Message.error("理赔原因必填")
+      }
+    },
     // 在值发生改变时更新表尾合计
     updateFooterEvent() {
       let xTable = this.$refs.xTable;
@@ -421,6 +427,11 @@ export default {
         ? new Date(this.formPlan.afterSaleDate)
         : "";
       this.$refs.formPlan.validate(async valid => {
+        this.formPlan.details.map(el=>{
+          if(el.afterSaleReason==""){
+            valid=false;
+          }
+        })
         if (valid) {
           if (this.dataChange.row) {
             try {
