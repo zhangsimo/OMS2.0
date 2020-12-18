@@ -363,6 +363,9 @@ export default {
       this.dataChange = data;
       this.$refs.xTab.setCurrentRow(this.dataChange.row);
       this.formPlan = data.row;
+      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+        ? new Date(this.formPlan.afterSaleDate)
+        : "";
       if(data.row.details.length<1){
         this.formPlan.partOrCustomerOnly=0;
       }else{
@@ -414,6 +417,9 @@ export default {
 
     //保存
     save() {
+      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+        ? new Date(this.formPlan.afterSaleDate)
+        : "";
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           if (this.dataChange.row) {
@@ -451,6 +457,9 @@ export default {
     },
     //提交
     submit(){
+      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+        ? new Date(this.formPlan.afterSaleDate)
+        : "";
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           if (this.dataChange.row) {
@@ -488,6 +497,9 @@ export default {
     },
     //打开添加配件模态框
     addMountings() {
+      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+        ? new Date(this.formPlan.afterSaleDate)
+        : "";
       this.$refs.selectPartCom.init();
     },
     //添加配件
