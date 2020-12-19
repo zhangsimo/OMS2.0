@@ -340,6 +340,7 @@
                   fixed="left"
                   title="配件编码"
                   :filters="[]"
+                  width="100"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -347,38 +348,44 @@
                   fixed="left"
                   title="配件名称"
                   :filters="[]"
+                  width="100"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
                 <vxe-table-column
                   fixed="left"
                   field="partInnerId"
                   title="配件内码"
+                  width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   fixed="left"
                   field="partBrand"
                   title="品牌"
+                  width="100"
                   :filters="[]"
                   :filter-method="filterOrderNo"
                 ></vxe-table-column>
-                <vxe-table-column field="outUnitId" title="单位"></vxe-table-column>
-                <vxe-table-column field="canReQty" title="入库数量"></vxe-table-column>
+                <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column field="canReQty" title="入库数量" width="100"></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"
                   title="退货数量"
+                  width="100"
                   :edit-render="{ name: 'input',autoselect: true, attrs: { disabled: false } }"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="orderPrice"
+                  width="100"
                   title="退货单价"
                   :edit-render="{ name: 'input',autoselect: true }"
                 ></vxe-table-column>
-                <vxe-table-column field="orderAmt" title="退货金额">
+                <vxe-table-column field="orderAmt" title="退货金额" width="100">
                   <template v-slot="{ row }">{{ countAmount(row) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column
                   field="remark"
                   title="备注"
+                  width="100"
                   :edit-render="{
                     name: 'input',
                     attrs: { disabled: presentrowMsg !== 0 }
@@ -387,6 +394,7 @@
                 <vxe-table-column
                   field="stockOutQty"
                   title="缺货数量"
+                  width="100"
                   :filters="[]"
                   :filter-method="filterOrderNo"
                 >
@@ -402,9 +410,9 @@
                     <div v-else>{{ row.stockOutQty || 0 }}</div>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
-                <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
-                <vxe-table-column field="spec" title="规格"></vxe-table-column>
+                <vxe-table-column field="storeShelf" title="仓位" width="100"></vxe-table-column>
+                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->

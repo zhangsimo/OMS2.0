@@ -7,7 +7,7 @@
           <div class="db mr20">
             <span class="mr10">门店</span>
             <Select v-model="shopId" style="width:250px" @on-change='changeShop'>
-              <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
+              <Option v-for="(item,index) in shopListArr" :value="item.id" :key="index">{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -467,7 +467,7 @@
       issuingXE(){
         let filterData = this.InvoiceVersion.filter(item => item.itemCode==this.formValidate.invoiceVersion);
         let filterDataRate = this.taxRate.filter(item => item.itemCode==this.formValidate.taxRate);
-        this.formValidate.invoiceQuota = ((filterData.length>0?filterData[0].itemValueOne:0)*(1+(filterDataRate.length>0?filterDataRate[0].itemValueOne:0))).toFixed(0);
+        this.formValidate.invoiceQuota = ((filterData.length>0?Number(filterData[0].itemValueOne):0)*(1+(filterDataRate.length>0?Number(filterDataRate[0].itemValueOne):0))).toFixed(0);
       },
       //获取选中区域名称
       changeArea(v){

@@ -475,10 +475,12 @@ export default {
       if (!reg.test(this.data.applyQuota)) {
         this.$Message.error("请输入大于0的正整数!");
         this.data.applyQuota = 0;
+        return false
       }
       if (+this.data.applyQuota + +this.data.creditLimit > 10000000) {
         this.$Message.error("不能超过最高授信额度1000万!");
         this.data.applyQuota = 0;
+        return false
       }
     },
     //临时额度失去焦点
@@ -487,10 +489,12 @@ export default {
       if (!reg.test(this.data.tempQuota)) {
         this.$Message.error("请输入大于0的正整数!");
         this.data.tempQuota = 0;
+        return false
       }
       if (+this.data.tempQuota + this.data.tempCreditLimit > 10000000) {
         this.$Message.error("不能超过最高授信额度1000万!");
         this.data.tempQuota = 0;
+        return false
       }
     },
     init(){

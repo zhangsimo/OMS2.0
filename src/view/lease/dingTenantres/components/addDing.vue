@@ -2,19 +2,19 @@
   <Modal v-model="addDingBool" :title="tit" @on-ok="inOk" width="600" height="500" @on-cancel="inCancel">
     <!--   切换栏-->
     <div class="tabList">
-      <Form :label-width="80" :model="data" :rules="rules">
+      <Form :label-width="100" :model="data" :rules="rules">
         <Tabs type="card">
           <TabPane label="基本信息">
             <div style="display: flex">
               <div style="flex-flow: row nowrap;width: 100%">
                 <Row>
                   <Col span="12">
-                    <FormItem label="企业编号" prop="corpId" class="h40">
+                    <FormItem label="企业编号:" prop="corpId" class="h40">
                       <Input v-model.trim="data.corpId" style="width: 180px"/>
                     </FormItem>
                   </Col>
                   <Col span="12">
-                    <FormItem label="企业名称" prop="corpName" class="h40">
+                    <FormItem label="企业名称:" prop="corpName" class="h40">
                       <Input v-model.trim="data.corpName" style="width: 180px"/>
                     </FormItem>
                   </Col>
@@ -49,7 +49,7 @@
                   </Col>
                   <Col span="12">
                     <FormItem label="门店ID:" prop="orgid" class="h40">
-                      <Select v-model.trim="data.orgid" style="width:180px" class="mr10">
+                      <Select v-model.trim="data.orgid" style="width:180px" class="mr10" :disabled="id">
                         <Option
                           v-for="item in storeList"
                           :value="item.id"
@@ -77,12 +77,12 @@
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="agentId" prop="agentId" class="h40">
+                    <FormItem label="agentId:" prop="agentId" class="h40">
                       <Input v-model.trim="data.agentId" style="width: 180px"/>
                     </FormItem>
                   </Col>
                   <Col span="12">
-                    <FormItem label="app名称" prop="appName" class="h40">
+                    <FormItem label="app名称:" prop="appName" class="h40">
                       <Input v-model.trim="data.appName" style="width: 180px"/>
                     </FormItem>
                   </Col>
@@ -108,31 +108,31 @@
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="appId" prop="appId" class="h40">
+                    <FormItem label="appId:" prop="appId" class="h40">
                       <Input v-model.trim="data.appId" style="width: 180px"/>
                     </FormItem>
                   </Col>
                   <Col span="12">
-                    <FormItem label="suiteId" prop="suiteId" class="h40">
+                    <FormItem label="suiteId:" prop="suiteId" class="h40">
                       <Input v-model.trim="data.suiteId" style="width: 180px"/>
                     </FormItem>
                   </Col>
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="suiteKey:" prop="suiteKey" class="h40">
-                      <Input v-model.trim="data.suiteKey" style="width: 180px"/>
+                    <FormItem label="应用名称:" prop="suiteName" class="h50">
+                      <Input v-model.trim="data.suiteName" style="width: 180px"/>
                     </FormItem>
                   </Col>
                   <Col span="12">
-                    <FormItem label="应用名称:" prop="suiteName" class="h50">
-                      <Input v-model.trim="data.suiteName" style="width: 180px"/>
+                    <FormItem label="suiteKey:" prop="suiteKey" class="h40">
+                      <Input v-model.trim="data.suiteKey" style="width: 180px"/>
                     </FormItem>
                   </Col>
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="suiteSecret" prop="suiteSecret" class="h50">
+                    <FormItem label="suiteSecret:" prop="suiteSecret" class="h50">
                       <Input v-model.trim="data.suiteSecret" style="width: 180px"/>
                     </FormItem>
                   </Col>
@@ -146,19 +146,19 @@
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="appId" prop="appId2" class="h40">
+                    <FormItem label="appId:" prop="appId2" class="h40">
                       <Input v-model.trim="data.appId2" style="width: 180px"/>
                     </FormItem>
                   </Col>
                   <Col span="12">
-                    <FormItem label="应用名称" prop="appName2" class="h40">
+                    <FormItem label="应用名称:" prop="appName2" class="h40">
                       <Input v-model.trim="data.appName2" style="width: 180px"/>
                     </FormItem>
                   </Col>
                 </Row>
                 <Row>
                   <Col span="12">
-                    <FormItem label="应用秘钥" prop="appSecret2" class="h50">
+                    <FormItem label="应用秘钥:" prop="appSecret2" class="h50">
                       <Input v-model.trim="data.appSecret2" style="width: 180px"/>
                     </FormItem>
                   </Col>
@@ -221,12 +221,13 @@
 <script>
   import * as api from "_api/reportForm/index.js";
   import addDingTalk from "./addDingTalk";
-  import {saveDing,getTypeList} from "_api/lease/tenantres";
+  import {saveDing,getTypeList,changeDing} from "_api/lease/tenantres";
   import moment from "moment"
   export default {
     props: ["data","dictionariesConfigCodeList"],
     data() {
       return {
+        id:"",//修改时暂存id
         addDingBool: false,//模态款boolean
         tit: "添加租户配置",
         storeList: [],
@@ -267,9 +268,9 @@
       data:{
         handler(newValue,oldValue){
           if(newValue.orgid==0){
-            newValue.isMultiple=true;
-          }else{
             newValue.isMultiple=false;
+          }else{
+            newValue.isMultiple=true;
           }
         },
         deep:true
@@ -308,6 +309,9 @@
     methods: {
       async inOk() {
         let data={};
+        if(this.tit=="修改租户配置"){
+          data.id=this.id;
+        }
         data.effectiveDate=this.data.date[0]?moment(this.data.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss"):"";
         data.expirationDate=this.data.date[1]?moment(this.data.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):"";
         data.tenantId=this.data.tenantId;
@@ -337,11 +341,24 @@
           appName:this.data.appName2,
         }
         data.configContent.dingTalkBpmsConfigs=this.dingTalkBpmsConfigs;
-        let res=await saveDing(data);
-        if(res.code===0){
-          this.$Message.success("保存成功")
+        if(this.id){
+          let res=await changeDing(data)
+          if(res.code===0){
+            this.addDingBool=false;
+            this.$Message.success("保存成功")
+          }else{
+            this.addDingBool=true;
+            this.$Message.error("保存失败")
+          }
         }else{
-          this.$Message.error("保存失败")
+          let res=await saveDing(data);
+          if(res.code===0){
+            this.addDingBool=false;
+            this.$Message.success("保存成功")
+          }else{
+            this.addDingBool=true;
+            this.$Message.error("保存失败")
+          }
         }
       },
       inCancel() {
