@@ -74,11 +74,19 @@ export function getTypeList(){
     method:"get",
   })
 }
-//保存
+//保存 添加
 export function saveDing(data){
   return axios.request({
     url:`${api.omsApi}/tenantConfig/save`,
     method:"put",
+    data
+  })
+}
+//保存 修改
+export function changeDing(data){
+  return axios.request({
+    url:`${api.omsApi}/tenantConfig/save`,
+    method:"patch",
     data
   })
 }

@@ -401,15 +401,27 @@
           content: '<p>确认审核</p>',
           onOk: async () => {
             let ids = this.oneList.map(el => el.id)
-            let res = await api.dailyFundAudit({ids})
-            if (res.code == 0) {
-              if(res.data instanceof Array){
-                if(res.data[0]){
-                  this.$message.error(res.data[0])
-                }else{
-                  this.$message.success('审核成功！')
+            try {
+              showLoading('.loadingClass')
+              let res = await api.dailyFundAudit({ids})
+              if (res.code == 0) {
+                if(res.data instanceof Array){
+                  if(res.data[0]){
+                    let msg = res.data.join('<br/>')
+                    this.$message({
+                      type: 'error',
+                      message: msg,
+                      dangerouslyUseHTMLString: true,
+                      duration: 3000
+                    })
+                  }else{
+                    this.$message.success('审核成功！')
+                  }
                 }
               }
+              hideLoading()
+            } catch (error) {
+              hideLoading()
             }
             this.query()
           },

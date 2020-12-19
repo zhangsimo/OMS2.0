@@ -282,6 +282,7 @@
           paymentBalance: 0,
           writeOffStatus: 0,
           searchType: 0,
+          orgid: JSON.parse(localStorage.getItem('oms2-userList')).shopId || '',
           startTime: this.dates[0]
             ? moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00"
             : "",

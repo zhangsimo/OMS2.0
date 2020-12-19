@@ -84,7 +84,7 @@ export function getPayablesExportba(params){
 export function getPayablesExportnine(params){
   return `${api.omsSettle}/cashAccountServer/export/findCashAccount?${params}access_token=${Cookies.get(TOKEN_KEY)}`
 }
-// 进销存排行 
+// 进销存排行
 export function getSalesAndInventoryList(data = {}, params) {
   return axios.request({
     url: `${api.omsBatch}`,
@@ -370,6 +370,26 @@ export function sellOutMain(data = {}, params={}) {
     url: `${api.omsOrder}/sellOutMain/getPjSellAnalyzeTotal`,
     method: 'post',
     data,
+    params,
+  })
+}
+
+
+//进销存排行
+export function omsInvoicingReport(data = {}, params={}) {
+  return axios.request({
+    url: `${api.omsOrder}/omsInvoicingReport/queryByConditions`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
+//进销存排行获取统比
+export function monthToMonth(params={}) {
+  return axios.request({
+    url: `${api.omsOrder}/omsInvoicingReport/monthToMonth`,
+    method: 'get',
     params,
   })
 }
