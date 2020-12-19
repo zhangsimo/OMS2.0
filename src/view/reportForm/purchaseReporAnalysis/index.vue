@@ -35,8 +35,20 @@
     async mounted() {
     },
     methods: {
+       getnew(data){
+        let hh=moment(data[1]).format("YYYY-MM-DD")
+      let ha=moment(data[0]).format("YYYY-MM-DD")
+      let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+      return d
+    },
       tabName() {
+         let val=this.getnew(this.$refs.panne.search.enterDate)
+         if(val>31){
+         
+        return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
+      }
         let data={}
+    
         for (let key in this.$refs.panne.search) {
           if (this.$refs.panne.search[key]||this.$refs.panne.search[key]===0) {
             if (key == "enterDate") {

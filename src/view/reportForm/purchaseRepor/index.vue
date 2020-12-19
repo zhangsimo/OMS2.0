@@ -36,6 +36,7 @@ export default {
   async mounted() {},
   methods: {
     search1(data) {
+      
       let data2 = {};
       if(data.isPanne) {
         // 基本查询
@@ -43,6 +44,7 @@ export default {
         data2 = data;
       } else {
         // 更多查询
+        console.log(data)
         data.orgid?data2.orgid=data.orgid:"";
         data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
@@ -59,6 +61,7 @@ export default {
         data.auditor ? data2.auditorId = data.auditor : "";
         data.createUname ? data2.createUid = data.createUname : "";
       }
+ 
       this.$refs.tabOne.body = data2
       this.$refs.tabOne.getList();
     },

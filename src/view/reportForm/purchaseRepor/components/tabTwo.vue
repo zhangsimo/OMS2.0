@@ -296,6 +296,9 @@
           page: this.page.num - 1,
           size: this.page.size
         };
+      //  if(this.body.orgid==null){
+      //       return 
+      //   }
         let res = await api.getPjPchsEnterMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
