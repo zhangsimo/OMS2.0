@@ -521,6 +521,17 @@ export default {
           this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
             ? moment(this.formPlan.afterSaleDate).format("YYYY-MM-DD")
             : "";
+          let boolNotSim=false;
+          (this.formPlan.details || []).map(delEl=>{
+            (val || []).map(valEl=>{
+              if(delEl.partInnerId==valEl.partInnerId){
+                boolNotSim=true;
+              }
+            })
+          })
+          if(boolNotSim){
+            return this.$message.error("存在已添加配件")
+          }
           this.formPlan.details = [...claimSupplier(val),...this.formPlan.details]
           this.formPlan.partOrCustomerOnly=1;
         } else {

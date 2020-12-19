@@ -25,13 +25,14 @@
       <Button
         class="mr10"
         @click="submit"
+        :disabled="formPlan.orderSign&&formPlan.orderSign!=0||formPlan.id==undefined"
       >
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
       </Button>
       <Button class="mr10" @click="setPrint">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button type="default" class="mr10" @click="supplierExamie">查看供应商</Button>
+      <Button type="default" class="mr10" @click="supplierExamie" :disabled="formPlan.id==undefined||fromPlan&&fromPlan.guestId">查看供应商</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -207,6 +208,7 @@
                 ref="xTable"
                 show-overflow="tooltip"
                 show-footer
+                max-height="400"
                 :footer-method="footerMethod"
                 :edit-rules="validRules"
                 @select-change="selectSameList"
