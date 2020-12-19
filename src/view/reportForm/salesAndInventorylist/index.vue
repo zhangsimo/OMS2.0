@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper" style="background: #fff">
+  <div class="content-oper flex-c" style="background: #fff;">
     <panne @search="search" @export="exportxls()" />
     <tabOne ref="tabOne" />
   </div>
