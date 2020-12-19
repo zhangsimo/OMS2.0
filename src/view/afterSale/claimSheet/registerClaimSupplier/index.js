@@ -13,8 +13,6 @@ import { area } from "@/api/lease/registerApi";
 import {getSupplierTreeList} from '@/api/system/essentialData/supplierManagement'
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 
-
-import {getup} from "@/api/business/procurementAndStorage";
 import Cookies from "js-cookie";
 import {TOKEN_KEY} from "@/libs/util";
 import SelectSupplier from "@/view/goods/goodsList/components/supplier/selectSupplier";
@@ -94,7 +92,7 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //请求头
-      upurl: getup, //批量导入地址
+      upurl: api.getup, //批量导入地址
       flag: 0,
       addNewBool: false,
       selectLeftItemId: ""
@@ -422,7 +420,7 @@ export default {
       this.formPlan = row;
     },
     downModal(){
-      down('3800000000')
+      down('3900000000')
     },
     //保存
     save() {
@@ -603,7 +601,7 @@ export default {
       })
     },
     getRUl() {
-      this.upurl = getup + "?id=" + this.formPlan.id;
+      this.upurl = api.getup + "?id=" + this.formPlan.id;
     },
 
     //批量上传失败
@@ -613,8 +611,8 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       if (response.code == 0) {
-        if (response.data.list && response.data.list.length > 0) {
-          this.warning(response.data.list[0]);
+        if (response.data && response.data.length > 0) {
+          this.warning(response.data);
         }
         this.getLeftLists();
         this.formPlan = {
@@ -625,10 +623,21 @@ export default {
         this.$Message.error("上传失败");
       }
     },
-    warning(nodesc) {
+    warning(nodesc){
+      let str=""
+      if(nodesc.length>0){
+        nodesc.map((item,index)=>{
+          if(index!=nodesc.length-1){
+            str+=`${item}<br/>`;
+          }else{
+            str+=`${item}`;
+          }
+        })
+      }
       this.$Notice.warning({
-        title: "上传错误信息",
-        desc: nodesc
+        title: '上传错误信息',
+        desc: `<div style="height:300px;overflow-y: scroll;">${str}</div>`,
+        duration: 0
       });
     },
     //上传之前清空

@@ -176,9 +176,9 @@
                       :on-format-error="onFormatError"
                       :on-success="onSuccess"
                       :before-upload='beforeUpload'
-                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
+                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2"
                     >
-                      <Button size="small" class="mr10" :disabled="formPlan.billStatusValue != 0 "
+                      <Button size="small" class="mr10" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2"
                               type="default" @click="getRUl"><i class="iconfont icondaoruicon icons"/> 导入配件
                       </Button>
                     </Upload>

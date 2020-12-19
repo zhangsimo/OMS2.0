@@ -63,6 +63,10 @@ export function registerClaimSubmit(data){
     data
   })
 }
+//批量导入地址
+export const getup = `${api.omsOrder}/afterSaleOutDetail/import/partId`;
+
+
 
 
 
