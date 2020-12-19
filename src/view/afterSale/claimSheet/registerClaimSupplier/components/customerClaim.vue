@@ -158,17 +158,39 @@
     //选中
     private async checkClaim(selection:any){
       this.checkData=selection.selection;
+      let par:any=this.$parent;
+      let notSim:boolean=false;
+      (par.formPlan.details || []).map(detEL=>{
+        (this.checkData || []).map(arrEl=>{
+          if(detEL.serviceId==arrEl.serviceId){
+            notSim=true;
+          }
+        })
+      })
+      if(notSim){
+        return this.$Message.error("存在已添加的客户理赔登记单!")
+      }
     }
     //选入
     private selAddPart(){
       if(this.checkData.length<1){
-        return this.$Message.error("请选择配件")
+        return this.$Message.error("请选择客户理赔登记单")
       }else{
         let par:any=this.$parent;
+        let notSim:boolean=false;
+        (par.formPlan.details || []).map(detEL=>{
+          (this.checkData || []).map(arrEl=>{
+            if(detEL.serviceId==arrEl.serviceId){
+              notSim=true;
+            }
+          })
+        })
+        if(notSim){
+          return this.$Message.error("存在已添加的客户理赔登记单!")
+        }
         let arr:Array<any>=new Array<any>();
         arr=this.checkData.map(el=>{
-          let data:any={};
-          data=el;
+          let data:any=Object.assign({}, el);//对象浅拷贝
           data.claimDemageCode="";
           data.afterSaleQty=el.noChoiceQty;
           data.enterMainId=data.mainId;
