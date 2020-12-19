@@ -687,10 +687,10 @@ export default {
         case "发票对冲":
           this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.open(row);
           break;
-        case "客户信用调查":
+        case "客户信用额度调查":
           this.$refs.clientApply.init(row);
           break;
-        case "客户信用额度":
+        case "客户信用额度审批":
           this.$refs.quotaApply.init(row);
           break;
         case "盘亏出库":
