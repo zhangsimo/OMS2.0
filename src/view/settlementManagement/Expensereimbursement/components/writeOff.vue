@@ -352,7 +352,7 @@
                     xeUtils.sum(data, column.property);
                 }
               }
-              return this.totalfooter;
+              return this.totalfooter.toFixed(2);
             }
             return null;
           })
