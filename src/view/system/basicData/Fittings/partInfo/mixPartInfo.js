@@ -1,5 +1,5 @@
 //适用车型，品牌及车型接口
-import { getCarBrandAll, getCarModel } from "_api/system/systemSetting/Initialization";
+import { getCarBrandAll, getCarModel,getBusinessUnitList } from "_api/system/systemSetting/Initialization";
 //品牌品质，自定义分类接口
 import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamineApi'
 
@@ -25,6 +25,10 @@ export const mixPartInfo = {
       btnIsLoadding: false,
       typepf: [],
       typeps: [],
+      //事业部
+      businessArr:[],
+      //负责人
+      businessMan:[],
       saveFlag:false,
       //car
       isCart:false,
@@ -112,6 +116,12 @@ export const mixPartInfo = {
         ],
         taxCalssCode: [
           { required: true, message: '收税分类编码不能为空', trigger: 'change' }
+        ],
+        businessUnit: [
+          { required: true, message: '所属事业部不能为空', trigger: 'change' }
+        ],
+        dutyManId: [
+          { required: true, message: '产品负责人不能为空', trigger: 'change' }
         ]
       },
       qualityArr: [],//所有品质
@@ -282,9 +292,22 @@ export const mixPartInfo = {
     if(this.typepf.length==0){
       this.treeInit();
     }
+    if(this.businessArr.length==0){
+      this.getBusiness();
+    }
     this.getType();
   },
   methods: {
+    async getBusiness(){
+      const rep = await getBusinessUnitList();
+      if(rep.code==0){
+        this.businessArr = rep.data||[]
+      }
+    },
+    changeBusiness(v){
+      let businessManFilter = this.businessArr.filter(item => item.id == v);
+      this.businessMan
+    },
     async treeInit() {
       let res = await getCarPartClass();
       this.typepf = res;
