@@ -160,7 +160,7 @@
 
 <script>
   import moment from "moment";
-  import QuickDate from "_c/getDate/dateget2";
+  import QuickDate from "_c/getDate/dateget_w";
   import * as api from "_api/reportForm/index.js";
   import {creat} from "@/view/settlementManagement/components";
   import {getBrandList} from "@/view/reportForm/until.js"
@@ -349,8 +349,24 @@
         this.search.orgid = arr[1];
         this.query()
       },
+      getnew(data){
+     let hh=moment(data[1]).format("YYYY-MM-DD")
+      let ha=moment(data[0]).format("YYYY-MM-DD")
+    
+      let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+      return d
+    },
+      alert(){
+        this.search.enterDate=[]
+        this.$message({message:'出库日期跨度不能超过一个月',type:'error'})
+      },
       // 查询
       query() {
+        let val=this.getnew(this.search.enterDate)
+         if(val>31){
+         
+        return this.alert() 
+       }this.search.enterDate=[]
         this.moreModel = false;
         this.$emit("search", this.search);
       },

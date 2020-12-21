@@ -10,6 +10,7 @@
           placement="bottom-end"
           style="width: 300px"
           v-model="createDate"
+          
         ></DatePicker>
       </Row>
       <Row class="mb30" v-if="[1, 4].includes(type)">
@@ -146,9 +147,22 @@ import {getBrandList, getWares} from "@/view/reportForm/until.js"
 })
 export default class MoreSearch extends Vue {
   @Prop({ default: "" }) private readonly type!: string;
-
+  private timeOption :any= {
+          disabledDate(date){
+              let t :any= new Date()
+			let Day :any= t.getDate()
+			let Mon:any = t.getMonth()
+			let Year:any = t.getFUllYear()
+			let startTime:any = new Date(Year, Mon, (Day - 30))
+			let endTime :any= new Date(Year, Mon, (Day - 1))
+			return date.valueOf() > Date.parse(endTime) || date.valueOf() < Date.parse(startTime)
+          }
+         
+        
+        }
+  
   private serchN: boolean = false;
-
+  private startq:any=['2020-12-02','2020-12-05']
   private createDate: Array<any> = new Array();
   private auditDate: Array<any> = new Array();
   private serviceId: string = "";
@@ -277,8 +291,35 @@ export default class MoreSearch extends Vue {
       this.brandLists=await getBrandList("")
     }
   }
-  @Emit("getmoreData")
+  @Emit("getmoreData")send(msg:any){};
+  private getnew(data:any){
+    let hh:any=moment(data[1]).format("YYYY-MM-DD")
+    let ha:any=moment(data[0]).format("YYYY-MM-DD")
+    let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+     return d
+    }
+    private chamgeName(){ 
+      if(this.type=="1"){
+        return "创建日期"
+      }else if(this.type=="3"){
+        return  "入库日期"
+      }else if(this.type=="2"){
+        return "出库日期"
+      }
+      
+    }
   private ok() {
+    console.log(moment(this.createDate[0]).format("YYYY-MM-DD"))
+     let createW:any=this.getnew(this.createDate)
+      let strtW:any=this.getnew(this.auditDate)
+      if(createW>31){
+        this.$message({message:`${this.chamgeName()}不可超过一个月，请重新选择`,type:'error'})
+        return
+      }
+      if(strtW>31){
+         this.$message({message:'提交日期不可超过一个月，请重新选择',type:'error'})
+         return
+      }
     let parent:any=this.$parent
     let search:any=parent.search
     let data = {
@@ -322,8 +363,12 @@ export default class MoreSearch extends Vue {
     } else {
       obj = null;
     }
-    this.cancel();
-    return obj;
+    if(!(createW>31)||!(strtW>31)){
+            this.cancel();
+       }
+  
+   
+     this.send(obj)
   }
 }
 </script>

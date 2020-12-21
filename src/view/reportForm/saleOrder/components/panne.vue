@@ -130,7 +130,7 @@
 <!--getWares-->
 <script>
   import moment from "moment";
-  import QuickDate from "_c/getDate/dateget_noEmit";
+  import QuickDate from "_c/getDate/dateget_w";
   import more from "./more";
   import * as api from "_api/reportForm/index.js";
   import {creat} from "@/view/settlementManagement/components";
@@ -222,10 +222,27 @@
         this.query();
       },
       getDataQuick2(v){
+         if(!this.search.content&&this.getnew(v)>31){
+        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
+      }
         this.search.auditDate = v;
       },
+      getnew(data){
+        let hh=data[1].substr(0,10);
+      let ha=data[0].substr(0,10);
+      let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+      return d
+    },
       // 查询
       query() {
+        let val=this.getnew(this.search.auditDate)
+      if(val>30&&this.search.content){
+          this.search.content=""
+        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
+      }
+      if(!this.search.auditDate[0]){
+        return this.$message({message:'日期范围不能为空',type:'error'})
+      }
         let data = {};
         for (let key in this.search) {
           if (this.search[key]) {

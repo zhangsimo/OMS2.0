@@ -322,10 +322,10 @@ export default {
       ], //申请状态数组
       ApplicationType: "99", //申请类型
       ApplicationTypelist: [
-        {
-          value: "99",
-          label: "全部"
-        },
+        // {
+        //   value: "99",
+        //   label: "全部"
+        // },
         // {
         //   value: "0",
         //   label: "费用报销"
@@ -687,10 +687,10 @@ export default {
         case "发票对冲":
           this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.open(row);
           break;
-        case "客户信用调查":
+        case "客户信用额度调查":
           this.$refs.clientApply.init(row);
           break;
-        case "客户信用额度":
+        case "客户信用额度审批":
           this.$refs.quotaApply.init(row);
           break;
         case "盘亏出库":
@@ -698,13 +698,13 @@ export default {
         case "采购计划单":
         case "临时采购订单":
         case "门店外采订单":
-        case "活动申请":
+        case "活动审批":
           this.$refs.viewOtherModel.init(row);
           break;
-        case "配件资料审批申请":
+        case "配件资料审批":
           this.$refs.partInfo.getPartDetail(row);
           break;
-        case "供应商资料审批申请":
+        case "供应商资料审批":
           this.$refs.suppler.init(row);
           break;
       }

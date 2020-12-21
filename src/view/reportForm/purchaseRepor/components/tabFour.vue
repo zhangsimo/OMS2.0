@@ -235,6 +235,9 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
+      //  if(!this.body.orgid){
+      //       return 
+      //   }
       let res = await api.getPjPchsPlanDetailList(this.body, params);
       if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
