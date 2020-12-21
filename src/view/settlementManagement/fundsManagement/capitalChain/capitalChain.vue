@@ -996,7 +996,7 @@ export default {
       for (var i in data) {
         params += `${i}=${data[i]}&`;
       }
-      location.href = api.getPayablesExportsan(params);
+      //location.href = api.getPayablesExportsan(params);
     },
     //获取表格信息
     async getList() {
