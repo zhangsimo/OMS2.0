@@ -147,7 +147,7 @@
   @Component({
     components: {}
   })
-  export default class MoreSearch extends Vue {
+    export default class MoreSearch extends Vue {
     @Prop({default: ""}) private readonly type!: string;
 
     private serchN: boolean = false;

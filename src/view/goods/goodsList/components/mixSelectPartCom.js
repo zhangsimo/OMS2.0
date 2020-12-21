@@ -165,7 +165,8 @@ export const mixSelectPartCom = {
     };
   },
   props: {
-    formPlanmain: Object
+    formPlanmain: Object,
+    noDBclick:Boolean//双击弹框事件为空
   },
   mounted() {
     this.routeName = this.$route.name;
@@ -292,7 +293,9 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
         // this.searchPartLayer = false;
-        this.$Message.success("已添加");
+        if(!this.noDBclick){
+          this.$Message.success("已添加");
+        }
         this.focusInput();
       } else {
         this.$Message.error("请选择数据");
@@ -355,8 +358,10 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase" ||this.$route.name=="bookingSheet"){
-        this.$refs.selectPartInfo.init(v);
+      if(!this.noDBclick){
+        if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase" ||this.$route.name=="bookingSheet"){
+          this.$refs.selectPartInfo.init(v);
+        }
       }
       // if(this.$route.name=="bookingSheet"){
       //   this.$refs.selectPartInfo2.init(v);
