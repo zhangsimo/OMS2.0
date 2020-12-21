@@ -59,7 +59,7 @@
           </div>
           <div class="db">
             <Button type="warning" @click="query" class="mr5">查询</Button>
-<!--            <Button type="warning" @click="exportxls" class="mr5">导出</Button>-->
+            <!--            <Button type="warning" @click="exportxls" class="mr5">导出</Button>-->
           </div>
         </div>
       </div>
@@ -72,9 +72,10 @@
   import {ToDayStr} from "@/components/getDate/index_bill.js"
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import moment from "moment";
+
   @Component({
     components: {
-      quickDate:quickDate
+      quickDate: quickDate
     }
   })
   export default class panne extends Vue {
@@ -83,40 +84,45 @@
       guestName: "",
       partCode: "",
       partBrand: "",
-      orderSign:99
+      orderSign: 99
     }//搜索条件
     private bandArr: Array<any> = new Array<any>();//品牌数组
-    private typeList:Array<any> =[ //单据状态
+    private typeList: Array<any> = [ //单据状态
       {value: 99, name: "所有"},
       {value: 0, name: "草稿"},
       {value: 1, name: "已提交"},
       {value: 2, name: "已完成"}
     ]
+
     async mounted() {
       this.bandArr = await getBrandList(this.search.partBrand)
     }
+
     //获取时间
     private getvalue(value) {
       this.search.orderDate = value;
       this.query();
     }
-    private getDataQuick(v){
+
+    private getDataQuick(v) {
       this.search.orderDate = v;
     }
+
     private async partBrandRemote(query: string) {
       this.bandArr = await getBrandList(query)
     }
+
     private query() {
-      let data:any = {};
+      let data: any = {};
       for (let key in this.search) {
         if (this.search[key]) {
           if (key == "orderDate") {
-            data.createStartTime =this.search["orderDate"][0]!=""?
-              moment(this.search["orderDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss"):""
-            data.createEndTime =this.search["orderDate"][1]!=""?
-              moment(this.search["orderDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):""
-          }else if(key=="orderSign"){
-            data.orderSign=this.search.orderSign == 99 ? "" : this.search.orderSign
+            data.createStartTime = this.search["orderDate"][0] != "" ?
+              moment(this.search["orderDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss") : ""
+            data.createEndTime = this.search["orderDate"][1] != "" ?
+              moment(this.search["orderDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss") : ""
+          } else if (key == "orderSign") {
+            data.orderSign = this.search.orderSign == 99 ? "" : this.search.orderSign
           } else {
             data[key] = this.search[key];
           }
@@ -124,7 +130,8 @@
       }
       this.$emit("search", data);
     }
-    private exportxls(){
+
+    private exportxls() {
       this.$emit("export")
     }
   }

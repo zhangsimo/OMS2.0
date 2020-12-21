@@ -17,7 +17,7 @@
       <vxe-table-column field="afterSaleDate" title="理赔日期" width="100"></vxe-table-column>
       <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
       <vxe-table-column field="manualCode" title="手工单号" width="100"></vxe-table-column>
-      <vxe-table-column field="orderSignStatus" title="类型" width="100"></vxe-table-column>
+      <vxe-table-column field="orderSignStatus" title="状态" width="100"></vxe-table-column>
       <vxe-table-column field="partInnerId" title="配件内码" width="100"></vxe-table-column>
       <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
       <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>

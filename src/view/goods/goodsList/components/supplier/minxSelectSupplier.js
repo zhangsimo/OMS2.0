@@ -200,11 +200,7 @@ export const mixSelectSupplier = {
         return this.$Message.error("请选择供应商");
       }
       this.$emit("selectSupplierName", this.selectTableItem);
-      if(this.$emit("selectSupplierName", this.selectTableItem)){
-        this.searchPartLayer = true;
-      }else{
-        this.searchPartLayer = false;
-      }
+      this.searchPartLayer = false;
       // console.log(this.selectTableItem)
     },
     //分页

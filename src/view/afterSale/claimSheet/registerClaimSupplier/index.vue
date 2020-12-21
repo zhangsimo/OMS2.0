@@ -25,14 +25,14 @@
       <Button
         class="mr10"
         @click="submit"
-        :disabled="formPlan.orderSign&&formPlan.orderSign!=0||formPlan.id==undefined"
+        :disabled="formPlan.orderSign!=0||formPlan.id==undefined"
       >
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
       </Button>
       <Button class="mr10" @click="setPrint">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button type="default" class="mr10" @click="supplierExamie" :disabled="formPlan.id==undefined||formPlan&&formPlan.guestId">查看供应商</Button>
+      <Button type="default" class="mr10" @click="supplierExamie" :disabled="!formPlan.guestId">查看供应商</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -102,7 +102,7 @@
                                placeholder="请输入供应商"
                                :search-value="formPlan.guestName"
                                @throwName="throwNameFun"
-                               :disabled-prop="formPlan.orderSign&&formPlan.orderSign!=0"
+                               :disabled-prop="formPlan.orderSign!=0"
                       >
                       </GoodCus>
                     </Tooltip>
@@ -111,7 +111,7 @@
                       size="small"
                       type="default"
                       @click="addSuppler"
-                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
+                      :disabled="formPlan.orderSign!=0"
                     >
                       <Icon type="md-checkmark"/>
                     </Button>
@@ -123,7 +123,7 @@
                     placeholder="选择日期"
                     format="yyyy-MM-dd"
                     v-model="formPlan.afterSaleDate"
-                    :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
+                    :disabled="formPlan.orderSign!=0"
                     style="width: 200px"
                   ></DatePicker>
                 </FormItem>
@@ -132,7 +132,7 @@
                     <Input
                       style="width: 340px"
                       v-model="formPlan.remark"
-                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
+                      :disabled="formPlan.orderSign!=0"
                     />
                   </Tooltip>
                 </FormItem>
@@ -151,7 +151,7 @@
                 <div class="clearfix pt5 pb5">
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="addMountings"
-                            :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 ">
+                            :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 ">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
@@ -161,7 +161,7 @@
                       @click="delect"
                       size="small"
                       class="mr10"
-                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0"
+                      :disabled="formPlan.orderSign!=0"
                     >
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                     </Button>
@@ -178,7 +178,7 @@
                       :on-success="onSuccess"
                       :before-upload='beforeUpload'
                     >
-                      <Button size="small" class="mr10" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 || formPlan.id==undefined"
+                      <Button size="small" class="mr10" :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 || formPlan.id==undefined"
                               type="default" @click="getRUl"><i class="iconfont icondaoruicon icons"/> 导入配件
                       </Button>
                     </Upload>
@@ -190,7 +190,7 @@
                   </div>
                   <div class="fl mb5">
                     <Button type="default" @click="openCustomer" size="small"
-                            :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
+                            :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
                       选择客户理赔登记单
                     </Button>
                   </div>

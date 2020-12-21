@@ -114,13 +114,13 @@ export default {
     },
     //获取选中供应商
     getSupplierName(val) {
-      if(val.orgid==this.$store.state.user.userData.currentCompany.id){
-        this.$message.error("供应商不可以选自己")
-        return false;
-      }else{
+      // if(val.orgid==this.$store.state.user.userData.currentCompany.id){
+      //   this.$message.error("供应商不可以选自己")
+      //   return false;
+      // }else{
         this.$set(this.formPlan, "guestId", val.id);
         this.$set(this.formPlan, "guestName", val.fullName);
-      }
+      // }
     },
     //获取地址 查看供应商使用
     getAdress() {
@@ -371,15 +371,15 @@ export default {
         return;
       }
       this.dataChange = data;
-      this.$refs.xTab.setCurrentRow(this.dataChange.row);
-      this.formPlan = data.row;
+      this.$refs.xTab.setCurrentRow(data.row==undefined?data:data.row);
+      this.formPlan = data.row==undefined?data:data.row;
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if (data.row.details.length < 1) {
+      if (this.formPlan.details.length<1) {
         this.formPlan.partOrCustomerOnly = 0;
       } else {
-        if (data.row.details[0].enterMainId) {//判断是否从客户理赔登记单录入
+        if (this.formPlan.details[0].enterMainId) {//判断是否从客户理赔登记单录入
           this.formPlan.partOrCustomerOnly = 2;
         } else {
           this.formPlan.partOrCustomerOnly = 1;
