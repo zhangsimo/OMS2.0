@@ -63,71 +63,89 @@
   import {Vue, Component, Watch} from "vue-property-decorator";
   import * as api from "@/api/afterSale/claimSheet/index.js"
   import moment from "moment";
+
   @Component
-  export default class tabOne extends Vue{
-    private claimSupplierData:Array<any>=new Array<any>();
-    private body:any={};
-    private page:any={
-      num:1,
-      size:10
+  export default class tabOne extends Vue {
+    private claimSupplierData: Array<any> = new Array<any>();
+    private body: any = {};
+    private page: any = {
+      num: 1,
+      size: 10
     };
-    private validRules:any={
-      thisTreatmentQty:[{required: true,message:"本次处理数量必填",trigger:"change"}]
+    private validRules: any = {
+      thisTreatmentQty: [{required: true, message: "本次处理数量必填", trigger: "blur"}]
     }
-    private claimSupplierSelData:Array<any>=new Array<any>();
-    private claimSupplierSel({selection}){
-      this.claimSupplierSelData=selection;
+    private claimSupplierSelData: Array<any> = new Array<any>();
+
+    private claimSupplierSel({selection}) {
+      this.claimSupplierSelData = selection;
     }
-    private async claim(type:number){
-      if(this.claimSupplierSelData.length<1){
+
+    private async claim(type: number) {
+      if (this.claimSupplierSelData.length < 1) {
         return this.$message.error("最少选中一条数据进行处理！")
       }
-      // @ts-ignore
-      // this.$refs.xTable.validate(valid => {
-      //   if(valid){
-      let p=""
+      let boolAjax:boolean=true;
+      this.claimSupplierSelData.map(el=>{
+        if(!el.thisTreatmentQty){
+          boolAjax=false
+        }
+      })
+      let p = ""
       switch (type) {
-        case 1:p="原货退还";break;
-        case 2:p="换货处理";break;
-        case 3:p="退货处理";break;
-        case 4:p="原物销毁";break;
+        case 1:
+          p = "原货退还";
+          break;
+        case 2:
+          p = "换货处理";
+          break;
+        case 3:
+          p = "退货处理";
+          break;
+        case 4:
+          p = "原物销毁";
+          break;
       }
-      this.$Modal.confirm({
-        title: '提示',
-        content: `<p>是否确定${p}?</p>`,
-        onOk: async () => {
-          let params:any={
-            orderType:type,
+      // @ts-ignore
+      if(boolAjax){
+        this.$Modal.confirm({
+          title: '提示',
+          content: `<p>是否确定${p}?</p>`,
+          onOk: async () => {
+            let params: any = {
+              orderType: type,
+            }
+            let res: any = await api.supplierClaimSettlement(params, this.claimSupplierSelData)
+            if (res.code === 0) {
+              this.getList()
+              this.$Message.success("处理成功")
+            }
+          },
+          onCancel: () => {
           }
-          let res:any=await api.supplierClaimSettlement(params,this.claimSupplierSelData)
-          if(res.code===0){
-            this.getList()
-            this.$Message.success("处理成功")
-          }
-        },
-        onCancel: () => {}
-      });
-      //   }else{
-      //     this.$message.error("表格校验不通过")
-      //   }
-      // })
+        });
+      }else{
+        return this.$message.error("本次处理数量必填")
+      }
     }
-    private exportData(){
+
+    private exportData() {
 
     }
-    private async getList(){
+
+    private async getList() {
       // let params:any={
       //   page:this.page.num-1,
       //   size:this.page.size
       // }
-      let params:any={
-        page:0,
-        size:10000
+      let params: any = {
+        page: 0,
+        size: 10000
       }
       // @ts-ignore
-      let res:any=await api.supplierClaimSettlementQuery(params,this.body)
-      if(res.code===0){
-        this.claimSupplierData=res.data.content;
+      let res: any = await api.supplierClaimSettlementQuery(params, this.body)
+      if (res.code === 0) {
+        this.claimSupplierData = res.data.content;
 
       }
     }

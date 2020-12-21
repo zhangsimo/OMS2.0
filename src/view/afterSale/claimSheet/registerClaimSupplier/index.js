@@ -371,7 +371,7 @@ export default {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if (this.formPlan.details.length < 1) {
+      if (this.formPlan.details.length < 1 || this.formPlan.details.length==undefined) {
         this.formPlan.partOrCustomerOnly = 0;
       } else {
         if (this.formPlan.details[0].enterMainId) {//判断是否从客户理赔登记单录入
@@ -384,6 +384,8 @@ export default {
           })
         }
       }
+      this.logDataLoading=false;
+      this.logData=[];
     },
     //理赔数量录入
     afterSaleQtyChange(row) {
@@ -438,7 +440,7 @@ export default {
         ? new Date(this.formPlan.afterSaleDate)
         : "";
       this.$refs.formPlan.validate(async valid => {
-        this.formPlan.details.map(el => {
+        (this.formPlan.details || []).map(el => {
           if (el.afterSaleReason == "") {
             valid = false;
           }
@@ -479,14 +481,14 @@ export default {
     },
     //提交
     submit() {
-      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
-        ? new Date(this.formPlan.afterSaleDate)
-        : "";
       if (this.formPlan.details && this.formPlan.details.length < 1) {
         return this.$message.error("配件明细不可为空")
       }
+      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+        ? new Date(this.formPlan.afterSaleDate)
+        : "";
       this.$refs.formPlan.validate(async valid => {
-        this.formPlan.details.map(el => {
+        (this.formPlan.details || []).map(el => {
           if (el.afterSaleReason == "") {
             valid = false;
           }
@@ -550,7 +552,7 @@ export default {
           if (boolNotSim) {
             return this.$message.error("存在已添加配件")
           }
-          this.formPlan.details = [...claimSupplier(val), ...this.formPlan.details]
+          this.formPlan.details = [...claimSupplier(val), ...(this.formPlan.details || [])]
           this.formPlan.partOrCustomerOnly = 1;
         } else {
           this.$Message.error("*为必填项");
