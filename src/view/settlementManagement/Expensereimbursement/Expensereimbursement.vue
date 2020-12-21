@@ -315,49 +315,6 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
-    <!-- 认领弹框 -->
-    <Modal
-      v-model="claimModal"
-      :title="claimTit"
-      width="1000"
-      @on-visible-change="visChangeClaim"
-    >
-      <span>往来单位：</span>
-      <Select
-        v-model="companyId"
-        class="w150"
-        clearable
-        filterable
-        remote
-        :loading="remoteloading"
-        :remote-method="getOne"
-        @on-change="query2"
-      >
-        <Option v-for="item in company" :value="item.value" :key="item.value">{{
-          item.label
-        }}</Option>
-      </Select>
-      <span class="ml10">对方户名：</span>
-      <Input v-model="bankNameO" class="w100" />
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
-      <button
-        class="ivu-btn ivu-btn-default ml10"
-        type="button"
-        @click="queryClaimed"
-      >
-        <i class="iconfont iconchaxunicon"></i>
-        <span>查询</span>
-      </button>
-      <Button class="ml10" @click="claimPay" :loading="claimPayDis"
-        >认领</Button
-      >
-      <!--<Button class="ml10" v-else @click="claimCollection">预收款认领</Button>-->
-      <claim ref="claim" @selection="selection" />
-      <div slot="footer"></div>
-    </Modal>
-    <!--点击认领后弹框-->
-    <claimGuest ref="claimGuest" />
     <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
@@ -400,7 +357,6 @@ import {
 import { goshop } from "@/api/settlementManagement/shopList";
 import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
-import claimGuest from "./components/claimGuest";
 import writeOff from "./components/writeOff";
 import * as restful from "_api/settlementManagement/financialStatement.js";
 import {
@@ -421,7 +377,6 @@ export default {
     Record,
     verification,
     writeOff,
-    claimGuest,
     ClaimModal,
   },
   data() {
@@ -695,40 +650,6 @@ export default {
       this.currRow = null;
       this.limitMoney = 0
       this.$refs.xTable.clearCurrentRow();
-    },
-    // 认领弹框认领
-    claimPay() {
-      if (this.claimSelection.length !== 0) {
-        // currRow
-        if (
-          this.selectionData.paidMoney >
-          this.currRow.reimbursementAmount + this.currRow.expenseClaimAmount
-        ) {
-          return this.$message.error("金额大于因公借支金额金额，无法认领");
-        }
-        // this.$refs.claimGuest.modal = true;
-        let obj = {
-          financeAccountCashList: this.$store.state.businessBorrowing
-            .financeAccountCashList,
-          loanId: this.$store.state.businessBorrowing.loanId,
-          claimType: 4,
-        };
-        this.claimPayDis = true;
-        restful.addClaim(obj).then((res) => {
-          if (res.code === 0) {
-            this.$message.success("认领成功");
-            this.claimPayDis = false;
-            this.claimModal = false;
-            this.$parent.getQuery();
-            // this.$parent.reload();
-          } else {
-            this.claimPayDis = false;
-          }
-        });
-        this.claimModal = false;
-      } else {
-        this.$message.error("请选择因公借支数据");
-      }
     },
     //认领弹框传参数据
     selection(selection) {
