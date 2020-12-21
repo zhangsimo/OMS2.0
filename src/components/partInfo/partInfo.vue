@@ -150,6 +150,42 @@
               </Col>
             </Row>
             <Row>
+              <Col span="11">
+                <FormItem label="所属事业部：" prop="businessUnit">
+                  <Select v-model="formValidate.businessUnit" @on-change="changeBusiness" filterable>
+                    <Option
+                      v-for="item in businessArr"
+                      :value="item.id"
+                      :key="item.id"
+                    >{{item.itemName}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="产品负责人：" prop="dutyManId">
+                  <Select v-model="formValidate.dutyManId" filterable>
+                    <Option
+                      v-for="item in businessMan"
+                      :value="item.id"
+                      :key="item.id"
+                    >{{item.staffName}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="是否为统采：">
+                  <checkbox v-model="formValidate.is_tc"></checkbox>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="来源：">
+                  <Input v-model="formValidate.source" readonly/>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
               <Col span="22">
                 <FormItem label="拼音码:">
                   <Input v-model="spellCode" readonly/>
