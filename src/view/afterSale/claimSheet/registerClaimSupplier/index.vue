@@ -32,7 +32,7 @@
       <Button class="mr10" @click="setPrint">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button type="default" class="mr10" @click="supplierExamie" :disabled="formPlan.id==undefined||fromPlan&&fromPlan.guestId">查看供应商</Button>
+      <Button type="default" class="mr10" @click="supplierExamie" :disabled="formPlan.id==undefined||formPlan&&formPlan.guestId">查看供应商</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -151,7 +151,7 @@
                 <div class="clearfix pt5 pb5">
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="addMountings"
-                            :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2">
+                            :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 ">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
@@ -177,9 +177,8 @@
                       :on-format-error="onFormatError"
                       :on-success="onSuccess"
                       :before-upload='beforeUpload'
-                      :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2"
                     >
-                      <Button size="small" class="mr10" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2"
+                      <Button size="small" class="mr10" :disabled="formPlan.orderSign&&formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 || formPlan.id==undefined"
                               type="default" @click="getRUl"><i class="iconfont icondaoruicon icons"/> 导入配件
                       </Button>
                     </Upload>

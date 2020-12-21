@@ -9,9 +9,9 @@ import moment from "moment";
 import {claimSupplier} from "@/components/changeWbList/changewblist";
 import {hideLoading, showLoading} from "@/utils/loading";
 import selectPartCom from "@/view/goods/goodsList/components/selectPartCom.vue";
-import { area } from "@/api/lease/registerApi";
+import {area} from "@/api/lease/registerApi";
 import {getSupplierTreeList} from '@/api/system/essentialData/supplierManagement'
-import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
+import {down} from "@/api/system/essentialData/commoditiesInShortSupply.js"
 
 import Cookies from "js-cookie";
 import {TOKEN_KEY} from "@/libs/util";
@@ -43,7 +43,9 @@ export default {
     return {
       dataChange: {}, //左侧当前数据
       moment: moment,
-      supplierData: {},//当前选中项查看供应商数据
+      supplierData: {
+        clientList: {guestTaxpayerVOList: []},
+      },//当前选中项查看供应商数据
       clientDataShow: false,//查看供应商弹框 bool
       orderSign: 99,
       typeList: [ //单据状态
@@ -60,8 +62,8 @@ export default {
         num: 1
       }, //左侧分页
       leftTableData: [], //左侧数组
-      logData:[],//处理日志
-      logDataLoading:false,//处理日志表格
+      logData: [],//处理日志
+      logDataLoading: false,//处理日志表格
       queryDate: [], //快速查询时间
       moreQueryList: {}, //更多搜索信息
       formPlan: {
@@ -69,7 +71,7 @@ export default {
         code: "",
         serviceId: "",
         remark: "",
-        partOrCustomerOnly:0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
+        partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
         orderSign: 1,
         afterSaleDate: moment(new Date()).format("YYYY-MM-DD")
       }, //点击获取左侧数据
@@ -78,16 +80,16 @@ export default {
           {required: true, type: "string", message: " ", trigger: "change"}
         ],
         afterSaleDate: [
-          {required: true,type:"date", message: "", trigger: "change"}
+          {required: true, type: "date", message: "", trigger: "change"}
         ],
       }, //表单校验
       validRules: {
         afterSaleQty: [{required: true, validator: changeNumber}],
-        afterSaleReason: [{required: true, message:"理赔原因必填",trigger:"change"}]
+        afterSaleReason: [{required: true, message: "理赔原因必填", trigger: "change"}]
       }, //表格校验
-      list:[],//暂存 treeList
-      treeList:[],
-      provinceArr:[],
+      list: [],//暂存 treeList
+      treeList: [],
+      provinceArr: [],
       rightList: [], //右侧点击数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -112,28 +114,33 @@ export default {
     },
     //获取选中供应商
     getSupplierName(val) {
-      this.$set(this.formPlan, "guestId", val.id);
-      this.$set(this.formPlan, "guestName", val.fullName);
+      if(val.orgid==this.$store.state.user.userData.currentCompany.id){
+        this.$message.error("供应商不可以选自己")
+        return false;
+      }else{
+        this.$set(this.formPlan, "guestId", val.id);
+        this.$set(this.formPlan, "guestName", val.fullName);
+      }
     },
     //获取地址 查看供应商使用
     getAdress() {
       area().then(res => {
         if (res.code == 0) {
-          this.provinceArr = res.data;
+          this.provinceArr = res.data || [];
         }
       });
     },
     //查看供应商 treelist
-    getTreeList(){
-      getSupplierTreeList().then( res => {
-        if (res.code == 0){
+    getTreeList() {
+      getSupplierTreeList().then(res => {
+        if (res.code == 0) {
           this.list = res.data
-          let leverOne = res.data.filter( item => item.lever ==1)
-          leverOne.map( item => {
-            item.children =[]
+          let leverOne = res.data.filter(item => item.lever == 1)
+          leverOne.map(item => {
+            item.children = []
             item.code = item.id
-            this.list.forEach( el => {
-              if (item.id == el.parentId){
+            this.list.forEach(el => {
+              if (item.id == el.parentId) {
                 item.children.push(el)
               }
             })
@@ -153,20 +160,21 @@ export default {
     },
     //查看供应商
     supplierExamie(type) {
-      if(type){
+      if (type) {
         if (!this.dataChange.row.hasOwnProperty('guestId')) {
           return this.$Message.error("请选择一条单据明细");
         }
         let data = {};
         data.id = this.dataChange.row.guestId;
         getCustomerDetails(data).then(res => {
-          if (res.code == 0) {
+          if (res.code === 0) {
             this.supplierData.clientList = res.data;
             this.supplierData.clientList.belongSystem = JSON.parse(
               this.supplierData.clientList.belongSystem
             ).value;
-            this.$refs.child.financeList=res.data.guestAccountVoList
-            this.$refs.child.invoice=res.data.guestTaxpayerVOList
+            this.supplierData.clientList.guestTaxpayerVOList = res.data.guestTaxpayerVOList || [];
+            this.$refs.child.financeList = res.data.guestAccountVoList || []
+            this.$refs.child.invoice = res.data.guestTaxpayerVOList || []
             this.nameChange = true;
           }
           this.clientDataShow = true;
@@ -242,7 +250,7 @@ export default {
               break;
             }
           }
-        }else{
+        } else {
           this.clickOnesList(this.leftTableData[0]);
         }
       }
@@ -275,7 +283,7 @@ export default {
               el.handleSignStatus = "已处理";
               break;
           }
-          switch (el.orderSign) {
+          switch (el.orderSign || "") {
             case 0:
               el.orderSignStatus = "草稿";
               break;
@@ -284,6 +292,9 @@ export default {
               break;
             case 2:
               el.orderSignStatus = "已完成";
+              break;
+            default:
+              el.orderSignStatus = "草稿"
               break;
           }
           return el;
@@ -296,7 +307,7 @@ export default {
               break;
             }
           }
-        }else{
+        } else {
           this.clickOnesList(this.leftTableData[0]);
         }
       }
@@ -343,8 +354,8 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      if (data.row.id) {
-        this.selectLeftItemId = data.row.id;
+      if (data.row && data.row.id || data.id) {
+        this.selectLeftItemId = data.row && data.row.id || data.id;
       }
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -362,29 +373,33 @@ export default {
       this.dataChange = data;
       this.$refs.xTab.setCurrentRow(this.dataChange.row);
       this.formPlan = data.row;
-      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+      this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if(data.row.details.length<1){
-        this.formPlan.partOrCustomerOnly=0;
-      }else{
-        if(data.row.details[0].enterMainId){//判断是否从客户理赔登记单录入
-          this.formPlan.partOrCustomerOnly=2;
-        }else{
-          this.formPlan.partOrCustomerOnly=1;
+      if (data.row.details.length < 1) {
+        this.formPlan.partOrCustomerOnly = 0;
+      } else {
+        if (data.row.details[0].enterMainId) {//判断是否从客户理赔登记单录入
+          this.formPlan.partOrCustomerOnly = 2;
+        } else {
+          this.formPlan.partOrCustomerOnly = 1;
+          this.formPlan.details=this.formPlan.details.map(el=>{
+            el.isAddPart=0;
+            return el;
+          })
         }
       }
     },
     //理赔数量录入
-    afterSaleQtyChange(row){
-      if(row.isAddPart==0){
-        row.untreatedQty=row.afterSaleQty
+    afterSaleQtyChange(row) {
+      if (row.isAddPart == 0) {
+        row.untreatedQty = row.afterSaleQty
       }
       this.updateFooterEvent()
     },
     //理赔原因录入
-    afterSaleReasonChange(row){
-      if(row.afterSaleReason==""){
+    afterSaleReasonChange(row) {
+      if (row.afterSaleReason == "") {
         return this.$Message.error("理赔原因必填")
       }
     },
@@ -419,7 +434,7 @@ export default {
       this.$refs.xTab.setCurrentRow(row);
       this.formPlan = row;
     },
-    downModal(){
+    downModal() {
       down('3900000000')
     },
     //保存
@@ -428,9 +443,9 @@ export default {
         ? new Date(this.formPlan.afterSaleDate)
         : "";
       this.$refs.formPlan.validate(async valid => {
-        this.formPlan.details.map(el=>{
-          if(el.afterSaleReason==""){
-            valid=false;
+        this.formPlan.details.map(el => {
+          if (el.afterSaleReason == "") {
+            valid = false;
           }
         })
         if (valid) {
@@ -468,11 +483,19 @@ export default {
       });
     },
     //提交
-    submit(){
+    submit() {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
         ? new Date(this.formPlan.afterSaleDate)
         : "";
+      if(this.formPlan.details&&this.formPlan.details.length<1){
+        return this.$message.error("配件明细不可为空")
+      }
       this.$refs.formPlan.validate(async valid => {
+        this.formPlan.details.map(el => {
+          if (el.afterSaleReason == "") {
+            valid = false;
+          }
+        })
         if (valid) {
           if (this.dataChange.row) {
             try {
@@ -521,19 +544,19 @@ export default {
           this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
             ? moment(this.formPlan.afterSaleDate).format("YYYY-MM-DD")
             : "";
-          let boolNotSim=false;
-          (this.formPlan.details || []).map(delEl=>{
-            (val || []).map(valEl=>{
-              if(delEl.partInnerId==valEl.partInnerId){
-                boolNotSim=true;
+          let boolNotSim = false;
+          (this.formPlan.details || []).map(delEl => {
+            (val || []).map(valEl => {
+              if (delEl.partInnerId == valEl.partInnerId) {
+                boolNotSim = true;
               }
             })
           })
-          if(boolNotSim){
+          if (boolNotSim) {
             return this.$message.error("存在已添加配件")
           }
-          this.formPlan.details = [...claimSupplier(val),...this.formPlan.details]
-          this.formPlan.partOrCustomerOnly=1;
+          this.formPlan.details = [...claimSupplier(val), ...this.formPlan.details]
+          this.formPlan.partOrCustomerOnly = 1;
         } else {
           this.$Message.error("*为必填项");
         }
@@ -542,7 +565,6 @@ export default {
     //新增
     addNew() {
       if (this.formPlan.hasOwnProperty("id") || !this.formPlan.hasOwnProperty("guestId")) {
-        this.$refs["formPlan"].resetFields();
         this.formPlan = {
           details: [],
           code: "",
@@ -550,8 +572,8 @@ export default {
           remark: "",
           guestId: "",
           guestName: "",
-          partOrCustomerOnly:0,
-          orderSign:0,//草稿状态
+          partOrCustomerOnly: 0,
+          orderSign: 0,//草稿状态
           afterSaleDate: moment(new Date()).format("YYYY-MM-DD")
         };
         this.leftTableData.unshift(this.formPlan);
@@ -568,30 +590,30 @@ export default {
       this.rightList = val.selection;
     },
     //选中出现 处理记录
-    async logDataMethod({row}){
-      if(this.addNewBool){
+    async logDataMethod({row}) {
+      if (this.addNewBool) {
         return
-      }else{
-        this.logDataLoading=true;
-        let data={
-          detailId:row.id
+      } else {
+        this.logDataLoading = true;
+        let data = {
+          detailId: row.id
         }
-        let res=await api.registerPartsProcesLog(data)
-        if(res.code===0){
-          this.logData=(res.data || []).map(el=>{
+        let res = await api.registerPartsProcesLog(data)
+        if (res.code === 0) {
+          this.logData = (res.data || []).map(el => {
             switch (el.recordType) {
               case "1":
-                el.recordTypeStatus="理赔出库";
+                el.recordTypeStatus = "理赔出库";
                 break;
               case "2":
-                el.recordTypeStatus="理赔入库";
+                el.recordTypeStatus = "理赔入库";
                 break;
             }
             return el;
           });
-          this.logDataLoading=false;
-        }else{
-          this.logDataLoading=false;
+          this.logDataLoading = false;
+        } else {
+          this.logDataLoading = false;
         }
       }
     },
@@ -626,6 +648,7 @@ export default {
           this.warning(response.data);
         }
         this.getLeftLists();
+        this.formPlan.partOrCustomerOnly = 1;
         this.formPlan = {
           code: ""
         };
@@ -634,14 +657,14 @@ export default {
         this.$Message.error("上传失败");
       }
     },
-    warning(nodesc){
-      let str=""
-      if(nodesc.length>0){
-        nodesc.map((item,index)=>{
-          if(index!=nodesc.length-1){
-            str+=`${item}<br/>`;
-          }else{
-            str+=`${item}`;
+    warning(nodesc) {
+      let str = ""
+      if (nodesc.length > 0) {
+        nodesc.map((item, index) => {
+          if (index != nodesc.length - 1) {
+            str += `${item}<br/>`;
+          } else {
+            str += `${item}`;
           }
         })
       }
