@@ -322,10 +322,10 @@ export default {
       ], //申请状态数组
       ApplicationType: "99", //申请类型
       ApplicationTypelist: [
-        {
-          value: "99",
-          label: "全部"
-        },
+        // {
+        //   value: "99",
+        //   label: "全部"
+        // },
         // {
         //   value: "0",
         //   label: "费用报销"
