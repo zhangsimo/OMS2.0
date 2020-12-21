@@ -1100,8 +1100,7 @@ export default [
   {
     path: "/aftersale",
     name: "afterSale",
-    mark: "11",
-    redirect: "/reportForm",
+    //mark: "11",
     meta: { keepAlive: true,
       icon: "md-brush",
       // icon: "ios-paper",
@@ -1110,17 +1109,74 @@ export default [
     component: Main,
     children: [
       {
-        path: '/draftingOfApplication',
-        name: 'documentApprovalDraftingOfApplication',
-        // redirect: "/multilevel/level_2_1",
-        mark: '11001',
+        path: '/aftersale/claimSheet',
+        name: 'claimSheet',
+       // mark: '12001',
         meta: { keepAlive: true,
-          title: '售后一',
-
+          title: '理赔开单',
         },
-        component: () =>
-          import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
-      }]
+        component:parentView,
+        
+        children: [
+          {
+            path: '/afterSale/claimSheet/CustomerClaimsRegistration',
+            name: 'CustomerClaimsRegistration',
+            // redirect: "/multilevel/level_2_1",
+            //mark: '11001',
+            meta: { keepAlive: true,
+              title: '客户理赔登记',
+    
+            },
+            component: () =>
+              import("@/view/afterSale/claimSheet/CustomerClaimsRegistration/index.vue")
+          },
+          {
+            path: '/afterSale/claimSheet/CustomerclaimsHandling',
+            name: 'CustomerclaimsHandling',
+            // redirect: "/multilevel/level_2_1",
+            //mark: '11002',
+            meta: { keepAlive: true,
+              title: '客户理赔处理',
+            },
+            component: () =>
+              import("@/view/afterSale/claimSheet/CustomerclaimsHandling/index.vue")
+          },
+        ]
+      },
+      {
+        path: '/aftersale/claimsTheQuery',
+        name: 'claimsTheQuery',
+       // mark: '12002',
+        meta: { keepAlive: true,
+          title: '理赔查询',
+        },
+        component:parentView,
+        children:[
+          {
+            path: '/afterSale/claimsTheQuery/Customerclaimsregistrationenquiry',
+            name: 'Customerclaimsregistrationenquiry',
+            // redirect: "/multilevel/level_2_1",
+            // mark: '11001',
+            meta: { keepAlive: true,
+              title: '客户理赔登记查询',
+            },
+            component: () =>
+              import("@/view/afterSale/claimsTheQuery/Customerclaimsregistrationenquiry/index.vue")
+          },
+          {
+            path: '/afterSale/claimsTheQuery/Customerclaimshandlingenquiry',
+            name: 'Customerclaimshandlingenquiry',
+            // redirect: "/multilevel/level_2_1",
+            // mark: '11002',
+            meta: { keepAlive: true,
+              title: '客户理赔处理查询',
+            },
+            component: () =>
+              import("@/view/afterSale/claimsTheQuery/Customerclaimshandlingenquiry/index.vue")
+          },
+        ]
+      },
+    ]
   },
   {
     path: "/documentApproval",
