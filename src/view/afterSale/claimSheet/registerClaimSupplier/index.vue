@@ -306,6 +306,7 @@
         ref="selectSupplier"
         header-tit="供应商资料"
         @selectSupplierName="getSupplierName"
+        :noSimply="true"
       ></select-supplier>
       <!--查看供应商-->
       <Modal

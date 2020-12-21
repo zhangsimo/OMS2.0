@@ -114,13 +114,8 @@ export default {
     },
     //获取选中供应商
     getSupplierName(val) {
-      // if(val.orgid==this.$store.state.user.userData.currentCompany.id){
-      //   this.$message.error("供应商不可以选自己")
-      //   return false;
-      // }else{
-        this.$set(this.formPlan, "guestId", val.id);
-        this.$set(this.formPlan, "guestName", val.fullName);
-      // }
+      this.$set(this.formPlan, "guestId", val.id);
+      this.$set(this.formPlan, "guestName", val.fullName);
     },
     //获取地址 查看供应商使用
     getAdress() {
@@ -371,20 +366,20 @@ export default {
         return;
       }
       this.dataChange = data;
-      this.$refs.xTab.setCurrentRow(data.row==undefined?data:data.row);
-      this.formPlan = data.row==undefined?data:data.row;
+      this.$refs.xTab.setCurrentRow(data.row == undefined ? data : data.row);
+      this.formPlan = data.row == undefined ? data : data.row;
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if (this.formPlan.details.length<1) {
+      if (this.formPlan.details.length < 1) {
         this.formPlan.partOrCustomerOnly = 0;
       } else {
         if (this.formPlan.details[0].enterMainId) {//判断是否从客户理赔登记单录入
           this.formPlan.partOrCustomerOnly = 2;
         } else {
           this.formPlan.partOrCustomerOnly = 1;
-          this.formPlan.details=this.formPlan.details.map(el=>{
-            el.isAddPart=0;
+          this.formPlan.details = this.formPlan.details.map(el => {
+            el.isAddPart = 0;
             return el;
           })
         }
@@ -487,7 +482,7 @@ export default {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if(this.formPlan.details&&this.formPlan.details.length<1){
+      if (this.formPlan.details && this.formPlan.details.length < 1) {
         return this.$message.error("配件明细不可为空")
       }
       this.$refs.formPlan.validate(async valid => {
