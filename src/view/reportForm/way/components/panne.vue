@@ -136,6 +136,9 @@ export default {
   },
   methods: {
     changeDate(v){
+       if(!this.search.content&&this.getnew(v)>31){
+        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
+      }
       this.search.submitDate = v
     },
     // 快速日期查询
@@ -160,9 +163,6 @@ export default {
       let val=this.getnew(this.search.submitDate)
       if(val>30&&this.search.content){
           this.search.content=""
-        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
-      }
-      if(!this.search.content&&this.getnew(this.search.submitDate)>30){
         return this.$message({message:'日期跨度不能超过一个月',type:'error'})
       }
       if(!this.search.submitDate[0]){
