@@ -89,7 +89,7 @@
     private bandArr: Array<any> = new Array<any>();//品牌数组
     private typeList: Array<any> = [ //单据状态
       {value: 99, name: "所有"},
-      {value: 0, name: "草稿"},
+      {value: 3, name: "草稿"},
       {value: 1, name: "已提交"},
       {value: 2, name: "已完成"}
     ]
