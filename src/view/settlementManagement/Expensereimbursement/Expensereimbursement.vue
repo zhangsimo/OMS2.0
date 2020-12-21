@@ -376,7 +376,7 @@
       @upData="query"
     ></registration-entry>
     <!-- 报销认领新弹框 -->
-    <ClaimModal ref="claimModal" titleName="报销认领"></ClaimModal>
+    <ClaimModal ref="claimModal" titleName="报销认领" :limitMoney="limitMoney"></ClaimModal>
   </div>
 </template>
 
@@ -457,6 +457,7 @@ export default {
       claimType: 4,
       amountType: 2,
       loanId: "",
+      limitMoney: 0,  //选中数据的报销未核销余额
     };
   },
   computed: {
@@ -584,7 +585,6 @@ export default {
       // }
     },
     openRegEnter() {
-      // console.log(this.currRow)
       if (this.currRow && this.currRow.hasOwnProperty("id")) {
         this.$refs.registrationEntry.accountData = [];
         let objItem = { ...this.currRow };
@@ -693,6 +693,7 @@ export default {
       this.serviceId = "";
       this.$refs.Record.init();
       this.currRow = null;
+      this.limitMoney = 0
       this.$refs.xTable.clearCurrentRow();
     },
     // 认领弹框认领
@@ -787,6 +788,7 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.currRow = row;
+      this.limitMoney = row.paymentBalance
       this.loanId = row.id;
       this.$store.commit("setLoanId", row.id);
       // this.reconciliationStatement.accountNo = row.serviceId;
