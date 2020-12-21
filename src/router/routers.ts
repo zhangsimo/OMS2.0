@@ -698,7 +698,7 @@ export default [
             //mark: "5105",
             meta: { keepAlive: true,
               // hideInMenu: true,
-              title: " 调出在途信息"
+              title: "调出在途信息"
             },
             component: () =>
               import("@/view/settlementManagement/bill/Onway.vue")
@@ -1102,8 +1102,7 @@ export default [
     name: "afterSale",
     //mark: "11",
     meta: { keepAlive: true,
-      icon: "md-brush",
-      // icon: "ios-paper",
+      icon: "md-repeat",
       title: "售后模块"
     },
     component: Main,
@@ -1124,7 +1123,7 @@ export default [
             //mark: '11001',
             meta: { keepAlive: true,
               title: '客户理赔登记',
-          
+
             },
             component: () =>
               import("@/view/afterSale/claimSheet/CustomerClaimsRegistration/index.vue")
