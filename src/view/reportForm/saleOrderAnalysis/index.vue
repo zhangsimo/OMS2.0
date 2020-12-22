@@ -3,19 +3,19 @@
     <panne ref="panne" @search="tabName" @export="exportxls()"/>
     <Tabs style="min-height: 500px" v-model="tabNameKey" type="card" @on-click="tabName">
       <TabPane label="按客户排行" name="tabOne">
-        <tabOne ref="tabOne" />
+        <tabOne ref="tabOne" @one="one"/>
       </TabPane>
       <TabPane label="按商品排行" name="tabTwo">
-        <tabTwo ref="tabTwo" />
+        <tabTwo ref="tabTwo" @two="two"/>
       </TabPane>
       <TabPane label="按品牌排行" name="tabThree">
-        <tabThree ref="tabThree" />
+        <tabThree ref="tabThree" @san="san"/>
       </TabPane>
       <TabPane label="按配件类型排行" name="tabFour">
-        <tabFour ref="tabFour" />
+        <tabFour ref="tabFour" @si="si"/>
       </TabPane>
       <TabPane label="按业务员排行" name="tabFive">
-        <tabFive ref="tabFive" />
+        <tabFive ref="tabFive" @wu="wu"/>
       </TabPane>
     </Tabs>
   </div>
@@ -38,18 +38,22 @@
     },
     mounted() {},
     methods: {
-       getnew(data){
-        let hh=moment(data[1]).format("YYYY-MM-DD")
-      let ha=moment(data[0]).format("YYYY-MM-DD")
-      let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
-      return d
-    },
+       one(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      two(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      san(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      si(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      wu(){
+         this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
       tabName() {
-        let val=this.getnew(this.$refs.panne.search.enterDate)
-         if(val>31){
-         
-        return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
-      }
         let data={}
         for (let key in this.$refs.panne.search) {
           if (this.$refs.panne.search[key]) {

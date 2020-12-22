@@ -76,7 +76,7 @@
           this.tableData = (res.data.content || []).map(el => {
             return el;
           });
-
+           this.$emit("si");
           this.page.total = res.data.totalElements;
         } else {
           this.page.total = 0;

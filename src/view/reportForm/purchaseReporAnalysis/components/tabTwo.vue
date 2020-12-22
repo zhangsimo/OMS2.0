@@ -83,8 +83,10 @@
           this.tableData = (res.data.content || []).map(el => {
             return el;
           });
+          
           this.page.total = res.data.totalElements;
           hideLoading()
+          this.$emit("two");
         } else {
           this.page.total = 0;
           this.tableData = [];
