@@ -406,7 +406,7 @@
       // 查询
       query() {
           let val=this.getnew(this.search.enterDate)
-         if(val>31){
+         if(val>31&&this.search.partCode==""){
            this.search.enterDate=this.v1
             return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
          }

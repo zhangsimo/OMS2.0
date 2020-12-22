@@ -340,11 +340,11 @@
       let strtW:any=this.getnew(this.auditDate)
       localStorage.creaew=createW;
       localStorage.strtW=strtW
-      if(createW>31){
+      if(createW>31&&this.partCode==""){
         this.$message({message:`${this.chamgeName()}不可超过一个月，请重新选择`,type:'error'})
         return
       }
-      if(strtW>31){
+      if(strtW>31&&this.partCode==""){
          this.$message({message:'提交日期不可超过一个月，请重新选择',type:'error'})
          return
       }
@@ -394,9 +394,10 @@
       }
       
       // search.auditDate=this.createDate
-      if(!(createW>31)||!(strtW>31)){
+     if(!(createW>31&&this.partCode=="")||!(strtW>31&&this.partCode=="")){
             this.cancel();
        }
+  
   
       this.send(obj)
     }

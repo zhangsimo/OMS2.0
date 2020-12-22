@@ -192,7 +192,9 @@ export default {
       this.query()
     },
     getDataQuick2(v){
+       
        if(!this.search.content&&this.getnew(v)>31){
+         this.search.auditDate = v;
         return this.$message({message:'日期跨度不能超过一个月',type:'error'})
       }
       
@@ -208,8 +210,7 @@ export default {
     // 查询
     query() {
       let val=this.getnew(this.search.auditDate)
-      if(val>30&&this.search.content){
-          this.search.content=""
+       if(this.search.content==""&&val>31){
         return this.$message({message:'日期跨度不能超过一个月',type:'error'})
       }
        if(!this.search.auditDate[0]){

@@ -410,7 +410,7 @@
           data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
           if (objItem.hasOwnProperty("id")) {
             data.suppliersBean = {
-              guestSourceName: objItem.fullName || "",
+              guestSourceName: objItem.shortName || "",
               guestSourceId: objItem.id || ""
             }
           }
@@ -448,6 +448,7 @@
         } else {
           let ajaxBool = true;
           data.guestId = objItem.id || "";
+          data.guestName = objItem.shortName || "";
           data.financeAccountCashList = this.accrued
           if (this.claimTit == "预收款认领") {
             data.claimMoney = this.accrued[0].rpAmt;
