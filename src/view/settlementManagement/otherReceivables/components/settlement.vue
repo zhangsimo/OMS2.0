@@ -367,6 +367,7 @@ export default {
       if (value.fullName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.shortName,
+          businessTypeName: this.obj.fullName + "-" + value.shortName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -385,6 +386,7 @@ export default {
       } else if (value.userName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.userName,
+          businessTypeName: this.obj.fullName + "-" + value.userName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -394,8 +396,8 @@ export default {
           mateAccountCode: this.obj.titleCode,
           auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
-          auxiliaryName: value.fullName, //辅助核算名称
-          auxiliaryCode: value.code, //辅助核算项目编码
+          auxiliaryName: value.userName, //辅助核算名称
+          auxiliaryCode: value.id, //辅助核算项目编码
           isSubject: 1,
           paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
           paymentTypeName: value.paymentTypeName ? value.paymentTypeName : "", //辅助核算的款项分类
@@ -403,6 +405,7 @@ export default {
       } else if (value.itemName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.itemName,
+          businessTypeName: this.obj.fullName + "-" + value.itemName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -413,7 +416,7 @@ export default {
           auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
           auxiliaryName: value.itemName, //辅助核算名称
-          auxiliaryCode: value.code, //辅助核算项目编码
+          auxiliaryCode: value.itemCode, //辅助核算项目编码
           isSubject: 1,
           paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
           paymentTypeName: value.paymentTypeName ? value.paymentTypeName : "", //辅助核算的款项分类
@@ -615,14 +618,6 @@ export default {
               // obj3.three = this.tableData;
               obj3.type = 2;
               obj3.isSub = this.isSub
-              if(this.isSub === 1){
-                for(let i = 0; i < this.BusinessType.length; i++){
-                  if(this.BusinessType[i].isSubject !== 1){
-                    return this.$message.error('不能同时选中会计科目和对账单')
-                  }               
-                }
-
-              }
               this.conserveDis = true;
               orderWriteOff(obj3).then((res) => {
                 if (res.code === 0) {
