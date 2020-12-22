@@ -155,15 +155,15 @@
                   <Select v-model="formValidate.businessUnit" @on-change="changeBusiness" filterable>
                     <Option
                       v-for="item in businessArr"
-                      :value="item.id"
-                      :key="item.id"
+                      :value="item.itemCode"
+                      :key="item.itemCode"
                     >{{item.itemName}}</Option>
                   </Select>
                 </FormItem>
               </Col>
               <Col span="11">
-                <FormItem label="产品负责人：" prop="dutyManId">
-                  <Select v-model="formValidate.dutyManId" filterable>
+                <FormItem label="产品负责人："  prop="dutyManId" >
+                  <Select v-model="formValidate.dutyManId" @on-change="changeDutyMan" filterable label-in-value>
                     <Option
                       v-for="item in businessMan"
                       :value="item.id"
@@ -176,12 +176,12 @@
             <Row>
               <Col span="11">
                 <FormItem label="是否为统采：">
-                  <checkbox v-model="formValidate.is_tc"></checkbox>
+                  <checkbox v-model="formValidate.isTc"></checkbox>
                 </FormItem>
               </Col>
               <Col span="11">
                 <FormItem label="来源：">
-                  <Input v-model="formValidate.source" readonly/>
+                  <Input v-model="getSource" readonly/>
                 </FormItem>
               </Col>
             </Row>

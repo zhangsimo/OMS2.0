@@ -85,6 +85,7 @@ export const mixPartInfo = {
         specVOS: [],//规格list
         taxCalssName:'',//税收分类名称
         taxCalssCode:'',//税收分类编码
+        source:1,
       },
       ruleValidate: {
         qualityTypeId: [
@@ -266,6 +267,21 @@ export const mixPartInfo = {
       let str=(this.formValidate.name|| "")+(car || "")+(this.formValidate.partBrandName || "")
       let spell=pinyin.getCamelChars(str)
       return (this.formValidate.pyCode=spell)
+    },
+    getSource(){
+      let text ="";
+      switch (this.formValidate.source) {
+        case 1:
+          text = "oms系统";
+          break;
+        case 2:
+          text = "电商平台";
+          break;
+        case 3:
+          text = "华胜ERP";
+          break;
+      }
+      return text;
     }
   },
   mounted(){
@@ -301,12 +317,23 @@ export const mixPartInfo = {
     async getBusiness(){
       const rep = await getBusinessUnitList();
       if(rep.code==0){
-        this.businessArr = rep.data||[]
+        this.businessArr = rep.data||[];
+        if(this.formValidate.businessUnit){
+          //获取事业部下面负责人
+          this.changeBusiness(this.formValidate.businessUnit);
+        }
       }
     },
     changeBusiness(v){
-      let businessManFilter = this.businessArr.filter(item => item.id == v);
-      this.businessMan
+      let businessManFilter = this.businessArr.filter(item => item.itemCode == v);
+      if(businessManFilter.length>0){
+        this.businessMan = businessManFilter[0].dutyManList||[]
+      }
+    },
+    changeDutyMan(v){
+      if(v){
+        this.formValidate.dutyMan = v.label;
+      }
     },
     async treeInit() {
       let res = await getCarPartClass();
@@ -420,11 +447,20 @@ export const mixPartInfo = {
       this.formValidate.carModelName = ''
       this.formValidate.fullName = ''
       this.formValidate.customType = ""
+      this.formValidate.isTc = false
+      this.formValidate.source = 1
       if (setData) {
         this.formValidate = setData;
+        this.formValidate.isTc = this.formValidate.isTc?true:false;
+        this.formValidate.source = this.formValidate.source?this.formValidate.source:1;
         this.formValidate.taxCalssName = this.formValidate.taxType || '';
         if (this.formValidate.taxCalssName) {
           this.changeclass(this.formValidate.taxCalssName)
+        }
+        //赋值产品事业部负责人
+        if(this.formValidate.businessUnit){
+          //获取事业部下面负责人
+          this.changeBusiness(this.formValidate.businessUnit);
         }
         //赋值适用车型
         let carModelName = setData.carModelName&&setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
@@ -708,7 +744,7 @@ export const mixPartInfo = {
                 this.btnIsLoadding = false
                 return this.$message.error('正在保存数据')
               }
-              let objReq = {}
+              let objReq = {...this.formValidate}
               //品质
               objReq.qualityTypeId = this.formValidate.qualityTypeId
               if(objReq.qualityTypeId === "000070") {
@@ -800,7 +836,8 @@ export const mixPartInfo = {
               objReq.partRelevanceList= partRelevanceList || []
               //税收分类
               objReq.taxType = this.formValidate.taxCalssName||"";
-
+              objReq.isTc = objReq.isTc?1:0;
+              objReq.source = objReq.source?objReq.source:1;
               this.saveFlag = true
               this.$emit('throwData', objReq)
               this.btnIsLoadding = false

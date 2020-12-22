@@ -32,7 +32,7 @@
       <!--      汇总库存表-->
       <div class="tabs-warp" v-show="tabIndex == 0">
         <!--      搜索工具栏-->
-        <div class="oper-top flex" ref="operTop0" style="min-height: auto">
+        <div class="oper-top flex" ref="operTop0">
           <div class="pt10">
             <!--            <Input-->
             <!--              v-model="searchForm.partCode"-->
@@ -197,6 +197,13 @@
             <vxe-table-column field="pchRoadQty" title="采购在途库存" width="100"></vxe-table-column>
             <vxe-table-column field="attotRoadQty" title="调拨在途库存" width="100"></vxe-table-column>
             <vxe-table-column field="onRoadQty" title="合计在途库存" width="100"></vxe-table-column>
+            <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+            <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+            <vxe-table-column field="isTc" title="是否统采" width="100">
+              <template v-slot="{row}">
+                <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+              </template>
+            </vxe-table-column>
           </vxe-table>
         </div>
         <div class="page-warp fw">
@@ -516,6 +523,13 @@
             <vxe-table-column field="enterUnitId" title="单位" width="50"></vxe-table-column>
             <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
             <vxe-table-column field="partInnerId" title="配件内码" width="70"></vxe-table-column>
+            <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+            <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+            <vxe-table-column field="isTc" title="是否统采" width="100">
+              <template v-slot="{row}">
+                <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+              </template>
+            </vxe-table-column>
             <vxe-table-column field="orgName" title="机构名称" width="150"></vxe-table-column>
           </vxe-table>
         </div>
@@ -642,21 +656,21 @@
         </vxe-table>
       </div>
       <!--      分页-->
-      <div class="page-warp fw">
+      <!--<div class="page-warp fw">-->
 
-        <Page
-          v-if="tabIndex == 2"
-          class-name="page-con"
-          :current="hspage.num"
-          :total="hspage.total"
-          :page-size="hspage.size"
-          @on-change="selectNum"
-          @on-page-size-change="selectPage"
-          size="small"
-          show-sizer
-          show-total
-        ></Page>
-      </div>
+        <!--<Page-->
+          <!--v-if="tabIndex == 2"-->
+          <!--class-name="page-con"-->
+          <!--:current="hspage.num"-->
+          <!--:total="hspage.total"-->
+          <!--:page-size="hspage.size"-->
+          <!--@on-change="selectNum"-->
+          <!--@on-page-size-change="selectPage"-->
+          <!--size="small"-->
+          <!--show-sizer-->
+          <!--show-total-->
+        <!--&gt;</Page>-->
+      <!--</div>-->
       <!--      点击查看显示-->
       <enter-stock ref="look" :mainData="selectTableData" :storeArr="storeList" :searchForm="searchForm"></enter-stock>
     </section>
@@ -1003,9 +1017,9 @@
       this.getMasterId();
       this.getHsStoreFun();
 
-      this.$nextTick(() => {
-        this.setDomHeight('operTop0')
-      })
+      // this.$nextTick(() => {
+      //   this.setDomHeight('operTop0')
+      // })
     },
     methods: {
       setDomHeight(refName) {
@@ -1342,7 +1356,7 @@
           this.$refs.xTable3.recalculate();
           this.$refs.xTable2.recalculate();
           this.$refs.hsOrder.recalculate();
-          this.setDomHeight('operTop' + this.tabIndex);
+          // this.setDomHeight('operTop' + this.tabIndex);
         })
       },
       //设置仓位
@@ -1815,6 +1829,7 @@
 
   .tabs-warp .top-table {
     flex: 2;
+    height: 0;
   }
 
   .tabs-warp .bottom-table {

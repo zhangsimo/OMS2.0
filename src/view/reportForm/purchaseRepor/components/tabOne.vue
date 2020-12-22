@@ -247,6 +247,13 @@
           title="订单备注"
           width="240"
         ></vxe-table-column>
+        <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+        <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+        <vxe-table-column field="isTc" title="是否统采" width="100">
+          <template v-slot="{row}">
+            <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <div class="page-warp fw">
@@ -288,7 +295,7 @@
     },
     methods: {
       // 查询表
-      async getList() { 
+      async getList() {
         console.log(11111)
         let params = {
           page: this.page.num - 1,
@@ -296,7 +303,7 @@
         };
         console.log(this.body)
         // if(this.body.orgid==null||!this.auditEndDate){
-        //     return 
+        //     return
         // }getPjSellOrderMainDetailList
         let res = await api.getPjPchsOrderMainDetailList(this.body, params);
         if (res.code == 0 && res.data != null) {
@@ -320,7 +327,7 @@
         }
       },
       async getAll() {
-       
+
         let tableDataAll = [];
         let params = {
           page: 0,

@@ -84,7 +84,8 @@ export const mixPartInfo = {
         carTypetName: '',
         specVOS: [],//规格list
         businessUnit:'',//事业部
-        dutyManId:''//负责人
+        dutyManId:'',//负责人
+        source:1
       },
       ruleValidate: {
         qualityTypeId: [
@@ -258,21 +259,42 @@ export const mixPartInfo = {
       let str=(this.formValidate.name|| "")+(car || "")+(this.formValidate.partBrandName || "")
       let spell=pinyin.getCamelChars(str)
       return (this.formValidate.pyCode=spell)
+    },
+    getSource(){
+      let text ="";
+      switch (this.formValidate.source) {
+        case 1:
+          text = "oms系统";
+          break;
+        case 2:
+          text = "电商平台";
+          break;
+        case 3:
+          text = "华胜ERP";
+          break;
+      }
+      return text;
     }
   },
   methods: {
     async getBusiness(){
       const rep = await getBusinessUnitList();
       if(rep.code==0){
-        this.businessArr = rep.data||[]
+        this.businessArr = rep.data||[];
+        if(this.formValidate.businessUnit){
+          //获取事业部下面负责人
+          this.changeBusiness(this.formValidate.businessUnit);
+        }
       }
     },
     changeBusiness(v){
-      let businessManFilter = this.businessArr.filter(item => item.id == v);
+      let businessManFilter = this.businessArr.filter(item => item.itemCode == v);
       if(businessManFilter.length>0){
         this.businessMan = businessManFilter[0].dutyManList||[]
       }
-
+    },
+    changeDutyMan(v){
+      this.formValidate.dutyMan = v.label;
     },
 
 
@@ -383,6 +405,7 @@ export const mixPartInfo = {
       this.getQuiltyAndBrand();
       //拉取自定义分类
       this.getCustomData();
+      this.getBusiness();
       //获取配件单位
       getDataDictionaryTable({ "dictCode": "UNIT_CODE_001" }).then(res => {
         if (res.code == 0) {
@@ -392,8 +415,10 @@ export const mixPartInfo = {
       this.formValidate.carBrandName = ''
       this.formValidate.carModelName = ''
       this.formValidate.fullName = ''
+      this.formValidate.isTc = false
       if (setData) {
         this.formValidate = setData;
+        this.formValidate.isTc = this.formValidate.isTc?true:false;
         //赋值适用车型
         let carModelName = setData.carModelName&&setData.carModelName.indexOf("|") > -1 ? setData.carModelName.split("|") : [setData.carModelName]; //车系
         let carBrandName = setData.carBrandName&&setData.carBrandName.indexOf("|") > -1 ? setData.carBrandName.split("|") : [setData.carBrandName]; //车品牌
@@ -403,6 +428,7 @@ export const mixPartInfo = {
           this.carItemObj.carName = carModelName[vindex];
           this.carList.push({...this.carItemObj});
         });
+
         // this.carList.push({...this.carItemObj});
       }else{
         this.carList.push({...this.carItemObj});
@@ -641,7 +667,7 @@ export const mixPartInfo = {
                 this.btnIsLoadding = false
                 return this.$message.error('正在保存数据')
               }
-              let objReq = {}
+              let objReq = {...this.formValidate}
               //品质
               objReq.qualityTypeId = this.formValidate.qualityTypeId
               if(objReq.qualityTypeId === "000070") {
@@ -731,7 +757,10 @@ export const mixPartInfo = {
                 partRelevanceList.push(data)
               })
               objReq.partRelevanceList= partRelevanceList || []
+              objReq.isTc = objReq.isTc?1:0;
+              objReq.source = objReq.source?objReq.source:1;
               this.saveFlag = true
+              console.log(objReq)
               this.$emit('throwData', objReq)
             } else {
               //this.$message.error('带*必填')
