@@ -341,11 +341,11 @@ export default class MoreSearch extends Vue {
   private ok() {
     let createW:any=this.getnew(this.createDate)
       let strtW:any=this.getnew(this.auditDate)
-      if(createW>31){
+      if(createW>31&&this.partCode==""){
         this.$message({message:`创建不可超过一个月，请重新选择`,type:'error'})
         return
       }
-      if(strtW>31){
+      if(strtW>31&&this.partCode==""){
          this.$message({message:`${this.chamgeName()}不可超过一个月，请重新选择`,type:'error'})
          return
       }
@@ -394,7 +394,7 @@ export default class MoreSearch extends Vue {
     } else {
       obj = null;
     }
-   if(!(createW>31)||!(strtW>31)){
+   if(!(createW>31&&this.partCode=="")||!(strtW>31&&this.partCode=="")){
             this.cancel();
        }
   
