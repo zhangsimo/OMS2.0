@@ -189,12 +189,7 @@ export default {
     // 查询
     query() {
         let val=this.getnew(this.search.auditDate)
-      if(val>31&&this.search.content){
-       // alert(1)
-          this.search.content=""
-        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
-      }
-       if(val>31){
+       if(this.search.content==""&&val>31){
         return this.$message({message:'日期跨度不能超过一个月',type:'error'})
       }
       if(!this.search.auditDate[0]){
