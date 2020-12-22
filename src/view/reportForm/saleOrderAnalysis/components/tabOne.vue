@@ -75,6 +75,7 @@ import {showLoading,hideLoading} from "../../../../utils/loading";
           this.tableData = (res.data.content || []).map(el => {
             return el;
           });
+           this.$emit("one");
           this.page.total = res.data.totalElements;
           hideLoading()
         } else {

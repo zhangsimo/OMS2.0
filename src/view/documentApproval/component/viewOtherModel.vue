@@ -321,7 +321,7 @@
         <vxe-table-column field="acceptQty" title="验收数量" width="100"></vxe-table-column>
       </vxe-table>
     </div>
-    <div v-show="modelTitle=='活动申请'">
+    <div v-show="modelTitle=='活动审批'">
       <p>申请单号：<Input disabled :value="mainData.applyId" placeholder="申请单号" style="width: 300px" /></p>
       <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
         <tr>

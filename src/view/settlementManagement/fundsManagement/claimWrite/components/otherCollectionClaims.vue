@@ -469,6 +469,8 @@
               data.externalEmployeeName = this.outStaffSelect.itemName
               data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
+            data.auxiliaryName = this.MessageValue //辅助核算名称
+            data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")
               addClaim2(data).then(res => {
@@ -508,7 +510,8 @@
               data.externalEmployeeName = this.outStaffSelect.itemName
               data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
-            
+            data.auxiliaryName = this.MessageValue //辅助核算名称
+            data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")
               addClaim(data).then(res => {

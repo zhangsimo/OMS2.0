@@ -3057,6 +3057,7 @@
                 if (this.onelist.detailList == [] || this.onelist.detailList == undefined) {
                   this.onelist.orderQty = 0
                 } else {
+                  this.onelist.orderQty = 0;
                   this.onelist.detailList.map((item, index) => {
                     this.onelist.orderQty += item.orderQty
                   })

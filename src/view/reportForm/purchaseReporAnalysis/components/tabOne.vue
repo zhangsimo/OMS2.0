@@ -70,6 +70,13 @@
       // this.getList();
     },
     methods: {
+       getnew(data){
+     let hh=moment(this.body.enterDateEnd).format("YYYY-MM-DD")
+      let ha=moment(this.body.enterDateStart).format("YYYY-MM-DD")
+    
+      let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+      return d
+    },
       // 查询表
       async getList() {
         let params = {
@@ -77,6 +84,13 @@
           size: this.page.size,
         };
         showLoading()
+        // console.log(this.body)
+        //  let val=this.getnew(this.body)
+        //  console.log(val)
+        //  if(val>31){
+        //   //  this.search.enterDate=this.v1
+        //     return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
+        //   } 
         let res = await api.getPurchaseReporAnalysis(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -84,7 +98,10 @@
             return el;
           });
           this.page.total = res.data.totalElements;
+          
           hideLoading()
+          this.$emit("one");
+
         } else {
           this.page.total = 0;
           this.tableData = [];

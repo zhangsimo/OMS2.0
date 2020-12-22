@@ -41,8 +41,8 @@
           <div class="db mr10">
             <span class="mr10">门店：</span>
             <Select
-              v-model="search.storeId"
-              class="w120"
+              v-model="search.orgid"
+              class="w200"
               placeholder="门店"
               filterable clearable
               :disabled="selectShopList"
@@ -87,7 +87,6 @@
         stores: [], // 门店
         quickDates: [], // 快速日期查询
         monthList: [
-          {name: "全部", value: 0},
           {name: "1", value: 1},
           {name: "2", value: 2},
           {name: "3", value: 3},
@@ -103,17 +102,15 @@
         ],//月份数组
         yearList: [],//年份数组
         search: {
-          submitDate: ThisMonthStr(), // 提交日期
           month: (new Date()).getMonth() + 1,
           year: (new Date()).getFullYear(),
-          guestId: "", // 供应商
-          storeId: "" // 门店
+          orgid: "", // 供应商
         }
       };
     },
     async mounted() {
       let arrYear = []
-      for (var i = 2010; i < 2031; i++) {
+      for (let i = 2010; i < (new Date()).getFullYear()+20; i++) {
         arrYear.push(i)
       }
       this.yearList = arrYear
@@ -129,7 +126,7 @@
         })
       }
       var arr = await creat("", this.$store);
-      this.search.storeId = arr[1];
+      this.search.orgid = arr[1];
     },
     computed: {
       selectShopList() {
@@ -143,8 +140,6 @@
     methods: {
       // 快速日期查询
       async getDataQuick(v) {
-        this.search.submitDate = v;
-        this.search.auditDate = v;
         var arr = await creat("", this.$store);
         this.search.orgid = arr[1];
         switch (this.$refs.quickDate.searchQuick) {
@@ -158,24 +153,16 @@
             this.search.month = (new Date()).getMonth();
             break;
         }
+        if(this.search.month===0){
+          this.search.year = new Date().getFullYear()-1;
+        }else{
+          this.search.year = new Date().getFullYear();
+        }
         this.query();
       },
       // 查询
       query() {
-        let data = {};
-        for (let key in this.search) {
-          if (this.search[key]) {
-            if (key == "submitDate") {
-              if (this.search["submitDate"][0]) {
-                data.allotFinishedStartDate = moment(this.search["submitDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
-                data.allotFinishedEndDate = moment(this.search["submitDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
-              }
-            } else {
-              data[key] = this.search[key];
-            }
-          }
-        }
-        this.$emit("search", data);
+        this.$emit("search", this.search);
       },
       getmoreData(data) {
         if (data != null) {
@@ -184,7 +171,11 @@
       },
       // 导出
       exportxls() {
-        this.$emit("export");
+        this.$Modal.info({
+          title: '通知',
+          content: '此业务请联系IT服务台导出报表数据'
+        });
+        //this.$emit("export");
       }
     }
   };

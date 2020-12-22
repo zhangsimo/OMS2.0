@@ -322,10 +322,10 @@ export default {
       ], //申请状态数组
       ApplicationType: "99", //申请类型
       ApplicationTypelist: [
-        {
-          value: "99",
-          label: "全部"
-        },
+        // {
+        //   value: "99",
+        //   label: "全部"
+        // },
         // {
         //   value: "0",
         //   label: "费用报销"
@@ -698,13 +698,13 @@ export default {
         case "采购计划单":
         case "临时采购订单":
         case "门店外采订单":
-        case "活动申请":
+        case "活动审批":
           this.$refs.viewOtherModel.init(row);
           break;
-        case "配件资料审批申请":
+        case "配件资料审批":
           this.$refs.partInfo.getPartDetail(row);
           break;
-        case "供应商资料审批申请":
+        case "供应商资料审批":
           this.$refs.suppler.init(row);
           break;
       }

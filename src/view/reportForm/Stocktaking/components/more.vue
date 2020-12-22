@@ -262,8 +262,32 @@ export default class MoreSearch extends Vue {
       this.brandLists=await getBrandList("")
     }
   }
-  @Emit("getmoreData")
+  @Emit("getmoreData")send(msg:any){};
+   private getnew(data:any){
+    let hh:any=moment(data[1]).format("YYYY-MM-DD")
+    let ha:any=moment(data[0]).format("YYYY-MM-DD")
+    let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+     return d
+    }
+    private chamgeName(){ 
+      if(this.type=="1"){
+        return "入库日期"
+      }else{
+        return  "出库日期"
+      }
+      
+    }
   private ok() {
+    let createW:any=this.getnew(this.createDate)
+      let strtW:any=this.getnew(this.auditDate)
+      if(createW>31&&this.partCode==""){
+        this.$message({message:`${this.chamgeName()}不可超过一个月，请重新选择`,type:'error'})
+        return
+      }
+      if(strtW>31&&this.partCode==""){
+         this.$message({message:`提交日期不可超过一个月，请重新选择`,type:'error'})
+         return
+      }
     let parent:any=this.$parent
     let search:any=parent.search
     let data = {
@@ -311,8 +335,12 @@ export default class MoreSearch extends Vue {
     } else {
       obj = null;
     }
-    this.cancel();
-    return obj;
+     if(!(createW>31&&this.partCode=="")||!(strtW>31&&this.partCode=="")){
+            this.cancel();
+       }
+  
+   
+     this.send(obj)
   }
 }
 </script>

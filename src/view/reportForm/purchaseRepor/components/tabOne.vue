@@ -288,11 +288,16 @@
     },
     methods: {
       // 查询表
-      async getList() {
+      async getList() { 
+        console.log(11111)
         let params = {
           page: this.page.num - 1,
           size: this.page.size,
         };
+        console.log(this.body)
+        // if(this.body.orgid==null||!this.auditEndDate){
+        //     return 
+        // }getPjSellOrderMainDetailList
         let res = await api.getPjPchsOrderMainDetailList(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -315,6 +320,7 @@
         }
       },
       async getAll() {
+       
         let tableDataAll = [];
         let params = {
           page: 0,

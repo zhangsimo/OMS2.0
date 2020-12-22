@@ -376,9 +376,12 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
-
+      //  if(!this.body.orgid){
+      //       return 
+      //   }
       let res = await api.getPjPchsRtnMainDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
+       
         this.tableData = (res.data.content || []).map(el => {
           // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
           // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
@@ -402,6 +405,9 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
+      // if(this.body.orgid==null){
+      //     return 
+      //   }
       let obj = await api.findPjPchsRtnMainDetailsCount(this.body, params)
       if (obj.code === 0){
         this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}

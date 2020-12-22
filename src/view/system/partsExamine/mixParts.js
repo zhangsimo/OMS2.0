@@ -3,6 +3,7 @@ import {
   getExamineList,
   getExamineDetail
 } from "_api/system/partsExamine/partsExamineApi";
+import {showLoading,hideLoading} from "../../../utils/loading";
 
 export const minxParts = {
   data() {
@@ -294,7 +295,9 @@ export const minxParts = {
         obj.id = this.selectTable.id;
       }
       this.$refs.partInfo.saveFlag = false;
+      showLoading();
       setApproval(obj).then(res => {
+        hideLoading();
         if (res.code == 0) {
           this.$refs.partInfo.proModal = false;
           // obj.auditSign===1? this.$message.success('审核通过')

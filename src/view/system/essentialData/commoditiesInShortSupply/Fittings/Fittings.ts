@@ -9,7 +9,8 @@ import * as tools from "_utils/tools";
 import accessories from "./modal/Accessories";
 // @ts-ignore
 import { getCarPartClass } from "_api/parts";
-
+// @ts-ignore
+import {showLoading , hideLoading} from "@/utils/loading";
 
 import {
   getSaveNewTight,
@@ -416,6 +417,7 @@ export default class Fittings extends Vue {
       item.passTime = pastTime;
       data.push(item);
     });
+    showLoading()
     let res: any = await getSaveNewTight(data,params);
     if (res.code == 0) {
       this.$emit("getNewList", res);
@@ -425,6 +427,9 @@ export default class Fittings extends Vue {
       } else {
         this.initLocalPartInfo();
       }
+      hideLoading()
+    }else{
+      hideLoading()
     }
   }
   //关闭新增页面
