@@ -181,6 +181,7 @@
     },
     data() {
       return {
+        v1:ToDayStr(),
         stores: [{id: 0, name: "全部"}], // 门店
         quickDates: [], // 快速日期查询
         bandArr: [],//品牌
@@ -222,7 +223,7 @@
           partBrand: "",//配件品牌
           partId: "",//配件内码
           partCode: "",//配件编码
-          enterDate: ThisMonthStr(), // 提交日期
+          enterDate: ToDayStr(), // 提交日期
           orgid: "" // 门店
         },
         moreModel:false,//更多查询是否开启
@@ -383,6 +384,7 @@
       },
       // 快速日期查询
       async getDataQuick(v) {
+         this.v1=v
         this.search.enterDate = v;
         if (this.selectShopList) {
           var arr = await creat("", this.$store);
@@ -401,17 +403,14 @@
       let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
       return d
     },
-      alert(){
-        this.search.enterDate=[]
-        this.$message({message:'出库日期跨度不能超过一个月',type:'error'})
-      },
       // 查询
       query() {
-         let val=this.getnew(this.search.enterDate)
+          let val=this.getnew(this.search.enterDate)
          if(val>31){
-        return this.alert() 
-       }this.search.enterDate=[]
-        this.moreModel=false;
+           this.search.enterDate=this.v1
+            return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
+         }
+        this.moreModel = false;
         this.$emit("search", this.search);
       },
       //更多查询清空

@@ -949,7 +949,6 @@ export default {
     },
     //分页
     changePage(p) {
-      console.log(p);
       this.page.num = p;
       this.getQuery();
     },
