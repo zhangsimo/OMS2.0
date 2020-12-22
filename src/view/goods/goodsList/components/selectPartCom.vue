@@ -25,7 +25,7 @@
         </div>
         <div class="db mr5 fl">
           <span class="mr5">内码:</span>
-          <el-input @focus="focus($event)" ref="elinputpartId" placeholder="内码" style="width: 120px" v-model="partId" @change="search"></el-input>
+          <el-input class="zw-cg-partId" @focus="focus($event)" ref="elinputpartId" placeholder="内码" style="width: 120px" v-model="partId" @change="search"></el-input>
         </div>
         <div class="db mr5 fl">
           <span class="mr5">名称:</span>
@@ -51,13 +51,13 @@
             >{{ item.name }}</Option
           >
         </Select> -->
-        <Button @click="search" class="mr10" type="primary"
+        <Button @click="search" class="mr10 zw-cg-search" type="primary"
           ><Icon type="ios-search" size="14" /> 查询</Button
         >
-        <Button class="mr10" type="default" @click="throwData"
+        <Button class="mr10 zw-cg-select" type="default" @click="throwData"
           ><Icon type="md-checkmark" /> 选择</Button
         >
-        <Button class="mr10" type="default" @click="cancel"
+        <Button class="mr10 zw-cg-cancel" type="default" @click="cancel"
           ><Icon type="md-close" /> 取消</Button
         >
         <Button type="default" v-if="isShowAddPartBtn" @click="applyPart"
@@ -83,6 +83,7 @@
             :stripe="true"
             :columns="columnsPart"
             :data="partData"
+            class="zw-cg-table"
           ></Table>
           <Page
             size="small"

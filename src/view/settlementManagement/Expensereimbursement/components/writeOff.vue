@@ -282,6 +282,7 @@
           paymentBalance: 0,
           writeOffStatus: 0,
           searchType: 0,
+          orgid: JSON.parse(localStorage.getItem('oms2-userList')).shopId || '',
           startTime: this.dates[0]
             ? moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00"
             : "",
@@ -351,7 +352,7 @@
                     xeUtils.sum(data, column.property);
                 }
               }
-              return this.totalfooter;
+              return this.totalfooter.toFixed(2);
             }
             return null;
           })
@@ -365,6 +366,10 @@
         //     );
         //   }
         // }
+        if(this.totalfooter < 0){
+          this.$message.error('因公借支核销总金额不能大于费用报销总金额!')
+          return
+        }
         let enbleAjax=true;
         this.selectArr.map((row, index) => {
           let ygjzwhxye = row.paymentReturnBalance <= 0.01 ? row.payAmt : row.paymentReturnBalance

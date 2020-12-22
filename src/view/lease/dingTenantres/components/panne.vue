@@ -24,9 +24,9 @@
           <div class="db mr10">
             <Button type="warning" @click="add">新增</Button>
           </div>
-<!--          <div class="db mr10">-->
-<!--            <Button type="warning" @click="change">修改</Button>-->
-<!--          </div>-->
+          <div class="db mr10">
+            <Button type="warning" @click="change">修改</Button>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +38,7 @@
   import {getUserAllCompany} from '@/api/base/user'
   import addDing from "./addDing";
   import {getDictionary} from "@/api/documentApproval/ExpenseReimbursement.js"
+  import moment from "moment";
 
   export default {
     props: {
@@ -124,6 +125,34 @@
       change() {
         let data=this.$parent.$refs.tabOne.selections
         console.log(data,111)
+        this.addDingList={
+          date:[data.effectiveDate,data.expirationDate],
+          tenantId:data.tenantId,
+          orgid:data.orgid,
+          isMultiple:data.isMultiple,
+          disable:data.disable,
+          dictionariesConfigCode:data.dictionariesConfigCode,
+          corpId:data.configContent.corpId,
+          corpName:data.configContent.cropName,
+          agentId:data.configContent.enterpriseInsideConfig.agentId,
+          appName:data.configContent.enterpriseInsideConfig.appName,
+          appKey:data.configContent.enterpriseInsideConfig.appKey,
+          appSecret:data.configContent.enterpriseInsideConfig.appSecret,
+
+          appId:data.configContent.thirdPartyConfig.appId,
+          suiteId:data.configContent.thirdPartyConfig.suiteId,
+          suiteName:data.configContent.thirdPartyConfig.suiteName,
+          suiteKey:data.configContent.thirdPartyConfig.suiteKey,
+          suiteSecret:data.configContent.thirdPartyConfig.suiteSecret,
+
+          appId2:data.configContent.tokenConfig.appId,
+          appSecret2:data.configContent.tokenConfig.appSecret,
+          appName2:data.configContent.tokenConfig.appName,
+        }
+        this.$refs.addDing.id=data.id;
+        this.$refs.addDing.dingTalkBpmsConfigs=data.configContent.dingTalkBpmsConfigs;
+        this.$refs.addDing.tit="修改租户配置"
+        this.$refs.addDing.addDingBool = true;
       }
     }
   };

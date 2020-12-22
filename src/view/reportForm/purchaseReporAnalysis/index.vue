@@ -2,17 +2,17 @@
   <div class="content-oper" style="background: #fff">
     <panne @search="tabName" @export="exportxls()" ref="panne"/>
     <Tabs style="min-height: 500px" v-model="tabNameKey" type="card" @on-click="tabName">
-      <TabPane label="按供应商排行" name="tabOne">
-        <tabOne ref="tabOne"/>
+      <TabPane label="按供应商排行" name="tabOne" >
+        <tabOne ref="tabOne" @one="one"/>
       </TabPane>
       <TabPane label="按商品排行" name="tabTwo">
-        <tabTwo ref="tabTwo"/>
+        <tabTwo ref="tabTwo"  @two="two"/>
       </TabPane>
       <TabPane label="按品牌排行" name="tabThree">
-        <tabThree ref="tabThree"/>
+        <tabThree ref="tabThree" @san="san"/>
       </TabPane>
       <TabPane label="按配件类型排行" name="tabFour">
-        <tabFour ref="tabFour"/>
+        <tabFour ref="tabFour" @si="si"/>
       </TabPane>
     </Tabs>
   </div>
@@ -35,8 +35,22 @@
     async mounted() {
     },
     methods: {
+      one(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      two(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      san(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
+      si(){
+        this.$refs.panne.search.enterDate=this.$refs.panne.v1
+      },
       tabName() {
+     
         let data={}
+    
         for (let key in this.$refs.panne.search) {
           if (this.$refs.panne.search[key]||this.$refs.panne.search[key]===0) {
             if (key == "enterDate") {
@@ -55,6 +69,7 @@
             }
           }
         }
+
         data.guestPart == true ? data.showPerson = 1 : data.showPerson = 0
         // console.log(data.supplierTypes,11111)
         switch (this.tabNameKey) {

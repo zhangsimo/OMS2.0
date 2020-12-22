@@ -105,7 +105,7 @@
     <!--      重置密码-->
     <Modal v-model="prassword" :title="password">
       <div style="text-align: center;line-height: 100px">
-        <span class="iconziyuan3">确定将密码重置为00000</span>
+        <span class="iconziyuan3">确定重置密码?</span>
       </div>
       <div slot="footer">
         <Button type="primary" @click="submitPassword">确定</Button>

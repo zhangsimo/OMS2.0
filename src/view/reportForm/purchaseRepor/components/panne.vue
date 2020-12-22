@@ -104,7 +104,7 @@
 
 <script>
 import moment from "moment";
-import QuickDate from "_c/getDate/dateget_noEmit";
+import QuickDate from "_c/getDate/dateget_w";
 import more from "./more";
 import * as api from "_api/reportForm/index.js";
 import { creat } from "@/view/settlementManagement/components";
@@ -121,6 +121,7 @@ export default {
   },
   data() {
     return {
+      dataw:[],
       bandArr: [], // 品牌
       stores: [{id:0,name:"全部"}], // 门店
       quickDates: [], // 快速日期查询
@@ -182,6 +183,7 @@ export default {
     },
     // 快速日期查询
     async getDataQuick(v) {
+      console.log(v)
       this.search.auditDate = v;
       if(this.selectShopList){
         var arr = await creat("", this.$store);
@@ -190,12 +192,33 @@ export default {
       this.query()
     },
     getDataQuick2(v){
+       
+       if(!this.search.content&&this.getnew(v)>31){
+         this.search.auditDate = v;
+        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
+      }
+      
       this.search.auditDate = v;
+    },
+    //
+    getnew(data){
+        let hh=data[1].substr(0,10);
+      let ha=data[0].substr(0,10);
+      let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
+      return d
     },
     // 查询
     query() {
+      let val=this.getnew(this.search.auditDate)
+       if(this.search.content==""&&val>31){
+        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
+      }
+       if(!this.search.auditDate[0]){
+        return this.$message({message:'日期范围不能为空',type:'error'})
+      }
       let data = {};
       for (let key in this.search) {
+
         if (this.search[key]) {
           if (key == "auditDate") {
             // data.auditDate = moment(this.search.auditDate).format(
@@ -247,6 +270,7 @@ export default {
     },
     // 更多
     moreOpen() {
+    
       this.$refs.more.init();
     },
     getmoreData(data) {

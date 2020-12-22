@@ -618,7 +618,7 @@ export default {
     },
     //点击单选框获取辅助核算客户
     radioChangeEventClient({ row }) {
-      this.AssistAccounting = row.fullName;
+      this.AssistAccounting = row.shortName;
       this.auxiliaryTypeCode = "1";
       this.auxiliaryCode = row.code;
       this.voucherItem = row;
@@ -657,7 +657,7 @@ export default {
     },
     //点击单选框获取辅助核算供应商
     radioChangeEventSupplier({ row }) {
-      this.AssistAccounting = row.fullName;
+      this.AssistAccounting = row.shortName;
       this.auxiliaryTypeCode = "2";
       this.auxiliaryCode = row.code;
       this.voucherItem = row;
