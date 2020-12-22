@@ -507,7 +507,6 @@
         if (!row) {
           return
         }
-        // console.log(row)
         this.editTopItemId = row.id
         this.rowMessage = row;
         this.state = row.isGuestResearch;
@@ -799,7 +798,7 @@
           ];
         }
         this.$refs.child.$refs.form.validate(valid => {
-          if(!this.$refs.child.increaseBlur() || !this.$refs.child.increaseBlur22()){
+          if( !this.$refs.child.increaseBlur22()){
             valid=false
           }
           if (valid) {

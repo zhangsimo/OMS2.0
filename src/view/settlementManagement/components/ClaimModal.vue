@@ -94,7 +94,7 @@ export default {
     PreClaimModal,
     voucherInput,
   },
-  props: ['titleName','amountType'],
+  props: ['titleName','amountType','limitMoney'],
   data(){
     return {
       visibal: false,
@@ -109,7 +109,8 @@ export default {
           { required: true, message: '请输入认领金额' },
           { type: 'number', message: '请输入数字' }
         ]
-      }
+      },
+      totalMoney: 0,  //认领单据的合计
     }
   },
   computed: {
@@ -125,6 +126,7 @@ export default {
             return '合计'
           }
           if (['thisClaimedAmt'].includes(column.property)) {
+            this.totalMoney = this.sum(data, column.property, columnIndex)  
             return this.sum(data, column.property, columnIndex)
           }
           return null
@@ -181,7 +183,10 @@ export default {
         this.$message.error('认领金额输入错误，不可为空')
         return
       }
-      
+      if(this.totalMoney > this.limitMoney){
+        this.$message.error('认领总金额不能大于报销未核销余额！')
+        return
+      }
       
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
