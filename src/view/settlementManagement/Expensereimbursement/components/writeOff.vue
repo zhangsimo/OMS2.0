@@ -366,6 +366,10 @@
         //     );
         //   }
         // }
+        if(this.totalfooter < 0){
+          this.$message.error('因公借支核销总金额不能大于费用报销总金额!')
+          return
+        }
         let enbleAjax=true;
         this.selectArr.map((row, index) => {
           let ygjzwhxye = row.paymentReturnBalance <= 0.01 ? row.payAmt : row.paymentReturnBalance
