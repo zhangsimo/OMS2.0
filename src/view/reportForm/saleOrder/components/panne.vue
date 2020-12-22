@@ -237,10 +237,6 @@
       // 查询
       query() {
         let val=this.getnew(this.search.auditDate)
-      if(val>30&&this.search.content){
-          this.search.content=""
-        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
-      }
       if(this.search.content==""&&val>31){
         return this.$message({message:'日期跨度不能超过一个月',type:'error'})
       }

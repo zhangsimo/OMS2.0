@@ -154,10 +154,6 @@ export default {
     // 查询
     query() {
        let val=this.getnew(this.search.submitDate)
-      if(val>31&&this.search.content){
-          this.search.content=""
-        return this.$message({message:'日期跨度不能超过一个月',type:'error'})
-      }
       if(!this.search.content&&val>31){
         return this.$message({message:'日期跨度不能超过一个月',type:'error'})
       }
