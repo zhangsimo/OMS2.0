@@ -208,6 +208,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
 import * as api from "_api/reportForm/index.js";
 export default {
   data() {
@@ -230,6 +231,7 @@ export default {
     // 查询表
     async getList(data = {}) {
       this.searchData = data;
+      showLoading('.content-oper')
       let res = await api.getStockCheckLoss(data,this.page);
       if (res.code == 0) {
         this.tableDataAll = (res.data.content || []).map(el => {
@@ -245,6 +247,7 @@ export default {
         this.tableData = this.tableDataAll;
         this.page.total = res.data.totalElements;
       }
+      hideLoading()
     },
     //分页
     changePage(p) {

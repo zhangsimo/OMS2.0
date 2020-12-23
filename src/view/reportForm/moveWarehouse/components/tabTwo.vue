@@ -182,6 +182,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
   import * as api from "_api/reportForm/index.js";
 
   export default {
@@ -205,6 +206,7 @@
       // 查询表
       async getList(data = {}) {
         this.searchData = data;
+        showLoading('.content-oper')
         let res = await api.getStockShiftOut(data, this.page);
         if (res.code == 0) {
           this.tableDataAll = (res.data.content || []).map(el => {
@@ -220,6 +222,7 @@
           this.tableData = this.tableDataAll;
           this.page.total = res.data.totalElements;
         }
+        hideLoading()
       },
       //导出
       async exportFun() {

@@ -68,24 +68,27 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        showLoading()
-        let res = await api.getPurchaseReporAnalysis(this.body, params);
-        if (res.code == 0 && res.data != null) {
-          this.tableData = (res.data.content || []).map(el => {
-            return el;
-          });
-          
-          this.page.total = res.data.totalElements;
-          hideLoading()
-          this.$emit("si");
-        } else {
-          this.page.total = 0;
-          this.tableData = [];
+        try {
+          showLoading('.content-oper')
+          let res = await api.getPurchaseReporAnalysis(this.body, params);
+          if (res.code == 0 && res.data != null) {
+            this.tableData = (res.data.content || []).map(el => {
+              return el;
+            });
+            
+            this.page.total = res.data.totalElements;
+            this.$emit("si");
+          } else {
+            this.page.total = 0;
+            this.tableData = [];
+            hideLoading()
+          }
+        } catch (error) {
           hideLoading()
         }
       },
       async getAllMoney(){
-        showLoading()
+        showLoading('.content-oper')
         let resp2 = await api.pchsEnterMain(this.body)
         if(resp2.code==0){
           hideLoading()

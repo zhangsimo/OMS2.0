@@ -200,6 +200,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
 import * as api from "_api/reportForm/index.js";
 export default {
   data() {
@@ -224,6 +225,7 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
+      showLoading('.content-oper')
       let res = await api.getAllotAcceptDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
@@ -242,6 +244,7 @@ export default {
         this.page.total = 0;
         this.tableData = [];
       }
+      hideLoading()
     },
     async getAll() {
       let tableDataAll = [];
