@@ -94,7 +94,7 @@
         <vxe-table-column field="unClaimedAmt" width="80" title="未认领金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
+          :edit-render="{name: 'input',  attrs:{type: 'number'}, props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           width="120"
           align="center"
