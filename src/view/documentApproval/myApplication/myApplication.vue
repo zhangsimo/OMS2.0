@@ -126,9 +126,9 @@
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
         <vxe-table-column field="applyTypeName" title="申请类型"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>
-        <vxe-table-column field="amtTotal" title="总金额">
+        <vxe-table-column field="applyAmt" title="总金额">
           <template v-slot="{row}">
-            {{row.amtTotal||0}}
+            {{row.applyAmt||0}}
           </template>
         </vxe-table-column>
         <vxe-table-column field="orgName" title="门店"></vxe-table-column>
