@@ -397,7 +397,8 @@ export const mixPartInfo = {
       this.formValidate.specVOS=[];
       this.saveFlag = false;
       this.selectLevelFirst="";
-      this.selectLevelSecond=""
+      this.selectLevelSecond="";
+      this.businessMan = [];
       this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌submit
       this.getCarBrand();
