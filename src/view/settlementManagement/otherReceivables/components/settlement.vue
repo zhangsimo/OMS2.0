@@ -345,6 +345,9 @@ export default {
         rpAmt: 0,
         unAmtLeft: 0,
         isSubject: 1,
+        mateAccountCode: val.titleCode,
+        mateAccountName: val.titleName,
+        isAuxiliaryAccounting: val.isAuxiliaryAccounting,
       });
     });
     bus.$on("content", (val) => {

@@ -230,7 +230,10 @@
           unAmt: 0,
           rpAmt: 0,
           unAmtLeft: 0,
-          isSubject: 1//与本来对账单区分
+          isSubject: 1,//与本来对账单区分
+          mateAccountCode: val.titleCode,
+          mateAccountName: val.titleName,
+          isAuxiliaryAccounting: val.isAuxiliaryAccounting,
         });
       });
       bus.$on("content", val => {
