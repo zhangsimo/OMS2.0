@@ -175,6 +175,13 @@
                           width="168"
 
         ></vxe-table-column>
+        <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+        <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+        <vxe-table-column field="isTc" title="是否统采" width="100">
+          <template v-slot="{row}">
+            <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -222,7 +229,7 @@
         };
         console.log(this.body)
         let res = await api.getPjSellOrderMainDetailList(this.body, params);
-        
+
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
             if ([1, "1", "是"].includes(el.taxSign)) {

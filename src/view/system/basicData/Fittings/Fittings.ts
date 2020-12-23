@@ -183,6 +183,64 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
+          title: "创建人",
+          key: "createUname",
+          minWidth: 120
+        },
+        {
+          title: "创建日期",
+          key: "createTime",
+          minWidth: 120
+        },
+        {
+          title: "操作人",
+          key: "updateUname",
+          minWidth: 120
+        },
+        {
+          title: "操作日期",
+          key: "updateTime",
+          minWidth: 120
+        },
+        {
+          title: "产品负责人",
+          key: "dutyMan",
+          minWidth: 120
+        },
+        {
+          title: "所属事业部",
+          key: "businessUnit",
+          minWidth: 120
+        },
+        {
+          title: "是否统采",
+          key: "isTc",
+          minWidth: 120,
+          render:(h,p) =>{
+           return h("span",p.row.isTc?"是":"否",)
+          }
+        },
+        {
+          title: "来源",
+          key: "remark",
+          minWidth: 120,
+          render:(h,p) => {
+            let text ="";
+            switch (p.row.source) {
+              case 1:
+                text = "oms系统";
+                break;
+              case 2:
+                text = "电商平台";
+                break;
+              case 3:
+                text = "华胜ERP";
+                break;
+            };
+            return h('span',text);
+          }
+        },
+        {
           title: "状态",
           minWidth: 80,
           render: (h, params) => {
@@ -311,6 +369,64 @@ export default class Fittings extends Vue {
           title: "备注",
           key: "direction",
           minWidth: 120
+        },
+        {
+          title: "创建人",
+          key: "createUname",
+          minWidth: 120
+        },
+        {
+          title: "创建日期",
+          key: "createTime",
+          minWidth: 120
+        },
+        {
+          title: "操作人",
+          key: "updateUname",
+          minWidth: 120
+        },
+        {
+          title: "操作日期",
+          key: "updateTime",
+          minWidth: 120
+        },
+        {
+          title: "产品负责人",
+          key: "dutyMan",
+          minWidth: 120
+        },
+        {
+          title: "所属事业部",
+          key: "businessUnit",
+          minWidth: 120
+        },
+        {
+          title: "是否统采",
+          key: "isTc",
+          minWidth: 120,
+          render:(h,p) =>{
+            return h("span",p.row.isTc?"是":"否",)
+          }
+        },
+        {
+          title: "来源",
+          key: "remark",
+          minWidth: 120,
+          render:(h,p) => {
+            let text ="";
+            switch (p.row.source) {
+              case 1:
+                text = "oms系统";
+                break;
+              case 2:
+                text = "电商平台";
+                break;
+              case 3:
+                text = "华胜ERP";
+                break;
+            };
+            return h('span',text);
+          }
         },
         {
           title: "状态",
