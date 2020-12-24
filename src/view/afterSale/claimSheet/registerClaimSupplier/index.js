@@ -254,11 +254,11 @@ export default {
     async getLeftLists() {
       let data = {};
       if (this.queryDate) {
-        data.createstartTime = this.queryDate[0];
-        data.createendTime = this.queryDate[1];
+        data.createStartTime = this.queryDate[0];
+        data.createEndTime = this.queryDate[1];
       } else {
-        data.createstartTime = "";
-        data.createendTime = "";
+        data.createStartTime = "";
+        data.createEndTime = "";
       }
       let params = {}
       data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
@@ -475,7 +475,7 @@ export default {
             this.$message.error("请先选择要保存的数据");
           }
         } else {
-          this.$Message.error("*为必填!");
+          this.$Message.error("理赔数量、理赔原因为必填!");
         }
       });
     },
