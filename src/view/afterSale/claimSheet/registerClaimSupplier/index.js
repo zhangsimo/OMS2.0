@@ -190,7 +190,7 @@ export default {
       order.id = this.formPlan.id;
       let printZF = this.$refs.printZF;
       printZF.openModal(order)
-      this.$refs.getLeftLists()
+      this.getLeftLists()
     },
     // 打开更多搜索
     openQueryModal() {
@@ -254,11 +254,11 @@ export default {
     async getLeftLists() {
       let data = {};
       if (this.queryDate) {
-        data.createstartTime = this.queryDate[0];
-        data.createendTime = this.queryDate[1];
+        data.createStartTime = this.queryDate[0];
+        data.createEndTime = this.queryDate[1];
       } else {
-        data.createstartTime = "";
-        data.createendTime = "";
+        data.createStartTime = "";
+        data.createEndTime = "";
       }
       let params = {}
       data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
@@ -303,6 +303,8 @@ export default {
             }
           }
         } else {
+          this.selectLeftItemId = this.leftTableData[0].id;
+          this.formPlan = this.leftTableData[0];
           this.clickOnesList(this.leftTableData[0]);
         }
       }
@@ -371,7 +373,7 @@ export default {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if (this.formPlan.details.length < 1 || this.formPlan.details.length==undefined) {
+      if (this.formPlan.details == null || this.formPlan.details.length < 1) {
         this.formPlan.partOrCustomerOnly = 0;
       } else {
         if (this.formPlan.details[0].enterMainId) {//判断是否从客户理赔登记单录入
@@ -384,14 +386,13 @@ export default {
           })
         }
       }
-      this.logDataLoading=false;
-      this.logData=[];
+      this.logDataLoading = false;
+      this.logData = [];
+      this.$refs.xLog.updateData()
     },
     //理赔数量录入
     afterSaleQtyChange(row) {
-      if (row.isAddPart == 0) {
-        row.untreatedQty = row.afterSaleQty
-      }
+      row.untreatedQty = row.afterSaleQty
       this.updateFooterEvent()
     },
     //理赔原因录入
@@ -456,13 +457,13 @@ export default {
               showLoading()
               let res = await api.registerClaimSave(this.formPlan);
               if (res.code === 0) {
-                this.getLeftLists();
                 this.formPlan = {
                   code: ""
                 };
+                this.selectLeftItemId = undefined;
+                this.getLeftLists();
                 this.$Message.success("保存成功");
                 this.flag = 0;
-                this.setSelected(this.dataChange.row);
               }
               hideLoading()
             } catch (errMap) {
@@ -476,7 +477,7 @@ export default {
             this.$message.error("请先选择要保存的数据");
           }
         } else {
-          this.$Message.error("*为必填!");
+          this.$Message.error("理赔数量、理赔原因为必填!");
         }
       });
     },
@@ -504,13 +505,13 @@ export default {
               showLoading()
               let res = await api.registerClaimSubmit(this.formPlan);
               if (res.code === 0) {
-                this.getLeftLists();
                 this.formPlan = {
                   code: ""
                 };
+                this.selectLeftItemId = undefined;
+                this.getLeftLists();
                 this.$Message.success("保存成功");
                 this.flag = 0;
-                this.setSelected(this.dataChange.row);
               }
               hideLoading()
             } catch (errMap) {
@@ -533,7 +534,13 @@ export default {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      this.$refs.selectPartCom.init();
+      this.$refs.formPlan.validate(async valid => {
+        if (valid) {
+          this.$refs.selectPartCom.init();
+        } else {
+          this.$Message.error("*为必填项");
+        }
+      })
     },
     //添加配件
     getPartNameList(val) {
@@ -620,16 +627,37 @@ export default {
       this.rightList = val.selection;
     },
     //删除
-    async delect() {
-      if (this.rightList.length < 1)
+    delect() {
+      if (this.rightList.length < 1) {
         return this.$message.error("至少选择一条数据");
-      this.formPlan.details.map((el, index) => {
-        this.rightList.map(el2 => {
-          if (el.id == el2.id) {
-            this.formPlan.details.splice(index, 1);
+      }
+      // let arr=Object.assign([],this.formPlan.details)
+      // this.formPlan.details = this.array_diff(
+      //   arr,
+      //   this.rightList
+      // );
+      this.rightList.map(el=>{
+        this.formPlan.details.map((el2,idx)=>{
+          if(el.id==el2.id){
+            this.formPlan.details.splice(idx,1)
+            idx=idx-1;
           }
         })
       })
+
+      return this.$message.success("删除成功")
+    },
+    array_diff(a, b) {
+      for (var i = 0; i < b.length; i++) {
+        for (var j = 0; j < a.length; j++) {
+          if (a[j].id == b[i].id) {
+            a.splice(j, 1);
+            j = j - 1;
+          }
+        }
+      }
+      console.log(a,b,111)
+      return a;
     },
     getRUl() {
       this.upurl = api.getup + "?id=" + this.formPlan.id;

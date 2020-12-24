@@ -100,21 +100,21 @@
       //获取创建时间
       getCreatDate(date) {
         if (date[0]) {
-          this.data.createstartTime = date[0] + " " + "00:00:00";
-          this.data.createendTime = date[1] + " " + "23:59:59";
+          this.data.createStartTime = date[0] + " " + "00:00:00";
+          this.data.createEndTime = date[1] + " " + "23:59:59";
         } else {
-          this.data.createstartTime = "";
-          this.data.createendTime = "";
+          this.data.createStartTime = "";
+          this.data.createEndTime = "";
         }
       },
       //获取提交时间
       getEnterDate(date) {
         if (date[0]) {
-          this.data.orderstartDate = date[0] + " " + "00:00:00";
-          this.data.orderendDate = date[1] + " " + "23:59:59";
+          this.data.orderStartDate = date[0] + " " + "00:00:00";
+          this.data.orderEndDate = date[1] + " " + "23:59:59";
         } else {
-          this.data.orderstartDate = "";
-          this.data.orderendDate = "";
+          this.data.orderStartDate = "";
+          this.data.orderEndDate = "";
         }
       },
       //确认

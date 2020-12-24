@@ -17,6 +17,7 @@
       <Button
         class="mr10 w90"
         @click="save"
+        :disabled="formPlan.orderSign!=0"
       >
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons"/>保存
@@ -65,7 +66,7 @@
                   <vxe-table-column show-overflow="tooltip" field="createUname" title="创建人"></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" field="createTime" title="创建日期"></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" field="print" title="打印次数"></vxe-table-column>
-                  <vxe-table-column show-overflow="tooltip" field="orderMen" title="提交人"></vxe-table-column>
+                  <vxe-table-column show-overflow="tooltip" field="orderMan" title="提交人"></vxe-table-column>
                   <vxe-table-column show-overflow="tooltip" field="orderDate" title="提交日期"></vxe-table-column>
                 </vxe-table>
               </div>
@@ -212,6 +213,7 @@
                 :edit-rules="validRules"
                 @select-change="selectSameList"
                 @select-all="selectAllList"
+                @select-cancel="selectAllList"
                 @current-change="logDataMethod"
                 :data="formPlan.details"
                 class="ml15"
@@ -227,7 +229,6 @@
                   <template v-slot="{ row }">
                     <vxe-input
                       type="integer"
-                      :max="row.isAddPart!=0?row.untreatedQty:100000000000"
                       :min="1"
                       v-model="row.afterSaleQty"
                       :precision="0"
@@ -274,6 +275,7 @@
                 :data="logData"
                 :loading="logDataLoading"
                 show-overflow="title"
+                ref="xLog"
                 class="ml15"
                 stripe
                 v-show="!addNewBool"
