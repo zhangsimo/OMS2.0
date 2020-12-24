@@ -387,7 +387,6 @@ export default {
       this.logDataLoading=false;
       this.logData=[];
       this.$refs.xLog.updateData()
-      console.log(this.logData,111)
     },
     //理赔数量录入
     afterSaleQtyChange(row) {
