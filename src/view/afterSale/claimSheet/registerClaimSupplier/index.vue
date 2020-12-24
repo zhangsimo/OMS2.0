@@ -213,6 +213,7 @@
                 :edit-rules="validRules"
                 @select-change="selectSameList"
                 @select-all="selectAllList"
+                @select-cancel="selectAllList"
                 @current-change="logDataMethod"
                 :data="formPlan.details"
                 class="ml15"

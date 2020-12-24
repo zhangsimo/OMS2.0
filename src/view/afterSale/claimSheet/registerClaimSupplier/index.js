@@ -630,19 +630,33 @@ export default {
       if (this.rightList.length < 1) {
         return this.$message.error("至少选择一条数据");
       }
-      let arr = Object.assign([], this.formPlan.details)
-      console.log(arr, this.rightList, 1111)
-      arr.map((el, index) => {
-        this.rightList.map(el2 => {
-          if (el.id == el2.id) {
-            arr.splice(index, 1);
+      // let arr=Object.assign([],this.formPlan.details)
+      // this.formPlan.details = this.array_diff(
+      //   arr,
+      //   this.rightList
+      // );
+      this.rightList.map(el=>{
+        this.formPlan.details.map((el2,idx)=>{
+          if(el.id==el2.id){
+            this.formPlan.details.splice(idx,1)
+            idx=idx-1;
           }
         })
-        if (index == arr.length - 1) {
-          this.$message.success("删除成功")
-        }
       })
-      this.formPlan.details = arr;
+
+      return this.$message.success("删除成功")
+    },
+    array_diff(a, b) {
+      for (var i = 0; i < b.length; i++) {
+        for (var j = 0; j < a.length; j++) {
+          if (a[j].id == b[i].id) {
+            a.splice(j, 1);
+            j = j - 1;
+          }
+        }
+      }
+      console.log(a,b,111)
+      return a;
     },
     getRUl() {
       this.upurl = api.getup + "?id=" + this.formPlan.id;
