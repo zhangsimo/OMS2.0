@@ -171,6 +171,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
 import * as api from "_api/reportForm/index.js";
 export default {
   data() {
@@ -197,6 +198,7 @@ export default {
       if(this.body.auditDate){
         delete this.body.auditDate;
       }
+      showLoading('.content-oper')
       let res = await api.getOnOrderStock(this.body, params);
       if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
@@ -214,6 +216,7 @@ export default {
         this.page.total = 0;
         this.tableData = [];
       }
+      hideLoading()
     },
     async getAll() {
       let params="";

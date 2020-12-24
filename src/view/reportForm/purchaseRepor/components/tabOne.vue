@@ -274,6 +274,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
   import * as api from "_api/reportForm/index.js";
 
   export default {
@@ -296,34 +297,38 @@
     methods: {
       // 查询表
       async getList() {
-        console.log(11111)
         let params = {
           page: this.page.num - 1,
           size: this.page.size,
         };
-        console.log(this.body)
         // if(this.body.orgid==null||!this.auditEndDate){
         //     return
         // }getPjSellOrderMainDetailList
-        let res = await api.getPjPchsOrderMainDetailList(this.body, params);
-        if (res.code == 0 && res.data != null) {
-          this.tableData = (res.data.content || []).map(el => {
-            if ([1, "1", "是"].includes(el.taxSign)) {
-              el.taxSign = true;
-            }
-            if ([0, "0", "否"].includes(el.taxSign)) {
-              el.taxSign = false;
-            }
-            // if(el.taxRate){
-            //   el.taxRate=`${el.taxRate*100}%`
-            // }
-            return el;
-          });
-          // this.total = res.data.purchaseOrderBean
-          this.page.total = res.data.totalElements;
-        } else {
-          this.page.total = 0;
-          this.tableData = [];
+        try {
+          showLoading('.content-oper')
+          let res = await api.getPjPchsOrderMainDetailList(this.body, params);
+          if (res.code == 0 && res.data != null) {
+            this.tableData = (res.data.content || []).map(el => {
+              if ([1, "1", "是"].includes(el.taxSign)) {
+                el.taxSign = true;
+              }
+              if ([0, "0", "否"].includes(el.taxSign)) {
+                el.taxSign = false;
+              }
+              // if(el.taxRate){
+              //   el.taxRate=`${el.taxRate*100}%`
+              // }
+              return el;
+            });
+            // this.total = res.data.purchaseOrderBean
+            this.page.total = res.data.totalElements;
+          } else {
+            this.page.total = 0;
+            this.tableData = [];
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
       async getAll() {

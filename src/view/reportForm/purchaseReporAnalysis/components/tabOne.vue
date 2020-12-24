@@ -83,7 +83,7 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        showLoading()
+        showLoading('.content-oper')
         // console.log(this.body)
         //  let val=this.getnew(this.body)
         //  console.log(val)
@@ -109,7 +109,7 @@
         }
       },
       async getAllMoney(){
-        showLoading()
+        showLoading('.content-oper')
         let resp2 = await api.pchsEnterMain(this.body)
         if(resp2.code==0){
           hideLoading()

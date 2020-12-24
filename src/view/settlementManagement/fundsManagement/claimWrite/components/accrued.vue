@@ -35,7 +35,7 @@
         <vxe-table-column
           field="balanceMoney"
           v-model="accrued[0].balanceMoney"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2}}"
+          :edit-render="{name: 'input',  attrs:{type: 'number'}, props: {type: 'float', digits: 2}}"
           title="本次认领金额"
           width="120"
           align="center"

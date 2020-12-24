@@ -50,7 +50,7 @@
               v-model="receiveGuestId"
               clearable
               filterable
-              :loading=loading1
+              :loading="loading1"
               remote
               :remote-method="remoteMethod"
               style="width:200px;padding-left: 5px"

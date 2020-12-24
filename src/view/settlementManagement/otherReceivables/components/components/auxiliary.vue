@@ -280,7 +280,7 @@
             style="width: 300px"
           >
             <FormItem label="款项分类:" prop="fund">
-              <Select v-model="formDynamic.fund" placeholder="请选择">
+              <Select v-model="formDynamic.fund" placeholder="请选择" @on-change="changeSele">
                 <Option
                   v-for="item in fundListZanshi"
                   :value="item.itemName"
@@ -403,7 +403,8 @@ export default {
       TabsChoose: 'client', //默认的tab页
       Classification: false, //款项分类下拉框是否显示
       formDynamic: {
-        fund: "" //款项分类
+        fund: "", //款项分类
+        code: '',
       },
       ruleValidateTwo: {
         fund: [
@@ -420,6 +421,15 @@ export default {
     };
   },
   methods: {
+    //款项分类下拉改变触发
+    changeSele(val){
+      console.log(this.fundListZanshi)
+      this.fundListZanshi.forEach(item => {
+        if(item.itemName === val){
+          this.formDynamic.code = item.itemCode
+        }
+      })
+    },
     // 客户刷新初始化
     ClientgetList() {
       let params = {};
@@ -670,7 +680,8 @@ export default {
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
-                this.AssistAccounting.paymentTypeCode = this.formDynamic.fund;
+                this.AssistAccounting.paymentTypeName = this.formDynamic.fund;
+                this.AssistAccounting.paymentTypeCode = this.formDynamic.code;
                 this.$emit("ChildContent", this.AssistAccounting);
                 bus.$emit("ChildContent", this.AssistAccounting);
                 this.subjectModelShowassist = false;

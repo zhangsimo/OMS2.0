@@ -193,6 +193,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
 import * as api from "_api/reportForm/index.js";
 export default {
   data() {
@@ -217,23 +218,29 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
-      let res = await api.getAllotApplyRtnDetails(this.body, params);
-      if (res.code == 0 && res.data != null) {
-        this.tableData = (res.data.content || []).map(el => {
-          if ([1, "1", "是"].includes(el.taxSign)) {
-            el.taxSign = true;
-          }
-          if ([0, "0", "否"].includes(el.taxSign)) {
-            el.taxSign = false;
-          }
-          el.isMakActivity = false;
-          return el;
-        });
-
-        this.page.total = res.data.totalElements;
-      } else {
-        this.page.total = 0;
-        this.tableData = [];
+      try {
+        showLoading('.content-oper')
+        let res = await api.getAllotApplyRtnDetails(this.body, params);
+        if (res.code == 0 && res.data != null) {
+          this.tableData = (res.data.content || []).map(el => {
+            if ([1, "1", "是"].includes(el.taxSign)) {
+              el.taxSign = true;
+            }
+            if ([0, "0", "否"].includes(el.taxSign)) {
+              el.taxSign = false;
+            }
+            el.isMakActivity = false;
+            return el;
+          });
+  
+          this.page.total = res.data.totalElements;
+        } else {
+          this.page.total = 0;
+          this.tableData = [];
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
     },
     async getAll() {

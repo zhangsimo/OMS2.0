@@ -250,7 +250,7 @@
     methods: {
       // 查询表
       async getList() {
-        showLoading();
+        showLoading('.bigbox');
         let res = await api.omsInvoicingReport(this.body);
         this.showFooter = false;
         hideLoading();

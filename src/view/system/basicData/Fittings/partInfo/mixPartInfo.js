@@ -86,6 +86,9 @@ export const mixPartInfo = {
         taxCalssName:'',//税收分类名称
         taxCalssCode:'',//税收分类编码
         source:1,
+        businessUnit:'',
+        dutyManId:''
+
       },
       ruleValidate: {
         qualityTypeId: [
@@ -449,6 +452,7 @@ export const mixPartInfo = {
       this.formValidate.customType = ""
       this.formValidate.isTc = false
       this.formValidate.source = 1
+      this.businessMan = []
       if (setData) {
         this.formValidate = setData;
         this.formValidate.isTc = this.formValidate.isTc?true:false;

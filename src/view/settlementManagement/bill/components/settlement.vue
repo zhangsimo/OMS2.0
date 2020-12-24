@@ -79,7 +79,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model.number.trim="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="float" size="mini" v-model.number.trim="row.rpAmt" :digits='2' @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="120" title="剩余未收/未付"></vxe-table-column>
