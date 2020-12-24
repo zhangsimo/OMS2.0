@@ -427,7 +427,8 @@ export default {
     },
 
     setSelected(row) {
-      this.$refs.formPlan.resetFields();
+      
+    this.$refs.formPlan.resetFields();
       this.$refs.xTab.setCurrentRow(row);
       this.formPlan = row;
     },

@@ -9,7 +9,8 @@ const dev = {
   omsEdit: 'http://192.168.30.21:9240', // 9220salesOrder
   // omsOrder:'http://192.168.30.11:9210', //陈舒
   // omsSettle: "http://192.168.30.11:9270",
-  omsSettle: "http://192.168.30.21:9270",//9270
+  omsSettle: "http://192.168.30.21:9270",//9270,
+  omsSale:"http://192.168.30.84:9210",//售后
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
   // omsEdit: '', // 9220salesOrder
@@ -59,8 +60,8 @@ const test = {
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   // omsProduct: "http://192.168.30.97:9200",//小冯同学
   // omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
-  omsOrder: "http://192.168.30.97:9210",//小冯同学
-  // omsOrder: "http://192.168.30.84:9210",//小毛同学
+  // omsOrder: "http://192.168.30.97:9210",//小冯同学
+  omsOrder: "http://192.168.15.110:9210",//小毛同学
   // omsOrder: "http://192.168.30.179:9210",//琦哥
   // omsOrder: "http://192.168.30.21:9210",//玮琳呀
   // omsOrder: "http://192.168.30.221:9210",//伟健哥

@@ -409,22 +409,22 @@ export default {
     AddInoice,
     bankAccount
   },
-  // props: {
-  //   data: {
-  //     type: Object,
-  //     default: {}
-  //   },
-  //   provincearr: {
-  //     type: Array,
-  //     default:()=>[]
-  //   },
-  //   treelist: {
-  //     type: Array,
-  //     default: ()=>[]
-  //   },
-  //   dis:""
-  // },
-  props:['data','provincearr','treelist','dis'],
+  props: {
+    data: {
+      type: Object,
+      default: {}
+    },
+    provincearr: {
+      type: Array,
+      default:()=>[]
+    },
+    treelist: {
+      type: Array,
+      default: ()=>[]
+    },
+    dis:""
+  },
+  //props:['data','provincearr','treelist','dis'],
   data() {
     const contactorTel = (rule, value, callback) => {
       if (!value) {

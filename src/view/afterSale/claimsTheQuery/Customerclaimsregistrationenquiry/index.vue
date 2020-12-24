@@ -8,33 +8,42 @@
       ></quick-date>
       <span>创建日期:</span>
       <DatePicker
-        v-model="createTime"
-        format="yyyy-MM-dd HH:mm:ss"
-        type="date"
-        class="date"
-      ></DatePicker>
+        @on-change="getDataQuick"
+        :value="search.orderDate"
+        type="daterange"
+        placement="bottom-start"
+        placeholder="选择日期"
+        class="w200"
+        clearable
+      >
+      </DatePicker>
 
       <span class="ml5">理赔单位：</span>
       <Input
-        v-model="orderUnit"
+        v-model.trim="search.orderUnit"
         placeholder="请输入理赔单位"
         style="width: 200px"
         clearable
       />
       <i class="iconfont iconcaidan input" @click="Dealings"></i>
       <span>品牌：</span>
-      <Select v-model="brand" @on-change="getDataType" class="w90 mr10">
-        <Option
-          v-for="item in brandArr"
-          :value="item.value"
-          :key="item.value"
-          >{{ item.label }}</Option
-        >
+      <Select
+        class="w120"
+        clearable
+        label-in-value
+        filterable
+        @on-change="select1"
+        v-model.trim="search.partBrand"
+        placeholder="请选择品牌"
+      >
+        <Option v-for="item in brandArr" :value="item.label" :key="item.id">{{
+          item.label
+        }}</Option>
       </Select>
       <span class="ml5">配件编码/名称/内码：</span>
-      <Input v-model="Fittingscode" style="width: 200px" clearable />
+      <Input v-model.trim="search.partCode" style="width: 200px" clearable />
       <span>状态：</span>
-      <Select v-model="state" @on-change="getDataType1" class="w90 mr10">
+      <Select v-model.trim="search.orderSign" @on-change="getDataType1" class="w90 mr10">
         <Option
           v-for="item in stateArr"
           :value="item.value"
@@ -42,7 +51,7 @@
           >{{ item.label }}</Option
         >
       </Select>
-      <Button @click="query">查询</Button>
+      <Button type="warning" @click="query">查询</Button>
       <Button v-has="'export'">导出</Button>
     </div>
     <Selectss ref="Selectss" @getOne="getOne" />
@@ -60,107 +69,127 @@
         show-overflow
         @current-change="getOneClinet"
         height="400"
-        :data="tableData"
+        :data="claimSupplierData"
       >
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="revokeNum" title="分店名称" width="100"></vxe-table-column>
+        <vxe-table-column
+          field="shortName"
+          title="分店名称"
+          width="100"
+        ></vxe-table-column>
         <vxe-table-column field="revokeType" title="理赔单号" width="100">
           <template v-slot="{ row }">{{
             row.revokeType ? row.revokeType.name : ""
           }}</template>
         </vxe-table-column>
-        <vxe-table-column field="source" title="理赔单位" width="100"></vxe-table-column>
-        <vxe-table-column field="verifyNum" title="理赔日期" width="100"></vxe-table-column>
         <vxe-table-column
-          field="billCreateTime"
+          field="source"
+          title="理赔单位"
+          width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="afterSaleDate"
+          title="理赔日期"
+          width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="remark"
           title="备注"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="billCreateUname"
+          field="orderSignStatus"
           title="状态"
           width="100"
         ></vxe-table-column>
-        <vxe-table-column field="billAmt" title="配件内码" width="100"></vxe-table-column>
         <vxe-table-column
-          field="createTime"
+          field="partInnerId"
+          title="配件内码"
+          width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="partCode"
           title="配件编码"
           width="100"
         ></vxe-table-column>
-        <vxe-table-column field="createUname" title="配件名称" width="100"></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="partName"
+          title="配件名称"
+          width="100"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="oemCode"
           title="OEM码"
           width="100"
         ></vxe-table-column>
-       <vxe-table-column
-          field="revokeReason"
+        <vxe-table-column
+          field="partBrand"
           title="品牌"
           width="100"
-        ></vxe-table-column> 
-         <vxe-table-column
-          field="revokeReason"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="carModelName"
           title="品牌车型"
           width="100"
         ></vxe-table-column>
-         <vxe-table-column
-          field="revokeReason"
+        <vxe-table-column
+          field="unit"
           title="单位"
           width="100"
         ></vxe-table-column>
-         <vxe-table-column
-          field="revokeReason"
+        <vxe-table-column
+          field="afterSaleQty"
           title="理赔数量"
           width="100"
         ></vxe-table-column>
-         <vxe-table-column
-          field="revokeReason"
+        <vxe-table-column
+          field="afterSaleReason"
           title="理赔原因"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="processedQty"
           title="已处理数量"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="untreatedQty"
           title="未处理数量"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="spec"
           title="规格"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="carTypef"
           title="配件类别一级"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="carTypes"
           title="配件类别二级"
           width="100"
         ></vxe-table-column>
-         <vxe-table-column
-          field="revokeReason"
+        <vxe-table-column
+          field="createUname"
           title="创建人"
           width="100"
         ></vxe-table-column>
-         <vxe-table-column
-          field="revokeReason"
+        <vxe-table-column
+          field="createTime"
           title="创建日期"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
+          field="orderMan"
           title="提交人"
           width="100"
         ></vxe-table-column>
         <vxe-table-column
           field="revokeReason"
-          title="提交日期"
+          title="orderDate"
           width="100"
         ></vxe-table-column>
       </vxe-table>
@@ -207,7 +236,7 @@ span {
 button {
   margin-left: 10px;
 }
-.footer{
+.footer {
   margin-top: 5px;
 }
 </style>

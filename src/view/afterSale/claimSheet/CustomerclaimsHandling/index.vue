@@ -5,73 +5,63 @@
         <FormItem label="提交日期：" prop="billType">
           <!--                          :disabled=" form.xinzeng || form.status.value !== 0"-->
           <DatePicker
-            v-model="form.createTime"
-            format="yyyy-MM-dd HH:mm:ss"
-            type="date"
-            class="w160"
-          ></DatePicker>
+              @on-change="getDataQuick"
+              :value="search.orderDate"
+              type="daterange"
+              placement="bottom-start"
+              placeholder="选择日期"
+              class="w200 mr10"
+              clearable
+            >
+            </DatePicker>
         </FormItem>
         <FormItem label="理赔单位：" prop="remark"> 
             <Input 
-              v-model="form.remark"
+              v-model.trim="search.guestName"
               class="w160"
             ></Input>
         </FormItem>
-        <span style="margin-top:2px">配件编码/名称/内码:</span><Input v-model="form.orderMan" class="ipt"></Input>
+        <span style="margin-top:2px">配件编码/名称/内码:</span><Input v-model.trim="search.partCode" class="ipt"></Input>
         </FormItem>
-        品牌:
-        <Select
-                v-model="form.status"
-                @on-change="getDataType"
-                class="w90 mr10"
-              >
-                <Option
-                  v-for="item in form.purchaseTypeArr"
-                  :value="item.value"
-                  :key="item.value"
-                  >{{ item.label }}
-                  </Option
-                >
-          </Select>
         
+            <span class="mr10">品牌:</span>
+            <Select
+              class="w120"
+              clearable
+              label-in-value
+              filterable
+              @on-change="select1"
+              v-model.trim="search.partBrand"
+              placeholder="请选择品牌"
+            >
+              <Option v-for="item in bandArr" :value="item.label" :key="item.id">{{ item.label }}</Option>
+            </Select>
+         
           <!--                          :disabled="form.status.value !== 0"-->  
-            <span style="margin-top:2px">理赔单号:</span><Input class="ipt" v-model="form.serviceId"></Input>   
+            <span style="margin-top:2px;margin-left:15px">理赔单号:</span><Input class="ipt" v-model.trim="search.claimsCode"></Input>   
         
-        <Button style="margin-top:2px" @click="query">查询</Button>
+        <Button style="margin-top:2px" @click="ok">查询</Button>
       </Form>
     </div>
     <div class="nav">
-      <Button class="btn" @click="kickback">原货退还</Button><Button class="btn" @click="barter">换货处理</Button><Button class="btn" @click="reimburse">退款处理</Button><Button class="btn" @click="destory">原物销毁</Button><Button class="btn" @click="getExport">导出</Button>
+      <Button class="btn" @click="claim(1)">原货退还</Button><Button class="btn" @click="claim(2)">换货处理</Button><Button class="btn" @click="claim(3)">退款处理</Button><Button class="btn" @click="claim(4)">原物销毁</Button><Button class="btn" @click="getExport">导出</Button>
     </div>
     <div class="con">
       <vxe-table
                   v-if="showit"
-                  border
-                  resizable
-                  ref="xTable2"
-                  size="mini"
-                  align="center"
-                
-                  highlight-current-row
-                  highlight-hover-row
-                  :keyboard-config="{
-                    isArrow: true,
-                    isDel: true,
-                    isEnter: true,
-                    isTab: true,
-                    isEdit: true,
-                  }"
-                  @keydown="keydown"
-                  @current-change="currentChangeEvent"
-                  @select-all="selectAllEvent"
-                  @select-change="selectChangeEvent"
-                  :height="rightTableHeight"
-                  :data="tableData"
-                  :edit-config="
-                    form.tablestatus.value === 0
-                      ? { trigger: 'click', mode: 'cell' }
-                      : {}
-                  "
+                 border
+      auto-resize
+      resizable
+      :data="claimSupplierData"
+      size="mini"
+      ref="xTable"
+      show-overflow="title"
+      class="mt20"
+      :edit-rules="validRules"
+      :edit-config="{trigger: 'click', mode: 'cell'}"
+      @checkbox-all="claimSupplierSel"
+      @checkbox-change="claimSupplierSel"
+      @checkbox-cancel="claimSupplierSel"
                 >
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -86,13 +76,13 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partCode"
+                    field="orderDate"
                     title="提交日期"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partName"
+                    field="serviceId"
                     title="理赔单号"
                     width="100"
                   ></vxe-table-column>
@@ -104,42 +94,43 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="unit"
+                    field="partInnerId"
                     title="配件内码"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="orderQty"
+                    field="partCode"
                     title="配件编码"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="remark"
+                    field="partName"
                     title="配件名称"
                     width="100"
                    
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="storeStockQty"
+                    field="oemCode"
                     title="OEM码"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="outableQty"
+                    field="partBrand"
                     title="品牌"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="stockOutQty"
+                    field="afterSaleReason"
                     title="理赔原因"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
+                  field="afterSaleQty"
                     show-overflow="tooltip"
                     title="理赔数量"
                     width="100"
@@ -150,74 +141,69 @@
                   </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="oemCode"
+                    field="processedQty"
                     title="已处理数量"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="spec"
+                    field="untreatedQty"
                     title="未处理数量"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerIda"
+                    field="thisTreatmentQty"
                     title="本次处理数量"
                     width="120"
-                     :edit-render="{
-                      name: 'input',
-                      autoselect: true,
-                      attrs: { type: 'number' },
-                      events: { keyup: keydownEvent },
-                    }"
+                     :edit-render="{ name: 'input', autoselect: true }"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerIds"
+                    field="remark"
                     title="备注"
                     width="120"
                      :edit-render="{ name: 'input', autoselect: true }"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId3"
+                    field="returnQty"
                     title="原货退还"
                     width="120"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId1"
+                    field="replaceQty"
                     title="换货处理"
                     width="120"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId2"
+                    field="refundQty"
                     title="退款处理"
                     width="120"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId4"
+                    field="destructionQty"
                     title="原物销毁"
                     width="120"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId5"
+                    field="unit"
                     title="单位"
                     width="120"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId6"
+                    field="carModelName"
                     title="品牌车型"
                     width="120"
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partInnerId7"
+                    field="spec"
                     title="规格"
                     width="120"
                   ></vxe-table-column>

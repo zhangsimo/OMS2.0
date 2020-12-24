@@ -118,6 +118,9 @@
       this.$emit("search", data);
     }
     private exportxls(){
+
+
+      
       this.$emit("export")
     }
   }

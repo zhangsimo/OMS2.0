@@ -20,7 +20,7 @@
                 v-on:quickDate="getDataQuick1"
               ></quick-date>
               <Select
-                v-model="Leftcurrentrow.status"
+                v-model="purchaseType"
                 @on-change="getDataType1"
                 class="w90 mr10"
               >
@@ -49,7 +49,7 @@
                 class="mr10"
                 @click="baocun"
                 :loading="saveLoading"
-                :disabled="flag == false"
+                :disabled="flag == false|!bcflag"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -59,7 +59,7 @@
                 class="mr10"
                 @click="tijiao"
                 :loading="commitLoading"
-                :disabled="flag == false"
+                :disabled="row.orderSignStatus!='草稿'||mainId==''"
               >
                 提交
               </Button>
@@ -70,7 +70,12 @@
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="watchke" :loading="cancelLoading">
+              <Button
+                class="mr10"
+                @click="watchke"
+                :loading="cancelLoading"
+              
+              >
                 查看客户
               </Button>
             </div>
@@ -87,13 +92,14 @@
                 style="overflow-y: auto; height: 100%"
               >
                 <div class="pane-made-hd">单据列表</div>
-                <!-- <vxe-table
+                <vxe-table
                   border
                   ref="xTable"
                   resizable
                   size="mini"
                   align="center"
                   auto-resize
+                  resizeable
                   highlight-hover-row
                   highlight-current-row
                   show-overflow
@@ -112,7 +118,7 @@
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
-                    field="unit"
+                    field="guestName"
                     title="理赔单位"
                     width="100"
                   ></vxe-table-column>
@@ -132,8 +138,8 @@
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
-                    field="billCreateUname"
-                    title="print"
+                    field="print"
+                    title="打印次数"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
@@ -146,9 +152,9 @@
                     title="提交日期"
                     width="100"
                   ></vxe-table-column>
-                </vxe-table> -->
+                </vxe-table>
                 <Page
-                  size="mini"
+                  size="small"
                   :total="Left.page.total"
                   :page-size="Left.page.size"
                   :current="Left.page.num"
@@ -174,11 +180,18 @@
                   >
                     <span class="xin">*</span>
                     <FormItem label="理赔单位：">
-                      <Input
-                        :disabled="flag == false"
-                        v-model="Leftcurrentrow.units"
-                        class="w160"
-                      />
+                      <Tooltip
+                        :content="form.units"
+                        placement="bottom"
+                        max-width="140"
+                      >
+                        <Input
+                          show-overflow="tooltip"
+                          :disabled="flag == false||row.manualId"
+                          v-model="form.units"
+                          class="w160"
+                        />
+                      </Tooltip>
                     </FormItem>
                     <Button
                       class="ml5 btn1"
@@ -193,42 +206,47 @@
                     <FormItem label="理赔日期：">
                       <!-- :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0" -->
                       <DatePicker
-                        :value="Leftcurrentrow.createDate"
-                        format="yyyy-MM-dd HH:mm:ss"
+                        v-model="form.afterSaleDate"
+                        format="yyyy-MM-dd"
                         type="date"
                         class="w160"
                         :disabled="flag == false"
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：">
-                      <Tooltip :content="Leftcurrentrow.remark">
+                      <Tooltip :content="form.remark" placement="bottom" max-width="180">
                         <Input
+                          show-overflow="bottom"
                           :disabled="flag == false"
-                          v-model="Leftcurrentrow.remark"
+                          v-model="form.remark"
                           class="w160"
                           maxlength="255"
                         />
                       </Tooltip>
                     </FormItem>
                     <FormItem label="理赔单号：">
-                      <!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
-
-                      <Input
+                      <!--                          :disabled="form.status.value !== 0"-->
+                      <Tooltip :content="form.serviceId" placement="bottom" max-width="180">
+                    <Input
+                        show-overflow="bottom"
                         class="w160"
-                        v-model="Leftcurrentrow.serviceId"
-                        :disabled="flag == false"
-                        readonly
+                        v-model="form.serviceId"
+                        disabled
                       />
+                  </Tooltip>
+                      
                     </FormItem>
                     <FormItem label="手工单号：">
-                      <!-- :disabled="Leftcurrentrow.status.value !== 0" -->
-                      <Tooltip :content="Leftcurrentrow.moblenumber">
-                        <Input
+                      <!-- :disabled="form.status.value !== 0" -->
+                         <Tooltip :content="form.moblenumber" placement="bottom" max-width="180">
+                         <Input
+                          show-overflow="tooltip"
                           class="w160"
-                          v-model="Leftcurrentrow.moblenumber"
-                          :disabled="flag == false"
+                          v-model="form.moblenumber"
+                          disabled
                         />
-                      </Tooltip>
+                  </Tooltip>
+                      
                     </FormItem>
                   </Form>
                 </div>
@@ -239,69 +257,48 @@
                         size="small"
                         class="mr10"
                         @click="changep"
-                        :disabled="flag == false || !Leftcurrentrow.units"
+                        :disabled="flag == false || row.manualId"
                       >
                         添加配件
                       </Button>
                     </div>
                     <div class="fl mb5">
-                    <Poptip placement="bottom">
-                      <Button class="mr10" size="small" :disabled="mainId==''" v-has="'import'">导入配件
-                      </Button>
-                      <div slot="content" class="flex" style="justify-content: space-between">
-                        <div class="flex mr10">
-                          <Upload
-                            ref="upload1"
-                            :show-upload-list="false"
-                            :action="upurlInnerId"
-                            :headers="headers"
-                            :format="['xlsx','xls']"
-                            :on-format-error="onFormatError"
-                            :on-success="onSuccess"
-                            :before-upload='beforeUploadInnerId'
-                          >
-                            <Button
-                              size="small"
-                              @click="getRUlInnerId"
-                            ><span class="center"><Icon custom="iconfont icondaoruicon icons" />配件内码导入</span>
-                            </Button>
-                          </Upload>
+                      
+                        
+                        <div
+                          slot="content"
+                          class="flex"
+                          style="justify-content: space-between"
+                        >
+                          <div class="flex mr10">
+                            <Upload
+                              ref="upload1"
+                              :show-upload-list="false"
+                              :action="upurlInnerId"
+                              :headers="headers"
+                              :format="['xlsx', 'xls']"
+                              :on-format-error="onFormatError"
+                              :on-success="onSuccess"
+                              :before-upload="beforeUploadInnerId"
+                            >
+                              <Button size="small"  :disabled="row.orderSignStatus != '草稿' " @click="getRUlInnerId"
+                                ><span class="center"
+                                  ><Icon
+                                    custom="iconfont icondaoruicon icons"
+                                  />配件导入</span
+                                >
+                              </Button>
+                            </Upload>
+                          </div>
                         </div>
-                        <div class="flex">
-                          <Upload
-                            ref="upload"
-                            :show-upload-list="false"
-                            :action="upurl"
-                            :headers="headers"
-                            :format="['xlsx','xls']"
-                            :on-format-error="onFormatError"
-                            :on-success="onSuccess"
-                            :before-upload ='beforeUpload'
-                          >
-                            <Button size="small" class="mr10" @click="getRUl">
-                              <span class="center"><Icon custom="iconfont icondaoruicon icons" />编码品牌导入</span>
-                            </Button>
-                          </Upload>
-                        </div>
-                      </div>
-                    </Poptip>
-                  </div>
+                      
+                    </div>
                     <div class="fl mb5">
-                      <Poptip placement="bottom">
-                        <Button size="small" class="btns">
+                        <Button size="small" class="btns" @click="downInnerId">
                           <Icon
                             custom="iconfont iconxiazaiicon icons"
                           />下载模板
                         </Button>
-                        <div slot="content">
-                          <Button size="small" class="mr10" @click="downInnerId"
-                            >配件内码模板
-                          </Button>
-                          <Button size="small" @click="down"
-                            >编码品牌模板</Button
-                          >
-                        </div>
-                      </Poptip>
                     </div>
                     <div class="fl mb5">
                       <Button size="small" class="mr10" @click="shanchu">
@@ -311,7 +308,7 @@
                   </div>
                 </div>
 
-                <!-- <vxe-table
+                <vxe-table
                   v-if="showit"
                   border
                   resizable
@@ -319,7 +316,7 @@
                   size="mini"
                   align="center"
                   show-footer
-                :footer-method="footerMethod"
+                  :footer-method="footerMethod"
                   highlight-current-row
                   highlight-hover-row
                   :keyboard-config="{
@@ -330,15 +327,13 @@
                     isEdit: true,
                   }"
                   @keydown="keydown"
-                  @current-change="currentChangeEvent"
+                  @current-change="logDataMethod"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
-                  :data="Leftcurrentrow.processProductVO"
+                  :data="rightTop.details"
                   :edit-config="
-                    Leftcurrentrow.status.value === 0
-                      ? { trigger: 'click', mode: 'cell' }
-                      : {}
+                   row.orderSignStatus=='草稿'||!row.manualId ? { trigger: 'click', mode: 'cell' } : {}
                   "
                 >
                   <vxe-table-column
@@ -376,22 +371,30 @@
                     title="品牌"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column field="afterSaleQty" title="理赔数量" width="100">
-                  <template v-slot="{ row }">
-                    <vxe-input
-                      type="number"
-                      :max="row.isAddPart!=0?row.untreatedQty:100000000000"
-                      :min="1"
-                      v-model="row.afterSaleQty"
-                      :controls="false"
-                      :precision="0"
-                      @change="afterSaleQtyChange(row)"
-                      size="mini"
-                    />
-                  </template>
-                </vxe-table-column>
+                  <vxe-table-column
+                    field="afterSaleQty"
+                    title="理赔数量"
+                    width="100"
+                  >
+                    <template v-slot="{ row }">
+                      <vxe-input
+                        type="number"
+                        :max="
+                          1>0? row.untreatedQty : 100000000000
+                        "
+                        :min="1"
+                        v-model="row.afterSaleQty"
+                        :controls="false"
+                        :precision="0"
+                        :disabled="row.manualId"
+                        @change="afterSaleQtyChange(row)"
+                        size="mini"
+                      />
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
+                   
                     field="afterSaleReason"
                     title="理赔原因"
                     width="100"
@@ -441,15 +444,15 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field=""
+                    field="direction"
                     title="方向"
                     width="100"
                   ></vxe-table-column>
-                </vxe-table> -->
+                </vxe-table>
 
                 <div class="wrapper" style="margin-top: 20px">
                   <div style="margin: 5px 10px">处理日志</div>
-                  <!-- <vxe-table
+                  <vxe-table
                     border
                     resizable
                     size="mini"
@@ -490,11 +493,13 @@
                     ></vxe-table-column>
                     <vxe-table-column
                       show-overflow="tooltip"
-                      field="orderQty"
+                      field="recordQty"
                       title="数量"
                       width="100"
                     >
-                     
+                      <!--                          <template v-slot="{ row, seq }">-->
+                      <!--                            <span>{{ row.qty * currentNum }}</span>-->
+                      <!--                          </template>-->
                     </vxe-table-column>
                     <vxe-table-column
                       show-overflow="tooltip"
@@ -526,7 +531,7 @@
                       title="返回单号"
                       width="120"
                     ></vxe-table-column>
-                  </vxe-table> -->
+                  </vxe-table>
                 </div>
               </div>
             </Split>
@@ -569,7 +574,7 @@
         header-tit="客户资料"
         @selectSupplierName="getSupplierNamea"
       ></select-supplier>
-      <Print ref="print" v-show="false"></Print>
+      <Print ref="printZF" v-show="false"></Print>
     </div>
   </main>
   <!-- 配件组装 -->
@@ -668,7 +673,7 @@
   margin-bottom: 0;
 }
 .it-box .ivu-tabs-content.ivu-tabs-content-animated {
-  height: 100%;
+  /* // height: 100%; */
 }
 .redIT .ivu-form-item-label {
   color: red;
