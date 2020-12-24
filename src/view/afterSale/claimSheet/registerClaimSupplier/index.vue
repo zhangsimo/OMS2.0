@@ -17,6 +17,7 @@
       <Button
         class="mr10 w90"
         @click="save"
+        :disabled="formPlan.orderSign!=0||formPlan.id==undefined"
       >
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons"/>保存
@@ -274,6 +275,7 @@
                 :data="logData"
                 :loading="logDataLoading"
                 show-overflow="title"
+                ref="xLog"
                 class="ml15"
                 stripe
                 v-show="!addNewBool"

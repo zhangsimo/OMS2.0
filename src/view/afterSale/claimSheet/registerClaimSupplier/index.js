@@ -371,7 +371,7 @@ export default {
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
         ? new Date(this.formPlan.afterSaleDate)
         : "";
-      if (this.formPlan.details.length < 1 || this.formPlan.details.length==undefined) {
+      if (this.formPlan.details==null||this.formPlan.details.length < 1 ) {
         this.formPlan.partOrCustomerOnly = 0;
       } else {
         if (this.formPlan.details[0].enterMainId) {//判断是否从客户理赔登记单录入
@@ -386,6 +386,8 @@ export default {
       }
       this.logDataLoading=false;
       this.logData=[];
+      this.$refs.xLog.updateData()
+      console.log(this.logData,111)
     },
     //理赔数量录入
     afterSaleQtyChange(row) {
