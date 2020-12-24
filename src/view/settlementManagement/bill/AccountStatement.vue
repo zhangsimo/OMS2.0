@@ -225,7 +225,7 @@
           <vxe-table-column title="序号" type="seq" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column title="申请时间" field="createTime" width="140"></vxe-table-column>
           <vxe-table-column title="公司名称" field="orgName" width="120"></vxe-table-column>
-          <vxe-table-column title="对账单号" field="accountNo" width="120"></vxe-table-column>
+          <vxe-table-column title="对账单号" field="accountNo" width="180"></vxe-table-column>
           <vxe-table-column title="往来单位" field="guestName" width="120" fixed="left"></vxe-table-column>
           <vxe-table-column title="收付类型" field="paymentTypeName" width="120"></vxe-table-column>
           <vxe-table-column title="对账应收" field="accountsReceivable" width="120">

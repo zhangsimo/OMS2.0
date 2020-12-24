@@ -486,12 +486,20 @@
             return this.$Message.error("请选中一条表格中的数据")
           }
           let arr = [];
+          let flag = false
           this.selectItem.map(el => {
             let obj = {};
             obj.id = el.id;
             obj.thisClaimedAmt = el.rpAmt;
+            if(Number(el.rpAmt) < 0){
+              flag = true
+            }
             arr.push(obj)
           })
+          if(flag){
+            this.$message.error('本次认领金额不可小于零')
+            return
+          }
           if(!this.dataOne || !this.dataTwo){
             return this.$Message.error("没有对冲数据")
           }
