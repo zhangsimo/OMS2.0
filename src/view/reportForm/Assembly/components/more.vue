@@ -4,6 +4,7 @@
       <Row class="mb30">
         <span>创建日期:</span>
         <DatePicker
+       
           type="daterange"
           placement="bottom-end"
           style="width: 300px"
@@ -101,6 +102,7 @@ import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 // @ts-ignore
 import {getBrandList,getWares} from "@/view/reportForm/until";
+// @ts-ignore
 
 @Component({
   components: {
@@ -149,9 +151,12 @@ export default class MoreSearch extends Vue {
   }
 
   mounted() {
+    // 
+     
     // alert(this.getBrand)
     // console.log(this.getBrand);
   }
+ 
   private reset() {
     this.createDate = new Array();
     this.auditDate = new Array();
@@ -272,6 +277,9 @@ export default class MoreSearch extends Vue {
       if(strtW>31&&this.partCode==""){
          this.$message({message:'提交日期不可超过一个月，请重新选择',type:'error'})
          return
+      }
+      if(!this.createDate[0]&&this.partCode==""&&!this.auditDate[0]){
+          return this.$message({message:'日期不能为空，请重新选择',type:'error'})
       }
     let parent:any=this.$parent
     let search:any=parent.search

@@ -1269,6 +1269,7 @@ export default {
                 if(b.id == this.Leftcurrentrow.id) {
                   b._highlight = true;
                   this.Leftcurrentrow = b;
+                  this.Status = this.Leftcurrentrow.status.value;
                   const params = {
                     mainId: b.id
                   };
@@ -1282,6 +1283,7 @@ export default {
               if(this.Left.tbdata.length>0){
                 this.Left.tbdata[0]._highlight = true;
                 this.Leftcurrentrow = this.Left.tbdata[0];
+                this.Status = this.Leftcurrentrow.status.value;
                 const params = {
                   mainId: this.Leftcurrentrow.id
                 };
