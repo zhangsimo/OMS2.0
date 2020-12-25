@@ -865,8 +865,8 @@
               otherFees: this.infoBase.otherFees,
               payingBadDebts: this.infoBase.payingBadDebts,
               dealingRebates: this.infoBase.dealingRebates,
-              badDebtReceivable: this.collectBaddebt,
-              receivableRebate: this.collectRebate
+              badDebtReceivable: this.infoBase.badDebtReceivable,
+              receivableRebate:this.infoBase.receivableRebate
             }
           ]
         };
