@@ -10,9 +10,9 @@
       auto-resize
       resizable
       :data="tableData"
+      show-footer
+      :footer-method="footerMethod"
     >
-<!--      show-footer-->
-<!--      :footer-method="footerMethod"-->
       <vxe-table-column show-overflow="tooltip" field="group0" title="基本信息" fixed="left">
         <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
@@ -135,7 +135,7 @@
           width="80"
         ></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip"  title="销售税率信息">
+      <vxe-table-column show-overflow="tooltip" title="销售税率信息">
         <vxe-table-column show-overflow="tooltip" field="sellTaxSign" title="销售含税" width="70">
           <template v-slot="{ row }">
             <Checkbox disabled v-model="row.sellTaxSign"></Checkbox>
@@ -192,7 +192,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip"  title="成本信息">
+      <vxe-table-column show-overflow="tooltip" title="成本信息">
         <vxe-table-column
           show-overflow="tooltip"
           field="enterPrice"
@@ -326,7 +326,7 @@
 
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column show-overflow="tooltip"  title="其他">
+      <vxe-table-column show-overflow="tooltip" title="其他">
         <vxe-table-column
           show-overflow="tooltip"
           field="code"
@@ -403,6 +403,7 @@
   import * as api from "_api/reportForm/index.js";
   import {getAllMoneyMun} from "@/api/bill/saleOrder";
   import {hideLoading, showLoading} from "../../../../utils/loading";
+
   export default {
     data() {
       return {
@@ -415,7 +416,7 @@
         body: {},
         tableData: [],
         total: {},
-        allMoneyList:{},//全部数据总和来自数据库后端
+        allMoneyList: {},//全部数据总和来自数据库后端
       };
     },
     mounted() {
@@ -461,7 +462,7 @@
               if ([0, "0", "否"].includes(el.isMakActivity)) {
                 el.isMakActivity = false;
               }
-              el.sellNoTaxPrice=Math.round((el.sellNoTaxPrice + Number.EPSILON) * 100) / 100;
+              el.sellNoTaxPrice = Math.round((el.sellNoTaxPrice + Number.EPSILON) * 100) / 100;
               return el;
             });
             // this.total = res.data.sellOutBean;
@@ -476,7 +477,7 @@
         }
 
       },
-      async getAllMoney(){
+      async getAllMoney() {
         let params = {
           page: this.page.num - 1,
           size: this.page.size
@@ -485,8 +486,8 @@
         let obj = await getAllMoneyMun(params, this.body)
         if (obj.code == 0) {
           hideLoading()
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
-        }else{
+          this.allMoneyList = (obj.data.content || []).length > 0 ? obj.data.content[0] : {}
+        } else {
           hideLoading()
         }
       },
@@ -498,7 +499,7 @@
         };
         let obj = await getAllMoneyMun(params, this.body)
         if (obj.code === 0) {
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+          this.allMoneyList = (obj.data.content || []).length > 0 ? obj.data.content[0] : {}
         }
         let res = await api.getPjSellOutMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {

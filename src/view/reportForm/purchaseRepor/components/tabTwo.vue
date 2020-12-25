@@ -10,9 +10,9 @@
       auto-resize
       resizable
       :data="tableData"
+      show-footer
+      :footer-method="footerMethod"
     >
-<!--      show-footer-->
-<!--      :footer-method="footerMethod"-->
       <vxe-table-column show-overflow="tooltip" field="group0" title="基本信息" fixed="left">
         <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
@@ -276,7 +276,7 @@
 </template>
 
 <script>
-import { hideLoading, showLoading } from '@/utils/loading';
+  import {hideLoading, showLoading} from '@/utils/loading';
   import * as api from "_api/reportForm/index.js";
 
   export default {
@@ -291,7 +291,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
         body: {},
         tableData: [],
         total: {},
-        allMoneyList:{}
+        allMoneyList: {}
       };
     },
     mounted() {
@@ -304,11 +304,11 @@ import { hideLoading, showLoading } from '@/utils/loading';
           page: this.page.num - 1,
           size: this.page.size
         };
-      //  if(this.body.orgid==null){
-      //       return
-      //   }
+        //  if(this.body.orgid==null){
+        //       return
+        //   }
         try {
-          showLoading('.content-oper')   
+          showLoading('.content-oper')
           let res = await api.getPjPchsEnterMainDetails(this.body, params);
           if (res.code == 0 && res.data != null) {
             this.tableData = (res.data.content || []).map(el => {
@@ -318,7 +318,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
               if ([0, "0", "否"].includes(el.taxSign)) {
                 el.taxSign = false;
               }
-              el.orderType=el.orderType.name
+              el.orderType = el.orderType.name
               return el;
             });
             // this.total = res.data.purchaseEnterBean
@@ -332,14 +332,14 @@ import { hideLoading, showLoading } from '@/utils/loading';
           hideLoading()
         }
       },
-      async getAllMoney(){
+      async getAllMoney() {
         let params = {
           page: this.page.num - 1,
           size: this.page.size
         };
         let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
-        if (obj.code === 0){
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        if (obj.code === 0) {
+          this.allMoneyList = (obj.data.content || []).length > 0 ? obj.data.content[0] : {}
         }
       },
       async getAll() {
@@ -349,8 +349,8 @@ import { hideLoading, showLoading } from '@/utils/loading';
           size: this.page.total
         };
         let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
-        if (obj.code === 0){
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        if (obj.code === 0) {
+          this.allMoneyList = (obj.data.content || []).length > 0 ? obj.data.content[0] : {}
         }
         let res = await api.getPjPchsEnterMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
@@ -361,7 +361,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = "否";
             }
-            el.orderType=el.orderType.name
+            el.orderType = el.orderType.name
             return el;
           });
           // this.total = res.data.purchaseEnterBean
