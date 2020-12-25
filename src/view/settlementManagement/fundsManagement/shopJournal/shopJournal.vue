@@ -1559,7 +1559,6 @@ export default {
       data.accountMoney = this.accountMoney;
       data.accountCode = this.accountCode;
       this.allMoneyList = {};
-      console.log(data)
     },
 
     //获取表格信息
