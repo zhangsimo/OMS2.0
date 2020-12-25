@@ -93,9 +93,9 @@ const test = {
   // omsSettle: "http://192.168.30.97:9270",//
   // omsSettle: "http://192.168.30.144:9270",//
   // omsSettle: "http://192.168.21.59:9270",//
-  omsSettle: "http://192.168.15.87:9270",//
+  // omsSettle: "http://192.168.15.87:9270",//
   // omsSettle: "http://192.168.30.179:9270",//
-  // omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//
   omsSettle_h: "https://tsapi2.g-parts.cn/oms-settlement-provider-h",//
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   omsSotck_h: "https://tsapi2.g-parts.cn/oms-stock-provider-h",
