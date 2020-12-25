@@ -125,7 +125,9 @@ export default {
           search1.auditEndTime=search1.auditDate?moment(search1.auditDate[1]).format("YYYY-MM-DD")+" 23:59:59":""
           delete search1.auditDate
           for(var i in search1){
-            str+=`${i}=${search1[i]}&`
+            if(this.search1[i]!=undefined){
+              str+=`${i}=${search1[i]}&`
+            }
           }
           let page={size:this.$refs.tabOne.page.total,page:0}
           for(var i in page){
@@ -145,7 +147,9 @@ export default {
           search2.endOutDate=search2.auditDate?moment(search2.auditDate[1]).format("YYYY-MM-DD")+" 23:59:59":""
           delete search2.auditDate
           for(var i in search2){
-            str2+=`${i}=${search2[i]}&`
+            if(search2[i]!=undefined){
+              str2+=`${i}=${search2[i]}&`
+            }
           }
           let page2={size:this.$refs.tabTwo.page.total,page:0}
           for(var i in page2){
@@ -164,7 +168,9 @@ export default {
           search3.auditEndDate=search3.auditDate?moment(search3.auditDate[1]).format("YYYY-MM-DD")+" 23:59:59":""
           delete search3.auditDate
           for(var i in search3){
-            str3+=`${i}=${search3[i]}&`
+            if(search3[i]!=undefined){
+              str3+=`${i}=${search3[i]}&`
+            }
           }
           let page3={size:this.$refs.tabThree.page.total,page:0}
           for(var i in page3){
