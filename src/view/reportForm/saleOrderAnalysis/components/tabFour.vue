@@ -67,7 +67,7 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        showLoading();
+        showLoading('.content-oper');
         this.tableData = [];
         this.page.total = 0;
         let res = await api.getPjSellAnalyze(this.body, params);

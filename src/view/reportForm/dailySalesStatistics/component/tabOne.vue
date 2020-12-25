@@ -94,7 +94,7 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        showLoading()
+        showLoading('.bigbox')
         let res = await api.getDailySalesStatistics(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {

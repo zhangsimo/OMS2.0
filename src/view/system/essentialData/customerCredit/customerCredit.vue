@@ -113,7 +113,7 @@
         :quality="quality"
       ></CreditLineApplication>
       <div slot="footer">
-        <Button type="primary" @click="Determined">确定</Button>
+        <Button type="primary" @click="Determined" :loading="isDisab">确定</Button>
         <Button type="default" @click="cancel2">取消</Button>
       </div>
     </Modal>
@@ -480,7 +480,8 @@
         total: "", //调整后剩余额度
         totalSuma: "",
         flag: "",
-        editTopItemId: ""//记录操作的是第几条数据
+        editTopItemId: "",//记录操作的是第几条数据
+        isDisab: false,
       };
     },
     methods: {
@@ -871,14 +872,17 @@
         data.preAmt = this.payable.preAmt;
         // console.log(data)
         // return
+        this.isDisab = true
         save(data).then(res => {
           if (res.code === 0) {
             this.CreditLineApplicationShow = false;
             this.$Message.warning("保存成功");
             this.getListTop();
           }
+          this.isDisab = false
           hideLoading()
         }).catch(err=>{
+          this.isDisab = false
           hideLoading()
         })
       }

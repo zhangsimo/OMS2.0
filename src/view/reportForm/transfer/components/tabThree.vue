@@ -169,6 +169,13 @@
           width="200"
 
         ></vxe-table-column>
+        <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+        <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+        <vxe-table-column field="isTc" title="是否统采" width="100">
+          <template v-slot="{row}">
+            <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -187,6 +194,7 @@
 </template>
 
 <script>
+import { hideLoading, showLoading } from '@/utils/loading';
 import * as api from "_api/reportForm/index.js";
 export default {
   data() {
@@ -211,6 +219,7 @@ export default {
         page: this.page.num - 1,
         size: this.page.size,
       };
+      showLoading('.content-oper')
       let res = await api.getAllotAcceptRntDetails(this.body, params);
       if (res.code == 0 && res.data != null) {
         this.tableData = (res.data.content || []).map(el => {
@@ -229,6 +238,7 @@ export default {
         this.page.total = 0;
         this.tableData = [];
       }
+      hideLoading()
     },
     async getAll() {
       let tableDataAll = [];

@@ -264,7 +264,7 @@
                 <vxe-table-column  show-overflow="tooltip"
                   field="trueQty"
                   title="实盘数量"
-                  width="90"
+                  width="150"
                   :edit-render="{name: 'input',autoselect: true ,attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
                 >
                   <template v-slot:edit="{ row }">

@@ -1705,7 +1705,12 @@
         let sum = 0;
         let boolShow = true;
         let reg = /^[1-9]\d*$/
+        let re = /^(0|\+?[1-9][0-9]*)$/
+        let flag = false
         this.Reconciliationcontent.map(item => {
+          if(!re.test(item.thisNoAccountQty)){
+            flag = true
+          }
           item.thisNoAccountAmt = (this.$utils.toNumber(item.thisNoAccountQty) * item.price).toFixed(2)
           sum += item.thisNoAccountAmt * 1;
           if (this.$utils.toNumber(item.thisNoAccountQty) > item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty) < 0) {
@@ -1718,6 +1723,9 @@
           //   boolShow=false;
           // }
         });
+        if(flag){
+          return this.$message.error('本次不对账请输入正整数')
+        }
         if (!errMap && boolShow) {
           const index = this.Reconciliationcontent[0].index;
           if (this.business === "销售退货" || this.business === "销售出库") {
