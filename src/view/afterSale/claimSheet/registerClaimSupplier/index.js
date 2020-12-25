@@ -428,7 +428,7 @@ export default {
     },
 
     setSelected(row) {
-      
+
     this.$refs.formPlan.resetFields();
       this.$refs.xTab.setCurrentRow(row);
       this.formPlan = row;
@@ -627,25 +627,18 @@ export default {
       this.rightList = val.selection;
     },
     //删除
-    delect() {
+    async delect() {
       if (this.rightList.length < 1) {
         return this.$message.error("至少选择一条数据");
       }
-      // let arr=Object.assign([],this.formPlan.details)
-      // this.formPlan.details = this.array_diff(
-      //   arr,
-      //   this.rightList
-      // );
+      let data=[]
       this.rightList.map(el=>{
-        this.formPlan.details.map((el2,idx)=>{
-          if(el.id==el2.id){
-            this.formPlan.details.splice(idx,1)
-            idx=idx-1;
-          }
-        })
+          data.push(el.id)
       })
-
-      return this.$message.success("删除成功")
+      let res=await api.deteleAfterSaleOutDetail({detailId:data})
+      if(res.code===0){
+        return this.$message.success("删除成功")
+      }
     },
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {

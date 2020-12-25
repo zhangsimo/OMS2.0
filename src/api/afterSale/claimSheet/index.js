@@ -65,7 +65,14 @@ export function registerClaimSubmit(data){
 }
 //批量导入地址
 export const getup = `${api.omsOrder}/afterSaleOutDetail/import/partId`;
-
+//向供应商理赔登记 删除配件 afterSaleOutMain/deteleAfterSaleOutDetail
+export function deteleAfterSaleOutDetail(data){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleOutMain/deteleAfterSaleOutDetail`,
+    method:"post",
+    data
+  })
+}
 
 
 
