@@ -178,6 +178,7 @@
       }else{
         let par:any=this.$parent;
         let notSim:boolean=false;
+        par.formPlan.details=par.formPlan.details==null?[]:par.formPlan.details
         (par.formPlan.details || []).map(detEL=>{
           (this.checkData || []).map(arrEl=>{
             if(detEL.serviceId==arrEl.serviceId){
