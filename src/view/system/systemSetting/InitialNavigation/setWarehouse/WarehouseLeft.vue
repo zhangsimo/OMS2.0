@@ -45,6 +45,13 @@
             </FormItem>
           </Col>
         </Row>
+        <Row>
+          <Col span="12">
+            <FormItem label='是否对外隐藏：' >
+              <Checkbox v-model="warehouseData.isShow"></Checkbox>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
       <div slot='footer'>
         <Button type='primary' @click="add('formValidate')">确定</Button>
