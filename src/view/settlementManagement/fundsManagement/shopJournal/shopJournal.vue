@@ -1559,7 +1559,6 @@ export default {
       data.accountMoney = this.accountMoney;
       data.accountCode = this.accountCode;
       this.allMoneyList = {};
-      console.log(data)
     },
 
     //获取表格信息
@@ -1665,7 +1664,9 @@ export default {
         return this.$Message.error("请选择一条数据");
       }
       this.oneList = this.selectTableList[0];
-      // console.log(this.oneList)
+      if(this.oneList.claimShopCode.indexOf(',') !== -1){
+        return this.$Message.error('该笔资金被人工分配至多家门店，请先撤销分配后修改')
+      }
       // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
       if (this.oneList.collateState == 1)
         return this.$Message.error("只能修改未核销数据");

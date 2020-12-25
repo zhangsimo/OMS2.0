@@ -68,7 +68,7 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
-        showLoading()
+        showLoading('.content-oper')
         let res = await api.getPjSellAnalyze(this.body, params);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el => {
@@ -84,7 +84,7 @@
         }
       },
       async getAllMoney(){
-        showLoading()
+        showLoading('.content-oper')
         let resp2 = await api.sellOutMain(this.body);
         if(resp2.code==0){
           hideLoading()

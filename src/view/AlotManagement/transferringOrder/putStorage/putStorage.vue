@@ -38,7 +38,7 @@
               </Button>
             </div>-->
             <div class="db">
-              <Button :loading="isOutClick" v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1 || Status == 2">
+              <Button :loading="isOutClick" v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1 || Status == 2||Status===3&&getStoreIsWms">
                 <Icon type="md-checkmark" size="14" />入库
               </Button>
             </div>
@@ -576,6 +576,7 @@ export default {
         status: {
           value: 1
         },
+        storeId:'',
         storeName: "",
         createTime: "",
         orderMan: "",
@@ -616,6 +617,20 @@ export default {
     //调取仓库
     this.getWareHouse();
     // this.getArrayParams();
+  },
+  computed:{
+    getStoreIsWms(){
+      let filterStore = this.cangkuListall.filter(item => item.id==this.Leftcurrentrow.storeId);
+      if(filterStore.length>0){
+        if(filterStore[0].isWms){
+          return true
+        }else{
+          return false
+        }
+      }else{
+        return true
+      }
+    }
   },
   methods: {
     //------------------------------------------------------------------------//
@@ -1254,6 +1269,7 @@ export default {
                 if(b.id == this.Leftcurrentrow.id) {
                   b._highlight = true;
                   this.Leftcurrentrow = b;
+                  this.Status = this.Leftcurrentrow.status.value;
                   const params = {
                     mainId: b.id
                   };
@@ -1267,6 +1283,7 @@ export default {
               if(this.Left.tbdata.length>0){
                 this.Left.tbdata[0]._highlight = true;
                 this.Leftcurrentrow = this.Left.tbdata[0];
+                this.Status = this.Leftcurrentrow.status.value;
                 const params = {
                   mainId: this.Leftcurrentrow.id
                 };

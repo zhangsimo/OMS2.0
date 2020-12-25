@@ -92,7 +92,7 @@
         </Col>
       </Row>
     </div>
-    <Button @click="subject">选择添加科目</Button>
+    <Button @click="subject" :disabled="isSub === 0">选择添加科目</Button>
     <Row class="mt10">
       <Col span="16">
         <vxe-table
@@ -302,12 +302,14 @@ export default {
       collectPayId: "",
       obj: {},
       showModalOne: "",
+      isSub: '',//用来对账的数据是全是会计科目1，全是对账单0，不能混合
     };
   },
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", (val) => {
       // console.log(val , 7879);
+      this.isSub = 0
       this.reconciliationStatement.accountNo =
         this.reconciliationStatement.accountNo + ";" + val.serviceId;
       // val.map(item => {
@@ -334,6 +336,7 @@ export default {
     });
     //选择科目
     bus.$on("hedInfo", (val) => {
+      this.isSub = 1
       this.BusinessType.push({
         businessTypeName: val.titleName,
         reconciliationAmt: 0,
@@ -342,10 +345,14 @@ export default {
         rpAmt: 0,
         unAmtLeft: 0,
         isSubject: 1,
+        mateAccountCode: val.titleCode,
+        mateAccountName: val.titleName,
+        isAuxiliaryAccounting: val.isAuxiliaryAccounting,
       });
     });
     bus.$on("content", (val) => {
       this.obj = val;
+      this.isSub = 1
     });
     bus.$on("ChildContent", (value) => {
       value.auxiliaryTypeCode =
@@ -362,7 +369,8 @@ export default {
       }
       if (value.fullName) {
         this.BusinessType.push({
-          serviceTypeName: this.obj.fullName + "-" + value.fullName,
+          serviceTypeName: this.obj.fullName + "-" + value.shortName,
+          businessTypeName: this.obj.fullName + "-" + value.shortName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -372,14 +380,16 @@ export default {
           mateAccountCode: this.obj.titleCode,
           auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
-          auxiliaryName: value.fullName, //辅助核算名称
+          auxiliaryName: value.shortName, //辅助核算名称
           auxiliaryCode: value.code, //辅助核算项目编码
           isSubject: 1,
           paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
+          paymentTypeName: value.paymentTypeName ? value.paymentTypeName : "", //辅助核算的款项分类
         });
       } else if (value.userName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.userName,
+          businessTypeName: this.obj.fullName + "-" + value.userName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -389,14 +399,16 @@ export default {
           mateAccountCode: this.obj.titleCode,
           auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
-          auxiliaryName: value.fullName, //辅助核算名称
-          auxiliaryCode: value.code, //辅助核算项目编码
+          auxiliaryName: value.userName, //辅助核算名称
+          auxiliaryCode: value.id, //辅助核算项目编码
           isSubject: 1,
           paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
+          paymentTypeName: value.paymentTypeName ? value.paymentTypeName : "", //辅助核算的款项分类
         });
       } else if (value.itemName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.itemName,
+          businessTypeName: this.obj.fullName + "-" + value.itemName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -406,10 +418,11 @@ export default {
           mateAccountCode: this.obj.titleCode,
           auxiliaryTypeCode: value.auxiliaryTypeCode, //辅助核算选中哪一个
           isAuxiliaryAccounting: value.isAuxiliaryAccounting, //是否辅助核算类
-          auxiliaryName: value.fullName, //辅助核算名称
-          auxiliaryCode: value.code, //辅助核算项目编码
+          auxiliaryName: value.itemName, //辅助核算名称
+          auxiliaryCode: value.itemCode, //辅助核算项目编码
           isSubject: 1,
           paymentTypeCode: value.paymentTypeCode ? value.paymentTypeCode : "", //辅助核算的款项分类
+          paymentTypeName: value.paymentTypeName ? value.paymentTypeName : "", //辅助核算的款项分类
         });
       }
     });
@@ -441,6 +454,9 @@ export default {
     },
     // 对账单号选择
     accountNoClick() {
+      if(this.isSub === 1){   //如果已经选择过了会计科目就不能选择对账单
+        return this.$message.info('不能同时选用会计科目和对账单')
+      }
       this.$refs.accountSelette.modal1 = true;
     },
     //弹框打开
@@ -452,6 +468,7 @@ export default {
         this.BusinessType = [];
         this.tableData = [];
         this.collectPayId = "";
+        this.isSub = ''
         if (this.$parent.paymentId === "YSKZC") {
           this.$parent.claimModal = false;
         }
@@ -555,9 +572,8 @@ export default {
               this.$message.success("其他收款收回成功!");
               this.$parent.getQuery();
               this.$parent.typeA = "";
-            } else {
+            } 
               this.conserveDis = false;
-            }
           });
         } else if (this.$parent.Types === "其他收款核销") {
           const errMap = await this.$refs.xTree
@@ -604,6 +620,7 @@ export default {
               obj3.two = this.BusinessType;
               // obj3.three = this.tableData;
               obj3.type = 2;
+              obj3.isSub = this.isSub
               this.conserveDis = true;
               orderWriteOff(obj3).then((res) => {
                 if (res.code === 0) {
@@ -613,9 +630,8 @@ export default {
                   this.$message.success("其他收款核销成功!");
                   this.$parent.Types = "";
                   this.$parent.getQuery();
-                } else {
-                  this.conserveDis = false;
                 }
+                  this.conserveDis = false;
               });
               // this.$XModal.message({ status: 'success', message: '校验成功！' })
             }
@@ -641,9 +657,8 @@ export default {
               this.$parent.claimModal = false;
               this.$message.success("其他付款认领成功！");
               this.$parent.getQuery();
-            } else {
+            } 
               this.conserveDis = false;
-            }
           });
         }
       } else {

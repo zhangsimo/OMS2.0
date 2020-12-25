@@ -91,7 +91,11 @@
             <span>{{tongbi.cgTotalAmt+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="wcRate" title="外采率(%)" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="wcRate" title="外采率(%)" width="110">
+          <template v-slot="{row}">
+            <span>{{row.wcRate}}%</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group3" title="外部销售数据">
         <vxe-table-column  show-overflow="tooltip" field="wbSell" title="外部销售" width="70">
@@ -104,7 +108,11 @@
             <span>{{tongbi.wbGrossMargin+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="wbMaoliRate" title="外部毛利率(%)" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="wbMaoliRate" title="外部毛利率(%)" width="110">
+          <template v-slot="{row}">
+            <span>{{row.wbMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="wbTaxGrossMargin" title="外部税点毛利" width="110">
           <template v-slot:footer>
             <span>{{tongbi.wbTaxGrossMargin+'%'||0+'%'}}</span>
@@ -115,7 +123,11 @@
             <span>{{tongbi.wbNoTaxGrossMargin+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="wbNoTaxMaoliRate" title="外部非税点毛利率(%)" width="140"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="wbNoTaxMaoliRate" title="外部非税点毛利率(%)" width="140">
+          <template v-slot="{row}">
+            <span>{{row.wbNoTaxMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group4" title="HS销售数据">
         <vxe-table-column  show-overflow="tooltip" field="hsSell" title="HS销售" width="70">
@@ -128,7 +140,11 @@
             <span>{{tongbi.hsGrossMargin+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hsMaoliRate" title="HS毛利率(%)" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="hsMaoliRate" title="HS毛利率(%)" width="110">
+          <template v-slot="{row}">
+            <span>{{row.hsMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="hsTaxGrossMargin" title="HS税点毛利" width="110">
           <template v-slot:footer>
             <span>{{tongbi.hsTaxGrossMargin+'%'||0+'%'}}</span>
@@ -139,7 +155,11 @@
             <span>{{tongbi.hsNoTaxGrossMargin+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="hsNoTaxMaoliRate" title="HS非税点毛利率(%)" width="130"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="hsNoTaxMaoliRate" title="HS非税点毛利率(%)" width="130">
+          <template v-slot="{row}">
+            <span>{{row.hsNoTaxMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group5" title="内部销售数据">
         <vxe-table-column  show-overflow="tooltip" field="domesticSales" title="内部销售" width="70">
@@ -152,7 +172,11 @@
             <span>{{tongbi.domesticGrossMargin+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="nxMaoliRate" title="内部毛利率(%)" width="110"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="nxMaoliRate" title="内部毛利率(%)" width="110">
+          <template v-slot="{row}">
+            <span>{{row.nxMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column  show-overflow="tooltip" field="group6" title="销售数据">
         <vxe-table-column  show-overflow="tooltip" field="saleTotal" title="销售合计" width="70">
@@ -165,7 +189,11 @@
             <span>{{tongbi.grossMarginTotal+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="totalMaoliRate" title="合计毛利率(%)" width="120"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="totalMaoliRate" title="合计毛利率(%)" width="120">
+          <template v-slot="{row}">
+            <span>{{row.totalMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column  show-overflow="tooltip" field="totalTaxMaoli" title="合计税点毛利" width="140">
           <template v-slot:footer>
             <span>{{tongbi.totalTaxMaoli+'%'||0+'%'}}</span>
@@ -176,7 +204,11 @@
             <span>{{tongbi.totalNoTaxMaoli+'%'||0+'%'}}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column  show-overflow="tooltip" field="totalNoTaxMaoliRate" title="合计非税点毛利率(%)" width="140"></vxe-table-column>
+        <vxe-table-column  show-overflow="tooltip" field="totalNoTaxMaoliRate" title="合计非税点毛利率(%)" width="140">
+          <template v-slot="{row}">
+            <span>{{row.totalNoTaxMaoliRate}}%</span>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <!--<Page-->
@@ -218,7 +250,7 @@
     methods: {
       // 查询表
       async getList() {
-        showLoading();
+        showLoading('.bigbox');
         let res = await api.omsInvoicingReport(this.body);
         this.showFooter = false;
         hideLoading();
@@ -257,7 +289,7 @@
         return [
           columns.map((column, columnIndex) => {
             if (columnIndex === 0) {
-              return "统比";
+              return "环比";
             }
             // if (
             //   [

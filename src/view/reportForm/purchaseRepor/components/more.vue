@@ -9,7 +9,7 @@
           type="daterange"
           placement="bottom-end"
           style="width: 300px"
-          v-model="createDate"
+           v-model="createDate"
         ></DatePicker>
       </Row>
       <Row class="mb30" v-if="[1, 4].includes(type)">
@@ -143,7 +143,8 @@
   import {getStorelist} from "_api/reportForm/index.js";
   import {creat} from "@/view/settlementManagement/components";
   import {getBrandList,getWares} from "@/view/reportForm/until.js"
-
+    // @ts-ignore
+import {ToDayStr} from "_c/getDate/index_bill.js"
   @Component({
     components: {}
   })
@@ -346,6 +347,10 @@
       }
       if(strtW>31&&this.partCode==""){
          this.$message({message:'提交日期不可超过一个月，请重新选择',type:'error'})
+         return
+      }
+      if(!this.createDate[0]&&!this.auditDate[0]&&this.partCode==""){
+         this.$message({message:'日期范围不能为空，请重新选择',type:'error'})
          return
       }
       let parent: any = this.$parent

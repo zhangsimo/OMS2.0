@@ -600,7 +600,7 @@
             key: "orderNo",
             className: "tc",
             resizable: true,
-            width: 100,
+            width: 180,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -623,7 +623,7 @@
             key: "serviceId",
             className: "tc",
             resizable: true,
-            width: 80,
+            width: 180,
             render: (h, params) => {
               return h(
                 "span",
@@ -1045,7 +1045,7 @@
             key: "orderNo",
             className: "tc",
             resizable: true,
-            width: 80,
+            width: 180,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -1068,7 +1068,7 @@
             key: "serviceId",
             className: "tc",
             resizable: true,
-            width: 80,
+            width: 180,
             render: (h, params) => {
               return h(
                 "span",

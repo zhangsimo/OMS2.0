@@ -423,6 +423,7 @@
         this.$refs.AddInoice.handleSubmit(() => {
           let data = this.$refs.AddInoice.data
           data.taxpayerSign ? data.taxpayerSign = 0 : data.taxpayerSign = 1
+          data.taxpayerType = true
           data.guestId = this.accountData[0].guestId
           this.invoiceSellerList.push(this.$refs.AddInoice.data)
           this.newInoiceShow = false;

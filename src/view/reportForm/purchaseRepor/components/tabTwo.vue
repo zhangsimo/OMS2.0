@@ -10,9 +10,9 @@
       auto-resize
       resizable
       :data="tableData"
+      show-footer
+      :footer-method="footerMethod"
     >
-<!--      show-footer-->
-<!--      :footer-method="footerMethod"-->
       <vxe-table-column show-overflow="tooltip" field="group0" title="基本信息" fixed="left">
         <vxe-table-column show-overflow="tooltip" type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column show-overflow="tooltip" field="shortName" title="分店名称" width="100"></vxe-table-column>
@@ -251,6 +251,13 @@
           title="原因"
           width="240"
         ></vxe-table-column>
+        <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+        <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+        <vxe-table-column field="isTc" title="是否统采" width="100">
+          <template v-slot="{row}">
+            <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -269,6 +276,7 @@
 </template>
 
 <script>
+  import {hideLoading, showLoading} from '@/utils/loading';
   import * as api from "_api/reportForm/index.js";
 
   export default {
@@ -283,7 +291,7 @@
         body: {},
         tableData: [],
         total: {},
-        allMoneyList:{}
+        allMoneyList: {}
       };
     },
     mounted() {
@@ -296,36 +304,42 @@
           page: this.page.num - 1,
           size: this.page.size
         };
-      //  if(this.body.orgid==null){
-      //       return 
-      //   }
-        let res = await api.getPjPchsEnterMainDetails(this.body, params);
-        if (res.code == 0 && res.data != null) {
-          this.tableData = (res.data.content || []).map(el => {
-            if ([1, "1", "是"].includes(el.taxSign)) {
-              el.taxSign = true;
-            }
-            if ([0, "0", "否"].includes(el.taxSign)) {
-              el.taxSign = false;
-            }
-            el.orderType=el.orderType.name
-            return el;
-          });
-          // this.total = res.data.purchaseEnterBean
-          this.page.total = res.data.totalElements;
-        } else {
-          this.page.total = 0;
-          this.tableData = [];
+        //  if(this.body.orgid==null){
+        //       return
+        //   }
+        try {
+          showLoading('.content-oper')
+          let res = await api.getPjPchsEnterMainDetails(this.body, params);
+          if (res.code == 0 && res.data != null) {
+            this.tableData = (res.data.content || []).map(el => {
+              if ([1, "1", "是"].includes(el.taxSign)) {
+                el.taxSign = true;
+              }
+              if ([0, "0", "否"].includes(el.taxSign)) {
+                el.taxSign = false;
+              }
+              el.orderType = el.orderType.name
+              return el;
+            });
+            // this.total = res.data.purchaseEnterBean
+            this.page.total = res.data.totalElements;
+          } else {
+            this.page.total = 0;
+            this.tableData = [];
+          }
+          hideLoading()
+        } catch (error) {
+          hideLoading()
         }
       },
-      async getAllMoney(){
+      async getAllMoney() {
         let params = {
           page: this.page.num - 1,
           size: this.page.size
         };
         let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
-        if (obj.code === 0){
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        if (obj.code === 0) {
+          this.allMoneyList = (obj.data.content || []).length > 0 ? obj.data.content[0] : {}
         }
       },
       async getAll() {
@@ -335,8 +349,8 @@
           size: this.page.total
         };
         let obj = await api.getPjPchsEnterMainDetailsCount(this.body, params)
-        if (obj.code === 0){
-          this.allMoneyList = (obj.data.content || [] ).length > 0 ? obj.data.content[0] : {}
+        if (obj.code === 0) {
+          this.allMoneyList = (obj.data.content || []).length > 0 ? obj.data.content[0] : {}
         }
         let res = await api.getPjPchsEnterMainDetails(this.body, params);
         if (res.code == 0 && res.data != null) {
@@ -347,7 +361,7 @@
             if ([0, "0", "否"].includes(el.taxSign)) {
               el.taxSign = "否";
             }
-            el.orderType=el.orderType.name
+            el.orderType = el.orderType.name
             return el;
           });
           // this.total = res.data.purchaseEnterBean

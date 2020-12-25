@@ -688,7 +688,8 @@ export default {
       }
       this.voucherItem = {
         id: selectedData[selectedData.length - 1].id,
-        name: selectedData[selectedData.length - 1].name
+        shortName: selectedData[selectedData.length - 1].name,
+        fullName: selectedData[selectedData.length - 1].name
       };
     },
     // 辅助弹框个人搜索

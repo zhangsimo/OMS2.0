@@ -142,7 +142,7 @@
       <Button type="primary" @click="SubjectConfirm" class="mr10">保存</Button>
       <Button type="default" @click="subjectModelShow = false">取消</Button>
     </div>
-    <auxiliary ref="auxiliary" :assistTypeCode="assistTypeCode"/>
+    <auxiliary ref="auxiliary" :oneAccountent="accountingSubject" :assistTypeCode="assistTypeCode"/>
   </Modal>
 </template>
 

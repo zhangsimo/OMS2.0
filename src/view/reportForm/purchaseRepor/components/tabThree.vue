@@ -331,6 +331,13 @@
           title="原因"
           width="240"
         ></vxe-table-column>
+        <vxe-table-column field="dutyMan" title="产品负责人" width="100"></vxe-table-column>
+        <vxe-table-column field="businessUnit" title="所属事业部" width="100"></vxe-table-column>
+        <vxe-table-column field="isTc" title="是否统采" width="100">
+          <template v-slot="{row}">
+            <checkbox disabled v-model="row.isTc?true:false"></checkbox>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
     </vxe-table>
     <Page
@@ -351,6 +358,7 @@
 <script>
 import * as api from "_api/reportForm/index.js";
 import moment from 'moment'
+import { hideLoading, showLoading } from '@/utils/loading';
 export default {
   data() {
     return {
@@ -377,27 +385,33 @@ export default {
         size: this.page.size,
       };
       //  if(!this.body.orgid){
-      //       return 
+      //       return
       //   }
-      let res = await api.getPjPchsRtnMainDetails(this.body, params);
-      if (res.code == 0 && res.data != null) {
-       
-        this.tableData = (res.data.content || []).map(el => {
-          // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
-          // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
-          if ([1, "1", "是"].includes(el.taxSign)) {
-            el.taxSign = true;
-          }
-          if ([0, "0", "否"].includes(el.taxSign)) {
-            el.taxSign = false;
-          }
-          return el;
-        });
-        // this.total = res.data.sellOutBean
-        this.page.total = res.data.totalElements;
-      } else {
-        this.page.total = 0;
-        this.tableData = [];
+      try {
+        showLoading('.content-oper')
+        let res = await api.getPjPchsRtnMainDetails(this.body, params);
+        if (res.code == 0 && res.data != null) {
+  
+          this.tableData = (res.data.content || []).map(el => {
+            // el.outDate = el.outDate ? moment(el.outDate).format("YYYY-MM-DD") :''
+            // el.auditDate = el.auditDate ? moment(el.auditDate).format("YYYY-MM-DD") :''
+            if ([1, "1", "是"].includes(el.taxSign)) {
+              el.taxSign = true;
+            }
+            if ([0, "0", "否"].includes(el.taxSign)) {
+              el.taxSign = false;
+            }
+            return el;
+          });
+          // this.total = res.data.sellOutBean
+          this.page.total = res.data.totalElements;
+        } else {
+          this.page.total = 0;
+          this.tableData = [];
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
       }
     },
     async getAllMoney(){
@@ -406,7 +420,7 @@ export default {
         size: this.page.size,
       };
       // if(this.body.orgid==null){
-      //     return 
+      //     return
       //   }
       let obj = await api.findPjPchsRtnMainDetailsCount(this.body, params)
       if (obj.code === 0){

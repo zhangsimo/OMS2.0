@@ -94,7 +94,7 @@
         <vxe-table-column field="unClaimedAmt" width="80" title="未认领金额"></vxe-table-column>
         <vxe-table-column
           field="rpAmt"
-          :edit-render="{name: 'input', props: {type: 'float', digits: 2},immediate:true}"
+          :edit-render="{name: 'input',  attrs:{type: 'number'}, props: {type: 'float', digits: 2},immediate:true}"
           title="本次认领金额"
           width="120"
           align="center"
@@ -347,10 +347,10 @@
       async getQuery() {
         if (this.claimTit == "其他付款认领") {
           let data = {
-            startTime: this.value[0]
+            startDate: this.value[0]
               ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
               : "",
-            endTime: this.value[1]
+            endDate: this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : "",
             orgid: this.BranchstoreId,
@@ -486,12 +486,20 @@
             return this.$Message.error("请选中一条表格中的数据")
           }
           let arr = [];
+          let flag = false
           this.selectItem.map(el => {
             let obj = {};
             obj.id = el.id;
             obj.thisClaimedAmt = el.rpAmt;
+            if(Number(el.rpAmt) < 0){
+              flag = true
+            }
             arr.push(obj)
           })
+          if(flag){
+            this.$message.error('本次认领金额不可小于零')
+            return
+          }
           if(!this.dataOne || !this.dataTwo){
             return this.$Message.error("没有对冲数据")
           }

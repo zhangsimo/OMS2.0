@@ -293,3 +293,12 @@ export function getPart(data) {
     data
   })
 }
+
+
+// 添加物料弹窗
+export function getBusinessUnitList(data) {
+  return axios.request({
+    url:`${api.omsProduct}/part/getBusinessUnitList`,
+    method:'get'
+  })
+}

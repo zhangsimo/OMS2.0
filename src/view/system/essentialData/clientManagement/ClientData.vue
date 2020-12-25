@@ -357,8 +357,6 @@
             </div>
             <div class="financeTab">
               <Table
-                @on-current-change="pitchOnBank"
-                @on-row-dblclick="pitchOnBank"
                 @on-row-click="pitchOnBank"
                 highlight-row
                 border
@@ -666,16 +664,16 @@ export default {
             let text = "";
             params.row.taxpayerSign == true ? (text = "是") : (text = "否");
             return h(
-              "a",
+              "span",
               {
-                on: {
-                  click: () => {
-                    params.row.taxpayerSign = !params.row.taxpayerSign;
-                    this.invoice[params.index].taxpayerSign=params.row.taxpayerSign;
-                    this.inoiceIndex=params.index;
-                    this.disposeTax();
-                  }
-                }
+                // on: {
+                //   click: () => {
+                //     params.row.taxpayerSign = !params.row.taxpayerSign;
+                //     this.invoice[params.index].taxpayerSign=params.row.taxpayerSign;
+                //     this.inoiceIndex=params.index;
+                //     this.disposeTax();
+                //   }
+                // }
               },
               text
             );
@@ -1288,25 +1286,25 @@ export default {
             this.addInoiceOne = this.$refs.AddInoice.data;
             if(item.bankId!=undefined){
               if (item.bankId == this.addInoiceOne.bankId) {
-                let newarr = {};
-                newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
-                item.taxpayerName = newarr.taxpayerName;
-                item.taxpayerCode = newarr.taxpayerCode;
-                item.taxpayerTel = newarr.taxpayerTel;
-                item.accountBankNo = newarr.accountBankNo;
-                item.taxpayerSign = newarr.taxpayerSign;
-                item.taxpayerType=true
+                // let newarr = {};
+                // newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+                item.taxpayerName = this.addInoiceOne.taxpayerName;
+                item.taxpayerCode = this.addInoiceOne.taxpayerCode;
+                item.taxpayerTel = this.addInoiceOne.taxpayerTel;
+                item.accountBankNo = this.addInoiceOne.accountBankNo;
+                item.taxpayerSign = this.addInoiceOne.taxpayerSign;
+                item.taxpayerType=this.addInoiceOne.taxpayerType
               }
             }else{
               if (item.id == this.addInoiceOne.id) {
-                let newarr = {};
-                newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
-                item.taxpayerName = newarr.taxpayerName;
-                item.taxpayerCode = newarr.taxpayerCode;
-                item.taxpayerTel = newarr.taxpayerTel;
-                item.accountBankNo = newarr.accountBankNo;
-                item.taxpayerSign = newarr.taxpayerSign;
-                item.taxpayerType=true
+                // let newarr = {};
+                // newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+                item.taxpayerName = this.addInoiceOne.taxpayerName;
+                item.taxpayerCode = this.addInoiceOne.taxpayerCode;
+                item.taxpayerTel = this.addInoiceOne.taxpayerTel;
+                item.accountBankNo = this.addInoiceOne.accountBankNo;
+                item.taxpayerSign = this.addInoiceOne.taxpayerSign;
+                item.taxpayerType=this.addInoiceOne.taxpayerType
               }
             }
           });
@@ -1343,6 +1341,7 @@ export default {
     },
     //选中银行
     pitchOnBank(selection,index) {
+      console.log(selection,111)
       this.addInoiceOne = selection;
       this.inoiceIndex=index;
       if (selection.taxpayerType == true) {
@@ -1350,7 +1349,7 @@ export default {
       } else {
         this.enAbleTax = "启用";
       }
-      this.disposeTax();
+      // this.disposeTax();
     },
     //修改银行
     changeBank() {
@@ -1368,7 +1367,7 @@ export default {
         }
       })
       this.newInoiceShow = true;
-      this.disposeTax();
+      // this.disposeTax();
     },
     deletBank() {
       this.invoice.map(item => {

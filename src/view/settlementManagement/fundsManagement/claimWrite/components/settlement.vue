@@ -392,7 +392,12 @@
               bool = false;
               return
             }
-            if (row.thisClaimedAmt <= 0 || row.thisClaimedAmt > row.unClaimedAmt) {
+            if(row.thisClaimedAmt <= 0){
+              this.$message.error('本次认领金额不可小于等于零')
+              bool = false
+              return
+            }
+            if (row.thisClaimedAmt > row.unClaimedAmt) {
               this.$message.error('本次认领金额不可大于未认领金额')
               bool = false
               return

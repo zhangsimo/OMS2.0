@@ -55,7 +55,8 @@ export const minxParts = {
       searchValue: "",
       //审核日期查询
       dateTime: "",
-
+      //显示自己
+      showPerson:true,
       //单位换算存在的list
       valueVOS: [
         {
@@ -175,7 +176,17 @@ export const minxParts = {
                   "●" + apptxt
                 );
               }
-            }
+            },
+            {
+              title: "所属事业部",
+              key: "businessUnit",
+              minWidth: 70
+            },
+            {
+              title: "产品负责人",
+              key: "dutyMan",
+              minWidth: 70
+            },
           ]
         },
         {
@@ -235,7 +246,8 @@ export const minxParts = {
       }
       //配件审核状态
       params.auditSign = this.approvalType;
-
+      //显示自己
+      this.showPerson?params.showPerson = 1:"";
       params.page = this.page.num - 1;
       params.size = this.page.size;
       this.loading = false;
