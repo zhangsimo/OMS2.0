@@ -93,9 +93,9 @@ const test = {
   // omsSettle: "http://192.168.30.97:9270",//
   // omsSettle: "http://192.168.30.144:9270",//
   // omsSettle: "http://192.168.21.59:9270",//
-  // omsSettle: "http://192.168.15.87:9270",//
+  omsSettle: "http://192.168.15.87:9270",//
   // omsSettle: "http://192.168.30.179:9270",//
-  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//
+  // omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",//
   omsSettle_h: "https://tsapi2.g-parts.cn/oms-settlement-provider-h",//
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   omsSotck_h: "https://tsapi2.g-parts.cn/oms-stock-provider-h",
@@ -126,6 +126,8 @@ const audit = {
   wmsApi: "https://uatapi2.g-part.cn/oms-system-provider",
   omsProduct: "https://uatapi2.g-part.cn/oms-product-provider",
   omsOrder: "https://uatapi2.g-part.cn/oms-order-provider",
+  omsOrder_h: "https://uatapi2.g-part.cn/oms-order-provider",
+
   passportApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
@@ -151,6 +153,7 @@ const pro = {
   wmsApi: "https://api2.g-part.cn/oms-system-provider",
   omsProduct: "https://api2.g-part.cn/oms-product-provider",
   omsOrder: "https://api2.g-part.cn/oms-order-provider",
+  omsOrder_h: "https://api2.g-part.cn/oms-order-provider",
   passportApi: "https://api2.g-part.cn/gpart-passport-provider",
   essentialApi: "https://api2.g-part.cn/oms-essential-provider",
   authApi: "https://api2.g-part.cn/gpart-passport-provider",
