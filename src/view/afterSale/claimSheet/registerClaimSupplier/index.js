@@ -237,6 +237,7 @@ export default {
           }
           return el;
         });
+        this.addNewBool=false;
         this.leftPage.total = res.data.totalElements;
         if (this.selectLeftItemId) {
           for (let b of this.leftTableData) {
@@ -294,6 +295,7 @@ export default {
           }
           return el;
         });
+        this.addNewBool=false;
         this.leftPage.total = res.data.totalElements;
         if (this.selectLeftItemId) {
           for (let b of this.leftTableData) {
@@ -596,7 +598,7 @@ export default {
     },
     //选中出现 处理记录
     async logDataMethod({row}) {
-      if (this.addNewBool) {
+      if (this.addNewBool || !row.id) {
         return
       } else {
         this.logDataLoading = true;
