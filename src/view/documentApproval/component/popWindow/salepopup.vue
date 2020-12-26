@@ -912,7 +912,6 @@ export default {
           showLoading()
           submitDraft(obj).then(res => {
             if (res.code === 0) {
-              this.preDis=false;
               this.$message.success("提交成功");
               hideLoading()
             }else{
