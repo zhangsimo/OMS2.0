@@ -462,7 +462,6 @@ export default {
                 this.formPlan = {
                   code: ""
                 };
-                this.selectLeftItemId = undefined;
                 this.getLeftLists();
                 this.$Message.success("保存成功");
                 this.flag = 0;
@@ -510,7 +509,6 @@ export default {
                 this.formPlan = {
                   code: ""
                 };
-                this.selectLeftItemId = undefined;
                 this.getLeftLists();
                 this.$Message.success("保存成功");
                 this.flag = 0;
