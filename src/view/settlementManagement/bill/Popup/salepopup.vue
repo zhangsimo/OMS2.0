@@ -20,32 +20,30 @@
       <!--v-has="'examine'"-->
     <!--&gt;增加不含税销售开票申请</button>-->
     <h4 class="mt10 mb10">基本信息</h4>
-    <Row>
-      <Col span="6">
+    <Row style="border:1px solid #000c17;">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;box-sizing:border-box;border-right:1px solid #000c17">
         <span>分店名称：{{information.orgName}}</span>
       </Col>
-      <Col span="6">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
         <span>分店店号：{{information.code}}</span>
       </Col>
-      <Col span="6">
-        <span>往来单位：{{information.guestName}}</span>
-      </Col>
-      <Col span="6">
-        <span>对账单号：{{information.accountNo}}</span>
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;">
+        <Poptip placement="top" trigger="hover" :content="information.guestNames" max-width="160">
+          <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">往来单位：{{information.guestNames}}</div>
+        </Poptip>
       </Col>
     </Row>
-    <Row class="mt10 ml10">
-      <Col span="6">
+    <Row style="border:1px solid #000c17;border-top: none;">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
         <span>开票申请单号：{{information.applyNo}}</span>
       </Col>
-      <Col span="6">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
         <span>申请时间：{{information.applicationDate}}</span>
       </Col>
-      <Col span="6">
-        <span>油品-开票申请单号： <span>{{information.oilsListOrder}}</span></span>
-      </Col>
-      <Col span="6">
-        <span>配件-开票申请单号： <span>{{information.partsListOrder}}</span></span>
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;">
+        <Poptip placement="top" trigger="hover" :content="information.accountNos" max-width="160">
+          <div  style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">对账单号：{{information.accountNos}}</div>
+        </Poptip>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
@@ -53,7 +51,7 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="发票单位" prop="receiptUnit">
-            <Select v-model="invoice.receiptUnit" class="ml5 w200" @on-change="invoiceChange">
+            <Select v-model.trim="invoice.receiptUnit" class="ml5 w200" @on-change="invoiceChange">
               <Option
                 v-for="item in invoice.receiptUnitList"
                 :value="item.value"
@@ -62,16 +60,16 @@
             </Select>
           </FormItem>
           <FormItem label="税号" prop="taxNo">
-            <Input v-model="invoice.taxNo" class="ml5 w200" />
+            <Input v-model.trim="invoice.taxNo" class="ml5 w200" />
           </FormItem>
           <FormItem label="地址电话" prop="tel">
-            <Input v-model="invoice.tel" class="ml5 w200" />
+            <Input v-model.trim="invoice.tel" class="ml5 w200" />
           </FormItem>
           <FormItem label="开户行及账号" prop="bankName">
-            <Input v-model="invoice.bankName" class="ml5 w200" />
+            <Input v-model.trim="invoice.bankName" class="ml5 w200" />
           </FormItem>
-          <FormItem label="开票单位" prop="invoiceUnit">
-            <Select v-model="invoice.invoiceUnit" class="ml5 w200">
+          <FormItem label="开票单位" prop="issuingOfficeId">
+            <Select v-model.trim="invoice.issuingOfficeId" class="ml5 w200" @on-change="invoUnitChange" >
               <Option
                 v-for="item in invoice.issuingOfficeList"
                 :value="item.value"
@@ -80,25 +78,13 @@
             </Select>
           </FormItem>
           <FormItem label="开票税率" prop="invoiceTax">
-            <Select v-model="invoice.invoiceTax" class="ml5 w200" disabled>
-              <Option
-                v-for="item in invoice.rateBillingList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <Input type="text" v-model.trim="invoice.invoiceTax" class="ml5 w200" disabled/>
           </FormItem>
           <FormItem label="票据类型" prop="invoiceType">
-            <Select v-model="invoice.invoiceType" class="ml5 w200">
-              <Option
-                v-for="item in invoice.typeBillingList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <Input type="text" v-model.trim="invoice.invoiceType" class="ml5 w200" disabled/>
           </FormItem>
           <FormItem label="收款方式" prop="collectionType">
-            <Select v-model="invoice.collectionType" class="ml5 w200">
+            <Select v-model.trim="invoice.collectionType" class="ml5 w200">
               <Option
                 v-for="item in invoice.paymentMethodList"
                 :value="item.value"
@@ -109,16 +95,16 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="快递收件人" prop="consignee">
-            <Input v-model="invoice.consignee" class="ml5 w200" />
+            <Input v-model.trim="invoice.consignee" class="ml5 w200" />
           </FormItem>
           <FormItem label="收件地址" prop="address">
-            <Input v-model="invoice.address" class="ml5 w200" />
+            <Input v-model.trim="invoice.address" class="ml5 w200" />
           </FormItem>
           <FormItem label="电话" prop="phone">
-            <Input v-model="invoice.phone" class="ml5 w200" placeholder="固定电话格式为xxx-xxxxxx"/>
+            <Input v-model.trim="invoice.phone" class="ml5 w200" placeholder="固定电话格式为xxx-xxxxxx"/>
           </FormItem>
           <FormItem label="寄件方式" prop="sendingWay">
-            <Select v-model="invoice.sendingWay" class="ml5 w200">
+            <Select v-model.trim="invoice.sendingWay" class="ml5 w200">
               <Option
                 v-for="item in invoice.waySendingList"
                 :value="item.value"
@@ -127,7 +113,7 @@
             </Select>
           </FormItem>
           <FormItem label="费用承担" prop="costBear">
-            <Select v-model="invoice.costBear" class="ml5 w200">
+            <Select v-model.trim="invoice.costBear" class="ml5 w200">
               <Option
                 v-for="item in invoice.bearingCostList"
                 :value="item.value"
@@ -136,7 +122,7 @@
             </Select>
           </FormItem>
           <FormItem label="快递备注">
-            <Input v-model="invoice.remark" class="ml5 w200" />
+            <Input v-model.trim="invoice.remark" class="ml5 w200" />
           </FormItem>
           <FormItem>
             <span style="color:#0099FF;cursor:pointer;" @click="quote">引用上次申请信息</span>
@@ -144,22 +130,13 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="对账单欠票金额" prop="statementAmtOwed">
-            <Input v-model="invoice.statementAmtOwed" class="ml5 w200" disabled />
+            <Input v-model.trim="invoice.statementAmtOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" prop="applyTaxAmt" >
-            <Input-number :max="1000000000" :min="0" v-model="invoice.applyTaxAmt" class="ml5 w200" @on-blur="confirmTheAmount " />
+            <Input-number :max="1000000000" :min="0" v-model.trim="invoice.applyTaxAmt" class="ml5 w200" @on-blur="confirmTheAmount " />
           </FormItem>
-          <!--<FormItem label="不含税金额" prop="notTaxAmt">-->
-            <!--<Input v-model="invoice.notTaxAmt" class="ml5 w200" disabled />-->
-          <!--</FormItem>-->
-          <!--<FormItem label="外加税点" prop="additionalTaxPoint">-->
-            <!--<Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />-->
-          <!--</FormItem>-->
-          <!--<FormItem label="申请开票金额" >-->
-            <!--<Input v-model="invoice.applyAmt" class="ml5 w200" disabled />-->
-          <!--</FormItem>-->
           <FormItem label="开票说明" >
-            <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
+            <Input v-model.trim="invoice.underTicketExplain" class="ml5 w200" />
           </FormItem>
         </div>
       </div>
@@ -208,6 +185,11 @@
           <vxe-table-column field="saleAmt" title="销售金额" >
             <template v-slot="{row}">
               {{row.saleAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="thisAccountAmt" title="本次对账金额" >
+            <template v-slot="{row}">
+              {{row.thisAccountAmt | priceFilters}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="invoiceAmt" title="已开票金额" >
@@ -271,6 +253,11 @@
               {{row.saleAmt | priceFilters}}
             </template>
           </vxe-table-column>
+          <vxe-table-column field="thisAccountAmt" title="本次对账金额" >
+            <template v-slot="{row}">
+              {{row.thisAccountAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="invoiceAmt" title="已开票金额" >
             <template v-slot="{row}">
               {{row.invoiceAmt | priceFilters}}
@@ -305,7 +292,8 @@ import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictiona
 import { approvalStatus } from "_api/base/user";
 import {
   noTaxApplyNo,
-  ditInvoice,
+  ditInvoices,
+  findCurrentIssuing,
   informationCitation,
   partsInvoice,
   saveDraft,
@@ -380,7 +368,7 @@ export default {
         taxNo: "", //税号
         tel: "", //地址电话
         bankName: "", //开户行及账号
-        invoiceUnit: "", //开票单位
+        issuingOfficeId: "", //开票单位
         issuingOfficeList: [], //开票单位列表
         invoiceType: "", //开票类型
         typeBillingList: [], //开票类型列表
@@ -446,24 +434,10 @@ export default {
             message: "开户行及账号不能为空"
           }
         ],
-        invoiceUnit: [
+        issuingOfficeId: [
           {
             required: true,
             message: "开票单位不能为空",
-            trigger: "change"
-          }
-        ],
-        invoiceType: [
-          {
-            required: true,
-            message: "开票类型不能为空",
-            trigger: "change"
-          }
-        ],
-        invoiceTax: [
-          {
-            required: true,
-            message: "开票税率不能为空",
             trigger: "change"
           }
         ],
@@ -536,19 +510,6 @@ export default {
     };
   },
   mounted() {
-    // 税率和开票类型数据字典
-    getDataDictionaryTable({ dictCode: "CS00107" }).then(res => {
-      res.data.map(item => {
-        this.invoice.typeBillingList.push({
-          value: item.itemCode,
-          label: item.itemName
-        });
-        this.invoice.rateBillingList.push({
-          value: item.itemCode,
-          label: (item.itemValueOne * 100).toFixed(0) + "%"
-        });
-      });
-    });
     // 收款方式数据字典
     getDataDictionaryTable({ dictCode: "RECEIVABLE_TYPE" }).then(res => {
       res.data.map(item => {
@@ -567,12 +528,14 @@ export default {
         });
       });
     });
-    // 开票单位数据字典
-    getDataDictionaryTable({ dictCode: "KPDW" }).then(res => {
+    // 开票单位
+    findCurrentIssuing().then(res => {
       res.data.map(item => {
         this.invoice.issuingOfficeList.push({
-          value: item.itemCode,
-          label: item.itemName
+          value: item.id,
+          label: item.name,
+          taxRateName:item.taxRateName,
+          invoiceTypeName:item.invoiceTypeName
         });
       });
     });
@@ -633,6 +596,14 @@ export default {
     });
   },
   methods: {
+    invoUnitChange(option){
+      this.invoice.issuingOfficeList.map(el=>{
+        if(el.id==option.value){
+          this.invoice.invoiceTax=el.taxRateName;
+          this.invoice.invoiceType=el.invoiceTypeName;
+        }
+      })
+    },
     //够选的数据放上面
     partsData(v){
       let oldPartData = [...this.accessoriesBillingData];
@@ -646,7 +617,7 @@ export default {
             arrData1.push(item);
           }
         });
-        if (this.$parent.reconciliationStatement.isOilPart == 1){
+        if (this.$parent.salepopupList[0].isOilPart == 1){
           this.accessoriesBillingData1 = bbArr.concat(arrData1)
         } else {
           this.accessoriesBillingData2 = bbArr.concat(arrData1)
@@ -705,8 +676,10 @@ export default {
         this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
         this.invoice.notTaxAmt = 0
         this.invoice.applyAmt = this.invoice.applyTaxAmt + this.invoice.notTaxAmt
+        this.invoice.invoiceTax="";
+        this.invoice.invoiceType="";
         // 发票单位
-        ditInvoice({ guestId: this.information.guestId }).then(res => {
+        ditInvoices(this.information.guestIds.split(";") ).then(res => {
           if (res.code === 0) {
             res.data.map(item => {
               item.label = item.taxpayerName;
@@ -743,7 +716,7 @@ export default {
           }else{
             // 开票配件
             partsInvoice({
-              accountNo: this.information.accountNo,
+              accountNos: this.information.accountNos.split(";"),
               taxSign: 1
             }).then(res => {
               if (res.code === 0) {
@@ -763,7 +736,7 @@ export default {
     },
     //填充表格数据
     setTableData(){
-      if (this.$parent.reconciliationStatement.isOilPart == 1){
+      if (this.$parent.salepopupList[0].isOilPart == 1){
         this.accessoriesBillingData1 = this.accessoriesBillingData
       } else {
         this.accessoriesBillingData2 = this.accessoriesBillingData
@@ -845,14 +818,14 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
-            orgCode: this.information.code,
-            orgid: this.information.orgId,
+            orgCode: this.$store.state.user.userData.currentCompany.code,
+            orgid: this.$store.state.user.userData.currentCompany.id,
             orgName: this.information.orgName,
-            guestId: this.information.guestId,
-            accountNo: this.information.accountNo,
+            guestIds: this.information.guestIds.split(";"),
+            accountNos: this.information.accountNos.split(";"),
             applyNo: this.information.applyNo,
             applyDate: this.information.applicationDate,
-            guestName: this.information.guestName,
+            guestNames: this.information.guestNames.split(";"),
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
             isOilPart: this.$parent.data1[0].isOilPart,
@@ -896,14 +869,14 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
-            orgCode: this.information.code,
-            orgid: this.information.orgId,
+            orgCode: this.$store.state.user.userData.currentCompany.code,
+            orgid: this.$store.state.user.userData.currentCompany.id,
             orgName: this.information.orgName,
-            guestId: this.information.guestId,
-            accountNo: this.information.accountNo,
+            guestIds: this.information.guestIds.split(";"),
+            accountNos: this.information.accountNos.split(";"),
             applyNo: this.information.applyNo,
             applyDate: this.information.applicationDate,
-            guestName: this.information.guestName,
+            guestNames: this.information.guestNames.split(";"),
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
             isOilPart: this.$parent.data1[0].isOilPart,
