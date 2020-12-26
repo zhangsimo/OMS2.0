@@ -641,18 +641,6 @@ export default {
         return this.$message.success("删除成功")
       }
     },
-    array_diff(a, b) {
-      for (var i = 0; i < b.length; i++) {
-        for (var j = 0; j < a.length; j++) {
-          if (a[j].id == b[i].id) {
-            a.splice(j, 1);
-            j = j - 1;
-          }
-        }
-      }
-      console.log(a,b,111)
-      return a;
-    },
     getRUl() {
       this.upurl = api.getup + "?id=" + this.formPlan.id;
     },
