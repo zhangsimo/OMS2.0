@@ -635,8 +635,9 @@ export default {
       this.rightList.map(el=>{
           data.push(el.id)
       })
-      let res=await api.deteleAfterSaleOutDetail({detailId:data})
+      let res=await api.deteleAfterSaleOutDetail(data)
       if(res.code===0){
+        this.getLeftLists();
         return this.$message.success("删除成功")
       }
     },
