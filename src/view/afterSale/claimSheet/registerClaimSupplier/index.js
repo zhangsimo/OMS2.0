@@ -190,9 +190,7 @@ export default {
       order.id = this.formPlan.id;
       let printZF = this.$refs.printZF;
       printZF.openModal(order)
-      setTimeout(()=>{
-        this.getLeftLists()
-      })
+      this.getLeftLists()
     },
     // 打开更多搜索
     openQueryModal() {
@@ -586,7 +584,7 @@ export default {
         this.$refs.xTab.setCurrentRow(this.leftTableData[0]);
         this.dataChange.row = this.formPlan;
         this.flag = 1;
-        this.selectLeftItemId=null;
+        this.selectLeftItemId = null;
         this.addNewBool = true;
       } else {
         this.$message.error("请先保存数据");
