@@ -1,5 +1,5 @@
 <template>
-<Modal v-model="credentShow" width="1200" title="修改凭证">
+<Modal v-model="credentShow" width="1200" title="修改凭证" @on-visible-change="showOrHide">
   <div class="bigBox">
     <section class="oper-box">
       <div class="oper-top flex mt10">
@@ -125,6 +125,7 @@
       <Button type="warning" class="w90 ml10" @click="Save">保存</Button>
       <div class="mt10">
         <vxe-table
+          id="changeV"
           border
           resizable
           ref="xTable"
@@ -175,7 +176,7 @@
               <Input type="text" v-model="row.paymentTypeCode" disabled/>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="debitAmount" title="借方金额" :edit-render="{type: 'default'}">
+          <vxe-table-column field="debitAmount" width="100" title="借方金额" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <InputNumber
                 v-model="row.debitAmount"
@@ -185,7 +186,7 @@
             </template>
             <template v-slot="{ row }">{{ thousands(row.debitAmount)  }}</template>
           </vxe-table-column>
-          <vxe-table-column field="lenderAmount" title="贷方金额" :edit-render="{type: 'default'}">
+          <vxe-table-column field="lenderAmount" width="100" title="贷方金额" :edit-render="{type: 'default'}">
             <template v-slot:edit="{row}">
               <InputNumber
                 v-model="row.lenderAmount"
@@ -711,6 +712,7 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
     components: {
       addOutStaff
     },
+    props: ['vercherId'],
     data() {
       const subjectNameValid = ({row, cellValue}) => {
         return new Promise((resolve, reject) => {
@@ -910,6 +912,11 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
       };
     },
     methods: {
+      showOrHide(v){
+        if(v){
+          this.getList()
+        }
+      },
       //业务日期改变=》年月改变
       changeBuessinessDate(){
         this.formPlan.period=tools.transMonth(this.formPlan.voucherTime)
@@ -1074,8 +1081,8 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
         data.companyCode = localStorage.getItem('currentShopCode')
         BigSave(data).then(res => {
           if (res.code === 0) {
+
             this.$Message.warning("保存成功!");
-            this.$router.push({name: "AuditList"});
           } else {
             this.$Message.warning("保存失败！");
           }
@@ -1825,7 +1832,7 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
       //修改刷新列表
       getList() {
         let params = {};
-        params.id = this.$route.query.id;
+        params.id = this.vercherId[0].id;
         findById(params).then(res => {
           if (res.code === 0) {
             this.ID = res.data.id;
@@ -1931,14 +1938,10 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
       },
     },
     mounted() {
-      this.getList();
       this.OtherClickTable();
       this.fundGetList();
       this.SelectGetlistJi();
       this.businessType();
-    },
-    activated() {
-      this.getList();
     },
     //过滤器
     filters: {
@@ -2019,7 +2022,13 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
     font-size: 15px;
   }
 </style>
-<style scoped>
+<style lang="less" scoped>
+  .changeV {
+      height: 36px !important;
+  }
+  /deep/.vxe-table.vxe-editable.size--mini .vxe-body--column{
+    height: 36px !important;
+  }
   .formBox .ivu-form-item {
     margin-bottom: 5px;
     margin-right: 5px;

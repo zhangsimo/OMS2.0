@@ -117,6 +117,7 @@
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="putVoucher"
+              :disabled="status == 0"
               v-has="'change'"
             >
               <span>修改凭证</span>
@@ -575,7 +576,7 @@
         <Button @click="shenheCancel">取消</Button>
       </div>
     </Modal>
-    <CredentChange ref="credent" :voucherId="voucherId"></CredentChange>
+    <CredentChange ref="credent" :vercherId="oneList"></CredentChange>
   </div>
 </template>
 
