@@ -595,14 +595,16 @@ export default {
       }
     },
     //右侧表格多选
-    selectSameList(val) {
-      let row=val.row;
-      if (val.selection) {
-        if (row.isAddPart==0) {
-          this.rightList.push(row);
-        } else {
-          this.tmpDeletePartArr.push(row);
-        }
+    selectSameList({selection,row}) {
+      console.log(row,11111)
+      if (selection) {
+        selection.map(el=>{
+          if (el.isAddPart==0) {
+            this.tmpDeletePartArr.push(el);
+          } else {
+            this.rightList.push(el);
+          }
+        })
       } else {
         this.rightList.forEach((el, index, arr) => {
           if (el.isAddPart==0 && row.id == el.id) {
@@ -646,13 +648,9 @@ export default {
         }
       }
     },
-    //右侧全选
-    selectAllList(val) {
-      this.rightList = val.selection;
-    },
     //删除
     async delect() {
-      if (this.rightList.length < 1) {
+      if (this.rightList.length < 1 && this.tmpDeletePartArr.length<1) {
         return this.$message.error("至少选择一条数据");
       }
       let data = []
