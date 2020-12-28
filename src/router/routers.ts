@@ -698,7 +698,7 @@ export default [
             mark: "5105",
             meta: { keepAlive: true,
               // hideInMenu: true,
-              title: " 调出在途信息"
+              title: "调出在途信息"
             },
             component: () =>
               import("@/view/settlementManagement/bill/Onway.vue")
@@ -1100,10 +1100,9 @@ export default [
   // {
   //   path: "/aftersale",
   //   name: "afterSale",
-  //   //mark: "12",
+  //   mark: "12",
   //   meta: { keepAlive: true,
-  //     icon: "md-brush",
-  //     // icon: "ios-paper",
+  //     icon: "md-repeat",
   //     title: "售后模块"
   //   },
   //   component: Main,
@@ -1111,39 +1110,37 @@ export default [
   //     {
   //       path: '/claimSheet',
   //       name: 'claimSheet',
-  //       //mark: '12001',
+  //       mark: '12100',
   //       meta: { keepAlive: true,
   //         title: '理赔开单',
   //       },
   //       component: parentView,
   //       children: [
-  //         // {
-  //         //   path: 'afterSale/CustomerClaimsRegistration',
-  //         //   name: 'CustomerClaimsRegistration',
-  //         //   // redirect: "/multilevel/level_2_1",
-  //         //   //mark: '11001',
-  //         //   meta: { keepAlive: true,
-  //         //     title: '客户理赔登记',
-  //         //
-  //         //   },
-  //         //   component: () =>
-  //         //     import("@/view/afterSale/CustomerClaimsRegistration/index.vue")
-  //         // },
-  //         // {
-  //         //   path: 'afterSale/CustomerclaimsHandling',
-  //         //   name: 'CustomerclaimsHandling',
-  //         //   // redirect: "/multilevel/level_2_1",
-  //         //   //mark: '11002',
-  //         //   meta: { keepAlive: true,
-  //         //     title: '客户理赔处理',
-  //         //   },
-  //         //   component: () =>
-  //         //     import("@/view/afterSale/CustomerclaimsHandling/index.vue")
-  //         // },
+  //         {
+  //           path: 'afterSale/CustomerClaimsRegistration',
+  //           name: 'CustomerClaimsRegistration',
+  //           mark: '12101',
+  //           meta: { keepAlive: true,
+  //             title: '客户理赔登记',
+  //
+  //           },
+  //           component: () =>
+  //             import("@/view/afterSale/claimSheet/CustomerClaimsRegistration/index.vue")
+  //         },
+  //         {
+  //           path: 'afterSale/CustomerclaimsHandling',
+  //           name: 'CustomerclaimsHandling',
+  //           mark: '12102',
+  //           meta: { keepAlive: true,
+  //             title: '客户理赔处理',
+  //           },
+  //           component: () =>
+  //             import("@/view/afterSale/claimSheet/CustomerclaimsHandling/index.vue")
+  //         },
   //         {
   //           path: 'afterSale/registerClaimSupplier',
   //           name: 'registerClaimSupplier',
-  //           //mark: '11002',
+  //           mark: '12103',
   //           meta: {
   //             keepAlive: true,
   //             title: '向供应商理赔登记',
@@ -1151,12 +1148,23 @@ export default [
   //           component: () =>
   //             import("@/view/afterSale/claimSheet/registerClaimSupplier/index.vue")
   //         },
+  //         {
+  //           path: 'afterSale/claimSupplier',
+  //           name: 'claimSupplier',
+  //           mark: '12104',
+  //           meta: {
+  //             keepAlive: true,
+  //             title: '供应商理赔处理',
+  //           },
+  //           component: () =>
+  //             import("@/view/afterSale/claimSheet/claimSupplier/index.vue")
+  //         },
   //       ]
   //     },
   //     {
   //       path: '',
   //       name: 'claimsTheQuery',
-  //       //mark: '12002',
+  //       mark: '12200',
   //       redirect: "/afterSale/claimsTheQuery/Customerclaimsregistrationenquiry",
   //       meta: { keepAlive: true,
   //         title: '理赔查询',
@@ -1166,24 +1174,51 @@ export default [
   //         {
   //           path: '/claimsTheQuery/Customerclaimsregistrationenquiry',
   //           name: 'Customerclaimsregistrationenquiry',
-  //           meta: { keepAlive: true,
+  //           mark:"12201",
+  //           meta: {
+  //             keepAlive: true,
   //             title: '客户理赔登记查询',
   //           },
-  //           // component: () =>
-  //           //   import("@/view/afterSale/Customerclaimsregistrationenquiry/index.vue")
+  //           component: () =>
+  //             import("@/view/afterSale/claimsTheQuery/Customerclaimsregistrationenquiry/index.vue")
   //         },
-  //         // {
-  //         //   path: 'afterSale/Customerclaimshandlingenquiry',
-  //         //   name: 'Customerclaimshandlingenquiry',
-  //         //   meta: { keepAlive: true,
-  //         //     title: '客户理赔处理查询',
-  //         //   },
-  //         //   component: () =>
-  //         //     import("@/view/afterSale/Customerclaimshandlingenquiry/index.vue")
-  //         // },
+  //         {
+  //           path: 'afterSale/claimsTheQueryCustomerclaimshandlingenquiry',
+  //           name: 'Customerclaimshandlingenquiry',
+  //           mark:"12202",
+  //           meta: {
+  //             keepAlive: true,
+  //             title: '客户理赔处理查询',
+  //           },
+  //           component: () =>
+  //             import("@/view/afterSale/claimsTheQuery/Customerclaimshandlingenquiry/index.vue")
+  //         },
+  //         {
+  //           path: '/afterSale/claimsTheQuery/registerClaimSupplierQuery',
+  //           name: 'registerClaimSupplierQuery',
+  //           mark:"12203",
+  //           meta: {
+  //             keepAlive: true,
+  //             title: '向供应商理赔查询',
+  //           },
+  //           component: () =>
+  //             import("@/view/afterSale/claimsTheQuery/registerClaimSupplierQuery/index.vue")
+  //         },
+  //         {
+  //           path: '/afterSale/claimsTheQuery/claimsTheQuery',
+  //           name: 'supplierClaimQuery',
+  //           mark:"12204",
+  //           meta: {
+  //             keepAlive: true,
+  //             title: '供应商处理查询',
+  //           },
+  //           component: () =>
+  //             import("@/view/afterSale/claimsTheQuery/supplierClaimQuery/index.vue")
+  //         },
   //         {
   //           path: '/afterSale/claimsTheQuery/inAndOutQuery',
   //           name: 'inAndOutQuery',
+  //           mark:"12205",
   //           meta: {
   //             keepAlive: true,
   //             title: '出入记录查询',
