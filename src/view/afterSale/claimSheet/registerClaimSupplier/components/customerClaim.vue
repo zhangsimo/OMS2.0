@@ -219,7 +219,11 @@
       if(res.code===0){
         let data:Array<any>=(res.data || []).map(el=>{
           let dataEl:any=Object.assign({}, el);//对象浅拷贝
+          dataEl.claimDemageCode="";
+          dataEl.afterSaleQty=el.noChoiceQty;
           dataEl.enterMainId=dataEl.mainId;
+          dataEl.processedQty=0;
+          dataEl.untreatedQty=el.noChoiceQty;
           dataEl.enterDetailId=dataEl.id;
           delete dataEl.id;
           delete dataEl.mainId;

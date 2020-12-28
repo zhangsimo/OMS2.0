@@ -91,6 +91,7 @@ export default {
       treeList: [],
       provinceArr: [],
       rightList: [], //右侧点击数据
+      tmpDeletePartArr:[],//暂时存储删除配件
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //请求头
@@ -595,7 +596,27 @@ export default {
     },
     //右侧表格多选
     selectSameList(val) {
-      this.rightList = val.selection;
+      let row=val.row;
+      if (val.selection) {
+        if (row.isAddPart==0) {
+          this.rightList.push(row);
+        } else {
+          this.tmpDeletePartArr.push(row);
+        }
+      } else {
+        this.rightList.forEach((el, index, arr) => {
+          if (el.isAddPart==0 && row.id == el.id) {
+            arr.splice(index, 1);
+          }
+        });
+        this.tmpDeletePartArr.forEach(
+          (el, index, arr) => {
+            if (row.id == el.id) {
+              arr.splice(index, 1);
+            }
+          }
+        );
+      }
     },
     //选中出现 处理记录
     async logDataMethod({row}) {
@@ -638,11 +659,47 @@ export default {
       this.rightList.map(el => {
         data.push(el.id)
       })
-      let res = await api.deteleAfterSaleOutDetail(data)
-      if (res.code === 0) {
-        this.getLeftLists();
-        return this.$message.success("删除成功")
-      }
+      let delOk = false;
+      let delOk2 = false;
+      let isNetWork = false;
+      this.$Modal.confirm({
+        title: "是否要删除配件",
+        onOk: async () => {
+          if (this.selectLeftItemId) {
+            let res = await api.deteleAfterSaleOutDetail(data);
+            if (res.code == 0) {
+              delOk = true;
+              isNetWork = true;
+            }
+          } else {
+            delOk = true;
+          }
+          if (this.tmpDeletePartArr.length > 0) {
+            this.tmpDeletePartArr.forEach((els) => {
+              this.formPlan.details.forEach(
+                (el, index, arr) => {
+                  if (el.id == els.id) {
+                    arr.splice(index, 1);
+                  }
+                }
+              );
+            });
+            this.tmpDeletePartArr = [];
+            delOk2 = true;
+          } else {
+            delOk2 = true;
+          }
+          if (delOk && delOk2) {
+            this.$Message.success("删除成功");
+            if (isNetWork) {
+              this.getLeftLists();
+            }
+          }
+        },
+        onCancel: () => {
+          // this.$Message.info('取消删除');
+        }
+      });
     },
     getRUl() {
       this.upurl = api.getup + "?id=" + this.formPlan.id;
