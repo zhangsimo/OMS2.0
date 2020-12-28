@@ -240,7 +240,7 @@ export default {
           }
           return el;
         });
-        this.addNewBool=false;
+        this.addNewBool = false;
         this.leftPage.total = res.data.totalElements;
         if (this.selectLeftItemId) {
           for (let b of this.leftTableData) {
@@ -298,7 +298,7 @@ export default {
           }
           return el;
         });
-        this.addNewBool=false;
+        this.addNewBool = false;
         this.leftPage.total = res.data.totalElements;
         if (this.selectLeftItemId) {
           for (let b of this.leftTableData) {
@@ -433,8 +433,7 @@ export default {
     },
 
     setSelected(row) {
-
-    this.$refs.formPlan.resetFields();
+      this.$refs.formPlan.resetFields();
       this.$refs.xTab.setCurrentRow(row);
       this.formPlan = row;
     },
@@ -588,6 +587,7 @@ export default {
         this.$refs.xTab.setCurrentRow(this.leftTableData[0]);
         this.dataChange.row = this.formPlan;
         this.flag = 1;
+        this.selectLeftItemId = null;
         this.addNewBool = true;
       } else {
         this.$message.error("请先保存数据");
@@ -634,12 +634,12 @@ export default {
       if (this.rightList.length < 1) {
         return this.$message.error("至少选择一条数据");
       }
-      let data=[]
-      this.rightList.map(el=>{
-          data.push(el.id)
+      let data = []
+      this.rightList.map(el => {
+        data.push(el.id)
       })
-      let res=await api.deteleAfterSaleOutDetail(data)
-      if(res.code===0){
+      let res = await api.deteleAfterSaleOutDetail(data)
+      if (res.code === 0) {
         this.getLeftLists();
         return this.$message.success("删除成功")
       }

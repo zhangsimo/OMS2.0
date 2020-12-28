@@ -211,8 +211,9 @@
     //整单选入
     private async allSelAddPart(){
       let mainIds=new Array<any>();
+
       this.checkData.map(el=>{
-        mainIds.push(Number(el.mainId));
+        mainIds.push(el.mainId);
       })
       let res:any=await allCustomerClaim(mainIds);
       if(res.code===0){
