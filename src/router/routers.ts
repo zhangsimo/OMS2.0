@@ -66,7 +66,7 @@ export default [
   {
     path: "/goods",
     name: "goods",
-    //mark: "1",
+    mark: "1",
     redirect: "/multilevel/level_2_1",
     meta: { keepAlive: true,
       icon: "ios-cart",
@@ -78,7 +78,7 @@ export default [
       {
         path: "goodsList",
         name: "goodsList",
-        //mark: "1000",
+        mark: "1000",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "滚动计划单",
@@ -89,7 +89,7 @@ export default [
       {
         path: "plannedPurchaseOrder",
         name: "PlannedPurchaseOrder",
-        //mark: "1001",
+        mark: "1001",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "计划采购订单",
@@ -101,7 +101,7 @@ export default [
       {
         path: "interPurchase",
         name: "InterPurchase",
-        //mark: "1002",
+        mark: "1002",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "国际采购订单",
@@ -112,7 +112,7 @@ export default [
       {
         path: "/goods/temporary-purchase",
         name: "TemporaryPurchase",
-        //mark: "1003",
+        mark: "1003",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "临时采购订单",
@@ -123,7 +123,7 @@ export default [
       {
         path: "/goods/outside-purchase",
         name: "OutsidePurchase",
-        //mark: "1004",
+        mark: "1004",
         meta: { keepAlive: true,
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -135,7 +135,7 @@ export default [
       {
         path: "/goods/supplierList",
         name: "supplierList",
-        //mark: "1005",
+        mark: "1005",
         meta: { keepAlive: true,
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -148,7 +148,7 @@ export default [
       {
         path: "/goods/bookingSheet/bookingSheet",
         name: "bookingSheet",
-        //mark: "1006",
+        mark: "1006",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "预订单",
@@ -160,7 +160,7 @@ export default [
       {
         path: "/goods/brandList",
         name: "brandList",
-        //mark: "1007",
+        mark: "1007",
         meta: { keepAlive: true,
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -172,7 +172,7 @@ export default [
       {
         path: "/goods/barcodeList",
         name: "barcodeList",
-        // //mark: 'oms_goods_barcode', 空
+        // mark: 'oms_goods_barcode', 空
         meta: { keepAlive: true,
           hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -184,7 +184,7 @@ export default [
       {
         path: "/goods/specificationsList",
         name: "specificationsList",
-        // //mark: 'oms_goods_specifications', 空
+        // mark: 'oms_goods_specifications', 空
         meta: { keepAlive: true,
           hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -196,7 +196,7 @@ export default [
       {
         path: "/goods/priceList",
         name: "priceList",
-        // //mark: 'oms_goods_price', 空
+        // mark: 'oms_goods_price', 空
         meta: { keepAlive: true,
           hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -208,7 +208,7 @@ export default [
       {
         path: "/goods/goodsSync",
         name: "goodsSync",
-        // //mark: 'oms_goods_sync', 空
+        // mark: 'oms_goods_sync', 空
         meta: { keepAlive: true,
           hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -222,7 +222,7 @@ export default [
   {
     path: "",
     name: "salesManagement",
-    //mark: "2",
+    mark: "2",
     redirect: "",
     meta: { keepAlive: true,
       // hideInMenu: true,
@@ -235,7 +235,7 @@ export default [
       {
         path: "/salesManagement/salesOrder",
         name: "salesOrder",
-        //mark: "2000",
+        mark: "2000",
         meta: { keepAlive: true,
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -248,7 +248,7 @@ export default [
       {
         path: "/salesManagement/sellReturn",
         name: "sellReturn",
-        //mark: "2001",
+        mark: "2001",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "销售退货",
@@ -260,7 +260,7 @@ export default [
       {
         path: "/salesManagement/presell",
         name: "presell",
-        //mark: "2002",
+        mark: "2002",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "预售单",
@@ -271,7 +271,7 @@ export default [
       {
         path: "/salesManagement/acceptance",
         name: "acceptance",
-        //mark: "2003",
+        mark: "2003",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "预售单受理",
@@ -283,7 +283,7 @@ export default [
       {
         path: "/hsOrder/hsIndex",
         name: "hsOrder",
-        //mark: "2004",
+        mark: "2004",
         meta: {
           icon: "arrow-graph-up-right",
           title: "华胜订单处理",
@@ -296,7 +296,7 @@ export default [
       {
         path: "/hsOrder/hsPayment",
         name: "hsPayment",
-        //mark: "2004",
+        mark: "2004",
         meta: {
           icon: "arrow-graph-up-right",
           title: "华胜代付入库",
@@ -311,7 +311,7 @@ export default [
   {
     path: "",
     name: "allot",
-    //mark: "3",
+    mark: "3",
     redirect: "/allot/one/apply",
     meta: { keepAlive: true,
       icon:"md-git-pull-request",
@@ -323,7 +323,7 @@ export default [
       {
         path: "",
         name: "allotOne",
-        //mark: "3100",
+        mark: "3100",
         redirect: "/allot/one/apply",
         meta: { keepAlive: true,
           title: "调拨单"
@@ -333,7 +333,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/applyFor",
             name: "applyFor",
-            //mark: "3101",
+            mark: "3101",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -348,7 +348,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/Acceptances",
             name: "Acceptances",
-            //mark: "3103",
+            mark: "3103",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -363,7 +363,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/stockRemoval",
             name: "stockRemoval",
-            //mark: "3102",
+            mark: "3102",
             meta: {
               // hideInMenu: true,
               title: "调拨出库",
@@ -377,7 +377,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/putStorage",
             name: "putStorage",
-            //mark: "3104",
+            mark: "3104",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "调拨入库",
@@ -393,7 +393,7 @@ export default [
       {
         path: "",
         name: "allotTwo",
-        //mark: "3200",
+        mark: "3200",
         redirect: "/allot/two/backApply",
         meta: { keepAlive: true,
           title: "调拨退货"
@@ -403,7 +403,7 @@ export default [
           {
             path: "/allot/two/backApply",
             name: "twoBackApply",
-            //mark: "3201",
+            mark: "3201",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "调入退回申请",
@@ -417,7 +417,7 @@ export default [
           {
             path: "/allot/two/backInStorage",
             name: "twoBackInStorage",
-            //mark: "3202",
+            mark: "3202",
             meta: {
               // hideInMenu: true,
               title: "调出退回入库",
@@ -431,7 +431,7 @@ export default [
           {
             path: "/allot/two/backAccept",
             name: "twoBackAccept",
-            //mark: "3203",
+            mark: "3203",
             meta: {
               // hideInMenu: true,
               title: "调入退回受理",
@@ -447,7 +447,7 @@ export default [
       {
         path: "",
         name: "allotThree",
-        //mark: "3300",
+        mark: "3300",
         meta: { keepAlive: true,
           title: "直调直发"
         },
@@ -456,7 +456,7 @@ export default [
           {
             path: "/allot/three/headquarters",
             name: "threeHeadquarters",
-            //mark: "3301",
+            mark: "3301",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "总部直调入库",
@@ -470,7 +470,7 @@ export default [
           {
             path: "/allot/three/supplier",
             name: "threeSupplier",
-            //mark: "3302",
+            mark: "3302",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "供应商直发入库",
@@ -488,7 +488,7 @@ export default [
   {
     path: "/business/policy",
     name: "policy",
-    //mark: "4",
+    mark: "4",
     meta: { keepAlive: true,
       icon: "ios-cube",
       title: "库存管理",
@@ -498,7 +498,7 @@ export default [
       {
         path: "/policy/stockSearch",
         name: "stockSearch",
-        //mark: "4000",
+        mark: "4000",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "库存查询",
@@ -510,7 +510,7 @@ export default [
       {
         path: "/business/procurementAndStorage",
         name: "procurementAndStorage",
-        //mark: "4001",
+        mark: "4001",
         meta: {
           icon: "arrow-graph-up-right",
           title: "采购入库",
@@ -522,19 +522,19 @@ export default [
           )
       },
       // {
-      //   path: "/policy///market",
-      //   name: "//market",
-      //   //mark: "4002",
+      //   path: "/policy/market",
+      //   name: "market",
+      //   mark: "4002",
       //   meta: { keepAlive: true,
       //     icon: "arrow-graph-up-right",
       //     title: "销售单"
       //   },
-      //   component: () => import("@/view/business/policy///market///market.vue")
+      //   component: () => import("@/view/business/policy/market/market.vue")
       // },
       {
         path: "/policy/moveStorehouse",
         name: "moveStorehouse",
-        //mark: "4003",
+        mark: "4003",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "移仓单",
@@ -546,7 +546,7 @@ export default [
       {
         path: "/policy/smsInventory",
         name: "smsInventory",
-        //mark: "4004",
+        mark: "4004",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "盘点单",
@@ -558,7 +558,7 @@ export default [
       {
         path: "/policy/ventoryProfit",
         name: "ventoryProfit",
-        //mark: "4006",
+        mark: "4006",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "盘盈入库",
@@ -570,7 +570,7 @@ export default [
       {
         path: "/policy/inventoryLosses",
         name: "inventoryLosses",
-        //mark: "4007",
+        mark: "4007",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "盘亏出库",
@@ -582,7 +582,7 @@ export default [
       {
         path: "/policy/process",
         name: "process",
-        //mark: "4005",
+        mark: "4005",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "加工单",
@@ -595,7 +595,7 @@ export default [
   {
     path: "/settlementManagement",
     name: "settlementManagement",
-    //mark: "5",
+    mark: "5",
     redirect: "/reportForm",
     meta: { keepAlive: true,
       icon: "logo-yen",
@@ -608,7 +608,7 @@ export default [
         path: '/documentsToQuery',
         name: 'DocumentsToQuery',
         redirect: "/multilevel/level_2_1",
-        //mark: '5400',
+        mark: '5400',
         meta: { keepAlive: true,
           title: '单据查询'
         },
@@ -617,7 +617,7 @@ export default [
           {
             path: 'undoFlowQuery',
             name: 'UndoFlowQuery',
-            //mark: '5401',
+            mark: '5401',
             meta: { keepAlive: true,
               title: '撤销流水帐查询',
             },
@@ -627,7 +627,7 @@ export default [
           // {
           //   path: 'checkTheOrder',
           //   name: 'checkTheOrder',
-          //   //mark:'',
+          //   mark:'',
           //   meta:{
           //     title:'对账订单',
           //   },
@@ -639,7 +639,7 @@ export default [
       {
         path: "/settlementManagement/bill",
         name: "settlementManagementBill",
-        //mark: "5100",
+        mark: "5100",
         meta: { keepAlive: true,
           title: "对账与结算"
         },
@@ -648,7 +648,7 @@ export default [
           {
             path: "/settlementManagement/bill/AccountStatement",
             name: "accountStatement",
-            //mark: "5101",
+            mark: "5101",
             meta: { keepAlive: true,
               title: "对账单"
             },
@@ -658,7 +658,7 @@ export default [
           {
             path: "/settlementManagement/bill/CollectionPayment",
             name: "billCollectionPayment",
-            //mark: "5102",
+            mark: "5102",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "收付款单查询"
@@ -670,7 +670,7 @@ export default [
             path:
               "/settlementManagement/settlementManagement/bill/Allocationstock",
             name: "billAllocationstock",
-            //mark: "5103",
+            mark: "5103",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: " 调拨出库明细"
@@ -681,8 +681,8 @@ export default [
           {
             path: "/settlementManagement/bill/Allocationwarehousing",
             name: "billAllocationwarehousing",
-            // //mark: 'oms_orders_approve',
-            //mark: "5104",
+            // mark: 'oms_orders_approve',
+            mark: "5104",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: " 调拨入库明细"
@@ -695,7 +695,7 @@ export default [
           {
             path: "/settlementManagement/bill/Onway",
             name: "billOnway",
-            //mark: "5105",
+            mark: "5105",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "调出在途信息"
@@ -706,7 +706,7 @@ export default [
           {
             path: "/settlementManagement/settlementManagement/bill/External",
             name: "billExternal",
-            //mark: "5106",
+            mark: "5106",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: " 采购入库明细"
@@ -717,8 +717,8 @@ export default [
           {
             path: "/settlementManagement/bill/Sales",
             name: "billSales",
-            // //mark: 'oms_orders_approve',
-            //mark: "5107",
+            // mark: 'oms_orders_approve',
+            mark: "5107",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "销售订单明细"
@@ -729,8 +729,8 @@ export default [
           {
             path: "/settlementManagement/settlementManagement/bill/stock",
             name: "billStock",
-            // //mark: 'oms_orders_approve',
-            //mark: "5108",
+            // mark: 'oms_orders_approve',
+            mark: "5108",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "销售出库明细"
@@ -741,8 +741,8 @@ export default [
           // {
           //   path: "/settlementManagement/bill/chainReceivable",
           //   name: "bill-chainReceivable",
-          //   // //mark: 'oms_orders_approve',
-          //   //mark: '5109',
+          //   // mark: 'oms_orders_approve',
+          //   mark: '5109',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     title: "连锁应收应付查询"
@@ -752,8 +752,8 @@ export default [
           // {
           //   path: "/settlementManagement/bill/arrearsAnalysis",
           //   name: "bill-arrearsAnalysis",
-          //   // //mark: 'oms_orders_approve',
-          //   //mark: '5110',
+          //   // mark: 'oms_orders_approve',
+          //   mark: '5110',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     title: "欠款分析"
@@ -763,8 +763,8 @@ export default [
           // {
           //   path: "/settlementManagement/bill/paymentAnalysis",
           //   name: "bill-paymentAnalysis",
-          //   // //mark: 'oms_orders_approve',
-          //   //mark: '5112',
+          //   // mark: 'oms_orders_approve',
+          //   mark: '5112',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     title: "付款分析"
@@ -776,7 +776,7 @@ export default [
       {
         path: "/invoiceAdministration",
         name: "invoiceAdministration",
-        //mark: "5500",
+        mark: "5500",
         // redirect: "/reportForm",
         meta: { keepAlive: true,
           // icon: "ios-paper",
@@ -788,7 +788,7 @@ export default [
           //   path: "/invoiceAdministration/costOpening",
           //   name: "invoiceAdministration-costOpening",
           //   redirect: "",
-          //   //mark: "5501",
+          //   mark: "5501",
           //   meta: { keepAlive: true,
           //     title: "费用开票申请"
           //   },
@@ -801,7 +801,7 @@ export default [
             path: "/invoiceAdministration/invoiceApply",
             name: "invoiceAdministrationInvoiceApply",
             redirect: "",
-            //mark: "5502",
+            mark: "5502",
             meta: { keepAlive: true,
               title: "开票申请查询与核销"
             },
@@ -814,7 +814,7 @@ export default [
             path: "/invoiceAdministration/salesInvoice",
             name: "invoiceAdministrationSalesInvoice",
             redirect: "",
-            //mark: "5503",
+            mark: "5503",
             meta: { keepAlive: true,
               title: "销售发票导入"
             },
@@ -827,7 +827,7 @@ export default [
             path: "/invoiceAdministration/invoiceManagement",
             name: "invoiceAdministrationInvoiceManagement",
             redirect: "",
-            // //mark: "5200",
+            // mark: "5200",
             meta: { keepAlive: true,
               title: "进项发票管理"
             },
@@ -847,7 +847,7 @@ export default [
           //     {
           //       path: "",
           //       name: "",
-          //       // //mark: 'oms_orders_approve',
+          //       // mark: 'oms_orders_approve',
           //       meta: { keepAlive: true,
           //         // hideInMenu: true,
           //         title: "结算账户"
@@ -857,7 +857,7 @@ export default [
           //     {
           //       path: "/",
           //       name: "",
-          //       // //mark: 'oms_orders_approve',
+          //       // mark: 'oms_orders_approve',
           //       meta: { keepAlive: true,
           //         // hideInMenu: true,
           //         title: "收支项目"
@@ -867,7 +867,7 @@ export default [
           //     {
           //       path: "/",
           //       name: "",
-          //       // //mark: 'oms_orders_approve',
+          //       // mark: 'oms_orders_approve',
           //       meta: { keepAlive: true,
           //         // hideInMenu: true,
           //         title: "期初现金银行"
@@ -877,7 +877,7 @@ export default [
           //     {
           //       path: "/",
           //       name: "",
-          //       // //mark: 'oms_orders_approve',
+          //       // mark: 'oms_orders_approve',
           //       meta: { keepAlive: true,
           //         // hideInMenu: true,
           //         title: "期初应收应付"
@@ -891,8 +891,8 @@ export default [
       {
         path: "/settlementManagement/paymentmanage",
         name: "payMentmanage",
-        // //mark: 'oms_orders_approve',
-        //mark: "5200",
+        // mark: 'oms_orders_approve',
+        mark: "5200",
         meta: { keepAlive: true,
           // hideInMenu: true,
 
@@ -904,8 +904,8 @@ export default [
       {
         path: "/settlementManagement/advanceCollection",
         name: "settlementManagementAdvanceCollection",
-        // //mark: 'oms_orders_approve',
-        //mark: "5300",
+        // mark: 'oms_orders_approve',
+        mark: "5300",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "预收款管理"
@@ -916,8 +916,8 @@ export default [
       {
         path: "/settlementManagement/advanceCharge",
         name: "settlementManagementAdvanceCharge",
-        // //mark: 'oms_orders_approve',
-        //mark: "5600",
+        // mark: 'oms_orders_approve',
+        mark: "5600",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "预付款管理"
@@ -928,8 +928,8 @@ export default [
       {
         path: "/settlementManagement/otherReceivables",
         name: "settlementManagementOtherReceivables",
-        // //mark: 'oms_orders_approve',
-        //mark: "5700",
+        // mark: 'oms_orders_approve',
+        mark: "5700",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "其他应收款管理"
@@ -940,8 +940,8 @@ export default [
       {
         path: "/settlementManagement/otherPayable",
         name: "settlementManagementOtherPayable",
-        // //mark: 'oms_orders_approve',
-        //mark: "5800",
+        // mark: 'oms_orders_approve',
+        mark: "5800",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "其他应付款管理"
@@ -952,8 +952,8 @@ export default [
       {
         path: "/settlementManagement/businessBorrowing",
         name: "settlementManagementBusinessBorrowing",
-        // //mark: 'oms_orders_approve',
-        //mark: "5900",
+        // mark: 'oms_orders_approve',
+        mark: "5900",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "因公借支管理"
@@ -964,8 +964,8 @@ export default [
       {
         path: "/settlementManagement/Dailyfundaudit",
         name: "settlementManagementDailyfundaudit",
-        // //mark: 'oms_orders_approve',
-        //mark: "5301",
+        // mark: 'oms_orders_approve',
+        mark: "5301",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "每日资金审核",
@@ -976,8 +976,8 @@ export default [
       {
         path: "/settlementManagement/Expensereimbursement",
         name: "settlementManagementExpensereimbursement",
-        // //mark: 'oms_orders_approve',
-        //mark: "51000",
+        // mark: 'oms_orders_approve',
+        mark: "51000",
         meta: { keepAlive: true,
           // hideInMenu: true,
           title: "费用报销管理"
@@ -988,7 +988,7 @@ export default [
       {
         path: "/fundsManagement",
         name: "fundsManagement",
-        //mark: "51100",
+        mark: "51100",
         meta: { keepAlive: true,
           title: "资金管理"
         },
@@ -997,7 +997,7 @@ export default [
           {
             path: "capitalChain",
             name: "capitalChain",
-            //mark: "51101",
+            mark: "51101",
             meta: { keepAlive: true,
               title: "连锁资金日记账"
             },
@@ -1007,7 +1007,7 @@ export default [
           {
             path: "shopJournal",
             name: "shopJournal",
-            //mark: "51102",
+            mark: "51102",
             meta: { keepAlive: true,
 
               title: "门店资金日记账"
@@ -1018,7 +1018,7 @@ export default [
           {
             path: "accountRegistration",
             name: "accountRegistration",
-            //mark: "51103",
+            mark: "51103",
             meta: { keepAlive: true,
               title: "账户登记表"
             },
@@ -1028,7 +1028,7 @@ export default [
           {
             path: "/fundsManagement/statistical",
             name: "statistical",
-            //mark: "51104",
+            mark: "51104",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "资金统计表"
@@ -1039,7 +1039,7 @@ export default [
           {
             path: "/fundsManagement/cashflow",
             name: "cashflow",
-            //mark: "51105",
+            mark: "51105",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "现金流量表"
@@ -1050,7 +1050,7 @@ export default [
           {
             path: "/fundsManagement/accountings",
             name: "accountings",
-            //mark: "51106",
+            mark: "51106",
             meta: { keepAlive: true,
 
               title: "资金日记账审核"
@@ -1062,7 +1062,7 @@ export default [
             path: "/fundsManagement/cashJournal",
             name: "cashJournal",
             redirect: "",
-            //mark: "51107",
+            mark: "51107",
             meta: { keepAlive: true,
 
               title: "现金日记账"
@@ -1074,7 +1074,7 @@ export default [
             path: "/fundsManagement/claimWrite",
             name: "claimWrite",
             redirect: "",
-            //mark: "51108",
+            mark: "51108",
             meta: {
               keepAlive: true,
               title: "资金认领款核销"
@@ -1087,7 +1087,7 @@ export default [
       // {
       //   path: "/settlementManagement/DailyFundReview",
       //   name: "settlementManagement-DailyFundReview",
-      //   //mark: "5300",
+      //   mark: "5300",
       //   meta: { keepAlive: true,
       //     // hideInMenu: true,
       //     title: "资金审核"
@@ -1100,7 +1100,7 @@ export default [
   {
     path: "/aftersale",
     name: "afterSale",
-    ////mark: "12",
+    mark: "12",
     meta: { keepAlive: true,
       icon: "md-repeat",
       title: "售后模块"
@@ -1110,7 +1110,7 @@ export default [
       {
         path: '/claimSheet',
         name: 'claimSheet',
-        //mark: '12100',
+        mark: '12100',
         meta: { keepAlive: true,
           title: '理赔开单',
         },
@@ -1119,7 +1119,7 @@ export default [
           {
             path: 'afterSale/CustomerClaimsRegistration',
             name: 'CustomerClaimsRegistration',
-            //mark: '12101',
+            mark: '12101',
             meta: { keepAlive: true,
               title: '客户理赔登记',
 
@@ -1130,7 +1130,7 @@ export default [
           {
             path: 'afterSale/CustomerclaimsHandling',
             name: 'CustomerclaimsHandling',
-            //mark: '12102',
+            mark: '12102',
             meta: { keepAlive: true,
               title: '客户理赔处理',
             },
@@ -1140,7 +1140,7 @@ export default [
           {
             path: 'afterSale/registerClaimSupplier',
             name: 'registerClaimSupplier',
-            //mark: '12103',
+            mark: '12103',
             meta: {
               keepAlive: true,
               title: '向供应商理赔登记',
@@ -1151,7 +1151,7 @@ export default [
           {
             path: 'afterSale/claimSupplier',
             name: 'claimSupplier',
-            //mark: '12104',
+            mark: '12104',
             meta: {
               keepAlive: true,
               title: '供应商理赔处理',
@@ -1164,7 +1164,7 @@ export default [
       {
         path: '',
         name: 'claimsTheQuery',
-        //mark: '12200',
+        mark: '12200',
         redirect: "/afterSale/claimsTheQuery/Customerclaimsregistrationenquiry",
         meta: { keepAlive: true,
           title: '理赔查询',
@@ -1174,7 +1174,7 @@ export default [
           {
             path: '/claimsTheQuery/Customerclaimsregistrationenquiry',
             name: 'Customerclaimsregistrationenquiry',
-            //mark:"12201",
+            mark:"12201",
             meta: {
               keepAlive: true,
               title: '客户理赔登记查询',
@@ -1185,7 +1185,7 @@ export default [
           {
             path: 'afterSale/claimsTheQueryCustomerclaimshandlingenquiry',
             name: 'Customerclaimshandlingenquiry',
-            //mark:"12202",
+            mark:"12202",
             meta: {
               keepAlive: true,
               title: '客户理赔处理查询',
@@ -1196,7 +1196,7 @@ export default [
           {
             path: '/afterSale/claimsTheQuery/registerClaimSupplierQuery',
             name: 'registerClaimSupplierQuery',
-            //mark:"12203",
+            mark:"12203",
             meta: {
               keepAlive: true,
               title: '向供应商理赔查询',
@@ -1207,7 +1207,7 @@ export default [
           {
             path: '/afterSale/claimsTheQuery/claimsTheQuery',
             name: 'supplierClaimQuery',
-            //mark:"12204",
+            mark:"12204",
             meta: {
               keepAlive: true,
               title: '供应商处理查询',
@@ -1218,7 +1218,7 @@ export default [
           {
             path: '/afterSale/claimsTheQuery/inAndOutQuery',
             name: 'inAndOutQuery',
-            //mark:"12205",
+            mark:"12205",
             meta: {
               keepAlive: true,
               title: '出入记录查询',
@@ -1233,7 +1233,7 @@ export default [
   {
     path: "/documentApproval",
     name: "documentApproval",
-    ////mark: "11",
+    mark: "11",
     redirect: "/reportForm",
     meta: { keepAlive: true,
       icon: "md-brush",
@@ -1246,7 +1246,7 @@ export default [
         path: '/documentApproval/draftingOfApplication',
         name: 'documentApprovalDraftingOfApplication',
         // redirect: "/multilevel/level_2_1",
-        //mark: '11001',
+        mark: '11001',
         meta: { keepAlive: true,
           title: '申请流程',
 
@@ -1257,7 +1257,7 @@ export default [
       {
         path: "/documentApproval/myApplication",
         name: "myApplication",
-        //mark: "11002",
+        mark: "11002",
         meta: { keepAlive: true,
           title: "申请单",
           //
@@ -1270,7 +1270,7 @@ export default [
   {
     path: "",
     name: "reportForm",
-    //mark: "7",
+    mark: "7",
     // hideInMenu: true,
     redirect: "/reportForm",
     meta: { keepAlive: true,
@@ -1287,7 +1287,7 @@ export default [
         path: "/reportForm/dailySalesStatistics/dailySalesStatistics",
         name: "dailySalesStatistics",
         redirect: "",
-        //mark: "7107",
+        mark: "7107",
         meta: { keepAlive: true,
           title: "每日销售统计",
         },
@@ -1297,7 +1297,7 @@ export default [
       //   path: "/reportForm/salesAndInventorylist/salesAndInventorylist",
       //   name: "salesAndInventorylist",
       //   redirect: "",
-      //   // //mark: "7108",
+      //   // mark: "7108",
       //   meta: { keepAlive: true,
       //     title: "进销存排行",
       //   },
@@ -1307,7 +1307,7 @@ export default [
         path: "/reportForm/purchaseRepor/reporIndex",
         name: "reportFormProcurement ",
         redirect: "",
-        //mark: "7100",
+        mark: "7100",
         meta: { keepAlive: true,
           title: "采购报表",
 
@@ -1318,7 +1318,7 @@ export default [
         path: "/reportForm/purchaseRepor/saleOrder",
         name: "procurementSaleOrder",
         redirect: "",
-        //mark: "7101",
+        mark: "7101",
         meta: { keepAlive: true,
           title: "销售报表",
 
@@ -1329,7 +1329,7 @@ export default [
         path: "/reportForm/purchaseReporAnalysis",
         name: "purchaseReporAnalysis ",
         redirect: "",
-        //mark: "7109",
+        mark: "7109",
         meta: {
           keepAlive: true,
           title: "采购排行分析",
@@ -1340,7 +1340,7 @@ export default [
         path: "/reportForm/saleOrderAnalysis",
         name: "saleOrderAnalysis",
         redirect: "",
-        //mark: "7110",
+        mark: "7110",
         meta: { keepAlive: true,
           title: "销售排行分析",
         },
@@ -1350,7 +1350,7 @@ export default [
         path: "/reportForm/purchaseRepor/transfer",
         name: "procurementTransfer",
         redirect: "",
-        //mark: "7102",
+        mark: "7102",
         meta: { keepAlive: true,
           title: "调拨报表",
 
@@ -1361,7 +1361,7 @@ export default [
         path: "/reportForm/purchaseRepor/way",
         name: "procurementWay",
         redirect: "",
-        //mark: "7103",
+        mark: "7103",
         meta: { keepAlive: true,
           title: "调出在途信息",
 
@@ -1372,7 +1372,7 @@ export default [
         path: "/reportForm/purchaseRepor/moveWarehouse",
         name: "procurementMoveWarehouse",
         redirect: "",
-        //mark: "7104",
+        mark: "7104",
         meta: { keepAlive: true,
           title: "移仓报表",
 
@@ -1383,7 +1383,7 @@ export default [
         path: "/reportForm/purchaseRepor/Stocktaking",
         name: "procurementStocktaking",
         redirect: "",
-        //mark: "7105",
+        mark: "7105",
         meta: { keepAlive: true,
           title: "盘点报表",
 
@@ -1394,7 +1394,7 @@ export default [
         path: "/reportForm/purchaseRepor/Assembly",
         name: "procurementAssembly",
         redirect: "",
-        //mark: "7106",
+        mark: "7106",
         meta: { keepAlive: true,
           title: "加工报表",
 
@@ -1406,7 +1406,7 @@ export default [
   {
     path: "/systemSetting",
     name: "systemSetting",
-    //mark: "9",
+    mark: "9",
     meta: { keepAlive: true,
       icon: "md-settings",
       title: "系统设置",
@@ -1417,7 +1417,7 @@ export default [
       {
         path: "basicData",
         name: "1basicData ",
-        //mark: "9100",
+        mark: "9100",
         redirect: "",
         meta: { keepAlive: true,
           title: "基础数据"
@@ -1427,7 +1427,7 @@ export default [
           {
             path: "Fittings",
             name: "Fittings",
-            //mark: "9101",
+            mark: "9101",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1440,7 +1440,7 @@ export default [
           {
             path: "/system/partsExamine",
             name: "partsExamine",
-            //mark: "9102",
+            mark: "9102",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1453,7 +1453,7 @@ export default [
           {
             path: "ProductLA",
             name: "ProductLA",
-            //mark: "9103",
+            mark: "9103",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1466,7 +1466,7 @@ export default [
           {
             path: "/essentialData/commoditiesInShortSupply",
             name: "commoditiesInShortSupply",
-            //mark: "9104",
+            mark: "9104",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1481,7 +1481,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/productDistribution",
             name: "productDistribution",
-            //mark: "3105",
+            mark: "3105",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "紧俏品分配",
@@ -1495,7 +1495,7 @@ export default [
           {
             path: "issuing-office",
             name: "issuingOffice",
-            //mark: "3105",
+            mark: "3105",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "开票单位",
@@ -1509,7 +1509,7 @@ export default [
           {
             path: "priceManage",
             name: "priceManage",
-            //mark: "9105",
+            mark: "9105",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1520,7 +1520,7 @@ export default [
               {
                 path: "priceManage",
                 name: "priceManage",
-                //mark: "9210",
+                mark: "9210",
                 meta: { keepAlive: true,
                   title: "价格管理",
 
@@ -1531,7 +1531,7 @@ export default [
               {
                 path: "priceSystemSearch",
                 name: "priceSystemSearch",
-                //mark: "9211",
+                mark: "9211",
                 meta: { keepAlive: true,
                   title: "价格体系查询",
 
@@ -1544,8 +1544,8 @@ export default [
           // {
           //   path: "/",
           //   name: "",
-          //   // //mark: 'oms_orders_approve',
-          //   //mark: '9107',
+          //   // mark: 'oms_orders_approve',
+          //   mark: '9107',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     title: "信用额度调查查询"
@@ -1555,7 +1555,7 @@ export default [
           {
             path: "activityManage",
             name: "activityManage",
-            //mark: "9111",
+            mark: "9111",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1570,7 +1570,7 @@ export default [
           {
             path: "/essentialData/clientManagement",
             name: "clientManagement",
-            //mark: "9112",
+            mark: "9112",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1585,7 +1585,7 @@ export default [
           {
             path: "/essentialData/clientCredit",
             name: "clientCredit",
-            //mark: "9113",
+            mark: "9113",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1600,7 +1600,7 @@ export default [
           {
             path: "/essentialData/CreditApproval",
             name: "CreditApproval",
-            //mark: "9106",
+            mark: "9106",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1615,7 +1615,7 @@ export default [
           {
             path: "/essentialData/lineOfCredit",
             name: "LineOfCredit",
-            // //mark: '9114',
+            // mark: '9114',
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1630,7 +1630,7 @@ export default [
           {
             path: "/essentialData/supplierManagement/",
             name: "supplierManagement",
-            //mark: "9108",
+            mark: "9108",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1645,7 +1645,7 @@ export default [
           {
             path: "/essentialData/logistics",
             name: "essentialDataLogistics",
-            //mark: "9109",
+            mark: "9109",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1658,7 +1658,7 @@ export default [
           // {
           //   path: "/",
           //   name: "",
-          //   //mark: '9110',
+          //   mark: '9110',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     icon: "arrow-graph-up-right",
@@ -1670,7 +1670,7 @@ export default [
           // {
           //   path: "FittingReplacement",
           //   name: "FittingReplacement",
-          //   //mark: "58",
+          //   mark: "58",
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     icon: "arrow-graph-up-right",
@@ -1681,7 +1681,7 @@ export default [
           {
             path: "/system/basicdata/mixture",
             name: "mixtureRatio",
-            //mark: "9115",
+            mark: "9115",
             meta: { keepAlive: true,
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1694,7 +1694,7 @@ export default [
           {
             path: "/lease/dataDictionary/",
             name: "dataDictionary",
-            //mark: "9116",
+            mark: "9116",
             meta: { keepAlive: true,
               icon: "gear-b",
               title: "数据字典",
@@ -1707,9 +1707,9 @@ export default [
       },
       {
         path: "",
-        name: "//marketFrom",
+        name: "marketFrom",
         redirect: "",
-        //mark: "9200",
+        mark: "9200",
         meta: { keepAlive: true,
           title: "系统设置"
         },
@@ -1718,7 +1718,7 @@ export default [
           {
             path: "/system/systemSetting/navigationFater/navigationFater",
             name: "navigationFater",
-            //mark: "9201",
+            mark: "9201",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "初始导航",
@@ -1732,7 +1732,7 @@ export default [
           {
             path: "/system/systemSetting/navigationFater/sysetmset",
             name: "sysetmset",
-            //mark: "9204",
+            mark: "9204",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "业务参数",
@@ -1746,7 +1746,7 @@ export default [
           {
             path: "/system/systemSetting/navigationFater/SettlementAccount",
             name: "SettlementAccount",
-            //mark: "9205",
+            mark: "9205",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "结算账户",
@@ -1760,7 +1760,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
-            //mark: '9403',
+            mark: '9403',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初库存",
@@ -1775,7 +1775,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
-            //mark: '9401',
+            mark: '9401',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "备货级别设置",
@@ -1790,7 +1790,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/CustomClassification/CustomClassification",
             name: "CustomClassification",
-            //mark: '9209',
+            mark: '9209',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "自定义分类设置",
@@ -1805,7 +1805,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/AccessoriesCommission/AccessoriesCommission",
             name: "AccessoriesCommission",
-            // //mark: '59',
+            // mark: '59',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "配件提成",
@@ -1820,7 +1820,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/AccessoriesBrand/AccessoriesBrand",
             name: "AccessoriesBrand",
-            // //mark: '59',
+            // mark: '59',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "配件品牌",
@@ -1835,7 +1835,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
             name: "brandCarModel",
-            //mark: '9208',
+            mark: '9208',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "品牌车型",
@@ -1851,7 +1851,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment",
             name: "receiptPayment",
-            // //mark: '59',
+            // mark: '59',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初应收应付",
@@ -1866,7 +1866,7 @@ export default [
             path:
               "/system/systemSetting/InitialNavigation/AccessoriesCategory/AccessoriesCategory",
             name: "AccessoriesCategory",
-            // //mark: '59',
+            // mark: '59',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "配件分类",
@@ -1881,7 +1881,7 @@ export default [
             path:
               "/systemSetting/InitialNavigation/storeManagement/storeManagement",
             name: "storeManagement",
-            //mark: '9207',
+            mark: '9207',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "门店设置",
@@ -1895,7 +1895,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
             name: "setWarehouse",
-            //mark: '9402',
+            mark: '9402',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "仓库设置",
@@ -1909,7 +1909,7 @@ export default [
           {
             path: "/systemSetting/InitialNavigation/setBank",
             name: "setBank",
-            //mark: '9404',
+            mark: '9404',
             meta: { keepAlive: true,
               hideInMenu: true,
               title: "期初现金银行",
@@ -1923,7 +1923,7 @@ export default [
           {
             path: "/system/staff/management",
             name: "staffManagement",
-            //mark: "9202",
+            mark: "9202",
             meta: { keepAlive: true,
               // hideInMenu: true,
               title: "员工管理",
@@ -1937,7 +1937,7 @@ export default [
           {
             path: "/system/outstaff/management",
             name: "outStaffManagement",
-            //mark: "9206",
+            mark: "9206",
             meta: {
               keepAlive: true,
               // hideInMenu: true,
@@ -1952,7 +1952,7 @@ export default [
           {
             path: "/accounting",
             name: "accounting",
-            // //mark: "4002",
+            // mark: "4002",
             meta: { keepAlive: true,
               icon: "arrow-graph-up-right",
               title: "会计科目管理",
@@ -1964,7 +1964,7 @@ export default [
           // {
           //   path: "/system/partsExamine",
           //   name: "partsExamine",
-          //   // //mark: '59',
+          //   // mark: '59',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     title: '配件审核与标定'
@@ -1974,8 +1974,8 @@ export default [
           // {
           //   path: "/",
           //   name: "",
-          //   // //mark: 'oms_orders_approve',
-          //   //mark: '9203',
+          //   // mark: 'oms_orders_approve',
+          //   mark: '9203',
           //   meta: { keepAlive: true,
           //     // hideInMenu: true,
           //     title: "角色权限管理"
@@ -1987,7 +1987,7 @@ export default [
       {
         path: "/system/systemSetting/accountInformation/accountInformation",
         name: "allotThree",
-        //mark: "9301",
+        mark: "9301",
         meta: { keepAlive: true,
           //
           title: "基本信息"
@@ -1997,7 +1997,7 @@ export default [
           {
             path: "/system/systemSetting/accountInformation/accountInformation",
             name: "/accountInformation",
-            //mark: "9301",
+            mark: "9301",
             meta: { keepAlive: true,
               //
               title: "基本信息",
@@ -2011,7 +2011,7 @@ export default [
           {
             path: "/accountInformation/record",
             name: "record",
-            // //mark: '45',
+            // mark: '45',
             meta: { keepAlive: true,
               hideInMenu: true,
               // icon: "gear-b",
@@ -2026,7 +2026,7 @@ export default [
           {
             path: "/accountInformation/recharge",
             name: "recharge",
-            // //mark: '45',
+            // mark: '45',
             meta: { keepAlive: true,
               hideInMenu: true,
               icon: "gear-b",
@@ -2041,7 +2041,7 @@ export default [
           {
             path: "/accountInformation/ProductsBuy",
             name: "ProductsBuy",
-            // //mark: '45',
+            // mark: '45',
             meta: { keepAlive: true,
               hideInMenu: true,
               icon: "gear-b",
@@ -2058,7 +2058,7 @@ export default [
       {
         path: "/system/systemSetting/template/templateIndex",
         name: "templateIndex",
-        //mark: "9999",
+        mark: "9999",
         meta: { keepAlive: true,
           //
           title: "模板管理",
@@ -2074,7 +2074,7 @@ export default [
   {
     path: "/lease",
     name: "lease",
-    //mark: "8",
+    mark: "8",
     meta: { keepAlive: true,
       icon: "ios-transgender",
       title: "租赁管理",
@@ -2085,7 +2085,7 @@ export default [
       {
         path: "/lease/register",
         name: "registers",
-        //mark: "8100",
+        mark: "8100",
         meta: { keepAlive: true,
           icon: "",
           title: "注册管理",
@@ -2096,7 +2096,7 @@ export default [
       {
         path: "/lease/lessee",
         name: "lessee",
-        //mark: "8101",
+        mark: "8101",
         meta: { keepAlive: true,
           icon: "",
           title: "租户管理",
@@ -2107,7 +2107,7 @@ export default [
       // {
       //   path: '/lease/Practice',
       //   name: 'Practice',
-      //   // //mark: '41',
+      //   // mark: '41',
       //   meta: { keepAlive: true,
       //     icon: '',
       //     title: '练习'
@@ -2117,7 +2117,7 @@ export default [
       {
         path: "/lease/product",
         name: "leaseProduct",
-        //mark: "8102",
+        mark: "8102",
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "产品管理",
@@ -2128,7 +2128,7 @@ export default [
       {
         path: "/lease/order",
         name: "leaseOrder",
-        //mark: "8103",
+        mark: "8103",
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "订单管理",
@@ -2139,7 +2139,7 @@ export default [
       {
         path: "/lease/tenantres",
         name: "tenantRes",
-        //mark: "8104",
+        mark: "8104",
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "租户资源",
@@ -2150,7 +2150,7 @@ export default [
       // {
       //   path: "/lease/dingTenantres",
       //   name: "dingTenantres",
-      //   // //mark: "8104",
+      //   // mark: "8104",
       //   meta: { keepAlive: true,
       //     icon: "gear-b",
       //     title: "租户配置"
@@ -2160,7 +2160,7 @@ export default [
       {
         path: "/lease/FeedbackManagementOne",
         name: "FeedbackManagementOne",
-        //mark: "8105",
+        mark: "8105",
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "反馈管理",
@@ -2171,7 +2171,7 @@ export default [
       {
         path: "/lease/feedback_management",
         name: "feedback_management",
-        // //mark: '45',
+        // mark: '45',
         meta: { keepAlive: true,
           hideInMenu: true,
           icon: "gear-b",
@@ -2184,8 +2184,8 @@ export default [
       {
         path: "/lease/putlog",
         name: "putlog",
-        // //mark: 'gpart_oms_policy',
-        //mark: "8106",
+        // mark: 'gpart_oms_policy',
+        mark: "8106",
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "发布日志",
@@ -2197,7 +2197,7 @@ export default [
         path: "/lease/historylog",
         name: "historylog",
         redirect: "historylog",
-        // //mark: '8107',
+        // mark: '8107',
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "历史日志"
@@ -2207,7 +2207,7 @@ export default [
           {
             path: "historylog",
             name: "historylog",
-            //mark: "8107",
+            mark: "8107",
             meta: { keepAlive: true,
               icon: "gear-b",
               title: "历史日志",
@@ -2219,7 +2219,7 @@ export default [
           {
             path: "logWebInfo",
             name: "logWebInfo",
-            // //mark: '46',
+            // mark: '46',
             meta: { keepAlive: true,
               icon: "gear-b",
               title: "日志详情",
@@ -2233,7 +2233,7 @@ export default [
       {
         path: "/lease/customerServiceManagement",
         name: "customerServiceManagement",
-        //mark: "8108",
+        mark: "8108",
         meta: { keepAlive: true,
           icon: "gear-b",
           title: "客服管理",
@@ -2249,7 +2249,7 @@ export default [
   {
     path: "/gpart_auth_center",
     name: "auth",
-    //mark: "10",
+    mark: "10",
     redirect: "/multilevel/level_2_1",
     meta: { keepAlive: true,
       icon: "ios-people",
@@ -2261,7 +2261,7 @@ export default [
       {
         path: "/auth/staff",
         name: "staff",
-        //mark: "10001",
+        mark: "10001",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "登录用户",
@@ -2273,7 +2273,7 @@ export default [
       {
         path: "/auth/group",
         name: "group",
-        //mark: "10002",
+        mark: "10002",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "组织管理",
@@ -2285,7 +2285,7 @@ export default [
       {
         path: "/auth/role",
         name: "Role",
-        //mark: "10003",
+        mark: "10003",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "角色管理",
@@ -2297,7 +2297,7 @@ export default [
       {
         path: "/auth/roleswms",
         name: "Roleswms",
-        //mark: "10006",
+        mark: "10006",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "wms角色管理",
@@ -2309,7 +2309,7 @@ export default [
       {
         path: "/auth/lessee",
         name: "AuthLessee",
-        //mark: "10005",
+        mark: "10005",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "租户模板",
@@ -2320,7 +2320,7 @@ export default [
       {
         path: "/auth/resource",
         name: "resource",
-        //mark: "10004",
+        mark: "10004",
         meta: { keepAlive: true,
           icon: "arrow-graph-up-right",
           title: "资源管理",
