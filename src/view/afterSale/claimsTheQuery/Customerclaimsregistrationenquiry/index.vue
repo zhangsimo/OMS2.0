@@ -4,7 +4,7 @@
       <quick-date
         ref="quickdate"
         class="mr10"
-        v-on:quickDate="getDataQuick"
+        v-on:quickDate="getvalue"
       ></quick-date>
       <span>创建日期:</span>
       <DatePicker
@@ -20,12 +20,13 @@
 
       <span class="ml5">理赔单位：</span>
       <Input
-        v-model.trim="search.orderUnit"
+        v-model.trim="search.guestName"
         placeholder="请输入理赔单位"
         style="width: 200px"
         clearable
+      
       />
-      <i class="iconfont iconcaidan input" @click="Dealings"></i>
+     
       <span>品牌：</span>
       <Select
         class="w120"
@@ -45,16 +46,16 @@
       <span>状态：</span>
       <Select v-model.trim="search.orderSign" @on-change="getDataType1" class="w90 mr10">
         <Option
-          v-for="item in stateArr"
+          v-for="item in typeList"
           :value="item.value"
           :key="item.value"
-          >{{ item.label }}</Option
+          >{{ item.name }}</Option
         >
       </Select>
       <Button type="warning" @click="query">查询</Button>
       <Button v-has="'export'">导出</Button>
     </div>
-    <Selectss ref="Selectss" @getOne="getOne" />
+   
     <div class="footer">
       <vxe-table
         border
@@ -73,17 +74,14 @@
       >
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column
-          field="shortName"
+          field="shortAname"
           title="分店名称"
           width="100"
         ></vxe-table-column>
-        <vxe-table-column field="revokeType" title="理赔单号" width="100">
-          <template v-slot="{ row }">{{
-            row.revokeType ? row.revokeType.name : ""
-          }}</template>
+        <vxe-table-column field="serviceId" title="理赔单号" width="100">
         </vxe-table-column>
         <vxe-table-column
-          field="source"
+          field="guestName"
           title="理赔单位"
           width="100"
         ></vxe-table-column>
@@ -98,7 +96,7 @@
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="orderSignStatus"
+          field="orderSign"
           title="状态"
           width="100"
         ></vxe-table-column>
@@ -128,7 +126,7 @@
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="carModelName"
+          field="carBrandName"
           title="品牌车型"
           width="100"
         ></vxe-table-column>
@@ -188,8 +186,8 @@
           width="100"
         ></vxe-table-column>
         <vxe-table-column
-          field="revokeReason"
-          title="orderDate"
+          field="orderDate"
+          title="提交日期"
           width="100"
         ></vxe-table-column>
       </vxe-table>

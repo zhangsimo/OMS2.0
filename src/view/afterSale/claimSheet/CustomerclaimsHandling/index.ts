@@ -24,7 +24,7 @@ export default class Custom extends Vue {
         guestName: "",//理赔单位
         partCode: "",
         partBrand: "",
-        claimsCode: ""
+        serviceId: ""
       }//搜索条件
       //分页
       private page: any = {

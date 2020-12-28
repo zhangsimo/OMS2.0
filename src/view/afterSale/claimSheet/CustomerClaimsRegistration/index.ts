@@ -29,7 +29,8 @@ import {
 import { down } from "./api/index";
 import * as api from "@/api/procurement/plan";
 import * as all from "@/api/afterSale/CustomerClaimsRegistration/index";
-// import {showLoading, hideLoading} from "@/utils/loading"
+// @ts-ignore
+import { showLoading, hideLoading } from "@/utils/loading"
 @Component({
   components: {
     ClientData,
@@ -49,10 +50,13 @@ export default class Customs extends Vue {
   private treeDiagramList: any = []
   private provinceArr: any = []
   private clientList: any = {
-    isSupplier: true
 
 
   }
+  //查看客户id
+  private chaId: any = ""
+  //默认选中的行高亮
+  private highlight: any = {}
   //打印Id
   private mainId: any = ""
   //关联Id
@@ -85,8 +89,15 @@ export default class Customs extends Vue {
   private formPlan: any = {
     storeId: ""
   }
-  private printList: any = []
-  private moreList: any = {}
+  private moreQueryList: any = {
+
+  }
+  private changeNumber = ({ cellValue }) => {
+    const reg = /^[1-9]\d*$/;
+    if (!reg.test(cellValue)) {
+      return Promise.reject(new Error("数量输入不正确"));
+    }
+  }
   //--------左边的table 
   //记录左边点击的数据 
   //选中的行
@@ -107,22 +118,19 @@ export default class Customs extends Vue {
       total: 0,
       size: 10,
       num: 1
-    },
-    tableList: [
+    }
+    //左边的表格
 
-    ]
   }
-  //右上的数据
-  //请求头
+  private tableList: any = []
 
+
+  //请求头
   private headers = {
     Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
-  };//请求头
+  };
   //导入
-  private upurl = api.outgetup;//导入地址
-  private upurlInnerId = api.outgetupInnerId //按照内码 导入配件
-  // private upurl = api.outgetup;//导入地址
-  // private upurlInnerId=api.outgetupInnerId //按照内码 导入配件
+  private upurlInnerId = all.getup;//导入地址
   //要删除的配件
   private delArr: any = []
   //右上的表格
@@ -139,27 +147,18 @@ export default class Customs extends Vue {
 
   }
   //右上的数据
-  private rightTop: any = {
-    details: [
-    ],
-  }
+  private details:Array<any>=new Array<any>()
+  private currentData: any = []
   private Leftcurrentrow: any = {
 
   }
-  //右下的表格
-  private currentData: any = [
-  ]
-  //-------methods
-  //   : "2021-01-19 23:59:59"
-  // acceptEnterTimeStart: "2020-12-01 00:00:00"
-  // allotEnterTimeEnd: "2021-01-22 23:59:59"
-  // allotEnterTimeStart: "2020-12-02 00:00:00"
   $refs: {
     upload: HTMLFormElement, xTable2: HTMLFormElement, child: HTMLFormElement,
     SelectPartRef: HTMLFormElement, selectSupplier: HTMLFormElement,
     paneLeft: HTMLFormElement, planForm: HTMLFormElement, planBtn: HTMLFormElement, more: HTMLFormElement,
-    printZF: HTMLFormElement
+    printZF: HTMLFormElement, xTable: HTMLFormElement, morequeryModal: HTMLFormElement
   }
+  private keydown() { }
   //更多搜索
   private async getList() {
     let data: any = {};
@@ -172,71 +171,99 @@ export default class Customs extends Vue {
     moreData.moreData.allotEnterTimeEnd ? data.orderEndTime = moreData.moreData.allotEnterTimeEnd : ""
     moreData.moreData.allotEnterTimeStart ? data.orderStartTime = moreData.moreData.allotEnterTimeStart : ""
     //理赔单位
-    moreData.moreData.orderId ? data.guestId = moreData.moreData.orderId : ""
+    moreData.moreData.orderUnit ? data.guestName = moreData.moreData.orderUnit : ""
     //配件内码
-    moreData.moreData.partCode ? data.partInnerId = moreData.moreData.partCod : ""
+    moreData.moreData.partCode ? data.partInnerId = moreData.moreData.partCode : ""
     //理赔单号 
     moreData.moreData.serviceId ? data.serviceId = moreData.moreData.serviceId : ""
     //配件编码
-    moreData.moreData.partCode ? data.partCode = moreData.moreData.partCode : ""
+    moreData.moreData.code ? data.partCode = moreData.moreData.code : ""
     //配件名称
     moreData.moreData.partName ? data.partName = moreData.moreData.partName : ""
     //创建人
-    moreData.moreData.createName ? data.createName = moreData.moreData.orderMan : ""
+    moreData.moreData.orderMan ? data.createUname = moreData.moreData.orderMan : ""
     //console.log(this.purchaseType)
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
     console.log(data)
+    // showLoading()
     let res: any = await all.getListSale(params, data);
-    console.log(res)
     if (res.code == 0) {
-      //  if(res.data.totalElements==0){
-      //     console.log(1111111)
-      // }
 
-      this.Left.page.total = res.data.totalElements;
-      this.Left.tableList = (res.data.content || []).map(el => {
+      if (res.data.content && res.data.content.length > 0) {
+        this.tableList = res.data.content.map(el => {
+          el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
+          el.createTime = moment(el.createTime).format("YYYY-MM-DD")
+          switch (el.orderSign || "") {
+            case 0:
+              el.orderSignStatus = "草稿";
+              break;
+            case 1:
+              el.orderSignStatus = "已提交";
+              break;
+            case 2:
+              el.orderSignStatus = "已完成";
+              break;
+            default:
+              el.orderSignStatus = "草稿"
+              break;
+          }
+          return el;
+        });
+        this.$set(this.Left.page, "total", res.data.totalElements)
+        // this.row = res.data.content[0];
+        res.data.content[0].details.length != 0 ? this.details = res.data.content[0].details : this.details = []
 
-        el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
-        el.createTime = moment(el.createTime).format("YYYY-MM-DD")
-        switch (el.orderSign) {
-          case 0:
-            el.orderSignStatus = "草稿";
-            break;
-          case 1:
-            el.orderSignStatus = "已提交";
-            break;
-          case 2:
-            el.orderSignStatus = "已完成";
-            break;
+        // hideLoading()
+        let hg = this.filters(this.tableList);
+        console.log(hg,1)
+        let row:any = null
+        if (hg !== undefined) {
+          row = hg
+        } else {
+          row = this.tableList[0]
         }
-        return el;
-      });
-      this.form.serviceId = res.data.content[0].serviceId
-      this.form.guestId = res.data.content[0].guestId
-      this.form.afterSaleDate = moment(res.data.content[0].afterSaleDate).format("YYYY-MM-DD")
-      res.data.content[0].manualId ? this.form.moblenumber = res.data.content[0].manualId : this.form.moblenumber = "";
-      res.data.content[0].manualId && data.row.remark ? this.form.remark = res.data.content[0].remark : this.form.remark = ""
-      this.form.units = res.data.content[0].guestName
-      this.form.serviceId = res.data.content[0].serviceId
-      this.row = res.data.content[0];
-      this.relevanceList = res.data.content;
-      this.rightTop.details = res.data.content[0].details
+        this.details=row.details
+        this.$refs.xTable.setCurrentRow(row);
 
-
-      if (res.data.content[0].orderSignStatus == "草稿") this.flag = true
-
-
-
-
-      //console.log(this.relevanceList)
+        //给表单赋值
+        this.format(res.data.content)
+      } else {
+        this.tableList = []
+        this.details = []
+        this.$set(this.Left.page, "total", 0)
+      }
     }
-
+  }
+  //给表单赋值
+  private format(data) {
+    this.form.id=data[0].id
+    this.form.serviceId = data[0].serviceId
+    this.form.guestId = data[0].guestId
+    this.form.afterSaleDate = moment(data[0].afterSaleDate).format("YYYY-MM-DD")
+    data[0].manualCode ? this.form.moblenumber = data[0].manualCode : this.form.moblenumber = "";
+    this.form.remark = data[0].remark
+    this.form.units = data[0].guestName
+    this.form.serviceId = data[0].serviceId
+    this.highlight = data[0]
+    this.row = data[0];
+    console.log(data[0].id)
+    this.mainId=data[0].id
+    this.relevanceList = data;
+    if(data.length==1&&this.flag==false){
+      this.peiflag=true
+    }
+      if (data[0].orderSignStatus == "草稿") {
+        this.flag = true;
+        this.bcflag = true
+        this.tjflag = true
+        this.mainId = data[0].id
+      
+    }
   }
   //左边表格数据
   private async getLeftLists() {
     let data: any = {};
     if (this.queryDate) {
-
       data.startTime = this.queryDate[0];
       data.endTime = this.queryDate[1];
     } else {
@@ -247,53 +274,63 @@ export default class Customs extends Vue {
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
     params.page = this.Left.page.num - 1;
     params.size = this.Left.page.size;
+    // showLoading()
     let res: any = await all.getListSale(params, data);
     if (res.code === 0) {
-      this.Left.tableList = (res.data.content || []).map(el => {
-        el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
-        el.createTime = moment(el.createTime).format("YYYY-MM-DD")
-        switch (el.orderSign || "") {
-          case 0:
-            el.orderSignStatus = "草稿";
-            break;
-          case 1:
-            el.orderSignStatus = "已提交";
-            break;
-          case 2:
-            el.orderSignStatus = "已完成";
-            break;
-          default:
-            el.orderSignStatus = "草稿"
-            break;
+      if (res.data.content && res.data.content.length > 0) {
+        this.tableList = res.data.content.map(el => {
+          el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
+          el.createTime = moment(el.createTime).format("YYYY-MM-DD")
+          switch (el.orderSign || "") {
+            case 0:
+              el.orderSignStatus = "草稿";
+              break;
+            case 1:
+              el.orderSignStatus = "已提交";
+              break;
+            case 2:
+              el.orderSignStatus = "已完成";
+              break;
+            default:
+              el.orderSignStatus = "草稿"
+              break;
+          }
+          return el;
+        });
+        this.$set(this.Left.page, "total", res.data.totalElements)
+        // hideLoading()
+        let hg = this.filters(this.tableList);
+        //console.log(hg)
+        let row:any = null
+        if (hg !== undefined) {
+          row = hg
+        } else {
+          
+          row = this.tableList[0]
         }
-        return el;
-      });
-      // this.Leftcurrentrow.serviceId
-      //给表单赋值
-      this.form.serviceId = res.data.content[0].serviceId
-      this.form.guestId = res.data.content[0].guestId
-      this.form.afterSaleDate = moment(res.data.content[0].afterSaleDate).format("YYYY-MM-DD")
-      res.data.content[0].manualId ? this.form.moblenumber = res.data.content[0].manualId : this.form.moblenumber = "";
-      res.data.content[0].manualId && data.row.remark ? this.form.remark = res.data.content[0].remark : this.form.remark = ""
-      this.form.units = res.data.content[0].guestName
-      this.form.serviceId = res.data.content[0].serviceId
-      //默认标识
-      this.row = res.data.content[0];
-      this.rightTop.details = res.data.content[0].details
-      this.Left.page.total = res.data.totalElements;
-      if (res.data.content[0].orderSignStatus == "草稿") this.flag = true
+        this.details=row.details
+        // if(this.bjFlag!=false){
+        //   row = this.tableList[0]
+        // }
+        this.$refs.xTable.setCurrentRow(row);
+        //给表单赋值
+        this.format(res.data.content)
+      } else {
+        this.tableList = []
+        this.details = []
+        this.$set(this.Left.page, "total", 0)
+      }
     }
   }
   //快速查询
   private getDataQuick1(v) {
     this.queryDate = v;
     this.Left.page.num = 1;
-    // this.moreQueryList = {};
     this.getLeftLists();
   }
   //获取类型
   private getDataType1(v) {
-    console.log(v)
+
     this.Left.page.num = 1;
     this.purchaseType = v;
     this.getLeftLists()
@@ -307,20 +344,27 @@ export default class Customs extends Vue {
   }
   //新增
   private add() {
+    this.peiflag=true
+    this.tjflag = false
     this.bcflag = true
     this.flag = true;
     this.bjFlag = true
-    if (this.Left.tableList.length === 0) {
+  
+    if (this.tableList.length === 0) {
     } else {
-      if (this.Left.tableList[0]["xinzeng"] === "1") {
+      if (this.tableList[0]["xinzeng"] === "1") {
         this.$Message.info(
           "当前加工单列表已有一个新增单等待操作,请先保存当前操作新增单据"
         );
         return;
       }
     }
+    if(this.tableList.length > 0){
+  this.form.id=""
+    }
+  this.mainId=""
     this.row.orderSignStatus = "草稿"
-    this.rightTop.details = []
+    this.details = []
     this.form.serviceId = ""
     this.form.guestId = ""
     this.form.afterSaleDate = moment(new Date()).format("YYYY-MM-DD")
@@ -332,63 +376,55 @@ export default class Customs extends Vue {
       code: "2",
       index: 1,
       xinzeng: "1",
-      orderMan: this.$store.state.user.userData.staffName,
+     
     };
-    this.Left.tableList.unshift(item);
-    this.Left.tableList.map((item, index) => {
-      item.index = index + 1;
-      item._highlight = false;
-    });
+    this.tableList.unshift(item);
+    this.$refs.xTable.setCurrentRow(this.tableList[0]);
+    // this.tableList.map((item, index) => {
+    //   item.index = index + 1;
+    //   item._highlight = false;
+    // });
 
-    //this.leftClickItemId=null;
-    //this.Leftcurrentrow._highlight=true
-    // this.Left.tableList[0]['processProductVO'] = []
-    this.currentData = [];
   }
   //提交
   private async tijiao() {
-    if (!this.row.orderSignStatus) {
-      this.row = this.Left.tableList[0]
-    }
     if (!this.form.units || !this.form.afterSaleDate) {
       return this.$Message.error("*为必填项");
     }
-    // if (this.row.orderSignStatus!="草稿") {
-    //   return this.$Message.error("请先保存在提交");
-    // }
-    if (this.rightTop.details.length == 0) {
+    if (this.details.length == 0) {
       return this.$Message.error("请添加明细");
     }
-    let hh = this.rightTop.details.every((item, i) => {
+    let hh = this.details.every((item, i) => {
       return item.afterSaleReason != null
     })
-    let ge = this.rightTop.details.every((item, i) => {
-      return item.afterSaleQty != 0
+    let ge = this.details.every((item, i) => {
+      return item.afterSaleQty != 0 && item.afterSaleQty != null
     })
     if (!ge) { return this.$Message.info("理赔数量不能为0") }
     if (!hh) { return this.$Message.info("请填写理赔原因") }
-    Object.assign(this.Leftcurrentrow, this.form, this.rightTop)
-    console.log(this.Leftcurrentrow)
+    Object.assign(this.Leftcurrentrow, this.form)
+
+    this.Leftcurrentrow.details = this.details
     this.Leftcurrentrow.afterSaleDate = this.Leftcurrentrow.afterSaleDate
       ? moment(this.Leftcurrentrow.afterSaleDate).format("YYYY-MM-DD")
       : "";
     let res: any = await all.submitSale(this.Leftcurrentrow);
     if (res.code == 0) {
-      this.getList()
+      this.getLeftLists()
+      // this.$refs.xTable.setCurrentRow(this.highlight);
       this.flag = false
       this.$Message.success("提交成功");
       this.bcflag = false
       this.Leftcurrentrow = {
-        //moblenumber: ""
-
       }
     }
 
-
+  }
+  //高亮单元行的方法
+  private filters(data) {
+    return data.find(ele => ele.id === this.mainId)
   }
   //打印
-
-  // $refs: { }
   private stamp() {
     if (!this.mainId) {
       return this.$Message.error("请选择要打印的单据");
@@ -397,22 +433,26 @@ export default class Customs extends Vue {
     order.id = this.mainId;
     let printZF = this.$refs.printZF;
     printZF.openModal(order)
+    setTimeout(() => {
+        this.getLeftLists()
+    }, 0);
+    //this.$refs.xTable.setCurrentRow(this.highlight);
     //this.$refs.getLeftLists()
+   // location.reload()
+
   }
-  //按照编码品牌导入
-  private getRUl() {
-    this.upurl = api.outgetup + 'id=' + this.mainId;
-  }
+  //上传成功
   private onSuccess(response) {
     if (response.code == 0) {
       if (response.data.list && response.data.list.length > 0) {
         this.warning(response.data.list[0]);
       }
       //this.getLeftLists();
-      this.formPlan = {
-        code: ""
-      };
-      this.$Message.success("保存成功");
+      // this.formPlan = {
+      //   code: ""
+      // };
+      this.$Message.success("导入成功");
+      this.getLeftLists()
     } else {
       this.$Message.error("上传失败");
     }
@@ -430,46 +470,37 @@ export default class Customs extends Vue {
   }
   //按照配件内码导入
   private getRUlInnerId() {
-    this.upurlInnerId = api.outgetupInnerId + 'id=' + this.mainId;
+    this.upurlInnerId = all.getup + '?id=' + this.mainId;
   };
   //配件内码模板----下载魔板
   private downInnerId() {
     down('3800000000')
 
   }
-  //
   private getSupplierNamea(val) {
-
     console.log(val.id)
     this.$set(this.form, 'guestId', val.id)
     this.$set(this.form, 'units', val.fullName)
   }
   //删除配件
   private shanchu() {
+    //console.log(this.rightTop.details)
     if (this.delArr.length === 0) {
-      this.$Message.info("请勾选要删除的配件");
-
-
+      return this.$Message.info("请勾选要删除的配件");
     }
+    this.delArr.map(el => {
+      this.details.map((el2, idx) => {
+        if (el.id == el2.id) {
+          this.details.splice(idx, 1)
+          idx = idx - 1;
+        }
+      })
+    })
+
+    this.flag = true
   }
-
-
-  //获取表格高度
-  // private getDomHeight() {
-  //   this.$nextTick(() => {
-  //     let wrapH = this.$refs.paneLeft.offsetHeight;
-  //     let planFormH = this.$refs.planForm.offsetHeight;
-  //     let planBtnH = this.$refs.planBtn.offsetHeight;
-  //     // let planPageH = this.$refs.planPage.offsetHeight;
-  //     //获取左侧侧表格高度
-  //     this.leftTableHeight = wrapH - 144;
-  //     //获取右侧表格高度
-  //     this.rightTableHeight = (wrapH - planFormH - planBtnH - 80) / 2;
-  //   });
-  // }
   //添加配件
   private changep() {
-    //console.log(this.$refs.selectPartCom)
     this.$refs.SelectPartRef.init();
   }
   private afterSaleQtyChange(row) {
@@ -505,7 +536,6 @@ export default class Customs extends Vue {
   }
   //理赔单位的对勾
   private addSuppler() {
-    //console.log(this.$refs.selectSupplier);
     this.$refs.selectSupplier.init();
   }
   //更多的弹框回调
@@ -514,66 +544,52 @@ export default class Customs extends Vue {
   }
   //回调弹框表单里的数据
   private openMoreData(val) {
-    // this.moreList = val
-    // console.log(val)
+    this.Left.page.num = 1;
     this.getList()
   }
   //查看客户
   private watchke() {
-    this.clientDataShow = true;
-    // if () {
-    //   return this.$Message.error("请选择一条客户信息");
-    // }
-    // let data:any = {};
-    // data.id = this.clientList.partId;
-    // this.$refs.child.$refs.form.resetFields()
-    // getCustomerDetails(data).then((res:any) => {
-    //   if (res.code == 0) {
-    //     this.clientList = res.data;
-    //     this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
-    //     this.clientList.isFatCompany = this.clientList.isFatCompany == 1 ? true : false
-    //     this.clientList.isDisabled = this.clientList.isDisabled == 1 ? true : false
-    //     this.clientList.isSupplier = this.clientList.isSupplier == 1 ? true : false
-    //     this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
-    //     this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
-    //     this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
-    //     this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
-    //     this.$refs.child.financeList=this.clientList.guestAccountVoList
-    //     this.nameChange=true;
-    //   }
-    //   // console.log(this.clientList);
-    //   this.clientDataShow = true;
-    // });
+    if (!this.chaId) {
+      return this.$Message.error("请选择一条客户信息");
+    }
+    let data: any = {};
+    data.id = this.chaId;
+    this.$refs.child.$refs.form.resetFields()
+    getCustomerDetails(data).then((res: any) => {
+      console.log(res)
+      if (res.code == 0) {
+        this.clientList = res.data;
+        this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
+        this.clientList.isFatCompany = this.clientList.isFatCompany == 1 ? true : false
+        this.clientList.isDisabled = this.clientList.isDisabled == 1 ? true : false
+        this.clientList.isSupplier = this.clientList.isSupplier == 1 ? true : false
+        this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
+        this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
+        this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
+        this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
+        this.$refs.child.financeList = this.clientList.guestAccountVoList
+        this.nameChange = true;
+        this.getLeftLists()
+      }
+     
+      this.clientDataShow = true;
+    });
 
   }
   //保存
+  //配件禁用
+  private peiflag=false
   private async baocun() {
-
-    // if (this.rightTop.details.length <= 0) {
-    //   return this.$Message.error("请填选明细");
-    // }
+   
     if (!this.form.units || !this.form.afterSaleDate) {
       return this.$Message.error("*为必填项");
     }
-    // if (!this.form.serviceId) {
-    //   if (this.form.xinzeng === "1") {
-    //   } else {
-    //     this.$Message.info("请先选择加工单");
-    //     return;
-    //   }
-    // }
     if (this.row.orderSignStatus != "草稿") {
       this.$Message.info("只有草稿状态才能进行保存操作");
       return;
     }
-    // let hh = this.Leftcurrentrow.details.every((item, i) => {
-    //   return item.afterSaleReason != null
-    // })
-    // if (!hh) { return this.$Message.info("请填写理赔原因") }
-
-
-    Object.assign(this.Leftcurrentrow, this.form, this.rightTop)
-
+    Object.assign(this.Leftcurrentrow, this.form)
+    this.Leftcurrentrow.details = this.details
     this.Leftcurrentrow.afterSaleDate = this.Leftcurrentrow.afterSaleDate
       ? moment(this.Leftcurrentrow.afterSaleDate).format("YYYY-MM-DD")
       : "";
@@ -581,39 +597,24 @@ export default class Customs extends Vue {
     if (res.code == 0) {
       this.bcflag = false
       this.tjflag = true
-      this.getList()
+      this.getLeftLists()
       this.flag = false;
       this.bjFlag = false
+      this.peiflag=false
       this.$Message.success("保存成功");
       this.Leftcurrentrow = {
-        //moblenumber: ""
       }
     }
-
-    // const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-    // params.details = params.details.length
-    //   ? params.details[0]
-    //   : {};
-    // if (
-    //   !params.details.orderQty ||
-    //   params.details.orderQty * 1 < 1
-    // ) {
-    //   this.$Message.info("组装数量必须大于0");
-    //   return;
-    // }
-
-    // }
-
   }
   //------左边的table 
   private changePage(v) {
     this.Left.page.num = v
-    this.getList()
+    this.getLeftLists()
   }
   private changeSize(size) {
     this.Left.page.num = 1
     this.Left.page.size = size
-    this.getList()
+    this.getLeftLists()
   }
   //添加配件
   private getPartNameList(val) {
@@ -625,14 +626,14 @@ export default class Customs extends Vue {
     let arr: any = [];
 
     datas.forEach((item) => {
-      let filterArr = this.rightTop.details.map(({ partCode }) => partCode)
+      let filterArr = this.details.map(({ partCode }) => partCode)
       if (!filterArr.includes(item.partCode)) {
         arr.push(item)
       }
     })
     arr.forEach(item => {
       delete item.id;
-      this.rightTop.details.unshift(item);
+      this.details.unshift(item);
     });
     //this.setFilterArr(this.Leftcurrentrow.details || [])
     if (arr.length != datas.length) {
@@ -644,7 +645,7 @@ export default class Customs extends Vue {
   }
   //选中的行
   private getOneClinet(data) {
-    if (this.flag == true && data.row.orderSignStatus == "草稿" && this.bjFlag) {
+    if (this.flag == true && data.row.orderSignStatus && this.bjFlag) {
       this.$Modal.confirm({
         title: "您正在编辑单据，是否需要保存",
         onOk: () => {
@@ -652,53 +653,58 @@ export default class Customs extends Vue {
           this.baocun();
         },
         onCancel: () => {
-          // this.getLeftLists();
+          this.tableList.shift(this.tableList[0])
+
           this.flag = false;
         }
       });
       return;
     }
+    this.peiflag=false
+    this.currentData = []
     this.bcflag = true
+    if (data.row.orderSignStatus == "草稿") {
+      this.tjflag = true
+    }
     // this.tjflag=true
+    this.highlight = data.row
     this.row = data.row
+    this.chaId = data.row.guestId
     this.form.id = data.row.id
     this.mainId = data.row.id
     this.form.serviceId = data.row.serviceId
     this.form.guestId = data.row.guestId
     this.form.afterSaleDate = moment(data.row.afterSaleDate).format("YYYY-MM-DD")
-    data.row.manualId ? this.form.moblenumber = data.row.manualId : this.form.moblenumber = "";
-    data.row.manualId && data.row.remark ? this.form.moblenumber = data.row.remark : this.form.moblenumber = ""
+    data.row.manualCode ? this.form.moblenumber = data.row.manualCode : this.form.moblenumber = "";
+    data.row.manualCode ? this.form.moblenumber = data.row.manualCode : this.form.moblenumber = ""
     this.form.units = data.row.guestName
 
-    this.rightTop.details = data.row.details
+    this.details = data.row.details
     if (data.row.orderSignStatus != "草稿") {
       this.flag = false
     } else {
       this.flag = true
     }
   }
-  //------右上边的table
-
-  private keydown() {
-
-  }
   //手动全选触发
-  private selectAllEvent() {
-
+  private selectAllEvent(e) {
+    this.delArr = e.selection
   }
+
   //选中当前行
   private currentChangeEvent(e) {
-    this.clientList = e.row
+    // this.clientList = e.row
     console.log(e.row)
   }
   private logDataLoading: boolean = false
+  //获取日志
   private async logDataMethod({ row }) {
-    // if (this.addNewBool) {
-    // return
-    // } else {
     this.logDataLoading = true;
     let data = {
       detailId: row.id
+    }
+    if (this.row.orderSignStatus == "草稿") {
+      return;
     }
     let res: any = await all.registerPartsProcesLog(data)
     if (res.code === 0) {
@@ -721,18 +727,14 @@ export default class Customs extends Vue {
 
   //选中单个框
   private selectChangeEvent(e) {
-    this.printList.push(e.row)
+    console.log(e.row)
+    this.delArr.push(e.row)
   }
   private keydownEvent() {
 
   }
-  //---mounted
   mounted() {
-    this.getList()
-    // window.onresize = () => {
-    //   this.getDomHeight();
-    // };
+   
   }
-
 
 }

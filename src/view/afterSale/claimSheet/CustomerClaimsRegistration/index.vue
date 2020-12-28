@@ -49,7 +49,7 @@
                 class="mr10"
                 @click="baocun"
                 :loading="saveLoading"
-                :disabled="flag == false|!bcflag"
+                :disabled="flag == false"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -59,7 +59,7 @@
                 class="mr10"
                 @click="tijiao"
                 :loading="commitLoading"
-                :disabled="row.orderSignStatus!='草稿'||mainId==''"
+                :disabled="row.orderSignStatus!='草稿'||mainId==''||tjflag==false"
               >
                 提交
               </Button>
@@ -105,7 +105,7 @@
                   show-overflow
                   @current-change="getOneClinet"
                   :height="leftTableHeight"
-                  :data="Left.tableList"
+                  :data="tableList"
                 >
                   <vxe-table-column
                     type="seq"
@@ -143,7 +143,7 @@
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
-                    field="orderMen"
+                    field="orderMan"
                     title="提交人"
                     width="100"
                   ></vxe-table-column>
@@ -187,7 +187,7 @@
                       >
                         <Input
                           show-overflow="tooltip"
-                          :disabled="flag == false||row.manualId"
+                          :disabled="flag == false||row.manualCode"
                           v-model="form.units"
                           class="w160"
                         />
@@ -197,7 +197,7 @@
                       class="ml5 btn1"
                       size="small"
                       type="default"
-                      :disabled="flag == false"
+                      :disabled="flag == false||row.manualCode"
                       @click="addSuppler"
                     >
                       <Icon type="md-checkmark" />
@@ -257,7 +257,7 @@
                         size="small"
                         class="mr10"
                         @click="changep"
-                        :disabled="flag == false || row.manualId"
+                        :disabled="flag == false || row.manualCode"
                       >
                         添加配件
                       </Button>
@@ -281,7 +281,7 @@
                               :on-success="onSuccess"
                               :before-upload="beforeUploadInnerId"
                             >
-                              <Button size="small"  :disabled="row.orderSignStatus != '草稿' " @click="getRUlInnerId"
+                              <Button size="small"  :disabled="row.orderSignStatus != '草稿' ||row.manualCode||peiflag" @click="getRUlInnerId"
                                 ><span class="center"
                                   ><Icon
                                     custom="iconfont icondaoruicon icons"
@@ -301,7 +301,7 @@
                         </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="shanchu">
+                      <Button size="small" class="mr10" @click="shanchu" :disabled="row.orderSignStatus != '草稿'||row.manualCode">
                         删除配件
                       </Button>
                     </div>
@@ -329,11 +329,11 @@
                   @keydown="keydown"
                   @current-change="logDataMethod"
                   @select-all="selectAllEvent"
-                  @select-change="selectChangeEvent"
+                  @checkbox-change="selectChangeEvent"
                   :height="rightTableHeight"
-                  :data="rightTop.details"
+                  :data="details"
                   :edit-config="
-                   row.orderSignStatus=='草稿'||!row.manualId ? { trigger: 'click', mode: 'cell' } : {}
+                   row.orderSignStatus=='草稿'||!row.manualCode ? { trigger: 'click', mode: 'cell' } : {}
                   "
                 >
                   <vxe-table-column
@@ -379,14 +379,12 @@
                     <template v-slot="{ row }">
                       <vxe-input
                         type="number"
-                        :max="
-                          1>0? row.untreatedQty : 100000000000
-                        "
+                
                         :min="1"
                         v-model="row.afterSaleQty"
                         :controls="false"
                         :precision="0"
-                        :disabled="row.manualId"
+                        :disabled="row.manualCode"
                         @change="afterSaleQtyChange(row)"
                         size="mini"
                       />
@@ -420,7 +418,7 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partBrand"
+                    field="carModelName"
                     title="品牌车型"
                     width="100"
                   ></vxe-table-column>
@@ -548,6 +546,7 @@
       ></select-part-com>
       <!--更多弹框-->
       <!--      客户资料-->
+      
       <Modal v-model="clientDataShow" title="客户资料" width="700">
         <ClientData
           :data="clientList"
