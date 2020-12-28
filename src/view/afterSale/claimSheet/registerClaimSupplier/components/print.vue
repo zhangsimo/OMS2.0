@@ -67,11 +67,11 @@
               序号
             </th>
             <th
-              style="width:20%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:25%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件内码
             </th>
             <th
-              style="width:20%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:25%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件编码
             </th>
             <th
@@ -83,11 +83,11 @@
               品牌
             </th>
             <th
-              style="width: 10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 16%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               品牌车型
             </th>
             <th
-              style="width: 7%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               规格
             </th>
             <th
