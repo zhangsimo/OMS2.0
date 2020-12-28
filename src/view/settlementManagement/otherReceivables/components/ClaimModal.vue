@@ -2,7 +2,8 @@
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20 ">
-        <Button class="fl" @click="openPClaimModal">选择单据</Button>
+        <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
+        备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
         <div class="fr">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
           <Select v-model="fund" placeholder="请选择" class="w200" clearable>
@@ -88,6 +89,7 @@
     props: ['titleName'],
     data() {
       return {
+        remark: '',
         visibal: false,
         fund: "",
         fundList: [],//款项分类数组
@@ -155,6 +157,7 @@
         this.tableData = [];
         this.visibal = true;
         this.fund = "";
+        this.remark = ''
         setTimeout(() => {
           let params = {
             accountNo: this.$parent.serviceId,
@@ -209,6 +212,13 @@
         if (flag) {
           this.$message.error('认领金额输入错误，不可为空')
           return
+        }
+        if(this.remark){
+          if(this.remark.length > 500){
+            return this.$message.error('备注500字符以内')
+          }else{
+            this.dataOne.remark = this.remark
+          }
         }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {

@@ -2,40 +2,42 @@
   <div>
     <Modal v-model="modal" :title="claimTit" width="1000">
       <Row class="dbd" v-if="claimTit=='预收款认领'">
-        <i-col span="15">
+        <i-col span="6">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
         </i-col>
-        <i-col span="9" class="tr">
-          <Form :model="formValidate" ref="form" :rules="ruleValidate">
-            <FormItem label="选择辅助核算：" prop="voucherInput">
+        <i-col span="18" class="tr">
+          <Form :model="formValidate" inline ref="form" :rules="ruleValidate">
+            <FormItem label="备注：" :label-width="60" label-position="left" maxlength="500" show-word-limit  prop="remark">
               <Row>
-                <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput" v-model="MessageValue"></i-input>
-                </i-col>
-                <i-col span="2" class="ml10">
-                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
-                </i-col>
+                <i-input :value.sync="formValidate.remark" class="w180" maxlength="500" v-model.trim="formValidate.remark"></i-input>
+              </Row>
+            </FormItem>
+            <FormItem label="选择辅助核算：" :label-width="120" label-position="left" prop="voucherInput">
+              <Row>
+                  <i-input :value.sync="formValidate.voucherInput" class="w200" v-model="MessageValue"></i-input>
+                  <Button type="default" @click="openVoucherInput" class="ml10">辅助核算</Button>
               </Row>
             </FormItem>
           </Form>
         </i-col>
       </Row>
       <Row class="dbd" v-else>
-        <i-col span="15">
-          <Form :model="formValidate" ref="form" :rules="ruleValidate">
-            <FormItem label="选择辅助核算：" prop="voucherInput">
+        <i-col span="18">
+          <Form :model="formValidate" ref="form" inline :rules="ruleValidate">
+            <FormItem label="备注：" :label-width="60" label-position="left" prop="remark">
               <Row>
-                <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput" v-model="MessageValue"></i-input>
-                </i-col>
-                <i-col span="2" class="ml10">
-                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
-                </i-col>
+                <i-input :value.sync="formValidate.remark" class="w180" maxlength="500" show-word-limit v-model.trim="formValidate.remark"></i-input>
+              </Row>
+            </FormItem>
+            <FormItem label="选择辅助核算："  :label-width="120" label-position="left" prop="voucherInput">
+              <Row>
+                  <i-input :value.sync="formValidate.voucherInput" class="w200" v-model="MessageValue"></i-input>
+                  <Button type="default" @click="openVoucherInput" class="ml10">辅助核算</Button>
               </Row>
             </FormItem>
           </Form>
         </i-col>
-        <i-col span="9" class="tr">
+        <i-col span="6" class="tr">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
         </i-col>
       </Row>
@@ -163,9 +165,10 @@
       };
       return {
         voucherinputModel: false,
-        formValidate: {voucherInput: ""},
+        formValidate: {voucherInput: "",remark: ""},
         ruleValidate: {
-          voucherInput: [{required: true, message: '必填项', trigger: 'blur'}]
+          voucherInput: [{required: true, message: '必填项', trigger: ['blur','change']}],
+          remark: [{min: 0, max: 500, message: '备注信息500字符以内', trigger: ['blur','change']}]
         },
         // 表格验证  本次认领金额  是否符合条件
         validRules: {
@@ -212,6 +215,7 @@
         this.modal = true;
         this.MessageValue = ''
         this.$refs.voucherInput.AssistAccounting = ''
+        this.formValidate.remark = ''
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
         })
@@ -387,6 +391,9 @@
         let data = {};
         data.detailId = this.accrued[0].id;
         let objItem = this.$refs.voucherInput.voucherItem;
+        if(this.formValidate.remark){
+          data.remark = this.formValidate.remark
+        }
         if (this.voucherinputModel) {
           let ajaxBool = true;
           if (this.claimTit == "预收款认领") {

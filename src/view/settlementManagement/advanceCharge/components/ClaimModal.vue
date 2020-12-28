@@ -135,6 +135,7 @@
       open() {
         this.tableData = []
         this.visibal = true;
+        this.remark = ''
         setTimeout(()=>{
           let params={
             accountNo: this.$parent.serviceId,
@@ -185,6 +186,11 @@
         }
         if(this.titleName=="预付款收回认领" && (this.thisClaimedAmtSum>this.$parent.currRow.claimAmt)){
           return this.$Message.error("本次认领金额不可大于本次已认领金额")
+        }
+        if(this.remark){
+          if(this.remark.length > 500){
+            return this.$message.error('备注500字符以内')
+          }
         }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {

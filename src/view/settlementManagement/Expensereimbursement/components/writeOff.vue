@@ -1,7 +1,8 @@
 <template>
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
-      <Button :loading="submitDis" :disabled="selectArr.length <= 0" @click="submit">保存</Button>
+      <Button :loading="submitDis" class="mr10" :disabled="selectArr.length <= 0" @click="submit">保存</Button>
+      备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
     </Row>
     <Row class="mt20">
       <vxe-table
@@ -181,6 +182,7 @@
             {required: true, validator: amtValid} // message: "因公借支核销金额必填" ,
           ]
         },
+        remark: '',
         show: false,
         showChild: false,
         submitDis: false,//保存接口返回之前按钮不可点击
@@ -233,6 +235,7 @@
       },
       init() {
         this.currRow = null;
+        this.remark = ''
         this.dates = [];
         this.tbdataChild = [];
         this.selectTmpArr = [];
@@ -395,6 +398,13 @@
                 return {id: el.id, rpAmt: el.writeOffAmount};
               })
             };
+            if(this.remark){
+              if(this.remark.length > 500){
+                return this.$message.error('备注500字符以内')
+              }else{
+                data.remark = this.remark
+              }
+            }
             this.submitDis = true;
             api.orderWriteOff2(data).then(res => {
               if (res.code == 0) {

@@ -53,7 +53,8 @@
         <i style="color:red">* </i>
         <span>选择辅助核算：</span>
         <Input v-model="MessageValue" class="w150 mr10" />
-        <Button type="default" @click="openVoucherInput">辅助核算</Button>
+        <Button type="default" class="mr10" @click="openVoucherInput">辅助核算</Button>
+        备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
       </div>
       <div slot="footer">
         <Button type="primary" @click="submitOk" class="mr10">确定</Button>
@@ -99,6 +100,7 @@ export default {
       bool:true,
       MessageValue:'',
       assistTypeCode: '1', //控制打开辅助核算类型，默认是客户和供应商往来
+      remark: '',
     };
   },
   methods: {
@@ -107,6 +109,7 @@ export default {
       this.oneSubject = {};
       this.modal = true;
       this.MessageValue = ""
+      this.remark = ''
       this.$nextTick(()=>{
         this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0),"balanceMoney")
       })
@@ -150,6 +153,13 @@ export default {
       if(data.claimMoney > this.accrued[0].unClaimedAmt){
         this.$Message.error('本次认领金额不可大于未认领金额')
         return
+      }
+      if(this.remark){
+        if(this.remark.length > 500){
+          return this.$message.error('备注500字符以内')
+        }else{
+          data.remark = this.remark
+        }
       }
       if(this.bool){
         data.subjectCode="2202";

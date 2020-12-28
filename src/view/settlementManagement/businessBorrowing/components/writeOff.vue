@@ -1,7 +1,8 @@
 <template>
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
-      <Button :loading="disabled" :disabled="currRow==null" @click="submit">因公借支核销</Button>
+      <Button :loading="disabled" :disabled="currRow==null" class="mr10" @click="submit">因公借支核销</Button>
+      备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
     </Row>
     <div class="mt20">
       <vxe-table
@@ -166,6 +167,7 @@ export default {
           {  required: true,validator: amtValid } // message: "因公借支核销金额必填" ,
         ]
       },
+      remark: '',
       show: false,
       disabled: false,
       currRow: null,
@@ -280,6 +282,13 @@ export default {
           },
         }
         this.disabled=true;
+        if(this.remark){
+          if(this.remark.length > 500){
+            return this.$message.error('备注500字符以内')
+          }else{
+            data.remark = this.remark
+          }
+        }
         let res = await api.orderWriteOff(data)
         if (res.code == 0) {
           this.disabled=false;
