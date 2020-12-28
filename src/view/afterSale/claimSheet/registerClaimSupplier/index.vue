@@ -235,6 +235,7 @@
                       :min="1"
                       v-model="row.afterSaleQty"
                       :precision="0"
+                      :disabled="formPlan.orderSign!=0"
                       @change="afterSaleQtyChange(row)"
                       size="mini"
                     />
@@ -247,6 +248,7 @@
                       maxlength="60"
                       v-model="row.afterSaleReason"
                       size="mini"
+                      :disabled="formPlan.orderSign!=0"
                       @change="afterSaleReasonChange(row)"
                     />
                   </template>
@@ -257,6 +259,7 @@
                       v-model="row.claimDemageCode"
                       :controls="false"
                       size="mini"
+                      :disabled="formPlan.orderSign!=0"
                     />
                   </template>
                 </vxe-table-column>
