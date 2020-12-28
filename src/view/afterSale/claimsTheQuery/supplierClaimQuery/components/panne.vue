@@ -68,7 +68,7 @@
                         v-for="item in handleTypeList"
                         :value="item.value"
                         :key="item.value"
-                      >{{ item.label }}
+                      >{{ item.name }}
                       </Option>
                     </Select>
                   </FormItem>
@@ -78,7 +78,7 @@
                         v-for="item in guestTypeList"
                         :value="item.value"
                         :key="item.value"
-                      >{{ item.label }}
+                      >{{ item.name }}
                       </Option>
                     </Select>
                   </FormItem>
