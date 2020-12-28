@@ -410,6 +410,11 @@
            this.search.enterDate=this.v1
             return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
          }
+         if(!this.search.enterDate[0]&&this.search.partCode==""){
+           
+            return this.$message({message:'日期范围不能为空',type:'error'})
+         }
+
         this.moreModel = false;
         this.$emit("search", this.search);
       },

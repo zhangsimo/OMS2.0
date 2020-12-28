@@ -347,10 +347,10 @@
       async getQuery() {
         if (this.claimTit == "其他付款认领") {
           let data = {
-            startTime: this.value[0]
+            startDate: this.value[0]
               ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
               : "",
-            endTime: this.value[1]
+            endDate: this.value[1]
               ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
               : "",
             orgid: this.BranchstoreId,

@@ -119,7 +119,7 @@
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
             <Button @click="moreOpen" class="mr10">更多查询</Button>
-            <Button @click="exportxls" v-has="'export'">导出</Button>
+<!--            <Button @click="exportxls" v-has="'export'">导出</Button>-->
           </div>
         </div>
       </div>

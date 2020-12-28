@@ -126,6 +126,8 @@ const audit = {
   wmsApi: "https://uatapi2.g-part.cn/oms-system-provider",
   omsProduct: "https://uatapi2.g-part.cn/oms-product-provider",
   omsOrder: "https://uatapi2.g-part.cn/oms-order-provider",
+  omsOrder_h: "https://uatapi2.g-part.cn/oms-order-provider-h",
+
   passportApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
@@ -151,6 +153,7 @@ const pro = {
   wmsApi: "https://api2.g-part.cn/oms-system-provider",
   omsProduct: "https://api2.g-part.cn/oms-product-provider",
   omsOrder: "https://api2.g-part.cn/oms-order-provider",
+  omsOrder_h: "https://api2.g-part.cn/oms-order-provider-h",
   passportApi: "https://api2.g-part.cn/gpart-passport-provider",
   essentialApi: "https://api2.g-part.cn/oms-essential-provider",
   authApi: "https://api2.g-part.cn/gpart-passport-provider",

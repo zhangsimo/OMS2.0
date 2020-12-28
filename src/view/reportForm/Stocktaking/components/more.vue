@@ -288,6 +288,10 @@ export default class MoreSearch extends Vue {
          this.$message({message:`提交日期不可超过一个月，请重新选择`,type:'error'})
          return
       }
+      if(!this.createDate[0]&&!this.auditDate[0]&&this.partCode==""){
+         this.$message({message:`日期范围不能为空，请重新选择`,type:'error'})
+         return
+      }
     let parent:any=this.$parent
     let search:any=parent.search
     let data = {
