@@ -10,7 +10,7 @@
             <span class="mr10">公司名称：</span>
             <Select
               v-model="search.orgid"
-              class="w120"
+              class="w200"
               :disabled="selectShopList"
               filterable
               clearable
@@ -21,9 +21,14 @@
                 :key="item.id"
               >{{ item.shortName }}</Option>
             </Select>
-            <Checkbox class="mr20 ml10" v-model="search.guestPart">
-              包含内部客户
-            </Checkbox>
+            <!--<Checkbox class="mr20 ml10" v-model="search.guestPart">-->
+              <!--包含内部客户-->
+            <!--</Checkbox>-->
+          </div>
+          <div class="db mr10">
+            <Select v-model="search.guestType" placeholder="请选择客户体系" multiple style="width:270px;height: 32px">
+              <Option v-for="item in Subordinate" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db">
             <Button type="warning" @click="query" class="mr10">查询</Button>
@@ -210,7 +215,7 @@
         shoppingList: [{id: "", shortName: "全部", fullName: "全部", name: "全部"}],//门店数组
         search: {
           isPanne: true,
-          guestPart: true,//包含内部客户
+          guestType: [0,1,2],//包含内部客户
           showPerson: 1,
           guestCode: "",//客户编码
           guestName: "",//客户名称
@@ -399,7 +404,7 @@
        getnew(data){
      let hh=moment(data[1]).format("YYYY-MM-DD")
       let ha=moment(data[0]).format("YYYY-MM-DD")
-    
+
       let d=(new Date(hh).getTime()-new Date(ha).getTime())/(1000*3600*24)
       return d
     },
@@ -411,7 +416,7 @@
             return this.$message({message:'出库日期跨度不可超过一个月',type:'error'})
          }
          if(!this.search.enterDate[0]&&this.search.partCode==""){
-           
+
             return this.$message({message:'日期范围不能为空',type:'error'})
          }
 
