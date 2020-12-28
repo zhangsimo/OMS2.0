@@ -190,10 +190,13 @@
   import {Vue, Component, Watch} from "vue-property-decorator";
 import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
   import moment from "moment"
-  @Component
+  @Component 
+  
   export default class print extends Vue{
+  
     private onelist:any={};
-    private print() {
+    private print() { 
+     
       let iframe:any = document.getElementById("print-iframe");
       if (!iframe) {
         let el:any = document.getElementById("printBox");
@@ -220,6 +223,7 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
         this.onelist=res.data;
         this.onelist.printDate=moment(new Date()).format("yyyy-MM-dd HH:mm:ss")
         setTimeout(()=>{
+          
           this.print()
         })
       }

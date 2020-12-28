@@ -61,4 +61,16 @@ export function registerPartsProcesLog(params){
     params
   })
 }
-
+//导入
+// /afterSaleMain/import/partId
+export const getup = `${api.omsOrder}/afterSaleMain/import/partId`;
+//客户理赔处理查询
+// afterSaleOutDetail/findAllAfterSaleDetail
+export function getKuquery(params,data){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleOutDetail/findAllAfterSaleDetail`,
+    method:"post",
+    params,
+    data
+  })
+}

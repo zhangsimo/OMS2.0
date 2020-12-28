@@ -7,6 +7,7 @@ import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 import {getBrandList} from "@/view/reportForm/until.js";
 import {ToDayStr} from "@/components/getDate/index_bill.js"
+import * as all from "@/api/afterSale/CustomerClaimsRegistration/index";
 @Component({
   components: {
   
@@ -43,7 +44,7 @@ export default class Custom extends Vue {
   private pageOpts: Array<number> = [10, 20, 30, 50];
   //---更多查询的数据
   private moreSearch:any={
-    orderDate:[],
+    orderDate1:ToDayStr(),
     handleType:99,
     guestType:99,
     orderMan:"",
@@ -65,14 +66,20 @@ export default class Custom extends Vue {
   ]
   async mounted() {
     this.brandArr = await getBrandList(this.search.partBrand)
+    this.getList()
   }
   //---methods
   private async partBrandRemote(query: string) {
     this.brandArr = await getBrandList(query)
   }
+  private getDataType(e){
+    console.log(e)
+  }
   //获取时间
   private getvalue(value) { 
     this.search.orderDate = value;
+    this.page.num = 1;
+    this.getList()
   }
   //状态
   private select1() { }
@@ -81,14 +88,18 @@ export default class Custom extends Vue {
     console.log(data);
   }
   //查询
-  private query() {
+  private query(){
+   // alert(2)
+        this.getList()
+  }
+  private getdata() {
     let data: any = {};
     for (let key in this.search) {
       if (this.search[key]) {
         if (key == "orderDate") {
-          data.createStartTime = this.search["orderDate"][0] != "" ?
+          data.orderStartDate = this.search["orderDate"][0] != "" ?
             moment(this.search["orderDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss") : ""
-          data.createEndTime = this.search["orderDate"][1] != "" ?
+          data.orderEndDate = this.search["orderDate"][1] != "" ?
             moment(this.search["orderDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss") : ""
         } else if (key == "orderSign") {
           data.orderSign = this.search.orderSign == 99 ? "" : this.search.orderSign
@@ -109,22 +120,53 @@ export default class Custom extends Vue {
     this.search.orderDate = v;
   }
   //更多查询确定按钮
-  private Morequery() {
+  private async Morequery() {
     let data:any = {};
     for (let key in this.moreSearch) {
       if (this.moreSearch[key]) {
-        if (key == "orderDate") {
-          data.createStartTime =this.moreSearch["orderDate"][0]!=""?
-            moment(this.moreSearch["orderDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss"):""
-          data.createEndTime =this.moreSearch["orderDate"][1]!=""?
-            moment(this.moreSearch["orderDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):""
-        }else {
-          data[key] = this.moreSearch[key];
+        if (key == "orderDate1") {
+          
+          data.orderStartDate =this.moreSearch["orderDate1"][0]!=""?
+            moment(this.moreSearch["orderDate1"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss"):""
+          data.orderEndDate =this.moreSearch["orderDate1"][1]!=""?
+            moment(this.moreSearch["orderDate1"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):"";
+          
+        }else if(key == "handleType"){
+          data.handleType = this.moreSearch.handleType == 99 ? "" : this.moreSearch.handleType
+         
+        }else if(key == "guestType"){
+          data.guestType = this.moreSearch.guestType == 99 ? "" : this.moreSearch.guestType
+        }else{
+           data[key] = this.moreSearch[key];
         }
       }
+    }  
+
+   delete data.orderDate
+    console.log(data)
+    let params:any={
+      page:this.page.num-1,
+      size:this.page.size
     }
-  console.log(data)
-  // this.cancelContent(0)
+    let res:any=await all.getKuquery(params,data)
+    if(res.code===0){
+      this.claimSupplierData=(res.data.content || []).map(el=>{
+        switch (el.orderSign) {
+          case 0:
+            el.handleType = "草稿";
+            break;
+          case 1:
+            el.handleType = "已提交";
+            break;
+          case 2:
+            el.handleType = "已完成";
+            break;
+        }
+        return el;
+      });
+      this.page.total=res.data.totalElements
+    }
+  
   }
   private poperHide(){
     this.moreModel = false;
@@ -152,36 +194,38 @@ export default class Custom extends Vue {
   //选择日期
   private changePage(p) {  
     this.page.num = p;
-   
+    this.getList()
   }
   private changeSize(size) {
    this.page.num = 1;
     this.page.size = size;
+    this.getList()
   }
-  private getList(){
+  private async getList(){
     let params:any={
       page:this.page.num-1,
       size:this.page.size
     }
-    // @ts-ignore
-    // let res:any=await api.supplierSettlementQuery(params,this.body)
-    // if(res.code===0){
-      // this.claimSupplierData=(res.data.content || []).map(el=>{
-      //   switch (el.orderSign) {
-      //     case 0:
-      //       el.orderSignStatus = "草稿";
-      //       break;
-      //     case 1:
-      //       el.orderSignStatus = "已提交";
-      //       break;
-      //     case 2:
-      //       el.orderSignStatus = "已完成";
-      //       break;
-      //   }
-      //   return el;
-      // });
-      // this.page.total=res.data.totalElements
-    //}
+    this.getdata()
+   // @ts-ignore
+    let res:any=await all.getKuquery(params,this.body)
+    if(res.code===0){
+      this.claimSupplierData=(res.data.content || []).map(el=>{
+        switch (el.orderSign) {
+          case 0:
+            el.handleType = "草稿";
+            break;
+          case 1:
+            el.handleType = "已提交";
+            break;
+          case 2:
+            el.handleType = "已完成";
+            break;
+        }
+        return el;
+      });
+      this.page.total=res.data.totalElements
+    }
   }
   
   //获取点击行

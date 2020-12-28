@@ -190,7 +190,10 @@ export default {
       order.id = this.formPlan.id;
       let printZF = this.$refs.printZF;
       printZF.openModal(order)
-      this.getLeftLists()
+      setTimeout(()=>{
+        this.getLeftLists()
+      })
+      
     },
     // 打开更多搜索
     openQueryModal() {

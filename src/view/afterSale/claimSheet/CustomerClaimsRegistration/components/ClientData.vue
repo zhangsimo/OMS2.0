@@ -21,7 +21,7 @@
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="客户属性:" prop="guestProperty">
-                <Select v-model="data.guestProperty" style="width:180px" class="mr10" >
+                <Select v-model="data.guestProperty" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00105"
                     :value="item.itemCode"
@@ -30,21 +30,20 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  :disabled="dis" readonly/>
+                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  :disabled="dis" />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
-                <Input v-model="data.fullName" style="width: 180px"  :disabled="dis" readonly/>
+                <Input v-model="data.fullName" style="width: 180px"  :disabled="dis" />
               </FormItem>
               <FormItem label="拼音码:">
                 <Input v-model="spellCode" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="联系人:" prop="contactor">
-                <Input v-model="data.contactor" style="width: 180px" maxlength="8" readonly/>
+                <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
               </FormItem>
               <FormItem label="省份:" prop="provinceId">
                 <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
                   <Option
-                  
                     v-for="item in provincearr"
                     v-show="item.parentId==0"
                     :key="item.id"
@@ -174,9 +173,9 @@
           <span style="margin-left: 100px">
             <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
           </span>
-          <!-- <span style="margin-left: 100px">
+          <span style="margin-left: 100px">
             <Checkbox v-model="data.isFatCompany"></Checkbox>是否成品油企业
-          </span> -->
+          </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
           <div>
@@ -424,7 +423,6 @@ export default {
     },
     dis:""
   },
-  //props:['data','provincearr','treelist','dis'],
   data() {
     const contactorTel = (rule, value, callback) => {
       if (!value) {

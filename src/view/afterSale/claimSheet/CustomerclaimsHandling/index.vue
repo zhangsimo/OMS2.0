@@ -38,7 +38,7 @@
             </Select>
          
           <!--                          :disabled="form.status.value !== 0"-->  
-            <span style="margin-top:2px;margin-left:15px">理赔单号:</span><Input class="ipt" v-model.trim="search.claimsCode"></Input>   
+            <span style="margin-top:2px;margin-left:15px">理赔单号:</span><Input class="ipt" v-model.trim="search.serviceId"></Input>   
         
         <Button style="margin-top:2px" @click="ok">查询</Button>
       </Form>
@@ -57,6 +57,7 @@
       ref="xTable"
       show-overflow="title"
       class="mt20"
+      height="600"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @checkbox-all="claimSupplierSel"
@@ -88,7 +89,7 @@
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
-                    field="partBrand"
+                    field="guestName"
                     title="理赔单位"
                     width="100"
                   ></vxe-table-column>
@@ -156,8 +157,12 @@
                     field="thisTreatmentQty"
                     title="本次处理数量"
                     width="120"
-                     :edit-render="{ name: 'input', autoselect: true }"
-                  ></vxe-table-column>
+                  >
+                   <template v-slot="{row}">
+          <vxe-input type="integer" :controls="false" v-model="row.thisTreatmentQty" :min="1" :max="row.untreatedQty"/>
+        </template>
+                  
+                  </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="remark"
@@ -218,24 +223,26 @@
 </script>
 
 <style scoped lang="less">
-.customer{
+
+.customer {
+  padding: 0px;
+  margin: 0px;
   width: 100%;
   height: 100%;
   background: white;
   padding-top: 5px;
-  .top{
-    border-bottom: 4px solid skyblue;
-
+  .top {
+   
   }
-  .form{
+  .form {
     margin-top: 20px;
   }
 }
-.ipt{
+.ipt {
   width: 170px;
-  margin:0 10px;
+  margin: 0 10px;
 }
-.btn{
-   margin:3px 15px;
+.btn {
+  margin: 3px 15px;
 }
 </style>
