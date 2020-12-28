@@ -596,7 +596,6 @@ export default {
     },
     //右侧表格多选
     selectSameList({selection,row}) {
-      console.log(row,11111)
       if (selection) {
         selection.map(el=>{
           if (el.isAddPart==0) {
