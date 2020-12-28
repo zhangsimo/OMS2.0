@@ -226,6 +226,9 @@
           return dataEl;
         });
         let par:any=this.$parent;
+        if(par.formPlan.details==null||undefined){
+          par.formPlan.details=[]
+        }
         par.formPlan.details=[...data,...par.formPlan.details];
         this.data.map(el=>{
           this.checkData.map(el2=>{
@@ -236,6 +239,7 @@
             }
           })
         })
+        par.partOrCustomerOnly=2;
         let xtable:any=this.$refs.customerXtable
         xtable.clearCheckboxRow();
         xtable.updateData();
