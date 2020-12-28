@@ -15,15 +15,15 @@
             >
             </DatePicker>
         </FormItem>
-        <FormItem label="理赔单位：" prop="remark"> 
-            <Input 
+        <FormItem label="理赔单位：" prop="remark">
+            <Input
               v-model.trim="search.guestName"
               class="w160"
             ></Input>
         </FormItem>
         <span style="margin-top:2px">配件编码/名称/内码:</span><Input v-model.trim="search.partCode" class="ipt"></Input>
         </FormItem>
-        
+
             <span class="mr10">品牌:</span>
             <Select
               class="w120"
@@ -36,10 +36,10 @@
             >
               <Option v-for="item in bandArr" :value="item.label" :key="item.id">{{ item.label }}</Option>
             </Select>
-         
-          <!--                          :disabled="form.status.value !== 0"-->  
-            <span style="margin-top:2px;margin-left:15px">理赔单号:</span><Input class="ipt" v-model.trim="search.serviceId"></Input>   
-        
+
+          <!--                          :disabled="form.status.value !== 0"-->
+            <span style="margin-top:2px;margin-left:15px">理赔单号:</span><Input class="ipt" v-model.trim="search.serviceId"></Input>
+
         <Button style="margin-top:2px" @click="ok">查询</Button>
       </Form>
     </div>
@@ -111,7 +111,7 @@
                     field="partName"
                     title="配件名称"
                     width="100"
-                   
+
                   ></vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -137,9 +137,9 @@
                     title="理赔数量"
                     width="100"
                   >
-                    <template v-slot="{ row }">
-                      <span>{{ row.carBrandName }} {{ row.carModelName }}</span>
-                    </template>
+<!--                    <template v-slot="{ row }">-->
+<!--                      <span>{{ row.carBrandName }} {{ row.carModelName }}</span>-->
+<!--                    </template>-->
                   </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -162,7 +162,7 @@
                    <template v-slot="{row}">
           <vxe-input type="integer" :controls="false" v-model="row.thisTreatmentQty" :min="1" :max="row.untreatedQty"/>
         </template>
-                  
+
                   </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
@@ -233,7 +233,7 @@
   background: white;
   padding-top: 5px;
   .top {
-   
+
   }
   .form {
     margin-top: 20px;

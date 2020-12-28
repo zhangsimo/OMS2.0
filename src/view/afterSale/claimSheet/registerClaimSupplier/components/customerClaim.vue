@@ -217,7 +217,14 @@
       })
       let res:any=await allCustomerClaim(mainIds);
       if(res.code===0){
-        let data:Array<any>=res.data;
+        let data:Array<any>=(res.data || []).map(el=>{
+          let dataEl:any=Object.assign({}, el);//对象浅拷贝
+          dataEl.enterMainId=dataEl.mainId;
+          dataEl.enterDetailId=dataEl.id;
+          delete dataEl.id;
+          delete dataEl.mainId;
+          return dataEl;
+        });
         let par:any=this.$parent;
         par.formPlan.details=[...data,...par.formPlan.details];
         this.data.map(el=>{

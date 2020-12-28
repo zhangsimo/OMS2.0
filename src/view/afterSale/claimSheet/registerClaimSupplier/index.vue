@@ -6,11 +6,11 @@
       <Select v-model="orderSign" style="width:100px" class="mr10" @on-change="selectTypetList">
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
-      <Button type="default" @click="openQueryModal" class="mr10">
+      <Button type="default" @click="openQueryModal" class="mr10" v-has="'more'">
         <Icon type="ios-more"/>
         更多
       </Button>
-      <Button type="default" class="mr10 w90" @click="addNew">
+      <Button type="default" class="mr10 w90" @click="addNew" v-has="'addNew'">
         <Icon type="md-add" size="14"/>
         新增
       </Button>
@@ -18,6 +18,7 @@
         class="mr10 w90"
         @click="save"
         :disabled="formPlan.orderSign!=0"
+        v-has="'save'"
       >
         <span class="center">
           <Icon custom="iconfont iconbaocunicon icons"/>保存
@@ -26,14 +27,15 @@
       <Button
         class="mr10"
         @click="submit"
+        v-has="'submit'"
         :disabled="formPlan.orderSign!=0||formPlan.id==undefined"
       >
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交
       </Button>
-      <Button class="mr10" @click="setPrint">
+      <Button class="mr10" @click="setPrint" v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
-      <Button type="default" class="mr10" @click="supplierExamie" :disabled="!formPlan.guestId">查看供应商</Button>
+      <Button type="default" class="mr10" @click="supplierExamie" v-has="'lookSupplier'" :disabled="!formPlan.guestId">查看供应商</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -152,7 +154,7 @@
                 <div class="clearfix pt5 pb5">
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="addMountings"
-                            :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 ">
+                            :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 " v-has="'addParts'">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
@@ -163,6 +165,7 @@
                       size="small"
                       class="mr10"
                       :disabled="formPlan.orderSign!=0"
+                      v-has="'delParts'"
                     >
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                     </Button>
@@ -180,17 +183,17 @@
                       :before-upload='beforeUpload'
                     >
                       <Button size="small" class="mr10" :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 || formPlan.id==undefined"
-                              type="default" @click="getRUl"><i class="iconfont icondaoruicon icons"/> 导入配件
+                              type="default" @click="getRUl" v-has="'importParts'"><i class="iconfont icondaoruicon icons"/> 导入配件
                       </Button>
                     </Upload>
                   </div>
                   <div class="fl mb5">
-                    <Button class="mr10" size="small" @click="downModal">
+                    <Button class="mr10" size="small" @click="downModal" v-has="'downTemplate'">
                       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button type="default" @click="openCustomer" size="small"
+                    <Button type="default" @click="openCustomer" size="small" v-has="'selCustomClaimRegister'"
                             :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
                       选择客户理赔登记单
                     </Button>
