@@ -53,7 +53,7 @@
         >
       </Select>
       <Button type="warning" @click="query">查询</Button>
-      <Button v-has="'export'">导出</Button>
+      <!-- <Button v-has="'export'">导出</Button> -->
     </div>
    
     <div class="footer">

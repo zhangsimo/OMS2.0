@@ -33,13 +33,13 @@
               </Select>
             </div>
             <div class="db">
-              <Button type="default" @click="addmore" class="mr10">
+              <Button type="default" @click="addmore" class="mr10" v-has="'more'">
                 <i class="el-icon-more"></i>
                 更多
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="add">
+              <Button class="mr10" @click="add" v-has="'add'">
                 <Icon type="md-add" />新增
               </Button>
             </div>
@@ -47,6 +47,7 @@
               <Button
                 type="default"
                 class="mr10"
+                v-has="'save'"
                 @click="baocun"
                 :loading="saveLoading"
                 :disabled="flag == false"
@@ -57,6 +58,7 @@
             <div class="db">
               <Button
                 class="mr10"
+                v-has="'tijiao'"
                 @click="tijiao"
                 :loading="commitLoading"
                 :disabled="row.orderSignStatus!='草稿'||mainId==''||tjflag==false"
@@ -65,13 +67,14 @@
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="stamp" :loading="cancelLoading">
+              <Button class="mr10" @click="stamp" :loading="cancelLoading" v-has="'stamp'">
                 打印
               </Button>
             </div>
             <div class="db">
               <Button
                 class="mr10"
+                v-has="'watchke'"
                 @click="watchke"
                 :loading="cancelLoading"
               
@@ -257,6 +260,7 @@
                         size="small"
                         class="mr10"
                         @click="changep"
+                        v-has="'addpj'"
                         :disabled="flag == false || row.manualCode"
                       >
                         添加配件
@@ -281,7 +285,7 @@
                               :on-success="onSuccess"
                               :before-upload="beforeUploadInnerId"
                             >
-                              <Button size="small"  :disabled="row.orderSignStatus != '草稿' ||row.manualCode||peiflag" @click="getRUlInnerId"
+                              <Button size="small" v-has="'Import'" :disabled="row.orderSignStatus != '草稿' ||row.manualCode||peiflag" @click="getRUlInnerId"
                                 ><span class="center"
                                   ><Icon
                                     custom="iconfont icondaoruicon icons"
@@ -294,14 +298,14 @@
                       
                     </div>
                     <div class="fl mb5">
-                        <Button size="small" class="btns" @click="downInnerId">
+                        <Button size="small" class="btns" @click="downInnerId" v-has="'down'">
                           <Icon
                             custom="iconfont iconxiazaiicon icons"
                           />下载模板
                         </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="shanchu" :disabled="row.orderSignStatus != '草稿'||row.manualCode">
+                      <Button size="small" class="mr10" v-has="'del'" @click="shanchu" :disabled="row.orderSignStatus != '草稿'||row.manualCode">
                         删除配件
                       </Button>
                     </div>
@@ -383,7 +387,7 @@
                         :min="1"
                         v-model="row.afterSaleQty"
                         :controls="false"
-                        :precision="0"
+                        :precision="1"
                         :disabled="row.manualCode"
                         @change="afterSaleQtyChange(row)"
                         size="mini"
@@ -506,16 +510,11 @@
                       width="100"
                     ></vxe-table-column>
                     <vxe-table-column
-                      field="afterSaleCode"
+                      field="handleCode"
                       show-overflow="tooltip"
                       title="处理单号"
                       width="100"
                     >
-                      <template v-slot="{ row }">
-                        <span
-                          >{{ row.carBrandName }} {{ row.carModelName }}</span
-                        >
-                      </template>
                     </vxe-table-column>
                     <vxe-table-column
                       show-overflow="tooltip"

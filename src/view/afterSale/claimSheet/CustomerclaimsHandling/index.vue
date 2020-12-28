@@ -44,7 +44,8 @@
       </Form>
     </div>
     <div class="nav">
-      <Button class="btn" @click="claim(1)">原货退还</Button><Button class="btn" @click="claim(2)">换货处理</Button><Button class="btn" @click="claim(3)">退款处理</Button><Button class="btn" @click="claim(4)">原物销毁</Button><Button class="btn" @click="getExport">导出</Button>
+      <Button class="btn" @click="claim(1)" v-has="'claim1'">原货退还</Button><Button class="btn" @click="claim(2)" v-has="'claim2'">换货处理</Button><Button class="btn" @click="claim(3)" v-has="'claim3'">退款处理</Button><Button class="btn" @click="claim(4)" v-has="'claim4'">原物销毁</Button>
+      <!-- <Button class="btn" @click="getExport">导出</Button> -->
     </div>
     <div class="con">
       <vxe-table

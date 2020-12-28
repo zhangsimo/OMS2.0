@@ -45,7 +45,7 @@
         clearable
       />
       <Button @click="query">查询</Button>
-      <Button v-has="'export'">导出</Button>
+      <!-- <Button v-has="'export'">导出</Button> -->
      
       <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
               <Button class="mr10" @click="moreOpen">更多查询</Button>

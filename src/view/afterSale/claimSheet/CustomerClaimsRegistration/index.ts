@@ -508,7 +508,7 @@ export default class Customs extends Vue {
     if (row.isAddPart == 0) {
       row.untreatedQty = row.afterSaleQty
     }
-    this.updateFooterEvent()
+    // this.updateFooterEvent()
   }
   // 在值发生改变时更新表尾合计
   private updateFooterEvent() {
@@ -671,7 +671,10 @@ export default class Customs extends Vue {
     this.highlight = data.row
     this.row = data.row
     this.chaId = data.row.guestId
-    this.form.id = data.row.id
+    // if(!this.bjFlag){
+    //    this.form.id = data.row.id
+    // }
+   
     this.mainId = data.row.id
     this.form.serviceId = data.row.serviceId
     this.form.guestId = data.row.guestId
