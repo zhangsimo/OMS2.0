@@ -41,7 +41,6 @@
               clearable
               label-in-value
               filterable
-              @on-change="select1"
               v-model.trim="search.partBrand"
               placeholder="请选择品牌"
             >
@@ -120,7 +119,7 @@
     private exportxls(){
 
 
-      
+
       this.$emit("export")
     }
   }
