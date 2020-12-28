@@ -7,13 +7,13 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import * as api from "_api/procurement/plan";
 export const mixSelectSupplier = {
-  props:['noSimply'],
   data() {
     return {
       params: "",
       loading: false,
       treeLoading: false,
-
+      coding:'',//编码
+      phone:"",//电话号
       searchPartLayer: false, //配件名称查询层
       fullName: "", //供应商名称
       code: "", //编码
@@ -29,7 +29,7 @@ export const mixSelectSupplier = {
           type: "index"
         },
         {
-          title: "供应商名称",
+          title: "客户名称",
           key: "fullName",
           minWidth: 200,
           tooltip: true,
@@ -120,6 +120,7 @@ export const mixSelectSupplier = {
     getfindTypeListFun() {
       this.treeLoading = true;
       getfindTypeList({}).then(res => {
+        console.log(res.data)
         this.treeLoading = false;
         this.treeData = res.data || [];
       });
@@ -200,17 +201,8 @@ export const mixSelectSupplier = {
       if (!this.selectTableItem) {
         return this.$Message.error("请选择供应商");
       }
-      if(this.noSimply){
-        if(this.selectTableItem.isInternalId==this.$store.state.user.userData.currentCompany.id){
-          return this.$message.error("不可选择当前机构")
-        }else{
-          this.$emit("selectSupplierName", this.selectTableItem);
-          this.searchPartLayer = false;
-        }
-      }else{
-        this.$emit("selectSupplierName", this.selectTableItem);
-        this.searchPartLayer = false;
-      }
+      this.$emit("selectSupplierName", this.selectTableItem);
+      this.searchPartLayer = false;
       // console.log(this.selectTableItem)
     },
     //分页
