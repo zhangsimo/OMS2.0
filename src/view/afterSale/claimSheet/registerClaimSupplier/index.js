@@ -156,11 +156,11 @@ export default {
     //查看供应商
     supplierExamie(type) {
       if (type) {
-        if (!this.dataChange.row.hasOwnProperty('guestId')) {
+        if (!this.dataChange.hasOwnProperty('guestId')) {
           return this.$Message.error("请选择一条单据明细");
         }
         let data = {};
-        data.id = this.dataChange.row.guestId;
+        data.id = this.dataChange.guestId;
         getCustomerDetails(data).then(res => {
           if (res.code === 0) {
             this.supplierData.clientList = res.data;
@@ -193,7 +193,7 @@ export default {
       setTimeout(()=>{
         this.getLeftLists()
       })
-      
+
     },
     // 打开更多搜索
     openQueryModal() {
@@ -372,7 +372,7 @@ export default {
         });
         return;
       }
-      this.dataChange = data;
+      this.dataChange = data.row == undefined ? data : data.row;
       this.$refs.xTab.setCurrentRow(data.row == undefined ? data : data.row);
       this.formPlan = data.row == undefined ? data : data.row;
       this.formPlan.afterSaleDate = this.formPlan.afterSaleDate || new Date()
@@ -452,7 +452,7 @@ export default {
           }
         })
         if (valid) {
-          if (this.dataChange.row) {
+          if (this.dataChange) {
             try {
               await this.$refs.xTable.validate();
               this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
@@ -499,7 +499,7 @@ export default {
           }
         })
         if (valid) {
-          if (this.dataChange.row) {
+          if (this.dataChange) {
             try {
               await this.$refs.xTable.validate();
               this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
@@ -585,7 +585,7 @@ export default {
         };
         this.leftTableData.unshift(this.formPlan);
         this.$refs.xTab.setCurrentRow(this.leftTableData[0]);
-        this.dataChange.row = this.formPlan;
+        this.dataChange = this.formPlan;
         this.flag = 1;
         this.selectLeftItemId = null;
         this.addNewBool = true;
