@@ -479,6 +479,7 @@ export default class Customs extends Vue {
   }
   private getSupplierNamea(val) {
     console.log(val.id)
+    this.chaId= val.id
     this.$set(this.form, 'guestId', val.id)
     this.$set(this.form, 'units', val.fullName)
   }
