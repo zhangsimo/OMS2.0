@@ -143,23 +143,28 @@ export default class Custom extends Vue {
     }  
 
    delete data.orderDate
-    console.log(data)
+   
     let params:any={
       page:this.page.num-1,
       size:this.page.size
     }
     let res:any=await all.getKuquery(params,data)
     if(res.code===0){
+     
       this.claimSupplierData=(res.data.content || []).map(el=>{
-        switch (el.orderSign) {
-          case 0:
-            el.handleType = "草稿";
-            break;
+     
+        switch (el.handleType) {
           case 1:
-            el.handleType = "已提交";
+            el.handleTypeStatus = "原货退还";
             break;
           case 2:
-            el.handleType = "已完成";
+            el.handleTypeStatus = "换货";
+            break;
+          case 3:
+            el.handleTypeStatus = "退款";
+            break;
+          case 4:
+            el.handleTypeStatus = "原物销毁";
             break;
         }
         return el;
@@ -211,15 +216,19 @@ export default class Custom extends Vue {
     let res:any=await all.getKuquery(params,this.body)
     if(res.code===0){
       this.claimSupplierData=(res.data.content || []).map(el=>{
-        switch (el.orderSign) {
-          case 0:
-            el.handleType = "草稿";
-            break;
+    
+        switch (el.handleType) {
           case 1:
-            el.handleType = "已提交";
+            el.handleTypeStatus = "原货退还";
             break;
           case 2:
-            el.handleType = "已完成";
+            el.handleTypeStatus = "换货";
+            break;
+          case 3:
+            el.handleTypeStatus = "退款";
+            break;
+          case 4:
+            el.handleTypeStatus = "原物销毁";
             break;
         }
         return el;
@@ -230,7 +239,7 @@ export default class Custom extends Vue {
   
   //获取点击行
   private getOneClinet(data) {
-    console.log(data.row)
+   
   }
 
 

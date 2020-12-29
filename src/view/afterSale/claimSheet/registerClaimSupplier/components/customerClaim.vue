@@ -219,13 +219,20 @@
       if(res.code===0){
         let data:Array<any>=(res.data || []).map(el=>{
           let dataEl:any=Object.assign({}, el);//对象浅拷贝
+          dataEl.claimDemageCode="";
+          dataEl.afterSaleQty=el.noChoiceQty;
           dataEl.enterMainId=dataEl.mainId;
+          dataEl.processedQty=0;
+          dataEl.untreatedQty=el.noChoiceQty;
           dataEl.enterDetailId=dataEl.id;
           delete dataEl.id;
           delete dataEl.mainId;
           return dataEl;
         });
         let par:any=this.$parent;
+        if(par.formPlan.details==null||undefined){
+          par.formPlan.details=[]
+        }
         par.formPlan.details=[...data,...par.formPlan.details];
         this.data.map(el=>{
           this.checkData.map(el2=>{
@@ -236,6 +243,7 @@
             }
           })
         })
+        par.partOrCustomerOnly=2;
         let xtable:any=this.$refs.customerXtable
         xtable.clearCheckboxRow();
         xtable.updateData();

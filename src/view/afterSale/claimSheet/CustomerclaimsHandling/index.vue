@@ -59,7 +59,7 @@
       show-overflow="title"
       class="mt20"
       height="600"
-      :edit-rules="validRules"
+    
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @checkbox-all="claimSupplierSel"
       @checkbox-change="claimSupplierSel"
@@ -168,6 +168,7 @@
                     show-overflow="tooltip"
                     field="remark"
                     title="备注"
+                    max-width="50"
                     width="120"
                      :edit-render="{ name: 'input', autoselect: true }"
                   ></vxe-table-column>
@@ -226,17 +227,17 @@
 <style scoped lang="less">
 
 .customer {
-  padding: 0px;
-  margin: 0px;
+ 
+  
   width: 100%;
   height: 100%;
   background: white;
   padding-top: 5px;
   .top {
-
+    margin-top: 0px;
   }
   .form {
-    margin-top: 20px;
+    margin-top: 10px;
   }
 }
 .ipt {
@@ -244,6 +245,6 @@
   margin: 0 10px;
 }
 .btn {
-  margin: 3px 15px;
+  margin: 3px 10px;
 }
 </style>

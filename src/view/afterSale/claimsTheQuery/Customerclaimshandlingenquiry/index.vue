@@ -127,7 +127,7 @@
         <vxe-table-column field="guestName" title="理赔单位" width="100"></vxe-table-column>
         <vxe-table-column field="orderDate" title="处理日期" width="100"></vxe-table-column>
         <vxe-table-column
-          field="handleType"
+          field="handleTypeStatus"
           title="处理类型"
           width="100"
         ></vxe-table-column>
@@ -235,7 +235,7 @@
   width: 100%;
   height: 100%;
   background-color: white;
-  padding: 5px 10px;
+  padding: 15px 10px;
 }
 .date {
   width: 150px;

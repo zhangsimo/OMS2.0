@@ -74,3 +74,22 @@ export function getKuquery(params,data){
     data
   })
 }
+//客户理赔登记查询
+///afterSaleMain/findGuestClaimMain --afterSaleMain/findGuestEnterMain
+export function getdjQuery(params,data){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleMain/findGuestEnterMain`,
+    method:"post",
+    params,
+    data
+  })
+}
+//删除接口  --/afterSaleDetail/deleteDetails
+export function del(data){
+  return axios.request({
+    url:`${api.omsOrder}/afterSaleDetail/deleteDetails`,
+    method:"post",
+    data
+    
+  })
+}

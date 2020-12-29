@@ -30,7 +30,7 @@
       <vxe-table-column field="createUname" title="操作人" width="100"></vxe-table-column>
       <vxe-table-column field="createTime" title="操作日期" width="100"></vxe-table-column>
       <vxe-table-column field="guestName" title="客户/供应商" width="110"></vxe-table-column>
-      <vxe-table-column field="afterSaleCode" title="单号" width="110"></vxe-table-column>
+      <vxe-table-column field="afterSaleCode" title="单号" width="150"></vxe-table-column>
     </vxe-table>
     <div class="page-warp fw">
       <Page
@@ -51,6 +51,7 @@
 
 <script>
   import * as api from "_api/afterSale/claimsTheQuery/index.js";
+  import {showLoading , hideLoading } from "../../../../../utils/loading";
 
   export default {
     data() {
@@ -76,6 +77,7 @@
           page: this.page.num - 1,
           size: this.page.size,
         };
+        showLoading()
         let res = await api.inAndOutLogQuery(params,this.body);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el=>{
@@ -89,9 +91,11 @@
           })
           // this.total = res.data.purchaseOrderBean
           this.page.total = res.data.totalElements;
+          hideLoading()
         } else {
           this.page.total = 0;
           this.tableData = [];
+          hideLoading()
         }
       },
       //分页
