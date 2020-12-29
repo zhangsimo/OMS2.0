@@ -324,6 +324,7 @@ export default {
         });
         this.addNewBool = false;
         this.leftPage.total = res.data.totalElements;
+        hideLoading()
         if (this.selectLeftItemId) {
           for (let b of this.leftTableData) {
             if (b.id == this.selectLeftItemId) {
@@ -336,7 +337,6 @@ export default {
           this.formPlan = this.leftTableData[0];
           this.clickOnesList(this.leftTableData[0]);
         }
-        hideLoading()
       }else{
         this.leftTableData =[];
         this.addNewBool = false;
