@@ -186,7 +186,12 @@ export default {
     },
     //打印
     setPrint() {
-      if (!this.formPlan.id) return this.$message.error("请至少选择一条数据");
+      if(this.formPlan&&!this.selectLeftItemId){
+        return this.$message.error("请先保存单据")
+      }
+      if (!this.selectLeftItemId) {
+        return this.$message.error("请至少选择一条数据")
+      }
       let order = {};
       order.id = this.formPlan.id;
       let printZF = this.$refs.printZF;
