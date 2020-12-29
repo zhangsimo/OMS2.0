@@ -193,11 +193,10 @@
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button type="default" @click="openCustomer" size="small"
+                    <Button type="default" @click="openCustomer" size="small" v-has="'selCustomClaimRegister'"
                             :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
                       选择客户理赔登记单
                     </Button>
-<!--                    v-has="'selCustomClaimRegister'"-->
                   </div>
                 </div>
               </div>
