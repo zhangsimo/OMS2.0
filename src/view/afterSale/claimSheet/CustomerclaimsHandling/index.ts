@@ -39,7 +39,7 @@ export default class Custom extends Vue {
   private claimSupplierSelData: Array<any> = new Array<any>();
   async mounted() {
     this.bandArr = await getBrandList(this.search.partBrand)
-    //this.getList()
+    this.getList()
   }
   private getDataQuick(v) {
     this.search.orderDate = v;
