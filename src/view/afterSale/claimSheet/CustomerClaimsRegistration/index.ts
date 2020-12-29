@@ -753,7 +753,9 @@ export default class Customs extends Vue {
       detailId: row.id
      
     } 
-    
+    if(!this.mainId){
+       return
+    }
     if (this.row.orderSign ==0) {
 
       return

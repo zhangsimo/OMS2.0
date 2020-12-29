@@ -437,7 +437,7 @@
                   >
                   <template v-slot="{ row }">
                       <vxe-input
-                        type="number"
+                        type="string"
                             @change="afterSaleReasonChange(row)"
                         v-model="row.afterSaleReason"
                         :controls="false"
