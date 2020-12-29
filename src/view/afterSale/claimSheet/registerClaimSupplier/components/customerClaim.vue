@@ -230,19 +230,21 @@
           return dataEl;
         });
         let par:any=this.$parent;
+        let notSim:boolean=false;
         if(par.formPlan.details==null||undefined){
           par.formPlan.details=[]
         }
-        par.formPlan.details=[...data,...par.formPlan.details];
-        this.data.map(el=>{
-          this.checkData.map(el2=>{
-            if(el.id==el2.id){
-              el._disabled=true;
-            }else{
-              el._disabled=false;
+        (par.formPlan.details || []).map(detEL=>{
+          (this.checkData || []).map(arrEl=>{
+            if(detEL.partInnerId==arrEl.partInnerId){
+              notSim=true;
             }
           })
         })
+        if(notSim){
+          return this.$Message.error("存在已添加的客户理赔登记单!")
+        }
+        par.formPlan.details=[...data,...par.formPlan.details];
         par.partOrCustomerOnly=2;
         let xtable:any=this.$refs.customerXtable
         xtable.clearCheckboxRow();
