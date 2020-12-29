@@ -6,7 +6,7 @@ import {
 import { getwbParts } from "_api/system/partManager";
 import {
   getCarParts
-} from "../../../../api/purchasing/purchasePlan";
+} from "@/api/purchasing/purchasePlan";
 
 import { getCarPartClass } from "_api/parts";
 
@@ -165,8 +165,7 @@ export const mixSelectPartCom = {
     };
   },
   props: {
-    formPlanmain: Object,
-    noDBclick:Boolean//双击弹框事件为空
+    formPlanmain: Object
   },
   mounted() {
     this.routeName = this.$route.name;
@@ -198,11 +197,11 @@ export const mixSelectPartCom = {
       if(!this.partName && !this.partId && !this.partCode && !this.oemCode){
         boolParams=true
       }
-      if(boolParams){
-        this.$Message.error("最少有一个筛选条件")
-        this.loading = false;
-        return false
-      }
+      // if(boolParams){
+      //   this.$Message.error("最少有一个筛选条件")
+      //   this.loading = false;
+      //   return false
+      // }
       let formData = {};
       for (let k in data) {
         if (data[k] && data[k].trim()) {
@@ -293,9 +292,7 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
         // this.searchPartLayer = false;
-        if(!this.noDBclick){
-          this.$Message.success("已添加");
-        }
+        this.$Message.success("已添加");
         this.focusInput();
       } else {
         this.$Message.error("请选择数据");
@@ -358,10 +355,8 @@ export const mixSelectPartCom = {
     },
     //双击显示
     dblclick(v){
-      if(!this.noDBclick){
-        if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase" ||this.$route.name=="bookingSheet"){
-          this.$refs.selectPartInfo.init(v);
-        }
+      if(this.$route.name=="salesOrder"||this.$route.name=="goodsList"||this.$route.name=="TemporaryPurchase"||this.$route.name=="OutsidePurchase" ||this.$route.name=="bookingSheet"){
+        this.$refs.selectPartInfo.init(v);
       }
       // if(this.$route.name=="bookingSheet"){
       //   this.$refs.selectPartInfo2.init(v);

@@ -32,7 +32,7 @@ const dev = {
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
   getFileApi: "https://devoms2.g-parts.cn",
-  downApi: "http://api2.g-parts.cn/gpart-oss-provider",
+  downApi: "http://api2.g-parts.cn/gpart-essential-provider",
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
   // omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
@@ -139,7 +139,7 @@ const audit = {
   upbase64Api:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFileNew",
   getFileApi: "https://uatoms2.g-part.cn.cn",
-  downApi: "https://uatapi2.g-part.cn/gpart-oss-provider",
+  downApi: "https://uatapi2.g-part.cn/gpart-essential-provider",
   omsTpApi: "https://uatapi2.g-part.cn/oms-thirdparty-provider",
   templateApi:"https://uatapi2.g-part.cn/gpart-essential-provider"
 };
@@ -165,7 +165,7 @@ const pro = {
   upbase64Api:
     "https://api2.g-part.cn/gpart-essential-provider/file/uploadFileNew",
   getFileApi: "https://erp.g-part.cn",
-  downApi: "https://api2.g-part.cn/gpart-oss-provider",
+  downApi: "https://api2.g-part.cn/gpart-essential-provider",
   omsTpApi: "https://api2.g-part.cn/oms-thirdparty-provider",
   templateApi:"https://api2.g-part.cn/gpart-essential-provider",
 };
