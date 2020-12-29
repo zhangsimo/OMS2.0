@@ -1302,7 +1302,7 @@ export default {
       claimShopName: "", //认领门店查询参数
       suppliers: "", //往来单位
       accountCode: "", //账号
-      getAccShopList: [{ shopCode: "-1", shopName: "请选择" }],
+      getAccShopList: [{ shopCode: "-1", shopName: "请选择", code: '-1' }],
       selectTableList: [], //勾选的表格数据
       page: {
         opts: [100, 300, 500, 800, 1000],
