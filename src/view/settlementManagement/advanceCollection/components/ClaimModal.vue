@@ -163,7 +163,6 @@ export default {
       this.$refs.voucherInput.Classification = 0
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
-      this.remark = ''
       this.visibal = true
       if(this.titleName!='预收款认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:3}).then(res=>{
@@ -214,11 +213,6 @@ export default {
       if(this.titleName=="预收款支出认领" && (this.thisClaimedAmtSum>this.$parent.currRow.expenditureAmt)){
         return this.$Message.error("本次认领金额不可大于本次支出申请金额")
       }
-      if(this.remark){
-        if(this.remark.length > 500){
-          return this.$message.error('备注500字符以内')
-        }
-      }
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
         let o = {}
@@ -248,7 +242,6 @@ export default {
           data.thisClaimedAmt=el.thisClaimedAmt;
           arr.push(data)
         })
-        this.dataOne.remark = this.remark
         let data={
           one:this.dataOne,
           two:this.dataTwo,

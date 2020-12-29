@@ -135,7 +135,6 @@
       open() {
         this.tableData = []
         this.visibal = true;
-        this.remark = ''
         setTimeout(()=>{
           let params={
             accountNo: this.$parent.serviceId,
