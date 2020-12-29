@@ -21,7 +21,7 @@
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="客户属性:" prop="guestProperty">
-                <Select v-model="data.guestProperty" style="width:180px" class="mr10">
+                <Select v-model="data.guestProperty" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in dataList.CS00105"
                     :value="item.itemCode"
@@ -30,19 +30,19 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  :disabled="dis" />
+                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  readonly />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
-                <Input v-model="data.fullName" style="width: 180px"  :disabled="dis" />
+                <Input v-model="data.fullName" style="width: 180px"  readonly />
               </FormItem>
               <FormItem label="拼音码:">
                 <Input v-model="spellCode" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="联系人:" prop="contactor">
-                <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
+                <Input v-model="data.contactor" style="width: 180px" maxlength="8" readonly/>
               </FormItem>
               <FormItem label="省份:" prop="provinceId">
-                <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
+                <Select filterable v-model="data.provinceId" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in provincearr"
                     v-show="item.parentId==0"
@@ -54,7 +54,7 @@
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="所属体系:" prop="belongSystem" class="h40">
-                <Select v-model="data.belongSystem" style="width:180px" class="mr10">
+                <Select v-model="data.belongSystem" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in Subordinate"
                     :value="item.value"
@@ -63,7 +63,7 @@
                 </Select>
               </FormItem>
               <FormItem label="票据类型:" prop="billTypeId">
-                <Select v-model="data.billTypeId" style="width:180px" class="mr10">
+                <Select v-model="data.billTypeId" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in dataList.CS00107"
                     :value="item.itemCode"
@@ -72,7 +72,7 @@
                 </Select>
               </FormItem>
               <FormItem label="结算方式:" prop="settTypeId">
-                <Select v-model="data.settTypeId" style="width:180px" class="mr10">
+                <Select v-model="data.settTypeId" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in dataList.CS00106"
                     :value="item.itemCode"
@@ -81,7 +81,7 @@
                 </Select>
               </FormItem>
               <FormItem label="所属门店:">
-                <Select v-model="data.compCode" style="width:180px" class="mr10">
+                <Select v-model="data.compCode" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in tableComData"
                     :value="item.orgid"
@@ -91,10 +91,10 @@
                 </Select>
               </FormItem>
               <FormItem label="联系人手机:" prop="contactorTel">
-                <Input v-model="data.contactorTel" style="width: 180px" />
+                <Input v-model="data.contactorTel" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="城市:" prop="cityId">
-                <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
+                <Select filterable v-model="data.cityId" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in provincearr"
                     v-if="data.provinceId==item.parentId"
@@ -106,15 +106,15 @@
             </div>
           </div>
           <FormItem label="地址:">
-            <Input v-model="data.streetAddress" style="width: 380px" />
+            <Input v-model="data.streetAddress" style="width: 380px" readonly/>
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员:">
-                <Input v-model="data.salesman" style="width: 180px" />
+                <Input v-model="data.salesman" style="width: 180px" readonly/>
               </FormItem>
               <FormItem v-if="sessionKey === 0" label="信用等级:">
-                <Select v-model="data.tgrade" style="width:180px" class="mr10">
+                <Select v-model="data.tgrade" style="width:180px" class="mr10" readonly>
                   <Option
                     v-for="item in dataList.CS00112"
                     :value="item.itemCode"
@@ -123,13 +123,13 @@
                 </Select>
               </FormItem>
               <FormItem label="电话:">
-                <Input v-model="data.tel" style="width: 180px" />
+                <Input v-model="data.tel" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="备注:">
-                <Input v-model="data.remark" style="width: 180px" />
+                <Input v-model="data.remark" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="一级分类:" prop="guestType">
-                <Select v-model="data.guestType" style="width:180px" class="mr10" placement="top">
+                <Select v-model="data.guestType" style="width:180px" class="mr10" placement="top" readonly>
                   <Option
                     v-for="item in treelist"
                     v-if="item.lever == 1"
@@ -139,19 +139,19 @@
                 </Select>
               </FormItem>
               <FormItem v-if="sessionKey == 0" label="信誉额度:" prop="creditLimit">
-                <Input v-model="data.creditLimit" style="width: 180px" />
+                <Input v-model="data.creditLimit" style="width: 180px" readonly/>
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员手机:">
-                <Input v-model="data.salesmanTel" style="width: 180px" />
+                <Input v-model="data.salesmanTel" style="width: 180px" readonly/>
               </FormItem>
 
               <FormItem label="QQ/微信:">
-                <Input v-model="data.instantMsg" style="width: 180px" />
+                <Input v-model="data.instantMsg" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="默认物流:">
-                <Input v-model="data.defaultLogistics" style="width: 180px" />
+                <Input v-model="data.defaultLogistics" style="width: 180px" readonly/>
               </FormItem>
               <FormItem label="二级分类:">
                 <Select
@@ -159,6 +159,7 @@
                   style="width:180px"
                   class="mr10"
                   placement="top"
+                  readonly
                 >
                   <Option
                     v-for="item in treelist "

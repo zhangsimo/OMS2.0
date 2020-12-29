@@ -81,7 +81,7 @@ export default class Custom extends Vue {
         }
         this.getdata()
         // // @ts-ignore
-        let res:any=await all.getListSale(params,this.body)
+        let res:any=await all.getdjQuery(params,this.body)
         if(res.code===0){
          
           this.claimSupplierData=(res.data.content || []).map(el=>{

@@ -7,11 +7,11 @@
           <tr>
             <th colspan="6"
                 style="line-height: 18px;text-align: left;font-size: 18px;line-height: 18px;font-weight: 600">
-              {{ onelist.shortName }}
+              {{ onelist.orgName }}
             </th>
             <th colspan="4" style="text-align: left;">
               <p style="font-size: 15px;font-weight: 600;padding:0">客户理赔登记单:</p>
-              <p style="font-size: 12px;font-weight:400;padding:0;margin-top:-10px;">No:{{onelist.orgName}}</p>
+              <p style="font-size: 12px;font-weight:400;padding:0;margin-top:-10px;">No:{{onelist.serviceId}}</p>
             </th>
           </tr>
           <tr style="padding-top: 0px;margin-top: 0px;">
@@ -217,8 +217,9 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
       // @ts-ignore
       console.log(data)
       let res:any=await all.printSale(data);
-      console.log(res)
+      //console.log(res)
       if(res.code===0){
+        
         console.log(res.data)
         this.onelist=res.data;
         this.onelist.printDate=moment(new Date()).format("yyyy-MM-dd HH:mm:ss")

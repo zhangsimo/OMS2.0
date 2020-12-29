@@ -214,6 +214,7 @@
       // @ts-ignore
       let res:any=await api.print(data);
       if(res.code===0){
+        console.log(res.data)
         this.onelist=res.data;
         this.onelist.printDate=moment(new Date()).format("yyyy-MM-dd HH:mm:ss")
         setTimeout(()=>{

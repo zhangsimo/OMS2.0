@@ -217,7 +217,7 @@
   width: 100%;
   height: 100%;
   background-color: white;
-  padding: 5px 10px;
+  padding: 15px 10px;
 }
 .date {
   width: 150px;
