@@ -53,7 +53,7 @@
         @checkbox-all="checkClaim"
         @checkbox-cancel="checkClaim"
       >
-        <vxe-table-column type="selection" width="30" :selectable="checkboxInit"></vxe-table-column>
+        <vxe-table-column type="selection" width="30"></vxe-table-column>
         <vxe-table-column type="seq" width="40" title="序号"></vxe-table-column>
         <vxe-table-column title="理赔入库单号" width="100" field="serviceId"></vxe-table-column>
         <vxe-table-column title="理赔单位" width="100" field="guestName"></vxe-table-column>
@@ -113,12 +113,6 @@
         this.partCode="";
         this.data=[];
       }
-    }
-    private checkboxInit(row,index){
-      if (row._disabled)//这个判断根据你的情况而定
-        return 0;//不可勾选
-      else
-        return 1;//可勾选
     }
     //获取品牌数组
     private async getBrand(data: string) {
