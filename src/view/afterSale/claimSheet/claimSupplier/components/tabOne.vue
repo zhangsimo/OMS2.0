@@ -62,7 +62,7 @@
 <script lang="ts">
   import {Vue, Component, Watch} from "vue-property-decorator";
   import * as api from "@/api/afterSale/claimSheet/index.js"
-  import moment from "moment";
+  import {showLoading,hideLoading} from "@/utils/loading";
 
   @Component
   export default class tabOne extends Vue {
@@ -115,13 +115,18 @@
             let params: any = {
               orderType: type,
             }
+            showLoading()
             let res: any = await api.supplierClaimSettlement(params, this.claimSupplierSelData)
             if (res.code === 0) {
               this.getList()
+              hideLoading()
               this.$Message.success("处理成功")
+            }else{
+              hideLoading()
             }
           },
           onCancel: () => {
+            this.$message.warning("已取消操作")
           }
         });
       }else{
@@ -142,11 +147,15 @@
         page: 0,
         size: 10000
       }
+      showLoading()
       // @ts-ignore
       let res: any = await api.supplierClaimSettlementQuery(params, this.body)
       if (res.code === 0) {
         this.claimSupplierData = res.data.content;
-
+        hideLoading()
+      }else{
+        this.claimSupplierData =[];
+        hideLoading()
       }
     }
   }

@@ -186,7 +186,12 @@ export default {
     },
     //打印
     setPrint() {
-      if (!this.formPlan.id) return this.$message.error("请至少选择一条数据");
+      if(this.formPlan&&!this.selectLeftItemId){
+        return this.$message.error("请先保存单据")
+      }
+      if (!this.selectLeftItemId) {
+        return this.$message.error("请至少选择一条数据")
+      }
       let order = {};
       order.id = this.formPlan.id;
       let printZF = this.$refs.printZF;
@@ -214,6 +219,7 @@ export default {
       params.page = this.leftPage.num - 1;
       params.size = this.leftPage.size;
       data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
+      showLoading()
       let res = await api.registerClaimsQuery(params, data);
       if (res.code === 0) {
         this.leftTableData = (res.data.content || []).map(el => {
@@ -253,6 +259,22 @@ export default {
         } else {
           this.clickOnesList(this.leftTableData[0]);
         }
+        hideLoading()
+      }else{
+        this.leftTableData =[];
+        this.addNewBool = false;
+        this.leftPage.total =0;
+        this.selectLeftItemId = null;
+        this.formPlan = {
+          details: [],
+          code: "",
+          serviceId: "",
+          remark: "",
+          partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
+          orderSign: 1,
+          afterSaleDate: "",
+        };
+        hideLoading()
       }
     },
     // 左侧表格数据
@@ -269,6 +291,7 @@ export default {
       data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
       params.page = this.leftPage.num - 1;
       params.size = this.leftPage.size;
+      showLoading()
       let res = await api.registerClaimsQuery(params, data);
       if (res.code === 0) {
         this.leftTableData = (res.data.content || []).map(el => {
@@ -301,6 +324,7 @@ export default {
         });
         this.addNewBool = false;
         this.leftPage.total = res.data.totalElements;
+        hideLoading()
         if (this.selectLeftItemId) {
           for (let b of this.leftTableData) {
             if (b.id == this.selectLeftItemId) {
@@ -313,6 +337,21 @@ export default {
           this.formPlan = this.leftTableData[0];
           this.clickOnesList(this.leftTableData[0]);
         }
+      }else{
+        this.leftTableData =[];
+        this.addNewBool = false;
+        this.leftPage.total =0;
+        this.selectLeftItemId = null;
+        this.formPlan = {
+          details: [],
+          code: "",
+          serviceId: "",
+          remark: "",
+          partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
+          orderSign: 1,
+          afterSaleDate: "",
+        };
+        hideLoading()
       }
     },
     //回车供应商数据
