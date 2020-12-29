@@ -187,10 +187,10 @@ export default class Customs extends Vue {
     //console.log(this.purchaseType)
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
   
-    // showLoading()
+     showLoading()
     let res: any = await all.getListSale(params, data);
     if (res.code == 0) {
-
+      hideLoading()
       if (res.data.content && res.data.content.length > 0) {
         this.tableList = res.data.content.map(el => {
           el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
@@ -753,7 +753,9 @@ export default class Customs extends Vue {
       detailId: row.id
      
     } 
-    
+    if(!this.mainId){
+       return
+    }
     if (this.row.orderSign ==0) {
 
       return

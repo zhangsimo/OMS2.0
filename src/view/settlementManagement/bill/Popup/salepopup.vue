@@ -720,8 +720,8 @@ export default {
               taxSign: 1
             }).then(res => {
               if (res.code === 0) {
-                this.invoice.invoiceType = "010103";
-                this.invoice.invoiceTax = "010103";
+                this.invoice.invoiceType = "";
+                this.invoice.invoiceTax = "";
                 this.accessoriesBillingData = res.data;
                 this.copyData = res.data;
 
