@@ -73,7 +73,7 @@ export default class Custom extends Vue {
     this.brandArr = await getBrandList(query)
   }
   private getDataType(e){
-    console.log(e)
+    
   }
   //获取时间
   private getvalue(value) { 
@@ -85,7 +85,7 @@ export default class Custom extends Vue {
   private select1() { }
   //获取选择的数据
   private getOne(data) {
-    console.log(data);
+
   }
   //查询
   private query(){
@@ -109,7 +109,7 @@ export default class Custom extends Vue {
       }
     }
     this.body=data
-    console.log(data)
+ 
 
    }
   //更多查询
