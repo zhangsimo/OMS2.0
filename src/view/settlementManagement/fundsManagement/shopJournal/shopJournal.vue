@@ -1302,7 +1302,7 @@ export default {
       claimShopName: "", //认领门店查询参数
       suppliers: "", //往来单位
       accountCode: "", //账号
-      getAccShopList: [{ shopCode: "-1", shopName: "请选择" }],
+      getAccShopList: [{ shopCode: "-1", shopName: "请选择", code: '-1' }],
       selectTableList: [], //勾选的表格数据
       page: {
         opts: [100, 300, 500, 800, 1000],
@@ -1664,7 +1664,7 @@ export default {
         return this.$Message.error("请选择一条数据");
       }
       this.oneList = this.selectTableList[0];
-      if(this.oneList.claimShopCode.indexOf(',') !== -1){
+      if(this.oneList.claimShopCode && this.oneList.claimShopCode.indexOf(',') !== -1){
         return this.$Message.error('该笔资金被人工分配至多家门店，请先撤销分配后修改')
       }
       // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')

@@ -45,6 +45,13 @@
             </FormItem>
           </Col>
         </Row>
+        <Row>
+          <Col span="12">
+            <FormItem label='是否对外隐藏：' >
+              <Checkbox v-model="warehouseData.isHide"></Checkbox>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
       <div slot='footer'>
         <Button type='primary' @click="add('formValidate')">确定</Button>
@@ -101,6 +108,7 @@
                         data.isDisabled=this.warehouseData.isDisabled?this.warehouseData.isDisabled:false;
                         data.sellSign=this.warehouseData.sellSign?this.warehouseData.sellSign:false;
                         data.isDefault=this.warehouseData.isDefault?this.warehouseData.isDefault:false;
+                        data.isHide = this.warehouseData.isHide?this.warehouseData.isHide:false;
                         getNewWarehouse(data).then( res => {
                             this.getList()
                             this.showNewWareHouse =false

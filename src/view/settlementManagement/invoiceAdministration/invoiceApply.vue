@@ -106,15 +106,6 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-<!--        <Table-->
-<!--          border-->
-<!--          :columns="columns"-->
-<!--          :data="data"-->
-<!--          ref="summary"-->
-<!--          highlight-row-->
-<!--          @on-selection-change="requires"-->
-<!--          max-height="400"-->
-<!--        ></Table>-->
         <vxe-table
           border
           auto-resize
@@ -140,6 +131,7 @@
               <span style="color: red;font-weight: 600" @click="applyNoCli(row)">{{row.applyNo}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column field="applyNoSub" title="开票申请子单号" width="180"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位" fixed="left" width="100"></vxe-table-column>
           <vxe-table-column field="applyDate" title="申请日期" width="100"></vxe-table-column>
           <vxe-table-column field="accountNo" title="对账单号" width="180"></vxe-table-column>
@@ -196,7 +188,7 @@
           <vxe-table-column title="申请日期" field="applyDate" width="100"></vxe-table-column>
           <vxe-table-column title="对账单号" field="accountNo" width="100"></vxe-table-column>
           <vxe-table-column title="开票申请单号" field="applyNo" width="120"></vxe-table-column>
-          <vxe-table-column title="发票种类" field="invoiceKindName" width="100"></vxe-table-column>
+          <vxe-table-column title="发票种类" field="invoiceKind" width="100"></vxe-table-column>
           <vxe-table-column title="发票单位" field="receiptUnitName" width="100"></vxe-table-column>
           <vxe-table-column title="税号" field="customDuty" width="100"></vxe-table-column>
           <vxe-table-column title="地址" field="tel" width="100"></vxe-table-column>
@@ -295,454 +287,6 @@
       return {
         btnTestDir: false,
         proTypeList: [{id: '0', shortName: '全部'}],//分店
-        columns: [
-          {
-            title: "选择",
-            width: 40,
-            type: "selection",
-            fixed: "left",
-            className: "tc",
-            resizable: true,
-          },
-          {
-            title: "序号",
-            // key: "seq",
-            type: "index",
-            className: "tc",
-            resizable: true,
-            width: 40,
-            fixed: "left"
-          },
-          {
-            title: "分店名称",
-            key: "orgName",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.orgName
-                  }
-                }, params.row.orgName)
-              ])
-            }
-          },
-          {
-            title: "店号",
-            key: "orgCode",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.orgCode
-                  }
-                }, params.row.orgCode)
-              ])
-            }
-          },
-          {
-            title: "开票申请单",
-            key: "applyNo",
-            className: "tc",
-            resizable: true,
-            width: 180,
-            render: (h, params) => {
-              return h(
-                "span",
-                {
-                  style: {
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      // this.details.accountNo = params.row.accountNo;
-                      this.details.id = params.row.id;
-                      this.details.applyAmt = params.row.applyAmt
-                      this.getDetails();
-                    }
-                  }
-                },
-                params.row.applyNo
-              );
-            }
-          },
-          {
-            title: "往来单位",
-            key: "guestName",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            fixed: "left",
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.guestName
-                  }
-                }, params.row.guestName)
-              ])
-            }
-          },
-          {
-            title: "申请日期",
-            key: "applyDate",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.applyDate
-                  }
-                }, params.row.applyDate)
-              ])
-            }
-          },
-          {
-            title: "对账单号",
-            key: "accountNo",
-            className: "tc",
-            resizable: true,
-            width: 180,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.accountNo
-                  }
-                }, params.row.accountNo)
-              ])
-            }
-          },
-          {
-            title: "发票单位",
-            key: "receiptUnit",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.receiptUnit
-                  }
-                }, params.row.receiptUnit)
-              ])
-            }
-          },
-          {
-            title: "税点",
-            key: "additionalTaxPoint",
-            className: "tc",
-            resizable: true,
-            width: 80,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.additionalTaxPoint
-                  }
-                }, params.row.additionalTaxPoint)
-              ])
-            }
-          },
-          {
-            title: "申请开票金额",
-            key: "applyAmt",
-            className: "tc",
-            resizable: true,
-            width: 180,
-          },
-          {
-            title: "开票单位",
-            key: "invoiceUnit",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.invoiceUnit
-                  }
-                }, params.row.invoiceUnit)
-              ])
-            }
-          },
-          {
-            title: "寄件方式",
-            key: "sendingWay",
-            className: "tc",
-            resizable: true,
-            width: 150
-          },
-          {
-            title: "快递单号",
-            key: "sendingNumber",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h("el-input", {
-                style: {
-                  display: 'inline-block',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                },
-                props: {
-                  type: "text",
-                  value: params.row.sendingNumber
-                },
-                domProps: {
-                  title: params.row.sendingNumber
-                },
-                on: {
-                  input: val => {
-                    this.data[params.index].sendingNumber = val;
-                  }
-                }
-                // on: {
-                //   "on-blur": event => {
-                //     // this.data1[params.index].sort =event.target.value
-                //     let form = {
-                //       id: params.row.id,
-                //       sendingNumber: event.target.value
-                //     };
-                //     updateNumber(form).then(res => {
-                //       if (res.code === 0) {
-                //         this.$Message.success(res.data);
-                //         this.getDataList();
-                //       }
-                //     });
-                //   }
-                // }
-              });
-            }
-          },
-          {
-            title: "发票代码",
-            key: "invoiceCode",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.invoiceCode
-                  }
-                }, params.row.invoiceCode)
-              ])
-            }
-          },
-          {
-            title: "发票号码",
-            key: "invoiceNo",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.invoiceNo
-                  }
-                }, params.row.invoiceNo)
-              ])
-            }
-          },
-          {
-            title: "导入开票单位",
-            key: "importInvoiceUnit",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.importInvoiceUnit
-                  }
-                }, params.row.importInvoiceUnit)
-              ])
-            }
-          },
-          {
-            title: "验证开票单位",
-            key: "verifyInvoiceUnit",
-            className: "tc",
-            resizable: true,
-            width: 100,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.verifyInvoiceUnit
-                  }
-                }, params.row.verifyInvoiceUnit)
-              ])
-            }
-          },
-          {
-            title: "增发票价税合计加类型",
-            key: "priceTaxTotal",
-            className: "tc",
-            resizable: true,
-            width: 220,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.priceTaxTotal
-                  }
-                }, params.row.priceTaxTotal)
-              ])
-            }
-          },
-          {
-            title: "发票不含税金额",
-            key: "notTaxAmt",
-            className: "tc",
-            resizable: true,
-            width: 180
-          },
-          {
-            title: "发票税额",
-            key: "invoiceTax",
-            className: "tc",
-            resizable: true,
-            width: 180
-          },
-          {
-            title: "已核销金额",
-            key: "canceledTax",
-            className: "tc",
-            resizable: true,
-            width: 180
-          },
-          {
-            title: "剩余未核销开票",
-            key: "remainCancelTax",
-            className: "tc",
-            resizable: true,
-            width: 150,
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  style: {
-                    display: 'inline-block',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                    title: params.row.remainCancelTax
-                  }
-                }, params.row.remainCancelTax)
-              ])
-            }
-          }
-        ],
         data: [],
         data1: [],
         value: [],
@@ -789,11 +333,29 @@
 
       //撤销模态框
       backCancel() {
-        if (this.allTablist.length === 0) return this.$Message.error('请选择一条需要撤回的申请')
-        if (this.allTablist.length > 1) return this.$Message.error('只能选择一条需要撤回的申请')
-        if (this.allTablist.length === 1 && this.allTablist[0].cancalStatus === 1) return this.$Message.error('该条数据已核销不能撤回')
-        this.revokeReason = ''
-        this.modalShow = true;
+        if (this.allTablist.length === 0) return this.$Message.error('请选择需要撤回的申请')
+        let canBack=0;
+        let applyNo=this.allTablist[0].applyNo;
+        this.allTablist.map(el=>{
+          if(el.cancalStatus === 1){
+            canBack=1;//存在已核销数据
+          }
+          if(el.applyNo!=applyNo){
+            canBack=2;//不是同一父开票的单子
+          }
+        })
+        switch (canBack) {
+          case 0:
+            this.revokeReason = ''
+            this.modalShow = true;
+            break;
+          case 1:
+            this.$message.error("存在已核销数据不可撤回")
+            break;
+          case 2:
+            this.$message.error("只能选择同一开票申请单下的子订单")
+            break;
+        }
       },
       //批量保存快递单号
       saveSendingNumber() {
@@ -829,8 +391,12 @@
       //确定撤销
       async reClose() {
         if (!this.revokeReason.trim()) return this.$Message.error('撤回原因必须')
+        let ids=[];
+        this.allTablist.map(el=>{
+          ids.push(el.id);
+        })
         let data = {}
-        data.id = this.allTablist[0].id
+        data.ids = ids
         data.revokeReason = this.revokeReason
         let res = await backApply(data)
         if (res.code === 0) {
@@ -1001,21 +567,6 @@
               item.isOilPart == 1 ? item.invoiceNature = 1 : item.invoiceNature = 0
               item.applyAmtSell = item.applyAmt
               item.applyAmt = this.details.applyAmt
-              item.invoiceKindName="";
-              switch (item.invoiceKind) {
-                case "010101":
-                  item.invoiceKindName = null//收据
-                  break;
-                case "010102":
-                  item.invoiceKindName = "c";//普票
-                  break;
-                case "010103":
-                  item.invoiceKindName = "s";//专票
-                  break;
-                default:
-                  item.invoiceKindName = null;
-                  break;
-              }
               item.seq = index + 1
               return item
             });

@@ -26,70 +26,69 @@
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
-      @click="submission"
       v-has="'examine'"
-      v-noresub
+      @click="submission"
       :disabled="modelType.type!==1"
     >提交申请</button>
     <h4 class="mt10 mb10">基本信息</h4>
-    <Row>
-      <Col span="8">
+    <Row style="border:1px solid #000c17;">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;box-sizing:border-box;border-right:1px solid #000c17">
         <span>分店名称：{{information.orgName}}</span>
       </Col>
-      <Col span="8">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
         <span>分店店号：{{information.code}}</span>
       </Col>
-      <Col span="8">
-        <span>往来单位：{{information.guestName}}</span>
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;">
+        <Poptip placement="top" trigger="hover" :content="information.guestName" max-width="140">
+          <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">往来单位：{{information.guestName}}</div>
+        </Poptip>
       </Col>
     </Row>
-    <Row class="mt10">
-      <Col span="8">
+    <Row style="border:1px solid #000c17;border-top: none;">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
         <span>不含税开票申请单号：{{information.noTaxApply}}</span>
       </Col>
-      <Col span="8">
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
         <span>申请时间：{{information.applicationDate}}</span>
+      </Col>
+      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;">
+        <Poptip placement="top" trigger="hover" :content="information.accountNo" max-width="140">
+          <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">对账单号：{{information.accountNo}}</div>
+        </Poptip>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
     <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="80">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="对账单号" prop="accountNo">
-            <Input v-model="invoice.accountNo" class="ml5 w100" disabled />
-            <i class="iconfont iconcaidan input" v-if="Boolean(modelType.type != 3)" @click="seleteAccount"></i>
+          <FormItem label="不含税对账单未开金额" :label-width="160">
+            <Input v-model="information.notAmt" class="ml5 w150" disabled/>
           </FormItem>
-          <FormItem label="产生税费" prop="taxation">
-            <Input :value="getTaxesAndDues" class="ml5 w100" disabled />
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="不含税对账单未开金额" prop="notAmt" :label-width="160">
-            <Input v-model="invoice.notAmt" class="ml5 w100" disabled />
-          </FormItem>
-          <FormItem label="实际增加开票金额" prop="invoiceAmt" :label-width="160">
-            <Input :value="showPay" class="ml5 w100" disabled />
+          <FormItem label="产生税费" :label-width="160">
+            <Input :value="getTaxesAndDues" class="ml5 w150" disabled/>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt" :label-width="150">
-            <Input v-model="invoice.invoiceTaxAmt" class="ml5 w100" :disabled="modelType.type!==1" />
+            <InputNumber :max="1000000000" :min="0" v-model="invoice.invoiceTaxAmt" class="ml10 w100" :disabled="modelType.type!==1" />
           </FormItem>
-          <FormItem label="申请说明" :label-width="150">
-            <Input v-model="invoice.remark" class="ml5 w400" :disabled="modelType.type!==1" />
+          <FormItem label="本次实际申请开票金额" :label-width="150">
+            <Input :value="showPay" class="ml5 w100" disabled/>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="申请税点" prop="taxPoint">
+          <FormItem label="申请税点" :label-width="150">
             <InputNumber
-              :disabled="modelType.type!==1"
               :min="0"
               :max="100"
               v-model="invoice.taxPoint"
-              class="ml5 w100"
+              class="ml5 w150"
               :formatter="value => `${value}%`"
               :parser="value => value.replace('%', '')"
-              />
+            />
+          </FormItem>
+          <FormItem label="申请说明" :label-width="150">
+            <Input v-model="invoice.remark" class="ml5 w150" :disabled="modelType.type!==1" />
           </FormItem>
         </div>
       </div>
@@ -378,7 +377,7 @@ export default {
   methods: {
     open(row){
       this.modal1 = true
-      this.row = row
+      this.row = Object.assign({}, row);//对象浅拷贝row
     },
     // 对话框是否显示
     async visChange(flag) {
@@ -426,10 +425,11 @@ export default {
             this.information.guestId = res.data.guestId;
             this.information.noTaxApply = res.data.applyNo;
             this.information.guestName = res.data.guestName;
+            this.information.accountNo = res.data.accountNo;
             this.information.applicationDate = res.data.applyDate;
+            this.information.notAmt = res.data.notAmt;
             this.invoice = res.data;
             this.invoice.taxApplicationList = [{value: "0.06", label: "6%"}, {value: "0.07", label: "7%"}];
-            console.log(this.invoice)
             this.accessoriesBillingData = res.data.partList;
             // this.remarks = res.data.applyReason
           }
