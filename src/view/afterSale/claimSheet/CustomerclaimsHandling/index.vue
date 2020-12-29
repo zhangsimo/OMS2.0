@@ -58,7 +58,7 @@
       ref="xTable"
       show-overflow="title"
       class="mt20"
-      height="600"
+      height="400"
     
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @checkbox-all="claimSupplierSel"
@@ -215,6 +215,20 @@
                     width="120"
                   ></vxe-table-column>
                 </vxe-table>
+                <div class="page-warp fw">
+        <Page
+          class-name="page-con"
+          :current="page.num"
+          :total="page.total"
+          :page-size="page.size"
+          :page-size-opts="pageOpts"
+          @on-change="changePage"
+          @on-page-size-change="changeSize"
+          show-sizer
+          show-total
+          transfer
+        ></Page>
+      </div>
 
                 <!--  -->
     </div>
@@ -225,10 +239,7 @@
 </script>
 
 <style scoped lang="less">
-
 .customer {
- 
-  
   width: 100%;
   height: 100%;
   background: white;

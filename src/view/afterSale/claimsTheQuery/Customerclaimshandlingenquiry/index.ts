@@ -8,6 +8,7 @@ import QuickDate from "../../../../components/getDate/dateget";
 import {getBrandList} from "@/view/reportForm/until.js";
 import {ToDayStr} from "@/components/getDate/index_bill.js"
 import * as all from "@/api/afterSale/CustomerClaimsRegistration/index";
+import { showLoading, hideLoading } from "@/utils/loading"
 @Component({
   components: {
   
@@ -148,6 +149,7 @@ export default class Custom extends Vue {
       page:this.page.num-1,
       size:this.page.size
     }
+    showLoading()
     let res:any=await all.getKuquery(params,data)
     if(res.code===0){
      
@@ -170,6 +172,7 @@ export default class Custom extends Vue {
         return el;
       });
       this.page.total=res.data.totalElements
+      hideLoading()
     }
   
   }
@@ -213,6 +216,7 @@ export default class Custom extends Vue {
     }
     this.getdata()
    // @ts-ignore
+   showLoading()
     let res:any=await all.getKuquery(params,this.body)
     if(res.code===0){
       this.claimSupplierData=(res.data.content || []).map(el=>{
@@ -234,6 +238,7 @@ export default class Custom extends Vue {
         return el;
       });
       this.page.total=res.data.totalElements
+      hideLoading()
     }
   }
   
