@@ -1973,7 +1973,7 @@
           this.collectlist.map(item => {
             str += `serviceIdList=${item.serviceId}&`;
           });
-          location.href = payColMonthExportAcSta(str);
+          location.href = payColMonthExportAcSta(`${str}guestId=${this.companyInfo}&`);
         } else {
           // this.$message.error("请勾选要导出的对账清单");
           this.$message({
