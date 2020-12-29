@@ -427,7 +427,7 @@
           width="140"
         >
           <template v-slot="{ row }">
-            <vxe-input type="float" digits="2" v-model="row.thisNoAccountAmt" :controls="false" :max="row.noAccountAmt==0?0:(row.noAccountAmt>0?row.noAccountAmt:0)" :min="row.noAccountAmt==0?0:(row.noAccountAmt>0?0:row.noAccountAmt)" @blur="updateFooterEvent"></vxe-input>
+            <vxe-input type="float" digits="2" v-model="row.thisNoAccountAmt" :controls="false" style="height: 20px;" :max="row.noAccountAmt==0?0:(row.noAccountAmt>0?row.noAccountAmt:0)" :min="row.noAccountAmt==0?0:(row.noAccountAmt>0?0:row.noAccountAmt)" @blur="updateFooterEvent"></vxe-input>
           </template>
         </vxe-table-column>
         <vxe-table-column width="120" title="本次对账金额" align="center" field="thisAccountAmt">
@@ -1973,7 +1973,7 @@
           this.collectlist.map(item => {
             str += `serviceIdList=${item.serviceId}&`;
           });
-          location.href = payColMonthExportAcSta(str);
+          location.href = payColMonthExportAcSta(`${str}guestId=${this.companyInfo}&`);
         } else {
           // this.$message.error("请勾选要导出的对账清单");
           this.$message({

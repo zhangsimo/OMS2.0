@@ -9,7 +9,13 @@
         <span class="mr5">申请日期:</span>
         <DatePicker type="daterange" placement="bottom-end"  v-model="date" style="width: 200px" class="mr10"></DatePicker>
         <span class="mr5">往来单位：</span>
-        <Select v-model="companyId" class="w150 mr10" filterable>
+        <Select v-model="companyId"
+          filterable
+          remote
+          :remote-method="remoteMethod"
+          :loading="loading1"
+          clearable
+         class="w150 mr10">
           <Option v-for="(item,index) in company" :value="item.value" :key="index">{{ item.label }}</Option>
         </Select>
         <span class="mr5">金额：</span>
@@ -61,14 +67,35 @@
         date:[],//时间
         tableData:[],//表格数据
         checkedList:{},//获取到的信息
-        company:[
-          {label:'全部' ,value: 0 }
-        ],//往来列表
+        company:[],//往来列表
         companyId:0,//获取到往来单位id
         money:'',//金额
+        loading1: false,
       }
     },
     methods: {
+      //往来单位查询
+      async remoteMethod(query) {
+        this.company = [];
+        this.loading1 = true
+        let arr = []
+        let req = {
+          fullName: query,
+          size: 20,
+        }
+        let res = await findGuest(req);
+        if (res.code == 0) {
+          this.loading1 = false
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.shortName,
+            });
+          });
+        }
+        let arrJson = new Set(arr)
+        this.company = Array.from(arrJson)
+      },
       //打开模态框
       open() {
         this.modelShow = true
@@ -79,26 +106,25 @@
         // date.push(start)
         // date.push(end)
         this.date = ThisWeekStr()
-        this.getOne()
-        this.companyId = 0
         this.checkedList = {}
+        this.remoteMethod('')
         this.query()
       },
 
       // 往来单位选择
-      async getOne() {
-        this.company = [{label:'全部' ,value: 0 }]
-        findGuest({ size: 2000 }).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(item => {
-              this.company.push({
-                value: item.id,
-                label: item.fullName
-              });
-            });
-          }
-        });
-      },
+      // async getOne() {
+      //   this.company = [{label:'全部' ,value: 0 }]
+      //   findGuest({ size: 2000 }).then(res => {
+      //     if (res.code === 0) {
+      //       res.data.content.map(item => {
+      //         this.company.push({
+      //           value: item.id,
+      //           label: item.fullName
+      //         });
+      //       });
+      //     }
+      //   });
+      // },
 
       //查询
       async query(){
