@@ -57,12 +57,25 @@
       <vxe-table-column field="unit" title="单位" width="80"></vxe-table-column>
       <vxe-table-column field="spec" title="规格" width="80"></vxe-table-column>
     </vxe-table>
+    <Page
+      :total="page.total"
+      :page-size="page.size"
+      size="small"
+      :current="page.num"
+      show-sizer
+      show-total
+      class-name="page-con"
+      @on-change="selectNum"
+      @on-page-size-change="selectPage"
+      class="mr10"
+      :page-size-opts="[ 50, 100, 200]"
+    ></Page>
   </section>
 </template>
 <script lang="ts">
   import {Vue, Component, Watch} from "vue-property-decorator";
   import * as api from "@/api/afterSale/claimSheet/index.js"
-  import {showLoading,hideLoading} from "@/utils/loading";
+  import {showLoading, hideLoading} from "@/utils/loading";
 
   @Component
   export default class tabOne extends Vue {
@@ -70,7 +83,7 @@
     private body: any = {};
     private page: any = {
       num: 1,
-      size: 10
+      size: 50
     };
     private validRules: any = {
       thisTreatmentQty: [{required: true, message: "本次处理数量必填", trigger: "blur"}]
@@ -81,14 +94,27 @@
       this.claimSupplierSelData = selection;
     }
 
+    //切换页面
+    private selectNum(val) {
+      this.page.num = val;
+      this.getList()
+    }
+
+    //切换页数
+    private selectPage(val) {
+      this.page.num = 1;
+      this.page.size = val;
+      this.getList();
+    }
+
     private async claim(type: number) {
       if (this.claimSupplierSelData.length < 1) {
         return this.$message.error("最少选中一条数据进行处理！")
       }
-      let boolAjax:boolean=true;
-      this.claimSupplierSelData.map(el=>{
-        if(!el.thisTreatmentQty){
-          boolAjax=false
+      let boolAjax: boolean = true;
+      this.claimSupplierSelData.map(el => {
+        if (!el.thisTreatmentQty) {
+          boolAjax = false
         }
       })
       let p = ""
@@ -107,7 +133,7 @@
           break;
       }
       // @ts-ignore
-      if(boolAjax){
+      if (boolAjax) {
         this.$Modal.confirm({
           title: '提示',
           content: `<p>是否确定${p}?</p>`,
@@ -121,7 +147,7 @@
               this.getList()
               hideLoading()
               this.$Message.success("处理成功")
-            }else{
+            } else {
               hideLoading()
             }
           },
@@ -129,7 +155,7 @@
             this.$message.warning("已取消操作")
           }
         });
-      }else{
+      } else {
         return this.$message.error("本次处理数量必填")
       }
     }
@@ -139,22 +165,20 @@
     }
 
     private async getList() {
-      // let params:any={
-      //   page:this.page.num-1,
-      //   size:this.page.size
-      // }
       let params: any = {
-        page: 0,
-        size: 10000
+        page: this.page.num - 1,
+        size: this.page.size
       }
       showLoading()
       // @ts-ignore
       let res: any = await api.supplierClaimSettlementQuery(params, this.body)
       if (res.code === 0) {
         this.claimSupplierData = res.data.content;
+        this.page.total = res.data.totalElements;
         hideLoading()
-      }else{
-        this.claimSupplierData =[];
+      } else {
+        this.claimSupplierData = [];
+        this.page.total = 0;
         hideLoading()
       }
     }
