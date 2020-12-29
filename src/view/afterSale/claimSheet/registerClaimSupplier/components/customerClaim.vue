@@ -162,7 +162,7 @@
       let notSim:boolean=false;
       (par.formPlan.details || []).map(detEL=>{
         (this.checkData || []).map(arrEl=>{
-          if(detEL.serviceId==arrEl.serviceId){
+          if(detEL.partInnerId==arrEl.partInnerId){
             notSim=true;
           }
         })
