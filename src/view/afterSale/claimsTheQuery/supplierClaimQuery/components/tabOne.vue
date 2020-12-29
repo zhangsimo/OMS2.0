@@ -54,7 +54,8 @@
 <script lang="ts">
   import {Vue, Component, Watch} from "vue-property-decorator";
   import * as api from "@/api/afterSale/claimsTheQuery/index.js"
-  import moment from "moment";
+  import {showLoading , hideLoading } from "@/utils/loading";
+
   @Component
   export default class tabOne extends Vue{
     private claimSupplierData:Array<any>=new Array<any>();
@@ -84,6 +85,7 @@
         page:this.page.num-1,
         size:this.page.size
       }
+      showLoading()
       // @ts-ignore
       let res:any=await api.supplierClaimQuery(params,this.body)
       if(res.code===0){
@@ -105,6 +107,11 @@
           return el;
         });
         this.page.total=res.data.totalElements
+        hideLoading()
+      }else{
+        this.claimSupplierData=[]
+        this.page.total=0;
+        hideLoading()
       }
     }
   }
