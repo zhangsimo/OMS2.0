@@ -186,7 +186,7 @@ export default class Customs extends Vue {
     moreData.moreData.orderMan ? data.createUname = moreData.moreData.orderMan : ""
     //console.log(this.purchaseType)
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
-    console.log(data)
+  
     // showLoading()
     let res: any = await all.getListSale(params, data);
     if (res.code == 0) {
@@ -216,7 +216,7 @@ export default class Customs extends Vue {
         
         // hideLoading()
         let hg = this.filters(this.tableList);
-        console.log(hg,1)
+      
         let row:any = null
         if (hg !== undefined) {
           row = hg
@@ -278,9 +278,10 @@ export default class Customs extends Vue {
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
     params.page = this.Left.page.num - 1;
     params.size = this.Left.page.size;
-    // showLoading()
+      showLoading()
     let res: any = await all.getListSale(params, data);
-    if (res.code === 0) {
+    if (res.code === 0) {  
+        hideLoading()
       if (res.data.content && res.data.content.length > 0) {
         this.tableList = res.data.content.map(el => {
           el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
@@ -300,9 +301,10 @@ export default class Customs extends Vue {
               break;
           }
           return el;
-        });
+        }); 
+       
         this.$set(this.Left.page, "total", res.data.totalElements)
-        // hideLoading()
+      
         let hg = this.filters(this.tableList);
         //console.log(hg)
         let row:any = null
@@ -319,11 +321,14 @@ export default class Customs extends Vue {
         this.$refs.xTable.setCurrentRow(row);
         //给表单赋值
         this.format(res.data.content)
+        // hideLoading()
       } else {
         this.tableList = []
         this.details = []
         this.$set(this.Left.page, "total", 0)
-      }
+       
+      } 
+      
     }
   }
   //理赔原因 
@@ -357,7 +362,7 @@ export default class Customs extends Vue {
     this.peiflag=true
     this.tjflag = false
     this.bcflag = true
-    this.flag = true;
+    this.row={}
     this.bjFlag = true
   
     if (this.tableList.length === 0) {
@@ -374,7 +379,7 @@ export default class Customs extends Vue {
     }
   this.mainId=""
    // this.row.orderSignStatus = "草稿"
-    
+     this.flag = true;
     this.details = []
     this.form.serviceId = ""
     this.form.guestId = ""
@@ -489,7 +494,7 @@ export default class Customs extends Vue {
 
   }
   private getSupplierNamea(val) {
-    console.log(val.id)
+   
     this.chaId= val.id
     this.$set(this.form, 'guestId', val.id)
     this.$set(this.form, 'units', val.fullName)
@@ -514,7 +519,7 @@ export default class Customs extends Vue {
         content: `<p>是否确定删除?</p>`,
         onOk: async () => {
           let list:any=this.delArrs;
-        console.log(list)
+      
         let res:any=await all.del(list)
         if(res.code===0){
           this.$Message.info("删除成功");
@@ -587,7 +592,7 @@ export default class Customs extends Vue {
     data.id = this.chaId;
     this.$refs.child.$refs.form.resetFields()
     getCustomerDetails(data).then((res: any) => {
-      console.log(res)
+  
       if (res.code == 0) {
         this.clientList = res.data;
         this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
@@ -624,9 +629,10 @@ export default class Customs extends Vue {
     this.Leftcurrentrow.afterSaleDate = this.Leftcurrentrow.afterSaleDate
       ? moment(this.Leftcurrentrow.afterSaleDate).format("YYYY-MM-DD")
       : "";
+     // showLoading()
     let res: any = await all.saveSale(this.Leftcurrentrow);
     if (res.code == 0) { 
-    
+    //  hideLoading()
       this.bcflag = false
       this.tjflag = true
      
@@ -678,7 +684,7 @@ export default class Customs extends Vue {
   }
   //选中的行
   private getOneClinet(data) {
-    if (this.flag == true && data.row.orderSignStatus && this.bjFlag) {
+    if (this.flag == true && data.row.orderSign && this.bjFlag) {
       this.$Modal.confirm({
         title: "您正在编辑单据，是否需要保存",
         onOk: () => {
@@ -737,7 +743,7 @@ export default class Customs extends Vue {
   //选中当前行
   private currentChangeEvent(e) {
     // this.clientList = e.row
-    console.log(e.row)
+    
   }
   private logDataLoading: boolean = false
   //获取日志
@@ -745,10 +751,12 @@ export default class Customs extends Vue {
     this.logDataLoading = true;
     let data = {
       detailId: row.id
-    }
+     
+    } 
+    
     if (this.row.orderSign ==0) {
-      console.log(4444)
-      return;
+
+      return
     }
     let res: any = await all.registerPartsProcesLog(data)
     if (res.code === 0) {
@@ -771,7 +779,7 @@ export default class Customs extends Vue {
 
   //选中单个框
   private selectChangeEvent(e) {
-    console.log(e.row)
+
     if(e.row.id){
       this.delArrs.push(e.row.id)
     }else{

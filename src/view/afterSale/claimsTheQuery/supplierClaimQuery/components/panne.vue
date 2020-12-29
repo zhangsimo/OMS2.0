@@ -40,7 +40,7 @@
           <div class="db mr10">
             <span class="mr5">理赔单号:</span>
             <Input
-              v-model.trim="search.serviceId"
+              v-model.trim="search.claimsCode"
               placeholder="请输入理赔单号"
               class="w180"
               clearable
@@ -133,7 +133,7 @@
       orderDate: ToDayStr(),
       guestName: "",
       partCode: "",
-      serviceId:"",
+      claimsCode:"",
       partBrand: ""
     }//搜索条件 panne
     private moreSearch:any={
@@ -197,7 +197,9 @@
               moment(this.moreSearch["orderDate"][0]).startOf('day').format("YYYY-MM-DD HH:mm:ss"):""
             data.createEndTime =this.moreSearch["orderDate"][1]!=""?
               moment(this.moreSearch["orderDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):""
-          }else {
+          }else if(key=="handleType"||key=="guestType"){
+            data[key]=data[key]==99?"":data[key]
+          } else {
             data[key] = this.moreSearch[key];
           }
         }

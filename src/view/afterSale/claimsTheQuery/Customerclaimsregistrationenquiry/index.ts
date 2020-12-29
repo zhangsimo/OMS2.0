@@ -107,7 +107,7 @@ export default class Custom extends Vue {
     }
     private getdata() {
         let data: any = {};
-        console.log(this.search)
+   
         for (let key in this.search) {
           if (this.search[key]) {
             if (key == "orderDate") {
@@ -156,6 +156,6 @@ export default class Custom extends Vue {
       }
     //获取点击行
     private getOneClinet(data) {
-        console.log(data.row)
+        
     }
 }
