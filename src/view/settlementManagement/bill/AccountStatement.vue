@@ -873,6 +873,12 @@
       },
       //撤销申请
       withdrawTheApplication() {
+        if(this.salepopupList.length>1){
+          return this.$message.error("请选择一条数据")
+        }
+        if(this.salepopupList.length===1){
+          this.reconciliationStatement=this.salepopupList[0]
+        }
         this.reTitle = '撤回申请'
         this.revokeReason = ''
         this.modalShow = true;
@@ -880,6 +886,12 @@
 
       //撤回核销
       backCancel() {
+        if(this.salepopupList.length>1){
+          return this.$message.error("请选择一条数据")
+        }
+        if(this.salepopupList.length===1){
+          this.reconciliationStatement=this.salepopupList[0]
+        }
         this.reTitle = '撤回核销'
         this.revokeReason = ''
         this.modalShow = true;
