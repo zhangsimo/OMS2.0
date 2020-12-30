@@ -272,23 +272,22 @@ export default {
       if(errMap){
 
       }else{
+        if(this.remark){
+          if(this.remark.length > 500){
+            return this.$message.error('备注500字符以内')
+          }
+        }
         let data = {
           sourceDto: {
             id: this.tableData[0].id,
             rpAmt: this.tableData[0].writeOffAmount,
+            remark: this.remark
           },
           wrtiteOffDto: {
             id: this.currRow.id,
           },
         }
         this.disabled=true;
-        if(this.remark){
-          if(this.remark.length > 500){
-            return this.$message.error('备注500字符以内')
-          }else{
-            data.remark = this.remark
-          }
-        }
         let res = await api.orderWriteOff(data)
         if (res.code == 0) {
           this.disabled=false;

@@ -389,22 +389,21 @@
         if (errMap) {
         } else {
           if(enbleAjax){
+            if(this.remark){
+              if(this.remark.length > 500){
+                return this.$message.error('备注500字符以内')
+              }
+            }
             let data = {
               sourceDto: {
                 id: this.tableData[0].id,
-                rpAmt: this.totalfooter
+                rpAmt: this.totalfooter,
+                remark: this.remark,
               },
               wrtiteOffDtos: this.selectArr.map(el => {
                 return {id: el.id, rpAmt: el.writeOffAmount};
               })
             };
-            if(this.remark){
-              if(this.remark.length > 500){
-                return this.$message.error('备注500字符以内')
-              }else{
-                data.remark = this.remark
-              }
-            }
             this.submitDis = true;
             api.orderWriteOff2(data).then(res => {
               if (res.code == 0) {
