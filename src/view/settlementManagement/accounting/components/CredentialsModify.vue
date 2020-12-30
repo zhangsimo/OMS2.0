@@ -705,7 +705,6 @@
     addOutStaffe
   } from "@/api/voucherInput/voucherInput";
 import { hideLoading, showLoading } from '@/utils/loading';
-import {getSubjectMsg} from '@/api/lease/customerSM'
 
   export default {
     name: "CredentialsModify",
@@ -1081,7 +1080,8 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
         data.companyCode = localStorage.getItem('currentShopCode')
         BigSave(data).then(res => {
           if (res.code === 0) {
-
+            this.credentShow = false
+            this.$parent.query()
             this.$Message.warning("保存成功!");
           } else {
             this.$Message.warning("保存失败！");
@@ -1319,7 +1319,7 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
               titleCode: row.subjectCode,
               titleTypeCode: row.rootCode
             }
-            let res = await getSubjectMsg(data)           // 查询根据auxiliaryAccountingName来判断是否有辅助核算
+            let res = await api.getSubjectMsg(data)           // 查询根据auxiliaryAccountingName来判断是否有辅助核算
             if(!res.data[0].auxiliaryAccountingName){
               this.$Modal.info({title: '所选会计科目没有辅助核算'})
               return this.subjectModelShowassist = false;
@@ -1832,7 +1832,7 @@ import {getSubjectMsg} from '@/api/lease/customerSM'
       //修改刷新列表
       getList() {
         let params = {};
-        params.id = this.vercherId[0].id;
+        params.id = this.vercherId[0].financeVoucherId;
         findById(params).then(res => {
           if (res.code === 0) {
             this.ID = res.data.id;
