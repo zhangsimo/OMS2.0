@@ -493,6 +493,7 @@
           }
           let arr = [];
           let flag = false
+          let flag1 = false
           this.selectItem.map(el => {
             let obj = {};
             obj.id = el.id;
@@ -500,10 +501,17 @@
             if(Number(el.rpAmt) < 0){
               flag = true
             }
+            if(el.rpAmt > el.unClaimedAmt){
+              flag1 = true
+            }
             arr.push(obj)
           })
           if(flag){
             this.$message.error('本次认领金额不可小于零')
+            return
+          }
+          if(flag1){
+            this.$message.error('本次认领金额不可大于未认领金额')
             return
           }
           if(!this.dataOne || !this.dataTwo){
