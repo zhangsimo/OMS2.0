@@ -105,6 +105,8 @@
         // let end = moment().add(7 - weekOfday, 'days').format('YYYY-MM-DD') // 周日日期
         // date.push(start)
         // date.push(end)
+        this.companyId = ''
+        this.money = ''
         this.date = ThisWeekStr()
         this.checkedList = {}
         this.remoteMethod('')

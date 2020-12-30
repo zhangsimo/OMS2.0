@@ -271,7 +271,7 @@
           <!--<vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>-->
           <vxe-table-column field="applyAmt" title="申请开票金额" >
             <template v-slot="{ row }">
-              {{row.invoiceNotAmt | priceFilters}}
+              {{row.applyAmt | priceFilters}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
@@ -598,7 +598,7 @@ export default {
   methods: {
     invoUnitChange(option){
       this.invoice.issuingOfficeList.map(el=>{
-        if(el.id==option.value){
+        if(el.value==option){
           this.invoice.invoiceTax=el.taxRateName;
           this.invoice.invoiceType=el.invoiceTypeName;
         }
