@@ -300,7 +300,7 @@
           let data = {
             type:this.radioSelect,
             status: 1,
-            ids:this.at_present,
+            id:this.at_present,
             tenantTypeId: this.tenantTypeId,
             tenantTypeName: this.tenantTypeName
           }
@@ -321,7 +321,7 @@
           if (this.zhuanagtai === 0){
             let name = {
               isDisabled: 1,
-              ids:this.at_present
+              id:this.at_present
             }
             trialRegister(name).then((res) =>{
               this.$Message.warning('禁用成功')
@@ -343,7 +343,7 @@
           }else {
             let name = {
               isDisabled: 0,
-              ids: this.at_present
+              id: this.at_present
             }
             trialRegister(name).then((res) =>{
               this.$Message.success('启用成功')
