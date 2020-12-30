@@ -1250,9 +1250,11 @@
               item.statementStatusName = item.statementStatus.name;
             });
             this.data1 = res.data.content;
+            this.salepopupList=[];
             hideLoading()
           } else {
             this.data1 = [];
+            this.salepopupList=[];
             hideLoading()
           }
         }).catch(e => {
