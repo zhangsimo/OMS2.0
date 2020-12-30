@@ -205,6 +205,7 @@ export default {
     init() {
       this.date = [];
       this.price = 0;
+      this.remark = ''
       this.disabled = false;
       this.page = {
         num: 1,
