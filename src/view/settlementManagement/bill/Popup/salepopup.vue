@@ -598,7 +598,7 @@ export default {
   methods: {
     invoUnitChange(option){
       this.invoice.issuingOfficeList.map(el=>{
-        if(el.id==option.value){
+        if(el.value==option){
           this.invoice.invoiceTax=el.taxRateName;
           this.invoice.invoiceType=el.invoiceTypeName;
         }
