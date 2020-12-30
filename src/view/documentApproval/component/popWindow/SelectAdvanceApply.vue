@@ -142,7 +142,6 @@
 
       //选择
       selectChangeEvent({selection}){
-        console.log(selection)
         this.checkedList = selection
       },
       //全选
