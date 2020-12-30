@@ -1,8 +1,12 @@
 <template>
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
-      <div class="clearfix mb20">
+      <div class="flex-jb mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
+        <div>
+          <span class="mr10">备注:</span>
+          <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" class="w200" />
+        </div>
       </div>
 
       <vxe-table
@@ -80,6 +84,7 @@
         tableData: [],
         outFlag: false,
         type: this.amountType,
+        remark:"",
         financeAccountCashList: [], //选中待认领的数组
         currentRow: {}, // 报销认领弹框中选中的行
         validRules: {
@@ -200,6 +205,7 @@
           two: this.dataTwo,
           three: arr
         }
+        data.one.remark=this.remark;
         saveAccount(data).then(res => {
           if (res.code === 0) {
             this.$message.success("认领成功")
@@ -267,5 +273,9 @@
   .el-input-number {
     width: 100px;
   }
-
+  .flex-jb{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 </style>

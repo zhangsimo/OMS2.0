@@ -873,6 +873,12 @@
       },
       //撤销申请
       withdrawTheApplication() {
+        if(this.salepopupList.length>1){
+          return this.$message.error("请选择一条数据")
+        }
+        if(this.salepopupList.length===1){
+          this.reconciliationStatement=this.salepopupList[0]
+        }
         this.reTitle = '撤回申请'
         this.revokeReason = ''
         this.modalShow = true;
@@ -880,6 +886,12 @@
 
       //撤回核销
       backCancel() {
+        if(this.salepopupList.length>1){
+          return this.$message.error("请选择一条数据")
+        }
+        if(this.salepopupList.length===1){
+          this.reconciliationStatement=this.salepopupList[0]
+        }
         this.reTitle = '撤回核销'
         this.revokeReason = ''
         this.modalShow = true;
@@ -1238,9 +1250,11 @@
               item.statementStatusName = item.statementStatus.name;
             });
             this.data1 = res.data.content;
+            this.salepopupList=[];
             hideLoading()
           } else {
             this.data1 = [];
+            this.salepopupList=[];
             hideLoading()
           }
         }).catch(e => {
@@ -1343,8 +1357,88 @@
         this.getRecord(obj);
         this.getdetailsDocuments(obj);
       },
-      distributionSelection({selection}) {
+      distributionSelection({selection,row,index}) {
         this.salepopupList = selection;
+        if(selection.length===1){
+          this.taxArrearsfalg = false
+          this.statementStatusflag = false
+          this.hedgingfalg = false
+          this.receivefalg = false
+          if (row.statementStatusName == '审核中') {
+            this.ifRecallApply = true
+          }
+          if (row.statementStatus.value == 4) {
+            this.statementStatusflag = true
+          }
+          if (row.taxSign === 1) {
+            if (row.taxArrearsOfPart == 0 && row.taxArrearsOfOil == 0) {
+              this.taxArrearsfalg = true
+            }
+          } else {
+            if (row.taxNotIncluded <= 0) {
+              this.taxArrearsfalg = true
+            }
+          }
+          if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil) {
+            this.hedgingfalg = true
+          }
+          if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil) {
+            this.receivefalg = true
+          }
+          if (row.statementStatus.value == 1) {
+            this.hedgingfalg = true
+          }
+          if (row.statementStatus.value == 1 || row.ownEnterList == 0) {
+            this.ownEnterList = true
+
+          }
+          this.reconciliationStatement = row;
+          this.reconciliationStatement.index = index;
+          this.data2 = []
+          this.data3 = []
+          this.data4 = []
+          setCanwithdraw({id: row.id}).then(
+            res => {
+              if (res.code === 0) {
+                if (row.statementStatusName == '审核中') {
+                  this.ifRecallApply = true
+                } else {
+                  this.ifRecallApply = !res.data.ifRecallApply
+                }
+                this.ifRecallWriteOff = !res.data.ifRecallWriteOff
+                this.ifRecallHedge = !res.data.ifRecallHedge
+              }
+            }
+          )
+          getId({orgId: row.orgId, incomeType: row.paymentType.value}).then(
+            res => {
+              this.collectPayId = !res.data.fno;
+              this.Write = !res.data.checkId;
+            }
+          );
+          let date = {
+            startDate: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            endDate: moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+          };
+          // this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
+          this.$refs.reconciliation.parameter = {...row, ...date};
+          let obj = {
+            orgId: row.orgId,
+            startDate: this.value[0]
+              ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            endDate: this.value[1]
+              ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+              : "",
+            guestId: row.guestId,
+            accountNo: row.accountNo,
+            serviceId: row.serviceId
+          };
+          this.getRecord(obj);
+          this.getdetailsDocuments(obj);
+        }
       },
       // 查看对账单
       viewStatement() {
