@@ -214,20 +214,20 @@ export default class Customs extends Vue {
         this.$set(this.Left.page, "total", res.data.totalElements)
         
         
-        // hideLoading()
-        let hg = this.filters(this.tableList);
+        // // hideLoading()
+        // let hg = this.filters(this.tableList);
       
-        let row:any = null
-        if (hg !== undefined) {
-          row = hg
-        } else {
+         let row:any = null
+        // if (hg !== undefined) {
+        //   row = hg
+        // } else {
           row = this.tableList[0]
-        }
+      //  }
         this.details=row.details
         this.$refs.xTable.setCurrentRow(row);
-
+       
         //给表单赋值
-        this.format(res.data.content)
+        this.format(this.tableList[0])
       } else {
         this.tableList = []
         this.details = []
@@ -237,28 +237,29 @@ export default class Customs extends Vue {
   }
   //给表单赋值
   private format(data) { 
-    this.row = data[0];
-    this.mainId = data[0].id
-    this.chaId=data[0].guestId
-    this.form.id=data[0].id
-    this.form.serviceId = data[0].serviceId
-    this.form.guestId = data[0].guestId
-    this.form.afterSaleDate = moment(data[0].afterSaleDate).format("YYYY-MM-DD")
-     data[0].manualCode ? this.form.moblenumber = data[0].manualCode : this.form.moblenumber = "";
    
-    this.form.remark = data[0].remark
-    this.form.units = data[0].guestName
-    this.form.serviceId = data[0].serviceId
-    this.highlight = data[0]
+    this.row = data;
+    this.mainId = data.id
+    this.chaId=data.guestId
+    this.form.id=data.id
+    this.form.serviceId = data.serviceId
+    this.form.guestId = data.guestId
+    this.form.afterSaleDate = moment(data.afterSaleDate).format("YYYY-MM-DD")
+     data.manualCode ? this.form.moblenumber = data.manualCode : this.form.moblenumber = "";
+  
+    this.form.remark = data.remark
+    this.form.units = data.guestName
+    this.form.serviceId = data.serviceId
+    this.highlight = data
    
-   // console.log(data[0].id)
-    //this.mainId=data[0].guestId
+   // console.log(data.id)
+    //this.mainId=data.guestId
     this.relevanceList = data;
     //导入配件开关
     if(this.flag==false){
       this.peiflag=false
     }
-    if (data[0].orderSign ==0) {
+    if (data.orderSign ==0) {
         this.flag = true;
         this.bcflag = true
         this.tjflag = true 
@@ -278,10 +279,10 @@ export default class Customs extends Vue {
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
     params.page = this.Left.page.num - 1;
     params.size = this.Left.page.size;
-      showLoading()
+     // showLoading()
     let res: any = await all.getListSale(params, data);
     if (res.code === 0) {  
-        hideLoading()
+      //  hideLoading()
       if (res.data.content && res.data.content.length > 0) {
         this.tableList = res.data.content.map(el => {
           el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
@@ -320,7 +321,7 @@ export default class Customs extends Vue {
         // }
         this.$refs.xTable.setCurrentRow(row);
         //给表单赋值
-        this.format(res.data.content)
+        this.format(row)
         // hideLoading()
       } else {
         this.tableList = []
@@ -494,7 +495,7 @@ export default class Customs extends Vue {
 
   }
   private getSupplierNamea(val) {
-   
+//   console.log(val)
     this.chaId= val.id
     this.$set(this.form, 'guestId', val.id)
     this.$set(this.form, 'units', val.fullName)
@@ -572,7 +573,8 @@ export default class Customs extends Vue {
   }
   //理赔单位的对勾
   private addSuppler() {
-    this.$refs.selectSupplier.init();
+   
+    this.$refs.selectSupplier.openModel();
   }
   //更多的弹框回调
   private openMoreflag(val) {
@@ -612,8 +614,22 @@ export default class Customs extends Vue {
     });
 
   }
+  private fun(func, delay) {            
+    　　var prev = Date.now();            
+    　　return function() {                
+    　　　//　var context = this;                
+    　　　　var args = arguments;                
+    　　　　var now = Date.now();                
+    　　　　if (now - prev >= delay) {                    
+    　　　　　　func();                    
+    　　　　　　prev = Date.now();                
+    　　　　}            
+    　　}        
+    }  
+     
   //保存
   //配件禁用
+
   private peiflag=true
   private async baocun() {
    
@@ -631,8 +647,9 @@ export default class Customs extends Vue {
       : "";
      // showLoading()
     let res: any = await all.saveSale(this.Leftcurrentrow);
+    showLoading()
     if (res.code == 0) { 
-    //  hideLoading()
+      hideLoading()
       this.bcflag = false
       this.tjflag = true
      
@@ -643,6 +660,8 @@ export default class Customs extends Vue {
       this.form = {
       } 
        this.getLeftLists()
+    }else{
+      hideLoading()
     }
   }
   //------左边的table 
@@ -716,7 +735,8 @@ export default class Customs extends Vue {
     this.mainId = data.row.id
     this.form.serviceId = data.row.serviceId
     this.form.guestId = data.row.guestId
-    this.form.afterSaleDate = moment(data.row.afterSaleDate).format("YYYY-MM-DD")
+    this.form.afterSaleDate = moment(data.row.afterSaleDate).format("YYYY-MM-DD");
+    this.form.remark=data.row.remark
     data.row.manualCode ? this.form.moblenumber = data.row.manualCode : this.form.moblenumber = "";
     data.row.manualCode ? this.form.moblenumber = data.row.manualCode : this.form.moblenumber = ""
     this.form.units = data.row.guestName
@@ -762,8 +782,10 @@ export default class Customs extends Vue {
     }
     let res: any = await all.registerPartsProcesLog(data)
     if (res.code === 0) {
-      this.currentData = (res.data || []).map(el => {
+      this.currentData = (res.data || []).map(el => { 
+      
         switch (el.recordType) {
+        
           case "1":
             el.recordTypeStatus = "理赔出库";
             break;

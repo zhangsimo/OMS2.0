@@ -215,12 +215,12 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
     }
     private async openModal(data){
       // @ts-ignore
-      console.log(data)
+     
       let res:any=await all.printSale(data);
       //console.log(res)
       if(res.code===0){
         
-        console.log(res.data)
+       
         this.onelist=res.data;
         this.onelist.printDate=moment(new Date()).format("yyyy-MM-dd HH:mm:ss")
         setTimeout(()=>{

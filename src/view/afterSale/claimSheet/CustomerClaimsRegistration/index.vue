@@ -95,7 +95,7 @@
                 查看客户
               </Button>
             </div>
-          </div>
+        </div>
         </div>
       </section>
       <section class="con-box">
@@ -614,7 +614,7 @@
       <select-supplier
         ref="selectSupplier"
         header-tit="客户资料"
-        @selectSupplierName="getSupplierNamea"
+        @getOne="getSupplierNamea"
       ></select-supplier>
       <Print ref="printZF" v-show="false"></Print>
     </div>
