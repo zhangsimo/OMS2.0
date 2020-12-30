@@ -1,8 +1,12 @@
 <template>
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
-      <div class="clearfix mb20">
-        <Button class="fl" @click="openPClaimModal">选择单据</Button>
+      <div class="mb20 flex-jb">
+        <Button class="mr10" @click="openPClaimModal">选择单据</Button>
+        <div>
+          <span>备注:</span>
+          <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" class="w200" />
+        </div>
         <div class="fr" v-show="titleName!='预收款支出认领'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
@@ -105,6 +109,7 @@ export default {
       type: this.amountType,
       financeAccountCashList: [], //选中待认领的数组
       currentRow: {}, // 报销认领弹框中选中的行
+      remark:"",//备注
       validRules: {
         thisClaimedAmt: [
           { required: true, message: '请输入认领金额' },
@@ -186,13 +191,6 @@ export default {
         this.$message.error('请点击选择单据按钮，选择数据')
         return
       }
-      // this.$refs.xTree.validate((err) => {
-      //   if(err){
-      //     this.$message.error('待认领金额输入不正确')
-      //   }else{
-      //     this.$message.success('认领成功')
-      //   }
-      // })
       let flag1 = this.tableData.some(v => {
         return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.unClaimedAmt
       })
@@ -226,7 +224,8 @@ export default {
         let obj = {
           financeAccountCashList: this.financeAccountCashList,
           claimType: this.$parent.claimType,
-          guestId: this.voucherItem.id
+          guestId: this.voucherItem.id,
+          remark:this.remark
         }
         addClaim(obj).then(res => {
           if(res.code === 0){
@@ -248,6 +247,7 @@ export default {
           two:this.dataTwo,
           three:arr
         }
+        data.one.remark=this.remark;
         saveAccount(data).then(res=>{
           if(res.code===0){
             this.$message.success("认领成功")
@@ -316,5 +316,9 @@ export default {
 .el-input-number{
   width: 100px;
 }
-
+.flex-jb{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>
