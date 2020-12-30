@@ -1077,7 +1077,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
           });
         }
         showLoading('.bigBox')
-        data.companyCode = localStorage.getItem('currentShopCode')
+        data.companyCode = this.$store.state.user.userData.currentCompany.code
         BigSave(data).then(res => {
           if (res.code === 0) {
             this.credentShow = false
