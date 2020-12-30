@@ -852,6 +852,7 @@ export default {
   methods: {
     // 新增采购订单保存数据
     savePre() {
+      //console.log(this.billTypeName,this.settleTypeName,this.transitUnit,111)
       if (
         this.transitUnit === "" ||
         this.billTypeName === "" ||
@@ -919,7 +920,7 @@ export default {
         if (res.code === 0) {
           this.settlementMethodList = res.data;
           this.settleTypeId = res.data[0].itemCode;
-          this.settleTypeName = res.data[0].Name;
+          this.settleTypeName = res.data[0].itemName;
         }
       });
     },
@@ -1046,9 +1047,9 @@ export default {
     },
     // 新增采购票据类型改变时触发
     addChange3(value) {
-      // console.log(value)
       // this.billTypeId = value;
       this.settleTypeId = value;
+      // console.log(value,this.settleTypeName)
     },
     // 新增备注
     remarks(event) {
