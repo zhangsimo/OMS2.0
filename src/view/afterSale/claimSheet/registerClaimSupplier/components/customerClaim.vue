@@ -131,8 +131,8 @@
       let data:any={};
       data.orderSign=1;
       if(this.submitData[0]){
-        data.orderstartDate=moment(this.submitData[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss");
-        data.orderendDate=moment(this.submitData[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss");
+        data.orderStartDate=moment(this.submitData[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss");
+        data.orderEndDate=moment(this.submitData[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss");
       }
       data.guestName=this.guestName;
       data.partBrand=this.partBrand;
