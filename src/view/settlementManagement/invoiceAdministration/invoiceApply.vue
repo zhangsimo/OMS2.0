@@ -565,6 +565,7 @@
             this.data1 = res.data.map((item, index) => {
               item.isOilPart == 0 ? item.isOilPartText = "不含税" : (item.isOilPart == 1 ? item.isOilPartText = "含税油品" : item.isOilPartText = "含税配件")
               item.isOilPart == 1 ? item.invoiceNature = 1 : item.invoiceNature = 0
+              item.isOilPart == 1 ? item.qty = item.oilsQty : item.qty;
               item.applyAmtSell = item.applyAmt
               item.applyAmt = this.details.applyAmt
               item.seq = index + 1
