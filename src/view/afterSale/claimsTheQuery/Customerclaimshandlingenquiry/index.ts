@@ -152,7 +152,8 @@ export default class Custom extends Vue {
     showLoading()
     let res:any=await all.getKuquery(params,data)
     if(res.code===0){
-     
+      this.resetMoreReseach()
+      this.moreModel = false;
       this.claimSupplierData=(res.data.content || []).map(el=>{
      
         switch (el.handleType) {

@@ -149,8 +149,8 @@
           </tr>
           <tr style="font-size: 12px;line-height: 12px;">
             <td colspan="2" style="padding: 0 2px;">
-              <span>合计: </span>
-              <span>{{ onelist.afterSaleQty }}</span>
+              <span class="he">合计: </span>
+              <span class="ji">{{onelist.afterSaleQty}}</span>
             </td>
           </tr>
           <tr style="font-size: 12px;line-height: 12px;">
@@ -193,7 +193,7 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
   @Component 
   
   export default class print extends Vue{
-  
+    private num:any=0
     private onelist:any={};
     private print() { 
      
@@ -219,8 +219,12 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
       let res:any=await all.printSale(data);
       //console.log(res)
       if(res.code===0){
-        
        
+      res.data.details.forEach((ele)=>{
+          this.num+=ele.afterSaleQty
+      })
+      console.log(this.num)
+      console.log(res.data)
         this.onelist=res.data;
         this.onelist.printDate=moment(new Date()).format("yyyy-MM-dd HH:mm:ss")
         setTimeout(()=>{
@@ -232,6 +236,9 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
   }
 </script>
 <style type="less">
+.he{
+  margin: 600px;
+}
   .vertical-center-modal {
     display: flex;
     align-items: center;

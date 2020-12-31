@@ -43,19 +43,19 @@
                     <Button @click="cancel" class="w90">取消</Button>
                   </div>
           </Modal>
-          <Modal v-model="tenant_audit_sure" title="注册租户信息">
+          <Modal v-model="tenant_audit_sure" title="审核通过">
             <Form :label-width="80" :model="tenant_audit_data" ref="formValidate">
               <FormItem label="前缀:">
-                <Input v-model="tenant_audit_data.prefix" readonly/>
+                <span>{{tenant_audit_data.prefix}}</span>
               </FormItem>
               <FormItem label="域:">
-                <Input v-model="tenant_audit_data.domain" readonly/>
+                <span>{{tenant_audit_data.domain}}</span>
               </FormItem>
               <FormItem label="登录账号:">
-                <Input v-model="tenant_audit_data.userName" readonly/>
+                <span>{{tenant_audit_data.userName}}</span>
               </FormItem>
               <FormItem label="初始密码:">
-                <Input v-model="tenant_audit_data.userPassword" readonly/>
+                <span>{{tenant_audit_data.userPassword}}</span>
               </FormItem>
             </Form>
             <div class="audit_nav2" slot="footer">
@@ -334,7 +334,6 @@
           })
          },
         PassSure(){
-          this.$Message.success('审核通过成功')
           this.getList()
           this.tenant_audit_sure=false;
           this.tenant_audit_data={};
