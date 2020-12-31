@@ -2,7 +2,8 @@
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
-        <Button class="fl" @click="openPClaimModal">选择单据</Button>
+        <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
+        备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
         <!-- <div class="fr" v-if="this.$route.name !== 'settlementManagementExpensereimbursement'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
@@ -96,6 +97,7 @@ export default {
   props: ['titleName','amountType'],
   data(){
     return {
+      remark: '',
       visibal: false,
       calculation: '',
       tableData: [],
@@ -144,6 +146,7 @@ export default {
 
     //弹框打开
     open(){
+      this.remark = ''
       this.tableData = []
       this.visibal = true
     },
@@ -180,8 +183,6 @@ export default {
         this.$message.error('认领金额输入错误，不可为空')
         return
       }
-      
-      
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
         let o = {}
@@ -193,6 +194,13 @@ export default {
         financeAccountCashList: this.financeAccountCashList,
         loanId:this.$parent.loanId,
         claimType: this.$parent.claimType
+      }
+      if(this.remark){
+        if(this.remark.length > 500){
+          return this.$message.error('备注500字符以内')
+        }else{
+          obj.remark = this.remark
+        }
       }
       addClaim(obj).then(res => {
         if(res.code === 0){

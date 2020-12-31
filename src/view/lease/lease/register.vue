@@ -43,6 +43,25 @@
                     <Button @click="cancel" class="w90">取消</Button>
                   </div>
           </Modal>
+          <Modal v-model="tenant_audit_sure" title="审核通过">
+            <Form :label-width="80" :model="tenant_audit_data" ref="formValidate">
+              <FormItem label="前缀:">
+                <span>{{tenant_audit_data.prefix}}</span>
+              </FormItem>
+              <FormItem label="域:">
+                <span>{{tenant_audit_data.domain}}</span>
+              </FormItem>
+              <FormItem label="登录账号:">
+                <span>{{tenant_audit_data.userName}}</span>
+              </FormItem>
+              <FormItem label="初始密码:">
+                <span>{{tenant_audit_data.userPassword}}</span>
+              </FormItem>
+            </Form>
+            <div class="audit_nav2" slot="footer">
+              <Button type="error" @click="PassSure" class="mr20">确定</Button>
+            </div>
+          </Modal>
         </div>
       </div>
     </section>
@@ -88,6 +107,8 @@
             arrAudit: [],
             AuditChild:[],
             tenant_audit: false,
+            tenant_audit_sure:false,
+            tenant_audit_data:{},
             // clickd: 1,
             jin: false,
             qi: true,
@@ -300,18 +321,23 @@
           let data = {
             type:this.radioSelect,
             status: 1,
-            ids:this.at_present,
+            id:this.at_present,
             tenantTypeId: this.tenantTypeId,
             tenantTypeName: this.tenantTypeName
           }
           trialRegister(data).then((res) => {
             if(res.code === 0){
               this.tenant_audit = false
-              this.$Message.success('审核通过成功')
-              this.getList()
+              this.tenant_audit_data=res.data;
+              this.tenant_audit_sure=true;
             }
           })
          },
+        PassSure(){
+          this.getList()
+          this.tenant_audit_sure=false;
+          this.tenant_audit_data={};
+        },
         //取消
         cancel(){
           this.tenant_audit = false
@@ -321,7 +347,7 @@
           if (this.zhuanagtai === 0){
             let name = {
               isDisabled: 1,
-              ids:this.at_present
+              id:this.at_present
             }
             trialRegister(name).then((res) =>{
               this.$Message.warning('禁用成功')
@@ -343,7 +369,7 @@
           }else {
             let name = {
               isDisabled: 0,
-              ids: this.at_present
+              id: this.at_present
             }
             trialRegister(name).then((res) =>{
               this.$Message.success('启用成功')

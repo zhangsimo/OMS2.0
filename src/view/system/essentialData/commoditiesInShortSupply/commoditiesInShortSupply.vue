@@ -58,6 +58,7 @@
         size="small"
         :loading="Loading"
         border
+        max-height="500"
         @on-selection-change="picthTight"
       ></Table>
       <Page

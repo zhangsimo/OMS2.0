@@ -441,7 +441,6 @@ export default {
     },
     //日期组件改变时值
     changeDate(val) {
-      // console.log(val)
       this.value = val;
       this.query()
     },
@@ -465,7 +464,6 @@ export default {
       findByDynamicQuery(params,obj).then(res => {
         if (res.code === 0) {
           this.tableData = res.data.content;
-          // console.log(res.data.content)
           this.page.total = res.data.totalElements;
         }
         hideLoading()
@@ -514,7 +512,9 @@ export default {
           // this.claimModal = true;
           this.claimTit = "其他付款支出认领";
           this.amountType=2;
-          this.$refs.claimModal.open();
+          this.$nextTick(() => {
+            this.$refs.claimModal.open();
+          })
           // this.claimedList(2);
         } else {
           this.$message.error("请选择有其他收款支出单号且未支出认领的数据！");
@@ -569,7 +569,6 @@ export default {
     },
     //子组件的数据
     getMessage(value) {
-      // console.log(value[0].fno)
       this.MessageValue = value[0].startStatus.name;
       this.MessageValueNumber = value[0].fno;
     },
@@ -705,7 +704,6 @@ export default {
     },
     //认领弹框传参数据
     selection(arr) {
-      // console.log(arr);
       this.claimSelection = [];
       this.claimSelection.push({ id: arr.id ,mateAccountCoding:arr.mateAccountCoding});
     },
@@ -749,7 +747,6 @@ export default {
     },
     // 选中行
     currentChangeEvent({ row }) {
-      // console.log(row)
       this.currRow = row;
       this.modelType.rowMessage = row;
       this.reconciliationStatement.accountNo = row.serviceId;

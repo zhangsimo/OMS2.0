@@ -1196,7 +1196,6 @@ export default {
     },
     //分配至本店
     distributionShop() {
-      console.log(this.currentDistribution,'asdf')
       if (this.currentDistribution.length !== 0) {
         let obj = [];
         this.currentDistribution.map((item) => {
