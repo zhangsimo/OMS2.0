@@ -27,10 +27,13 @@ import {
   getCustomerDetails
 } from "@/api/system/essentialData/clientManagement";
 import { down } from "./api/index";
+
 import * as api from "@/api/procurement/plan";
 import * as all from "@/api/afterSale/CustomerClaimsRegistration/index";
 // @ts-ignore
-import { showLoading, hideLoading } from "@/utils/loading"
+import { showLoading, hideLoading } from "@/utils/loading";
+// @ts-ignore
+import SalesCus from "./components/ENnter"
 @Component({
   components: {
     ClientData,
@@ -38,7 +41,7 @@ import { showLoading, hideLoading } from "@/utils/loading"
     QuickDate,
     SelectSupplier,
     SelectPartCom,
-    Print
+    Print,SalesCus
   }
 })
 export default class Customs extends Vue {
@@ -92,11 +95,14 @@ export default class Customs extends Vue {
   private moreQueryList: any = {
 
   }
-  private changeNumber = ({ cellValue }) => {
-    const reg = /^[1-9]\d*$/;
+  private changeNumber = ({cellValue}) => {
+    const reg:any = /^[1-9]\d{0,}$/;
     if (!reg.test(cellValue)) {
-      return Promise.reject(new Error("数量输入不正确"));
+      return Promise.reject(new Error("不允许输入小数和0"));
     }
+  }
+  private validRules:any= {
+    afterSaleQty: [{required: true, validator: this.changeNumber}]
   }
   //--------左边的table 
   //记录左边点击的数据 
@@ -116,7 +122,7 @@ export default class Customs extends Vue {
   private Left: any = {
     page: {
       total: 0,
-      size: 10,
+      size: 20,
       num: 1
     }
     //左边的表格
@@ -351,13 +357,18 @@ export default class Customs extends Vue {
     this.purchaseType = v;
     this.getLeftLists()
   }
-  //更多按钮
+  //更多按钮--1283301248685159210
   private addmore() {
     this.showMore = true;
   }
-  private Moresearch() {
+  //回车搜索
 
-  }
+  private throwNameFun(v) {
+    console.log(v)
+      this.getSupplierNamea(v);
+    }
+    
+  
   //新增
   private add() {
     this.peiflag=true
@@ -365,7 +376,8 @@ export default class Customs extends Vue {
     this.bcflag = true
     this.row={}
     this.bjFlag = true
-  
+   this.currentData = []
+   this.details=[]
     if (this.tableList.length === 0) {
     } else {
       if (this.tableList[0]["xinzeng"] === "1") {
@@ -381,7 +393,7 @@ export default class Customs extends Vue {
   this.mainId=""
    // this.row.orderSignStatus = "草稿"
      this.flag = true;
-    this.details = []
+   
     this.form.serviceId = ""
     this.form.guestId = ""
     this.form.afterSaleDate = moment(new Date()).format("YYYY-MM-DD")
@@ -415,7 +427,7 @@ export default class Customs extends Vue {
       return item.afterSaleReason != null
     })
     let ge = this.details.every((item, i) => {
-      return item.afterSaleQty != 0 && item.afterSaleQty != null
+      return item.afterSaleQty != 0||item.afterSaleQty<0 && item.afterSaleQty != null
     })
     if (!ge) { return this.$Message.info("理赔数量不能为0") }
     if (!hh) { return this.$Message.info("请填写理赔原因") }
@@ -500,47 +512,66 @@ export default class Customs extends Vue {
     this.$set(this.form, 'guestId', val.id)
     this.$set(this.form, 'units', val.fullName)
   }
+  private  rightList:any= [] //右侧点击数据
+  private tmpDeletePartArr:any=[]//暂时存储删除配件
   //删除配件
-  private async shanchu() {
-    if (this.delArrs.length === 0) {
-        if(this.delArr.length==0){
-          return this.$Message.info("请勾选要删除的配件");
-        }
-       this.delArr.forEach((el,i) => {
-         this.details.forEach((el2, idx) => {
-        if (el.partId == el2.partId) {
-          this.details.splice(idx, 1)
-          this.delArr.splice(i,1)
-        }
-      })
-    })
-    }else{
-      this.$Modal.confirm({
-        title: '提示',
-        content: `<p>是否确定删除?</p>`,
-        onOk: async () => {
-          let list:any=this.delArrs;
-      
-        let res:any=await all.del(list)
-        if(res.code===0){
-          this.$Message.info("删除成功");
-          this.getLeftLists()
-        }
-        },
-        onCancel: () => {
-
-        }
-      });
+  async shanchu() {
+    if (this.rightList.length < 1 && this.tmpDeletePartArr.length<1) {
+      return this.$message.error("至少选择一条数据");
     }
-
-   
-   // this.flag = true
+    let data:any = []
+    this.rightList.map((item) => {
+      data.push(item.id)
+    })
+    let delOk:any = false;
+    let delOk2:any = false;
+    let isNetWork:any= false;
+    this.$Modal.confirm({
+      title: "是否要删除配件",
+      onOk: async () => {
+        if (this.mainId) {
+          let res:any = await all.del(data);
+          if (res.code == 0) {
+            delOk = true;
+            isNetWork = true;
+          }
+        } else {
+          delOk = true;
+        }
+        if (this.tmpDeletePartArr.length > 0) {
+          this.tmpDeletePartArr.forEach((els) => {
+            this.details.forEach(
+              (el, index, arr) => {
+                if (el.id == els.id) {
+                  arr.splice(index, 1);
+                }
+              }
+            );
+          });
+          this.tmpDeletePartArr = [];
+          delOk2 = true;
+        } else {
+          delOk2 = true;
+        }
+        if (delOk && delOk2) {
+          this.$Message.success("删除成功");
+          if (isNetWork) {
+           
+            this.getLeftLists()
+          }
+        }
+      },
+      onCancel: () => {
+        // this.$Message.info('取消删除');
+      }
+    });
   }
   //添加配件
   private changep() {
     this.$refs.SelectPartRef.init();
   }
   private afterSaleQtyChange(row) {
+   // console.log(row.afterSaleQty)
    
       row.untreatedQty = row.afterSaleQty
     
@@ -548,11 +579,11 @@ export default class Customs extends Vue {
   }
   // 在值发生改变时更新表尾合计
   private updateFooterEvent() {
-    let xTable = this.$refs.xTable2;
+    let xTable = this.$refs.xTable;
     xTable.updateFooter();
   }
   //计算底部
-  private footerMethod({ columns, data }) {
+  private footerMethod({columns, data}) {
     return [
       columns.map((column, columnIndex) => {
         if (columnIndex === 0) {
@@ -676,9 +707,14 @@ export default class Customs extends Vue {
   }
   //添加配件
   private getPartNameList(val) {
-    
+    console.log(val)
+   
     let datas = [...val].map(el => {
       //el.orderQty = undefined;
+      if(!el.afterSaleQty){
+            el.afterSaleQty=1
+      }
+  
       return el;
     });
     let arr: any = [];
@@ -690,9 +726,12 @@ export default class Customs extends Vue {
       }
     })
     arr.forEach(item => {
+     // console.log(item)
       delete item.id;
+     
       this.details.unshift(item);
     });
+    
     //this.setFilterArr(this.Leftcurrentrow.details || [])
     if (arr.length != datas.length) {
       return this.$Message.info("配件已存在请勿重复添加");
@@ -749,17 +788,31 @@ export default class Customs extends Vue {
     }
   }
   //手动全选触发
-  private selectAllEvent(e) {
-    e.selection.forEach((item)=>{
-        if(item.id){
-          this.delArrs.push(item.id)
-        }else{
-          this.delArr.push(item)
+  private selectSameList({selection,row}) {
+    if (selection) {
+      selection.map(el=>{
+        if (el.isAddPart==0) {
+          this.tmpDeletePartArr.push(el);
+        } else {
+          this.rightList.push(el);
         }
-    })
-    //console.log(this.delArrs,this.delArr)
+      })
+    } else {
+      this.rightList.forEach((el, index, arr) => {
+        if (el.isAddPart==0 && row.id == el.id) {
+          arr.splice(index, 1);
+        }
+      });
+      this.tmpDeletePartArr.forEach(
+        (el, index, arr) => {
+          if (row.id == el.id) {
+            arr.splice(index, 1);
+          }
+        }
+      );
+    }
   }
-
+  
   //选中当前行
   private currentChangeEvent(e) {
     // this.clientList = e.row
@@ -802,20 +855,23 @@ export default class Customs extends Vue {
   }
 
   //选中单个框
-  private selectChangeEvent(e) {
+  // private selectChangeEvent(e) {
 
-    if(e.row.id){
-      this.delArrs.push(e.row.id)
-    }else{
-       this.delArr.push(e.row)
-    }
+  //   if(e.row.id){
+  //     this.delArrs.push(e.row.id)
+  //   }else{
+  //      this.delArr.push(e.row)
+  //   }
    
-  }
+  // }
   private keydownEvent() {
 
   }
   mounted() {
-   
+  
+  }
+  created(){
+     this.getLeftLists()
   }
 
 }
