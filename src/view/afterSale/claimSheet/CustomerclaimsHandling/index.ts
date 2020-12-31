@@ -30,16 +30,29 @@ export default class Custom extends Vue {
   //分页
   private page: any = {
     num: 1,
-    size: 10,
+    size: 50,
     total: 0
   };
+  private changeNumber = ({cellValue}) => {
+    const reg = /^[0-9]\d{0,}$/;
+    if (!reg.test(cellValue)) {
+      return Promise.reject(new Error("数量输入不正确"));
+    }
+  }
+  private validRules:any= {
+    hasAcceptQty: [{required: true, validator: this.changeNumber}]
+  }
   private pageOpts: Array<number> = [50, 100, 200];
   private bandArr: Array<any> = new Array<any>();//品牌数组
   //---methods
   private claimSupplierSelData: Array<any> = new Array<any>();
-  async mounted() {
-    this.bandArr = await getBrandList(this.search.partBrand)
+  public created(): void {
     this.getList()
+  }
+  
+ async mounted() {
+    this.bandArr = await getBrandList(this.search.partBrand)
+    
   }
   private getDataQuick(v) {
     this.search.orderDate = v;
@@ -149,7 +162,12 @@ export default class Custom extends Vue {
     //@ts-ignore
     let res: any = await all.CustomerprocessingQuery(params, this.body)
     if (res.code === 0) {
-      this.claimSupplierData = res.data.content;
+      res.data.content.forEach(el => {
+       if(el.thisTreatmentQty<1){
+        el.thisTreatmentQty=1
+       }
+      });
+      this.claimSupplierData= res.data.content
       this.page.total=res.data.totalElements
       hideLoading()
 

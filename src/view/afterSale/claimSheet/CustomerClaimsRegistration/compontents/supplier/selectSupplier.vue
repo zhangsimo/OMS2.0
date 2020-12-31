@@ -382,8 +382,8 @@ export default {
     //选择
     select() {
       if (Object.keys(this.oneClinet).length !== 0) {
-        if (this.oneClinet.isDisabled == 1) {
-          this.$message.error("改客户已被禁用");
+        if (this.oneClinet.isInternalId == this.$store.state.user.userData.currentCompany.id) {
+          this.$message.error("不能添加当前机构");
           return false;
         } else {
           this.$emit("getOne", this.oneClinet);

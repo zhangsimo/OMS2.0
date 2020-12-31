@@ -158,10 +158,19 @@
                     field="thisTreatmentQty"
                     title="本次处理数量"
                     width="120"
+                    
                   >
-                   <template v-slot="{row}">
-          <vxe-input type="integer" :controls="false" v-model="row.thisTreatmentQty" :min="1" :max="row.untreatedQty"/>
-        </template>
+                  <!-- :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }" -->
+                  <template v-slot="{ row }">
+                    <vxe-input
+                      type="integer"
+                      :min="1"
+                      v-model="row.thisTreatmentQty"
+                      :precision="0"
+                    :max="row.untreatedQty"
+                      size="mini"
+                    />
+                  </template>
 
                   </vxe-table-column>
                   <vxe-table-column

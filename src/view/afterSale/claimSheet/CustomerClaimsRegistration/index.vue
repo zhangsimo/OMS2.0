@@ -201,12 +201,10 @@
                         placement="bottom"
                         max-width="140"
                       >
-                        <Input
-                          show-overflow="tooltip"
-                          :disabled="flag == false || row.manualCode"
-                          v-model="form.units"
-                          class="w160"
-                        />
+                      <sales-cus style="width:130px; display: inline-block"
+                         :disabled-prop="flag == false || row.manualCode" :title="form.units"
+                         placeholder="请输入客户" :search-value="form.units" @throwName="throwNameFun"></sales-cus>
+        
                       </Tooltip>
                     </FormItem>
                     <Button
@@ -360,17 +358,12 @@
                   :footer-method="footerMethod"
                   highlight-current-row
                   highlight-hover-row
-                  :keyboard-config="{
-                    isArrow: true,
-                    isDel: true,
-                    isEnter: true,
-                    isTab: true,
-                    isEdit: true,
-                  }"
-                  @keydown="keydown"
+                  :edit-rules="validRules"
+                  @select-change="selectSameList"
+                 @select-all="selectSameList"
+                 @select-cancel="selectSameList"
+                
                   @current-change="logDataMethod"
-                  @select-all="selectAllEvent"
-                  @checkbox-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="details"
                   :edit-config="{trigger: 'click', mode: 'cell',method:updateFooterEvent}"
@@ -410,24 +403,24 @@
                     title="品牌"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
-                    field="afterSaleQty"
-                    title="理赔数量"
-                    width="100"
+                  <vxe-table-column field="afterSaleQty" title="理赔数量" width="100" min-width="100"
+                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
+                 
                   >
-                    <template v-slot="{ row }">
-                      <vxe-input
-                        type="number"
-                        :disabled="form.moblenumber != ''"
-                        :min="1"
-                        v-model="row.afterSaleQty"
-                        :controls="false"
-                        :precision="0"
-                        @change="afterSaleQtyChange(row)"
-                        size="mini"
-                      />
-                    </template>
-                  </vxe-table-column>
+                  <!-- <template v-slot="{ row }">
+                    <vxe-input
+                      type="integer"
+                     :min="1"
+                     :max="1000"
+                      v-model="row.afterSaleQty"
+                      :precision="0"
+                     :disabled="form.moblenumber != ''"
+                      @change="afterSaleQtyChange(row)"
+                      size="mini"
+                     
+                    />
+                  </template> -->
+                </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="afterSaleReason"
