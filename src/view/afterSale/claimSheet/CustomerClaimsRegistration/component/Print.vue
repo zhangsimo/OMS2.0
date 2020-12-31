@@ -150,7 +150,7 @@
           <tr style="font-size: 12px;line-height: 12px;">
             <td colspan="2" style="padding: 0 2px;">
               <span class="he">合计: </span>
-              <span class="ji">{{ num }}</span>
+              <span class="ji">{{onelist.afterSaleQty}}</span>
             </td>
           </tr>
           <tr style="font-size: 12px;line-height: 12px;">
