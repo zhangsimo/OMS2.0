@@ -958,9 +958,12 @@ export default {
         return this.$message.error('修改凭证只能选择一条数据')
       }
       if(!this.oneList[0].proofCode){
-        this.$message.error('该条数据未生成凭证，无法修改')
+        return this.$message.error('该条数据未生成凭证，无法修改')
       }
       let res = await findById({id: this.oneList[0].financeVoucherId})
+      if(res.data.isVerify == 1){
+        return this.$message.error('凭证已审核，请先反审核')
+      }
       this.resOBj = res
       this.$refs.credent.credentShow = true
     }
